@@ -162,7 +162,7 @@
                                                     <td v-else>Paid</td>
                                                 </tr> 
                                                 <tr v-for="(inst,ctr) in installments">
-                                                    <td><input v-if="inst > 0" type="checkbox" v-model="checkedValues" :id="'installment'+ctr" :value="inst" @change="updatePayment" class="form-check-input"></input></td>
+                                                    <td><input v-if="inst > 0" type="checkbox" :value="inst" @change="updatePayment($event)" class="form-check-input"></input></td>
                                                     <td>Installment{{ '(' + installment_dates[ctr]+ ')' }}</td>
                                                     <td>{{ inst == 0 ? 'Paid' : inst }}</td>
                                                 </tr>
@@ -490,7 +490,7 @@ new Vue({
                 })
         },   
         updatePayment: function(event){
-            console.log(this.checkedValues);
+            console.log(event.target.value);
         },
         computePayment: function(event){
             if(this.registration.enumStudentType == "new"){
