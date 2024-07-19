@@ -339,7 +339,7 @@
                                                         class="btn btn-primary">
                                                         Print OR
                                                 </button>
-                                                <button v-if="application_payment.status == 'Paid' && application_payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages"  class="btn btn-primary" @click="setToVoid(application_payment.id)">Void/Cancel</button>
+                                                <button v-if="application_payment.status == 'Paid' && application_payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages" data-toggle="modal" data-target="#voidPaymentModal" class="btn btn-primary" @click="setToVoid(application_payment.id)">Void/Cancel</button>
                                             </td>
                                         </tr>                                        
                                         <tr v-for="payment in other_payments">
@@ -363,7 +363,7 @@
                                                         class="btn btn-primary">
                                                         Print OR
                                                 </button>
-                                                <button v-if="payment.status == 'Paid' && payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages"  class="btn btn-primary" @click="setToVoid(payment.id)">Void/Cancel</button>
+                                                <button v-if="payment.status == 'Paid' && payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages"  class="btn btn-primary" data-toggle="modal" data-target="#voidPaymentModal" @click="setToVoid(payment.id)">Void/Cancel</button>
                                                 <button v-if="payment.status == 'Pending' && payment.mode.name == 'Onsite Payment' && cashier"  class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button>
                                                 <button v-if="payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages && payment.status == 'Paid'"  class="btn btn-danger" @click="deletePayment(payment.id)">Retract Payment</button>
                                             </td>
@@ -394,7 +394,7 @@
                                                         class="btn btn-primary">
                                                         Print OR
                                                 </button>
-                                                <button v-if="reservation_payment.status == 'Paid' && reservation_payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages"  class="btn btn-primary" @click="setToVoid(reservation_payment.id)">Void/Cancel</button>
+                                                <button v-if="reservation_payment.status == 'Paid' && reservation_payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages" data-toggle="modal" data-target="#voidPaymentModal"  class="btn btn-primary" @click="setToVoid(reservation_payment.id)">Void/Cancel</button>
                                             </td>
                                         </tr> 
                                         <tr v-for="payment in payments">                                            
@@ -418,7 +418,7 @@
                                                         class="btn btn-primary">
                                                         Print OR
                                                 </button>                                                
-                                                <button v-if="payment.mode && payment.status == 'Paid' && payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages"  class="btn btn-primary" @click="setToVoid(payment.id)">Void/Cancel</button>
+                                                <button v-if="payment.mode && payment.status == 'Paid' && payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages" data-toggle="modal" data-target="#voidPaymentModal"  class="btn btn-primary" @click="setToVoid(payment.id)">Void/Cancel</button>
                                                 <button v-if="(payment.mode && payment.status == 'Pending' && payment.mode.name == 'Onsite Payment') && cashier" class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button>
                                                 <button v-if="(payment.mode && payment.mode.name == 'Onsite Payment')  && cashier && finance_manager_privilages"  class="btn btn-danger" @click="deletePayment(payment.id)">Retract Payment</button>
                                             </td>
@@ -491,6 +491,30 @@
                         <select class="form-control" v-model="or_update.or_number" required>
                             <option v-for="i in (parseInt(cashier_start), parseInt(cashier_end))" :value="i">{{ i }}</option>
                         </select>                                     
+                    </div>
+                </div>
+                <div class=" modal-footer">
+                    <!-- modal footer  -->
+                    <button type="submit" :disabled="!or_update.or_number" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="modal fade" id="voidPaymentModal" role="dialog">
+        <form @submit.prevent="voidPayment" class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- modal header  -->
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Set Payment to Void</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">                        
+                        <textarea class="form-control" v-model="void_reason" required></textarea>                                     
                     </div>
                 </div>
                 <div class=" modal-footer">
@@ -620,6 +644,8 @@ new Vue({
         installment_dates:[],  
         applicant_id: undefined,
         current_term: undefined,
+        void_reason: undefined,
+        void_id: undefined,
         user:{
             special_role: 0,
         },                 
@@ -1191,6 +1217,10 @@ new Vue({
 
         },
         setToVoid: function(payment_id){    
+            this.void_id = payment_id;        
+            this.void_reason =  undefined;    
+        },        
+        voidPayment: function(){                
             let url = api_url + 'finance/set_void';
 
             this.loader_spinner = true;
@@ -1207,7 +1237,7 @@ new Vue({
                 showLoaderOnConfirm: true,
                     preConfirm: (login) => {
                         
-                        let payload = {'id':payment_id}
+                        let payload = {'id':this.void_id,'void_reason': this.void_reason}
 
                         return axios.post(url, payload, {
                                     headers: {
