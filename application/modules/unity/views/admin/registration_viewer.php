@@ -329,7 +329,7 @@
                                             <td>{{ application_payment.status }}</td>                                            
                                             <td>{{ application_payment.updated_at }}</td>
                                             <td>                                                
-                                                <button v-if="!application_payment.or_number && application_payment.status == 'Paid' && cashier" data-toggle="modal"                                                
+                                                <button v-if="!application_payment.or_number && application_payment.status == 'Paid' && cashier && application_payment.remarks != 'Voided'" data-toggle="modal"                                                
                                                         @click="prepUpdate(application_payment.id,application_payment.description,application_payment.subtotal_order)" 
                                                         data-target="#myModal" class="btn btn-primary">
                                                         Update OR
@@ -339,7 +339,7 @@
                                                         class="btn btn-primary">
                                                         Print OR
                                                 </button>
-                                                <button v-if="application_payment.status == 'Paid' && application_payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages" data-toggle="modal" data-target="#voidPaymentModal" class="btn btn-primary" @click="setToVoid(application_payment.id)">Void/Cancel</button>
+                                                <button v-if="application_payment.status == 'Paid' && application_payment.remarks != 'Voided' &&  application_payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages" data-toggle="modal" data-target="#voidPaymentModal" class="btn btn-primary" @click="setToVoid(application_payment.id)">Void/Cancel</button>
                                             </td>
                                         </tr>                                        
                                         <tr v-for="payment in other_payments">
@@ -363,7 +363,7 @@
                                                         class="btn btn-primary">
                                                         Print OR
                                                 </button>
-                                                <button v-if="payment.status == 'Paid' && payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages"  class="btn btn-primary" data-toggle="modal" data-target="#voidPaymentModal" @click="setToVoid(payment.id)">Void/Cancel</button>
+                                                <button v-if="payment.status == 'Paid' && application_payment.remarks != 'Voided' && payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages"  class="btn btn-primary" data-toggle="modal" data-target="#voidPaymentModal" @click="setToVoid(payment.id)">Void/Cancel</button>
                                                 <button v-if="payment.status == 'Pending' && payment.mode.name == 'Onsite Payment' && cashier"  class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button>
                                                 <button v-if="payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages && payment.status == 'Paid'"  class="btn btn-danger" @click="deletePayment(payment.id)">Retract Payment</button>
                                             </td>
@@ -394,7 +394,7 @@
                                                         class="btn btn-primary">
                                                         Print OR
                                                 </button>
-                                                <button v-if="reservation_payment.status == 'Paid' && reservation_payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages" data-toggle="modal" data-target="#voidPaymentModal"  class="btn btn-primary" @click="setToVoid(reservation_payment.id)">Void/Cancel</button>
+                                                <button v-if="reservation_payment.status == 'Paid' && application_payment.remarks != 'Voided' && reservation_payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages" data-toggle="modal" data-target="#voidPaymentModal"  class="btn btn-primary" @click="setToVoid(reservation_payment.id)">Void/Cancel</button>
                                             </td>
                                         </tr> 
                                         <tr v-for="payment in payments">                                            
@@ -418,7 +418,7 @@
                                                         class="btn btn-primary">
                                                         Print OR
                                                 </button>                                                
-                                                <button v-if="payment.mode && payment.status == 'Paid' && payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages" data-toggle="modal" data-target="#voidPaymentModal"  class="btn btn-primary" @click="setToVoid(payment.id)">Void/Cancel</button>
+                                                <button v-if="payment.mode && payment.status == 'Paid' && application_payment.remarks != 'Voided' && payment.mode.name == 'Onsite Payment' && cashier && finance_manager_privilages" data-toggle="modal" data-target="#voidPaymentModal"  class="btn btn-primary" @click="setToVoid(payment.id)">Void/Cancel</button>
                                                 <button v-if="(payment.mode && payment.status == 'Pending' && payment.mode.name == 'Onsite Payment') && cashier" class="btn btn-primary" @click="setToPaid(payment.id)">Set to paid</button>
                                                 <button v-if="(payment.mode && payment.mode.name == 'Onsite Payment')  && cashier && finance_manager_privilages"  class="btn btn-danger" @click="deletePayment(payment.id)">Retract Payment</button>
                                             </td>
