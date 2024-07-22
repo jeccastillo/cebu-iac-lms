@@ -256,7 +256,7 @@
                                                 class="btn btn-primary">
                                                 Print OR
                                         </button>
-                                        <button v-if="payment.status == 'Paid' && payment.remarks != 'Voided' && cashier && finance_manager_privilages" data-toggle="modal" data-target="#voidPaymentModal" class="btn btn-primary" @click="setToVoid(application_payment.id)">Void/Cancel</button>
+                                        <button v-if="payment.status == 'Paid' && payment.remarks != 'Voided' && cashier && finance_manager_privilages" data-toggle="modal" data-target="#voidPaymentModal" class="btn btn-primary" @click="setToVoid(payment.id)">Void/Cancel</button>
                                     </td>                                    
                                 </tr>                                                                                                                                    
                             </table>       
