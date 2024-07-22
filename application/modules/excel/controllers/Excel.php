@@ -4785,7 +4785,7 @@ class Excel extends CI_Controller {
                 }
 
                 $date_enrolled = date("Y-m-d",strtotime($reg['dteRegistered']));
-                $tuition_discount = $total_discount = '';
+                $tuition_discount = $total_discount = 0;
 
                 if($date_enrolled < $sy->reconf_start){
                     if($reg['paymentType'] == 'full' && $tuition['scholarship_tuition_fee_rate'] > 0)
