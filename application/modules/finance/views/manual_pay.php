@@ -176,7 +176,7 @@
                                                 @click="printOR(application_payment)" 
                                                 class="btn btn-primary">
                                                 Print OR
-                                        </button>
+                                        </button>                                        
                                     </td>                                    
                                 </tr>
                                 <!-- <tr v-if="application_payment">
@@ -256,6 +256,7 @@
                                                 class="btn btn-primary">
                                                 Print OR
                                         </button>
+                                        <button v-if="payment.status == 'Paid' && payment.remarks != 'Voided' && cashier && finance_manager_privilages" data-toggle="modal" data-target="#voidPaymentModal" class="btn btn-primary" @click="setToVoid(application_payment.id)">Void/Cancel</button>
                                     </td>                                    
                                 </tr>                                                                                                                                    
                             </table>       
@@ -310,6 +311,30 @@
 
             </form>
         </div>
+        <div class="modal fade" id="voidPaymentModal" role="dialog">
+        <form @submit.prevent="voidPayment" class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- modal header  -->
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Set Payment to Void</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">                        
+                        <textarea class="form-control" v-model="void_reason" required></textarea>                                     
+                    </div>
+                </div>
+                <div class=" modal-footer">
+                    <!-- modal footer  -->
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
     </div><!---vue container--->
 </aside>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
@@ -339,6 +364,9 @@ new Vue({
         refunded_payments: [],    
         amount_to_pay: 0,
         sms_account: undefined,
+        void_id: undefined,
+        void_reason: undefined,
+        finance_manager_privilages: false, 
         particulars: [],
         description_other: '', 
         cashier: undefined,
@@ -425,6 +453,7 @@ new Vue({
                 this.user = data.data.user;  
                 this.particulars =  data.data.particulars;
                 this.sms_account = data.data.data;
+                this.finance_manager_privilages = data.data.finance_manager_privilages;  
                 this.or_update.student_campus = this.request.student_campus;           
                 this.applicant_id = "A"+data.data.sem_year+"-"+String(this.student.id).padStart(4, '0');       
                 if(this.cashier){
@@ -646,6 +675,60 @@ new Vue({
                 })
 
         },        
+        setToVoid: function(payment_id){    
+            this.void_id = payment_id;        
+            this.void_reason =  undefined;    
+        },        
+        voidPayment: function(){                
+            let url = api_url + 'finance/set_void';
+
+            this.loader_spinner = true;
+            
+            Swal.fire({
+                title: 'Continue with processing Payment',
+                text: "Are you sure you want to process payment?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                    preConfirm: (login) => {
+                        
+                        let payload = {'id':this.void_id,'void_reason': this.void_reason}
+
+                        return axios.post(url, payload, {
+                                    headers: {
+                                        Authorization: `Bearer ${window.token}`
+                                    }
+                                })
+                                .then(data => {
+                                    this.loader_spinner = false;
+                                    if(data.data.success)
+                                        Swal.fire({
+                                            title: "Success",
+                                            text: data.data.message,
+                                            icon: "success"
+                                        }).then(function() {
+                                            location.reload();
+                                        });
+                                    else
+                                        Swal.fire({
+                                            title: "Failed",
+                                            text: data.data.message,
+                                            icon: "error"
+                                        }).then(function() {
+                                            //location.reload();
+                                        });
+                                });
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
+                
+                })
+
+        },
         submitManualPayment: function(){
             let url = api_url + 'finance/manual_payment';            
             this.loader_spinner = true;

@@ -87,7 +87,10 @@ class Finance extends CI_Controller {
                     ->get_where('tb_mas_particulars',array('type'=>'particular'))
                     ->result_array();
 
-        $sem = $this->data_fetcher->get_active_sem();        
+        $sem = $this->data_fetcher->get_active_sem();    
+        $role = $this->session->userdata('special_role');
+        $ret['advanced_privilages'] = (in_array($role,array(1,2)) )?true:false;            
+        $ret['finance_manager_privilages'] = ($role == 2)?true:false;    
         
         $data['current_sem'] = $sem['intID'];
         $data['sem_year'] = $sem['strYearStart'];
