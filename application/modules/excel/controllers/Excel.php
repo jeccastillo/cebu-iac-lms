@@ -4610,27 +4610,27 @@ class Excel extends CI_Controller {
 
         $i = 4;
         $count = 1;
-        $payments = $students = array();
+        $payments = $students = $date_enrolled_array = array();
 
         foreach($users as $index => $user){
-            if($report_date){
-                $query = $this->db->select('payment_details.*')
-                        ->from('payment_details')
-                        ->join('tb_mas_users', 'tb_mas_users.slug = payment_details.student_number')
-                        ->join('tb_mas_registration', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
-                        ->where(array('payment_details.sy_reference' => $sem, 'payment_details.student_campus' => $campus, 'payment_details.student_number' => $user['slug'], 'payment_details.status' => 'Paid', 'payment_details.updated_at <=' => $report_date . ' 23:59:59'))
-                        ->order_by('payment_details.created_at', 'asc')
-                        ->group_by('payment_details.id')
-                        ->get()
-                        ->result_array();
-            }
+            $payment_details = $this->db->select('payment_details.*')
+                    ->from('payment_details')
+                    ->join('tb_mas_users', 'tb_mas_users.slug = payment_details.student_number')
+                    ->join('tb_mas_registration', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->where(array('payment_details.sy_reference' => $sem, 'payment_details.student_campus' => $campus, 'payment_details.student_number' => $user['slug'], 'payment_details.status' => 'Paid', 'payment_details.updated_at <=' => $report_date . ' 23:59:59'))
+                    ->order_by('payment_details.created_at', 'asc')
+                    ->group_by('payment_details.id')
+                    ->get()
+                    ->result_array();
 
-            $payment_details = $query;
             $payment_month = $payment_year = '';
             $current_index = 0;
             if($payment_details){
-                $payment = $user_payment = $date = array();
-                foreach($payment_details as $payment_detail){
+                $payment = $user_payment = $date = $student_payment = array();
+                foreach($payment_details as $payment_index => $payment_detail){
+                    if($payment_index == 0){
+                        $date_enrolled_array[$payment_detail['student_number']] = $payment_detail['updated_at'];
+                    }
                     if(strpos($payment_detail['description'], 'Tuition') !== false || strpos($payment_detail['description'], 'Reservation') !== false){
                         if($payments == null){
                             $payment['date'] = date("M d", strtotime($payment_detail['updated_at']));
@@ -4807,49 +4807,14 @@ class Excel extends CI_Controller {
                     ->get()
                     ->result_array();
 
-                //Aging for Installment Tuition
-                $total_amount_paid = $installment_balance = 0;
-                $installment_array = array();
-                if($reg['paymentType'] == 'partial'){
-                
-                    foreach($tuition_payments as $tuition_payment){
-                        if(strpos($tuition_payment['description'], 'Tuition') !== false || strpos($tuition_payment['description'], 'Reservation') !== false){
-                            $total_amount_paid += $tuition_payment['subtotal_order'];
-                        }
-                    }
-                    
-                    $total_installment = $tuition['ti_before_deductions'] - $tuition['down_payment'];
-                    $installment_balance = $tuition['ti_before_deductions'] - $total_amount_paid;
-
-                    if($date_enrolled >= $sy->reconf_start){
-                        if(count($applied_to) > 0){
-                            $installment_balance = $installment_balance - $applied_to[2];
-                        }
-                        
-                        if(count($applied_from) > 0){
-                            $installment_balance = $installment_balance - $applied_from[2];
-                        }
-                        $installment_balance -= $total_discount;
-                    }
-                    // else{
-                    //     $installment_balance -= $tuition_discount;
-                    //     $installment_balance = $tuition['scholarship_tuition_fee_fixed'] > 0 ? $installment_balance - $tuition['scholarship_tuition_fee_fixed'] : $installment_balance;
-                    //     $installment_balance = $tuition['scholarship_lab_fee_rate'] > 0 ? $installment_balance - $tuition['scholarship_lab_fee_rate'] : $installment_balance;
-                    //     $installment_balance = $tuition['scholarship_lab_fee_fixed'] > 0 ? $installment_balance - $tuition['scholarship_lab_fee_fixed'] : $installment_balance;
-                    //     $installment_balance = $tuition['scholarship_misc_fee_rate'] > 0 ? $installment_balance - $tuition['scholarship_misc_fee_rate'] : $installment_balance;
-                    //     $installment_balance = $tuition['nsf'] > 0 ? $installment_balance - $tuition['nsf'] : $installment_balance;
-                    //     $installment_balance = $assessment_discount_rate > 0 ? $installment_balance - $assessment_discount_rate : $installment_balance;
-                    //     $installment_balance = $assessment_discount_fixed > 0 ? $installment_balance - $assessment_discount_fixed : $installment_balance;
-                    // }
-                }
-
                 // Add some data
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A'.$i, $count)
                     // ->setCellValue('B'.$i, str_replace(str_split('T-'), "",$user['strStudentNumber']))
                     ->setCellValue('B'.$i, str_replace("-", "",$user['strStudentNumber']))
                     ->setCellValue('C'.$i, strtoupper($user['strLastname']) . ', ' . strtoupper($user['strFirstname']) . ' ' . strtoupper($user['strMiddlename']))
-                    ->setCellValue('D'.$i, date("M d,Y",strtotime($reg['date_enlisted'])))
+                    ->setCellValue('D'.$i, isset($date_enrolled_array[$user['slug']]) ? date("M d,Y",strtotime($date_enrolled_array[$user['slug']])) : '')
+                    // ->setCellValue('D'.$i, date("M d,Y",strtotime($reg['date_enlisted'])))
                     ->setCellValue('E'.$i, $reg['paymentType'] == 'full' ? 'FULL PAYMENT' : 'INSTALLMENT')
                     ->setCellValue('F'.$i, $course['strProgramCode'])
                     ->setCellValue('G'.$i, $reg['paymentType'] == 'full' && $tuition['tuition_before_discount'] > 0 ? (float)$tuition['tuition_before_discount'] : '')
@@ -4988,7 +4953,7 @@ class Excel extends CI_Controller {
                 $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 17, $i)->setValue($total_adjustment);
                 $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 18, $i)->setValue('=' . $this->columnIndexToLetter($last_index + 1) . '' . $i . '-' . $this->columnIndexToLetter($last_index + 17) . '' . $i);
 
-                // if($reg['paymentType'] == 'partial' && $installment_balance > 0){
+                $installment_balance = 0;
                 if($reg['paymentType'] == 'partial'){
                     $installment_balance = $tuition['tuition_installment_before_discount'] + $tuition['lab_installment_before_discount'] + $tuition['misc_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
                     
