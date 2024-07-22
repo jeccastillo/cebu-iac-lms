@@ -4882,9 +4882,12 @@ class Excel extends CI_Controller {
                     ->setCellValue('AH'.$i, '=U' . $i . '-AG' . $i . ')');
 
                 $total_amount = '=' . $this->columnIndexToLetter(36) . '' . $i;
+                $total_payment = 0;
 
                 if(count($payments) > 0){
                     foreach($payments as $index_payment => $payment){
+                        $total_payment += isset($payment['data'][$user['intID']]) ? $payment['data'][$user['intID']]['amount'] : 0;
+
                         $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(34 + ($index_payment * 3), 1)
                             ->setValue($payment['month_name'] . ' ' . $payment['year']);
     
@@ -4985,7 +4988,30 @@ class Excel extends CI_Controller {
                 $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 17, $i)->setValue($total_adjustment);
                 $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 18, $i)->setValue('=' . $this->columnIndexToLetter($last_index + 1) . '' . $i . '-' . $this->columnIndexToLetter($last_index + 17) . '' . $i);
 
-                if($reg['paymentType'] == 'partial' && $installment_balance > 0){
+                // if($reg['paymentType'] == 'partial' && $installment_balance > 0){
+                if($reg['paymentType'] == 'partial'){
+                    $installment_balance = $tuition['tuition_installment_before_discount'] + $tuition['lab_installment_before_discount'] + $tuition['misc_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
+                    
+                    if($date_enrolled < $sy->reconf_start){
+                        $installment_balance -= $tuition_discount;
+                        $installment_balance -= $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : 0;
+                        $installment_balance -= $tuition['scholarship_lab_fee_rate'] > 0 ? $tuition['scholarship_lab_fee_rate'] : 0;
+                        $installment_balance -= $tuition['scholarship_lab_fee_fixed'] > 0 ? $tuition['scholarship_lab_fee_fixed'] : 0;
+                        $installment_balance -= $tuition['scholarship_misc_fee_rate'] > 0 ? $tuition['scholarship_misc_fee_rate'] : 0;
+                        $installment_balance -= $tuition['scholarship_misc_fee_rate'] > 0 ? $tuition['scholarship_misc_fee_rate'] : 0;
+                        $installment_balance -= $tuition['nsf'] > 0 ? $tuition['nsf'] : 0;
+                        $installment_balance -= $assessment_discount_rate > 0 ? $assessment_discount_rate : 0;
+                        $installment_balance -= $assessment_discount_fixed > 0 ? $assessment_discount_fixed : 0;
+                        $installment_balance -= $applied_from ? $applied_from[2] : 0;
+                        $installment_balance -= $applied_to ? $applied_to[2] : 0;
+                    }else{
+                        $installment_balance -= $applied_from ? $applied_from[2] : 0;
+                        $installment_balance -= $applied_to ? $applied_to[2] : 0;
+                        $installment_balance -= $total_discount;
+                    }
+
+                    $installment_balance -= $total_payment;
+                    
                     $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 20, $i)->setValue($installment_balance > 0 ? $installment_balance - ($tuition['installment_fee'] * 5) >= 0 ? $tuition['installment_fee'] : (($tuition['installment_fee'] * 5) > $installment_balance && ($tuition['installment_fee'] * 5) - $installment_balance < $tuition['installment_fee'] ? $installment_balance - ($tuition['installment_fee'] * 4) : 0) : 0);
                     $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 21, $i)->setValue($installment_balance > 0 ? $installment_balance - ($tuition['installment_fee'] * 4) >= 0 ? $tuition['installment_fee'] : (($tuition['installment_fee'] * 4) > $installment_balance && ($tuition['installment_fee'] * 4) - $installment_balance < $tuition['installment_fee'] ? $installment_balance - ($tuition['installment_fee'] * 3) : 0) : 0);
                     $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 22, $i)->setValue($installment_balance > 0 ? $installment_balance - ($tuition['installment_fee'] * 3) >= 0 ? $tuition['installment_fee'] : (($tuition['installment_fee'] * 3) > $installment_balance && ($tuition['installment_fee'] * 3) - $installment_balance < $tuition['installment_fee'] ? $installment_balance - ($tuition['installment_fee'] * 2) : 0) : 0);
