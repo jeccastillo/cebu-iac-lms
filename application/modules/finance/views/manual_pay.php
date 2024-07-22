@@ -243,7 +243,8 @@
                                     <td>{{ payment.charges }}</td>
                                     <td>{{ payment.total_amount_due }}</td>
                                     <td>{{ payment.status }}</td>                                            
-                                    <td>{{ payment.response_message }}</td>
+                                    <td v-if="payment.remarks != 'Voided'">{{ payment.response_message }}</td>
+                                    <td v-else>{{ payment.void_reason }}</td>
                                     <td>{{ payment.updated_at }}</td>            
                                     <td>
                                         <button v-if="!payment.or_number && payment.status == 'Paid'" data-toggle="modal"                                                
