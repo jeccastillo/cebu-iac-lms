@@ -14,7 +14,7 @@
                     <label>Search by OR Number</label>
                     <input type="text" v-model="or_number" class="form-control" />
                     <button @click="getPaymentDetails" class="btn btn-primary">Search</button>                    
-                    <form @submit.prevent="submitPaymentDetails" class="modal-dialog modal-lg">
+                    <form v-if="payment_detail" @submit.prevent="submitPaymentDetails" class="modal-dialog modal-lg">
                         <div class="box box-solid box-success">
                             <div class="box-header">                            
                                 Update Details    
@@ -22,7 +22,16 @@
                             <div class="box-body">                                    
                                 <!-- modal header  -->                                        
                                 <h4 class="modal-title">Payment Details</h4>                                
-                                <div class="form-group">                                
+                                <table class="table">
+                                    <tr>
+                                        <th>Payee</th>
+                                        <td>{{ payment_detail.lastname + " " + payment_detail.firstname }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Description</th>
+                                        <td>{{ payment_detail.description }}</td>
+                                    </tr>
+                                </table>                                                              
                                 <div class="form-group">
                                     <label>OR Date</label>
                                     <input type="date" required v-model="request.or_date" class="form-control" />
@@ -88,7 +97,8 @@ new Vue({
             })
             .then(data => {                
                 this.payment_detail = data.data.data;
-                console.log(this.payment_details);                    
+                request.or_number = this.payment_detail.or_number;
+                request.or_date = this.payment_detail.or_date;                    
             });
         },
         submitPaymentDetails: function(){
