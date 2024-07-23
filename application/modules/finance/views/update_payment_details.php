@@ -10,19 +10,19 @@
         </section>
         <hr />
         <div class="content">                        
-                <div class="col-sm-12">
+                <div class="col-sm-12">                    
+                    <label>Search by OR Number</label>
+                    <input type="text" required v-model="or_number" class="form-control" />
+                    <button @click="getPaymentDetails" class="btn btn-primary">Search</button>                    
                     <form @submit.prevent="submitPaymentDetails" class="modal-dialog modal-lg">
                         <div class="box box-solid box-success">
                             <div class="box-header">                            
-                                Manually Accept Payment    
+                                Update Details    
                             </div>
                             <div class="box-body">                                    
                                 <!-- modal header  -->                                        
                                 <h4 class="modal-title">Payment Details</h4>                                
-                                <div class="form-group">
-                                    <label>OR Number</label>
-                                    <input type="text" required v-model="or_number" class="form-control" />
-                                </div>                                
+                                <div class="form-group">                                
                                 <div class="form-group">
                                     <label>OR Date</label>
                                     <input type="date" required v-model="request.or_date" class="form-control" />
@@ -56,7 +56,7 @@ new Vue({
         
         base_url: "<?php echo base_url(); ?>",   
         or_number: undefined,
-        payment_details: undefined,
+        payment_detail: undefined,
         request:{
             or_number: undefined,
             or_date: undefined,
@@ -81,13 +81,13 @@ new Vue({
     methods: {                  
         getPaymentDetails: function(){
             axios
-            .get(api_url + 'finance/get_payment_details/', this.or_number, {
+            .get(api_url + 'finance/get_payment_detail/', this.or_number, {
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 }
             })
             .then(data => {                
-                this.payment_details = data.data.payment_details;
+                this.payment_detail = data.data.payment_detail;
                 console.log(this.payment_details);                    
             });
         },
