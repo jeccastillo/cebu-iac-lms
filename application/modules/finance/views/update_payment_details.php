@@ -97,8 +97,8 @@ new Vue({
             })
             .then(data => {                
                 this.payment_detail = data.data.data;
-                request.or_number = this.payment_detail.or_number;
-                request.or_date = this.payment_detail.or_date;                    
+                this.request.or_number = this.payment_detail.or_number;
+                this.request.or_date = this.payment_detail.or_date;                    
             });
         },
         submitPaymentDetails: function(){
