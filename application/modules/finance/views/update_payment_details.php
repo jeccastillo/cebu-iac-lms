@@ -12,10 +12,12 @@
         <div class="content">                        
                 <div class="col-sm-12">                    
                     <label>Search by OR Number</label>
-                    <div class="form-group">
-                        <input type="text" v-model="or_number" class="form-control" />
-                        <button @click="getPaymentDetails" class="btn btn-primary">Search</button>                    
-                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text" v-model="or_number" class="form-control" placeholder="OR Number" aria-label="OR Number" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <button @click="getPaymentDetails" class="btn btn-outline-secondary" type="button">Search</button>
+                        </div>
+                    </div>                    
                     <form v-if="payment_detail" @submit.prevent="submitPaymentDetails" class="modal-dialog modal-lg">
                         <div class="box box-solid box-success">
                             <div class="box-header">                            
