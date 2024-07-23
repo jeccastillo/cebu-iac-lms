@@ -87,7 +87,7 @@ new Vue({
                 }
             })
             .then(data => {                
-                this.payment_detail = data.data.payment_detail;
+                this.payment_detail = data.data.data;
                 console.log(this.payment_details);                    
             });
         },
