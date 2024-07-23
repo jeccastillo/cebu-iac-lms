@@ -15,7 +15,7 @@
                     <div class="input-group mb-3">
                         <input type="text" v-model="or_number" class="form-control" placeholder="OR Number" aria-label="OR Number" aria-describedby="basic-addon2">
                         <div class="input-group-append">
-                            <button @click="getPaymentDetails" class="btn btn-outline-secondary" type="button">Search</button>
+                            <button @click="getPaymentDetails" class="btn btn-primary" type="button">Search</button>
                         </div>
                     </div>                    
                     <form v-if="payment_detail" @submit.prevent="submitPaymentDetails" class="modal-dialog modal-lg">
