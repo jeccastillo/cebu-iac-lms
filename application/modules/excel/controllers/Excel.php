@@ -4629,7 +4629,7 @@ class Excel extends CI_Controller {
                 $payment = $user_payment = $date = $student_payment = array();
                 foreach($payment_details as $payment_index => $payment_detail){
                     if(strpos($payment_detail['description'], 'Tuition') !== false || strpos($payment_detail['description'], 'Reservation') !== false){
-                        if(!isset($date_enrolled_array[$payment_detail['student_number']])){
+                        if(!isset($date_enrolled_array[$payment_detail['student_number']]) && strpos($payment_detail['description'], 'Tuition') !== false){
                             $date_enrolled_array[$payment_detail['student_number']] = $payment_detail['updated_at'];
                         }
                         if($payments == null){
