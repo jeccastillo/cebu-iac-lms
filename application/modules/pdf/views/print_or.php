@@ -137,12 +137,7 @@
                 <tr style="line-height:20px;">
                     <td width="75%" style="text-align:right;font-weight:bold;font-size:9px;">OR No:<?php echo $or_number; ?></td>
                 </tr>
-            </table>
-            <table>
-                <tr style="line-height:5px;">
-                    <td></td>
-                </tr>
-            </table>
+            </table>           
             <table >
                 <tr style="line-height:12px;">
                     <td style="font-size:10px;text-align:right;padding-right:15px;"><?php echo "  ".date("m/d/y",strtotime($transaction_date)); ?></td>
@@ -234,7 +229,7 @@
                 </tr>
             </table>
             <table >
-                <tr style="line-height:5px;">
+                <tr style="line-height:10px;">
                     <td style=""></td>
                 </tr>
             </table>
