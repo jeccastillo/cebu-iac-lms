@@ -660,6 +660,11 @@
               </a>
             </li>                
             <?php if($user['special_role'] >= 2): ?>                                      
+              <li class="<?php echo (isset($page) && $page=="update_payment")?'active':''; ?>"><a
+                  href="<?php echo base_url(); ?>finance/update_payment"
+                  style="margin-left: 10px;"><i class="ion ion-android-list"></i> Update Payment Details
+                </a>
+              </li>
               <li class="<?php echo (isset($page) && $page=="logs_forwarded")?'active':''; ?>"><a
                 href="<?php echo base_url(); ?>unity/logs/null/null/Payment%20Term%20Forwarded"
                 style="margin-left: 10px;"><i class="ion ion-android-list"></i> Forwarded
