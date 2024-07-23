@@ -180,8 +180,8 @@
             <table>
                 <tr style="line-height:15px;">                    
                     <td style="font-size:<?php echo $fontsize; ?>;text-align:left;">
-                        <span style="color:#fff;">Address &nbsp;</span><?php echo $student_address; ?><br />
-                        <span style="color:#fff;">Address &nbsp;</span>
+                        <span style="color:#fff;">Address &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><?php echo $student_address; ?><br />
+                        <span style="color:#fff;">Address &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     </td>
                 </tr>
             </table>
