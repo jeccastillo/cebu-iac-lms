@@ -12,8 +12,10 @@
         <div class="content">                        
                 <div class="col-sm-12">                    
                     <label>Search by OR Number</label>
-                    <input type="text" v-model="or_number" class="form-control" />
-                    <button @click="getPaymentDetails" class="btn btn-primary">Search</button>                    
+                    <div class="form-group">
+                        <input type="text" v-model="or_number" class="form-control" />
+                        <button @click="getPaymentDetails" class="btn btn-primary">Search</button>                    
+                    </div>
                     <form v-if="payment_detail" @submit.prevent="submitPaymentDetails" class="modal-dialog modal-lg">
                         <div class="box box-solid box-success">
                             <div class="box-header">                            
@@ -104,7 +106,7 @@ new Vue({
         submitPaymentDetails: function(){
             Swal.fire({
                 title: 'Continue with the update',
-                text: "Are you sure you want to accept this payment?",
+                text: "Are you sure you want to update this payment?",
                 showCancelButton: true,
                 confirmButtonText: "Yes",
                 imageWidth: 100,
