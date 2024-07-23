@@ -74,6 +74,7 @@ new Vue({
         payment_detail: undefined,
         campus: undefined,
         request:{
+            id: undefined;
             or_number: undefined,
             or_date: undefined,
         }
@@ -105,6 +106,7 @@ new Vue({
             })
             .then(data => {                
                 this.payment_detail = data.data.data;
+                this.request.id = this.payment_detail.id;
                 this.request.or_number = this.payment_detail.or_number;
                 this.request.or_date = this.payment_detail.or_date;                    
             });
