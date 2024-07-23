@@ -33,7 +33,7 @@
                                 </div>
                             </div><!---box body--->
                             <div class="box-footer">
-                                <button type="submit" class="btn btn-primary">Update</button>                                        
+                                <button :disabled="payment_detail" type="submit" class="btn btn-primary">Update</button>                                        
                             </div>                        
                         </div><!---box--->                      
                     </form>
