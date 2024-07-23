@@ -2192,7 +2192,7 @@ class Pdf extends CI_Controller {
         }
     }
 
-    function print_or($test = 0)
+    function print_or()
     {
         $request = $this->input->post();
 
@@ -2286,12 +2286,8 @@ class Pdf extends CI_Controller {
 
         if(isset($payee))
             $html = $this->load->view("print_or_ns_payment",$this->data,true);
-        elseif($this->data['campus'] == "Cebu"){
-            if($test == 0)
-                $html = $this->load->view("print_or",$this->data,true);
-            else
-                $html = $this->load->view("print_or_test",$this->data,true);
-        }
+        elseif($this->data['campus'] == "Cebu")
+            $html = $this->load->view("print_or_test",$this->data,true);
         else            
             $html = $this->load->view("print_or_makati",$this->data,true);
         
