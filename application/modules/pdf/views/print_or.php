@@ -99,12 +99,7 @@
                     <td style="width:50%"></td>
                     <td style="width:50%"></td>
                 </tr>
-            </table>
-            <table>
-                <tr style="line-height:5px;">
-                    <td style=""></td>
-                </tr>
-            </table>
+            </table>            
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
                     <td style="width:50%"></td>
