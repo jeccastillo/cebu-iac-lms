@@ -68,6 +68,7 @@ new Vue({
         base_url: "<?php echo base_url(); ?>",   
         or_number: undefined,
         payment_detail: undefined,
+        campus: undefined,
         request:{
             or_number: undefined,
             or_date: undefined,
@@ -82,7 +83,8 @@ new Vue({
         this.loader_spinner = true;
         axios.get(base_url + 'finance/override_payment_data')
         .then((data) => {            
-            this.user = data.data.user;           
+            this.user = data.data.user;  
+            this.campus = data.data.campus;         
         })
         .catch((error) => {
             console.log(error);
@@ -92,7 +94,7 @@ new Vue({
     methods: {                  
         getPaymentDetails: function(){
             axios
-            .get(api_url + 'finance/get_payment_detail/'+ this.or_number, {
+            .get(api_url + 'finance/get_payment_detail/'+ this.or_number + '/' + this.campus, {
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 }

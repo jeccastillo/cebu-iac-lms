@@ -28,7 +28,7 @@ class Finance extends CI_Controller {
 			$this->settings[$setting['strSettingName']] = $setting['strSettingValue'];
 		}
         $this->data['term_type'] = $this->config->item('term_type');
-        $this->data['campus'] = $this->config->item('campus');
+        $this->data["campus"] = $this->config->item('campus');
         $this->data["user"] = $this->session->all_userdata();
         $this->data['img_dir'] = base_url()."assets/themes/".$theme."/images/";	
         $this->data['student_pics'] = base_url()."assets/photos/";
@@ -36,6 +36,7 @@ class Finance extends CI_Controller {
         $this->data['js_dir'] = base_url()."assets/themes/".$theme."/js/";
         $this->data['title'] = "CCT Unity";
         $this->data['api_url'] = $this->config->item('api_url');
+        
         $this->load->library("email");
         
                 
@@ -285,8 +286,8 @@ class Finance extends CI_Controller {
 
     public function override_payment_data(){
         $data['user'] = $this->data["user"];
+        $data['campus'] = $this->data["campus"];
         echo json_encode($data);        
-
     }
 
     public function student_ledger($id,$sem = 0){
