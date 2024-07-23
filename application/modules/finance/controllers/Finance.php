@@ -247,7 +247,7 @@ class Finance extends CI_Controller {
 
     }
 
-    public function override_payment(){
+    public function update_payment(){
                 
 
         $role = $this->session->userdata('special_role');
@@ -265,7 +265,7 @@ class Finance extends CI_Controller {
 
     }
 
-    public function update_payment(){
+    public function override_payment(){
                 
 
         $role = $this->session->userdata('special_role');
