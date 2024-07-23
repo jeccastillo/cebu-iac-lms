@@ -172,26 +172,14 @@
                 </tr>
             </table>
             <?php
-                $text = $student_address;
-
-                $splitstring1 = substr($text, 0, 40);
-                $splitstring2 = substr($text, 40);
-                
-                if (substr($splitstring1, 0, -1) != ' ' AND substr($splitstring2, 0, 1) != ' ')
-                {
-                    $middle = strlen($splitstring1) + strpos($splitstring2, ' ') + 1;
-                }
+                if(strlen($student_address) > 50)
+                    $fontsize = '7.5px';
                 else
-                {
-                    $middle = strrpos(substr($text, 0, 40), ' ') + 1;    
-                }
-                
-                $string1 = substr($text, 0, $middle);  // "The Quick : Brown Fox Jumped "
-                $string2 = substr($text, $middle);  // "Over The Lazy / Dog"
+                    $fontsize = '8px';
             ?>
             <table>
                 <tr style="line-height:15px;">                    
-                    <td style="font-size:7.5px;text-align:left;">
+                    <td style="font-size:<?php echo $fontsize; ?>;text-align:left;">
                         <span style="color:#fff;">Address &nbsp;</span><?php echo $student_address; ?><br />
                         <span style="color:#fff;">Address &nbsp;</span>
                     </td>
