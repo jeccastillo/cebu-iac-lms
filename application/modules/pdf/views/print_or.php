@@ -191,9 +191,9 @@
             ?>
             <table>
                 <tr style="line-height:15px;">                    
-                    <td style="font-size:9px;text-align:left;">
-                        <span style="color:#fff;">Address &nbsp;</span><?php echo $string1; ?><br />
-                        <span style="color:#fff;">Address &nbsp;</span><?php echo $string2; ?>
+                    <td style="font-size:8px;text-align:left;">
+                        <span style="color:#fff;">Address &nbsp;</span><?php echo $student_address; ?><br />
+                        <span style="color:#fff;">Address &nbsp;</span>
                     </td>
                 </tr>
             </table>
