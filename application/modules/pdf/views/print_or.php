@@ -171,12 +171,6 @@
                     <td style=""></td>
                 </tr>
             </table>
-            <?php
-                if(strlen($student_address) > 50)
-                    $fontsize = '7.5px';
-                else
-                    $fontsize = '8px';
-            ?>
             <table>
                 <tr style="line-height:15px;">                    
                     <td style="font-size:<?php echo $fontsize; ?>;text-align:left;">
@@ -185,11 +179,11 @@
                     </td>
                 </tr>
             </table>
-            <!-- <table >
+            <table >
                 <tr style="line-height:5px;">
                     <td style=""></td>
                 </tr>
-            </table> -->
+            </table>
             <table >
                 <tr style="line-height:3px;">                    
                     <td style="font-size:10px;text-align:left;"></td>
