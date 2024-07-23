@@ -12,7 +12,7 @@
         <div class="content">                        
                 <div class="col-sm-12">                    
                     <label>Search by OR Number</label>
-                    <input type="text" required v-model="or_number" class="form-control" />
+                    <input type="text" v-model="or_number" class="form-control" />
                     <button @click="getPaymentDetails" class="btn btn-primary">Search</button>                    
                     <form @submit.prevent="submitPaymentDetails" class="modal-dialog modal-lg">
                         <div class="box box-solid box-success">
@@ -81,7 +81,7 @@ new Vue({
     methods: {                  
         getPaymentDetails: function(){
             axios
-            .get(api_url + 'finance/get_payment_detail/', this.or_number, {
+            .get(api_url + 'finance/get_payment_detail/'+ this.or_number, {
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 }
