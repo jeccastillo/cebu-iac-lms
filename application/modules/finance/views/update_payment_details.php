@@ -74,7 +74,7 @@ new Vue({
         payment_detail: undefined,
         campus: undefined,
         request:{
-            id: undefined;
+            id: undefined,
             or_number: undefined,
             or_date: undefined,
         }
