@@ -79,6 +79,7 @@ new Vue({
             id: undefined,
             or_number: undefined,
             or_date: undefined,
+            campus: undefined,
         }
              
     },
@@ -108,9 +109,19 @@ new Vue({
             })
             .then(data => {                
                 this.payment_detail = data.data.data;
-                this.request.id = this.payment_detail.id;
-                this.request.or_number = this.payment_detail.or_number;
-                this.request.or_date = this.payment_detail.or_date;                    
+                if(this.payment_detail){
+                    this.request.id = this.payment_detail.id;
+                    this.request.or_number = this.payment_detail.or_number;
+                    this.request.or_date = this.payment_detail.or_date;                    
+                }
+                else
+                {
+                    Swal.fire(
+                        'Error',
+                        'Data not Found',
+                        'error'
+                    )
+                }
             });
         },
         submitPaymentDetails: function(){
@@ -143,15 +154,22 @@ new Vue({
                             }
                         })
                         .then(data => {                
-                            
-                            Swal.fire(
-                                'Done',
-                                data.data.message,
-                                'success'
-                            ).then(function(){
-                                if(data.data.reload)
+                            if(data.data.success){
+                                Swal.fire(
+                                    'Done',
+                                    data.data.message,
+                                    'success'
+                                ).then(function(){                        
                                     location.reload();
-                            });
+                                });
+                            }
+                            else{
+                                Swal.fire(
+                                    'Error',
+                                    data.data.message,
+                                    'error'
+                                )
+                            }
                             
                             
                         });
