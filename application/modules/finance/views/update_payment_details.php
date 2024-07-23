@@ -33,6 +33,10 @@
                                         <th>Description</th>
                                         <td>{{ payment_detail.description }}</td>
                                     </tr>
+                                    <tr>
+                                        <th>Amount</th>
+                                        <td>{{ payment_detail.subtotal_order }}</td>
+                                    </tr>
                                 </table>                                                              
                                 <div class="form-group">
                                     <label>OR Date</label>
