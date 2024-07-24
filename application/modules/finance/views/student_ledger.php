@@ -218,7 +218,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div v-if="apply_to_term.length == 0" class="row">
                             <div class="col-sm-3">
                                 <div class="form-group">  
                                     <label>Amount</label>                                                             
@@ -249,7 +249,7 @@
                                 </div>
                             </div>                            
                         </div>
-                        <table class="table table-bordered table-striped">
+                        <table v-else class="table table-bordered table-striped">
                             <tr>
                                 <th>Amount</th>
                                 <th>Description</th>
