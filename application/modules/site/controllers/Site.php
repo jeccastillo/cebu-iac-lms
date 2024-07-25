@@ -289,6 +289,26 @@ class Site extends CI_Controller {
             return false;
     }
 
+	public function application_makati_view($term = 0,$type = 0) {
+        // $this->load->view('common/header',$this->data);        
+		if($term == 0){
+			if($type == 0)
+            	$term = $this->data_fetcher->get_processing_sem();        			
+			else
+				$term = $this->data_fetcher->get_processing_sem_shs();        						
+		}
+		else
+			$term = $this->data_fetcher->get_sem_by_id($term);
+
+		$this->data['term'] = $term;
+
+		$this->data['current_term'] = $term['intID'];	
+		$this->load->view('common/header_new',$this->data);  
+		$this->load->view('student_application_makati_view',$this->data);
+		$this->load->view('common/footer_new',$this->data);
+    }
+
+
    }
 
 ?>
