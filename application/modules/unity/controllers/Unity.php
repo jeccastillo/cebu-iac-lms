@@ -1759,6 +1759,7 @@ class Unity extends CI_Controller {
                     else
                         $balance = $tuition['total_installment'] - $paid;
 
+                    $balance = ($balance < 0.01)?0:$balance;
                     $term_balances[] = [
                         'formatted_balance'=> number_format($balance,2),
                         'balance'=>$balance,
