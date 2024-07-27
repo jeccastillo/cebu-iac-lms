@@ -4629,58 +4629,61 @@ class Excel extends CI_Controller {
                 $payment = $user_payment = $date = $student_payment = array();
                 foreach($payment_details as $payment_index => $payment_detail){
                     if(strpos($payment_detail['description'], 'Tuition') !== false || strpos($payment_detail['description'], 'Reservation') !== false){
+                        //set date enrolled based on full or installment payment
                         if(!isset($date_enrolled_array[$payment_detail['student_number']]) && strpos($payment_detail['description'], 'Tuition') !== false){
-                            $date_enrolled_array[$payment_detail['student_number']] = $payment_detail['updated_at'];
+                            $date_enrolled_array[$payment_detail['student_number']] = $payment_detail['created_at'];
                         }
                         if($payments == null){
-                            $payment['date'] = date("M d", strtotime($payment_detail['updated_at']));
+                            $payment['date'] = date("M d", strtotime($payment_detail['created_at']));
                             $payment['or_number'] = $payment_detail['or_number'];
                             $payment['amount'] = (float)number_format($payment_detail['subtotal_order'], 2, '.', '');
                             
-                            $payment_month = date("m", strtotime($payment_detail['updated_at']));
-                            $payment_year = date("Y", strtotime($payment_detail['updated_at']));
+                            $payment_month = date("m", strtotime($payment_detail['created_at']));
+                            $payment_year = date("Y", strtotime($payment_detail['created_at']));
                             
                             $user_payment[$user['intID']] = $payment;
     
                             $date['month'] = $payment_month;
-                            $date['month_name'] = date("F", strtotime($payment_detail['updated_at']));
+                            $date['month_name'] = date("F", strtotime($payment_detail['created_at']));
                             $date['year'] = $payment_year;
                             $date['data'] = $user_payment;
     
                             $payments[] = $date;
                         }else{
-                            if(isset($date['data'][$user['intID']]) && $payment_month == date("m", strtotime($payment_detail['updated_at'])) && $payment_year == date("Y", strtotime($payment_detail['updated_at']))){
-                                $payments[$current_index]['data'][$user['intID']]['date'] .= ', ' . date("d", strtotime($payment_detail['updated_at']));
+                            if(isset($date['data'][$user['intID']]) && $payment_month == date("m", strtotime($payment_detail['created_at'])) && $payment_year == date("Y", strtotime($payment_detail['created_at']))){
+                                $payments[$current_index]['data'][$user['intID']]['date'] .= ', ' . date("d", strtotime($payment_detail['created_at']));
                                 $payments[$current_index]['data'][$user['intID']]['or_number'] .= ', ' . $payment_detail['or_number'];
                                 $payments[$current_index]['data'][$user['intID']]['amount'] += (float)number_format($payment_detail['subtotal_order'], 2, '.', '');
                             }else{
                                 $flag = $same_month_year = false;
                                 $data = $date = array();
                                 for($index = count($payments) - 1; $index >= 0; $index--){
-                                    if($payments[$index]['year'] == date("Y", strtotime($payment_detail['updated_at'])) && $payments[$index]['month'] == date("m", strtotime($payment_detail['updated_at']))){
+                                    if($payments[$index]['year'] == date("Y", strtotime($payment_detail['created_at'])) && $payments[$index]['month'] == date("m", strtotime($payment_detail['created_at']))){
+                                        
+                                    
                                         $same_month_year = true;
                                         $current_index = $index;
-                                    }else if($payments[$index]['year'] == date("Y", strtotime($payment_detail['updated_at']))){
-                                        if($payments[$index]['month'] > date("m", strtotime($payment_detail['updated_at']))){
+                                    }else if($payments[$index]['year'] == date("Y", strtotime($payment_detail['created_at']))){
+                                        if($payments[$index]['month'] > date("m", strtotime($payment_detail['created_at']))){
                                             $current_index = $index;
                                             $flag = true;
                                         }
-                                    }else if($payments[$index]['year'] > date("Y", strtotime($payment_detail['updated_at']))){
+                                    }else if($payments[$index]['year'] > date("Y", strtotime($payment_detail['created_at']))){
                                         $current_index = $index;
                                         $flag = true;
                                     }
                                 }
 
-                                $payment['date'] = date("M d", strtotime($payment_detail['updated_at']));
+                                $payment['date'] = date("M d", strtotime($payment_detail['created_at']));
                                 $payment['or_number'] = $payment_detail['or_number'];
                                 $payment['amount'] = (float)number_format($payment_detail['subtotal_order'], 2, '.', '');
                                 
-                                $payment_month = date("m", strtotime($payment_detail['updated_at']));
-                                $payment_year = date("Y", strtotime($payment_detail['updated_at']));
+                                $payment_month = date("m", strtotime($payment_detail['created_at']));
+                                $payment_year = date("Y", strtotime($payment_detail['created_at']));
                                 $user_payment[$user['intID']] = $payment;
         
                                 $date['month'] = $payment_month;
-                                $date['month_name'] = date("F", strtotime($payment_detail['updated_at']));
+                                $date['month_name'] = date("F", strtotime($payment_detail['created_at']));
                                 $date['year'] = $payment_year;
                                 $date['data'] = $user_payment;
                                 $data[] = $date;
@@ -4715,7 +4718,6 @@ class Excel extends CI_Controller {
                     ->join('tb_mas_scholarships', 'tb_mas_scholarships.intID = tb_mas_registration.enumScholarship', 'left')
                     ->get()
                     ->first_row('array');
-
             $tuition = $this->data_fetcher->getTuition($user['intID'], $sem);
 
             if($reg){
