@@ -375,7 +375,6 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"></script>
 <script src="<?php echo base_url(); ?>assets/themes/default/js/axios.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 
 <style scoped="">
 .box_mode_payment {
