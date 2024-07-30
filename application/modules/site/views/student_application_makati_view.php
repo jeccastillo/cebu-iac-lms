@@ -55,24 +55,27 @@
         method="post"
         class="">
 
-        <div class="flex flex-wrap md:space-x-5 mb-6 mt-10 justify-center ">
+        <div v-if="true"
+            class="flex flex-wrap md:space-x-5 mb-6 mt-10 justify-center ">
             <div id="select-term"
-                class=" px-4 flex-[1_0_188px]">
+                class=" pr-4 flex-[1_0_188px]">
                 <div class="mb-5">
                     <label class="block t color-primary font-bold mb-3 pr-4"
                         for="inline-full-name">
                         Select Term <span class="text-red-500">*</span>
                     </label>
-
                     <select
                         class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                         type="text"
                         required
-                        v-model="request.syid">
-                        <option v-for="s in sy"
+                        v-model="optionValue">
+                        <option disabled
+                            value="">--Select options--</option>
+                        <!-- <option v-for="s in sy"
                             :value="s.intID">
                             {{ s.enumSem+" "+s.term_label+" SY "+s.strYearStart+"-"+s.strYearEnd }}
-                        </option>
+                        </option> -->
+
                     </select>
                 </div>
                 <div id="applicant-type"
@@ -109,11 +112,12 @@
                                 class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                 type="text"
                                 required
-                                v-model="request.syid">
-                                <option v-for="s in sy"
+                                v-model="optionValue">
+                                <!-- <option v-for="s in sy"
                                     :value="s.intID">
-
-                                </option>
+                                </option> -->
+                                <option disabled
+                                    value="">--Select options--</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -125,11 +129,12 @@
                                 class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                 type="text"
                                 required
-                                v-model="request.syid">
-                                <option v-for="s in sy"
+                                v-model="optionValue">
+                                <!-- <option v-for="s in sy"
                                     :value="s.intID">
-
-                                </option>
+                                </option> -->
+                                <option disabled
+                                    value="">--Select options--</option>
                             </select>
                         </div>
                         <div>
@@ -141,11 +146,12 @@
                                 class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                 type="text"
                                 required
-                                v-model="request.syid">
-                                <option v-for="s in sy"
+                                v-model="optionValue">
+                                <!-- <option v-for="s in sy"
                                     :value="s.intID">
-
-                                </option>
+                                </option> -->
+                                <option disabled
+                                    value="">--Select options--</option>
                             </select>
                         </div>
 
@@ -156,7 +162,8 @@
             </div>
 
         </div>
-        <div class=" mb-6 mt-10">
+        <div sv-if="true"
+            class=" mb-6 mt-10">
             <h4 class="color-primary font-bold text-xl">BASIC INFORMATION</h4>
             <hr class="mb-5 bg-[#10326f] h-1 w-3/5" />
             <div class="border-[1px] border-neutral-100 rounded-lg mt-5 py-5 px-2.5">
@@ -235,11 +242,11 @@
                     </div>
 
                     <div id="gender"
-                        class="basis-[100px]">
+                        class="basis-[120px]">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
                             Gender <span class="text-red-500">*</span>
                         </label>
-                        <select
+                        <select v-model="optionValue"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
                             <option disabled
                                 value="">--options--</option>
@@ -252,7 +259,7 @@
                         <label class="block t color-primary font-bold  mb-3  pr-4">
                             Citizenship <span class="text-red-500">*</span>
                         </label>
-                        <select
+                        <select v-model="optionValue"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
                             <option disabled
                                 value="">--Select options--</option>
@@ -262,7 +269,7 @@
                     <div id="citizenship-dual"
                         class="basis-[300px] self-end">
 
-                        <select
+                        <select v-model="optionValue"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
                             <option disabled
                                 value="">--Select options--</option>
@@ -283,10 +290,12 @@
             </div>
 
         </div>
-        <div class=" mb-6 mt-10">
+        <div sv-if="true"
+            class=" mb-6 mt-10">
             <h4 class="color-primary font-bold text-xl">CONTACT INFORMATION</h4>
             <hr class="mb-5 bg-[#10326f] h-1 w-3/5" />
-            <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
+            <div sv-if="true"
+                class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
                 <h5 class="color-primary mb-2.5">CONTACT DETAILS</h5>
                 <div
                     class="grid gap-x-16 grid-cols-[repeat(auto-fit,_minmax(0,420px))] gap-y-2 mb-4 ">
@@ -359,7 +368,8 @@
             </div>
             <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
                 <h5 class="color-primary mb-2.5">ADDRESS</h5>
-                <div class="grid grid-cols-[repeat(3,_minmax(0,1fr))] gap-2.5 mb-4 ">
+                <div
+                    class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-2.5 mb-4 ">
                     <div id="home"
                         class="">
                         <label class="block  color-primary font-bold mb-3 pr-4">
@@ -379,6 +389,7 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
+                            placeholder="--Select options--"
                             required>
                         </input>
                     </div>
@@ -389,13 +400,15 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
+                            placeholder="--Select options--"
                             required>
                         </input>
                     </div>
 
 
                 </div>
-                <div class="grid grid-cols-[repeat(3,_minmax(0,1fr))] gap-2.5 mb-4 ">
+                <div
+                    class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-2.5 mb-4 ">
                     <div id="home"
                         class="">
                         <label class="block  color-primary font-bold mb-3 pr-4">
@@ -404,14 +417,80 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
+                            placeholder="--Select options--"
                             required>
 
                         </input>
                     </div>
-
                     <div id="barangay">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Country <span class="text-red-500">*</span>
+                            Country
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            placeholder="--Select options--"
+                            required>
+                        </input>
+                    </div>
+                    <div>
+                        <label class="hidden block color-primary font-bold  mb-3  pr-4">
+                            <span class="text-red-500">*</span>
+                        </label>
+                        <input
+                            class="hidden bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            required>
+                        </input>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div sv-if="true"
+            class=" mb-6 mt-10">
+            <h4 class="color-primary font-bold text-xl">PARENT'S INFORMATION</h4>
+            <hr class="mb-5 bg-[#10326f] h-1 w-3/5" />
+
+            <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
+                <h5 class="color-primary mb-2.5">MOTHER <span class="text-red-500">*</span> </h5>
+                <div
+                    class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-2.5 mb-4 ">
+                    <div>
+                        <label class="block  color-primary font-bold mb-3 pr-4">
+                            Name
+                        </label>
+                        <input
+                            class="parent-info bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            placeholder='(write "n/a" only if not applicable)'
+                            required>
+
+                        </input>
+                    </div>
+                    <div>
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Occupation
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            required>
+                        </input>
+                    </div>
+                    <div>
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Email Address
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            required>
+                        </input>
+                    </div>
+                    <div>
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Mobile Number
                         </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
@@ -422,14 +501,570 @@
 
 
                 </div>
+                <div>
+                    <label class="block color-primary mb-1 ml-1.5">
+                        <input type="radio"
+                            class="mr-1">
+                        SET AS PRIMARY CONTACT
+                    </label>
+                </div>
 
+            </div>
+            <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
+                <h5 class="color-primary mb-2.5">FATHER <span class="text-red-500">*</span> </h5>
+                <div
+                    class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-2.5 mb-4 ">
+                    <div>
+                        <label class="block  color-primary font-bold mb-3 pr-4">
+                            Name
+                        </label>
+                        <input
+                            class="parent-info bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            placeholder='(write "n/a" only if not applicable)'
+                            required>
+
+                        </input>
+                    </div>
+                    <div>
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Occupation
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            required>
+                        </input>
+                    </div>
+                    <div>
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Email Address
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            required>
+                        </input>
+                    </div>
+                    <div>
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Mobile Number
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            required>
+                        </input>
+                    </div>
+
+
+                </div>
+                <div>
+                    <label class="block color-primary mb-1 ml-1.5">
+                        <input type="radio"
+                            class="mr-1">
+                        SET AS PRIMARY CONTACT IN CASE OF EMERGENCY
+                    </label>
+                </div>
+
+            </div>
+            <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
+                <h5 class="color-primary mb-2.5">GUARDIAN <span class="text-red-500">*</span> </h5>
+                <div
+                    class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-2.5 mb-4 ">
+                    <div>
+                        <label class="block  color-primary font-bold mb-3 pr-4">
+                            Name
+                        </label>
+                        <input
+                            class="parent-info bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            placeholder='(write "n/a" only if not applicable)'
+                            required>
+
+                        </input>
+                    </div>
+                    <div>
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Occupation
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            required>
+                        </input>
+                    </div>
+                    <div>
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Email Address
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            required>
+                        </input>
+                    </div>
+                    <div>
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Mobile Number
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            required>
+                        </input>
+                    </div>
+
+
+                </div>
+                <div>
+                    <label class="block color-primary mb-1 ml-1.5">
+                        <input type="radio"
+                            class="mr-1">
+                        SET AS PRIMARY CONTACT
+                    </label>
+                </div>
+
+            </div>
+        </div>
+        <div sv-if="true"
+            class=" mb-6 mt-10">
+            <h4 class="color-primary font-bold text-xl">EDUCATIONAL BACKGROUND</h4>
+            <hr class="mb-5 bg-[#10326f] h-1 w-3/5" />
+
+            <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
+
+                <div class="flex flex-wrap gap-2.5 mb-4 ">
+                    <div class="grow">
+                        <label class="block color-primary font-bold mb-3 pr-4">
+                            Last School Attended
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            required>
+
+                        </input>
+                    </div>
+                    <div class="basis-[154px]">
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            City
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            required>
+                        </input>
+                    </div>
+                    <div class="basis-[154px]">
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            State/Province <span class="text-red-500">*</span>
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            required>
+                        </input>
+                    </div>
+                    <div>
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Country <span class="text-red-500">*</span>
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            required>
+                        </input>
+                    </div>
+
+
+                </div>
+                <div class="flex flex-wrap gap-2.5 mb-4 ">
+                    <div class="grow lg:grow-0">
+                        <label class="block color-primary font-bold mb-3 pr-4">
+                            Grade/Year Level
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            required>
+
+                        </input>
+                    </div>
+                    <div class="grow">
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Program/Strand/Degree earned
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            required>
+                        </input>
+                    </div>
+                    <div class="grow">
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            LRN <i class="font-normal">(For Junior High School Applicants)</i>
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            required>
+                        </input>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+            <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
+                <h5 class="color-primary mb-2.5">Register your school if not in the list </h5>
+                <div class="flex flex-wrap gap-2.5 mb-4 ">
+                    <div class="grow">
+                        <label class="block color-primary font-bold mb-3 pr-4">
+                            School Name
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            required>
+
+                        </input>
+                    </div>
+                    <div class="basis-[154px]">
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            City
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            required>
+                        </input>
+                    </div>
+                    <div class="basis-[154px]">
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            State/Province <span class="text-red-500">*</span>
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            required>
+                        </input>
+                    </div>
+                    <div>
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Country <span class="text-red-500">*</span>
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            required>
+                        </input>
+                    </div>
+
+
+                </div>
             </div>
 
         </div>
+        <div sv-if="true"
+            class=" mb-6 mt-10">
+            <h4 class="color-primary font-bold text-xl">ADDITIONAL INFORMATION</h4>
+            <hr class="mb-5 bg-[#10326f] h-1 w-3/5" />
+            <div class="grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-6">
+                <div class="border-[1px] border-neutral-100 p-2.5 rounded-lg">
+                    <h5 class="color-primary mb-2.5">Do you hold good moral standing in your
+                        previous
+                        school? <span class="text-red-500">*</span> </h5>
+                    <label class="block color-primary mb-1 ml-1.5">
+                        <input type="radio"
+                            class="mr-1">
+                        Yes
+                    </label>
+                    <label class="block color-primary mb-1 ml-1.5">
+                        <input type="radio"
+                            class="mr-1">
+                        No
+                    </label>
+                </div>
+                <div class="border-[1px] border-neutral-100 p-2.5 rounded-lg">
+                    <h5 class="color-primary mb-2.5">Have you involved of any illegal activities?
+                        <span class="text-red-500">*</span>
+                    </h5>
+                    <label class="block color-primary mb-1 ml-1.5">
+                        <input type="radio"
+                            class="mr-1">
+                        Yes
+                    </label>
+                    <label class="block color-primary mb-1 ml-1.5">
+                        <input type="radio"
+                            class="mr-1">
+                        No
+                    </label>
+                </div>
+            </div>
+            <h5 class="color-primary font-bold text-base mt-4 mb-2">Health Conditions</h5>
+            <div class="grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-6">
+                <div>
+                    <div class="border-[1px] border-neutral-100 p-2.5 rounded-lg">
+                        <h5 class="color-primary mb-2.5">Do you hold good moral standing in your
+                            previous
+                            school? <span class="text-red-500">*</span> </h5>
+                        <label class="block color-primary mb-1 ml-1.5">
+                            <input type="radio"
+                                class="mr-1">
+                            Yes
+                        </label>
+                        <label class="block color-primary mb-1 ml-1.5">
+                            <input type="radio"
+                                class="mr-1">
+                            No
+                        </label>
+                    </div>
+                    <label class="block color-primary font-bold text-base mt-2 ">
+                        Other health concerns/conditions <span class="text-red-500">*</span>
+                    </label>
+                    <label class="block color-primary italic text-sm mb-1">
+                        (Type "none" if you do not have any)
+                    </label>
+                    <input
+                        class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                        type="text"
+                        required>
+                    </input>
+                </div>
+                <div class="border-[1px] border-neutral-100 p-2.5 rounded-lg">
+                    <h5 class="color-primary mb-2.5">Do you have any of the following? (check all
+                        that apply) </h5>
+                    <label class="block color-primary mb-1 ml-1.5">
+                        <input type="checkbox"
+                            class="mr-1">
+                        Diabetes
+                    </label>
+                    <label class="block color-primary mb-1 ml-1.5">
+                        <input type="checkbox"
+                            class="mr-1">
+                        Allergies
+                    </label>
+                    <label class="block color-primary mb-1 ml-1.5">
+                        <input type="checkbox"
+                            class="mr-1">
+                        High Blood
+                    </label>
+                    <label class="block color-primary mb-1 ml-1.5">
+                        <input type="checkbox"
+                            class="mr-1">
+                        Anemia
+                    </label>
+                    <label class="block color-primary mb-1 ml-1.5">
+                        <input type="checkbox"
+                            class="mr-1">
+                        Others (please specify)
+                    </label>
+                </div>
+            </div>
+
+            <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
+                <h5 class="color-primary text-base mb-2.5">Professional Background </h5>
+                <div
+                    class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-2.5 mb-4 ">
+                    <div>
+                        <label class="block  color-primary font-bold mb-3 pr-4">
+                            Company
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            required>
+
+                        </input>
+                    </div>
+                    <div>
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Industry
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            required>
+                        </input>
+                    </div>
+                    <div>
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Designation
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            required>
+                        </input>
+                    </div>
 
 
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+        <div class=" mb-6 mt-10">
+            <h4 class="color-primary font-bold text-xl">HOW DID YOU KNOW ABOUT US?</h4>
+            <hr class="mb-5 bg-[#10326f] h-1 w-3/5" />
+
+            <h5 class="color-primary font-bold text-base mt-4 mb-2">Health Conditions</h5>
+            <div class="grid grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-6">
+
+                <div>
+                    <div class="border-[1px] border-neutral-100 p-2.5 mb-4 rounded-lg">
+                        <h5 class="color-primary mb-2.5">How did you know about us?</h5>
+                        <div class="flex ">
+                            <div class="w-1/2">
+                                <template v-for="source,index in sourceList">
+                                    <label v-if="index <= 4"
+                                        class="block color-primary mb-1 ml-1.5">
+                                        <input type="checkbox"
+                                            class="mr-1"
+                                            :id="source"
+                                            :value="source"
+                                            v-model="sources"
+                                            v-on:click="sources.pop()">
+                                        {{source}}
+                                    </label>
+                                </template>
+                            </div>
+                            <div class="w-1/2">
+                                <template v-for="source,index in sourceList">
+                                    <label v-if="index >= 5"
+                                        class="block color-primary mb-1 ml-1.5">
+                                        <input type="checkbox"
+                                            class="mr-1"
+                                            :id="source"
+                                            :value="source"
+                                            v-model="sources"
+                                            v-on:click="sources.pop()">
+                                        {{source }} {{index >= 7? "(please specify)" : ""}}
+                                    </label>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="border-[1px] border-neutral-100 p-2.5 rounded-lg">
+                        <h5 class="color-primary text-sm mb-2.5">Best time to contact you? <i>(to
+                                receive
+                                application updates/announcement/etc)</i></h5>
+                        <div class="flex ">
+                            <div class="w-1/2">
+                                <template v-for="time,index in timeList">
+                                    <label v-if="index <= 3"
+                                        class="block color-primary mb-1 ml-1.5">
+                                        <input type="checkbox"
+                                            class="mr-1"
+                                            :id="time"
+                                            :value="time"
+                                            v-model="times"
+                                            v-on:click="times.pop()">
+                                        {{time}}
+                                    </label>
+                                </template>
+                            </div>
+                            <div class="w-1/2">
+                                <template v-for="time,index in timeList">
+                                    <label v-if="index >= 4"
+                                        class="block color-primary mb-1 ml-1.5">
+                                        <input type="checkbox"
+                                            class="mr-1"
+                                            :id="index"
+                                            :value="time"
+                                            v-model="times"
+                                            v-on:click="times.pop()">
+                                        {{time}}
+                                    </label>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div v-if="sources[0] === 'Referral'"
+                        class="border-[1px] border-neutral-100 p-2.5 mb-4 rounded-lg">
+                        <h5 class="color-primary mb-2.5">Referred by<span
+                                class="text-red-500">*</span></h5>
+                        <div class="flex">
+                            <div class="w-full">
+                                <div class="grid grid-cols-[repeat(2,_1fr)]">
+                                    <template v-for="refer,index in referredList">
+                                        <label v-if="index < 2"
+                                            class="block color-primary mb-1 ml-1.5 capitalize">
+                                            <input type="checkbox"
+                                                class="mr-1 "
+                                                :id="refer"
+                                                :value="refer"
+                                                v-model="sources"
+                                                v-on:click="sources.pop()">
+                                            {{refer}}
+                                        </label>
+                                    </template>
+                                </div>
+                                <template v-for="refer,index in referredList">
+                                    <label v-if="index > 1"
+                                        class="block color-primary mb-1 ml-1.5 ">
+                                        <input type="checkbox"
+                                            class="mr-1 "
+                                            :id="refer"
+                                            :value="refer"
+                                            v-model="sources"
+                                            v-on:click="sources.pop()">
+                                        {{refer}}
+                                    </label>
+                                </template>
+                                <input
+                                    class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                    type="text"
+                                    required
+                                    placeholder="Name of your referrer">
+                                </input>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div v-if="sources[0] === 'Others'"
+                        v-bind:key="2"
+                        class="border-[1px] border-neutral-100 p-2.5 mb-4 rounded-lg ">
+                        <div class="">
+                            <h5 class="color-primary mb-2.5">Others (please specify)</h5>
+                            <input
+                                class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                type="text"
+                                required>
+
+                            </input>
+                        </div>
+                    </div>
+                    <div v-if="sources[0] === 'Event'"
+                        v-bind:key="1"
+                        class="border-[1px] border-neutral-100 p-2.5 mb-4 rounded-lg ">
+                        <div class="">
+                            <h5 class="color-primary mb-2.5">Events (please specify)</h5>
+                            <input
+                                class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                type="text"
+                                required>
+
+                            </input>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+        </div>
         <div class="text-center color-primary mt-[50px]"
-            v-if="false">
+            sv-if="true">
             iACADEMY shall retain in confidence all confidential information concerning and
             involving every
             student and the school.
@@ -454,7 +1089,7 @@
 
 
         <div class=" text-right"
-            v-if="false">
+            sv-if="true">
             <div v-if="loading_spinner"
                 class="lds-ring">
                 <div></div>
@@ -483,12 +1118,84 @@
     src="//js.hs-scripts.com/45758391.js"></script> -->
 <!-- End of HubSpot Embed Code -->
 
+<style>
+input::placeholder {
+    text-align: center;
+}
 
+.parent-info::placeholder {
+    text-align: center;
+    font-size: 12px;
+    font-style: italic;
+}
+
+select {
+    text-align: center;
+    text-align-last: center;
+    color: #f5f5f5;
+    background-color: #f5f5f5;
+}
+
+.slide-fade-enter {
+    transform: translateX(10px);
+    display: inline-block;
+    opacity: 0;
+}
+
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+    transition: all 0.2s ease;
+}
+
+.slide-fade-leave-to {
+    transform: translateX(-10px);
+    opacity: 0;
+}
+
+.list-complete-item {
+    /* transition: all .2s ease; */
+    /* display: inline-block; */
+    /* margin-right: 10px; */
+
+    transform: translateX(10px);
+    display: inline-block;
+
+}
+
+.list-complete-enter,
+.list-complete-leave-to {
+    opacity: 0;
+    /* transform: translateY(30px); */
+    transform: translateX(-10px);
+}
+
+.list-complete-leave-active {
+    position: absolute;
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 
 <script>
+const sourcesLeft = ['Google', 'Facebook', 'Instagram', 'Tiktok', 'News']
+const sourcesRight = ['School Fair/Orientation', 'Billboard', 'Event', 'Referral', 'Others']
+
+const timeLeft = ['8:00am-10:00am', '10:00am-12:00am', '12:00pm-2:00pm', '2:00pm-4:00pm']
+const timeRight = ['4:00pm-6:00pm', '6:00pm-8:00pm', '8:00pm-10:00pm', '10:00pm-12:00am']
+
+const referred = ['Family', 'Teacher/Guidance',
+    'Relatives', 'Friend', 'iAcademy Student/Alumni/Applicant/Employee/Partner'
+]
+
 new Vue({
     el: "#adminssions-form",
     data: {
+        optionValue: '',
+        sources: [],
+        times: [],
+        sourceList: [...sourcesLeft, ...sourcesRight],
+        timeList: [...timeLeft, ...timeRight],
+        referredList: [...referred],
         syid: <?php echo $current_term; ?>,
         request: {
             type_id: "",
@@ -527,6 +1234,12 @@ new Vue({
                 value: 'freshmen'
             }
         ]
+    },
+    computed: {
+        testX() {
+            console.log(this.sources[0]);
+            return this.sources[0] == 'Others' ? true : false
+        }
     },
     mounted() {
 
@@ -600,6 +1313,7 @@ new Vue({
     },
 
     methods: {
+
         submitForm: function() {
             //console.log(this.request);
         },
