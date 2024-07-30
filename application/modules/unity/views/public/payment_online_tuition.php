@@ -120,6 +120,31 @@
                                             <hr />
                                             <div class="d-flex flex-wrap my-5"
                                                 style="margin-top:50px">
+                                                <div v-if="this.selected_mode_of_payment.pchannel == 'bdo_pay'"
+                                                    style="margin-bottom:27px">
+                                                    <h5><strong>Cardholder Information:</strong>
+                                                    </h5>
+                                                    <div style="margin-bottom:10px;">
+                                                        <span>Cardholder First Name:</span>
+                                                        <input style="width:240px"
+                                                            type="text"
+                                                            v-model="cardHolderObj.firstName">
+                                                    </div>
+                                                    <div style="margin-bottom:10px;">
+                                                        <span>Cardholder Last Name:</span>
+                                                        <input style="width:240px"
+                                                            type="text"
+                                                            v-model="cardHolderObj.lastName">
+                                                    </div>
+                                                    <div style="margin-bottom:10px;">
+                                                        <span
+                                                            style="width:172px;display:inline-block">Cardholder
+                                                            Email:</span>
+                                                        <input style="width:240px"
+                                                            type="text"
+                                                            v-model="cardHolderObj.email">
+                                                    </div>
+                                                </div>
                                                 <h5 class="mb-3"><strong>Breakdown of Fees</strong>
                                                 </h5>
 
@@ -234,28 +259,7 @@
                                                     <td>{{ inst == 0 ? 'Paid' : inst }}</td>
                                                 </tr>
                                             </table>
-                                            <div
-                                                v-if="this.selected_mode_of_payment.pchannel == 'bdo_pay'">
-                                                <h5><strong>Cardholder Information:</strong></h5>
-                                                <div style="margin-bottom:10px;">
-                                                    <label>First Name:</label>
-                                                    <input style="width:240px"
-                                                        type="text"
-                                                        v-model="cardHolderObj.firstName">
-                                                </div>
-                                                <div style="margin-bottom:10px;">
-                                                    <label>Last Name:</label>
-                                                    <input style="width:240px"
-                                                        type="text"
-                                                        v-model="cardHolderObj.lastName">
-                                                </div>
-                                                <div style="margin-bottom:10px;">
-                                                    <label style="width:86px">Email:</label>
-                                                    <input style="width:240px"
-                                                        type="text"
-                                                        v-model="cardHolderObj.email">
-                                                </div>
-                                            </div>
+
                                         </div>
                                     </div>
                                 </form>
@@ -883,6 +887,7 @@ new Vue({
                         } else if (this.selected_mode_of_payment.pchannel ==
                             "bdo_pay") {
                             this.request_bdo = data.data.post_data;
+
                             setTimeout(() => {
                                 this.$refs.bdo_form.submit();
                             }, 500);
