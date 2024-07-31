@@ -1072,7 +1072,7 @@ class Data_fetcher extends CI_Model {
 
     }
     
-    function getStudents($course = 0,$regular= 0, $year=0,$gender = 0,$graduate=0,$scholarship=0,$registered=0,$sem=0,$type=0)
+    function getStudents($course = 0,$regular= 0, $year=0,$gender = 0,$graduate=0,$scholarship=0,$registered=0,$sem=0,$type=0, $level = 'none')
     {
         
         
@@ -1158,6 +1158,10 @@ class Data_fetcher extends CI_Model {
                     $this->db->where('isGraduate',1);
                 else
                     $this->db->where('isGraduate',0);
+
+        if($level!='none')
+            $this->db->where('level',$level);
+                
         
         
         
