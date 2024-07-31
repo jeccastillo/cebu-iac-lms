@@ -25,7 +25,7 @@
                         <span class="caret"></span>
                       </button>
                       <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">                        
-                            <li><a href="<?php echo base_url() ?>excel/download_students/<?php echo $course.'/'.$postreg.'/'.$postyear.'/'.$gender.'/'.$graduate.'/'.$scholarship.'/'.$registered.'/'.$sem; ?>" class="text-muted">Students Data Report</a></li>                                                  
+                            <li><a href="<?php echo base_url() ?>excel/download_students/<?php echo $course.'/'.$postreg.'/'.$postyear.'/'.$gender.'/'.$graduate.'/'.$scholarship.'/'.$registered.'/'.$sem.'/0/'.$level; ?>" class="text-muted">Students Data Report</a></li>                                                  
                             <li><a href="<?php echo base_url() ?>excel/download_student_grades/<?php echo $course.'/'.$postreg.'/'.$postyear.'/'.$gender.'/'.$graduate.'/'.$scholarship.'/'.$registered.'/'.$sem; ?>" class="text-muted">Student Grades</a></li>                                                                           
                             <li><a href="<?php echo base_url() ?>excel/download_enrolled_students_neo/<?php echo $course.'/'.$postreg.'/'.$postyear.'/'.$gender.'./'.$scholarship.'/'.$registered.'/'.$sem.'/'.'1'.'/'.$level; ?>" class="text-muted">Enrolled Students</a></li>                                                                           
                             <li><a href="<?php echo base_url() ?>excel/download_enrolled_students_neo/<?php echo $course.'/'.$postreg.'/'.$postyear.'/'.$gender.'./'.$scholarship.'/'.$registered.'/'.$sem.'/'.'0'.'/'.$level; ?>" class="text-muted">Enrolled Per Course</a></li>                                                                           
@@ -75,14 +75,14 @@
                             <option <?php echo ($gender == 2)?'selected':''; ?> value="2">female</option>
                         </select>
                     </div>
-                    <!-- <div class="col-sm-4">
+                    <div class="col-sm-4">
                         <label for="graduate">Graduated:</label>
                         <select id="graduate" class="form-control select2">
                             <option <?php echo ($graduate == 0)?'selected':''; ?> value="0">-----------------SELECT---------------</option>
                             <option <?php echo ($graduate == 1)?'selected':''; ?> value="1">yes</option>
                             <option <?php echo ($graduate == 2)?'selected':''; ?> value="2">no</option>
                         </select>
-                    </div>-->
+                    </div>
                    <div class="col-sm-4">
                         <label for="registered">Enrollment Status:</label>
                         <select id="registered" class="form-control select2">
