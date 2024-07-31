@@ -1997,7 +1997,7 @@ class Excel extends CI_Controller {
          exit;
     }
     
-    public function download_students($course = 0,$regular= 0, $year=0,$gender = 0,$graduate=0,$scholarship=0,$registered=0,$sem = 0, $neo = 0, $level = 'none')
+    public function download_students($course = 0,$regular= 0, $year=0,$gender = 0,$graduate=0,$scholarship=0,$registered=0,$sem = 0, $neo = 0, $level = 0)
     {
         
         $students = $this->data_fetcher->getStudents($course,$regular,$year,$gender,$graduate,$scholarship,$registered,$sem,$level);
