@@ -45,12 +45,7 @@
             </table>
             <table>
                 <tr style="font-size:10px;line-height:2px;text-align:left;">
-                    <td style="width:50%;color:#fff;">
-                        <?php 
-                        if($remarks != "Paynamics" && $remarks != "BDO Pay" && $remarks != "Maya Pay")
-                            echo $remarks;
-                        ?>
-                    </td>                    
+                    <td style="width:50%;color:#fff;">SPACE</td>                    
                 </tr>
             </table>
             <table>
