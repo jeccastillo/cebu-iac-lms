@@ -4789,7 +4789,7 @@ class Excel extends CI_Controller {
                 $date_enrolled = date("Y-m-d",strtotime($reg['dteRegistered']));
                 $tuition_discount = $total_discount = 0;
 
-                if($date_enrolled < $sy->reconf_start){
+                if($date_enrolled < $sy->ar_report_date_generation){
                     if($reg['paymentType'] == 'full' && $tuition['scholarship_tuition_fee_rate'] > 0)
                     $tuition_discount = $tuition['scholarship_tuition_fee_rate'];
                     if($reg['paymentType'] == 'partial' && $tuition['scholarship_tuition_fee_installment_rate'] > 0)
@@ -4834,17 +4834,17 @@ class Excel extends CI_Controller {
                     ->setCellValue('S'.$i, $reg['paymentType'] == 'partial' && $tuition['late_enrollment_fee'] > 0 ? (float)$tuition['late_enrollment_fee'] : '')
                     ->setCellValue('T'.$i, '=SUM(N' . $i . ':S' . $i . ')')
                     ->setCellValue('U'.$i, '=M' . $i . '+T' . $i . ')')
-                    ->setCellValue('V'.$i, $date_enrolled < $sy->reconf_start ? $tuition['scholar_type'] : '')
+                    ->setCellValue('V'.$i, $date_enrolled < $sy->ar_report_date_generation ? $tuition['scholar_type'] : '')
                     ->setCellValue('W'.$i, $tuition_discount )
-                    ->setCellValue('X'.$i, $date_enrolled < $sy->reconf_start && $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : '')
-                    ->setCellValue('Y'.$i, $date_enrolled < $sy->reconf_start && $tuition['scholarship_lab_fee_rate'] > 0 ? $tuition['scholarship_lab_fee_rate'] : '')
-                    ->setCellValue('Z'.$i, $date_enrolled < $sy->reconf_start && $tuition['scholarship_lab_fee_fixed'] > 0 ? $tuition['scholarship_lab_fee_fixed'] : '')
-                    ->setCellValue('AA'.$i, $date_enrolled < $sy->reconf_start && $tuition['scholarship_misc_fee_rate'] > 0 ? $tuition['scholarship_misc_fee_rate'] : '')
-                    ->setCellValue('AB'.$i, $date_enrolled < $sy->reconf_start && $tuition['scholarship_misc_fee_fixed'] > 0 ? $tuition['scholarship_misc_fee_fixed'] : '')
-                    ->setCellValue('AC'.$i, $date_enrolled < $sy->reconf_start && $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
-                    ->setCellValue('AD'.$i, $date_enrolled < $sy->reconf_start && $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
-                    ->setCellValue('AE'.$i, $date_enrolled < $sy->reconf_start && $assessment_discount_rate > 0 ? $assessment_discount_rate : '')
-                    ->setCellValue('AF'.$i, $date_enrolled < $sy->reconf_start && $assessment_discount_fixed > 0 ? $assessment_discount_fixed : '')
+                    ->setCellValue('X'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : '')
+                    ->setCellValue('Y'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_lab_fee_rate'] > 0 ? $tuition['scholarship_lab_fee_rate'] : '')
+                    ->setCellValue('Z'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_lab_fee_fixed'] > 0 ? $tuition['scholarship_lab_fee_fixed'] : '')
+                    ->setCellValue('AA'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_misc_fee_rate'] > 0 ? $tuition['scholarship_misc_fee_rate'] : '')
+                    ->setCellValue('AB'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_misc_fee_fixed'] > 0 ? $tuition['scholarship_misc_fee_fixed'] : '')
+                    ->setCellValue('AC'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
+                    ->setCellValue('AD'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
+                    ->setCellValue('AE'.$i, $date_enrolled < $sy->ar_report_date_generation && $assessment_discount_rate > 0 ? $assessment_discount_rate : '')
+                    ->setCellValue('AF'.$i, $date_enrolled < $sy->ar_report_date_generation && $assessment_discount_fixed > 0 ? $assessment_discount_fixed : '')
                     ->setCellValue('AG'.$i, '=SUM(W' . $i . ':AF' . $i . ')')
                     ->setCellValue('AH'.$i, '=U' . $i . '-AG' . $i . ')');
 
@@ -4959,7 +4959,7 @@ class Excel extends CI_Controller {
                 if($reg['paymentType'] == 'partial'){
                     $installment_balance = $tuition['tuition_installment_before_discount'] + $tuition['lab_installment_before_discount'] + $tuition['misc_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
                     
-                    if($date_enrolled < $sy->reconf_start){
+                    if($date_enrolled < $sy->ar_report_date_generation){
                         $installment_balance -= $tuition_discount;
                         $installment_balance -= $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : 0;
                         $installment_balance -= $tuition['scholarship_lab_fee_rate'] > 0 ? $tuition['scholarship_lab_fee_rate'] : 0;
