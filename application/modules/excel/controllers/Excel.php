@@ -4590,7 +4590,7 @@ class Excel extends CI_Controller {
     {
         $users = $this->db->select('tb_mas_users.*')
                     ->from('tb_mas_users')
-                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->order_by('tb_mas_users.strStudentNumber', 'ASC')
                     ->get()
                     ->result_array();
 
