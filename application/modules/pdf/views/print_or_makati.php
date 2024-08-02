@@ -33,11 +33,18 @@
                 </tr>
             </table>     
             <table>
-                <tr style="line-height:110px;font-size:10px;text-align:left;">
+                <tr style="line-height:12px;font-size:10px;text-align:left;">
                     <td>
                         <?php 
                             echo $remarks;
                         ?>
+                    </td>                    
+                </tr>
+            </table>
+            <table>
+                <tr style="line-height:98px;font-size:10px;text-align:left;">
+                    <td>
+                    &nbsp;
                     </td>                    
                 </tr>
             </table>
