@@ -179,6 +179,12 @@
             </table>
             <?php
                 $text = $student_address;
+                if(strlen($text) > 60){
+                    $textSize = "6px";
+                }
+                else{
+                    $textSize = "7.5px";
+                }
 
                 $splitstring1 = substr($text, 0, 40);
                 $splitstring2 = substr($text, 40);
@@ -199,7 +205,7 @@
                 <tr style="line-height:15px;">                    
                     <td style="font-size:10px;text-align:left;">
                         <span style="color:#fff;">Address &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                        <span style="font-size:7.5px;"><?php echo $student_address; ?></span>                        
+                        <span style="font-size:<?php echo $textSize; ?>;"><?php echo $student_address; ?></span>                        
                     </td>
                 </tr>
             </table>
