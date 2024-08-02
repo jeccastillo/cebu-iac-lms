@@ -39,7 +39,7 @@
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
                     <td>
-                        <div style="height:98px;">
+                        <div style="height:120px;">
                             <?php echo $remarks; ?>
                         </div>
                     </td>                    
