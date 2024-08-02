@@ -18,7 +18,13 @@
             </table>
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
-                    <td style="width:50%;font-size:8px;height:12px;"><?php echo $description; ?> <?php echo $description == "Reservation Payment" ? "<br />NON REFUNDABLE AND NON <br />TRANSFERABLE":""; ?></td>
+                    <td style="width:50%;font-size:8px;height:12px;">
+                    <?php 
+                        $out = strlen($description) > 30 ? substr($description,0,30)."..." : $description;
+                        echo $out; 
+                    
+                    ?> 
+                    <?php echo $description == "Reservation Payment" ? "<br />NON REFUNDABLE AND NON <br />TRANSFERABLE":""; ?></td>
                     <td style="width:50%"><?php echo number_format($total_amount_due,2,'.',','); ?></td>
                 </tr>
             </table>            
@@ -34,11 +40,11 @@
             </table>     
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
-                    <td><?php 
-                    $out = strlen($remarks) > 30 ? substr($remarks,0,30)."..." : $remarks;
-                    echo $out; 
-                    
-                    ?></td>                    
+                    <td>
+                    <?php                     
+                        echo $remarks;                     
+                    ?>
+                    </td>                    
                 </tr>
             </table>
             <table>
