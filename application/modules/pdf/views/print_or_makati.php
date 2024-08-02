@@ -111,9 +111,8 @@
                 </tr>
             </table>
             <table>
-                <tr style="line-height:12px;font-size:10px;text-align:left;">
-                    <td style="width:50%"></td>
-                    <td style="width:50%"><?php 
+                <tr style="line-height:12px;font-size:10px;text-align:left;">                    
+                    <td colspan="2"><?php 
                         if($remarks == "Paynamics" || $remarks == "BDO Pay" || $remarks == "Maya Pay")
                             echo $remarks;                                                
                         else
