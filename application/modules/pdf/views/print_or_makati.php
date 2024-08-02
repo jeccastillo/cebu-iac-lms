@@ -22,7 +22,7 @@
                     <td style="width:50%"><?php echo number_format($total_amount_due,2,'.',','); ?></td>
                 </tr>
             </table>            
-            <table style="height:98px;">
+            <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
                     <td><?php echo "SY ".$term['strYearStart']."-".$term['strYearEnd']." ".$term['enumSem']." ".$term['term_label']; ?></td>                    
                 </tr>
@@ -34,7 +34,11 @@
             </table>     
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
-                    <td><?php echo $remarks; ?></td>                    
+                    <td>
+                        <div style="height:98px;">
+                            <?php echo $remarks; ?>
+                        </div>
+                    </td>                    
                 </tr>
             </table>
             <!-- <table>
