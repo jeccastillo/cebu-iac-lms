@@ -36,7 +36,6 @@
                 <tr style="line-height:110px;font-size:10px;text-align:left;">
                     <td>
                         <?php 
-                        if($remarks != "Paynamics" && $remarks != "BDO Pay" && $remarks != "Maya Pay")
                             echo $remarks;
                         ?>
                     </td>                    
