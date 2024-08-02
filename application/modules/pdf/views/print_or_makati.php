@@ -182,9 +182,11 @@
                 if(strlen($text) > 60){
                     $textSize = "6px";
                 }
-                else{
+                elseif(strlen($text) > 40){
                     $textSize = "7.5px";
                 }
+                else
+                    $textSize = "9px";
 
                 $splitstring1 = substr($text, 0, 40);
                 $splitstring2 = substr($text, 40);
