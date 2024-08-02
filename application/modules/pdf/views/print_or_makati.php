@@ -144,16 +144,18 @@
             </table>           
             <table >
                 <tr style="line-height:12px;">
-                    <td style="font-size:10px;text-align:right;padding-right:15px;"><?php echo "  ".date("m/d/y",strtotime($transaction_date)); ?></td>
+                    <td style="font-size:10px;text-align:right;padding-right:15px;"><?php echo "  ".date("M j, Y",strtotime($transaction_date)); ?></td>
                 </tr>
             </table>
             <table>
                 <tr style="line-height:15px;">
                     <td style="font-size:10px;text-align:left;">
                     <span style="color:#fff;">RECEIVED fr</span>
+                    <span style="font-size:8px">
                     <?php if($student_id != 'undefined' && $student_id != ''): ?>
                         <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?>
                     <?php endif; ?>
+                    </span>
                     </td>
                 </tr>
             </table>
