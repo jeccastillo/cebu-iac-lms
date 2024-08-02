@@ -232,7 +232,7 @@
                 <tr style="line-height:15px;">
                     <td style="width:85%"></td>
                     <td style="width:15%;font-size:10px;text-align:right;">
-                        <?php echo number_format($total_amount_due,2,'.',','); ?>
+                        P<?php echo number_format($total_amount_due,2,'.',','); ?>
                     </td>
                 </tr>
             </table>
@@ -265,7 +265,7 @@
                 <tr style="line-height:15px;">
                     <td style="width:70%"></td>
                     <td style="width:30%;font-size:10px;text-align:right;">
-                    <?php echo number_format($total_amount_due,2,'.',','); ?>
+                    P<?php echo number_format($total_amount_due,2,'.',','); ?>
                     </td>
                 </tr>
             </table>
@@ -290,8 +290,8 @@
             <table >
                 <tr style="line-height:15px;">
                     <td style="width:57%"></td>
-                    <td style="width:43%;font-size:10px;text-align:center;">
-                    <?php echo number_format($total_amount_due,2,'.',','); ?>
+                    <td style="width:43%;font-size:10px;text-align:right;">
+                    P<?php echo number_format($total_amount_due,2,'.',','); ?>
                     </td>
                 </tr>
             </table>
@@ -329,8 +329,8 @@
             <table >
                 <tr style="line-height:15px;">
                     <td style="width:60%"></td>
-                    <td style="width:40%;font-size:10px;text-align:center;">
-                    <?php echo number_format($total_amount_due,2,'.',','); ?>
+                    <td style="width:40%;font-size:10px;text-align:right;">
+                    P<?php echo number_format($total_amount_due,2,'.',','); ?>
                     </td>
                 </tr>
             </table>
