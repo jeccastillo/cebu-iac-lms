@@ -35,8 +35,7 @@
             </table>      -->
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
-                    <td>
-                    <?php                     
+                    <td><?php                     
                         echo $remarks;                     
                     ?>
                     </td>                    
