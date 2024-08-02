@@ -232,7 +232,7 @@
                 <tr style="line-height:15px;">
                     <td style="width:85%"></td>
                     <td style="width:15%;font-size:10px;text-align:right;">
-                        P<?php echo number_format($total_amount_due,2,'.',','); ?>
+                        P<?php echo number_format($total_amount_due,2,'.',','); ?><br />
                     </td>
                 </tr>
             </table>
