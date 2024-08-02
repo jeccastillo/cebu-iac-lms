@@ -4,13 +4,18 @@
     </tr>
 </table>
 <table >
-    <tr style="line-height:50px;">
+    <tr style="line-height:40px;">
         <td width="75%" style="text-align:right;font-weight:bold;font-size:9px;"></td>
     </tr>
 </table>
 <table>
     <tr>        
-        <td style="width:30%">            
+        <td style="width:30%">
+            <table>
+                <tr style="line-height:5px;">
+                    <td style=""></td>
+                </tr>
+            </table>
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
                     <td style="width:50%;font-size:8px;height:12px;"><?php echo $description; ?> <?php echo $description == "Reservation Payment" ? "<br />NON REFUNDABLE AND NON <br />TRANSFERABLE":""; ?></td>
