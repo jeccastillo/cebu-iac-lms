@@ -22,7 +22,7 @@
                     <td style="width:50%"><?php echo number_format($total_amount_due,2,'.',','); ?></td>
                 </tr>
             </table>            
-            <table>
+            <table style="height:98px;">
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
                     <td><?php echo "SY ".$term['strYearStart']."-".$term['strYearEnd']." ".$term['enumSem']." ".$term['term_label']; ?></td>                    
                 </tr>
@@ -37,13 +37,13 @@
                     <td><?php echo $remarks; ?></td>                    
                 </tr>
             </table>
-            <table>
+            <!-- <table>
                 <tr style="line-height:98px;font-size:10px;text-align:left;">
                     <td>
                     &nbsp;
                     </td>                    
                 </tr>
-            </table>
+            </table> -->
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
                     <td style="width:30%;font-size:9px;"><?php echo $description == "Reservation Payment" ? 'Name:' : ''; ?></td>
