@@ -18,9 +18,8 @@
             </table>
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
-                    <td style="width:50%;font-size:8px;height:12px;">
-                    <?php 
-                        $out = strlen($description) > 30 ? substr($description,0,30)."..." : $description;
+                    <td style="width:50%;font-size:8px;height:12px;"><?php 
+                        $out = strlen($description) > 20 ? substr($description,0,20)."..." : $description;
                         echo $out; 
                     
                     ?> 
