@@ -28,11 +28,11 @@
                     <td><?php echo "SY ".$term['strYearStart']."-".$term['strYearEnd']." ".$term['enumSem']." ".$term['term_label']; ?></td>                    
                 </tr>
             </table>
-            <table>
+            <!-- <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
                     <td><?php echo $type; ?></td>                    
                 </tr>
-            </table>     
+            </table>      -->
             <table>
                 <tr style="line-height:12px;font-size:10px;text-align:left;">
                     <td>
