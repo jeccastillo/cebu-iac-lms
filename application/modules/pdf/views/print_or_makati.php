@@ -346,7 +346,7 @@
                 </tr>
             </table>
             <table>
-                <tr style="line-height:70px;">
+                <tr style="line-height:60px;">
                     <td style=""></td>
                 </tr>
             </table>
