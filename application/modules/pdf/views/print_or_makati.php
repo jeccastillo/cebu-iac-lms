@@ -196,7 +196,7 @@
                 <tr style="line-height:15px;">                    
                     <td style="font-size:10px;text-align:left;">
                         <span style="color:#fff;">Address &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                        <span style="font-size:7.5px;"><?php echo $student_address; ?><br /></span>                        
+                        <span style="font-size:7.5px;"><?php echo $student_address; ?></span>                        
                     </td>
                 </tr>
             </table>
