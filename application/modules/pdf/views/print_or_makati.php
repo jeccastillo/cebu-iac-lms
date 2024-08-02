@@ -34,7 +34,12 @@
             </table>     
             <table>
                 <tr style="line-height:110px;font-size:10px;text-align:left;">
-                    <td>&nbsp;</td>                    
+                    <td>
+                        <?php 
+                        if($remarks != "Paynamics" && $remarks != "BDO Pay" && $remarks != "Maya Pay")
+                            echo $remarks;
+                        ?>
+                    </td>                    
                 </tr>
             </table>
             <table>
@@ -46,10 +51,7 @@
             <table>
                 <tr style="font-size:10px;line-height:2px;text-align:left;">
                     <td style="width:50%;color:#fff;">
-                        <?php 
-                        if($remarks != "Paynamics" && $remarks != "BDO Pay" && $remarks != "Maya Pay")
-                            echo $remarks;
-                        ?>
+                        &nbsp;
                     </td>                    
                 </tr>
             </table>
