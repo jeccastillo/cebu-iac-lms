@@ -186,7 +186,7 @@
                     $textSize = "7.5px";
                 }
                 else
-                    $textSize = "10px";
+                    $textSize = "9px";
 
                 $splitstring1 = substr($text, 0, 40);
                 $splitstring2 = substr($text, 40);
