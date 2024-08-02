@@ -2222,7 +2222,7 @@ class Pdf extends CI_Controller {
     
     
         // set margins
-        $pdf->SetMargins(8, 10, 25);
+        $pdf->SetMargins(8, 10, 15);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
         //$pdf->SetAutoPageBreak(TRUE, 6);
