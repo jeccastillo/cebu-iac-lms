@@ -4792,7 +4792,7 @@ class Excel extends CI_Controller {
                 //     die();
                 // }
 
-                $date_enrolled = date("Y-m-d",strtotime($reg['dteRegistered']));
+                $date_enrolled = date("Y-m-d",strtotime($reg['date_enlisted']));
                 if(isset($date_enrolled_array[$user['slug']])){
                     $date_enrolled = date("M d,Y",strtotime($date_enrolled_array[$user['slug']]));
                 }
