@@ -4765,25 +4765,27 @@ class Excel extends CI_Controller {
                 $studentsEnrolled = true;
                 $course = $this->data_fetcher->getProgramDetails($user['intProgramID']);          
                 $assessment_discount_rate = $assessment_discount_fixed = $tuition_discount_rate = 0;
-                if($reg['paymentType'] == 'full'){
-                    if($tuition['scholarship_total_assessment_rate'] > 0){
-                        $assessment_discount_rate = $tuition['scholarship_total_assessment_rate'];
-                    }
-                    if($tuition['scholarship_total_assessment_fixed'] > 0){
-                        $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed'];
-                    }
-                    if($tuition['scholarship_tuition_fee_rate'] > 0){
-                        $tuition_discount_rate = $tuition['scholarship_tuition_fee_rate'];
-                    }
-                }else{ 
-                    if($tuition['scholarship_total_assessment_rate_installment'] > 0){
-                        $assessment_discount_rate = $tuition['scholarship_total_assessment_rate_installment'];
-                    }
-                    if($tuition['scholarship_total_assessment_fixed_installment'] > 0){
-                        $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed_installment'];
-                    }
-                    if($tuition['scholarship_tuition_fee_installment_rate'] > 0){
-                        $tuition_discount_rate = $tuition['scholarship_tuition_fee_installment_rate'];
+                if($tuition){
+                    if($reg['paymentType'] == 'full'){
+                        if($tuition['scholarship_total_assessment_rate'] > 0){
+                            $assessment_discount_rate = $tuition['scholarship_total_assessment_rate'];
+                        }
+                        if($tuition['scholarship_total_assessment_fixed'] > 0){
+                            $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed'];
+                        }
+                        if($tuition['scholarship_tuition_fee_rate'] > 0){
+                            $tuition_discount_rate = $tuition['scholarship_tuition_fee_rate'];
+                        }
+                    }else{ 
+                        if($tuition['scholarship_total_assessment_rate_installment'] > 0){
+                            $assessment_discount_rate = $tuition['scholarship_total_assessment_rate_installment'];
+                        }
+                        if($tuition['scholarship_total_assessment_fixed_installment'] > 0){
+                            $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed_installment'];
+                        }
+                        if($tuition['scholarship_tuition_fee_installment_rate'] > 0){
+                            $tuition_discount_rate = $tuition['scholarship_tuition_fee_installment_rate'];
+                        }
                     }
                 }
 
