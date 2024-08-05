@@ -4793,6 +4793,9 @@ class Excel extends CI_Controller {
                 // }
 
                 $date_enrolled = date("Y-m-d",strtotime($reg['dteRegistered']));
+                if(isset($date_enrolled_array[$user['slug']])){
+                    $date_enrolled = date("M d,Y",strtotime($date_enrolled_array[$user['slug']]));
+                }
                 $tuition_discount = $total_discount = 0;
 
                 if($date_enrolled < $sy->ar_report_date_generation){
