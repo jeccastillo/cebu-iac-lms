@@ -4787,6 +4787,9 @@ class Excel extends CI_Controller {
                             $tuition_discount_rate = $tuition['scholarship_tuition_fee_installment_rate'];
                         }
                     }
+                }else{
+                    print_r($user);
+                    die();
                 }
 
                 $date_enrolled = date("Y-m-d",strtotime($reg['dteRegistered']));
