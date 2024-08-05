@@ -2002,10 +2002,10 @@ class Datatables extends CI_Controller {
                     $sWhere .= "AND ".$table.".level = 'shs' ";
                 break;
                 case 2:
-                    $sWhere .= "AND ".$table.".level = 'college' ";
+                    $sWhere .= "AND (".$table.".level = 'college' OR ".$table.".level = 'other')";
                 break;
                 case 3:
-                    $sWhere .= "AND ".$table.".level = 'sd' ";
+                    $sWhere .= "AND ".$table.".level = 'other' ";
                 break;
                 case 4:
                     $sWhere .= "AND ".$table.".level = 'drive' ";
