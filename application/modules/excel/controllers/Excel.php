@@ -4715,7 +4715,7 @@ class Excel extends CI_Controller {
             $reg = $this->db->select('tb_mas_registration.*, tb_mas_scholarships.name as scholarshipName')
                     ->from('tb_mas_registration')
                     ->where(array('intStudentID'=>$user['intID'],'intAYID'=>$sem, 'dteRegistered !=' => NULL))
-                    ->or_where(array('intStudentID'=>$user['intID'],'intAYID'=>$sem, 'date_enlisted !=' => NULL))
+                    // ->or_where(array('intStudentID'=>$user['intID'],'intAYID'=>$sem, 'date_enlisted !=' => NULL))
                     ->join('tb_mas_scholarships', 'tb_mas_scholarships.intID = tb_mas_registration.enumScholarship', 'left')
                     ->get()
                     ->first_row('array');
@@ -4765,7 +4765,7 @@ class Excel extends CI_Controller {
                 $studentsEnrolled = true;
                 $course = $this->data_fetcher->getProgramDetails($user['intProgramID']);          
                 $assessment_discount_rate = $assessment_discount_fixed = $tuition_discount_rate = 0;
-                if($tuition){
+                // if($tuition){
                     if($reg['paymentType'] == 'full'){
                         if($tuition['scholarship_total_assessment_rate'] > 0){
                             $assessment_discount_rate = $tuition['scholarship_total_assessment_rate'];
@@ -4787,10 +4787,10 @@ class Excel extends CI_Controller {
                             $tuition_discount_rate = $tuition['scholarship_tuition_fee_installment_rate'];
                         }
                     }
-                }else{
-                    print_r($user);
-                    die();
-                }
+                // }else{
+                //     print_r($user);
+                //     die();
+                // }
 
                 $date_enrolled = date("Y-m-d",strtotime($reg['dteRegistered']));
                 $tuition_discount = $total_discount = 0;
