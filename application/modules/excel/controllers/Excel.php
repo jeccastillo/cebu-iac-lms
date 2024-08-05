@@ -4824,7 +4824,7 @@ class Excel extends CI_Controller {
                     // ->setCellValue('B'.$i, str_replace(str_split('T-'), "",$user['strStudentNumber']))
                     ->setCellValue('B'.$i, str_replace("-", "",$user['strStudentNumber']))
                     ->setCellValue('C'.$i, strtoupper($user['strLastname']) . ', ' . strtoupper($user['strFirstname']) . ' ' . strtoupper($user['strMiddlename']))
-                    ->setCellValue('D'.$i, isset($date_enrolled_array[$user['slug']]) ? date("M d,Y",strtotime($date_enrolled_array[$user['slug']])) : date("Y-m-d",strtotime($reg['date_enlisted'])))
+                    ->setCellValue('D'.$i, isset($date_enrolled_array[$user['slug']]) ? date("M d,Y",strtotime($date_enrolled_array[$user['slug']])) : date("M d, Y",strtotime($reg['date_enlisted'])))
                     // ->setCellValue('D'.$i, date("M d,Y",strtotime($reg['date_enlisted'])))
                     ->setCellValue('E'.$i, $reg['paymentType'] == 'full' ? 'FULL PAYMENT' : 'INSTALLMENT')
                     ->setCellValue('F'.$i, $course['strProgramCode'])
