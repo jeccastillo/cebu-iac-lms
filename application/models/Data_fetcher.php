@@ -1160,10 +1160,13 @@ class Data_fetcher extends CI_Model {
                     $this->db->where('isGraduate',0);
 
         if($level!=0)
-                if($level == 1)
+                if($level == 1){
                     $this->db->where('level','shs');
-                elseif($level == 2)
-                    $this->db->where('level','college');
+                }
+                elseif($level == 2){
+                    $this->db->where('level !=','shs');
+                    $this->db->where('level !=','drive');
+                }
                 elseif($level == 3)
                     $this->db->where('level','other');
                 else
