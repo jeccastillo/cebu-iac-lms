@@ -1946,7 +1946,10 @@ class Datatables extends CI_Controller {
         
        
         if($table =='tb_mas_users'){
-            $sWhere = "WHERE $table.student_status = '$student_type' ";
+            if($student_type == "active")
+                $sWhere = "WHERE ($table.student_status = 'active' OR $table.student_status = 'loa' OR $table.student_status = 'awol') ";
+            else
+                $sWhere = "WHERE $table.student_status = '$student_type' ";
         }
         if($gender!=0  && $table =='tb_mas_users'){
             
