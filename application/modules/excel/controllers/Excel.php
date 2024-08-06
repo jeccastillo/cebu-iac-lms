@@ -4714,7 +4714,8 @@ class Excel extends CI_Controller {
 
             $reg = $this->db->select('tb_mas_registration.*, tb_mas_scholarships.name as scholarshipName')
                     ->from('tb_mas_registration')
-                    ->where(array('intStudentID'=>$user['intID'],'intAYID'=>$sem, 'dteRegistered !=' => NULL))
+                    ->where(array('intStudentID'=>$user['intID'],'intAYID'=>$sem, 'date_enlisted !=' => NULL))
+                    // ->or_where(array('intStudentID'=>$user['intID'],'intAYID'=>$sem, 'dteRegistered !=' => NULL))
                     ->join('tb_mas_scholarships', 'tb_mas_scholarships.intID = tb_mas_registration.enumScholarship', 'left')
                     ->get()
                     ->first_row('array');
@@ -4764,29 +4765,37 @@ class Excel extends CI_Controller {
                 $studentsEnrolled = true;
                 $course = $this->data_fetcher->getProgramDetails($user['intProgramID']);          
                 $assessment_discount_rate = $assessment_discount_fixed = $tuition_discount_rate = 0;
-                if($reg['paymentType'] == 'full'){
-                    if($tuition['scholarship_total_assessment_rate'] > 0){
-                        $assessment_discount_rate = $tuition['scholarship_total_assessment_rate'];
+                // if($tuition){
+                    if($reg['paymentType'] == 'full'){
+                        if($tuition['scholarship_total_assessment_rate'] > 0){
+                            $assessment_discount_rate = $tuition['scholarship_total_assessment_rate'];
+                        }
+                        if($tuition['scholarship_total_assessment_fixed'] > 0){
+                            $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed'];
+                        }
+                        if($tuition['scholarship_tuition_fee_rate'] > 0){
+                            $tuition_discount_rate = $tuition['scholarship_tuition_fee_rate'];
+                        }
+                    }else{ 
+                        if($tuition['scholarship_total_assessment_rate_installment'] > 0){
+                            $assessment_discount_rate = $tuition['scholarship_total_assessment_rate_installment'];
+                        }
+                        if($tuition['scholarship_total_assessment_fixed_installment'] > 0){
+                            $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed_installment'];
+                        }
+                        if($tuition['scholarship_tuition_fee_installment_rate'] > 0){
+                            $tuition_discount_rate = $tuition['scholarship_tuition_fee_installment_rate'];
+                        }
                     }
-                    if($tuition['scholarship_total_assessment_fixed'] > 0){
-                        $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed'];
-                    }
-                    if($tuition['scholarship_tuition_fee_rate'] > 0){
-                        $tuition_discount_rate = $tuition['scholarship_tuition_fee_rate'];
-                    }
-                }else{ 
-                    if($tuition['scholarship_total_assessment_rate_installment'] > 0){
-                        $assessment_discount_rate = $tuition['scholarship_total_assessment_rate_installment'];
-                    }
-                    if($tuition['scholarship_total_assessment_fixed_installment'] > 0){
-                        $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed_installment'];
-                    }
-                    if($tuition['scholarship_tuition_fee_installment_rate'] > 0){
-                        $tuition_discount_rate = $tuition['scholarship_tuition_fee_installment_rate'];
-                    }
-                }
+                // }else{
+                //     print_r($user);
+                //     die();
+                // }
 
-                $date_enrolled = date("Y-m-d",strtotime($reg['dteRegistered']));
+                $date_enrolled = date("Y-m-d",strtotime($reg['date_enlisted']));
+                if(isset($date_enrolled_array[$user['slug']])){
+                    $date_enrolled = date("M d,Y",strtotime($date_enrolled_array[$user['slug']]));
+                }
                 $tuition_discount = $total_discount = 0;
 
                 if($date_enrolled < $sy->ar_report_date_generation){
@@ -4815,7 +4824,7 @@ class Excel extends CI_Controller {
                     // ->setCellValue('B'.$i, str_replace(str_split('T-'), "",$user['strStudentNumber']))
                     ->setCellValue('B'.$i, str_replace("-", "",$user['strStudentNumber']))
                     ->setCellValue('C'.$i, strtoupper($user['strLastname']) . ', ' . strtoupper($user['strFirstname']) . ' ' . strtoupper($user['strMiddlename']))
-                    ->setCellValue('D'.$i, isset($date_enrolled_array[$user['slug']]) ? date("M d,Y",strtotime($date_enrolled_array[$user['slug']])) : '')
+                    ->setCellValue('D'.$i, isset($date_enrolled_array[$user['slug']]) ? date("M d,Y",strtotime($date_enrolled_array[$user['slug']])) : date("M d, Y",strtotime($reg['date_enlisted'])))
                     // ->setCellValue('D'.$i, date("M d,Y",strtotime($reg['date_enlisted'])))
                     ->setCellValue('E'.$i, $reg['paymentType'] == 'full' ? 'FULL PAYMENT' : 'INSTALLMENT')
                     ->setCellValue('F'.$i, $course['strProgramCode'])
