@@ -152,7 +152,7 @@
                         <?php endif; ?>                                                        
                         <td>
                             <?php if($record['intFinalized'] >= 2 && $active_sem['viewing_final_start'] <= date("Y-m-d") && $active_sem['viewing_final_end'] > date("Y-m-d") && count($deficiencies) == 0): ?> 
-                                <?php echo ($record['intFinalized'] >= 1)?:''; ?>
+                                <?php echo $record['strRemarks']; ?>
                             <?php else: ?>
                                 -
                             <?php endif; ?>                            
