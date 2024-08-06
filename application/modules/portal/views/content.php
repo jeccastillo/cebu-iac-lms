@@ -150,7 +150,13 @@
                         <?php else: ?>
                             <td>Not Yet Available</td>
                         <?php endif; ?>                                                        
-                        <td><?php echo ($record['intFinalized'] >= 1)?$record['strRemarks']:''; ?></td>                        
+                        <td>
+                            <?php if($record['intFinalized'] >= 2 && $active_sem['viewing_final_start'] <= date("Y-m-d") && $active_sem['viewing_final_end'] > date("Y-m-d") && count($deficiencies) == 0): ?> 
+                                <?php echo ($record['intFinalized'] >= 1)?:''; ?>
+                            <?php else: ?>
+                                -
+                            <?php endif; ?>                            
+                        </td>
                         <td><?php if($record['strFirstname']!="unassigned"){
                                     $firstNameInitial = substr($record['strFirstname'], 0,1);
                                     echo $firstNameInitial.". ".$record['strLastname'];  
