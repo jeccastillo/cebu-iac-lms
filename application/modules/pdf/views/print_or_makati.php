@@ -250,12 +250,7 @@
                         P<?php echo number_format($total_amount_due,2,'.',','); ?><br />
                     </td>
                 </tr>
-            </table>
-            <table >
-                <tr style="line-height:2px;">
-                    <td style=""></td>
-                </tr>
-            </table>
+            </table>            
             <table >
                 <tr style="line-height:15px;">                    
                     <td style="font-size:10px;text-align:left;">
@@ -265,7 +260,7 @@
                 </tr>
             </table>
             <table >
-                <tr style="line-height:22px;">
+                <tr style="line-height:12px;">
                     <td style="width:60%"></td>
                     <td style="width:40%;font-size:8px;text-align:right;">                        
                     </td>
@@ -350,7 +345,7 @@
                 </tr>
             </table>
             <table>
-                <tr style="line-height:50px;">
+                <tr style="line-height:47px;">
                     <td style=""></td>
                 </tr>
             </table>
