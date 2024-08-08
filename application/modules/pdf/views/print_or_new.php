@@ -158,7 +158,7 @@
                             <tr style="line-height:15px;">                    
                                 <td style="font-size:12px;;text-align:left;">
                                     <span style="color:#fff;">RECEIVED fr</span>
-                                    <span style="font-size:9px">
+                                    <span style="font-size:12px">
                                         <?php echo $student_name; ?>
                                     </span>                                                                        
                                 </td>
