@@ -134,7 +134,7 @@
                     <td style="width:70%;vertical-align:top;">
                         <table>
                             <tr>
-                                <td width="60%" style="text-align:right;font-weight:bold;font-size:9px;">OR No:<?php echo $or_number; ?></td>
+                                <td style="text-align:right;font-weight:bold;font-size:9px;padding-right:20mm;">OR No:<?php echo $or_number; ?></td>
                             </tr>
                         </table>           
                         <table >
@@ -144,7 +144,7 @@
                         </table>
                         <table>
                             <tr>
-                                <td style="padding-left:30mm;font-size:12px;;text-align:left;">                                
+                                <td style="padding-left:25mm;font-size:12px;;text-align:left;">                                
                                     <div style="font-size:11px;">
                                         <?php if($student_id != 'undefined' && $student_id != ''): ?>
                                             <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?>
@@ -155,7 +155,7 @@
                         </table>
                         <table >
                             <tr>                    
-                                <td style="font-size:12px;;text-align:left;padding-left:30mm;">                                    
+                                <td style="font-size:12px;;text-align:left;padding-left:25mm;">                                    
                                     <span style="font-size:11px">
                                         <?php echo $student_name; ?>
                                     </span>                                                                        
