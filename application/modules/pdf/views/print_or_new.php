@@ -1,5 +1,5 @@
 <style>
-   body { margin: 0 }
+   body { margin: 0; font-family: Arial, Sans-Serif; }
     .sheet-outer {
         margin: 0;
     }
