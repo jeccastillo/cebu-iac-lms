@@ -43,10 +43,16 @@
 <body>
     <div class="sheet-outer A4">
         <section class="sheet padding-5mm">
-            <article>This is an A4 document.</article>
-        </section>
-        <section class="sheet padding-5mm">
-            <article>This is an A4 document.</article> 
-        </section>
+            <table style="border:none">
+                <tr>
+                    <td style="width:30%">
+                        Left
+                    </td>
+                    <td style="width:70%">
+                        Right
+                    </td>
+                </tr>
+            </table>     
+        </section>        
     </div>
 </body>
