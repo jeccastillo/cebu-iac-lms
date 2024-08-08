@@ -154,9 +154,8 @@
                             </tr>
                         </table>
                         <table >
-                            <tr style="line-height:15px;">                    
-                                <td style="font-size:12px;;text-align:left;">
-                                    <span style="color:#fff;">RECEIVED fr</span>
+                            <tr>                    
+                                <td style="font-size:12px;;text-align:left;padding-left:20mm;">                                    
                                     <span style="font-size:11px">
                                         <?php echo $student_name; ?>
                                     </span>                                                                        
