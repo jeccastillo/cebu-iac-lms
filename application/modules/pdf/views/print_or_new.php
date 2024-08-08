@@ -57,7 +57,10 @@
                         </table>
                         <table style="min-height:98px;">
                             <tr style="font-size:12px;text-align:left;vertical-align:top;">
-                                <td style="vertical-align:top;"><?php echo "SY ".$term['strYearStart']."-".$term['strYearEnd']." ".$term['enumSem']." ".$term['term_label']." ".$type; ?></td>                    
+                                <td style="vertical-align:top;">
+                                    <?php echo "SY ".$term['strYearStart']."-".$term['strYearEnd']." ".$term['enumSem']." ".$term['term_label']." ".$type; ?><br />
+                                    <?php echo $remarks; ?>
+                                </td>                    
                             </tr>
                         </table>
                     </td>
