@@ -133,18 +133,18 @@
                     </td>
                     <td style="width:70%;vertical-align:top;">
                         <table>
-                            <tr style="line-height:17px;">
-                                <td width="75%" style="text-align:right;font-weight:bold;font-size:9px;">OR No:<?php echo $or_number; ?></td>
+                            <tr>
+                                <td width="60%" style="text-align:right;font-weight:bold;font-size:9px;">OR No:<?php echo $or_number; ?></td>
                             </tr>
                         </table>           
                         <table >
                             <tr style="line-height:12px;">
-                                <td style="font-size:12px;;text-align:right;padding-right:15px;"><?php echo "  ".date("M j, Y",strtotime($transaction_date)); ?></td>
+                                <td style="font-size:12px;;text-align:right;padding-right:30mm;"><?php echo "  ".date("M j, Y",strtotime($transaction_date)); ?></td>
                             </tr>
                         </table>
                         <table>
                             <tr>
-                                <td style="padding-left:20mm;font-size:12px;;text-align:left;">                                
+                                <td style="padding-left:25mm;font-size:12px;;text-align:left;">                                
                                     <div style="font-size:11px;">
                                         <?php if($student_id != 'undefined' && $student_id != ''): ?>
                                             <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?>
