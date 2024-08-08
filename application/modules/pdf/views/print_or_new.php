@@ -55,6 +55,11 @@
                                 <td colspan="2"><?php echo $description == "Reservation Payment" ? "NON REFUNDABLE AND NON TRANSFERABLE":""; ?></td>                                
                             </tr>
                         </table>
+                        <table style="min-height:98px;">
+                            <tr style="font-size:12px;text-align:left;">
+                                <td><?php echo "SY ".$term['strYearStart']."-".$term['strYearEnd']." ".$term['enumSem']." ".$term['term_label']." ".$type; ?></td>                    
+                            </tr>
+                        </table>
                     </td>
                     <td style="width:70%;vertical-align:top;">
                         Right
