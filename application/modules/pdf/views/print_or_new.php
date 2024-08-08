@@ -172,13 +172,13 @@
                         <?php
                             $text = $student_address;
                             if(strlen($text) > 60){
-                                $textSize = "6px";
+                                $textSize = "8px";
                             }
                             elseif(strlen($text) > 40){
-                                $textSize = "7.5px";
+                                $textSize = "9.5px";
                             }
                             else
-                                $textSize = "9px";
+                                $textSize = "11px";
 
                             $splitstring1 = substr($text, 0, 40);
                             $splitstring2 = substr($text, 40);
