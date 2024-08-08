@@ -48,7 +48,7 @@
 <body>
     <div class="sheet-outer A4">
         <section class="sheet padding-5mm">            
-            <table style="border:none;width:100%;margin-top:15mm;">
+            <table style="border:none;width:100%;margin-top:18mm;">
                 <tr>
                     <td style="width:30%">
                         <table>
@@ -125,7 +125,7 @@
                         <table style="">
                             <tr style="font-size:12px;text-align:left;">
                                 <td style="width:50%">&nbsp;</td>
-                                <td style="width:50%;padding-top:10mm;">P<?php echo number_format($total_amount_due,2,'.',','); ?></td>
+                                <td style="width:50%;padding-top:7mm;">P<?php echo number_format($total_amount_due,2,'.',','); ?></td>
                             </tr>
                         </table>
                     </td>
@@ -137,7 +137,7 @@
                         </table>           
                         <table >
                             <tr>
-                                <td style="font-size:12px;;text-align:right;padding-right:10mm;padding-top:5mm;"><?php echo "  ".date("M j, Y",strtotime($transaction_date)); ?></td>
+                                <td style="font-size:12px;;text-align:right;padding-right:10mm;padding-top:3mm;"><?php echo "  ".date("M j, Y",strtotime($transaction_date)); ?></td>
                             </tr>
                         </table>
                         <table>
