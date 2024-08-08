@@ -64,7 +64,7 @@
                             </tr>
                         </table>
                         <table>
-                            <tr style="font-size:10px;text-align:left;">
+                            <tr style="font-size:12px;text-align:left;">
                                 <td style="width:50%">&nbsp;</td>
                                 <td style="width:50%"><?php echo $is_cash == 1?"yes":""; ?></td>
                             </tr>
@@ -108,7 +108,7 @@
                             </tr>
                         </table>
                         <table>
-                            <tr style="font-size:10px;text-align:left;">                    
+                            <tr style="font-size:12px;text-align:left;">                    
                                 <td colspan="2"><?php 
                                     if($remarks == "Paynamics" || $remarks == "BDO Pay" || $remarks == "Maya Pay")
                                         echo $remarks;                                                
