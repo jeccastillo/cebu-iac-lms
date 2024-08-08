@@ -48,9 +48,11 @@
                     <td style="width:30%">
                         <table>
                             <tr style="text-align:left;font-size:10px;">
-                                <td style="width:50%;height:12px;"><?php echo $description; ?> 
-                                <?php echo $description == "Reservation Payment" ? "<br />NON REFUNDABLE AND NON <br />TRANSFERABLE":""; ?></td>
-                                <td style="width:50%"><?php echo number_format($total_amount_due,2,'.',','); ?></td>
+                                <td style="width:50%;"><?php echo $description; ?></td>
+                                <td style="width:50%;vertical-align:top;"><?php echo number_format($total_amount_due,2,'.',','); ?></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><?php echo $description == "Reservation Payment" ? "<br />NON REFUNDABLE AND NON <br />TRANSFERABLE":""; ?></td>                                
                             </tr>
                         </table>
                     </td>
