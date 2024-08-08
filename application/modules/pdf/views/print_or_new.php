@@ -65,31 +65,6 @@
                         </table>
                         <table>
                             <tr style="line-height:12px;font-size:10px;text-align:left;">
-                                <td style="width:30%;font-size:9px;"><?php echo $description == "Reservation Payment" ? 'Name:' : ''; ?></td>
-                                <td style="width:70%;<?php echo $description == "Reservation Payment" ? 'border-bottom:1px solid #000;' : ''; ?>"></td>                  
-                            </tr>
-                        </table>
-                        <table>
-                            <tr style="font-size:10px;line-height:2px;text-align:left;">
-                                <td style="width:50%;color:#fff;">
-                                    &nbsp;
-                                </td>                    
-                            </tr>
-                        </table>
-                        <table>
-                            <tr style="line-height:12px;font-size:10px;text-align:left;">
-                                <td style="width:30%;font-size:9px;"><?php echo $description == "Reservation Payment" ? 'Signature:' : ''; ?></td>
-                                <td style="width:70%;<?php echo $description == "Reservation Payment" ? 'border-bottom:1px solid #000;' : ''; ?>"></td>                  
-                            </tr>
-                        </table>                  
-                        <table>
-                            <tr style="font-size:10px;text-align:left;">
-                                <td style="width:50%;line-height:35px;color:#fff;">SPACE</td>                    
-                            </tr>
-                        </table>
-                        <br />            
-                        <table>
-                            <tr style="line-height:12px;font-size:10px;text-align:left;">
                                 <td style="width:50%"></td>
                                 <td style="width:50%"><?php echo $is_cash == 1?"yes":""; ?></td>
                             </tr>
