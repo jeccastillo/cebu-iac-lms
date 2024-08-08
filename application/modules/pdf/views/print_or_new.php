@@ -139,7 +139,7 @@
                         </table>           
                         <table >
                             <tr style="line-height:12px;">
-                                <td style="font-size:12px;;text-align:right;padding-right:30mm;"><?php echo "  ".date("M j, Y",strtotime($transaction_date)); ?></td>
+                                <td style="font-size:12px;;text-align:right;padding-right:10mm;"><?php echo "  ".date("M j, Y",strtotime($transaction_date)); ?></td>
                             </tr>
                         </table>
                         <table>
@@ -155,7 +155,7 @@
                         </table>
                         <table >
                             <tr>                    
-                                <td style="font-size:12px;;text-align:left;padding-left:20mm;">                                    
+                                <td style="font-size:12px;;text-align:left;padding-left:30mm;">                                    
                                     <span style="font-size:11px">
                                         <?php echo $student_name; ?>
                                     </span>                                                                        
