@@ -2257,7 +2257,7 @@ class Pdf extends CI_Controller {
         elseif($this->data['campus'] == "Cebu")
             $this->load->view("print_or_new",$this->data);
         else            
-            $this->load->view("print_or_new",$this->data);
+            $this->load->view("print_or_new_makati",$this->data);
 
     }
 
