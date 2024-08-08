@@ -50,14 +50,14 @@
                             <tr style="text-align:left;font-size:12px;">
                                 <td style="width:50%;"><?php echo $description; ?></td>
                                 <td style="width:50%;vertical-align:top;"><?php echo number_format($total_amount_due,2,'.',','); ?></td>
-                            </tr>                            
-                        </table>
-                        <table style="min-height:198px;">
-                            <tr style="text-align:left;font-size:10px;vertical-align:top;">
-                                <td><?php echo $description == "Reservation Payment" ? "NON REFUNDABLE AND NON TRANSFERABLE":""; ?></td>                                
                             </tr>
+                            <tr style="text-align:left;font-size:10px;">
+                                <td colspan="2"><?php echo $description == "Reservation Payment" ? "NON REFUNDABLE AND NON TRANSFERABLE":""; ?></td>                                
+                            </tr>
+                        </table>
+                        <table style="min-height:98px;">
                             <tr style="font-size:12px;text-align:left;vertical-align:top;">
-                                <td><?php echo "SY ".$term['strYearStart']."-".$term['strYearEnd']." ".$term['enumSem']." ".$term['term_label']." ".$type; ?></td>                    
+                                <td style="vertical-align:top;"><?php echo "SY ".$term['strYearStart']."-".$term['strYearEnd']." ".$term['enumSem']." ".$term['term_label']." ".$type; ?></td>                    
                             </tr>
                         </table>
                     </td>
