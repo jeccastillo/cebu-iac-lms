@@ -134,7 +134,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="width:70%;vertical-align:top;padding-top:30mm;">
+                    <td style="width:70%;vertical-align:top;padding-top:15mm;">
                         <table>
                             <tr>
                                 <td style="text-align:right;font-weight:bold;font-size:9px;padding-right:20mm;">OR No:<?php echo $or_number; ?></td>
