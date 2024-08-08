@@ -340,7 +340,7 @@
                         <table >
                             <tr style="line-height:15px;">
                                 <td style="width:63%"></td>
-                                <td style="width:37%;font-size:8px;text-align:center;">
+                                <td style="width:37%;font-size:10px;text-align:center;">
                                     <?php echo $cashier_name; ?>
                                 </td>
                             </tr>
