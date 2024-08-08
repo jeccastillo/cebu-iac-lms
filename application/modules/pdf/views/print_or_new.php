@@ -52,6 +52,14 @@
                         Right
                     </td>
                 </tr>
+                <tr>
+                    <td style="width:30%">
+                        Left
+                    </td>
+                    <td style="width:70%">
+                        Right
+                    </td>
+                </tr>
             </table>     
         </section>        
     </div>
