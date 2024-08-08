@@ -45,7 +45,7 @@
 <body>
     <div class="sheet-outer A4">
         <section class="sheet padding-5mm">            
-            <table style="border:none;width:100%;margin-top:20mm;">
+            <table style="border:none;width:100%;margin-top:15mm;">
                 <tr>
                     <td style="width:30%">
                         <table>
@@ -54,7 +54,7 @@
                                 <td style="width:50%;vertical-align:top;"><?php echo number_format($total_amount_due,2,'.',','); ?></td>
                             </tr>
                         </table>
-                        <table style="height:198px;overflow:hidden;">
+                        <table style="height:225px;overflow:hidden;">
                             <tr style="font-size:12px;text-align:left;vertical-align:top;">
                                 <td style="vertical-align:top;">
                                     <?php echo $description == "Reservation Payment" ? "NON REFUNDABLE AND NON TRANSFERABLE":""; ?><br />
