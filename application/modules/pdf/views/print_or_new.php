@@ -13,6 +13,9 @@
     table{
         width:100%;
     }
+    table tr td{
+        vertical-align:top;
+    }
     @media screen {
         body { 
             background: #e0e0e0 
