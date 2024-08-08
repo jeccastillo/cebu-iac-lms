@@ -146,7 +146,7 @@
                             <tr>
                                 <td style="font-size:12px;;text-align:left;">
                                 <span style="color:#fff;">RECEIVED fr</span>
-                                <span style="font-size:12px">
+                                <span style="font-size:11px">
                                 <?php if($student_id != 'undefined' && $student_id != ''): ?>
                                     <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?>
                                 <?php endif; ?>
@@ -158,7 +158,7 @@
                             <tr style="line-height:15px;">                    
                                 <td style="font-size:12px;;text-align:left;">
                                     <span style="color:#fff;">RECEIVED fr</span>
-                                    <span style="font-size:12px">
+                                    <span style="font-size:11px">
                                         <?php echo $student_name; ?>
                                     </span>                                                                        
                                 </td>
