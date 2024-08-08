@@ -328,13 +328,8 @@
                                 P<?php echo number_format($total_amount_due,2,'.',','); ?>
                                 </td>
                             </tr>
-                        </table>
-                        <table>
-                            <tr style="line-height:47px;">
-                                <td style=""></td>
-                            </tr>
-                        </table>
-                        <table >
+                        </table>                        
+                        <table style="margin-top:60px;">
                             <tr>
                                 <td style="width:63%"></td>
                                 <td style="width:37%;font-size:12px;text-align:center;">
