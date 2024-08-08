@@ -202,7 +202,7 @@
                         </table>                      
                         <table>
                             <tr style="line-height:15px;">                    
-                                <td style="font-size:12px;;text-align:left;padding-left:30mm;margin-top:30mm;">
+                                <td style="font-size:12px;;text-align:left;padding-left:30mm;padding-top:30mm;">
                                     <?php echo convert_number($total_amount_due); ?> <?php echo $decimal?'and '.convert_number($decimal).' cents':'only'; ?>
                                 </td>
                             </tr>
