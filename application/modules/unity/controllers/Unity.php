@@ -653,7 +653,7 @@ class Unity extends CI_Controller {
 
         $ret['student'] = $this->data_fetcher->getStudent($id);
 
-        if(get_stype($ret['student']['level']) == "college")
+        if(get_stype($ret['student']['level']) != "shs")
             $active_sem = $this->data_fetcher->get_processing_sem();
         else
             $active_sem = $this->data_fetcher->get_processing_sem_shs();
