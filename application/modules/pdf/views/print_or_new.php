@@ -63,7 +63,7 @@
                         </table>
                         <table>
                             <tr style="line-height:12px;font-size:10px;text-align:left;">
-                                <td style="width:50%"></td>
+                                <td style="width:50%">&nbsp;</td>
                                 <td style="width:50%"><?php echo $is_cash == 1?"yes":""; ?></td>
                             </tr>
                         </table>            
@@ -74,7 +74,7 @@
                         </table>
                         <table>
                             <tr style="line-height:12px;font-size:10px;text-align:left;">
-                                <td style="width:50%"></td>
+                                <td style="width:50%">&nbsp;</td>
                                 <td style="width:50%"><?php echo $is_cash == 0?"yes":""; ?></td>
                             </tr>
                         </table>
@@ -85,7 +85,7 @@
                         </table>
                         <table>
                             <tr style="line-height:12px;font-size:10px;text-align:left;">
-                                <td style="width:50%"></td>
+                                <td style="width:50%">&nbsp;</td>
                                 <td style="width:50%"><?php echo ($is_cash == 2 || $is_cash == 3)?"yes":""; ?></td>
                             </tr>
                         </table>
@@ -124,7 +124,7 @@
                         </table>                             -->
                         <table>
                             <tr style="line-height:12px;font-size:10px;text-align:left;">
-                                <td style="width:50%"></td>
+                                <td style="width:50%">&nbsp;</td>
                                 <td style="width:50%">P<?php echo number_format($total_amount_due,2,'.',','); ?></td>
                             </tr>
                         </table>
