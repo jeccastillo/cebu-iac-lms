@@ -192,23 +192,23 @@
                             $string2 = substr($text, $middle);  // "Over The Lazy / Dog"
                         ?>
                         <table>
-                            <tr style="line-height:15px;">                    
+                            <tr>                    
                                 <td style="font-size:12px;;text-align:left;padding-left:15mm;">                                    
                                     <span style="font-size:<?php echo $textSize; ?>;"><?php echo $student_address; ?></span>                        
                                 </td>
                             </tr>
                         </table>                      
                         <table>
-                            <tr style="line-height:15px;">                    
+                            <tr>                    
                                 <td style="font-size:11px;;text-align:left;padding-left:34mm;padding-top:10mm;">
                                     <?php echo convert_number($total_amount_due); ?> <?php echo $decimal?'and '.convert_number($decimal).' cents':'only'; ?>
                                 </td>
                             </tr>
                         </table>
                         <table >
-                            <tr style="line-height:15px;">
+                            <tr>
                                 <td style="width:85%"></td>
-                                <td style="width:15%;font-size:12px;;text-align:right;padding-top:5mm;">
+                                <td style="width:15%;font-size:12px;;text-align:right;padding-top:3mm;">
                                     P<?php echo number_format($total_amount_due,2,'.',','); ?><br />
                                 </td>
                             </tr>
