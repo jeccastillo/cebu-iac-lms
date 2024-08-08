@@ -310,7 +310,7 @@
                                 </td>
                             </tr>
                         </table>                        
-                        <table style="margin-top:60px;">
+                        <table style="margin-top:70px;">
                             <tr>
                                 <td style="width:63%"></td>
                                 <td style="width:37%;font-size:12px;text-align:center;">
