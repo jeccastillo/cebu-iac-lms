@@ -657,6 +657,7 @@ class Unity extends CI_Controller {
             $active_sem = $this->data_fetcher->get_processing_sem();
         else
             $active_sem = $this->data_fetcher->get_processing_sem_shs();
+        
 
         if($sem!=null)
             $ret['selected_ay'] = $sem;
