@@ -50,7 +50,7 @@
                     <td style="width:30%">
                         <table>
                             <tr style="text-align:left;font-size:12px;">
-                                <td style="width:50%;font-size:10px;"><?php echo $description; ?></td>
+                                <td style="width:50%;font-size:12px;"><?php echo $description; ?></td>
                                 <td style="width:50%;vertical-align:top;"><?php echo number_format($total_amount_due,2,'.',','); ?></td>
                             </tr>
                         </table>
@@ -139,12 +139,12 @@
                         </table>           
                         <table >
                             <tr style="line-height:12px;">
-                                <td style="font-size:10px;text-align:right;padding-right:15px;"><?php echo "  ".date("M j, Y",strtotime($transaction_date)); ?></td>
+                                <td style="font-size:12px;;text-align:right;padding-right:15px;"><?php echo "  ".date("M j, Y",strtotime($transaction_date)); ?></td>
                             </tr>
                         </table>
                         <table>
                             <tr style="line-height:15px;">
-                                <td style="font-size:10px;text-align:left;">
+                                <td style="font-size:12px;;text-align:left;">
                                 <span style="color:#fff;">RECEIVED fr</span>
                                 <span style="font-size:9px">
                                 <?php if($student_id != 'undefined' && $student_id != ''): ?>
@@ -156,7 +156,7 @@
                         </table>
                         <table >
                             <tr style="line-height:15px;">                    
-                                <td style="font-size:10px;text-align:left;">
+                                <td style="font-size:12px;;text-align:left;">
                                     <span style="color:#fff;">RECEIVED fr</span>
                                     <span style="font-size:9px">
                                         <?php echo $student_name; ?>
@@ -197,7 +197,7 @@
                         ?>
                         <table>
                             <tr style="line-height:15px;">                    
-                                <td style="font-size:10px;text-align:left;">
+                                <td style="font-size:12px;;text-align:left;">
                                     <span style="color:#fff;">Address &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                     <span style="font-size:<?php echo $textSize; ?>;"><?php echo $student_address; ?></span>                        
                                 </td>
@@ -210,7 +210,7 @@
                         </table> -->
                         <table >
                             <tr style="line-height:3px;">                    
-                                <td style="font-size:10px;text-align:left;"></td>
+                                <td style="font-size:12px;;text-align:left;"></td>
                             </tr>
                         </table>
                         <table >
@@ -220,7 +220,7 @@
                         </table>
                         <table >
                             <tr style="line-height:15px;">                    
-                                <td style="font-size:10px;text-align:left;">
+                                <td style="font-size:12px;;text-align:left;">
                                     <span style="color:#fff;">the amount of pesos &nbsp;</span>
                                     <?php echo convert_number($total_amount_due); ?> <?php echo $decimal?'and '.convert_number($decimal).' cents':'only'; ?>
                                 </td>
@@ -234,14 +234,14 @@
                         <table >
                             <tr style="line-height:15px;">
                                 <td style="width:85%"></td>
-                                <td style="width:15%;font-size:10px;text-align:right;">
+                                <td style="width:15%;font-size:12px;;text-align:right;">
                                     P<?php echo number_format($total_amount_due,2,'.',','); ?><br />
                                 </td>
                             </tr>
                         </table>            
                         <table >
                             <tr style="line-height:15px;">                    
-                                <td style="font-size:10px;text-align:left;">
+                                <td style="font-size:12px;;text-align:left;">
                                     <span style="color:#fff;">as full/partial payment of &nbsp;</span>
                                     <?php echo $description; ?>
                                 </td>
@@ -262,7 +262,7 @@
                         <table >
                             <tr style="line-height:15px;">
                                 <td style="width:70%"></td>
-                                <td style="width:30%;font-size:10px;text-align:right;">
+                                <td style="width:30%;font-size:12px;;text-align:right;">
                                 P<?php echo number_format($total_amount_due,2,'.',','); ?>
                                 </td>
                             </tr>
@@ -288,7 +288,7 @@
                         <table >
                             <tr style="line-height:15px;">
                                 <td style="width:57%"></td>
-                                <td style="width:43%;font-size:10px;text-align:right;">
+                                <td style="width:43%;font-size:12px;;text-align:right;">
                                 P<?php echo number_format($total_amount_due,2,'.',','); ?>
                                 </td>
                             </tr>
@@ -327,7 +327,7 @@
                         <table >
                             <tr style="line-height:15px;">
                                 <td style="width:60%"></td>
-                                <td style="width:40%;font-size:10px;text-align:right;">
+                                <td style="width:40%;font-size:12px;;text-align:right;">
                                 P<?php echo number_format($total_amount_due,2,'.',','); ?>
                                 </td>
                             </tr>
