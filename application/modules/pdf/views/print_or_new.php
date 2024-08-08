@@ -45,21 +45,13 @@
         <section class="sheet padding-5mm">
             <table style="border:none">
                 <tr>
-                    <td style="width:30%">
+                    <td style="width:50%">
                         Left
                     </td>
-                    <td style="width:70%">
+                    <td style="width:50%">
                         Right
                     </td>
-                </tr>
-                <tr>
-                    <td style="width:30%">
-                        Left
-                    </td>
-                    <td style="width:70%">
-                        Right
-                    </td>
-                </tr>
+                </tr>                
             </table>     
         </section>        
     </div>
