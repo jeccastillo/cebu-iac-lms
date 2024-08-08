@@ -56,7 +56,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="width:70%">
+                    <td style="width:70%;vertical-align:top;">
                         Right
                     </td>
                 </tr>                
