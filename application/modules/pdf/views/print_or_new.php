@@ -129,28 +129,22 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="width:70%;vertical-align:top;padding-top:5mm;">
-                        <table>
+                    <td style="width:70%;vertical-align:top;">
+                        <table style="padding-top:3mm;">
                             <tr>
                                 <td style="text-align:right;font-weight:bold;font-size:9px;padding-right:20mm;">OR No:<?php echo $or_number; ?></td>
                             </tr>
                         </table>           
-                        <table >
-                            <tr>
-                                <td style="font-size:12px;;text-align:right;padding-right:10mm;padding-top:3mm;"><?php echo "  ".date("M j, Y",strtotime($transaction_date)); ?></td>
-                            </tr>
-                        </table>
                         <table>
-                            <tr>
-                                <td style="padding-left:26mm;font-size:12px;;text-align:left;">                                
-                                    <div style="font-size:11px;">
-                                        <?php if($student_id != 'undefined' && $student_id != ''): ?>
-                                            <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?>
-                                        <?php endif; ?>
-                                    </div>
+                            <tr style="padding-top:5mm;">
+                                <td style="width:50%;padding-left:26mm;font-size:12px;text-align:left;">
+                                    <?php if($student_id != 'undefined' && $student_id != ''): ?>
+                                        <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?>
+                                    <?php endif; ?>
                                 </td>
+                                <td style="width:50%;font-size:12px;text-align:right;padding-right:10mm;"><?php echo "  ".date("M j, Y",strtotime($transaction_date)); ?></td>
                             </tr>
-                        </table>
+                        </table>                       
                         <table >
                             <tr>                    
                                 <td style="font-size:12px;;text-align:left;padding-left:26mm;">                                    
