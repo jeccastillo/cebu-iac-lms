@@ -42,8 +42,8 @@
 </style>
 <body>
     <div class="sheet-outer A4">
-        <section class="sheet padding-5mm">
-            <table style="border:none">
+        <section class="sheet padding-5mm">            
+            <table style="border:none;width:100%">
                 <tr>
                     <td style="width:50%">
                         Left
