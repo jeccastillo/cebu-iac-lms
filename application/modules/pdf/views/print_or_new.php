@@ -57,7 +57,7 @@
                                 <td style="width:50%;vertical-align:top;"><?php echo number_format($total_amount_due,2,'.',','); ?></td>
                             </tr>
                         </table>
-                        <table style="height:83mm;overflow:hidden;">
+                        <table style="height:70mm;overflow:hidden;">
                             <tr style="font-size:12px;text-align:left;vertical-align:top;">
                                 <td style="vertical-align:top;">
                                     <?php echo $description == "Reservation Payment" ? "NON REFUNDABLE AND NON TRANSFERABLE":""; ?><br />
@@ -122,10 +122,10 @@
                                 ?></td>
                             </tr>
                         </table>   
-                        <table style="margin-top:-10px;">
+                        <table style="">
                             <tr style="font-size:12px;text-align:left;">
                                 <td style="width:50%">&nbsp;</td>
-                                <td style="width:50%">P<?php echo number_format($total_amount_due,2,'.',','); ?></td>
+                                <td style="width:50%;padding-top:10mm;">P<?php echo number_format($total_amount_due,2,'.',','); ?></td>
                             </tr>
                         </table>
                     </td>
@@ -136,13 +136,13 @@
                             </tr>
                         </table>           
                         <table >
-                            <tr style="line-height:12px;">
-                                <td style="font-size:12px;;text-align:right;padding-right:10mm;"><?php echo "  ".date("M j, Y",strtotime($transaction_date)); ?></td>
+                            <tr>
+                                <td style="font-size:12px;;text-align:right;padding-right:10mm;padding-top:5mm;"><?php echo "  ".date("M j, Y",strtotime($transaction_date)); ?></td>
                             </tr>
                         </table>
                         <table>
                             <tr>
-                                <td style="padding-left:25mm;font-size:12px;;text-align:left;">                                
+                                <td style="padding-left:26mm;font-size:12px;;text-align:left;">                                
                                     <div style="font-size:11px;">
                                         <?php if($student_id != 'undefined' && $student_id != ''): ?>
                                             <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?>
@@ -153,7 +153,7 @@
                         </table>
                         <table >
                             <tr>                    
-                                <td style="font-size:12px;;text-align:left;padding-left:25mm;">                                    
+                                <td style="font-size:12px;;text-align:left;padding-left:26mm;">                                    
                                     <span style="font-size:11px">
                                         <?php echo $student_name; ?>
                                     </span>                                                                        
@@ -208,14 +208,14 @@
                         <table >
                             <tr style="line-height:15px;">
                                 <td style="width:85%"></td>
-                                <td style="width:15%;font-size:12px;;text-align:right;">
+                                <td style="width:15%;font-size:12px;;text-align:right;padding-top:5mm;">
                                     P<?php echo number_format($total_amount_due,2,'.',','); ?><br />
                                 </td>
                             </tr>
                         </table>            
                         <table >
                             <tr style="line-height:15px;">                    
-                                <td style="font-size:12px;;text-align:left;padding-left:35mm;">                                    
+                                <td style="font-size:12px;;text-align:left;padding-left:42mm;">                                    
                                     <?php echo $description; ?>
                                 </td>
                             </tr>
