@@ -122,12 +122,7 @@
                                 ?></td>
                             </tr>
                         </table>   
-                        <!-- <table>
-                            <tr style="line-height:3px;">
-                                <td style=""></td>
-                            </tr>
-                        </table>                             -->
-                        <table>
+                        <table style="margin-top:-10px;">
                             <tr style="font-size:12px;text-align:left;">
                                 <td style="width:50%">&nbsp;</td>
                                 <td style="width:50%">P<?php echo number_format($total_amount_due,2,'.',','); ?></td>
