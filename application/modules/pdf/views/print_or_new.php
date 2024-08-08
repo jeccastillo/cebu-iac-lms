@@ -199,32 +199,12 @@
                                     <span style="font-size:<?php echo $textSize; ?>;"><?php echo $student_address; ?></span>                        
                                 </td>
                             </tr>
-                        </table>
-                        <!-- <table >
-                            <tr style="line-height:5px;">
-                                <td style=""></td>
-                            </tr>
-                        </table> -->
-                        <table >
-                            <tr style="line-height:3px;">                    
-                                <td style="font-size:12px;;text-align:left;"></td>
-                            </tr>
-                        </table>
-                        <table >
-                            <tr style="line-height:30px;">
-                                <td style=""></td>
-                            </tr>
-                        </table>
-                        <table >
+                        </table>                      
+                        <table>
                             <tr style="line-height:15px;">                    
-                                <td style="font-size:12px;;text-align:left;padding-left:30mm;">
+                                <td style="font-size:12px;;text-align:left;padding-left:30mm;margin-top:30mm;">
                                     <?php echo convert_number($total_amount_due); ?> <?php echo $decimal?'and '.convert_number($decimal).' cents':'only'; ?>
                                 </td>
-                            </tr>
-                        </table>
-                        <table >
-                            <tr style="line-height:5px;">
-                                <td style=""></td>
                             </tr>
                         </table>
                         <table >
