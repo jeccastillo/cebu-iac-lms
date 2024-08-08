@@ -143,7 +143,7 @@
                             </tr>
                         </table>
                         <table>
-                            <tr style="line-height:15px;">
+                            <tr>
                                 <td style="font-size:12px;;text-align:left;">
                                 <span style="color:#fff;">RECEIVED fr</span>
                                 <span style="font-size:9px">
