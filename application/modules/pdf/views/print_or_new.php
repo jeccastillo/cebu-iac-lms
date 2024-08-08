@@ -10,7 +10,9 @@
         box-sizing: border-box;
         page-break-after: always;
     }
-
+    table{
+        width:100%;
+    }
     @media screen {
         body { 
             background: #e0e0e0 
