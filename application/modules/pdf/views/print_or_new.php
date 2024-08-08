@@ -145,11 +145,11 @@
                         <table>
                             <tr>
                                 <td style="font-size:12px;;text-align:left;">                                
-                                <span style="font-size:11px;margin-left:10mm;">
+                                <div style="font-size:11px;margin-left:10mm;">
                                 <?php if($student_id != 'undefined' && $student_id != ''): ?>
                                     <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?>
                                 <?php endif; ?>
-                                </span>
+                                </div>
                                 </td>
                             </tr>
                         </table>
