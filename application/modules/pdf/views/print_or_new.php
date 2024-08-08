@@ -208,7 +208,7 @@
                         <table >
                             <tr>
                                 <td style="width:85%"></td>
-                                <td style="width:15%;font-size:12px;;text-align:right;padding-top:3mm;">
+                                <td style="width:15%;font-size:12px;;text-align:right;">
                                     P<?php echo number_format($total_amount_due,2,'.',','); ?><br />
                                 </td>
                             </tr>
@@ -235,13 +235,13 @@
                         <table >
                             <tr style="line-height:15px;">
                                 <td style="width:70%"></td>
-                                <td style="width:30%;font-size:12px;;text-align:right;">
+                                <td style="width:30%;font-size:12px;;text-align:right;padding-top:5mm;">
                                 P<?php echo number_format($total_amount_due,2,'.',','); ?>
                                 </td>
                             </tr>
                         </table>
                         <table >
-                            <tr style="line-height:10px;">
+                            <tr style="line-height:15px;">
                                 <td style=""></td>
                             </tr>
                         </table>
