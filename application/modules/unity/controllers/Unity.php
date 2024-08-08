@@ -810,7 +810,7 @@ class Unity extends CI_Controller {
         
 
         $this->load->view("public/header",$this->data);
-        $this->load->view("public/mock_payment_tuition",$data);
+        $this->load->view("public/payment_online_tuition",$data);
         $this->load->view("public/footer",$this->data);         
     }
 
