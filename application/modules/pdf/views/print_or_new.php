@@ -52,7 +52,7 @@
                                 <td style="width:50%;vertical-align:top;"><?php echo number_format($total_amount_due,2,'.',','); ?></td>
                             </tr>                            
                         </table>
-                        <table style="min-height:98px;">
+                        <table style="min-height:198px;">
                             <tr style="text-align:left;font-size:10px;">
                                 <td style="vertical-align:top;"><?php echo $description == "Reservation Payment" ? "NON REFUNDABLE AND NON TRANSFERABLE":""; ?></td>                                
                             </tr>
