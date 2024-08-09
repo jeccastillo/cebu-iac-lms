@@ -86,7 +86,7 @@
                         </table>                                               
                         <table>
                             <tr style="font-size:12px;text-align:left;">                    
-                                <td colspan="2"><?php 
+                                <td colspan="2" style="padding-top:13mm;"><?php 
                                     if($remarks == "Paynamics" || $remarks == "BDO Pay" || $remarks == "Maya Pay")
                                         echo $remarks;                                                
                                     else
@@ -99,7 +99,7 @@
                         <table style="">
                             <tr style="font-size:12px;text-align:left;">
                                 <td style="width:50%">&nbsp;</td>
-                                <td style="width:50%;padding-top:13mm;">P<?php echo number_format($total_amount_due,2,'.',','); ?></td>
+                                <td style="width:50%;">P<?php echo number_format($total_amount_due,2,'.',','); ?></td>
                             </tr>
                         </table>
                     </td>
