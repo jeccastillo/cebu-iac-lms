@@ -340,7 +340,7 @@ class Finance extends CI_Controller {
         $data['student']['strStudentNumber'] = preg_replace("/[^a-zA-Z0-9]+/", "", $data['student']['strStudentNumber']);
         $registrations =  $this->db->select('tb_mas_sy.*')
                                     ->join('tb_mas_sy', 'payment_details.term_id = tb_mas_sy.intID')
-                                    ->where(array('intStudentID'=>$id))
+                                    ->where(array('student_number'=>$data['student']['slug']))
                                     ->order_by("strYearStart desc, enumSem desc")
                                     ->group_by("payment_details.term_id")
                                     ->get('payment_details')
