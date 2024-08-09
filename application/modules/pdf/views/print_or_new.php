@@ -136,13 +136,15 @@
                             </tr>
                         </table>           
                         <table>
-                            <tr>
-                                <td style="width:50%;padding-left:26mm;font-size:12px;text-align:left;padding-top:8mm;">
-                                    <?php if($student_id != 'undefined' && $student_id != ''): ?>
-                                        <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?>
-                                    <?php endif; ?>
+                            <tr style="padding-top:6mm;">
+                                <td style="width:50%;padding-left:26mm;font-size:12px;text-align:left;">
+                                    <div style="padding-top:1mm;">
+                                        <?php if($student_id != 'undefined' && $student_id != ''): ?>
+                                            <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?>
+                                        <?php endif; ?>
+                                    </div>
                                 </td>
-                                <td style="width:50%;font-size:12px;text-align:right;padding-right:10mm;padding-top:6mm;"><?php echo "  ".date("M j, Y",strtotime($transaction_date)); ?></td>
+                                <td style="width:50%;font-size:12px;text-align:right;padding-right:10mm;"><?php echo "  ".date("M j, Y",strtotime($transaction_date)); ?></td>
                             </tr>
                         </table>                       
                         <table >
