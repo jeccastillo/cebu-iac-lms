@@ -4728,7 +4728,7 @@ class Excel extends CI_Controller {
                     ->first_row('array');
             $tuition = $this->data_fetcher->getTuition($user['intID'], $sem);
 
-            if($reg && $substr($user['strStudentNumber'], 0, 1) != 'T'){
+            if($reg && substr($user['strStudentNumber'], 0, 1) != 'T'){
 
                 $ledger_data = $this->db->get_where('tb_mas_student_ledger', array('syid' => $sem, 'student_id' => $user['intID'], 'date <=' => $report_date . ' 23:59:59'))->result_array();
 
