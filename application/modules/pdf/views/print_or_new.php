@@ -180,7 +180,7 @@
                         </table>            
                         <table >
                             <tr style="line-height:15px;">                    
-                                <td style="font-size:12px;;text-align:left;padding-left:42mm;">                                    
+                                <td style="font-size:12px;;text-align:left;padding-left:42mm;padding-top:5px;">                                    
                                     <?php echo $description; ?>
                                 </td>
                             </tr>
