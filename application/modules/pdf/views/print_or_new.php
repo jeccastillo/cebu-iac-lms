@@ -83,23 +83,7 @@
                                 <td style="width:50%">&nbsp;</td>
                                 <td style="width:50%"><?php echo ($is_cash == 2 || $is_cash == 3)?"yes":""; ?></td>
                             </tr>
-                        </table>
-                        <table>
-                            <tr style="line-height:5px;">
-                                <td style=""></td>
-                            </tr>
-                        </table>
-                        <table>
-                            <tr style="font-size:12px;text-align:left;">
-                                <td style="width:50%"></td>
-                                <td style="width:50%"></td>
-                            </tr>
-                        </table>
-                        <table>
-                            <tr style="line-height:15px;">
-                                <td style=""></td>
-                            </tr>
-                        </table>
+                        </table>                                               
                         <table>
                             <tr style="font-size:12px;text-align:left;">                    
                                 <td colspan="2"><?php 
@@ -115,7 +99,7 @@
                         <table style="">
                             <tr style="font-size:12px;text-align:left;">
                                 <td style="width:50%">&nbsp;</td>
-                                <td style="width:50%;padding-top:7mm;">P<?php echo number_format($total_amount_due,2,'.',','); ?></td>
+                                <td style="width:50%;padding-top:10mm;">P<?php echo number_format($total_amount_due,2,'.',','); ?></td>
                             </tr>
                         </table>
                     </td>
