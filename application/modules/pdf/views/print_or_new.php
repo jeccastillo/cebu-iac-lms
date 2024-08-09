@@ -158,7 +158,7 @@
                         ?>
                         <table>
                             <tr>                    
-                                <td style="font-size:12px;;text-align:left;padding-left:15mm;padding-top:7mm;">                                    
+                                <td style="font-size:12px;;text-align:left;padding-left:15mm;padding-top:5mm;">                                    
                                     <span style="font-size:<?php echo $textSize; ?>;"><?php echo $student_address; ?></span>                        
                                 </td>
                             </tr>
