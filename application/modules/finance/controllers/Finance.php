@@ -346,7 +346,8 @@ class Finance extends CI_Controller {
                                     ->result_array();
         $tuition = [];
         
-        $data['current_type'] = $registrations[0]['enumStudentType'];
+        if($registrations)
+            $data['current_type'] = $registrations[0]['enumStudentType'];        
 
         foreach($registrations as $reg){            
             $temp = $this->data_fetcher->getTuition($id,$reg['intID']);                            
