@@ -53,7 +53,7 @@
                     <td style="width:30%">
                         <table>
                             <tr style="text-align:left;font-size:12px;">
-                                <td style="width:50%;font-size:12px;"><?php echo $description; ?></td>
+                            <td style="width:50%;font-size:12px;"><div style="height:20px;"><?php echo $description; ?></div></td>
                                 <td style="width:50%;vertical-align:top;"><?php echo number_format($total_amount_due,2,'.',','); ?></td>
                             </tr>
                         </table>
