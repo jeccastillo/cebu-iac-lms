@@ -442,14 +442,13 @@ new Vue({
             this.term_balance_other = 0;
             this.ledger_term = [];
             this.other_term = [];
-            
             if(tuition.term.paymentType == 'partial')
                 amount = tuition.ti_before_deductions;
             else
                 amount = tuition.total_before_deductions;
 
-            
-            if(tuition)
+            this.term_balance += amount;
+
             this.ledger_term.push({                
                 'strYearStart':tuition.term.strYearStart,
                 'strYearEnd':tuition.term.strYearEnd,
