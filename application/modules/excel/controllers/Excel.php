@@ -4711,13 +4711,13 @@ class Excel extends CI_Controller {
         foreach($users as $index => $user)
         {
             $applied_from = $applied_to = $other = array();
-            $paymentExist = false;
-            foreach($payments as $index_payment => $payment){
-                if(isset($date_enrolled_array[$user['slug']])){
-                    $paymentExist = true;
-                    break;
-                }
-            }
+            // $paymentExist = false;
+            // foreach($payments as $index_payment => $payment){
+            //     if(isset($date_enrolled_array[$user['slug']])){
+            //         $paymentExist = true;
+            //         break;
+            //     }
+            // }
 
             $reg = $this->db->select('tb_mas_registration.*, tb_mas_scholarships.name as scholarshipName')
                     ->from('tb_mas_registration')
@@ -4728,7 +4728,7 @@ class Excel extends CI_Controller {
                     ->first_row('array');
             $tuition = $this->data_fetcher->getTuition($user['intID'], $sem);
 
-            if($reg && $paymentExist){
+            if($reg && substr($user['strStudentNumber'], 0, 1) != 'T'){
 
                 $ledger_data = $this->db->get_where('tb_mas_student_ledger', array('syid' => $sem, 'student_id' => $user['intID'], 'date <=' => $report_date . ' 23:59:59'))->result_array();
 
