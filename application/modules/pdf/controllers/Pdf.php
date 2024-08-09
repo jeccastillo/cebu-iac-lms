@@ -2248,7 +2248,7 @@ class Pdf extends CI_Controller {
         $this->data['total_amount_due'] = $request['total_amount_due'];
         $this->data['decimal'] = ($this->data['total_amount_due'] - floor( $this->data['total_amount_due'] )) * 100;
         $this->data['decimal'] = round($this->data['decimal']);        
-        $this->data['transaction_date'] =  $request['or_date'];          
+        $this->data['transaction_date'] =  $request['transaction_date'];          
         $this->data['tin'] = $payee?$payee['tin']:'';
         $this->data['type'] = $type;
 
