@@ -136,7 +136,7 @@
                             </tr>
                         </table>           
                         <table>
-                            <tr style="padding-top:5mm;">
+                            <tr style="padding-top:6mm;">
                                 <td style="width:50%;padding-left:26mm;font-size:12px;text-align:left;">
                                     <?php if($student_id != 'undefined' && $student_id != ''): ?>
                                         <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?>
@@ -147,18 +147,13 @@
                         </table>                       
                         <table >
                             <tr>                    
-                                <td style="font-size:12px;;text-align:left;padding-left:26mm;">                                    
+                                <td style="font-size:12px;;text-align:left;padding-left:26mm;padding-top:1.5mm">                                    
                                     <span style="font-size:11px">
                                         <?php echo $student_name; ?>
                                     </span>                                                                        
                                 </td>
                             </tr>
-                        </table>
-                        <table >
-                            <tr style="line-height:5px;">
-                                <td style=""></td>
-                            </tr>
-                        </table>
+                        </table>                       
                         <?php
                             $text = $student_address;
                             if(strlen($text) > 60){
@@ -187,7 +182,7 @@
                         ?>
                         <table>
                             <tr>                    
-                                <td style="font-size:12px;;text-align:left;padding-left:15mm;">                                    
+                                <td style="font-size:12px;;text-align:left;padding-left:15mm;padding-top:10mm;">                                    
                                     <span style="font-size:<?php echo $textSize; ?>;"><?php echo $student_address; ?></span>                        
                                 </td>
                             </tr>
@@ -213,88 +208,27 @@
                                     <?php echo $description; ?>
                                 </td>
                             </tr>
-                        </table>
+                        </table>                       
                         <table >
-                            <tr style="line-height:12px;">
-                                <td style="width:60%"></td>
-                                <td style="width:40%;font-size:8px;text-align:right;">                        
-                                </td>
-                            </tr>
-                        </table>
-                        <table >
-                            <tr style="line-height:5px;">
-                                <td style=""></td>
-                            </tr>
-                        </table>
-                        <table >
-                            <tr style="line-height:15px;">
+                            <tr>
                                 <td style="width:70%"></td>
-                                <td style="width:30%;font-size:12px;;text-align:right;padding-top:5mm;">
+                                <td style="width:30%;font-size:12px;;text-align:right;padding-top:15mm;">
                                 P<?php echo number_format($total_amount_due,2,'.',','); ?>
                                 </td>
                             </tr>
-                        </table>
-                        <table >
-                            <tr style="line-height:15px;">
-                                <td style=""></td>
-                            </tr>
-                        </table>
-                        <table >
-                            <tr style="line-height:5px;">
-                                <td style="width:60%"></td>
-                                <td style="width:40%;font-size:8px;text-align:center;">
-                                    
-                                </td>
-                            </tr>
-                        </table>
-                        <!-- <table >
-                            <tr style="line-height:5px;">
-                                <td style=""></td>
-                            </tr>
-                        </table> -->
-                        <table >
-                            <tr style="line-height:15px;">
+                        </table>                        
+                        <table>
+                            <tr style="line-height:15px;padding-top:10mm;">
                                 <td style="width:57%"></td>
                                 <td style="width:43%;font-size:12px;;text-align:right;">
                                 P<?php echo number_format($total_amount_due,2,'.',','); ?>
                                 </td>
                             </tr>
-                        </table>
+                        </table>                        
                         <table >
-                            <tr style="line-height:5px;">
-                                <td style=""></td>
-                            </tr>
-                        </table>
-                        <table >
-                            <tr style="line-height:10px;">
+                            <tr>
                                 <td style="width:60%"></td>
-                                <td style="width:40%;font-size:8px;text-align:center;">
-                                    
-                                </td>
-                            </tr>
-                        </table>
-                        <table >
-                            <tr style="line-height:5px;">
-                                <td style=""></td>
-                            </tr>
-                        </table>
-                        <!-- <table >
-                            <tr style="line-height:10px;">
-                                <td style="width:60%"></td>
-                                <td style="width:40%;font-size:8px;text-align:center;">
-                                    
-                                </td>
-                            </tr>
-                        </table> -->
-                        <table >
-                            <tr style="line-height:10px;">
-                                <td style=""></td>
-                            </tr>
-                        </table>
-                        <table >
-                            <tr style="line-height:15px;">
-                                <td style="width:60%"></td>
-                                <td style="width:40%;font-size:12px;;text-align:right;">
+                                <td style="width:40%;font-size:12px;;text-align:right;padding-top:15mm;">
                                 P<?php echo number_format($total_amount_due,2,'.',','); ?>
                                 </td>
                             </tr>
