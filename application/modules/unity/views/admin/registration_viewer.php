@@ -328,7 +328,7 @@
                                             <td>{{ application_payment.charges }}</td>
                                             <td>{{ application_payment.total_amount_due }}</td>
                                             <td>{{ application_payment.status }}</td>                                            
-                                            <td>{{ application_payment.updated_at }}</td>
+                                            <td>{{ application_payment.or_date }}</td>
                                             <td>{{ application_payment.void_reason }}</td>
                                             <td>                                                
                                                 <button v-if="!application_payment.or_number && application_payment.status == 'Paid' && cashier && application_payment.remarks != 'Voided'" data-toggle="modal"                                                
@@ -353,7 +353,7 @@
                                             <td>{{ payment.charges }}</td>
                                             <td>{{ payment.total_amount_due }}</td>
                                             <td>{{ payment.status }}</td>                                            
-                                            <td>{{ payment.updated_at }}</td>
+                                            <td>{{ payment.or_date }}</td>
                                             <td>{{ payment.void_reason }}</td>
                                             <td>
                                                 <button v-if="!payment.or_number && payment.status == 'Paid' && cashier" data-toggle="modal"                                                
@@ -385,7 +385,7 @@
                                             <td>{{ reservation_payment.charges }}</td>
                                             <td>{{ reservation_payment.total_amount_due }}</td>
                                             <td>{{ reservation_payment.status }}</td>                                            
-                                            <td>{{ reservation_payment.updated_at }}</td>
+                                            <td>{{ reservation_payment.or_date }}</td>
                                             <td>{{ reservation_payment.void_reason }}</td>
                                             <td>                                                
                                                 <button v-if="!reservation_payment.or_number && reservation_payment.status == 'Paid' && cashier" data-toggle="modal"                                                
@@ -410,7 +410,7 @@
                                             <td>{{ payment.charges }}</td>
                                             <td>{{ payment.total_amount_due }}</td>
                                             <td>{{ payment.status }}</td>                                            
-                                            <td>{{ payment.updated_at }}</td>
+                                            <td>{{ payment.or_date }}</td>
                                             <td>{{ payment.void_reason }}</td>
                                             <td>
                                                 <button v-if="(!payment.or_number && payment.status == 'Paid') && cashier" data-toggle="modal"                                                
