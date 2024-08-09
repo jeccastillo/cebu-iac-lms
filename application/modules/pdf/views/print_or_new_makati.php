@@ -48,16 +48,16 @@
 <body>
     <div class="sheet-outer A4">
         <section class="sheet padding-5mm">            
-            <table style="border:none;width:100%;margin-top:22mm;">
+            <table style="border:none;width:100%;margin-top:18mm;">
                 <tr>
                     <td style="width:30%">
                         <table>
                             <tr style="text-align:left;font-size:12px;">
-                            <td style="width:50%;font-size:12px;"><div style="height:20px;"><?php echo $description; ?></div></td>
+                                <td style="width:50%;font-size:12px;"><div style="height:20px;"><?php echo $description; ?></div></td>
                                 <td style="width:50%;vertical-align:top;"><?php echo number_format($total_amount_due,2,'.',','); ?></td>
                             </tr>
                         </table>
-                        <table style="height:66mm;overflow:hidden;">
+                        <table style="height:70mm;overflow:hidden;">
                             <tr style="font-size:12px;text-align:left;vertical-align:top;">
                                 <td style="vertical-align:top;">
                                     <?php echo $description == "Reservation Payment" ? "NON REFUNDABLE AND NON TRANSFERABLE":""; ?><br />
@@ -180,7 +180,7 @@
                         </table>            
                         <table >
                             <tr style="line-height:15px;">                    
-                                <td style="font-size:12px;;text-align:left;padding-left:42mm;">                                    
+                                <td style="font-size:12px;;text-align:left;padding-left:42mm;padding-top:5px;">                                    
                                     <?php echo $description; ?>
                                 </td>
                             </tr>
