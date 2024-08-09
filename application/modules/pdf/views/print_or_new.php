@@ -199,7 +199,7 @@
                         <table >
                             <tr>
                                 <td style="width:85%"></td>
-                                <td style="width:15%;font-size:12px;;text-align:right;padding-top:15px;">
+                                <td style="width:15%;font-size:12px;;text-align:right;">
                                     P<?php echo number_format($total_amount_due,2,'.',','); ?><br />
                                 </td>
                             </tr>
