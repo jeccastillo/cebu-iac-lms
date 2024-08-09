@@ -71,23 +71,13 @@
                                 <td style="width:50%">&nbsp;</td>
                                 <td style="width:50%"><?php echo $is_cash == 1?"yes":""; ?></td>
                             </tr>
-                        </table>            
-                        <table>
-                            <tr style="line-height:5px;">
-                                <td style=""></td>
-                            </tr>
-                        </table>
+                        </table>             
                         <table>
                             <tr style="font-size:12px;text-align:left;">
                                 <td style="width:50%">&nbsp;</td>
                                 <td style="width:50%"><?php echo $is_cash == 0?"yes":""; ?></td>
                             </tr>
-                        </table>
-                        <table>
-                            <tr style="line-height:5px;">
-                                <td style=""></td>
-                            </tr>
-                        </table>
+                        </table>                        
                         <table>
                             <tr style="font-size:12px;text-align:left;">
                                 <td style="width:50%">&nbsp;</td>
