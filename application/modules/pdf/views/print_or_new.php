@@ -138,7 +138,7 @@
                         <table>
                             <tr style="padding-top:6mm;">
                                 <td style="width:50%;padding-left:26mm;font-size:12px;text-align:left;">
-                                    <div style="padding-top:1mm;">
+                                    <div style="padding-top:2mm;">
                                         <?php if($student_id != 'undefined' && $student_id != ''): ?>
                                             <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?>
                                         <?php endif; ?>
@@ -149,10 +149,10 @@
                         </table>                       
                         <table >
                             <tr>                    
-                                <td style="font-size:12px;;text-align:left;padding-left:26mm;padding-top:1.5mm">                                    
-                                    <span style="font-size:11px">
+                                <td style="font-size:12px;;text-align:left;padding-left:26mm;">                                    
+                                    <div style="font-size:11px">
                                         <?php echo $student_name; ?>
-                                    </span>                                                                        
+                                    </div>                                                                        
                                 </td>
                             </tr>
                         </table>                       
