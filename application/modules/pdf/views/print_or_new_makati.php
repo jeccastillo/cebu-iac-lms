@@ -48,7 +48,7 @@
 <body>
     <div class="sheet-outer A4">
         <section class="sheet padding-5mm">            
-            <table style="border:none;width:100%;margin-top:15mm;">
+            <table style="border:none;width:100%;margin-top:18mm;">
                 <tr>
                     <td style="width:30%">
                         <table>
@@ -57,7 +57,7 @@
                                 <td style="width:50%;vertical-align:top;"><?php echo number_format($total_amount_due,2,'.',','); ?></td>
                             </tr>
                         </table>
-                        <table style="height:83mm;overflow:hidden;">
+                        <table style="height:70mm;overflow:hidden;">
                             <tr style="font-size:12px;text-align:left;vertical-align:top;">
                                 <td style="vertical-align:top;">
                                     <?php echo $description == "Reservation Payment" ? "NON REFUNDABLE AND NON TRANSFERABLE":""; ?><br />
@@ -71,45 +71,19 @@
                                 <td style="width:50%">&nbsp;</td>
                                 <td style="width:50%"><?php echo $is_cash == 1?"yes":""; ?></td>
                             </tr>
-                        </table>            
-                        <table>
-                            <tr style="line-height:5px;">
-                                <td style=""></td>
-                            </tr>
-                        </table>
+                        </table>             
                         <table>
                             <tr style="font-size:12px;text-align:left;">
                                 <td style="width:50%">&nbsp;</td>
                                 <td style="width:50%"><?php echo $is_cash == 0?"yes":""; ?></td>
                             </tr>
-                        </table>
-                        <table>
-                            <tr style="line-height:5px;">
-                                <td style=""></td>
-                            </tr>
-                        </table>
+                        </table>                        
                         <table>
                             <tr style="font-size:12px;text-align:left;">
                                 <td style="width:50%">&nbsp;</td>
                                 <td style="width:50%"><?php echo ($is_cash == 2 || $is_cash == 3)?"yes":""; ?></td>
                             </tr>
-                        </table>
-                        <table>
-                            <tr style="line-height:5px;">
-                                <td style=""></td>
-                            </tr>
-                        </table>
-                        <table>
-                            <tr style="font-size:12px;text-align:left;">
-                                <td style="width:50%"></td>
-                                <td style="width:50%"></td>
-                            </tr>
-                        </table>
-                        <table>
-                            <tr style="line-height:15px;">
-                                <td style=""></td>
-                            </tr>
-                        </table>
+                        </table>                                               
                         <table>
                             <tr style="font-size:12px;text-align:left;">                    
                                 <td colspan="2"><?php 
@@ -122,54 +96,40 @@
                                 ?></td>
                             </tr>
                         </table>   
-                        <!-- <table>
-                            <tr style="line-height:3px;">
-                                <td style=""></td>
-                            </tr>
-                        </table>                             -->
-                        <table>
+                        <table style="">
                             <tr style="font-size:12px;text-align:left;">
                                 <td style="width:50%">&nbsp;</td>
-                                <td style="width:50%">P<?php echo number_format($total_amount_due,2,'.',','); ?></td>
+                                <td style="width:50%;padding-top:10mm;">P<?php echo number_format($total_amount_due,2,'.',','); ?></td>
                             </tr>
                         </table>
                     </td>
-                    <td style="width:70%;vertical-align:top;padding-top:15mm;">
-                        <table>
+                    <td style="width:70%;vertical-align:top;">
+                        <table style="padding-top:3mm;">
                             <tr>
                                 <td style="text-align:right;font-weight:bold;font-size:9px;padding-right:20mm;">OR No:<?php echo $or_number; ?></td>
                             </tr>
                         </table>           
-                        <table >
-                            <tr style="line-height:12px;">
-                                <td style="font-size:12px;;text-align:right;padding-right:10mm;"><?php echo "  ".date("M j, Y",strtotime($transaction_date)); ?></td>
-                            </tr>
-                        </table>
                         <table>
-                            <tr>
-                                <td style="padding-left:25mm;font-size:12px;;text-align:left;">                                
-                                    <div style="font-size:11px;">
+                            <tr style="padding-top:6mm;">
+                                <td style="width:50%;padding-left:26mm;font-size:12px;text-align:left;">
+                                    <div style="padding-top:15px;">
                                         <?php if($student_id != 'undefined' && $student_id != ''): ?>
                                             <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?>
                                         <?php endif; ?>
                                     </div>
                                 </td>
+                                <td style="width:50%;font-size:12px;text-align:right;padding-right:10mm;"><?php echo "  ".date("M j, Y",strtotime($transaction_date)); ?></td>
                             </tr>
-                        </table>
+                        </table>                       
                         <table >
                             <tr>                    
-                                <td style="font-size:12px;;text-align:left;padding-left:25mm;">                                    
-                                    <span style="font-size:11px">
+                                <td style="font-size:12px;;text-align:left;padding-left:26mm;">                                    
+                                    <div style="font-size:11px;position: relative;margin-top: -7px;">
                                         <?php echo $student_name; ?>
-                                    </span>                                                                        
+                                    </div>                                                                        
                                 </td>
                             </tr>
-                        </table>
-                        <table >
-                            <tr style="line-height:5px;">
-                                <td style=""></td>
-                            </tr>
-                        </table>
+                        </table>                       
                         <?php
                             $text = $student_address;
                             if(strlen($text) > 60){
@@ -197,120 +157,59 @@
                             $string2 = substr($text, $middle);  // "Over The Lazy / Dog"
                         ?>
                         <table>
-                            <tr style="line-height:15px;">                    
-                                <td style="font-size:12px;;text-align:left;padding-left:15mm;">                                    
+                            <tr>                    
+                                <td style="font-size:12px;;text-align:left;padding-left:15mm;padding-top:7mm;">                                    
                                     <span style="font-size:<?php echo $textSize; ?>;"><?php echo $student_address; ?></span>                        
                                 </td>
                             </tr>
                         </table>                      
                         <table>
-                            <tr style="line-height:15px;">                    
-                                <td style="font-size:12px;;text-align:left;padding-left:32mm;padding-top:15mm;">
+                            <tr>                    
+                                <td style="font-size:11px;;text-align:left;padding-left:34mm;padding-top:10mm;">
                                     <?php echo convert_number($total_amount_due); ?> <?php echo $decimal?'and '.convert_number($decimal).' cents':'only'; ?>
                                 </td>
                             </tr>
                         </table>
                         <table >
-                            <tr style="line-height:15px;">
+                            <tr>
                                 <td style="width:85%"></td>
-                                <td style="width:15%;font-size:12px;;text-align:right;">
+                                <td style="width:15%;font-size:12px;;text-align:right;padding-top:10px;">
                                     P<?php echo number_format($total_amount_due,2,'.',','); ?><br />
                                 </td>
                             </tr>
                         </table>            
                         <table >
                             <tr style="line-height:15px;">                    
-                                <td style="font-size:12px;;text-align:left;padding-left:35mm;">                                    
+                                <td style="font-size:12px;;text-align:left;padding-left:42mm;">                                    
                                     <?php echo $description; ?>
                                 </td>
                             </tr>
-                        </table>
+                        </table>                       
                         <table >
-                            <tr style="line-height:12px;">
-                                <td style="width:60%"></td>
-                                <td style="width:40%;font-size:8px;text-align:right;">                        
-                                </td>
-                            </tr>
-                        </table>
-                        <table >
-                            <tr style="line-height:5px;">
-                                <td style=""></td>
-                            </tr>
-                        </table>
-                        <table >
-                            <tr style="line-height:15px;">
+                            <tr>
                                 <td style="width:70%"></td>
-                                <td style="width:30%;font-size:12px;;text-align:right;">
-                                P<?php echo number_format($total_amount_due,2,'.',','); ?>
-                                </td>
-                            </tr>
-                        </table>
-                        <table >
-                            <tr style="line-height:10px;">
-                                <td style=""></td>
-                            </tr>
-                        </table>
-                        <table >
-                            <tr style="line-height:5px;">
-                                <td style="width:60%"></td>
-                                <td style="width:40%;font-size:8px;text-align:center;">
-                                    
-                                </td>
-                            </tr>
-                        </table>
-                        <!-- <table >
-                            <tr style="line-height:5px;">
-                                <td style=""></td>
-                            </tr>
-                        </table> -->
-                        <table >
-                            <tr style="line-height:15px;">
-                                <td style="width:57%"></td>
-                                <td style="width:43%;font-size:12px;;text-align:right;">
-                                P<?php echo number_format($total_amount_due,2,'.',','); ?>
-                                </td>
-                            </tr>
-                        </table>
-                        <table >
-                            <tr style="line-height:5px;">
-                                <td style=""></td>
-                            </tr>
-                        </table>
-                        <table >
-                            <tr style="line-height:10px;">
-                                <td style="width:60%"></td>
-                                <td style="width:40%;font-size:8px;text-align:center;">
-                                    
-                                </td>
-                            </tr>
-                        </table>
-                        <table >
-                            <tr style="line-height:5px;">
-                                <td style=""></td>
-                            </tr>
-                        </table>
-                        <!-- <table >
-                            <tr style="line-height:10px;">
-                                <td style="width:60%"></td>
-                                <td style="width:40%;font-size:8px;text-align:center;">
-                                    
-                                </td>
-                            </tr>
-                        </table> -->
-                        <table >
-                            <tr style="line-height:10px;">
-                                <td style=""></td>
-                            </tr>
-                        </table>
-                        <table >
-                            <tr style="line-height:15px;">
-                                <td style="width:60%"></td>
-                                <td style="width:40%;font-size:12px;;text-align:right;">
+                                <td style="width:30%;font-size:12px;;text-align:right;padding-top:10mm;">
                                 P<?php echo number_format($total_amount_due,2,'.',','); ?>
                                 </td>
                             </tr>
                         </table>                        
-                        <table style="margin-top:60px;">
+                        <table>
+                            <tr style="line-height:15px;">
+                                <td style="width:57%"></td>
+                                <td style="width:43%;font-size:12px;;text-align:right;padding-top:5mm;">
+                                P<?php echo number_format($total_amount_due,2,'.',','); ?>
+                                </td>
+                            </tr>
+                        </table>                        
+                        <table >
+                            <tr>
+                                <td style="width:60%"></td>
+                                <td style="width:40%;font-size:12px;;text-align:right;padding-top:13mm;">
+                                P<?php echo number_format($total_amount_due,2,'.',','); ?>
+                                </td>
+                            </tr>
+                        </table>                        
+                        <table style="margin-top:15mm;">
                             <tr>
                                 <td style="width:63%"></td>
                                 <td style="width:37%;font-size:12px;text-align:center;">
