@@ -165,7 +165,7 @@
                                     <td>{{ refunded.total_amount_due }}</td>
                                     <td>{{ refunded.status }}</td>                                            
                                     <td>{{ refunded.response_message }}</td>
-                                    <td>{{ refunded.updated_at }}</td>            
+                                    <td>{{ refunded.or_date }}</td>            
                                     <td>
                                         <button v-if="!refunded.or_number" data-toggle="modal"                                                
                                                 @click="or_update.id = application_payment.id;" 
@@ -245,7 +245,7 @@
                                     <td>{{ payment.status }}</td>                                            
                                     <td v-if="payment.remarks != 'Voided'">{{ payment.response_message }}</td>
                                     <td v-else>{{ payment.void_reason }}</td>
-                                    <td>{{ payment.updated_at }}</td>            
+                                    <td>{{ payment.or_date }}</td>            
                                     <td>
                                         <button v-if="!payment.or_number && payment.status == 'Paid'" data-toggle="modal"                                                
                                                 @click="or_update.id = payment.id;" 
@@ -270,7 +270,7 @@
                 </div><!---column--->
             </div><!---row--->
         </div><!---content container--->
-        <form ref="print_or" method="post" :action="base_url + 'pdf/print_or'" target="_blank">
+        <form ref="print_or" method="post" :action="base_url + 'pdf/print_or_new'" target="_blank">
             <input type="hidden" name="campus" :value="request.student_campus">
             <input type="hidden" name="student_name" v-model="or_print.student_name">
             <input type="hidden" name="cashier_id" v-model="or_print.cashier_id">
@@ -503,7 +503,7 @@ new Vue({
                         this.or_print.or_number = payment.or_number;
                         this.or_print.description = payment.description;
                         this.or_print.total_amount_due = payment.subtotal_order;
-                        this.or_print.transaction_date = payment.updated_at;
+                        this.or_print.transaction_date = payment.or_date;
                         this.or_print.remarks = payment.remarks;
                         this.or_print.student_name =  this.request.last_name+", "+this.request.first_name+", "+this.request.middle_name;    
                         this.or_print.student_address = this.student.address;
