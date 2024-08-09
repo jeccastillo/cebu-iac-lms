@@ -184,7 +184,7 @@
                         ?>
                         <table>
                             <tr>                    
-                                <td style="font-size:12px;;text-align:left;padding-left:15mm;padding-top:5mm;">                                    
+                                <td style="font-size:12px;;text-align:left;padding-left:15mm;padding-top:7mm;">                                    
                                     <span style="font-size:<?php echo $textSize; ?>;"><?php echo $student_address; ?></span>                        
                                 </td>
                             </tr>
@@ -199,7 +199,7 @@
                         <table >
                             <tr>
                                 <td style="width:85%"></td>
-                                <td style="width:15%;font-size:12px;;text-align:right;">
+                                <td style="width:15%;font-size:12px;;text-align:right;padding-top:15px;">
                                     P<?php echo number_format($total_amount_due,2,'.',','); ?><br />
                                 </td>
                             </tr>
