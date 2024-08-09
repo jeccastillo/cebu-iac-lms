@@ -339,10 +339,10 @@ class Finance extends CI_Controller {
         $data['student'] = $this->data_fetcher->getStudent($id);
         $data['student']['strStudentNumber'] = preg_replace("/[^a-zA-Z0-9]+/", "", $data['student']['strStudentNumber']);
         $registrations =  $this->db->select('tb_mas_sy.*')
-                                    ->join('tb_mas_sy', 'payment_details.term_id = tb_mas_sy.intID')
+                                    ->join('tb_mas_sy', 'payment_details.sy_reference = tb_mas_sy.intID')
                                     ->where(array('student_number'=>$data['student']['slug']))
                                     ->order_by("strYearStart desc, enumSem desc")
-                                    ->group_by("payment_details.term_id")
+                                    ->group_by("payment_details.sy_reference")
                                     ->get('payment_details')
                                     ->result_array();
         $tuition = [];
