@@ -212,15 +212,15 @@
                         <table >
                             <tr>
                                 <td style="width:70%"></td>
-                                <td style="width:30%;font-size:12px;;text-align:right;padding-top:15mm;">
+                                <td style="width:30%;font-size:12px;;text-align:right;padding-top:10mm;">
                                 P<?php echo number_format($total_amount_due,2,'.',','); ?>
                                 </td>
                             </tr>
                         </table>                        
                         <table>
-                            <tr style="line-height:15px;padding-top:10mm;">
+                            <tr style="line-height:15px;">
                                 <td style="width:57%"></td>
-                                <td style="width:43%;font-size:12px;;text-align:right;">
+                                <td style="width:43%;font-size:12px;;text-align:right;padding-top:5mm;">
                                 P<?php echo number_format($total_amount_due,2,'.',','); ?>
                                 </td>
                             </tr>
