@@ -4176,7 +4176,7 @@ class Excel extends CI_Controller {
             $remarks = $d->remarks == "Paynamics" ? $d->request_id : $d->remarks;
 
             $objPHPExcel->setActiveSheetIndex(0)                    
-                    ->setCellValue('A'.$i, $d->updated_at)
+                    ->setCellValue('A'.$i, $d->or_date)
                     ->setCellValue('B'.$i, $or_number)
                     ->setCellValue('C'.$i, $d->student_number)
                     ->setCellValue('D'.$i, strtoupper($d->student_name))
