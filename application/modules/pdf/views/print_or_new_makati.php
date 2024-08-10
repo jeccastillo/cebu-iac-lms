@@ -32,7 +32,7 @@
         width: 210mm; 
         height: 296mm 
     }
-    .sheet.padding-5mm { padding-top: 10mm; padding-left: 5mm; padding-right: 10mm; }
+    .sheet.padding-5mm { padding-top: 10mm; padding-left: 8mm; padding-right: 10mm; }
 
     @page {
         size: A4;
