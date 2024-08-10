@@ -62,7 +62,19 @@
                                 <td style="vertical-align:top;">
                                     <?php echo $description == "Reservation Payment" ? "NON REFUNDABLE AND NON TRANSFERABLE":""; ?><br />
                                     <?php echo "SY ".$term['strYearStart']."-".$term['strYearEnd']." ".$term['enumSem']." ".$term['term_label']."<br />".$type; ?><br />
-                                    <?php echo $remarks; ?>
+                                    <?php echo $remarks; ?><br />
+                                    <table>
+                                        <tr style="line-height:12px;font-size:10px;text-align:left;">
+                                            <td style="width:30%;font-size:11px;"><?php echo $description == "Reservation Payment" ? 'Name:' : ''; ?></td>
+                                            <td style="width:70%;<?php echo $description == "Reservation Payment" ? 'border-bottom:1px solid #000;' : ''; ?>"></td>                  
+                                        </tr>
+                                    </table>                                    
+                                    <table>
+                                        <tr style="line-height:12px;font-size:10px;text-align:left;">
+                                            <td style="width:30%;font-size:11px;padding-top:5px;"><?php echo $description == "Reservation Payment" ? 'Signature:' : ''; ?></td>
+                                            <td style="width:70%;<?php echo $description == "Reservation Payment" ? 'border-bottom:1px solid #000;' : ''; ?>"></td>                  
+                                        </tr>
+                                    </table>
                                 </td>                    
                             </tr>
                         </table>
