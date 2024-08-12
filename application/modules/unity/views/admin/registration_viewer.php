@@ -152,6 +152,7 @@
                         </li>
                         <li v-if="cashier" :class="cashier?'active':''"><a href="#tab_1" data-toggle="tab">Payment</a></li>
                         <li :class="!cashier?'active':''"><a href="#tab_2" data-toggle="tab">Details</a></li>
+                        <li :class="!cashier?'active':''"><a href="#tab_3" data-toggle="tab">SOA</a></li>
                         <!-- <li>
                             <a :href="base_url + 'unity/accounting/' + student.intID">                                
                                 Accounting Summary
@@ -457,7 +458,11 @@
                                     <div v-html="tuition" class="col-sm-6"></div>                                                                                                                                        
                                 </div>
                             </div>              
-                        </div>     
+                        </div>  
+                        <div :class="tab-pane" id="tab_3">
+                            <h3>Statment of Account</h3>
+                            <img :src="logo" />
+                        </div>    
                     </div>
                 </div>
             </div>
@@ -562,6 +567,7 @@ new Vue({
         },    
         cashier: undefined,     
         user_level: undefined, 
+        logo: undefined;
         user: undefined,
         term_balances: [],
         show_alert: false,
@@ -604,7 +610,7 @@ new Vue({
             status: 'Paid',
             is_cash: 1,
             check_number: '',
-            student_campus: '<?php echo $campus; ?>',
+            student_campus: '<?php echo $campus; ?>',            
         },
         or_update_description: undefined,
         or_update:{
@@ -661,6 +667,7 @@ new Vue({
         let url_string = window.location.href;        
         if(this.id != 0){            
             //this.loader_spinner = true;
+            this.logo = (this.student_campus == "Cebu")?"https://i.ibb.co/9hgbYNB/seal.png":"https://i.ibb.co/kcYVsS7/i-ACADEMY-Seal-Makati.png";            
             axios.get(this.base_url + 'unity/registration_viewer_data/' + this.id + '/' + this.sem)
                 .then((data) => {  
                     if(data.data.success){      
