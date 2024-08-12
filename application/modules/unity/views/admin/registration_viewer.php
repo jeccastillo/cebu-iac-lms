@@ -901,15 +901,18 @@ new Vue({
                                     if(this.remaining_amount <= 0)
                                         this.description = "Other";
                             }
+
+                            this.soa.installments = this.installments;
+                            for(i in this.soa.installments){
+                                console.log(this.soa.installments[i]);
+                            }
                         })
                         .catch((error) => {
                             console.log(error);
                         })  
                         
-                        this.soa.installments = this.installments;                         
-                        for(const [key, value] of Object.entries(this.soa.installments)){
-                            console.log(`Key: ${key}, Value: ${value}`);
-                        }                                         
+                                                 
+                                                                 
                         
                     }
                     else{
