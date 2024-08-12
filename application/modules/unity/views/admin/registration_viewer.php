@@ -701,11 +701,11 @@ new Vue({
                             this.show_alert = true;
                         this.current_term = data.data.active_sem;
                         this.current_term_full_label = this.current_term.term_label == "Term" ? "Trimester" : "Semester";
-                        this.installment_dates.push(data.data.installment1_formatted);
-                        this.installment_dates.push(data.data.installment2_formatted);
-                        this.installment_dates.push(data.data.installment3_formatted);
-                        this.installment_dates.push(data.data.installment4_formatted);
-                        this.installment_dates.push(data.data.installment5_formatted);                                                
+                        this.installment_dates.push(data.data.active_sem.installment1_formatted);
+                        this.installment_dates.push(data.data.active_sem.installment2_formatted);
+                        this.installment_dates.push(data.data.active_sem.installment3_formatted);
+                        this.installment_dates.push(data.data.active_sem.installment4_formatted);
+                        this.installment_dates.push(data.data.active_sem.installment5_formatted);                                                
                         
                         if(data.data.registration){         
                             this.registration = data.data.registration;
