@@ -476,11 +476,11 @@
                                         </tr> 
                                         <tr v-for="(inst,ctr) in installments" v-if="inst > 0">
                                             <td>{{ addSuffix(ctr + 1) + ' installment due ' + installment_dates[ctr]+ ' ' }}</td>
-                                            <td>{{ inst }}</td>
+                                            <td>P{{ inst }}</td>
                                         </tr>
                                         <tr>
                                             <td>TOTAL BALANCE</td>
-                                            <td>{{ soa.total }}</td>
+                                            <td>P{{ item.formatted_balance }}</td>
                                         </tr>
                                     </table> 
                                 </div>                                 
@@ -845,15 +845,16 @@ new Vue({
                                                 temp = temp - this.tuition_data.installment_fee;
                                             }
                                         
-                                        }                                        
+                                        }
                                     }
-                                    else{
+                                    else
                                         for(i=0; i < 5; i++)
                                             this.installments.push(this.tuition_data.installment_fee);                                                                                                                  
-                                        this.soa.total += this.tuition_data.down_payment;
-                                    }
+                                        
+                                                                                                        
                                     
                                     var val = 0;                                
+                                    
 
                                     this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                                                
                                     this.loader_spinner = false;
@@ -906,10 +907,6 @@ new Vue({
                         })  
                         
                         this.soa.installments = this.installments;
-                        for(i in this.soa.installments){
-                            this.soa.total += this.soa.installments[i];
-                        }                        
-
                     }
                     else{
                         //document.location = this.base_url + 'users/login';
