@@ -256,7 +256,7 @@
                                                         <td v-if="registration.downpayment == 0"><a href="#" @click="setValue(tuition_data.down_payment,'down',0)">{{ tuition_data.down_payment }}</a></td>                                                        
                                                     </tr> 
                                                     <tr v-for="(inst,ctr) in installments">
-                                                        <td>Installment{{ '(' + installment_dates[ctr]+ ')' }}</td>
+                                                        <td>{{ addSuffix(ctr + 1) + ' installment due ' + installment_dates[ctr]+ ' ' }}</td>
                                                         <td><a href="#" @click="setValue(inst,'installment',ctr)">{{ inst }}</a></td>
                                                     </tr>
                                                 </table>                                                
@@ -918,6 +918,20 @@ new Vue({
             })
 
         },  
+        addSuffix: function(i){
+            let j = i % 10,
+                k = i % 100;
+            if (j === 1 && k !== 11) {
+                return i + "st";
+            }
+            if (j === 2 && k !== 12) {
+                return i + "nd";
+            }
+            if (j === 3 && k !== 13) {
+                return i + "rd";
+            }
+            return i + "th";
+        },
         forwardSelected: function(){
             if(this.switch_term && this.selected_items.length > 0){
                 var data = {
