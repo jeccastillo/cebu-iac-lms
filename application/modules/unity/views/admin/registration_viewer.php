@@ -480,7 +480,7 @@
                                         </tr>
                                         <tr>
                                             <td>TOTAL BALANCE</td>
-                                            <td>P{{ item.formatted_balance }}</td>
+                                            <td>P{{ this.soa.total }}</td>
                                         </tr>
                                     </table> 
                                 </div>                                 
@@ -907,6 +907,7 @@ new Vue({
                         })  
                         
                         this.soa.installments = this.installments;
+                        console.log(this.soa.installments);
                     }
                     else{
                         //document.location = this.base_url + 'users/login';
