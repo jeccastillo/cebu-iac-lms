@@ -906,8 +906,8 @@ new Vue({
                             console.log(error);
                         })  
                         
-                        this.soa.installments = this.installments;                       
-                        console.log(this.soa.installments);
+                        this.soa.installments = this.installments;                                               
+                        Object.values(this.soa.installments)
                     }
                     else{
                         //document.location = this.base_url + 'users/login';
