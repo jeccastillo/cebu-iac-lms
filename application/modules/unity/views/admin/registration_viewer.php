@@ -466,7 +466,7 @@
                                 <h3>Information & Communications Technology Academy</h3>
                                 <h4>{{ address }}</h4>
                             </div>
-                            <table class="table table-bordered" v-else>
+                            <table class="table table-bordered">
                                 <tr v-if="tuition_data.down_payment > 0">
                                     <td>Down Payment</td>
                                     <td>{{ tuition_data.down_payment }}</td>                                                        
