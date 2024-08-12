@@ -907,10 +907,7 @@ new Vue({
                         })  
                         
                         this.soa.installments = this.installments;                       
-                        for(i in this.soa.installments){
-                            console.log(parseFloat(this.installments[i]));
-                            this.soa.total += parseFloat(this.soa.installments[i]);
-                        }
+                        console.log(this.soa.installments);
                     }
                     else{
                         //document.location = this.base_url + 'users/login';
