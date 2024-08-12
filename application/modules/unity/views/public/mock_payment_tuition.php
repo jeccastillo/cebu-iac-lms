@@ -202,12 +202,12 @@
                                                 <td>{{ application_payment.total_amount_due }}</td>
                                                 <td>{{ application_payment.status }}</td>                                                                                            
                                             </tr>
-                                            <tr v-if="reservation_payment">                                    
-                                                <td>{{ reservation_payment.description }}</td>
-                                                <td>{{ reservation_payment.subtotal_order }}</td>
-                                                <td>{{ reservation_payment.charges }}</td>
-                                                <td>{{ reservation_payment.total_amount_due }}</td>
-                                                <td>{{ reservation_payment.status }}</td>                                                                                           
+                                            <tr v-if="reservation_payment" v-for="res_pay in reservation_payment">                                    
+                                                <td>{{ res_pay.description }}</td>
+                                                <td>{{ res_pay.subtotal_order }}</td>
+                                                <td>{{ res_pay.charges }}</td>
+                                                <td>{{ res_pay.total_amount_due }}</td>
+                                                <td>{{ res_pay.status }}</td>                                                                                           
                                             </tr>
                                             <tr>
                                                 <th colspan="6">
@@ -469,8 +469,7 @@ new Vue({
                             
                             
                             this.other_payments = data.data.other;
-                            this.computePayment(); 
-                            console.log(this.reservation_payment);
+                            this.computePayment();                             
                                                          
                             
                         })
@@ -493,9 +492,9 @@ new Vue({
                 .then((data) => {                                        
                     this.reservation_payment = data.data.data;    
                     this.application_payment = data.data.application;                    
-                    if(this.reservation_payment.status == "Paid" && data.data.student_sy == this.sem){
-                            this.remaining_amount = this.remaining_amount - this.reservation_payment.subtotal_order;                                                                                            
-                            this.amount_paid = this.amount_paid + this.reservation_payment.subtotal_order;                                        
+                    if(this.reservation_payment[0].status == "Paid" && data.data.student_sy == this.sem){
+                            this.remaining_amount = this.remaining_amount - this.reservation_payment[0].subtotal_order;                                                                                            
+                            this.amount_paid = this.amount_paid + this.reservation_payment[0].subtotal_order;                                        
                     }                                
 
                     this.remaining_amount = (this.remaining_amount < 0.02) ? 0 : this.remaining_amount;
