@@ -567,7 +567,7 @@ new Vue({
         },    
         cashier: undefined,     
         user_level: undefined, 
-        logo: undefined;
+        logo: undefined,
         user: undefined,
         term_balances: [],
         show_alert: false,
