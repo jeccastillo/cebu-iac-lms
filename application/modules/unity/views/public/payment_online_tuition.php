@@ -244,7 +244,7 @@
                                                     <td>Down Payment</td>
                                                     <td
                                                         v-if="registration.downpayment == 0 && down_payment != 0">
-                                                        {{ tuition_data.down_payment }}
+                                                        {{ down_payment }}
                                                     </td>
                                                     <td v-else>Paid</td>
                                                 </tr>
@@ -657,8 +657,7 @@ new Vue({
                             .amount_paid) ? 0 : (this.tuition_data
                             .down_payment - this.amount_paid);
                         this.down_payment = down_payment;
-
-                        console.log(this.down_payment);
+                        
                         if (this.payment_type == "full") {
 
                             this.item_details.price = this.remaining_amount;
