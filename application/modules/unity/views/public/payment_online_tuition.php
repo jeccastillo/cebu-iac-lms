@@ -640,8 +640,7 @@ new Vue({
                                 .reservation_payment.subtotal_order;
                             this.amount_paid = this.amount_paid + this
                                 .reservation_payment.subtotal_order;
-                        }
-                        console.log(this.amount_paid);
+                        }                        
 
                         this.remaining_amount = (this.remaining_amount < 0.02) ? 0 :
                             this.remaining_amount;
@@ -659,6 +658,7 @@ new Vue({
                             .down_payment - this.amount_paid);
                         this.down_payment = down_payment;
 
+                        console.log(this.down_payment);
                         if (this.payment_type == "full") {
 
                             this.item_details.price = this.remaining_amount;
