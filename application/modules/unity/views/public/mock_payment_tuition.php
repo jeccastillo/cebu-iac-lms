@@ -489,14 +489,16 @@ new Vue({
         computePayment: function(event){
             if(this.registration.enumStudentType == "new"){
                 axios.get(api_url + 'finance/reservation/' + this.slug + '/' + this.sem)
-                .then((data) => {
-                    this.reservation_payment = data.data.data;    
+                .then((data) => {                    
+                    
+                    this.reservation_payment = data.data.data[0];    
                     this.application_payment = data.data.application;
                     
                     if(this.reservation_payment.status == "Paid" && data.data.student_sy == this.sem){
                             this.remaining_amount = this.remaining_amount - this.reservation_payment.subtotal_order;                                                                                            
                             this.amount_paid = this.amount_paid + this.reservation_payment.subtotal_order;                                        
                     }                                
+                    
                     this.remaining_amount = (this.remaining_amount < 0.02) ? 0 : this.remaining_amount;
                     this.remaining_amount = Math.round(this.remaining_amount * 100) / 100;
                     this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
