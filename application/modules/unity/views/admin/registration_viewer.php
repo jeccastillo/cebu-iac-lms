@@ -906,12 +906,11 @@ new Vue({
                             console.log(error);
                         })  
                         
-                        this.soa.installments = this.installments;
-                        this.soa.installments.forEach((element) => console.log(element));
-                        // for(i in this.soa.installments){
-                        //     console.log(parseFloat(this.soa.installments[i]));
-                        //     this.soa.total += parseFloat(this.soa.installments[i]);
-                        // }
+                        this.soa.installments = this.installments;                       
+                        for(i in this.soa.installments){
+                            console.log(parseFloat(this.installments[i]));
+                            this.soa.total += parseFloat(this.soa.installments[i]);
+                        }
                     }
                     else{
                         //document.location = this.base_url + 'users/login';
