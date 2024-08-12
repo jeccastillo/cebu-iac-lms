@@ -632,8 +632,7 @@ new Vue({
                 axios.get(api_url + 'finance/reservation/' + this.slug + '/' + this.sem)
                     .then((data) => {
                         this.reservation_payment = data.data.data[0];
-                        this.application_payment = data.data.application;
-                        console.log(this.reservation_payment);
+                        this.application_payment = data.data.application;                        
 
                         if (this.reservation_payment.status == "Paid" && data.data
                             .student_sy == this.sem) {
@@ -642,6 +641,8 @@ new Vue({
                             this.amount_paid = this.amount_paid + this
                                 .reservation_payment.subtotal_order;
                         }
+                        console.log(this.amount_paid);
+
                         this.remaining_amount = (this.remaining_amount < 0.02) ? 0 :
                             this.remaining_amount;
                         this.remaining_amount = Math.round(this.remaining_amount *
