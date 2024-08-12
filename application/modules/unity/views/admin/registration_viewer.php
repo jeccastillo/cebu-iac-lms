@@ -907,7 +907,8 @@ new Vue({
                         })  
                         
                         this.soa.installments = this.installments; 
-                        for(var i=0; i < this.soa.installments.length; i++){
+                        console.log("TEST");
+                        for(i in this.soa.installments){
                             console.log("TEST");
                         }                                              
                         
