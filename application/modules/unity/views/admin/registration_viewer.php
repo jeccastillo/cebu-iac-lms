@@ -461,7 +461,7 @@
                         </div>  
                         <div class="tab-pane" id="tab_3">
                             <h3>Statment of Account</h3>
-                            <img :src="logo" height="300px" width="300px"/>
+                            <!-- <img :src="logo" height="300px" width="300px"/> -->
                             <div class="text-center">
                                 <h3>Information & Communications Technology Academy</h3>
                                 <h4>{{ address }}</h4>
