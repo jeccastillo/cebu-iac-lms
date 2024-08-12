@@ -773,7 +773,7 @@ new Vue({
                         console.log(error);
                     })
             }
-            console.log(item_details.price);
+            console.log(this.item_details.price);
 
         },
         selectPayment: function(mode_payment) {
