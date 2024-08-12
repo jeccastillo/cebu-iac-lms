@@ -240,7 +240,11 @@
                                             <table class="table table-striped"
                                                 v-else>
                                                 <tr>
-                                                    <td>&nbsp;</td>
+                                                    <td><input v-if="registration.downpayment == 0 && down_payment != 0"
+                                                            type="checkbox"
+                                                            :value="down_payment"
+                                                            @change="updatePayment($event)"
+                                                            class="form-check-input"></input></td>
                                                     <td>Down Payment</td>
                                                     <td
                                                         v-if="registration.downpayment == 0 && down_payment != 0">
