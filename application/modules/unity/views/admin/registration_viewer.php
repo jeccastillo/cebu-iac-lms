@@ -459,7 +459,7 @@
                                 </div>
                             </div>              
                         </div>  
-                        <div :class="tab-pane" id="tab_3">
+                        <div class="tab-pane" id="tab_3">
                             <h3>Statment of Account</h3>
                             <img :src="logo" />
                         </div>    
