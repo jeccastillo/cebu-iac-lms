@@ -2218,7 +2218,7 @@ class Registrar extends CI_Controller {
                     
                     $this->db->where(array('intStudentID'=>$post['id'],'intClassListID'=>$record['classlistID']))->delete('tb_mas_classlist_student');                        
                 }
-                $this->db->where(array('intStudentID'=>$post['id'],'intAYID'=>$post['sem']))->delete('tb_mas_registration');
+                //$this->db->where(array('intStudentID'=>$post['id'],'intAYID'=>$post['sem']))->delete('tb_mas_registration');
             }
             else{
                 foreach($records as $record){
@@ -2230,11 +2230,13 @@ class Registrar extends CI_Controller {
                     
                     $this->db->where(array('intStudentID'=>$post['id'],'intClassListID'=>$record['classlistID']))->update('tb_mas_classlist_student',$data);
                 }     
-                $data =[
-                    'intROG' => 3,                    
-                ];         
-                $this->db->where(array('intStudentID'=>$post['id'],'intAYID'=>$post['sem']))->update('tb_mas_registration',$data);
+                
             }
+
+            $data =[
+                'intROG' => 3,                    
+            ];         
+            $this->db->where(array('intStudentID'=>$post['id'],'intAYID'=>$post['sem']))->update('tb_mas_registration',$data);
 
                                 
            

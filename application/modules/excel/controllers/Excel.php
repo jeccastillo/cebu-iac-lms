@@ -4176,7 +4176,7 @@ class Excel extends CI_Controller {
             $remarks = $d->remarks == "Paynamics" ? $d->request_id : $d->remarks;
 
             $objPHPExcel->setActiveSheetIndex(0)                    
-                    ->setCellValue('A'.$i, $d->updated_at)
+                    ->setCellValue('A'.$i, $d->or_date)
                     ->setCellValue('B'.$i, $or_number)
                     ->setCellValue('C'.$i, $d->student_number)
                     ->setCellValue('D'.$i, strtoupper($d->student_name))
@@ -4711,6 +4711,13 @@ class Excel extends CI_Controller {
         foreach($users as $index => $user)
         {
             $applied_from = $applied_to = $other = array();
+            // $paymentExist = false;
+            // foreach($payments as $index_payment => $payment){
+            //     if(isset($date_enrolled_array[$user['slug']])){
+            //         $paymentExist = true;
+            //         break;
+            //     }
+            // }
 
             $reg = $this->db->select('tb_mas_registration.*, tb_mas_scholarships.name as scholarshipName')
                     ->from('tb_mas_registration')
@@ -4721,7 +4728,7 @@ class Excel extends CI_Controller {
                     ->first_row('array');
             $tuition = $this->data_fetcher->getTuition($user['intID'], $sem);
 
-            if($reg){
+            if($reg && substr($user['strStudentNumber'], 0, 1) != 'T'){
 
                 $ledger_data = $this->db->get_where('tb_mas_student_ledger', array('syid' => $sem, 'student_id' => $user['intID'], 'date <=' => $report_date . ' 23:59:59'))->result_array();
 
@@ -5112,6 +5119,8 @@ class Excel extends CI_Controller {
                         ->setCellValue('AD'.$i, '=SUM(AD4:AD' . ($i-1) . ')')
                         ->setCellValue('AE'.$i, '=SUM(AE4:AE' . ($i-1) . ')')
                         ->setCellValue('AF'.$i, '=SUM(AF4:AF' . ($i-1) . ')')
+                        ->setCellValue('AG'.$i, '=SUM(AG4:AG' . ($i-1) . ')')
+                        ->setCellValue('AH'.$i, '=SUM(AH4:AH' . ($i-1) . ')')
                         ->setCellValue($this->columnIndexToLetter($last_index) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index) .'4:' . $this->columnIndexToLetter($last_index) . '' . ($i-1) . ')')
                         ->setCellValue($this->columnIndexToLetter($last_index + 1) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 1) .'4:' . $this->columnIndexToLetter($last_index + 1) . '' . ($i-1) . ')')
                         ->setCellValue($this->columnIndexToLetter($last_index + 4) . '' . $i, '=SUM('. $this->columnIndexToLetter($last_index + 4) .'4:' . $this->columnIndexToLetter($last_index + 4) . '' . ($i-1) . ')')
@@ -5135,7 +5144,7 @@ class Excel extends CI_Controller {
                 $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($index) . '4:' . $this->columnIndexToLetter($index) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
             }
     
-            $objPHPExcel->getActiveSheet()->getStyle('G4:AF' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+            $objPHPExcel->getActiveSheet()->getStyle('G4:AH' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
             $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index) . '4:' . $this->columnIndexToLetter($last_index) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
             $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 1) . '4:' . $this->columnIndexToLetter($last_index + 1) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
             $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 4) . '4:' . $this->columnIndexToLetter($last_index + 4) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');

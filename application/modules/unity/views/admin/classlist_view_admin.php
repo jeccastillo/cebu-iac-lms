@@ -57,6 +57,7 @@
                         <th>Slots Remaining</th>
                         <th>Faculty</th>                        
                         <th>Finalized Status</th>
+                        <th>Conduct Grade</th>
                         <th>Actions</th>
 <!--                        <th>No. of Students</th>-->
                         <!--th>Change Status</th-->                        
@@ -78,7 +79,8 @@
                         <th>Slots Enlisted</th>
                         <th>Slots Remaining</th>
                         <th>Faculty</th>                        
-                        <th>Finalized Status</th>   
+                        <th>Finalized Status</th>
+                        <th>Conduct Grade</th>
                         <th>Actions</th>                                             
                     </tr>
                         </tfoot>

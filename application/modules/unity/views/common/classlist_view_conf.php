@@ -31,7 +31,7 @@
             "sAjaxSource": "<?php echo base_url(); ?>index.php/datatables/data_tables_ajax_cs/<?php echo $selected_ay; ?>/<?php echo $program; ?>/<?php echo $dissolved ?>/<?php echo $has_faculty ?>",
             "aoColumnDefs":[
                 {
-                    "aTargets":[12],
+                    "aTargets":[13],
                     "mData": null,
                     "bSortable":false,
                     "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>unity/classlist_viewer/'+row[0]+'">View Offering</a></li><li><a href="<?php echo base_url(); ?>unity/edit_classlist/'+row[0]+'">Edit Offering</a></li><li><a href="<?php echo base_url(); ?>unity/reassign_classlist/'+row[0]+'">Re-assign</a></li><li><a href="<?php echo base_url(); ?>unity/duplicate_classlist/'+row[0]+'">Duplicate</a></li><li><a href="#" rel="'+row[0]+'" class="finalizedOption">Change Status</a></li>'

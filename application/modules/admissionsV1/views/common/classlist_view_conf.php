@@ -12,6 +12,15 @@
 <script type="text/javascript">
     
     $(document).ready(function(){
+        var requestOptions = {
+        method: 'GET',
+        redirect: 'follow'
+        };
+
+        fetch("https://psgc.vercel.app/api/province", requestOptions)
+        .then(response => response.text())
+        .then(result => console.log(result))
+        .catch(error => console.log('error', error));
         
     $('#classlist-table-admin tfoot th').each( function () {
         var title = $(this).text();

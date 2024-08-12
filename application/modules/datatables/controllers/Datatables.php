@@ -594,7 +594,7 @@ class Datatables extends CI_Controller {
         //array("intID","strStudentNumber","strLastname","strFirstname","strMiddlename","strProgramCode","intStudentYear","strAcademicStanding");
         
 
-        $aColumns = array("tb_mas_classlist.intID","strProgramCode","strCode","strClassName","year","strSection","sub_section","slots","strLastname","strFirstname","intFinalized");
+        $aColumns = array("tb_mas_classlist.intID","strProgramCode","strCode","strClassName","year","strSection","sub_section","slots","strLastname","strFirstname","intFinalized","conduct_grade");
         // $aColumns = array("intID","strStudentNumber","strLastname","strFirstname","strMiddlename","strProgramCode","intStudentYear","intROG");
         //$aColumns = array("intID","strFullName","strCourse","strSection");
         $sIndexColumn = "intID";

@@ -328,7 +328,7 @@
                                             <td>{{ application_payment.charges }}</td>
                                             <td>{{ application_payment.total_amount_due }}</td>
                                             <td>{{ application_payment.status }}</td>                                            
-                                            <td>{{ application_payment.updated_at }}</td>
+                                            <td>{{ application_payment.or_date }}</td>
                                             <td>{{ application_payment.void_reason }}</td>
                                             <td>                                                
                                                 <button v-if="!application_payment.or_number && application_payment.status == 'Paid' && cashier && application_payment.remarks != 'Voided'" data-toggle="modal"                                                
@@ -353,7 +353,7 @@
                                             <td>{{ payment.charges }}</td>
                                             <td>{{ payment.total_amount_due }}</td>
                                             <td>{{ payment.status }}</td>                                            
-                                            <td>{{ payment.updated_at }}</td>
+                                            <td>{{ payment.or_date }}</td>
                                             <td>{{ payment.void_reason }}</td>
                                             <td>
                                                 <button v-if="!payment.or_number && payment.status == 'Paid' && cashier" data-toggle="modal"                                                
@@ -385,7 +385,7 @@
                                             <td>{{ reservation_payment.charges }}</td>
                                             <td>{{ reservation_payment.total_amount_due }}</td>
                                             <td>{{ reservation_payment.status }}</td>                                            
-                                            <td>{{ reservation_payment.updated_at }}</td>
+                                            <td>{{ reservation_payment.or_date }}</td>
                                             <td>{{ reservation_payment.void_reason }}</td>
                                             <td>                                                
                                                 <button v-if="!reservation_payment.or_number && reservation_payment.status == 'Paid' && cashier" data-toggle="modal"                                                
@@ -410,7 +410,7 @@
                                             <td>{{ payment.charges }}</td>
                                             <td>{{ payment.total_amount_due }}</td>
                                             <td>{{ payment.status }}</td>                                            
-                                            <td>{{ payment.updated_at }}</td>
+                                            <td>{{ payment.or_date }}</td>
                                             <td>{{ payment.void_reason }}</td>
                                             <td>
                                                 <button v-if="(!payment.or_number && payment.status == 'Paid') && cashier" data-toggle="modal"                                                
@@ -463,7 +463,7 @@
             </div>
         </div>
     </div>
-    <form ref="print_or" method="post" :action="base_url + 'pdf/print_or'" target="_blank">
+    <form ref="print_or" method="post" :action="base_url + 'pdf/print_or_new'" target="_blank">
         <input type="hidden" name="student_name" v-model="or_print.student_name">
         <input type="hidden" name="campus" :value="request.student_campus">
         <input type="hidden" name="cashier_id" v-model="or_print.cashier_id">
@@ -1124,7 +1124,7 @@ new Vue({
                         this.or_print.or_number = payment.or_number;
                         this.or_print.description = payment.description;
                         this.or_print.total_amount_due = payment.subtotal_order;
-                        this.or_print.transaction_date = payment.updated_at;
+                        this.or_print.transaction_date = payment.or_date;
                         this.or_print.remarks = payment.remarks;
                         this.or_print.student_name =  this.request.last_name+", "+this.request.first_name+", "+this.request.middle_name;    
                         this.or_print.student_address = this.student.strAddress;

@@ -606,7 +606,11 @@ new Vue({
                                 console.log(error);
                             })
                     } else {
-                        document.location = this.base_url + 'users/login';
+                        Swal.fire({
+                            title: "Error",
+                            text: "There was an error loading the data",
+                            icon: "error"
+                        });
                     }
 
                 })

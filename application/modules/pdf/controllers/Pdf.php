@@ -2192,6 +2192,75 @@ class Pdf extends CI_Controller {
         }
     }
 
+    function print_or_new(){
+        $request = $this->input->post();
+
+        $role = $this->session->userdata('special_role');
+        $userlevel = $this->session->userdata('intUserLevel');
+
+        if($userlevel != 2 && $userlevel != 6)
+		  redirect(base_url()."unity");
+
+        $printed = $this->db->where(array('or_number'=>(string)$request['or_number'],'campus'=>$this->data['campus']))
+                        ->get('tb_mas_printed_or')
+                        ->first_row();
+
+        if($printed && $role <= 1){
+            echo "This OR has already been printed";
+            return;
+        }
+
+        $cashier = $this->db->get_where('tb_mas_faculty',array('intID'=>$request['cashier_id']))->row();
+        $this->data['term'] = $this->db->get_where('tb_mas_sy',array('intID'=>$request['sem']))->first_row('array');
+        
+        if(isset($request['payee_id']))
+            $payee = $this->db->get_where('tb_mas_ns_payee',array('id'=>$request['payee_id']))->first_row('array');
+        else
+            $payee = null;
+
+        $type = "";
+        if(isset($request['type'])){
+            switch($request['type']){
+                case 'college':
+                    $type = "UG ".$request['description'];
+                    break;
+                case 'other':
+                        $type = "UG ".$request['description'];
+                        break;                    
+                case 'shs':
+                    $type = "SHS ".$request['description'];
+                    break;
+                default:
+                    $type = "SHS ".$request['description'];                    
+            }
+        }
+
+        $this->data['student_name'] = strtoupper($request['student_name']);        
+        $this->data['cashier_name'] = strtoupper($cashier->strFirstname." ".$cashier->strLastname);        
+        $this->data['student_id'] = $request['student_id'];        
+        $this->data['student_address'] = strtoupper($request['student_address']);
+        $this->data['is_cash'] = $request['is_cash'];        
+        $this->data['check_number'] = $request['check_number'];        
+        $this->data['remarks'] = $request['remarks'];
+        $this->data['or_number'] = (string)$request['or_number'];
+        $this->data['or_number'] = str_pad($this->data['or_number'],5,'0', STR_PAD_LEFT);
+        $this->data['description'] = $request['description'];
+        $this->data['total_amount_due'] = $request['total_amount_due'];
+        $this->data['decimal'] = ($this->data['total_amount_due'] - floor( $this->data['total_amount_due'] )) * 100;
+        $this->data['decimal'] = round($this->data['decimal']);        
+        $this->data['transaction_date'] =  $request['transaction_date'];          
+        $this->data['tin'] = $payee?$payee['tin']:'';
+        $this->data['type'] = $type;
+
+        if(isset($payee))
+            $this->load->view("print_or_ns_payment",$this->data);
+        elseif($this->data['campus'] == "Cebu")
+            $this->load->view("print_or_new",$this->data);
+        else            
+            $this->load->view("print_or_new_makati",$this->data);
+
+    }
+
     function print_or()
     {
         $request = $this->input->post();

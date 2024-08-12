@@ -60,7 +60,7 @@
                             <th>id</th>
                             <th>slug</th>     
                             <th>Cashier</th>                  
-                            <th>Date Updated</th>
+                            <th>OR Date</th>
                             <th>OR Number</th>
                             <th>Applicant Number</th>
                             <th>Name</th>
