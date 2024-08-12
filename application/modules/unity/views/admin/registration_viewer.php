@@ -906,11 +906,10 @@ new Vue({
                             console.log(error);
                         })  
                         
-                        this.soa.installments = this.installments; 
-                        console.log(this.soa.installments.length);
-                        for(i in this.soa.installments){
-                            console.log("TEST");
-                        }                                              
+                        this.soa.installments = this.installments;                         
+                        for(const [key, value] of Object.entries(this.soa.installments)){
+                            console.log(`Key: ${key}, Value: ${value}`);
+                        }                                         
                         
                     }
                     else{
