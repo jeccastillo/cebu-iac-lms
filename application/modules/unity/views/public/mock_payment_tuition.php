@@ -493,12 +493,12 @@ new Vue({
                     
                     this.reservation_payment = data.data.data[0];    
                     this.application_payment = data.data.application;
-                    
+                    console.log(this.reservation_payment);
                     if(this.reservation_payment.status == "Paid" && data.data.student_sy == this.sem){
                             this.remaining_amount = this.remaining_amount - this.reservation_payment.subtotal_order;                                                                                            
                             this.amount_paid = this.amount_paid + this.reservation_payment.subtotal_order;                                        
                     }                                
-                    
+
                     this.remaining_amount = (this.remaining_amount < 0.02) ? 0 : this.remaining_amount;
                     this.remaining_amount = Math.round(this.remaining_amount * 100) / 100;
                     this.remaining_amount_formatted = this.remaining_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
