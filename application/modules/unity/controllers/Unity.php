@@ -761,8 +761,14 @@ class Unity extends CI_Controller {
                                        ->get()
                                        ->result_array();
 
+            
             $ret['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$ret['selected_ay']);
             $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($ret['selected_ay']);      
+            $ret['active_sem']['installment1_formatted'] = date("M j, Y", strtotime($ret['active_sem']['installment1']));
+            $ret['active_sem']['installment2_formatted'] = date("M j, Y", strtotime($ret['active_sem']['installment2']));
+            $ret['active_sem']['installment3_formatted'] = date("M j, Y", strtotime($ret['active_sem']['installment3']));
+            $ret['active_sem']['installment4_formatted'] = date("M j, Y", strtotime($ret['active_sem']['installment4']));
+            $ret['active_sem']['installment5_formatted'] = date("M j, Y", strtotime($ret['active_sem']['installment5']));
             $ret['user_logged'] = $this->data['user']['intID'];
             $ret['student'] = $this->data_fetcher->getStudent($id);
             $ret['subjects_available'] = $this->data_fetcher->getOfferedSubjects($ret['student']['intID'],$ret['student']['intCurriculumID'],$sem);           
