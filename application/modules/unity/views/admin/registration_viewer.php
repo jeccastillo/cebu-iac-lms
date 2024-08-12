@@ -465,7 +465,7 @@
                             <div class="text-center">
                                 <h3>Information & Communications Technology Academy</h3>
                                 <h4>{{ address }}</h4>
-                                <h4>AY {{ current_term.strYearStart }} - {{ current_term.strYearEnd }} {{ current_term.enumSem }} {{ current_term.term_label }}</h4>
+                                <h4>AY {{ current_term.strYearStart }} - {{ current_term.strYearEnd }} {{ current_term.enumSem }} {{ current_term_full_label }}</h4>
                             </div>
                             <div class="row">
                                 <div class="col-sm-6">
@@ -700,6 +700,7 @@ new Vue({
                         if (this.term_balances[i].balance > 0)
                             this.show_alert = true;
                         this.current_term = data.data.active_sem;
+                        this.current_term_full_label = current_term.term_label == "Term" ? "Trimester" : "Semester";
                         this.installment_dates.push(data.data.active_sem.installment1);
                         this.installment_dates.push(data.data.active_sem.installment2);
                         this.installment_dates.push(data.data.active_sem.installment3);
