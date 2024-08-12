@@ -256,7 +256,7 @@
                                                         <td v-if="registration.downpayment == 0"><a href="#" @click="setValue(tuition_data.down_payment,'down',0)">{{ tuition_data.down_payment }}</a></td>                                                        
                                                     </tr> 
                                                     <tr v-for="(inst,ctr) in installments">
-                                                        <td>{{ addSuffix(ctr + 1) + ' installment due ' + installment_dates[ctr]+ ' ' }}</td>
+                                                        <td>Installment{{ '(' + installment_dates[ctr]+ ')' }}</td>
                                                         <td><a href="#" @click="setValue(inst,'installment',ctr)">{{ inst }}</a></td>
                                                     </tr>
                                                 </table>                                                
@@ -472,7 +472,7 @@
                                     <td>{{ tuition_data.down_payment }}</td>                                                        
                                 </tr> 
                                 <tr v-for="(inst,ctr) in installments" v-if="inst > 0">
-                                    <td>Installment{{ '(' + installment_dates[ctr]+ ')' }}</td>
+                                    <td>{{ addSuffix(ctr + 1) + ' installment due ' + installment_dates[ctr]+ ' ' }}</td>
                                     <td>{{ inst }}</td>
                                 </tr>
                             </table>  
