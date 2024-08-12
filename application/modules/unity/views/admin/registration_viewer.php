@@ -461,10 +461,10 @@
                         </div>  
                         <div class="tab-pane" id="tab_3">
                             <h3>Statment of Account</h3>
-                            <!-- <img :src="logo" height="300px" width="300px"/> -->
+                            <!-- <img :src="soa.logo" height="300px" width="300px"/> -->
                             <div class="text-center">
                                 <h3>Information & Communications Technology Academy</h3>
-                                <h4>{{ address }}</h4>
+                                <h4>{{ soa.address }}</h4>
                                 <h4>AY {{ current_term.strYearStart }} - {{ current_term.strYearEnd }} {{ current_term.enumSem }} {{ current_term_full_label }}</h4>
                             </div>
                             <div class="row">
@@ -477,6 +477,10 @@
                                         <tr v-for="(inst,ctr) in installments" v-if="inst > 0">
                                             <td>{{ addSuffix(ctr + 1) + ' installment due ' + installment_dates[ctr]+ ' ' }}</td>
                                             <td>{{ inst }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>TOTAL BALANCE</td>
+                                            <td>{{ soa.total }}</td>
                                         </tr>
                                     </table> 
                                 </div>                                 
@@ -586,8 +590,13 @@ new Vue({
         },    
         cashier: undefined,     
         user_level: undefined, 
-        logo: undefined,
-        address: undefined,
+        soa:{
+            logo: undefined,
+            address: undefined,
+            total: 0,
+            downpayment:0,
+            installments: [],
+        },
         user: undefined,
         term_balances: [],
         show_alert: false,
@@ -751,8 +760,8 @@ new Vue({
                             this.request.cashier_id = this.cashier.user_id;
                             this.or_update.cashier_id = this.cashier.user_id;
                             this.or_update.student_campus = this.request.student_campus;
-                            this.logo = (this.or_update.student_campus == "Cebu")?"https://i.ibb.co/9hgbYNB/seal.png":"https://i.ibb.co/kcYVsS7/i-ACADEMY-Seal-Makati.png";            
-                            this.address = (this.or_update.student_campus == "Cebu")?"5F Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City, Philippines":"iACADEMY Nexus Campus, 7434 Yakal, Makati, 1203 Metro Manila, Philippines";
+                            this.soa.logo = (this.or_update.student_campus == "Cebu")?"https://i.ibb.co/9hgbYNB/seal.png":"https://i.ibb.co/kcYVsS7/i-ACADEMY-Seal-Makati.png";            
+                            this.soa.address = (this.or_update.student_campus == "Cebu")?"5F Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City, Philippines":"iACADEMY Nexus Campus, 7434 Yakal, Makati, 1203 Metro Manila, Philippines";
                         }                        
                         
 
@@ -836,16 +845,15 @@ new Vue({
                                                 temp = temp - this.tuition_data.installment_fee;
                                             }
                                         
-                                        }
+                                        }                                        
                                     }
-                                    else
+                                    else{
                                         for(i=0; i < 5; i++)
                                             this.installments.push(this.tuition_data.installment_fee);                                                                                                                  
-                                        
-                                                                                                        
+                                        this.soa.total += this.tuition_data.down_payment;
+                                    }
                                     
                                     var val = 0;                                
-                                    
 
                                     this.amount_paid_formatted = this.amount_paid.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');                                                                
                                     this.loader_spinner = false;
@@ -895,7 +903,13 @@ new Vue({
                         })
                         .catch((error) => {
                             console.log(error);
-                        })      
+                        })  
+                        
+                        this.soa.installments = this.installments;
+                        for(i in this.soa.installments){
+                            this.soa.total += this.soa.installments[i];
+                        }                        
+
                     }
                     else{
                         //document.location = this.base_url + 'users/login';
