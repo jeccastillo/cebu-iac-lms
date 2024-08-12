@@ -653,10 +653,10 @@ class Unity extends CI_Controller {
 
         $ret['student'] = $this->data_fetcher->getStudent($id);
 
-        if(get_stype($ret['student']['level']) != "shs")
-            $active_sem = $this->data_fetcher->get_processing_sem();
+        if(get_stype($ret['student']['level']) == "college")
+            $active_sem = $this->data_fetcher->get_active_sem();
         else
-            $active_sem = $this->data_fetcher->get_processing_sem_shs();
+            $active_sem = $this->data_fetcher->get_active_sem_shs();
 
         if($sem!=null)
             $ret['selected_ay'] = $sem;
@@ -793,7 +793,7 @@ class Unity extends CI_Controller {
         
 
         $this->load->view("public/header",$this->data);
-        $this->load->view("public/mock_payment_tuition",$data);
+        $this->load->view("public/payment_online_tuition",$data);
         $this->load->view("public/footer",$this->data);         
     }  
 
@@ -810,7 +810,7 @@ class Unity extends CI_Controller {
         
 
         $this->load->view("public/header",$this->data);
-        $this->load->view("public/payment_online_tuition",$data);
+        $this->load->view("public/mock_payment_tuition",$data);
         $this->load->view("public/footer",$this->data);         
     }
 
