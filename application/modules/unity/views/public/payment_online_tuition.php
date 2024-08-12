@@ -633,6 +633,7 @@ new Vue({
                     .then((data) => {
                         this.reservation_payment = data.data.data[0];
                         this.application_payment = data.data.application;
+                        console.log(this.reservation_payment);
 
                         if (this.reservation_payment.status == "Paid" && data.data
                             .student_sy == this.sem) {
