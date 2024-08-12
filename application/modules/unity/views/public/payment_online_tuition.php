@@ -653,8 +653,7 @@ new Vue({
                         this.remaining_amount_formatted = this.remaining_amount
                             .toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                         this.amount_paid_formatted = this.amount_paid.toFixed(2)
-                            .replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                        this.item_details.price = this.remaining_amount;
+                            .replace(/\d(?=(\d{3})+\.)/g, '$&,');                        
                         this.loader_spinner = false;
 
                         let down_payment = (this.tuition_data.down_payment <= this
