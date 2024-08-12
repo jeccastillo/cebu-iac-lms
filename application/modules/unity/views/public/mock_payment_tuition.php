@@ -470,6 +470,7 @@ new Vue({
                             
                             this.other_payments = data.data.other;
                             this.computePayment(); 
+                            console.log(this.reservation_payment);
                                                          
                             
                         })
@@ -489,8 +490,7 @@ new Vue({
         computePayment: function(event){
             if(this.registration.enumStudentType == "new"){
                 axios.get(api_url + 'finance/reservation/' + this.slug + '/' + this.sem)
-                .then((data) => {                    
-                    console.log(data);
+                .then((data) => {                                        
                     this.reservation_payment = data.data.data;    
                     this.application_payment = data.data.application;                    
                     if(this.reservation_payment.status == "Paid" && data.data.student_sy == this.sem){
