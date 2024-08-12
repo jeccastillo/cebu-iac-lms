@@ -205,7 +205,7 @@
                                                     </div>
                                                     <div v-else>
                                                         <button type="submit"
-                                                            :disabled="loading_spinner && item_details.price > 0"
+                                                            :disabled="loading_spinner && item_details.price == 0"
                                                             v-if="selected_mode_of_payment.id"
                                                             class="btn btn-primary"
                                                             name="button">Submit
@@ -772,8 +772,7 @@ new Vue({
                     .catch((error) => {
                         console.log(error);
                     })
-            }
-            console.log(this.item_details.price);
+            }            
 
         },
         selectPayment: function(mode_payment) {
