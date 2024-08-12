@@ -467,11 +467,11 @@
                                 <h4>{{ address }}</h4>
                             </div>
                             <table class="table table-bordered">
-                                <tr v-if="tuition_data.down_payment > 0">
+                                <tr v-if="registration.downpayment > 0">
                                     <td>Down Payment</td>
                                     <td>{{ tuition_data.down_payment }}</td>                                                        
                                 </tr> 
-                                <tr v-for="(inst,ctr) in installments">
+                                <tr v-for="(inst,ctr) in installments" v-if="inst > 0">
                                     <td>Installment{{ '(' + installment_dates[ctr]+ ')' }}</td>
                                     <td>{{ inst }}</td>
                                 </tr>
