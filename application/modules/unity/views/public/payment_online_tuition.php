@@ -205,13 +205,13 @@
                                                     </div>
                                                     <div v-else>
                                                         <button type="submit"
-                                                            :disabled="item_details.price <= 0"
+                                                            :disabled="loading_spinner && item_details.price <= 0"
                                                             v-if="selected_mode_of_payment.id"
                                                             class="btn btn-primary"
                                                             name="button">Submit
                                                         </button>
                                                         <button type="button"
-                                                            disabled
+                                                            :disabled="item_details.price <= 0"
                                                             v-else
                                                             class="btn btn-default"
                                                             name="button">Submit</button>
