@@ -666,8 +666,7 @@ new Vue({
 
         let url_string = window.location.href;        
         if(this.id != 0){            
-            //this.loader_spinner = true;
-            this.logo = (this.student_campus == "Cebu")?"https://i.ibb.co/9hgbYNB/seal.png":"https://i.ibb.co/kcYVsS7/i-ACADEMY-Seal-Makati.png";            
+            //this.loader_spinner = true;            
             axios.get(this.base_url + 'unity/registration_viewer_data/' + this.id + '/' + this.sem)
                 .then((data) => {  
                     if(data.data.success){      
@@ -731,6 +730,7 @@ new Vue({
                             this.request.cashier_id = this.cashier.user_id;
                             this.or_update.cashier_id = this.cashier.user_id;
                             this.or_update.student_campus = this.request.student_campus;
+                            this.logo = (this.student_campus == "Cebu")?"https://i.ibb.co/9hgbYNB/seal.png":"https://i.ibb.co/kcYVsS7/i-ACADEMY-Seal-Makati.png";            
                         }                        
                         
 
