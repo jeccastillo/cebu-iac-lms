@@ -573,11 +573,11 @@ class Unity extends CI_Controller {
             $ret['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$ret['selected_ay']);
             $ret['tuition_years'] = $this->db->get_where('tb_mas_tuition_year')->result_array();
             $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($ret['selected_ay']);      
-            $ret['active_sem']['installment1_formatted'] = date("M j, Y", strtotime($ret['active_sem']['installment1']));
-            $ret['active_sem']['installment2_formatted'] = date("M j, Y", strtotime($ret['active_sem']['installment2']));
-            $ret['active_sem']['installment3_formatted'] = date("M j, Y", strtotime($ret['active_sem']['installment3']));
-            $ret['active_sem']['installment4_formatted'] = date("M j, Y", strtotime($ret['active_sem']['installment4']));
-            $ret['active_sem']['installment5_formatted'] = date("M j, Y", strtotime($ret['active_sem']['installment5']));
+            $ret['active_sem']['installment1_formatted'] = date("F j, Y", strtotime($ret['active_sem']['installment1']));
+            $ret['active_sem']['installment2_formatted'] = date("F j, Y", strtotime($ret['active_sem']['installment2']));
+            $ret['active_sem']['installment3_formatted'] = date("F j, Y", strtotime($ret['active_sem']['installment3']));
+            $ret['active_sem']['installment4_formatted'] = date("F j, Y", strtotime($ret['active_sem']['installment4']));
+            $ret['active_sem']['installment5_formatted'] = date("F j, Y", strtotime($ret['active_sem']['installment5']));
             $ret['cashier'] = $this->db->get_where('tb_mas_cashier',array('user_id'=>$this->data['user']['intID']))->first_row();      
             $ret['user_logged'] = $this->data['user']['intID'];
             $ret['user_level'] = $this->data['user']['intUserLevel'];
