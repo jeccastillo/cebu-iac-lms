@@ -700,7 +700,7 @@ new Vue({
                         if (this.term_balances[i].balance > 0)
                             this.show_alert = true;
                         this.current_term = data.data.active_sem;
-                        this.current_term_full_label = current_term.term_label == "Term" ? "Trimester" : "Semester";
+                        this.current_term_full_label = this.current_term.term_label == "Term" ? "Trimester" : "Semester";
                         this.installment_dates.push(data.data.active_sem.installment1);
                         this.installment_dates.push(data.data.active_sem.installment2);
                         this.installment_dates.push(data.data.active_sem.installment3);
