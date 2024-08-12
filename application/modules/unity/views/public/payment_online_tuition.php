@@ -689,7 +689,6 @@ new Vue({
                                 this.installments.push(this.tuition_data
                                     .installment_fee);
 
-                            this.item_details.price = this.installments[0];
                         }
 
 
