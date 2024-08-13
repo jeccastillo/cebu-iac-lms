@@ -476,6 +476,7 @@
                                         </tr>
                                         <tr>
                                             <th>ID NUMBER:</th>
+                                            <td>{{ student.strStudentNumber.replace(/-/g, '') }}</td>
                                         </tr>
                                         <tr>
                                             <th>COURSE:</th>
