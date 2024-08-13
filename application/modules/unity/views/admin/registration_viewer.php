@@ -466,9 +466,21 @@
                                 <h3>Information & Communications Technology Academy</h3>
                                 <h4>{{ soa.address }}</h4>
                                 <h4>AY {{ current_term.strYearStart }} - {{ current_term.strYearEnd }} {{ current_term.enumSem }} {{ current_term_full_label }}</h4>
-                            </div>
+                            </div>                            
                             <div class="row">
-                                <div class="col-sm-6">
+                                <div class="col-sm-6">                                    
+                                    <table class="table">
+                                        <tr>
+                                            <th>NAME OF STUDENT:</th>                                                                                        
+                                            <td>{{ student.strLastname.toUpperCase() }}, {{ student.strFirstname.toUpperCase() }} {{ student.strMiddlename.toUpperCase() }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>ID NUMBER:</th>
+                                        </tr>
+                                        <tr>
+                                            <th>COURSE:</th>
+                                        </tr>
+                                    </table>
                                     <div v-if="payment_type != 'full'">
                                         <table class="table table-bordered">
                                             <tr v-if="registration.downpayment == 0">
