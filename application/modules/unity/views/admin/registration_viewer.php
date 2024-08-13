@@ -480,7 +480,7 @@
                                         </tr>
                                         <tr>
                                             <td>TOTAL BALANCE</td>
-                                            <td>P{{ this.soa.total }}</td>
+                                            <td>P{{ soa.total }}</td>
                                         </tr>
                                     </table> 
                                 </div>                                 
@@ -904,7 +904,7 @@ new Vue({
                             }
 
                             this.soa.installments = this.installments;
-                            this.soa.total = Math.round((this.remaining_amount + Number.EPSILON) * 100) / 100;
+                            this.soa.total = this.remaining_amount_formatted;
                         })
                         .catch((error) => {
                             console.log(error);
