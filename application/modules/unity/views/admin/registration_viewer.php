@@ -480,6 +480,7 @@
                                         </tr>
                                         <tr>
                                             <th>COURSE:</th>
+                                            <td>{{ student.strProgramCode }}</td>
                                         </tr>
                                     </table>
                                     <div v-if="payment_type != 'full'">
