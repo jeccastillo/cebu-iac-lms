@@ -906,6 +906,7 @@ new Vue({
                             for(i in this.soa.installments){
                                 this.soa.total += parseFloat(this.soa.installments[i]);
                             }
+                            this.soa.total = this.soa.total.toFixed(2);
                         })
                         .catch((error) => {
                             console.log(error);
