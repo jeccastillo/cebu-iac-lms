@@ -318,6 +318,21 @@ class AdmissionsV1 extends CI_Controller {
         else
             redirect(base_url()."users/login");            
     }
+    public function view_lead_new($id) {
+        if(in_array($this->session->userdata('intUserLevel'),array(2,3,5,6)))
+        {
+            $this->data['exam_type']= $this->data_fetcher->fetch_table('tb_mas_exam');
+            $this->data['userlevel'] = $this->session->userdata('intUserLevel');
+            //$this->data['subjects'] = $this->data_fetcher->fetch_table('tb_mas_subjects',array('strCode','asc'));
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/view_lead_new",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/subjects_conf",$this->data); 
+        }
+        else
+            redirect(base_url()."users/login");            
+    }
+
 
     public function fi_calendar() {
         if(in_array($this->session->userdata('intUserLevel'),array(2,3,5,6)))

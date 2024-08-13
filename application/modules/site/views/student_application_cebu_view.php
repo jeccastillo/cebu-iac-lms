@@ -29,17 +29,21 @@
     <div class="color-primary text-center">
         <h4 class="font-medium text-2xl mb-5">
             Application Form for {{ term.term_student_type.toUpperCase() }}
-            <strong>(Makati Campus)</strong><br />
+            <strong>(Cebu Campus)</strong><br />
         </h4>
         <p>Hello future Game Changers! Kindly fill out your information sheet. If you have any
             questions, feel free
             to email us at <strong><u>admissions@iacademy.edu.ph</u></strong> </p>
 
         <p style="margin-top:15px;">
-            Note: You are applying for iACADEMY Makati Campus, if you want to apply to iACADEMY Cebu
-            click
+            Note: You are applying for iACADEMY Cebu Campus, if you want to apply to iACADEMY Makati
+            (Main Campus) click
             <a style="text-decoration: underline;"
-                href="http://cebu.iacademy.edu.ph/site/student_application">here</a>.
+                href="https://employeeportal.iacademy.edu.ph/#/admissions/requirement-submission/request-form">here</a>
+            for
+            SY23 and
+            <a style="text-decoration: underline;"
+                href="http://sms-makati.iacademy.edu.ph/">here</a> for SY24.
         </p>
     </div>
 
@@ -143,7 +147,8 @@
                                 </option>
                             </select>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-3"
+                            v-if="false">
                             <label class="block t color-primary font-bold  mb-3  pr-4"
                                 for="inline-full-name">
                                 Second Choice
@@ -165,7 +170,7 @@
                                 </option>
                             </select>
                         </div>
-                        <div>
+                        <div v-if="false">
                             <label class="block t color-primary font-bold  mb-3  pr-4"
                                 for="inline-full-name">
                                 Third Choice
@@ -1422,6 +1427,7 @@ new Vue({
         optionValue: '',
         sources: '',
         times: [],
+        campus: '<?php echo $campus; ?>',
         sourceList: [...sourcesLeft, ...sourcesRight],
         timeList: [...timeLeft, ...timeRight],
         referredList: [...referred],
@@ -1454,7 +1460,7 @@ new Vue({
             date_of_birth: "",
             program: "",
             health_concerns: [],
-            campus: "Makati",
+            campus: "Cebu",
             citizenship: 'Philippines',
             syid: '',
             student_type: '',
@@ -1501,7 +1507,12 @@ new Vue({
             }
         ]
     },
-
+    // computed: {
+    //     testX() {
+    //         console.log(this.sources[0]);
+    //         return this.sources[0] == 'Others' ? true : false
+    //     }
+    // },
     mounted() {
 
         axios
@@ -1731,7 +1742,7 @@ new Vue({
         confirmEmail: function() {
             if (this.request.email != this.request.email_confirmation) {
                 Swal.fire({
-                    title: 'iACADEMY MAKATI CAMPUS',
+                    title: 'iACADEMY CEBU CAMPUS',
                     html: 'The email address you provided does not match',
                     confirmButtonText: "Ok",
                     imageWidth: 100,
@@ -1745,7 +1756,7 @@ new Vue({
         confirmMobileNumber: function() {
             if (this.request.mobile_number != this.request.mobile_number_confirmation) {
                 Swal.fire({
-                    title: 'iACADEMY MAKATI CAMPUS',
+                    title: 'iACADEMY CEBU CAMPUS',
                     html: 'The mobile number you provided does not match',
                     confirmButtonText: "Ok",
                     imageWidth: 100,
@@ -1794,9 +1805,9 @@ new Vue({
             this.setSource()
 
             Swal.fire({
-                title: 'iACADEMY MAKATI CAMPUS',
+                title: 'iACADEMY CEBU CAMPUS',
                 html: `
-                You are applying for iACADEMY MAKATI Campus. Click <a style='color:#000099' href='https://cebu.iacademy.edu.ph'>here</a> if you are applying for iACADEMY Cebu Campus
+                You are applying for iACADEMY CEBU Campus. Click <a style='color:#000099' href='https://cebu.iacademy.edu.ph'>here</a> if you are applying for iACADEMY Cebu Campus
             `,
                 showCancelButton: true,
                 confirmButtonText: "Submit Application",
