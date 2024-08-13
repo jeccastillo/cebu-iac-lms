@@ -904,7 +904,7 @@ new Vue({
                             }
 
                             this.soa.installments = this.installments;
-                            this.soa.total = this.remaining_amount.toFixed(2);
+                            this.soa.total = Math.round((this.remaining_amount + Number.EPSILON) * 100) / 100;
                         })
                         .catch((error) => {
                             console.log(error);
