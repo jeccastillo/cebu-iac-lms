@@ -904,7 +904,7 @@ new Vue({
                             }
 
                             this.soa.installments = this.installments;
-                            this.soa.total = this.remaining_amount;
+                            this.soa.total = this.remaining_amount.toFixed(2);
                         })
                         .catch((error) => {
                             console.log(error);
