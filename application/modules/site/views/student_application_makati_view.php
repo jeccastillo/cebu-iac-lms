@@ -104,7 +104,7 @@
                             id="one"
                             :value="shs"
                             v-model="request.student_type"
-                            @click="filterShs(filterCollege[index])"
+                            @click="filterShs(filterShs[index])"
                             class="mr-1">
                         {{shs}}
                     </label>
