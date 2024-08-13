@@ -469,20 +469,30 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <table class="table table-bordered">
-                                        <tr v-if="registration.downpayment == 0">
-                                            <td>Down Payment</td>
-                                            <td>{{ tuition_data.down_payment }}</td>                                                        
-                                        </tr> 
-                                        <tr v-for="(inst,ctr) in installments" v-if="inst > 0">
-                                            <td>{{ addSuffix(ctr + 1) + ' installment due ' + installment_dates[ctr]+ ' ' }}</td>
-                                            <td>P{{ inst }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>TOTAL BALANCE</td>
-                                            <td>P{{ soa.total }}</td>
-                                        </tr>
-                                    </table> 
+                                    <div v-if="payment_type != 'full'">
+                                        <table class="table table-bordered">
+                                            <tr v-if="registration.downpayment == 0">
+                                                <td>Down Payment</td>
+                                                <td>{{ tuition_data.down_payment }}</td>                                                        
+                                            </tr> 
+                                            <tr v-for="(inst,ctr) in installments" v-if="inst > 0">
+                                                <td>{{ addSuffix(ctr + 1) + ' installment due ' + installment_dates[ctr]+ ' ' }}</td>
+                                                <td>P{{ inst }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>TOTAL BALANCE</td>
+                                                <td>P{{ soa.total }}</td>
+                                            </tr>
+                                        </table> 
+                                    </div>
+                                    <div v-else>
+                                    <table class="table table-bordered">                                            
+                                            <tr>
+                                                <td>TOTAL BALANCE</td>
+                                                <td>P{{ remaining_amount_formatted }}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
                                 </div>                                 
                             </div>                            
                         </div>    
