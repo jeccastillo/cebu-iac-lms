@@ -876,8 +876,9 @@ new Vue({
                                     for(i in this.installments){                                                     
                                         this.soa.total += parseFloat(this.installments[i]);
                                     }
-                                    this.soa.total += this.registration.downpayment == 0 ? parseFloat(this.tuition_data.down_payment):0; 
-                                    this.soa.total = this.soa.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                                    //this.soa.total += this.registration.downpayment == 0 ? parseFloat(this.tuition_data.down_payment):0; 
+                                    //this.soa.total = this.soa.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                                    this.soa.total = this.remaining_amount_formatted;
                                     
                                     
                                 })
@@ -923,8 +924,9 @@ new Vue({
                                     for(i in this.installments){                                          
                                         this.soa.total += parseFloat(this.installments[i]);
                                     }
-                                    this.soa.total += this.registration.downpayment == 0 ? parseFloat(this.tuition_data.down_payment):0; 
-                                    this.soa.total = this.soa.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                                    //this.soa.total += this.registration.downpayment == 0 ? parseFloat(this.tuition_data.down_payment):0; 
+                                    //this.soa.total = this.soa.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                                    this.soa.total = this.remaining_amount_formatted;
                             }
 
                            
