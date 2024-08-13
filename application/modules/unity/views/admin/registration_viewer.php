@@ -863,8 +863,9 @@ new Vue({
                                         this.description = "Other";
 
                                     this.soa.installments = this.installments;                                    
-                                    for(i in this.soa.installments){                                        
-                                        this.soa.total += parseFloat(this.soa.installments[i]);
+                                    for(i in this.installments){             
+                                        this.soa.installments[i] = this.installments[i].replace(/\d(?=(\d{3})+\.)/g, '$&,'); 
+                                        this.soa.total += parseFloat(this.installments[i]);
                                     }
                                     this.soa.total = this.soa.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 
@@ -909,8 +910,9 @@ new Vue({
                                         this.description = "Other";
 
                                     this.soa.installments = this.installments;                            
-                                    for(i in this.soa.installments){                                        
-                                        this.soa.total += parseFloat(this.soa.installments[i]);
+                                    for(i in this.installments){  
+                                        this.soa.installments[i] = this.installments[i].replace(/\d(?=(\d{3})+\.)/g, '$&,');                                       
+                                        this.soa.total += parseFloat(this.installments[i]);
                                     }
                                     this.soa.total = this.soa.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                             }
