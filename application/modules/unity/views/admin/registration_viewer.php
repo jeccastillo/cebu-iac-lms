@@ -480,7 +480,7 @@
                                         </tr>
                                         <tr>
                                             <td>TOTAL BALANCE</td>
-                                            <td>P{{ remaining_amount_formatted }}</td>
+                                            <td>P{{ soa.total }}</td>
                                         </tr>
                                     </table> 
                                 </div>                                 
@@ -904,6 +904,10 @@ new Vue({
                             }
 
                             this.soa.installments = this.installments;
+                            for(i in this.soa.installments){
+                                this.soa.total += parseFloat(this.soa.installments[i]);
+                            }
+                            this.soa.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                             
                         })
                         .catch((error) => {
