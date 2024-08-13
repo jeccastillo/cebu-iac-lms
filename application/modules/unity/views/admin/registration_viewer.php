@@ -847,12 +847,10 @@ new Vue({
                                         
                                         }
                                     }
-                                    else{
+                                    else
                                         for(i=0; i < 5; i++)
-                                            this.installments.push(this.tuition_data.installment_fee);                                                                                                                  
-                                        this.soa.total += parseFloat(this.tuition_data.down_payment);    
-                                        
-                                    }
+                                            this.installments.push(this.tuition_data.installment_fee);                                                                                 
+                                    
                                         
                                                                                                         
                                     
@@ -906,10 +904,7 @@ new Vue({
                             }
 
                             this.soa.installments = this.installments;
-                            for(i in this.soa.installments){
-                                this.soa.total += parseFloat(this.soa.installments[i]);
-                            }
-                            this.soa.total = this.soa.total.toFixed(2);
+                            this.soa.total = this.remaining_amount;
                         })
                         .catch((error) => {
                             console.log(error);
