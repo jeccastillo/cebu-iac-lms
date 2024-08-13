@@ -904,6 +904,7 @@ new Vue({
                             }
 
                             this.soa.installments = this.installments;
+                            console.log(this.soa.installments);
                             for(i in this.soa.installments){
                                 console.log(this.soa.installments[i]);
                                 this.soa.total += parseFloat(this.soa.installments[i]);
