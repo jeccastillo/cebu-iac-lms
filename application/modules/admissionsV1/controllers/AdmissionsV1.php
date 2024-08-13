@@ -268,9 +268,10 @@ class AdmissionsV1 extends CI_Controller {
 
     }
 
-    public function programs($slug){
+    public function programs($slug,$sem = 0){
         $ret['programs'] = $this->data_fetcher->fetch_table('tb_mas_programs');
         $ret['sy'] = $this->db->get('tb_mas_sy')->result_array();
+        $ret['current_term'] = $this->data_fetcher->get_sem_by_id($sem);
         $ret['entrance_exam'] = $this->db->get_where('tb_mas_student_exam',array('student_id'=>$slug))->first_row('array'); 
         // print_r($ret['entrance_exam']);
         $scorePerSectionArray = [];

@@ -1431,6 +1431,7 @@ new Vue({
             reserve_enroll: 0,
             waive_reason: undefined,
             enhanced_curriculum: 0,
+            applicant_id: undefined,
         },
         request_sched: {
             from: "",
@@ -1466,6 +1467,7 @@ new Vue({
         program_text: undefined,
         program_text2: undefined,
         program_text3: undefined,
+        current_term: undefined,                
         reserve_time_picker_options: {
             start: "08:00",
             step: "00:30",
@@ -1489,12 +1491,14 @@ new Vue({
         this.loader_spinner = true;
         axios.get(api_url + 'admissions/student-info/' + this.slug)
             .then((data) => {
-                this.request = data.data.data;
+                this.request = data.data.data;                
                 this.sy_reference = this.request.sy_reference;
                 this.loader_spinner = false;
                 //this.program_update = this.request.type_id;
-                axios.get(base_url + 'admissionsV1/programs/' + this.slug)
+                axios.get(base_url + 'admissionsV1/programs/' + this.slug + '/' + this.sy_reference)
                     .then((data) => {
+                        this.request.applicant_id = "A"+this.current_term.strYearStart+"-"+String(this.request.id).padStart(4, '0');
+                        console.log(this.request.applicant_id);
                         this.programs = data.data.programs;
                         this.entrance_exam = data.data.entrance_exam;
                         this.sections_scores = data.data.section_scores;
