@@ -1486,8 +1486,6 @@ new Vue({
         let url_string = window.location.href;
         let url = new URL(url_string);
 
-
-
         this.loader_spinner = true;
         axios.get(api_url + 'admissions/student-info/' + this.slug)
             .then((data) => {
