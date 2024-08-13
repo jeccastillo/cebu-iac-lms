@@ -903,14 +903,14 @@ new Vue({
                                         this.description = "Other";
                             }
 
-                            setTimeout(function() {
-                                this.soa.installments = this.installments;
-                                for(i in this.soa.installments){
-                                    console.log(this.soa.installments[i]);
-                                    this.soa.total += parseFloat(this.soa.installments[i]);
-                                }
-                                this.soa.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                            }, 1500);
+                            
+                            this.soa.installments = this.installments;
+                            for(i in this.soa.installments){
+                                console.log(this.soa.installments[i]);
+                                this.soa.total += parseFloat(this.soa.installments[i]);
+                            }
+                            this.soa.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                            
                             
                             
                         })
