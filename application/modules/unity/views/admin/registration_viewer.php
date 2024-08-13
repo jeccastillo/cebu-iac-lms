@@ -829,7 +829,7 @@ new Vue({
                                     
                                     
                                     this.remaining_amount = (this.remaining_amount < 0.02) ? 0 : this.remaining_amount;                                
-                                    this.remaining_amount_formatted = this.remaining_amount.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                                    this.remaining_amount_formatted = this.remaining_amount;
                                     //installment amounts                                
                                     if(this.registration.downpayment == 1){
                                         var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);
