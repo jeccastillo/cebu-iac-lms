@@ -847,9 +847,12 @@ new Vue({
                                         
                                         }
                                     }
-                                    else
+                                    else{
                                         for(i=0; i < 5; i++)
                                             this.installments.push(this.tuition_data.installment_fee);                                                                                                                  
+                                        this.soa.total += parseFloat(this.tuition_data.down_payment);    
+                                        
+                                    }
                                         
                                                                                                         
                                     
