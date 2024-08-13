@@ -1497,6 +1497,7 @@ new Vue({
                 //this.program_update = this.request.type_id;
                 axios.get(base_url + 'admissionsV1/programs/' + this.slug + '/' + this.sy_reference)
                     .then((data) => {
+                        this.current_term = data.data.current_term;
                         this.request.applicant_id = "A"+this.current_term.strYearStart+"-"+String(this.request.id).padStart(4, '0');
                         console.log(this.request.applicant_id);
                         this.programs = data.data.programs;
