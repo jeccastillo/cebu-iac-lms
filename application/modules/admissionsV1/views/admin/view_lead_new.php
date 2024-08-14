@@ -646,8 +646,7 @@
                     </div>
                     <!-- for cebu applicant -->
                     <div v-if="request.campus == 'Cebu'"
-                        class="box-body"
-                        style="padding:2rem">
+                        class="box-body">
                         <div>
                             <strong><i class="fa fa-user margin-r-5"></i>Selected Program</strong>
                             <p class="text-muted">
@@ -685,8 +684,7 @@
                     <!-- end -->
                     <!-- for Makati applicant -->
                     <div v-if="request.campus == 'Makati'"
-                        class="box-body"
-                        style="padding:2rem">
+                        class="box-body">
                         <div>
                             <strong><i class="fa fa-user margin-r-5"></i>Enhanced
                                 Curriculum</strong>
