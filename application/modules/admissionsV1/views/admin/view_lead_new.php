@@ -135,7 +135,7 @@
                         </div>
                         <hr>
                     </div>
-                    <div v-if="true">
+                    <div v-if="false">
                         <strong>School</strong>
                         <div class="form-inline">
                             <input type="text"
@@ -150,7 +150,7 @@
                         </div>
                         <hr>
                     </div>
-                    <div v-if="true">
+                    <div v-if="false">
                         <strong>School City </strong>
                         <div class="form-inline">
                             <input type="text"
@@ -166,7 +166,7 @@
                         <hr>
                     </div>
 
-                    <div v-if="true">
+                    <div v-if="false">
                         <strong>School State </strong>
                         <div class="form-inline">
                             <input type="text"
@@ -181,7 +181,7 @@
                         </div>
                         <hr>
                     </div>
-                    <div>
+                    <div v-if="false">
                         <strong>Strand/Program/Course</strong>
                         <div class="form-inline">
                             <input type="text"
@@ -889,6 +889,28 @@
                     </h5>
                 </div>
                 <div class="box-body">
+                <form v-if="!entrance_exam"
+                            @submit.prevent="generateExam"
+                            style="text-align:center; display:flex; justify-content:center; margin-bottom:2rem;">
+                            <div class="col-xs-5">
+                                <select name="examID"
+                                    v-model="exam_type_id"
+                                    id="selectExamID"
+                                    class="form-control"
+                                    required
+                                    id="">
+                                    <option value=""
+                                        disabled
+                                        selected>--select exam type--</option>
+                                    <option v-for="ex in exam_types"
+                                        :value="ex.intID">{{ex.strName}}</option>
+                                </select>
+                            </div>
+                            <button type="submit"
+                                class="btn btn-success">
+                                Generate Exam Link
+                            </button>
+                        </form>
                     <div v-if="entrance_exam" style="display: flex;justify-content: space-between;">
                         <div>
                             <strong>Date Submitted:</strong>
@@ -903,7 +925,7 @@
                     </div>
                     <!-- v-if="entrance_exam" -->
                     <table class="table table-sm"
-                        v-if="true">
+                        v-if="entrance_exam">
                         <thead>
                             <th>Section</th>
                             <th>Scores</th>
@@ -1234,7 +1256,7 @@
                 </div>
                 <div class="box-body">
                     <div>
-                        <strong>Mother's Name </strong>
+                        <strong>Mother's Name <span v-if="request.primary_contact == 'mother'" class="text-muted">(PRIMARY)</span> </strong>
                         <div class="form-inline">
                             <input type="text"
                                 class="form-control"
@@ -1294,7 +1316,7 @@
                         <hr>
                     </div>
                     <div>
-                        <strong>Father's Name </strong>
+                        <strong>Father's Name <span v-if="request.primary_contact == 'father'" class="text-muted">(PRIMARY)</span></strong>
                         <div class="form-inline">
                             <input type="text"
                                 class="form-control"
@@ -1354,7 +1376,7 @@
                         <hr>
                     </div>
                     <div>
-                        <strong>Guardian's Name </strong>
+                        <strong>Guardian's Name <span v-if="request.primary_contact == 'guardian'" class="text-muted">(PRIMARY)</span> </strong>
                         <div class="form-inline">
                             <input type="text"
                                 class="form-control"
@@ -1561,7 +1583,7 @@
     </div>
     <!-- End -->
     <div class="content  container"
-        v-if="true">
+        v-if="false">
         <div action="">
             <div class="box ">
                 <div class="box-header with-border font-weight-bold py-5"
@@ -3004,6 +3026,10 @@ tr>td {
 
 tr>th {
     font-size: 10px
+}
+
+.content-header {
+    margin-bottom: 20px
 }
 
 .form-control:disabled {
