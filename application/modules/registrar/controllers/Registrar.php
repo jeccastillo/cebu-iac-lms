@@ -2218,7 +2218,7 @@ class Registrar extends CI_Controller {
                     
                     $this->db->where(array('intStudentID'=>$post['id'],'intClassListID'=>$record['classlistID']))->delete('tb_mas_classlist_student');                        
                 }
-                //$this->db->where(array('intStudentID'=>$post['id'],'intAYID'=>$post['sem']))->delete('tb_mas_registration');
+                $this->db->where(array('intStudentID'=>$post['id'],'intAYID'=>$post['sem']))->update('tb_mas_registration',array('dteRegistered' => NULL,'date_enlisted'=> NULL));
             }
             else{
                 foreach($records as $record){
