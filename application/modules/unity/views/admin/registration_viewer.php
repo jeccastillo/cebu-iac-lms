@@ -985,7 +985,7 @@ new Vue({
         },  
         printSOA: function(){
 
-        }
+        },
         addSuffix: function(i){
             let j = i % 10,
                 k = i % 100;
