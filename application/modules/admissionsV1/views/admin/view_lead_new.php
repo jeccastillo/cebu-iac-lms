@@ -1093,12 +1093,55 @@
                 <div class="box-body">
                     <div>
                         <strong>Waive Application Fee? </strong>
-                        <p class="text-muted">No</p>
+                        <div class="form-inline">
+                        <select class="form-control"
+                        :disabled="true"
+                            @change="updateField('waive_app_fee',$event)"
+                            v-model="request.waive_app_fee">
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                        <button
+                                v-if="request.status !=  'Game Changer' && request.status !=  'For Enrollment'"
+                                class="btn btn-primary text-right"
+                                @click="onEdit">Edit</button>
+                        </div>
+                        <hr>
+                    </div>
+                    <div>
+                        <strong>Waive Reason </strong>
+                        <div class="form-inline">
+                      
+                        <select class="form-control"
+                        :disabled="true"
+                            @change="updateField('waive_reason',$event)"
+                            v-model="request.waive_reason">
+                            <option value="organic">Organic</option>
+                            <option value="scholarship">Scholarship</option>
+                            <option value="special application">Special Application</option>
+                        </select>
+                        <button
+                                v-if="request.status !=  'Game Changer' && request.status !=  'For Enrollment'"
+                                class="btn btn-primary text-right"
+                                @click="onEdit">Edit</button>
+                        </div>
                         <hr>
                     </div>
                     <div>
                         <strong>Reserve Enroll Promo </strong>
-                        <p class="text-muted">Yes</p>
+                        <div class="form-inline">
+                        <select class="form-control"
+                        :disabled="true"
+                            @change="updateField('reserve_enroll',$event)"
+                            v-model="request.reserve_enroll">
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                        <button
+                                v-if="request.status !=  'Game Changer' && request.status !=  'For Enrollment'"
+                                class="btn btn-primary text-right"
+                                @click="onEdit">Edit</button>
+                        </div>
                         <hr>
                     </div>
                     <div>
