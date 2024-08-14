@@ -2261,6 +2261,10 @@ class Pdf extends CI_Controller {
 
     }
 
+    function print_soa(){
+        $request = $this->input->post();
+        print_r($request);
+    }
     function print_or()
     {
         $request = $this->input->post();

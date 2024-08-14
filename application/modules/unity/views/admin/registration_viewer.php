@@ -534,6 +534,18 @@
         <input type="hidden" name="transaction_date" v-model="or_print.transaction_date" /> 
         <input type="hidden" name="type" v-model="or_print.type" />              
     </form>
+    <form ref="print_soa" method="post" :action="base_url + 'pdf/print_soa'" target="_blank">
+        <input type="hidden" name="down_payment" v-model="tuition_data.down_payment">
+        <input type="hidden" name="is_paid_dp" :value="registration.downpayment">
+        <input type="hidden" name="cashier_id" v-model="or_print.cashier_id">
+        <input type="hidden" name="student_id" v-model="soa.student_id">
+        <input type="hidden" name="student_name" v-model="soa.student_name">
+        <input type="hidden" name="campus_address" v-model="soa.address">
+        <input type="hidden" name="campus_logo" v-model="soa.logo">
+        <input type="hidden" name="installments" v-model="soa.installments">
+        <input type="hidden" name="term" v-model="soa.term">
+        <input type="hidden" name="total" v-model="remaining_amount_formatted">            
+    </form>
     <div class="modal fade" id="myModal" role="dialog">
         <form @submit.prevent="updateOR" class="modal-dialog modal-lg">
 
@@ -622,6 +634,16 @@ new Vue({
             total: 0,
             downpayment:0,
             installments: [],
+            term: undefined,
+        },
+        soa_print:{
+            logo: undefined,
+            address: undefined,
+            total: 0,
+            downpayment:0,
+            installments: [],
+            student_name: undefined,
+            student_id: undefined,
         },
         user: undefined,
         term_balances: [],
@@ -983,8 +1005,21 @@ new Vue({
             })
 
         },  
-        printSOA: function(){
+        printSOA: function(){            
+            this.soa.term = "AY " + current_term.strYearStart + " - " + current_term.strYearEnd + " " + current_term.enumSem + " " + current_term_full_label;
+            this.soa.student_name =  this.request.last_name+", "+this.request.first_name+", "+this.request.middle_name;    
+            //this.or_print.student_address = this.student.strAddress;
+            if(this.student.strStudentNumber.charAt(0) != "T")
+                this.soa.student_id = this.student.strStudentNumber;
+            else
+                this.soa.student_id = this.applicant_id;
 
+            var delayInMilliseconds = 1000; //1 second
+            var soa_send = this.$refs.print_soa;
+            setTimeout(function() {
+                soa_send.submit();
+            }, delayInMilliseconds);
+            
         },
         addSuffix: function(i){
             let j = i % 10,
