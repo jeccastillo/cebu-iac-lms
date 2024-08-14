@@ -740,7 +740,7 @@
 
             </div>
         </div>
-        <div v-if="false"
+        <div v-if="true"
             class=" mb-6 mt-10">
             <h4 class="color-primary font-bold text-xl">EDUCATIONAL BACKGROUND</h4>
             <hr class="mb-5 bg-[#10326f] h-1 w-3/5" />
