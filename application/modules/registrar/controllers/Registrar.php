@@ -2200,6 +2200,8 @@ class Registrar extends CI_Controller {
             $data['registration'] = $this->db->where(array('intStudentID'=>$post['id'],'intAYID'=>$post['sem']))
             ->get('tb_mas_registration')
             ->first_row();
+            print_r($data['registration']);
+            die();
             //post->period before opening, after opening, end of term
             if($post['period'] == "before"){                
                 foreach($records as $record){
