@@ -809,7 +809,7 @@
 
         </div>
         <div class="row-container"
-            v-if="true">
+            v-if="true" style="grid-template-columns: 1fr;">
             <!-- 1st row 1st Column -->
             <div v-if="false"
                 class="col-md-6 box">
