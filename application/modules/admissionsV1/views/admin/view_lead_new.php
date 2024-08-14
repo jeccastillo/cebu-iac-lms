@@ -1056,7 +1056,7 @@
             <div class="col-md-6 box">
                 <div class="box-header with-border font-weight-bold ">
                     <h5 class=" text-left text-primary ">
-                        <strong> Parent's details</strong>
+                        <strong>Call Logs</strong>
                     </h5>
                 </div>
                 <div class="box-body">
@@ -2620,7 +2620,7 @@
             <!-- for interview -->
             <div class="col-lg-12">
                 <div class="box box-primary">
-                    <div class="box-header with-border  font-weight-bold"
+                    <div class="box-header with-border font-weight-bold"
                         style="text-align:left; font-weight:bold">
                         <h3 class="box-title text-left text-primary">Status Logs</h3>
                     </div>
