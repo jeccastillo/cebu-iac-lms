@@ -460,7 +460,7 @@
                             </div>              
                         </div>  
                         <div class="tab-pane" id="tab_3">
-                            <h3>Statment of Account</h3>
+                            <h3>Statement of Account</h3>
                             <!-- <img :src="soa.logo" height="300px" width="300px"/> -->
                             <div class="text-center">
                                 <h3>Information & Communications Technology Academy</h3>
@@ -508,7 +508,7 @@
                                         </table>
                                     </div>
                                     <hr />  
-                                    <button class="btn btn-primary btn-lg" @click="printSOA">Print</button>                                  
+                                    <button class="btn btn-primary btn-lg pull-right" @click="printSOA">Print</button>                                  
                                 </div>                                 
                             </div>                            
                         </div>    
