@@ -588,9 +588,26 @@
                     </h5>
                 </div>
                 <div class="box-body">
-                    <div>
+                    <!--  -->
+                    <div v-if="">
                         <strong>Student Year and Term </strong>
-                        <p class="text-muted">0123456789</p>
+                       <div class="form-inline">
+                       <select required 
+                            @change="updateField('syid',$event)"
+                            v-model="sy_reference"
+                            class="form-control"
+                            :disabled="true"
+                            >
+                            <option v-for="sem in sy"
+                                :value="sem.intID">
+                                {{ sem.term_student_type + " " + sem.enumSem + " SY " + sem.strYearStart + " - " + sem.strYearEnd  }}
+                            </option>
+                        </select>
+                        <button
+                                v-if="request.status == 'New'"
+                                class="btn btn-primary text-right"
+                                @click="onEdit">Edit</button>
+                       </div>
                         <hr>
                     </div>
                     <div>
@@ -742,14 +759,16 @@
                     </h5>
                 </div>
                 <div class="box-body">
-                    <div style="display: flex;justify-content: space-between;">
+                    <div v-if="entrance_exam" style="display: flex;justify-content: space-between;">
                         <div>
                             <strong>Date Submitted:</strong>
-                            <span class="text-muted">2024-20-21</span>
+                            <span class="text-muted">{{ entrance_exam?.date_taken }}</span>
                         </div>
                         <div>
                             <strong>Score:</strong>
-                            <span class="text-muted">11/30</span>
+                            <span class="text-muted">
+                            {{ entrance_exam?.score + '/' + entrance_exam?.exam_overall }}
+                            </span>
                         </div>
                     </div>
                     <!-- v-if="entrance_exam" -->
@@ -2636,8 +2655,6 @@
     <div class="modal fade"
         id="applicantStatusUpdate"
         role="dialog">
-        <form @submit.prevent="submitSchedule"
-            class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <!-- modal header  -->
@@ -2697,7 +2714,7 @@
                 </div>
             </div>
 
-        </form>
+       
     </div>
 
     <div class="modal fade"
@@ -2870,7 +2887,7 @@ select.form-control:disabled {
     crossorigin="anonymous"
     referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
-
+<!-- <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script> -->
 
 <script>
 new Vue({
@@ -2946,7 +2963,7 @@ new Vue({
                 this.sy_reference = this.request.sy_reference;
                 this.loader_spinner = false;
                 //this.program_update = this.request.type_id;
-                axios.get(base_url + 'admissionsV1/programs/' + this.slug)
+                axios.get(base_url + 'admissionsV1/programs/' + this.slug + '/' + this.sy_reference)    
                     .then((data) => {
                         this.current_term = data.data.current_term;
                         this.request.applicant_id = "A" + this.current_term
