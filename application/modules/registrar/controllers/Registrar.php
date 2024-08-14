@@ -2214,11 +2214,8 @@ class Registrar extends CI_Controller {
                     $adj['adjustment_type'] =  "Withdrawn";
                     $adj['adjusted_by'] =  $this->session->userdata('intID');
 
-                    $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj);  
-                    
-                    $this->db->where(array('intStudentID'=>$post['id'],'intClassListID'=>$record['classlistID']))->delete('tb_mas_classlist_student');                        
-                }
-                $this->db->where(array('intStudentID'=>$post['id'],'intAYID'=>$post['sem']))->update('tb_mas_registration',array('dteRegistered' => NULL,'date_enlisted'=> NULL));
+                    $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj);                                          
+                }               
             }
             else{
                 foreach($records as $record){
@@ -2234,7 +2231,9 @@ class Registrar extends CI_Controller {
             }
 
             $data =[
-                'intROG' => 3,                    
+                'intROG' => 3,  
+                'dteRegistered' => NULL,
+                'date_enlisted'=> NULL,
             ];         
             $this->db->where(array('intStudentID'=>$post['id'],'intAYID'=>$post['sem']))->update('tb_mas_registration',$data);
 
