@@ -161,7 +161,7 @@
                             <tr v-for="(item,j) in term.ledger_items">
                                 <td :class="item.muted">{{ item.strYearStart + " - " + item.strYearEnd }}</td>
                                 <td :class="item.muted">{{ item.enumSem +" "+ item.term_label }}</td>                                
-                                <td :class="item.muted" v-if="(item.name == 'Application Payment' || item.name == 'Reservation Payment' || item.name == 'Tuition Fee' || item.name == 'LATE ENROLLMENT FEE') && finance && finance.special_role >= 2">
+                                <td :class="item.muted" v-if="(item.name == 'Application Payment' || item.name == 'Reservation Payment' || item.name == 'Tuition Fee' || item.name == 'LATE ENROLLMENT FEE') && finance && finance.special_role >= 1">
                                     <select @change="updateDescription(item.payment_id,$event)" class="form-control" v-model="other[i].ledger_items[j].name">
                                         <option value="Application Payment">Application Payment</option>
                                         <option value="Tuition Fee">Tuition Fee</option>                                        
