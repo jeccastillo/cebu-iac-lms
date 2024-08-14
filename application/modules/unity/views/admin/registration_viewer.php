@@ -1006,7 +1006,7 @@ new Vue({
 
         },  
         printSOA: function(){            
-            this.soa.term = "AY " + current_term.strYearStart + " - " + current_term.strYearEnd + " " + current_term.enumSem + " " + current_term_full_label;
+            this.soa.term = "AY " + this.current_term.strYearStart + " - " + this.current_term.strYearEnd + " " + this.current_term.enumSem + " " + this.current_term_full_label;
             this.soa.student_name =  this.request.last_name+", "+this.request.first_name+", "+this.request.middle_name;    
             //this.or_print.student_address = this.student.strAddress;
             if(this.student.strStudentNumber.charAt(0) != "T")
