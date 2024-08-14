@@ -644,37 +644,169 @@
                         </div>
                         <hr>
                     </div>
-                    <div>
-                        <strong>1st Choice</strong>
-                        <div class="form-inline">
-                            <select v-model="program_update"
-                                @change="changeProgram($event, 1)"
-                                required
-                                class="form-control">
-                                <option v-for="program in programs"
-                                    :value="program.intProgramID">
-                                    {{ program.strProgramDescription }}
-                                </option>
-                            </select>
-                            <button
-                                v-if="request.status !=  'Game Changer' && request.status !=  'For Enrollment'"
-                                class="btn btn-primary text-right"
-                                @click="onEdit">Edit</button>
+                    <!-- for cebu applicant -->
+                    <div v-if="request.campus == 'Cebu'"
+                        class="box-body"
+                        style="padding:2rem">
+                        <div>
+                            <strong><i class="fa fa-user margin-r-5"></i>Selected Program</strong>
+                            <p class="text-muted">
+                                {{request.program}}
+                            </p>
+                            <hr>
                         </div>
-                        <hr>
+                        <form @submit.prevent="confirmProgram(1)"
+                            method="post">
+                            <table class="table table-bordered table-striped">
+                                <tbody>
+                                    <tr>
+                                        <th>Select Program to Change</th>
+                                        <td>
+                                            <select v-model="program_update"
+                                                @change="changeProgram($event, 1)"
+                                                required
+                                                class="form-control">
+                                                <option v-for="program in programs"
+                                                    :value="program.intProgramID">
+                                                    {{ program.strProgramDescription }}
+                                                </option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <hr />
+                            <div class="text-center">
+                                <button type="submit"
+                                    class="btn btn-primary">Update Program</button>
+                            </div>
+                        </form>
                     </div>
-                    <div>
-                        <strong>2nd Choice</strong>
+                    <!-- end -->
+                    <!-- for Makati applicant -->
+                    <div v-if="request.campus == 'Makati'"
+                        class="box-body"
+                        style="padding:2rem">
+                        <div>
+                            <strong><i class="fa fa-user margin-r-5"></i>Enhanced
+                                Curriculum</strong>
+                            <select class="form-control"
+                                @change="updateField('enhanced_curriculum',$event)"
+                                v-model="request.enhanced_curriculum">
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                            <hr>
+                        </div>
+                        <div>
+                            <strong><i class="fa fa-user margin-r-5"></i>Selected Program: 1st
+                                Choice</strong>
+                            <p class="text-muted">
+                                {{request.program}}
+                            </p>
+                            <hr>
+                        </div>
+                        <div>
+                            <strong><i class="fa fa-user margin-r-5"></i>Selected Program: 2nd
+                                Choice</strong>
+                            <p class="text-muted">
+                                {{request.program2}}
+                            </p>
+                            <hr>
+                        </div>
+                        <div>
+                            <strong><i class="fa fa-user margin-r-5"></i>Selected Program: 3rd
+                                Choice</strong>
+                            <p class="text-muted">
+                                {{request.program3}}
+                            </p>
+                            <hr>
+                        </div>
+                        <form @submit.prevent="confirmProgram(1)"
+                            class=""
+                            method="post">
+                            <table class="table table-bordered table-striped">
+                                <tbody>
+                                    <tr>
+                                        <th>Select Program to Change (1st Choice)</th>
+                                        <td>
+                                            <select v-model="program_update"
+                                                @change="changeProgram($event,1)"
+                                                required
+                                                class="form-control">
+                                                <option v-for="program in filtered_programs"
+                                                    :value="program.intProgramID">
+                                                    {{ program.strProgramDescription }}
+                                                </option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <hr />
+                            <div class="text-center">
+                                <button type="submit"
+                                    class="btn btn-primary">Update Program</button>
+                            </div>
+                        </form>
 
-                        <p class="text-muted">Bachelor of Science in Animation</p>
-                        <hr>
-                    </div>
-                    <div>
-                        <strong>3rd Choice</strong>
+                        <form @submit.prevent="confirmProgram(2)"
+                            method="post"
+                            class="mt-5">
+                            <table class="table table-bordered table-striped">
+                                <tbody>
+                                    <tr>
+                                        <th>Select Program to Change (2nd Choice)</th>
+                                        <td>
+                                            <select v-model="program_update2"
+                                                @change="changeProgram($event,2)"
+                                                required
+                                                class="form-control">
+                                                <option v-for="program in filtered_programs"
+                                                    :value="program.intProgramID">
+                                                    {{ program.strProgramDescription }}
+                                                </option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <hr />
+                            <div class="text-center">
+                                <button type="submit"
+                                    class="btn btn-primary">Update Program</button>
+                            </div>
+                        </form>
 
-                        <p class="text-muted">Bachelor of Arts in Psychology</p>
-                        <hr>
+                        <form @submit.prevent="confirmProgram(3)"
+                            method="post"
+                            class="mt-5">
+                            <table class="table table-bordered table-striped">
+                                <tbody>
+                                    <tr>
+                                        <th>Select Program to Change (3rd Choice)</th>
+                                        <td>
+                                            <select v-model="program_update3"
+                                                @change="changeProgram($event,3)"
+                                                required
+                                                class="form-control">
+                                                <option v-for="program in filtered_programs"
+                                                    :value="program.intProgramID">
+                                                    {{ program.strProgramDescription }}
+                                                </option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <hr />
+                            <div class="text-center">
+                                <button type="submit"
+                                    class="btn btn-primary">Update Program</button>
+                            </div>
+                        </form>
                     </div>
+                    <!-- end -->
 
 
                 </div>
@@ -1056,7 +1188,7 @@
             <div class="col-md-6 box">
                 <div class="box-header with-border font-weight-bold ">
                     <h5 class=" text-left text-primary ">
-                        <strong>Call Logs</strong>
+                        <strong>Parent's Details</strong>
                     </h5>
                 </div>
                 <div class="box-body">
@@ -1281,7 +1413,7 @@
             <div class="col-md-6 box">
                 <div class="box-header with-border font-weight-bold ">
                     <h5 class=" text-left text-primary ">
-                        <strong> Parent's details</strong>
+                        <strong> Call Logs</strong>
                     </h5>
                 </div>
                 <div class="box-body">
