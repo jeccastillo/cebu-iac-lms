@@ -500,13 +500,15 @@
                                         </table> 
                                     </div>
                                     <div v-else>
-                                    <table class="table table-bordered">                                            
+                                        <table class="table table-bordered">                                            
                                             <tr>
                                                 <td>TOTAL BALANCE</td>
                                                 <td>P{{ remaining_amount_formatted }}</td>
                                             </tr>
                                         </table>
                                     </div>
+                                    <hr />  
+                                    <button class="btn btn-primary btn-lg" @click="printSOA">Print</button>                                  
                                 </div>                                 
                             </div>                            
                         </div>    
@@ -981,6 +983,9 @@ new Vue({
             })
 
         },  
+        printSOA: function(){
+
+        }
         addSuffix: function(i){
             let j = i % 10,
                 k = i % 100;
