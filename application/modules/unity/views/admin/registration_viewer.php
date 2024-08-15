@@ -472,7 +472,7 @@
                                     <table class="table">
                                         <tr>
                                             <th>NAME OF STUDENT:</th>                                                                                        
-                                            <td>{{ student.strLastname.toUpperCase() }}, {{ student.strFirstname.toUpperCase() }} {{ student.strMiddlename.toUpperCase() }}</td>
+                                            <td>{{ student.strLastname.toUpperCase() }}, {{ student.strFirstname.toUpperCase() }}</td>
                                         </tr>
                                         <tr>
                                             <th>ID NUMBER:</th>
