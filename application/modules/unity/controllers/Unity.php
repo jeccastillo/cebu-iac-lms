@@ -705,7 +705,8 @@ class Unity extends CI_Controller {
         
         //$active_sem = $this->data_fetcher->get_active_sem();        
 
-        $data['campus'] =  $this->data['campus'];        
+        $data['campus'] =  $this->data['campus'];   
+        $data['sem'] = $sem;     
         
         $data['id'] =  $id;
 
