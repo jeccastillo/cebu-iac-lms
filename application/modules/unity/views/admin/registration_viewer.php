@@ -757,7 +757,8 @@ new Vue({
                 .then((data) => {  
                     if(data.data.success){      
                         this.sem = data.data.active_sem.intID;                                                
-                        this.or_update.sy_reference = this.sem;                                                                                                                 
+                        this.or_update.sy_reference = this.sem;
+                        this.request.sy_reference = this.sem;                                                                                                                 
                         this.user_level = data.data.user_level;
                         this.sy = data.data.sy;
                         this.ledger_items = data.data.ledger;
