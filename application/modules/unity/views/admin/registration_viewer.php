@@ -615,7 +615,7 @@ new Vue({
     el: '#registration-container',
     data: {
         id: '<?php echo $id; ?>',    
-        sem: '<?php echo $selected_ay; ?>',
+        sem: null,
         base_url: '<?php echo base_url(); ?>',
         selected_items: [],
         applicant_data: {
