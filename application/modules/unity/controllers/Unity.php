@@ -539,7 +539,7 @@ class Unity extends CI_Controller {
             }
         }
     }    
-    public function registration_viewer_data($id,$sem){
+    public function registration_viewer_data($id,$sem =  null){
         if($this->is_super_admin() || $this->is_accounting() || $this->is_registrar())
         {
             
@@ -550,7 +550,7 @@ class Unity extends CI_Controller {
             ->where(array('student_id'=>$id,'tb_mas_student_ledger.type'=>'tuition','syid' => $sem))                    
             ->get()
             ->result_array();
-            
+
             $ret['student'] = $this->data_fetcher->getStudent($id);
             
             if(get_stype($ret['student']['level']) == "college")
@@ -703,14 +703,9 @@ class Unity extends CI_Controller {
     public function registration_viewer($id,$sem = null)
     {
         
-        $active_sem = $this->data_fetcher->get_active_sem();        
+        //$active_sem = $this->data_fetcher->get_active_sem();        
 
-        $data['campus'] =  $this->data['campus'];
-
-        if($sem!=null)
-            $data['selected_ay'] = $sem;
-        else
-            $data['selected_ay'] = $active_sem['intID'];
+        $data['campus'] =  $this->data['campus'];        
         
         $data['id'] =  $id;
 
