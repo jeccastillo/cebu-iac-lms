@@ -539,7 +539,7 @@ class Unity extends CI_Controller {
             }
         }
     }    
-    public function registration_viewer_data($id,$sem =  null){
+    public function registration_viewer_data($id,$sem =  0){
         if($this->is_super_admin() || $this->is_accounting() || $this->is_registrar())
         {
             
@@ -558,7 +558,7 @@ class Unity extends CI_Controller {
             else
                 $active_sem = $this->data_fetcher->get_active_sem_shs();
 
-            if($sem!=null)
+            if($sem!=0)
                 $ret['selected_ay'] = $sem;
             else
                 $ret['selected_ay'] = $active_sem['intID'];
@@ -700,7 +700,7 @@ class Unity extends CI_Controller {
 
     }
 
-    public function registration_viewer($id,$sem = null)
+    public function registration_viewer($id,$sem = 0)
     {
         
         //$active_sem = $this->data_fetcher->get_active_sem();        
