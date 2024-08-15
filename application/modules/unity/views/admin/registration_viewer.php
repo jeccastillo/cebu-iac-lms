@@ -683,7 +683,7 @@ new Vue({
             total_amount_due: 0,            
             charges: 0,
             cashier_id: undefined,
-            sy_reference: '<?php echo $selected_ay; ?>',
+            sy_reference: null,
             status: 'Paid',
             is_cash: 1,
             check_number: '',
@@ -744,9 +744,10 @@ new Vue({
         let url_string = window.location.href;        
         if(this.id != 0){            
             //this.loader_spinner = true;            
-            axios.get(this.base_url + 'unity/registration_viewer_data/' + this.id + '/' + this.sem)
+            axios.get(this.base_url + 'unity/registration_viewer_data/' + this.id)
                 .then((data) => {  
                     if(data.data.success){      
+                        this.sem = data.data.active_sem.intID;                        
                         this.or_update.sy_reference = this.sem;                                                                                                                 
                         this.user_level = data.data.user_level;
                         this.sy = data.data.sy;
