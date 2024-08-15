@@ -542,7 +542,7 @@ class Unity extends CI_Controller {
     public function registration_viewer_data($id,$sem){
         if($this->is_super_admin() || $this->is_accounting() || $this->is_registrar())
         {
-            $active_sem = $this->data_fetcher->get_active_sem();
+            
             $ret['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
 
             $ret['ledger'] = $this->db->select('tb_mas_student_ledger.*')        
@@ -551,12 +551,6 @@ class Unity extends CI_Controller {
             ->get()
             ->result_array();
 
-            if($sem!=null)
-                $ret['selected_ay'] = $sem;
-            else
-                $ret['selected_ay'] = $active_sem['intID'];
-
-            
             $ret['registration'] = $this->data_fetcher->getRegistrationInfo($id,$ret['selected_ay']);
             if($ret['registration']){
                 $data['tuition'] = $this->data_fetcher->getTuition($id,$ret['selected_ay']);
@@ -583,6 +577,16 @@ class Unity extends CI_Controller {
             $ret['user_level'] = $this->data['user']['intUserLevel'];
             $ret['user'] = $this->data['user'];
             $ret['student'] = $this->data_fetcher->getStudent($id);
+            
+            if(get_stype($ret['student']['level']) == "college")
+                $active_sem = $this->data_fetcher->get_active_sem();
+            else
+                $active_sem = $this->data_fetcher->get_active_sem_shs();
+
+            if($sem!=null)
+                $ret['selected_ay'] = $sem;
+            else
+                $ret['selected_ay'] = $active_sem['intID'];
             //$ret['transactions'] = $this->data_fetcher->getTransactions($ret['registration']['intRegistrationID'],$ret['selected_ay']);
             //$payment = $this->data_fetcher->getTransactionsPayment($ret['registration']['intRegistrationID'],$ret['selected_ay']);
             // $pay =  array();
