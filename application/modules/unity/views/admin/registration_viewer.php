@@ -264,7 +264,7 @@
                                         </div> 
                                         <hr />
                                         
-                                        <button class="btn btn-primary btn-lg pull-right" :disabled="!request.or_number" type="submit">Submit Payment</button>                                                
+                                        <button class="btn btn-primary btn-lg pull-right" :disabled="!request.or_number || !ready" type="submit">Submit Payment</button>                                                
                                                                                                                       
                                     </form>
                                 </div>
@@ -618,6 +618,7 @@ new Vue({
         sem: <?php echo $sem; ?>,
         base_url: '<?php echo base_url(); ?>',
         selected_items: [],
+        ready: false,
         applicant_data: {
             reserve_enroll: 0,
         },
@@ -918,7 +919,7 @@ new Vue({
                                     //this.soa.total += this.registration.downpayment == 0 ? parseFloat(this.tuition_data.down_payment):0; 
                                     //this.soa.total = this.soa.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                                     this.soa.total = this.remaining_amount_formatted;
-                                    
+                                    this.ready = true;
                                     
                                 })
                                 .catch((error) => {
@@ -966,6 +967,7 @@ new Vue({
                                     //this.soa.total += this.registration.downpayment == 0 ? parseFloat(this.tuition_data.down_payment):0; 
                                     //this.soa.total = this.soa.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                                     this.soa.total = this.remaining_amount_formatted;
+                                    this.ready = true;
                             }
 
                            
