@@ -214,6 +214,14 @@
                                                 </div>
                                             <div class="col-sm-4" v-if="cashier">
                                                 <div class="form-group">
+                                                    <label>Term:</label>                                                    
+                                                    <input type="hidden" class="form-control" v-model="request.or_number">
+                                                    {{ sem }}
+                                                    <!-- <select class="form-control" v-model="request.or_number" required>
+                                                        <option v-for="i in (parseInt(cashier_start), parseInt(cashier_end))" :value="i">{{ i }}</option>
+                                                    </select>                                                     -->
+                                                </div>
+                                                <div class="form-group">
                                                     <label>OR Number:</label>                                                    
                                                     <input type="hidden" class="form-control" v-model="request.or_number">
                                                     {{ request.or_number }}
@@ -748,7 +756,7 @@ new Vue({
             axios.get(this.base_url + 'unity/registration_viewer_data/' + this.id + '/' + this.sem)
                 .then((data) => {  
                     if(data.data.success){      
-                        this.sem = data.data.active_sem.intID;                        
+                        this.sem = data.data.active_sem.intID;                                                
                         this.or_update.sy_reference = this.sem;                                                                                                                 
                         this.user_level = data.data.user_level;
                         this.sy = data.data.sy;
