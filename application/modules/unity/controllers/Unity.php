@@ -550,6 +550,18 @@ class Unity extends CI_Controller {
             ->where(array('student_id'=>$id,'tb_mas_student_ledger.type'=>'tuition','syid' => $sem))                    
             ->get()
             ->result_array();
+            
+            $ret['student'] = $this->data_fetcher->getStudent($id);
+            
+            if(get_stype($ret['student']['level']) == "college")
+                $active_sem = $this->data_fetcher->get_active_sem();
+            else
+                $active_sem = $this->data_fetcher->get_active_sem_shs();
+
+            if($sem!=null)
+                $ret['selected_ay'] = $sem;
+            else
+                $ret['selected_ay'] = $active_sem['intID'];
 
             $ret['registration'] = $this->data_fetcher->getRegistrationInfo($id,$ret['selected_ay']);
             if($ret['registration']){
@@ -576,17 +588,7 @@ class Unity extends CI_Controller {
             $ret['user_logged'] = $this->data['user']['intID'];
             $ret['user_level'] = $this->data['user']['intUserLevel'];
             $ret['user'] = $this->data['user'];
-            $ret['student'] = $this->data_fetcher->getStudent($id);
-            
-            if(get_stype($ret['student']['level']) == "college")
-                $active_sem = $this->data_fetcher->get_active_sem();
-            else
-                $active_sem = $this->data_fetcher->get_active_sem_shs();
-
-            if($sem!=null)
-                $ret['selected_ay'] = $sem;
-            else
-                $ret['selected_ay'] = $active_sem['intID'];
+           
             //$ret['transactions'] = $this->data_fetcher->getTransactions($ret['registration']['intRegistrationID'],$ret['selected_ay']);
             //$payment = $this->data_fetcher->getTransactionsPayment($ret['registration']['intRegistrationID'],$ret['selected_ay']);
             // $pay =  array();
