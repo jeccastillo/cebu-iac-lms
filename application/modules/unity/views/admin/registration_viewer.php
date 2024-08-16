@@ -54,7 +54,7 @@
                                 Enrolled
                             </div>
                         </div>
-                        <div v-if="registration && user.special_role > 1" style="margin-right:1rem;" class="pull-right">                                                                         
+                        <div v-if="registration && user.special_role >= 1" style="margin-right:1rem;" class="pull-right">                                                                         
                             Allow To Print RF
                             <select v-model="allow_enroll" @change="changeAllowEnroll" class="form-control">
                                 <option value="0">No</option>
