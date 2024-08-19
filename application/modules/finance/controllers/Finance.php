@@ -364,7 +364,7 @@ class Finance extends CI_Controller {
             }   
             
             //OTHER PAYMENTS
-            $sql = "SELECT * FROM payment_details WHERE student_number = '".$data['student']['slug']."' AND sy_reference = ".$reg['intID']." AND description NOT LIKE 'Reservation%' AND description NOT LIKE 'Tuition%' AND status = 'Paid' || status = 'Void' ORDER BY or_date ASC";
+            $sql = "SELECT * FROM payment_details WHERE student_number = '".$data['student']['slug']."' AND sy_reference = ".$reg['intID']." AND description NOT LIKE 'Reservation%' AND description NOT LIKE 'Tuition%' AND (status = 'Paid' || status = 'Void') ORDER BY or_date ASC";
             $other_payments =  $this->db->query($sql)
                                           ->result_array();                  
 
