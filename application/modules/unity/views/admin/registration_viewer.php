@@ -222,9 +222,14 @@
                                                     </select>                                                     -->
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>OR Number:</label>                                                    
-                                                    <input type="hidden" class="form-control" v-model="request.or_number">
-                                                    {{ request.or_number }}
+                                                    <label>OR Number:</label>    
+                                                    <div v-if="user.special_role == 2 || cashier.temporary_admin ==  1">
+                                                        <input type="number" class="form-control" v-model="request.or_number" />
+                                                    </div>
+                                                    <div v-else>                                                
+                                                        <input type="hidden" class="form-control" v-model="request.or_number">
+                                                        {{ request.or_number }}
+                                                    </div>
                                                     <!-- <select class="form-control" v-model="request.or_number" required>
                                                         <option v-for="i in (parseInt(cashier_start), parseInt(cashier_end))" :value="i">{{ i }}</option>
                                                     </select>                                                     -->
