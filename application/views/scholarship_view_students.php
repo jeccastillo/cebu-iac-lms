@@ -82,7 +82,7 @@ new Vue({
     methods: {     
        
         changeTerm: function(event){
-             document.location = base_url + 'scholarship/scholarship_view/' + event.target.value ;
+             document.location = base_url + '<?php echo $module; ?>/scholarship_view/' + event.target.value ;
         },
                                    
     }
