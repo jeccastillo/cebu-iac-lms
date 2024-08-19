@@ -32,7 +32,7 @@
                             <td>{{ student.strLastname }}</td>
                             <td>{{ student.strFirstname }}</td>
                             <td>
-                                <a target="_blank" :href="'<?php echo base_url(); ?>/scholarship/assign_scholarship_data/'+student.intID+'/'+current_sem">
+                                <a target="_blank" :href="'<?php echo base_url(); ?>/scholarship/assign_scholarship/'+current_sem+'/'+student.intID">
                                     View Scholarships/Discounts
                                 </a>
                             </td>
