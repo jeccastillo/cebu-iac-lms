@@ -579,7 +579,7 @@
           </ul>
         </li>
         <?php if($user['cashier_admin'] || $user['special_role'] >= 2 ): ?>
-          <li class="treeview <?php echo (isset($opentree) && $opentree=="cashier")?'active':''; ?>">
+          <li class="treeview <?php echo (isset($opentree) && $opentree=="cashier_admin")?'active':''; ?>">
             <a href="#">
               <i class="fa fa-circle text-green"></i> <span>Cashier Admin</span>
               <i class="fa pull-right fa-angle-left"></i>
