@@ -59,6 +59,7 @@ new Vue({
         base_url: '<?php echo base_url(); ?>',
         current_sem: '<?php echo $sem; ?>',       
         students: [],      
+        terms: [],
                       
     },
 
