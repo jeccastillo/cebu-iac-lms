@@ -31,7 +31,11 @@
                         <tr v-for="student in students">
                             <td>{{ student.strLastname }}</td>
                             <td>{{ student.strFirstname }}</td>
-                            <td></td>
+                            <td>
+                                <a target="_blank" :href="'<?php echo base_url(); ?>/scholarship/assign_scholarship_data/'+student.intID+'/'+current_sem">
+                                    View Scholarships/Discounts
+                                </a>
+                            </td>
                         </tr>
                     </tbody>
                </table>
