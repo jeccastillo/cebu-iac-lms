@@ -654,9 +654,7 @@ new Vue({
                         let down_payment = (this.tuition_data.down_payment <= this
                             .amount_paid) ? 0 : (this.tuition_data
                             .down_payment - this.amount_paid);
-                        this.down_payment = down_payment;
-
-                        console.log(this.down_payment);
+                        this.down_payment = down_payment;                        
                         
                         if (this.payment_type == "full") {
 
@@ -727,6 +725,8 @@ new Vue({
                 let down_payment = (this.tuition_data.down_payment <= this
                     .amount_paid) ? 0 : (this.tuition_data.down_payment - this
                     .amount_paid);
+                
+                this.down_payment = down_payment;
 
                 if (this.payment_type == "full") {
 
