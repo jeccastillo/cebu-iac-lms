@@ -552,7 +552,9 @@
         <input type="hidden" name="campus_logo" v-model="soa.logo">
         <input type="hidden" name="installments" v-model="soa.installments">
         <input type="hidden" name="term" v-model="soa.term">
-        <input type="hidden" name="total" v-model="remaining_amount_formatted">            
+        <input type="hidden" name="total" v-model="remaining_amount_formatted">
+        <input type="hidden" name="user_id" v-model="student.intID">
+        <input type="hidden" name="sem" v-model="sem">
     </form>
     <div class="modal fade" id="myModal" role="dialog">
         <form @submit.prevent="updateOR" class="modal-dialog modal-lg">
