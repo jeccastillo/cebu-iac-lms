@@ -26,6 +26,7 @@
                         Name: {{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}
                     </div>
                 </div>
+                <hr />
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">                       
                         <li class="active"><a href="#tab_1" data-toggle="tab">Scholarship</a></li>
