@@ -12,7 +12,7 @@
     <div class="content"> 
         <div class="pull-right">
             <select @change="changeTerm($event)" class="form-control" v-model="current_sem">
-                <option v-for="term in terms" :value="term.intID">{{ term.enumSem }} Term SY {{ term.strYearStart }} - {{ term.strYearEnd }}</option>
+            <option v-for="term in terms" :value="term.intID">{{ term.term_student_type }} {{ term.enumSem }} {{ term.term_label }} SY {{ term.strYearStart }} - {{ term.strYearEnd }}</option>
             </select>
         </div>
         <hr />
