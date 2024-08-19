@@ -226,7 +226,7 @@ class Finance extends CI_Controller {
         
         if($userlevel == 2 || ($userlevel == 6 && $role == 2)){
             $this->data['page'] = "payee_setup";
-            $this->data['opentree'] = "finance_admin";
+            $this->data['opentree'] = "cashier_admin";
 
             $this->load->view("common/header",$this->data);
             $this->load->view("view_payees",$this->data);
@@ -1049,7 +1049,7 @@ class Finance extends CI_Controller {
             redirect(base_url()."unity");
 
         $this->data['page'] = "cashier";
-        $this->data['opentree'] = "finance_admin";
+        $this->data['opentree'] = "cashier_admin";
         $this->load->view("common/header",$this->data);
         $this->load->view("cashier",$this->data);
         $this->load->view("common/footer",$this->data);        

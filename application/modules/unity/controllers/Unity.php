@@ -137,7 +137,7 @@ class Unity extends CI_Controller {
             }
             elseif($cat == "Cashier"){
                 $this->data['page'] = "logs_cashier";
-                $this->data['opentree'] = "finance_admin";
+                $this->data['opentree'] = "cashier_admin";
                 $this->data['title'] ="Logs for Cashier Setup";
             }
             else{
