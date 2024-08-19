@@ -3220,6 +3220,276 @@ class Pdf extends CI_Controller {
           
         $pdf->Output('SHS GWA Rank - ' . $gradeLevel . ' ' . $year_level . ' ' .  $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . ".pdf", 'I');
     }
+
+    public function generate_soa($id, $sem)
+    {
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $sy = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+
+        $user = $this->db->select('intID, strFirstName, strMiddleName, strLastName, slug, intProgramID, strStudentNumber')
+            ->from('tb_mas_users')
+            ->where(array('intID'=>$id))
+            ->get()
+            ->first_row('array');
+
+        $reg = $this->db->select('tb_mas_registration.*, tb_mas_scholarships.name as scholarshipName')
+            ->from('tb_mas_registration')
+            ->where(array('intStudentID'=>$id,'intAYID'=>$sem, 'date_enlisted !=' => NULL))
+            ->join('tb_mas_scholarships', 'tb_mas_scholarships.intID = tb_mas_registration.enumScholarship', 'left')
+            ->get()
+            ->first_row('array');
+
+        $tuition = $this->data_fetcher->getTuition($id, $sem);
+        $applied_from = $applied_to = $other = $payments = array();
+        $assessment_discount_rate = $assessment_discount_fixed = $tuition_discount_rate = 0;
+        
+        $payment_details = $this->db->select('payment_details.*')
+                    ->from('payment_details')
+                    ->join('tb_mas_users', 'tb_mas_users.slug = payment_details.student_number')
+                    ->join('tb_mas_registration', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->where(array('payment_details.sy_reference' => $sem, 'payment_details.student_number' => $user['slug'], 'payment_details.status' => 'Paid'))
+                    ->order_by('payment_details.created_at', 'asc')
+                    ->group_by('payment_details.id')
+                    ->get()
+                    ->result_array();
+
+        $current_index = 0;
+        $payment_month = $payment_year = '';
+
+        if($payment_details){
+            $payment = $user_payment = $date = $student_payment = array();
+            foreach($payment_details as $payment_index => $payment_detail){
+                if(strpos($payment_detail['description'], 'Tuition') !== false || strpos($payment_detail['description'], 'Reservation') !== false){
+                    //set date enrolled based on full or installment payment
+                    if(!isset($date_enrolled_array[$payment_detail['student_number']]) && strpos($payment_detail['description'], 'Tuition') !== false){
+                        $date_enrolled_array[$payment_detail['student_number']] = $payment_detail['created_at'];
+                    }
+                    if($payments == null){
+                        $payment['date'] = date("M d", strtotime($payment_detail['created_at']));
+                        $payment['or_number'] = $payment_detail['or_number'];
+                        $payment['amount'] = (float)number_format($payment_detail['subtotal_order'], 2, '.', '');
+                        
+                        $payment_month = date("m", strtotime($payment_detail['created_at']));
+                        $payment_year = date("Y", strtotime($payment_detail['created_at']));
+                        
+                        $user_payment[$user['intID']] = $payment;
+
+                        $date['month'] = $payment_month;
+                        $date['month_name'] = date("F", strtotime($payment_detail['created_at']));
+                        $date['year'] = $payment_year;
+                        $date['data'] = $user_payment;
+
+                        $payments[] = $date;
+                    }else{
+                        if(isset($date['data'][$user['intID']]) && $payment_month == date("m", strtotime($payment_detail['created_at'])) && $payment_year == date("Y", strtotime($payment_detail['created_at']))){
+                            $payments[$current_index]['data'][$user['intID']]['date'] .= ', ' . date("d", strtotime($payment_detail['created_at']));
+                            $payments[$current_index]['data'][$user['intID']]['or_number'] .= ', ' . $payment_detail['or_number'];
+                            $payments[$current_index]['data'][$user['intID']]['amount'] += (float)number_format($payment_detail['subtotal_order'], 2, '.', '');
+                        }else{
+                            $flag = $same_month_year = false;
+                            $data = $date = array();
+                            for($index = count($payments) - 1; $index >= 0; $index--){
+                                if($payments[$index]['year'] == date("Y", strtotime($payment_detail['created_at'])) && $payments[$index]['month'] == date("m", strtotime($payment_detail['created_at']))){
+                                    
+                                
+                                    $same_month_year = true;
+                                    $current_index = $index;
+                                }else if($payments[$index]['year'] == date("Y", strtotime($payment_detail['created_at']))){
+                                    if($payments[$index]['month'] > date("m", strtotime($payment_detail['created_at']))){
+                                        $current_index = $index;
+                                        $flag = true;
+                                    }
+                                }else if($payments[$index]['year'] > date("Y", strtotime($payment_detail['created_at']))){
+                                    $current_index = $index;
+                                    $flag = true;
+                                }
+                            }
+
+                            $payment['date'] = date("M d", strtotime($payment_detail['created_at']));
+                            $payment['or_number'] = $payment_detail['or_number'];
+                            $payment['amount'] = (float)number_format($payment_detail['subtotal_order'], 2, '.', '');
+                            
+                            $payment_month = date("m", strtotime($payment_detail['created_at']));
+                            $payment_year = date("Y", strtotime($payment_detail['created_at']));
+                            $user_payment[$user['intID']] = $payment;
+    
+                            $date['month'] = $payment_month;
+                            $date['month_name'] = date("F", strtotime($payment_detail['created_at']));
+                            $date['year'] = $payment_year;
+                            $date['data'] = $user_payment;
+                            $data[] = $date;
+                            
+                            if($same_month_year){
+                                $payments[$current_index]['data'][$user['intID']] = $payment;
+                            }else{
+                                if($flag){
+                                    array_splice($payments, $current_index, 0, $data);
+                                }
+                                else{
+                                    $current_index = count($payments);
+                                    array_splice($payments, count($payments), 0, $data);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        $ledger_data = $this->db->get_where('tb_mas_student_ledger', array('syid' => $sem, 'student_id' => $id))->result_array();
+
+        if($ledger_data){
+            foreach($ledger_data as $ledger){
+                
+                if($ledger['type'] == 'other'){
+                    if(!$other){
+                        $other[0] = date("M d,Y",strtotime($ledger['date']));
+                        $other[1] = $ledger['name'];
+                        $other[2] = $ledger['amount'];
+                    }else{
+                        $other[0] = ', ' . date("M d,Y",strtotime($ledger['date']));
+                        $other[1] = ', ' . $ledger['name'];
+                        $other[2] += $ledger['amount'];
+                    }
+                }else if(strpos($ledger['remarks'], 'APPLIED FROM') !== false){
+                    if(!$applied_from){
+                        $applied_from[0] = date("M d,Y",strtotime($ledger['date']));
+                        $applied_from[1] = $ledger['remarks'];
+                        $applied_from[2] = $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
+                    }else{
+                        $applied_from[0] .= ', ' . date("M d,Y",strtotime($ledger['date']));
+                        $applied_from[1] .= ', ' . $ledger['remarks'];
+                        $applied_from[2] += $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
+                    }
+                }else if(strpos($ledger['remarks'], 'APPLIED TO') !== false){
+                    if(!$applied_from){
+                        $applied_to[0] = date("M d,Y",strtotime($ledger['date']));
+                        $applied_to[1] = $ledger['remarks'];
+                        $applied_to[2] = $ledger['amount'] < 0 ? $ledger['amount'] : -1 * abs($ledger['amount']);
+                    }else{
+                        $applied_to[0] = date("M d,Y",strtotime($ledger['date']));
+                        $applied_to[1] = $ledger['remarks'];
+                        $applied_to[2] = $ledger['amount'] < 0 ? $ledger['amount'] : -1 * abs($ledger['amount']);
+                    }
+                }
+            }
+        }
+
+        if($reg['paymentType'] == 'full'){
+            if($tuition['scholarship_total_assessment_rate'] > 0){
+                $assessment_discount_rate = $tuition['scholarship_total_assessment_rate'];
+            }
+            if($tuition['scholarship_total_assessment_fixed'] > 0){
+                $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed'];
+            }
+            if($tuition['scholarship_tuition_fee_rate'] > 0){
+                $tuition_discount_rate = $tuition['scholarship_tuition_fee_rate'];
+            }
+        }else{ 
+            if($tuition['scholarship_total_assessment_rate_installment'] > 0){
+                $assessment_discount_rate = $tuition['scholarship_total_assessment_rate_installment'];
+            }
+            if($tuition['scholarship_total_assessment_fixed_installment'] > 0){
+                $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed_installment'];
+            }
+            if($tuition['scholarship_tuition_fee_installment_rate'] > 0){
+                $tuition_discount_rate = $tuition['scholarship_tuition_fee_installment_rate'];
+            }
+        }
+
+        $balance = $tuition['tuition_before_discount'] + $tuition['lab_before_discount'] + $tuition['misc_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
+        
+        $installment_balance = $tuition['tuition_installment_before_discount'] + $tuition['lab_installment_before_discount'] + $tuition['misc_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
+        
+        $installment_balance -= $tuition['scholarship_tuition_fee_rate'];
+        $installment_balance -= $tuition['scholarship_tuition_fee_installment_rate'];
+        $installment_balance -= $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : 0;
+        $installment_balance -= $tuition['scholarship_lab_fee_rate'] > 0 ? $tuition['scholarship_lab_fee_rate'] : 0;
+        $installment_balance -= $tuition['scholarship_lab_fee_fixed'] > 0 ? $tuition['scholarship_lab_fee_fixed'] : 0;
+        $installment_balance -= $tuition['scholarship_misc_fee_rate'] > 0 ? $tuition['scholarship_misc_fee_rate'] : 0;
+        $installment_balance -= $tuition['scholarship_misc_fee_rate'] > 0 ? $tuition['scholarship_misc_fee_rate'] : 0;
+        $installment_balance -= $tuition['nsf'] > 0 ? $tuition['nsf'] : 0;
+        $installment_balance -= $assessment_discount_rate > 0 ? $assessment_discount_rate : 0;
+        $installment_balance -= $assessment_discount_fixed > 0 ? $assessment_discount_fixed : 0;
+        $installment_balance -= $applied_from ? $applied_from[2] : 0;
+        $installment_balance -= $applied_to ? $applied_to[2] : 0;
+        
+        $payment_details = $this->db->select('payment_details.*')
+            ->from('payment_details')
+            ->join('tb_mas_users', 'tb_mas_users.slug = payment_details.student_number')
+            ->join('tb_mas_registration', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
+            ->where(array('payment_details.sy_reference' => $sem, 'payment_details.student_number' => $user['slug'], 'payment_details.status' => 'Paid'))
+            ->order_by('payment_details.created_at', 'asc')
+            ->group_by('payment_details.id')
+            ->get()
+            ->result_array();
+
+        if($payment_details){
+            // $payment = $user_payment = $date = $student_payment = array();
+            foreach($payment_details as $payment_index => $payment_detail){
+                if(strpos($payment_detail['description'], 'Tuition') !== false || strpos($payment_detail['description'], 'Reservation') !== false){
+                    $installment_balance -= $payment_detail['subtotal_order'];
+                    $balance -= $payment_detail['subtotal_order'];
+                }
+            }
+        }
+
+
+        $installment = array();
+        $total_installment = 0;
+
+        if($reg['paymentType'] == 'partial'){
+            $installment = array( 
+                $installment_balance > 0 ? $installment_balance - ($tuition['installment_fee'] * 5) >= 0 ? $tuition['installment_fee'] : (($tuition['installment_fee'] * 5) > $installment_balance && ($tuition['installment_fee'] * 5) - $installment_balance < $tuition['installment_fee'] ? $installment_balance - ($tuition['installment_fee'] * 4) : 0) : 0,
+                $installment_balance > 0 ? $installment_balance - ($tuition['installment_fee'] * 4) >= 0 ? $tuition['installment_fee'] : (($tuition['installment_fee'] * 4) > $installment_balance && ($tuition['installment_fee'] * 4) - $installment_balance < $tuition['installment_fee'] ? $installment_balance - ($tuition['installment_fee'] * 3) : 0) : 0,
+                $installment_balance > 0 ? $installment_balance - ($tuition['installment_fee'] * 3) >= 0 ? $tuition['installment_fee'] : (($tuition['installment_fee'] * 3) > $installment_balance && ($tuition['installment_fee'] * 3) - $installment_balance < $tuition['installment_fee'] ? $installment_balance - ($tuition['installment_fee'] * 2) : 0) : 0,
+                $installment_balance > 0 ? $installment_balance - ($tuition['installment_fee'] * 2) >= 0 ? $tuition['installment_fee'] : (($tuition['installment_fee'] * 2) > $installment_balance && ($tuition['installment_fee'] * 2) - $installment_balance < $tuition['installment_fee'] ? $installment_balance - ($tuition['installment_fee']) : 0) : 0,
+                $installment_balance > 0 ? $installment_balance - $tuition['installment_fee'] >= 0 ? $tuition['installment_fee'] : $installment_balance : 0
+            );
+    
+            $total_installment = $installment[0] + $installment[1] + $installment[2] + $installment[3] + $installment[4];
+        }
+
+        $this->data['user'] =  $this->session->all_userdata();
+        $this->data['student'] = $user;
+        $this->data['installment'] = $installment;
+        $this->data['total_installment'] = $total_installment;
+        $this->data['balance'] = $balance;
+        $this->data['reg'] = $reg;
+        $this->data['course'] = $this->data_fetcher->getProgramDetails($user['intProgramID']); 
+        $this->data['sy'] = $sy;
+
+        tcpdf();
+        // create new PDF document
+        $pdf = new TCPDF("P", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);        
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetTitle("Statement of Account");
+        
+        // set margins
+        $pdf->SetMargins(0.5, .25, 0.5);
+
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        
+        $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
+        
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);    
+             
+        $pdf->AddPage();
+          
+        $html = $this->load->view("print_soa",$this->data,true);
+        $pdf->writeHTML($html, true, false, true, false, '');
+          
+        $pdf->Output('Statement of Account -' . $user['strLastName'] . ', ' . $user['strFirstName'] . ' ' .  $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . ".pdf", 'I');
+
+        die();
+    }
     
     public function is_admin()
     {
