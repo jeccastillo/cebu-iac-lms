@@ -792,7 +792,7 @@
                 href="<?php echo base_url(); ?>scholarship/scholarships"
                 style="margin-left: 10px;"><i class="ion ion-android-list"></i>
                 Scholarships/Discount</a></li>
-            <li class="<?php echo (isset($page) && $page=="scholarship_view")?'active':''; ?>"><a
+            <li class="<?php echo (isset($page) && $page=="scholarship_view_students")?'active':''; ?>"><a
                 href="<?php echo base_url(); ?>scholarship/scholarship_view"
                 style="margin-left: 10px;"><i class="ion ion-android-list"></i>
                 Students with Scholarships</a></li>
