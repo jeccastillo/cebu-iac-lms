@@ -155,12 +155,7 @@ class Scholarship extends CI_Controller {
     }
 
     public function scholarship_view($sem = 0){
-        
-        if($student == 0){
-            $post =  $this->input->post();
-            $student = $post['student'];
-        }
-
+                
         if($sem != 0)
             $this->data['sem'] = $sem;
         else{
