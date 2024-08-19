@@ -2261,10 +2261,6 @@ class Pdf extends CI_Controller {
 
     }
 
-    function print_soa(){
-        $request = $this->input->post();
-        print_r($request);
-    }
     function print_or()
     {
         $request = $this->input->post();
@@ -3221,8 +3217,12 @@ class Pdf extends CI_Controller {
         $pdf->Output('SHS GWA Rank - ' . $gradeLevel . ' ' . $year_level . ' ' .  $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . ".pdf", 'I');
     }
 
-    public function generate_soa($id, $sem)
+    public function print_soa()
     {
+        $request = $this->input->post();
+        $sem = $request['sem'];
+        $user_id = $request['user_id'];
+
         $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
         if($sem == 0 )
         {
@@ -3232,18 +3232,18 @@ class Pdf extends CI_Controller {
 
         $user = $this->db->select('intID, strFirstName, strMiddleName, strLastName, slug, intProgramID, strStudentNumber')
             ->from('tb_mas_users')
-            ->where(array('intID'=>$id))
+            ->where(array('intID'=>$user_id))
             ->get()
             ->first_row('array');
 
         $reg = $this->db->select('tb_mas_registration.*, tb_mas_scholarships.name as scholarshipName')
             ->from('tb_mas_registration')
-            ->where(array('intStudentID'=>$id,'intAYID'=>$sem, 'date_enlisted !=' => NULL))
+            ->where(array('intStudentID'=>$user_id,'intAYID'=>$sem, 'date_enlisted !=' => NULL))
             ->join('tb_mas_scholarships', 'tb_mas_scholarships.intID = tb_mas_registration.enumScholarship', 'left')
             ->get()
             ->first_row('array');
 
-        $tuition = $this->data_fetcher->getTuition($id, $sem);
+        $tuition = $this->data_fetcher->getTuition($user_id, $sem);
         $applied_from = $applied_to = $other = $payments = array();
         $assessment_discount_rate = $assessment_discount_fixed = $tuition_discount_rate = 0;
         
@@ -3340,7 +3340,7 @@ class Pdf extends CI_Controller {
             }
         }
 
-        $ledger_data = $this->db->get_where('tb_mas_student_ledger', array('syid' => $sem, 'student_id' => $id))->result_array();
+        $ledger_data = $this->db->get_where('tb_mas_student_ledger', array('syid' => $sem, 'student_id' => $user_id))->result_array();
 
         if($ledger_data){
             foreach($ledger_data as $ledger){
