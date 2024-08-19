@@ -21,18 +21,18 @@
                 <h3>Scholarship</h3>
             </div>
             <div class="box-body"> 
+                <div class="row">
+                    <div v-if="student" class="col-md-6">
+                        Name: {{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}
+                    </div>
+                </div>
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">                       
                         <li class="active"><a href="#tab_1" data-toggle="tab">Scholarship</a></li>
                         <li><a href="#tab_2" data-toggle="tab">Payments</a></li>                        
                     </ul>           
                     <div class="tab-content">            
-                        <div class="tab-pane active" id="tab_1">
-                            <div class="row">
-                                <div v-if="student" class="col-md-6">
-                                    Name: {{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}
-                                </div>
-                            </div>
+                        <div class="tab-pane active" id="tab_1">                            
                             <hr />                
                             <div class="row">                                        
                                 <div class="col-md-6">                            
