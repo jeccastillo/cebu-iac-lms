@@ -4838,6 +4838,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('G'.$i, $reg['paymentType'] == 'full' && $tuition['tuition_before_discount'] > 0 ? (float)$tuition['tuition_before_discount'] : '')
                     ->setCellValue('H'.$i, $reg['paymentType'] == 'full' && $tuition['lab_before_discount'] > 0 ? (float)$tuition['lab_before_discount'] : '')
                     ->setCellValue('I'.$i, $reg['paymentType'] == 'full' && $tuition['misc_before_discount'] > 0 ? (float)$tuition['misc_before_discount'] : '')
+                    ->setCellValue('J'.$i, $reg['paymentType'] == 'full' && $tuition['thesis_fee'] > 0 ? (float)$tuition['thesis_fee'] : '')
                     ->setCellValue('K'.$i, $reg['paymentType'] == 'full' && $tuition['new_student'] > 0 ? (float)$tuition['new_student'] : '')
                     ->setCellValue('L'.$i, $reg['paymentType'] == 'full' && $tuition['late_enrollment_fee'] > 0 ? (float)$tuition['late_enrollment_fee'] : '')
                     ->setCellValue('M'.$i, '=SUM(G' . $i . ':L' . $i . ')')
@@ -4995,6 +4996,7 @@ class Excel extends CI_Controller {
 
                     $installment_balance -= $total_payment;
                     
+                    //Aging
                     $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 20, $i)->setValue($installment_balance > 0 ? $installment_balance - ($tuition['installment_fee'] * 5) >= 0 ? $tuition['installment_fee'] : (($tuition['installment_fee'] * 5) > $installment_balance && ($tuition['installment_fee'] * 5) - $installment_balance < $tuition['installment_fee'] ? $installment_balance - ($tuition['installment_fee'] * 4) : 0) : 0);
                     $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 21, $i)->setValue($installment_balance > 0 ? $installment_balance - ($tuition['installment_fee'] * 4) >= 0 ? $tuition['installment_fee'] : (($tuition['installment_fee'] * 4) > $installment_balance && ($tuition['installment_fee'] * 4) - $installment_balance < $tuition['installment_fee'] ? $installment_balance - ($tuition['installment_fee'] * 3) : 0) : 0);
                     $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 22, $i)->setValue($installment_balance > 0 ? $installment_balance - ($tuition['installment_fee'] * 3) >= 0 ? $tuition['installment_fee'] : (($tuition['installment_fee'] * 3) > $installment_balance && ($tuition['installment_fee'] * 3) - $installment_balance < $tuition['installment_fee'] ? $installment_balance - ($tuition['installment_fee'] * 2) : 0) : 0);
