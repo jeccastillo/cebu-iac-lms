@@ -235,14 +235,14 @@
                                             <table class="table table-striped"
                                                 v-else>
                                                 <tr>
-                                                    <td><input v-if="registration.downpayment == 0"
+                                                    <td><input v-if="registration.downpayment == 0 && down_payment != 0"
                                                             type="checkbox"
                                                             :value="down_payment"
                                                             @change="updatePayment($event)"
                                                             class="form-check-input"></input></td>
                                                     <td>Down Payment</td>
                                                     <td
-                                                        v-if="registration.downpayment == 0">
+                                                        v-if="registration.downpayment == 0 && down_payment != 0">
                                                         {{ down_payment }}
                                                     </td>
                                                     <td v-else>Paid</td>
@@ -655,6 +655,8 @@ new Vue({
                             .amount_paid) ? 0 : (this.tuition_data
                             .down_payment - this.amount_paid);
                         this.down_payment = down_payment;
+
+                        console.log(this.down_payment);
                         
                         if (this.payment_type == "full") {
 
