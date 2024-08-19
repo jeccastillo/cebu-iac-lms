@@ -69,7 +69,7 @@ new Vue({
 
     mounted() {
         // this.enrolledStudents();
-        axios.get(this.base_url + 'scholarship/scholarship_view_data/'+this.current_sem)
+        axios.get(this.base_url + '<?php echo $module; ?>/scholarship_view_data/'+this.current_sem)
             .then((data) => {                        
                 this.students = data.data.students;
                 this.terms = data.data.terms;                                                

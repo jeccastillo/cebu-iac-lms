@@ -568,7 +568,10 @@
             <li class="<?php echo (isset($page) && $page=="transactions")?'active':''; ?>"><a
             style="margin-left: 10px;" href="<?php echo base_url() ?>finance/payments"><i class="ion ion-cash"></i>
                 <span>Collection Report</span></a></li>
-            
+            <li class="<?php echo (isset($page) && $page=="scholarship_view_students")?'active':''; ?>"><a
+                href="<?php echo base_url(); ?>finance/scholarship_view"
+                style="margin-left: 10px;">
+                Students with Scholarships</a></li> 
             
             <!-- <li class="<?php echo (isset($page) && $page=="other_payments_report")?'active':''; ?>"><a
                                 href="<?php echo base_url() ?>finance/payments/0/1"><i class="ion ion-cash"></i>

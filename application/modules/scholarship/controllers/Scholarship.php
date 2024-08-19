@@ -163,7 +163,7 @@ class Scholarship extends CI_Controller {
             $this->data['sem'] = $active_sem['intID'];
         }
         
-                
+        $this->data['module'] = "scholarship";
         $this->data['page'] = "scholarship_view_students";
         $this->data['opentree'] = "scholarship";
                                                                 

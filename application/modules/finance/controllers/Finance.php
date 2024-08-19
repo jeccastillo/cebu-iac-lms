@@ -333,6 +333,45 @@ class Finance extends CI_Controller {
 
         echo json_encode($ret);
     }
+
+    public function scholarship_view_data($sem){
+
+        // $ret['scholarships'] = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'scholarship'))->result_array();
+        // $ret['discounts'] = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'discount'))->result_array();
+        $ret['terms'] = $this->db->get('tb_mas_sy')->result_array();        
+        
+                
+        $ret['students'] = $this->db->select('tb_mas_users.*')
+                                    ->where(array('syid'=>$sem))
+                                    ->join('tb_mas_users','tb_mas_users.intID = tb_mas_student_discount.student_id')
+                                    ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
+                                    ->group_by('student_id')
+                                    ->get('tb_mas_student_discount')
+                                     ->result_array();
+                            
+
+        echo json_encode($ret);
+
+    }
+
+    public function scholarship_view($sem = 0){
+                
+        if($sem != 0)
+            $this->data['sem'] = $sem;
+        else{
+            $active_sem = $this->data_fetcher->get_active_sem();
+            $this->data['sem'] = $active_sem['intID'];
+        }
+        
+        $this->data['module'] = "finance";        
+        $this->data['page'] = "scholarship_view_students";
+        $this->data['opentree'] = "cashier";
+                                                                
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("scholarship_view_students",$this->data);
+        $this->load->view("common/footer",$this->data);        
+    }
     
     public function student_ledger_data($id,$sem){
                                 
