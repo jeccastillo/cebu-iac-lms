@@ -144,7 +144,7 @@ new Vue({
     mounted() {
 
         let url_string = window.location.href;        
-        console.log(registrations);
+        console.log(this.registrations);
         if(this.id != 0){            
             //this.loader_spinner = true;
             
