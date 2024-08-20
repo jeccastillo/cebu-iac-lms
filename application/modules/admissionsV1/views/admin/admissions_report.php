@@ -7,9 +7,9 @@
                     <i class="ion ion-arrow-left-a"></i>
                     View Leads
                 </a> 
-                <a href="#" @click="syncEnrollmentDates" class="btn btn-app">
+                <!-- <a href="#" @click="syncEnrollmentDates" class="btn btn-app">
                     Sync Enrollment Dates
-                </a>
+                </a> -->
             </small>
             <br />
             <?php if($start != 0): ?>
