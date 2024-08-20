@@ -3663,8 +3663,8 @@ class Excel extends CI_Controller {
                     ->setCellValue('G'.$i, '=SUM(G4:G'.($i-1).')')
                     ->setCellValue('H'.$i, '=SUM(H4:H'.($i-1).')');
         
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle('G'.$i)->getFont()->setBold( true );                    
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle('A3:G3')->getFont()->setBold( true );
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle('H'.$i)->getFont()->setBold( true );                    
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle('A3:H3')->getFont()->setBold( true );
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(50);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
