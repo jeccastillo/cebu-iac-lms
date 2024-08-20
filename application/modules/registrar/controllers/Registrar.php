@@ -724,6 +724,7 @@ class Registrar extends CI_Controller {
             'second' => 0,
             'continuing' => 0,
             'shiftee' => 0,
+            'returning' => 0,
         ];
 
         foreach ($period as $dt) {
@@ -734,7 +735,8 @@ class Registrar extends CI_Controller {
                 'transferee' => 0,
                 'second' => 0, 
                 'continuing' => 0,    
-                'shiftee' => 0,           
+                'shiftee' => 0,      
+                'returning' => 0,     
                 'total' => 0,
                 'date' => date("M j, Y", strtotime($date))
             ]; 
@@ -763,6 +765,11 @@ class Registrar extends CI_Controller {
                 {
                     $data[$date]['shiftee'] += 1;
                     $totals['shiftee'] += 1;
+                }
+                elseif($st['enumStudentType'] == "returning")
+                {
+                    $data[$date]['returning'] += 1;
+                    $totals['returning'] += 1;
                 }
                 else
                     switch($st['student_type']){

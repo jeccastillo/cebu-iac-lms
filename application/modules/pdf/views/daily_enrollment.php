@@ -51,6 +51,7 @@ $html .= '
          <th style="width:10%;font-size:9px;">Second Degree</th>
          <th style="width:10%;font-size:9px;">Continuing</th>
          <th style="width:10%;font-size:9px;">Shiftee</th>
+         <th style="width:10%;font-size:9px;">Returning</th>
          <th style="width:10%;font-size:9px;">Total Enrollment</th>
      </tr>
      <tr style="line-height:10px;">
@@ -80,6 +81,9 @@ $html .= '
                     '.$item->shiftee.'
                 </td>
                 <td style="font-size:8px;">
+                    '.$item->returning.'
+                </td>
+                <td style="font-size:8px;">
                     '.$item->total.'
                 </td>
             </tr>
@@ -99,6 +103,7 @@ $html .= '
          <td>'.$totals->second.'</td>
          <td>'.$totals->continuing.'</td>
          <td>'.$totals->shiftee.'</td>
+         <td>'.$totals->returning.'</td>
          <td><strong>'.$full_total.'</strong></td>
      </tr>
      <tr style="line-height:30px;">
