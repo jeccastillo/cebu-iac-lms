@@ -116,7 +116,7 @@
                         </table>
                     </td>
                     <td style="width:70%;vertical-align:top;">
-                        <table style="padding-top:8mm;">
+                        <table style="padding-top:6mm;">
                             <tr>
                                 <td style="text-align:right;font-weight:bold;font-size:9px;padding-right:20mm;">OR No:<?php echo $or_number; ?></td>
                             </tr>
@@ -170,7 +170,7 @@
                         ?>
                         <table>
                             <tr>                    
-                                <td style="font-size:12px;;text-align:left;padding-left:15mm;padding-top:5mm;">                                    
+                                <td style="font-size:12px;;text-align:left;padding-left:15mm;padding-top:4mm;">                                    
                                     <span style="font-size:<?php echo $textSize; ?>;"><?php echo $student_address; ?></span>                        
                                 </td>
                             </tr>
