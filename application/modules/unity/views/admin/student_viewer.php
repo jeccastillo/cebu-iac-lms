@@ -225,7 +225,14 @@
                         <p><strong>Country of Citizenship:</strong> {{ applicant_data.citizenship }}
                           </li>
                         <div v-if="registration">
-                          <p><strong>Enrollment Status: </strong>{{ registration.enumStudentType }}
+                          <p><strong>Enrollment Type: </strong>
+                            <select @change="updateStudentType($event)"
+                              v-model="registration.enumStudentType">
+                              <option value="new">new</option>
+                              <option value="continuing">continuing</option>
+                              <option value="shiftee">shiftee</option>
+                              <option value="returning">returning</option>
+                            </select>
                           </p>
                           <p><strong>Academic Status: </strong>
                             <select @change="updateAcademicStatus($event)"
@@ -944,6 +951,32 @@ new Vue({
 
 
     },
+    updateStudentType: function(event) {
+
+      var formdata = new FormData();
+      formdata.append('intRegistrationID', this.registration.intRegistrationID);
+      formdata.append('enumStudentType', event.target.value);
+
+
+      this.loader_spinner = true;
+      axios.post(base_url + 'unity/update_academic_status', formdata, {
+          headers: {
+            Authorization: `Bearer ${window.token}`
+          }
+        })
+        .then(data => {
+          this.loader_spinner = false;
+          Swal.fire({
+            title: "Success",
+            text: data.data.message,
+            icon: "success"
+          }).then(function() {
+
+          });
+        });
+
+
+      },
     printRF: function() {
       var mt = 35;
       if(this.campus == 'Makati')
