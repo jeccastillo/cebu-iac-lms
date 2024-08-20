@@ -56,7 +56,7 @@ $html .= '
          <th style="width:8%;font-size:9px;">Total</th>
      </tr>
      <tr style="line-height:10px;">
-        <th colspan="8"></th>
+        <th colspan="9"></th>
      </tr>
      ';
      
@@ -99,7 +99,7 @@ $html .= '
     }
 $html .= ' 
     <tr style="line-height:10px;">
-        <th style="border-top:1px solid #333;" colspan="8"></th>
+        <th style="border-top:1px solid #333;" colspan="9"></th>
     </tr>
     <tr>
         <td></td>
