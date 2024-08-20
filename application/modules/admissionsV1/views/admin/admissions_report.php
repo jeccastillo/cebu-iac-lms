@@ -172,7 +172,7 @@ new Vue({
     methods: {      
         syncEnrollmentDates: function(){
             let payload = {
-                registrations: this.registrations;
+                registrations: this.registrations
             };
             axios
                 .post(api_url + 'admissions/student-info/sync-enrollment/term', payload, {
