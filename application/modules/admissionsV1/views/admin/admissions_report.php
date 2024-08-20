@@ -7,6 +7,9 @@
                     <i class="ion ion-arrow-left-a"></i>
                     View Leads
                 </a> 
+                <a href="#" @click="syncEnrollmentDates" class="btn btn-app">
+                    Sync Enrollment Dates
+                </a>
             </small>
             <br />
             <?php if($start != 0): ?>
@@ -167,7 +170,20 @@ new Vue({
     },
 
     methods: {      
-       
+        syncEnrollmentDates: function(){
+            let payload = {
+                registrations: this.registrations;
+            };
+            axios
+                .post(api_url + 'admissions/student-info/sync-enrollment/term', payload, {
+                        headers: {
+                            Authorization: `Bearer ${window.token}`
+                        }
+                    })
+                .then(data => {
+                });
+
+       }
                                        
     }
 
