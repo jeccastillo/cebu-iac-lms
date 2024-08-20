@@ -62,7 +62,7 @@ $html .= '
      $all_enrolled = 0;
     foreach($enrollment as $item){        
         $major = ($item['strMajor'] != "None" && $item['strMajor'] != "")?'Major in '.$item['strMajor']:''; 
-        $all_enrolled +=  $item['enrolled_freshman'] + $item['enrolled_transferee'] + $item['enrolled_foreign'] + $item['enrolled_second'] + $item['enrolled_continuing'] + $item['enrolled_shiftee'];
+        $all_enrolled +=  $item['enrolled_freshman'] + $item['enrolled_transferee'] + $item['enrolled_foreign'] + $item['enrolled_second'] + $item['enrolled_continuing'] + $item['enrolled_shiftee'] + $item['enrolled_returnee'];
         $html .= '            
             <tr>
                 <td style="font-size:8px;">'.trim($item['strProgramDescription']).' '.$major.'</td>
@@ -85,7 +85,10 @@ $html .= '
                     '.$item['enrolled_shiftee'].'
                 </td>
                 <td style="font-size:8px;">
-                    '.($item['enrolled_freshman'] + $item['enrolled_transferee'] + $item['enrolled_foreign'] + $item['enrolled_second'] + $item['enrolled_continuing'] + $item['enrolled_shiftee']).'
+                    '.$item['enrolled_returnee'].'
+                </td>
+                <td style="font-size:8px;">
+                    '.($item['enrolled_freshman'] + $item['enrolled_transferee'] + $item['enrolled_foreign'] + $item['enrolled_second'] + $item['enrolled_continuing'] + $item['enrolled_shiftee'] + $item['enrolled_returnee']).'
                 </td>
             </tr>
             <tr style="line-height:5px;">
@@ -98,6 +101,7 @@ $html .= '
         <th style="border-top:1px solid #333;" colspan="8"></th>
     </tr>
     <tr>
+        <td></td>
         <td></td>
         <td></td>
         <td></td>
