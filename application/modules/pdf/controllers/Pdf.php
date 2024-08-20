@@ -3223,6 +3223,8 @@ class Pdf extends CI_Controller {
         $sem = $request['sem'];
         $user_id = $request['user_id'];
 
+        $installments = explode(',', $request['installments']);
+
         $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
         if($sem == 0 )
         {
@@ -3442,26 +3444,27 @@ class Pdf extends CI_Controller {
         $installment = array();
         $total_installment = 0;
 
-        if($reg['paymentType'] == 'partial'){
-            $installment = array( 
-                $installment_balance > 0 ? $installment_balance - ($tuition['installment_fee'] * 5) >= 0 ? $tuition['installment_fee'] : (($tuition['installment_fee'] * 5) > $installment_balance && ($tuition['installment_fee'] * 5) - $installment_balance < $tuition['installment_fee'] ? $installment_balance - ($tuition['installment_fee'] * 4) : 0) : 0,
-                $installment_balance > 0 ? $installment_balance - ($tuition['installment_fee'] * 4) >= 0 ? $tuition['installment_fee'] : (($tuition['installment_fee'] * 4) > $installment_balance && ($tuition['installment_fee'] * 4) - $installment_balance < $tuition['installment_fee'] ? $installment_balance - ($tuition['installment_fee'] * 3) : 0) : 0,
-                $installment_balance > 0 ? $installment_balance - ($tuition['installment_fee'] * 3) >= 0 ? $tuition['installment_fee'] : (($tuition['installment_fee'] * 3) > $installment_balance && ($tuition['installment_fee'] * 3) - $installment_balance < $tuition['installment_fee'] ? $installment_balance - ($tuition['installment_fee'] * 2) : 0) : 0,
-                $installment_balance > 0 ? $installment_balance - ($tuition['installment_fee'] * 2) >= 0 ? $tuition['installment_fee'] : (($tuition['installment_fee'] * 2) > $installment_balance && ($tuition['installment_fee'] * 2) - $installment_balance < $tuition['installment_fee'] ? $installment_balance - ($tuition['installment_fee']) : 0) : 0,
-                $installment_balance > 0 ? $installment_balance - $tuition['installment_fee'] >= 0 ? $tuition['installment_fee'] : $installment_balance : 0
-            );
+        // if($reg['paymentType'] == 'partial'){
+        //     $installment = array( 
+        //         $installment_balance > 0 ? $installment_balance - ($tuition['installment_fee'] * 5) >= 0 ? $tuition['installment_fee'] : (($tuition['installment_fee'] * 5) > $installment_balance && ($tuition['installment_fee'] * 5) - $installment_balance < $tuition['installment_fee'] ? $installment_balance - ($tuition['installment_fee'] * 4) : 0) : 0,
+        //         $installment_balance > 0 ? $installment_balance - ($tuition['installment_fee'] * 4) >= 0 ? $tuition['installment_fee'] : (($tuition['installment_fee'] * 4) > $installment_balance && ($tuition['installment_fee'] * 4) - $installment_balance < $tuition['installment_fee'] ? $installment_balance - ($tuition['installment_fee'] * 3) : 0) : 0,
+        //         $installment_balance > 0 ? $installment_balance - ($tuition['installment_fee'] * 3) >= 0 ? $tuition['installment_fee'] : (($tuition['installment_fee'] * 3) > $installment_balance && ($tuition['installment_fee'] * 3) - $installment_balance < $tuition['installment_fee'] ? $installment_balance - ($tuition['installment_fee'] * 2) : 0) : 0,
+        //         $installment_balance > 0 ? $installment_balance - ($tuition['installment_fee'] * 2) >= 0 ? $tuition['installment_fee'] : (($tuition['installment_fee'] * 2) > $installment_balance && ($tuition['installment_fee'] * 2) - $installment_balance < $tuition['installment_fee'] ? $installment_balance - ($tuition['installment_fee']) : 0) : 0,
+        //         $installment_balance > 0 ? $installment_balance - $tuition['installment_fee'] >= 0 ? $tuition['installment_fee'] : $installment_balance : 0
+        //     );
     
-            $total_installment = $installment[0] + $installment[1] + $installment[2] + $installment[3] + $installment[4];
-        }
+        //     $total_installment = $installment[0] + $installment[1] + $installment[2] + $installment[3] + $installment[4];
+        // }
 
         $this->data['user'] =  $this->session->all_userdata();
         $this->data['student'] = $user;
-        $this->data['installment'] = $installment;
+        $this->data['installments'] = $installments;
         $this->data['total_installment'] = $total_installment;
         $this->data['balance'] = $balance;
         $this->data['reg'] = $reg;
         $this->data['course'] = $this->data_fetcher->getProgramDetails($user['intProgramID']); 
         $this->data['sy'] = $sy;
+        $this->data['request'] = $request;
 
         tcpdf();
         // create new PDF document
