@@ -137,12 +137,14 @@ new Vue({
         all_reserved: 0,
         all_enrolled: 0,
         total: 0,
+        registrations: <?php echo $registrations; ?>
                       
     },
 
     mounted() {
 
         let url_string = window.location.href;        
+        console.log(registrations);
         if(this.id != 0){            
             //this.loader_spinner = true;
             

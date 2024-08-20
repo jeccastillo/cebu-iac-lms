@@ -202,6 +202,12 @@ class AdmissionsV1 extends CI_Controller {
             
         $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
         $this->data['current_sem'] = $term['intID'];
+        $this->data['registrations'] = json_encode($this->db->select('tb_mas_users.slug,tb_mas_registration.dteRegistered')
+                                                ->from('tb_mas_registration')
+                                                ->join('tb_mas_users','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                                                ->where(array('intAYID'=>$term))
+                                                ->get()
+                                                ->result_array());    
         
         $this->data['start'] = $start;
         $this->data['end'] = $end;        
