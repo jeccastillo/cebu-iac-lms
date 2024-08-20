@@ -205,7 +205,7 @@ class AdmissionsV1 extends CI_Controller {
         $this->data['registrations'] = json_encode($this->db->select('tb_mas_users.slug,tb_mas_registration.dteRegistered')
                                                 ->from('tb_mas_registration')
                                                 ->join('tb_mas_users','tb_mas_registration.intStudentID = tb_mas_users.intID')
-                                                ->where(array('intAYID'=>$term))
+                                                ->where(array('intAYID'=>$term['intID']))
                                                 ->get()
                                                 ->result_array());    
         
