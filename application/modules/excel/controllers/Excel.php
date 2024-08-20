@@ -3510,7 +3510,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('E3', 'Second Degree')
                     ->setCellValue('F3', 'Continuing')
                     ->setCellValue('G3', 'Shiftee')
-                    ->setCellValue('H3', 'Returnee')
+                    ->setCellValue('H3', 'Returning')
                     ->setCellValue('I3', 'Total');
                             
         $i = 4;

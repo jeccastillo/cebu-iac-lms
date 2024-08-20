@@ -52,6 +52,7 @@ $html .= '
          <th style="width:8%;font-size:9px;">SD</th>
          <th style="width:8%;font-size:9px;">Continuing</th>
          <th style="width:8%;font-size:9px;">Shiftee</th>
+         <th style="width:8%;font-size:9px;">Returning</th>
          <th style="width:8%;font-size:9px;">Total</th>
      </tr>
      <tr style="line-height:10px;">
