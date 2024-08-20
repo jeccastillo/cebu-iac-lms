@@ -3630,7 +3630,8 @@ class Excel extends CI_Controller {
                     ->setCellValue('D3', 'Second Degree')                    
                     ->setCellValue('E3', 'Continuing')
                     ->setCellValue('F3', 'Shiftee')
-                    ->setCellValue('G3', 'Total Enrollment');
+                    ->setCellValue('G3', 'Returning')
+                    ->setCellValue('H3', 'Total Enrollment');
                             
         $i = 4;
         
@@ -3645,7 +3646,8 @@ class Excel extends CI_Controller {
                     ->setCellValue('D'.$i, $item->second)
                     ->setCellValue('E'.$i, $item->continuing)
                     ->setCellValue('F'.$i, $item->shiftee)
-                    ->setCellValue('G'.$i, '=SUM(B'.$i.':F'.$i.')');                                                
+                    ->setCellValue('G'.$i, $item->returning)
+                    ->setCellValue('H'.$i, '=SUM(B'.$i.':G'.$i.')');                                                
                              
         
             $i++;
@@ -3658,7 +3660,8 @@ class Excel extends CI_Controller {
                     ->setCellValue('D'.$i, '=SUM(D4:D'.($i-1).')')
                     ->setCellValue('E'.$i, '=SUM(E4:E'.($i-1).')')                    
                     ->setCellValue('F'.$i, '=SUM(F4:F'.($i-1).')')
-                    ->setCellValue('G'.$i, '=SUM(G4:G'.($i-1).')');
+                    ->setCellValue('G'.$i, '=SUM(G4:G'.($i-1).')')
+                    ->setCellValue('H'.$i, '=SUM(H4:H'.($i-1).')');
         
         $objPHPExcel->setActiveSheetIndex(0)->getStyle('G'.$i)->getFont()->setBold( true );                    
         $objPHPExcel->setActiveSheetIndex(0)->getStyle('A3:G3')->getFont()->setBold( true );
@@ -3670,6 +3673,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
         
                 
          
