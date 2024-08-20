@@ -110,6 +110,7 @@ $html .= '
         <td></td>
         <td></td>
         <td></td>
+        <td></td>
         <td><strong>&nbsp;'.$all_enrolled.'</strong></td>
     </tr>
     <tr style="line-height:30px;">
