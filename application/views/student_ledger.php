@@ -4,8 +4,8 @@
             <small>
                 <a v-if="finance.intUserLevel == 6" style="margin-right:1rem;" class="btn btn-app" :href="base_url + 'finance/view_all_students'"><i class="ion ion-arrow-left-a"></i>All Students</a>
                 <div class="pull-right">
-                    <p>Select Term Filter</p>
-                    <!-- <select  @change="filterByTerm($event)" class="form-control" required v-model="sem">
+                    <!-- <p>Select Term Filter</p>
+                    <select  @change="filterByTerm($event)" class="form-control" required v-model="sem">
                         <option value=0>All</option>
                         <option v-for="sy_select in sy" :value="sy_select.intID">{{ sy_select.enumSem + " Term " + sy_select.strYearStart + " - " + sy_select.strYearEnd }}</option>
                     </select> -->
