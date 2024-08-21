@@ -8,7 +8,7 @@
           </a>
           <a class="btn btn-app"
             :href="base_url + 'admissionsV1/view_lead/' + student.slug"><i class="fa fa-list"></i>
-            Edit</a>
+            Applicant Data</a>
           <a v-if="user_level == 2 || user_level == 3"
             class="btn btn-app"
             :href="base_url + 'student/edit_student/' + student.intID"><i class="ion ion-edit"></i>
