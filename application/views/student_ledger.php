@@ -2,7 +2,7 @@
     <section class="content-header">
         <h1>            
             <small>
-                <a style="margin-right:1rem;" class="btn btn-app" :href="base_url + 'finance/view_all_students'"><i class="ion ion-arrow-left-a"></i>All Students</a>
+                <a v-if="finance.intUserLevel == 6" style="margin-right:1rem;" class="btn btn-app" :href="base_url + 'finance/view_all_students'"><i class="ion ion-arrow-left-a"></i>All Students</a>
                 <div class="pull-right">
                     <p>Select Term Filter</p>
                     <select  @change="filterByTerm($event)" class="form-control" required v-model="sem">
