@@ -102,7 +102,7 @@
                                 <td :class="item.muted">{{ item.strYearStart + " - " + item.strYearEnd }}</td>
                                 <td :class="item.muted">{{ item.enumSem +" "+ item.term_label }}</td>
                                 <td :class="item.muted">{{ item.scholarship_name }}</td>
-                                <td :class="item.muted" v-if="(item.name == 'Application Payment' || item.name == 'Reservation Payment' || item.name == 'Tuition Fee') && finance && finance.special_role >= 1">
+                                <td :class="item.muted" v-if="(item.name == 'Application Payment' || item.name == 'Reservation Payment' || item.name == 'Tuition Fee') && finance.intUserLevel == 6 && finance.special_role >= 1">
                                     <select @change="updateDescription(item.payment_id,$event)" class="form-control" v-model="ledger[i].ledger_items[j].name">
                                         <option value="Application Payment">Application Payment</option>
                                         <option value="Tuition Fee">Tuition Fee</option>                                        
@@ -119,7 +119,7 @@
                                 <td :class="item.muted">{{ (item.added_by != 0) ? 'Manually Generated': 'System Generated' }}</td>   
                                 <td :class="item.muted" v-if="item.added_by == 0"><a @click="cashierDetails(item.cashier)" href="#">{{ item.cashier }}</a></td>
                                 <td :class="item.muted" v-else><a @click="cashierDetails(item.added_by)" href="#">{{ item.added_by }}</a></td>
-                                <td :class="item.muted" v-if="item.id && finance && finance.special_role > 1">
+                                <td :class="item.muted" v-if="item.id && finance.intUserLevel == 6 && finance.special_role > 1">
                                     <button class="btn btn-danger" @click="deleteLedgerItem(item.id)">Delete</button><br />                                
                                 </td>
                                     
@@ -127,7 +127,7 @@
                             <tr>                                                                
                                 <td colspan="11" class="text-right">Term Balance/Refund:{{ term.balance }}</td>                                
                                 <td>    
-                                <button data-toggle="modal" v-if="finance && finance.special_role >= 1 && term.balance < 0"  @click="applyToTermUpdate(term)" 
+                                <button data-toggle="modal" v-if="finance.intUserLevel == 6 && finance.special_role >= 1 && term.balance < 0"  @click="applyToTermUpdate(term)" 
                                                 data-target="#applyToTermModal" class="btn btn-primary">Apply To Term</button>                                                                    
                                 </td>                                
                             </tr>                                                                  
@@ -161,7 +161,7 @@
                             <tr v-for="(item,j) in term.ledger_items">
                                 <td :class="item.muted">{{ item.strYearStart + " - " + item.strYearEnd }}</td>
                                 <td :class="item.muted">{{ item.enumSem +" "+ item.term_label }}</td>                                
-                                <td :class="item.muted" v-if="(item.name == 'Application Payment' || item.name == 'Reservation Payment' || item.name == 'Tuition Fee' || item.name == 'LATE ENROLLMENT FEE') && finance && finance.special_role >= 1">
+                                <td :class="item.muted" v-if="(item.name == 'Application Payment' || item.name == 'Reservation Payment' || item.name == 'Tuition Fee' || item.name == 'LATE ENROLLMENT FEE') && finance.intUserLevel == 6 && finance.special_role >= 1">
                                     <select @change="updateDescription(item.payment_id,$event)" class="form-control" v-model="other[i].ledger_items[j].name">
                                         <option value="Application Payment">Application Payment</option>
                                         <option value="Tuition Fee">Tuition Fee</option>                                        
@@ -177,7 +177,7 @@
                                 <td :class="item.muted">{{ (item.type == 'payment')?numberWithCommas(item.amount):'-' }}</td>                               
                                 <td :class="item.muted">{{ (item.added_by != 0) ? item.strLastname + " " + item.strFirstname : 'System Generated' }}</td>                                
                                 <td :class="item.muted"><a @click="cashierDetails(item.cashier)" href="#">{{ item.cashier }}</a></td>
-                                <td :class="item.muted" v-if="item.id && finance && finance.special_role > 1"><button class="btn btn-danger" @click="deleteLedgerItem(item.id)">Delete</button></td>
+                                <td :class="item.muted" v-if="item.id && finance.intUserLevel == 6 && finance.special_role > 1"><button class="btn btn-danger" @click="deleteLedgerItem(item.id)">Delete</button></td>
                                 <td :class="item.muted" v-else></td>                                                                                             
                                 <td v-else></td>
                             </tr>
