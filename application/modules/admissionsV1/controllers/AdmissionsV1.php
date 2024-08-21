@@ -9,7 +9,7 @@ class AdmissionsV1 extends CI_Controller {
         
         $userlevel = $this->session->userdata('intUserLevel');   
         $ip = $this->input->ip_address();        
-        if($userlevel != 2 && $userlevel != 5 && $userlevel != 6 && $userlevel != 3 &&  $ip != "172.16.80.22")
+        if($userlevel != 2 && $userlevel != 5 && $userlevel != 6 && $userlevel != 7 && $userlevel != 3 &&  $ip != "172.16.80.22")
 		  redirect(base_url()."unity");
 
 		$this->config->load('themes');		
