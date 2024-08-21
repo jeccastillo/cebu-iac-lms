@@ -92,10 +92,16 @@
         <td style="border:1px solid #333;font-weight:bold" width="50%">TOTAL BALANCE</td>
         <td style="border:1px solid #333;font-weight:bold;text-align:right;padding-right:5px" width="20%"><?php echo $request['total'] ?> </td>
     </tr>
+    <tr>
+        <td style="border:1px solid #333;font-size:10px" colspan="2"><i>Please note that rounding off may cause some minor disparity in the installment schedule</i></td>
+    </tr>
 <?php elseif($reg['paymentType'] == 'full') :?>
     <tr>
         <td style="border:1px solid #333;font-weight:bold" width="50%">TOTAL BALANCE</td>
         <td style="border:1px solid #333;font-weight:bold;text-align:right;padding-right:5px" width="20%"><?php echo $request['total'] ?> </td>
+    </tr>
+    <tr>
+        <td style="border:1px solid #333;font-size:10px" colspan="2"><i>Please note that rounding off may cause some minor disparity in the installment schedule</i></td>
     </tr>
 <?php endif; ?>
 </table>
