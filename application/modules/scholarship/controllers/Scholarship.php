@@ -191,7 +191,7 @@ class Scholarship extends CI_Controller {
 
         $this->data['id'] = $id;        
         $this->data['sem'] = $sem;
-        $this->data['page'] = "student_ledger";
+        $this->data['page'] = "student_ledger_osas";
         $this->data['opentree'] = "scholarship";
 
         $max_id = $this->db->select('updated_at')

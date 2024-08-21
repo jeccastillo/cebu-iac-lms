@@ -374,7 +374,7 @@ new Vue({
         
                              
         axios
-            .get(base_url + 'finance/student_ledger_data/' + this.id + '/' + this.sem, {
+            .get(base_url + 'scholarship/student_ledger_data/' + this.id + '/' + this.sem, {
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 },
