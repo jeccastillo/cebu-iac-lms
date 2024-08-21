@@ -3474,7 +3474,7 @@ class Pdf extends CI_Controller {
         $pdf->SetTitle("Statement of Account");
         
         // set margins
-        $pdf->SetMargins(0.75, .25, 0.5);
+        $pdf->SetMargins(5, .25, 0.5);
 
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
