@@ -6,7 +6,7 @@
           <a class="btn btn-app"
             :href="base_url + 'student/view_all_students'"><i class="ion ion-arrow-left-a"></i>All
           </a>
-          <a class="btn btn-app"
+          <a target="_blank" class="btn btn-app"
             :href="base_url + 'admissionsV1/view_lead/' + student.slug"><i class="fa fa-list"></i>
             Applicant Data</a>
           <a v-if="user_level == 2 || user_level == 3"
