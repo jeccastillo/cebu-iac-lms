@@ -3249,196 +3249,196 @@ class Pdf extends CI_Controller {
         $applied_from = $applied_to = $other = $payments = array();
         $assessment_discount_rate = $assessment_discount_fixed = $tuition_discount_rate = 0;
         
-        $payment_details = $this->db->select('payment_details.*')
-                    ->from('payment_details')
-                    ->join('tb_mas_users', 'tb_mas_users.slug = payment_details.student_number')
-                    ->join('tb_mas_registration', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
-                    ->where(array('payment_details.sy_reference' => $sem, 'payment_details.student_number' => $user['slug'], 'payment_details.status' => 'Paid'))
-                    ->order_by('payment_details.created_at', 'asc')
-                    ->group_by('payment_details.id')
-                    ->get()
-                    ->result_array();
+        // $payment_details = $this->db->select('payment_details.*')
+        //             ->from('payment_details')
+        //             ->join('tb_mas_users', 'tb_mas_users.slug = payment_details.student_number')
+        //             ->join('tb_mas_registration', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
+        //             ->where(array('payment_details.sy_reference' => $sem, 'payment_details.student_number' => $user['slug'], 'payment_details.status' => 'Paid'))
+        //             ->order_by('payment_details.created_at', 'asc')
+        //             ->group_by('payment_details.id')
+        //             ->get()
+        //             ->result_array();
 
-        $current_index = 0;
-        $payment_month = $payment_year = '';
+        // $current_index = 0;
+        // $payment_month = $payment_year = '';
 
-        if($payment_details){
-            $payment = $user_payment = $date = $student_payment = array();
-            foreach($payment_details as $payment_index => $payment_detail){
-                if(strpos($payment_detail['description'], 'Tuition') !== false || strpos($payment_detail['description'], 'Reservation') !== false){
-                    //set date enrolled based on full or installment payment
-                    if(!isset($date_enrolled_array[$payment_detail['student_number']]) && strpos($payment_detail['description'], 'Tuition') !== false){
-                        $date_enrolled_array[$payment_detail['student_number']] = $payment_detail['created_at'];
-                    }
-                    if($payments == null){
-                        $payment['date'] = date("M d", strtotime($payment_detail['created_at']));
-                        $payment['or_number'] = $payment_detail['or_number'];
-                        $payment['amount'] = (float)number_format($payment_detail['subtotal_order'], 2, '.', '');
+        // if($payment_details){
+        //     $payment = $user_payment = $date = $student_payment = array();
+        //     foreach($payment_details as $payment_index => $payment_detail){
+        //         if(strpos($payment_detail['description'], 'Tuition') !== false || strpos($payment_detail['description'], 'Reservation') !== false){
+        //             //set date enrolled based on full or installment payment
+        //             if(!isset($date_enrolled_array[$payment_detail['student_number']]) && strpos($payment_detail['description'], 'Tuition') !== false){
+        //                 $date_enrolled_array[$payment_detail['student_number']] = $payment_detail['created_at'];
+        //             }
+        //             if($payments == null){
+        //                 $payment['date'] = date("M d", strtotime($payment_detail['created_at']));
+        //                 $payment['or_number'] = $payment_detail['or_number'];
+        //                 $payment['amount'] = (float)number_format($payment_detail['subtotal_order'], 2, '.', '');
                         
-                        $payment_month = date("m", strtotime($payment_detail['created_at']));
-                        $payment_year = date("Y", strtotime($payment_detail['created_at']));
+        //                 $payment_month = date("m", strtotime($payment_detail['created_at']));
+        //                 $payment_year = date("Y", strtotime($payment_detail['created_at']));
                         
-                        $user_payment[$user['intID']] = $payment;
+        //                 $user_payment[$user['intID']] = $payment;
 
-                        $date['month'] = $payment_month;
-                        $date['month_name'] = date("F", strtotime($payment_detail['created_at']));
-                        $date['year'] = $payment_year;
-                        $date['data'] = $user_payment;
+        //                 $date['month'] = $payment_month;
+        //                 $date['month_name'] = date("F", strtotime($payment_detail['created_at']));
+        //                 $date['year'] = $payment_year;
+        //                 $date['data'] = $user_payment;
 
-                        $payments[] = $date;
-                    }else{
-                        if(isset($date['data'][$user['intID']]) && $payment_month == date("m", strtotime($payment_detail['created_at'])) && $payment_year == date("Y", strtotime($payment_detail['created_at']))){
-                            $payments[$current_index]['data'][$user['intID']]['date'] .= ', ' . date("d", strtotime($payment_detail['created_at']));
-                            $payments[$current_index]['data'][$user['intID']]['or_number'] .= ', ' . $payment_detail['or_number'];
-                            $payments[$current_index]['data'][$user['intID']]['amount'] += (float)number_format($payment_detail['subtotal_order'], 2, '.', '');
-                        }else{
-                            $flag = $same_month_year = false;
-                            $data = $date = array();
-                            for($index = count($payments) - 1; $index >= 0; $index--){
-                                if($payments[$index]['year'] == date("Y", strtotime($payment_detail['created_at'])) && $payments[$index]['month'] == date("m", strtotime($payment_detail['created_at']))){
+        //                 $payments[] = $date;
+        //             }else{
+        //                 if(isset($date['data'][$user['intID']]) && $payment_month == date("m", strtotime($payment_detail['created_at'])) && $payment_year == date("Y", strtotime($payment_detail['created_at']))){
+        //                     $payments[$current_index]['data'][$user['intID']]['date'] .= ', ' . date("d", strtotime($payment_detail['created_at']));
+        //                     $payments[$current_index]['data'][$user['intID']]['or_number'] .= ', ' . $payment_detail['or_number'];
+        //                     $payments[$current_index]['data'][$user['intID']]['amount'] += (float)number_format($payment_detail['subtotal_order'], 2, '.', '');
+        //                 }else{
+        //                     $flag = $same_month_year = false;
+        //                     $data = $date = array();
+        //                     for($index = count($payments) - 1; $index >= 0; $index--){
+        //                         if($payments[$index]['year'] == date("Y", strtotime($payment_detail['created_at'])) && $payments[$index]['month'] == date("m", strtotime($payment_detail['created_at']))){
                                     
                                 
-                                    $same_month_year = true;
-                                    $current_index = $index;
-                                }else if($payments[$index]['year'] == date("Y", strtotime($payment_detail['created_at']))){
-                                    if($payments[$index]['month'] > date("m", strtotime($payment_detail['created_at']))){
-                                        $current_index = $index;
-                                        $flag = true;
-                                    }
-                                }else if($payments[$index]['year'] > date("Y", strtotime($payment_detail['created_at']))){
-                                    $current_index = $index;
-                                    $flag = true;
-                                }
-                            }
+        //                             $same_month_year = true;
+        //                             $current_index = $index;
+        //                         }else if($payments[$index]['year'] == date("Y", strtotime($payment_detail['created_at']))){
+        //                             if($payments[$index]['month'] > date("m", strtotime($payment_detail['created_at']))){
+        //                                 $current_index = $index;
+        //                                 $flag = true;
+        //                             }
+        //                         }else if($payments[$index]['year'] > date("Y", strtotime($payment_detail['created_at']))){
+        //                             $current_index = $index;
+        //                             $flag = true;
+        //                         }
+        //                     }
 
-                            $payment['date'] = date("M d", strtotime($payment_detail['created_at']));
-                            $payment['or_number'] = $payment_detail['or_number'];
-                            $payment['amount'] = (float)number_format($payment_detail['subtotal_order'], 2, '.', '');
+        //                     $payment['date'] = date("M d", strtotime($payment_detail['created_at']));
+        //                     $payment['or_number'] = $payment_detail['or_number'];
+        //                     $payment['amount'] = (float)number_format($payment_detail['subtotal_order'], 2, '.', '');
                             
-                            $payment_month = date("m", strtotime($payment_detail['created_at']));
-                            $payment_year = date("Y", strtotime($payment_detail['created_at']));
-                            $user_payment[$user['intID']] = $payment;
+        //                     $payment_month = date("m", strtotime($payment_detail['created_at']));
+        //                     $payment_year = date("Y", strtotime($payment_detail['created_at']));
+        //                     $user_payment[$user['intID']] = $payment;
     
-                            $date['month'] = $payment_month;
-                            $date['month_name'] = date("F", strtotime($payment_detail['created_at']));
-                            $date['year'] = $payment_year;
-                            $date['data'] = $user_payment;
-                            $data[] = $date;
+        //                     $date['month'] = $payment_month;
+        //                     $date['month_name'] = date("F", strtotime($payment_detail['created_at']));
+        //                     $date['year'] = $payment_year;
+        //                     $date['data'] = $user_payment;
+        //                     $data[] = $date;
                             
-                            if($same_month_year){
-                                $payments[$current_index]['data'][$user['intID']] = $payment;
-                            }else{
-                                if($flag){
-                                    array_splice($payments, $current_index, 0, $data);
-                                }
-                                else{
-                                    $current_index = count($payments);
-                                    array_splice($payments, count($payments), 0, $data);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        //                     if($same_month_year){
+        //                         $payments[$current_index]['data'][$user['intID']] = $payment;
+        //                     }else{
+        //                         if($flag){
+        //                             array_splice($payments, $current_index, 0, $data);
+        //                         }
+        //                         else{
+        //                             $current_index = count($payments);
+        //                             array_splice($payments, count($payments), 0, $data);
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
-        $ledger_data = $this->db->get_where('tb_mas_student_ledger', array('syid' => $sem, 'student_id' => $user_id))->result_array();
+        // $ledger_data = $this->db->get_where('tb_mas_student_ledger', array('syid' => $sem, 'student_id' => $user_id))->result_array();
 
-        if($ledger_data){
-            foreach($ledger_data as $ledger){
+        // if($ledger_data){
+        //     foreach($ledger_data as $ledger){
                 
-                if($ledger['type'] == 'other'){
-                    if(!$other){
-                        $other[0] = date("M d,Y",strtotime($ledger['date']));
-                        $other[1] = $ledger['name'];
-                        $other[2] = $ledger['amount'];
-                    }else{
-                        $other[0] = ', ' . date("M d,Y",strtotime($ledger['date']));
-                        $other[1] = ', ' . $ledger['name'];
-                        $other[2] += $ledger['amount'];
-                    }
-                }else if(strpos($ledger['remarks'], 'APPLIED FROM') !== false){
-                    if(!$applied_from){
-                        $applied_from[0] = date("M d,Y",strtotime($ledger['date']));
-                        $applied_from[1] = $ledger['remarks'];
-                        $applied_from[2] = $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
-                    }else{
-                        $applied_from[0] .= ', ' . date("M d,Y",strtotime($ledger['date']));
-                        $applied_from[1] .= ', ' . $ledger['remarks'];
-                        $applied_from[2] += $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
-                    }
-                }else if(strpos($ledger['remarks'], 'APPLIED TO') !== false){
-                    if(!$applied_from){
-                        $applied_to[0] = date("M d,Y",strtotime($ledger['date']));
-                        $applied_to[1] = $ledger['remarks'];
-                        $applied_to[2] = $ledger['amount'] < 0 ? $ledger['amount'] : -1 * abs($ledger['amount']);
-                    }else{
-                        $applied_to[0] = date("M d,Y",strtotime($ledger['date']));
-                        $applied_to[1] = $ledger['remarks'];
-                        $applied_to[2] = $ledger['amount'] < 0 ? $ledger['amount'] : -1 * abs($ledger['amount']);
-                    }
-                }
-            }
-        }
+        //         if($ledger['type'] == 'other'){
+        //             if(!$other){
+        //                 $other[0] = date("M d,Y",strtotime($ledger['date']));
+        //                 $other[1] = $ledger['name'];
+        //                 $other[2] = $ledger['amount'];
+        //             }else{
+        //                 $other[0] = ', ' . date("M d,Y",strtotime($ledger['date']));
+        //                 $other[1] = ', ' . $ledger['name'];
+        //                 $other[2] += $ledger['amount'];
+        //             }
+        //         }else if(strpos($ledger['remarks'], 'APPLIED FROM') !== false){
+        //             if(!$applied_from){
+        //                 $applied_from[0] = date("M d,Y",strtotime($ledger['date']));
+        //                 $applied_from[1] = $ledger['remarks'];
+        //                 $applied_from[2] = $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
+        //             }else{
+        //                 $applied_from[0] .= ', ' . date("M d,Y",strtotime($ledger['date']));
+        //                 $applied_from[1] .= ', ' . $ledger['remarks'];
+        //                 $applied_from[2] += $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
+        //             }
+        //         }else if(strpos($ledger['remarks'], 'APPLIED TO') !== false){
+        //             if(!$applied_from){
+        //                 $applied_to[0] = date("M d,Y",strtotime($ledger['date']));
+        //                 $applied_to[1] = $ledger['remarks'];
+        //                 $applied_to[2] = $ledger['amount'] < 0 ? $ledger['amount'] : -1 * abs($ledger['amount']);
+        //             }else{
+        //                 $applied_to[0] = date("M d,Y",strtotime($ledger['date']));
+        //                 $applied_to[1] = $ledger['remarks'];
+        //                 $applied_to[2] = $ledger['amount'] < 0 ? $ledger['amount'] : -1 * abs($ledger['amount']);
+        //             }
+        //         }
+        //     }
+        // }
 
-        if($reg['paymentType'] == 'full'){
-            if($tuition['scholarship_total_assessment_rate'] > 0){
-                $assessment_discount_rate = $tuition['scholarship_total_assessment_rate'];
-            }
-            if($tuition['scholarship_total_assessment_fixed'] > 0){
-                $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed'];
-            }
-            if($tuition['scholarship_tuition_fee_rate'] > 0){
-                $tuition_discount_rate = $tuition['scholarship_tuition_fee_rate'];
-            }
-        }else{ 
-            if($tuition['scholarship_total_assessment_rate_installment'] > 0){
-                $assessment_discount_rate = $tuition['scholarship_total_assessment_rate_installment'];
-            }
-            if($tuition['scholarship_total_assessment_fixed_installment'] > 0){
-                $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed_installment'];
-            }
-            if($tuition['scholarship_tuition_fee_installment_rate'] > 0){
-                $tuition_discount_rate = $tuition['scholarship_tuition_fee_installment_rate'];
-            }
-        }
+        // if($reg['paymentType'] == 'full'){
+        //     if($tuition['scholarship_total_assessment_rate'] > 0){
+        //         $assessment_discount_rate = $tuition['scholarship_total_assessment_rate'];
+        //     }
+        //     if($tuition['scholarship_total_assessment_fixed'] > 0){
+        //         $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed'];
+        //     }
+        //     if($tuition['scholarship_tuition_fee_rate'] > 0){
+        //         $tuition_discount_rate = $tuition['scholarship_tuition_fee_rate'];
+        //     }
+        // }else{ 
+        //     if($tuition['scholarship_total_assessment_rate_installment'] > 0){
+        //         $assessment_discount_rate = $tuition['scholarship_total_assessment_rate_installment'];
+        //     }
+        //     if($tuition['scholarship_total_assessment_fixed_installment'] > 0){
+        //         $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed_installment'];
+        //     }
+        //     if($tuition['scholarship_tuition_fee_installment_rate'] > 0){
+        //         $tuition_discount_rate = $tuition['scholarship_tuition_fee_installment_rate'];
+        //     }
+        // }
 
-        $balance = $tuition['tuition_before_discount'] + $tuition['lab_before_discount'] + $tuition['misc_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
+        // $balance = $tuition['tuition_before_discount'] + $tuition['lab_before_discount'] + $tuition['misc_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
         
-        $installment_balance = $tuition['tuition_installment_before_discount'] + $tuition['lab_installment_before_discount'] + $tuition['misc_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
+        // $installment_balance = $tuition['tuition_installment_before_discount'] + $tuition['lab_installment_before_discount'] + $tuition['misc_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
         
-        $installment_balance -= $tuition['scholarship_tuition_fee_rate'];
-        $installment_balance -= $tuition['scholarship_tuition_fee_installment_rate'];
-        $installment_balance -= $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : 0;
-        $installment_balance -= $tuition['scholarship_lab_fee_rate'] > 0 ? $tuition['scholarship_lab_fee_rate'] : 0;
-        $installment_balance -= $tuition['scholarship_lab_fee_fixed'] > 0 ? $tuition['scholarship_lab_fee_fixed'] : 0;
-        $installment_balance -= $tuition['scholarship_misc_fee_rate'] > 0 ? $tuition['scholarship_misc_fee_rate'] : 0;
-        $installment_balance -= $tuition['scholarship_misc_fee_rate'] > 0 ? $tuition['scholarship_misc_fee_rate'] : 0;
-        $installment_balance -= $tuition['nsf'] > 0 ? $tuition['nsf'] : 0;
-        $installment_balance -= $assessment_discount_rate > 0 ? $assessment_discount_rate : 0;
-        $installment_balance -= $assessment_discount_fixed > 0 ? $assessment_discount_fixed : 0;
-        $installment_balance -= $applied_from ? $applied_from[2] : 0;
-        $installment_balance -= $applied_to ? $applied_to[2] : 0;
+        // $installment_balance -= $tuition['scholarship_tuition_fee_rate'];
+        // $installment_balance -= $tuition['scholarship_tuition_fee_installment_rate'];
+        // $installment_balance -= $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : 0;
+        // $installment_balance -= $tuition['scholarship_lab_fee_rate'] > 0 ? $tuition['scholarship_lab_fee_rate'] : 0;
+        // $installment_balance -= $tuition['scholarship_lab_fee_fixed'] > 0 ? $tuition['scholarship_lab_fee_fixed'] : 0;
+        // $installment_balance -= $tuition['scholarship_misc_fee_rate'] > 0 ? $tuition['scholarship_misc_fee_rate'] : 0;
+        // $installment_balance -= $tuition['scholarship_misc_fee_rate'] > 0 ? $tuition['scholarship_misc_fee_rate'] : 0;
+        // $installment_balance -= $tuition['nsf'] > 0 ? $tuition['nsf'] : 0;
+        // $installment_balance -= $assessment_discount_rate > 0 ? $assessment_discount_rate : 0;
+        // $installment_balance -= $assessment_discount_fixed > 0 ? $assessment_discount_fixed : 0;
+        // $installment_balance -= $applied_from ? $applied_from[2] : 0;
+        // $installment_balance -= $applied_to ? $applied_to[2] : 0;
         
-        $payment_details = $this->db->select('payment_details.*')
-            ->from('payment_details')
-            ->join('tb_mas_users', 'tb_mas_users.slug = payment_details.student_number')
-            ->join('tb_mas_registration', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
-            ->where(array('payment_details.sy_reference' => $sem, 'payment_details.student_number' => $user['slug'], 'payment_details.status' => 'Paid'))
-            ->order_by('payment_details.created_at', 'asc')
-            ->group_by('payment_details.id')
-            ->get()
-            ->result_array();
+        // $payment_details = $this->db->select('payment_details.*')
+        //     ->from('payment_details')
+        //     ->join('tb_mas_users', 'tb_mas_users.slug = payment_details.student_number')
+        //     ->join('tb_mas_registration', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
+        //     ->where(array('payment_details.sy_reference' => $sem, 'payment_details.student_number' => $user['slug'], 'payment_details.status' => 'Paid'))
+        //     ->order_by('payment_details.created_at', 'asc')
+        //     ->group_by('payment_details.id')
+        //     ->get()
+        //     ->result_array();
 
-        if($payment_details){
-            // $payment = $user_payment = $date = $student_payment = array();
-            foreach($payment_details as $payment_index => $payment_detail){
-                if(strpos($payment_detail['description'], 'Tuition') !== false || strpos($payment_detail['description'], 'Reservation') !== false){
-                    $installment_balance -= $payment_detail['subtotal_order'];
-                    $balance -= $payment_detail['subtotal_order'];
-                }
-            }
-        }
+        // if($payment_details){
+        //     // $payment = $user_payment = $date = $student_payment = array();
+        //     foreach($payment_details as $payment_index => $payment_detail){
+        //         if(strpos($payment_detail['description'], 'Tuition') !== false || strpos($payment_detail['description'], 'Reservation') !== false){
+        //             $installment_balance -= $payment_detail['subtotal_order'];
+        //             $balance -= $payment_detail['subtotal_order'];
+        //         }
+        //     }
+        // }
 
 
         $installment = array();
@@ -3459,8 +3459,8 @@ class Pdf extends CI_Controller {
         $this->data['user'] =  $this->session->all_userdata();
         $this->data['student'] = $user;
         $this->data['installments'] = $installments;
-        $this->data['total_installment'] = $total_installment;
-        $this->data['balance'] = $balance;
+        // $this->data['total_installment'] = $total_installment;
+        // $this->data['balance'] = $balance;
         $this->data['reg'] = $reg;
         $this->data['course'] = $this->data_fetcher->getProgramDetails($user['intProgramID']); 
         $this->data['sy'] = $sy;

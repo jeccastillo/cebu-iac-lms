@@ -70,32 +70,38 @@
     
     <tr>
         <td style="border:1px solid #333;" width="50%"> 1st installment balance due <?php echo date("F d, Y", strtotime($sy->installment1)) ?></td>
-        <td style="border:1px solid #333;text-align:right;padding-right:5px" width="20%"><?php echo $installments[0] ?> </td>
+        <td style="border:1px solid #333;text-align:right;padding-right:5px" width="20%"><?php echo number_format($installments[0], 2, '.', ',') ?> </td>
     </tr>
     <tr>
         <td style="border:1px solid #333;" width="50%"> 2nd installment balance due <?php echo date("F d, Y", strtotime($sy->installment2)) ?></td>
-        <td style="border:1px solid #333;text-align:right;padding-right:5px" width="20%"><?php echo $installments[1] ?> </td>
+        <td style="border:1px solid #333;text-align:right;padding-right:5px" width="20%"><?php echo number_format($installments[1], 2, '.', ',') ?> </td>
     </tr>
     <tr>
         <td style="border:1px solid #333;" width="50%"> 3rd installment balance due <?php echo date("F d, Y", strtotime($sy->installment3)) ?></td>
-        <td style="border:1px solid #333;text-align:right;padding-right:5px" width="20%"><?php echo $installments[2] ?> </td>
+        <td style="border:1px solid #333;text-align:right;padding-right:5px" width="20%"><?php echo number_format($installments[2], 2, '.', ',') ?> </td>
     </tr>
     <tr>
         <td style="border:1px solid #333;" width="50%"> 4th installment balance due <?php echo date("F d, Y", strtotime($sy->installment4)) ?></td>
-        <td style="border:1px solid #333;text-align:right;padding-right:5px" width="20%"><?php echo $installments[3] ?> </td>
+        <td style="border:1px solid #333;text-align:right;padding-right:5px" width="20%"><?php echo number_format($installments[3], 2, '.', ',') ?> </td>
     </tr>
     <tr>
         <td style="border:1px solid #333;" width="50%"> 5th installment balance due <?php echo date("F d, Y", strtotime($sy->installment5)) ?></td>
-        <td style="border:1px solid #333;text-align:right;padding-right:5px" width="20%"><?php echo $installments[4] ?> </td>
+        <td style="border:1px solid #333;text-align:right;padding-right:5px" width="20%"><?php echo number_format($installments[4], 2, '.', ',') ?> </td>
     </tr>
     <tr>
         <td style="border:1px solid #333;font-weight:bold" width="50%">TOTAL BALANCE</td>
         <td style="border:1px solid #333;font-weight:bold;text-align:right;padding-right:5px" width="20%"><?php echo $request['total'] ?> </td>
+    </tr>
+    <tr>
+        <td style="border:1px solid #333;font-size:10px" colspan="2"><i>Please note that rounding off may cause some minor disparity in the installment schedule</i></td>
     </tr>
 <?php elseif($reg['paymentType'] == 'full') :?>
     <tr>
         <td style="border:1px solid #333;font-weight:bold" width="50%">TOTAL BALANCE</td>
         <td style="border:1px solid #333;font-weight:bold;text-align:right;padding-right:5px" width="20%"><?php echo $request['total'] ?> </td>
+    </tr>
+    <tr>
+        <td style="border:1px solid #333;font-size:10px" colspan="2"><i>Please note that rounding off may cause some minor disparity in the installment schedule</i></td>
     </tr>
 <?php endif; ?>
 </table>
