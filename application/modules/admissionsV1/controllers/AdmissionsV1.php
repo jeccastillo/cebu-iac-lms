@@ -72,7 +72,7 @@ class AdmissionsV1 extends CI_Controller {
 
     public function view_classlist_archive_admin($sem = null, $program = 0, $dissolved = 0, $has_faculty = 0)
     {
-        if($this->data["user"]["special_role"] >= 1)
+        if($this->data["user"]["special_role"] >= 1 && $this->data["user"]["intUserLevel"] != 7)
         {  
             $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
             
