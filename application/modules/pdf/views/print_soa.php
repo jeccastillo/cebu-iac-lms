@@ -1,6 +1,13 @@
 <table border="0" cellspacing="0" cellpadding="0" style="color:#333;">   
     <tr style="font-weight:bold;">        
-        <td width="100%" align="center" style="text-align:center;vertical-align: middle;"><img src= "https://i.ibb.co/XW1DRVT/iacademy-logo.png"  width="150" height="44"/></td>
+        <td width="100%" align="center" style="text-align:center;vertical-align: middle;">
+        
+        <?php if($campus == 'Makati'): ?>   
+            <img src= "https://i.ibb.co/XW1DRVT/iacademy-logo.png"  width="150" height="44"/>
+        <?php elseif($campus == 'Cebu'): ?>
+            <img src= "https://i.ibb.co/9hgbYNB/seal.png"  width="100" height="100"/>
+        <?php endif; ?>
+        </td>
     </tr><br>
     <tr>
         <td width="100%" align="center" style="text-align:center;vertical-align: middle; font-size:14px; font-weight:bold">
@@ -101,12 +108,12 @@ Prepared by:
 <b><?php echo $user['strLastname'] . ', ' . $user['strFirstname'] . ' ' . $user['strMiddlename'];?></b>
 
 <br><br><br>
-<span style="font-size:11px"><i>Note: If you have any question about your Statement of Account, please call Finance @ 
+<span style="font-size:11px"><i>Note: If you have any question about your Statement of Account, please call Finance 
 <?php 
     if($campus == 'Makati'){
-        echo ' ';
+        echo 'or send an email at finance@iacademy.edu.ph';
     }else if($campus == 'Cebu'){
-        echo '520 4888 local 3114 or send an email at financecebu@iacademy.edu.ph';
+        echo '@ 520 4888 local 3114 or send an email at financecebu@iacademy.edu.ph';
     }
 ?>
 </i></span>
