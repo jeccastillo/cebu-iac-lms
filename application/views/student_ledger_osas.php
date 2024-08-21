@@ -363,16 +363,7 @@ new Vue({
         ':' +
         (minute < 10 ? '0' + minute.toString() : minute);
         this.request.date = localDatetime;
-        Swal.fire({
-            showCancelButton: false,
-            showCloseButton: false,
-            allowEscapeKey: false,
-            title: 'Syncing',
-            text: 'Syncing Data do not leave page',
-            icon: 'info',
-        })
         
-                             
         axios
             .get(base_url + 'scholarship/student_ledger_data/' + this.id + '/' + this.sem, {
                 headers: {
