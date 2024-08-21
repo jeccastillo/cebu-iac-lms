@@ -207,7 +207,7 @@ class Scholarship extends CI_Controller {
             $this->data['max_id'] = 0;       
 
         $this->load->view("common/header",$this->data);
-        $this->load->view("student_ledger",$this->data);
+        $this->load->view("student_ledger_osas",$this->data);
         $this->load->view("common/footer",$this->data);
 
     }
