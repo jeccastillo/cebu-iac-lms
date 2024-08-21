@@ -241,7 +241,7 @@
             <span>View My
               Classes</span></a></li>
         <?php endif; ?>
-        <?php if(in_array($user['intUserLevel'],array(2,5,3,6)) ): ?>
+        <?php if(in_array($user['intUserLevel'],array(2,5,3,6,7)) ): ?>
         <!-- <li class="<?php echo (isset($page) && $page=="transactions")?'active':''; ?>"><a href="<?php echo base_url() ?>unity/transactions"><i class="ion ion-cash"></i> <span>Transactions</span> </a></li> -->
         <li class="header">Admissions</li>
         <?php if(in_array($user['intUserLevel'],array(2,5)) ): ?>
