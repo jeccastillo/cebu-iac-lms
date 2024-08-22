@@ -181,7 +181,7 @@
                                                 data-target="#myModal" class="btn btn-primary">
                                                 Update OR
                                         </button>
-                                        <button v-if="!refunded.or_number" data-toggle="modal"                                                
+                                        <button v-if="!refunded.invoice_number" data-toggle="modal"                                                
                                                 @click="invoice_update.id = refunded.id;" 
                                                 data-target="#invoiceUpdate" class="btn btn-primary">
                                                 Update Invoice
@@ -267,7 +267,7 @@
                                                 data-target="#myModal" class="btn btn-primary">
                                                 Update OR
                                         </button>
-                                        <button v-if="!payment.or_number" data-toggle="modal"                                                
+                                        <button v-if="!payment.invoice_number" data-toggle="modal"                                                
                                                 @click="invoice_update.id = payment.id;" 
                                                 data-target="#invoiceUpdate" class="btn btn-primary">
                                                 Update Invoice
