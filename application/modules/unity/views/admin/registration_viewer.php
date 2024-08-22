@@ -340,7 +340,7 @@
                                             Other Payments:
                                             </th>
                                         </tr>  
-                                        <!-- <tr v-if="application_payment">
+                                        <tr v-if="application_payment">
                                             <td></td>
                                             <td>{{ application_payment.invoice_number }}</td>
                                             <td>{{ application_payment.or_number }}</td>
@@ -358,11 +358,6 @@
                                                         data-target="#myModal" class="btn btn-primary">
                                                         Update OR
                                                 </button>
-                                                <button v-if="!application_payment.invoice_number && application_payment.status == 'Paid' && cashier && application_payment.remarks != 'Voided'" data-toggle="modal"                                                
-                                                        @click="prepUpdateInvoice(application_payment.id,application_payment.description,application_payment.subtotal_order)" 
-                                                        data-target="#invoiceUpdate" class="btn btn-primary">
-                                                        Update Invoice
-                                                </button>
                                                 <button v-if="application_payment.or_number && cashier"                                             
                                                         @click="printOR(application_payment)" 
                                                         class="btn btn-primary">
@@ -370,7 +365,7 @@
                                                 </button>
                                                 <button v-if="application_payment.status == 'Paid' && application_payment.remarks != 'Voided' && cashier && finance_manager_privilages" data-toggle="modal" data-target="#voidPaymentModal" class="btn btn-primary" @click="setToVoid(application_payment.id)">Void/Cancel</button>
                                             </td>
-                                        </tr>                                         -->
+                                        </tr>                                        
                                         <tr v-for="payment in other_payments">
                                             <td><input v-if="user.special_role > 1" type="checkbox" :value="payment.or_number" v-model="selected_items" /></td>
                                             <td>{{ payment.invoice_number }}</td>
@@ -422,11 +417,6 @@
                                                         data-target="#myModal" class="btn btn-primary">
                                                         Update OR
                                                 </button>
-                                                <button v-if="!reservation_payment.invoice_number && application_payment.status == 'Paid' && cashier && application_payment.remarks != 'Voided'" data-toggle="modal"                                                
-                                                        @click="prepUpdateInvoice(reservation_payment.id,reservation_payment.description,reservation_payment.subtotal_order)" 
-                                                        data-target="#invoiceUpdate" class="btn btn-primary">
-                                                        Update Invoice
-                                                </button>
                                                 <button v-if="reservation_payment.or_number && cashier"                                             
                                                         @click="printOR(reservation_payment)" 
                                                         class="btn btn-primary">
@@ -452,11 +442,6 @@
                                                         @click="prepUpdate(payment.id,payment.description,payment.subtotal_order)" 
                                                         data-target="#myModal" class="btn btn-primary">
                                                         Update OR
-                                                </button>
-                                                <button v-if="!payment.invoice_number && application_payment.status == 'Paid' && cashier && application_payment.remarks != 'Voided'" data-toggle="modal"                                                
-                                                        @click="prepUpdateInvoice(payment.id,payment.description,payment.subtotal_order)" 
-                                                        data-target="#invoiceUpdate" class="btn btn-primary">
-                                                        Update Invoice
                                                 </button>
                                                 <button v-if="payment.or_number && cashier"                                             
                                                         @click="printOR(payment)" 
@@ -614,31 +599,6 @@
 
         </form>
     </div>
-    <div class="modal fade" id="invoiceUpdate" role="dialog">
-        <form @submit.prevent="updateInvoice" class="modal-dialog modal-lg">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <!-- modal header  -->
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Update Invoice Number</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label>Invoice Number <span class="text-danger">*</span> </label>                        
-                        <input type="text" class="form-control" v-model="invoice_update.invoice_number" required />
-                    </div>
-                </div>
-                <div class=" modal-footer">
-                    <!-- modal footer  -->
-                    <button type="submit" :disabled="!or_update.or_number" class="btn btn-primary">Submit</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-
-        </form>
-    </div>
     <div class="modal fade" id="voidPaymentModal" role="dialog">
         <form @submit.prevent="voidPayment" class="modal-dialog modal-lg">
 
@@ -755,15 +715,6 @@ new Vue({
             is_cash: 1,
             check_number: '',
             student_campus: '<?php echo $campus; ?>',            
-        },
-        invoice_update_description: undefined,
-        invoice_update: {
-            id: undefined,
-            invoice_number: undefined,
-            cashier_id: undefined,
-            sy_reference: undefined,
-            total_amount_due: undefined,
-            student_campus: undefined,
         },
         or_update_description: undefined,
         or_update:{
@@ -1178,11 +1129,6 @@ new Vue({
             this.or_update.id = id;
             this.or_update_description = desc;
             this.or_update.total_amount_due = amount;
-        },
-        prepUpdateInvoice: function(id,desc,amount){
-            this.invoice_update.id = id;
-            this.invoice_update_description = desc;
-            this.invoice_update.total_amount_due = amount;
         },        
         setValue: function(value,type,ctr){            
             if(ctr == 0){
@@ -1229,47 +1175,6 @@ new Vue({
                 }
             });
 
-        },
-        updateInvoice: function(){
-            let url = api_url + 'finance/update_invoice';
-            let slug = this.slug;      
-            this.loader_spinner = true;
-            
-            Swal.fire({
-                title: 'Continue with the update',
-                text: "Are you sure you want to update the payment?",
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                imageWidth: 100,
-                icon: "question",
-                cancelButtonText: "No, cancel!",
-                showCloseButton: true,
-                showLoaderOnConfirm: true,
-                    preConfirm: (login) => {                                                
-
-                        return axios.post(url, this.invoice_update, {
-                                    headers: {
-                                        Authorization: `Bearer ${window.token}`
-                                    }
-                        })
-                        .then(data => {
-                            this.loader_spinner = false;                                    
-                            if(data.data.success){
-                                
-                                                this.loader_spinner = false;                                                                                                                            
-                                                Swal.fire({
-                                                    title: "Success",
-                                                    text: "Update Success",
-                                                    icon: "success"
-                                                }).then(function() {
-                                                    location.reload();
-                                                });  
-                                        
-                            }
-                        });                    
-
-                    },
-                });
         },
         updateOR: function(){
             let url = api_url + 'finance/update_or';
