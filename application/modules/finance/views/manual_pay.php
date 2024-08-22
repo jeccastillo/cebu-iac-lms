@@ -177,12 +177,17 @@
                                     <td>{{ refunded.or_date }}</td>            
                                     <td>
                                         <button v-if="!refunded.or_number" data-toggle="modal"                                                
-                                                @click="or_update.id = application_payment.id;" 
+                                                @click="or_update.id = refunded.id;" 
                                                 data-target="#myModal" class="btn btn-primary">
                                                 Update OR
                                         </button>
+                                        <button v-if="!refunded.or_number" data-toggle="modal"                                                
+                                                @click="invoice_update.id = refunded.id;" 
+                                                data-target="#invoiceUpdate" class="btn btn-primary">
+                                                Update Invoice
+                                        </button>
                                         <button v-if="refunded.or_number"                                             
-                                                @click="printOR(application_payment)" 
+                                                @click="printOR(refunded)" 
                                                 class="btn btn-primary">
                                                 Print OR
                                         </button>                                        
@@ -262,6 +267,11 @@
                                                 data-target="#myModal" class="btn btn-primary">
                                                 Update OR
                                         </button>
+                                        <button v-if="!payment.or_number" data-toggle="modal"                                                
+                                                @click="invoice_update.id = payment.id;" 
+                                                data-target="#invoiceUpdate" class="btn btn-primary">
+                                                Update Invoice
+                                        </button>
                                         <button v-if="payment.or_number"                                             
                                                 @click="printOR(payment)" 
                                                 class="btn btn-primary">
@@ -297,6 +307,31 @@
             <input type="hidden" name="type" v-model="or_print.type" />
             <input type="hidden" name="transaction_date" v-model="or_print.transaction_date" />               
         </form>
+        <div class="modal fade" id="invoiceUpdate" role="dialog">
+            <form @submit.prevent="updateInvoice" class="modal-dialog modal-lg">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!-- modal header  -->
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Update Invoice Number</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Invoice Number <span class="text-danger">*</span> </label>                        
+                            <input type="text" class="form-control" v-model="invoice_update.invoice_number" required />
+                        </div>
+                    </div>
+                    <div class=" modal-footer">
+                        <!-- modal footer  -->
+                        <button type="submit" :disabled="!or_update.or_number" class="btn btn-primary">Submit</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
         <div class="modal fade" id="myModal" role="dialog">
             <form @submit.prevent="updateOR" class="modal-dialog modal-lg">
                 <!-- Modal content-->
@@ -418,6 +453,15 @@ new Vue({
             check_number: undefined,   
             sem: undefined,   
             type: undefined,      
+        },
+        invoice_update_description: undefined,
+        invoice_update: {
+            id: undefined,
+            invoice_number: undefined,
+            cashier_id: undefined,
+            sy_reference: undefined,
+            total_amount_due: undefined,
+            student_campus: undefined,
         },
         or_update:{
             id: undefined,
@@ -592,6 +636,47 @@ new Vue({
             })
 
         },  
+        updateInvoice: function(){
+            let url = api_url + 'finance/update_invoice';
+            let slug = this.slug;      
+            this.loader_spinner = true;
+            
+            Swal.fire({
+                title: 'Continue with the update',
+                text: "Are you sure you want to update the payment?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                    preConfirm: (login) => {                                                
+
+                        return axios.post(url, this.invoice_update, {
+                                    headers: {
+                                        Authorization: `Bearer ${window.token}`
+                                    }
+                        })
+                        .then(data => {
+                            this.loader_spinner = false;                                    
+                            if(data.data.success){
+                                
+                                                this.loader_spinner = false;                                                                                                                            
+                                                Swal.fire({
+                                                    title: "Success",
+                                                    text: "Update Success",
+                                                    icon: "success"
+                                                }).then(function() {
+                                                    location.reload();
+                                                });  
+                                        
+                            }
+                        });                    
+
+                    },
+                });
+        },
         updateOR: function(){
             let url = api_url + 'finance/update_or';
 
