@@ -358,7 +358,7 @@
                                                         data-target="#myModal" class="btn btn-primary">
                                                         Update OR
                                                 </button>
-                                                <button v-if="!application_payment.invoice_number && application_payment.status == 'Paid' && cashier && application_payment.remarks != 'Voided'" data-toggle="modal"                                                
+                                                <button v-if="application_payment.status == 'Paid' && cashier && application_payment.remarks != 'Voided'" data-toggle="modal"                                                
                                                         @click="invoice_update.id = application_payment.id;"
                                                         data-target="#invoiceUpdate" class="btn btn-primary">
                                                         Update Invoice
@@ -389,7 +389,7 @@
                                                         data-target="#myModal" class="btn btn-primary">
                                                         Update OR
                                                 </button>
-                                                <button v-if="!payment.invoice_number && payment.status == 'Paid' && cashier && payment.remarks != 'Voided'" data-toggle="modal"                                                
+                                                <button v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided'" data-toggle="modal"                                                
                                                         @click="invoice_update.id = payment.id;"
                                                         data-target="#invoiceUpdate" class="btn btn-primary">
                                                         Update Invoice
@@ -427,7 +427,7 @@
                                                         data-target="#myModal" class="btn btn-primary">
                                                         Update OR
                                                 </button>
-                                                <button v-if="!reservation_payment.invoice_number && reservation_payment.status == 'Paid' && cashier && reservation_payment.remarks != 'Voided'" data-toggle="modal"                                                
+                                                <button v-if="reservation_payment.status == 'Paid' && cashier && reservation_payment.remarks != 'Voided'" data-toggle="modal"                                                
                                                         @click="invoice_update.id = reservation_payment.id;"
                                                         data-target="#invoiceUpdate" class="btn btn-primary">
                                                         Update Invoice
@@ -458,7 +458,7 @@
                                                         data-target="#myModal" class="btn btn-primary">
                                                         Update OR
                                                 </button>
-                                                <button v-if="!payment.invoice_number && payment.status == 'Paid' && cashier && payment.remarks != 'Voided'" data-toggle="modal"                                                
+                                                <button v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided'" data-toggle="modal"                                                
                                                         @click="invoice_update.id = payment.id;"
                                                         data-target="#invoiceUpdate" class="btn btn-primary">
                                                         Update Invoice
