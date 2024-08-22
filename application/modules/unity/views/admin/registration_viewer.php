@@ -1183,12 +1183,7 @@ new Vue({
             this.or_update.id = id;
             this.or_update_description = desc;
             this.or_update.total_amount_due = amount;
-        },
-        prepUpdateInvoice: function(id,desc,amount){
-            this.invoice_update.id = id;
-            this.invoice_update_description = desc;
-            this.invoice_update.total_amount_due = amount;
-        },        
+        },            
         setValue: function(value,type,ctr){            
             if(ctr == 0){
                 if(this.installments[ctr] != 0){
