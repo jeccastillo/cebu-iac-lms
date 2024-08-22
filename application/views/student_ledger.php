@@ -88,6 +88,7 @@
                                 <th>Payment Description</th>
                                 <th>O.R. Date</th>
                                 <th>O.R. Number</th>
+                                <th>Invoice Number</th>
                                 <th>Remarks</th>
                                 <th>Assessment</th>
                                 <th>Payment</th>
@@ -112,6 +113,7 @@
                                 <td :class="item.muted" v-else>{{ item.name }}</td>
                                 <td :class="item.muted">{{  item.date }}</td>
                                 <td :class="item.muted">{{  item.or_number }}</td>
+                                <td :class="item.muted">{{  item.invoice_number }}</td>
                                 <td :class="item.muted">{{  item.remarks }}</td>
                                 <td :class="item.muted">{{ (item.type != 'payment')?numberWithCommas(item.amount):'-' }}</td>
                                 <td :class="item.muted">{{ (item.type == 'payment')?numberWithCommas(item.amount):'-' }}</td>
