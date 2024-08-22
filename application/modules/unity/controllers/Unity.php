@@ -545,12 +545,6 @@ class Unity extends CI_Controller {
             
             $ret['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
 
-            $ret['ledger'] = $this->db->select('tb_mas_student_ledger.*')        
-            ->from('tb_mas_student_ledger')            
-            ->where(array('student_id'=>$id,'tb_mas_student_ledger.type'=>'tuition','syid' => $sem))                    
-            ->get()
-            ->result_array();
-
             $ret['student'] = $this->data_fetcher->getStudent($id);
             
             if(get_stype($ret['student']['level']) == "college")
@@ -562,6 +556,14 @@ class Unity extends CI_Controller {
                 $ret['selected_ay'] = $sem;
             else
                 $ret['selected_ay'] = $active_sem['intID'];
+
+            $ret['ledger'] = $this->db->select('tb_mas_student_ledger.*')        
+            ->from('tb_mas_student_ledger')            
+            ->where(array('student_id'=>$id,'tb_mas_student_ledger.type'=>'tuition','syid' => $ret['selected_ay']))                    
+            ->get()
+            ->result_array();
+
+            
 
             $ret['registration'] = $this->data_fetcher->getRegistrationInfo($id,$ret['selected_ay']);
             if($ret['registration']){

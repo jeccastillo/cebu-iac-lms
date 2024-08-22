@@ -100,6 +100,118 @@ class Scholarship extends CI_Controller {
         $this->load->view("common/footer",$this->data);        
     }
 
+    public function student_ledger_data($id,$sem){
+                                
+        $data['student'] = $this->data_fetcher->getStudent($id);
+        $data['student']['strStudentNumber'] = preg_replace("/[^a-zA-Z0-9]+/", "", $data['student']['strStudentNumber']);
+        $registrations =  $this->db->select('tb_mas_sy.*, paymentType, enumStudentType')
+                                    ->join('tb_mas_sy', 'tb_mas_registration.intAYID = tb_mas_sy.intID')
+                                    ->where(array('intStudentID'=>$id))
+                                    ->order_by("strYearStart desc, enumSem desc")
+                                    ->get('tb_mas_registration')
+                                    ->result_array();
+        $tuition = [];
+        
+        $data['current_type'] = $registrations[0]['enumStudentType'];
+
+        foreach($registrations as $reg){            
+            $temp = $this->data_fetcher->getTuition($id,$reg['intID']);                            
+            $temp['term'] = $reg;     
+            
+            //TUITION PAYMENTS
+            $sql = "SELECT * FROM payment_details WHERE student_number = '".$data['student']['slug']."' AND sy_reference = ".$reg['intID']." AND (description LIKE 'Tuition%' || description LIKE 'Reservation%') AND (status = 'Paid' || status = 'Void' ) ORDER BY or_date ASC";
+            $tuition_payments =  $this->db->query($sql)
+                                          ->result_array();                  
+
+            $temp['payments_tuition']  = [];                                  
+            foreach($tuition_payments as $tuition_payment){
+                $tuition_payment['or_date'] = date('M j, Y',strtotime($tuition_payment['or_date']));
+                $temp['payments_tuition'][] = $tuition_payment;
+            }   
+            
+            //OTHER PAYMENTS
+            $sql = "SELECT * FROM payment_details WHERE student_number = '".$data['student']['slug']."' AND sy_reference = ".$reg['intID']." AND description NOT LIKE 'Reservation%' AND description NOT LIKE 'Tuition%' AND (status = 'Paid' || status = 'Void') ORDER BY or_date ASC";
+            $other_payments =  $this->db->query($sql)
+                                          ->result_array();                  
+
+            $temp['payments_other']  = [];                                  
+            foreach($other_payments as $other_payment){
+                $other_payment['or_date'] = date('M j, Y',strtotime($other_payment['or_date']));
+                $temp['payments_other'][] = $other_payment;
+            } 
+
+                                                      
+
+            $ledger = $this->db->select('tb_mas_student_ledger.*,tb_mas_scholarships.name as scholarship_name, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
+            ->from('tb_mas_student_ledger')
+            ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
+            ->join('tb_mas_scholarships', 'tb_mas_student_ledger.scholarship_id = tb_mas_scholarships.intID','left')
+            ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')                    
+            ->where(array('student_id'=>$id,'tb_mas_student_ledger.type'=>'tuition','syid' => $reg['intID']))        
+            ->order_by("strYearStart asc, enumSem asc")
+            ->get()
+            ->result_array();
+
+            $temp['ledger'] = [];
+
+            foreach($ledger as $item){
+                $item['date'] = date('M j, Y',strtotime($item['date']));
+                $temp['ledger'][] = $item;
+            }
+
+            $other = $this->db->select('tb_mas_student_ledger.*, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
+            ->from('tb_mas_student_ledger')
+            ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
+            ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')
+            ->where(array('student_id'=>$id,'tb_mas_student_ledger.type'=>'other','syid' => $reg['intID']))        
+            ->get()
+            ->result_array();
+
+            $temp['other'] = [];
+
+            foreach($other as $item){
+                $item['date'] = date('M j, Y',strtotime($item['date']));
+                $temp['other'][] = $item;
+            }
+
+            $tuition[] =  $temp;
+            
+        }
+        
+        $data['tuition'] = $tuition;
+        $data['user'] = $this->data["user"];
+        $data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+        $sem = $this->data_fetcher->get_active_sem();  
+        $data['active_sem'] = $sem['intID'];
+
+        echo json_encode($data);
+    }
+
+    public function student_ledger($id,$sem = 0){
+
+        $this->data['id'] = $id;        
+        $this->data['sem'] = $sem;
+        $this->data['page'] = "student_ledger_osas";
+        $this->data['opentree'] = "scholarship";
+
+        $max_id = $this->db->select('updated_at')
+                            ->order_by('updated_at', 'DESC')
+                            ->limit(1)
+                            ->get('payment_details')
+                            ->first_row();
+
+        // Data to be sent in the POST request
+        if($max_id)
+            $this->data['max_id'] = $max_id->updated_at;
+        else
+            $this->data['max_id'] = 0;       
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("student_ledger_osas",$this->data);
+        $this->load->view("common/footer",$this->data);
+
+    }
+
     public function assign_scholarship_data($student,$sem){
 
         $ret['scholarships'] = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'scholarship'))->result_array();

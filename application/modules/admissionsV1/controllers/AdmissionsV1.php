@@ -9,7 +9,7 @@ class AdmissionsV1 extends CI_Controller {
         
         $userlevel = $this->session->userdata('intUserLevel');   
         $ip = $this->input->ip_address();        
-        if($userlevel != 2 && $userlevel != 5 && $userlevel != 6 && $userlevel != 3 &&  $ip != "172.16.80.22")
+        if($userlevel != 2 && $userlevel != 5 && $userlevel != 6 && $userlevel != 7 && $userlevel != 3 &&  $ip != "172.16.80.22")
 		  redirect(base_url()."unity");
 
 		$this->config->load('themes');		
@@ -72,7 +72,7 @@ class AdmissionsV1 extends CI_Controller {
 
     public function view_classlist_archive_admin($sem = null, $program = 0, $dissolved = 0, $has_faculty = 0)
     {
-        if($this->data["user"]["special_role"] >= 1)
+        if($this->data["user"]["special_role"] >= 1 && $this->data["user"]["intUserLevel"] != 7)
         {  
             $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
             
@@ -311,7 +311,7 @@ class AdmissionsV1 extends CI_Controller {
     }
 
     public function view_lead($id) {
-        if(in_array($this->session->userdata('intUserLevel'),array(2,3,5,6)))
+        if(in_array($this->session->userdata('intUserLevel'),array(2,3,5,6,7)))
         {
             $this->data['exam_type']= $this->data_fetcher->fetch_table('tb_mas_exam');
             $this->data['userlevel'] = $this->session->userdata('intUserLevel');

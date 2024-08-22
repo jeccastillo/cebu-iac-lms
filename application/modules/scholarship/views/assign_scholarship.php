@@ -23,8 +23,12 @@
             <div class="box-body"> 
                 <div class="row">
                     <div v-if="student" class="col-md-6">
-                        Name: {{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}
+                        Name: {{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}                        
                     </div>
+                    <div class="col-md-6 text-right">
+                        <a target="_blank" class="btn btn-primary" :href="base_url + 'scholarship/student_ledger/'+ student.intID">View Ledger</a>
+                    </div>
+                    
                 </div>
                 <hr />
                 <div class="nav-tabs-custom">
