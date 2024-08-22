@@ -323,6 +323,7 @@
                                     <table class="table table-bordered table-striped">
                                         <tr>
                                             <th></th>
+                                            <th>Invoice Number</th>
                                             <th>OR Number</th>                                            
                                             <th>Payment Type</th>
                                             <th>Reference No.</th>
