@@ -235,6 +235,12 @@
                                                     </select>                                                     -->
                                                 </div>
                                                 <div class="form-group">
+                                                    <label>Invoice Number:</label>    
+                                                    <div>
+                                                        <input type="text" class="form-control" v-model="request.invoice_number" />
+                                                    </div>                                                                                                        
+                                                </div>
+                                                <div class="form-group">
                                                     <label>Contact Number:</label>
                                                     {{ request.contact_number }}
                                                     <input type="hidden" required class="form-control" v-model="request.contact_number" />
@@ -335,6 +341,7 @@
                                         </tr>  
                                         <tr v-if="application_payment">
                                             <td></td>
+                                            <td>{{ application_payment.invoice_number }}</td>
                                             <td>{{ application_payment.or_number }}</td>
                                             <td>{{ application_payment.description }}</td>
                                             <td>{{ application_payment.check_number }}</td>
@@ -360,6 +367,7 @@
                                         </tr>                                        
                                         <tr v-for="payment in other_payments">
                                             <td><input v-if="user.special_role > 1" type="checkbox" :value="payment.or_number" v-model="selected_items" /></td>
+                                            <td>{{ payment.invoice_number }}</td>
                                             <td>{{ payment.or_number }}</td>
                                             <td>{{ payment.description }}</td>
                                             <td>{{ payment.check_number }}</td>
@@ -392,6 +400,7 @@
                                         </tr>
                                         <tr v-if="reservation_payments" v-for="reservation_payment in reservation_payments">
                                             <td></td>
+                                            <td>{{ reservation_payment.invoice_number }}</td>
                                             <td>{{ reservation_payment.or_number }}</td>
                                             <td>{{ reservation_payment.description }}</td>
                                             <td>{{ reservation_payment.check_number }}</td>
@@ -417,6 +426,7 @@
                                         </tr> 
                                         <tr v-for="payment in payments">                                            
                                             <td><input v-if="user.special_role > 1" type="checkbox" :value="payment.or_number" v-model="selected_items" /></td>
+                                            <td>{{ payment.invoice_number }}</td>
                                             <td>{{ payment.or_number }}</td>
                                             <td>{{ payment.description }}</td>
                                             <td>{{ payment.check_number }}</td>

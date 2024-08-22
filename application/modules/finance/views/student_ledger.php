@@ -149,6 +149,7 @@
                                 <th>Payment Description</th>
                                 <th>O.R. Date</th>
                                 <th>O.R. Number</th>
+                                <th>Invoice Number</th>
                                 <th>Remarks</th>
                                 <th>Assessment</th>
                                 <th>Payment</th>                                
@@ -172,6 +173,7 @@
                                 <td :class="item.muted" v-else>{{ item.name }}</td>
                                 <td :class="item.muted">{{  item.date }}</td>
                                 <td :class="item.muted">{{  item.or_number }}</td>
+                                <td :class="item.muted">{{  item.invoice_number }}</td>
                                 <td :class="item.muted">{{  item.remarks }}</td>
                                 <td :class="item.muted">{{ (item.type!= 'payment')?numberWithCommas(item.amount):'-' }}</td>
                                 <td :class="item.muted">{{ (item.type == 'payment')?numberWithCommas(item.amount):'-' }}</td>                               
@@ -458,6 +460,7 @@ new Vue({
                 'scholarship_name':'',
                 'name':'Tuition',
                 'or_number':'',
+                'invoice_number':'',
                 'remarks':'',
                 'amount': amount.toFixed(2),
                 'added_by': 0,
@@ -482,6 +485,7 @@ new Vue({
                     'date': payments[i].created_at,
                     'name': payments[i].description,
                     'or_number':payments[i].or_number,
+                    'invoice_number':payments[i].invoice_number,
                     'remarks': payments[i].remarks,
                     'amount': parseFloat(payments[i].subtotal_order).toFixed(2),
                     'added_by': 0, 
@@ -514,6 +518,7 @@ new Vue({
                     'scholarship_name': tuition.scholarship[i].name,
                     'name':'Scholarship',
                     'or_number':'',
+                    'invoice_number':'',
                     'date': tuition.scholarship[i].date_applied,
                     'remarks':'',
                     'amount': sa.toFixed(2),
@@ -566,6 +571,7 @@ new Vue({
                     'scholarship_name': tuition.discount[i].name,
                     'name':'Discount',
                     'or_number':'',
+                    'invoice_number':'',
                     'date': tuition.discount[i].date_applied,
                     'remarks':'',
                     'amount': dc.toFixed(2),
@@ -608,6 +614,7 @@ new Vue({
                     'date': other[i].created_at,
                     'name': other[i].description,
                     'or_number':other[i].or_number,
+                    'invoice_number':other[i].invoice_number,
                     'remarks': other[i].remarks,
                     'amount': parseFloat(other[i].subtotal_order).toFixed(2),
                     'added_by': 0, 

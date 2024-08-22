@@ -102,8 +102,7 @@
                                         </div>                                    
                                     </div>                                    
                                     <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label>OR Number:</label>
+                                        <div class="form-group">                                            
                                             <label>OR Number <span class="text-danger">*</span> </label>
                                             <div v-if="user.special_role == 2 || cashier.temporary_admin ==  1">
                                                 <input type="number" class="form-control" v-model="request.or_number" />
@@ -114,6 +113,14 @@
                                             </div>                                            
                                         </div>
                                     </div>  
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Invoice Number:</label>    
+                                            <div>
+                                                <input type="text" class="form-control" v-model="request.invoice_number" />
+                                            </div>                                                                                                        
+                                        </div>
+                                    </div>
                                     <!-- <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Amount to Pay:</label>
@@ -141,6 +148,7 @@
                         <div class="box-body">
                             <table class="table table-bordered">
                                 <tr>
+                                    <th>Invoice Number</th>
                                     <th>OR Number</th>
                                     <th>Cashier</th>
                                     <th>Payment Type</th>
@@ -155,6 +163,7 @@
                                     <th>Actions</th>
                                 </tr>    
                                 <tr v-for="refunded in refunded_payments">
+                                    <td>{{ refunded.invoice_number }}</td>
                                     <td>{{ refunded.or_number }}</td>
                                     <td><a href="#" @click.prevent.stop="cashierDetails(application_payment.cashier_id)">{{ refunded.cashier_id }}</a></td>
                                     <td>{{ refunded.description }}</td>
@@ -228,6 +237,7 @@
                                     </td>
                                 </tr>                                                                                                     -->                                                               
                                 <tr v-for="(payment,i) in payments">
+                                    <td>{{ payment.invoice_number }}</td>
                                     <td>{{ payment.or_number }}</td>
                                     <td><a href="#" @click.prevent.stop="cashierDetails(payment.cashier_id)">{{ payment.cashier_id }}</a></td>
                                     <td :class="payment.muted" v-if="(payment.description == 'Application Payment' || payment.description == 'Reservation Payment' || payment.description == 'Tuition Fee')">
