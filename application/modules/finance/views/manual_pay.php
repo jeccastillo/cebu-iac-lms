@@ -252,6 +252,9 @@
                                             <option value="Reservation Payment">Reservation Payment</option>                                        
                                         </select>
                                     </td>
+                                    <td v-else>
+                                        {{ payment.description }}
+                                    </td>
                                     <td>{{ payment.check_number }}</td>
                                     <td>{{ payment.request_id }}</td>
                                     <td>{{ payment.subtotal_order }}</td>
