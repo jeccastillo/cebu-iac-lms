@@ -340,7 +340,7 @@
                                             Other Payments:
                                             </th>
                                         </tr>  
-                                        <tr v-if="application_payment">
+                                        <!-- <tr v-if="application_payment">
                                             <td></td>
                                             <td>{{ application_payment.invoice_number }}</td>
                                             <td>{{ application_payment.or_number }}</td>
@@ -370,7 +370,7 @@
                                                 </button>
                                                 <button v-if="application_payment.status == 'Paid' && application_payment.remarks != 'Voided' && cashier && finance_manager_privilages" data-toggle="modal" data-target="#voidPaymentModal" class="btn btn-primary" @click="setToVoid(application_payment.id)">Void/Cancel</button>
                                             </td>
-                                        </tr>                                        
+                                        </tr>                                         -->
                                         <tr v-for="payment in other_payments">
                                             <td><input v-if="user.special_role > 1" type="checkbox" :value="payment.or_number" v-model="selected_items" /></td>
                                             <td>{{ payment.invoice_number }}</td>
