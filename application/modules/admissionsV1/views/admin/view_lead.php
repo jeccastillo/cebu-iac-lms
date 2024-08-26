@@ -1489,7 +1489,11 @@ new Vue({
         this.loader_spinner = true;
         axios.get(api_url + 'admissions/student-info/' + this.slug)
             .then((data) => {
-                this.request = data.data.data;                
+                this.request = data.data.data;     
+                for(i in this.request.uploaded_requirements)
+                {
+                    this.request.uploaded_requirements[i].path = this.request.uploaded_requirements[i].path.replace("116.50.237.244", "smsapi.iacademy.edu.ph"); 
+                }           
                 this.sy_reference = this.request.sy_reference;
                 this.loader_spinner = false;
                 //this.program_update = this.request.type_id;
