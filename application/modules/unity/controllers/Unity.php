@@ -2950,6 +2950,24 @@ class Unity extends CI_Controller {
         echo json_encode($data);
     }
 
+    public function update_registration_field()
+    {
+        if($this->is_registrar() || $this->is_super_admin() || $this->is_accounting())
+        {
+            
+            $post = $this->input->post();
+            $this->data_poster->post_data('tb_mas_registration',$post,$post['intRegistrationID']);
+                        
+            $data['message'] = "Success";
+            $data['success'] = true;
+        }
+        else{
+            $data['message'] = "Failed";
+            $data['success'] = false;
+        }
+        echo json_encode($data);
+    }
+
     public function update_allow_enroll(){
         if($this->is_registrar() || $this->is_super_admin() || $this->is_accounting())
         {

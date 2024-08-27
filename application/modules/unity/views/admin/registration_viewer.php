@@ -55,6 +55,13 @@
                             </div>
                         </div>
                         <div v-if="registration && user.special_role >= 1" style="margin-right:1rem;" class="pull-right">                                                                         
+                            Has DP
+                            <select v-model="downpayment_status" @change="changeDownPaymentStatus" class="form-control">
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>                                
+                            </select>                            
+                        </div>
+                        <div v-if="registration && user.special_role >= 1" style="margin-right:1rem;" class="pull-right">                                                                         
                             Allow To Print RF
                             <select v-model="allow_enroll" @change="changeAllowEnroll" class="form-control">
                                 <option value="0">No</option>
@@ -798,6 +805,7 @@ new Vue({
         particulars: [],
         application_payment: undefined,
         registration_status: 0,
+        downpayment_status: 0,
         allow_enroll: 0,
         remaining_amount: 0,
         amount_paid: 0,
@@ -849,6 +857,7 @@ new Vue({
                         
                         if(data.data.registration){         
                             this.registration = data.data.registration;
+                            this.downpayment_status = this.registration.downpayment;
                             this.registration_status = data.data.registration.intROG;  
                             this.allow_enroll = data.data.registration.allow_enroll;                          
                             this.tuition = data.data.tuition;
@@ -1798,6 +1807,45 @@ new Vue({
             
             
         },
+        changeDownPaymentStatus: function(){
+            let url = this.base_url + 'unity/update_registration_field';
+            var formdata= new FormData();
+            formdata.append("intRegistrationID",this.registration.intRegistrationID);
+            formdata.append("downpayment",this.downpayment_status);
+            var missing_fields = false;
+            this.loader_spinner = true;
+            
+            //validate description
+                      
+            axios.post(url, formdata, {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            })
+            .then(data => {
+                this.loader_spinner = false;
+                if(data.data.success){                    
+                    Swal.fire({
+                        title: "Success",
+                        text: data.data.message,
+                        icon: "success"
+                    }).then(function() {
+                        location.reload();
+                    });                   
+                }
+                else
+                    Swal.fire({
+                        title: "Failed",
+                        text: data.data.message,
+                        icon: "error"
+                    }).then(function() {
+                        //location.reload();
+                    });
+            });
+           
+            
+            
+        },        
         changeAllowEnroll: function(){
             let url = this.base_url + 'unity/update_allow_enroll';
             var formdata= new FormData();
