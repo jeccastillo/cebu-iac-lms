@@ -28,6 +28,8 @@
                 <div class="box-header with-border font-weight-bold ">
                     <h5 class=" text-left text-primary ">
                         <strong> Applicant Details</strong>
+                        <a class="btn btn-primary"
+                            :href="base_url + 'admissionsV1/view_lead/' + slug">Old View</a>
                     </h5>
                 </div>
                 <div class="box-body">
@@ -528,7 +530,8 @@
                         </div>
                         <hr>
                     </div>
-                    <div v-if="request.type == 'other'">
+                    <div
+                        v-if="request.tos == '2nd - Degree iACADEMY' || request.tos == '2nd - Degree Other'">
                         <strong>Company</strong>
                         <div class="form-inline">
                             <input type="text"
@@ -543,7 +546,8 @@
                         </div>
                         <hr>
                     </div>
-                    <div v-if="request.type == 'other'">
+                    <div
+                        v-if="request.tos == '2nd - Degree iACADEMY' || request.tos == '2nd - Degree Other'">
                         <strong>Industry</strong>
                         <div class="form-inline">
                             <input type="text"
@@ -558,7 +562,8 @@
                         </div>
                         <hr>
                     </div>
-                    <div v-if="request.type == 'other'">
+                    <div
+                        v-if="request.tos == '2nd - Degree iACADEMY' || request.tos == '2nd - Degree Other'">
                         <strong>Position</strong>
                         <div class="form-inline">
                             <input type="text"
@@ -1118,14 +1123,12 @@
                         <hr>
                     </div>
                     <div v-if="true">
-                        <strong>Reserve Enroll Promo </strong>
+                        <strong>Reserve Enroll Promo</strong>
                         <div class="form-inline">
                             <select class="form-control"
                                 :disabled="true"
                                 @change="updateField('reserve_enroll',$event)"
                                 v-model="request.reserve_enroll">
-                                <option value="0">No</option>
-                                <option value="1">Yes</option>
                                 <option value="1">reserve_enrol_promo1</option>
                                 <option value="1">reserve_enrol_promo2</option>
                                 <option value="1">reserve_enrol_promo3</option>
@@ -3348,6 +3351,10 @@ new Vue({
     },
 
     methods: {
+        addNewSchool() {
+            console.log('dasd');
+
+        },
         copyClipBoard: function(str) {
             var el = document.createElement('textarea');
             el.value = str;
