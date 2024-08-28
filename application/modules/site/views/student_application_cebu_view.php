@@ -37,13 +37,9 @@
 
         <p style="margin-top:15px;">
             Note: You are applying for iACADEMY Cebu Campus, if you want to apply to iACADEMY Makati
-            (Main Campus) click
+            click
             <a style="text-decoration: underline;"
-                href="https://employeeportal.iacademy.edu.ph/#/admissions/requirement-submission/request-form">here</a>
-            for
-            SY23 and
-            <a style="text-decoration: underline;"
-                href="http://sms-makati.iacademy.edu.ph/">here</a> for SY24.
+                href="http://cebu.iacademy.edu.ph/site/student_application">here</a>.
         </p>
     </div>
 
@@ -84,22 +80,49 @@
                 </div>
                 <div id="applicant-type"
                     class="border-[1px] border-neutral-100 p-2.5 rounded-lg">
-                    <label class="block t color-primary font-bold  mb-3  pr-4"
+                    <label class="block t color-primary font-bold  mb-2  pr-4"
                         for="inline-full-name">
-                        Applicant Type
+                        Applicant Type <i class="font-normal">(Select one)</i>
                     </label>
+                    <h6 class="color-primary font-bold">Freshman</h6>
                     <label v-if="term.term_student_type == 'college'"
-                        v-for="college,index of collegeList"
-                        class="block color-primary mb-1 ml-1.5">
+                        v-for="college,index of collegeList.slice(0,2)"
+                        class="block indent-5 color-primary mb-1 ml-1.5">
                         <input type="radio"
                             :id="index"
-                            :value="college"
+                            :value="freshmenValue[index]"
                             name="college"
                             v-model="request.student_type"
-                            @click="filterCourses(filterCollege[index])"
+                            @click="filterCourses('college')"
                             required
                             class="mr-1">
                         {{college}}
+                    </label>
+                    <h6 class="color-primary font-bold">2nd Degree</h6>
+                    <label v-if="term.term_student_type == 'college'"
+                        v-for="college,index of collegeList.slice(2,4)"
+                        class="block indent-5 color-primary mb-1 ml-1.5">
+                        <input type="radio"
+                            :id="index"
+                            :value="secondDegreeValue[index]"
+                            name="college"
+                            v-model="request.student_type"
+                            @click="filterCourses('college')"
+                            required
+                            class="mr-1">
+                        {{college}}
+                    </label>
+                    <h6 class="color-primary font-bold">Other</h6>
+                    <label v-if="term.term_student_type == 'college'"
+                        class="block indent-5 color-primary mb-1 ml-1.5">
+                        <input type="radio"
+                            value="`College - Transferee`"
+                            name="college"
+                            v-model="request.student_type"
+                            @click="filterCourses('college')"
+                            required
+                            class="mr-1">
+                        Transferee
                     </label>
                     <label v-if="term.term_student_type == 'shs'"
                         v-for="shs,index of shsList"
@@ -124,74 +147,17 @@
                         Applying for
                     </label>
                     <div class="border-[1px] border-neutral-100 p-2.5 rounded-lg">
-                        <div id="first-choice"
-                            class="mb-3">
-                            <label class="block t color-primary font-bold  mb-3  pr-4"
-                                for="inline-full-name">
-                                First Choice
-                            </label>
-                            <select :disabled="!request.student_type ? true : false"
-                                class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                type="text"
-                                @change="setFirstChoice"
+                        <label v-for="t in programs.college"
+                            class="block indent-5 color-primary mb-1 ml-1.5">
+                            <input type="radio"
+                                :id="'progId-' + t.id"
+                                :value="t.id"
+                                @click="filterProgram(t.type,t.title)"
+                                v-model="cebuFilter"
                                 required
-                                v-model="request.type_id">
-                                <option disabled
-                                    value="">--Select options--</option>
-                                <option :value="t.id"
-                                    v-for="t in filtered_programs"
-                                    :data-title="t.title"
-                                    :key="t.id"
-                                    :disabled="t.id == request.type_id2 || t.id == request.type_id3 ? true : false">
-                                    {{t.title}}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="mb-3"
-                            v-if="false">
-                            <label class="block t color-primary font-bold  mb-3  pr-4"
-                                for="inline-full-name">
-                                Second Choice
-                            </label>
-                            <select :disabled="!request.student_type ? true : false"
-                                class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                type="text"
-                                @change="setSecondChoice"
-                                required
-                                v-model="request.type_id2">
-                                <option disabled
-                                    value="">--Select options--</option>
-                                <option :value="t.id"
-                                    v-for="t in filtered_programs"
-                                    :data-title="t.title"
-                                    :key="t.id"
-                                    :disabled="t.id == request.type_id || t.id == request.type_id3 ? true : false">
-                                    {{t.title}}
-                                </option>
-                            </select>
-                        </div>
-                        <div v-if="false">
-                            <label class="block t color-primary font-bold  mb-3  pr-4"
-                                for="inline-full-name">
-                                Third Choice
-                            </label>
-                            <select :disabled="!request.student_type ? true : false"
-                                class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                type="text"
-                                @change="setThirdChoice"
-                                required
-                                v-model="request.type_id3">
-                                <option disabled
-                                    value="">--Select options--</option>
-                                <option :value="t.id"
-                                    v-for="t in filtered_programs"
-                                    :key="t.id"
-                                    :data-title="t.title"
-                                    :disabled="t.id == request.type_id || t.id == request.type_id2 ? true : false">
-                                    {{t.title}}
-                                </option>
-                            </select>
-                        </div>
+                                class="mr-1">
+                            {{t.title}}
+                        </label>
 
                     </div>
 
@@ -214,49 +180,49 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
+                            name="first_name"
                             required
                             v-model="request.first_name">
 
-                        </input>
+
                     </div>
                     <div id="middle-name"
                         class="flex-grow">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Middle Name <span class="text-red-500">*</span>
+                            Middle Name
                         </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
-                            required
+                            name="middle_name"
                             v-model="request.middle_name">
 
-                        </input>
+
                     </div>
-                    <div id="last-name"
-                        class="flex-grow">
+                    <div class="flex-grow">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
                             Last Name <span class="text-red-500">*</span>
                         </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
+                            name="last_name"
                             required
                             v-model="request.last_name">
 
-                        </input>
+
                     </div>
                     <div id="suffix"
                         class="basis-[100px]">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Suffix <span class="text-red-500">*</span>
+                            Suffix
                         </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
-                            v-model="request.suffix"
-                            required>
+                            v-model="request.suffix">
 
-                        </input>
+
                     </div>
                 </div>
                 <div class="flex flex-wrap gap-x-2 gap-y-2 mb-4">
@@ -359,7 +325,7 @@
                             type="email"
                             required>
 
-                        </input>
+
                     </div>
                     <div id="email-confirm">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -369,20 +335,19 @@
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="email"
                             required>
-                        </input>
+
                     </div>
 
                 </div>
                 <div
                     class="grid grid-cols-[repeat(auto-fit,_minmax(0,420px))] gap-x-16 gap-y-2 mb-4">
-                    <div id="email"
-                        class="">
+                    <div class="">
                         <label class="block color-primary font-bold mb-3 pr-4">
                             Mobile Number <span class="text-red-500">*</span>
                         </label>
                         <div class="flex gap-x-2.5">
                             <select v-model="code1"
-                                class="w-1/5 bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
+                                class="w-1/3 bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
                                 <option v-for="code in codes"
                                     :value="code.dialCode"
                                     required>
@@ -390,20 +355,20 @@
                                 </option>
                             </select>
                             <input
-                                class="w-4/5 bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                class="w-2/3 bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                 type="number"
                                 v-model="request.mobile_number"
                                 required>
-                            </input>
+
                         </div>
                     </div>
-                    <div id="email-confirm">
+                    <div>
                         <label class="block t color-primary font-bold  mb-3  pr-4">
                             Confirm Mobile Number <span class="text-red-500">*</span>
                         </label>
                         <div class="flex gap-x-2.5">
                             <select v-model="code2"
-                                class="w-1/5 bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
+                                class="w-1/3 bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
                                 <option v-for="code in codes"
                                     :value="code.dialCode"
                                     required>
@@ -411,12 +376,12 @@
                                 </option>
                             </select>
                             <input
-                                class="w-4/5 bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                class="w-2/3 bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                 type="number"
                                 v-model="request.mobile_number_confirmation"
                                 required>
 
-                            </input>
+
                         </div>
                     </div>
 
@@ -433,28 +398,21 @@
                         </label>
                         <input v-model="request.address"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            name="address"
                             type="text"
                             required>
-                        </input>
+
                     </div>
                     <div id="">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
                             Barangay
                         </label>
-                        <!-- <select v-if="addressObj.country == 'Philippines'"
-                            v-model="addressObj.barangay"
-                            class="w-full bg-neutral-100 border border-neutral-100 rounded-lg py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
-                            <option v-for="brgy in barangay"
-                                :value="brgy.name"
-                                required>
-                                {{ brgy.name}}
-                            </option>
-                        </select> -->
                         <input v-model="addressObj.barangay"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            name="barangay"
                             type="text"
                             required>
-                        </input>
+
                     </div>
                     <div id="">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -464,7 +422,7 @@
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
                             required>
-                        </input>
+
                         <!-- <select v-if="addressObj.country == 'Philippines'"
                             @change="getBarangay"
                             v-model="addressObj.city"
@@ -489,40 +447,12 @@
                 </div>
                 <div
                     class="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] items-end gap-2.5 mb-4 ">
-                    <div id=""
-                        class="">
-                        <label class="block color-primary font-bold mb-3 pr-4">
-                            State/Province <span class="text-red-500">*</span>
-                        </label>
-                        <select v-if="addressObj.country == 'Philippines'"
-                            @change="getCities"
-                            v-model="addressObj.province"
-                            class="w-full bg-neutral-100 border border-neutral-100 rounded-lg py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
-                            <option v-for="state in states"
-                                :id="state.code"
-                                :value="state.name"
-                                required>
-                                {{ state.name}}
-                            </option>
-                        </select>
-                        <select v-else
-                            @change="getCities"
-                            v-model="addressObj.province"
-                            class="w-full bg-neutral-100 border border-neutral-100 rounded-lg py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
-                            <option v-for="state in states"
-                                :value="state"
-                                required>
-                                {{ state}}
-                            </option>
-                        </select>
-
-
-                    </div>
                     <div id="">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
                             Country<span class="text-red-500">*</span>
                         </label>
                         <select @change="getState"
+                            name="country"
                             v-model="addressObj.country"
                             class="w-full bg-neutral-100 border border-neutral-100 rounded-lg py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
                             <option v-for="country in countryList"
@@ -535,7 +465,34 @@
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
                             required>
-                        </input> -->
+                         -->
+                    </div>
+                    <div id=""
+                        class="">
+                        <label class="block color-primary font-bold mb-3 pr-4">
+                            State/Province <span class="text-red-500">*</span>
+                        </label>
+                        <select v-if="addressObj.country == 'Philippines'"
+                            @change="getCities"
+                            v-model="addressObj.province"
+                            required
+                            class="w-full bg-neutral-100 border border-neutral-100 rounded-lg py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
+                            <option v-for="state in states"
+                                :id="state.code"
+                                :value="state.name">
+                                {{ state.name}}
+                            </option>
+                        </select>
+                        <select v-else
+                            @change="getCities"
+                            v-model="addressObj.province"
+                            required
+                            class="w-full bg-neutral-100 border border-neutral-100 rounded-lg py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
+                            <option v-for="state in states"
+                                :value="state">
+                                {{ state}}
+                            </option>
+                        </select>
                     </div>
                     <!-- <div>
                         <label class="hidden block color-primary font-bold  mb-3  pr-4">
@@ -545,7 +502,7 @@
                             class="hidden bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
                             required>
-                        </input>
+                        
                     </div> -->
                 </div>
             </div>
@@ -567,10 +524,9 @@
                         <input v-model="request.mother_name"
                             class="parent-info bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
+                            name="full_name"
                             placeholder='(write "n/a" only if not applicable)'
                             required>
-
-                        </input>
                     </div>
                     <div>
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -579,8 +535,9 @@
                         <input v-model="request.mother_occupation"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
-                            required>
-                        </input>
+                            name="job_title"
+                            required />
+
                     </div>
                     <div>
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -589,8 +546,9 @@
                         <input v-model="request.mother_email"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="email"
+                            name="email"
                             required>
-                        </input>
+
                     </div>
                     <div>
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -599,8 +557,9 @@
                         <input v-model="request.mother_contact"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="number"
+                            name="number"
                             required>
-                        </input>
+
                     </div>
 
 
@@ -610,8 +569,10 @@
                         <input type="radio"
                             class="mr-1"
                             id="mother"
+                            name="primary_contact"
                             v-model="request.primary_contact"
-                            value="mother">
+                            value="mother"
+                            required>
                         SET AS PRIMARY CONTACT
                     </label>
                 </div>
@@ -628,10 +589,9 @@
                         <input v-model="request.father_name"
                             class="parent-info bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
+                            name="full_name"
                             placeholder='(write "n/a" only if not applicable)'
                             required>
-
-                        </input>
                     </div>
                     <div>
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -639,9 +599,9 @@
                         </label>
                         <input v-model="request.father_occupation"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            name="job_title"
                             type="text"
                             required>
-                        </input>
                     </div>
                     <div>
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -649,9 +609,10 @@
                         </label>
                         <input v-model="request.father_email"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            name="email"
                             type="email"
                             required>
-                        </input>
+
                     </div>
                     <div>
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -660,8 +621,9 @@
                         <input v-model="request.father_contact"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="number"
+                            name="number"
                             required>
-                        </input>
+
                     </div>
 
 
@@ -671,8 +633,10 @@
                         <input type="radio"
                             class="mr-1"
                             id="father"
+                            name="primary_contact"
                             v-model="request.primary_contact"
-                            value="father">
+                            value="father"
+                            required>
                         SET AS PRIMARY CONTACT
                     </label>
                 </div>
@@ -689,10 +653,9 @@
                         <input v-model="request.guardian_name"
                             class="parent-info bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
+                            name="full_name"
                             placeholder='(write "n/a" only if not applicable)'
                             required>
-
-                        </input>
                     </div>
                     <div>
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -702,7 +665,7 @@
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
                             required>
-                        </input>
+
                     </div>
                     <div>
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -711,8 +674,9 @@
                         <input v-model="request.guardian_email"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="email"
+                            name="email"
                             required>
-                        </input>
+
                     </div>
                     <div>
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -721,8 +685,9 @@
                         <input v-model="request.guardian_contact"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="number"
+                            name="number"
                             required>
-                        </input>
+
                     </div>
 
 
@@ -732,8 +697,10 @@
                         <input type="radio"
                             class="mr-1"
                             id="guardian"
+                            name="primary_contact"
                             v-model="request.primary_contact"
-                            value="guardian">
+                            value="guardian"
+                            required>
                         SET AS PRIMARY CONTACT
                     </label>
                 </div>
@@ -752,22 +719,9 @@
                         <label class="block color-primary font-bold mb-3 pr-4">
                             Last School Attended
                         </label>
-
                         <v-select :options="prevSchoolList"
                             label="name"
                             @input="onInputChange"></v-select>
-                        <!-- <v-select :options="prevSchoolList" label="name" @input="onInputChange" v-model="selected">
-                                <template #search="{attributes, events}">
-                                    <input
-                                    class="vs__search"
-                                    :required="!selected"
-                                    v-bind="attributes"
-                                    v-on="events"
-                                    />
-                                </template>
-                            </v-select> -->
-
-
                     </div>
                     <div class="basis-[154px]">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -777,7 +731,7 @@
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
                             v-model="request.school_city">
-                        </input>
+
                     </div>
                     <div class="basis-[154px]">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -787,7 +741,7 @@
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
                             v-model="request.school_province">
-                        </input>
+
                     </div>
                     <div>
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -797,7 +751,7 @@
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
                             v-model="request.school_country">
-                        </input>
+
                     </div>
 
 
@@ -812,7 +766,7 @@
                             type="text"
                             v-model="request.grade_year_level">
 
-                        </input>
+
                     </div>
                     <div class="grow">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -822,7 +776,7 @@
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
                             v-model="request.program_strand_degree">
-                        </input>
+
                     </div>
                     <div class="grow">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -831,12 +785,12 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text">
-                        </input>
+
                     </div>
                 </div>
 
             </div>
-            <div v-if="request.school_id == ''"
+            <div v-if="isOnList"
                 class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
                 <h5 class="color-primary mb-2.5">Register your school if not in the list </h5>
                 <div class="flex flex-wrap gap-2.5 mb-4 ">
@@ -850,7 +804,7 @@
                             v-model="register.school_name"
                             required>
 
-                        </input>
+
                     </div>
                     <div class="basis-[154px]">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -861,7 +815,7 @@
                             type="text"
                             v-model="register.school_city"
                             required>
-                        </input>
+
                     </div>
                     <div class="basis-[154px]">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -872,7 +826,7 @@
                             type="text"
                             v-model="register.school_province"
                             required>
-                        </input>
+
                     </div>
                     <div>
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -883,7 +837,7 @@
                             type="text"
                             v-model="register.school_country"
                             required>
-                        </input>
+
                     </div>
 
 
@@ -979,7 +933,7 @@
                         type="text"
                         v-model="request.other_health_concern"
                         required>
-                    </input>
+
                 </div>
                 <div class="border-[1px] border-neutral-100 p-2.5 rounded-lg">
                     <h5 class="color-primary mb-2.5">Do you have any of the following? (check all
@@ -1029,7 +983,7 @@
                 </div>
             </div>
 
-            <div v-if="request.student_type == 'College - Second Degree'"
+            <div v-if="isSecondaDegree"
                 class="border-[1px] border-neutral-100 rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
                 <h5 class="color-primary text-base mb-2.5">Professional Background </h5>
                 <div
@@ -1043,7 +997,7 @@
                             type="text"
                             v-model="request.sd_company">
 
-                        </input>
+
                     </div>
                     <div>
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -1053,7 +1007,7 @@
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
                             v-model="request.sd_position">
-                        </input>
+
                     </div>
                     <div>
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -1063,7 +1017,7 @@
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
                             v-model="request.sd_degree">
-                        </input>
+
                     </div>
                 </div>
             </div>
@@ -1080,16 +1034,16 @@
                                 class="text-red-500">*</span></h5>
                         <div class="flex ">
                             <div class="w-1/2">
+
                                 <template v-for="source,index in sourceList">
                                     <label v-if="index <= 4"
-                                        class="custom-radio mb-1">
-                                        <input type="radio"
+                                        class="custom-checkbox mb-1">
+                                        <input type="checkbox"
                                             :id="index"
-                                            name="source"
-                                            :value="source.toLowerCase()"
-                                            v-model="sources"
-                                            required>
-                                        <span class="custom-radio-button"></span>
+                                            :name="source"
+                                            :value="source"
+                                            v-model="sources">
+                                        <span class="custom-checkbox-button"></span>
                                         {{source}}
                                     </label>
                                 </template>
@@ -1097,15 +1051,14 @@
                             <div class="w-1/2">
                                 <template v-for="source,index in sourceList">
                                     <label v-if="index >= 5"
-                                        class="custom-radio mb-1">
-                                        <input type="radio"
+                                        class="custom-checkbox mb-1">
+                                        <input type="checkbox"
                                             class=""
                                             :id="index"
                                             name="source"
                                             :value="source.toLowerCase()"
-                                            v-model="sources"
-                                            required>
-                                        <span class="custom-radio-button"></span>
+                                            v-model="sources">
+                                        <span class="custom-checkbox-button"></span>
                                         {{source }} {{index >= 7? "(please specify)" : ""}}
                                     </label>
                                 </template>
@@ -1124,14 +1077,13 @@
                             <div class="w-1/2">
                                 <template v-for="time,index in timeList">
                                     <label v-if="index <= 3"
-                                        class="custom-radio mb-1">
-                                        <input type="radio"
+                                        class="custom-checkbox mb-1">
+                                        <input type="checkbox"
                                             name="time"
                                             :id="index"
                                             :value="time"
-                                            v-model="request.best_time"
-                                            required>
-                                        <span class="custom-radio-button"></span>
+                                            v-model="bestTime">
+                                        <span class="custom-checkbox-button"></span>
                                         {{time}}
                                     </label>
 
@@ -1140,14 +1092,13 @@
                             <div class="w-1/2">
                                 <template v-for="time,index in timeList">
                                     <label v-if="index >= 4"
-                                        class="custom-radio mb-1">
-                                        <input type="radio"
+                                        class="custom-checkbox mb-1">
+                                        <input type="checkbox"
                                             name="time"
                                             :id="index"
                                             :value="time"
-                                            v-model="request.best_time"
-                                            required>
-                                        <span class="custom-radio-button"></span>
+                                            v-model="bestTime">
+                                        <span class="custom-checkbox-button"></span>
                                         {{time}}
                                     </label>
                                 </template>
@@ -1155,8 +1106,23 @@
                         </div>
                     </div>
                 </div>
+
                 <div>
-                    <div v-if="sources === 'referral'"
+                    <div v-if="sources.includes('event')"
+                        v-bind:key="1"
+                        class="border-[1px] border-neutral-100 p-2.5 mb-4 rounded-lg ">
+                        <div class="">
+                            <h5 class="color-primary mb-2.5">Events (please specify)</h5>
+                            <input v-model="sourcesSpecify.event"
+                                class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                type="text"
+                                required>
+
+
+                        </div>
+                    </div>
+                    <!-- v-if="sources === 'referral'" -->
+                    <div v-if="sources.includes('referral')"
                         class="border-[1px] border-neutral-100 p-2.5 mb-4 rounded-lg">
                         <h5 class="color-primary mb-2.5">Referred by<span
                                 class="text-red-500">*</span></h5>
@@ -1209,7 +1175,7 @@
                                         v-model="sourcesSpecify.referral"
                                         required>
                                     <span class="custom-radio-button"></span>
-                                    iAcademy Student/Alumni/Applicant/Employee/Partner
+                                    iACADEMY Student/Alumni/Applicant/Employee/Partner
 
                                 </label>
                                 <input
@@ -1218,12 +1184,12 @@
                                     required
                                     v-model="refferalName"
                                     placeholder="Name of your referrer">
-                                </input>
+
                             </div>
 
                         </div>
                     </div>
-                    <div v-if="sources === 'others'"
+                    <div v-if="sources.includes('others')"
                         v-bind:key="2"
                         class="border-[1px] border-neutral-100 p-2.5 mb-4 rounded-lg ">
                         <div class="">
@@ -1234,20 +1200,7 @@
                                 v-model="sourcesSpecify.others"
                                 required>
 
-                            </input>
-                        </div>
-                    </div>
-                    <div v-if="sources === 'event'"
-                        v-bind:key="1"
-                        class="border-[1px] border-neutral-100 p-2.5 mb-4 rounded-lg ">
-                        <div class="">
-                            <h5 class="color-primary mb-2.5">Events (please specify)</h5>
-                            <input v-model="sourcesSpecify.event"
-                                class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                type="text"
-                                required>
 
-                            </input>
                         </div>
                     </div>
 
@@ -1393,25 +1346,41 @@ input[type="number"] {
 <link rel="stylesheet"
     href="https://unpkg.com/vue-select@3.0.0/dist/vue-select.css">
 
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
 <script src="<?php echo $js_dir ?>dataExport.js"></script>
 
 <script>
 const sourcesLeft = ['Google', 'Facebook', 'Instagram', 'Tiktok', 'News']
 const sourcesRight = ['School Fair/Orientation', 'Billboard', 'Event', 'Referral', 'Others']
 
-const timeLeft = ['8:00am-10:00am', '10:00am-12:00am', '12:00pm-2:00pm', '2:00pm-4:00pm']
+const timeLeft = ['8:00am-10:00am', '10:00am-12:00pm', '12:00pm-2:00pm', '2:00pm-4:00pm']
 const timeRight = ['4:00pm-6:00pm', '6:00pm-8:00pm', '8:00pm-10:00pm', '10:00pm-12:00am']
 
 const referred = ['Family', 'Teacher/Guidance',
     'Relatives', 'Friend'
 ]
 
-const applicantTypeCollege = ['College - Freshman', 'College - Transferee',
+const applicantTypeCollege = ['iACADEMY SHS Graduate', 'Graduate from other SHS',
+    'iACADEMY College Graduate', 'Graduate from other College'
+]
+
+const collegeTypeValue = ['College - Freshman', 'College - Transferee',
     'College - Second Degree', 'College - iACADEMY SHS Graduate'
 ]
-const applicantTypeShs = ['SHS - Freshmen', 'SHS - Transferee', 'SHS - DRIVE HomeSchool Program']
+
+const freshmenValue = ['College - Freshmen iACADEMY', 'College - Freshmen Other']
+
+const secondDegreeValue = ['2nd - Degree iACADEMY', '2nd - Degree Other']
+
+const applicantTypeShs = ['SHS - New', 'SHS - Transferee']
 
 const healthConditions = ['Diabetes', 'Allergies', 'High Blood', 'Anemia']
+
+const cebuCourse = ['Bachelor of Science in Entertainment and Multimedia Computing',
+    'Bachelor of Arts in Animation', 'Bachelor of Arts in Multimedia Arts and Design ',
+    'Bachelor of Science in Real Estate Management '
+]
 
 Vue.component('v-select', VueSelect.VueSelect)
 
@@ -1423,17 +1392,19 @@ new Vue({
         barangay: [],
         cities: [],
         states: [],
-        test_api: "http://cebuapi.iacademy.edu.ph/api/v1/",
+        apiUrl: "http://cebuapi.iacademy.edu.ph/api/v1/",
         optionValue: '',
-        sources: '',
+        sources: [],
         times: [],
-        campus: '<?php echo $campus; ?>',
         sourceList: [...sourcesLeft, ...sourcesRight],
         timeList: [...timeLeft, ...timeRight],
         referredList: [...referred],
         collegeList: [...applicantTypeCollege],
         shsList: [...applicantTypeShs],
         healthConcern: [...healthConditions],
+        freshmenValue: [...freshmenValue],
+        secondDegreeValue: [...secondDegreeValue],
+        cebuCourse: [...cebuCourse],
         filterCollege: ['college', 'college', 'college', 'college'],
         filterShs: ['shs', 'shs', 'shs'],
         countries: [...countries],
@@ -1441,16 +1412,18 @@ new Vue({
         code1: '+63',
         code2: '+63',
         register: {
-            school_name: 'Lyceum',
-            school_city: 'Manila',
-            school_province: 'Manila',
-            school_country: 'Province'
+            school_name: '',
+            school_city: '',
+            school_province: '',
+            school_country: ''
         },
         sourcesSpecify: {
             event: '',
             referral: '',
             others: ''
         },
+        isOnList: false,
+        bestTime: [],
         refferalName: '',
         prevSchoolList: [],
         syid: <?php echo $current_term; ?>,
@@ -1473,7 +1446,8 @@ new Vue({
             school_city: '',
             school_province: '',
             school_country: '',
-            grade_year_level: '12'
+            grade_year_level: '',
+            primary_contact: ''
         },
         addressObj: {
             country: '',
@@ -1488,35 +1462,14 @@ new Vue({
         filtered_programs: [],
         programs_group: [],
         types: [],
+        cebuFilter: '',
         base_url: "<?php echo base_url(); ?>",
-        applicantTypeObj: [{
-                type: 'College - Freshmen',
-                value: 'freshmen'
-            },
-            {
-                type: 'College - Transferee',
-                value: 'freshmen'
-            },
-            {
-                type: 'College - Second Degree',
-                value: 'freshmen'
-            },
-            {
-                type: 'College - iACADEMY SHS Graduate',
-                value: 'freshmen'
-            }
-        ]
     },
-    // computed: {
-    //     testX() {
-    //         console.log(this.sources[0]);
-    //         return this.sources[0] == 'Others' ? true : false
-    //     }
-    // },
+
     mounted() {
 
         axios
-            .get(this.base_url + 'site/view_active_programs_makati/' + this.syid, {
+            .get(this.base_url + 'site/view_active_programs_makati/' + '28', {
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 },
@@ -1527,6 +1480,9 @@ new Vue({
                 this.programs = data.data.data;
                 this.sy = data.data.sy;
                 this.term = data.data.term;
+
+                console.log(this.programs.college);
+
 
             })
             .catch((e) => {
@@ -1585,16 +1541,16 @@ new Vue({
 
 
     },
+    computed: {
+        isSecondaDegree() {
+            return this.request.student_type == '2nd - Degree iACADEMY' || this.request
+                .student_type == '2nd - Degree Other'
+
+        }
+    },
 
     methods: {
-
         async getBarangay(e) {
-
-            // const {
-            //     data
-            // } = await axios.get(
-            //     `https://psgc.cloud/api/cities-municipalities/${e.target.selectedOptions[0].id}/barangays`
-            // )
             const {
                 data
             } = await axios.get(
@@ -1604,13 +1560,6 @@ new Vue({
         },
         async getCities(e) {
             if (this.addressObj.country == 'Philippines') {
-                // const {
-                //     data
-                // } = await axios.get(
-                //     `https://psgc.cloud/api/provinces/${e.target.selectedOptions[0].id}/cities`
-                // )
-                // this.cities = data
-
                 const {
                     data
                 } = await axios.get(
@@ -1666,17 +1615,22 @@ new Vue({
             const {
                 data
             } = await axios.get(
-                `${this.test_api}admissions/previous-schools`, {
+                `${this.apiUrl}admissions/previous-schools`, {
                     headers: {
                         Authorization: `Bearer ${window.token}`
                     }
                 })
             if (data.length != 0) {
                 this.prevSchoolList = data
+                const obj = {
+                    name: 'Not on the list'
+                }
+                this.prevSchoolList.push(obj)
             }
         },
         async onInputChange(value) {
             if (value == null) {
+                this.isOnList = false
                 this.request.school_id = ''
                 this.request.school_name = ""
                 this.request.school_city = ""
@@ -1684,6 +1638,13 @@ new Vue({
                 this.request.school_country = ""
                 return
             }
+
+            if (value.name == 'Not on the list') {
+                this.isOnList = true
+                return
+            }
+
+
             this.request.school_id = value.id
             this.request.school_name = value.name
             this.request.school_city = value.city
@@ -1754,6 +1715,10 @@ new Vue({
             return false
         },
         confirmMobileNumber: function() {
+            this.request.mobile_number = `${this.code1}${this.request.mobile_number}`
+            this.request.mobile_number_confirmation =
+                `${this.code2}${this.request.mobile_number_confirmation}`
+
             if (this.request.mobile_number != this.request.mobile_number_confirmation) {
                 Swal.fire({
                     title: 'iACADEMY CEBU CAMPUS',
@@ -1769,15 +1734,36 @@ new Vue({
         },
 
         setSource: function() {
-            this.request.source = this.sources
-            if (this.sources == 'event' || this.sources == 'others') {
-                this.request.source =
-                    `${this.sources}-${this.sourcesSpecify[this.sources]}`
+            if (this.sources.includes('event')) {
+                const index = this.sources.indexOf("event");
+                this.sources[index] = `Event(${this.sourcesSpecify.event})`
             }
-            if (this.sources == 'referral') {
-                this.request.source =
-                    `${this.sources}-${this.sourcesSpecify[this.sources]}-${this.refferalName}`
+            if (this.sources.includes('others')) {
+                const index = this.sources.indexOf("others");
+                this.sources[index] = `Others(${this.sourcesSpecify.others})`
             }
+
+            if (this.sources.includes('referral')) {
+                const index = this.sources.indexOf("referral");
+                this.sources[index] =
+                    `referral-${this.sourcesSpecify.referral}(${this.refferalName})`
+
+            }
+
+            this.request.source = this.sources.join();
+
+            // this.request.source = this.sources
+            // if (this.sources == 'event' || this.sources == 'others') {
+            //     this.request.source =
+            //         `${this.sources}-${this.sourcesSpecify[this.sources]}`
+            // }
+            // if (this.sources == 'referral') {
+            //     this.request.source =
+            //         `${this.sources}-${this.sourcesSpecify[this.sources]}-${this.refferalName}`
+            // }
+        },
+        setTime: function() {
+            this.request.best_time = this.bestTime.join();
         },
 
         setFirstChoice: function(e) {
@@ -1802,12 +1788,38 @@ new Vue({
             if (this.confirmMobileNumber()) {
                 return
             }
+
+            if (this.sources.length == 0) {
+                Swal.fire({
+                    title: 'iACADEMY CEBU CAMPUS',
+                    html: 'Missing value on How did you know about us?',
+                    confirmButtonText: "Ok",
+                    imageWidth: 100,
+                    icon: "error",
+                    showCloseButton: true
+                })
+                return
+            }
+
+            if (this.bestTime.length == 0) {
+                Swal.fire({
+                    title: 'iACADEMY CEBU CAMPUS',
+                    html: 'Missing value on Best time to contact you',
+                    confirmButtonText: "Ok",
+                    imageWidth: 100,
+                    icon: "error",
+                    showCloseButton: true
+                })
+                return
+            }
             this.setSource()
+            this.setTime()
+
 
             Swal.fire({
                 title: 'iACADEMY CEBU CAMPUS',
                 html: `
-                You are applying for iACADEMY CEBU Campus. Click <a style='color:#000099' href='https://cebu.iacademy.edu.ph'>here</a> if you are applying for iACADEMY Cebu Campus
+                You are applying for iACADEMY Cebu Campus. Click <a style='color:#000099' href='https://cebu.iacademy.edu.ph'>here</a> if you are applying for iACADEMY Cebu Campus
             `,
                 showCancelButton: true,
                 confirmButtonText: "Submit Application",
