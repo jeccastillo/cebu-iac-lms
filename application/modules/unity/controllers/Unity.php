@@ -1824,11 +1824,13 @@ class Unity extends CI_Controller {
         else
         {
             $student = $this->data_fetcher->getStudent($id); 
-            
             if(!is_numeric($id)){
+                // if(!$student)
                 $student = $this->data_fetcher->getStudent($id, 'slug');
             }
             
+            die();
+
             $student_type = get_stype($student['level']);    
             if($student_type == "college")        
                 $ret['active_sem'] = $this->data_fetcher->get_active_sem();
@@ -1846,7 +1848,8 @@ class Unity extends CI_Controller {
                     
         
         
-        $this->data['student'] = $this->data_fetcher->getStudent($id);
+        // $this->data['student'] = $this->data_fetcher->getStudent($id);
+        $this->data['student'] = $student;
         
         if(!$this->data['student'])
             $this->data['student'] = $this->data_fetcher->getStudent($id, 'slug');
