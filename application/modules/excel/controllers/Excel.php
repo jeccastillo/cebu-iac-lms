@@ -5465,8 +5465,8 @@ class Excel extends CI_Controller {
                         ->setCellValue('H'.$i, strtoupper($subject['strCode']))
                         ->setCellValue('I'.$i, strtoupper($subject['strDescription']))
                         ->setCellValue('J'.$i, $subject['strUnits'])
-                        ->setCellValue('K'.$i, number_format((float)$subject['floatMidtermGrade'], 2, '.', ''))
-                        ->setCellValue('L'.$i, number_format((float)$subject['floatFinalGrade'], 2, '.', ''));
+                        ->setCellValueExplicit('K'.$i, number_format((float)$subject['floatMidtermGrade'], 2, '.', ''))
+                        ->setCellValueExplicit('L'.$i, number_format((float)$subject['floatFinalGrade'], 2, '.', ''));
                     $i++;
                 }
 
