@@ -2086,7 +2086,7 @@ class Unity extends CI_Controller {
             }
             
         }
-        redirect(base_url()."unity/view_all_curriculum");
+        redirect(base_url()."unity/edit_curriculum/".$post['intCurriculumID']);
     }
     
     public function submit_class()
