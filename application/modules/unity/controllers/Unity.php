@@ -1825,9 +1825,10 @@ class Unity extends CI_Controller {
         {
             $student = $this->data_fetcher->getStudent($id); 
             
-            if(!$student)
+            if(!is_numeric($id)){
                 $student = $this->data_fetcher->getStudent($id, 'slug');
-
+            }
+            
             $student_type = get_stype($student['level']);    
             if($student_type == "college")        
                 $ret['active_sem'] = $this->data_fetcher->get_active_sem();
