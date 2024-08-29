@@ -1853,14 +1853,12 @@ class Unity extends CI_Controller {
             $this->data['tab'] = "tab_1";
                     
         
-        
-        $this->data['student'] = $this->data_fetcher->getStudent($id);
-        // $this->data['student'] = $student;
-        
-        if(!is_numeric($id))
+        if(is_numeric($id)){
+            $this->data['student'] = $this->data_fetcher->getStudent($id);
+        }else{
             $this->data['student'] = $this->data_fetcher->getStudent($id, 'slug');
+        }
         //per faculty info                        
-
         $this->data['sched_table'] = $this->load->view('sched_table', $this->data, true);
         
         $this->load->view("common/header",$this->data);
