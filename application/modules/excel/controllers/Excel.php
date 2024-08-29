@@ -4615,14 +4615,13 @@ class Excel extends CI_Controller {
             // Decode the response if it's JSON
             $data = json_decode($response, true);
         }
-        
-        curl_close($ch);
 
         $enrolledSlugs = array();
 
         foreach($data['data'] as $studentInformation){
             array_push($enrolledSlugs, $studentInformation['slug']);
         }
+        curl_close($ch);
         
         $users = $this->db->select('tb_mas_users.*')
                     ->from('tb_mas_users')
@@ -4650,29 +4649,29 @@ class Excel extends CI_Controller {
         $payments = $students = $date_enrolled_array = array();
 
         foreach($users as $index => $user){
-            $ch = curl_init();
+            // $ch = curl_init();
 
-            // Step 2: Set cURL options
-            // Specify the URL to fetch
-            $url = $this->data['api_url'] . 'admissions/student-info/' . $user['slug']; // Example URL
+            // // Step 2: Set cURL options
+            // // Specify the URL to fetch
+            // $url = $this->data['api_url'] . 'admissions/student-info/' . $user['slug']; // Example URL
 
-            curl_setopt($ch, CURLOPT_URL, $url); // Set the URL to fetch
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Return the response as a string
+            // curl_setopt($ch, CURLOPT_URL, $url); // Set the URL to fetch
+            // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Return the response as a string
 
-            // Step 3: Execute the cURL session
-            $response = curl_exec($ch);
-            $data = array();
-            // Step 4: Check for errors
-            if (curl_errno($ch)) {
-                print 'cURL error: ' . curl_error($ch);
-            } else {
-                // Decode the response if it's JSON
-                $data = json_decode($response, true);
-            }
-            curl_close($ch);
+            // // Step 3: Execute the cURL session
+            // $response = curl_exec($ch);
+            // $data = array();
+            // // Step 4: Check for errors
+            // if (curl_errno($ch)) {
+            //     print 'cURL error: ' . curl_error($ch);
+            // } else {
+            //     // Decode the response if it's JSON
+            //     $data = json_decode($response, true);
+            // }
+            // curl_close($ch);
             
-            if(isset($data['data']['status'])){
-                if($data['data']['status'] == 'Enrolled'){
+            // if(isset($data['data']['status'])){
+            //     if($data['data']['status'] == 'Enrolled'){
                     $payment_details = $this->db->select('payment_details.*')
                             ->from('payment_details')
                             ->join('tb_mas_users', 'tb_mas_users.slug = payment_details.student_number')
@@ -4764,8 +4763,8 @@ class Excel extends CI_Controller {
                             }
                         }
                     }
-                }
-            }
+            //     }
+            // }
         }
 
         $studentsEnrolled = false;
