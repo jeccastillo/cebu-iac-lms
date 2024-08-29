@@ -1828,8 +1828,6 @@ class Unity extends CI_Controller {
                 // if(!$student)
                 $student = $this->data_fetcher->getStudent($id, 'slug');
             }
-            
-            die();
 
             $student_type = get_stype($student['level']);    
             if($student_type == "college")        
