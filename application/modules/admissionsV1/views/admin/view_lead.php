@@ -24,6 +24,7 @@
                         style="font-size:2rem">
                         Applicant Details
                     </h3>
+                    <a class="btn btn-primary" :href="base_url + 'admissionsV1/view_lead_new/' + slug">New View</a>
                 </div>
 
                 <div class="box-body"
