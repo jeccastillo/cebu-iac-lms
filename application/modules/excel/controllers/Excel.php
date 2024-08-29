@@ -4625,7 +4625,7 @@ class Excel extends CI_Controller {
 
             // Step 2: Set cURL options
             // Specify the URL to fetch
-            $url = $this->data['api_url'] . 'sms/admissions/student-info/' . $user['slug']; // Example URL
+            $url = $this->data['api_url'] . 'admissions/student-info/' . $user['slug']; // Example URL
 
             curl_setopt($ch, CURLOPT_URL, $url); // Set the URL to fetch
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Return the response as a string
