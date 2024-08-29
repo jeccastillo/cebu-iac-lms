@@ -1818,8 +1818,11 @@ class Unity extends CI_Controller {
         $this->data['id'] = $id;
         $this->data['sem'] = $sem;
 
-        $student = $this->data_fetcher->getStudent($id); 
-        if(!is_numeric($id)){
+        $student = '';
+        
+        if(is_numeric($id)){
+            $student = $this->data_fetcher->getStudent($id); 
+        }else{
             // if(!$student)
             $student = $this->data_fetcher->getStudent($id, 'slug');
         }
