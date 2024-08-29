@@ -1860,6 +1860,7 @@ class Unity extends CI_Controller {
             print('2');
             $this->data['student'] = $this->data_fetcher->getStudent($id, 'slug');
         }
+        print_r($this->data['student']);
         die();
         //per faculty info                        
         $this->data['sched_table'] = $this->load->view('sched_table', $this->data, true);
