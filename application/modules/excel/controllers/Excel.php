@@ -5464,9 +5464,9 @@ class Excel extends CI_Controller {
                     $objPHPExcel->setActiveSheetIndex(0)
                         ->setCellValue('H'.$i, strtoupper($subject['strCode']))
                         ->setCellValue('I'.$i, strtoupper($subject['strDescription']))
-                        ->setCellValue('J'.$i, strtoupper($subject['strUnits']))
-                        ->setCellValue('K'.$i, strtoupper($subject['floatMidtermGrade']))
-                        ->setCellValue('L'.$i, strtoupper($subject['floatFinalGrade']));
+                        ->setCellValue('J'.$i, $subject['strUnits'])
+                        ->setCellValue('K'.$i, number_format((float)$subject['floatMidtermGrade'], 2, '.', ''))
+                        ->setCellValue('L'.$i, number_format((float)$subject['floatFinalGrade'], 2, '.', ''));
                     $i++;
                 }
 
