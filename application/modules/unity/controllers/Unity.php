@@ -1820,18 +1820,22 @@ class Unity extends CI_Controller {
 
         $student = '';
         
-        if(is_numeric($id)){
-            $student = $this->data_fetcher->getStudent($id); 
-        }else{
-            // if(!$student)
-            $student = $this->data_fetcher->getStudent($id, 'slug');
-        }
+        // if(is_numeric($id)){
+        //     $student = $this->data_fetcher->getStudent($id); 
+        // }else{
+        //     // if(!$student)
+        //     $student = $this->data_fetcher->getStudent($id, 'slug');
+        // }
         
         if($sem!=null){
             $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
         }
         else
         {
+            $student = $this->data_fetcher->getStudent($id);
+
+            if(!$student)
+                $student = $this->data_fetcher->getStudent($id, 'slug');
 
             $student_type = get_stype($student['level']);    
             if($student_type == "college")        
@@ -1850,10 +1854,10 @@ class Unity extends CI_Controller {
                     
         
         
-        // $this->data['student'] = $this->data_fetcher->getStudent($id);
-        $this->data['student'] = $student;
+        $this->data['student'] = $this->data_fetcher->getStudent($id);
+        // $this->data['student'] = $student;
         
-        if(!$this->data['student'])
+        if(!is_numeric($id))
             $this->data['student'] = $this->data_fetcher->getStudent($id, 'slug');
         //per faculty info                        
 
