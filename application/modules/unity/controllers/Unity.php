@@ -1832,9 +1832,10 @@ class Unity extends CI_Controller {
         }
         else
         {
-            $student = $this->data_fetcher->getStudent($id);
-
-            if(!$student)
+            if(is_numeric($id))
+                $student = $this->data_fetcher->getStudent($id);
+            else
+            // if(!$student)
                 $student = $this->data_fetcher->getStudent($id, 'slug');
 
             $student_type = get_stype($student['level']);    
