@@ -4599,7 +4599,7 @@ class Excel extends CI_Controller {
         $post = $this->input->post();
         $ar_students = json_decode($post['ar_students']);
 
-        $enrolledSlugs = array();
+        $enrolledSlugs = $notEnrolledSlugs = array();
 
         // $ar_students = "<script> </script>"
         // $ch = curl_init();
@@ -4628,12 +4628,14 @@ class Excel extends CI_Controller {
         // curl_close($ch);
 
         foreach($ar_students as $studentInformation){
-            array_push($enrolledSlugs, $studentInformation->slug);
+            if($studentInformation->status != 'Enrolled')
+            array_push($notEnrolledSlugs, $studentInformation->slug);
+            // array_push($enrolledSlugs, $studentInformation->slug);
         }
 
         $users = $this->db->select('tb_mas_users.*')
                     ->from('tb_mas_users')
-                    ->where_in('slug', $enrolledSlugs)
+                    ->where_not_in('slug', $notEnrolledSlugs)
                     ->order_by('tb_mas_users.strStudentNumber', 'ASC')
                     ->get()
                     ->result_array();
