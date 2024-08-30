@@ -4596,33 +4596,41 @@ class Excel extends CI_Controller {
     
     public function student_account_report($sem, $campus, $report_date)
     {
-        $ch = curl_init();
-        // Step 2: Set cURL options
-        // Specify the URL to fetch
-        // $url = $this->data['api_url'] . 'admissions/student-info/view-students/' . $sem;
-        $url = 'https://smsapi.iacademy.edu.ph/sms/admissions/student-info/view-students/' . $sem;
-
-        curl_setopt($ch, CURLOPT_URL, $url); // Set the URL to fetch
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Return the response as a string
-
-        // Step 3: Execute the cURL session
-        $response = curl_exec($ch);
-        $data = array();
-        // Step 4: Check for errors
-        if (curl_errno($ch)) {
-            print 'cURL error: ' . curl_error($ch);
-        } else {
-            // Decode the response if it's JSON
-            $data = json_decode($response, true);
-        }
+        $post = $this->input->post();
+        $ar_students = json_decode($post['ar_students']);
 
         $enrolledSlugs = array();
 
-        foreach($data['data'] as $studentInformation){
-            array_push($enrolledSlugs, $studentInformation['slug']);
-        }
-        curl_close($ch);
+        // $ar_students = "<script> </script>"
+        // $ch = curl_init();
+        // // Step 2: Set cURL options
+        // // Specify the URL to fetch
+        // // $url = $this->data['api_url'] . 'admissions/student-info/view-students/' . $sem;
+        // $url = 'https://smsapi.iacademy.edu.ph/sms/admissions/student-info/view-students/' . $sem;
+
+        // curl_setopt($ch, CURLOPT_URL, $url); // Set the URL to fetch
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Return the response as a string
+
+        // // Step 3: Execute the cURL session
+        // $response = curl_exec($ch);
+        // $data = array();
+        // // Step 4: Check for errors
+        // if (curl_errno($ch)) {
+        //     print 'cURL error: ' . curl_error($ch);
+        // } else {
+        //     // Decode the response if it's JSON
+        //     $data = json_decode($response, true);
+        // }
         
+        // foreach($data['data'] as $studentInformation){
+        //     array_push($enrolledSlugs, $studentInformation['slug']);
+        // }
+        // curl_close($ch);
+
+        foreach($ar_students as $studentInformation){
+            array_push($enrolledSlugs, $studentInformation->slug);
+        }
+
         $users = $this->db->select('tb_mas_users.*')
                     ->from('tb_mas_users')
                     ->where_in('slug', $enrolledSlugs)
@@ -4649,26 +4657,6 @@ class Excel extends CI_Controller {
         $payments = $students = $date_enrolled_array = array();
 
         foreach($users as $index => $user){
-            // $ch = curl_init();
-
-            // // Step 2: Set cURL options
-            // // Specify the URL to fetch
-            // $url = $this->data['api_url'] . 'admissions/student-info/' . $user['slug']; // Example URL
-
-            // curl_setopt($ch, CURLOPT_URL, $url); // Set the URL to fetch
-            // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Return the response as a string
-
-            // // Step 3: Execute the cURL session
-            // $response = curl_exec($ch);
-            // $data = array();
-            // // Step 4: Check for errors
-            // if (curl_errno($ch)) {
-            //     print 'cURL error: ' . curl_error($ch);
-            // } else {
-            //     // Decode the response if it's JSON
-            //     $data = json_decode($response, true);
-            // }
-            // curl_close($ch);
             
             // if(isset($data['data']['status'])){
             //     if($data['data']['status'] == 'Enrolled'){
