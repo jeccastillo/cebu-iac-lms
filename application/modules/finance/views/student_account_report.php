@@ -49,69 +49,11 @@ new Vue({
         sy_reference : null,
         students : null,
     },
-
-    mounted() {
-
-        // let url_string = window.location.href;
-        // let url = new URL(url_string);
-
-        // this.loader_spinner = true;
-        // axios.get(api_url + 'admissions/student-info/' + this.slug)
-            // .then((data) => {
-            //     this.request = data.data.data;
-            //     this.sy_reference = this.request.sy_reference;
-            //     this.loader_spinner = false;
-            //     //this.program_update = this.request.type_id;
-            //     axios.get(base_url + 'admissionsV1/programs/' + this.slug + '/' + this.sy_reference)    
-            //         .then((data) => {
-            //             this.current_term = data.data.current_term;
-            //             this.request.applicant_id = "A" + this.current_term
-            //                 .strYearStart + "-" + String(this.request.id).padStart(
-            //                     4, '0');
-            //             console.log(this.request.applicant_id);
-            //             this.programs = data.data.programs;
-            //             this.entrance_exam = data.data.entrance_exam;
-            //             this.sections_scores = data.data.section_scores;
-
-            //             this.status_update_manual = this.request.status;
-            //             this.sy = data.data.sy;
-            //             if (this.programs.length > 0)
-            //                 this.filtered_programs = this.programs.filter((
-            //                     prog) => {
-            //                     return prog.type == this.request.type
-            //                 })
-
-
-
-            //             if (this.entrance_exam && this.entrance_exam.token) {
-            //                 this.student_exam_link = this.base_url +
-            //                     'unity/student_exam/' + this.slug +
-            //                     '/' + this.entrance_exam.exam_id + '/' + this
-            //                     .entrance_exam.token
-            //             } else {
-            //                 this.student_exam_link = this.base_url +
-            //                     'unity/student_exam/' + this.slug +
-            //                     '/' + this.entrance_exam.exam_id + '/submitted'
-            //             }
-
-
-
-            //         })
-            //         .catch((error) => {
-            //             console.log(error);
-            //         })
-
-            // })
-            // .catch((error) => {
-            //     console.log(error);
-            // })
-
-    },
-
     methods: {
         exportStudentAccountReport: function(){
             this.report_date = $("#report_date").val();
-            this.sem = "<?php echo $current_sem; ?>";
+            this.sem = $("#sem").val();
+
             if(this.report_date == ""){
                 alert("Please select report date");
             }else{
