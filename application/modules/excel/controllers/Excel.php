@@ -4777,7 +4777,7 @@ class Excel extends CI_Controller {
                     ->join('tb_mas_scholarships', 'tb_mas_scholarships.intID = tb_mas_registration.enumScholarship', 'left')
                     ->get()
                     ->first_row('array');
-            $reg_status = $this->data_fetcher->getRegistrationStatus($id,$ret['selected_ay']);
+            $reg_status = $this->data_fetcher->getRegistrationStatus($user['intID'],$ret['selected_ay']);
             $tuition = $this->data_fetcher->getTuition($user['intID'], $sem);
 
             if($reg && substr($user['strStudentNumber'], 0, 1) != 'T'){
