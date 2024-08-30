@@ -4629,14 +4629,14 @@ class Excel extends CI_Controller {
 
         foreach($ar_students as $studentInformation){
             if($studentInformation->status != 'Enrolled')
-            array_push($notEnrolledSlugs, $studentInformation->slug);
+                array_push($notEnrolledSlugs, $studentInformation->slug);
             // array_push($enrolledSlugs, $studentInformation->slug);
         }
 
         $users = $this->db->select('tb_mas_users.*')
                     ->from('tb_mas_users')
                     ->where_not_in('slug', $notEnrolledSlugs)
-                    ->order_by('tb_mas_users.strStudentNumber', 'ASC')
+                    ->order_by('strStudentNumber', 'ASC')
                     ->get()
                     ->result_array();
 
