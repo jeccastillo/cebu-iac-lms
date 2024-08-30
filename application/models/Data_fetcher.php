@@ -574,6 +574,21 @@ class Data_fetcher extends CI_Model {
         return $subjects;
     }
 
+    function getSubjectsAvailable($id,$sem)
+    {
+        $subjects = $this->db
+                         ->select( 'tb_mas_subjects.strCode,tb_mas_subjects.strUnits,tb_mas_subjects.intID as intSubjectID,tb_mas_subjects.strDescription,tb_mas_subjects.intLab, tb_mas_subjects.intLectHours')
+                         ->from('tb_mas_subjects')                         
+                         ->join('tb_mas_classlist','tb_mas_subjects.intID = tb_mas_classlist.intSubjectID')
+                         ->where(array('tb_mas_classlist.strAcademicYear'=>$sem))
+                         ->group_by('tb_mas_subjects.intID')
+                         ->order_by('strCode asc')
+                         ->get()
+                         ->result_array();                     
+        
+        return $subjects;
+    }
+
     function getSubjectsInCurriculumMain($id)
     {
         $subjects = $this->db
