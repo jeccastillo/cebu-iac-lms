@@ -4632,9 +4632,7 @@ class Excel extends CI_Controller {
                 array_push($notEnrolledSlugs, $studentInformation->slug);
             // array_push($enrolledSlugs, $studentInformation->slug);
         }
-        print_r($ar_students);
-        die();
-
+        
         $users = $this->db->select('tb_mas_users.*')
                     ->from('tb_mas_users')
                     ->where_not_in('slug', $notEnrolledSlugs)
