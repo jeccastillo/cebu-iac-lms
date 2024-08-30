@@ -1460,9 +1460,10 @@ class Unity extends CI_Controller {
                                    
             
             
-            $ret['student'] = $this->data_fetcher->getStudent($id); 
-            
-            if(!$ret['student'])
+            if(is_numeric($id))
+                $ret['student'] = $this->data_fetcher->getStudent($id); 
+            else
+            // if(!$ret['student'])
                 $ret['student'] = $this->data_fetcher->getStudent($id, 'slug');
 
             $student_type = get_stype($ret['student']['level']);
@@ -1818,14 +1819,17 @@ class Unity extends CI_Controller {
         $this->data['id'] = $id;
         $this->data['sem'] = $sem;
 
+        $student = '';
+        
         if($sem!=null){
             $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
         }
         else
         {
-            $student = $this->data_fetcher->getStudent($id); 
-            
-            if(!$student)
+            if(is_numeric($id))
+                $student = $this->data_fetcher->getStudent($id);
+            else
+            // if(!$student)
                 $student = $this->data_fetcher->getStudent($id, 'slug');
 
             $student_type = get_stype($student['level']);    
@@ -1844,13 +1848,12 @@ class Unity extends CI_Controller {
             $this->data['tab'] = "tab_1";
                     
         
-        
-        $this->data['student'] = $this->data_fetcher->getStudent($id);
-        
-        if(!$this->data['student'])
+        if(is_numeric($id)){
+            $this->data['student'] = $this->data_fetcher->getStudent($id);
+        }else{
             $this->data['student'] = $this->data_fetcher->getStudent($id, 'slug');
+        }
         //per faculty info                        
-
         $this->data['sched_table'] = $this->load->view('sched_table', $this->data, true);
         
         $this->load->view("common/header",$this->data);

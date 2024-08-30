@@ -195,6 +195,21 @@
                         <hr>
                     </div>
                     <div>
+                        <strong>Grade/Year Level</strong>
+                        <div class="form-inline">
+                            <input type="text"
+                                class="form-control"
+                                v-model="request.grade_year_level"
+                                @blur="updateField('grade_year_level',$event)"
+                                :disabled="true" />
+                            <button
+                                v-if="request.status !=  'Game Changer' && request.status !=  'For Enrollment'"
+                                class="btn btn-primary text-right"
+                                @click="onEdit">Edit</button>
+                        </div>
+                        <hr>
+                    </div>
+                    <div>
                         <strong>Nationality</strong>
                         <div class="form-inline">
                             <select class="form-control"
@@ -617,10 +632,15 @@
                                 :disabled="true"
                                 @change="updateField('student_type',$event)"
                                 v-model="request.tos">
-                                <option value="freshman">freshman</option>
-                                <option value="foreign">foreign</option>
-                                <option value="transferee">transferee</option>
-                                <option value="second degree">second degree</option>
+                                <option value="College - Freshmen iACADEMY">College - Freshmen
+                                    iACADEMY
+                                </option>
+                                <option value="College - Freshmen Other">College - Freshmen Other
+                                </option>
+                                <option value="SHS - New">SHS - New</option>
+                                <option value="SHS - Transferee">SHS - Transferee</option>
+                                <option value="2nd - Degree iACADEMY">2nd - Degree iACADEMY</option>
+                                <option value="2nd - Degree Other">2nd - Degree Other</option>
                             </select>
                             <select v-else
                                 required
@@ -628,9 +648,10 @@
                                 :disabled="true"
                                 @change="updateField('student_type',$event)"
                                 v-model="request.tos">
-                                <option value="College - Freshmen iACADEMY">COLLEGE - Freshman
+                                <option value="College - Freshmen iACADEMY">College - Freshmen
+                                    iACADEMY
                                 </option>
-                                <option value="College - Freshmen Other">COLLEGE - Transferee
+                                <option value="College - Freshmen Other">College - Freshmen Other
                                 </option>
                                 <option value="SHS - New">SHS - New</option>
                                 <option value="SHS - Transferee">SHS - Transferee</option>
@@ -1378,7 +1399,7 @@
                         <hr>
                     </div>
                     <div>
-                        <strong>Guardian's Occupation </strong>
+                        <strong>Guardian's Relationship </strong>
                         <div class="form-inline">
                             <input type="text"
                                 class="form-control"
@@ -1617,11 +1638,11 @@
                 </div>
                 <div class="box-body">
                     <div class="form-inline">
-                        <input type="text"
+                        <textarea type="text"
                             class="form-control"
                             v-model="request.source"
                             @blur="updateField('source',$event)"
-                            :disabled="true" />
+                            :disabled="true" /></textarea>
                         <button
                             v-if="request.status !=  'Game Changer' && request.status !=  'For Enrollment'"
                             class="btn btn-primary text-right"
@@ -2354,23 +2375,32 @@
                                 class="form-control"
                                 @change="updateField('student_type',$event)"
                                 v-model="request.tos">
-                                <option value="freshman">freshman</option>
-                                <option value="foreign">foreign</option>
-                                <option value="transferee">transferee</option>
-                                <option value="second degree">second degree</option>
+                                <option value="College - Freshmen iACADEMY">College - Freshmen
+                                    iACADEMY</option>
+                                <option value="College - Freshmen Other">College - Freshmen Other
+                                </option>
+                                <option value="SHS - New">SHS - New</option>
+                                <option value="SHS -  Transferee">SHS - Transferee</option>
+
+                                <option value="2nd - Degree iACADEMY">2nd - Degree iACADEMY</option>
+
+                                <option value="2nd - Degree Other">2nd - Degree Other</option>
                             </select>
                             <select v-if="request.campus == 'Makati'"
                                 required
                                 class="form-control"
                                 @change="updateField('student_type',$event)"
                                 v-model="request.tos">
-                                <option value="COLLEGE - Freshman">COLLEGE - Freshman</option>
-                                <option value="COLLEGE - Transferee">COLLEGE - Transferee</option>
-                                <option value="SHS - Freshman">SHS - Freshman</option>
+                                <option value="College - Freshmen iACADEMY">College -eshmen
+                                    iACADEMY</option>
+                                <option value="College - Freshmen Other">College - Freshmen Other
+                                </option>
+                                <option value="SHS - New">SHS - New</option>
                                 <option value="SHS -  Transferee">SHS - Transferee</option>
-                                <option value="SHS - DRIVE HomeSchool Program">SHS - DRIVE
-                                    HomeSchool Program</option>
-                                <option value="2ND - DEGREE">2ND - DEGREE</option>
+
+                                <option value="2nd - Degree iACADEMY">2nd - Degree iACADEMY</option>
+
+                                <option value="2nd - Degree Other">2nd - Degree Other</option>
                             </select>
                             </p>
 
@@ -3083,26 +3113,35 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>School Name</label>
-                        <input type="email"
+                        <input type="text"
+                            name="school_name"
                             class="form-control"
+                            required
+                            required
                             placeholder="School Name">
                     </div>
                     <div class="form-group">
                         <label>City</label>
-                        <input type="email"
+                        <input type="text"
+                            name="school_city"
                             class="form-control"
+                            required
                             placeholder="City">
                     </div>
                     <div class="form-group">
                         <label>State/Province</label>
-                        <input type="email"
+                        <input type="text"
+                            name="school_province"
                             class="form-control"
+                            required
                             placeholder="State/Province">
                     </div>
                     <div class="form-group">
                         <label>Country</label>
-                        <input type="email"
+                        <input type="text"
+                            name="school_country"
                             class="form-control"
+                            required
                             placeholder="Country">
                     </div>
 
@@ -3351,9 +3390,40 @@ new Vue({
     },
 
     methods: {
-        addNewSchool() {
-            console.log('dasd');
+        async addNewSchool(e) {
+            let formData = new FormData(e.target);
+            const payload = Object.assign(Object.fromEntries(formData.entries()))
 
+            const {
+                data
+            } = await axios
+                .post(`${api_url}admissions/student-info/new-school`, payload, {
+                    headers: {
+                        Authorization: `Bearer ${window.token}`
+                    }
+                })
+            if (data.success) {
+                Swal.fire({
+                    showCancelButton: false,
+                    showCloseButton: true,
+                    allowEscapeKey: false,
+                    title: 'Successfully Added New School',
+                    text: 'Field Updated',
+                    icon: 'success',
+                });
+                e.target.reset()
+                this.getAllPrevSchool()
+                $('#addSchool').modal('hide')
+            } else {
+                Swal.fire({
+                    showCancelButton: false,
+                    showCloseButton: true,
+                    allowEscapeKey: false,
+                    title: `${data.message}`,
+                    text: 'Error',
+                    icon: 'error',
+                });
+            }
         },
         copyClipBoard: function(str) {
             var el = document.createElement('textarea');
@@ -3918,8 +3988,6 @@ new Vue({
             } = await axios
                 .get(`${api_url}admissions/applications/call-log/${this.request.id}`)
             this.callLogs = data.data
-
-            console.log(this.callLogs);
 
         },
         async updateCallLogs(e) {

@@ -84,46 +84,48 @@
                         for="inline-full-name">
                         Applicant Type <i class="font-normal">(Select one)</i>
                     </label>
-                    <h6 class="color-primary font-bold">Freshman</h6>
-                    <label v-if="term.term_student_type == 'college'"
-                        v-for="college,index of collegeList.slice(0,2)"
-                        class="block indent-5 color-primary mb-1 ml-1.5">
-                        <input type="radio"
-                            :id="index"
-                            :value="freshmenValue[index]"
-                            name="college"
-                            v-model="request.student_type"
-                            @click="filterCourses('college')"
-                            required
-                            class="mr-1">
-                        {{college}}
-                    </label>
-                    <h6 class="color-primary font-bold">2nd Degree</h6>
-                    <label v-if="term.term_student_type == 'college'"
-                        v-for="college,index of collegeList.slice(2,4)"
-                        class="block indent-5 color-primary mb-1 ml-1.5">
-                        <input type="radio"
-                            :id="index"
-                            :value="secondDegreeValue[index]"
-                            name="college"
-                            v-model="request.student_type"
-                            @click="filterCourses('college')"
-                            required
-                            class="mr-1">
-                        {{college}}
-                    </label>
-                    <h6 class="color-primary font-bold">Other</h6>
-                    <label v-if="term.term_student_type == 'college'"
-                        class="block indent-5 color-primary mb-1 ml-1.5">
-                        <input type="radio"
-                            value="`College - Transferee`"
-                            name="college"
-                            v-model="request.student_type"
-                            @click="filterCourses('college')"
-                            required
-                            class="mr-1">
-                        Transferee
-                    </label>
+                    <template v-if="term.term_student_type == 'college'">
+                        <h6 class="color-primary font-bold">Freshman</h6>
+                        <label v-if="term.term_student_type == 'college'"
+                            v-for="college,index of collegeList.slice(0,2)"
+                            class="block indent-5 color-primary mb-1 ml-1.5">
+                            <input type="radio"
+                                :id="index"
+                                :value="freshmenValue[index]"
+                                name="college"
+                                v-model="request.student_type"
+                                @click="filterCourses('college')"
+                                required
+                                class="mr-1">
+                            {{college}}
+                        </label>
+                        <h6 class="color-primary font-bold">2nd Degree</h6>
+                        <label v-if="term.term_student_type == 'college'"
+                            v-for="college,index of collegeList.slice(2,4)"
+                            class="block indent-5 color-primary mb-1 ml-1.5">
+                            <input type="radio"
+                                :id="index"
+                                :value="secondDegreeValue[index]"
+                                name="college"
+                                v-model="request.student_type"
+                                @click="filterCourses('college')"
+                                required
+                                class="mr-1">
+                            {{college}}
+                        </label>
+                        <h6 class="color-primary font-bold">Other</h6>
+                        <label v-if="term.term_student_type == 'college'"
+                            class="block indent-5 color-primary mb-1 ml-1.5">
+                            <input type="radio"
+                                value="`College - Transferee`"
+                                name="college"
+                                v-model="request.student_type"
+                                @click="filterCourses('college')"
+                                required
+                                class="mr-1">
+                            Transferee
+                        </label>
+                    </template>
                     <label v-if="term.term_student_type == 'shs'"
                         v-for="shs,index of shsList"
                         class="block color-primary mb-1 ml-1.5">
@@ -302,6 +304,7 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
+                            name="place_of_birth"
                             v-model="request.place_of_birth"
                             required>
 
@@ -337,9 +340,9 @@
                         </select>
                     </div>
                     <div id="citizenship-dual"
+                        v-if="isDual"
                         class="basis-[300px] self-end">
                         <select v-model="request.country_of_citizenship2"
-                            :disabled="!isDual"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             required>
                             <option disabled
@@ -778,6 +781,7 @@
                         <v-select :options="prevSchoolList"
                             label="name"
                             @input="onInputChange"></v-select>
+
                     </div>
                     <div class="basis-[154px]">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -840,6 +844,7 @@
                         </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            v-model="request.lrn"
                             type="text">
 
                     </div>
@@ -1625,17 +1630,19 @@ new Vue({
             }
         },
         async getState(e) {
+            console.log('dasda');
+
             this.states = []
             this.cities = []
             this.barangay = []
-
+            Swal.showLoading();
             if (e.target.value == 'Philippines') {
                 const {
                     data
                 } = await axios.get('https://psgc.cloud/api/provinces')
                 this.states = data
-
             } else {
+
                 const {
                     data
                 } = await axios.post(
@@ -1647,6 +1654,7 @@ new Vue({
                     this.states.push(state.name)
                 }
             }
+            Swal.hideLoading();
         },
         async getAllCountry() {
             const {
@@ -1675,8 +1683,23 @@ new Vue({
             }
         },
         async onInputChange(value) {
+
             if (value == null) {
                 this.isOnList = false
+                this.request.school_id = ''
+                this.request.school_name = ""
+                this.request.school_city = ""
+                this.request.school_province = ""
+                this.request.school_country = ""
+                for (const key in this.register) {
+                    this.register[key] = ''
+                }
+
+                return
+            }
+
+            if (value.name == 'Not on the list') {
+                this.isOnList = true
                 this.request.school_id = ''
                 this.request.school_name = ""
                 this.request.school_city = ""
@@ -1685,9 +1708,8 @@ new Vue({
                 return
             }
 
-            if (value.name == 'Not on the list') {
-                this.isOnList = true
-                return
+            if (value.name != '') {
+                this.isOnList = false
             }
 
 
@@ -1858,6 +1880,25 @@ new Vue({
                 })
                 return
             }
+            // For school registration
+            if (this.request.school_id == "") {
+                Object.assign(this.request, this.register);
+            }
+
+
+            if (this.request.school_name == '') {
+                Swal.fire({
+                    title: 'iACADEMY MAKATI CAMPUS',
+                    html: 'Missing value on last school attended ',
+                    confirmButtonText: "Ok",
+                    imageWidth: 100,
+                    icon: "error",
+                    showCloseButton: true
+                })
+                return
+            }
+
+
             this.setSource()
             this.setTime()
 
@@ -1903,12 +1944,8 @@ new Vue({
                             ", "
                         );
 
-                    // For school registration
-                    if (this.request.school_id == "") {
-                        Object.assign(this.request, this.register);
-                    }
-
                     Object.assign(this.request, this.addressObj)
+
                     console.log(this.request);
                     console.log(data);
 
