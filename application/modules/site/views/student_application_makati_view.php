@@ -382,6 +382,7 @@
                         <input v-model="request.email"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="email"
+                            name="confirm-email"
                             required>
 
 
@@ -393,6 +394,7 @@
                         <input v-model="request.email_confirmation"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="email"
+                            name="confirm-email"
                             required>
 
                     </div>
@@ -480,6 +482,7 @@
                         <input v-model="addressObj.city"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
+                            name="city"
                             required>
 
                         <!-- <select v-if="addressObj.country == 'Philippines'"
@@ -531,38 +534,33 @@
                         <label class="block color-primary font-bold mb-3 pr-4">
                             State/Province <span class="text-red-500">*</span>
                         </label>
-                        <select v-if="addressObj.country == 'Philippines'"
-                            @change="getCities"
-                            v-model="addressObj.province"
-                            required
-                            class="w-full bg-neutral-100 border border-neutral-100 rounded-lg py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
-                            <option v-for="state in states"
-                                :id="state.code"
-                                :value="state.name">
-                                {{ state.name}}
-                            </option>
-                        </select>
-                        <select v-else
-                            @change="getCities"
-                            v-model="addressObj.province"
-                            required
-                            class="w-full bg-neutral-100 border border-neutral-100 rounded-lg py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
-                            <option v-for="state in states"
-                                :value="state">
-                                {{ state}}
-                            </option>
-                        </select>
-                    </div>
-                    <!-- <div>
-                        <label class="hidden block color-primary font-bold  mb-3  pr-4">
-                            <span class="text-red-500">*</span>
-                        </label>
-                        <input
-                            class="hidden bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                        <input v-model="addressObj.province"
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
+                            name="state"
                             required>
-                        
-                    </div> -->
+                        <!-- <select v-if="addressObj.country == 'Philippines'"
+                                @change="getCities"
+                                v-model="addressObj.province"
+                                required
+                                class="w-full bg-neutral-100 border border-neutral-100 rounded-lg py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
+                                <option v-for="state in states"
+                                    :id="state.code"
+                                    :value="state.name">
+                                    {{ state.name}}
+                                </option>
+                            </select>
+                            <select v-else
+                                @change="getCities"
+                                v-model="addressObj.province"
+                                required
+                                class="w-full bg-neutral-100 border border-neutral-100 rounded-lg py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
+                                <option v-for="state in states"
+                                    :value="state">
+                                    {{ state}}
+                                </option>
+                            </select> -->
+                    </div>
                 </div>
             </div>
 
@@ -780,6 +778,7 @@
                         </label>
                         <v-select :options="prevSchoolList"
                             label="name"
+                            class="style-chooser"
                             @input="onInputChange"></v-select>
 
                     </div>
@@ -824,6 +823,7 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
+                            name="number"
                             v-model="request.grade_year_level">
 
 
@@ -835,6 +835,7 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
+                            name="strand"
                             v-model="request.program_strand_degree">
 
                     </div>
@@ -1400,6 +1401,13 @@ input[type="number"] {
 .custom-radio input[type="radio"]:checked+.custom-radio-button::after {
     opacity: 1;
 }
+
+
+.style-chooser .vs__search::placeholder,
+.style-chooser .vs__dropdown-toggle,
+.style-chooser .vs__dropdown-menu {
+    background-color: rgb(245 245 245)
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
@@ -1630,11 +1638,17 @@ new Vue({
             }
         },
         async getState(e) {
-            console.log('dasda');
-
             this.states = []
             this.cities = []
             this.barangay = []
+            Swal.fire({
+                showCancelButton: false,
+                showCloseButton: false,
+                allowEscapeKey: false,
+                title: 'Please wait',
+                text: 'Loading state/province',
+                icon: 'info',
+            })
             Swal.showLoading();
             if (e.target.value == 'Philippines') {
                 const {
@@ -1654,7 +1668,7 @@ new Vue({
                     this.states.push(state.name)
                 }
             }
-            Swal.hideLoading();
+            Swal.close();
         },
         async getAllCountry() {
             const {
@@ -1666,16 +1680,24 @@ new Vue({
 
         },
         async getAllPrevSchool() {
-            const {
-                data
-            } = await axios.get(
-                `${this.apiUrl}admissions/previous-schools`, {
-                    headers: {
-                        Authorization: `Bearer ${window.token}`
+            try {
+                const {
+                    data
+                } = await axios.get(
+                    `${api_url}admissions/previous-schools`, {
+                        headers: {
+                            Authorization: `Bearer ${window.token}`
+                        }
+                    })
+                if (data.length != 0) {
+                    this.prevSchoolList = data
+                    const obj = {
+                        name: 'Not on the list'
                     }
-                })
-            if (data.length != 0) {
-                this.prevSchoolList = data
+                    this.prevSchoolList.push(obj)
+                }
+
+            } catch (error) {
                 const obj = {
                     name: 'Not on the list'
                 }

@@ -84,46 +84,48 @@
                         for="inline-full-name">
                         Applicant Type <i class="font-normal">(Select one)</i>
                     </label>
-                    <h6 class="color-primary font-bold">Freshman</h6>
-                    <label v-if="term.term_student_type == 'college'"
-                        v-for="college,index of collegeList.slice(0,2)"
-                        class="block indent-5 color-primary mb-1 ml-1.5">
-                        <input type="radio"
-                            :id="index"
-                            :value="freshmenValue[index]"
-                            name="college"
-                            v-model="request.student_type"
-                            @click="filterCourses('college')"
-                            required
-                            class="mr-1">
-                        {{college}}
-                    </label>
-                    <h6 class="color-primary font-bold">2nd Degree</h6>
-                    <label v-if="term.term_student_type == 'college'"
-                        v-for="college,index of collegeList.slice(2,4)"
-                        class="block indent-5 color-primary mb-1 ml-1.5">
-                        <input type="radio"
-                            :id="index"
-                            :value="secondDegreeValue[index]"
-                            name="college"
-                            v-model="request.student_type"
-                            @click="filterCourses('college')"
-                            required
-                            class="mr-1">
-                        {{college}}
-                    </label>
-                    <h6 class="color-primary font-bold">Other</h6>
-                    <label v-if="term.term_student_type == 'college'"
-                        class="block indent-5 color-primary mb-1 ml-1.5">
-                        <input type="radio"
-                            value="`College - Transferee`"
-                            name="college"
-                            v-model="request.student_type"
-                            @click="filterCourses('college')"
-                            required
-                            class="mr-1">
-                        Transferee
-                    </label>
+                    <template v-if="term.term_student_type == 'college'">
+                        <h6 class="color-primary font-bold">Freshman</h6>
+                        <label v-if="term.term_student_type == 'college'"
+                            v-for="college,index of collegeList.slice(0,2)"
+                            class="block indent-5 color-primary mb-1 ml-1.5">
+                            <input type="radio"
+                                :id="index"
+                                :value="freshmenValue[index]"
+                                name="college"
+                                v-model="request.student_type"
+                                @click="filterCourses('college')"
+                                required
+                                class="mr-1">
+                            {{college}}
+                        </label>
+                        <h6 class="color-primary font-bold">2nd Degree</h6>
+                        <label v-if="term.term_student_type == 'college'"
+                            v-for="college,index of collegeList.slice(2,4)"
+                            class="block indent-5 color-primary mb-1 ml-1.5">
+                            <input type="radio"
+                                :id="index"
+                                :value="secondDegreeValue[index]"
+                                name="college"
+                                v-model="request.student_type"
+                                @click="filterCourses('college')"
+                                required
+                                class="mr-1">
+                            {{college}}
+                        </label>
+                        <h6 class="color-primary font-bold">Other</h6>
+                        <label v-if="term.term_student_type == 'college'"
+                            class="block indent-5 color-primary mb-1 ml-1.5">
+                            <input type="radio"
+                                value="`College - Transferee`"
+                                name="college"
+                                v-model="request.student_type"
+                                @click="filterCourses('college')"
+                                required
+                                class="mr-1">
+                            Transferee
+                        </label>
+                    </template>
                     <label v-if="term.term_student_type == 'shs'"
                         v-for="shs,index of shsList"
                         class="block color-primary mb-1 ml-1.5">
@@ -147,7 +149,7 @@
                         Applying for
                     </label>
                     <div class="border-[1px] border-neutral-100 p-2.5 rounded-lg">
-                        <label v-for="t in programs.college"
+                        <label v-for="t in programs"
                             class="block indent-5 color-primary mb-1 ml-1.5">
                             <input type="radio"
                                 :id="'progId-' + t.id"
@@ -246,6 +248,7 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
+                            name="place_of_birth"
                             v-model="request.place_of_birth"
                             required>
 
@@ -281,9 +284,9 @@
                         </select>
                     </div>
                     <div id="citizenship-dual"
+                        v-if="isDual"
                         class="basis-[300px] self-end">
                         <select v-model="request.country_of_citizenship2"
-                            :disabled="!isDual"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             required>
                             <option disabled
@@ -323,6 +326,7 @@
                         <input v-model="request.email"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="email"
+                            name="confirm-email"
                             required>
 
 
@@ -334,6 +338,7 @@
                         <input v-model="request.email_confirmation"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="email"
+                            name="confirm-email"
                             required>
 
                     </div>
@@ -357,6 +362,7 @@
                             <input
                                 class="w-2/3 bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                 type="number"
+                                name="mobile-number"
                                 v-model="request.mobile_number"
                                 required>
 
@@ -378,6 +384,7 @@
                             <input
                                 class="w-2/3 bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                 type="number"
+                                name="mobile-number"
                                 v-model="request.mobile_number_confirmation"
                                 required>
 
@@ -421,6 +428,7 @@
                         <input v-model="addressObj.city"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
+                            name="city"
                             required>
 
                         <!-- <select v-if="addressObj.country == 'Philippines'"
@@ -472,38 +480,33 @@
                         <label class="block color-primary font-bold mb-3 pr-4">
                             State/Province <span class="text-red-500">*</span>
                         </label>
-                        <select v-if="addressObj.country == 'Philippines'"
-                            @change="getCities"
-                            v-model="addressObj.province"
-                            required
-                            class="w-full bg-neutral-100 border border-neutral-100 rounded-lg py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
-                            <option v-for="state in states"
-                                :id="state.code"
-                                :value="state.name">
-                                {{ state.name}}
-                            </option>
-                        </select>
-                        <select v-else
-                            @change="getCities"
-                            v-model="addressObj.province"
-                            required
-                            class="w-full bg-neutral-100 border border-neutral-100 rounded-lg py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
-                            <option v-for="state in states"
-                                :value="state">
-                                {{ state}}
-                            </option>
-                        </select>
-                    </div>
-                    <!-- <div>
-                        <label class="hidden block color-primary font-bold  mb-3  pr-4">
-                            <span class="text-red-500">*</span>
-                        </label>
-                        <input
-                            class="hidden bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                        <input v-model="addressObj.province"
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
+                            name="state"
                             required>
-                        
-                    </div> -->
+                        <!-- <select v-if="addressObj.country == 'Philippines'"
+                                @change="getCities"
+                                v-model="addressObj.province"
+                                required
+                                class="w-full bg-neutral-100 border border-neutral-100 rounded-lg py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
+                                <option v-for="state in states"
+                                    :id="state.code"
+                                    :value="state.name">
+                                    {{ state.name}}
+                                </option>
+                            </select>
+                            <select v-else
+                                @change="getCities"
+                                v-model="addressObj.province"
+                                required
+                                class="w-full bg-neutral-100 border border-neutral-100 rounded-lg py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
+                                <option v-for="state in states"
+                                    :value="state">
+                                    {{ state}}
+                                </option>
+                            </select> -->
+                    </div>
                 </div>
             </div>
 
@@ -721,7 +724,9 @@
                         </label>
                         <v-select :options="prevSchoolList"
                             label="name"
+                            class="style-chooser"
                             @input="onInputChange"></v-select>
+
                     </div>
                     <div class="basis-[154px]">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -764,6 +769,7 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
+                            name="number"
                             v-model="request.grade_year_level">
 
 
@@ -775,6 +781,7 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text"
+                            name="strand"
                             v-model="request.program_strand_degree">
 
                     </div>
@@ -784,6 +791,7 @@
                         </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            v-model="request.lrn"
                             type="text">
 
                     </div>
@@ -1339,6 +1347,13 @@ input[type="number"] {
 .custom-radio input[type="radio"]:checked+.custom-radio-button::after {
     opacity: 1;
 }
+
+
+.style-chooser .vs__search::placeholder,
+.style-chooser .vs__dropdown-toggle,
+.style-chooser .vs__dropdown-menu {
+    background-color: rgb(245 245 245)
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
@@ -1377,11 +1392,6 @@ const applicantTypeShs = ['SHS - New', 'SHS - Transferee']
 
 const healthConditions = ['Diabetes', 'Allergies', 'High Blood', 'Anemia']
 
-const cebuCourse = ['Bachelor of Science in Entertainment and Multimedia Computing',
-    'Bachelor of Arts in Animation', 'Bachelor of Arts in Multimedia Arts and Design ',
-    'Bachelor of Science in Real Estate Management '
-]
-
 Vue.component('v-select', VueSelect.VueSelect)
 
 new Vue({
@@ -1404,7 +1414,6 @@ new Vue({
         healthConcern: [...healthConditions],
         freshmenValue: [...freshmenValue],
         secondDegreeValue: [...secondDegreeValue],
-        cebuCourse: [...cebuCourse],
         filterCollege: ['college', 'college', 'college', 'college'],
         filterShs: ['shs', 'shs', 'shs'],
         countries: [...countries],
@@ -1469,7 +1478,7 @@ new Vue({
     mounted() {
 
         axios
-            .get(this.base_url + 'site/view_active_programs_makati/' + '28', {
+            .get(this.base_url + 'site/view_active_programs/' + this.syid, {
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 },
@@ -1480,9 +1489,6 @@ new Vue({
                 this.programs = data.data.data;
                 this.sy = data.data.sy;
                 this.term = data.data.term;
-
-                console.log(this.programs.college);
-
 
             })
             .catch((e) => {
@@ -1582,14 +1588,22 @@ new Vue({
             this.states = []
             this.cities = []
             this.barangay = []
-
+            Swal.fire({
+                showCancelButton: false,
+                showCloseButton: false,
+                allowEscapeKey: false,
+                title: 'Please wait',
+                text: 'Loading state/province',
+                icon: 'info',
+            })
+            Swal.showLoading();
             if (e.target.value == 'Philippines') {
                 const {
                     data
                 } = await axios.get('https://psgc.cloud/api/provinces')
                 this.states = data
-
             } else {
+
                 const {
                     data
                 } = await axios.post(
@@ -1601,6 +1615,7 @@ new Vue({
                     this.states.push(state.name)
                 }
             }
+            Swal.close();
         },
         async getAllCountry() {
             const {
@@ -1612,16 +1627,24 @@ new Vue({
 
         },
         async getAllPrevSchool() {
-            const {
-                data
-            } = await axios.get(
-                `${this.apiUrl}admissions/previous-schools`, {
-                    headers: {
-                        Authorization: `Bearer ${window.token}`
+            try {
+                const {
+                    data
+                } = await axios.get(
+                    `${api_url}admissions/previous-schools`, {
+                        headers: {
+                            Authorization: `Bearer ${window.token}`
+                        }
+                    })
+                if (data.length != 0) {
+                    this.prevSchoolList = data
+                    const obj = {
+                        name: 'Not on the list'
                     }
-                })
-            if (data.length != 0) {
-                this.prevSchoolList = data
+                    this.prevSchoolList.push(obj)
+                }
+
+            } catch (error) {
                 const obj = {
                     name: 'Not on the list'
                 }
@@ -1629,8 +1652,23 @@ new Vue({
             }
         },
         async onInputChange(value) {
+
             if (value == null) {
                 this.isOnList = false
+                this.request.school_id = ''
+                this.request.school_name = ""
+                this.request.school_city = ""
+                this.request.school_province = ""
+                this.request.school_country = ""
+                for (const key in this.register) {
+                    this.register[key] = ''
+                }
+
+                return
+            }
+
+            if (value.name == 'Not on the list') {
+                this.isOnList = true
                 this.request.school_id = ''
                 this.request.school_name = ""
                 this.request.school_city = ""
@@ -1639,9 +1677,8 @@ new Vue({
                 return
             }
 
-            if (value.name == 'Not on the list') {
-                this.isOnList = true
-                return
+            if (value.name != '') {
+                this.isOnList = false
             }
 
 
@@ -1703,7 +1740,7 @@ new Vue({
         confirmEmail: function() {
             if (this.request.email != this.request.email_confirmation) {
                 Swal.fire({
-                    title: 'iACADEMY CEBU CAMPUS',
+                    title: 'iACADEMY Cebu CAMPUS',
                     html: 'The email address you provided does not match',
                     confirmButtonText: "Ok",
                     imageWidth: 100,
@@ -1721,7 +1758,7 @@ new Vue({
 
             if (this.request.mobile_number != this.request.mobile_number_confirmation) {
                 Swal.fire({
-                    title: 'iACADEMY CEBU CAMPUS',
+                    title: 'iACADEMY Cebu CAMPUS',
                     html: 'The mobile number you provided does not match',
                     confirmButtonText: "Ok",
                     imageWidth: 100,
@@ -1791,7 +1828,7 @@ new Vue({
 
             if (this.sources.length == 0) {
                 Swal.fire({
-                    title: 'iACADEMY CEBU CAMPUS',
+                    title: 'iACADEMY Cebu CAMPUS',
                     html: 'Missing value on How did you know about us?',
                     confirmButtonText: "Ok",
                     imageWidth: 100,
@@ -1803,7 +1840,7 @@ new Vue({
 
             if (this.bestTime.length == 0) {
                 Swal.fire({
-                    title: 'iACADEMY CEBU CAMPUS',
+                    title: 'iACADEMY Cebu CAMPUS',
                     html: 'Missing value on Best time to contact you',
                     confirmButtonText: "Ok",
                     imageWidth: 100,
@@ -1812,12 +1849,31 @@ new Vue({
                 })
                 return
             }
+            // For school registration
+            if (this.request.school_id == "") {
+                Object.assign(this.request, this.register);
+            }
+
+
+            if (this.request.school_name == '') {
+                Swal.fire({
+                    title: 'iACADEMY Cebu CAMPUS',
+                    html: 'Missing value on last school attended ',
+                    confirmButtonText: "Ok",
+                    imageWidth: 100,
+                    icon: "error",
+                    showCloseButton: true
+                })
+                return
+            }
+
+
             this.setSource()
             this.setTime()
 
 
             Swal.fire({
-                title: 'iACADEMY CEBU CAMPUS',
+                title: 'iACADEMY Cebu CAMPUS',
                 html: `
                 You are applying for iACADEMY Cebu Campus. Click <a style='color:#000099' href='https://cebu.iacademy.edu.ph'>here</a> if you are applying for iACADEMY Cebu Campus
             `,
@@ -1857,12 +1913,8 @@ new Vue({
                             ", "
                         );
 
-                    // For school registration
-                    if (this.request.school_id == "") {
-                        Object.assign(this.request, this.register);
-                    }
-
                     Object.assign(this.request, this.addressObj)
+
                     console.log(this.request);
                     console.log(data);
 
