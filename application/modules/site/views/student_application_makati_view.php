@@ -1680,22 +1680,25 @@ new Vue({
 
         },
         async getAllPrevSchool() {
-            const {
-                data
-            } = await axios.get(
-                `${api_url}admissions/previous-schools`, {
-                    headers: {
-                        Authorization: `Bearer ${window.token}`
-                    }
-                })
-            if (data.length != 0) {
-                this.prevSchoolList = data
-            }
+            try {
+                const {
+                    data
+                } = await axios.get(
+                    `${api_url}admissions/previous-schools`, {
+                        headers: {
+                            Authorization: `Bearer ${window.token}`
+                        }
+                    })
+                if (data.length != 0) {
+                    this.prevSchoolList = data
+                }
 
-            const obj = {
-                name: 'Not on the list'
+            } catch (error) {
+                const obj = {
+                    name: 'Not on the list'
+                }
+                this.prevSchoolList.push(obj)
             }
-            this.prevSchoolList.push(obj)
         },
         async onInputChange(value) {
 
