@@ -42,13 +42,17 @@
                                 </div>                                
                                 <div class="form-group col-xs-6">
                                     <label for="intYearLevel">Year</label>
-                                    <select class="form-control" name="year" v-model="request.year">                                        
+                                    <select v-if="active_sem.term_student_type == 'college'" class="form-control" name="year" v-model="request.year">                                        
                                         <option value="1">1st</option>                                        
                                         <option value="2">2nd</option>                                        
                                         <option value="3">3rd</option>                                        
                                         <option value="4">4th</option>                                        
                                         <option value="5">5th</option>                                        
                                         <option value="6">6th</option>                                        
+                                    </select>
+                                    <select v-else="active_sem.term_student_type == 'college'" class="form-control" name="year" v-model="request.year">                                        
+                                        <option value="1">Grade 11</option>                                        
+                                        <option value="2">Grade 12</option>                                                                                
                                     </select>
                                 </div>                                
                                 <div class="form-group col-xs-12">
