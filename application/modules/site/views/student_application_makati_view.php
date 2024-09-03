@@ -1128,11 +1128,10 @@
                         </div>
                     </div>
                     <div class="border-[1px] border-neutral-100 p-2.5 rounded-lg">
-                        <h5 class="color-primary text-sm mb-2.5">Best time to contact you? <span
-                                class="text-red-500">*</span>
-                            <em>(to
-                                receive
-                                application updates/announcement/etc)</em>
+                        <h5 class="color-primary text-sm mb-2.5">(to
+                            receive
+                            application updates/announcement/etc)
+                            <em>Best time to contact you?</em><span class="text-red-500">*</span>
 
                         </h5>
                         <div class="flex ">

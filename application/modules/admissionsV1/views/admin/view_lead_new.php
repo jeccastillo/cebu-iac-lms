@@ -1523,7 +1523,8 @@
                         <strong> requirements/ lrn /vouchers</strong>
                     </h5>
                 </div>
-                <div class="box-body">
+                <div class="box-body box-body-voucher"
+                    style="height:292px">
                     <div v-for="requirement in request.uploaded_requirements">
                         <strong>{{ (requirement.type=="2x2_foreign"?"2x2":requirement.type ) }}</strong>
                         <p class="text-muted">
@@ -1548,9 +1549,10 @@
                         </p>
                         <hr>
                     </div>
+                    <!--  -->
 
                 </div>
-                <div class="box-footer">
+                <div class="box-footer box-footer-voucher">
                     <div class="text-right">
                         <?php if($userlevel == "2" || $userlevel == "5"): ?>
                         <button
@@ -3231,6 +3233,18 @@ select.form-control:disabled {
 }
 
 .v-select {
+    width: 100%;
+}
+
+.box-body-voucher {
+    height: 295px;
+    overflow-y: scroll;
+}
+
+.box-footer-voucher {
+    position: sticky;
+    z-index: 1000;
+    bottom: 0;
     width: 100%;
 }
 </style>
