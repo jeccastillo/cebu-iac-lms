@@ -1237,11 +1237,12 @@
                     <div>
                         <strong>Call Hours</strong>
                         <div class="form-inline">
-                            <input type="text"
+                            <textarea type="text"
+                                rows="4"
                                 class="form-control"
                                 v-model="request.best_time"
                                 @blur="updateField('best_time',$event)"
-                                :disabled="true" />
+                                :disabled="true"></textarea>
                             <button
                                 v-if="request.status !=  'Game Changer' && request.status !=  'For Enrollment'"
                                 class="btn btn-primary text-right"
@@ -1639,6 +1640,7 @@
                 <div class="box-body">
                     <div class="form-inline">
                         <textarea type="text"
+                            rows="5"
                             class="form-control"
                             v-model="request.source"
                             @blur="updateField('source',$event)"
