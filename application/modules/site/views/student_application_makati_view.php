@@ -1690,11 +1690,12 @@ new Vue({
                 })
             if (data.length != 0) {
                 this.prevSchoolList = data
-                const obj = {
-                    name: 'Not on the list'
-                }
-                this.prevSchoolList.push(obj)
             }
+
+            const obj = {
+                name: 'Not on the list'
+            }
+            this.prevSchoolList.push(obj)
         },
         async onInputChange(value) {
 
