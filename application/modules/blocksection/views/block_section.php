@@ -23,7 +23,7 @@
 
                                 <div class="form-group col-xs-6">
                                     <label for="intYearLevel">Program</label>
-                                    <select class="form-control" @change="selected_term_type = " name="intProgramID" v-model="request.intProgramID">                                        
+                                    <select class="form-control" name="intProgramID" v-model="request.intProgramID">                                        
                                         <option v-for="program in programs" :value="program.intProgramID">{{ program.strProgramCode }}</option>                                        
                                     </select>
                                 </div>
@@ -36,13 +36,13 @@
                                 </div>
                                 <div class="form-group col-xs-6">
                                     <label for="intSYID">Choose Term</label>
-                                    <select class="form-control" name="intSYID" v-model="active_sem">                                        
-                                        <option v-for="s in sy" :value="s">{{ s.term_student_type}} {{ s.enumSem }} {{ s.term_label }} {{s.strYearStart }} - {{ s.strYearEnd }}</option>                                        
+                                    <select class="form-control" @change="selected_term_type = $event.target.getAttribute('data-stype')" name="intSYID" v-model="request.intSYID">                                        
+                                        <option v-for="s in sy" :data-stype="s.term_student_type" :value="s.intID">{{ s.term_student_type}} {{ s.enumSem }} {{ s.term_label }} {{s.strYearStart }} - {{ s.strYearEnd }}</option>                                        
                                     </select>
                                 </div>                                
                                 <div class="form-group col-xs-6">
                                     <label for="intYearLevel">Year</label>
-                                    <select v-if="active_sem.term_student_type == 'college'" class="form-control" name="year" v-model="request.year">                                        
+                                    <select v-if="selected_term_type == 'college'" class="form-control" name="year" v-model="request.year">                                        
                                         <option value="1">1st</option>                                        
                                         <option value="2">2nd</option>                                        
                                         <option value="3">3rd</option>                                        
@@ -138,8 +138,6 @@ new Vue({
                     for(const [key,value] of Object.entries(this.request)){                   
                         formdata.append(key,value);
                     }
-
-                    formdata.append('intSYID',active_sem.intID);                    
                     
                     return axios.post(url, formdata, {
                         headers: {
