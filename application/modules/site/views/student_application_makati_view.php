@@ -1683,7 +1683,7 @@ new Vue({
             const {
                 data
             } = await axios.get(
-                `${this.apiUrl}admissions/previous-schools`, {
+                `${api_url}admissions/previous-schools`, {
                     headers: {
                         Authorization: `Bearer ${window.token}`
                     }

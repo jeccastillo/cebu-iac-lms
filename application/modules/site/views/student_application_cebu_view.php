@@ -1588,6 +1588,14 @@ new Vue({
             this.states = []
             this.cities = []
             this.barangay = []
+            Swal.fire({
+                showCancelButton: false,
+                showCloseButton: false,
+                allowEscapeKey: false,
+                title: 'Please wait',
+                text: 'Loading state/province',
+                icon: 'info',
+            })
             Swal.showLoading();
             if (e.target.value == 'Philippines') {
                 const {
@@ -1607,7 +1615,7 @@ new Vue({
                     this.states.push(state.name)
                 }
             }
-            Swal.hideLoading();
+            Swal.close();
         },
         async getAllCountry() {
             const {
@@ -1622,7 +1630,7 @@ new Vue({
             const {
                 data
             } = await axios.get(
-                `${this.apiUrl}admissions/previous-schools`, {
+                `${api_url}admissions/previous-schools`, {
                     headers: {
                         Authorization: `Bearer ${window.token}`
                     }
