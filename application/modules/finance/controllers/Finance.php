@@ -973,6 +973,68 @@ class Finance extends CI_Controller {
     
         echo json_encode($data);
     }
+
+    public function update_cashier_invoice(){
+        $post = $this->input->post();              
+        $valid = true; 
+        $data['reload'] = false;
+        
+        $cashier = $this->db->get_where('tb_mas_cashier',array('intID'=>$post['intID']))->row();
+        
+        
+        $cashier_validation_start = $this->db->get_where('tb_mas_cashier',array('intID !='=>$post['intID'],'invoice_start <='=>$post['start'],'invoice_end >=' => $post['start']))->row();
+        $cashier_validation_end = $this->db->get_where('tb_mas_cashier',array('intID !='=>$post['intID'],'invoice_start <='=>$post['end'],'invoice_end >=' => $post['end']))->row();        
+        $cashier_validation_both = $this->db->get_where('tb_mas_cashier',array('intID !='=>$post['intID'],'invoice_start >='=>$post['start'],'invoice_end <=' => $post['end']))->row();
+        if($cashier_validation_start || $cashier_validation_end || $cashier_validation_both){            
+            $data['message'] = "Conflict with one of the cashiers";
+            $data['success'] = false;                
+        }        
+        else{
+            if($post['start'] <= $post['end']){
+                $update = array(
+                    "invoice_start" => $post['start'],
+                    "invoice_end" => $post['end'],
+                    "invoice_current" => isset($post['current']) ? $post['current'] : $post['start']
+                );
+
+                if(isset($post['current'])){
+                    if($post['current'] <= $post['end']){
+
+                        $this->db->where('intID',$post['intID'])
+                        ->update('tb_mas_cashier',$update);
+
+                        $data['message'] = "Successfully Updated";
+                        $data['success'] = true;
+                    }else{
+                        $data['message'] = "Invoice number has reached the Invoice end of the cashier";
+                        $data['success'] = false;
+                    }
+                }else{
+                    $this->db->where('intID',$post['intID'])
+                            ->update('tb_mas_cashier',$update);
+
+                    $cashier_up = $this->db->get_where('tb_mas_cashier',array('intID'=>$post['intID']))->row();
+
+                    $message = $this->data["user"]["strFirstname"]." ".$this->data["user"]["strLastname"]."Updated Invoice Series for Cashier #".$post['intID']." ";
+                    $message .= "from ".$cashier->invoice_start." to ".$cashier_up->invoice_start." and ".$cashier->invoice_end." to ".$cashier_up->invoice_end." ";
+                    $message .= "current Invoice updated from ".$cashier->invoice_current." to ".$cashier_up->invoice_current;
+                    
+                    $this->data_poster->log_action('Cashier',$message,'orange');
+                    $data['message'] = "Successfully Updated";
+                    $data['success'] = true;
+                }
+
+            }
+            else{
+                $data['message'] = "Invoice Start can not be greater than Invoice End";
+                $data['success'] = false;
+            }
+        }
+        
+    
+        echo json_encode($data);
+    }
+    
     public function payments_no_or(){                             
 
         $this->data['page'] = "no_or";
@@ -1049,6 +1111,21 @@ class Finance extends CI_Controller {
         $this->data['opentree'] = "cashier_admin";
         $this->load->view("common/header",$this->data);
         $this->load->view("cashier",$this->data);
+        $this->load->view("common/footer",$this->data);        
+    }
+
+    public function cashier_invoice(){                                     
+
+        $role = $this->session->userdata('special_role');
+        $userlevel = $this->session->userdata('intUserLevel');
+        
+        if($role == 0 && $userlevel != 2)
+            redirect(base_url()."unity");
+
+        $this->data['page'] = "cashier";
+        $this->data['opentree'] = "cashier_admin";
+        $this->load->view("common/header",$this->data);
+        $this->load->view("cashier_invoice",$this->data);
         $this->load->view("common/footer",$this->data);        
     }
 
