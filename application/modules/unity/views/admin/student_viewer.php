@@ -218,6 +218,9 @@
                         <!-- <p><strong>Learner Reference Number(LRN): </strong>{{ student.strLRN'] }}</p> -->
                         <p><strong>Block Section:
                           </strong>{{ student.block ? student.block : 'Not yet selected' }}</p>
+                        <p><strong>Gender:
+                          </strong>{{ student.enumGender }}</p>
+                          
                         <p><strong>Address: </strong>{{ student.strAddress }}</p>
                         <p><strong>Contact: </strong>{{ student.strMobileNumber }}</p>
                         <!-- <p><strong>Institutional Email: </strong>{{ student.strGSuiteEmail' }}</p>   -->
