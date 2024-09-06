@@ -31,7 +31,7 @@
                     <table class="table table-bordered">                        
                         <thead>
                             <tr>
-                                <th v-if="is_super_admin"></th>                        
+                                <th v-if="is_super_admin || is_registrar"></th>                        
                                 <th></th>
                                 <th>Name</th>
                                 <th>Program</th>                                
@@ -45,7 +45,7 @@
                         </thead>
                         <tbody>                        
                             <tr :style="sid == student.intID?'background-color:#ccc;':''" v-for="(student,index) in students" v-if="show_all || student.registered">                                    
-                                <td v-if="is_super_admin"><input type="checkbox" v-model="checked" :value="student.intID" /></td>                                                                                    
+                                <td v-if="is_super_admin || is_registrar"><input type="checkbox" v-model="checked" :value="student.intID" /></td>                                                                                    
                                 <td >{{ index + 1 }}</td>
                                 <td ><a :href="base_url + 'unity/student_viewer/' + student.intID">{{ student.strLastname +' '+student.strFirstname+' '+student.strMiddlename }}</a></td>
                                 <td >{{ student.strProgramCode }}</td>
