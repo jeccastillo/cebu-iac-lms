@@ -303,7 +303,7 @@
                             <input type="text" value="<?php echo $student['strand']; ?>" name="strand"
                                 class="form-control" id="strand" placeholder="Enter Strand">
                         </div>
-                        <!-- <div class="form-group col-md-6">
+                        <div class="form-group col-md-6">
                             <label>Student Type</label>
                             <select class="form-control" name="student_type" id="student_type">
                                 <option <?php echo ($student['student_type'] == "freshman")?'selected':''; ?>
@@ -315,7 +315,7 @@
                                 <option <?php echo ($student['student_type'] == "second degree")?'selected':''; ?>
                                     value="second degree">Second Degree</option>
                             </select>
-                        </div> -->
+                        </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-xs-12">
