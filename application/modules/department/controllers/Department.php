@@ -90,7 +90,7 @@ class Department extends CI_Controller {
     
     public function faculty_loading()
     {
-        
+        $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');        
         $this->data['error_message'] = $this->session->flashdata('error_message');
         $this->data['page'] = "faculty_loading";
         $this->data['opentree'] = "department";
@@ -380,8 +380,10 @@ class Department extends CI_Controller {
         {
 			$post = $this->input->post();
             $id = $post['facultyID'];
-            
-            $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
+                        
+
+            $this->data['active_sem'] = $this->data_fetcher->get_sem_by_id($post['sem']);
+
             $this->data['faculty'] = $this->data_fetcher->getFaculty($id);
             $this->data['sc'] = [];
             

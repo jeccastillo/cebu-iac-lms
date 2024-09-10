@@ -31,6 +31,13 @@
                      <div class="col-sm-6">
                         <input type="text" id="select-faculty-id" name="facultyID" placeholder="Select Faculty" class="form-control" />
                      </div>
+                     <div class="col-sm-6">
+                     <select id="sem" name="sem" class="form-control" >
+                        <?php foreach($sy as $s): ?>
+                            <option <?php echo ($sem == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID']; ?>"><?php echo $s['term_student_type']." ".$s['enumSem']." ".$s['term_label']." ".$s['strYearStart']."-".$s['strYearEnd']; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                     </div>
                  </div>
                  <br />
                  <input class="btn btn-info btn-flat" type="submit" />
