@@ -411,7 +411,7 @@
           </ul>
         </li>
         <?php endif; ?>
-        <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 4): ?>
+        <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 4 || $user['intUserLevel'] == 3): ?>
         <li
           class="treeview <?php echo (isset($opentree) && $opentree=="department")?'active':''; ?>">
           <a href="#">
