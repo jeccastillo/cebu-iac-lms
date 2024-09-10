@@ -90,7 +90,9 @@ class Department extends CI_Controller {
     
     public function faculty_loading()
     {
-        $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');        
+        $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');    
+        $this->data['sem'] = $this->data_fetcher->get_active_sem();    
+        $this->data['sem'] = $this->data['sem']['intID'];
         $this->data['error_message'] = $this->session->flashdata('error_message');
         $this->data['page'] = "faculty_loading";
         $this->data['opentree'] = "department";
