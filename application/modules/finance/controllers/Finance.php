@@ -642,6 +642,16 @@ class Finance extends CI_Controller {
         $this->load->view("manual_pay",$this->data);
         $this->load->view("common/footer",$this->data);
     }
+    public function manualPayNew($slug,$type="Reservation Payment"){
+                
+        $this->data['type'] = $type;
+        $this->data['slug'] = $slug;
+        
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("manual_pay_new",$this->data);
+        $this->load->view("common/footer",$this->data);
+    }
 
     public function new_cashier(){
         $post = $this->input->post();
