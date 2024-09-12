@@ -53,6 +53,7 @@ new Vue({
     data: {        
         id: '<?php echo $id; ?>',
         sem: '<?php echo $sem; ?>', 
+        sy: [],
         student: {
             strFirstname:'',
             strLastname:'',
@@ -73,7 +74,8 @@ new Vue({
             })
 
             .then((data) => { 
-                this.student = data.data.student;                                         
+                this.student = data.data.student;
+                this.sy = data.data.sy;                                         
             });
 
    
