@@ -89,8 +89,8 @@ table tr td {
             <div style="position:absolute; top: 190px; right: 0; width: 200px; height: 20px;">
                 Sept 12, 2024
             </div>
-            <div style="position:absolute; top: 222px; left: 336px; width: 200px; height: 20px;">
-                Payee No and Payee Name
+            <div style="position:absolute; top: 222px; left: 336px; width: 500px; height: 20px;">
+                C202301050 HASSAN, KALILAH MYNA, VILLAMOR 
             </div>
             <div style="position:absolute; top: 250px; left: 336px; width: 500px; height: 20px;">
                 1773 Dian St. Palanan Makati City
@@ -103,6 +103,9 @@ table tr td {
             </div>
             <div style="position:absolute; top: 320px; right: -20; width: 200px; height: 20px;">
                 12,976.16
+            </div>
+            <div style="position:absolute; top: 345px; left: 355px; width: 200px; height: 20px;">
+                Tuition Fee / 3rd Term SY 2023-2024
             </div>
             
         </section>
