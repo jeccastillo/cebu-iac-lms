@@ -111,7 +111,7 @@ table tr td {
                 Tuition Fee / 3rd Term SY 2023-2024
             </div>
             <div style="position:absolute; top: 330px; right: -20px; width: 200px; height: 20px;font-size:15px">
-                Pinky D. Omaya
+            Pinky D. Omayao
             </div>
         </section>
     </div>
