@@ -49,7 +49,7 @@
     <div class="sheet-outer A4">
         <section class="sheet padding-5mm">     
             <div style="position:absolute; top: 160px; left: 100px; width: 100px; height: 20px;">
-                Inv No
+                1234A
             </div>
             <div style="position:absolute; top: 160px; left: 200px; width: 200px; height: 20px;">
                 12,976.16
