@@ -2192,6 +2192,65 @@ class Pdf extends CI_Controller {
         }
     }
 
+    function print_invoice()
+    {
+        $request = $this->input->post();
+
+        $role = $this->session->userdata('special_role');
+        $userlevel = $this->session->userdata('intUserLevel');
+
+        if($userlevel != 2 && $userlevel != 6)
+		  redirect(base_url()."unity");
+
+        $cashier = $this->db->get_where('tb_mas_faculty',array('intID'=>$request['cashier_id']))->row();
+        // $student = $this->db->get_where('tb_mas_users',array('slug'=> 'c9316f71-8991-4c93-a8d8-fd20f776aea1'))->first_row('array');
+        $student = $this->db->get_where('tb_mas_users',array('slug'=>$request['slug']))->first_row('array');
+        $term = $this->db->get_where('tb_mas_sy',array('intID'=>$request['sem']))->first_row('array');
+        
+        $reg = $this->db->get_where('tb_mas_registration',array('intStudentID'=>$student['intID'],'intAYID'=>$request['sem'], 'date_enlisted !=' => NULL))->first_row('array');
+        
+        $reservationDescription = $reservationAmount = '';
+        $tuition = $this->data_fetcher->getTuition($student['intID'], $request['sem']);
+        
+        if($reg['paymentType'] == 'partial'){
+            $reservationPayment = $this->db->get_where('payment_details',array('last_name' => 'Cajilog', 'description' => 'Reservation Payment', 'payment_details.sy_reference' => $request['sem'], 'payment_details.status' => 'Paid'))->first_row('array');
+    
+            if($reservationPayment){
+                $reservationAmount = $reservationPayment['subtotal_order'];
+                if($reservationPayment['invoice_number'])
+                    $reservationDescription = 'Inv ' . $reservationPayment['invoice_number'] . ' - ';
+            }
+            $reservationDescription .= 'Reservation Fee '; 
+        }
+        
+        $description = $request['description'] == "Tuition Fee" || $request['description'] == "Reservation Payment"  ? "Total Assessment " . $term['enumSem']." ".$term['term_label'] . " AY ".$term['strYearStart']."-".$term['strYearEnd']." ": $request['description'];
+
+        $this->data['term'] = $term;
+        $this->data['student_name'] = strtoupper($request['student_name']);        
+        $this->data['cashier_name'] = strtoupper($cashier->strFirstname." ".$cashier->strLastname);        
+        $this->data['student_id'] = $request['student_id'];        
+        $this->data['student_address'] = strtoupper($request['student_address']);
+        $this->data['is_cash'] = $request['is_cash'];        
+        $this->data['check_number'] = $request['check_number'];        
+        $this->data['remarks'] = $request['remarks'];
+        // $this->data['invoice_number'] = (string)$request['invoice_number'];
+        // $this->data['invoice_number'] = str_pad($this->data['invoice_number'],5,'0', STR_PAD_LEFT);
+        $this->data['description'] = $description;
+        $this->data['total_amount_due'] = number_format($request['total_amount_due'],2,'.',',');
+        $this->data['decimal'] = ($this->data['total_amount_due'] - floor( $this->data['total_amount_due'] )) * 100;
+        $this->data['decimal'] = round($this->data['decimal']);        
+        $this->data['transaction_date'] =  $request['transaction_date'];          
+        // $this->data['tin'] = $payee?$payee['tin']:'';
+        // $this->data['type'] = $type;
+        $this->data['request'] = $request;
+        $this->data['reservation_description'] = $reservationDescription;
+        $this->data['reservation_amount'] = number_format($reservationAmount,2,'.',',');
+        $this->data['payment_type'] = $reg['paymentType'];
+
+        $this->load->view("print_invoice",$this->data);
+
+    }
+
     function print_or_new(){
         $request = $this->input->post();
 
