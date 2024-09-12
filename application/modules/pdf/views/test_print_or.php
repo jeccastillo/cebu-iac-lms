@@ -68,43 +68,43 @@ table tr td {
 <body>
     <div class="sheet-outer A4">
         <section class="sheet padding-5mm">
-            <div style="position:absolute; top: 160px; left: 100px; width: 100px; height: 20px;">
+            <div style="position:absolute; top: 80px; left: 75px; width: 100px; height: 20px;">
                 1234A
             </div>
-            <div style="position:absolute; top: 160px; left: 200px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 80px; left: 175px; width: 200px; height: 20px;">
                 12,976.16
             </div>
-            <div style="position:absolute; top: 200px; left: 100px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 120px; left: 75px; width: 200px; height: 20px;">
                 Description Box
             </div>
-            <div style="position:absolute; top: 270px; left: 200px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 190px; left: 175px; width: 200px; height: 20px;">
                 12,976.16
             </div>
-            <div style="position:absolute; top: 370px; left: 100px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 290px; left: 75px; width: 200px; height: 20px;">
                 Remarks
             </div>
-            <div style="position:absolute; top: 390px; left: 200px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 290px; left: 175px; width: 200px; height: 20px;">
                 12,976.16
             </div>
-            <div style="position:absolute; top: 190px; right: 0; width: 200px; height: 20px;">
-                Sept 12, 2024
+            <div style="position:absolute; top: 110px; right: 0; width: 200px; height: 20px;">
+                09/12/24
             </div>
-            <div style="position:absolute; top: 222px; left: 336px; width: 500px; height: 20px;">
+            <div style="position:absolute; top: 140px; left: 336px; width: 500px; height: 20px;">
                 C202301050 HASSAN, KALILAH MYNA, VILLAMOR 
             </div>
-            <div style="position:absolute; top: 250px; left: 336px; width: 500px; height: 20px;">
+            <div style="position:absolute; top: 170px; left: 336px; width: 500px; height: 20px;">
                 1773 Dian St. Palanan Makati City
             </div>
-            <div style="position:absolute; top: 275px; left: 336px; width: 500px; height: 20px;">
+            <div style="position:absolute; top: 195px; left: 336px; width: 500px; height: 20px;">
                 As Applicable
             </div>
-            <div style="position:absolute; top: 295px; left: 350px; width: 500px; height: 20px;">
+            <div style="position:absolute; top: 215px; left: 350px; width: 500px; height: 20px;">
                 Twelve thousand, nine hundred seventy-six and sixteen hundredths.
             </div>
-            <div style="position:absolute; top: 320px; right: -20; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 240px; right: -20; width: 200px; height: 20px;">
                 12,976.16
             </div>
-            <div style="position:absolute; top: 345px; left: 355px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 265px; left: 355px; width: 200px; height: 20px;">
                 Tuition Fee / 3rd Term SY 2023-2024
             </div>
             
