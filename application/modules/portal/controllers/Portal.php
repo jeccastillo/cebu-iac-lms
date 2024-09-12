@@ -150,8 +150,7 @@ class Portal extends CI_Controller {
             $tuition[] =  $temp;
             
         }
-
-        $data['student'] = $this->data_fetcher->getStudent($id);
+        
         $data['tuition'] = $tuition;        
         
         $data['ledger_group_term'] =$this->db->select('tb_mas_sy.*, paymentType')
@@ -178,6 +177,41 @@ class Portal extends CI_Controller {
         $this->load->view("common/footer",$this->data);
 
     }
+
+    public function enlistment($sem = 0){
+        $id = $this->session->userdata('intID');
+        $this->data['id'] = $id;     
+        $this->data['page']="enlistment form";   
+        $this->data['sem'] = $sem;        
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("enlistment",$this->data);
+        $this->load->view("common/footer",$this->data);
+    }
+
+    public function enlistment_data($id,$sem){
+        $data['student'] = $this->data_fetcher->getStudent($id);  
+        
+        switch($data['student']['level']){
+            case 'shs':
+                $stype = 'shs';
+            break;
+            case 'drive':
+                $stype = 'shs';
+            break;
+            case 'college':
+                $stype = 'college';
+            break;
+            case 'other':
+                $stype = 'college';
+            break;
+            default: 
+                $stype = 'college';
+        }
+
+        $data['sy'] = $this->db->get_where('tb_mas_sy',array('term_student_type'=>$stype))->result_array();    
+        echo json_encode($data);
+    }
 	
     public function select_sem($sem,$page)
     {
@@ -203,6 +237,9 @@ class Portal extends CI_Controller {
                     break;
             case 'schedule':
                 redirect(base_url().'portal/schedule');
+                break;
+            case 'enlistment':
+                redirect(base_url().'portal/enlistment');
                 break;
         }
     }
