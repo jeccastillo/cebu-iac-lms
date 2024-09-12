@@ -68,22 +68,22 @@ table tr td {
 <body>
     <div class="sheet-outer A4">
         <section class="sheet padding-5mm">
-            <div style="position:absolute; top: 80px; left: 35px; width: 100px; height: 20px;">
+            <div style="position:absolute; top: 95px; left: 20px; width: 100px; height: 20px;">
                 1234A
             </div>
-            <div style="position:absolute; top: 80px; left: 130px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 95px; left: 80px; width: 200px; height: 20px;">
                 12,976.16
             </div>
-            <div style="position:absolute; top: 120px; left: 35px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 120px; left: 0px; width: 200px; height: 20px;">
                 Description Box
             </div>
-            <div style="position:absolute; top: 190px; left: 130px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 190px; left: 80px; width: 200px; height: 20px;">
                 12,976.16
             </div>
-            <div style="position:absolute; top: 290px; left: 35px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 360px; left: 0px; width: 200px; height: 20px;">
                 Remarks
             </div>
-            <div style="position:absolute; top: 290px; left: 130px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 360px; left: 80px; width: 200px; height: 20px;">
                 12,976.16
             </div>
             <div style="position:absolute; top: 115px; right: -60px; width: 200px; height: 20px;">
