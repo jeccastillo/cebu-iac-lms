@@ -54,6 +54,9 @@
             <div style="position:absolute; top: 160px; left: 200px; width: 200px; height: 20px;">
                 12,976.16
             </div>
+            <div style="position:absolute; top: 200px; left: 100px; width: 200px; height: 20px;">
+                Description Box
+            </div>
         </section>
     </div>
 </body>
