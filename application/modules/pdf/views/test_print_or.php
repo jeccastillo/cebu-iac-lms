@@ -71,20 +71,23 @@ table tr td {
             <div style="position:absolute; top: 95px; left: 20px; width: 100px; height: 20px;">
                 1234A
             </div>
-            <div style="position:absolute; top: 95px; left: 80px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 95px; left: 95px; width: 200px; height: 20px;">
                 12,976.16
             </div>
-            <div style="position:absolute; top: 120px; left: 0px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 140px; left: 0px; width: 200px; height: 20px;">
                 Description Box
             </div>
-            <div style="position:absolute; top: 190px; left: 80px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 190px; left: 95px; width: 200px; height: 20px;">
                 12,976.16
             </div>
-            <div style="position:absolute; top: 360px; left: 0px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 340px; left: 0px; width: 200px; height: 20px;">
                 Remarks
             </div>
-            <div style="position:absolute; top: 360px; left: 80px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 360px; left: 95px; width: 200px; height: 20px;">
                 12,976.16
+            </div>
+            <div style="position:absolute; top: 90; right: 60px; width: 200px; height: 20px;">
+                OR No: 03041
             </div>
             <div style="position:absolute; top: 115px; right: -60px; width: 200px; height: 20px;">
                 09/12/24
