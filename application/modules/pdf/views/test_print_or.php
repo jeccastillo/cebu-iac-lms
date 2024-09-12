@@ -99,7 +99,7 @@ table tr td {
                 As Applicable
             </div>
             <div style="position:absolute; top: 215px; left: 350px; width: 500px; height: 20px;">
-                Twelve thousand, nine hundred seventy-six and sixteen hundredths.
+                Twelve thousand, nine hundred seventy-six and sixteen cents
             </div>
             <div style="position:absolute; top: 240px; right: -50; width: 200px; height: 20px;">
                 12,976.16
