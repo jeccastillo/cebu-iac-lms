@@ -1731,7 +1731,7 @@ new Vue({
                 return
             }
             else
-                this.hide_school_address =  true
+                this.hide_school_address =  false
 
             if (value.name != '') {
                 this.isOnList = false
