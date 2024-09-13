@@ -104,7 +104,7 @@ table tr td {
             <div style="position:absolute; top: 195px; left: 295px; width: 500px; height: 20px;">
                 As Applicable
             </div>
-            <div style="position:absolute; top: 215px; left: 350px; width: 500px; height: 20px;">
+            <div style="position:absolute; top: 215px; left: 350px; width: 700px; height: 20px;">
                 <?php echo convert_number($total_amount_due); ?> <?php echo $decimal?'and '.convert_number($decimal).' cents':'only'; ?>
             </div>
             <div style="position:absolute; top: 240px; right: -50; width: 200px; height: 20px;">
