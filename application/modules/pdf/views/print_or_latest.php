@@ -111,7 +111,7 @@ table tr td {
                 <?php echo $total_amount_due; ?>
             </div>
             <div style="position:absolute; top: 265px; left: 380px; width: 200px; height: 20px;">
-                <?php echo $description == "Reservation Payment" ? "NON REFUNDABLE AND NON TRANSFERABLE":""; ?> / <?php echo "SY ".$term['strYearStart']."-".$term['strYearEnd']." ".$term['enumSem']." ".$term['term_label']."<br />".$type; ?>            
+                 <?php echo $type. " / SY ".$term['strYearStart']."-".$term['strYearEnd']." ".$term['enumSem']." ".$term['term_label']; ?>            
             </div>
             <div style="position:absolute; top: 330px; right: -20px; width: 200px; height: 20px;font-size:15px">
             Pinky D. Omayao
