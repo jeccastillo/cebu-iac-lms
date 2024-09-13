@@ -39,7 +39,7 @@
             Note: You are applying for iACADEMY Cebu Campus, if you want to apply to iACADEMY Makati
             click
             <a style="text-decoration: underline;"
-                href="http://cebu.iacademy.edu.ph/site/student_application_makati_view">here</a>.
+                href="https://sms-makati.iacademy.edu.ph/">here</a>.
         </p>
     </div>
 
