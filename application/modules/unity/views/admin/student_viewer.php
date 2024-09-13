@@ -771,17 +771,19 @@ new Vue({
                     axios.get(api_url + 'admissions/student-info/' + this.student.slug)
                       .then((data) => {
                         this.applicant_data = data.data.data;
-
                         this.applicant_data.tos =
                         this.applicant_data.tos.charAt(0).toUpperCase()
                           + this.applicant_data.tos.slice(1);
 
                         for (i in this.applicant_data.uploaded_requirements) {
+                          this.applicant_data.uploaded_requirements[i].path = this.applicant_data.uploaded_requirements[i].path.replace("116.50.237.244", "smsapi.iacademy.edu.ph"); 
                           if (this.applicant_data.uploaded_requirements[i].type ==
                             "2x2" || this.applicant_data.uploaded_requirements[i]
                             .type == "2x2_foreign")
                             this.picture = this.applicant_data.uploaded_requirements[i]
                             .path;
+
+                            
                         }
                       })
                       .catch((error) => {
