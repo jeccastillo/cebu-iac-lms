@@ -95,7 +95,7 @@ $(document).ready(function() {
                 "mData": null,
                 "bSortable": false,
                 "mRender": function(data, type, row, meta) {
-                    return '<?php echo $d_open; ?><li><a target="_blank" href="<?php echo base_url(); ?>admissionsV1/view_lead/'
+                    return '<?php echo $d_open; ?><li><a target="_blank" href="<?php echo base_url(); ?>admissionsV1/view_lead_new/'
                         +row.slug 
                         +'">View Details</a></li>'
                         +'<li><a target="_blank" href="<?php echo base_url(); ?>finance/manualPay/'

@@ -29,7 +29,7 @@
                     <h5 class=" text-left text-primary ">
                         <strong> Applicant Details</strong>
                         <a class="btn btn-primary"
-                            :href="base_url + 'admissionsV1/view_lead/' + slug">Old View</a>
+                            :href="base_url + 'admissionsV1/view_lead_new/' + slug">Old View</a>
                     </h5>
                 </div>
                 <div class="box-body">
@@ -3891,7 +3891,7 @@ new Vue({
                         text: 'Field Updated',
                         icon: 'success',
                     });
-                    //document.location = base_url + 'admissionsV1/view_lead/' + this.slug;
+                    //document.location = base_url + 'admissionsV1/view_lead_new/' + this.slug;
 
 
                 });
@@ -3905,7 +3905,7 @@ new Vue({
                 icon: 'warning',
             }).then(data => {
                 document.location = base_url +
-                    'admissionsV1/view_lead/' + this
+                    'admissionsV1/view_lead_new/' + this
                     .slug;
 
             });
@@ -3952,7 +3952,7 @@ new Vue({
 
                     Swal.hideLoading();
                     document.location = base_url +
-                        'admissionsV1/view_lead/' + this
+                        'admissionsV1/view_lead_new/' + this
                         .slug;
 
 
@@ -4265,7 +4265,7 @@ new Vue({
                 icon: 'warning',
             }).then(data => {
                 document.location = base_url +
-                    'admissionsV1/view_lead/' + this
+                    'admissionsV1/view_lead_new/' + this
                     .slug;
 
             });
@@ -4343,7 +4343,7 @@ new Vue({
                 icon: 'warning',
             }).then(data => {
                 document.location = base_url +
-                    'admissionsV1/view_lead/' +
+                    'admissionsV1/view_lead_new/' +
                     this
                     .slug;
 
