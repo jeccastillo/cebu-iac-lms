@@ -2322,7 +2322,6 @@ class Pdf extends CI_Controller {
         $this->data['decimal'] = $decimal;
         $this->data['description'] = $description;
         $this->data['total_amount_due'] = number_format($request['total_amount_due'],2,'.',',');
-
                   
         $this->load->view("print_or_latest",$this->data);
 
