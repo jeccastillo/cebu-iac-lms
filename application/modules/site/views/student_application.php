@@ -1637,11 +1637,10 @@ new Vue({
                         }
                     })
            
-                 this.prevSchoolList = data
-                   
                 }
 
-                const obj = {
+                this.prevSchoolList = data
+                    const obj = {
                         name: 'Not on the list'
                     }
                     this.prevSchoolList.push(obj)
