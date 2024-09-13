@@ -726,17 +726,12 @@ new Vue({
     },
     watch: {
         'request.description': {
-            handler(newVal, oldVal) {
-                if (newVal === 'Reservation Payment') {                                    
-                    this.request.invoice_number = this.cashier.invoice_current
-                    this.request.or_number  = ''
-                    this.apiUpdate = 'finance/update_cashier_invoice'
-                }
-                if (newVal === 'Application Payment') {
-                    this.request.or_number = this.cashier.or_current;
-                    this.request.invoice_number  = ''
-                    this.apiUpdate = 'finance/next_or'
-                }
+            handler(newVal, oldVal) {            
+                this.request.invoice_number = this.cashier.invoice_current
+                this.request.or_number  = ''
+                this.apiUpdate = 'finance/update_cashier_invoice'
+            }
+                
             },
             deep: true,
             immediate: true
