@@ -728,7 +728,7 @@
                             @input="onInputChange"></v-select>
 
                     </div>
-                    <div class="basis-[154px]">
+                    <div v-if="!hide_school_address" class="basis-[154px]">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
                             City
                         </label>
@@ -738,7 +738,7 @@
                             v-model="request.school_city">
 
                     </div>
-                    <div class="basis-[154px]">
+                    <div v-if="!hide_school_address" class="basis-[154px]">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
                             State/Province
                         </label>
@@ -748,7 +748,7 @@
                             v-model="request.school_province">
 
                     </div>
-                    <div>
+                    <div v-if="!hide_school_address">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
                             Country
                         </label>
@@ -1400,6 +1400,7 @@ new Vue({
         selected: '',
         countryList: [],
         barangay: [],
+        hide_school_address: false,
         cities: [],
         states: [],
         apiUrl: "http://cebuapi.iacademy.edu.ph/api/v1/",
@@ -1674,6 +1675,7 @@ new Vue({
                 this.request.school_city = ""
                 this.request.school_province = ""
                 this.request.school_country = ""
+                this.hide_school_address =  true
                 return
             }
 
