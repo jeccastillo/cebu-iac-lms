@@ -2296,7 +2296,7 @@ class Pdf extends CI_Controller {
 
         $decimal = ($request['total_amount_due'] - floor( $request['total_amount_due'] )) * 100;
         $decimal = round($decimal);
-        $totalAmountDueText = convert_number($request['total_amount_due']);
+        $totalAmountDueText = convert_number($request['total_amount_due'])." ";
         $totalAmountDueText .= $decimal ? 'and '.convert_number($decimal).' cents':'only';
 
         $description = $request['description'] == "Reservation Payment" ? "NON REFUNDABLE AND NON TRANSFERABLE":"";
