@@ -93,7 +93,10 @@ table tr td {
                 09/12/24
             </div>
             <div style="position:absolute; top: 140px; left: 336px; width: 500px; height: 20px;">
-                C202301050 HASSAN, KALILAH MYNA, VILLAMOR 
+                <?php if($student_id != 'undefined' && $student_id != ''): ?>
+                    <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?>
+                <?php endif; ?>
+                &nbsp; <?php echo $student_name; ?>
             </div>
             <div style="position:absolute; top: 170px; left: 310px; width: 500px; height: 20px;">
                 1773 Dian St. Palanan Makati City
