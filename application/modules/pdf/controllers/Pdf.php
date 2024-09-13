@@ -2203,8 +2203,8 @@ class Pdf extends CI_Controller {
 		  redirect(base_url()."unity");
 
         $cashier = $this->db->get_where('tb_mas_faculty',array('intID'=>$request['cashier_id']))->row();
-        $student = $this->db->get_where('tb_mas_users',array('slug'=> 'c9316f71-8991-4c93-a8d8-fd20f776aea1'))->first_row('array');
-        // $student = $this->db->get_where('tb_mas_users',array('slug'=>$request['slug']))->first_row('array');
+        // $student = $this->db->get_where('tb_mas_users',array('slug'=> 'c9316f71-8991-4c93-a8d8-fd20f776aea1'))->first_row('array');
+        $student = $this->db->get_where('tb_mas_users',array('slug'=>$request['slug']))->first_row('array');
         $term = $this->db->get_where('tb_mas_sy',array('intID'=>$request['sem']))->first_row('array');
         
         
