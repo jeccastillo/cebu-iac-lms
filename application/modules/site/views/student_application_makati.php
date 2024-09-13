@@ -1706,6 +1706,7 @@ new Vue({
         },
         async onInputChange(value) {
 
+            this.hide_school_address =  false
             if (value == null) {
                 this.isOnList = false
                 this.request.school_id = ''
@@ -1729,9 +1730,8 @@ new Vue({
                 this.request.school_country = ""
                 this.hide_school_address =  true
                 return
-            }
-            else
-                this.hide_school_address =  false
+            }            
+                
 
             if (value.name != '') {
                 this.isOnList = false
