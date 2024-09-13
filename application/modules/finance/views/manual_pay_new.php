@@ -1101,19 +1101,12 @@ new Vue({
                                 this.loader_spinner = false;
                                 if (data.data.success) {
                                     var formdata = new FormData();
-                                    if (this.request.description == 'Application Payment') {
-                                        formdata.append('intID', this.cashier.intID);
-                                        formdata.append('or_current', this.cashier.or_current);
-                                        formdata.append('or_used', this.cashier.or_current);
-                                        formdata.append('sy', this.student.sy_reference);
-                                    }
-
-                                    if (this.request.description == 'Reservation Payment') {
-                                        formdata.append('intID', this.cashier.intID);
-                                        formdata.append('start', this.cashier.invoice_start);
-                                        formdata.append('end', this.cashier.invoice_end);
-                                        formdata.append('current', (parseInt(this.cashier.invoice_current) + 1).toString());
-                                    }
+                                                                                                           
+                                    formdata.append('intID', this.cashier.intID);
+                                    formdata.append('start', this.cashier.invoice_start);
+                                    formdata.append('end', this.cashier.invoice_end);
+                                    formdata.append('current', (parseInt(this.cashier.invoice_current) + 1).toString());
+                                    
                                     console.log(this.apiUpdate);
                                     console.log(formdata);
                                     
