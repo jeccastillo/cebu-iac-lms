@@ -564,14 +564,14 @@
                                             <td>{{ application_payment.or_date }}</td>
                                             <td>{{ application_payment.void_reason }}</td>
                                             <td>
-                                                <button
+                                                <!-- <button
                                                     v-if="!application_payment.or_number && application_payment.status == 'Paid' && cashier && application_payment.remarks != 'Voided'"
                                                     data-toggle="modal"
                                                     @click="prepUpdate(application_payment.id,application_payment.description,application_payment.subtotal_order)"
                                                     data-target="#myModal"
                                                     class="btn btn-primary">
                                                     Update OR
-                                                </button>
+                                                </button> -->
                                                 <button
                                                     v-if="application_payment.status == 'Paid' && cashier && application_payment.remarks != 'Voided'"
                                                     data-toggle="modal"
@@ -586,17 +586,17 @@
                                                     @click="or_details.id = application_payment.id;"
                                                     data-target="#orDetailsUpdate"
                                                     class="btn btn-primary">
-                                                    Update OR Details
+                                                    Update Details
                                                 </button>
-                                                <button
+                                                <!-- <button
                                                     v-if="application_payment.or_number && cashier"
                                                     @click="printOR(application_payment)"
                                                     class="btn btn-primary">
                                                     Print OR
-                                                </button>
+                                                </button> -->
                                                 <button
-                                                    v-if="application_payment.or_number && cashier"
-                                                    @click="printOR(application_payment)"
+                                                    v-if="application_payment.invoice_number && cashier"
+                                                    @click="printInvoice(application_payment)"
                                                     class="btn btn-primary">
                                                     Print Invoice
                                                 </button>
@@ -648,14 +648,14 @@
                                                     class="btn btn-primary">
                                                     Update OR Details
                                                 </button>
-                                                <button v-if="payment.or_number && cashier"
+                                                <!-- <button v-if="payment.or_number && cashier"
                                                     @click="printOR(payment)"
                                                     class="btn btn-primary">
                                                     Print OR
-                                                </button>
+                                                </button> -->
                                                 <button
-                                                    v-if="application_payment.or_number && cashier"
-                                                    @click="printOR(application_payment)"
+                                                    v-if="payment.invoice_number && cashier"
+                                                    @click="printInvoice(payment)"
                                                     class="btn btn-primary">
                                                     Print Invoice
                                                 </button>
@@ -697,14 +697,14 @@
                                             <td>{{ reservation_payment.or_date }}</td>
                                             <td>{{ reservation_payment.void_reason }}</td>
                                             <td>
-                                                <button
+                                                <!-- <button
                                                     v-if="!reservation_payment.or_number && reservation_payment.status == 'Paid' && cashier"
                                                     data-toggle="modal"
                                                     @click="prepUpdate(reservation_payment.id,reservation_payment.description,reservation_payment.subtotal_order)"
                                                     data-target="#myModal"
                                                     class="btn btn-primary">
                                                     Update OR
-                                                </button>
+                                                </button> -->
                                                 <button
                                                     v-if="reservation_payment.status == 'Paid' && cashier && reservation_payment.remarks != 'Voided'"
                                                     data-toggle="modal"
@@ -719,17 +719,17 @@
                                                     @click="or_details.id = reservation_payment.id;"
                                                     data-target="#orDetailsUpdate"
                                                     class="btn btn-primary">
-                                                    Update OR Details
+                                                    Update Details
                                                 </button>
-                                                <button
+                                                <!-- <button
                                                     v-if="reservation_payment.or_number && cashier"
                                                     @click="printOR(reservation_payment)"
                                                     class="btn btn-primary">
                                                     Print OR
-                                                </button>
+                                                </button> -->
                                                 <button
-                                                    v-if="application_payment.or_number && cashier"
-                                                    @click="printOR(application_payment)"
+                                                    v-if="reservation_payment.invoice_number && cashier"
+                                                    @click="printInvoice(reservation_payment)"
                                                     class="btn btn-primary">
                                                     Print Invoice
                                                 </button>
@@ -779,16 +779,16 @@
                                                     @click="or_details.id = payment.id;"
                                                     data-target="#orDetailsUpdate"
                                                     class="btn btn-primary">
-                                                    Update OR Details
+                                                    Update Details
                                                 </button>
-                                                <button v-if="payment.or_number && cashier"
+                                                <button v-if="payment.or_number && payment.invoice_number && cashier"
                                                     @click="printOR(payment)"
                                                     class="btn btn-primary">
                                                     Print OR
                                                 </button>
                                                 <button
-                                                    v-if="application_payment.or_number && cashier"
-                                                    @click="printOR(application_payment)"
+                                                    v-if="payment.or_number && cashier"
+                                                    @click="printInvoice(payment)"
                                                     class="btn btn-primary">
                                                     Print Invoice
                                                 </button>
@@ -950,6 +950,9 @@
             name="or_number"
             v-model="or_print.or_number" />
         <input type="hidden"
+            name="invoice_number"
+            v-model="or_print.invoice_number" />
+        <input type="hidden"
             name="description"
             v-model="or_print.description" />
         <input type="hidden"
@@ -968,6 +971,59 @@
             name="type"
             v-model="or_print.type" />
     </form>    
+    <form ref="print_or"
+        method="post"
+        :action="base_url + 'pdf/print_updated_or'"
+        target="_blank">
+        <input type="hidden"
+            name="student_name"
+            v-model="or_print.student_name">
+        <input type="hidden"
+            name="campus"
+            :value="request.student_campus">
+        <input type="hidden"
+            name="cashier_id"
+            v-model="or_print.cashier_id">
+        <input type="hidden"
+            name="student_id"
+            v-model="or_print.student_id">
+        <input type="hidden"
+            name="student_address"
+            v-model="or_print.student_address">
+        <input type="hidden"
+            name="is_cash"
+            v-model="or_print.is_cash">
+        <input type="hidden"
+            name="check_number"
+            v-model="or_print.check_number">
+        <input type="hidden"
+            name="remarks"
+            v-model="or_print.remarks">
+        <input type="hidden"
+            name="or_number"
+            v-model="or_print.or_number" />
+        <input type="hidden"
+            name="invoice_number"
+            v-model="or_print.invoice_number" />
+        <input type="hidden"
+            name="description"
+            v-model="or_print.description" />
+        <input type="hidden"
+            name="total_amount_due"
+            v-model="or_print.total_amount_due" />
+        <input type="hidden"
+            name="name"
+            v-model="or_print.student_name" />
+        <input type="hidden"
+            name="sem"
+            v-model="or_print.sem" />
+        <input type="hidden"
+            name="transaction_date"
+            v-model="or_print.transaction_date" />
+        <input type="hidden"
+            name="type"
+            v-model="or_print.type" />
+    </form>
     <form ref="print_soa"
         method="post"
         :action="base_url + 'pdf/print_soa'"
@@ -2085,6 +2141,7 @@ new Vue({
                 showLoaderOnConfirm: true,
                 preConfirm: (data) => {
                     this.or_print.or_number = payment.or_number;
+                    this.or_print.invoice_number = payment.invoice_number;
                     this.or_print.description = payment.description;
                     this.or_print.total_amount_due = payment.subtotal_order;
                     this.or_print.transaction_date = payment.or_date;
