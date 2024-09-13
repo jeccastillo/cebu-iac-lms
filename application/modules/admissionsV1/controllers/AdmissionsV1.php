@@ -322,10 +322,10 @@ class AdmissionsV1 extends CI_Controller {
             $this->load->view("common/subjects_conf",$this->data); 
         }
         else
-            redirect(base_url()."users/login");            
+            redirect(base_url()."users");            
     }
     public function view_lead_new($id) {
-        if(in_array($this->session->userdata('intUserLevel'),array(2,3,5,6)))
+        if(in_array($this->session->userdata('intUserLevel'),array(2,3,5,6,7)))
         {
             $this->data['exam_type']= $this->data_fetcher->fetch_table('tb_mas_exam');
             $this->data['userlevel'] = $this->session->userdata('intUserLevel');
