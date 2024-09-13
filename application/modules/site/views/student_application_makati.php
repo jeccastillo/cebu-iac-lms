@@ -142,7 +142,7 @@
                 </div>
             </div>
             <div id=applying-for
-                class=" flex-[4_1_auto] max-w-[710px]">
+                class=" flex-[4_1_auto] max-w-[710px]" v-if="request.student_type">
                 <div class="md:w-5/5">
                     <label class="block t color-primary font-bold  mb-3  pr-4"
                         for="inline-full-name">
