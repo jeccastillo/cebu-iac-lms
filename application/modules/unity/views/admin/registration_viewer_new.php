@@ -397,7 +397,7 @@
                                                     class="form-group">
                                                     <label>Invoice Number:</label>
                                                     <select class="form-control" v-model="request.invoice_number" required>
-                                                        <option v-for="i in invoiceNumbers" :value="i">{{ i }}</option>
+                                                        <option v-for="invoiceNumber in invoiceNumbers" :value="invoiceNumber.invoice_number">{{ invoiceNumber.invoice_number }}</option>
                                                     </select>                                                     
 
                                                 </div>
