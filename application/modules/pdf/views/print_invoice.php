@@ -67,11 +67,7 @@ table tr td {
 
 <body>
     <div class="sheet-outer A4">
-        <section class="sheet padding-5mm">
-         
-        
-        
-        
+        <section class="sheet padding-5mm">                
             <div style="position:absolute; top: 100; right: 60px; width: 200px; height: 20px;">
                 OR No: 03041
             </div>
