@@ -74,7 +74,7 @@ table tr td {
             <div style="position:absolute; top: 90px; left: 95px; width: 200px; height: 20px;">
                 <?php echo $total_amount_due; ?>
             </div>
-            <div style="position:absolute; top: 140px; left: 5px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 120px; left: 5px; width: 200px; height: 20px;">
                 <?php echo $description == "Reservation Payment" ? "NON REFUNDABLE AND NON TRANSFERABLE":""; ?><br />
                 <?php echo "SY ".$term['strYearStart']."-".$term['strYearEnd']." ".$term['enumSem']." ".$term['term_label']."<br />".$type; ?><br />
                 <?php echo $remarks; ?>
