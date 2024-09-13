@@ -495,8 +495,8 @@
                                                         class="btn btn-primary">
                                                         Print OR
                                                 </button>        
-                                                <button v-if="application_payment.or_number && cashier"                                             
-                                                        @click="printORUpdated(application_payment)" 
+                                                <button v-if="payment.or_number && cashier"                                             
+                                                        @click="printORUpdated(payment)" 
                                                         class="btn btn-primary">
                                                         Print Updated
                                                 </button>                                        
