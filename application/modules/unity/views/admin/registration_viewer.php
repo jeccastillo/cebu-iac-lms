@@ -610,7 +610,7 @@
         <input type="hidden" name="transaction_date" v-model="or_print.transaction_date" /> 
         <input type="hidden" name="type" v-model="or_print.type" />              
     </form>
-    <form ref="print_or_updated" method="post" :action="base_url + 'pdf/print_or_updated'" target="_blank">
+    <form ref="print_or_updated" method="post" :action="base_url + 'pdf/print_updated_or'" target="_blank">
         <input type="hidden" name="student_name" v-model="or_print.student_name">
         <input type="hidden" name="campus" :value="request.student_campus">
         <input type="hidden" name="cashier_id" v-model="or_print.cashier_id">
