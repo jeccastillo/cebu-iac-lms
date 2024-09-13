@@ -2518,6 +2518,10 @@ class Pdf extends CI_Controller {
     function print_or_test(){
         $this->load->view('test_print_or');
     }
+    function print_invoice_test(){
+        $this->load->view('test_print_invoice');
+    }
+    
     
     function student_viewer_blank_rog_print($id, $sem = null)
     {
