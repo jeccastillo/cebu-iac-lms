@@ -160,8 +160,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6"
-                                        v-if="request.description == 'Reservation Payment'">
+                                    <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Invoice Number:</label>
                                             <!-- <div>
