@@ -552,14 +552,10 @@
             <i class="fa pull-right fa-angle-left"></i>
           </a>
           <ul class="treeview-menu">
-          <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
-             style="margin-left: 10px;" href="<?php echo base_url() ?>finance/view_all_students"><i
-                  class="ion ion-cash"></i>
-                <span>Collection</span> </a></li>
             <li class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>"><a
              style="margin-left: 10px;" href="<?php echo base_url() ?>finance/view_all_students"><i
                   class="ion ion-cash"></i>
-                <span>Payment</span> </a></li>
+                <span>Collection</span> </a></li>            
             <li class="<?php echo (isset($page) && $page=="no_or")?'active':''; ?>"><a
             style="margin-left: 10px;" href="<?php echo base_url() ?>finance/payments_no_or"><i class="ion ion-cash"></i>
                 <span>Online Payment</span> </a></li>

@@ -713,7 +713,7 @@ class Unity extends CI_Controller {
         $data['id'] =  $id;
 
         $this->load->view("common/header",$this->data);
-        $this->load->view("admin/registration_viewer",$data);
+        $this->load->view("admin/registration_viewer_new",$data);
         $this->load->view("common/footer",$this->data);         
     }
 
