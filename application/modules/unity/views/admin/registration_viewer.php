@@ -500,7 +500,7 @@
                                                         class="btn btn-primary">
                                                         Print Updated
                                                 </button> 
-                                                <button v-if="payment.or_number && cashier"                                             
+                                                <button v-if="payment.invoice_number && cashier"                                             
                                                         @click="printInvoice(payment)" 
                                                         class="btn btn-primary">
                                                         Print Invoice
