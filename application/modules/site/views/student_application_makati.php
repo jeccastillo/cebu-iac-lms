@@ -1727,9 +1727,11 @@ new Vue({
                 this.request.school_city = ""
                 this.request.school_province = ""
                 this.request.school_country = ""
-                this.hide_school_address =  true;
+                this.hide_school_address =  true
                 return
             }
+            else
+                this.hide_school_address =  true
 
             if (value.name != '') {
                 this.isOnList = false
