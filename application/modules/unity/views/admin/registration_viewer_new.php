@@ -396,9 +396,9 @@
                                                 <div v-if="isOR"
                                                     class="form-group">
                                                     <label>Invoice Number:</label>
-                                                    <!-- <select class="form-control" v-model="request.or_number" required>
-                                                        <option v-for="i in (parseInt(cashier_start), parseInt(cashier_end))" :value="i">{{ i }}</option>
-                                                    </select>                                                     -->
+                                                    <select class="form-control" v-model="request.invoice_number" required>
+                                                        <option v-for="i in invoiceNumbers" :value="i">{{ i }}</option>
+                                                    </select>                                                     
 
                                                 </div>
                                                 <div v-if="onInvoice"
@@ -1761,7 +1761,7 @@ new Vue({
 
     methods: {
         async getInvoiceNumber(){                                    
-           const {data} = await axios.get(`${api_url}finance/invoice-list/${this.applicant_data.syid}/${this.applicant_data.campus}/${this.slug}`)
+           const {data} = await axios.get(`${api_url}finance/invoice-list/${this.sem}/${this.applicant_data.campus}/${this.slug}`)
            
            this.invoiceNumbers = data.data
 
