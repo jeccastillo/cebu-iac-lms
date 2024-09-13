@@ -380,6 +380,11 @@
                                                         class="btn btn-primary">
                                                         Print OR
                                                 </button>
+                                                <button v-if="application_payment.or_number && cashier"                                             
+                                                        @click="printORUpdated(application_payment)" 
+                                                        class="btn btn-primary">
+                                                        Print Updated
+                                                </button>
                                                 <button v-if="application_payment.status == 'Paid' && application_payment.remarks != 'Voided' && cashier && finance_manager_privilages" data-toggle="modal" data-target="#voidPaymentModal" class="btn btn-primary" @click="setToVoid(application_payment.id)">Void/Cancel</button>
                                             </td>
                                         </tr>                                        
@@ -589,6 +594,23 @@
         </div>
     </div>
     <form ref="print_or" method="post" :action="base_url + 'pdf/print_or_new'" target="_blank">
+        <input type="hidden" name="student_name" v-model="or_print.student_name">
+        <input type="hidden" name="campus" :value="request.student_campus">
+        <input type="hidden" name="cashier_id" v-model="or_print.cashier_id">
+        <input type="hidden" name="student_id" v-model="or_print.student_id">
+        <input type="hidden" name="student_address" v-model="or_print.student_address">
+        <input type="hidden" name="is_cash" v-model="or_print.is_cash">
+        <input type="hidden" name="check_number" v-model="or_print.check_number">
+        <input type="hidden" name="remarks" v-model="or_print.remarks">
+        <input type="hidden" name="or_number" v-model="or_print.or_number" />
+        <input type="hidden" name="description" v-model="or_print.description" />
+        <input type="hidden" name="total_amount_due" v-model="or_print.total_amount_due" /> 
+        <input type="hidden" name="name" v-model="or_print.student_name" />       
+        <input type="hidden" name="sem" v-model="or_print.sem" />       
+        <input type="hidden" name="transaction_date" v-model="or_print.transaction_date" /> 
+        <input type="hidden" name="type" v-model="or_print.type" />              
+    </form>
+    <form ref="print_or_updated" method="post" :action="base_url + 'pdf/print_or_updated'" target="_blank">
         <input type="hidden" name="student_name" v-model="or_print.student_name">
         <input type="hidden" name="campus" :value="request.student_campus">
         <input type="hidden" name="cashier_id" v-model="or_print.cashier_id">
@@ -1505,6 +1527,43 @@ new Vue({
             }).then((result) => {
                 var delayInMilliseconds = 1000; //1 second
                 var or_send = this.$refs.print_or;
+                setTimeout(function() {
+                    or_send.submit();
+                }, delayInMilliseconds);
+                            
+            });  
+        },
+        printORUpdated: function(payment){        
+            Swal.fire({
+                title: 'Continue with Printing OR',
+                text: "Are you sure you want to continue? You can only print the OR once",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                    preConfirm: (data) => {    
+                        this.or_print.or_number = payment.or_number;
+                        this.or_print.description = payment.description;
+                        this.or_print.total_amount_due = payment.subtotal_order;
+                        this.or_print.transaction_date = payment.or_date;
+                        this.or_print.remarks = payment.remarks;
+                        this.or_print.student_name =  this.request.last_name+", "+this.request.first_name+", "+this.request.middle_name;    
+                        this.or_print.student_address = this.student.strAddress;
+                        if(this.student.strStudentNumber.charAt(0) != "T")
+                            this.or_print.student_id = this.student.strStudentNumber;
+                        else
+                            this.or_print.student_id = this.applicant_id;
+                        this.or_print.is_cash = payment.is_cash;
+                        this.or_print.check_number = payment.check_number;
+                        this.or_print.sem = payment.sy_reference;
+                        this.or_print.cashier_id = payment.cashier_id;                                                                                                
+                    }
+            }).then((result) => {
+                var delayInMilliseconds = 1000; //1 second
+                var or_send = this.$refs.print_or_updated;
                 setTimeout(function() {
                     or_send.submit();
                 }, delayInMilliseconds);
