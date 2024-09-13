@@ -920,7 +920,7 @@
     </div>
     <form ref="print_or"
         method="post"
-        :action="base_url + 'pdf/print_or_new'"
+        :action="base_url + 'pdf/print_or_updated'"
         target="_blank">
         <input type="hidden"
             name="student_name"
@@ -967,7 +967,7 @@
         <input type="hidden"
             name="type"
             v-model="or_print.type" />
-    </form>
+    </form>    
     <form ref="print_soa"
         method="post"
         :action="base_url + 'pdf/print_soa'"
