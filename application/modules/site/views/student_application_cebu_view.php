@@ -1032,7 +1032,7 @@
         </div>
         <div v-if="true"
             class=" mb-6 mt-10">
-            <h4 class="color-primary font-bold text-xl">HOW DID YOU KNOW ABOUT US?</h4>
+            <h4 class="color-primary font-bold text-xl">HOW DID YOU FIND OUT ABOUT iACADEMY?</h4>
             <hr class="mb-5 bg-[#10326f] h-1 w-3/5" />
             <div class="grid grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-6">
 
