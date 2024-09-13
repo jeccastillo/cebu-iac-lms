@@ -39,7 +39,7 @@
             Note: You are applying for iACADEMY Cebu Campus, if you want to apply to iACADEMY Makati
             click
             <a style="text-decoration: underline;"
-                href="http://cebu.iacademy.edu.ph/site/student_application">here</a>.
+                href="http://cebu.iacademy.edu.ph/site/student_application_makati_view">here</a>.
         </p>
     </div>
 
@@ -1361,7 +1361,7 @@ input[type="number"] {
 <link rel="stylesheet"
     href="https://unpkg.com/vue-select@3.0.0/dist/vue-select.css">
 
-<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
 
 <script src="<?php echo $js_dir ?>dataExport.js"></script>
 
