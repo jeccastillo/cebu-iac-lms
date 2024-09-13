@@ -72,25 +72,25 @@ table tr td {
                 1234A
             </div>
             <div style="position:absolute; top: 90px; left: 95px; width: 200px; height: 20px;">
-                12,976.16
+                <?php echo number_format($total_amount_due,2,'.',','); ?>
             </div>
             <div style="position:absolute; top: 140px; left: 5px; width: 200px; height: 20px;">
                 Description Box
             </div>
             <div style="position:absolute; top: 190px; left: 95px; width: 200px; height: 20px;">
-                12,976.16
+                <?php echo number_format($total_amount_due,2,'.',','); ?>
             </div>
             <div style="position:absolute; top: 340px; left: 5px; width: 200px; height: 20px;">
                 Remarks
             </div>
             <div style="position:absolute; top: 340px; left: 95px; width: 200px; height: 20px;">
-                12,976.16
+                <?php echo number_format($total_amount_due,2,'.',','); ?>
             </div>
             <div style="position:absolute; top: 100; right: 60px; width: 200px; height: 20px;">
-                OR No: 03041
+                OR No: <?php echo $or_number; ?>
             </div>
             <div style="position:absolute; top: 115px; right: -60px; width: 200px; height: 20px;">
-                09/12/24
+                <?php echo "  ".date("m/d/Y",strtotime($transaction_date)); ?>
             </div>
             <div style="position:absolute; top: 140px; left: 336px; width: 500px; height: 20px;">
                 <?php if($student_id != 'undefined' && $student_id != ''): ?>
@@ -104,17 +104,17 @@ table tr td {
             <div style="position:absolute; top: 195px; left: 295px; width: 500px; height: 20px;">
                 As Applicable
             </div>
-            <div style="position:absolute; top: 215px; left: 350px; width: 700px; height: 20px;">
+            <div style="position:absolute; top: 215px; left: 350px; width: 500px; height: 20px;">
                 <?php echo convert_number($total_amount_due); ?> <?php echo $decimal?'and '.convert_number($decimal).' cents':'only'; ?>
             </div>
             <div style="position:absolute; top: 240px; right: -50; width: 200px; height: 20px;">
                 <?php echo $total_amount_due; ?>
             </div>
-            <div style="position:absolute; top: 265px; left: 380px; width: 200px; height: 20px;">
-                 <?php echo $type. " / SY ".$term['strYearStart']."-".$term['strYearEnd']." ".$term['enumSem']." ".$term['term_label']; ?>            
+            <div style="position:absolute; top: 265px; left: 380px; width: 400px; height: 20px;">
+                 <?php echo $type." /  ".$term['enumSem']." ".$term['term_label']." ".$term['strYearStart']."-".$term['strYearEnd']; ?>            
             </div>
             <div style="position:absolute; top: 330px; right: -20px; width: 200px; height: 20px;font-size:15px">
-            Pinky D. Omayao
+                <?php echo $cashier_name; ?>
             </div>
         </section>
     </div>    
