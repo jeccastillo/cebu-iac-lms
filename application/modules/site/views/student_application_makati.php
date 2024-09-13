@@ -1,31 +1,45 @@
 <div class="custom-container">
-    <a href="https://iacademy.edu.ph/" class="flex mt-10 items-center gap-x-2 text-[#666666] cursor-pointer">
-        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="15" viewBox="0 0 8 15" fill="none">
-            <path d="M7 1L1 7.5L7 14" stroke="#666666" stroke-width="2" stroke-linecap="round"
+    <a href="https://iacademy.edu.ph/"
+        class="flex mt-10 items-center gap-x-2 text-[#666666] cursor-pointer">
+        <svg xmlns="http://www.w3.org/2000/svg"
+            width="8"
+            height="15"
+            viewBox="0 0 8 15"
+            fill="none">
+            <path d="M7 1L1 7.5L7 14"
+                stroke="#666666"
+                stroke-width="2"
+                stroke-linecap="round"
                 stroke-linejoin="round" />
         </svg>
         BACK
     </a>
 </div>
 
-<div class=" block mx-auto mt-[60px]" data-aos="fade-up">
+<div class=" block mx-auto mt-[60px]"
+    data-aos="fade-up">
     <h1 class="text-4xl font-[900] text-center color-primary">
         iACADEMY
     </h1>
 </div>
 
-<div class="custom-container" id="adminssions-form" style="margin-top:10px;">
+<div class="custom-container max-w-[1080px]"
+    id="adminssions-form"
+    style="margin-top:10px;">
     <div class="color-primary text-center">
         <h4 class="font-medium text-2xl mb-5">
             Application Form for {{ term.term_student_type.toUpperCase() }}
             <strong>(Makati Campus)</strong><br />
         </h4>
-        <p>Hello future Game Changers! Kindly fill out your information sheet. If you have any questions, feel free
+        <p>Hello future Game Changers! Kindly fill out your information sheet. If you have any
+            questions, feel free
             to email us at <strong><u>admissions@iacademy.edu.ph</u></strong> </p>
 
         <p style="margin-top:15px;">
-            Note: You are applying for iACADEMY Makati Campus, if you want to apply to iACADEMY Cebu click
-            <a style="text-decoration: underline;" href="http://cebu.iacademy.edu.ph/site/student_application">here</a>.
+            Note: You are applying for iACADEMY Makati Campus, if you want to apply to iACADEMY Cebu
+            click
+            <a style="text-decoration: underline;"
+                href="http://cebu.iacademy.edu.ph/site/student_application_cebu_view">here</a>.
         </p>
     </div>
 
@@ -37,833 +51,1239 @@
                 request,
                 'admissions/student-info'
             )
-        " method="post">
+        "
+        method="post"
+        class="">
 
-        <div class="flex md:space-x-5 mb-6 mt-10 justify-center">
-            <div class="md:w-1/2 w-full">
+        <div v-if="true"
+            class="flex flex-wrap md:space-x-5 mb-6 mt-10 justify-center ">
+            <div id="select-term"
+                class=" pr-4 flex-[1_0_188px]">
+                <div class="mb-5">
+                    <label class="block t color-primary font-bold mb-3 pr-4"
+                        for="inline-full-name">
+                        Select Term <span class="text-red-500">*</span>
+                    </label>
+                    <select
+                        class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                        type="text"
+                        required
+                        v-model="request.syid">
+                        <option disabled
+                            value="">--Select options--</option>
+                        <option v-for="s in sy"
+                            :value="s.intID">
+                            {{ `${s.enumSem} ${s.term_label} SY ${s.strYearStart}-${s.strYearEnd}`}}
+                        </option>
 
-                <div class="mb-6">
-                    <div class="md:w-5/5">
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                            Select Term <span class="text-red-500">*</span>
-                        </label>
-                        <select
-                            class="bg-gray-200 border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" required v-model="request.syid">
-                            <option v-for="s in sy" :value="s.intID">
-                                {{ s.enumSem+" "+s.term_label+" SY "+s.strYearStart+"-"+s.strYearEnd }}</option>
-                        </select>
-                    </div>
+                    </select>
                 </div>
+                <div id="applicant-type"
+                    class="border-[1px] border-neutral-100 p-2.5 rounded-lg">
+                    <label class="block t color-primary font-bold  mb-2  pr-4"
+                        for="inline-full-name">
+                        Applicant Type <i class="font-normal">(Select one)</i>
+                    </label>
+                    <template v-if="term.term_student_type == 'college'">
+                        <h6 class="color-primary font-bold">Freshman</h6>
+                        <label v-if="term.term_student_type == 'college'"
+                            v-for="college,index of collegeList.slice(0,2)"
+                            class="block indent-5 color-primary mb-1 ml-1.5">
+                            <input type="radio"
+                                :id="index"
+                                :value="freshmenValue[index]"
+                                name="college"
+                                v-model="request.student_type"
+                                @click="filterCourses('college')"
+                                required
+                                class="mr-1">
+                            {{college}}
+                        </label>
+                        <h6 class="color-primary font-bold">2nd Degree</h6>
+                        <label v-if="term.term_student_type == 'college'"
+                            v-for="college,index of collegeList.slice(2,4)"
+                            class="block indent-5 color-primary mb-1 ml-1.5">
+                            <input type="radio"
+                                :id="index"
+                                :value="secondDegreeValue[index]"
+                                name="college"
+                                v-model="request.student_type"
+                                @click="filterCourses('college')"
+                                required
+                                class="mr-1">
+                            {{college}}
+                        </label>
+                        <h6 class="color-primary font-bold">Other</h6>
+                        <label v-if="term.term_student_type == 'college'"
+                            class="block indent-5 color-primary mb-1 ml-1.5">
+                            <input type="radio"
+                                value="`College - Transferee`"
+                                name="college"
+                                v-model="request.student_type"
+                                @click="filterCourses('college')"
+                                required
+                                class="mr-1">
+                            Transferee
+                        </label>
+                    </template>
+                    <label v-if="term.term_student_type == 'shs'"
+                        v-for="shs,index of shsList"
+                        class="block color-primary mb-1 ml-1.5">
+                        <input type="radio"
+                            id="one"
+                            :value="shs"
+                            v-model="request.student_type"
+                            @click="filterCourses(filterShs[index])"
+                            class="mr-1"
+                            required>
+                        {{shs}}
+                    </label>
 
-                <div class="mb-6">
-                    <div class="md:w-5/5">
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
+                </div>
+            </div>
+            <div id=applying-for
+                class=" flex-[4_1_auto] max-w-[710px]">
+                <div class="md:w-5/5">
+                    <label class="block t color-primary font-bold  mb-3  pr-4"
+                        for="inline-full-name">
+                        Applying for
+                    </label>
+                    <div class="border-[1px] border-neutral-100 p-2.5 rounded-lg">
+                        <div id="first-choice"
+                            class="mb-3">
+                            <label class="block t color-primary font-bold  mb-3  pr-4"
+                                for="inline-full-name">
+                                First Choice
+                            </label>
+                            <select :disabled="!request.student_type ? true : false"
+                                class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                type="text"
+                                @change="setFirstChoice"
+                                required
+                                v-model="request.type_id">
+                                <option disabled
+                                    value="">--Select options--</option>
+                                <option :value="t.id"
+                                    v-for="t in filtered_programs"
+                                    :data-title="t.title"
+                                    :key="t.id"
+                                    :disabled="t.id == request.type_id2 || t.id == request.type_id3 ? true : false">
+                                    {{t.title}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="block t color-primary font-bold  mb-3  pr-4"
+                                for="inline-full-name">
+                                Second Choice
+                            </label>
+                            <select :disabled="!request.student_type ? true : false"
+                                class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                type="text"
+                                @change="setSecondChoice"
+                                required
+                                v-model="request.type_id2">
+                                <option disabled
+                                    value="">--Select options--</option>
+                                <option :value="t.id"
+                                    v-for="t in filtered_programs"
+                                    :data-title="t.title"
+                                    :key="t.id"
+                                    :disabled="t.id == request.type_id || t.id == request.type_id3 ? true : false">
+                                    {{t.title}}
+                                </option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block t color-primary font-bold  mb-3  pr-4"
+                                for="inline-full-name">
+                                Third Choice
+                            </label>
+                            <select :disabled="!request.student_type ? true : false"
+                                class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                type="text"
+                                @change="setThirdChoice"
+                                required
+                                v-model="request.type_id3">
+                                <option disabled
+                                    value="">--Select options--</option>
+                                <option :value="t.id"
+                                    v-for="t in filtered_programs"
+                                    :key="t.id"
+                                    :data-title="t.title"
+                                    :disabled="t.id == request.type_id || t.id == request.type_id2 ? true : false">
+                                    {{t.title}}
+                                </option>
+                            </select>
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+        <div v-if="true"
+            class=" mb-6 mt-10">
+            <h4 class="color-primary font-bold text-xl">BASIC INFORMATION</h4>
+            <hr class="mb-5 bg-[#10326f] h-1 w-3/5" />
+            <div class="border-[1px] border-neutral-100 rounded-lg mt-5 py-5 px-2.5">
+                <div class="flex flex-wrap gap-x-2 gap-y-2 mb-4">
+                    <div id="first-name"
+                        class="flex-grow">
+                        <label class="block color-primary font-bold  mb-3  pr-4">
                             First Name <span class="text-red-500">*</span>
                         </label>
                         <input
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" required v-model="request.first_name">
-                    </div>
-                </div>
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            name="first_name"
+                            required
+                            v-model="request.first_name">
 
-                <div class="mb-6">
-                    <div class="md:w-5/5">
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
+
+                    </div>
+                    <div id="middle-name"
+                        class="flex-grow">
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
                             Middle Name
                         </label>
                         <input
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" v-model="request.middle_name">
-                    </div>
-                </div>
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            name="middle_name"
+                            v-model="request.middle_name">
 
-                <div class="mb-6">
-                    <div class="md:w-5/5">
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                            Last/Family Name <span class="text-red-500">*</span>
+
+                    </div>
+                    <div class="flex-grow">
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Last Name <span class="text-red-500">*</span>
                         </label>
                         <input
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" required v-model="request.last_name">
-                    </div>
-                </div>
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            name="last_name"
+                            required
+                            v-model="request.last_name">
 
-                <div class="mb-6">
-                    <div class="md:w-5/5">
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                            Email Address <span class="text-red-500">*</span>
+
+                    </div>
+                    <div id="suffix"
+                        class="basis-[100px]">
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Suffix
                         </label>
                         <input
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="email" required v-model="request.email">
-                    </div>
-                </div>
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            v-model="request.suffix">
 
-                <div class="mb-6">
-                    <div class="md:w-5/5">
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                            Confirm Email Address <span class="text-red-500">*</span>
-                        </label>
-                        <input
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="email" required v-model="request.email_confirmation">
-                    </div>
-                </div>
-
-                <div class="mb-6">
-                    <div class="md:w-5/5">
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                            Mobile Number <span class="text-red-500">*</span>
-                        </label>
-                        <the-mask
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            :mask="['(+63) ###-###-####']" type="text" v-model="request.mobile_number" required
-                            masked="true" placeholder="(+63) XXX-XXX-XXXX"></the-mask>
-                        <!-- <input
-                               class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                               type="number" required v-model="request.mobile_number"> -->
-                    </div>
-                </div>
-
-                <div class="mb-6">
-                    <div class="md:w-5/5">
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                            Telephone Number
-                        </label>
-                        <the-mask
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            :mask="['(+63) ###-####']" type="text" v-model="request.tel_number" masked="true"
-                            placeholder="(+63) XXX-XXXX"></the-mask>
-                        <!-- <input
-                               class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                               type="number" v-model="request.tel_number"> -->
-                    </div>
-                </div>
-
-                <div class="mb-6">
-                    <div class="md:w-5/5">
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                            Address <span class="text-red-500">*</span>
-                        </label>
-                        <textarea required
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            name="" rows="4" v-model="request.address">></textarea>
 
                     </div>
                 </div>
-
-
-                <div class="mb-6">
-                    <div class="md:w-5/5">
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
+                <div class="flex flex-wrap gap-x-2 gap-y-2 mb-4">
+                    <div id="date-birth"
+                        class="basis-[300px]">
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
                             Date of Birth <span class="text-red-500">*</span>
                         </label>
                         <input
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="date" required v-model="request.date_of_birth">
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="date"
+                            v-model="request.date_of_birth"
+                            required>
+
                     </div>
-                </div>
-                <div class="form-group mb-6">
-                    <div class="md:w-5/5">
+                    <div id="place-birth"
+                        class="basis-[300px]">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Country of citizenship
-                            <span class="text-red-500">*</span>
+                            Place of Birth <span class="text-red-500">*</span>
                         </label>
-                        <select
-                            class="bg-gray-200 border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            required name="citizenship" v-model="request.citizenship">
-                            <option value="Afghanistan">Afghanistan</option>
-                            <option value="Aland Islands">Åland Islands</option>
-                            <option value="Albania">Albania</option>
-                            <option value="Algeria">Algeria</option>
-                            <option value="American Samoa">American Samoa</option>
-                            <option value="Andorra">Andorra</option>
-                            <option value="Angola">Angola</option>
-                            <option value="Anguilla">Anguilla</option>
-                            <option value="Antarctica">Antarctica</option>
-                            <option value="Antigua and Barbuda">Antigua & Barbuda</option>
-                            <option value="Argentina">Argentina</option>
-                            <option value="Armenia">Armenia</option>
-                            <option value="Aruba">Aruba</option>
-                            <option value="Australia">Australia</option>
-                            <option value="Austria">Austria</option>
-                            <option value="Azerbaijan">Azerbaijan</option>
-                            <option value="Bahamas">Bahamas</option>
-                            <option value="Bahrain">Bahrain</option>
-                            <option value="Bangladesh">Bangladesh</option>
-                            <option value="Barbados">Barbados</option>
-                            <option value="Belarus">Belarus</option>
-                            <option value="Belgium">Belgium</option>
-                            <option value="Belize">Belize</option>
-                            <option value="Benin">Benin</option>
-                            <option value="Bermuda">Bermuda</option>
-                            <option value="Bhutan">Bhutan</option>
-                            <option value="Bolivia">Bolivia</option>
-                            <option value="Bonaire, Sint Eustatius and Saba">Caribbean Netherlands</option>
-                            <option value="Bosnia and Herzegovina">Bosnia & Herzegovina</option>
-                            <option value="Botswana">Botswana</option>
-                            <option value="Bouvet Island">Bouvet Island</option>
-                            <option value="Brazil">Brazil</option>
-                            <option value="British Indian Ocean Territory">British Indian Ocean Territory</option>
-                            <option value="Brunei Darussalam">Brunei</option>
-                            <option value="Bulgaria">Bulgaria</option>
-                            <option value="Burkina Faso">Burkina Faso</option>
-                            <option value="Burundi">Burundi</option>
-                            <option value="Cambodia">Cambodia</option>
-                            <option value="Cameroon">Cameroon</option>
-                            <option value="Canada">Canada</option>
-                            <option value="Cape Verde">Cape Verde</option>
-                            <option value="Cayman Islands">Cayman Islands</option>
-                            <option value="Central African Republic">Central African Republic</option>
-                            <option value="Chad">Chad</option>
-                            <option value="Chile">Chile</option>
-                            <option value="China">China</option>
-                            <option value="Christmas Island">Christmas Island</option>
-                            <option value="Cocos (Keeling) Islands">Cocos (Keeling) Islands</option>
-                            <option value="Colombia">Colombia</option>
-                            <option value="Comoros">Comoros</option>
-                            <option value="Congo">Congo - Brazzaville</option>
-                            <option value="Congo, Democratic Republic of the Congo">Congo - Kinshasa</option>
-                            <option value="Cook Islands">Cook Islands</option>
-                            <option value="Costa Rica">Costa Rica</option>
-                            <option value="Cote D'Ivoire">Côte d’Ivoire</option>
-                            <option value="Croatia">Croatia</option>
-                            <option value="Cuba">Cuba</option>
-                            <option value="Curacao">Curaçao</option>
-                            <option value="Cyprus">Cyprus</option>
-                            <option value="Czech Republic">Czechia</option>
-                            <option value="Denmark">Denmark</option>
-                            <option value="Djibouti">Djibouti</option>
-                            <option value="Dominica">Dominica</option>
-                            <option value="Dominican Republic">Dominican Republic</option>
-                            <option value="Ecuador">Ecuador</option>
-                            <option value="Egypt">Egypt</option>
-                            <option value="El Salvador">El Salvador</option>
-                            <option value="Equatorial Guinea">Equatorial Guinea</option>
-                            <option value="Eritrea">Eritrea</option>
-                            <option value="Estonia">Estonia</option>
-                            <option value="Ethiopia">Ethiopia</option>
-                            <option value="Falkland Islands (Malvinas)">Falkland Islands (Islas Malvinas)</option>
-                            <option value="Faroe Islands">Faroe Islands</option>
-                            <option value="Fiji">Fiji</option>
-                            <option value="Finland">Finland</option>
-                            <option value="France">France</option>
-                            <option value="French Guiana">French Guiana</option>
-                            <option value="French Polynesia">French Polynesia</option>
-                            <option value="French Southern Territories">French Southern Territories</option>
-                            <option value="Gabon">Gabon</option>
-                            <option value="Gambia">Gambia</option>
-                            <option value="Georgia">Georgia</option>
-                            <option value="Germany">Germany</option>
-                            <option value="Ghana">Ghana</option>
-                            <option value="Gibraltar">Gibraltar</option>
-                            <option value="Greece">Greece</option>
-                            <option value="Greenland">Greenland</option>
-                            <option value="Grenada">Grenada</option>
-                            <option value="Guadeloupe">Guadeloupe</option>
-                            <option value="Guam">Guam</option>
-                            <option value="Guatemala">Guatemala</option>
-                            <option value="Guernsey">Guernsey</option>
-                            <option value="Guinea">Guinea</option>
-                            <option value="Guinea-Bissau">Guinea-Bissau</option>
-                            <option value="Guyana">Guyana</option>
-                            <option value="Haiti">Haiti</option>
-                            <option value="Heard Island and Mcdonald Islands">Heard & McDonald Islands</option>
-                            <option value="Holy See (Vatican City State)">Vatican City</option>
-                            <option value="Honduras">Honduras</option>
-                            <option value="Hong Kong">Hong Kong</option>
-                            <option value="Hungary">Hungary</option>
-                            <option value="Iceland">Iceland</option>
-                            <option value="India">India</option>
-                            <option value="Indonesia">Indonesia</option>
-                            <option value="Iran, Islamic Republic of">Iran</option>
-                            <option value="Iraq">Iraq</option>
-                            <option value="Ireland">Ireland</option>
-                            <option value="Isle of Man">Isle of Man</option>
-                            <option value="Israel">Israel</option>
-                            <option value="Italy">Italy</option>
-                            <option value="Jamaica">Jamaica</option>
-                            <option value="Japan">Japan</option>
-                            <option value="Jersey">Jersey</option>
-                            <option value="Jordan">Jordan</option>
-                            <option value="Kazakhstan">Kazakhstan</option>
-                            <option value="Kenya">Kenya</option>
-                            <option value="Kiribati">Kiribati</option>
-                            <option value="Korea, Democratic People's Republic of">North Korea</option>
-                            <option value="Korea, Republic of">South Korea</option>
-                            <option value="Kosovo">Kosovo</option>
-                            <option value="Kuwait">Kuwait</option>
-                            <option value="Kyrgyzstan">Kyrgyzstan</option>
-                            <option value="Lao People's Democratic Republic">Laos</option>
-                            <option value="Latvia">Latvia</option>
-                            <option value="Lebanon">Lebanon</option>
-                            <option value="Lesotho">Lesotho</option>
-                            <option value="Liberia">Liberia</option>
-                            <option value="Libyan Arab Jamahiriya">Libya</option>
-                            <option value="Liechtenstein">Liechtenstein</option>
-                            <option value="Lithuania">Lithuania</option>
-                            <option value="Luxembourg">Luxembourg</option>
-                            <option value="Macao">Macao</option>
-                            <option value="Macedonia, the Former Yugoslav Republic of">North Macedonia</option>
-                            <option value="Madagascar">Madagascar</option>
-                            <option value="Malawi">Malawi</option>
-                            <option value="Malaysia">Malaysia</option>
-                            <option value="Maldives">Maldives</option>
-                            <option value="Mali">Mali</option>
-                            <option value="Malta">Malta</option>
-                            <option value="Marshall Islands">Marshall Islands</option>
-                            <option value="Martinique">Martinique</option>
-                            <option value="Mauritania">Mauritania</option>
-                            <option value="Mauritius">Mauritius</option>
-                            <option value="Mayotte">Mayotte</option>
-                            <option value="Mexico">Mexico</option>
-                            <option value="Micronesia, Federated States of">Micronesia</option>
-                            <option value="Moldova, Republic of">Moldova</option>
-                            <option value="Monaco">Monaco</option>
-                            <option value="Mongolia">Mongolia</option>
-                            <option value="Montenegro">Montenegro</option>
-                            <option value="Montserrat">Montserrat</option>
-                            <option value="Morocco">Morocco</option>
-                            <option value="Mozambique">Mozambique</option>
-                            <option value="Myanmar">Myanmar (Burma)</option>
-                            <option value="Namibia">Namibia</option>
-                            <option value="Nauru">Nauru</option>
-                            <option value="Nepal">Nepal</option>
-                            <option value="Netherlands">Netherlands</option>
-                            <option value="Netherlands Antilles">Curaçao</option>
-                            <option value="New Caledonia">New Caledonia</option>
-                            <option value="New Zealand">New Zealand</option>
-                            <option value="Nicaragua">Nicaragua</option>
-                            <option value="Niger">Niger</option>
-                            <option value="Nigeria">Nigeria</option>
-                            <option value="Niue">Niue</option>
-                            <option value="Norfolk Island">Norfolk Island</option>
-                            <option value="Northern Mariana Islands">Northern Mariana Islands</option>
-                            <option value="Norway">Norway</option>
-                            <option value="Oman">Oman</option>
-                            <option value="Pakistan">Pakistan</option>
-                            <option value="Palau">Palau</option>
-                            <option value="Palestinian Territory, Occupied">Palestine</option>
-                            <option value="Panama">Panama</option>
-                            <option value="Papua New Guinea">Papua New Guinea</option>
-                            <option value="Paraguay">Paraguay</option>
-                            <option value="Peru">Peru</option>
-                            <option selected value="Philippines">Philippines</option>
-                            <option value="Pitcairn">Pitcairn Islands</option>
-                            <option value="Poland">Poland</option>
-                            <option value="Portugal">Portugal</option>
-                            <option value="Puerto Rico">Puerto Rico</option>
-                            <option value="Qatar">Qatar</option>
-                            <option value="Reunion">Réunion</option>
-                            <option value="Romania">Romania</option>
-                            <option value="Russian Federation">Russia</option>
-                            <option value="Rwanda">Rwanda</option>
-                            <option value="Saint Barthelemy">St. Barthélemy</option>
-                            <option value="Saint Helena">St. Helena</option>
-                            <option value="Saint Kitts and Nevis">St. Kitts & Nevis</option>
-                            <option value="Saint Lucia">St. Lucia</option>
-                            <option value="Saint Martin">St. Martin</option>
-                            <option value="Saint Pierre and Miquelon">St. Pierre & Miquelon</option>
-                            <option value="Saint Vincent and the Grenadines">St. Vincent & Grenadines</option>
-                            <option value="Samoa">Samoa</option>
-                            <option value="San Marino">San Marino</option>
-                            <option value="Sao Tome and Principe">São Tomé & Príncipe</option>
-                            <option value="Saudi Arabia">Saudi Arabia</option>
-                            <option value="Senegal">Senegal</option>
-                            <option value="Serbia">Serbia</option>
-                            <option value="Serbia and Montenegro">Serbia</option>
-                            <option value="Seychelles">Seychelles</option>
-                            <option value="Sierra Leone">Sierra Leone</option>
-                            <option value="Singapore">Singapore</option>
-                            <option value="Sint Maarten">Sint Maarten</option>
-                            <option value="Slovakia">Slovakia</option>
-                            <option value="Slovenia">Slovenia</option>
-                            <option value="Solomon Islands">Solomon Islands</option>
-                            <option value="Somalia">Somalia</option>
-                            <option value="South Africa">South Africa</option>
-                            <option value="South Georgia and the South Sandwich Islands">South Georgia & South Sandwich
-                                Islands</option>
-                            <option value="South Sudan">South Sudan</option>
-                            <option value="Spain">Spain</option>
-                            <option value="Sri Lanka">Sri Lanka</option>
-                            <option value="Sudan">Sudan</option>
-                            <option value="Suriname">Suriname</option>
-                            <option value="Svalbard and Jan Mayen">Svalbard & Jan Mayen</option>
-                            <option value="Swaziland">Eswatini</option>
-                            <option value="Sweden">Sweden</option>
-                            <option value="Switzerland">Switzerland</option>
-                            <option value="Syrian Arab Republic">Syria</option>
-                            <option value="Taiwan, Province of China">Taiwan</option>
-                            <option value="Tajikistan">Tajikistan</option>
-                            <option value="Tanzania, United Republic of">Tanzania</option>
-                            <option value="Thailand">Thailand</option>
-                            <option value="Timor-Leste">Timor-Leste</option>
-                            <option value="Togo">Togo</option>
-                            <option value="Tokelau">Tokelau</option>
-                            <option value="Tonga">Tonga</option>
-                            <option value="Trinidad and Tobago">Trinidad & Tobago</option>
-                            <option value="Tunisia">Tunisia</option>
-                            <option value="Turkey">Turkey</option>
-                            <option value="Turkmenistan">Turkmenistan</option>
-                            <option value="Turks and Caicos Islands">Turks & Caicos Islands</option>
-                            <option value="Tuvalu">Tuvalu</option>
-                            <option value="Uganda">Uganda</option>
-                            <option value="Ukraine">Ukraine</option>
-                            <option value="United Arab Emirates">United Arab Emirates</option>
-                            <option value="United Kingdom">United Kingdom</option>
-                            <option value="United States">United States</option>
-                            <option value="United States Minor Outlying Islands">U.S. Outlying Islands</option>
-                            <option value="Uruguay">Uruguay</option>
-                            <option value="Uzbekistan">Uzbekistan</option>
-                            <option value="Vanuatu">Vanuatu</option>
-                            <option value="Venezuela">Venezuela</option>
-                            <option value="Viet Nam">Vietnam</option>
-                            <option value="Virgin Islands, British">British Virgin Islands</option>
-                            <option value="Virgin Islands, U.s.">U.S. Virgin Islands</option>
-                            <option value="Wallis and Futuna">Wallis & Futuna</option>
-                            <option value="Western Sahara">Western Sahara</option>
-                            <option value="Yemen">Yemen</option>
-                            <option value="Zambia">Zambia</option>
-                            <option value="Zimbabwe">Zimbabwe</option>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            name="place_of_birth"
+                            v-model="request.place_of_birth"
+                            required>
+
+                    </div>
+
+                    <div id="gender"
+                        class="basis-[120px]">
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Gender <span class="text-red-500">*</span>
+                        </label>
+                        <select v-model="request.gender"
+                            required
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
+                            <option disabled
+                                value="">--options--</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
                         </select>
                     </div>
                 </div>
-                <div class="mb-6">
-                    <div class="md:w-5/5">
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                            Father Name
+                <div class="flex flex-wrap gap-x-2 gap-y-2 ">
+                    <div id="citizenship-base"
+                        class="basis-[300px]">
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Citizenship <span class="text-red-500">*</span>
                         </label>
-                        <input
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" v-model="request.father_name">
-                    </div>
-                </div>
-                <div class="mb-6">
-                    <div class="md:w-5/5">
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                            Father Contact No.
-                        </label>
-                        <the-mask
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            :mask="['(+63) ###-###-####']" type="text" v-model="request.father_contact" masked="true"
-                            placeholder="(+63) XXX-XXX-XXXX"></the-mask>
-                    </div>
-                </div>
-                <div class="mb-6">
-                    <div class="md:w-5/5">
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                            Father Email Address
-                        </label>
-                        <input
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="email" v-model="request.father_email">
-                    </div>
-                </div>
-                <div class="mb-6">
-                    <div class="md:w-5/5">
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                            Mother Name
-                        </label>
-                        <input
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" v-model="request.mother_name">
-                    </div>
-                </div>
-                <div class="mb-6">
-                    <div class="md:w-5/5">
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                            Mother Contact No.
-                        </label>
-                        <the-mask
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            :mask="['(+63) ###-###-####']" type="text" v-model="request.mother_contact" masked="true"
-                            placeholder="(+63) XXX-XXX-XXXX"></the-mask>
-                    </div>
-                </div>
-                <div class="mb-6">
-                    <div class="md:w-5/5">
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                            Mother Email Address
-                        </label>
-                        <input
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="email" v-model="request.mother_email">
-                    </div>
-                </div>
-                <div class="mb-6">
-                    <div class="md:w-5/5">
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                            Guardian Name
-                        </label>
-                        <input
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" v-model="request.guardian_name">
-                    </div>
-                </div>
-                <div class="mb-6">
-                    <div class="md:w-5/5">
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                            Guardian Contact No.
-                        </label>
-                        <the-mask
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            :mask="['(+63) ###-###-####']" type="text" v-model="request.guardian_contact" masked="true"
-                            placeholder="(+63) XXX-XXX-XXXX"></the-mask>
-                    </div>
-                </div>
-                <div class="mb-6">
-                    <div class="md:w-5/5">
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                            Guardian Email Address
-                        </label>
-                        <input
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="email" v-model="request.guardian_email">
-                    </div>
-                </div>
-                <div class="mb-6">
-                    <div class="md:w-5/5">
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="i">
-                            How did you find out about iACADEMY? <span class="text-red-500">*</span>
-                        </label>
-                        <select
-                            class="bg-gray-200 border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            required name="source" v-model="request.source">
-                            <option value="cos">COS (Career Orientation Seminar)</option>
-                            <option value="facebook">Facebook</option>
-                            <option value="instagram">Instagram</option>
-                            <option value="tiktok">Tiktok</option>
-                            <option value="google">Google</option>
-                            <option value="other">Other Online Site/Platform</option>
-                            <option value="billboard">Billboard</option>
-                            <option value="newspaper">Newspaper</option>
-                            <option value="radio">Radio</option>
-                            <option value="tv">TV</option>
-                            <option value="referrer">Referral</option>
+                        <select v-model="request.citizenship"
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
+                            <option disabled
+                                value="">--Select options--</option>
+                            <option v-for="country in countries"
+                                :value="country">{{country}}</option>
                         </select>
                     </div>
-                </div>
-                <div class="form-group md:w-5/5" v-if="request.source == 'referrer'">
-                    <label for="">Referrer <span class="text-danger">*</span>
-                    </label>
-                    <input type="text" required
-                        class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                        v-model="request.referrer" />
-                </div>
-
-
-                <div class="form-group mb-6">
-                    <label class="block t color-primary font-bold  mb-3  pr-4">
-                        Additional Information
-                    </label>
-                    <div
-                        class="md:w-5/5 bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600 p-3">
-                        <label for="">Do you hold good moral standing in your
-                            previous school?
-                            <span class="text-danger">*</span>
+                    <div id="citizenship-dual"
+                        v-if="isDual"
+                        class="basis-[300px] self-end">
+                        <select v-model="request.country_of_citizenship2"
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            required>
+                            <option disabled
+                                value="">--Select options--</option>
+                            <option v-for="country in countries"
+                                :value="country">{{country}}</option>
+                        </select>
+                    </div>
+                    <div id="citizenship-radio"
+                        class="self-end">
+                        <label class="block color-primary mb-1 ml-1.5">
+                            <input type="radio"
+                                id="one"
+                                class="mr-1"
+                                :checked="isDual"
+                                @click="isDual = !isDual">
+                            I'm a dual citizen
                         </label>
-
-                        <div class="mt-2">
-                            <input type="radio" required name="good_moral" v-model="request.good_moral" value="Yes" />
-                            Yes
-                        </div>
-
-                        <div>
-                            <input type="radio" required name="good_moral" value="No" v-model="request.good_moral" />
-                            No
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group  mb-6">
-                    <div
-                        class="md:w-5/5 bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600 p-3">
-                        <label for="">Have you been involved of any illegal
-                            activities?
-                            <span class="text-danger">*</span>
-                        </label>
-
-                        <div class="mt-2">
-                            <input type="radio" required name="crime" v-model="request.crime" value="Yes" />
-                            Yes
-                        </div>
-
-                        <div>
-                            <input type="radio" required name="crime" value="No" v-model="request.crime" />
-                            No
-                        </div>
-                    </div>
-                </div>
-                <div class="mb-5">
-                    <div class="form-group">
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Health Conditions
-                        </label>
-                        <div
-                            class="md:w-5/5 bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600 p-3">
-                            <label for="">Have you been hospitalized before?
-                                <span class="text-danger">*</span>
-                            </label>
-
-                            <div class="mt-2">
-                                <input type="radio" required name="hospitalized" v-model="request.hospitalized"
-                                    value="Yes" />
-                                Yes
-                            </div>
-
-                            <div>
-                                <input type="radio" required name="hospitalized" value="No"
-                                    v-model="request.hospitalized" />
-                                No
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group md:w-5/5" v-if="request.hospitalized == 'Yes'">
-                        <label for="">Reason <span class="text-danger">*</span>
-                        </label>
-                        <input type="text" required
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            v-model="request.hospitalized_reason" />
-                    </div>
-
-                    <div class="form-group mb-6 mt-6">
-                        <div
-                            class="md:w-5/5 bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600 p-3">
-                            <label for="">Do you have any of the following? (check
-                                all that apply)
-                            </label>
-
-                            <div class="mt-2">
-                                <input type="checkbox" name="health_concern" v-model="request.health_concerns"
-                                    value="Diabetes" />
-                                Diabetes
-                            </div>
-
-                            <div>
-                                <input type="checkbox" name="health_concern" value="Allergies"
-                                    v-model="request.health_concerns" />
-                                Allergies
-                            </div>
-
-                            <div>
-                                <input type="checkbox" name="health_concern" value="High Blood"
-                                    v-model="request.health_concerns" />
-                                High Blood
-                            </div>
-                            <div>
-                                <input type="checkbox" name="health_concern" value="Anemia"
-                                    v-model="request.health_concerns" />
-                                Anemia
-                            </div>
-                            <div>
-                                <input type="checkbox" name="health_concern" value="Others"
-                                    v-model="request.health_concerns" />
-                                Others (please specify)
-                            </div>
-                            <div v-if="
-                                        request.health_concerns.includes(
-                                            'Others'
-                                        )
-                                    ">
-                                <input type="text"
-                                    class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                    required value="" v-model="request.health_concern_other" />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group md:w-5/5">
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="">
-                            Other health concerns/conditions the school
-                            should know about (Type None if you do not have any)
-                            <span class="text-red-500">*</span>
-                        </label>
-                        <input type="text" required
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            v-model="request.other_health_concern" />
-                    </div>
-                </div>
-
-                <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                    Student Type <span class="text-red-500">*</span>
-                </label>
-                <div class="form-group mb-6">
-                    <div
-                        class="md:w-5/5 bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600 p-3">
-
-
-                        <div v-if="term.term_student_type == 'college'" class="mt-2">
-                            <input type="radio" required name="student_type" id="rb-ug-freshman" data-type="college"
-                                @change="filterCourses('college')" v-model="request.student_type"
-                                value="COLLEGE - Freshman" />
-                            <label for="rb-ug-freshman"> COLLEGE - Freshman</label>
-                        </div>
-
-                        <div v-if="term.term_student_type == 'college'" class="mt-2">
-                            <input type="radio" required name="student_type" id="rb-ug-transferee" data-type="college"
-                                @change="filterCourses('college')" v-model="request.student_type"
-                                value="COLLEGE - Transferee" />
-
-                            <label for="rb-ug-transferee"> COLLEGE - Transferee</label>
-                        </div>
-
-                        <div v-if="term.term_student_type == 'shs'" class="mt-2">
-                            <input type="radio" id="rb-shs-freshman" required name="student_type" data-type="shs"
-                                @change="filterCourses('shs')" v-model="request.student_type" value="SHS - Freshman" />
-                            <label for="rb-shs-freshman">SHS - New</label>
-                        </div>
-
-                        <div v-if="term.term_student_type == 'shs'" class="mt-2">
-                            <input type="radio" required id="rb-shs-transferee" name="student_type" data-type="shs"
-                                @change="filterCourses('shs')" v-model="request.student_type"
-                                value="SHS - Transferee" />
-
-                            <label for="rb-shs-transferee">SHS - Transferee</label>
-                        </div>
-                        <div v-if="term.term_student_type == 'shs'" class="mt-2">
-                            <input type="radio" required id="rb-shs-drive" name="student_type" data-type="shs"
-                                @change="filterCourses('drive')" v-model="request.student_type"
-                                value="SHS - DRIVE HomeSchool Program" />
-                            <label for="rb-shs-drive">SHS - DRIVE HomeSchool Program</label>
-                        </div>
-
-                        <div v-if="term.term_student_type == 'college'" class="mt-2">
-                            <input type="radio" required id="rb-2nd-deg" name="student_type" data-type="second_degree"
-                                @change="filterCourses('other')" v-model="request.student_type" value="2ND - DEGREE" />
-                            <label for="rb-2nd-deg"> 2ND - DEGREE
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <div v-if="request.type == 'other'">
-                    <div class="mb-6">
-                        <div class="md:w-5/5">
-                            <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                                Company
-                            </label>
-                            <input
-                                class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                type="text" v-model="request.sd_company">
-                        </div>
-                    </div>
-
-                    <div class="mb-6">
-                        <div class="md:w-5/5">
-                            <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                                Position
-                            </label>
-                            <input
-                                class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                type="text" v-model="request.sd_position">
-                        </div>
-                    </div>
-                    <div class="mb-6">
-                        <div class="md:w-5/5">
-                            <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                                Previous Degree <span class="text-red-500">*</span>
-                            </label>
-                            <input
-                                class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                type="text" v-model="request.sd_degree">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-6">
-                    <div class="md:w-5/5">
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                            Applying For <span class="text-red-500">*</span>
-                        </label>
-                        <!-- <ul
-                            class="hidden bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600">
-                            <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-200"
-                                v-for="t in filtered_programs" :key="t.id">
-                                <div class="flex items-center pl-3">
-                                    <input type="checkbox" class="admissions_submission_cb" :id="'progId-' + t.id"
-                                        @click="filterProgram(t.type,t.title)" name="" :value="t.id" required />
-                                    <label class="py-3 ml-2" :for="'progId-' + t.id"> {{ t.title }}</label>
-                                </div>_
-                            </li>
-                        </ul> -->
-
-                        <div
-                            class="md:w-5/5 bg-white border border-gray-200 rounded-lg dark:bg-gray-100 dark:border-gray-100 dark:text-gray-600 p-3">
-
-                            <div class="my-3">
-                                <label class="block t color-primary font-bold  mb-3  pr-4">
-                                    First Choice
-                                </label>
-                                <select :disabled="!request.student_type ? true : false"
-                                    class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                    v-model="request.type_id" id="course_first_choice" required>
-                                    <option value="" disabled selected> -- Select option -- </option>
-                                    <option :value="t.id" v-for="t in filtered_programs" :data-title="t.title"
-                                        :key="t.id"
-                                        :disabled="t.id == request.type_id2 || t.id == request.type_id3 ? true : false">
-                                        {{t.title}}</option>
-                                </select>
-                            </div>
-                            <div class="my-3">
-                                <label class="block t color-primary font-bold  mb-3  pr-4">
-                                    Second Choice
-                                </label>
-                                <select :disabled="!request.student_type ? true : false"
-                                    class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                    v-model="request.type_id2" id="course_second_choice" required>
-                                    <option value="" disabled selected> -- Select option -- </option>
-                                    <option :value="t.id" v-for="t in filtered_programs" :data-title="t.title"
-                                        :key="t.id"
-                                        :disabled="t.id == request.type_id || t.id == request.type_id3 ? true : false">
-                                        {{t.title}}</option>
-                                </select>
-                            </div>
-                            <div class="my-3">
-                                <label class="block t color-primary font-bold  mb-3  pr-4">
-                                    Third Choice
-                                </label>
-                                <select :disabled="!request.student_type ? true : false"
-                                    class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                    v-model="request.type_id3" id="course_third_choice"
-                                    :required="filtered_programs.length > 2 ? true : false">
-                                    <option value="" disabled selected> -- Select option -- </option>
-                                    <option :value="t.id" v-for="t in filtered_programs" :key="t.id"
-                                        :data-title="t.title"
-                                        :disabled="t.id == request.type_id || t.id == request.type_id2 ? true : false">
-                                        {{t.title}}</option>
-                                </select>
-                            </div>
-
-                        </div>
-
-
-                    </div>
-                </div>
-
-                <div class="mb-6">
-                    <div class="md:w-5/5">
-                        <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                            Previous School <span class="text-red-500">*</span>
-                        </label>
-                        <input
-                            class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" required v-model="request.school">
                     </div>
                 </div>
             </div>
 
         </div>
+        <div v-if="true"
+            class=" mb-6 mt-10">
+            <h4 class="color-primary font-bold text-xl">CONTACT INFORMATION</h4>
+            <hr class="mb-5 bg-[#10326f] h-1 w-3/5" />
+            <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
+                <h5 class="color-primary mb-2.5">CONTACT DETAILS</h5>
+                <div
+                    class="grid gap-x-16 grid-cols-[repeat(auto-fit,_minmax(0,420px))] gap-y-2 mb-4 ">
+                    <div id="email"
+                        class="">
+                        <label class="block  color-primary font-bold mb-3 pr-4">
+                            Email Address <span class="text-red-500">*</span>
+                        </label>
+                        <input v-model="request.email"
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="email"
+                            name="confirm-email"
+                            required>
 
 
-        <div class="text-center color-primary mt-[50px]">
-            iACADEMY shall retain in confidence all confidential information concerning and involving every
+                    </div>
+                    <div id="email-confirm">
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Confirm Email Address <span class="text-red-500">*</span>
+                        </label>
+                        <input v-model="request.email_confirmation"
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="email"
+                            name="confirm-email"
+                            required>
+
+                    </div>
+
+                </div>
+                <div
+                    class="grid grid-cols-[repeat(auto-fit,_minmax(0,420px))] gap-x-16 gap-y-2 mb-4">
+                    <div class="">
+                        <label class="block color-primary font-bold mb-3 pr-4">
+                            Mobile Number <span class="text-red-500">*</span>
+                        </label>
+                        <div class="flex gap-x-2.5">
+                            <select v-model="code1"
+                                class="w-1/3 bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
+                                <option v-for="code in codes"
+                                    :value="code.dialCode"
+                                    required>
+                                    {{ code.flag}} {{code.dialCode}}
+                                </option>
+                            </select>
+                            <input
+                                class="w-2/3 bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                type="number"
+                                v-model="request.mobile_number"
+                                required>
+
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Confirm Mobile Number <span class="text-red-500">*</span>
+                        </label>
+                        <div class="flex gap-x-2.5">
+                            <select v-model="code2"
+                                class="w-1/3 bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
+                                <option v-for="code in codes"
+                                    :value="code.dialCode"
+                                    required>
+                                    {{ code.flag}} {{code.dialCode}}
+                                </option>
+                            </select>
+                            <input
+                                class="w-2/3 bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                type="number"
+                                v-model="request.mobile_number_confirmation"
+                                required>
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
+                <h5 class="color-primary mb-2.5">ADDRESS</h5>
+                <div
+                    class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-2.5 mb-4 ">
+                    <div id=""
+                        class="">
+                        <label class="block color-primary font-bold mb-3 pr-4">
+                            Home Number/Street/Subdivision <span class="text-red-500">*</span>
+                        </label>
+                        <input v-model="request.address"
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            name="address"
+                            type="text"
+                            required>
+
+                    </div>
+                    <div id="">
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Barangay
+                        </label>
+                        <input v-model="addressObj.barangay"
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            name="barangay"
+                            type="text"
+                            required>
+
+                    </div>
+                    <div id="">
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            City <span class="text-red-500">*</span>
+                        </label>
+                        <input v-model="addressObj.city"
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            name="city"
+                            required>
+
+                        <!-- <select v-if="addressObj.country == 'Philippines'"
+                            @change="getBarangay"
+                            v-model="addressObj.city"
+                            class="w-full bg-neutral-100 border border-neutral-100 rounded-lg py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
+                            <option v-for="city in cities"
+                                :value="city.name"
+                                :id="city.code"
+                                required>
+                                {{ city.name}}
+                            </option>
+                        </select> -->
+                        <!-- <select v-else
+                            v-model="addressObj.city"
+                            class="w-full bg-neutral-100 border border-neutral-100 rounded-lg py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
+                            <option v-for="city in cities"
+                                :value="city"
+                                required>
+                                {{ city}}
+                            </option>
+                        </select> -->
+                    </div>
+                </div>
+                <div
+                    class="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] items-end gap-2.5 mb-4 ">
+                    <div id="">
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Country<span class="text-red-500">*</span>
+                        </label>
+                        <select @change="getState"
+                            name="country"
+                            v-model="addressObj.country"
+                            class="w-full bg-neutral-100 border border-neutral-100 rounded-lg py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
+                            <option v-for="country in countryList"
+                                :value="country"
+                                required>
+                                {{ country}}
+                            </option>
+                        </select>
+                        <!-- <input v-model="request.country"
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            required>
+                         -->
+                    </div>
+                    <div id=""
+                        class="">
+                        <label class="block color-primary font-bold mb-3 pr-4">
+                            State/Province <span class="text-red-500">*</span>
+                        </label>
+                        <input v-model="addressObj.province"
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            name="state"
+                            required>
+                        <!-- <select v-if="addressObj.country == 'Philippines'"
+                                @change="getCities"
+                                v-model="addressObj.province"
+                                required
+                                class="w-full bg-neutral-100 border border-neutral-100 rounded-lg py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
+                                <option v-for="state in states"
+                                    :id="state.code"
+                                    :value="state.name">
+                                    {{ state.name}}
+                                </option>
+                            </select>
+                            <select v-else
+                                @change="getCities"
+                                v-model="addressObj.province"
+                                required
+                                class="w-full bg-neutral-100 border border-neutral-100 rounded-lg py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
+                                <option v-for="state in states"
+                                    :value="state">
+                                    {{ state}}
+                                </option>
+                            </select> -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div v-if="true"
+            class=" mb-6 mt-10">
+            <h4 class="color-primary font-bold text-xl">PARENT'S INFORMATION</h4>
+            <hr class="mb-5 bg-[#10326f] h-1 w-3/5" />
+
+            <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
+                <h5 class="color-primary mb-2.5">MOTHER <span class="text-red-500">*</span> </h5>
+                <div
+                    class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-2.5 mb-4 ">
+                    <div>
+                        <label class="block  color-primary font-bold mb-3 pr-4">
+                            Name
+                        </label>
+                        <input v-model="request.mother_name"
+                            class="parent-info bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            name="full_name"
+                            placeholder='(write "n/a" only if not applicable)'
+                            required>
+                    </div>
+                    <div>
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Occupation
+                        </label>
+                        <input v-model="request.mother_occupation"
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            name="job_title"
+                            required />
+
+                    </div>
+                    <div>
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Email Address
+                        </label>
+                        <input v-model="request.mother_email"
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="email"
+                            name="email"
+                            required>
+
+                    </div>
+                    <div>
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Mobile Number
+                        </label>
+                        <input v-model="request.mother_contact"
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="number"
+                            name="number"
+                            required>
+
+                    </div>
+
+
+                </div>
+                <div>
+                    <label class="block color-primary mb-1 ml-1.5">
+                        <input type="radio"
+                            class="mr-1"
+                            id="mother"
+                            name="primary_contact"
+                            v-model="request.primary_contact"
+                            value="mother"
+                            required>
+                        SET AS PRIMARY CONTACT
+                    </label>
+                </div>
+
+            </div>
+            <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
+                <h5 class="color-primary mb-2.5">FATHER <span class="text-red-500">*</span> </h5>
+                <div
+                    class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-2.5 mb-4 ">
+                    <div>
+                        <label class="block  color-primary font-bold mb-3 pr-4">
+                            Name
+                        </label>
+                        <input v-model="request.father_name"
+                            class="parent-info bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            name="full_name"
+                            placeholder='(write "n/a" only if not applicable)'
+                            required>
+                    </div>
+                    <div>
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Occupation
+                        </label>
+                        <input v-model="request.father_occupation"
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            name="job_title"
+                            type="text"
+                            required>
+                    </div>
+                    <div>
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Email Address
+                        </label>
+                        <input v-model="request.father_email"
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            name="email"
+                            type="email"
+                            required>
+
+                    </div>
+                    <div>
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Mobile Number
+                        </label>
+                        <input v-model="request.father_contact"
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="number"
+                            name="number"
+                            required>
+
+                    </div>
+
+
+                </div>
+                <div>
+                    <label class="block color-primary mb-1 ml-1.5">
+                        <input type="radio"
+                            class="mr-1"
+                            id="father"
+                            name="primary_contact"
+                            v-model="request.primary_contact"
+                            value="father"
+                            required>
+                        SET AS PRIMARY CONTACT
+                    </label>
+                </div>
+
+            </div>
+            <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
+                <h5 class="color-primary mb-2.5">GUARDIAN <span class="text-red-500">*</span> </h5>
+                <div
+                    class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-2.5 mb-4 ">
+                    <div>
+                        <label class="block  color-primary font-bold mb-3 pr-4">
+                            Name
+                        </label>
+                        <input v-model="request.guardian_name"
+                            class="parent-info bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            name="full_name"
+                            placeholder='(write "n/a" only if not applicable)'
+                            required>
+                    </div>
+                    <div>
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Relationship
+                        </label>
+                        <input v-model="request.guardian_occupation"
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            required>
+
+                    </div>
+                    <div>
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Email Address
+                        </label>
+                        <input v-model="request.guardian_email"
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="email"
+                            name="email"
+                            required>
+
+                    </div>
+                    <div>
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Mobile Number
+                        </label>
+                        <input v-model="request.guardian_contact"
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="number"
+                            name="number"
+                            required>
+
+                    </div>
+
+
+                </div>
+                <div>
+                    <label class="block color-primary mb-1 ml-1.5">
+                        <input type="radio"
+                            class="mr-1"
+                            id="guardian"
+                            name="primary_contact"
+                            v-model="request.primary_contact"
+                            value="guardian"
+                            required>
+                        SET AS PRIMARY CONTACT
+                    </label>
+                </div>
+
+            </div>
+        </div>
+        <div v-if="true"
+            class=" mb-6 mt-10">
+            <h4 class="color-primary font-bold text-xl">EDUCATIONAL BACKGROUND</h4>
+            <hr class="mb-5 bg-[#10326f] h-1 w-3/5" />
+
+            <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
+
+                <div class="flex flex-wrap gap-2.5 mb-4 ">
+                    <div class="grow">
+                        <label class="block color-primary font-bold mb-3 pr-4">
+                            Last School Attended
+                        </label>
+                        <v-select :options="prevSchoolList"
+                            label="name"
+                            class="style-chooser"
+                            @input="onInputChange"></v-select>
+
+                    </div>
+                    <div class="basis-[154px]">
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            City
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            v-model="request.school_city">
+
+                    </div>
+                    <div class="basis-[154px]">
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            State/Province
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            v-model="request.school_province">
+
+                    </div>
+                    <div>
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Country
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            v-model="request.school_country">
+
+                    </div>
+
+
+                </div>
+                <div class="flex flex-wrap gap-2.5 mb-4 ">
+                    <div class="grow lg:grow-0">
+                        <label class="block color-primary font-bold mb-3 pr-4">
+                            Grade/Year Level
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            name="number"
+                            v-model="request.grade_year_level">
+
+
+                    </div>
+                    <div class="grow">
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Program/Strand/Degree earned
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            name="strand"
+                            v-model="request.program_strand_degree">
+
+                    </div>
+                    <div class="grow">
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            LRN <i class="font-normal">(For Junior High School Applicants)</i>
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            v-model="request.lrn"
+                            type="text">
+
+                    </div>
+                </div>
+
+            </div>
+            <div v-if="isOnList"
+                class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
+                <h5 class="color-primary mb-2.5">Register your school if not in the list </h5>
+                <div class="flex flex-wrap gap-2.5 mb-4 ">
+                    <div class="grow">
+                        <label class="block color-primary font-bold mb-3 pr-4">
+                            School Name
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            v-model="register.school_name"
+                            required>
+
+
+                    </div>
+                    <div class="basis-[154px]">
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            City
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            v-model="register.school_city"
+                            required>
+
+                    </div>
+                    <div class="basis-[154px]">
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            State/Province
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            v-model="register.school_province"
+                            required>
+
+                    </div>
+                    <div>
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Country
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            v-model="register.school_country"
+                            required>
+
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+        <div v-if="true"
+            class=" mb-6 mt-10">
+            <h4 class="color-primary font-bold text-xl">ADDITIONAL INFORMATION</h4>
+            <hr class="mb-5 bg-[#10326f] h-1 w-3/5" />
+            <div class="grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-6">
+                <div class="border-[1px] border-neutral-100 p-2.5 rounded-lg">
+                    <h5 class="color-primary mb-2.5">Do you hold good moral standing in your
+                        previous
+                        school? <span class="text-red-500">*</span> </h5>
+                    <label class="block color-primary mb-1 ml-1.5">
+                        <input type="radio"
+                            class="mr-1"
+                            value="Yes"
+                            name="good_moral"
+                            required
+                            v-model="request.good_moral">
+                        Yes
+                    </label>
+                    <label class="block color-primary mb-1 ml-1.5">
+                        <input type="radio"
+                            class="mr-1"
+                            value="No"
+                            name="good_moral"
+                            required
+                            v-model="request.good_moral">
+                        No
+                    </label>
+                </div>
+                <div class="border-[1px] border-neutral-100 p-2.5 rounded-lg">
+                    <h5 class="color-primary mb-2.5">Have you involved of any illegal activities?
+                        <span class="text-red-500">*</span>
+                    </h5>
+                    <label class="block color-primary mb-1 ml-1.5">
+                        <input type="radio"
+                            class="mr-1"
+                            value="Yes"
+                            name="crime"
+                            required
+                            v-model="request.crime">
+                        Yes
+                    </label>
+                    <label class="block color-primary mb-1 ml-1.5">
+                        <input type="radio"
+                            class="mr-1"
+                            value="No"
+                            name="crime"
+                            required
+                            v-model="request.crime">
+                        No
+                    </label>
+                </div>
+            </div>
+            <h5 class="color-primary font-bold text-base mt-4 mb-2">Health Conditions</h5>
+            <div class="grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-6">
+                <div>
+                    <div class="border-[1px] border-neutral-100 p-2.5 rounded-lg">
+                        <h5 class="color-primary mb-2.5">Have you been hospitalized before?* <span
+                                class="text-red-500">*</span> </h5>
+                        <label class="block color-primary mb-1 ml-1.5">
+                            <input type="radio"
+                                class="mr-1"
+                                value="Yes"
+                                required
+                                name="hospitalized"
+                                v-model="request.hospitalized">
+                            Yes
+                        </label>
+                        <label class="block color-primary mb-1 ml-1.5">
+                            <input type="radio"
+                                class="mr-1"
+                                value="No"
+                                name="hospitalized"
+                                required
+                                v-model="request.hospitalized">
+                            No
+                        </label>
+                    </div>
+                    <label class="block color-primary font-bold text-base mt-2 ">
+                        Other health concerns/conditions <span class="text-red-500">*</span>
+                    </label>
+                    <label class="block color-primary italic text-sm mb-1">
+                        (Type "none" if you do not have any)
+                    </label>
+                    <input
+                        class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                        type="text"
+                        v-model="request.other_health_concern"
+                        required>
+
+                </div>
+                <div class="border-[1px] border-neutral-100 p-2.5 rounded-lg">
+                    <h5 class="color-primary mb-2.5">Do you have any of the following? (check all
+                        that apply) </h5>
+                    <label class="custom-checkbox">
+                        <input type="checkbox"
+                            v-model="request.health_concerns"
+                            value="Diabetes">
+                        <span class="custom-checkbox-button"></span>
+                        Diabetes
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox"
+                            v-model="request.health_concerns"
+                            value="Allergies">
+                        <span class="custom-checkbox-button"></span>
+                        Allergies
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox"
+                            v-model="request.health_concerns"
+                            value="High Blood">
+                        <span class="custom-checkbox-button"></span>
+                        High Blood
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox"
+                            v-model="request.health_concerns"
+                            value="Anemia">
+                        <span class="custom-checkbox-button"></span>
+                        Anemia
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox"
+                            v-model="request.health_concerns"
+                            value="Others">
+                        <span class="custom-checkbox-button"></span>
+                        Others (please specify)
+                    </label>
+                    <label v-if="request.health_concerns.includes('Others')"
+                        class="block color-primary mb-1 ml-1.5">
+                        <input type="text"
+                            class="mr-1 bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            required
+                            v-model="request.health_concern_other">
+                    </label>
+                </div>
+            </div>
+
+            <div v-if="isSecondaDegree"
+                class="border-[1px] border-neutral-100 rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
+                <h5 class="color-primary text-base mb-2.5">Professional Background </h5>
+                <div
+                    class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-2.5 mb-4 ">
+                    <div>
+                        <label class="block  color-primary font-bold mb-3 pr-4">
+                            Company
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            v-model="request.sd_company">
+
+
+                    </div>
+                    <div>
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Industry
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            v-model="request.sd_position">
+
+                    </div>
+                    <div>
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Designation
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text"
+                            v-model="request.sd_degree">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div v-if="true"
+            class=" mb-6 mt-10">
+            <h4 class="color-primary font-bold text-xl">HOW DID YOU FIND OUT ABOUT iACADEMY?</h4>
+            <hr class="mb-5 bg-[#10326f] h-1 w-3/5" />
+            <div class="grid grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-6">
+
+                <div>
+                    <div class="border-[1px] border-neutral-100 p-2.5 mb-4 rounded-lg">
+                        <h5 class="color-primary mb-2.5">How did you know about us?<span
+                                class="text-red-500">*</span></h5>
+                        <div class="flex ">
+                            <div class="w-1/2">
+
+                                <template v-for="source,index in sourceList">
+                                    <label v-if="index <= 4"
+                                        class="custom-checkbox mb-1">
+                                        <input type="checkbox"
+                                            :id="index"
+                                            :name="source"
+                                            :value="source"
+                                            v-model="sources">
+                                        <span class="custom-checkbox-button"></span>
+                                        {{source}}
+                                    </label>
+                                </template>
+                            </div>
+                            <div class="w-1/2">
+                                <template v-for="source,index in sourceList">
+                                    <label v-if="index >= 5"
+                                        class="custom-checkbox mb-1">
+                                        <input type="checkbox"
+                                            class=""
+                                            :id="index"
+                                            name="source"
+                                            :value="source.toLowerCase()"
+                                            v-model="sources">
+                                        <span class="custom-checkbox-button"></span>
+                                        {{source }} {{index >= 7? "(please specify)" : ""}}
+                                    </label>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="border-[1px] border-neutral-100 p-2.5 rounded-lg">
+                        <h5 class="color-primary text-sm mb-2.5">(to
+                            receive
+                            application updates/announcement/etc)
+                            <em>Best time to contact you?</em><span class="text-red-500">*</span>
+
+                        </h5>
+                        <div class="flex ">
+                            <div class="w-1/2">
+                                <template v-for="time,index in timeList">
+                                    <label v-if="index <= 3"
+                                        class="custom-checkbox mb-1">
+                                        <input type="checkbox"
+                                            name="time"
+                                            :id="index"
+                                            :value="time"
+                                            v-model="bestTime">
+                                        <span class="custom-checkbox-button"></span>
+                                        {{time}}
+                                    </label>
+
+                                </template>
+                            </div>
+                            <div class="w-1/2">
+                                <template v-for="time,index in timeList">
+                                    <label v-if="index >= 4"
+                                        class="custom-checkbox mb-1">
+                                        <input type="checkbox"
+                                            name="time"
+                                            :id="index"
+                                            :value="time"
+                                            v-model="bestTime">
+                                        <span class="custom-checkbox-button"></span>
+                                        {{time}}
+                                    </label>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div v-if="sources.includes('event')"
+                        v-bind:key="1"
+                        class="border-[1px] border-neutral-100 p-2.5 mb-4 rounded-lg ">
+                        <div class="">
+                            <h5 class="color-primary mb-2.5">Events (please specify)</h5>
+                            <input v-model="sourcesSpecify.event"
+                                class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                type="text"
+                                required>
+
+
+                        </div>
+                    </div>
+                    <!-- v-if="sources === 'referral'" -->
+                    <div v-if="sources.includes('referral')"
+                        class="border-[1px] border-neutral-100 p-2.5 mb-4 rounded-lg">
+                        <h5 class="color-primary mb-2.5">Referred by<span
+                                class="text-red-500">*</span></h5>
+                        <div class="flex">
+                            <div class="w-full">
+                                <div class="grid grid-cols-[repeat(2,_1fr)]">
+                                    <template v-for="refer,index in referredList">
+                                        <label v-if="index < 1"
+                                            class="custom-radio mb-1">
+                                            <input type="radio"
+                                                class="mr-1 "
+                                                :id="index"
+                                                name="refer"
+                                                :value="refer.toLowerCase()"
+                                                v-model="sourcesSpecify.referral"
+                                                required>
+                                            <span class="custom-radio-button"></span>
+                                            {{refer}}
+                                        </label>
+                                    </template>
+                                    <label class="custom-radio mb-1">
+                                        <input type="radio"
+                                            class="mr-1 "
+                                            id="index"
+                                            name="refer"
+                                            value="teacher"
+                                            v-model="sourcesSpecify.referral"
+                                            required>
+                                        <span class="custom-radio-button"></span>
+                                        Teacher/Guardian
+                                    </label>
+                                </div>
+                                <template v-for="refer,index in referredList">
+                                    <label v-if="index > 1"
+                                        class="custom-radio mb-1">
+                                        <input type="radio"
+                                            :id="index"
+                                            name="refer"
+                                            :value="refer.toLowerCase()"
+                                            v-model="sourcesSpecify.referral"
+                                            required>
+                                        <span class="custom-radio-button"></span>
+                                        {{refer}}
+                                    </label>
+                                </template>
+                                <label class="custom-radio mb-1">
+                                    <input type="radio"
+                                        name="refer"
+                                        value="iacademy"
+                                        v-model="sourcesSpecify.referral"
+                                        required>
+                                    <span class="custom-radio-button"></span>
+                                    iACADEMY Student/Alumni/Applicant/Employee/Partner
+
+                                </label>
+                                <input
+                                    class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                    type="text"
+                                    required
+                                    v-model="refferalName"
+                                    placeholder="Name of your referrer">
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div v-if="sources.includes('others')"
+                        v-bind:key="2"
+                        class="border-[1px] border-neutral-100 p-2.5 mb-4 rounded-lg ">
+                        <div class="">
+                            <h5 class="color-primary mb-2.5">Others (please specify)</h5>
+                            <input
+                                class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                type="text"
+                                v-model="sourcesSpecify.others"
+                                required>
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <div class="text-center color-primary mt-[50px]"
+            v-if="true">
+            iACADEMY shall retain in confidence all confidential information concerning and
+            involving every
             student and the school.
-            <a href=" https://iacademy.edu.ph/privacypolicy.htm" target="_blank" class="underline font-bold">
+            <a href=" https://iacademy.edu.ph/privacypolicy.htm"
+                target="_blank"
+                class="underline font-bold">
                 https://iacademy.edu.ph/privacypolicy.htm</a>
 
             <div class="mt-4">
-                <input type="checkbox" required id="agreement"> <label for="agreement" class="italic">I have read and
+                <input type="checkbox"
+                    required
+                    id="agreement"> <label for="agreement"
+                    class="italic">I have read and
                     I
                     agree to the
                     said
@@ -874,8 +1294,10 @@
         <hr class="my-5 bg-gray-400 h-[3px]" />
 
 
-        <div class=" text-right">
-            <div v-if="loading_spinner" class="lds-ring">
+        <div class=" text-right"
+            sv-if="true">
+            <div v-if="loading_spinner"
+                class="lds-ring">
                 <div></div>
                 <div></div>
                 <div></div>
@@ -894,24 +1316,180 @@
 
     </form>
 </div>
-  <!-- Start of HubSpot Embed Code -->
-  <script type="text/javascript"
-        id="hs-script-loader"
-        async
-        defer
-        src="//js.hs-scripts.com/45758391.js"></script>
-    <!-- End of HubSpot Embed Code -->
-<style>
+<!-- Start of HubSpot Embed Code -->
+<!-- <script type="text/javascript"
+    id="hs-script-loader"
+    async
+    defer
+    src="//js.hs-scripts.com/45758391.js"></script> -->
+<!-- End of HubSpot Embed Code -->
 
+<style>
+input::placeholder {
+    text-align: center;
+}
+
+.parent-info::placeholder {
+    text-align: center;
+    font-size: 12px;
+    font-style: italic;
+}
+
+select {
+    text-align: center;
+    text-align-last: center;
+    color: #f5f5f5;
+    background-color: #f5f5f5;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.custom-checkbox input[type="checkbox"],
+.custom-radio input[type="radio"] {
+    opacity: 0;
+    position: absolute;
+    z-index: -1;
+}
+
+.custom-checkbox,
+.custom-radio {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+}
+
+.custom-checkbox-button,
+.custom-radio-button {
+    width: 13px;
+    height: 13px;
+    border: 2px solid #000;
+    border-radius: 35%;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+}
+
+.custom-checkbox-button::after,
+.custom-radio-button::after {
+    content: '';
+    width: 13px;
+    height: 13px;
+    background-color: #3B82F680;
+    border-radius: 35%;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.custom-checkbox input[type="checkbox"]:checked+.custom-checkbox-button,
+.custom-radio input[type="radio"]:checked+.custom-radio-button {
+    background-color: #fff;
+}
+
+.custom-checkbox input[type="checkbox"]:checked+.custom-checkbox-button::after,
+.custom-radio input[type="radio"]:checked+.custom-radio-button::after {
+    opacity: 1;
+}
+
+
+.style-chooser .vs__search::placeholder,
+.style-chooser .vs__dropdown-toggle,
+.style-chooser .vs__dropdown-menu {
+    background-color: rgb(245 245 245)
+}
 </style>
 
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-select@3.0.0"></script>
+<link rel="stylesheet"
+    href="https://unpkg.com/vue-select@3.0.0/dist/vue-select.css">
 
+
+
+<script src="<?php echo $js_dir ?>dataExport.js"></script>
 
 <script>
+const sourcesLeft = ['Google', 'Facebook', 'Instagram', 'Tiktok', 'News']
+const sourcesRight = ['School Fair/Orientation', 'Billboard', 'Event', 'Referral', 'Others']
+
+const timeLeft = ['8:00am-10:00am', '10:00am-12:00pm', '12:00pm-2:00pm', '2:00pm-4:00pm']
+const timeRight = ['4:00pm-6:00pm', '6:00pm-8:00pm', '8:00pm-10:00pm', '10:00pm-12:00am']
+
+const referred = ['Family', 'Teacher/Guidance',
+    'Relatives', 'Friend'
+]
+
+const applicantTypeCollege = ['iACADEMY SHS Graduate', 'Graduate from other SHS',
+    'iACADEMY College Graduate', 'Graduate from other College'
+]
+
+const collegeTypeValue = ['College - Freshman', 'College - Transferee',
+    'College - Second Degree', 'College - iACADEMY SHS Graduate'
+]
+
+const freshmenValue = ['College - Freshmen iACADEMY', 'College - Freshmen Other']
+
+const secondDegreeValue = ['2nd - Degree iACADEMY', '2nd - Degree Other']
+
+const applicantTypeShs = ['SHS - New', 'SHS - Transferee']
+
+const healthConditions = ['Diabetes', 'Allergies', 'High Blood', 'Anemia']
+
+Vue.component('v-select', VueSelect.VueSelect)
+
 new Vue({
     el: "#adminssions-form",
     data: {
+        selected: '',
+        countryList: [],
+        barangay: [],
+        cities: [],
+        states: [],
+        apiUrl: "http://cebuapi.iacademy.edu.ph/api/v1/",
+        optionValue: '',
+        sources: [],
+        times: [],
+        sourceList: [...sourcesLeft, ...sourcesRight],
+        timeList: [...timeLeft, ...timeRight],
+        referredList: [...referred],
+        collegeList: [...applicantTypeCollege],
+        shsList: [...applicantTypeShs],
+        healthConcern: [...healthConditions],
+        freshmenValue: [...freshmenValue],
+        secondDegreeValue: [...secondDegreeValue],
+        filterCollege: ['college', 'college', 'college', 'college'],
+        filterShs: ['shs', 'shs', 'shs'],
+        countries: [...countries],
+        codes: phoneCode,
+        code1: '+63',
+        code2: '+63',
+        register: {
+            school_name: '',
+            school_city: '',
+            school_province: '',
+            school_country: ''
+        },
+        sourcesSpecify: {
+            event: '',
+            referral: '',
+            others: ''
+        },
+        isOnList: false,
+        bestTime: [],
+        refferalName: '',
+        prevSchoolList: [],
         syid: <?php echo $current_term; ?>,
+        isDual: false,
         request: {
             type_id: "",
             date_of_birth: "",
@@ -919,10 +1497,25 @@ new Vue({
             health_concerns: [],
             campus: "Makati",
             citizenship: 'Philippines',
-            syid: undefined,
+            syid: '',
             student_type: '',
+            source: '',
+            best_time: '',
             type_id2: "",
-            type_id3: ""
+            type_id3: "",
+            school_id: '',
+            school_name: '',
+            school_city: '',
+            school_province: '',
+            school_country: '',
+            grade_year_level: '',
+            primary_contact: ''
+        },
+        addressObj: {
+            country: '',
+            province: '',
+            city: '',
+            barangay: '',
         },
         term: undefined,
         loading_spinner: false,
@@ -933,6 +1526,7 @@ new Vue({
         types: [],
         base_url: "<?php echo base_url(); ?>",
     },
+
     mounted() {
 
         axios
@@ -943,9 +1537,11 @@ new Vue({
             })
 
             .then((data) => {
+
                 this.programs = data.data.data;
                 this.sy = data.data.sy;
                 this.term = data.data.term;
+
             })
             .catch((e) => {
                 console.log("error");
@@ -965,7 +1561,8 @@ new Vue({
                             .not(e.currentTarget)
                             .prop("checked", false);
                         if ($(e.currentTarget).is(":checked")) {
-                            this.request.type_id = e.currentTarget.value;
+                            this.request.type_id = e.currentTarget
+                                .value;
                             $(".admissions_submission_cb").removeAttr(
                                 "required"
                             );
@@ -979,13 +1576,16 @@ new Vue({
                 }, 500);
 
                 document.querySelector('#course_first_choice').onchange = (e) => {
-                    this.request.program = e.target.selectedOptions[0].getAttribute('data-title');
+                    this.request.program = e.target.selectedOptions[0].getAttribute(
+                        'data-title');
                 };
                 document.querySelector('#course_second_choice').onchange = (e) => {
-                    this.request.program2 = e.target.selectedOptions[0].getAttribute('data-title');
+                    this.request.program2 = e.target.selectedOptions[0]
+                        .getAttribute('data-title');
                 };
                 document.querySelector('#course_third_choice').onchange = (e) => {
-                    this.request.program3 = e.target.selectedOptions[0].getAttribute('data-title');
+                    this.request.program3 = e.target.selectedOptions[0]
+                        .getAttribute('data-title');
                 };
             })
             .catch((e) => {
@@ -993,13 +1593,153 @@ new Vue({
             });
 
 
+        this.getAllPrevSchool()
 
-
+        this.getAllCountry()
 
 
     },
+    computed: {
+        isSecondaDegree() {
+            return this.request.student_type == '2nd - Degree iACADEMY' || this.request
+                .student_type == '2nd - Degree Other'
+
+        }
+    },
 
     methods: {
+        async getBarangay(e) {
+            const {
+                data
+            } = await axios.get(
+                `https://psgc.cloud/api/cities/${e.target.selectedOptions[0].id}/barangays`
+            )
+            this.barangay = data
+        },
+        async getCities(e) {
+            if (this.addressObj.country == 'Philippines') {
+                const {
+                    data
+                } = await axios.get(
+                    `https://psgc.cloud/api/cities`
+                )
+                this.cities = data
+
+            } else {
+                const {
+                    data
+                } = await axios.post(
+                    'https://countriesnow.space/api/v0.1/countries/state/cities', {
+                        "country": this.addressObj.country,
+                        "state": e.target.value
+                    })
+                this.cities = data.data
+            }
+        },
+        async getState(e) {
+            this.states = []
+            this.cities = []
+            this.barangay = []
+            Swal.fire({
+                showCancelButton: false,
+                showCloseButton: false,
+                allowEscapeKey: false,
+                title: 'Please wait',
+                text: 'Loading state/province',
+                icon: 'info',
+            })
+            Swal.showLoading();
+            if (e.target.value == 'Philippines') {
+                const {
+                    data
+                } = await axios.get('https://psgc.cloud/api/provinces')
+                this.states = data
+            } else {
+
+                const {
+                    data
+                } = await axios.post(
+                    'https://countriesnow.space/api/v0.1/countries/states', {
+                        "country": e.target.value
+                    })
+
+                for (const state of data.data.states) {
+                    this.states.push(state.name)
+                }
+            }
+            Swal.close();
+        },
+        async getAllCountry() {
+            const {
+                data
+            } = await axios.get('https://countriesnow.space/api/v0.1/countries')
+            for (const countryObj of data.data) {
+                this.countryList.push(countryObj.country)
+            }
+
+        },
+        async getAllPrevSchool() {
+            try {
+                const {
+                    data
+                } = await axios.get(
+                    `${api_url}admissions/previous-schools`, {
+                        headers: {
+                            Authorization: `Bearer ${window.token}`
+                        }
+                    })
+                if (data.length != 0) {
+                    this.prevSchoolList = data
+                    const obj = {
+                        name: 'Not on the list'
+                    }
+                    this.prevSchoolList.push(obj)
+                }
+
+            } catch (error) {
+                const obj = {
+                    name: 'Not on the list'
+                }
+                this.prevSchoolList.push(obj)
+            }
+        },
+        async onInputChange(value) {
+
+            if (value == null) {
+                this.isOnList = false
+                this.request.school_id = ''
+                this.request.school_name = ""
+                this.request.school_city = ""
+                this.request.school_province = ""
+                this.request.school_country = ""
+                for (const key in this.register) {
+                    this.register[key] = ''
+                }
+
+                return
+            }
+
+            if (value.name == 'Not on the list') {
+                this.isOnList = true
+                this.request.school_id = ''
+                this.request.school_name = ""
+                this.request.school_city = ""
+                this.request.school_province = ""
+                this.request.school_country = ""
+                return
+            }
+
+            if (value.name != '') {
+                this.isOnList = false
+            }
+
+
+            this.request.school_id = value.id
+            this.request.school_name = value.name
+            this.request.school_city = value.city
+            this.request.school_province = value.province
+            this.request.school_country = value.country
+        },
         submitForm: function() {
             //console.log(this.request);
         },
@@ -1025,10 +1765,12 @@ new Vue({
                         .prop("checked", false);
                     if ($(e.currentTarget).is(":checked")) {
                         this.request.program_id = e.currentTarget.value;
-                        $(".admissions_submission_pg").removeAttr("required");
+                        $(".admissions_submission_pg").removeAttr(
+                            "required");
 
                     } else {
-                        $(".admissions_submission_pg").attr("required", true);
+                        $(".admissions_submission_pg").attr("required",
+                            true);
                     }
                 });
             }, 500);
@@ -1047,8 +1789,140 @@ new Vue({
 
             this.request.type = type;
         },
+        confirmEmail: function() {
+            if (this.request.email != this.request.email_confirmation) {
+                Swal.fire({
+                    title: 'iACADEMY MAKATI CAMPUS',
+                    html: 'The email address you provided does not match',
+                    confirmButtonText: "Ok",
+                    imageWidth: 100,
+                    icon: "error",
+                    showCloseButton: true
+                })
+                return true
+            }
+            return false
+        },
+        confirmMobileNumber: function() {
+            this.request.mobile_number = `${this.code1}${this.request.mobile_number}`
+            this.request.mobile_number_confirmation =
+                `${this.code2}${this.request.mobile_number_confirmation}`
+
+            if (this.request.mobile_number != this.request.mobile_number_confirmation) {
+                Swal.fire({
+                    title: 'iACADEMY MAKATI CAMPUS',
+                    html: 'The mobile number you provided does not match',
+                    confirmButtonText: "Ok",
+                    imageWidth: 100,
+                    icon: "error",
+                    showCloseButton: true
+                })
+                return true
+            }
+            return false
+        },
+
+        setSource: function() {
+            if (this.sources.includes('event')) {
+                const index = this.sources.indexOf("event");
+                this.sources[index] = `Event(${this.sourcesSpecify.event})`
+            }
+            if (this.sources.includes('others')) {
+                const index = this.sources.indexOf("others");
+                this.sources[index] = `Others(${this.sourcesSpecify.others})`
+            }
+
+            if (this.sources.includes('referral')) {
+                const index = this.sources.indexOf("referral");
+                this.sources[index] =
+                    `referral-${this.sourcesSpecify.referral}(${this.refferalName})`
+
+            }
+
+            this.request.source = this.sources.join();
+
+            // this.request.source = this.sources
+            // if (this.sources == 'event' || this.sources == 'others') {
+            //     this.request.source =
+            //         `${this.sources}-${this.sourcesSpecify[this.sources]}`
+            // }
+            // if (this.sources == 'referral') {
+            //     this.request.source =
+            //         `${this.sources}-${this.sourcesSpecify[this.sources]}-${this.refferalName}`
+            // }
+        },
+        setTime: function() {
+            this.request.best_time = this.bestTime.join();
+        },
+
+        setFirstChoice: function(e) {
+            this.request.program = e.target.selectedOptions[0].getAttribute(
+                'data-title')
+        },
+        setSecondChoice: function(e) {
+            this.request.program2 = e.target.selectedOptions[0].getAttribute(
+                'data-title')
+        },
+        setThirdChoice: function(e) {
+            this.request.program3 = e.target.selectedOptions[0].getAttribute(
+                'data-title')
+        },
+
 
         customSubmit: function(type, title, text, data, url, redirect) {
+
+            if (this.confirmEmail()) {
+                return
+            }
+            if (this.confirmMobileNumber()) {
+                return
+            }
+
+            if (this.sources.length == 0) {
+                Swal.fire({
+                    title: 'iACADEMY MAKATI CAMPUS',
+                    html: 'Missing value on How did you know about us?',
+                    confirmButtonText: "Ok",
+                    imageWidth: 100,
+                    icon: "error",
+                    showCloseButton: true
+                })
+                return
+            }
+
+            if (this.bestTime.length == 0) {
+                Swal.fire({
+                    title: 'iACADEMY MAKATI CAMPUS',
+                    html: 'Missing value on Best time to contact you',
+                    confirmButtonText: "Ok",
+                    imageWidth: 100,
+                    icon: "error",
+                    showCloseButton: true
+                })
+                return
+            }
+            // For school registration
+            if (this.request.school_id == "") {
+                Object.assign(this.request, this.register);
+            }
+
+
+            if (this.request.school_name == '') {
+                Swal.fire({
+                    title: 'iACADEMY MAKATI CAMPUS',
+                    html: 'Missing value on last school attended ',
+                    confirmButtonText: "Ok",
+                    imageWidth: 100,
+                    icon: "error",
+                    showCloseButton: true
+                })
+                return
+            }
+
+
+            this.setSource()
+            this.setTime()
+
 
             Swal.fire({
                 title: 'iACADEMY MAKATI CAMPUS',
@@ -1064,63 +1938,73 @@ new Vue({
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
                     this.loading_spinner = true;
-                    if (this.request.mobile_number.length < 18) {
-                        this.loading_spinner = false;
-                        Swal.fire(
-                            'Failed!',
-                            "Please fill in mobile number",
-                            'warning'
-                        )
-                    } else {
-                        if (this.request.health_concerns.includes("Others")) {
-                            const hasOther = this.request.health_concerns.indexOf("Others");
-                            this.request.health_concerns.splice(
-                                hasOther,
-                                1,
-                                this.request.health_concern_other
-                            );
-                        }
+
+                    // if (this.request.mobile_number.length < 9) {
+                    //     this.loading_spinner = false;
+                    //     Swal.fire(
+                    //         'Failed!',
+                    //         "Please fill in mobile number",
+                    //         'warning'
+                    //     )
+                    // } else {
+
+                    if (this.request.health_concerns.includes(
+                            "Others")) {
+                        const hasOther = this.request.health_concerns
+                            .indexOf("Others");
+                        this.request.health_concerns.splice(
+                            hasOther,
+                            1,
+                            this.request.health_concern_other
+                        );
+                    }
 
 
-                        this.request.health_concern = this.request.health_concerns.join(
+                    this.request.health_concern = this.request
+                        .health_concerns.join(
                             ", "
                         );
 
-                        axios
-                            .post(api_url + url, data, {
-                                headers: {
-                                    Authorization: `Bearer ${window.token}`
-                                }
-                            })
-                            .then(data => {
-                                this.is_done = true;
+                    Object.assign(this.request, this.addressObj)
 
-                                if (data.data.success) {
+                    console.log(this.request);
+                    console.log(data);
 
-                                    this.loading_spinner = false;
-                                    var ret = data.data.data;
+                    axios
+                        .post(api_url + url, data, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                        .then(data => {
+                            this.is_done = true;
 
-                                    Swal.fire({
-                                        title: "SUCCESS",
-                                        text: data.data.message,
-                                        icon: "success"
-                                    }).then(function() {
-                                        location.href =
-                                            "<?php echo base_url(); ?>site/initial_requirements/" +
-                                            ret
-                                            .slug;
-                                    });
+                            if (data.data.success) {
 
-                                } else {
-                                    this.loading_spinner = false;
-                                    Swal.fire(
-                                        'Failed!',
-                                        data.data.message,
-                                        'error'
-                                    )
-                                }
-                            });
-                    }
+                                this.loading_spinner = false;
+                                var ret = data.data.data;
+
+                                Swal.fire({
+                                    title: "SUCCESS",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.href =
+                                        "<?php echo base_url(); ?>site/initial_requirements/" +
+                                        ret
+                                        .slug;
+                                });
+
+                            } else {
+                                this.loading_spinner = false;
+                                Swal.fire(
+                                    'Failed!',
+                                    data.data.message,
+                                    'error'
+                                )
+                            }
+                        });
+                    // }
                 }
             })
         },
