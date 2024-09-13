@@ -368,7 +368,7 @@
                                                     <label>Term:</label>
                                                     <input type="hidden"
                                                         class="form-control"
-                                                        v-model="request.or_number">
+                                                        v-model="request.sy_reference">
                                                     {{ sem }}
                                                     <!-- <select class="form-control" v-model="request.or_number" required>
                                                         <option v-for="i in (parseInt(cashier_start), parseInt(cashier_end))" :value="i">{{ i }}</option>
