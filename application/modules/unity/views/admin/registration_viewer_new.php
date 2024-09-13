@@ -303,7 +303,7 @@
                                                         v-model="description">
                                                         <option value="Tuition Fee">Tuition Fee
                                                         </option>
-                                                        <option value="Other">Other</option>
+                                                        <option v-if="!isInvoice" value="Other">Other</option>
                                                     </select>
                                                 </div>
                                                 <div v-if="description == 'Tuition Fee'"
