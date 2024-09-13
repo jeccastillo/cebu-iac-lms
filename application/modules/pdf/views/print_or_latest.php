@@ -72,19 +72,19 @@ table tr td {
                 1234A
             </div>
             <div style="position:absolute; top: 90px; left: 95px; width: 200px; height: 20px;">
-                <?php echo number_format($total_amount_due,2,'.',','); ?>
+                <?php echo $total_amount_due; ?>
             </div>
             <div style="position:absolute; top: 140px; left: 5px; width: 200px; height: 20px;">
                 Description Box
             </div>
             <div style="position:absolute; top: 190px; left: 95px; width: 200px; height: 20px;">
-                <?php echo number_format($total_amount_due,2,'.',','); ?>
+                <?php echo $total_amount_due; ?>
             </div>
             <div style="position:absolute; top: 340px; left: 5px; width: 200px; height: 20px;">
                 Remarks
             </div>
             <div style="position:absolute; top: 340px; left: 95px; width: 200px; height: 20px;">
-                <?php echo number_format($total_amount_due,2,'.',','); ?>
+                <?php echo $total_amount_due; ?>
             </div>
             <div style="position:absolute; top: 100; right: 60px; width: 200px; height: 20px;">
                 OR No: <?php echo $or_number; ?>
