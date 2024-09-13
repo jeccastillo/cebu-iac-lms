@@ -1636,13 +1636,15 @@ new Vue({
                             Authorization: `Bearer ${window.token}`
                         }
                     })
-                if (data.length != 0) {
-                    this.prevSchoolList = data
-                    const obj = {
+           
+                 this.prevSchoolList = data
+                   
+                }
+
+                const obj = {
                         name: 'Not on the list'
                     }
                     this.prevSchoolList.push(obj)
-                }
 
             } catch (error) {
                 const obj = {
