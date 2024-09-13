@@ -69,7 +69,7 @@ table tr td {
     <div class="sheet-outer A4" id="vue-container">
         <section class="sheet padding-5mm">
             <div style="position:absolute; top: 90px; left: 20px; width: 100px; height: 20px;">
-                1234A
+                <?php echo $invoice_number; ?>
             </div>
             <div style="position:absolute; top: 90px; left: 95px; width: 200px; height: 20px;">
                 <?php echo $total_amount_due; ?>
