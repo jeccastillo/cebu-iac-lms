@@ -2302,33 +2302,24 @@ class Pdf extends CI_Controller {
         $description = $request['description'] == "Reservation Payment" ? "NON REFUNDABLE AND NON TRANSFERABLE":"";
         $sem = "SY ".$term['strYearStart']."-".$term['strYearEnd']." ".$term['enumSem']." ".$term['term_label'];
 
-        $this->data['student_name'] = strtoupper($request['student_name']);        
-        $this->data['cashier_name'] = strtoupper($cashier->strFirstname." ".$cashier->strLastname);        
-        $this->data['student_id'] = $request['student_id'];        
-        $this->data['student_address'] = strtoupper($request['student_address']);
-        $this->data['is_cash'] = $request['is_cash'];        
-        $this->data['check_number'] = $request['check_number'];        
-        $this->data['remarks'] = $request['remarks'];
-        $this->data['or_number'] = (string)$request['or_number'];
-        $this->data['or_number'] = str_pad($this->data['or_number'],5,'0', STR_PAD_LEFT);
-        // $this->data['description'] = $request['description'];
-        // $this->data['total_amount_due'] = $request['total_amount_due'];
-        // $this->data['decimal'] = ($this->data['total_amount_due'] - floor( $this->data['total_amount_due'] )) * 100;
-        // $this->data['decimal'] = round($this->data['decimal']);
-        $this->data['transaction_date'] =  $request['transaction_date'];          
-        $this->data['tin'] = $payee?$payee['tin']:'';
-        $this->data['type'] = $type;
-        $this->data['sem'] = $sem;
-        $this->data['decimal'] = $decimal;
-        $this->data['description'] = $description;
-        $this->data['total_amount_due'] = number_format($request['total_amount_due'],2,'.',',');
+        $data['student_name'] = strtoupper($request['student_name']);        
+        $data['cashier_name'] = strtoupper($cashier->strFirstname." ".$cashier->strLastname);        
+        $data['student_id'] = $request['student_id'];        
+        $data['student_address'] = strtoupper($request['student_address']);
+        $data['is_cash'] = $request['is_cash'];        
+        $data['check_number'] = $request['check_number'];        
+        $data['remarks'] = $request['remarks'];
+        $data['or_number'] = (string)$request['or_number'];
+        $data['or_number'] = str_pad($data['or_number'],5,'0', STR_PAD_LEFT);
+        $data['transaction_date'] =  $request['transaction_date'];          
+        $data['tin'] = $payee?$payee['tin']:'';
+        $data['type'] = $type;
+        $data['sem'] = $sem;
+        $data['decimal'] = $decimal;
+        $data['description'] = $description;
+        $data['total_amount_due'] = number_format($request['total_amount_due'],2,'.',',');
 
-        if(isset($payee))
-            $this->load->view("print_or_ns_payment",$this->data);
-        elseif($this->data['campus'] == "Cebu")
-            $this->load->view("print_or_new",$this->data);
-        else            
-            $this->load->view("print_or_new_makati",$this->data);
+        echo json_encode($data);
 
     }
 
