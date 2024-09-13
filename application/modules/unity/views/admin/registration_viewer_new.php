@@ -1121,8 +1121,14 @@
                 </div>
                 <div class="modal-body">
                         <div class="form-group">
-                            <label>Invoice Number <span class="text-danger">*</span> </label>
-                            <template v-if="invoiceNumbers.length !== 0">
+                            <div class="form-group">
+                             <label>Invoice Number <span class="text-danger">*</span> </label>                        
+                             <input type="text" class="form-control" v-model="invoice_update.invoice_number" required />
+                        </div>
+                            <!-- <template v-if="invoiceNumbers.length !== 0">
+                                 <select class="form-control" v-model="invoice_update.invoice_number" required>
+                                    <option v-for="i in (parseInt(invoiceStart), parseInt(invoiceEnd))" :value="i">{{ i }}</option>
+                                 </select>          
                                 <select v-model="invoice_update.invoice_number" class="form-control" required>                           
                                     <option v-for="invoice in invoiceNumbers" :value="invoice.invoice_number">
                                         {{invoice.invoice_number}}
@@ -1135,7 +1141,7 @@
                                     class="form-control"
                                     v-model="invoice_update.invoice_number"
                                     required />
-                            </template>  
+                            </template>   -->
                             
                         </div>
                     </div>
@@ -1236,7 +1242,9 @@
     referrerpolicy="no-referrer"></script>
 <script src="<?php echo base_url(); ?>assets/themes/default/js/axios.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+
+
 
 <script>
 function numberWithCommas(x) {
@@ -1466,13 +1474,8 @@ new Vue({
                             this.request.cashier_id = this.cashier.user_id;
                             this.or_update.cashier_id = this.cashier.user_id;
                             this.or_update.student_campus = this.request.student_campus;
-                            this.soa.logo = (this.or_update.student_campus == "Cebu") ?
-                                "https://i.ibb.co/9hgbYNB/seal.png" :
-                                "https://i.ibb.co/kcYVsS7/i-ACADEMY-Seal-Makati.png";
-                            this.soa.address = (this.or_update.student_campus ==
-                                    "Cebu") ?
-                                "5F Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City, Philippines" :
-                                "iACADEMY Nexus Campus, 7434 Yakal, Makati, 1203 Metro Manila, Philippines";
+                            this.soa.logo = (this.or_update.student_campus == "Cebu") ? "https://i.ibb.co/9hgbYNB/seal.png" : "https://i.ibb.co/kcYVsS7/i-ACADEMY-Seal-Makati.png";
+                            this.soa.address = (this.or_update.student_campus == "Cebu") ? "5F Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City, Philippines" : "iACADEMY Nexus Campus, 7434 Yakal, Makati, 1203 Metro Manila, Philippines";
                         }
 
 
@@ -1524,10 +1527,8 @@ new Vue({
                                     axios.get(api_url + 'finance/reservation/' +
                                             this.slug + '/' + this.sem)
                                         .then((data) => {
-                                            this.reservation_payments = data
-                                                .data.data;
-                                            this.application_payment = data.data
-                                                .application;
+                                            this.reservation_payments = data.data.data;
+                                            this.application_payment = data.data.application;
 
                                             for (i in this
                                                 .reservation_payments) {
@@ -1631,8 +1632,7 @@ new Vue({
                                             }
                                             //this.soa.total += this.registration.downpayment == 0 ? parseFloat(this.tuition_data.down_payment):0; 
                                             //this.soa.total = this.soa.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                                            this.soa.total = this
-                                                .remaining_amount_formatted;
+                                            this.soa.total = this.remaining_amount_formatted;
                                             this.ready = true;
 
                                         })
