@@ -920,7 +920,7 @@
     </div>
     <form ref="print_or"
         method="post"
-        :action="base_url + 'pdf/print_or_updated'"
+        :action="base_url + 'pdf/print_updated_or'"
         target="_blank">
         <input type="hidden"
             name="student_name"
