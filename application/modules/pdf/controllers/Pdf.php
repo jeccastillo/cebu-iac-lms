@@ -2302,7 +2302,7 @@ class Pdf extends CI_Controller {
         $description = $request['description'] == "Reservation Payment" ? "NON REFUNDABLE AND NON TRANSFERABLE":"";
         $sem = "SY ".$term['strYearStart']."-".$term['strYearEnd']." ".$term['enumSem']." ".$term['term_label'];
 
-        $this->data['student_name'] = strtoupper($request['student_name']);        
+        $this->data['student_name'] = strtoupper($request['student_name']);   
         $this->data['cashier_name'] = strtoupper($cashier->strFirstname." ".$cashier->strLastname);        
         $this->data['student_id'] = $request['student_id'];        
         $this->data['student_address'] = strtoupper($request['student_address']);
@@ -2311,6 +2311,8 @@ class Pdf extends CI_Controller {
         $this->data['remarks'] = $request['remarks'];
         $this->data['or_number'] = (string)$request['or_number'];
         $this->data['or_number'] = str_pad($this->data['or_number'],5,'0', STR_PAD_LEFT);
+        $this->data['invoice_number'] = strtoupper($request['invoice_number']);
+        $this->data['invoice_number'] = str_pad($this->data['or_number'],5,'0', STR_PAD_LEFT);
         // $this->data['description'] = $request['description'];
         // $this->data['total_amount_due'] = $request['total_amount_due'];
         // $this->data['decimal'] = ($this->data['total_amount_due'] - floor( $this->data['total_amount_due'] )) * 100;
