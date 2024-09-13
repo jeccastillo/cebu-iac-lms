@@ -99,19 +99,19 @@ table tr td {
                 &nbsp; <?php echo $student_name; ?>
             </div>
             <div style="position:absolute; top: 170px; left: 310px; width: 500px; height: 20px;">
-                1773 Dian St. Palanan Makati City
+                <?php echo $student_address; ?>
             </div>
             <div style="position:absolute; top: 195px; left: 295px; width: 500px; height: 20px;">
                 As Applicable
             </div>
             <div style="position:absolute; top: 215px; left: 350px; width: 500px; height: 20px;">
-                Twelve thousand, nine hundred seventy-six and sixteen cents
+                <?php echo convert_number($total_amount_due); ?> <?php echo $decimal?'and '.convert_number($decimal).' cents':'only'; ?>
             </div>
             <div style="position:absolute; top: 240px; right: -50; width: 200px; height: 20px;">
-                12,976.16
+                <?php echo $total_amount_due; ?>
             </div>
             <div style="position:absolute; top: 265px; left: 380px; width: 200px; height: 20px;">
-                Tuition Fee / 3rd Term SY 2023-2024
+                <?php echo $description == "Reservation Payment" ? "NON REFUNDABLE AND NON TRANSFERABLE":""; ?> / <?php echo "SY ".$term['strYearStart']."-".$term['strYearEnd']." ".$term['enumSem']." ".$term['term_label']."<br />".$type; ?>            
             </div>
             <div style="position:absolute; top: 330px; right: -20px; width: 200px; height: 20px;font-size:15px">
             Pinky D. Omayao
