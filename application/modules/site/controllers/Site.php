@@ -44,10 +44,6 @@ class Site extends CI_Controller {
 		else
 			$term = $this->data_fetcher->get_sem_by_id($term);
 
-		if((date("Y-m-d h:i:s") >= $term['endOfApplicationPeriod']) || !$term['endOfApplicationPeriod']){
-			echo "Application Period has ended for this term";
-			die();
-		}
 
 		$this->data['term'] = $term;
 
