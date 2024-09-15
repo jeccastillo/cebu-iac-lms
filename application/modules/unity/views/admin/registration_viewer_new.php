@@ -396,7 +396,7 @@
                                                 <div v-if="isOR"
                                                     class="form-group">
                                                     <label>Invoice Number:</label>
-                                                    <select class="form-control" v-model="request.invoice_number" :required="request.student_campus = 'Makati'">
+                                                    <select class="form-control" v-model="request.invoice_number" required>
                                                         <option v-for="invoiceNumber in invoiceNumbers" :value="invoiceNumber.invoice_number">{{ invoiceNumber.invoice_number }}</option>
                                                     </select>                                                     
 
