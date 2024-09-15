@@ -303,7 +303,7 @@
                                                         v-model="description">
                                                         <option value="Tuition Fee">Tuition Fee
                                                         </option>
-                                                        <option v-if="isInvoice" value="Other">Other</option>
+                                                        <option value="Other">Other</option>
                                                     </select>
                                                 </div>
                                                 <div v-if="description == 'Tuition Fee'"
@@ -312,9 +312,9 @@
                                                     <select required
                                                         class="form-control"
                                                         v-model="description_other">
-                                                        <option v-if="isInvoice"
+                                                        <option
                                                             value="full">Full Tuition</option>
-                                                        <option v-if="isInvoice"
+                                                        <option
                                                             value="down">Down Payment</option>
                                                         <option v-if="isOR"
                                                             value="installment">Installment
