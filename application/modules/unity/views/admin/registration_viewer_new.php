@@ -542,7 +542,7 @@
                                             <th>Online Payment Charge</th>
                                             <th>Total Due</th>
                                             <th>Status</th>
-                                            <th>OR Date</th>
+                                            <th>Issued Date</th>
                                             <th>Info</th>
                                             <th>Actions</th>
                                         </tr>
