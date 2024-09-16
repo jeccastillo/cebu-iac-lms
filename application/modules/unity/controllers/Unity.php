@@ -2408,6 +2408,7 @@ class Unity extends CI_Controller {
             $this->data['program'] = $program;
             $this->data['dissolved'] = $dissolved;
             $this->data['has_faculty'] = $has_faculty;
+            $this->data['status'] = $status;
            
             //$this->data['classlists'] = $this->data_fetcher->fetch_classlists_all(null,$this->data['selected_ay']);
             $this->data['page'] = "classlist_archive";
