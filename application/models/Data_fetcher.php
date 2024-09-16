@@ -3637,7 +3637,7 @@ class Data_fetcher extends CI_Model {
         return $d;
     }
 
-    function getClasslists($sem , $program, $dissolved, $has_faculty)
+    function getClasslists($sem , $program, $dissolved, $has_faculty, $status = 0)
     {
         $ret = [];
         $where = array('tb_mas_classlist.strAcademicYear'=>$sem);
@@ -3645,6 +3645,10 @@ class Data_fetcher extends CI_Model {
             $where['intFacultyID !='] = 999;
         if($dissolved != 0)
             $where['isDissolved'] = 1;
+        if($status != 0){
+            $status_n = $status - 1;
+            $where['intFinalized'] = $status;
+        }
 
         $classlists = $this->db
         ->select('tb_mas_classlist.intID,strProgramCode,strCode,tb_mas_subjects.strDescription as subjectDescription,strClassName,year,strSection,sub_section,slots,strLastname,strFirstname,strMiddlename,intFinalized,tb_mas_subjects.strUnits')
