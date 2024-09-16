@@ -564,14 +564,14 @@
                                             <td>{{ application_payment.or_date }}</td>
                                             <td>{{ application_payment.void_reason }}</td>
                                             <td>
-                                                <!-- <button
+                                                <button
                                                     v-if="!application_payment.or_number && application_payment.status == 'Paid' && cashier && application_payment.remarks != 'Voided'"
                                                     data-toggle="modal"
                                                     @click="prepUpdate(application_payment.id,application_payment.description,application_payment.subtotal_order)"
                                                     data-target="#myModal"
                                                     class="btn btn-primary">
                                                     Update OR
-                                                </button> -->
+                                                </button>
                                                 <button
                                                     v-if="application_payment.status == 'Paid' && cashier && application_payment.remarks != 'Voided'"
                                                     data-toggle="modal"
@@ -697,14 +697,14 @@
                                             <td>{{ reservation_payment.or_date }}</td>
                                             <td>{{ reservation_payment.void_reason }}</td>
                                             <td>
-                                                <!-- <button
+                                                <button
                                                     v-if="!reservation_payment.or_number && reservation_payment.status == 'Paid' && cashier"
                                                     data-toggle="modal"
                                                     @click="prepUpdate(reservation_payment.id,reservation_payment.description,reservation_payment.subtotal_order)"
                                                     data-target="#myModal"
                                                     class="btn btn-primary">
                                                     Update OR
-                                                </button> -->
+                                                </button>
                                                 <button
                                                     v-if="reservation_payment.status == 'Paid' && cashier && reservation_payment.remarks != 'Voided'"
                                                     data-toggle="modal"
@@ -781,7 +781,7 @@
                                                     class="btn btn-primary">
                                                     Update Details
                                                 </button>
-                                                <button v-if="payment.or_number && payment.invoice_number && cashier"
+                                                <button v-if="payment.or_number && cashier"
                                                     @click="printOR(payment)"
                                                     class="btn btn-primary">
                                                     Print OR
