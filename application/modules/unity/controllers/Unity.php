@@ -2575,7 +2575,7 @@ class Unity extends CI_Controller {
             $data['cl'] = $this->db->select('tb_mas_classlist.*,tb_mas_subjects.strCode')
                 ->from('tb_mas_classlist')
                 ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
-                ->where(array('strAcademicYear'=>$cl_ay,'intSubjectID'=>$cl_subj,'intID !='=>$id,'intFinalized !='=>1))
+                ->where(array('strAcademicYear'=>$cl_ay,'intSubjectID'=>$cl_subj,'tb_mas_classlist.intID !='=>$id,'intFinalized !='=>1))
                 ->get()
                 ->result_array();
                         
@@ -2584,7 +2584,7 @@ class Unity extends CI_Controller {
                 $cl_temp = $this->db->select('tb_mas_classlist.*,tb_mas_subjects.strCode')
                     ->from('tb_mas_classlist')
                     ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
-                    ->where(array('strAcademicYear'=>$cl_ay,'intSubjectID'=>$eq_sec['intEquivalentID'],'intID !='=>$id,'intFinalized !='=>1))
+                    ->where(array('strAcademicYear'=>$cl_ay,'intSubjectID'=>$eq_sec['intEquivalentID'],'tb_mas_classlist.intID !='=>$id,'intFinalized !='=>1))
                     ->get()
                     ->result_array();
 
