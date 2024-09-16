@@ -581,7 +581,7 @@ class Datatables extends CI_Controller {
 	   echo json_encode( $output );
     }
     
-    public function data_tables_ajax_cs($sem = 0, $program = 0, $dissolved = 0, $has_faculty = 0)
+    public function data_tables_ajax_cs($sem = 0, $program = 0, $dissolved = 0, $has_faculty = 0, $status = 0)
     {
         /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
          * TABLE CONFIG
@@ -786,6 +786,16 @@ class Datatables extends CI_Controller {
                 }
                 else if($aColumns[$i] == 'strFirstname'){
 
+                }
+                else if($aColumns[$i] == 'intFinalized'){
+                    switch($aRow->{$aColumns[$i]}){
+                        case 0: 
+                            $row[] = 'Not Submitted';
+                        case 1: 
+                            $row[] = 'Submitted Midterm';
+                        case 2: 
+                            $row[] = 'Submitted Final';
+                    }
                 }
                 else if($aColumns[$i] == 'slots'){
                     $row[] = $slots_taken_enrolled;
