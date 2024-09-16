@@ -646,7 +646,7 @@
                                                     @click="or_details.id = payment.id;"
                                                     data-target="#orDetailsUpdate"
                                                     class="btn btn-primary">
-                                                    Update OR Details
+                                                    Update Details
                                                 </button>
                                                 <button v-if="payment.or_number && cashier"
                                                     @click="printOR(payment)"
