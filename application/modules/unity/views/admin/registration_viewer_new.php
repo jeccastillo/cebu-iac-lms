@@ -588,12 +588,12 @@
                                                     class="btn btn-primary">
                                                     Update Details
                                                 </button>
-                                                <!-- <button
+                                                <button
                                                     v-if="application_payment.or_number && cashier"
                                                     @click="printOR(application_payment)"
                                                     class="btn btn-primary">
                                                     Print OR
-                                                </button> -->
+                                                </button>
                                                 <button
                                                     v-if="application_payment.invoice_number && cashier"
                                                     @click="printInvoice(application_payment)"
@@ -648,11 +648,11 @@
                                                     class="btn btn-primary">
                                                     Update OR Details
                                                 </button>
-                                                <!-- <button v-if="payment.or_number && cashier"
+                                                <button v-if="payment.or_number && cashier"
                                                     @click="printOR(payment)"
                                                     class="btn btn-primary">
                                                     Print OR
-                                                </button> -->
+                                                </button>
                                                 <button
                                                     v-if="payment.invoice_number && cashier"
                                                     @click="printInvoice(payment)"
@@ -721,12 +721,12 @@
                                                     class="btn btn-primary">
                                                     Update Details
                                                 </button>
-                                                <!-- <button
+                                                <button
                                                     v-if="reservation_payment.or_number && cashier"
                                                     @click="printOR(reservation_payment)"
                                                     class="btn btn-primary">
                                                     Print OR
-                                                </button> -->
+                                                </button>
                                                 <button
                                                     v-if="reservation_payment.invoice_number && cashier"
                                                     @click="printInvoice(reservation_payment)"
