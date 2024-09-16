@@ -1319,7 +1319,7 @@ class Excel extends CI_Controller {
     }
 
     public function download_classlists($sem , $program, $dissolved, $has_faculty, $status){
-        $classlists = $this->data_fetcher->getClasslists($sem , $program, $dissolved, 0, $status);
+        $classlists = $this->data_fetcher->getClasslists($sem , $program, $dissolved, $has_faculty, $status);
         $date = date("Y-m-d H:i:s");
 
         error_reporting(E_ALL);
