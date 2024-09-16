@@ -3647,7 +3647,7 @@ class Data_fetcher extends CI_Model {
             $where['isDissolved'] = 1;
         if($status != 0){
             $status_n = $status - 1;
-            $where['intFinalized'] = $status;
+            $where['intFinalized'] = $status_n;
         }
 
         $classlists = $this->db
