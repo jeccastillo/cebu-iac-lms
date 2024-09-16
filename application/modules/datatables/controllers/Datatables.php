@@ -800,10 +800,13 @@ class Datatables extends CI_Controller {
                     switch($aRow->{$aColumns[$i]}){
                         case 0: 
                             $row[] = 'Not Submitted';
+                            break;
                         case 1: 
                             $row[] = 'Submitted Midterm';
+                            break;
                         case 2: 
                             $row[] = 'Submitted Final';
+                            break;
                     }
                 }
                 else if ( $aColumns[$i] != ' ')
