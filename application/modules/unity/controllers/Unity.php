@@ -2576,6 +2576,7 @@ class Unity extends CI_Controller {
                 ->from('tb_mas_classlist')
                 ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
                 ->where(array('strAcademicYear'=>$cl_ay,'intSubjectID'=>$cl_subj,'intID !='=>$id,'intFinalized !='=>1))
+                ->get()
                 ->result_array();
                         
             $equivalent_sections = $this->db->get_where('tb_mas_equivalents',array('intSubjectID'=>$cl_subj))->result_array();
@@ -2584,6 +2585,7 @@ class Unity extends CI_Controller {
                     ->from('tb_mas_classlist')
                     ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
                     ->where(array('strAcademicYear'=>$cl_ay,'intSubjectID'=>$eq_sec['intEquivalentID'],'intID !='=>$id,'intFinalized !='=>1))
+                    ->get()
                     ->result_array();
 
                 $data['cl'] = array_merge($data['cl'],$cl_temp);
