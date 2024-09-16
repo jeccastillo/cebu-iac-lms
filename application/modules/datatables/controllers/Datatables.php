@@ -787,6 +787,9 @@ class Datatables extends CI_Controller {
                 else if($aColumns[$i] == 'strFirstname'){
 
                 }
+                else if($aColumns[$i] == 'conduct_grade'){
+                    $row[] = $aRow->{$aColumns[$i]};
+                }
                 else if($aColumns[$i] == 'intFinalized'){
                     switch($aRow->{$aColumns[$i]}){
                         case 0: 
