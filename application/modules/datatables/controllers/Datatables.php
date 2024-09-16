@@ -581,7 +581,7 @@ class Datatables extends CI_Controller {
 	   echo json_encode( $output );
     }
     
-    public function data_tables_ajax_cs($sem = 0, $program = 0, $dissolved = 0, $has_faculty = 0)
+    public function data_tables_ajax_cs($sem = 0, $program = 0, $dissolved = 0, $has_faculty = 0, $status = 0)
     {
         /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
          * TABLE CONFIG
@@ -658,6 +658,10 @@ class Datatables extends CI_Controller {
         $sWhere .= "AND $sTable.intFacultyID != 999 ";
        if($program != 0)
         $sWhere .= " AND tb_mas_programs.intProgramID = $program ";
+       if($status != 0){
+        $status_n = $status - 1;
+        $sWhere .= " AND tb_mas_classlist.intFinalized = $status_n ";
+       }
             
         
        if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
@@ -786,7 +790,7 @@ class Datatables extends CI_Controller {
                 }
                 else if($aColumns[$i] == 'strFirstname'){
 
-                }
+                }                
                 else if($aColumns[$i] == 'slots'){
                     $row[] = $slots_taken_enrolled;
                     $row[] = $slots_taken_enlisted;
@@ -795,6 +799,19 @@ class Datatables extends CI_Controller {
                 else if(substr($aColumns[$i], 0, 3) == 'dte')
                 {
                     $row[] = date("M j, Y",strtotime($aRow->{$aColumns[$i]}));
+                }
+                else if($aColumns[$i] == 'intFinalized'){
+                    switch($aRow->{$aColumns[$i]}){
+                        case 0: 
+                            $row[] = 'Not Submitted';
+                            break;
+                        case 1: 
+                            $row[] = 'Submitted Midterm';
+                            break;
+                        case 2: 
+                            $row[] = 'Submitted Final';
+                            break;
+                    }
                 }
                 else if ( $aColumns[$i] != ' ')
                 {
