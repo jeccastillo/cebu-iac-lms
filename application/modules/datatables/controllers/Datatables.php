@@ -658,6 +658,10 @@ class Datatables extends CI_Controller {
         $sWhere .= "AND $sTable.intFacultyID != 999 ";
        if($program != 0)
         $sWhere .= " AND tb_mas_programs.intProgramID = $program ";
+       if($status != 0){
+        $status_n = $status - 1;
+        $sWhere .= " AND tb_mas_programs.intFinalized = $status_n ";
+       }
             
         
        if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
