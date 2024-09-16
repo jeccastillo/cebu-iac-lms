@@ -2571,10 +2571,14 @@ class Unity extends CI_Controller {
                     $data['classlist']['final_end']  = $fx['date'];
             }
 
-            
             $data['cl'] = $this->data_fetcher->fetch_table('tb_mas_classlist',null,null,array('strAcademicYear'=>$cl_ay,'intSubjectID'=>$cl_subj,'intID !='=>$id,'intFinalized !='=>1));
-            
-            
+                        
+            $equivalent_sections = $this->db->get_where('tb_mas_equivalents',array('intSubjectID'=>$cl_subj))->result_array();
+            foreach($equivalent_sections as $eq_sec){
+                $cl_temp = $this->data_fetcher->fetch_table('tb_mas_classlist',null,null,array('strAcademicYear'=>$cl_ay,'intSubjectID'=>$eq_sec['intEquivalentID'],'intID !='=>$id,'intFinalized !='=>1));
+                $data['cl'] = array_merge($data['cl'],$cl_temp);
+            }
+                                    
             
             $data['is_super_admin'] = $this->is_super_admin();
             $data['is_registrar'] = $this->is_registrar();
