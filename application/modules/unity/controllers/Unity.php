@@ -2571,14 +2571,25 @@ class Unity extends CI_Controller {
                     $data['classlist']['final_end']  = $fx['date'];
             }
 
-            $data['cl'] = $this->data_fetcher->fetch_table('tb_mas_classlist',null,null,array('strAcademicYear'=>$cl_ay,'intSubjectID'=>$cl_subj,'intID !='=>$id,'intFinalized !='=>1));
+            
+            $data['cl'] = $this->db->select('tb_mas_classlist.*,tb_mas_subjects.strCode')
+                ->from('tb_mas_classlist')
+                ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
+                ->where(array('strAcademicYear'=>$cl_ay,'intSubjectID'=>$cl_subj,'tb_mas_classlist.intID !='=>$id,'intFinalized !='=>1))
+                ->get()
+                ->result_array();
                         
             $equivalent_sections = $this->db->get_where('tb_mas_equivalents',array('intSubjectID'=>$cl_subj))->result_array();
             foreach($equivalent_sections as $eq_sec){
-                $cl_temp = $this->data_fetcher->fetch_table('tb_mas_classlist',null,null,array('strAcademicYear'=>$cl_ay,'intSubjectID'=>$eq_sec['intEquivalentID'],'intID !='=>$id,'intFinalized !='=>1));
+                $cl_temp = $this->db->select('tb_mas_classlist.*,tb_mas_subjects.strCode')
+                    ->from('tb_mas_classlist')
+                    ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
+                    ->where(array('strAcademicYear'=>$cl_ay,'intSubjectID'=>$eq_sec['intEquivalentID'],'tb_mas_classlist.intID !='=>$id,'intFinalized !='=>1))
+                    ->get()
+                    ->result_array();
+
                 $data['cl'] = array_merge($data['cl'],$cl_temp);
-            }
-                                    
+            }            
             
             $data['is_super_admin'] = $this->is_super_admin();
             $data['is_registrar'] = $this->is_registrar();
