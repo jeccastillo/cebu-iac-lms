@@ -787,19 +787,16 @@ class Datatables extends CI_Controller {
                 else if($aColumns[$i] == 'strFirstname'){
 
                 }
-                else if($aColumns[$i] == 'conduct_grade'){
-                    $row[] = $aRow->{$aColumns[$i]};
-                }
-                else if($aColumns[$i] == 'intFinalized'){
-                    switch($aRow->{$aColumns[$i]}){
-                        case 0: 
-                            $row[] = 'Not Submitted';
-                        case 1: 
-                            $row[] = 'Submitted Midterm';
-                        case 2: 
-                            $row[] = 'Submitted Final';
-                    }
-                }
+                // else if($aColumns[$i] == 'intFinalized'){
+                //     switch($aRow->{$aColumns[$i]}){
+                //         case 0: 
+                //             $row[] = 'Not Submitted';
+                //         case 1: 
+                //             $row[] = 'Submitted Midterm';
+                //         case 2: 
+                //             $row[] = 'Submitted Final';
+                //     }
+                // }
                 else if($aColumns[$i] == 'slots'){
                     $row[] = $slots_taken_enrolled;
                     $row[] = $slots_taken_enlisted;
