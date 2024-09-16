@@ -660,7 +660,7 @@ class Datatables extends CI_Controller {
         $sWhere .= " AND tb_mas_programs.intProgramID = $program ";
        if($status != 0){
         $status_n = $status - 1;
-        $sWhere .= " AND tb_mas_programs.intFinalized = $status_n ";
+        $sWhere .= " AND tb_mas_classlist.intFinalized = $status_n ";
        }
             
         
