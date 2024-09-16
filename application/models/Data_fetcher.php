@@ -3656,8 +3656,9 @@ class Data_fetcher extends CI_Model {
         ->join('tb_mas_subjects','intSubjectID = tb_mas_subjects.intID')
         ->join('tb_mas_faculty','tb_mas_classlist.intFacultyID = tb_mas_faculty.intID')
         ->join('tb_mas_curriculum','tb_mas_classlist.intCurriculumID = tb_mas_curriculum.intID')
-        ->join('tb_mas_programs','tb_mas_curriculum.intProgramID = tb_mas_programs.intProgramID')
+        ->join('tb_mas_programs','tb_mas_curriculum.intProgramID = tb_mas_programs.intProgramID')        
         ->where($where)
+        ->order_by('tb_mas_faculty.strLastname','asc')
         ->get()
         ->result_array(); 
 
