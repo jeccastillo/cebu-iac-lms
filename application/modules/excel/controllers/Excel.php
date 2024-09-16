@@ -41,6 +41,7 @@ class Excel extends CI_Controller {
         $this->data["subjects"] = $this->data_fetcher->fetch_table('tb_mas_subjects');
         $this->data["students"] = $this->data_fetcher->fetch_table('tb_mas_users',array('strLastname','asc'));
         $this->data["user"] = $this->session->all_userdata();
+        $this->data['campus'] = $this->config->item('campus');
         $this->data['unread_messages'] = $this->data_fetcher->count_table_contents('tb_mas_message_user',null,array('intRead'=>'0','intTrash'=>0,'intFacultyID'=>$this->session->userdata('intID')));
         
         $this->data['all_messages'] = $this->data_fetcher->count_table_contents('tb_mas_message_user',null,array('intTrash'=>0,'intFacultyID'=>$this->session->userdata('intID')));
@@ -1351,12 +1352,17 @@ class Excel extends CI_Controller {
             $active_sem = $this->data_fetcher->get_active_sem();
 
         }
+
+        if($this->data['campus'] == "Cebu")
+            $address = "Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City";
+        else
+            $address = "iACADEMY Nexus, 7434 Yakal St., Makati City";
         
         //HEADER
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A2', 'iACADEMY');
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A3', 'Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City');
+                    ->setCellValue('A3', $address);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A4', date("M j, Y h:i a"));
         $objPHPExcel->setActiveSheetIndex(0)
@@ -1364,9 +1370,27 @@ class Excel extends CI_Controller {
         if($dissolved)
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A6', "DISSOLVED CLASSES");
+        elseif($status){
+            switch($status){
+                case 1:
+                    $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue('A6', "NO GRADES SUBMITTED");
+                    break;
+                case 2:
+                    $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue('A6', "MIDTERM GRADES SUBMITTED");
+                    break;
+                case 2:
+                    $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue('A6', "FINAL GRADES SUBMITTED");
+                    break;
+            }
+        }
         else
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A6', "SCHEDULE OF CLASSES BY SUBJECT");
+
+        
 
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A2:I2');
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A3:I3');
