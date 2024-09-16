@@ -97,7 +97,7 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <select required v-model="transfer_to" class="form-control">
-                                        <option v-for="c in cl" :value="c.intID">{{ c.strClassName + " " + c.year + c.strSection + " " + (c.sub_section?c.sub_section:'') }}</option>                                
+                                        <option v-for="c in cl" :value="c.intID">{{ c.strCode + " - " +  c.strClassName + " " + c.year + c.strSection + " " + (c.sub_section?c.sub_section:'') }}</option>                                
                                     </select>
                                 </div>                                
                             </form>
