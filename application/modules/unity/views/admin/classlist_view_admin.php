@@ -10,9 +10,26 @@
                             <?php endif; ?>
                             <a class="btn btn-app" href="<?php echo base_url() ?>excel/download_classlists/<?php echo $selected_ay.'/'.$program.'/'.$dissolved.'/'.$has_faculty; ?>"><i class="fa fa-download"></i> Download Report</a>
                             <?php if($has_faculty == 0): ?>
-                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/1" ?>" ><i class="fa fa-user"></i> Faculty Loading Summary</a>                                                                
+                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/1" ?>" ><i class="fa fa-user"></i> With Faculty</a>                                                                
                             <?php else: ?>                                                                
                                 <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/0"?>"><i class="fa fa-file"></i> Show All</a>
+                            <?php endif; ?>
+                            <?php if($status == 0): ?>
+                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/".$has_faculty."/1" ?>" ><i class="fa fa-list"></i> No Grades Submitted</a>
+                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/".$has_faculty."/2" ?>" ><i class="fa fa-list"></i> Midterms Grade Submitted</a>
+                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/".$has_faculty."/3" ?>" ><i class="fa fa-list"></i> Final Grade Submitted</a>                                                                                                
+                            <?php elseif($status == 1): ?>                                                                
+                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/".$has_faculty."/0" ?>" ><i class="fa fa-list"></i> All Statuses</a>
+                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/".$has_faculty."/2" ?>" ><i class="fa fa-list"></i> Midterms Grade Submitted</a>
+                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/".$has_faculty."/3" ?>" ><i class="fa fa-list"></i> Final Grade Submitted</a>                                                                
+                            <?php elseif($status == 2): ?>                                                                
+                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/".$has_faculty."/0" ?>" ><i class="fa fa-list"></i> All Statuses</a>
+                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/".$has_faculty."/1" ?>" ><i class="fa fa-list"></i> No Grades Submitted</a>
+                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/".$has_faculty."/3" ?>" ><i class="fa fa-list"></i> Final Grade Submitted</a>                                                                
+                            <?php elseif($status == 3): ?>                                                                
+                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/".$has_faculty."/0" ?>" ><i class="fa fa-list"></i> All Statuses</a>
+                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/".$has_faculty."/1" ?>" ><i class="fa fa-list"></i> No Grades Submitted</a>
+                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/".$has_faculty."/2" ?>" ><i class="fa fa-list"></i> Midterms Grade Submitted</a>                                                                
                             <?php endif; ?>
 
                         </small>
