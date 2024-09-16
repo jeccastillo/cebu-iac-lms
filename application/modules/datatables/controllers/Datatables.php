@@ -786,17 +786,7 @@ class Datatables extends CI_Controller {
                 }
                 else if($aColumns[$i] == 'strFirstname'){
 
-                }
-                // else if($aColumns[$i] == 'intFinalized'){
-                //     switch($aRow->{$aColumns[$i]}){
-                //         case 0: 
-                //             $row[] = 'Not Submitted';
-                //         case 1: 
-                //             $row[] = 'Submitted Midterm';
-                //         case 2: 
-                //             $row[] = 'Submitted Final';
-                //     }
-                // }
+                }                
                 else if($aColumns[$i] == 'slots'){
                     $row[] = $slots_taken_enrolled;
                     $row[] = $slots_taken_enlisted;
@@ -805,6 +795,16 @@ class Datatables extends CI_Controller {
                 else if(substr($aColumns[$i], 0, 3) == 'dte')
                 {
                     $row[] = date("M j, Y",strtotime($aRow->{$aColumns[$i]}));
+                }
+                else if($aColumns[$i] == 'intFinalized'){
+                    switch($aRow->{$aColumns[$i]}){
+                        case 0: 
+                            $row[] = 'Not Submitted';
+                        case 1: 
+                            $row[] = 'Submitted Midterm';
+                        case 2: 
+                            $row[] = 'Submitted Final';
+                    }
                 }
                 else if ( $aColumns[$i] != ' ')
                 {
