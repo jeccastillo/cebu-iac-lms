@@ -153,19 +153,19 @@ $(document).ready(function() {
                 }
             },
             {
-                "aTargets": [4],                                
+                "aTargets": [4,5],                                
                 "mRender": function(data, type, row, meta) {
                     return String(row.or_number).padStart(5, '0');
                 }
             }, 
             {
-                "aTargets": [6],                                
+                "aTargets": [7],                                
                 "mRender": function(data, type, row, meta) {
                     return row.student_name.toUpperCase();
                 }
             },            
             {
-                "aTargets": [7],                                
+                "aTargets": [8],                                
                 "mRender": function(data, type, row, meta) {                      
                     var mode = "Online";
                     if(row.is_cash != null){
@@ -194,7 +194,7 @@ $(document).ready(function() {
                 }
             },
             {
-                "aTargets": [11],                                
+                "aTargets": [12],                                
                 "mRender": function(data, type, row, meta) {                                        
                     if(row.remarks){             
                         if(row.remarks == "Paynamics")
@@ -229,6 +229,9 @@ $(document).ready(function() {
             },
             {
                 data: "or_number"
+            },
+            {
+                data: "invoice_number"
             },
             {
                 data: "student_number"
