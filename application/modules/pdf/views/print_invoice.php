@@ -90,43 +90,43 @@ table tr td {
                 1
             </div>
             <div style="position:absolute; top: 240px; left: 550px; width: 200px; height: 20px;">
-                89,880.82
+                <?php echo $full_assessment; ?>
             </div>
             <div style="position:absolute; top:  240px; left: 650px; width: 200px; height: 20px;">
-                89,880.82
+                <?php echo $full_assessment; ?>
             </div>
             <div style="position:absolute; top: 255px; left:0px; width: 500px; height: 20px;">
-                Inv 00001 - Reservation Fee
+                <?php echo $reservation_description; ?>
             </div>
             <div style="position:absolute; top: 255px; left: 500px; width: 500px; height: 20px;">
                 1
             </div>
             <div style="position:absolute; top: 255px; left: 550px; width: 200px; height: 20px;">
-                (10,000.00)
+                <?php  echo $reservation_amount; ?>
             </div>
             <div style="position:absolute; top:  255px; left: 650px; width: 200px; height: 20px;">
-            (10,000.00)
+                <?php  echo $reservation_amount; ?>
             </div>
             <div style="position:absolute; top:  355px; left: 650px; width: 200px; height: 20px;">
-            79,880.82
+                <?php  echo $total_assessment; ?>
             </div>
             <div style="position:absolute; top:  390px; left: 100px; width: 200px; height: 20px;">
-            15,000.00
+                <?php  echo $total_amount_due; ?>
             </div>
             <div style="position:absolute; top:  405px; left: 650px; width: 200px; height: 20px;">
-            79,880.82
+                <?php  echo $total_assessment; ?>
             </div>
             <div style="position:absolute; top:  455px; left: 0px; width: 200px; height: 20px;">
-            BDO 12456
+                <?php  echo $remarks; ?>
             </div>
             <div style="position:absolute; top:  485px; left: 300px; width: 200px; height: 20px;">
-            79,880.82
+                <?php  echo $total_assessment; ?>
             </div>    
             <div style="position:absolute; top:  565px; left: 50px; width: 200px; height: 20px;">
-            15,000.00
+                <?php  echo $total_amount_due; ?>
             </div>        
             <div style="position:absolute; top: 550px; right: 20px; width: 200px; height: 20px;font-size:15px">
-            Pinky D. Omayao
+                <?php echo $cashier_name; ?>
             </div>
         </section>
     </div>
