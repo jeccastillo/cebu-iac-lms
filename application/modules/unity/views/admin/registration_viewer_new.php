@@ -1473,6 +1473,7 @@ new Vue({
                             this.or_update.or_number = this.cashier.or_current;
                             this.request.cashier_id = this.cashier.user_id;
                             this.or_update.cashier_id = this.cashier.user_id;
+                            this.invoice_update.cashier_id = this.cashier.user_id;
                             this.or_update.student_campus = this.request.student_campus;
                             this.soa.logo = (this.or_update.student_campus == "Cebu") ? "https://i.ibb.co/9hgbYNB/seal.png" : "https://i.ibb.co/kcYVsS7/i-ACADEMY-Seal-Makati.png";
                             this.soa.address = (this.or_update.student_campus == "Cebu") ? "5F Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City, Philippines" : "iACADEMY Nexus Campus, 7434 Yakal, Makati, 1203 Metro Manila, Philippines";
@@ -1933,8 +1934,8 @@ new Vue({
         updateInvoice: function() {
             let url = api_url + 'finance/update_invoice';
             let slug = this.slug;
-            this.loader_spinner = true;
-
+            this.loader_spinner = true;            
+            
             Swal.fire({
                 title: 'Continue with the update',
                 text: "Are you sure you want to update the payment?",
@@ -1951,21 +1952,83 @@ new Vue({
                             headers: {
                                 Authorization: `Bearer ${window.token}`
                             }
-                        })
-                        .then(data => {
+                        }).then(data => {
                             this.loader_spinner = false;
                             if (data.data.success) {
+                                var formdata = new FormData();
+                                formdata.append('intID', this.cashier.intID);
+                                formdata.append('invoice_current', this.cashier.invoice_current);
+                                formdata.append('invoice_used', this.cashier.invoice_current);
+                                formdata.append('sy', this.student.sy_reference);
+                                axios.post(base_url + 'finance/next_or/1',
+                                        formdata, {
+                                            headers: {
+                                                Authorization: `Bearer ${window.token}`
+                                            }
+                                        })
+                                    .then(function(data) {
+                                        if (data.data.send_notif) {
+                                            let url = api_url +
+                                                'registrar/send_notif_enrolled/' +
+                                                this.student_data
+                                                .slug;
+                                            let payload = {
+                                                'message': "This message serves as a notification that you have been officially enrolled."
+                                            }
 
-                                this.loader_spinner = false;
+                                            Swal.fire({
+                                                showCancelButton: false,
+                                                showCloseButton: false,
+                                                allowEscapeKey: false,
+                                                title: 'Loading',
+                                                text: 'Processing Data do not leave page',
+                                                icon: 'info',
+                                            })
+                                            Swal.showLoading();
+                                            axios.post(url,
+                                                    payload, {
+                                                        headers: {
+                                                            Authorization: `Bearer ${window.token}`
+                                                        }
+                                                    })
+                                                .then(data => {
+                                                    this.loader_spinner =
+                                                        false;
+                                                    Swal.fire({
+                                                        title: "Success",
+                                                        text: data
+                                                            .data
+                                                            .message,
+                                                        icon: "success"
+                                                    }).then(
+                                                        function() {
+                                                            location
+                                                                .reload();
+                                                        });
+                                                });
+                                        } else {
+                                            Swal.fire({
+                                                title: "Success",
+                                                text: data
+                                                    .data
+                                                    .message,
+                                                icon: "success"
+                                            }).then(function() {
+                                                location
+                                                    .reload();
+                                            });
+
+                                        }
+
+                                    })
+                            } else
                                 Swal.fire({
-                                    title: "Success",
-                                    text: "Update Success",
-                                    icon: "success"
+                                    title: "Failed",
+                                    text: data.data.message,
+                                    icon: "error"
                                 }).then(function() {
-                                    location.reload();
+                                    //location.reload();
                                 });
-
-                            }
                         });
 
                 },
