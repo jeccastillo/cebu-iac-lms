@@ -29,7 +29,7 @@
                     <h5 class=" text-left text-primary ">
                         <strong> Applicant Details</strong>
                         <a class="btn btn-primary"
-                            :href="base_url + 'admissionsV1/view_lead_new/' + slug">Old View</a>
+                            :href="base_url + 'admissionsV1/view_lead/' + slug">Old View</a>
                     </h5>
                 </div>
                 <div class="box-body">
@@ -926,6 +926,8 @@
                                 </option>
                                 <option value="College - Freshmen Other">College - Freshmen Other
                                 </option>
+                                <option value="College - Transferee">College - Transferee
+                                </option>
                                 <option value="SHS - New">SHS - New</option>
                                 <option value="SHS - Transferee">SHS - Transferee</option>
                                 <option value="2nd - Degree iACADEMY">2nd - Degree iACADEMY</option>
@@ -941,6 +943,8 @@
                                     iACADEMY
                                 </option>
                                 <option value="College - Freshmen Other">College - Freshmen Other
+                                </option>
+                                <option value="College - Transferee">College - Transferee
                                 </option>
                                 <option value="SHS - New">SHS - New</option>
                                 <option value="SHS - Transferee">SHS - Transferee</option>
@@ -1188,6 +1192,18 @@
                                 @click="onEdit">Edit</button>
                         </div>
                         <hr>
+                    </div>
+                </div>
+                <div class="box-footer box-footer-schedule">
+                    <div class="text-right">
+                        <?php if($userlevel == "2" || $userlevel == "5"): ?>
+                        <button
+                            v-if="request.status == 'Waiting For Interview' || request.status == 'For Interview'"
+                            type="button"
+                            data-toggle="modal"
+                            data-target="#setFISchedule"
+                            class=" btn btn-info">Update/Set FI</button>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -1843,13 +1859,7 @@
                 </div>
                 <div class="box-footer box-footer-voucher">
                     <div class="text-right">
-                        <?php if($userlevel == "2" || $userlevel == "5"): ?>
-                        <button
-                            v-if="request.status == 'Waiting For Interview' || request.status == 'For Interview'"
-                            type="button"
-                            data-toggle="modal"
-                            data-target="#setFISchedule"
-                            class=" btn btn-info">Update/Set FI</button>
+                        <?php if($userlevel == "2" || $userlevel == "5"): ?>                        
                         <button type="button"
                             v-if="request.status == 'New'"
                             @click="deleteApplicant"
@@ -2672,6 +2682,8 @@
                                     iACADEMY</option>
                                 <option value="College - Freshmen Other">College - Freshmen Other
                                 </option>
+                                <option value="College - Transferee">College - Transferee
+                                </option>                                
                                 <option value="SHS - New">SHS - New</option>
                                 <option value="SHS -  Transferee">SHS - Transferee</option>
 
@@ -2684,10 +2696,12 @@
                                 class="form-control"
                                 @change="updateField('student_type',$event)"
                                 v-model="request.tos">
-                                <option value="College - Freshmen iACADEMY">College -eshmen
+                                <option value="College - Freshmen iACADEMY">College - Freshmen
                                     iACADEMY</option>
                                 <option value="College - Freshmen Other">College - Freshmen Other
                                 </option>
+                                <option value="College - Transferee">College - Transferee
+                                </option>                               
                                 <option value="SHS - New">SHS - New</option>
                                 <option value="SHS -  Transferee">SHS - Transferee</option>
 
