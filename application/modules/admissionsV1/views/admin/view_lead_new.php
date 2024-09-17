@@ -926,6 +926,8 @@
                                 </option>
                                 <option value="College - Freshmen Other">College - Freshmen Other
                                 </option>
+                                <option value="College - Transferee">College - Transferee
+                                </option>
                                 <option value="SHS - New">SHS - New</option>
                                 <option value="SHS - Transferee">SHS - Transferee</option>
                                 <option value="2nd - Degree iACADEMY">2nd - Degree iACADEMY</option>
@@ -941,6 +943,8 @@
                                     iACADEMY
                                 </option>
                                 <option value="College - Freshmen Other">College - Freshmen Other
+                                </option>
+                                <option value="College - Transferee">College - Transferee
                                 </option>
                                 <option value="SHS - New">SHS - New</option>
                                 <option value="SHS - Transferee">SHS - Transferee</option>
@@ -2678,7 +2682,7 @@
                                     iACADEMY</option>
                                 <option value="College - Freshmen Other">College - Freshmen Other
                                 </option>
-                                <option value="College - Freshmen Other">College - Transferee
+                                <option value="College - Transferee">College - Transferee
                                 </option>                                
                                 <option value="SHS - New">SHS - New</option>
                                 <option value="SHS -  Transferee">SHS - Transferee</option>
@@ -2696,8 +2700,8 @@
                                     iACADEMY</option>
                                 <option value="College - Freshmen Other">College - Freshmen Other
                                 </option>
-                                <option value="College - Freshmen Other">College - Transferee
-                                </option>                                
+                                <option value="College - Transferee">College - Transferee
+                                </option>                               
                                 <option value="SHS - New">SHS - New</option>
                                 <option value="SHS -  Transferee">SHS - Transferee</option>
 
