@@ -62,6 +62,7 @@
                             <th>Cashier</th>                  
                             <th>OR Date</th>
                             <th>OR Number</th>
+                            <th>Invoice Number</th>
                             <th>Applicant Number</th>
                             <th>Name</th>
                             <th>Payment Mode</th>                            
@@ -87,6 +88,7 @@
     <input type="hidden" id="is_cash" name="is_cash" />
     <input type="hidden" id="check_number" name="check_number" />
     <input type="hidden" id="or_number" name="or_number" />
+    <input type="hidden" id="invoice_number" name="invoice_number" />
     <input type="hidden" id="remarks" name="remarks" />
     <input type="hidden" id="description" name="description" />
     <input type="hidden" id="total_amount_due" name="total_amount_due" /> 
