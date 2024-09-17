@@ -153,9 +153,21 @@ $(document).ready(function() {
                 }
             },
             {
-                "aTargets": [4,5],                                
+                "aTargets": [4],                                
                 "mRender": function(data, type, row, meta) {
-                    return String(row.or_number).padStart(5, '0');
+                    if(row.or_number != null)
+                        return String(row.or_number).padStart(5, '0');
+                    else
+                        return " ";
+                }
+            },
+            {
+                "aTargets": [5],                                
+                "mRender": function(data, type, row, meta) {
+                    if(row.invoice_number != null)
+                        return String(row.invoice_number).padStart(5, '0');
+                    else
+                        return " ";
                 }
             }, 
             {
@@ -285,6 +297,7 @@ $(document).ready(function() {
                 $("#is_cash").val($(this).attr('data-is-cash'));
                 $("#check_number").val($(this).attr('data-check-number'));                
                 $("#or_number").val($(this).attr('data-or-number'));
+                $("#invoice_number").val($(this).attr('data-invoice-number'));
                 $("#remarks").val($(this).attr('data-remarks'));
                 $("#description").val($(this).attr('data-description'));                                                
                 $("#total_amount_due").val($(this).attr('data-total-amount-due'));                
