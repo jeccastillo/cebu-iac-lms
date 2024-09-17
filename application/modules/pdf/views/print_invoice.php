@@ -99,13 +99,13 @@ table tr td {
                 <?php echo $reservation_description; ?>
             </div>
             <div style="position:absolute; top: 270px; left: 500px; width: 500px; height: 20px;">
-                1
+               <?php echo $reservation_amount != 0 ? 1 : ""; ?>
             </div>
             <div style="position:absolute; top: 270px; left: 550px; width: 200px; height: 20px;">
-                <?php  echo $reservation_amount; ?>
+                <?php echo $reservation_amount != 0 ? $reservation_amount : ""; ?>
             </div>
             <div style="position:absolute; top:  270px; left: 650px; width: 200px; height: 20px;">
-                <?php  echo $reservation_amount; ?>
+                <?php echo $reservation_amount != 0 ? $reservation_amount : ""; ?>
             </div>
             <div style="position:absolute; top:  355px; left: 650px; width: 200px; height: 20px;">
                 <?php  echo $total_assessment; ?>
