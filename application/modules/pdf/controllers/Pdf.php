@@ -2211,20 +2211,34 @@ class Pdf extends CI_Controller {
         $reg = $this->db->get_where('tb_mas_registration',array('intStudentID'=>$student['intID'],'intAYID'=>$request['sem'], 'date_enlisted !=' => NULL))->first_row('array');
         
         // $request['slug']
-        $reservationDescription = $reservationAmount = '';
-        $tuition = $this->data_fetcher->getTuition($student['intID'], $request['sem']);
-                
+        $reservationDescription = $reservationAmount = $fullAssessment = $totalAssessment = '';
+        
         $reservationPayment = $this->db->get_where('payment_details',array('student_number'=> $request['slug'],'description' => 'Reservation Payment', 'payment_details.sy_reference' => $request['sem'], 'payment_details.status' => 'Paid'))->first_row('array');
-
+        
         if($reservationPayment){
             $reservationAmount = $reservationPayment['subtotal_order'];
             if($reservationPayment['invoice_number'])
-                $reservationDescription = 'Inv ' . $reservationPayment['invoice_number'] . ' - ';
+            $reservationDescription = 'Inv ' . $reservationPayment['invoice_number'] . ' - ';
             
             $reservationDescription .= 'Reservation Fee ';
+        }else{
+            $reservationAmount = 0;
+        }
+
+        $tuition = $this->data_fetcher->getTuition($student['intID'], $request['sem']);
+        if($tuition && $request['description'] == "Tuition Fee"){
+            if($reg['paymentType'] == 'partial'){
+                $fullAssessment = $tuition['total_installment'];
+                $totalAssessment = $tuition['total_installment'] - $reservationAmount;
+            }else{
+                $fullAssessment = $tuition['total'];
+                $totalAssessment = $tuition['total'] - $reservationAmount;
+            }
+        }else{
+            $fullAssessment = $request['total_amount_due'];
+            $totalAssessment = $request['total_amount_due'];
         }
          
-        
         $description = $request['description'] == "Tuition Fee" || $request['description'] == "Reservation Payment"  ? "Total Assessment " . $term['enumSem']." ".$term['term_label'] . " AY ".$term['strYearStart']."-".$term['strYearEnd']." ": $request['description'];
 
         $this->data['term'] = $term;
@@ -2238,6 +2252,7 @@ class Pdf extends CI_Controller {
         $this->data['invoice_number'] = (string)$request['invoice_number'];
         $this->data['invoice_number'] = str_pad($this->data['invoice_number'],5,'0', STR_PAD_LEFT);
         $this->data['description'] = $description;
+        // $this->data['total_amount_due'] = number_format($request['total_amount_due'],2,'.',',');
         $this->data['total_amount_due'] = number_format($request['total_amount_due'],2,'.',',');
         $this->data['decimal'] = ($this->data['total_amount_due'] - floor( $this->data['total_amount_due'] )) * 100;
         $this->data['decimal'] = round($this->data['decimal']);        
@@ -2246,9 +2261,10 @@ class Pdf extends CI_Controller {
         $this->data['reservation_description'] = $reservationDescription;
         $this->data['reservation_amount'] = number_format($reservationAmount,2,'.',',');
         $this->data['payment_type'] = $reg['paymentType'];
+        $this->data['full_assessment'] = number_format($fullAssessment,2,'.',',');
+        $this->data['total_assessment'] = number_format($totalAssessment,2,'.',',');
 
         $this->load->view("print_invoice",$this->data);
-
     }
 
     function print_updated_or(){
