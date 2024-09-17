@@ -2228,7 +2228,7 @@ class Pdf extends CI_Controller {
         }
 
         
-        if($tuition && $request['description'] == "Tuition Fee"){
+        if(isset($tuition) && $request['description'] == "Tuition Fee"){
             if($reg['paymentType'] == 'partial'){
                 $fullAssessment = $tuition['total_installment'];
                 $totalAssessment = $tuition['total_installment'] - $reservationAmount;
