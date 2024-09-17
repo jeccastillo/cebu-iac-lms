@@ -118,7 +118,7 @@ $(document).ready(function() {
         "aoColumnDefs": [
             
             {
-                "aTargets": [12],
+                "aTargets": [13],
                 "mData": null,
                 "bSortable": false,
                 "mRender": function(data, type, row, meta) {
