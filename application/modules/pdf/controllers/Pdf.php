@@ -2211,6 +2211,23 @@ class Pdf extends CI_Controller {
             $reg = $this->db->get_where('tb_mas_registration',array('intStudentID'=>$student['intID'],'intAYID'=>$request['sem'], 'date_enlisted !=' => NULL))->first_row('array');
             $tuition = $this->data_fetcher->getTuition($student['intID'], $request['sem']);
         }
+
+        $type = "";
+        if(isset($request['type'])){
+            switch($request['type']){
+                case 'college':
+                    $type = "UG ".$request['description'];
+                    break;
+                case 'other':
+                        $type = "UG ".$request['description'];
+                        break;                    
+                case 'shs':
+                    $type = "SHS ".$request['description'];
+                    break;
+                default:
+                    $type = "SHS ".$request['description'];                    
+            }
+        }
         
         // $request['slug']
         $reservationDescription = $reservationAmount = $fullAssessment = $totalAssessment = '';
@@ -2260,6 +2277,7 @@ class Pdf extends CI_Controller {
         $this->data['decimal'] = round($this->data['decimal']);        
         $this->data['transaction_date'] =  date("m/d/Y",strtotime($request['transaction_date']));  
         $this->data['request'] = $request;
+        $this->data['type'] = $type == "Tuition Fee" ? "Total Assessment" : $type;
         $this->data['reservation_description'] = $reservationDescription;
         $this->data['reservation_amount'] = number_format($reservationAmount,2,'.',',');
         $this->data['payment_type'] = isset($reg) ? $reg['paymentType']: "";
