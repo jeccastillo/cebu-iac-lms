@@ -359,6 +359,11 @@
                                             class="btn btn-primary">
                                             Print OR
                                         </button>
+                                        <button v-if="payment.invoice_number"
+                                            @click="printInvoice(payment)"
+                                            class="btn btn-primary">
+                                            Print Invoice
+                                        </button>
                                         <button
                                             v-if="payment.status == 'Paid' && payment.remarks != 'Voided' && cashier && finance_manager_privilages"
                                             data-toggle="modal"
