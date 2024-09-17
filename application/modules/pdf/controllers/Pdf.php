@@ -2205,10 +2205,29 @@ class Pdf extends CI_Controller {
         $cashier = $this->db->get_where('tb_mas_faculty',array('intID'=>$request['cashier_id']))->row();
         //$student = $this->db->get_where('tb_mas_users',array('slug'=> 'c9316f71-8991-4c93-a8d8-fd20f776aea1'))->first_row('array');
         $student = $this->db->get_where('tb_mas_users',array('slug'=>$request['slug']))->first_row('array');
-        $term = $this->db->get_where('tb_mas_sy',array('intID'=>$request['sem']))->first_row('array');
+        $term = $this->db->get_where('tb_mas_sy',array('intID'=>$request['sem']))->first_row('array');        
         
-        
-        $reg = $this->db->get_where('tb_mas_registration',array('intStudentID'=>$student['intID'],'intAYID'=>$request['sem'], 'date_enlisted !=' => NULL))->first_row('array');
+        if($student){
+            $reg = $this->db->get_where('tb_mas_registration',array('intStudentID'=>$student['intID'],'intAYID'=>$request['sem'], 'date_enlisted !=' => NULL))->first_row('array');
+            $tuition = $this->data_fetcher->getTuition($student['intID'], $request['sem']);
+        }
+
+        $type = "";
+        if(isset($request['type'])){
+            switch($request['type']){
+                case 'college':
+                    $type = "UG ".$request['description'];
+                    break;
+                case 'other':
+                        $type = "UG ".$request['description'];
+                        break;                    
+                case 'shs':
+                    $type = "SHS ".$request['description'];
+                    break;
+                default:
+                    $type = "SHS ".$request['description'];                    
+            }
+        }
         
         // $request['slug']
         $reservationDescription = $reservationAmount = $fullAssessment = $totalAssessment = '';
@@ -2225,8 +2244,8 @@ class Pdf extends CI_Controller {
             $reservationAmount = 0;
         }
 
-        $tuition = $this->data_fetcher->getTuition($student['intID'], $request['sem']);
-        if($tuition && $request['description'] == "Tuition Fee"){
+        
+        if(isset($tuition) && $request['description'] == "Tuition Fee"){
             if($reg['paymentType'] == 'partial'){
                 $fullAssessment = $tuition['total_installment'];
                 $totalAssessment = $tuition['total_installment'] - $reservationAmount;
@@ -2258,9 +2277,10 @@ class Pdf extends CI_Controller {
         $this->data['decimal'] = round($this->data['decimal']);        
         $this->data['transaction_date'] =  date("m/d/Y",strtotime($request['transaction_date']));  
         $this->data['request'] = $request;
+        $this->data['type'] = $type == "Tuition Fee" ? "Total Assessment" : $type;
         $this->data['reservation_description'] = $reservationDescription;
         $this->data['reservation_amount'] = number_format($reservationAmount,2,'.',',');
-        $this->data['payment_type'] = $reg['paymentType'];
+        $this->data['payment_type'] = isset($reg) ? $reg['paymentType']: "";
         $this->data['full_assessment'] = number_format($fullAssessment,2,'.',',');
         $this->data['total_assessment'] = number_format($totalAssessment,2,'.',',');
 
