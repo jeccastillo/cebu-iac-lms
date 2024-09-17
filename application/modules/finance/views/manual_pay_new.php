@@ -865,28 +865,83 @@ new Vue({
                             headers: {
                                 Authorization: `Bearer ${window.token}`
                             }
-                        })
-                        .then(data => {
+                        }).then(data => {
                             this.loader_spinner = false;
                             if (data.data.success) {
+                                var formdata = new FormData();
+                                formdata.append('intID', this.cashier.intID);
+                                formdata.append('invoice_current', this.cashier.invoice_current);
+                                formdata.append('invoice_used', this.cashier.invoice_current);
+                                formdata.append('sy', this.student.sy_reference);
+                                axios.post(base_url + 'finance/next_or/1',
+                                        formdata, {
+                                            headers: {
+                                                Authorization: `Bearer ${window.token}`
+                                            }
+                                        })
+                                    .then(function(data) {
+                                        if (data.data.send_notif) {
+                                            let url = api_url +
+                                                'registrar/send_notif_enrolled/' +
+                                                this.student_data
+                                                .slug;
+                                            let payload = {
+                                                'message': "This message serves as a notification that you have been officially enrolled."
+                                            }
 
-                                this.loader_spinner = false;
-                                Swal.fire({
-                                    title: "Success",
-                                    text: "Update Success",
-                                    icon: "success"
-                                }).then(function() {
-                                    location.reload();
-                                });
+                                            Swal.fire({
+                                                showCancelButton: false,
+                                                showCloseButton: false,
+                                                allowEscapeKey: false,
+                                                title: 'Loading',
+                                                text: 'Processing Data do not leave page',
+                                                icon: 'info',
+                                            })
+                                            Swal.showLoading();
+                                            axios.post(url,
+                                                    payload, {
+                                                        headers: {
+                                                            Authorization: `Bearer ${window.token}`
+                                                        }
+                                                    })
+                                                .then(data => {
+                                                    this.loader_spinner =
+                                                        false;
+                                                    Swal.fire({
+                                                        title: "Success",
+                                                        text: data
+                                                            .data
+                                                            .message,
+                                                        icon: "success"
+                                                    }).then(
+                                                        function() {
+                                                            location
+                                                                .reload();
+                                                        });
+                                                });
+                                        } else {
+                                            Swal.fire({
+                                                title: "Success",
+                                                text: data
+                                                    .data
+                                                    .message,
+                                                icon: "success"
+                                            }).then(function() {
+                                                location
+                                                    .reload();
+                                            });
 
-                            }else{
-                                this.loader_spinner = false;
+                                        }
+
+                                    })
+                            } else
                                 Swal.fire({
-                                    title: "failed",
-                                    text: `${data.data.message}`,
+                                    title: "Failed",
+                                    text: data.data.message,
                                     icon: "error"
-                                })
-                            }
+                                }).then(function() {
+                                    //location.reload();
+                                });
                         });
 
                 },
