@@ -67,21 +67,24 @@ table tr td {
 
 <body>
     <div class="sheet-outer A4">
-        <section class="sheet padding-5mm">                
-            <div style="position:absolute; top: 100; right: 60px; width: 200px; height: 20px;">
-                OR No: 03041
+        <section class="sheet padding-5mm">
+            <div style="position:absolute; top: 130px; right: 60px; width: 200px; height: 20px;">
+                Invoice No: <?php echo $invoice_number; ?>
             </div>
-            <div style="position:absolute; top: 140px; right: -60px; width: 200px; height: 20px;">
-                09/12/24
+            <div style="position:absolute; top: 170px; right: -60px; width: 200px; height: 20px;">
+                <?php echo $transaction_date; ?>
             </div>
-            <div style="position:absolute; top: 140px; left: 60px; width: 500px; height: 20px;">
-                C202301050 HASSAN, KALILAH MYNA, VILLAMOR 
+            <div style="position:absolute; top: 170px; left: 60px; width: 500px; height: 20px;">
+                <?php if($student_id != 'undefined' && $student_id != ''): ?>
+                    <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?>
+                <?php endif; ?>
+                &nbsp; <?php echo $student_name; ?>
             </div>
-            <div style="position:absolute; top: 160px; left: 60px; width: 500px; height: 20px;">
-                1773 Dian St. Palanan Makati City
+            <div style="position:absolute; top: 190px; left: 60px; width: 500px; height: 20px;">
+                <?php echo $student_address; ?>
             </div>
             <div style="position:absolute; top: 240px; left:0px; width: 500px; height: 20px;">
-                Total Assesssment 1st term AY 2024-2025
+                <?php echo $type." /  ".$term['enumSem']." ".$term['term_label']." ".$term['strYearStart']."-".$term['strYearEnd']; ?>
             </div>
             <div style="position:absolute; top: 240px; left: 500px; width: 500px; height: 20px;">
                 1
@@ -89,7 +92,7 @@ table tr td {
             <div style="position:absolute; top: 240px; left: 550px; width: 200px; height: 20px;">
                 89,880.82
             </div>
-            <div style="position:absolute; top:  240px; left: 640px; width: 200px; height: 20px;">
+            <div style="position:absolute; top:  240px; left: 650px; width: 200px; height: 20px;">
                 89,880.82
             </div>
             <div style="position:absolute; top: 255px; left:0px; width: 500px; height: 20px;">
@@ -101,19 +104,19 @@ table tr td {
             <div style="position:absolute; top: 255px; left: 550px; width: 200px; height: 20px;">
                 (10,000.00)
             </div>
-            <div style="position:absolute; top:  255px; left: 640px; width: 200px; height: 20px;">
+            <div style="position:absolute; top:  255px; left: 650px; width: 200px; height: 20px;">
             (10,000.00)
             </div>
-            <div style="position:absolute; top:  340px; left: 650px; width: 200px; height: 20px;">
+            <div style="position:absolute; top:  355px; left: 650px; width: 200px; height: 20px;">
             79,880.82
             </div>
-            <div style="position:absolute; top:  400px; left: 100px; width: 200px; height: 20px;">
+            <div style="position:absolute; top:  390px; left: 100px; width: 200px; height: 20px;">
             15,000.00
             </div>
             <div style="position:absolute; top:  405px; left: 650px; width: 200px; height: 20px;">
             79,880.82
             </div>
-            <div style="position:absolute; top:  450px; left: 0px; width: 200px; height: 20px;">
+            <div style="position:absolute; top:  455px; left: 0px; width: 200px; height: 20px;">
             BDO 12456
             </div>
             <div style="position:absolute; top:  485px; left: 300px; width: 200px; height: 20px;">
