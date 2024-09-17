@@ -2196,6 +2196,8 @@ class Pdf extends CI_Controller {
     {
         $request = $this->input->post();
 
+        print_r($request);
+        die();
         $role = $this->session->userdata('special_role');
         $userlevel = $this->session->userdata('intUserLevel');
 
@@ -2213,8 +2215,6 @@ class Pdf extends CI_Controller {
         // $request['slug']
         $reservationDescription = $reservationAmount = '';
         $tuition = $this->data_fetcher->getTuition($student['intID'], $request['sem']);
-        print_r($tuition);
-        die();
                 
         $reservationPayment = $this->db->get_where('payment_details',array('student_number'=> $request['slug'],'description' => 'Reservation Payment', 'payment_details.sy_reference' => $request['sem'], 'payment_details.status' => 'Paid'))->first_row('array');
 
