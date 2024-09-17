@@ -699,6 +699,7 @@ new Vue({
                             this.or_update.or_number = this.cashier.or_current;
                             this.request.cashier_id = this.cashier.user_id;
                             this.or_update.cashier_id = this.cashier.user_id;
+                            this.invoice_update.cashier_id = this.cashier.user_id;
                             // this.request.invoice_number = this.cashier.invoice_current
                         }
                     })
@@ -846,8 +847,7 @@ new Vue({
         updateInvoice: function() {
             let url = api_url + 'finance/update_invoice';
             let slug = this.slug;
-            this.loader_spinner = true;
-            console.log(this.invoice_update);
+            this.loader_spinner = true;            
             
             Swal.fire({
                 title: 'Continue with the update',
