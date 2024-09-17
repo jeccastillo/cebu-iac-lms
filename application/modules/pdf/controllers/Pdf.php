@@ -2207,8 +2207,10 @@ class Pdf extends CI_Controller {
         $student = $this->db->get_where('tb_mas_users',array('slug'=>$request['slug']))->first_row('array');
         $term = $this->db->get_where('tb_mas_sy',array('intID'=>$request['sem']))->first_row('array');        
         
-        if($student)
+        if($student){
             $reg = $this->db->get_where('tb_mas_registration',array('intStudentID'=>$student['intID'],'intAYID'=>$request['sem'], 'date_enlisted !=' => NULL))->first_row('array');
+            $tuition = $this->data_fetcher->getTuition($student['intID'], $request['sem']);
+        }
         
         // $request['slug']
         $reservationDescription = $reservationAmount = $fullAssessment = $totalAssessment = '';
@@ -2225,7 +2227,7 @@ class Pdf extends CI_Controller {
             $reservationAmount = 0;
         }
 
-        $tuition = $this->data_fetcher->getTuition($student['intID'], $request['sem']);
+        
         if($tuition && $request['description'] == "Tuition Fee"){
             if($reg['paymentType'] == 'partial'){
                 $fullAssessment = $tuition['total_installment'];
