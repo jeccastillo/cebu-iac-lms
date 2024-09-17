@@ -4155,23 +4155,25 @@ class Excel extends CI_Controller {
         $objPHPExcel->setActiveSheetIndex(0)                    
                     ->setCellValue('A1', 'Date')
                     ->setCellValue('B1', 'OR Number')
-                    ->setCellValue('C1', 'Applicant Number')
-                    ->setCellValue('D1', 'Name')
-                    ->setCellValue('E1', 'Payment Particulars')
-                    ->setCellValue('F1', 'Term/Sem')                                                            
-                    ->setCellValue('G1', 'Remarks')
-                    ->setCellValue('H1', 'Cash')
-                    ->setCellValue('I1', 'Check')
-                    ->setCellValue('J1', 'Credit')
-                    ->setCellValue('K1', 'Debit')
-                    ->setCellValue('L1', 'Online')
-                    ->setCellValue('M1', 'Total');
+                    ->setCellValue('C1', 'Invoice Number')
+                    ->setCellValue('D1', 'Applicant Number')
+                    ->setCellValue('E1', 'Name')
+                    ->setCellValue('F1', 'Payment Particulars')
+                    ->setCellValue('G1', 'Term/Sem')                                                            
+                    ->setCellValue('H1', 'Remarks')
+                    ->setCellValue('I1', 'Cash')
+                    ->setCellValue('J1', 'Check')
+                    ->setCellValue('K1', 'Credit')
+                    ->setCellValue('L1', 'Debit')
+                    ->setCellValue('M1', 'Online')
+                    ->setCellValue('N1', 'Total');
                     
         
         $i = 2;
         
         foreach($data as $d){             
-            $or_number = str_pad($d->or_number, 5, '0', STR_PAD_LEFT);           
+            $or_number = str_pad($d->or_number, 5, '0', STR_PAD_LEFT);
+            $invoice_number = str_pad($d->invoice_number, 5, '0', STR_PAD_LEFT);           
             // Add some datat
             $cashier = $this->data_fetcher->fetch_single_entry('tb_mas_faculty',$d->cashier_id);
             if($cashier)
@@ -4211,47 +4213,49 @@ class Excel extends CI_Controller {
             $objPHPExcel->setActiveSheetIndex(0)                    
                     ->setCellValue('A'.$i, $d->or_date)
                     ->setCellValue('B'.$i, $or_number)
-                    ->setCellValue('C'.$i, $d->student_number)
-                    ->setCellValue('D'.$i, strtoupper($d->student_name))
-                    ->setCellValue('E'.$i, $d->description)
-                    ->setCellValue('F'.$i, $term['enumSem']." ".$term['term_label']." SY".$term['strYearStart']."-".$term['strYearEnd'])                                        
-                    ->setCellValue('G'.$i, $remarks)
-                    ->setCellValue('M'.$i, '=SUM(H'.$i.':L'.$i.')');
+                    ->setCellValue('C'.$i, $invoice_number)
+                    ->setCellValue('D'.$i, $d->student_number)
+                    ->setCellValue('E'.$i, strtoupper($d->student_name))
+                    ->setCellValue('F'.$i, $d->description)
+                    ->setCellValue('G'.$i, $term['enumSem']." ".$term['term_label']." SY".$term['strYearStart']."-".$term['strYearEnd'])                                        
+                    ->setCellValue('H'.$i, $remarks)
+                    ->setCellValue('N'.$i, '=SUM(I'.$i.':M'.$i.')');
                                                        
             $i++;
         }
 
         $objPHPExcel->setActiveSheetIndex(0)       
-            ->setCellValue('H'.$i, '=SUM(H2:H'.($i-1).')');
+            ->setCellValue('H'.$i, '=SUM(I2:I'.($i-1).')');
         $objPHPExcel->setActiveSheetIndex(0)       
-            ->setCellValue('I'.$i, '=SUM(I2:I'.($i-1).')');
+            ->setCellValue('I'.$i, '=SUM(J2:J'.($i-1).')');
         $objPHPExcel->setActiveSheetIndex(0)       
-            ->setCellValue('J'.$i, '=SUM(J2:J'.($i-1).')');
+            ->setCellValue('J'.$i, '=SUM(K2:K'.($i-1).')');
         $objPHPExcel->setActiveSheetIndex(0)       
-            ->setCellValue('K'.$i, '=SUM(K2:K'.($i-1).')');
+            ->setCellValue('K'.$i, '=SUM(L2:L'.($i-1).')');
         $objPHPExcel->setActiveSheetIndex(0)       
-            ->setCellValue('L'.$i, '=SUM(L2:L'.($i-1).')');
+            ->setCellValue('L'.$i, '=SUM(M2:M'.($i-1).')');
         $objPHPExcel->setActiveSheetIndex(0)       
-            ->setCellValue('M'.$i, '=SUM(M2:M'.($i-1).')');
+            ->setCellValue('M'.$i, '=SUM(N2:N'.($i-1).')');
 
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle("H".$i.":M".$i)->getFont()->setBold( true );
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle("M2:M".($i-1))->getFont()->setBold( true );
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("I".$i.":N".$i)->getFont()->setBold( true );
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("N2:N".($i-1))->getFont()->setBold( true );
 
 
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(25);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(45);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(45);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(25);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(25);
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(20);
                 
          
         $objPHPExcel->getActiveSheet()->setTitle('Collection');
