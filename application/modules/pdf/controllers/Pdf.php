@@ -2273,13 +2273,13 @@ class Pdf extends CI_Controller {
         $this->data['description'] = $description;
         // $this->data['total_amount_due'] = number_format($request['total_amount_due'],2,'.',',');
         $this->data['total_amount_due'] = number_format($request['total_amount_due'],2,'.',',');
-        $this->data['decimal'] = ($this->data['total_amount_due'] - floor( $this->data['total_amount_due'] )) * 100;
-        $this->data['decimal'] = round($this->data['decimal']);        
+        // $this->data['decimal'] = ($this->data['total_amount_due'] - floor( $this->data['total_amount_due'] )) * 100;
+        // $this->data['decimal'] = round($this->data['decimal']);        
         $this->data['transaction_date'] =  date("m/d/Y",strtotime($request['transaction_date']));  
         $this->data['request'] = $request;
         $this->data['type'] = $type == "Tuition Fee" ? "Total Assessment" : $type;
         $this->data['reservation_description'] = $reservationDescription;
-        $this->data['reservation_amount'] = number_format($reservationAmount,2,'.',',');
+        $this->data['reservation_amount'] = $reservationAmount != 0 ? number_format($reservationAmount,2,'.',',') : $reservationAmount;
         $this->data['payment_type'] = isset($reg) ? $reg['paymentType']: "";
         $this->data['full_assessment'] = number_format($fullAssessment,2,'.',',');
         $this->data['total_assessment'] = number_format($totalAssessment,2,'.',',');
