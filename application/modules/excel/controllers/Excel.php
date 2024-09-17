@@ -4225,17 +4225,17 @@ class Excel extends CI_Controller {
         }
 
         $objPHPExcel->setActiveSheetIndex(0)       
-            ->setCellValue('H'.$i, '=SUM(I2:I'.($i-1).')');
+            ->setCellValue('I'.$i, '=SUM(I2:I'.($i-1).')');
         $objPHPExcel->setActiveSheetIndex(0)       
-            ->setCellValue('I'.$i, '=SUM(J2:J'.($i-1).')');
+            ->setCellValue('J'.$i, '=SUM(J2:J'.($i-1).')');
         $objPHPExcel->setActiveSheetIndex(0)       
-            ->setCellValue('J'.$i, '=SUM(K2:K'.($i-1).')');
+            ->setCellValue('K'.$i, '=SUM(K2:K'.($i-1).')');
         $objPHPExcel->setActiveSheetIndex(0)       
-            ->setCellValue('K'.$i, '=SUM(L2:L'.($i-1).')');
+            ->setCellValue('L'.$i, '=SUM(L2:L'.($i-1).')');
         $objPHPExcel->setActiveSheetIndex(0)       
-            ->setCellValue('L'.$i, '=SUM(M2:M'.($i-1).')');
+            ->setCellValue('M'.$i, '=SUM(M2:M'.($i-1).')');
         $objPHPExcel->setActiveSheetIndex(0)       
-            ->setCellValue('M'.$i, '=SUM(N2:N'.($i-1).')');
+            ->setCellValue('N'.$i, '=SUM(N2:N'.($i-1).')');
 
         $objPHPExcel->setActiveSheetIndex(0)->getStyle("I".$i.":N".$i)->getFont()->setBold( true );
         $objPHPExcel->setActiveSheetIndex(0)->getStyle("N2:N".($i-1))->getFont()->setBold( true );
