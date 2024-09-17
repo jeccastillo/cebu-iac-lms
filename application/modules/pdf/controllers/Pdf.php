@@ -2262,7 +2262,7 @@ class Pdf extends CI_Controller {
         $this->data['request'] = $request;
         $this->data['reservation_description'] = $reservationDescription;
         $this->data['reservation_amount'] = number_format($reservationAmount,2,'.',',');
-        $this->data['payment_type'] = $reg['paymentType'];
+        $this->data['payment_type'] = isset($reg) ? $reg['paymentType']: "";
         $this->data['full_assessment'] = number_format($fullAssessment,2,'.',',');
         $this->data['total_assessment'] = number_format($totalAssessment,2,'.',',');
 
