@@ -2250,8 +2250,6 @@ class Pdf extends CI_Controller {
         $this->data['reservation_amount'] = number_format($reservationAmount,2,'.',',');
         $this->data['payment_type'] = $reg['paymentType'];
 
-        print_r($this->data);
-        die();
         $this->load->view("print_invoice",$this->data);
 
     }
