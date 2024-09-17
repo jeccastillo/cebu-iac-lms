@@ -2196,6 +2196,8 @@ class Pdf extends CI_Controller {
     {
         $request = $this->input->post();
 
+        print_r($request);
+        die();
         $role = $this->session->userdata('special_role');
         $userlevel = $this->session->userdata('intUserLevel');
 
@@ -2212,19 +2214,19 @@ class Pdf extends CI_Controller {
         
         // $request['slug']
         $reservationDescription = $reservationAmount = '';
-        $tuition = $this->data_fetcher->getTuition($student['intID'], $request['sem']);
-                
+        
         $reservationPayment = $this->db->get_where('payment_details',array('student_number'=> $request['slug'],'description' => 'Reservation Payment', 'payment_details.sy_reference' => $request['sem'], 'payment_details.status' => 'Paid'))->first_row('array');
-
+        
         if($reservationPayment){
+            $tuition = $this->data_fetcher->getTuition($student['intID'], $request['sem']);
+            
             $reservationAmount = $reservationPayment['subtotal_order'];
             if($reservationPayment['invoice_number'])
-                $reservationDescription = 'Inv ' . $reservationPayment['invoice_number'] . ' - ';
+            $reservationDescription = 'Inv ' . $reservationPayment['invoice_number'] . ' - ';
             
             $reservationDescription .= 'Reservation Fee ';
         }
          
-        
         $description = $request['description'] == "Tuition Fee" || $request['description'] == "Reservation Payment"  ? "Total Assessment " . $term['enumSem']." ".$term['term_label'] . " AY ".$term['strYearStart']."-".$term['strYearEnd']." ": $request['description'];
 
         $this->data['term'] = $term;
@@ -2238,7 +2240,8 @@ class Pdf extends CI_Controller {
         $this->data['invoice_number'] = (string)$request['invoice_number'];
         $this->data['invoice_number'] = str_pad($this->data['invoice_number'],5,'0', STR_PAD_LEFT);
         $this->data['description'] = $description;
-        $this->data['total_amount_due'] = number_format($request['total_amount_due'],2,'.',',');
+        // $this->data['total_amount_due'] = number_format($request['total_amount_due'],2,'.',',');
+        $this->data['total_amount_due'] = $tuition ? $tuition['total_installment'] - $reservationAmount : number_format($request['total_amount_due'],2,'.',',');
         $this->data['decimal'] = ($this->data['total_amount_due'] - floor( $this->data['total_amount_due'] )) * 100;
         $this->data['decimal'] = round($this->data['decimal']);        
         $this->data['transaction_date'] =  date("m/d/Y",strtotime($request['transaction_date']));  
@@ -2247,6 +2250,8 @@ class Pdf extends CI_Controller {
         $this->data['reservation_amount'] = number_format($reservationAmount,2,'.',',');
         $this->data['payment_type'] = $reg['paymentType'];
 
+        print_r($this->data);
+        die();
         $this->load->view("print_invoice",$this->data);
 
     }
