@@ -694,7 +694,7 @@ class Finance extends CI_Controller {
         $post = $this->input->post();
         $data = $post;
         unset($data['sy']);
-        $current_or = $post['or_current'];
+        //$current_or = $post['or_current'];
         if(isset($post['registration_id'])){
             unset($data['payments']);
             unset($data['description']);
