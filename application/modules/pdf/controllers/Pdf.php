@@ -2205,10 +2205,10 @@ class Pdf extends CI_Controller {
         $cashier = $this->db->get_where('tb_mas_faculty',array('intID'=>$request['cashier_id']))->row();
         //$student = $this->db->get_where('tb_mas_users',array('slug'=> 'c9316f71-8991-4c93-a8d8-fd20f776aea1'))->first_row('array');
         $student = $this->db->get_where('tb_mas_users',array('slug'=>$request['slug']))->first_row('array');
-        $term = $this->db->get_where('tb_mas_sy',array('intID'=>$request['sem']))->first_row('array');
-        print_r($student);
+        $term = $this->db->get_where('tb_mas_sy',array('intID'=>$request['sem']))->first_row('array');        
         
-        $reg = $this->db->get_where('tb_mas_registration',array('intStudentID'=>$student['intID'],'intAYID'=>$request['sem'], 'date_enlisted !=' => NULL))->first_row('array');
+        if($student)
+            $reg = $this->db->get_where('tb_mas_registration',array('intStudentID'=>$student['intID'],'intAYID'=>$request['sem'], 'date_enlisted !=' => NULL))->first_row('array');
         
         // $request['slug']
         $reservationDescription = $reservationAmount = $fullAssessment = $totalAssessment = '';
