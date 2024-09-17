@@ -400,6 +400,9 @@
                 name="student_name"
                 v-model="or_print.student_name">
             <input type="hidden"
+                name="slug"
+                v-model="student.slug">
+            <input type="hidden"
                 name="cashier_id"
                 v-model="or_print.cashier_id">
             <input type="hidden"
