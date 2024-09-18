@@ -21,12 +21,23 @@
                         <tr>
                             <th>Name</th>
                             <th>City</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="item in schools">
                             <td>{{ item.name }}</td>
                             <td>{{ item.city }}</td>
+                            <td>
+                                <div class="btn-group"><button type="button" class="btn btn-default">Actions</button>
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span><span class="sr-only">Toggle Dropdown</span></button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li>
+                                            <a href="#">Edit</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
