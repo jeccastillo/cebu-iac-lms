@@ -15,7 +15,7 @@
     <div class="content">         
         <div class="row">
             <div class="col-md-6">
-                <h4>Awareness Stats</h4>
+                <h4>Schools</h4>
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
@@ -24,7 +24,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="item in stats" v-if="item.count > 0">
+                        <tr v-for="item in schools" v-if="item.count > 0">
                             <td>{{ item.name }}</td>
                             <td>{{ item.city }}</td>
                         </tr>
