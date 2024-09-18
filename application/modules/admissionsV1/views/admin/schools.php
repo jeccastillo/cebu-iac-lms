@@ -1,7 +1,7 @@
 <aside class="right-side" id="registration-container">    
     <section class="content-header">
         <h1>
-            Admissions Report - Awareness
+            Schools
             <small>
                 <a class="btn btn-app" 
                     href="#"
