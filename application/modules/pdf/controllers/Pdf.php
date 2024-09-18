@@ -2260,6 +2260,15 @@ class Pdf extends CI_Controller {
          
         $description = $request['description'] == "Tuition Fee" || $request['description'] == "Reservation Payment"  ? "Total Assessment " . $term['enumSem']." ".$term['term_label'] . " AY ".$term['strYearStart']."-".$term['strYearEnd']." ": $request['description'];
 
+        $amountNetVat = 0;
+        $less_vat = 0;
+
+        if($request['description'] != "Tuition Fee" || $request['description'] != "Reservation Payment" || $request['description'] != "Application Payment"){
+            $amountNetVat = $request['total_amount_due'] / 1.12;
+            $lessVat =  $amountNetVat * .12;
+            
+        }
+        
         $this->data['term'] = $term;
         $this->data['student_name'] = strtoupper($request['student_name']);        
         $this->data['cashier_name'] = strtoupper($cashier->strFirstname." ".$cashier->strLastname);        
@@ -2273,6 +2282,8 @@ class Pdf extends CI_Controller {
         $this->data['description'] = $description;
         // $this->data['total_amount_due'] = number_format($request['total_amount_due'],2,'.',',');
         $this->data['total_amount_due'] = number_format($request['total_amount_due'],2,'.',',');
+        $this->data['amount_net_vat'] = number_format($amountNetVat,2,'.',',');
+        $this->data['less_vat'] = number_format($lessVat,2,'.',',');
         // $this->data['decimal'] = ($this->data['total_amount_due'] - floor( $this->data['total_amount_due'] )) * 100;
         // $this->data['decimal'] = round($this->data['decimal']);        
         $this->data['transaction_date'] =  date("m/d/Y",strtotime($request['transaction_date']));  
