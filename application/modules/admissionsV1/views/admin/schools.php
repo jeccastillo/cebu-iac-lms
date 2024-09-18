@@ -64,7 +64,8 @@ new Vue({
             
             axios.get(api_url + 'admissions/previous-schools')
             .then((data) => {                          
-                this.schools = data.data;                    
+                this.schools = data.data;    
+                console.log(this.schools.count);                
             })
             .catch((error) => {
                 console.log(error);
