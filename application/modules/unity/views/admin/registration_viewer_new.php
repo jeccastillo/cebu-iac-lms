@@ -1250,9 +1250,6 @@
 
 
 <script>
-function numberWithCommas(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
 new Vue({
     el: '#registration-container',
     data: {
@@ -1773,6 +1770,9 @@ new Vue({
            if (this.invoiceNumbers.length === 0) {
                this.invoice_update.invoice_number = this.cashier?.invoice_current
            }           
+        },
+        numberWithCommas: function(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
         setInvoice() {
             this.request.invoice_number = this.cashier.invoice_current
