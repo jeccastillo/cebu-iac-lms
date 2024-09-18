@@ -4186,11 +4186,11 @@ class Excel extends CI_Controller {
             $term = $this->data_fetcher->get_sem_by_id($d->sy_reference);
             
             switch($d->is_cash){
-                case 0:                    
+                case 1:                    
                     $objPHPExcel->setActiveSheetIndex(0)       
                         ->setCellValue('I'.$i, $d->subtotal_order);
                     break;
-                case 1:
+                case 0:
                     $objPHPExcel->setActiveSheetIndex(0)       
                         ->setCellValue('J'.$i, $d->subtotal_order);
                     break;
