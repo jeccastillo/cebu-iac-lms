@@ -4186,25 +4186,25 @@ class Excel extends CI_Controller {
             $term = $this->data_fetcher->get_sem_by_id($d->sy_reference);
             
             switch($d->is_cash){
-                case 0:                    
+                case 1:                    
                     $objPHPExcel->setActiveSheetIndex(0)       
                         ->setCellValue('I'.$i, $d->subtotal_order);
                     break;
-                case 1:
-                    $objPHPExcel->setActiveSheetIndex(0)       
-                        ->setCellValue('H'.$i, $d->subtotal_order);
-                    break;
-                case 2:
+                case 0:
                     $objPHPExcel->setActiveSheetIndex(0)       
                         ->setCellValue('J'.$i, $d->subtotal_order);
                     break;
-                case 3:
+                case 2:
                     $objPHPExcel->setActiveSheetIndex(0)       
                         ->setCellValue('K'.$i, $d->subtotal_order);
+                    break;
+                case 3:
+                    $objPHPExcel->setActiveSheetIndex(0)       
+                        ->setCellValue('L'.$i, $d->subtotal_order);
                     break;  
                 case 4:     
                     $objPHPExcel->setActiveSheetIndex(0)       
-                        ->setCellValue('L'.$i, $d->subtotal_order);
+                        ->setCellValue('M'.$i, $d->subtotal_order);
                     break;                   
 
             }
