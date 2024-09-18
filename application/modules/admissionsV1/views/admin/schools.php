@@ -16,7 +16,7 @@
         <div class="row">
             <div class="col-md-6">
                 <h4>Schools</h4>
-                <table class="table table-bordered table-striped">
+                <table v-if="schools.count > 0" class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -24,12 +24,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="item in schools" v-if="item.count > 0">
+                        <tr v-for="item in schools">
                             <td>{{ item.name }}</td>
                             <td>{{ item.city }}</td>
                         </tr>
                     </tbody>
                 </table>
+                <div v-else>
+                    <h3>No Data</h3>
+                </div>
             </div>
         </div>
     </div>
@@ -61,8 +64,7 @@ new Vue({
             
             axios.get(api_url + 'admissions/previous-schools')
             .then((data) => {                          
-                this.schools = data.data;    
-                console.log(this.schools);
+                this.schools = data.data;                    
             })
             .catch((error) => {
                 console.log(error);
