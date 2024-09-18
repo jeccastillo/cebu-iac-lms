@@ -3387,7 +3387,7 @@ class Unity extends CI_Controller {
         
         $student = $this->data_fetcher->fetch_table('tb_mas_classlist_student',null,null,array('intStudentID'=>$post['intStudentID'],'intClassListID'=>$post['intClassListID']));
         
-        $active_sem = $this->data_fetcher->get_active_sem();
+        $active_sem = $this->data_fetcher->get_sem_by_id($post['activeSem']);
         
         $enlisted = $this->data_fetcher->checkStudentSubject($active_sem['intID'],$classlist['intSubjectID'],$post['intStudentID']);
        
