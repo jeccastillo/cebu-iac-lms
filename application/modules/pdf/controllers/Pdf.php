@@ -2234,7 +2234,7 @@ class Pdf extends CI_Controller {
         
         $reservationPayment = $this->db->get_where('payment_details',array('student_number'=> $request['slug'],'description' => 'Reservation Payment', 'payment_details.sy_reference' => $request['sem'], 'payment_details.status' => 'Paid'))->first_row('array');
         
-        if($reservationPayment){
+        if($reservationPayment && $request['description'] == "Tuition Fee"){
             $reservationAmount = $reservationPayment['subtotal_order'];
             if($reservationPayment['invoice_number'])
             $reservationDescription = 'Inv ' . $reservationPayment['invoice_number'] . ' - ';
