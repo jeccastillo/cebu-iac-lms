@@ -62,7 +62,7 @@ new Vue({
             axios.get(api_url + 'admissions/previous-schools')
             .then((data) => {       
                 // console.log(data);           
-                this.schools = data.data;                       
+                this.schools = data.dat.data;                       
             })
             .catch((error) => {
                 console.log(error);
