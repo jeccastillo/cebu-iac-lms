@@ -1769,7 +1769,7 @@ new Vue({
         },
         numberWithCommas: function(x) {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
+        },
         setInvoice() {
             this.request.invoice_number = this.cashier.invoice_current
             this.request.or_number = ''
