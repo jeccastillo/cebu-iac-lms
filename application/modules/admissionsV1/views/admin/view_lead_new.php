@@ -1503,8 +1503,7 @@
                                 v-model="request.mobile_number"
                                 @blur="updateField('mobile_number',$event)"
                                 :disabled="true" />
-                            <button
-                                v-if="request.status !=  'Game Changer' && request.status !=  'For Enrollment'"
+                            <button                                
                                 class="btn btn-primary text-right"
                                 @click="onEdit">Edit</button>
                         </div>
@@ -1518,8 +1517,7 @@
                                 v-model="request.email"
                                 @blur="updateField('email',$event)"
                                 :disabled="true" />
-                            <button
-                                v-if="request.status !=  'Game Changer' && request.status !=  'For Enrollment'"
+                            <button                                
                                 class="btn btn-primary text-right"
                                 @click="onEdit">Edit</button>
                         </div>
