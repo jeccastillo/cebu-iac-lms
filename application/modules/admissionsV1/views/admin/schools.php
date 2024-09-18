@@ -60,9 +60,9 @@ new Vue({
             //this.loader_spinner = true;
             
             axios.get(api_url + 'admissions/previous-schools')
-            .then((data) => {       
-                console.log(data);           
-                this.schools = data.data;                       
+            .then((data) => {                          
+                this.schools = data.data;    
+                console.log(this.schools);
             })
             .catch((error) => {
                 console.log(error);
