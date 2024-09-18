@@ -252,6 +252,16 @@ class AdmissionsV1 extends CI_Controller {
         echo json_encode($data);
     }
     
+    public function schools(){
+        
+        $this->data['page'] = "schools";
+        $this->data['opentree'] = "leads";
+                           
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/schools",$this->data);
+        $this->load->view("common/footer",$this->data); 
+    }
+
     public function awareness_stats($term = 0){
         if($term == 0)
                 $term = $this->data_fetcher->get_processing_sem();        
