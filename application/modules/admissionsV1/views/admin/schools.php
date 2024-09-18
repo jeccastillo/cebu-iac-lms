@@ -8,7 +8,7 @@
                     data-toggle="modal"                
                     data-target="#addSchool"
                 >
-                    <i class="ion ion-arrow-left-a"></i>
+                    <i class="fa fa-plus"></i>
                     Add School
                 </a> 
             </small>                       

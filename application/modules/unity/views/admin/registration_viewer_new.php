@@ -110,7 +110,7 @@
                                 Enrolled
                             </div>
                         </div>
-                        <div v-if="registration && user.special_role >= 1"
+                        <div v-if="registration && cashier"
                             style="margin-right:1rem;"
                             class="pull-right">
                             Has DP
