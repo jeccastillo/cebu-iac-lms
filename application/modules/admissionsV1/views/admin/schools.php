@@ -16,7 +16,7 @@
         <div class="row">
             <div class="col-md-6">
                 <h4>Schools</h4>
-                <table v-if="schools.count > 0" class="table table-bordered table-striped">
+                <table v-if="schools.length > 0" class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -64,8 +64,7 @@ new Vue({
             
             axios.get(api_url + 'admissions/previous-schools')
             .then((data) => {                          
-                this.schools = data.data;    
-                console.log(this.schools.count);                
+                this.schools = data.data;                                   
             })
             .catch((error) => {
                 console.log(error);
