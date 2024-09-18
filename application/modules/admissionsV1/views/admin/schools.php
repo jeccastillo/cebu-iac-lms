@@ -3,9 +3,13 @@
         <h1>
             Admissions Report - Awareness
             <small>
-                <a class="btn btn-app" href="<?php echo base_url(); ?>admissionsV1/view_all_leads" >
+                <a class="btn btn-app" 
+                    href="#"
+                    data-toggle="modal"                
+                    data-target="#addSchool"
+                >
                     <i class="ion ion-arrow-left-a"></i>
-                    View Schools
+                    Add School
                 </a> 
             </small>                       
             
@@ -47,6 +51,65 @@
             </div>
         </div>
     </div>
+    <div class="modal fade"
+        id="addSchool"
+        role="dialog">
+        <form class="modal-dialog modal-lg"
+            @submit.prevent="addNewSchool">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <button type="button"
+                        class="close"
+                        data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add School</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>School Name</label>
+                        <input type="text"
+                            name="school_name"
+                            class="form-control"
+                            required
+                            required
+                            placeholder="School Name">
+                    </div>
+                    <div class="form-group">
+                        <label>City</label>
+                        <input type="text"
+                            name="school_city"
+                            class="form-control"
+                            required
+                            placeholder="City">
+                    </div>
+                    <div class="form-group">
+                        <label>State/Province</label>
+                        <input type="text"
+                            name="school_province"
+                            class="form-control"
+                            required
+                            placeholder="State/Province">
+                    </div>
+                    <div class="form-group">
+                        <label>Country</label>
+                        <input type="text"
+                            name="school_country"
+                            class="form-control"
+                            required
+                            placeholder="Country">
+                    </div>
+                </div>
+                <div class=" modal-footer">
+                    <button type="submit"
+                        class="btn btn-primary">Submit</button>
+                    <button type="button"
+                        class="btn btn-default"
+                        data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
   
 </aside>
 
@@ -86,35 +149,44 @@ new Vue({
     },
 
     methods: {      
-       
+        async addNewSchool(e) {
+            let formData = new FormData(e.target);
+            const payload = Object.assign(Object.fromEntries(formData.entries()))
+
+            const {
+                data
+            } = await axios
+                .post(`${api_url}admissions/student-info/new-school`, payload, {
+                    headers: {
+                        Authorization: `Bearer ${window.token}`
+                    }
+                })
+            if (data.success) {
+                Swal.fire({
+                    showCancelButton: false,
+                    showCloseButton: true,
+                    allowEscapeKey: false,
+                    title: 'Successfully Added New School',
+                    text: 'Field Updated',
+                    icon: 'success',
+                });
+                e.target.reset()
+                this.getAllPrevSchool()
+                $('#addSchool').modal('hide')
+            } else {
+                Swal.fire({
+                    showCancelButton: false,
+                    showCloseButton: true,
+                    allowEscapeKey: false,
+                    title: `${data.message}`,
+                    text: 'Error',
+                    icon: 'error',
+                });
+            }
+        },
                                        
     }
 
 })
-
-$(document).ready(function(){
-    $('#daterange-btn-admissions').daterangepicker(
-    {
-        ranges: {
-            'Today': [moment(), moment()],
-            'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-            'Last 7 Days': [moment().subtract('days', 6), moment()],
-            'This Month': [moment().startOf('month'), moment().endOf('month')],
-            'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month',1).endOf('month')]
-        },
-        startDate: moment().subtract('days', 29),
-        endDate: moment()
-    },
-    function(start, end) {
-        document.location = base_url + 'admissionsV1/admissions_report/<?php echo $current_sem; ?>/'+start.format('YYYY-MM-DD')+'/'+end.add('days', 1).format('YYYY-MM-DD');
-        
-    }
-    );
-    
-    $("#select-term-leads").on('change', function(e){
-        const term = $(this).val();
-        document.location = "<?php echo base_url()."admissionsV1/awareness_stats/"; ?>"+term;
-    });
-});
 </script>
 
