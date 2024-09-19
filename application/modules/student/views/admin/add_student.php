@@ -11,7 +11,7 @@
                 </section>
 <div class="content">
     <div class="span10 box box-primary">
-    <form action="<?php echo base_url(); ?>excel/import_student_data" method="post" role="form" enctype="multipart/form-data">   
+        <form action="<?php echo base_url(); ?>excel/import_student_data" method="post" role="form" enctype="multipart/form-data">   
             <div class="box-body">
                 <div class="row">
                     <div class="form-group col-xs-4">
