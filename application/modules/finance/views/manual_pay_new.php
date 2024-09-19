@@ -512,13 +512,19 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label>Invoice Number <span class="text-danger">*</span> </label>
-                            <template v-if="invoiceNumbers.length !== 0">
-                                <select v-model="invoice_update.invoice_number" class="form-control">                           
-                                    <option v-for="invoice in invoiceNumbers" :value="invoice.invoice_number">
-                                        {{invoice.invoice_number}}
-                                    </option>                    
-                                </select>
+                            <label>Invoice Number <span class="text-danger">*</span> </label>                            
+                            <div
+                                v-if="user.special_role == 2 || cashier.temporary_admin ==  1">
+                                <input type="number"
+                                    class="form-control"
+                                    v-model="invoice_update.invoice_number" />
+                            </div>
+                            <div v-else>
+                                <div>{{ request.invoice_number }}</div>
+                                <input type="hidden"
+                                    class="form-control"
+                                    v-model="invoice_update.invoice_number" />
+                            </div>                                
                             </template>         
                             <template v-if="invoiceNumbers.length === 0">
                                 <p>{{invoice_update.invoice_number}}</p>                 
@@ -761,7 +767,7 @@ new Vue({
                             this.request.cashier_id = this.cashier.user_id;
                             this.or_update.cashier_id = this.cashier.user_id;
                             this.invoice_update.cashier_id = this.cashier.user_id;
-                            // this.request.invoice_number = this.cashier.invoice_current
+                            this.request.invoice_number = this.cashier.invoice_current
                         }
                     })
                     .catch((error) => {
