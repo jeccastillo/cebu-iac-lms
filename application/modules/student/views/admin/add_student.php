@@ -11,6 +11,31 @@
                 </section>
 <div class="content">
     <div class="span10 box box-primary">
+    <form action="<?php echo base_url(); ?>excel/import_student_data" method="post" role="form" enctype="multipart/form-data">   
+            <div class="box-body">
+                <div class="row">
+                    <div class="form-group col-xs-4">
+                        <label for="student_level">Student Level</label>
+                        <select class="form-control select2" name="student_level" >
+                            <option value="college">College</option>
+                            <option value="shs">Shs</option>
+                            <option value="other">Other</option>
+                            <option value="drive">Drive</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-xs-4">
+                        <input type="file" name="studentDataExcel" size="20" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-xs-4">
+                        <input type="submit" value="Import" class="btn btn-lg btn-default  btn-flat">
+                    </div>
+                </div>
+            </div>
+        </form>
         <div class="box-header">
                 <h3 class="box-title">New Student</h3>
         </div>
