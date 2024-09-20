@@ -1106,6 +1106,46 @@ new Vue({
                 },
             });
         },
+        updateORDetails: function() {
+            let url = api_url + 'finance/update_or_details';
+            let slug = this.slug;
+            this.loader_spinner = true;
+
+            Swal.fire({
+                title: 'Continue with the update',
+                text: "Are you sure you want to update the payment details?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    return axios.post(url, this.or_details, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                        .then(data => {
+                            this.loader_spinner = false;
+                            if (data.data.success) {
+
+                                this.loader_spinner = false;
+                                Swal.fire({
+                                    title: "Success",
+                                    text: "Update Success",
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });
+
+                            }
+                        });
+
+                },
+            });
+        },
         updateOR: function() {
             let url = api_url + 'finance/update_or';
 
