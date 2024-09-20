@@ -7376,7 +7376,7 @@ class Excel extends CI_Controller {
         $post = $this->input->post();
         $students = $post['data'];
 
-        print_r($post);
+        print_r($students);
 
         foreach($students as $index => $student){
             $tuitionYear = $studentProgramId = '';
