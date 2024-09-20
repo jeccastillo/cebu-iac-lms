@@ -174,6 +174,7 @@ new Vue({
         async importStudent() {
             const formData = new FormData()
 
+            this.activeSem =  "<?php echo $active_sem['intID']; ?>";
             if($("#studentLevel").val() == 'shs'){
                 this.activeSem =  "<?php echo $active_sem_shs['intID']; ?>";
             }
