@@ -7452,13 +7452,10 @@ class Excel extends CI_Controller {
 
             //Check if student exists
             $checkExists = $this->db->get_where('tb_mas_users',array('strStudentNumber' => $studentNumber))->first_row('array');
-            
-            print_r($checkExists);
-            print('@@@');
 
             // Insert into the database
             if(!$checkExists){
-                print_r($data);
+                print_r('123@@@');
                 $this->data_poster->post_data('tb_mas_users',$data);
                 $active_sem = $this->data_fetcher->get_active_sem();
 
