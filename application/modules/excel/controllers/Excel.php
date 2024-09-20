@@ -7483,9 +7483,9 @@ class Excel extends CI_Controller {
                     $this->data_poster->post_data('tb_mas_registration', $regData);
                 }
             }
+            $data['message'] = "success";
+            $data['success'] = true;        
         }
-        $data['message'] = "success";
-        $data['success'] = true;        
     }
 
 
