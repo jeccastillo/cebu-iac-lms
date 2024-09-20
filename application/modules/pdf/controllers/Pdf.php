@@ -2259,10 +2259,10 @@ class Pdf extends CI_Controller {
 
             if($reg['paymentType'] == 'partial'){
                 $fullAssessment += $tuition['total_installment'];
-                $totalAssessment = $tuition['total_installment'] - $reservationAmount;
+                $totalAssessment = $fullAssessment - $reservationAmount;
             }else{
                 $fullAssessment += $tuition['total'];
-                $totalAssessment = $tuition['total'] - $reservationAmount;
+                $totalAssessment = $fullAssessment - $reservationAmount;
             }
         }else{
             $fullAssessment = $request['total_amount_due'];
