@@ -189,6 +189,16 @@ new Vue({
                 })
 
             if (data.success) {
+                $.ajax({
+                    'url':'<?php echo base_url(); ?>excel/import_student_data',
+                    'method':'post',
+                    'data':{
+                        'data':data.data,
+                        'student_level': this.studentLevel
+                    },
+                    'dataType':'json'
+                });
+                
                 Swal.fire({
                     showCancelButton: false,
                     showCloseButton: true,
@@ -197,6 +207,7 @@ new Vue({
                     text: 'Field Updated',
                     icon: 'success',
                 });
+                
             } else {
                 Swal.fire({
                     showCancelButton: false,
