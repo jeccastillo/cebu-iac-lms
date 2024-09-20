@@ -524,15 +524,21 @@
                                 <input type="hidden"
                                     class="form-control"
                                     v-model="invoice_update.invoice_number" />
-                            </div>                                
-                            </template>         
-                            <template v-if="invoiceNumbers.length === 0">
+                            </div>        
+                            <label>Cashier ID <span class="text-danger">*</span> </label>                            
+                            <div
+                                v-if="user.special_role == 2 || cashier.temporary_admin ==  1">
+                                <input type="number"
+                                    class="form-control"
+                                    v-model="invoice_update.cashier_id" />
+                            </div>                                                   
+                            <!-- <template v-if="invoiceNumbers.length === 0">
                                 <p>{{invoice_update.invoice_number}}</p>                 
                                 <input  type="hidden"
                                     class="form-control"
                                     v-model="invoice_update.invoice_number"
                                     required />
-                            </template>  
+                            </template>   -->
                             
                         </div>
                     </div>
