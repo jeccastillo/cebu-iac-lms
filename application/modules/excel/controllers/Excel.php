@@ -7376,9 +7376,9 @@ class Excel extends CI_Controller {
         $post = $this->input->post();
         $students = $post['data'];
 
-        print_r($students);
-
         foreach($students as $index => $student){
+            print_r($student);
+            print('_____');
             $tuitionYear = $studentProgramId = '';
             $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
     
@@ -7453,11 +7453,14 @@ class Excel extends CI_Controller {
             //Check if student exists
             $checkExists = $this->db->get_where('tb_mas_users',array('strStudentNumber' => $studentNumber))->first_row('array');
             
+            print_r($checkExists);
+            print('@@@');
+
             // Insert into the database
             if(!$checkExists){
+                print_r($data);
                 $this->data_poster->post_data('tb_mas_users',$data);
                 $active_sem = $this->data_fetcher->get_active_sem();
-
 
                 $newStudentInformation = $this->db->get_where('tb_mas_users',array('slug'=> $student['slug']))->first_row('array');
                 $regData = array(
