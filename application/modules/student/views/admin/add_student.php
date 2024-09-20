@@ -24,7 +24,7 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-xs-4">
-                            <input @change="attachFile" type="file" name="student_data_excel" size="20" />
+                            <input @change="attachFile" type="file" name="student_data_excel" id="student_data_excel" size="20" />
                         </div>
                     </div>
                     <div class="row">
@@ -205,7 +205,7 @@ new Vue({
                     text: 'Field Updated',
                     icon: 'success',
                 });
-                
+                $("#student_data_excel").val('');
             } else {
                 Swal.fire({
                     showCancelButton: false,
