@@ -176,6 +176,7 @@ new Vue({
 
             formData.append('student_data_excel', this.attachment)
             formData.append('student_level', this.studentLevel)
+            formData.append('campus', "<?php echo $campus ?>")
 
             const {
                 data
