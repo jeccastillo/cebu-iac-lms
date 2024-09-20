@@ -80,6 +80,8 @@ class Student extends CI_Controller {
             
             $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
             $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
+            $this->data['active_sem_shs'] = $this->data_fetcher->get_active_sem_shs();
+            
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/add_student",$this->data);
             $this->load->view("common/footer",$this->data); 
