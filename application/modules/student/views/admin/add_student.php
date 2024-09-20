@@ -174,6 +174,10 @@ new Vue({
         async importStudent() {
             const formData = new FormData()
 
+            if(this.studentLevel == 'shs'){
+                this.activeSem =  "<?php echo $active_sem_shs['intID']; ?>";
+            }
+
             formData.append('student_data_excel', this.attachment)
             formData.append('student_level', this.studentLevel)
             formData.append('campus', this.campus)
