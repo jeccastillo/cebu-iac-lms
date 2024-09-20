@@ -793,6 +793,12 @@
                                                     Print Invoice
                                                 </button>
                                                 <button
+                                                    v-if="payment.invoice_number && cashier"
+                                                    @click="printInvoice(payment,1)"
+                                                    class="btn btn-primary">
+                                                    Print Invoice A
+                                                </button>
+                                                <button
                                                     v-if="payment.mode && payment.status == 'Paid' && payment.remarks != 'Voided' && cashier && finance_manager_privilages"
                                                     data-toggle="modal"
                                                     data-target="#voidPaymentModal"
@@ -973,7 +979,7 @@
     </form>    
     <form ref="print_invoice"
         method="post"
-        :action="base_url + 'pdf/print_invoice'"
+        :action="base_url + 'pdf/print_invoice/' + assessment "
         target="_blank">
         <input type="hidden"
             name="student_name"
@@ -1258,6 +1264,7 @@ new Vue({
         base_url: '<?php echo base_url(); ?>',
         selected_items: [],
         ready: false,
+        assessment: 0,
         applicant_data: {
             reserve_enroll: 0,
         },
@@ -2236,7 +2243,7 @@ new Vue({
 
             });
         },
-        printInvoice: function(payment) {
+        printInvoice: function(payment, assessment = 0) {
             Swal.fire({
                 title: 'Continue with Printing Invoice',
                 text: "Are you sure you want to continue? You can only print the Invoice once",
@@ -2267,6 +2274,7 @@ new Vue({
                     this.or_print.check_number = payment.check_number;
                     this.or_print.sem = payment.sy_reference;
                     this.or_print.cashier_id = payment.cashier_id;
+                    this.assessment = assessment;
                 }
             }).then((result) => {
                 var delayInMilliseconds = 1000; //1 second
