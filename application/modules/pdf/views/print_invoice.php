@@ -128,9 +128,11 @@ table tr td {
             <div style="position:absolute; top:  460px; left: 10px; width: 200px; height: 20px;">
                 <?php  echo $remarks; ?>
             </div>
-            <div style="position:absolute; top:  485px; left: 300px; width: 200px; height: 20px;">
+            <!--Vat Exempt Sale-->
+            <div style="position:absolute; top:  485px; left: 310px; width: 200px; height: 20px;">
                 <?php  echo $total_assessment; ?>
             </div>
+            <!--Total Amount received-->
             <div style="position:absolute; top:  565px; left: 50px; width: 200px; height: 20px;">
                 <?php  echo $total_amount_due; ?>
             </div>
