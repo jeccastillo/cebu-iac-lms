@@ -7374,117 +7374,120 @@ class Excel extends CI_Controller {
     public function import_student_data()
     {
         $post = $this->input->post();
-        $students = $post['data'];
+        
+        if(isset($post['data'])){
+            foreach($post['data'] as $index => $student){
+                $tuitionYear = $studentProgramId = '';
+                $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
+        
+                if($post['student_level'] == 'college'){
+                    $getTuitionYear = $this->db->get_where('tb_mas_tuition_year',array('isDefault'=> 1))->first_row('array');
+                    $tuitionYear = $getTuitionYear ? $getTuitionYear['intID'] : '';
+                }else if($post['student_level'] == 'shs'){
+                    $getTuitionYear = $this->db->get_where('tb_mas_tuition_year',array('isDefaultShs'=> 1))->first_row('array');
+                    $tuitionYear = $getTuitionYear ? $getTuitionYear['intID'] : '';
+                }
 
-        foreach($students as $index => $student){
-            $tuitionYear = $studentProgramId = '';
-            $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
-    
-            if($post['student_level'] == 'college'){
-                $getTuitionYear = $this->db->get_where('tb_mas_tuition_year',array('isDefault'=> 1))->first_row('array');
-                $tuitionYear = $getTuitionYear ? $getTuitionYear['intID'] : '';
-            }else if($post['student_level'] == 'shs'){
-                $getTuitionYear = $this->db->get_where('tb_mas_tuition_year',array('isDefaultShs'=> 1))->first_row('array');
-                $tuitionYear = $getTuitionYear ? $getTuitionYear['intID'] : '';
-            }
-            
-            $getCurriculum = $this->db->get_where('tb_mas_curriculum',array('strName'=> $student['curriculum']))->first_row('array');
+                $getCurriculum = $this->db->get_where('tb_mas_curriculum',array('strName'=>$student['curriculum']))->first_row();
 
-            $studentNumber = $student['student_number'];
-            $studentProgram = $student['program_code'];
+                $studentNumber = $student['student_number'];
+                $studentProgram = $student['program_code'];
 
-            foreach($programs as $program){
-                if($studentProgram == $program['strProgramCode']){
-                    $studentProgramId = $program['intProgramID'];
-                    break;
+                foreach($programs as $program){
+                    if($studentProgram == $program['strProgramCode']){
+                        $studentProgramId = $program['intProgramID'];
+                        break;
+                    }
+                }
+
+                $checkExists = $this->db->get_where('tb_mas_users',array('strStudentNumber'=>$studentNumber))->first_row();
+                
+                // Insert into the database
+                if(!$checkExists){
+                    $data = array(
+                        'level' => $post['student_level'],
+                        'slug' => $student['slug'],
+                        'strStudentNumber' => $studentNumber,
+                        'strLastname' => $student['last_name'],
+                        'strFirstname' => $student['first_name'],
+                        'strMiddlename' => $student['middle_name'],
+                        'intProgramID' => $studentProgramId,
+                        'intStudentYear' => $student['student_year'],
+                        'blockSection' => $student['block_section'],
+                        'intCurriculumID' => $getCurriculum ? $getCurriculum['intID'] : '',
+                        'dteBirthDate' => date("Y-m-d",strtotime($student['date_of_birth'])),
+                        'place_of_birth' => $student['place_of_birth'],
+                        'enumGender' => $student['gender'],
+                        // 'strCivilStatus' => $student['M'],
+                        // 'strCitizenship' => $student['N'],
+                        // 'strReligion' => $student['O'],
+                        'strTelNumber' => $student['tel_number'],
+                        'strMobileNumber' => $student['mobile_number'],
+                        'strEmail' => $student['email'],
+                        'father' => $student['father_name'],
+                        // 'father_occupation' => $student['U'],
+                        'father_contact' => $student['father_contact'],
+                        'father_email' => $student['father_email'],
+                        'mother' => $student['mother_name'],
+                        // 'mother_occupation' => $student['Z'],
+                        'mother_contact' => $student['mother_contact'],
+                        'mother_email' => $student['mother_email'],
+                        'guardian' => $student['guardian_name'],
+                        // 'relationship' => $student['AE'],
+                        'guardian_contact' => $student['guardian_contact'],
+                        'guardian_email' => $student['guardian_email'],
+                        'intTuitionYear' => $tuitionYear,
+                        
+                        'high_school' => $student['high_school'],
+                        'high_school_address' => $student['high_school_address'],
+                        'high_school_attended' => $student['high_school_attended'],
+                        'senior_high' => $student['senior_high'],
+                        'senior_high_address' => $student['senior_high_address'],
+                        'senior_high_attended' => $student['senior_high_attended'],
+                        
+                        // 'college' => $row['AS'],
+                        // 'college_address' => $row['AT'],
+                        // 'college_attended_from' => $row['AU'],
+                        // 'college_attended_to' => $row['AV'],
+                        'strLRN' => $student['lrn'],
+                    );
+
+                //Check if student exists
+                // print_r($checkExists);
+               
+                    $this->data_poster->post_data('tb_mas_users',$data);
+                    $active_sem = $this->data_fetcher->get_active_sem();
+
+                    $newStudentInformation = $this->db->get_where('tb_mas_users',array('slug'=> $student['slug']))->first_row('array');
+                    $regData = array(
+                        'intStudentID' => $newStudentInformation['intID'],
+                        'enlisted_by' => 1186,
+                        'dteRegistered' => date("Y-m-d",strtotime($student['date_enrolled'])),
+                        'date_enlisted' => date("Y-m-d",strtotime($student['date_enrolled'])),
+                        'intAYID' => $active_sem['intID'],
+                        'enumRegistrationStatus' => 'regular',
+                        'enumStudentType' => strtolower($student['enrollment_status']),
+                        'intYearLevel' => $student['student_year'],
+                        'intROG' => 1,
+                        'enumScholarship' => 0,
+                        'paymentType' => $student['mode_of_payment'] == 'FULL PAYMENT' ? 'full' : 'partial',
+                        'paymentStatus' => 'pending payment',
+                        'downpayment' => 0,
+                        'type_of_class' => 'regular',
+                        // 'current_program' => 'regular',
+                        'current_curriculum' => $getCurriculum ? $getCurriculum['intID'] : '',
+                        'tuition_year' => $tuitionYear,
+                        'late_enrollment' => '0',
+
+                    );
+                    $this->data_poster->post_data('tb_mas_registration', $regData);
                 }
             }
-
-            $data = array(
-                'level' => $post['student_level'],
-                'slug' => $student['slug'],
-                'strStudentNumber' => $studentNumber,
-                'strLastname' => $student['last_name'],
-                'strFirstname' => $student['first_name'],
-                'strMiddlename' => $student['middle_name'],
-                'intProgramID' => $studentProgramId,
-                'intStudentYear' => $student['student_year'],
-                'blockSection' => $student['block_section'],
-                'intCurriculumID' => $getCurriculum ? $getCurriculum['intID'] : '',
-                'dteBirthDate' => date("Y-m-d",strtotime($student['date_of_birth'])),
-                'place_of_birth' => $student['place_of_birth'],
-                'enumGender' => $student['gender'],
-                // 'strCivilStatus' => $student['M'],
-                // 'strCitizenship' => $student['N'],
-                // 'strReligion' => $student['O'],
-                'strTelNumber' => $student['tel_number'],
-                'strMobileNumber' => $student['mobile_number'],
-                'strEmail' => $student['email'],
-                'father' => $student['father_name'],
-                // 'father_occupation' => $student['U'],
-                'father_contact' => $student['father_contact'],
-                'father_email' => $student['father_email'],
-                'mother' => $student['mother_name'],
-                // 'mother_occupation' => $student['Z'],
-                'mother_contact' => $student['mother_contact'],
-                'mother_email' => $student['mother_email'],
-                'guardian' => $student['guardian_name'],
-                // 'relationship' => $student['AE'],
-                'guardian_contact' => $student['guardian_contact'],
-                'guardian_email' => $student['guardian_email'],
-                'intTuitionYear' => $tuitionYear,
-                
-                'high_school' => $student['high_school'],
-                'high_school_address' => $student['high_school_address'],
-                'high_school_attended' => $student['high_school_attended'],
-                'senior_high' => $student['senior_high'],
-                'senior_high_address' => $student['senior_high_address'],
-                'senior_high_attended' => $student['senior_high_attended'],
-                
-                // 'college' => $row['AS'],
-                // 'college_address' => $row['AT'],
-                // 'college_attended_from' => $row['AU'],
-                // 'college_attended_to' => $row['AV'],
-                'strLRN' => $row['lrn'],
-            );
-
-            //Check if student exists
-            $checkExists = $this->db->get_where('tb_mas_users',array('strStudentNumber' => $studentNumber))->first_row('array');
-            
-            // Insert into the database
-            if(!$checkExists){
-                $this->data_poster->post_data('tb_mas_users',$data);
-                $active_sem = $this->data_fetcher->get_active_sem();
-
-
-                $newStudentInformation = $this->db->get_where('tb_mas_users',array('slug'=> $student['slug']))->first_row('array');
-                $regData = array(
-                    'intStudentID' => $newStudentInformation['intID'],
-                    'enlisted_by' => 1186,
-                    'dteRegistered' => date("Y-m-d",strtotime($student['date_enrolled'])),
-                    'date_enlisted' => date("Y-m-d",strtotime($student['date_enrolled'])),
-                    'intAYID' => $active_sem['intID'],
-                    'enumRegistrationStatus' => 'regular',
-                    'enumStudentType' => strtolower($student['enrollment_status']),
-                    'intYearLevel' => $student['student_year'],
-                    'intROG' => 1,
-                    'enumScholarship' => 0,
-                    'paymentType' => $student['mode_of_payment'] == 'FULL PAYMENT' ? 'full' : 'partial',
-                    'paymentStatus' => 'pending payment',
-                    'downpayment' => 0,
-                    'type_of_class' => 'regular',
-                    // 'current_program' => 'regular',
-                    'current_curriculum' => $getCurriculum ? $getCurriculum['intID'] : '',
-                    'tuition_year' => $tuitionYear,
-                    'late_enrollment' => '0',
-
-                );
-                $this->data_poster->post_data('tb_mas_registration', $regData);
-            }
+            $data['message'] = "success";
+            $data['success'] = true;        
         }
-        $data['message'] = "success";
-        $data['success'] = true;        
     }
+
 
     private function generateRandomString($length) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
