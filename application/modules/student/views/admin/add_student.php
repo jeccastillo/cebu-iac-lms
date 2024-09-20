@@ -31,7 +31,7 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-xs-4">
-                            <button type="submit" class="btn btn-lg btn-default  btn-flat">Imports</button>
+                            <button type="submit" class="btn btn-lg btn-default  btn-flat">Import</button>
                         </div>
                     </div>
                 </div>
