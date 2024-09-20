@@ -26,7 +26,7 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-xs-4">
-                            <input @change="attachFile" type="file" name="studentDataExcel" size="20" />
+                            <input @change="attachFile" type="file" name="student_data_excel" size="20" />
                         </div>
                     </div>
                     <div class="row">
