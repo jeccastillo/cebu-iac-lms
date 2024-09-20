@@ -7400,61 +7400,61 @@ class Excel extends CI_Controller {
                     }
                 }
 
-                $data = array(
-                    'level' => $post['student_level'],
-                    'slug' => $student['slug'],
-                    'strStudentNumber' => $studentNumber,
-                    'strLastname' => $student['last_name'],
-                    'strFirstname' => $student['first_name'],
-                    'strMiddlename' => $student['middle_name'],
-                    'intProgramID' => $studentProgramId,
-                    'intStudentYear' => $student['student_year'],
-                    'blockSection' => $student['block_section'],
-                    'intCurriculumID' => $getCurriculum ? $getCurriculum['intID'] : '',
-                    'dteBirthDate' => date("Y-m-d",strtotime($student['date_of_birth'])),
-                    'place_of_birth' => $student['place_of_birth'],
-                    'enumGender' => $student['gender'],
-                    // 'strCivilStatus' => $student['M'],
-                    // 'strCitizenship' => $student['N'],
-                    // 'strReligion' => $student['O'],
-                    'strTelNumber' => $student['tel_number'],
-                    'strMobileNumber' => $student['mobile_number'],
-                    'strEmail' => $student['email'],
-                    'father' => $student['father_name'],
-                    // 'father_occupation' => $student['U'],
-                    'father_contact' => $student['father_contact'],
-                    'father_email' => $student['father_email'],
-                    'mother' => $student['mother_name'],
-                    // 'mother_occupation' => $student['Z'],
-                    'mother_contact' => $student['mother_contact'],
-                    'mother_email' => $student['mother_email'],
-                    'guardian' => $student['guardian_name'],
-                    // 'relationship' => $student['AE'],
-                    'guardian_contact' => $student['guardian_contact'],
-                    'guardian_email' => $student['guardian_email'],
-                    'intTuitionYear' => $tuitionYear,
-                    
-                    'high_school' => $student['high_school'],
-                    'high_school_address' => $student['high_school_address'],
-                    'high_school_attended' => $student['high_school_attended'],
-                    'senior_high' => $student['senior_high'],
-                    'senior_high_address' => $student['senior_high_address'],
-                    'senior_high_attended' => $student['senior_high_attended'],
-                    
-                    // 'college' => $row['AS'],
-                    // 'college_address' => $row['AT'],
-                    // 'college_attended_from' => $row['AU'],
-                    // 'college_attended_to' => $row['AV'],
-                    'strLRN' => $student['lrn'],
-                );
-
-                //Check if student exists
                 $checkExists = $this->db->get_where('tb_mas_users',array('strStudentNumber'=>$studentNumber))->first_row();
-                print_r($checkExists);
-               
+                
                 // Insert into the database
                 if(!$checkExists){
-                    print('123@@@');
+                    $data = array(
+                        'level' => $post['student_level'],
+                        'slug' => $student['slug'],
+                        'strStudentNumber' => $studentNumber,
+                        'strLastname' => $student['last_name'],
+                        'strFirstname' => $student['first_name'],
+                        'strMiddlename' => $student['middle_name'],
+                        'intProgramID' => $studentProgramId,
+                        'intStudentYear' => $student['student_year'],
+                        'blockSection' => $student['block_section'],
+                        'intCurriculumID' => $getCurriculum ? $getCurriculum['intID'] : '',
+                        'dteBirthDate' => date("Y-m-d",strtotime($student['date_of_birth'])),
+                        'place_of_birth' => $student['place_of_birth'],
+                        'enumGender' => $student['gender'],
+                        // 'strCivilStatus' => $student['M'],
+                        // 'strCitizenship' => $student['N'],
+                        // 'strReligion' => $student['O'],
+                        'strTelNumber' => $student['tel_number'],
+                        'strMobileNumber' => $student['mobile_number'],
+                        'strEmail' => $student['email'],
+                        'father' => $student['father_name'],
+                        // 'father_occupation' => $student['U'],
+                        'father_contact' => $student['father_contact'],
+                        'father_email' => $student['father_email'],
+                        'mother' => $student['mother_name'],
+                        // 'mother_occupation' => $student['Z'],
+                        'mother_contact' => $student['mother_contact'],
+                        'mother_email' => $student['mother_email'],
+                        'guardian' => $student['guardian_name'],
+                        // 'relationship' => $student['AE'],
+                        'guardian_contact' => $student['guardian_contact'],
+                        'guardian_email' => $student['guardian_email'],
+                        'intTuitionYear' => $tuitionYear,
+                        
+                        'high_school' => $student['high_school'],
+                        'high_school_address' => $student['high_school_address'],
+                        'high_school_attended' => $student['high_school_attended'],
+                        'senior_high' => $student['senior_high'],
+                        'senior_high_address' => $student['senior_high_address'],
+                        'senior_high_attended' => $student['senior_high_attended'],
+                        
+                        // 'college' => $row['AS'],
+                        // 'college_address' => $row['AT'],
+                        // 'college_attended_from' => $row['AU'],
+                        // 'college_attended_to' => $row['AV'],
+                        'strLRN' => $student['lrn'],
+                    );
+
+                //Check if student exists
+                // print_r($checkExists);
+               
                     $this->data_poster->post_data('tb_mas_users',$data);
                     $active_sem = $this->data_fetcher->get_active_sem();
 
