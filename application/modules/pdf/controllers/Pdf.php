@@ -2230,10 +2230,13 @@ class Pdf extends CI_Controller {
         }
         
         // $request['slug']
-        $reservationDescription = $fullAssessment = $totalAssessment = '';
+        $reservationDescription = $totalAssessment = '';
         $reservationAmount = 0;
+        $paidAmount = 0;
+        $fullAssessment = 0;
         
         $reservationPayments = $this->db->get_where('payment_details',array('student_number'=> $request['slug'],'description' => 'Reservation Payment', 'payment_details.sy_reference' => $request['sem'], 'payment_details.status' => 'Paid'))->result_array();
+        $tuitionPayments = $this->db->get_where('payment_details',array('student_number'=> $request['slug'],'description LIKE' => 'Tuition Fee%', 'payment_details.sy_reference' => $request['sem'], 'payment_details.status' => 'Paid'))->result_array();
         
         if(!empty($reservationPayments) && $request['description'] == "Tuition Fee"){            
             foreach($reservationPayments as $reservationPayment){
@@ -2247,13 +2250,18 @@ class Pdf extends CI_Controller {
             $reservationAmount = 0;
         }
 
-        
         if(isset($tuition) && $request['description'] == "Tuition Fee"){
+            
+            foreach($tuitionPayments as $tp)
+                $fullAssessment -= $tp['subtotal_order'];
+
+            $fullAssessment += $request['total_amount_due'];                
+
             if($reg['paymentType'] == 'partial'){
-                $fullAssessment = $tuition['total_installment'];
+                $fullAssessment += $tuition['total_installment'];
                 $totalAssessment = $tuition['total_installment'] - $reservationAmount;
             }else{
-                $fullAssessment = $tuition['total'];
+                $fullAssessment += $tuition['total'];
                 $totalAssessment = $tuition['total'] - $reservationAmount;
             }
         }else{
