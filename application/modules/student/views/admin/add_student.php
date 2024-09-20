@@ -165,7 +165,8 @@ new Vue({
     el: '#add-student',
     data: {
         studentLevel: 'college',
-        attachment: ''
+        attachment: '',
+        campus: "<?php echo $campus ?>"
     },
     methods: {
         attachFile($event) {
@@ -176,7 +177,7 @@ new Vue({
 
             formData.append('student_data_excel', this.attachment)
             formData.append('student_level', this.studentLevel)
-            formData.append('campus', "<?php echo $campus ?>")
+            formData.append('campus', this.campus)
 
             const {
                 data
