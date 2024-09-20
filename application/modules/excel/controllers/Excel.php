@@ -7387,8 +7387,8 @@ class Excel extends CI_Controller {
                     $getTuitionYear = $this->db->get_where('tb_mas_tuition_year',array('isDefaultShs'=> 1))->first_row('array');
                     $tuitionYear = $getTuitionYear ? $getTuitionYear['intID'] : '';
                 }
-                
-                $getCurriculum = $this->db->get_where('tb_mas_curriculum',array('strName'=> $student['curriculum']))->first_row('array');
+
+                $getCurriculum = $this->db->get_where('tb_mas_curriculum',array('strName'=>$student['curriculum']))->first_row();
 
                 $studentNumber = $student['student_number'];
                 $studentProgram = $student['program_code'];
