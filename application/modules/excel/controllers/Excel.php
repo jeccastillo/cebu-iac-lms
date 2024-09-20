@@ -7445,7 +7445,7 @@ class Excel extends CI_Controller {
                 // 'college_address' => $row['AT'],
                 // 'college_attended_from' => $row['AU'],
                 // 'college_attended_to' => $row['AV'],
-                'strLRN' => $row['lrn'],
+                'strLRN' => $student['lrn'],
             );
 
             //Check if student exists
