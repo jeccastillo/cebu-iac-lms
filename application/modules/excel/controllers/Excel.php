@@ -7377,7 +7377,7 @@ class Excel extends CI_Controller {
         $students = $post['data'];
 
         foreach($students as $index => $student){
-            $tuitionYear = '';
+            $tuitionYear = $studentProgramId = '';
             $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
     
             if($post['student_level'] == 'college'){
@@ -7389,10 +7389,7 @@ class Excel extends CI_Controller {
             }
             
             $getCurriculum = $this->db->get_where('tb_mas_curriculum',array('strName'=> $student['curriculum']))->first_row('array');
-    
-            $studentProgramId = '';
 
-            // format student number
             $studentNumber = $student['student_number'];
             $studentProgram = $student['program_code'];
 
@@ -7488,6 +7485,7 @@ class Excel extends CI_Controller {
         $data['message'] = "success";
         $data['success'] = true;        
     }
+
 
     // public function import_student_data()
     // {
