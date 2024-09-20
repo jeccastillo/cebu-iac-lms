@@ -73,7 +73,7 @@ table tr td {
                     &#10003;
                 </div>
             <?php else: ?>
-                <div style="position:absolute; top: 140px; left: 144px; width: 200px; height: 20px;font-size:1.4em;">
+                <div style="position:absolute; top: 140px; left: 142px; width: 200px; height: 20px;font-size:1.4em;">
                     &#10003;
                 </div>
             <?php endif; ?>
