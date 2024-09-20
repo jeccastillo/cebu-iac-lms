@@ -2234,6 +2234,7 @@ class Pdf extends CI_Controller {
         $reservationAmount = 0;
         $paidAmount = 0;
         $fullAssessment = 0;
+        $cashCharge = true;
         
         $reservationPayments = $this->db->get_where('payment_details',array('student_number'=> $request['slug'],'description' => 'Reservation Payment', 'payment_details.sy_reference' => $request['sem'], 'payment_details.status' => 'Paid'))->result_array();
         if($subtract_assesment)
@@ -2260,6 +2261,7 @@ class Pdf extends CI_Controller {
             }
 
             if($reg['paymentType'] == 'partial'){
+                $cashCharge = false;
                 $fullAssessment += $tuition['total_installment'];
                 $totalAssessment = $fullAssessment - $reservationAmount;
             }else{
@@ -2282,6 +2284,7 @@ class Pdf extends CI_Controller {
             
         }
         
+        $this->data['cashCharge'] = $cashCharge;
         $this->data['term'] = $term;
         $this->data['student_name'] = strtoupper($request['student_name']);        
         $this->data['cashier_name'] = strtoupper($cashier->strFirstname." ".$cashier->strLastname);        
