@@ -7377,8 +7377,6 @@ class Excel extends CI_Controller {
         // $students = isset($post['data']) ? $post['data'] : [];
         if(isset($post['data'])){
             foreach($post['data'] as $index => $student){
-                print_r($student);
-                print('_____');
                 $tuitionYear = $studentProgramId = '';
                 $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
         
@@ -7450,6 +7448,7 @@ class Excel extends CI_Controller {
                     'strLRN' => $student['lrn'],
                 );
 
+                print_r($data);
                 //Check if student exists
                 $checkExists = $this->db->get_where('tb_mas_users',array('strStudentNumber' => $studentNumber))->first_row('array');
 
