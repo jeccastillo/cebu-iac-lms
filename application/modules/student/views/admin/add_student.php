@@ -19,8 +19,6 @@
                             <select class="form-control select2" v-model="studentLevel">
                                 <option value="college">College</option>
                                 <option value="shs">Shs</option>
-                                <option value="other">Other</option>
-                                <option value="drive">Drive</option>
                             </select>
                         </div>
                     </div>
