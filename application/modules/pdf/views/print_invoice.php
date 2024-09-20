@@ -129,7 +129,7 @@ table tr td {
                 <?php  echo $remarks; ?>
             </div>
             <!--Vat Exempt Sale-->
-            <div style="position:absolute; top:  485px; left: 310px; width: 200px; height: 20px;">
+            <div style="position:absolute; top:  485px; left: 305px; width: 200px; height: 20px;">
                 <?php  echo $total_assessment; ?>
             </div>
             <!--Total Amount received-->
