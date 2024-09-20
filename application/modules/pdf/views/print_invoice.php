@@ -92,7 +92,7 @@ table tr td {
             <div style="position:absolute; top: 190px; left: 60px; width: 500px; height: 20px;">
                 <?php echo $student_address; ?>
             </div>
-            <div style="position:absolute; top: 245px; left:0px; width: 500px; height: 20px;">
+            <div style="position:absolute; top: 245px; left:10px; width: 500px; height: 20px;">
                 <?php echo $type." /  ".$term['enumSem']." ".$term['term_label']." ".$term['strYearStart']."-".$term['strYearEnd']; ?>
             </div>
             <div style="position:absolute; top: 245px; left: 500px; width: 500px; height: 20px;">
@@ -104,7 +104,7 @@ table tr td {
             <div style="position:absolute; top:  245px; left: 650px; width: 200px; height: 20px;">
                 <?php echo $full_assessment; ?>
             </div>
-            <div style="position:absolute; top: 270px; left:0px; width: 500px; height: 20px;">
+            <div style="position:absolute; top: 270px; left:10px; width: 500px; height: 20px;">
                 <?php echo $reservation_description; ?>
             </div>
             <div style="position:absolute; top: 270px; left: 500px; width: 500px; height: 20px;">
@@ -125,7 +125,7 @@ table tr td {
             <div style="position:absolute; top:  405px; left: 650px; width: 200px; height: 20px;">
                 <?php  echo $total_assessment; ?>
             </div>
-            <div style="position:absolute; top:  460px; left: 0px; width: 200px; height: 20px;">
+            <div style="position:absolute; top:  460px; left: 10px; width: 200px; height: 20px;">
                 <?php  echo $remarks; ?>
             </div>
             <div style="position:absolute; top:  485px; left: 300px; width: 200px; height: 20px;">
