@@ -2255,7 +2255,8 @@ class Pdf extends CI_Controller {
             if($subtract_assesment){
                 foreach($tuitionPayments as $tp)
                     $fullAssessment -= $tp['subtotal_order'];
-                               
+
+                $fullAssessment += $request['total_amount_due'];                
             }
 
             if($reg['paymentType'] == 'partial'){
