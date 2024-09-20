@@ -198,8 +198,8 @@ new Vue({
                     'url':'<?php echo base_url(); ?>excel/import_student_data',
                     'method':'post',
                     'data':{
-                        'data':data.data,
-                        'student_level': this.studentLevel
+                        'student_level': $("#studentLevel").val(),
+                        'data':data.data
                     },
                     'dataType':'json'
                 });
