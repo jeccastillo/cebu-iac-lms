@@ -19,19 +19,17 @@
                             <select class="form-control select2" v-model="studentLevel">
                                 <option value="college">College</option>
                                 <option value="shs">Shs</option>
-                                <option value="other">Other</option>
-                                <option value="drive">Drive</option>
                             </select>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-xs-4">
-                            <input @change="attachFile" type="file" name="studentDataExcel" size="20" />
+                            <input @change="attachFile" type="file" name="student_data_excel" size="20" />
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-xs-4">
-                            <button type="submit" class="btn btn-lg btn-default  btn-flat">Imports</button>
+                            <button type="submit" class="btn btn-lg btn-default  btn-flat">Import</button>
                         </div>
                     </div>
                 </div>
@@ -165,7 +163,8 @@ new Vue({
     el: '#add-student',
     data: {
         studentLevel: 'college',
-        attachment: ''
+        attachment: '',
+        campus: "<?php echo $campus ?>"
     },
     methods: {
         attachFile($event) {
@@ -176,6 +175,7 @@ new Vue({
 
             formData.append('student_data_excel', this.attachment)
             formData.append('student_level', this.studentLevel)
+            formData.append('campus', this.campus)
 
             const {
                 data
@@ -187,6 +187,16 @@ new Vue({
                 })
 
             if (data.success) {
+                $.ajax({
+                    'url':'<?php echo base_url(); ?>excel/import_student_data',
+                    'method':'post',
+                    'data':{
+                        'data':data.data,
+                        'student_level': this.studentLevel
+                    },
+                    'dataType':'json'
+                });
+                
                 Swal.fire({
                     showCancelButton: false,
                     showCloseButton: true,
@@ -195,6 +205,7 @@ new Vue({
                     text: 'Field Updated',
                     icon: 'success',
                 });
+                
             } else {
                 Swal.fire({
                     showCancelButton: false,
