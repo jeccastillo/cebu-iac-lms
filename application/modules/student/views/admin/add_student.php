@@ -165,6 +165,7 @@ new Vue({
         studentLevel: 'college',
         attachment: '',
         campus: "<?php echo $campus ?>"
+        activeSem = "<?php echo $this->data_fetcher->get_active_sem(); ?>"
     },
     methods: {
         attachFile($event) {
@@ -176,6 +177,7 @@ new Vue({
             formData.append('student_data_excel', this.attachment)
             formData.append('student_level', this.studentLevel)
             formData.append('campus', this.campus)
+            formData.append('active_sem', this.activeSem)
 
             const {
                 data
