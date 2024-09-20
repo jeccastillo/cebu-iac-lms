@@ -68,6 +68,15 @@ table tr td {
 <body>
     <div class="sheet-outer A4">
         <section class="sheet padding-5mm">
+            <?php if($cashCharge): ?>
+                <div style="position:absolute; top: 125px; left: 30px; width: 200px; height: 20px;">
+                    &#10003;
+                </div>
+            <?php else: ?>
+                <div style="position:absolute; top: 125px; left: 60px; width: 200px; height: 20px;">
+                    &#10003;
+                </div>
+            <?php endif; ?>
             <div style="position:absolute; top: 125px; right: 60px; width: 200px; height: 20px;">
                 Invoice No: <?php echo $invoice_number; ?>
             </div>
