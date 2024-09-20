@@ -354,6 +354,14 @@
                                             class="btn btn-primary">
                                             Update Invoice
                                         </button>
+                                        <button
+                                            v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided'"
+                                            data-toggle="modal"
+                                            @click="or_details.id = payment.id;"
+                                            data-target="#orDetailsUpdate"
+                                            class="btn btn-primary">
+                                            Update Details
+                                        </button>
                                         <button v-if="payment.or_number"
                                             @click="printOR(payment)"
                                             class="btn btn-primary">
@@ -593,6 +601,43 @@
             </form>
         </div>
         <div class="modal fade"
+            id="orDetailsUpdate"
+            role="dialog">
+            <form @submit.prevent="updateORDetails"
+                class="modal-dialog modal-lg">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!-- modal header  -->
+                        <button type="button"
+                            class="close"
+                            data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Update Details</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Issued Date <span class="text-danger">*</span> </label>
+                            <input type="date"
+                                class="form-control"
+                                v-model="or_details.or_date"
+                                required />
+                        </div>
+                    </div>
+                    <div class=" modal-footer">
+                        <!-- modal footer  -->
+                        <button type="submit"
+                            :disabled="!or_update.or_number"
+                            class="btn btn-primary">Submit</button>
+                        <button type="button"
+                            class="btn btn-default"
+                            data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <div class="modal fade"
             id="voidPaymentModal"
             role="dialog">
             <form @submit.prevent="voidPayment"
@@ -705,6 +750,10 @@ new Vue({
             type: undefined,
         },
         invoice_update_description: undefined,
+        or_details: {
+            id: undefined,
+            or_date: undefined,
+        },
         invoice_update: {
             id: undefined,
             invoice_number: undefined,
