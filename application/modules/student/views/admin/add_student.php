@@ -16,7 +16,7 @@
                     <div class="row">
                         <div class="form-group col-xs-4">
                             <label for="student_level">Student Level</label>
-                            <select class="form-control select2" v-model="studentLevel">
+                            <select id="studentLevel" class="form-control select2" v-model="studentLevel">
                                 <option value="college">College</option>
                                 <option value="shs">Shs</option>
                             </select>
@@ -24,7 +24,7 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-xs-4">
-                            <input @change="attachFile" type="file" name="student_data_excel" size="20" />
+                            <input @change="attachFile" type="file" name="student_data_excel" id="student_data_excel" size="20" />
                         </div>
                     </div>
                     <div class="row">
@@ -164,7 +164,8 @@ new Vue({
     data: {
         studentLevel: 'college',
         attachment: '',
-        campus: "<?php echo $campus ?>"
+        campus: "<?php echo $campus; ?>",
+        activeSem: "<?php echo $active_sem['intID']; ?>"
     },
     methods: {
         attachFile($event) {
@@ -173,9 +174,15 @@ new Vue({
         async importStudent() {
             const formData = new FormData()
 
+            this.activeSem =  "<?php echo $active_sem['intID']; ?>";
+            if($("#studentLevel").val() == 'shs'){
+                this.activeSem =  "<?php echo $active_sem_shs['intID']; ?>";
+            }
+
             formData.append('student_data_excel', this.attachment)
-            formData.append('student_level', this.studentLevel)
+            formData.append('student_level', $("#studentLevel").val())
             formData.append('campus', this.campus)
+            formData.append('active_sem', this.activeSem)
 
             const {
                 data
@@ -191,8 +198,8 @@ new Vue({
                     'url':'<?php echo base_url(); ?>excel/import_student_data',
                     'method':'post',
                     'data':{
-                        'data':data.data,
-                        'student_level': this.studentLevel
+                        'student_level': $("#studentLevel").val(),
+                        'data':data.data
                     },
                     'dataType':'json'
                 });
@@ -205,7 +212,7 @@ new Vue({
                     text: 'Field Updated',
                     icon: 'success',
                 });
-                
+                $("#student_data_excel").val('');
             } else {
                 Swal.fire({
                     showCancelButton: false,
@@ -216,7 +223,6 @@ new Vue({
                     icon: 'error',
                 });
             }
-
         },
     }
 })
