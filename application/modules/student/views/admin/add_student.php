@@ -164,8 +164,8 @@ new Vue({
     data: {
         studentLevel: 'college',
         attachment: '',
-        campus: "<?php echo $campus ?>"
-        activeSem = "<?php echo $this->data_fetcher->get_active_sem(); ?>"
+        campus: "<?php echo $campus; ?>"
+        activeSem = "<?php echo $active_sem['intID']; ?>"
     },
     methods: {
         attachFile($event) {
