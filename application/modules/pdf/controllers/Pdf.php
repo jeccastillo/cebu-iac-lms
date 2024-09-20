@@ -2192,7 +2192,7 @@ class Pdf extends CI_Controller {
         }
     }
 
-    function print_invoice()
+    function print_invoice($subtract_assesment = 0)
     {
         $request = $this->input->post();
 
@@ -2230,10 +2230,14 @@ class Pdf extends CI_Controller {
         }
         
         // $request['slug']
-        $reservationDescription = $fullAssessment = $totalAssessment = '';
+        $reservationDescription = $totalAssessment = '';
         $reservationAmount = 0;
+        $paidAmount = 0;
+        $fullAssessment = 0;
         
         $reservationPayments = $this->db->get_where('payment_details',array('student_number'=> $request['slug'],'description' => 'Reservation Payment', 'payment_details.sy_reference' => $request['sem'], 'payment_details.status' => 'Paid'))->result_array();
+        if($subtract_assesment)
+            $tuitionPayments = $this->db->get_where('payment_details',array('student_number'=> $request['slug'],'description LIKE' => 'Tuition Fee%', 'payment_details.sy_reference' => $request['sem'], 'payment_details.status' => 'Paid'))->result_array();
         
         if(!empty($reservationPayments) && $request['description'] == "Tuition Fee"){            
             foreach($reservationPayments as $reservationPayment){
@@ -2247,14 +2251,20 @@ class Pdf extends CI_Controller {
             $reservationAmount = 0;
         }
 
-        
         if(isset($tuition) && $request['description'] == "Tuition Fee"){
+            if($subtract_assesment){
+                foreach($tuitionPayments as $tp)
+                    $fullAssessment -= $tp['subtotal_order'];
+
+                $fullAssessment += $request['total_amount_due'];                
+            }
+
             if($reg['paymentType'] == 'partial'){
-                $fullAssessment = $tuition['total_installment'];
-                $totalAssessment = $tuition['total_installment'] - $reservationAmount;
+                $fullAssessment += $tuition['total_installment'];
+                $totalAssessment = $fullAssessment - $reservationAmount;
             }else{
-                $fullAssessment = $tuition['total'];
-                $totalAssessment = $tuition['total'] - $reservationAmount;
+                $fullAssessment += $tuition['total'];
+                $totalAssessment = $fullAssessment - $reservationAmount;
             }
         }else{
             $fullAssessment = $request['total_amount_due'];
