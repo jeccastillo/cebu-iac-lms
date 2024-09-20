@@ -116,7 +116,7 @@ table tr td {
             <div style="position:absolute; top:  270px; left: 650px; width: 200px; height: 20px;">
                 <?php echo $reservation_amount != 0 ? "-".$reservation_amount : ""; ?>
             </div>
-            <div style="position:absolute; top:  355px; left: 650px; width: 200px; height: 20px;">
+            <div style="position:absolute; top:  353px; left: 650px; width: 200px; height: 20px;">
                 <?php  echo $total_assessment; ?>
             </div>
             <div style="position:absolute; top:  380px; left: 100px; width: 200px; height: 20px;">
