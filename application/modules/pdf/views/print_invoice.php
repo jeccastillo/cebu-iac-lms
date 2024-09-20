@@ -69,11 +69,11 @@ table tr td {
     <div class="sheet-outer A4">
         <section class="sheet padding-5mm">
             <?php if($cashCharge): ?>
-                <div style="position:absolute; top: 145px; left: 40px; width: 200px; height: 20px;font-size:1.2em;">
+                <div style="position:absolute; top: 140px; left: 40px; width: 200px; height: 20px;font-size:1.2em;">
                     &#10003;
                 </div>
             <?php else: ?>
-                <div style="position:absolute; top: 145px; left: 140px; width: 200px; height: 20px;font-size:1.2em;">
+                <div style="position:absolute; top: 140px; left: 140px; width: 200px; height: 20px;font-size:1.2em;">
                     &#10003;
                 </div>
             <?php endif; ?>
