@@ -180,7 +180,7 @@ new Vue({
             }
 
             formData.append('student_data_excel', this.attachment)
-            formData.append('student_level', this.studentLevel)
+            formData.append('student_level', $("#studentLevel").val())
             formData.append('campus', this.campus)
             formData.append('active_sem', this.activeSem)
 
