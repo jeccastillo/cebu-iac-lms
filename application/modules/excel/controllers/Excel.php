@@ -3990,7 +3990,8 @@ class Excel extends CI_Controller {
                     ->setCellValue('AA1', 'Country of Citizenship')
                     ->setCellValue('AB1', 'Date of Birth')
                     ->setCellValue('AC1', 'Date Enrolled')
-                    ->setCellValue('AD1', 'Student Number');
+                    ->setCellValue('AD1', 'Student Number')
+                    ->setCellValue('AE1', 'Student Type');
                     
                     
         
@@ -4049,7 +4050,8 @@ class Excel extends CI_Controller {
                     ->setCellValue('AA'.$i, $d->citizenship)
                     ->setCellValue('AB'.$i, $d->date_of_birth)
                     ->setCellValue('AC'.$i, $d->date_enrolled)
-                    ->setCellValue('AD'.$i, $studnum);
+                    ->setCellValue('AD'.$i, $studnum)
+                    ->setCellValue('AE'.$i, $d->tos);
                     ;
                     
                     
@@ -4088,6 +4090,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('AB')->setWidth(50);
         $objPHPExcel->getActiveSheet()->getColumnDimension('AC')->setWidth(50);
         $objPHPExcel->getActiveSheet()->getColumnDimension('AD')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AE')->setWidth(50);
         
                 
          
