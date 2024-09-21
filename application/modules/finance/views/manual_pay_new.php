@@ -751,7 +751,7 @@ new Vue({
                             this.student.id).padStart(4, '0');
                         this.getInvoiceNumber()    
                         if (this.cashier) {
-                            // this.request.or_number =  this.cashier.or_current;
+                            this.request.or_number =  this.cashier.or_current;
                             this.or_update.or_number = this.cashier.or_current;
                             this.request.cashier_id = this.cashier.user_id;
                             this.or_update.cashier_id = this.cashier.user_id;
