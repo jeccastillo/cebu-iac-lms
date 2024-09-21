@@ -159,13 +159,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6">
+                                    <!-- <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label>Invoice Number:</label>
-                                            <!-- <div>
-                                                <input type="text" class="form-control" v-model="request.invoice_number" />
-                                            </div>    -->
-
+                                            <label>Invoice Number:</label>                                         
                                             <div
                                                 v-if="user.special_role == 2 || cashier.temporary_admin ==  1">
                                                 <input type="number"
@@ -179,7 +175,7 @@
                                                     v-model="request.invoice_number" />
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <!-- <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Amount to Pay:</label>
