@@ -141,7 +141,7 @@
                                                 v-model="request.remarks"></textarea>
                                         </div>
                                     </div>
-                                    <!-- <div class="col-sm-6"
+                                    <div class="col-sm-6"
                                         v-if="request.description == 'Application Payment'">
                                         <div class="form-group">
                                             <label>OR Number <span class="text-danger">*</span>
@@ -159,7 +159,7 @@
                                                     v-model="request.or_number" />
                                             </div>
                                         </div>
-                                    </div> -->
+                                    </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Invoice Number:</label>
