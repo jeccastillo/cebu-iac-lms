@@ -784,8 +784,7 @@ new Vue({
     watch: {
         'request.description': {
             handler(newVal, oldVal) {            
-                this.request.invoice_number = this.cashier.invoice_current
-                this.request.or_number  = ''
+                this.request.invoice_number = this.cashier.invoice_current                
                 this.apiUpdate = 'finance/update_cashier_invoice'            
                 
             },
