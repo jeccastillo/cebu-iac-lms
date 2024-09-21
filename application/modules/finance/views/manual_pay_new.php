@@ -141,8 +141,7 @@
                                                 v-model="request.remarks"></textarea>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6"
-                                        v-if="request.description == 'Application Payment'">
+                                    <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>OR Number <span class="text-danger">*</span>
                                             </label>
