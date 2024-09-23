@@ -7394,7 +7394,7 @@ class Excel extends CI_Controller {
                 $getCurriculum = $this->db->get_where('tb_mas_curriculum',array('strName'=>$student['curriculum']))->first_row('array');
 
                 $studentNumber = $student['student_number'];
-                $studentProgram = $student['program_code'];
+                $studentProgram = str_replace('.', '', $student['program_code']);
 
                 foreach($programs as $program){
                     if($studentProgram == $program['strProgramCode']){
