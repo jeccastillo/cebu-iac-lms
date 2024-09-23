@@ -7377,7 +7377,7 @@ class Excel extends CI_Controller {
     public function import_student_data()
     {
         $post = $this->input->post();
-        print_r($post);
+        
         if(isset($post['data'])){
             foreach($post['data'] as $index => $student){
                 $tuitionYear = $studentProgramId = '';
