@@ -7377,7 +7377,7 @@ class Excel extends CI_Controller {
     public function import_student_data()
     {
         $post = $this->input->post();
-        print_r($data);
+        print_r($post);
         if(isset($post['data'])){
             foreach($post['data'] as $index => $student){
                 $tuitionYear = $studentProgramId = '';
@@ -7391,7 +7391,7 @@ class Excel extends CI_Controller {
                     $tuitionYear = $getTuitionYear ? $getTuitionYear['intID'] : '';
                 }
 
-                $getCurriculum = $this->db->get_where('tb_mas_curriculum',array('strName'=>$student['curriculum']))->first_row();
+                $getCurriculum = $this->db->get_where('tb_mas_curriculum',array('strName'=>$student['curriculum']))->first_row('array');
 
                 $studentNumber = $student['student_number'];
                 $studentProgram = $student['program_code'];
@@ -7417,7 +7417,7 @@ class Excel extends CI_Controller {
                         'intProgramID' => $studentProgramId,
                         'intStudentYear' => $student['student_year'],
                         'blockSection' => $student['block_section'],
-                        'intCurriculumID' => $getCurriculum ? $getCurriculum['intID'] : '',
+                        'intCurriculumID' => isset($getCurriculum) ? $getCurriculum['intID'] : '',
                         'dteBirthDate' => date("Y-m-d",strtotime($student['date_of_birth'])),
                         'place_of_birth' => $student['place_of_birth'],
                         'enumGender' => $student['gender'],
