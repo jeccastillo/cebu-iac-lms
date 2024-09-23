@@ -7377,7 +7377,7 @@ class Excel extends CI_Controller {
     public function import_student_data()
     {
         $post = $this->input->post();
-        
+        print_r($post['data']);
         if(isset($post['data'])){
             foreach($post['data'] as $index => $student){
                 $tuitionYear = $studentProgramId = '';
@@ -7456,7 +7456,6 @@ class Excel extends CI_Controller {
                     );
 
                 //Check if student exists
-                // print_r($checkExists);
                
                     $this->data_poster->post_data('tb_mas_users',$data);
                     $active_sem = $this->data_fetcher->get_active_sem();
