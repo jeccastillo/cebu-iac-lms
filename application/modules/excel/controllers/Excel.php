@@ -7463,12 +7463,10 @@ class Excel extends CI_Controller {
                     $newStudentInformation = $this->db->get_where('tb_mas_users',array('slug'=> $student['slug']))->first_row('array');
                     $modeOfPayment = 'partial';
 
-
                     if(isset($student['mode_of_payment']))
                         if($student['mode_of_payment'] == 'FULL PAYMENT')
                             $modeOfPayment = 'full';
                     
-
                     $regData = array(
                         'intStudentID' => $newStudentInformation['intID'],
                         'enlisted_by' => 1186,
