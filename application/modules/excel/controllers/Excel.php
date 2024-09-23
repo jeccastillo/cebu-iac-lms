@@ -7441,12 +7441,12 @@ class Excel extends CI_Controller {
                         'guardian_email' => $student['guardian_email'],
                         'intTuitionYear' => $tuitionYear,
                         
-                        'high_school' => $student['high_school'],
-                        'high_school_address' => $student['high_school_address'],
-                        'high_school_attended' => $student['high_school_attended'],
-                        'senior_high' => $student['senior_high'],
-                        'senior_high_address' => $student['senior_high_address'],
-                        'senior_high_attended' => $student['senior_high_attended'],
+                        'high_school' => isset($student['high_school']) ? $student['high_school'] : null,
+                        'high_school_address' => isset($student['high_school']) ? $student['high_school'] : null,
+                        'high_school_attended' => isset($student['high_school']) ? $student['high_school'] : null,
+                        'senior_high' => isset($student['high_school']) ? $student['high_school'] : null,
+                        'senior_high_address' => isset($student['high_school']) ? $student['high_school'] : null,
+                        'senior_high_attended' => isset($student['high_school']) ? $student['high_school'] : null,
                         
                         // 'college' => $row['AS'],
                         // 'college_address' => $row['AT'],
@@ -7462,6 +7462,14 @@ class Excel extends CI_Controller {
                     $active_sem = $this->data_fetcher->get_active_sem();
 
                     $newStudentInformation = $this->db->get_where('tb_mas_users',array('slug'=> $student['slug']))->first_row('array');
+                    $modeOfPayment = 'partial';
+
+
+                    if(isset($student['mode_of_payment']))
+                        if($student['mode_of_payment'] == 'FULL PAYMENT')
+                            $modeOfPayment = 'full';
+                    
+
                     $regData = array(
                         'intStudentID' => $newStudentInformation['intID'],
                         'enlisted_by' => 1186,
@@ -7469,11 +7477,11 @@ class Excel extends CI_Controller {
                         'date_enlisted' => date("Y-m-d",strtotime($student['date_enrolled'])),
                         'intAYID' => $active_sem['intID'],
                         'enumRegistrationStatus' => 'regular',
-                        'enumStudentType' => strtolower($student['enrollment_status']),
+                        'enumStudentType' => isset($student['enrollment_status']) ? strtolower($student['enrollment_status']) : 'continuing',
                         'intYearLevel' => $student['student_year'],
                         'intROG' => 1,
                         'enumScholarship' => 0,
-                        'paymentType' => $student['mode_of_payment'] == 'FULL PAYMENT' ? 'full' : 'partial',
+                        'paymentType' => $modeOfPayment,
                         'paymentStatus' => 'pending payment',
                         'downpayment' => 0,
                         'type_of_class' => 'regular',
