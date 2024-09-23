@@ -192,7 +192,7 @@ new Vue({
                         Authorization: `Bearer ${window.token}`
                     }
                 })
-
+            console.log(data);
             if (data.success) {
                 $.ajax({
                     'url':'<?php echo base_url(); ?>excel/import_student_data',
