@@ -41,6 +41,26 @@
                             <button @click="addSubjectForEnlistment" :disabled="selected_subject == undefined" class="btn btn-primary">Add</button>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Subject</th>
+                                        <th>Section</th>
+                                        <th>Schedule</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="subject in selected_subjects">
+                                        <td>{{ subject.strCode }}</td>
+                                        <td>{{ subject.strClassName + subject.year + subject.strSection + subject.sub_section }}</td>
+                                        <td>{{ subject.sub_section + " " + subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>          
             </div>         
                                                        
@@ -115,8 +135,7 @@ new Vue({
             let i = this.available_subjects.map(item => item.intID).indexOf(id) // find index of your object
             this.selected_subjects.push(this.available_subjects[i]);            
             this.available_subjects.splice(i, 1) // remove it from array
-            this.selected_subject = undefined;
-            console.log(this.selected_subjects);
+            this.selected_subject = undefined;            
         }
     }
 
