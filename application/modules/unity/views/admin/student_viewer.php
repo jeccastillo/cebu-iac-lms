@@ -900,7 +900,15 @@ new Vue({
                       })
                   .then(data => {
                       this.loader_spinner = false;                                                                                                                            
-                      document.location = base_url + 'registrar/register_old_student/' + data.data.sid + '/' + this.active_sem.intID;                       
+                      if(data.data.success)
+                        document.location = base_url + 'registrar/register_old_student/' + data.data.sid + '/' + this.active_sem.intID;                       
+                      else
+                      Swal.fire({
+                        title: "Failed",
+                        text: data.data.message,
+                        icon: "failed"
+                      })
+
                   });
                   
               },
