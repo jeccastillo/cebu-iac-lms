@@ -90,7 +90,7 @@
                         </div>
                     </div>
                     <div v-else>
-                        <h4>Enlistment Form ({{ enlistment.status }})</h4>
+                        <h4>Enlistment Form <span :style="'color:'+color">&#9679; ({{ enlistment.status }})</span></h4>
                         <div class="row">
                             <div class="col-sm-12">
                                 <table class="table table-bordered table-striped">
@@ -191,6 +191,7 @@ new Vue({
         enlistment: undefined,
         enlisted_subjects: [],
         additional_units: 0,
+        color: "#090",
         student: {
             strFirstname:'',
             strLastname:'',
@@ -234,8 +235,17 @@ new Vue({
                 this.sem = data.data.active_sem.intID;   
                 this.available_subjects = data.data.subject_offerings;  
                 this.my_classlists = data.data.my_classlists;   
-                this.total_units = data.data.total_units;     
+                this.total_units = data.data.total_units;                     
                 this.enlistment = data.data.enlistment;
+                if(this.enlistment)
+                    switch(this.enlistment.status){
+                        case 'pending':
+                            this.color = "#d5d911";
+                        break;
+                        case 'approved':
+                            this.color = "#090";
+                        break;
+                    }
                 this.enlisted_subjects = data.data.enlisted_subjects;                  
             });
 
