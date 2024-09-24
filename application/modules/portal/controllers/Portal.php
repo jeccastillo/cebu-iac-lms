@@ -300,7 +300,20 @@ class Portal extends CI_Controller {
         $post =  $this->input->post();
 
         $records = $this->data_fetcher->getClassListStudentsSt($post['student'],$post['sem']);
+        $records2 = $post['subjects_to_add'];
+
         foreach($records as $record){                                
+            $conflict = $this->data_fetcher->student_conflict($post['section_to_add'],$record,$post['sem']);
+            foreach($conflict as $c){
+                if($c){
+                    $data['success'] = false;
+                    $data['message'] = "There was a conflict with one of the schedules ".$c->conflict['strCode']." ".$c->conflict['strClassName'].$c->conflict['year'].$c->conflict['strSection']." ".$c->conflict['sub_section'];   
+                    echo json_encode($data);                             
+                    return;
+                }
+            }                        
+        }
+        foreach($records2 as $record){                                
             $conflict = $this->data_fetcher->student_conflict($post['section_to_add'],$record,$post['sem']);
             foreach($conflict as $c){
                 if($c){
