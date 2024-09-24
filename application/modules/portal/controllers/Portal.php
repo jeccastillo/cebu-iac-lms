@@ -208,6 +208,11 @@ class Portal extends CI_Controller {
             default: 
                 $stype = 'college';
         }
+        
+        if($stype == "college")
+            $data['active_sem'] = $this->data_fetcher->get_active_sem();
+        else
+            $data['active_sem'] = $this->data_fetcher->get_active_sem_shs();
 
         $data['sy'] = $this->db->get_where('tb_mas_sy',array('term_student_type'=>$stype))->result_array();    
         echo json_encode($data);
@@ -369,8 +374,28 @@ class Portal extends CI_Controller {
                 
         if($sem != 0)
             $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
-        else
-        $ret['active_sem'] = $this->data_fetcher->get_active_sem();
+        else{
+            switch($data['student']['level']){
+                case 'shs':
+                    $stype = 'shs';
+                break;
+                case 'drive':
+                    $stype = 'shs';
+                break;
+                case 'college':
+                    $stype = 'college';
+                break;
+                case 'other':
+                    $stype = 'college';
+                break;
+                default: 
+                    $stype = 'college';
+            }
+            if($stype == "college")
+                $ret['active_sem'] = $this->data_fetcher->get_active_sem();
+            else
+                $ret['active_sem'] = $this->data_fetcher->get_active_sem_shs();
+        }
         $ret['sy'] = $this->db->get('tb_mas_sy')->result_array();
 
         $ret['student'] =  $this->data_fetcher->getStudent($id);        
