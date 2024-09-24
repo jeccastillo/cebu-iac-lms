@@ -2148,7 +2148,7 @@ class Data_fetcher extends CI_Model {
     {
             $courses =
                $this->db
-                    ->select( 'tb_mas_subjects.intID,strCode,strDescription,strUnits,intLab')
+                    ->select( 'tb_mas_subjects.intID,strCode,strDescription,strUnits,intLab,tb_mas_advised.classlist_id')
                     ->from('tb_mas_advised')
                     ->join('tb_mas_advised_subjects','tb_mas_advised.intAdvisedID = tb_mas_advised_subjects.intAdvisedID')
                     ->join('tb_mas_subjects','tb_mas_advised_subjects.intSubjectID = tb_mas_subjects.intID')
