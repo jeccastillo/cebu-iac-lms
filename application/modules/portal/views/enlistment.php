@@ -28,9 +28,7 @@
                     <hr />
                     <h4>Add Subject for Enlistment</h4>
                     <select v-model="selected_subject" class="form-control">
-                        <option v-for="subject in available_subjects" :value="subject.intID">
-                            {{ subject.strCode + " " + subject.strClassName + subject.year + subject.strSection + subject.sub_section + " " subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}
-                        </option>
+                        
                     </select>
                 </div>          
             </div>         
