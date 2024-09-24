@@ -74,6 +74,7 @@
                                         <th>Subject</th>
                                         <th>Section</th>
                                         <th>Schedule</th>                                        
+                                        <td>Units</td>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -81,6 +82,13 @@
                                         <td>{{ subject.strCode }}</td>
                                         <td>{{ subject.strClassName + subject.year + subject.strSection + subject.sub_section + subject.sub_section }}</td>
                                         <td>{{ subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}</td>                                        
+                                        <td>{{ subject.strUnits }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-right">Total Units:</td>
+                                        <td>{{ total_units }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -121,6 +129,7 @@ new Vue({
         selected_subject: undefined,
         selected_subjects: [],
         my_classlists: [],
+        total_units: 0,
         student: {
             strFirstname:'',
             strLastname:'',
@@ -163,7 +172,8 @@ new Vue({
                 this.sy = data.data.sy;  
                 this.sem = data.data.active_sem.intID;   
                 this.available_subjects = data.data.subject_offerings;  
-                this.my_classlists = data.data.my_classlists;                                 
+                this.my_classlists = data.data.my_classlists;   
+                this.total_units = data.data.total_units;                              
             });
 
    
