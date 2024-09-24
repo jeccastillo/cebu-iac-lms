@@ -50,6 +50,7 @@
                                         <th>Subject</th>
                                         <th>Section</th>
                                         <th>Schedule</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -57,6 +58,7 @@
                                         <td>{{ subject.strCode }}</td>
                                         <td>{{ subject.strClassName + subject.year + subject.strSection + subject.sub_section }}</td>
                                         <td>{{ subject.sub_section + " " + subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}</td>
+                                        <td><button @click="removeSubjectForEnlistment(subject.intID)" class="btn btn-danger">Remove</button></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -137,6 +139,11 @@ new Vue({
             this.selected_subjects.push(this.available_subjects[i]);            
             this.available_subjects.splice(i, 1) // remove it from array
             this.selected_subject = undefined;            
+        },
+        removeSubjectForEnlistment: function(id){            
+            let i = this.selected_subjects.map(item => item.intID).indexOf(id) // find index of your object            
+            this.available_subjects.push(this.selected_subjects[i]);
+            this.selected_subjects.splice(i, 1) // remove it from array
         }
     }
 
