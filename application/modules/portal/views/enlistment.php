@@ -122,7 +122,7 @@ new Vue({
                 return 0
             })
         }
-    }
+    },
     mounted() {        
         var amount = 0;
 
