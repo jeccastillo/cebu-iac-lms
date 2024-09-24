@@ -372,10 +372,12 @@ class Portal extends CI_Controller {
 
     public function student_deficiencies_data($sem,$id){
                 
+        $ret['student'] =  $this->data_fetcher->getStudent($id);  
+
         if($sem != 0)
             $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
         else{
-            switch($data['student']['level']){
+            switch($ret['student']['level']){
                 case 'shs':
                     $stype = 'shs';
                 break;
@@ -398,7 +400,7 @@ class Portal extends CI_Controller {
         }
         $ret['sy'] = $this->db->get('tb_mas_sy')->result_array();
 
-        $ret['student'] =  $this->data_fetcher->getStudent($id);        
+              
         $ret['deficiencies'] = $this->db
                     ->select('tb_mas_student_deficiencies.*,enumSem,term_label,strYearStart,strYearEnd')
                     ->join('tb_mas_sy','tb_mas_student_deficiencies.syid = tb_mas_sy.intID')
