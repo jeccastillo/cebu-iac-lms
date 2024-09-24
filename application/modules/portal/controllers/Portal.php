@@ -178,6 +178,33 @@ class Portal extends CI_Controller {
 
     }
 
+    public function submit_enlistment_form(){
+        $post = $this->input->post();
+        $sections_to_add = json_decode($post['sections_to_add']);   
+
+        $insert = [
+            'student_id' => $post['student'],
+            'term_id' => $post['sem']
+        ];
+
+        $this->db->insert('tb_mas_student_enlistment',$insert);
+        
+        $id = $this->db->insert_id();
+
+        foreach($sections_to_add as $cl){
+            $insert = [
+                'enlistment_id' => $id,
+                'classlist_id' => $cl['intID'],
+            ];
+            $this->db->insert('tb_mas_student_enlistment_subject',$insert);
+        }
+
+        $data['success'] = true;
+        $data['message'] = "Form has been submitted";
+
+        echo json_encode($data);
+
+    }
     public function enlistment($sem = 0){
         $id = $this->session->userdata('intID');
         $this->data['id'] = $id;     

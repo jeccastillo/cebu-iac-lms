@@ -77,7 +77,7 @@
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                        <td><button class="btn btn-primary">Submit Subjects</button></td>
+                                        <td><button @click="submitEnlistmentForm" class="btn btn-primary">Submit Subjects</button></td>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -247,6 +247,51 @@ new Vue({
             this.available_subjects.push(this.selected_subjects[i]);
             this.additional_units -= parseInt(this.selected_subjects[i].strUnits);
             this.selected_subjects.splice(i, 1) // remove it from array
+        },
+        submitEnlistmentForm: function(){
+            Swal.fire({
+                title: 'Submit Enlistment?',
+                text: "Continue Submitting This Form?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata= new FormData();
+                    formdata.append('student',this.id);
+                    formdata.append('sem',this.sem);                    
+                    formdata.append('sections_to_add',JSON.stringify(this.selected_subjects));
+                    return axios
+                    .post(base_url + 'portal/submit_enlistment_form',formdata, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                    .then(data => {
+                        console.log(data.data);
+                        if (data.data.success) {
+                            Swal.fire({
+                                title: "Success",
+                                text: data.data.message,
+                                icon: "success"
+                            }).then(function() {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire(
+                                'Failed!',
+                                data.data.message,
+                                'error'
+                            )
+                        }
+                    });
+                    
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
         }
     }
 
