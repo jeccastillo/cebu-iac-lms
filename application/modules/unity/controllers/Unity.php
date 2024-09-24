@@ -836,7 +836,8 @@ class Unity extends CI_Controller {
             {
                 $subject = (array)$subject;
                     
-                $data_subject['intSubjectID'] = $subject['intID'];
+                $data_subject['intSubjectID'] = $subject['intSubjectID'];
+                $data_subject['classlist_id'] = $subject['intID'];
                 $data_subject['intAdvisedID'] = $id;
                 $this->data_poster->post_data('tb_mas_advised_subjects',$data_subject);  
             }
