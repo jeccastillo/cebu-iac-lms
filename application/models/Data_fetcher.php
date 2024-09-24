@@ -4358,6 +4358,7 @@ class Data_fetcher extends CI_Model {
 
     function student_conflict($csid,$record,$sem)
     {
+        $record = (array) $record;
         $classlist_sched = $this->db->get_where('tb_mas_room_schedule',array('strScheduleCode'=>$record['intClassListID']))->result_array();
         $results = [];
         if(!empty($classlist_sched)){
