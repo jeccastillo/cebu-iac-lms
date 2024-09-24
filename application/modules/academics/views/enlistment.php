@@ -501,6 +501,7 @@ new Vue({
                                             'link': "",
                                             'message': "Greetings "+ this.student.strFirstname +", <br /><br />Your request has been approved. Subjects: <br /><br /> " + data.data.classlists_table,                                            
                                             'email' : this.student.strEmail,
+                                            'registrar_link': base_url + "unity/student_viewer/" + this.student.intID,
                                         } 
                             
                             Swal.fire({
