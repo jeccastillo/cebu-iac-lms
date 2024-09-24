@@ -324,7 +324,7 @@ new Vue({
                     .then(data => {
                         console.log(data.data);
                         if (data.data.success) {
-                            let url = api_url + 'registrar/send_notif_department_head/';                                                
+                            let url = api_url + 'registrar/send_notif_department_head/' + this.student.slug;                                                
                             let payload = {
                                             'message': "You have a new enlistment request from ." + this.student.strLastname + ", " + this.student.strFirstname,
                                             'id' : this.student.id,
