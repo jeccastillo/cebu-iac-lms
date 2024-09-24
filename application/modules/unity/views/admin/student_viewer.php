@@ -460,8 +460,7 @@
                                 <th>Subject</th>
                                 <th>Section</th>
                                 <th>Schedule</th>                                        
-                                <th>Units</th>
-                                <th>Actions</th>
+                                <th>Units</th>                                
                             </tr>
                         </thead>
                         <tbody>
