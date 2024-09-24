@@ -3553,7 +3553,10 @@ class Unity extends CI_Controller {
         foreach($subjects as $subj)
         {
             $cst = [];
-            $classlists = $this->data_fetcher->fetch_classlist_by_subject($subj['intID'],$active_sem['intID']);            
+            if($subj['classlist_id'])
+                $classlists = $this->data_fetcher->fetch_classlist_by_subject($subj['intID'],$active_sem['intID'],$subj['classlist_id']);
+            else
+                $classlists = $this->data_fetcher->fetch_classlist_by_subject($subj['intID'],$active_sem['intID']);            
             foreach($classlists as $classlist){
                 $classlist_temp = $classlist;
                 $classlist_temp['numCount'] = $this->data_fetcher->countRemainingSlotsClasslist($classlist['intID']);                
