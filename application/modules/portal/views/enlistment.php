@@ -26,7 +26,7 @@
                         </div>
                     </div>
                 </div>      
-                <div class="box-body">
+                <div class="box-body" v-if="!reg">
                     <div v-if="!enlistment">              
                         <h4>Add Subject for Enlistment</h4>
                         <div class="row">
@@ -152,6 +152,10 @@
                             </table>
                         </div>
                     </div>
+                </div> 
+                <div class="box-body text-center" v-else>
+                    <h3>You are Already Enlisted</h3>
+                    <p>Please ask the registrar to reset status for advising</p>
                 </div>          
             </div>         
                                                        
@@ -388,8 +392,7 @@ new Vue({
                                 Authorization: `Bearer ${window.token}`
                             }
                         })
-                    .then(data => {
-                        console.log(data.data);
+                    .then(data => {                        
                         if (data.data.success) {
                             Swal.fire({
                                 title: "Success",
