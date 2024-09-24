@@ -90,6 +90,20 @@
                         </div>
                     </div>
                     <div v-else>
+                        <h4>Add Subject for Enlistment</h4>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <select v-model="selected_subject" class="form-control">
+                                    <option v-for="subject in sortedSubjectsArray" :value="subject.intID">
+                                        {{ subject.strCode + " " + subject.strClassName + subject.year + subject.strSection + subject.sub_section + " " + subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6">
+                                <button @click="addToEnlistment" :disabled="selected_subject == undefined" class="btn btn-primary">Add</button>
+                            </div>
+                        </div>
+                        <hr />                    
                         <h4>Enlistment Form <span :style="'color:'+color">&#9679; ({{ enlistment.status }})</span></h4>
                         <div class="row">
                             <div class="col-sm-12">
@@ -264,7 +278,11 @@ new Vue({
                             this.color = "#090";
                         break;
                     }
-                this.enlisted_subjects = data.data.enlisted_subjects;                  
+                this.enlisted_subjects = data.data.enlisted_subjects;     
+                for(i in this.enlisted_subjects){
+                    let i = this.available_subjects.map(item => item.intID).indexOf(this.enlisted_subjects[i].intID) // find index of your object                    
+                    this.available_subjects.splice(i, 1) // remove it from array
+                }             
             });
 
    
@@ -419,6 +437,43 @@ new Vue({
                 allowOutsideClick: () => !Swal.isLoading()
             });
         },   
+        addToEnlistment: function(){
+            Swal.fire({
+                title: 'Add Subject?',
+                text: "Continue Adding Subject?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata= new FormData();
+                    let id = this.selected_subject;
+                    formdata.append('classlist_id',id);                    
+                    formdata.append('enlistment_id',this.enlistment.id);                    
+                    return axios
+                    .post(base_url + 'academics/add_subject_to_enlistment',formdata, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                    .then(data => {
+                        this.loader_spinner = false;                                                                                                                            
+                        Swal.fire({
+                            title: "Success",
+                            text: data.data.message,
+                            icon: "success"
+                        }).then(function() {
+                            location.reload();
+                        });                         
+                    });
+                    
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+        }, 
         approveEnlistmentForm: function(){
             Swal.fire({
                 title: 'Approve Enlistment?',
@@ -446,6 +501,7 @@ new Vue({
                                             'link': "",
                                             'message': "Greetings "+ this.student.strFirstname +", <br /><br />Your request has been approved. Subjects: <br /><br /> " + data.data.classlists_table,                                            
                                             'email' : this.student.strEmail,
+                                            'registrar_link': base_url + "unity/student_viewer/" + this.student.intID,
                                         } 
                             
                             Swal.fire({
