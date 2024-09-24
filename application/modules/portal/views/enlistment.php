@@ -38,7 +38,7 @@
                             </select>
                         </div>
                         <div class="col-sm-6">
-                            <button :disabled="selected_subject == undefined" class="btn btn-primary">Add</button>
+                            <button @click="addSubjectForEnlistment" :disabled="selected_subject == undefined" class="btn btn-primary">Add</button>
                         </div>
                     </div>
                 </div>          
@@ -110,6 +110,11 @@ new Vue({
         selectTerm: function($event){
             document.location = base_url + 'portal/enlistment/' + event.target.value;
         },
+        addSubjectForEnlistment: function(){
+            let id = this.selected_subject;
+            let i = this.available_subjects.map(item => item.intID).indexOf(id) // find index of your object
+            list.splice(i, 1) // remove it from array
+        }
     }
 
 })
