@@ -74,7 +74,9 @@
                                 </tbody>
                             </table>
                             <div v-else class="box">
-                                <h4>No Subjects Selected</h4>
+                                <div class="box-body">
+                                    <h4>No Subjects Selected</h4>
+                                </div>
                             </div>
                         </div>
                     </div>
