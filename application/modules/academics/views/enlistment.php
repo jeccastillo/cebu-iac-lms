@@ -331,8 +331,7 @@ new Vue({
                                 Authorization: `Bearer ${window.token}`
                             }
                         })
-                    .then(data => {
-                        console.log(data.data);
+                    .then(data => {                        
                         if (data.data.success) {
                             let url = api_url + 'registrar/send_notif_department_head/' + this.student.slug;                                                
                             let payload = {
@@ -434,16 +433,39 @@ new Vue({
                                 Authorization: `Bearer ${window.token}`
                             }
                         })
-                    .then(data => {
-                        console.log(data.data);
+                    .then(data => {                        
                         if (data.data.success) {
+                            let url = api_url + 'registrar/send_notif_department_head/' + this.student.slug;                                                
+                            let payload = {
+                                            'link': "",
+                                            'message': "Greetings "+ this.student.strFirstname +", <br /><br />Your request has been approved. Subjects: <br /><br /> " + data.data.classlists_table,                                            
+                                            'email' : this.student.strEmail,
+                                        } 
+                            
                             Swal.fire({
-                                title: "Success",
-                                text: data.data.message,
-                                icon: "success"
-                            }).then(function() {
-                                location.reload();
-                            });
+                                showCancelButton: false,
+                                showCloseButton: false,
+                                allowEscapeKey: false,
+                                title: 'Loading',
+                                text: 'Processing Data do not leave page',
+                                icon: 'info',
+                            })
+                            Swal.showLoading();
+                            axios.post(url, payload, {
+                                headers: {
+                                    Authorization: `Bearer ${window.token}`
+                                }
+                            })
+                            .then(data => {
+                                this.loader_spinner = false;                                                                                                                            
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });  
+                            });    
                         } else {
                             Swal.fire(
                                 'Failed!',

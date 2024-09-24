@@ -388,8 +388,7 @@ new Vue({
                                 Authorization: `Bearer ${window.token}`
                             }
                         })
-                    .then(data => {
-                        console.log(data.data);
+                    .then(data => {                        
                         if (data.data.success) {
                             Swal.fire({
                                 title: "Success",
