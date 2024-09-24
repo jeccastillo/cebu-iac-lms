@@ -186,6 +186,9 @@
               <li v-if="reg_status == 'Enrolled'"
                 :class="[(tab == 'tab_3') ? 'active' : '']"><a href="#tab_3"
                   data-toggle="tab">Changes of Grades</a></li>
+              <li v-if="enlistment"
+                :class="[(tab == 'tab_4') ? 'active' : '']"><a href="#tab_4"
+                  data-toggle="tab">Advising</a></li>
               <!-- <li v-if="advanced_privilages2" :class="[(tab == 'tab_3') ? 'active' : '']"><a href="#tab_3" data-toggle="tab">Assessment</a></li>                                         -->
               <li v-if="registration && advanced_privilages2"
                 :class="[(tab == 'tab_5') ? 'active' : '']"><a href="#tab_5"
@@ -444,6 +447,35 @@
                   </div>
                 </div>
               </div>
+              <div v-if="enlistment"
+                :class="[(tab == 'tab_4') ? 'active' : '']"
+                class="tab-pane"
+                id="tab_4">
+                <div class="box box-primary">
+                  <div class="box-body">
+                    <h4>Approved Subjects for Enlistment</h4>
+                    <table class="table table-condensed table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Section</th>
+                                <th>Schedule</th>                                        
+                                <th>Units</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="subject in enlisted_subjects">
+                                <td>{{ subject.strCode }}</td>
+                                <td>{{ subject.strClassName + subject.year + subject.strSection + subject.sub_section + subject.sub_section }}</td>
+                                <td>{{ subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}</td>                                        
+                                <td>{{ subject.strUnits }}</td>                                
+                            </tr>                                        
+                        </tbody>                             
+                    </table>
+                  </div>
+                </div>
+              </div>
               <div v-if="registration"
                 :class="[(tab == 'tab_5') ? 'active' : '']"
                 class="tab-pane"
@@ -614,6 +646,8 @@ new Vue({
     user_level: undefined,
     registration: undefined,
     applicant_data: {},
+    enlistment: undefined,
+    enlisted_subjects: [],
     active_sem: {},
     sections: [],
     balance: 0,
@@ -744,6 +778,8 @@ new Vue({
                     this.sections = data.data.sections;
                     this.tuition_payment_link =  data.data.tuition_payment_link;
                     this.notif_message = data.data.notif_message;
+                    this.enlistment = data.data.enlistment;                                    
+                    this.enlisted_subjects = data.data.enlisted_subjects;
 
                     if (this.sections)
                       this.add_subject.section = (this.sections.length > 0) ? this
