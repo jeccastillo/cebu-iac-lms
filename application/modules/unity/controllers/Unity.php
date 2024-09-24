@@ -842,14 +842,14 @@ class Unity extends CI_Controller {
             else
             {
                 //if enlisted add directly if not enrolled
-                $rog = $this->data_fetcher->checkRegistered($student['intID'],$data['classlist']['strAcademicYear']);
+                $rog = $this->data_fetcher->checkEnlisted($post['studentID'],$ay);
                 if($rog){
                     foreach($post['subjects'] as $subject)
                     {
-                        $enlisted = $this->data_fetcher->checkSubjectEnlisted($post['studentID'],$subject['intID']);
+                        $enlisted = $this->data_fetcher->checkSubjectEnlisted($post['studentID'],$subject->intID);
                         if(!$enlisted){                            
                             $send['intStudentID'] = $post['studentID'];
-                            $send['intClassListID'] = $subject['intID'];
+                            $send['intClassListID'] = $subject->intID;
                             $this->data_poster->addStudentClasslist($send,$post['studentID']);
                         }
 
