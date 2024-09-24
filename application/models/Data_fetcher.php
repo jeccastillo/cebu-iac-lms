@@ -2199,6 +2199,21 @@ class Data_fetcher extends CI_Model {
         else
             return true;
     }
+
+    function checkEnlisted($studentID,$AYID)
+    {
+        
+        $arr = $this->db
+             ->select('intRegistrationID')
+             ->from('tb_mas_registration')
+             ->where(array("intStudentID"=>$studentID,"intAYID"=>$AYID,'intROG >='=>0))
+             ->get()->result_array();
+        if(empty($arr))
+            return false;
+        else
+            return true;
+    }
+
     function checkClasslistExists($subject,$ay,$course,$new=null)
     {
         
@@ -3761,7 +3776,7 @@ class Data_fetcher extends CI_Model {
         }
 
         $classlists = $this->db
-        ->select('tb_mas_classlist.intID,strProgramCode,strCode,tb_mas_subjects.strDescription as subjectDescription,strClassName,year,strSection,sub_section,slots,strLastname,strFirstname,strMiddlename,intFinalized,tb_mas_subjects.strUnits')
+        ->select('tb_mas_classlist.intID,strProgramCode,strCode,tb_mas_subjects.strDescription as subjectDescription,strClassName,year,strSection,sub_section,slots,strLastname,strFirstname,strMiddlename,intFinalized,tb_mas_subjects.strUnits,intSubjectID')
         ->from('tb_mas_classlist')
         ->join('tb_mas_subjects','intSubjectID = tb_mas_subjects.intID')
         ->join('tb_mas_faculty','tb_mas_classlist.intFacultyID = tb_mas_faculty.intID')
