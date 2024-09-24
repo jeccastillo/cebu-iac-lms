@@ -884,7 +884,7 @@ class Academics extends CI_Controller {
         $data['dept_head'] = $this->db->get_where('tb_mas_faculty',array('strDepartment'=>$school,'special_role' => 2,'teaching' => 1))->first_row();        
         $data['enlisted_subjects'] = [];
         $data['enlistment'] = $this->db->get_where('tb_mas_student_enlistment',array('student_id'=>$id,'term_id'=>$data['active_sem']['intID']))->first_row();
-        
+        $data['user'] = $this->data['user'];
         if($data['enlistment']){
             $enlisted_subjects = $this->db->get_where('tb_mas_student_enlistment_subject',array('enlistment_id'=>$data['enlistment']->id))->result_array();
             foreach($enlisted_subjects as $enlisted)

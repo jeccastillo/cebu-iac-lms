@@ -175,6 +175,7 @@ new Vue({
         id: '<?php echo $id; ?>',
         sem: '<?php echo $sem; ?>',         
         sy: [],
+        user: undefined,
         available_subjects: [],
         selected_subject: undefined,
         selected_subjects: [],
@@ -229,7 +230,11 @@ new Vue({
                 this.available_subjects = data.data.subject_offerings;  
                 this.my_classlists = data.data.my_classlists;   
                 this.total_units = data.data.total_units; 
-                this.dept_head = data.data.dept_head;                    
+                this.dept_head = data.data.dept_head;    
+                this.user = data.data.user;
+                if(this.user.intUserLevel != 2 || this.dept_head.intID != this.user.intID)
+                    document.location = base_url + 'unity/faculty_dashboard'
+
                 this.enlistment = data.data.enlistment;
                 if(this.enlistment)
                     switch(this.enlistment.status){
