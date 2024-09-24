@@ -25,6 +25,13 @@
                             <option v-for="term in sy" :value="term.intID">{{ term.enumSem + " " + term.term_label + " SY " + term.strYearStart + "-" + term.strYearEnd }}</option>
                         </select>
                     </div>
+                    <hr />
+                    <h4>Add Subject for Enlistment</h4>
+                    <select v-model="selected_subject" class="form-control">
+                        <option v-for="subject in available_subjects" :value="subject.intID">
+                            {{ subject.strCode + " " + subject.strClassName + subject.year + subject.strSection + subject.sub_section + " " subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}
+                        </option>
+                    </select>
                 </div>          
             </div>         
                                                        
@@ -58,6 +65,7 @@ new Vue({
         sy: [],
         available_subjects: [],
         selected_subject: undefined,
+        selected_subjects: [],
         student: {
             strFirstname:'',
             strLastname:'',
