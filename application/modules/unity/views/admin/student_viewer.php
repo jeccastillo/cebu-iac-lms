@@ -901,7 +901,10 @@ new Vue({
                   .then(data => {
                       this.loader_spinner = false;                                                                                                                            
                       if(data.data.success)
-                        document.location = base_url + 'registrar/register_old_student/' + data.data.sid + '/' + this.active_sem.intID;                       
+                        if(data.data.sid)
+                          document.location = base_url + 'registrar/register_old_student/' + data.data.sid + '/' + this.active_sem.intID;                       
+                        else
+                          location.reload();
                       else
                       Swal.fire({
                         title: "Failed",
