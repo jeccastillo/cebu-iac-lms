@@ -26,7 +26,7 @@
                         </div>
                     </div>
                 </div>      
-                <div class="box-body">
+                <div class="box-body" v-if="reg">
                     <div v-if="!enlistment">              
                         <h4>Add Subject for Enlistment</h4>
                         <div class="row">
@@ -157,7 +157,11 @@
                             </table>
                         </div>
                     </div>
-                </div>          
+                </div>  
+                <div class="box-body text-center" v-else>
+                    <h3>Student is Already Enlisted</h3>
+                    <p>Please ask the registrar to reset status for advising</p>
+                </div>        
             </div>         
                                                        
             
@@ -195,6 +199,7 @@ new Vue({
         my_classlists: [],
         total_units: 0,
         dept_head: undefined,
+        reg: undefined,
         enlistment: undefined,
         enlisted_subjects: [],
         additional_units: 0,
@@ -244,6 +249,7 @@ new Vue({
                 this.my_classlists = data.data.my_classlists;   
                 this.total_units = data.data.total_units; 
                 this.dept_head = data.data.dept_head;    
+                this.reg = data.data.registration;
                 this.user = data.data.user;
                 if(this.user.intUserLevel != 2 && this.dept_head.intID != this.user.intID)
                     document.location = base_url + 'unity/faculty_dashboard'
