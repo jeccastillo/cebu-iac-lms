@@ -230,7 +230,7 @@ class Portal extends CI_Controller {
 
     public function enlistment_data($id,$sem){
         $data['student'] = $this->data_fetcher->getStudent($id);  
-        $data['registration'] = $this->db->get_where('tb_mas_registration',array('intStudentID'=>$id,'intAYID'=>$sem));
+        $data['registration'] = $this->db->get_where('tb_mas_registration',array('intStudentID'=>$id,'intAYID'=>$sem))->first_row();
         switch($data['student']['level']){
             case 'shs':
                 $stype = 'shs';
