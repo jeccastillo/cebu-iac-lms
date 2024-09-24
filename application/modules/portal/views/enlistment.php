@@ -180,7 +180,7 @@ new Vue({
             formdata.append('student',this.id);
             formdata.append('sem',this.sem);
             formdata.append('section_to_add',this.selected_subject);
-            formdata.append('sections_to_add',this.selected_subjects);
+            formdata.append('sections_to_add',JSON.stringify(this.selected_subjects));
             axios
             .post(base_url + 'portal/check_conflict/', formdata, {
                 headers: {

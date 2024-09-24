@@ -300,7 +300,7 @@ class Portal extends CI_Controller {
         $post =  $this->input->post();
 
         $records = $this->data_fetcher->getClassListStudentsSt($post['student'],$post['sem']);
-        $records2 = $post['sections_to_add'];
+        $records2 = json_decode($post['sections_to_add']);
 
         foreach($records as $record){                                
             $conflict = $this->data_fetcher->student_conflict($post['section_to_add'],$record,$post['sem']);
