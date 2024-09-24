@@ -315,7 +315,7 @@ class Portal extends CI_Controller {
         }
         if($records2)
             foreach($records2 as $record){                                
-                $conflict = $this->data_fetcher->student_conflict($post['section_to_add'],$record,$post['sem']);
+                $conflict = $this->data_fetcher->student_conflict_enlistment($post['section_to_add'],$record,$post['sem']);
                 foreach($conflict as $c){
                     if($c){
                         $data['success'] = false;

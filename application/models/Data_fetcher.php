@@ -4357,9 +4357,46 @@ class Data_fetcher extends CI_Model {
     }
 
     function student_conflict($csid,$record,$sem)
+    {        
+        $classlist_sched = $this->db->get_where('tb_mas_room_schedule',array('strScheduleCode'=>$record['intClassListID']))->result_array();
+        $results = [];
+        if(!empty($classlist_sched)){
+            foreach($classlist_sched as $sched){
+                $query ="SELECT intRoomSchedID,strCode,strSection,strClassName,year,sub_section
+                        FROM tb_mas_room_schedule
+                        JOIN tb_mas_classlist ON tb_mas_classlist.intID = tb_mas_room_schedule.strScheduleCode                
+                        JOIN tb_mas_subjects ON tb_mas_classlist.intSubjectID = tb_mas_subjects.intID                
+                        WHERE
+                        (
+                        (dteStart >= '".$sched['dteStart']."' AND dteEnd <= '".$sched['dteEnd']."') OR
+                        (dteStart < '".$sched['dteEnd']."' AND dteEnd >= '".$sched['dteEnd']."') OR 
+                        (dteStart <= '".$sched['dteStart']."' AND dteEnd > '".$sched['dteStart']."')
+                        )";
+            
+                
+                $query .=" AND strDay = '".$sched['strDay']."' AND tb_mas_classlist.intID = ".$csid." AND tb_mas_room_schedule.intSem = ".$sem." ";
+            
+                // echo $query."<br />";
+                //print_r($this->db->query($query)->result_array());
+                //die();
+                 $ret = $this->db->query($query)->first_row();
+                 
+                 if($ret)
+                    $ret->conflict = $record;
+                
+                $results[] = $ret;
+            }
+
+            
+        }
+        return $results;
+        
+    }
+
+    function student_conflict_enlistment($csid,$record,$sem)
     {
         $record = (array) $record;
-        $classlist_sched = $this->db->get_where('tb_mas_room_schedule',array('strScheduleCode'=>$record['intClassListID']))->result_array();
+        $classlist_sched = $this->db->get_where('tb_mas_room_schedule',array('strScheduleCode'=>$record['intID']))->result_array();
         $results = [];
         if(!empty($classlist_sched)){
             foreach($classlist_sched as $sched){
