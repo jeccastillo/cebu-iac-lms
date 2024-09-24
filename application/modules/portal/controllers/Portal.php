@@ -209,10 +209,15 @@ class Portal extends CI_Controller {
                 $stype = 'college';
         }
         
-        if($stype == "college")
+        if($sem)
+            $data['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
+        elseif($stype == "college")
             $data['active_sem'] = $this->data_fetcher->get_active_sem();
         else
             $data['active_sem'] = $this->data_fetcher->get_active_sem_shs();
+
+        $data['subject_offerings'] = $this->data_fetcher->getClasslists($data['active_sem']['intID'],0,0,0);
+        $data['my_classlists'] = $this->data_fetcher->getClassListStudentsStPortal($id,$data['active_sem']['intID']);
 
         $data['sy'] = $this->db->get_where('tb_mas_sy',array('term_student_type'=>$stype))->result_array();    
         echo json_encode($data);
