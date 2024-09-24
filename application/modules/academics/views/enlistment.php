@@ -437,7 +437,7 @@ new Vue({
                 allowOutsideClick: () => !Swal.isLoading()
             });
         },   
-        addToEnlistment: function(id){
+        addToEnlistment: function(){
             Swal.fire({
                 title: 'Add Subject?',
                 text: "Continue Adding Subject?",
@@ -450,6 +450,7 @@ new Vue({
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
                     var formdata= new FormData();
+                    let id = this.selected_subject;
                     formdata.append('classlist_id',id);                    
                     formdata.append('enlistment_id',this.enlistment.id);                    
                     return axios
