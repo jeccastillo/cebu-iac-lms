@@ -73,7 +73,9 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <h4 v-else>No Subjects Selected</h4>
+                            <div v-else class="box">
+                                <h4>No Subjects Selected</h4>
+                            </div>
                         </div>
                     </div>
                     <h4>Currently Enlisted Subjects</h4>
