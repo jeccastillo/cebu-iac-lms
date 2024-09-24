@@ -224,7 +224,7 @@ class Portal extends CI_Controller {
         foreach($offerings as $offering){
             $accept = true;
             foreach($data['my_classlists'] as $cl){
-                if($cl['classlistID'] == $offering['intID']){
+                if($cl['strCode'] == $offering['strCode']){
                     $accept = false;
                     break;
                 }
