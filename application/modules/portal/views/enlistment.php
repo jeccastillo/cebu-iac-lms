@@ -331,6 +331,9 @@ new Vue({
                 },
                 allowOutsideClick: () => !Swal.isLoading()
             });
+        },
+        cancelEnlistmentForm: function(){
+            
         }
     }
 
