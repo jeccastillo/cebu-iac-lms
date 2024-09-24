@@ -380,7 +380,7 @@ new Vue({
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
                     var formdata= new FormData();
-                    formdata.append('classlist_id',this.id);                    
+                    formdata.append('classlist_id',id);                    
                     formdata.append('enlistment_id',this.enlistment.id);                    
                     return axios
                     .post(base_url + 'academics/delete_subject_from_enlistment',formdata, {
