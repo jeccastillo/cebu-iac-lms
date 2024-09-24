@@ -846,7 +846,7 @@ class Unity extends CI_Controller {
                 if($rog){
                     foreach($post['subjects'] as $subject)
                     {
-                        $enlisted = $this->data_fetcher->checkSubjectEnlisted($post['studentID'],$subject['intID']);
+                        $enlisted = $this->data_fetcher->checkSubjectEnlisted($post['studentID'],$subject->intID);
                         if(!$enlisted){                            
                             $send['intStudentID'] = $post['studentID'];
                             $send['intClassListID'] = $subject['intID'];
