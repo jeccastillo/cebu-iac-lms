@@ -41,6 +41,7 @@
                             <button @click="addSubjectForEnlistment" :disabled="selected_subject == undefined" class="btn btn-primary">Add</button>
                         </div>
                     </div>
+                    <hr />
                     <div class="row">
                         <div class="col-sm-12">
                             <table class="table table-bordered table-striped">
