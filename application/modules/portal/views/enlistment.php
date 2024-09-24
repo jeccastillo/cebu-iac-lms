@@ -194,6 +194,7 @@ new Vue({
         total_units: 0,
         dept_head: undefined,
         enlistment: undefined,
+        reg: undefined,
         enlisted_subjects: [],
         additional_units: 0,
         color: "#090",
