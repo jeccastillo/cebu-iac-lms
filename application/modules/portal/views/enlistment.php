@@ -181,7 +181,7 @@ new Vue({
     el: "#vue-container",
     data: {        
         id: '<?php echo $id; ?>',
-        sem: '<?php echo $sem; ?>', 
+        sem: '<?php echo $sem; ?>',         
         sy: [],
         available_subjects: [],
         selected_subject: undefined,
@@ -327,7 +327,7 @@ new Vue({
                             let url = api_url + 'registrar/send_notif_department_head/' + this.student.slug;                                                
                             let payload = {
                                             'message': "You have a new enlistment request from ." + this.student.strLastname + ", " + this.student.strFirstname,
-                                            'id' : this.student.id,
+                                            'link' : base_url+'academics/enlistment/'+this.student.id+'/'+this.sem,
                                             'email' : this.dept_head.strEmail,
                                         } 
                             
