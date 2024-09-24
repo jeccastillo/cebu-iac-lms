@@ -219,8 +219,11 @@ class Portal extends CI_Controller {
         $data['subject_offerings'] = [];
         $offerings = $this->data_fetcher->getClasslists($data['active_sem']['intID'],0,0,0);
         $data['my_classlists'] = $this->data_fetcher->getClassListStudentsStPortal($id,$data['active_sem']['intID']);
+        $data['total_units'] = 0;
 
-        
+        foreach($data['my_classlists'] as $cl){
+            $data['total_units'] += intval($cl['strUnits']);
+        }
         foreach($offerings as $offering){
             $accept = true;
             foreach($data['my_classlists'] as $cl){
