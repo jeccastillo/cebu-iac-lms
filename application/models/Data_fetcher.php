@@ -1043,13 +1043,21 @@ class Data_fetcher extends CI_Model {
         return  $classlist['slots'] - $slots;
     }
     
-    function fetch_classlist_by_subject($subject_id,$sem)
+    function fetch_classlist_by_subject($subject_id,$sem,$id = 0)
     {
         $ret = [];
-        $classlists = $this->db
+        if($id == 0)
+            $classlists = $this->db
                     ->select('tb_mas_classlist.*')
                     ->from('tb_mas_classlist')                    
                     ->where(array('intSubjectID'=>$subject_id,'strSection !='=>'','strAcademicYear'=>$sem))                   
+                    ->get()
+                    ->result_array();
+        else
+            $classlists = $this->db
+                    ->select('tb_mas_classlist.*')
+                    ->from('tb_mas_classlist')                    
+                    ->where(array('intSubjectID'=>$subject_id,'strSection !='=>'','strAcademicYear'=>$sem,'intID'=>$id))                   
                     ->get()
                     ->result_array();
 
@@ -2081,6 +2089,20 @@ class Data_fetcher extends CI_Model {
              ->from('tb_mas_classlist_student')
              ->where(array("intStudentID"=>$studentID,"intSubjectID"=>$subjectID,'floatFinalGrade'=>'!= 5','enumStatus'=>'!= \'odrp\''))
              ->join('tb_mas_classlist', 'tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')             
+             ->get()->result_array();
+        if(empty($arr))
+            return false;
+        else
+            return true;
+    }
+
+    function checkSubjectEnlisted($studentID,$classlistID)
+    {
+        
+        $arr = $this->db
+             ->select('intStudentID')
+             ->from('tb_mas_classlist_student')
+             ->where(array("intStudentID"=>$studentID,"intClassListID"=>$classlistID,))                          
              ->get()->result_array();
         if(empty($arr))
             return false;
@@ -3720,6 +3742,68 @@ class Data_fetcher extends CI_Model {
             $classlist['sched_room'] = $sched_room;
 
             $ret[] = $classlist;
+        }
+
+        return $ret;
+    }
+
+    function getClasslistsNotTaken($sem , $program, $dissolved, $has_faculty, $status = 0, $student_id)
+    {
+        $ret = [];
+        $where = array('tb_mas_classlist.strAcademicYear'=>$sem);
+        if($has_faculty != 0)
+            $where['intFacultyID !='] = 999;
+        if($dissolved != 0)
+            $where['isDissolved'] = 1;
+        if($status != 0){
+            $status_n = $status - 1;
+            $where['intFinalized'] = $status_n;
+        }
+
+        $classlists = $this->db
+        ->select('tb_mas_classlist.intID,strProgramCode,strCode,tb_mas_subjects.strDescription as subjectDescription,strClassName,year,strSection,sub_section,slots,strLastname,strFirstname,strMiddlename,intFinalized,tb_mas_subjects.strUnits')
+        ->from('tb_mas_classlist')
+        ->join('tb_mas_subjects','intSubjectID = tb_mas_subjects.intID')
+        ->join('tb_mas_faculty','tb_mas_classlist.intFacultyID = tb_mas_faculty.intID')
+        ->join('tb_mas_curriculum','tb_mas_classlist.intCurriculumID = tb_mas_curriculum.intID')
+        ->join('tb_mas_programs','tb_mas_curriculum.intProgramID = tb_mas_programs.intProgramID')        
+        ->where($where)
+        ->order_by('tb_mas_faculty.strLastname','asc')
+        ->get()
+        ->result_array(); 
+
+        foreach($classlists as $classlist){
+            $classlist['slots_taken_enrolled'] = $this->db
+                ->select('tb_mas_classlist_student.intCSID')                                
+                ->from('tb_mas_classlist_student')
+                ->join('tb_mas_registration','tb_mas_classlist_student.intStudentID = tb_mas_registration.intStudentID')                                                                
+                ->where(array('intClassListID'=>$classlist['intID'],'intROG >'=>0))
+                ->get()
+                ->num_rows();
+
+            $schedule = $this->getScheduleByCode($classlist['intID']);        
+            $sched_day = '';
+            $sched_time = '';
+            $sched_room = '';                
+            
+            if(isset($schedule[0]['strDay']))                                                
+                $sched_time = date('g:ia',strtotime($schedule[0]['dteStart'])).' - '.date('g:ia',strtotime($schedule[0]['dteEnd']));  
+                    
+            foreach($schedule as $sched) {
+                if(isset($sched['strDay']))
+                    $sched_day.= $sched['strDayAbvr'];                    
+                    //$html.= date('g:ia',strtotime($sched['dteStart'])).'  '.date('g:ia',strtotime($sched['dteEnd']))." ".$sched['strDay']." ".$sched['strRoomCode'] . " ";                    
+            }
+                                                                
+            if(isset($schedule[0]['strDay']))
+                $sched_room = $schedule[0]['strRoomCode'];
+
+            $classlist['sched_day'] = $sched_day;
+            $classlist['sched_time'] = $sched_time;
+            $classlist['sched_room'] = $sched_room;
+            $taken = $this->checkStudentSubjectTaken($classlist['intSubjectID'],$student_id);
+            if(!$taken)
+                $ret[] = $classlist;
         }
 
         return $ret;
