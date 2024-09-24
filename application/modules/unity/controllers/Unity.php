@@ -849,7 +849,7 @@ class Unity extends CI_Controller {
                         $enlisted = $this->data_fetcher->checkSubjectEnlisted($post['studentID'],$subject->intID);
                         if(!$enlisted){                            
                             $send['intStudentID'] = $post['studentID'];
-                            $send['intClassListID'] = $subject['intID'];
+                            $send['intClassListID'] = $subject->intID;
                             $this->data_poster->addStudentClasslist($send,$post['studentID']);
                         }
 
