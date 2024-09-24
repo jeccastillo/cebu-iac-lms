@@ -256,7 +256,7 @@ class Portal extends CI_Controller {
         $data['enlistment'] = $this->db->get_where('tb_mas_student_enlistment',array('student_id'=>$id,'term_id'=>$sem))->first_row();
         
         if($data['enlistment']){
-            $enlisted_subjects = $this->db->where('tb_mas_student_enlistment',array('enlistment_id'=>$data['enlistment']['id']))->result_array();
+            $enlisted_subjects = $this->db->where('tb_mas_student_enlistment',array('enlistment_id'=>$data['enlistment']->id))->result_array();
             foreach($enlisted_subjects as $enlisted)
                 $data['enlisted_subjects'][] = $this->data_fetcher->getClasslistById($enlisted['classlist_id']);
         }
