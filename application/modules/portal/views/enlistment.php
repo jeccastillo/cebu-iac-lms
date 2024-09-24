@@ -112,7 +112,7 @@ new Vue({
             let sortedSubjects = this.available_subjects;
             
             sortedSubjects = sortedSubjects.sort((a,b) => {
-                let fa = a.strCode.toLowerCase(), fb = b.title.toLowerCase();
+                let fa = a.strCode.toLowerCase(), fb = b.strCode.toLowerCase();
                 if (fa < fb) {
                     return -1
                 }
