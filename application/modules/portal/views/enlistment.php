@@ -114,6 +114,7 @@ new Vue({
             let id = this.selected_subject;
             let i = this.available_subjects.map(item => item.intID).indexOf(id) // find index of your object
             this.available_subjects.splice(i, 1) // remove it from array
+            this.selected_subject = undefined;
         }
     }
 
