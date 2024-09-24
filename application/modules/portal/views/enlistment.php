@@ -38,7 +38,7 @@
                             </select>
                         </div>
                         <div class="col-sm-6">
-                            <button class="btn btn-primary">Add</button>
+                            <button :disabled="selected_subject == undefined" class="btn btn-primary">Add</button>
                         </div>
                     </div>
                 </div>          
