@@ -74,7 +74,7 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="6" class="text-right"><button class="btn btn-primary">Submit Subjects</button></td>
+                                        <td colspan="5" class="text-right"><button class="btn btn-primary">Submit Subjects</button></td>
                                     </tr>
                                 </tfoot>
                             </table>
