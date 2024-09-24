@@ -7377,7 +7377,7 @@ class Excel extends CI_Controller {
     public function import_student_data()
     {
         $post = $this->input->post();
-        print_r($post['data']);
+
         if(isset($post['data'])){
             foreach($post['data'] as $index => $student){
                 $tuitionYear = $studentProgramId = '';
@@ -7419,10 +7419,11 @@ class Excel extends CI_Controller {
                         'blockSection' => $student['block_section'],
                         'intCurriculumID' => isset($getCurriculum) ? $getCurriculum['intID'] : '',
                         'dteBirthDate' => date("Y-m-d",strtotime($student['date_of_birth'])),
+                        'strAddress' => $student['address'],
                         'place_of_birth' => $student['place_of_birth'],
                         'enumGender' => $student['gender'],
                         // 'strCivilStatus' => $student['M'],
-                        // 'strCitizenship' => $student['N'],
+                        'strCitizenship' => $student['citizenship'],
                         // 'strReligion' => $student['O'],
                         'strTelNumber' => $student['tel_number'],
                         'strMobileNumber' => $student['mobile_number'],
@@ -7442,16 +7443,15 @@ class Excel extends CI_Controller {
                         'intTuitionYear' => $tuitionYear,
                         
                         'high_school' => isset($student['high_school']) ? $student['high_school'] : null,
-                        'high_school_address' => isset($student['high_school']) ? $student['high_school'] : null,
-                        'high_school_attended' => isset($student['high_school']) ? $student['high_school'] : null,
-                        'senior_high' => isset($student['high_school']) ? $student['high_school'] : null,
-                        'senior_high_address' => isset($student['high_school']) ? $student['high_school'] : null,
-                        'senior_high_attended' => isset($student['high_school']) ? $student['high_school'] : null,
+                        'high_school_address' => isset($student['high_school_address']) ? $student['high_school_address'] : null,
+                        'high_school_attended' => isset($student['high_school_attended']) ? $student['high_school_attended'] : null,
+                        'senior_high' => isset($student['senior_high']) ? $student['senior_high'] : null,
+                        'senior_high_address' => isset($student['senior_high_address']) ? $student['senior_high_address'] : null,
+                        'senior_high_attended' => isset($student['senior_high_attended']) ? $student['senior_high_attended'] : null,
+                        'college' => isset($student['college']) ? $student['college'] : null,
+                        'college_address' => isset($student['college_address']) ? $student['college_address'] : null,
+                        'college_attended' => isset($student['college_attended']) ? $student['college_attended'] : null,
                         
-                        // 'college' => $row['AS'],
-                        // 'college_address' => $row['AT'],
-                        // 'college_attended_from' => $row['AU'],
-                        // 'college_attended_to' => $row['AV'],
                         'strLRN' => $student['lrn'],
                     );
                
