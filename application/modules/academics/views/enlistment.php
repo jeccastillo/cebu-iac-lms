@@ -26,7 +26,7 @@
                         </div>
                     </div>
                 </div>      
-                <div class="box-body">
+                <div class="box-body" v-if="!reg">
                     <div v-if="!enlistment">              
                         <h4>Add Subject for Enlistment</h4>
                         <div class="row">
@@ -100,6 +100,7 @@
                                             <th>Section</th>
                                             <th>Schedule</th>                                        
                                             <th>Units</th>
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -108,16 +109,20 @@
                                             <td>{{ subject.strClassName + subject.year + subject.strSection + subject.sub_section + subject.sub_section }}</td>
                                             <td>{{ subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}</td>                                        
                                             <td>{{ subject.strUnits }}</td>
+                                            <td><button v-if="enlistment.status == 'pending'" @click="deleteSubjectForEnlistment(subject.intID)" class="btn btn-danger">Remove</button></td>
                                         </tr>                                        
-                                    </tbody>
-                                    <tfoot v-if="enlistment.status == 'pending'">
+                                    </tbody>   
+                                    <tfoot>
                                         <tr>
                                             <td></td>
                                             <td></td>
                                             <td></td>                                            
-                                            <td><button @click="cancelEnlistmentForm" class="btn btn-danger">Cancel Enlistment</button></td>
+                                            <td v-if="enlistment.status == 'pending'">
+                                                <button @click="cancelEnlistmentForm" class="btn btn-danger">Cancel Enlistment</button>
+                                                <button @click="approveEnlistmentForm" class="btn btn-success">Approve Enlistment</button>
+                                            </td>
                                         </tr>
-                                    </tfoot>
+                                    </tfoot>                                 
                                 </table>
                             </div>
                         </div>
@@ -152,7 +157,11 @@
                             </table>
                         </div>
                     </div>
-                </div>          
+                </div>  
+                <div class="box-body text-center" v-else>
+                    <h3>Student is Already Enlisted</h3>
+                    <p>Please ask the registrar to reset status for advising</p>
+                </div>        
             </div>         
                                                        
             
@@ -183,12 +192,14 @@ new Vue({
         id: '<?php echo $id; ?>',
         sem: '<?php echo $sem; ?>',         
         sy: [],
+        user: undefined,
         available_subjects: [],
         selected_subject: undefined,
         selected_subjects: [],
         my_classlists: [],
         total_units: 0,
         dept_head: undefined,
+        reg: undefined,
         enlistment: undefined,
         enlisted_subjects: [],
         additional_units: 0,
@@ -224,7 +235,7 @@ new Vue({
         var amount = 0;
 
         axios
-            .get(base_url + 'portal/enlistment_data/' + this.id + '/' + this.sem, {
+            .get(base_url + 'academics/enlistment_data/' + this.id + '/' + this.sem, {
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 },
@@ -237,7 +248,12 @@ new Vue({
                 this.available_subjects = data.data.subject_offerings;  
                 this.my_classlists = data.data.my_classlists;   
                 this.total_units = data.data.total_units; 
-                this.dept_head = data.data.dept_head;                    
+                this.dept_head = data.data.dept_head;    
+                this.reg = data.data.registration;
+                this.user = data.data.user;
+                if(this.user.intUserLevel != 2 && this.dept_head.intID != this.user.intID)
+                    document.location = base_url + 'unity/faculty_dashboard'
+
                 this.enlistment = data.data.enlistment;
                 if(this.enlistment)
                     switch(this.enlistment.status){
@@ -258,7 +274,7 @@ new Vue({
 
     methods: {            
         selectTerm: function($event){
-            document.location = base_url + 'portal/enlistment/' + event.target.value;
+            document.location = base_url + 'academics/enlistment/' + event.target.value;
         },
         addSubjectForEnlistment: function(){
             var formdata= new FormData();
@@ -321,8 +337,7 @@ new Vue({
                                 Authorization: `Bearer ${window.token}`
                             }
                         })
-                    .then(data => {
-                        console.log(data.data);
+                    .then(data => {                        
                         if (data.data.success) {
                             let url = api_url + 'registrar/send_notif_department_head/' + this.student.slug;                                                
                             let payload = {
@@ -367,15 +382,117 @@ new Vue({
                 },
                 allowOutsideClick: () => !Swal.isLoading()
             });
-        },
-        cancelEnlistmentForm: function(){
+        },   
+        deleteSubjectForEnlistment: function(id){
             Swal.fire({
-                title: 'Cancel Enlistment?',
-                text: "You are about to cancel your enlistment request. Continue?",
+                title: 'Remove Subject?',
+                text: "Continue Deleting Subject?",
                 showCancelButton: true,
                 confirmButtonText: "Yes",
                 imageWidth: 100,
                 icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata= new FormData();
+                    formdata.append('classlist_id',id);                    
+                    formdata.append('enlistment_id',this.enlistment.id);                    
+                    return axios
+                    .post(base_url + 'academics/delete_subject_from_enlistment',formdata, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                    .then(data => {
+                        this.loader_spinner = false;                                                                                                                            
+                        Swal.fire({
+                            title: "Success",
+                            text: data.data.message,
+                            icon: "success"
+                        }).then(function() {
+                            location.reload();
+                        });                         
+                    });
+                    
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+        },   
+        approveEnlistmentForm: function(){
+            Swal.fire({
+                title: 'Approve Enlistment?',
+                text: "You are about to approve the enlistment request. Continue?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata= new FormData();
+                    formdata.append('id',this.enlistment.id);                    
+                    return axios
+                    .post(base_url + 'academics/approve_enlistment_form',formdata, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                    .then(data => {                        
+                        if (data.data.success) {
+                            let url = api_url + 'registrar/send_notif_department_head/' + this.student.slug;                                                
+                            let payload = {
+                                            'link': "",
+                                            'message': "Greetings "+ this.student.strFirstname +", <br /><br />Your request has been approved. Subjects: <br /><br /> " + data.data.classlists_table,                                            
+                                            'email' : this.student.strEmail,
+                                        } 
+                            
+                            Swal.fire({
+                                showCancelButton: false,
+                                showCloseButton: false,
+                                allowEscapeKey: false,
+                                title: 'Loading',
+                                text: 'Processing Data do not leave page',
+                                icon: 'info',
+                            })
+                            Swal.showLoading();
+                            axios.post(url, payload, {
+                                headers: {
+                                    Authorization: `Bearer ${window.token}`
+                                }
+                            })
+                            .then(data => {
+                                this.loader_spinner = false;                                                                                                                            
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });  
+                            });    
+                        } else {
+                            Swal.fire(
+                                'Failed!',
+                                data.data.message,
+                                'error'
+                            )
+                        }
+                    });
+                    
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+        },  
+        cancelEnlistmentForm: function(){
+            Swal.fire({
+                title: 'Cancel Enlistment?',
+                text: "You are about to cancel the enlistment request. Continue?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "danger",
                 cancelButtonText: "No, cancel!",
                 showCloseButton: true,
                 showLoaderOnConfirm: true,
@@ -411,6 +528,7 @@ new Vue({
                 allowOutsideClick: () => !Swal.isLoading()
             });
         }
+        
     }
 
 })
