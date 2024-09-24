@@ -32,7 +32,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <select v-model="selected_subject" class="form-control">
-                                <option v-for="subject in sortedSubjects" :value="subject.intID">
+                                <option v-for="subject in sortedSubjectsArray" :value="subject.intID">
                                     {{ subject.strCode + " " + subject.strClassName + subject.year + subject.strSection + subject.sub_section + " " + subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}
                                 </option>
                             </select>
@@ -108,7 +108,7 @@ new Vue({
         },       
     },
     computed: {
-        sortedSubjects() {
+        sortedSubjectsArray() {
             let sortedSubjects = this.available_subjects;
             
             sortedSubjects = sortedSubjects.sort((a,b) => {
