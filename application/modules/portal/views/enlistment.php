@@ -27,22 +27,21 @@
                     </div>
                 </div>      
                 <div class="box-body">
-                                        
-                    <h4>Add Subject for Enlistment</h4>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <select v-model="selected_subject" class="form-control">
-                                <option v-for="subject in sortedSubjectsArray" :value="subject.intID">
-                                    {{ subject.strCode + " " + subject.strClassName + subject.year + subject.strSection + subject.sub_section + " " + subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}
-                                </option>
-                            </select>
+                    <div v-if="!enlistment">              
+                        <h4>Add Subject for Enlistment</h4>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <select v-model="selected_subject" class="form-control">
+                                    <option v-for="subject in sortedSubjectsArray" :value="subject.intID">
+                                        {{ subject.strCode + " " + subject.strClassName + subject.year + subject.strSection + subject.sub_section + " " + subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6">
+                                <button @click="addSubjectForEnlistment" :disabled="selected_subject == undefined" class="btn btn-primary">Add</button>
+                            </div>
                         </div>
-                        <div class="col-sm-6">
-                            <button @click="addSubjectForEnlistment" :disabled="selected_subject == undefined" class="btn btn-primary">Add</button>
-                        </div>
-                    </div>
-                    <hr />
-                    <div v-if="!enlistment">
+                        <hr />                    
                         <h4>Subjects To Enlist</h4>
                         <div class="row">
                             <div class="col-sm-12">
