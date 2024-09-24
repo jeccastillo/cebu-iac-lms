@@ -823,29 +823,35 @@ class Unity extends CI_Controller {
 
                 $this->data_poster->post_data('tb_mas_advised',$data_advised);  
                 $id = $this->db->insert_id();
+
+                foreach($post['subjects'] as $subject)
+                {
+                    $subject = (array)$subject;
+                        
+                    $data_subject['intSubjectID'] = $subject['intSubjectID'];
+                    $data_subject['classlist_id'] = $subject['intID'];
+                    $data_subject['intAdvisedID'] = $id;
+                    $this->data_poster->post_data('tb_mas_advised_subjects',$data_subject);  
+                }
+
+                $data['success'] = true;
+                $data['message'] = "Successfully Added subjects";
+                $data['sid'] = $student;
                 
             }
             else
             {
-                $id = $this->data_fetcher->getAdvisedID($post['studentID'],$ay);
+                $data['success'] = false;
+                $data['message'] = "Already Added please proceed with the next step";
             }
             
-            $this->data_poster->removeAdvisedSubjects($post['studentID'],$ay);//check per subject
-
-            foreach($post['subjects'] as $subject)
-            {
-                $subject = (array)$subject;
-                    
-                $data_subject['intSubjectID'] = $subject['intSubjectID'];
-                $data_subject['classlist_id'] = $subject['intID'];
-                $data_subject['intAdvisedID'] = $id;
-                $this->data_poster->post_data('tb_mas_advised_subjects',$data_subject);  
-            }
+        }
+        else{
+            $data['success'] = false;
+            $data['message'] = "No Subjects Selected";
         }
 
-        $data['success'] = true;
-        $data['message'] = "Successfully Added subjects";
-        $data['sid'] = $student;
+        
         
         echo json_encode($data);
     }
@@ -3553,7 +3559,10 @@ class Unity extends CI_Controller {
         foreach($subjects as $subj)
         {
             $cst = [];
-            $classlists = $this->data_fetcher->fetch_classlist_by_subject($subj['intID'],$active_sem['intID']);            
+            if($subj['classlist_id'])
+                $classlists = $this->data_fetcher->fetch_classlist_by_subject($subj['intID'],$active_sem['intID'],$subj['classlist_id']);
+            else
+                $classlists = $this->data_fetcher->fetch_classlist_by_subject($subj['intID'],$active_sem['intID']);            
             foreach($classlists as $classlist){
                 $classlist_temp = $classlist;
                 $classlist_temp['numCount'] = $this->data_fetcher->countRemainingSlotsClasslist($classlist['intID']);                
