@@ -176,11 +176,35 @@ new Vue({
             document.location = base_url + 'portal/enlistment/' + event.target.value;
         },
         addSubjectForEnlistment: function(){
-            let id = this.selected_subject;
-            let i = this.available_subjects.map(item => item.intID).indexOf(id) // find index of your object
-            this.selected_subjects.push(this.available_subjects[i]);            
-            this.available_subjects.splice(i, 1) // remove it from array
-            this.selected_subject = undefined;            
+            var formdata= new FormData();
+            formdata.append('student',this.id);
+            formdata.append('sem',this.sem);
+            formdata.append('section_to_add',this.selected_subject);
+            axios
+            .post(base_url + 'portal/check_conflict/', formdata, {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                },
+            })
+            .then((data) => { 
+                if(data.data.success){
+                    let id = this.selected_subject;
+                    let i = this.available_subjects.map(item => item.intID).indexOf(id) // find index of your object
+                    this.selected_subjects.push(this.available_subjects[i]);            
+                    this.available_subjects.splice(i, 1) // remove it from array
+                    this.selected_subject = undefined;            
+                }
+                else{
+                    Swal.fire({
+                        title: "Failed",
+                        text: data.data
+                            .message,
+                        icon: "failed"
+                    })
+                }
+            });
+
+            
         },
         removeSubjectForEnlistment: function(id){            
             let i = this.selected_subjects.map(item => item.intID).indexOf(id) // find index of your object            
