@@ -154,7 +154,7 @@
                     </div>
                 </div> 
                 <div class="box-body text-center" v-else>
-                    <h3>Student is Already Enlisted</h3>
+                    <h3>You are Already Enlisted</h3>
                     <p>Please ask the registrar to reset status for advising</p>
                 </div>          
             </div>         
