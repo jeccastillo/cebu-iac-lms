@@ -115,7 +115,7 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>                                            
-                                            <td><button @click="cancelEnlistmentForm" class="btn btn-primary">Cancel Enlistment</button></td>
+                                            <td><button @click="cancelEnlistmentForm" class="btn btn-danger">Cancel Enlistment</button></td>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -333,7 +333,7 @@ new Vue({
             });
         },
         cancelEnlistmentForm: function(){
-            
+
         }
     }
 
