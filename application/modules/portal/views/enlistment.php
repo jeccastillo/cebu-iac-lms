@@ -240,7 +240,7 @@ new Vue({
                 if(this.enlistment)
                     switch(this.enlistment.status){
                         case 'pending':
-                            this.color = "#faff00";
+                            this.color = "#f5ae07";
                         break;
                         case 'approved':
                             this.color = "#090";
