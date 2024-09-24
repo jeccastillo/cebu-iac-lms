@@ -877,8 +877,8 @@ new Vue({
     },
     enlistStudent: function(id){
           Swal.fire({
-              title: 'Remove Subject?',
-              text: "Continue Deleting Subject?",
+              title: 'Enlist Subjects?',
+              text: "Continue Enlisting Subjects?",
               showCancelButton: true,
               confirmButtonText: "Yes",
               imageWidth: 100,
