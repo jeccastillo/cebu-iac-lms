@@ -218,9 +218,16 @@ class Portal extends CI_Controller {
 
         $data['subject_offerings'] = [];
         $offerings = $this->data_fetcher->getClasslists($data['active_sem']['intID'],0,0,0);
-        $data['my_classlists'] = $this->data_fetcher->getClassListStudentsStPortal($id,$data['active_sem']['intID']);
-
+        $records = $this->data_fetcher->getClassListStudentsStPortal($id,$data['active_sem']['intID']);
+        $data['records'] = [];
         
+        foreach($records as $record)
+        {
+            $record['schedule'] = $this->data_fetcher->getScheduleByCode($record['classlistID']);
+            //print_r($record['schedule']);
+            $data['records'][] = $record;
+        }
+
         foreach($offerings as $offering){
             $accept = true;
             foreach($data['my_classlists'] as $cl){

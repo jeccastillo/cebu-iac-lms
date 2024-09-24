@@ -57,8 +57,8 @@
                                 <tbody>
                                     <tr v-for="subject in selected_subjects">
                                         <td>{{ subject.strCode }}</td>
-                                        <td>{{ subject.strClassName + subject.year + subject.strSection + subject.sub_section }}</td>
-                                        <td>{{ subject.sub_section + " " + subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}</td>
+                                        <td>{{ subject.strClassName + subject.year + subject.strSection + subject.sub_section + subject.sub_section }}</td>
+                                        <td>{{ subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}</td>
                                         <td><button @click="removeSubjectForEnlistment(subject.intID)" class="btn btn-danger">Remove</button></td>
                                     </tr>
                                 </tbody>
@@ -79,8 +79,8 @@
                                 <tbody>
                                     <tr v-for="subject in my_classlists">
                                         <td>{{ subject.strCode }}</td>
-                                        <td>{{ subject.strClassName + subject.year + subject.strSection + subject.sub_section }}</td>
-                                        <td>{{ subject.sub_section + " " + subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}</td>                                        
+                                        <td>{{ subject.strClassName + subject.year + subject.strSection + subject.sub_section + subject.sub_section }}</td>
+                                        <td>{{ subject.schedule.sched_room + " " + subject.schedule.sched_day + " " + subject.schedule.sched_time }}</td>                                        
                                     </tr>
                                 </tbody>
                             </table>
@@ -163,7 +163,7 @@ new Vue({
                 this.sy = data.data.sy;  
                 this.sem = data.data.active_sem.intID;   
                 this.available_subjects = data.data.subject_offerings;  
-                this.my_classlists = data.data.my_classlists;                                 
+                this.my_classlists = data.data.records;                                 
             });
 
    
