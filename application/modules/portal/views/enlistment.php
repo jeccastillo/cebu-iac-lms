@@ -75,7 +75,8 @@ new Vue({
 
             .then((data) => { 
                 this.student = data.data.student;
-                this.sy = data.data.sy;                                         
+                this.sy = data.data.sy;  
+                this.sem = data.data.active_sem.intID;                                       
             });
 
    
