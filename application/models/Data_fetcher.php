@@ -1043,13 +1043,21 @@ class Data_fetcher extends CI_Model {
         return  $classlist['slots'] - $slots;
     }
     
-    function fetch_classlist_by_subject($subject_id,$sem)
+    function fetch_classlist_by_subject($subject_id,$sem,$id = 0)
     {
         $ret = [];
-        $classlists = $this->db
+        if($id == 0)
+            $classlists = $this->db
                     ->select('tb_mas_classlist.*')
                     ->from('tb_mas_classlist')                    
                     ->where(array('intSubjectID'=>$subject_id,'strSection !='=>'','strAcademicYear'=>$sem))                   
+                    ->get()
+                    ->result_array();
+        else
+            $classlists = $this->db
+                    ->select('tb_mas_classlist.*')
+                    ->from('tb_mas_classlist')                    
+                    ->where(array('intSubjectID'=>$subject_id,'strSection !='=>'','strAcademicYear'=>$sem,'intID'=>$id))                   
                     ->get()
                     ->result_array();
 
