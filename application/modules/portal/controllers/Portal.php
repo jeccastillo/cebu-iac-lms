@@ -179,8 +179,8 @@ class Portal extends CI_Controller {
     }
     public function cancel_enlistment_form(){
         $post = $this->input->post();
-        $this->data_fetcher->deleteItem('tb_mas_student_enlistment',$post['enlistment_id'],'id');
-        $this->data_fetcher->deleteItem('tb_mas_student_enlistment_subject',$post['enlistment_id'],'enlistment_id');
+        $this->data_poster->deleteItem('tb_mas_student_enlistment',$post['enlistment_id'],'id');
+        $this->data_poster->deleteItem('tb_mas_student_enlistment_subject',$post['enlistment_id'],'enlistment_id');
         
         $data['success'] = true;
         $data['message'] = "Request has been cancelled";
