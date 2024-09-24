@@ -42,6 +42,7 @@
                         </div>
                     </div>
                     <hr />
+                    <h4>Subjects To Enlist</h4>
                     <div class="row">
                         <div class="col-sm-12">
                             <table class="table table-bordered table-striped">
@@ -59,6 +60,27 @@
                                         <td>{{ subject.strClassName + subject.year + subject.strSection + subject.sub_section }}</td>
                                         <td>{{ subject.sub_section + " " + subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}</td>
                                         <td><button @click="removeSubjectForEnlistment(subject.intID)" class="btn btn-danger">Remove</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <h4>Currently Enlisted Subjects</h4>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Subject</th>
+                                        <th>Section</th>
+                                        <th>Schedule</th>                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="subject in my_classlists">
+                                        <td>{{ subject.strCode }}</td>
+                                        <td>{{ subject.strClassName + subject.year + subject.strSection + subject.sub_section }}</td>
+                                        <td>{{ subject.sub_section + " " + subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}</td>                                        
                                     </tr>
                                 </tbody>
                             </table>
@@ -98,6 +120,7 @@ new Vue({
         available_subjects: [],
         selected_subject: undefined,
         selected_subjects: [],
+        my_classlists: [],
         student: {
             strFirstname:'',
             strLastname:'',
@@ -139,7 +162,8 @@ new Vue({
                 this.student = data.data.student;
                 this.sy = data.data.sy;  
                 this.sem = data.data.active_sem.intID;   
-                this.available_subjects = data.data.subject_offerings;                                   
+                this.available_subjects = data.data.subject_offerings;  
+                this.my_classlists = data.data.my_classlists;                                 
             });
 
    
