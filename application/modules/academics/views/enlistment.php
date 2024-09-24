@@ -109,7 +109,7 @@
                                             <td>{{ subject.strClassName + subject.year + subject.strSection + subject.sub_section + subject.sub_section }}</td>
                                             <td>{{ subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}</td>                                        
                                             <td>{{ subject.strUnits }}</td>
-                                            <td><button @click="deleteSubjectForEnlistment(subject.intID)" class="btn btn-danger">Remove</button></td>
+                                            <td><button v-if="enlistment.status == 'pending'" @click="deleteSubjectForEnlistment(subject.intID)" class="btn btn-danger">Remove</button></td>
                                         </tr>                                        
                                     </tbody>   
                                     <tfoot v-if="enlistment.status == 'pending'">
