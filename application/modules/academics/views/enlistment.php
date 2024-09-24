@@ -109,15 +109,7 @@
                                             <td>{{ subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}</td>                                        
                                             <td>{{ subject.strUnits }}</td>
                                         </tr>                                        
-                                    </tbody>
-                                    <tfoot v-if="enlistment.status == 'pending'">
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>                                            
-                                            <td><button @click="cancelEnlistmentForm" class="btn btn-danger">Cancel Enlistment</button></td>
-                                        </tr>
-                                    </tfoot>
+                                    </tbody>                                    
                                 </table>
                             </div>
                         </div>
@@ -224,7 +216,7 @@ new Vue({
         var amount = 0;
 
         axios
-            .get(base_url + 'portal/enlistment_data/' + this.id + '/' + this.sem, {
+            .get(base_url + 'academics/enlistment_data/' + this.id + '/' + this.sem, {
                 headers: {
                     Authorization: `Bearer ${window.token}`
                 },
@@ -258,7 +250,7 @@ new Vue({
 
     methods: {            
         selectTerm: function($event){
-            document.location = base_url + 'portal/enlistment/' + event.target.value;
+            document.location = base_url + 'academics/enlistment/' + event.target.value;
         },
         addSubjectForEnlistment: function(){
             var formdata= new FormData();
@@ -367,50 +359,7 @@ new Vue({
                 },
                 allowOutsideClick: () => !Swal.isLoading()
             });
-        },
-        cancelEnlistmentForm: function(){
-            Swal.fire({
-                title: 'Cancel Enlistment?',
-                text: "You are about to cancel your enlistment request. Continue?",
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                imageWidth: 100,
-                icon: "question",
-                cancelButtonText: "No, cancel!",
-                showCloseButton: true,
-                showLoaderOnConfirm: true,
-                preConfirm: (login) => {
-                    var formdata= new FormData();
-                    formdata.append('enlistment_id',this.enlistment.id);
-                    return axios
-                    .post(base_url + 'portal/cancel_enlistment_form',formdata, {
-                            headers: {
-                                Authorization: `Bearer ${window.token}`
-                            }
-                        })
-                    .then(data => {
-                        console.log(data.data);
-                        if (data.data.success) {
-                            Swal.fire({
-                                title: "Success",
-                                text: data.data.message,
-                                icon: "success"
-                            }).then(function() {
-                                location.reload();
-                            });
-                        } else {
-                            Swal.fire(
-                                'Failed!',
-                                data.data.message,
-                                'error'
-                            )
-                        }
-                    });
-                    
-                },
-                allowOutsideClick: () => !Swal.isLoading()
-            });
-        }
+        },        
     }
 
 })
