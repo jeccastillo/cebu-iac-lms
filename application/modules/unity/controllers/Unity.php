@@ -823,32 +823,32 @@ class Unity extends CI_Controller {
 
                 $this->data_poster->post_data('tb_mas_advised',$data_advised);  
                 $id = $this->db->insert_id();
+
+                foreach($post['subjects'] as $subject)
+                {
+                    $subject = (array)$subject;
+                        
+                    $data_subject['intSubjectID'] = $subject['intSubjectID'];
+                    $data_subject['classlist_id'] = $subject['intID'];
+                    $data_subject['intAdvisedID'] = $id;
+                    $this->data_poster->post_data('tb_mas_advised_subjects',$data_subject);  
+                }
+
+                $data['success'] = true;
+                $data['message'] = "Successfully Added subjects";
+                $data['sid'] = $student;
                 
             }
             else
             {
-                $id = $this->data_fetcher->getAdvisedID($post['studentID'],$ay);
+                $data['success'] = false;
+                $data['message'] = "Already Enlisted Please add Subjects Manually";
             }
             
-            $this->data_poster->removeAdvisedSubjects($post['studentID'],$ay);//check per subject
-
-            foreach($post['subjects'] as $subject)
-            {
-                $subject = (array)$subject;
-                    
-                $data_subject['intSubjectID'] = $subject['intSubjectID'];
-                $data_subject['classlist_id'] = $subject['intID'];
-                $data_subject['intAdvisedID'] = $id;
-                $this->data_poster->post_data('tb_mas_advised_subjects',$data_subject);  
-            }
-
-            $data['success'] = true;
-            $data['message'] = "Successfully Added subjects";
-            $data['sid'] = $student;
         }
         else{
             $data['success'] = false;
-            $data['message'] = "Already Enlisted Please add Subjects Manually";
+            $data['message'] = "No Subjects Selected";
         }
 
         
