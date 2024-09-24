@@ -112,12 +112,15 @@
                                             <td><button v-if="enlistment.status == 'pending'" @click="deleteSubjectForEnlistment(subject.intID)" class="btn btn-danger">Remove</button></td>
                                         </tr>                                        
                                     </tbody>   
-                                    <tfoot v-if="enlistment.status == 'pending'">
+                                    <tfoot>
                                         <tr>
                                             <td></td>
                                             <td></td>
                                             <td></td>                                            
-                                            <td><button @click="cancelEnlistmentForm" class="btn btn-danger">Cancel Enlistment</button></td>
+                                            <td v-if="enlistment.status == 'pending'">
+                                                <button @click="cancelEnlistmentForm" class="btn btn-danger">Cancel Enlistment</button>
+                                                <button @click="approveEnlistmentForm" class="btn btn-success">Approve Enlistment</button>
+                                            </td>
                                         </tr>
                                     </tfoot>                                 
                                 </table>
@@ -410,15 +413,58 @@ new Vue({
                 },
                 allowOutsideClick: () => !Swal.isLoading()
             });
-        },     
-        cancelEnlistmentForm: function(){
+        },   
+        approveEnlistmentForm: function(){
             Swal.fire({
-                title: 'Cancel Enlistment?',
-                text: "You are about to cancel your enlistment request. Continue?",
+                title: 'Approve Enlistment?',
+                text: "You are about to approve the enlistment request. Continue?",
                 showCancelButton: true,
                 confirmButtonText: "Yes",
                 imageWidth: 100,
                 icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata= new FormData();
+                    formdata.append('id',this.enlistment.id);                    
+                    return axios
+                    .post(base_url + 'academics/approve_enlistment_form',formdata, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                    .then(data => {
+                        console.log(data.data);
+                        if (data.data.success) {
+                            Swal.fire({
+                                title: "Success",
+                                text: data.data.message,
+                                icon: "success"
+                            }).then(function() {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire(
+                                'Failed!',
+                                data.data.message,
+                                'error'
+                            )
+                        }
+                    });
+                    
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+        },  
+        cancelEnlistmentForm: function(){
+            Swal.fire({
+                title: 'Cancel Enlistment?',
+                text: "You are about to cancel the enlistment request. Continue?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "danger",
                 cancelButtonText: "No, cancel!",
                 showCloseButton: true,
                 showLoaderOnConfirm: true,

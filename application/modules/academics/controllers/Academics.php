@@ -923,6 +923,38 @@ class Academics extends CI_Controller {
         echo json_encode($data);
     }
     
+    public function approve_enlistment_form(){
+        $post = $this->input->post();        
+        $this->db
+        ->where('id',$post['id'])
+        ->update('tb_mas_student_enlistment', array('status'=> "approved"));
+
+        $enlisted_subjects = $this->db->get_where('tb_mas_student_enlistment_subject',array('enlistment_id'=>$post['id']))->result_array();
+            foreach($enlisted_subjects as $enlisted)
+                $classlists = $this->data_fetcher->getClasslistById($enlisted['classlist_id']);
+
+        $data['classlists_table'] = "<table>
+                                        <thead>
+                                            <tr>
+                                                <th>Subject</th>
+                                                <th>Section</th>
+                                                <th>Schedule</th>
+                                            </tr>
+                                        </thead><tbody>";
+        foreach($classlists as $classlist){
+            $data['classlists_table'] .=  "<tr>
+                                                <td>".$classlist['strCode']."</td>
+                                                <td>".$classlist['strClassName'].$classlist['year'].$classlist['strSection'].$classlist['sub_section']."</td>
+                                                <td>".$classlist['sched_room']." ".$classlist['sched_day']." ".$classlist['sched_time']."</td>
+                                           </tr>
+                                          ";    
+        }                                        
+        $data['classlists_table'] .=  "</tbody></table>";
+
+        $data['success'] = true;
+        $data['message'] = "Sucessfully Approved";
+        echo json_encode($data);
+    }
     
     
     public function faculty_logged_in()
