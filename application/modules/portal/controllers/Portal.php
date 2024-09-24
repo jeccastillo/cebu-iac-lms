@@ -194,7 +194,7 @@ class Portal extends CI_Controller {
         foreach($sections_to_add as $cl){
             $insert = [
                 'enlistment_id' => $id,
-                'classlist_id' => $cl['intID'],
+                'classlist_id' => $cl->intID,
             ];
             $this->db->insert('tb_mas_student_enlistment_subject',$insert);
         }
