@@ -116,19 +116,46 @@ class Data_fetcher extends CI_Model {
     function getClassListStudentsStPortal($id,$classlist) 
     {
                
-        return  $this->db
+        $ret = [];
+        $classlists = $this->db
                      ->select("tb_mas_classlist_student.intCSID,strCode,strSection , intSubjectID, year, sub_section, strClassName,intClasslistID, intLab, floatPrelimGrade, floatMidtermGrade, floatFinalsGrade, tb_mas_subjects.strDescription,tb_mas_classlist_student.floatFinalGrade as v3,intFinalized,enumStatus,strRemarks,tb_mas_faculty.strFirstname,tb_mas_faculty.strLastname, tb_mas_subjects.strUnits, tb_mas_subjects.intBridging, tb_mas_classlist.intID as classlistID, tb_mas_subjects.intID as subjectID, tb_mas_classlist.intFinalized")
                      ->from("tb_mas_classlist_student")
             
-                    ->where(array("intStudentID"=>$id,"strAcademicYear"=>$classlist))
-                        
-                        
+                    ->where(array("intStudentID"=>$id,"strAcademicYear"=>$classlist))                                                
                      ->join('tb_mas_classlist', 'tb_mas_classlist.intID = tb_mas_classlist_student.intClasslistID')
                      ->join('tb_mas_subjects', 'tb_mas_subjects.intID = tb_mas_classlist.intSubjectID')
                      ->join('tb_mas_faculty', 'tb_mas_faculty.intID = tb_mas_classlist.intFacultyID')
                      ->order_by('strCode','asc')   
                      ->get()
                      ->result_array();
+
+
+        foreach($classlists as $classlist){           
+
+            $schedule = $this->getScheduleByCode($classlist['intClasslistID']);        
+            $sched_day = '';
+            $sched_time = '';
+            $sched_room = '';                
+            
+            if(isset($schedule[0]['strDay']))                                                
+                $sched_time = date('g:ia',strtotime($schedule[0]['dteStart'])).' - '.date('g:ia',strtotime($schedule[0]['dteEnd']));  
+                    
+            foreach($schedule as $sched) {
+                if(isset($sched['strDay']))
+                    $sched_day.= $sched['strDayAbvr'];                    
+                    //$html.= date('g:ia',strtotime($sched['dteStart'])).'  '.date('g:ia',strtotime($sched['dteEnd']))." ".$sched['strDay']." ".$sched['strRoomCode'] . " ";                    
+            }
+                                                                
+            if(isset($schedule[0]['strDay']))
+                $sched_room = $schedule[0]['strRoomCode'];
+
+            $classlist['sched_day'] = $sched_day;
+            $classlist['sched_time'] = $sched_time;
+            $classlist['sched_room'] = $sched_room;
+
+            $ret[] = $classlist;
+        }
+        return $ret;
         
     }
     function getSyStudentEnrolled($id,$enrolled=1) 
@@ -4330,8 +4357,46 @@ class Data_fetcher extends CI_Model {
     }
 
     function student_conflict($csid,$record,$sem)
-    {
+    {        
         $classlist_sched = $this->db->get_where('tb_mas_room_schedule',array('strScheduleCode'=>$record['intClassListID']))->result_array();
+        $results = [];
+        if(!empty($classlist_sched)){
+            foreach($classlist_sched as $sched){
+                $query ="SELECT intRoomSchedID,strCode,strSection,strClassName,year,sub_section
+                        FROM tb_mas_room_schedule
+                        JOIN tb_mas_classlist ON tb_mas_classlist.intID = tb_mas_room_schedule.strScheduleCode                
+                        JOIN tb_mas_subjects ON tb_mas_classlist.intSubjectID = tb_mas_subjects.intID                
+                        WHERE
+                        (
+                        (dteStart >= '".$sched['dteStart']."' AND dteEnd <= '".$sched['dteEnd']."') OR
+                        (dteStart < '".$sched['dteEnd']."' AND dteEnd >= '".$sched['dteEnd']."') OR 
+                        (dteStart <= '".$sched['dteStart']."' AND dteEnd > '".$sched['dteStart']."')
+                        )";
+            
+                
+                $query .=" AND strDay = '".$sched['strDay']."' AND tb_mas_classlist.intID = ".$csid." AND tb_mas_room_schedule.intSem = ".$sem." ";
+            
+                // echo $query."<br />";
+                //print_r($this->db->query($query)->result_array());
+                //die();
+                 $ret = $this->db->query($query)->first_row();
+                 
+                 if($ret)
+                    $ret->conflict = $record;
+                
+                $results[] = $ret;
+            }
+
+            
+        }
+        return $results;
+        
+    }
+
+    function student_conflict_enlistment($csid,$record,$sem)
+    {
+        $record = (array) $record;
+        $classlist_sched = $this->db->get_where('tb_mas_room_schedule',array('strScheduleCode'=>$record['intID']))->result_array();
         $results = [];
         if(!empty($classlist_sched)){
             foreach($classlist_sched as $sched){
