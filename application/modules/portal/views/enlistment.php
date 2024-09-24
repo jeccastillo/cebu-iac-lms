@@ -194,6 +194,7 @@ new Vue({
         total_units: 0,
         dept_head: undefined,
         enlistment: undefined,
+        reg: undefined,
         enlisted_subjects: [],
         additional_units: 0,
         color: "#090",
@@ -243,6 +244,7 @@ new Vue({
                 this.total_units = data.data.total_units; 
                 this.dept_head = data.data.dept_head;                    
                 this.enlistment = data.data.enlistment;
+                this.reg = data.data.registration;
                 if(this.enlistment)
                     switch(this.enlistment.status){
                         case 'pending':
