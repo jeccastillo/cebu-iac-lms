@@ -132,7 +132,7 @@ class Data_fetcher extends CI_Model {
 
         foreach($classlists as $classlist){           
 
-            $schedule = $this->getScheduleByCode($classlist['intID']);        
+            $schedule = $this->getScheduleByCode($classlist['intClasslistID']);        
             $sched_day = '';
             $sched_time = '';
             $sched_room = '';                
