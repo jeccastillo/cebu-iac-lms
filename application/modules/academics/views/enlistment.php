@@ -232,7 +232,7 @@ new Vue({
                 this.total_units = data.data.total_units; 
                 this.dept_head = data.data.dept_head;    
                 this.user = data.data.user;
-                if(this.user.intUserLevel != 2 || this.dept_head.intID != this.user.intID)
+                if(this.user.intUserLevel != 2 && this.dept_head.intID != this.user.intID)
                     document.location = base_url + 'unity/faculty_dashboard'
 
                 this.enlistment = data.data.enlistment;
