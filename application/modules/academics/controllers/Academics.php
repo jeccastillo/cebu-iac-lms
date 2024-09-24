@@ -934,21 +934,9 @@ class Academics extends CI_Controller {
             foreach($enlisted_subjects as $enlisted)
                 $classlists[] = $this->data_fetcher->getClasslistById($enlisted['classlist_id']);
 
-        $data['classlists_table'] = "<table>
-                                        <thead>
-                                            <tr>
-                                                <th>Subject</th>
-                                                <th>Section</th>
-                                                <th>Schedule</th>
-                                            </tr>
-                                        </thead><tbody>";
+        $data['classlists_table'] = "<table><thead><tr><th>Subject</th><th>Section</th><th>Schedule</th></tr></thead><tbody>";
         foreach($classlists as $classlist){
-            $data['classlists_table'] .=  "<tr>
-                                                <td>".$classlist['strCode']."</td>
-                                                <td>".$classlist['strClassName'].$classlist['year'].$classlist['strSection'].$classlist['sub_section']."</td>
-                                                <td>".$classlist['sched_room']." ".$classlist['sched_day']." ".$classlist['sched_time']."</td>
-                                           </tr>
-                                          ";    
+            $data['classlists_table'] .=  "<tr><td>".$classlist['strCode']."</td><td>".$classlist['strClassName'].$classlist['year'].$classlist['strSection'].$classlist['sub_section']."</td><td>".$classlist['sched_room']." ".$classlist['sched_day']." ".$classlist['sched_time']."</td></tr>";    
         }                                        
         $data['classlists_table'] .=  "</tbody></table>";
 
