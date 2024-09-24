@@ -7454,11 +7454,12 @@ class Excel extends CI_Controller {
                         // 'college_attended_to' => $row['AV'],
                         'strLRN' => $student['lrn'],
                     );
-
-                //Check if student exists
                
                     $this->data_poster->post_data('tb_mas_users',$data);
                     $active_sem = $this->data_fetcher->get_active_sem();
+
+                    if($post['student_level'] == 'shs')
+                        $active_sem = $this->data_fetcher->get_active_sem_shs();
 
                     $newStudentInformation = $this->db->get_where('tb_mas_users',array('slug'=> $student['slug']))->first_row('array');
                     $modeOfPayment = 'partial';
