@@ -1583,6 +1583,14 @@ class Unity extends CI_Controller {
 
             $ret['user_logged'] = $this->data['user']['intID'];
             $ret['user_level'] = $this->data['user']['intUserLevel'];
+
+            $ret['enlistment'] = $this->db->get_where('tb_mas_student_enlistment',array('student_id'=>$id,'term_id'=>$ret['active_sem']['intID']))->first_row();
+            $ret['enlisted_subjects'] = [];
+            if($ret['enlistment']){
+                $enlisted_subjects = $this->db->get_where('tb_mas_student_enlistment_subject',array('enlistment_id'=>$ret['enlistment']->id))->result_array();
+                foreach($enlisted_subjects as $enlisted)
+                    $ret['enlisted_subjects'][] = $this->data_fetcher->getClasslistById($enlisted['classlist_id']);
+            }
                        
             $totalUnits = 0;
             $totalLab = 0;
