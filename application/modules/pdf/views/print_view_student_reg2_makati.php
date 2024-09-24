@@ -123,7 +123,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                     //$desc = strlen($record['strDescription']) > 35 ? substr($record['strDescription'],0,35)."..." : $record['strDescription'];
                                     $desc = $record['strDescription'];
                                     $html.='<tr style="color: #333;">
-                                            <td width="60px"> ' . $record['strClassName'].' '.$record['year'].$record['strSection'].$record['sub_section'].'</td>                                            
+                                            <td width="60px" style="font-size:7"> ' . $record['strClassName'].' '.$record['year'].$record['strSection'].$record['sub_section'].'</td>                                            
                                             <td width="240px" align ="left"> '.$desc. '</td>
                                             <td width="40px" align = "left"> '. $record['intLab'] . '</td> 
                                             <td width="40px" align = "left"> '. $units . '</td> ';
