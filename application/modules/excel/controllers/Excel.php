@@ -7541,9 +7541,9 @@ class Excel extends CI_Controller {
                         'strLRN' => $student['lrn'],
                     );
 
-                    print_r($checkExists);
+                    print_r($checkExists->intID);
                     print_r($data);
-                    $this->data_poster->post_data('tb_mas_users',$data,$checkExists['intID']);
+                    $this->data_poster->post_data('tb_mas_users',$data,$checkExists->intID);
                 }
             }
             $data['message'] = "success";
