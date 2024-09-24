@@ -327,7 +327,7 @@ new Vue({
                             let url = api_url + 'registrar/send_notif_department_head/' + this.student.slug;                                                
                             let payload = {
                                             'message': "You have a new enlistment request from ." + this.student.strLastname + ", " + this.student.strFirstname,
-                                            'link' : base_url+'academics/enlistment/'+this.student.id+'/'+this.sem,
+                                            'link' : base_url+'academics/enlistment/'+this.student.intID+'/'+this.sem,
                                             'email' : this.dept_head.strEmail,
                                         } 
                             
