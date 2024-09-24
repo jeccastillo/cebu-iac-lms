@@ -841,11 +841,17 @@ class Unity extends CI_Controller {
                 $data_subject['intAdvisedID'] = $id;
                 $this->data_poster->post_data('tb_mas_advised_subjects',$data_subject);  
             }
+
+            $data['success'] = true;
+            $data['message'] = "Successfully Added subjects";
+            $data['sid'] = $student;
+        }
+        else{
+            $data['success'] = false;
+            $data['message'] = "Already Enlisted Please add Subjects Manually";
         }
 
-        $data['success'] = true;
-        $data['message'] = "Successfully Added subjects";
-        $data['sid'] = $student;
+        
         
         echo json_encode($data);
     }
