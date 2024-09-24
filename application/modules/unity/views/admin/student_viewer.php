@@ -900,7 +900,7 @@ new Vue({
                       })
                   .then(data => {
                       this.loader_spinner = false;                                                                                                                            
-                      document.location = base_url + 'registrar/register_old_student/' + data.data.sid + '/' + sem;                       
+                      document.location = base_url + 'registrar/register_old_student/' + data.data.sid + '/' + this.active_sem.intID;                       
                   });
                   
               },
