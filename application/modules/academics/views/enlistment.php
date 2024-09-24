@@ -90,6 +90,20 @@
                         </div>
                     </div>
                     <div v-else>
+                        <h4>Add Subject for Enlistment</h4>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <select v-model="selected_subject" class="form-control">
+                                    <option v-for="subject in sortedSubjectsArray" :value="subject.intID">
+                                        {{ subject.strCode + " " + subject.strClassName + subject.year + subject.strSection + subject.sub_section + " " + subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6">
+                                <button @click="addSubjectForEnlistment" :disabled="selected_subject == undefined" class="btn btn-primary">Add</button>
+                            </div>
+                        </div>
+                        <hr />                    
                         <h4>Enlistment Form <span :style="'color:'+color">&#9679; ({{ enlistment.status }})</span></h4>
                         <div class="row">
                             <div class="col-sm-12">
