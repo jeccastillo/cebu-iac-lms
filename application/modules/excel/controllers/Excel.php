@@ -7377,7 +7377,7 @@ class Excel extends CI_Controller {
     public function import_student_data()
     {
         $post = $this->input->post();
-        
+
         if(isset($post['data'])){
             foreach($post['data'] as $index => $student){
                 $tuitionYear = $studentProgramId = '';
@@ -7391,10 +7391,10 @@ class Excel extends CI_Controller {
                     $tuitionYear = $getTuitionYear ? $getTuitionYear['intID'] : '';
                 }
 
-                $getCurriculum = $this->db->get_where('tb_mas_curriculum',array('strName'=>$student['curriculum']))->first_row();
+                $getCurriculum = $this->db->get_where('tb_mas_curriculum',array('strName'=>$student['curriculum']))->first_row('array');
 
                 $studentNumber = $student['student_number'];
-                $studentProgram = $student['program_code'];
+                $studentProgram = str_replace('.', '', $student['program_code']);
 
                 foreach($programs as $program){
                     if($studentProgram == $program['strProgramCode']){
@@ -7417,12 +7417,13 @@ class Excel extends CI_Controller {
                         'intProgramID' => $studentProgramId,
                         'intStudentYear' => $student['student_year'],
                         'blockSection' => $student['block_section'],
-                        'intCurriculumID' => $getCurriculum ? $getCurriculum['intID'] : '',
+                        'intCurriculumID' => isset($getCurriculum) ? $getCurriculum['intID'] : '',
                         'dteBirthDate' => date("Y-m-d",strtotime($student['date_of_birth'])),
+                        'strAddress' => $student['address'],
                         'place_of_birth' => $student['place_of_birth'],
                         'enumGender' => $student['gender'],
                         // 'strCivilStatus' => $student['M'],
-                        // 'strCitizenship' => $student['N'],
+                        'strCitizenship' => $student['citizenship'],
                         // 'strReligion' => $student['O'],
                         'strTelNumber' => $student['tel_number'],
                         'strMobileNumber' => $student['mobile_number'],
@@ -7441,27 +7442,32 @@ class Excel extends CI_Controller {
                         'guardian_email' => $student['guardian_email'],
                         'intTuitionYear' => $tuitionYear,
                         
-                        'high_school' => $student['high_school'],
-                        'high_school_address' => $student['high_school_address'],
-                        'high_school_attended' => $student['high_school_attended'],
-                        'senior_high' => $student['senior_high'],
-                        'senior_high_address' => $student['senior_high_address'],
-                        'senior_high_attended' => $student['senior_high_attended'],
+                        'high_school' => isset($student['high_school']) ? $student['high_school'] : null,
+                        'high_school_address' => isset($student['high_school_address']) ? $student['high_school_address'] : null,
+                        'high_school_attended' => isset($student['high_school_attended']) ? $student['high_school_attended'] : null,
+                        'senior_high' => isset($student['senior_high']) ? $student['senior_high'] : null,
+                        'senior_high_address' => isset($student['senior_high_address']) ? $student['senior_high_address'] : null,
+                        'senior_high_attended' => isset($student['senior_high_attended']) ? $student['senior_high_attended'] : null,
+                        'college' => isset($student['college']) ? $student['college'] : null,
+                        'college_address' => isset($student['college_address']) ? $student['college_address'] : null,
+                        'college_attended' => isset($student['college_attended']) ? $student['college_attended'] : null,
                         
-                        // 'college' => $row['AS'],
-                        // 'college_address' => $row['AT'],
-                        // 'college_attended_from' => $row['AU'],
-                        // 'college_attended_to' => $row['AV'],
                         'strLRN' => $student['lrn'],
                     );
-
-                //Check if student exists
-                // print_r($checkExists);
                
                     $this->data_poster->post_data('tb_mas_users',$data);
                     $active_sem = $this->data_fetcher->get_active_sem();
 
+                    if($post['student_level'] == 'shs')
+                        $active_sem = $this->data_fetcher->get_active_sem_shs();
+
                     $newStudentInformation = $this->db->get_where('tb_mas_users',array('slug'=> $student['slug']))->first_row('array');
+                    $modeOfPayment = 'partial';
+
+                    if(isset($student['mode_of_payment']))
+                        if($student['mode_of_payment'] == 'FULL PAYMENT')
+                            $modeOfPayment = 'full';
+                    
                     $regData = array(
                         'intStudentID' => $newStudentInformation['intID'],
                         'enlisted_by' => 1186,
@@ -7469,11 +7475,11 @@ class Excel extends CI_Controller {
                         'date_enlisted' => date("Y-m-d",strtotime($student['date_enrolled'])),
                         'intAYID' => $active_sem['intID'],
                         'enumRegistrationStatus' => 'regular',
-                        'enumStudentType' => strtolower($student['enrollment_status']),
+                        'enumStudentType' => isset($student['enrollment_status']) ? strtolower($student['enrollment_status']) : 'continuing',
                         'intYearLevel' => $student['student_year'],
                         'intROG' => 1,
                         'enumScholarship' => 0,
-                        'paymentType' => $student['mode_of_payment'] == 'FULL PAYMENT' ? 'full' : 'partial',
+                        'paymentType' => $modeOfPayment,
                         'paymentStatus' => 'pending payment',
                         'downpayment' => 0,
                         'type_of_class' => 'regular',
