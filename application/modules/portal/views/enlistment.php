@@ -17,11 +17,13 @@
                     <!-- /.widget-user-image -->
                     <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}</h3>                    
                     <h4 class="widget-user-desc" style="margin-left:0;">{{ student.strStudentNumber }}</h4>                   
-                    <div class="pull-right">
-                    <label>Select Term</label>
-                        <select class="form-control" required @change="selectTerm($event)" v-model="sem">
-                            <option v-for="term in sy" :value="term.intID">{{ term.enumSem + " " + term.term_label + " SY " + term.strYearStart + "-" + term.strYearEnd }}</option>
-                        </select>
+                    <div class="row">
+                        <div class="pull-right">
+                            <label>Select Term</label>
+                            <select class="form-control" required @change="selectTerm($event)" v-model="sem">
+                                <option v-for="term in sy" :value="term.intID">{{ term.enumSem + " " + term.term_label + " SY " + term.strYearStart + "-" + term.strYearEnd }}</option>
+                            </select>
+                        </div>
                     </div>
                 </div>      
                 <div class="box-body">
@@ -29,7 +31,7 @@
                     <h4>Add Subject for Enlistment</h4>
                     <select v-model="selected_subject" class="form-control">
                         <option v-for="subject in available_subjects" :value="subject.intID">
-                            {{ subject.strCode }}
+                            {{ subject.strCode + " " + subject.strClassName + subject.year + subject.strSection + subject.sub_section + " " + subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}
                         </option>
                     </select>
                 </div>          
