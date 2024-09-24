@@ -278,7 +278,11 @@ new Vue({
                             this.color = "#090";
                         break;
                     }
-                this.enlisted_subjects = data.data.enlisted_subjects;                  
+                this.enlisted_subjects = data.data.enlisted_subjects;     
+                for(i in this.enlisted_subjects){
+                    let i = this.available_subjects.map(item => item.intID).indexOf(this.enlisted_subjects[i].intID) // find index of your object                    
+                    this.available_subjects.splice(i, 1) // remove it from array
+                }             
             });
 
    
