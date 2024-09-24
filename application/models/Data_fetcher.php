@@ -130,14 +130,7 @@ class Data_fetcher extends CI_Model {
                      ->result_array();
 
 
-        foreach($classlists as $classlist){
-            $classlist['slots_taken_enrolled'] = $this->db
-                ->select('tb_mas_classlist_student.intCSID')                                
-                ->from('tb_mas_classlist_student')
-                ->join('tb_mas_registration','tb_mas_classlist_student.intStudentID = tb_mas_registration.intStudentID')                                                                
-                ->where(array('intClassListID'=>$classlist['intID'],'intROG >'=>0))
-                ->get()
-                ->num_rows();
+        foreach($classlists as $classlist){           
 
             $schedule = $this->getScheduleByCode($classlist['intID']);        
             $sched_day = '';
