@@ -924,6 +924,14 @@ class Academics extends CI_Controller {
         $data['message'] = "Sucessfully Deleted";
         echo json_encode($data);
     }
+
+    public function add_subject_to_enlistment(){
+        $post = $this->input->post();
+        $this->db->insert('tb_mas_student_enlistment_subject',array('enlistment_id'=>$post['enlistment_id'],'classlist_id'=>$post['classlist_id']));
+        $data['success'] = true;
+        $data['message'] = "Sucessfully Added";
+        echo json_encode($data);
+    }
     
     public function approve_enlistment_form(){
         $post = $this->input->post();        

@@ -100,7 +100,7 @@
                                 </select>
                             </div>
                             <div class="col-sm-6">
-                                <button @click="addSubjectForEnlistment" :disabled="selected_subject == undefined" class="btn btn-primary">Add</button>
+                                <button @click="addToEnlistment" :disabled="selected_subject == undefined" class="btn btn-primary">Add</button>
                             </div>
                         </div>
                         <hr />                    
@@ -437,6 +437,42 @@ new Vue({
                 allowOutsideClick: () => !Swal.isLoading()
             });
         },   
+        addToEnlistment: function(id){
+            Swal.fire({
+                title: 'Add Subject?',
+                text: "Continue Adding Subject?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata= new FormData();
+                    formdata.append('classlist_id',id);                    
+                    formdata.append('enlistment_id',this.enlistment.id);                    
+                    return axios
+                    .post(base_url + 'academics/add_subject_to_enlistment',formdata, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                    .then(data => {
+                        this.loader_spinner = false;                                                                                                                            
+                        Swal.fire({
+                            title: "Success",
+                            text: data.data.message,
+                            icon: "success"
+                        }).then(function() {
+                            location.reload();
+                        });                         
+                    });
+                    
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+        }, 
         approveEnlistmentForm: function(){
             Swal.fire({
                 title: 'Approve Enlistment?',
