@@ -74,7 +74,7 @@
                                         <th>Subject</th>
                                         <th>Section</th>
                                         <th>Schedule</th>                                        
-                                        <td>Units</td>
+                                        <th>Units</th>
                                     </tr>
                                 </thead>
                                 <tbody>
