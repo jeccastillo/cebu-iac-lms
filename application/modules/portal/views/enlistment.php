@@ -328,7 +328,7 @@ new Vue({
                             let payload = {
                                             'message': "You have a new enlistment request from ." + this.student.strLastname + ", " + this.student.strFirstname,
                                             'id' : this.student.id,
-                                            'email' : this.dept_head.email,
+                                            'email' : this.dept_head.strEmail,
                                         } 
                             
                             Swal.fire({
