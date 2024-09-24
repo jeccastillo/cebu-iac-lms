@@ -842,7 +842,7 @@ class Unity extends CI_Controller {
             else
             {
                 $data['success'] = false;
-                $data['message'] = "Already Enlisted Please add Subjects Manually";
+                $data['message'] = "Already Added please proceed with the next step";
             }
             
         }
