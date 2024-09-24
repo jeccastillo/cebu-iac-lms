@@ -849,7 +849,9 @@ class Academics extends CI_Controller {
     }
 
     public function enlistment_data($id,$sem){
+        
         $data['student'] = $this->data_fetcher->getStudent($id);  
+        $data['registration'] = $this->db->get_where('tb_mas_registration',array('intStudentID'=>$id,'intAYID'=>$sem))->first_row();
         
         switch($data['student']['level']){
             case 'shs':
@@ -884,7 +886,7 @@ class Academics extends CI_Controller {
         $data['dept_head'] = $this->db->get_where('tb_mas_faculty',array('strDepartment'=>$school,'special_role' => 2,'teaching' => 1))->first_row();        
         $data['enlisted_subjects'] = [];
         $data['enlistment'] = $this->db->get_where('tb_mas_student_enlistment',array('student_id'=>$id,'term_id'=>$data['active_sem']['intID']))->first_row();
-        
+        $data['user'] = $this->data['user'];
         if($data['enlistment']){
             $enlisted_subjects = $this->db->get_where('tb_mas_student_enlistment_subject',array('enlistment_id'=>$data['enlistment']->id))->result_array();
             foreach($enlisted_subjects as $enlisted)
@@ -913,7 +915,37 @@ class Academics extends CI_Controller {
         $data['sy'] = $this->db->get_where('tb_mas_sy',array('term_student_type'=>$stype))->result_array();    
         echo json_encode($data);
     }
+
+    public function delete_subject_from_enlistment(){
+        
+        $post = $this->input->post();
+        $this->db->where(array('enlistment_id'=>$post['enlistment_id'],'classlist_id'=>$post['classlist_id']))->delete('tb_mas_student_enlistment_subject');
+        $data['success'] = true;
+        $data['message'] = "Sucessfully Deleted";
+        echo json_encode($data);
+    }
     
+    public function approve_enlistment_form(){
+        $post = $this->input->post();        
+        $this->db
+        ->where('id',$post['id'])
+        ->update('tb_mas_student_enlistment', array('status'=> "approved","approved_by"=>$this->data['user']['intID'],"date_approved"=>date("Y-m-d h:i:s")));
+
+        $classlists = [];
+        $enlisted_subjects = $this->db->get_where('tb_mas_student_enlistment_subject',array('enlistment_id'=>$post['id']))->result_array();
+            foreach($enlisted_subjects as $enlisted)
+                $classlists[] = $this->data_fetcher->getClasslistById($enlisted['classlist_id']);
+
+        $data['classlists_table'] = "<table><thead><tr><th>Subject</th><th>Section</th><th>Schedule</th></tr></thead><tbody>";
+        foreach($classlists as $classlist){
+            $data['classlists_table'] .=  "<tr><td>".$classlist['strCode']."</td><td>".$classlist['strClassName'].$classlist['year'].$classlist['strSection'].$classlist['sub_section']."</td><td>".$classlist['sched_room']." ".$classlist['sched_day']." ".$classlist['sched_time']."</td></tr>";    
+        }                                        
+        $data['classlists_table'] .=  "</tbody></table>";
+
+        $data['success'] = true;
+        $data['message'] = "Sucessfully Approved";
+        echo json_encode($data);
+    }
     
     
     public function faculty_logged_in()
