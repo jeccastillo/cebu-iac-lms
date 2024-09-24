@@ -837,6 +837,82 @@ class Academics extends CI_Controller {
         $this->load->view("admin/discipline_report",$this->data);
         $this->load->view("common/footer",$this->data); 
     }
+
+    public function enlistment($id,$sem = 0){        
+        $this->data['id'] = $id;     
+        $this->data['page']="enlistment form";   
+        $this->data['sem'] = $sem;        
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("enlistment",$this->data);
+        $this->load->view("common/footer",$this->data);
+    }
+
+    public function enlistment_data($id,$sem){
+        $data['student'] = $this->data_fetcher->getStudent($id);  
+        
+        switch($data['student']['level']){
+            case 'shs':
+                $stype = 'shs';
+            break;
+            case 'drive':
+                $stype = 'shs';
+            break;
+            case 'college':
+                $stype = 'college';
+            break;
+            case 'other':
+                $stype = 'college';
+            break;
+            default: 
+                $stype = 'college';
+        }
+        
+        if($sem)
+            $data['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
+        elseif($stype == "college")
+            $data['active_sem'] = $this->data_fetcher->get_active_sem();
+        else
+            $data['active_sem'] = $this->data_fetcher->get_active_sem_shs();
+
+        $data['subject_offerings'] = [];
+        $offerings = $this->data_fetcher->getClasslists($data['active_sem']['intID'],0,0,0);
+        $data['my_classlists'] = $this->data_fetcher->getClassListStudentsStPortal($id,$data['active_sem']['intID']);
+        $data['total_units'] = 0;
+        $program = $this->db->get_where('tb_mas_programs',array('intProgramID'=>$data['student']['intProgramID']))->first_row();
+        $school = "School of ".$program->school;
+        $data['dept_head'] = $this->db->get_where('tb_mas_faculty',array('strDepartment'=>$school,'special_role' => 2,'teaching' => 1))->first_row();        
+        $data['enlisted_subjects'] = [];
+        $data['enlistment'] = $this->db->get_where('tb_mas_student_enlistment',array('student_id'=>$id,'term_id'=>$data['active_sem']['intID']))->first_row();
+        
+        if($data['enlistment']){
+            $enlisted_subjects = $this->db->get_where('tb_mas_student_enlistment_subject',array('enlistment_id'=>$data['enlistment']->id))->result_array();
+            foreach($enlisted_subjects as $enlisted)
+                $data['enlisted_subjects'][] = $this->data_fetcher->getClasslistById($enlisted['classlist_id']);
+        }
+        
+        foreach($data['my_classlists'] as $cl){
+            $data['total_units'] += intval($cl['strUnits']);
+        }
+        foreach($offerings as $offering){
+            $accept = true;
+            foreach($data['my_classlists'] as $cl){
+                if($cl['strCode'] == $offering['strCode']){
+                    $accept = false;
+                    break;
+                }
+            }                        
+            if($accept){
+                $slots = $this->data_fetcher->countRemainingSlotsClasslist($offering['intID']);
+                if($slots > 0)
+                    $data['subject_offerings'][] = $offering;
+            }
+
+        }
+
+        $data['sy'] = $this->db->get_where('tb_mas_sy',array('term_student_type'=>$stype))->result_array();    
+        echo json_encode($data);
+    }
     
     
     
