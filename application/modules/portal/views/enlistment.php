@@ -51,6 +51,7 @@
                                         <th>Subject</th>
                                         <th>Section</th>
                                         <th>Schedule</th>
+                                        <th>Units</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -59,6 +60,7 @@
                                         <td>{{ subject.strCode }}</td>
                                         <td>{{ subject.strClassName + subject.year + subject.strSection + subject.sub_section + subject.sub_section }}</td>
                                         <td>{{ subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}</td>
+                                        <td>{{ subject.strUnits }}</td>
                                         <td><button @click="removeSubjectForEnlistment(subject.intID)" class="btn btn-danger">Remove</button></td>
                                     </tr>
                                 </tbody>
