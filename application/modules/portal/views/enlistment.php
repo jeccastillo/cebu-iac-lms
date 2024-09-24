@@ -244,6 +244,7 @@ new Vue({
                 this.total_units = data.data.total_units; 
                 this.dept_head = data.data.dept_head;                    
                 this.enlistment = data.data.enlistment;
+                this.reg = data.data.registration;
                 if(this.enlistment)
                     switch(this.enlistment.status){
                         case 'pending':
