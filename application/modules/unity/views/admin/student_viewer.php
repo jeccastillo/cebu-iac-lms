@@ -466,7 +466,7 @@
                         <tbody>
                             <tr v-for="subject in enlisted_subjects">
                                 <td>{{ subject.strCode }}</td>
-                                <td>{{ subject.strClassName + subject.year + subject.strSection + subject.sub_section + subject.sub_section }}</td>
+                                <td><a target="_blank" :href="base_url + 'unity/classlist_viewer/'+subject.intID">{{ subject.strClassName + subject.year + subject.strSection + subject.sub_section + subject.sub_section }}</a></td>
                                 <td>{{ subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}</td>                                        
                                 <td>{{ subject.strUnits }}</td>                                
                             </tr>                                        
