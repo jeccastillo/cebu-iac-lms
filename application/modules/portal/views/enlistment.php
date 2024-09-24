@@ -121,6 +121,8 @@ new Vue({
                 }
                 return 0
             })
+
+            return sortedSubjects
         }
     },
     mounted() {        
