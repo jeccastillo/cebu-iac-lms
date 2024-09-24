@@ -26,7 +26,7 @@
                         </div>
                     </div>
                 </div>      
-                <div class="box-body">
+                <div class="box-body" v-if="!reg">
                     <div v-if="!enlistment">              
                         <h4>Add Subject for Enlistment</h4>
                         <div class="row">
@@ -152,6 +152,10 @@
                             </table>
                         </div>
                     </div>
+                </div> 
+                <div class="box-body text-center" v-else>
+                    <h3>Student is Already Enlisted</h3>
+                    <p>Please ask the registrar to reset status for advising</p>
                 </div>          
             </div>         
                                                        
