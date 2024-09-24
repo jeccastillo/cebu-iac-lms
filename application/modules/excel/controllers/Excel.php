@@ -7495,7 +7495,6 @@ class Excel extends CI_Controller {
                 }else{
                     $data = array(
                         'level' => $post['student_level'],
-                        'slug' => $student['slug'],
                         'strStudentNumber' => $studentNumber,
                         'strLastname' => $student['last_name'],
                         'strFirstname' => $student['first_name'],
