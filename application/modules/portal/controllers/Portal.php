@@ -309,11 +309,10 @@ class Portal extends CI_Controller {
                     echo json_encode($data);                             
                     return;
                 }
-            }
-            
-            $data['success'] = true;
-            echo json_encode($data);
+            }                        
         }
+        $data['success'] = true;
+        echo json_encode($data);
 
     }
 
