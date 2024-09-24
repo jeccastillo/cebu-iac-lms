@@ -177,7 +177,46 @@ class Portal extends CI_Controller {
         $this->load->view("common/footer",$this->data);
 
     }
+    public function cancel_enlistment_form(){
+        $post = $this->input->post();
+        $this->data_poster->deleteItem('tb_mas_student_enlistment',$post['enlistment_id'],'id');
+        $this->data_poster->deleteItem('tb_mas_student_enlistment_subject',$post['enlistment_id'],'enlistment_id');
+        
+        $data['success'] = true;
+        $data['message'] = "Request has been cancelled";
+        echo json_encode($data);
+    }
+    public function submit_enlistment_form(){
+        $post = $this->input->post();
+        $sections_to_add = json_decode($post['sections_to_add']);   
 
+        $insert = [
+            'student_id' => $post['student'],
+            'term_id' => $post['sem']
+        ];
+
+        $enlistment = $this->db->get_where('tb_mas_student_enlistment',$insert)->first_row();
+        if(!$enlistment){
+            $this->db->insert('tb_mas_student_enlistment',$insert);
+            $id = $this->db->insert_id();
+        }
+        else
+            $id = $enlistment['id'];
+
+        foreach($sections_to_add as $cl){
+            $insert = [
+                'enlistment_id' => $id,
+                'classlist_id' => $cl->intID,
+            ];
+            $this->db->insert('tb_mas_student_enlistment_subject',$insert);
+        }
+
+        $data['success'] = true;
+        $data['message'] = "Form has been submitted";
+
+        echo json_encode($data);
+
+    }
     public function enlistment($sem = 0){
         $id = $this->session->userdata('intID');
         $this->data['id'] = $id;     
@@ -219,8 +258,22 @@ class Portal extends CI_Controller {
         $data['subject_offerings'] = [];
         $offerings = $this->data_fetcher->getClasslists($data['active_sem']['intID'],0,0,0);
         $data['my_classlists'] = $this->data_fetcher->getClassListStudentsStPortal($id,$data['active_sem']['intID']);
-
+        $data['total_units'] = 0;
+        $program = $this->db->get_where('tb_mas_programs',array('intProgramID'=>$data['student']['intProgramID']))->first_row();
+        $school = "School of ".$program->school;
+        $data['dept_head'] = $this->db->get_where('tb_mas_faculty',array('strDepartment'=>$school,'special_role' => 2,'teaching' => 1))->first_row();        
+        $data['enlisted_subjects'] = [];
+        $data['enlistment'] = $this->db->get_where('tb_mas_student_enlistment',array('student_id'=>$id,'term_id'=>$data['active_sem']['intID']))->first_row();
         
+        if($data['enlistment']){
+            $enlisted_subjects = $this->db->get_where('tb_mas_student_enlistment_subject',array('enlistment_id'=>$data['enlistment']->id))->result_array();
+            foreach($enlisted_subjects as $enlisted)
+                $data['enlisted_subjects'][] = $this->data_fetcher->getClasslistById($enlisted['classlist_id']);
+        }
+        
+        foreach($data['my_classlists'] as $cl){
+            $data['total_units'] += intval($cl['strUnits']);
+        }
         foreach($offerings as $offering){
             $accept = true;
             foreach($data['my_classlists'] as $cl){
@@ -294,6 +347,41 @@ class Portal extends CI_Controller {
         
        
 	}
+
+    public function check_conflict(){
+
+        $post =  $this->input->post();
+
+        $records = $this->data_fetcher->getClassListStudentsSt($post['student'],$post['sem']);
+        $records2 = json_decode($post['sections_to_add']);        
+
+        foreach($records as $record){                                
+            $conflict = $this->data_fetcher->student_conflict($post['section_to_add'],$record,$post['sem']);
+            foreach($conflict as $c){
+                if($c){
+                    $data['success'] = false;
+                    $data['message'] = "There was a conflict with one of the schedules ".$c->conflict['strCode']." ".$c->conflict['strClassName'].$c->conflict['year'].$c->conflict['strSection']." ".$c->conflict['sub_section'];   
+                    echo json_encode($data);                             
+                    return;
+                }
+            }                        
+        }
+        if($records2)
+            foreach($records2 as $record){                                
+                $conflict = $this->data_fetcher->student_conflict_enlistment($post['section_to_add'],$record,$post['sem']);
+                foreach($conflict as $c){
+                    if($c){
+                        $data['success'] = false;
+                        $data['message'] = "There was a conflict with one of the schedules ".$c->conflict['strCode']." ".$c->conflict['strClassName'].$c->conflict['year'].$c->conflict['strSection']." ".$c->conflict['sub_section'];   
+                        echo json_encode($data);                             
+                        return;
+                    }
+                }                        
+            }
+        $data['success'] = true;
+        echo json_encode($data);
+
+    }
 
     public function profile()
 	{
