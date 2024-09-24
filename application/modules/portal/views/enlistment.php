@@ -17,13 +17,15 @@
                     <!-- /.widget-user-image -->
                     <h3 class="widget-user-username" style="text-transform:capitalize;margin-left:0;font-size:1.3em;">{{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}</h3>                    
                     <h4 class="widget-user-desc" style="margin-left:0;">{{ student.strStudentNumber }}</h4>                   
-                </div>                
-                <div class="pull-right">
-                <label>Select Term</label>
-                    <select class="form-control" required @change="selectTerm($event)" v-model="sem">
-                        <option v-for="term in sy" :value="term.intID">{{ term.enumSem + " " + term.term_label + " SY " + term.strYearStart + "-" + term.strYearEnd }}</option>
-                    </select>
-                </div>
+                </div>      
+                <div class="box-body">
+                    <div class="pull-right">
+                    <label>Select Term</label>
+                        <select class="form-control" required @change="selectTerm($event)" v-model="sem">
+                            <option v-for="term in sy" :value="term.intID">{{ term.enumSem + " " + term.term_label + " SY " + term.strYearStart + "-" + term.strYearEnd }}</option>
+                        </select>
+                    </div>
+                </div>          
             </div>         
                                                        
             
@@ -54,6 +56,8 @@ new Vue({
         id: '<?php echo $id; ?>',
         sem: '<?php echo $sem; ?>', 
         sy: [],
+        available_subjects: [],
+        selected_subject: undefined;
         student: {
             strFirstname:'',
             strLastname:'',
@@ -76,7 +80,8 @@ new Vue({
             .then((data) => { 
                 this.student = data.data.student;
                 this.sy = data.data.sy;  
-                this.sem = data.data.active_sem.intID;                                       
+                this.sem = data.data.active_sem.intID;   
+                this.available_subjects = data.data.subject_offerings;                                   
             });
 
    
