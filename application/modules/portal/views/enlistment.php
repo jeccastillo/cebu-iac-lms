@@ -65,8 +65,7 @@
                                     </tr>
                                     <tr>
                                         <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td></td>                                        
                                         <td class="text-right">Total Additional Units:</td>
                                         <td>{{ additional_units }}</td>
                                         <td></td>
