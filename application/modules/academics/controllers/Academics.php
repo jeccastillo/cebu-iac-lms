@@ -913,6 +913,15 @@ class Academics extends CI_Controller {
         $data['sy'] = $this->db->get_where('tb_mas_sy',array('term_student_type'=>$stype))->result_array();    
         echo json_encode($data);
     }
+
+    public function delete_subject_from_enlistment(){
+        
+        $post = $this->input->post();
+        $this->db->where(array('enlistment_id'=>$post['enlistment_id'],'classlist_id'=>$post['classlist_id']))->delete('tb_mas_student_enlistment_subject');
+        $data['success'] = true;
+        $data['message'] = "Sucessfully Deleted";
+        echo json_encode($data);
+    }
     
     
     

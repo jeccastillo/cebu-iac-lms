@@ -100,6 +100,7 @@
                                             <th>Section</th>
                                             <th>Schedule</th>                                        
                                             <th>Units</th>
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -108,6 +109,7 @@
                                             <td>{{ subject.strClassName + subject.year + subject.strSection + subject.sub_section + subject.sub_section }}</td>
                                             <td>{{ subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}</td>                                        
                                             <td>{{ subject.strUnits }}</td>
+                                            <td><button @click="deleteSubjectForEnlistment(subject.intID)" class="btn btn-danger">Remove</button></td>
                                         </tr>                                        
                                     </tbody>                                    
                                 </table>
@@ -364,7 +366,43 @@ new Vue({
                 },
                 allowOutsideClick: () => !Swal.isLoading()
             });
-        },        
+        },   
+        deleteSubjectForEnlistment: function(id){
+            Swal.fire({
+                title: 'Remove Subject?',
+                text: "Continue Deleting Subject?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata= new FormData();
+                    formdata.append('classlist_id',this.id);                    
+                    formdata.append('enlistment_id',this.enlistment.id);                    
+                    return axios
+                    .post(base_url + 'academics/delete_subject_from_enlistment',formdata, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                    .then(data => {
+                        this.loader_spinner = false;                                                                                                                            
+                        Swal.fire({
+                            title: "Success",
+                            text: data.data.message,
+                            icon: "success"
+                        }).then(function() {
+                            location.reload();
+                        });                         
+                    });
+                    
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+        },     
     }
 
 })
