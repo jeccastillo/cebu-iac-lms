@@ -477,7 +477,7 @@
                                 <td></td>
                                 <td></td>                                            
                                 <td>
-                                    <button @click="enlistStudent" class="btn btn-danger">Cancel Enlistment</button>                                    
+                                    <button @click="enlistStudent" class="btn btn-success">Enlist Advised Subjects</button>                                    
                                 </td>
                             </tr>
                         </tfoot>                          
