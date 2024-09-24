@@ -256,7 +256,7 @@ class Portal extends CI_Controller {
             $data['active_sem'] = $this->data_fetcher->get_active_sem_shs();
 
         $data['subject_offerings'] = [];
-        $offerings = $this->data_fetcher->getClasslists($data['active_sem']['intID'],0,0,0);
+        $offerings = $this->data_fetcher->getClasslistsNotTaken($data['active_sem']['intID'],0,0,0,0,$data['student']['intID']);
         $data['my_classlists'] = $this->data_fetcher->getClassListStudentsStPortal($id,$data['active_sem']['intID']);
         $data['total_units'] = 0;
         $program = $this->db->get_where('tb_mas_programs',array('intProgramID'=>$data['student']['intProgramID']))->first_row();

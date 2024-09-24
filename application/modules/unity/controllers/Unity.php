@@ -842,8 +842,25 @@ class Unity extends CI_Controller {
             else
             {
                 //if enlisted add directly if not enrolled
-                $data['success'] = false;
-                $data['message'] = "Already Added please proceed with the next step";
+                $rog = $this->data_fetcher->checkRegistered($student['intID'],$data['classlist']['strAcademicYear']);
+                if($rog){
+                    foreach($post['subjects'] as $subject)
+                    {
+                        $enlisted = $this->data_fetcher->checkSubjectEnlisted($post['studentID'],$subject['intID']);
+                        if(!$enlisted){                            
+                            $send['intStudentID'] = $post['studentID'];
+                            $send['intClassListID'] = $subject['intID'];
+                            $this->data_poster->addStudentClasslist($send,$post['studentID']);
+                        }
+
+                    }
+                    $data['success'] = true;
+                    $data['message'] = "Successfully Added subjects";
+                }
+                else{
+                    $data['success'] = false;
+                    $data['message'] = "Already Added please proceed with the next step";
+                }
             }
             
         }
