@@ -57,7 +57,7 @@ new Vue({
         sem: '<?php echo $sem; ?>', 
         sy: [],
         available_subjects: [],
-        selected_subject: undefined;
+        selected_subject: undefined,
         student: {
             strFirstname:'',
             strLastname:'',
