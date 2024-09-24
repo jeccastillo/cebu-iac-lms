@@ -228,7 +228,7 @@
                         <p><strong>Birthdate: </strong>{{ student.dteBirthDate }}</p>
                         <p><strong>Date Created: </strong>{{ student.dteCreated }}</p>
                         <p><strong>Admission Status: </strong>{{ applicant_data.tos }}</p>
-                        <p><strong>Country of Citizenship:</strong> {{ applicant_data.strCitizenship }}
+                        <p><strong>Country of Citizenship:</strong> {{ applicant_data.citizenship }}
                           </li>
                         <div v-if="registration">
                           <p><strong>Enrollment Type: </strong>
