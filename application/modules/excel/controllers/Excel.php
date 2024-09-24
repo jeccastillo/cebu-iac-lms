@@ -7456,6 +7456,7 @@ class Excel extends CI_Controller {
                     );
                
                     $this->data_poster->post_data('tb_mas_users',$data);
+
                     $active_sem = $this->data_fetcher->get_active_sem();
 
                     if($post['student_level'] == 'shs')
@@ -7490,6 +7491,57 @@ class Excel extends CI_Controller {
 
                     );
                     $this->data_poster->post_data('tb_mas_registration', $regData);
+                    
+                }else{
+                    $data = array(
+                        'level' => $post['student_level'],
+                        'slug' => $student['slug'],
+                        'strStudentNumber' => $studentNumber,
+                        'strLastname' => $student['last_name'],
+                        'strFirstname' => $student['first_name'],
+                        'strMiddlename' => $student['middle_name'],
+                        'intProgramID' => $studentProgramId,
+                        'intStudentYear' => $student['student_year'],
+                        'blockSection' => $student['block_section'],
+                        'intCurriculumID' => isset($getCurriculum) ? $getCurriculum['intID'] : '',
+                        'dteBirthDate' => date("Y-m-d",strtotime($student['date_of_birth'])),
+                        'strAddress' => $student['address'],
+                        'place_of_birth' => $student['place_of_birth'],
+                        'enumGender' => $student['gender'],
+                        // 'strCivilStatus' => $student['M'],
+                        'strCitizenship' => $student['citizenship'],
+                        // 'strReligion' => $student['O'],
+                        'strTelNumber' => $student['tel_number'],
+                        'strMobileNumber' => $student['mobile_number'],
+                        'strEmail' => $student['email'],
+                        'father' => $student['father_name'],
+                        // 'father_occupation' => $student['U'],
+                        'father_contact' => $student['father_contact'],
+                        'father_email' => $student['father_email'],
+                        'mother' => $student['mother_name'],
+                        // 'mother_occupation' => $student['Z'],
+                        'mother_contact' => $student['mother_contact'],
+                        'mother_email' => $student['mother_email'],
+                        'guardian' => $student['guardian_name'],
+                        // 'relationship' => $student['AE'],
+                        'guardian_contact' => $student['guardian_contact'],
+                        'guardian_email' => $student['guardian_email'],
+                        'intTuitionYear' => $tuitionYear,
+                        
+                        'high_school' => isset($student['high_school']) ? $student['high_school'] : null,
+                        'high_school_address' => isset($student['high_school_address']) ? $student['high_school_address'] : null,
+                        'high_school_attended' => isset($student['high_school_attended']) ? $student['high_school_attended'] : null,
+                        'senior_high' => isset($student['senior_high']) ? $student['senior_high'] : null,
+                        'senior_high_address' => isset($student['senior_high_address']) ? $student['senior_high_address'] : null,
+                        'senior_high_attended' => isset($student['senior_high_attended']) ? $student['senior_high_attended'] : null,
+                        'college' => isset($student['college']) ? $student['college'] : null,
+                        'college_address' => isset($student['college_address']) ? $student['college_address'] : null,
+                        'college_attended' => isset($student['college_attended']) ? $student['college_attended'] : null,
+                        
+                        'strLRN' => $student['lrn'],
+                    );
+
+                    $this->data_poster->post_data('tb_mas_users',$data,$checkExists['intID']);
                 }
             }
             $data['message'] = "success";
