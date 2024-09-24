@@ -313,17 +313,18 @@ class Portal extends CI_Controller {
                 }
             }                        
         }
-        foreach($records2 as $record){                                
-            $conflict = $this->data_fetcher->student_conflict($post['section_to_add'],$record,$post['sem']);
-            foreach($conflict as $c){
-                if($c){
-                    $data['success'] = false;
-                    $data['message'] = "There was a conflict with one of the schedules ".$c->conflict['strCode']." ".$c->conflict['strClassName'].$c->conflict['year'].$c->conflict['strSection']." ".$c->conflict['sub_section'];   
-                    echo json_encode($data);                             
-                    return;
-                }
-            }                        
-        }
+        if($records2)
+            foreach($records2 as $record){                                
+                $conflict = $this->data_fetcher->student_conflict($post['section_to_add'],$record,$post['sem']);
+                foreach($conflict as $c){
+                    if($c){
+                        $data['success'] = false;
+                        $data['message'] = "There was a conflict with one of the schedules ".$c->conflict['strCode']." ".$c->conflict['strClassName'].$c->conflict['year'].$c->conflict['strSection']." ".$c->conflict['sub_section'];   
+                        echo json_encode($data);                             
+                        return;
+                    }
+                }                        
+            }
         $data['success'] = true;
         echo json_encode($data);
 
