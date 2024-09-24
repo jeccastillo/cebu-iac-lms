@@ -45,7 +45,7 @@
                     <h4>Subjects To Enlist</h4>
                     <div class="row">
                         <div class="col-sm-12">
-                            <table class="table table-bordered table-striped">
+                            <table v-if="selected_subjects.length > 0" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
                                         <th>Subject</th>
@@ -63,8 +63,17 @@
                                         <td>{{ subject.strUnits }}</td>
                                         <td><button @click="removeSubjectForEnlistment(subject.intID)" class="btn btn-danger">Remove</button></td>
                                     </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-right">Total Additional Units:</td>
+                                        <td>{{ additional_units }}</td>
+                                        <td></td>
+                                    </tr>
                                 </tbody>
                             </table>
+                            <h4 v-else>No Subjects Selected</h4>
                         </div>
                     </div>
                     <h4>Currently Enlisted Subjects</h4>
@@ -132,6 +141,7 @@ new Vue({
         selected_subjects: [],
         my_classlists: [],
         total_units: 0,
+        additional_units: 0,
         student: {
             strFirstname:'',
             strLastname:'',
@@ -203,7 +213,8 @@ new Vue({
                 if(data.data.success){
                     let id = this.selected_subject;
                     let i = this.available_subjects.map(item => item.intID).indexOf(id) // find index of your object
-                    this.selected_subjects.push(this.available_subjects[i]);            
+                    this.selected_subjects.push(this.available_subjects[i]);
+                    this.additional_units += parseInt(this.available_subjects[i].strUnits);
                     this.available_subjects.splice(i, 1) // remove it from array
                     this.selected_subject = undefined;            
                 }
@@ -222,6 +233,7 @@ new Vue({
         removeSubjectForEnlistment: function(id){            
             let i = this.selected_subjects.map(item => item.intID).indexOf(id) // find index of your object            
             this.available_subjects.push(this.selected_subjects[i]);
+            this.additional_units -= parseInt(this.selected_subjects[i].strUnits);
             this.selected_subjects.splice(i, 1) // remove it from array
         }
     }
