@@ -116,19 +116,53 @@ class Data_fetcher extends CI_Model {
     function getClassListStudentsStPortal($id,$classlist) 
     {
                
-        return  $this->db
+        $ret = [];
+        $classlists = $this->db
                      ->select("tb_mas_classlist_student.intCSID,strCode,strSection , intSubjectID, year, sub_section, strClassName,intClasslistID, intLab, floatPrelimGrade, floatMidtermGrade, floatFinalsGrade, tb_mas_subjects.strDescription,tb_mas_classlist_student.floatFinalGrade as v3,intFinalized,enumStatus,strRemarks,tb_mas_faculty.strFirstname,tb_mas_faculty.strLastname, tb_mas_subjects.strUnits, tb_mas_subjects.intBridging, tb_mas_classlist.intID as classlistID, tb_mas_subjects.intID as subjectID, tb_mas_classlist.intFinalized")
                      ->from("tb_mas_classlist_student")
             
-                    ->where(array("intStudentID"=>$id,"strAcademicYear"=>$classlist))
-                        
-                        
+                    ->where(array("intStudentID"=>$id,"strAcademicYear"=>$classlist))                                                
                      ->join('tb_mas_classlist', 'tb_mas_classlist.intID = tb_mas_classlist_student.intClasslistID')
                      ->join('tb_mas_subjects', 'tb_mas_subjects.intID = tb_mas_classlist.intSubjectID')
                      ->join('tb_mas_faculty', 'tb_mas_faculty.intID = tb_mas_classlist.intFacultyID')
                      ->order_by('strCode','asc')   
                      ->get()
                      ->result_array();
+
+
+        foreach($classlists as $classlist){
+            $classlist['slots_taken_enrolled'] = $this->db
+                ->select('tb_mas_classlist_student.intCSID')                                
+                ->from('tb_mas_classlist_student')
+                ->join('tb_mas_registration','tb_mas_classlist_student.intStudentID = tb_mas_registration.intStudentID')                                                                
+                ->where(array('intClassListID'=>$classlist['intID'],'intROG >'=>0))
+                ->get()
+                ->num_rows();
+
+            $schedule = $this->getScheduleByCode($classlist['intID']);        
+            $sched_day = '';
+            $sched_time = '';
+            $sched_room = '';                
+            
+            if(isset($schedule[0]['strDay']))                                                
+                $sched_time = date('g:ia',strtotime($schedule[0]['dteStart'])).' - '.date('g:ia',strtotime($schedule[0]['dteEnd']));  
+                    
+            foreach($schedule as $sched) {
+                if(isset($sched['strDay']))
+                    $sched_day.= $sched['strDayAbvr'];                    
+                    //$html.= date('g:ia',strtotime($sched['dteStart'])).'  '.date('g:ia',strtotime($sched['dteEnd']))." ".$sched['strDay']." ".$sched['strRoomCode'] . " ";                    
+            }
+                                                                
+            if(isset($schedule[0]['strDay']))
+                $sched_room = $schedule[0]['strRoomCode'];
+
+            $classlist['sched_day'] = $sched_day;
+            $classlist['sched_time'] = $sched_time;
+            $classlist['sched_room'] = $sched_room;
+
+            $ret[] = $classlist;
+        }
+        return $ret;
         
     }
     function getSyStudentEnrolled($id,$enrolled=1) 
