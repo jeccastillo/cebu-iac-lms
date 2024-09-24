@@ -109,13 +109,7 @@
                                             <td>{{ subject.strClassName + subject.year + subject.strSection + subject.sub_section + subject.sub_section }}</td>
                                             <td>{{ subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}</td>                                        
                                             <td>{{ subject.strUnits }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td class="text-right">Total Units:</td>
-                                            <td>{{ total_units }}</td>
-                                        </tr>
+                                        </tr>                                        
                                     </tbody>
                                 </table>
                             </div>
