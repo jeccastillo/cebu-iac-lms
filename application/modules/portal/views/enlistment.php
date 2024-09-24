@@ -42,52 +42,86 @@
                         </div>
                     </div>
                     <hr />
-                    <h4>Subjects To Enlist</h4>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <table v-if="selected_subjects.length > 0" class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Subject</th>
-                                        <th>Section</th>
-                                        <th>Schedule</th>
-                                        <th>Units</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="subject in selected_subjects">
-                                        <td>{{ subject.strCode }}</td>
-                                        <td>{{ subject.strClassName + subject.year + subject.strSection + subject.sub_section + subject.sub_section }}</td>
-                                        <td>{{ subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}</td>
-                                        <td>{{ subject.strUnits }}</td>
-                                        <td><button @click="removeSubjectForEnlistment(subject.intID)" class="btn btn-danger">Remove</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>                                        
-                                        <td class="text-right">Total Additional Units:</td>
-                                        <td>{{ additional_units }}</td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td><button @click="submitEnlistmentForm" class="btn btn-primary">Submit Subjects</button></td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                            <div v-else class="box">
-                                <div class="box-body">
-                                    <h4>No Subjects Selected</h4>
+                    <div v-if="!enlistment">
+                        <h4>Subjects To Enlist</h4>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table v-if="selected_subjects.length > 0" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Subject</th>
+                                            <th>Section</th>
+                                            <th>Schedule</th>
+                                            <th>Units</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="subject in selected_subjects">
+                                            <td>{{ subject.strCode }}</td>
+                                            <td>{{ subject.strClassName + subject.year + subject.strSection + subject.sub_section + subject.sub_section }}</td>
+                                            <td>{{ subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}</td>
+                                            <td>{{ subject.strUnits }}</td>
+                                            <td><button @click="removeSubjectForEnlistment(subject.intID)" class="btn btn-danger">Remove</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>                                        
+                                            <td class="text-right">Total Additional Units:</td>
+                                            <td>{{ additional_units }}</td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td><button @click="submitEnlistmentForm" class="btn btn-primary">Submit Subjects</button></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                                <div v-else class="box">
+                                    <div class="box-body">
+                                        <h4>No Subjects Selected</h4>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div v-else>
+                        <h4>Enlistment Form</h4>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Subject</th>
+                                            <th>Section</th>
+                                            <th>Schedule</th>                                        
+                                            <th>Units</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="subject in enlisted_subjects">
+                                            <td>{{ subject.strCode }}</td>
+                                            <td>{{ subject.strClassName + subject.year + subject.strSection + subject.sub_section + subject.sub_section }}</td>
+                                            <td>{{ subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}</td>                                        
+                                            <td>{{ subject.strUnits }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="text-right">Total Units:</td>
+                                            <td>{{ total_units }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
                     <h4>Currently Enlisted Subjects</h4>
                     <div class="row">
                         <div class="col-sm-12">
@@ -153,6 +187,8 @@ new Vue({
         selected_subjects: [],
         my_classlists: [],
         total_units: 0,
+        enlistment: undefined,
+        enlisted_subjects: [],
         additional_units: 0,
         student: {
             strFirstname:'',
@@ -197,7 +233,9 @@ new Vue({
                 this.sem = data.data.active_sem.intID;   
                 this.available_subjects = data.data.subject_offerings;  
                 this.my_classlists = data.data.my_classlists;   
-                this.total_units = data.data.total_units;                              
+                this.total_units = data.data.total_units;     
+                this.enlistment = data.data.enlistment;
+                this.enlisted_subjects = data.data.enlisted_subjects;                  
             });
 
    
