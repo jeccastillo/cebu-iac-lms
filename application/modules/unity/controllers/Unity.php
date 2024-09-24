@@ -841,6 +841,7 @@ class Unity extends CI_Controller {
             }
             else
             {
+                //if enlisted add directly if not enrolled
                 $data['success'] = false;
                 $data['message'] = "Already Added please proceed with the next step";
             }
