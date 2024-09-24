@@ -26,7 +26,7 @@
                         </div>
                     </div>
                 </div>      
-                <div class="box-body" v-if="reg">
+                <div class="box-body" v-if="!reg">
                     <div v-if="!enlistment">              
                         <h4>Add Subject for Enlistment</h4>
                         <div class="row">
