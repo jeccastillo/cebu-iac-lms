@@ -187,9 +187,13 @@ class Portal extends CI_Controller {
             'term_id' => $post['sem']
         ];
 
-        $this->db->insert('tb_mas_student_enlistment',$insert);
-        
-        $id = $this->db->insert_id();
+        $enlistment = $this->db->get_where('tb_mas_student_enlistment',$insert)->first_row();
+        if(!$enlistment){
+            $this->db->insert('tb_mas_student_enlistment',$insert);
+            $id = $this->db->insert_id();
+        }
+        else
+            $id = $enlistment['id'];
 
         foreach($sections_to_add as $cl){
             $insert = [
