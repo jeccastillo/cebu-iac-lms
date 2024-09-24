@@ -188,6 +188,7 @@ new Vue({
         selected_subjects: [],
         my_classlists: [],
         total_units: 0,
+        dept_head: undefined,
         enlistment: undefined,
         enlisted_subjects: [],
         additional_units: 0,
@@ -235,7 +236,8 @@ new Vue({
                 this.sem = data.data.active_sem.intID;   
                 this.available_subjects = data.data.subject_offerings;  
                 this.my_classlists = data.data.my_classlists;   
-                this.total_units = data.data.total_units;                     
+                this.total_units = data.data.total_units; 
+                this.dept_head = data.data.dept_head;                    
                 this.enlistment = data.data.enlistment;
                 if(this.enlistment)
                     switch(this.enlistment.status){
@@ -322,13 +324,37 @@ new Vue({
                     .then(data => {
                         console.log(data.data);
                         if (data.data.success) {
+                            let url = api_url + 'registrar/send_notif_department_head/';                                                
+                            let payload = {
+                                            'message': "You have a new enlistment request from ." + this.student.strLastname + ", " + this.student.strFirstname,
+                                            'id' : this.student.id,
+                                            'email' : this.dept_head.email,
+                                        } 
+                            
                             Swal.fire({
-                                title: "Success",
-                                text: data.data.message,
-                                icon: "success"
-                            }).then(function() {
-                                location.reload();
-                            });
+                                showCancelButton: false,
+                                showCloseButton: false,
+                                allowEscapeKey: false,
+                                title: 'Loading',
+                                text: 'Processing Data do not leave page',
+                                icon: 'info',
+                            })
+                            Swal.showLoading();
+                            axios.post(url, payload, {
+                                headers: {
+                                    Authorization: `Bearer ${window.token}`
+                                }
+                            })
+                            .then(data => {
+                                this.loader_spinner = false;                                                                                                                            
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });  
+                            });                              
                         } else {
                             Swal.fire(
                                 'Failed!',
