@@ -72,6 +72,11 @@
                                         <td></td>
                                     </tr>
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="6" class="text-right"><button class="btn btn-primary">Submit Subjects</button></td>
+                                    </tr>
+                                </tfoot>
                             </table>
                             <div v-else class="box">
                                 <div class="box-body">
