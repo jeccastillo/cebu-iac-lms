@@ -177,7 +177,15 @@ class Portal extends CI_Controller {
         $this->load->view("common/footer",$this->data);
 
     }
-
+    public function cancel_enlistment_form(){
+        $post = $this->input->post();
+        $this->db->deleteItem('tb_mas_student_enlistment',$post['enlistment_id'],'id');
+        $this->db->deleteItem('tb_mas_student_enlistment_subject',$post['enlistment_id'],'enlistment_id');
+        
+        $data['success'] = true;
+        $data['message'] = "Request has been cancelled";
+        echo json_encode($data);
+    }
     public function submit_enlistment_form(){
         $post = $this->input->post();
         $sections_to_add = json_decode($post['sections_to_add']);   
