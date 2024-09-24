@@ -90,7 +90,7 @@
                         </div>
                     </div>
                     <div v-else>
-                        <h4>Enlistment Form</h4>
+                        <h4>Enlistment Form ({{ enlistment.status }})</h4>
                         <div class="row">
                             <div class="col-sm-12">
                                 <table class="table table-bordered table-striped">
