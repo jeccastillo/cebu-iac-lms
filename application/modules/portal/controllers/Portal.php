@@ -251,7 +251,16 @@ class Portal extends CI_Controller {
         $offerings = $this->data_fetcher->getClasslists($data['active_sem']['intID'],0,0,0);
         $data['my_classlists'] = $this->data_fetcher->getClassListStudentsStPortal($id,$data['active_sem']['intID']);
         $data['total_units'] = 0;
-
+        
+        $data['enlisted_subjects'] = [];
+        $data['enlistment'] = $this->db->where('tb_mas_student_enlistment',array('student_id'=>$id,'term_id'=>$sem))->first_row();
+        
+        if($data['enlistment']){
+            $enlisted_subjects = $this->db->where('tb_mas_student_enlistment',array('enlistment_id'=>$data['enlistment']['id']))->result_array();
+            foreach($enlisted_subjects as $enlisted)
+                $data['enlisted_subjects'][] = $this->data_fetcher->getClasslistById($enlisted['classlist_id']);
+        }
+        
         foreach($data['my_classlists'] as $cl){
             $data['total_units'] += intval($cl['strUnits']);
         }
