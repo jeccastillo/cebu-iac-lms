@@ -228,9 +228,12 @@ class Portal extends CI_Controller {
                     $accept = false;
                     break;
                 }
-            }            
-            if($accept)
-                $data['subject_offerings'][] = $offering;
+            }                        
+            if($accept){
+                $slots = $this->data_fetcher->countRemainingSlotsClasslist($offering['intID']);
+                if($slots > 0)
+                    $data['subject_offerings'][] = $offering;
+            }
 
         }
 
