@@ -110,6 +110,14 @@
                                             <td>{{ subject.strUnits }}</td>
                                         </tr>                                        
                                     </tbody>
+                                    <tfoot v-if="enlistment.status == 'pending'">
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>                                            
+                                            <td><button @click="cancelEnlistmentForm" class="btn btn-primary">Cancel Enlistment</button></td>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
