@@ -929,9 +929,10 @@ class Academics extends CI_Controller {
         ->where('id',$post['id'])
         ->update('tb_mas_student_enlistment', array('status'=> "approved"));
 
+        $classlists = [];
         $enlisted_subjects = $this->db->get_where('tb_mas_student_enlistment_subject',array('enlistment_id'=>$post['id']))->result_array();
             foreach($enlisted_subjects as $enlisted)
-                $classlists = $this->data_fetcher->getClasslistById($enlisted['classlist_id']);
+                $classlists[] = $this->data_fetcher->getClasslistById($enlisted['classlist_id']);
 
         $data['classlists_table'] = "<table>
                                         <thead>
