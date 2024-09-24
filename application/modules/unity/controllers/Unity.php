@@ -842,7 +842,7 @@ class Unity extends CI_Controller {
             else
             {
                 //if enlisted add directly if not enrolled
-                $rog = $this->data_fetcher->checkRegistered($post['studentID'],$ay);
+                $rog = $this->data_fetcher->checkEnlisted($post['studentID'],$ay);
                 if($rog){
                     foreach($post['subjects'] as $subject)
                     {
