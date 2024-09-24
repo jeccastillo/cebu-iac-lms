@@ -470,7 +470,17 @@
                                 <td>{{ subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}</td>                                        
                                 <td>{{ subject.strUnits }}</td>                                
                             </tr>                                        
-                        </tbody>                             
+                        </tbody>    
+                        <tfoot>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>                                            
+                                <td>
+                                    <button @click="enlistStudent" class="btn btn-danger">Cancel Enlistment</button>                                    
+                                </td>
+                            </tr>
+                        </tfoot>                          
                     </table>
                   </div>
                 </div>
@@ -865,6 +875,38 @@ new Vue({
         }
       });
     },
+    enlistStudent: function(id){
+          Swal.fire({
+              title: 'Remove Subject?',
+              text: "Continue Deleting Subject?",
+              showCancelButton: true,
+              confirmButtonText: "Yes",
+              imageWidth: 100,
+              icon: "question",
+              cancelButtonText: "No, cancel!",
+              showCloseButton: true,
+              showLoaderOnConfirm: true,
+              preConfirm: (login) => {
+                  var formdata= new FormData();
+                  formdata.append('subjects',JSON.stringify(this.enlisted_subjects));                
+                  formdata.append('studentID',this.student.intID);
+                  formdata.append('strAcademicYear',this.active_sem.intID);
+                  
+                  return axios
+                  .post(base_url + 'unity/enlist_from_advising',formdata, {
+                          headers: {
+                              Authorization: `Bearer ${window.token}`
+                          }
+                      })
+                  .then(data => {
+                      this.loader_spinner = false;                                                                                                                            
+                      this.sendEnlistedNotification();                        
+                  });
+                  
+              },
+              allowOutsideClick: () => !Swal.isLoading()
+          });
+      },
     sendEnlistedNotification: function(){
       let url = api_url + 'registrar/send_notif_registered/' + this.student.slug;                                    
       let payload = {'message': this.notif_message, 'payment_link':this.tuition_payment_link}

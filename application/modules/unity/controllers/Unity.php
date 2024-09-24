@@ -804,6 +804,51 @@ class Unity extends CI_Controller {
         echo json_encode($ret);
     }
 
+    public function enlist_from_advising(){
+        $post = $this->input->post();        
+        $ay = $post['strAcademicYear'];
+        $student = $post['studentID'];
+        
+        
+        //print_r($post);
+        if(isset($post['subjects']))
+        {
+            $post['subjects'] = json_decode($post['subjects']); 
+            
+            //TODO: CHECK if advised if not advised for the semester add advised data
+            if(!$this->data_fetcher->checkStudentAdvised($post['studentID'],$ay)) //check per subject
+            {
+                $data_advised['intStudentID'] = $post['studentID'];
+                $data_advised['intSYID'] = $ay;
+
+                $this->data_poster->post_data('tb_mas_advised',$data_advised);  
+                $id = $this->db->insert_id();
+                
+            }
+            else
+            {
+                $id = $this->data_fetcher->getAdvisedID($post['studentID'],$ay);
+            }
+            
+            $this->data_poster->removeAdvisedSubjects($post['studentID'],$ay);//check per subject
+
+            foreach($post['subjects'] as $subject)
+            {
+                $subject = (array)$subject;
+                    
+                $data_subject['intSubjectID'] = $subject['intID'];
+                $data_subject['intAdvisedID'] = $id;
+                $this->data_poster->post_data('tb_mas_advised_subjects',$data_subject);  
+            }
+        }
+
+        $data['success'] = true;
+        $data['message'] = "Successfully Added subjects";
+        $data['sid'] = $student;
+        
+        echo json_encode($data);
+    }
+
     public function student_tuition_payment($id,$sem = 0)
     {
         if($sem == 0)
