@@ -37,7 +37,11 @@
             <i class="fa fa-user"></i>Deficiencies
           </a>
 
-
+          <a v-if="user_level == 2 || user_level == 3"
+            class="btn btn-app"
+            :href="base_url + 'academics/enlistment/' + student.intID + '/' + active_sem.intID">
+            <i class="fa fa-book"></i>Advising Form</a>
+          </a>
           <a v-if="reg_status != 'For Subject Enlistment' && reg_status != 'For Sectioning' && (user_level == 2 || user_level == 3)"
             target="_blank"
             class="btn btn-app"
@@ -49,11 +53,7 @@
             :href="base_url + 'department/load_subjects/' + student.intID + '/' + active_sem.intID">
             <i class="fa fa-book"></i>Subject Enlistment</a>
           </a>
-          <a v-else-if="user_level == 2 || user_level == 3"
-            class="btn btn-app"
-            :href="base_url + 'academics/enlistment/' + student.intID + '/' + active_sem.intID">
-            <i class="fa fa-book"></i>Advising Form</a>
-          </a>
+          
           <!-- <a v-if="reg_status == 'For Registration' && (user_level == 2 || user_level == 3)"  class="btn btn-app" :href="base_url + 'unity/edit_sections/' + student.intID + '/' + active_sem.intID">
                         <i class="fa fa-book"></i> Update Sections
                     </a>                         -->
