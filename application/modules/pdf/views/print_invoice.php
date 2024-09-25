@@ -69,11 +69,11 @@ table tr td {
     <div class="sheet-outer A4">
         <section class="sheet padding-5mm">
             <?php if($cashCharge): ?>
-                <div style="position:absolute; top: 145px; left: 40px; width: 200px; height: 20px;">
+                <div style="position:absolute; top: 140px; left: 40px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
                     &#10003;
                 </div>
             <?php else: ?>
-                <div style="position:absolute; top: 145px; left: 100px; width: 200px; height: 20px;">
+                <div style="position:absolute; top: 140px; left: 142px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
                     &#10003;
                 </div>
             <?php endif; ?>
@@ -92,7 +92,7 @@ table tr td {
             <div style="position:absolute; top: 190px; left: 60px; width: 500px; height: 20px;">
                 <?php echo $student_address; ?>
             </div>
-            <div style="position:absolute; top: 245px; left:0px; width: 500px; height: 20px;">
+            <div style="position:absolute; top: 245px; left:10px; width: 500px; height: 20px;">
                 <?php echo $type." /  ".$term['enumSem']." ".$term['term_label']." ".$term['strYearStart']."-".$term['strYearEnd']; ?>
             </div>
             <div style="position:absolute; top: 245px; left: 500px; width: 500px; height: 20px;">
@@ -104,7 +104,7 @@ table tr td {
             <div style="position:absolute; top:  245px; left: 650px; width: 200px; height: 20px;">
                 <?php echo $full_assessment; ?>
             </div>
-            <div style="position:absolute; top: 270px; left:0px; width: 500px; height: 20px;">
+            <div style="position:absolute; top: 270px; left:10px; width: 500px; height: 20px;">
                 <?php echo $reservation_description; ?>
             </div>
             <div style="position:absolute; top: 270px; left: 500px; width: 500px; height: 20px;">
@@ -116,7 +116,7 @@ table tr td {
             <div style="position:absolute; top:  270px; left: 650px; width: 200px; height: 20px;">
                 <?php echo $reservation_amount != 0 ? "-".$reservation_amount : ""; ?>
             </div>
-            <div style="position:absolute; top:  355px; left: 650px; width: 200px; height: 20px;">
+            <div style="position:absolute; top:  353px; left: 650px; width: 200px; height: 20px;">
                 <?php  echo $total_assessment; ?>
             </div>
             <div style="position:absolute; top:  380px; left: 100px; width: 200px; height: 20px;">
@@ -125,12 +125,14 @@ table tr td {
             <div style="position:absolute; top:  405px; left: 650px; width: 200px; height: 20px;">
                 <?php  echo $total_assessment; ?>
             </div>
-            <div style="position:absolute; top:  460px; left: 0px; width: 200px; height: 20px;">
+            <div style="position:absolute; top:  460px; left: 10px; width: 200px; height: 20px;">
                 <?php  echo $remarks; ?>
             </div>
-            <div style="position:absolute; top:  485px; left: 300px; width: 200px; height: 20px;">
+            <!--Vat Exempt Sale-->
+            <div style="position:absolute; top:  475px; left: 305px; width: 200px; height: 20px;">
                 <?php  echo $total_assessment; ?>
             </div>
+            <!--Total Amount received-->
             <div style="position:absolute; top:  565px; left: 50px; width: 200px; height: 20px;">
                 <?php  echo $total_amount_due; ?>
             </div>
