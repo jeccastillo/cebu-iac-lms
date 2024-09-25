@@ -2484,7 +2484,7 @@ class Data_fetcher extends CI_Model {
         }
         
         if(isset($registration))
-            return $this->getTuitionSubjects($registration['enumStudentType'],$sch,$discount,$subjects,$id,$registration['type_of_class'],$sem,$registration['tuition_year'],$registration['dteRegistered']);
+            return $this->getTuitionSubjects($registration['enumStudentType'],$sch,$discount,$subjects,$id,$registration['type_of_class'],$sem,$registration['tuition_year'],$registration['dteRegistered'],$registration['intYearLevel']);
         else                              
             return null;
         
@@ -2530,7 +2530,7 @@ class Data_fetcher extends CI_Model {
         
     }   
 
-    function getTuitionSubjects($stype,$sch,$discount,$subjects,$id,$class_type="regular",$syid,$tuition_year_id,$dr="1970-01-01")
+    function getTuitionSubjects($stype,$sch,$discount,$subjects,$id,$class_type="regular",$syid,$tuition_year_id,$dr="1970-01-01",$year_level = 1)
     {
         $tuition = 0;
         $total_lab = 0;
@@ -2736,18 +2736,12 @@ class Data_fetcher extends CI_Model {
             ->get('tb_mas_tuition_year_track')->first_row('array');
             
             if($shs_rate)
-                switch($class_type){
-                    case 'regular':
+                switch($year_level){
+                    case 1:
                         $tuition = $shs_rate['tuition_amount'];
                     break;
-                    case 'online':
+                    case 2:
                         $tuition = $shs_rate['tuition_amount_online'];
-                    break;
-                    case 'hybrid':
-                        $tuition = $shs_rate['tuition_amount_hybrid'];
-                    break;
-                    case 'hyflex':
-                        $tuition = $shs_rate['tuition_amount_hyflex'];
                     break;
                     default:
                         $tuition = $shs_rate['tuition_amount'];
