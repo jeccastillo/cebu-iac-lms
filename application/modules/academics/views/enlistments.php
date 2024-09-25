@@ -38,13 +38,7 @@
                                     <tr v-for="enlistment in enlistments">
                                         <td><a :href="base_url + 'academics/enlistment/' + enlistment.student_id " target="_blank">{{ enlistment.strLastname + " " +enlistment.strFirstname }}</a></td>
                                         <td>{{ enlistment.status }}</td>                                        
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td class="text-right">Total Units:</td>
-                                        <td>{{ total_units }}</td>
-                                    </tr>
+                                    </tr>                                    
                                 </tbody>
                             </table>
                         </div>
