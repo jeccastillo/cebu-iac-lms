@@ -31,20 +31,16 @@
                                 <thead>
                                     <tr>
                                         <th>Name</th>
+                                        <th>Course/Program</th>
                                         <th>Status</th>                                                                                
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-for="enlistment in enlistments">
                                         <td><a :href="base_url + 'academics/enlistment/' + enlistment.student_id " target="_blank">{{ enlistment.strLastname + " " +enlistment.strFirstname }}</a></td>
+                                        <td>{{ enlistment.strProgramCode }}</td>
                                         <td>{{ enlistment.status }}</td>                                        
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td class="text-right">Total Units:</td>
-                                        <td>{{ total_units }}</td>
-                                    </tr>
+                                    </tr>                                    
                                 </tbody>
                             </table>
                         </div>
@@ -90,12 +86,14 @@ new Vue({
             })
 
             .then((data) => { 
-                this.enlistments = data.data.enlistments;
-                         
+                if(data.data.success){
+                    this.enlistments = data.data.enlistments;
+                    this.sem = data.data.active_sem.intID;
+                    this.sy = data.data.sy;
+                }
+                else
+                    document.location = base_url + 'unity/faculty_dashboard';
             });
-
-   
-
 
     },
 
