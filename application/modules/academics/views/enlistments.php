@@ -86,13 +86,14 @@ new Vue({
             })
 
             .then((data) => { 
-                this.enlistments = data.data.enlistments;
-                this.sem = data.data.active_sem.intID;
-                this.sy = data.data.sy;
+                if(data.data.success){
+                    this.enlistments = data.data.enlistments;
+                    this.sem = data.data.active_sem.intID;
+                    this.sy = data.data.sy;
+                }
+                else
+                    document.location = base_url + 'unity/faculty_dashboard';
             });
-
-   
-
 
     },
 
