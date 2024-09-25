@@ -838,8 +838,9 @@ class Academics extends CI_Controller {
         $this->load->view("common/footer",$this->data); 
     }
 
-    public function enlistments($sem = 0){                
-        $this->data['page']="enlistment form";   
+    public function enlistments($sem = 0){       
+        $this->data['opentree'] = "academics_students";         
+        $this->data['page']="enlistments";   
         $this->data['sem'] = $sem;        
 
         $this->load->view("common/header",$this->data);
