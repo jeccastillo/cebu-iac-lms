@@ -993,6 +993,7 @@ new Vue({
                             this.cashier_end = this.cashier.or_current?this.cashier.or_current:this.cashier.or_end;
                             this.request.or_number = this.cashier.or_current;
                             this.or_update.or_number = this.cashier.or_current;
+                            this.invoice_update.invoice_number = this.cashier.invoice_current;
                             this.request.cashier_id = this.cashier.user_id;
                             this.or_update.cashier_id = this.cashier.user_id;
                             this.or_update.student_campus = this.request.student_campus;

@@ -822,6 +822,7 @@ new Vue({
                             this.request.cashier_id = this.cashier.user_id;
                             this.or_update.cashier_id = this.cashier.user_id;
                             this.invoice_update.cashier_id = this.cashier.user_id;
+                            this.invoice_update.invoice_number = this.cashier.invoice_current;
                             this.request.invoice_number = this.cashier.invoice_current
                         }
                     })
