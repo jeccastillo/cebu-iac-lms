@@ -856,9 +856,10 @@ class Academics extends CI_Controller {
 
         $data['enlistments'] = 
             $this->db
-             ->select('tb_mas_student_enlistment.*, tb_mas_users.strFirstname, tb_mas_users.strLastname')
+             ->select('tb_mas_student_enlistment.*, tb_mas_users.strFirstname, tb_mas_users.strLastname,tb_mas_programs.strCode')
              ->from('tb_mas_student_enlistment')
              ->join('tb_mas_users','tb_mas_student_enlistment.student_id = tb_mas_users.intID')  
+             ->join('tb_mas_programs','tb_mas_programs.intProgramID = tb_mas_users.intProgramID')
              ->where(array('term_id'=>$data['active_sem']['intID']))
              ->order_by('strLastname','asc')
              ->get()

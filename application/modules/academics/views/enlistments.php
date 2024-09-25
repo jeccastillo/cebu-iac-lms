@@ -31,12 +31,14 @@
                                 <thead>
                                     <tr>
                                         <th>Name</th>
+                                        <th>Course/Program</th>
                                         <th>Status</th>                                                                                
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-for="enlistment in enlistments">
                                         <td><a :href="base_url + 'academics/enlistment/' + enlistment.student_id " target="_blank">{{ enlistment.strLastname + " " +enlistment.strFirstname }}</a></td>
+                                        <td>{{ enlistment.strCode }}</td>
                                         <td>{{ enlistment.status }}</td>                                        
                                     </tr>                                    
                                 </tbody>
