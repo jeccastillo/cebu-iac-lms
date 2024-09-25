@@ -865,6 +865,7 @@ class Academics extends CI_Controller {
              ->get()
              ->result_array();
 
+        $data['sy'] = $this->db->get('tb_mas_sy')->result_array();    
         echo json_encode($data);
 
     }
