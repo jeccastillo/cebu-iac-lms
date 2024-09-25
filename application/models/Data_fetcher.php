@@ -2081,13 +2081,13 @@ class Data_fetcher extends CI_Model {
         return $this->db->get_where('tb_mas_choices',array('question_id'=>$id))->result_array();        
     }
 
-    function checkSubjectTaken($studentID,$subjectID)
+    function checkSubjectTaken($studentID,$subjectID,$type = "college")
     {
         
         $arr = $this->db
              ->select('intStudentID')
              ->from('tb_mas_classlist_student')
-             ->where(array("intStudentID"=>$studentID,"intSubjectID"=>$subjectID,'floatFinalGrade'=>'!= 5','enumStatus'=>'!= \'odrp\''))
+             ->where(array("intStudentID"=>$studentID,"intSubjectID"=>$subjectID,'floatFinalGrade'=>'!= \'5.0\'','floatFinalGrade'=>'!= \'Failed\'','enumStatus'=>'!= \'OW\''))
              ->join('tb_mas_classlist', 'tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')             
              ->get()->result_array();
         if(empty($arr))
