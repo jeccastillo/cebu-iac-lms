@@ -838,6 +838,36 @@ class Academics extends CI_Controller {
         $this->load->view("common/footer",$this->data); 
     }
 
+    public function enlistments($sem = 0){                
+        $this->data['page']="enlistment form";   
+        $this->data['sem'] = $sem;        
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("enlistments",$this->data);
+        $this->load->view("common/footer",$this->data);
+    }
+
+    public function enlistments_data($sem){
+        
+        if($sem)
+            $data['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
+        else
+            $data['active_sem'] = $this->data_fetcher->get_active_sem();
+
+        $data['enlistments'] = 
+            $this->db
+             ->select('tb_mas_student_enlistment.*, tb_mas_users.strFirstname, tb_mas_users.strLastname')
+             ->from('tb_mas_student_enlistment')
+             ->join('tb_mas_users','tb_mas_student_enlistment.student_id = tb_mas_users.intID')  
+             ->where(array('term_id'=>$data['active_sem']['intID']))
+             ->order_by('strLastname','asc')
+             ->get()
+             ->result_array();
+
+        echo json_encode($data);
+
+    }
+    
     public function enlistment($id,$sem = 0){        
         $this->data['id'] = $id;     
         $this->data['page']="enlistment form";   
