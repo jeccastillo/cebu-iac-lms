@@ -371,6 +371,11 @@
                   class="fa fa-user"></i>
                 Discipline Report</a>
             </li>
+            <li class="<?php echo (isset($page) && $page=="enlistments")?'active':''; ?>">
+              <a href="<?php echo base_url()."academics/enlistments" ?>"><i
+                  class="fa fa-user"></i>
+                For Advising</a>
+            </li>
           </ul>
         </li>
         <?php endif; ?>
