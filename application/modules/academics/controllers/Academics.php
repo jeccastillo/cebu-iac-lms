@@ -854,16 +854,43 @@ class Academics extends CI_Controller {
         else
             $data['active_sem'] = $this->data_fetcher->get_active_sem();
 
+        $where = array('term_id'=>$data['active_sem']['intID']);
+        
+        $data['success'] = true;
+
+        if($this->data['user']['intUserLevel'] != 2)
+            if($this->data['user']['special_role'] == 2)
+                switch($this->data['user']['strDepartment']){
+                    case 'School of Computing':
+                        $where['tb_mas_programs.school'] = "Computing";
+                    break;
+                    case 'School of Business':
+                        $where['tb_mas_programs.school'] = "Business";
+                    break;
+                    case 'School of Design':
+                        $where['tb_mas_programs.school'] = "Design";
+                    break;                                   
+                    default:     
+                    $data['success'] = false;
+                }
+            else
+            {
+                $data['success'] = false;                        
+            }
+
         $data['enlistments'] = 
             $this->db
-             ->select('tb_mas_student_enlistment.*, tb_mas_users.strFirstname, tb_mas_users.strLastname')
+             ->select('tb_mas_student_enlistment.*, tb_mas_users.strFirstname, tb_mas_users.strLastname,tb_mas_programs.strProgramCode')
              ->from('tb_mas_student_enlistment')
              ->join('tb_mas_users','tb_mas_student_enlistment.student_id = tb_mas_users.intID')  
-             ->where(array('term_id'=>$data['active_sem']['intID']))
+             ->join('tb_mas_programs','tb_mas_programs.intProgramID = tb_mas_users.intProgramID')
+             ->where($where)
              ->order_by('strLastname','asc')
              ->get()
              ->result_array();
 
+        
+        $data['sy'] = $this->db->get('tb_mas_sy')->result_array();    
         echo json_encode($data);
 
     }
