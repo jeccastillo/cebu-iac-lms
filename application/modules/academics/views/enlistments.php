@@ -87,7 +87,7 @@ new Vue({
 
             .then((data) => { 
                 this.enlistments = data.data.enlistments;
-                         
+                this.sem = data.data.active_sem.intID;
             });
 
    
