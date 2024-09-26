@@ -7404,7 +7404,7 @@ class Excel extends CI_Controller {
                     }
                 }
 
-                $checkExists = $this->db->get_where('tb_mas_users',array('strStudentNumber'=>$studentNumber))->first_row();
+                $checkExists = $this->db->get_where('tb_mas_users',array('slug'=>$student['slug']))->first_row();
                 
                 // Insert into the database
                 if(!$checkExists){
