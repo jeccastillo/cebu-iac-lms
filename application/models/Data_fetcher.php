@@ -2759,11 +2759,12 @@ class Data_fetcher extends CI_Model {
         
 
         foreach($misc as $m){         
-            if($level == "college")
+            if($level == "college"){
                 if($stype != 'new' || strtoupper(trim($m['name'])) != 'ID VALIDATION' ){                
                     $misc_list[$m['name']] = getExtraFee($m, $class_type, 'misc');
                     $total_misc += $misc_list[$m['name']];
                 }
+            }
             else
                 if($stype != 'new' || strtoupper(trim($m['name'])) != 'ID VALIDATION' ){   
                     switch($year_level){
@@ -2783,7 +2784,7 @@ class Data_fetcher extends CI_Model {
                             $ctype = 'regular';
                         
                     }             
-                    $misc_list[$m['name']] = getExtraFee($m, $class_type, 'misc');
+                    $misc_list[$m['name']] = getExtraFee($m, $ctype, 'misc');
                     $total_misc += $misc_list[$m['name']];
                 }
         }
