@@ -2737,24 +2737,23 @@ class Data_fetcher extends CI_Model {
             
 
             if($shs_rate)
-                $tuition = $shs_rate['tuition_amount'];
-                // switch($year_level){
-                //     case 1:
-                //         $tuition = $shs_rate['tuition_amount'];
-                //     break;
-                //     case 2:
-                //         $tuition = $shs_rate['tuition_amount_online'];
-                //     break;
-                //     case 3:
-                //         $tuition = $shs_rate['tuition_amount_hybrid'];
-                //     break;
-                //     case 4:
-                //         $tuition = $shs_rate['tuition_amount_hyflex'];
-                //     break;
-                //     default:
-                //         $tuition = $shs_rate['tuition_amount'];
+                switch($year_level){
+                    case 1:
+                        $tuition = $shs_rate['tuition_amount'];
+                    break;
+                    case 2:
+                        $tuition = $shs_rate['tuition_amount_online'];
+                    break;
+                    case 3:
+                        $tuition = $shs_rate['tuition_amount_hybrid'];
+                    break;
+                    case 4:
+                        $tuition = $shs_rate['tuition_amount_hyflex'];
+                    break;
+                    default:
+                        $tuition = $shs_rate['tuition_amount'];
                     
-                // }                                 
+                }                                 
                     
         }
         
