@@ -7379,6 +7379,7 @@ class Excel extends CI_Controller {
         $post = $this->input->post();
 
         if(isset($post['data'])){
+            print_r($post['data']);
             foreach($post['data'] as $index => $student){
                 $tuitionYear = $studentProgramId = '';
                 $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
@@ -7393,7 +7394,6 @@ class Excel extends CI_Controller {
 
                 $getCurriculum = $this->db->get_where('tb_mas_curriculum',array('strName'=>$student['curriculum']))->first_row('array');
 
-                $studentNumber = $student['student_number'];
                 $studentProgram = str_replace('.', '', $student['program_code']);
 
                 foreach($programs as $program){
@@ -7403,14 +7403,14 @@ class Excel extends CI_Controller {
                     }
                 }
 
-                $checkExists = $this->db->get_where('tb_mas_users',array('strStudentNumber'=>$studentNumber))->first_row();
+                $checkExists = $this->db->get_where('tb_mas_users',array('slug'=>$student['slug']))->first_row();
                 
                 // Insert into the database
                 if(!$checkExists){
                     $data = array(
                         'level' => $post['student_level'],
                         'slug' => $student['slug'],
-                        'strStudentNumber' => $studentNumber,
+                        'strStudentNumber' => $student['student_number'],
                         'strLastname' => $student['last_name'],
                         'strFirstname' => $student['first_name'],
                         'strMiddlename' => $student['middle_name'],
@@ -7444,15 +7444,16 @@ class Excel extends CI_Controller {
                         'senior_high_attended' => isset($student['senior_high_attended']) ? $student['senior_high_attended'] : null,
                         'college' => isset($student['college']) ? $student['college'] : null,
                         'college_address' => isset($student['college_address']) ? $student['college_address'] : null,
-                        'college_attended' => isset($student['college_attended']) ? $student['college_attended'] : null,
+                        'college_attended_to' => isset($student['college_attended_to']) ? $student['college_attended_to'] : null,
                         'strLRN' => $student['lrn'],
                     );
-               
+                    print('New Student : ');
+                    print_r($data);
                     $this->data_poster->post_data('tb_mas_users',$data);
                 }else{
                     $data = array(
                         'level' => $post['student_level'],
-                        'strStudentNumber' => $studentNumber,
+                        'strStudentNumber' => isset($student['student_number']) ? $studentNumber : $checkExists->strStudentNumber,
                         'strLastname' => $student['last_name'],
                         'strFirstname' => $student['first_name'],
                         'strMiddlename' => $student['middle_name'],
@@ -7486,7 +7487,7 @@ class Excel extends CI_Controller {
                         'senior_high_attended' => isset($student['senior_high_attended']) ? $student['senior_high_attended'] : null,
                         'college' => isset($student['college']) ? $student['college'] : null,
                         'college_address' => isset($student['college_address']) ? $student['college_address'] : null,
-                        'college_attended_to' => isset($student['college_attended']) ? $student['college_attended'] : null,                        
+                        'college_attended_to' => isset($student['college_attended_to']) ? $student['college_attended_to'] : null,                        
                         'strLRN' => $student['lrn'],
                     );
 
