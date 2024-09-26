@@ -7445,7 +7445,7 @@ class Excel extends CI_Controller {
                         'senior_high_attended' => isset($student['senior_high_attended']) ? $student['senior_high_attended'] : null,
                         'college' => isset($student['college']) ? $student['college'] : null,
                         'college_address' => isset($student['college_address']) ? $student['college_address'] : null,
-                        'college_attended' => isset($student['college_attended']) ? $student['college_attended'] : null,
+                        'college_attended_to' => isset($student['college_attended_to']) ? $student['college_attended_to'] : null,
                         'strLRN' => $student['lrn'],
                     );
                     print('New Student : ');
@@ -7488,7 +7488,7 @@ class Excel extends CI_Controller {
                         'senior_high_attended' => isset($student['senior_high_attended']) ? $student['senior_high_attended'] : null,
                         'college' => isset($student['college']) ? $student['college'] : null,
                         'college_address' => isset($student['college_address']) ? $student['college_address'] : null,
-                        'college_attended_to' => isset($student['college_attended']) ? $student['college_attended'] : null,                        
+                        'college_attended_to' => isset($student['college_attended_to']) ? $student['college_attended_to'] : null,                        
                         'strLRN' => $student['lrn'],
                     );
 
