@@ -2735,24 +2735,26 @@ class Data_fetcher extends CI_Model {
             $shs_rate = $this->db->where(array('tuitionyear_id'=>$tuition_year['intID'], 'track_id' => $student['intProgramID']))
             ->get('tb_mas_tuition_year_track')->first_row('array');
             
+
             if($shs_rate)
-                switch($year_level){
-                    case 1:
-                        $tuition = $shs_rate['tuition_amount'];
-                    break;
-                    case 2:
-                        $tuition = $shs_rate['tuition_amount_online'];
-                    break;
-                    case 3:
-                        $tuition = $shs_rate['tuition_amount_hybrid'];
-                    break;
-                    case 4:
-                        $tuition = $shs_rate['tuition_amount_hyflex'];
-                    break;
-                    default:
-                        $tuition = $shs_rate['tuition_amount'];
+                $tuition = $shs_rate['tuition_amount'];
+                // switch($year_level){
+                //     case 1:
+                //         $tuition = $shs_rate['tuition_amount'];
+                //     break;
+                //     case 2:
+                //         $tuition = $shs_rate['tuition_amount_online'];
+                //     break;
+                //     case 3:
+                //         $tuition = $shs_rate['tuition_amount_hybrid'];
+                //     break;
+                //     case 4:
+                //         $tuition = $shs_rate['tuition_amount_hyflex'];
+                //     break;
+                //     default:
+                //         $tuition = $shs_rate['tuition_amount'];
                     
-                }                                 
+                // }                                 
                     
         }
         
