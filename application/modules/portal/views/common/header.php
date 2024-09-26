@@ -132,6 +132,9 @@ font-size: 1.6rem !important;
                         <li class="<?php echo (isset($page) && $page=="schedule")?'active':''; ?>"><a href="<?php echo base_url() ?>portal/schedule"><i class="fa fa-calendar"></i> <span>Schedule</span></a></li>
                     </ul>
                     <ul class="sidebar-menu">
+                        <li class="<?php echo (isset($page) && $page=="enlistment")?'active':''; ?>"><a href="<?php echo base_url() ?>portal/enlistment"><i class="fa fa-book"></i> <span>Advising</span></a></li>
+                    </ul>
+                    <ul class="sidebar-menu">
                         <li class="<?php echo (isset($page) && $page=="ledger")?'active':''; ?>"><a href="<?php echo base_url() ?>portal/ledger"><i class="fa fa-book"></i> <span>View Balance</span></a></li>
                     </ul>
                     <!-- <ul class="sidebar-menu">
