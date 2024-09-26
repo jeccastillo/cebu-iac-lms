@@ -7379,6 +7379,7 @@ class Excel extends CI_Controller {
         $post = $this->input->post();
 
         if(isset($post['data'])){
+            print_r($post['data']);
             foreach($post['data'] as $index => $student){
                 $tuitionYear = $studentProgramId = '';
                 $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
@@ -7447,7 +7448,8 @@ class Excel extends CI_Controller {
                         'college_attended' => isset($student['college_attended']) ? $student['college_attended'] : null,
                         'strLRN' => $student['lrn'],
                     );
-               
+                    print('New Student : ');
+                    print_r($data);
                     $this->data_poster->post_data('tb_mas_users',$data);
                 }else{
                     $data = array(
