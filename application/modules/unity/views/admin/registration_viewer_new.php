@@ -110,7 +110,7 @@
                                 Enrolled
                             </div>
                         </div>
-                        <div v-if="registration"
+                        <div v-if="registration && cashier"
                             style="margin-right:1rem;"
                             class="pull-right">
                             Has DP
@@ -303,7 +303,7 @@
                                                         v-model="description">
                                                         <option value="Tuition Fee">Tuition Fee
                                                         </option>
-                                                        <option value="Other">Other</option>
+                                                        <option v-if="isInvoice" value="Other">Other</option>
                                                     </select>
                                                 </div>
                                                 <div v-if="description == 'Tuition Fee'"
@@ -312,9 +312,9 @@
                                                     <select required
                                                         class="form-control"
                                                         v-model="description_other">
-                                                        <option
+                                                        <option v-if="isInvoice"
                                                             value="full">Full Tuition</option>
-                                                        <option
+                                                        <option v-if="isInvoice"
                                                             value="down">Down Payment</option>
                                                         <option v-if="isOR"
                                                             value="installment">Installment
@@ -396,7 +396,7 @@
                                                 <div v-if="isOR"
                                                     class="form-group">
                                                     <label>Invoice Number:</label>
-                                                    <select class="form-control" v-model="request.invoice_number">
+                                                    <select class="form-control" v-model="request.invoice_number" required>
                                                         <option v-for="invoiceNumber in invoiceNumbers" :value="invoiceNumber.invoice_number">{{ invoiceNumber.invoice_number }}</option>
                                                     </select>                                                     
 
@@ -564,14 +564,14 @@
                                             <td>{{ application_payment.or_date }}</td>
                                             <td>{{ application_payment.void_reason }}</td>
                                             <td>
-                                                <button
+                                                <!-- <button
                                                     v-if="!application_payment.or_number && application_payment.status == 'Paid' && cashier && application_payment.remarks != 'Voided'"
                                                     data-toggle="modal"
                                                     @click="prepUpdate(application_payment.id,application_payment.description,application_payment.subtotal_order)"
                                                     data-target="#myModal"
                                                     class="btn btn-primary">
                                                     Update OR
-                                                </button>
+                                                </button> -->
                                                 <button
                                                     v-if="application_payment.status == 'Paid' && cashier && application_payment.remarks != 'Voided'"
                                                     data-toggle="modal"
@@ -588,12 +588,12 @@
                                                     class="btn btn-primary">
                                                     Update Details
                                                 </button>
-                                                <button
+                                                <!-- <button
                                                     v-if="application_payment.or_number && cashier"
                                                     @click="printOR(application_payment)"
                                                     class="btn btn-primary">
                                                     Print OR
-                                                </button>
+                                                </button> -->
                                                 <button
                                                     v-if="application_payment.invoice_number && cashier"
                                                     @click="printInvoice(application_payment)"
@@ -648,11 +648,11 @@
                                                     class="btn btn-primary">
                                                     Update Details
                                                 </button>
-                                                <button v-if="payment.or_number && cashier"
+                                                <!-- <button v-if="payment.or_number && cashier"
                                                     @click="printOR(payment)"
                                                     class="btn btn-primary">
                                                     Print OR
-                                                </button>
+                                                </button> -->
                                                 <button
                                                     v-if="payment.invoice_number && cashier"
                                                     @click="printInvoice(payment)"
@@ -697,14 +697,14 @@
                                             <td>{{ reservation_payment.or_date }}</td>
                                             <td>{{ reservation_payment.void_reason }}</td>
                                             <td>
-                                                <button
+                                                <!-- <button
                                                     v-if="!reservation_payment.or_number && reservation_payment.status == 'Paid' && cashier"
                                                     data-toggle="modal"
                                                     @click="prepUpdate(reservation_payment.id,reservation_payment.description,reservation_payment.subtotal_order)"
                                                     data-target="#myModal"
                                                     class="btn btn-primary">
                                                     Update OR
-                                                </button>
+                                                </button> -->
                                                 <button
                                                     v-if="reservation_payment.status == 'Paid' && cashier && reservation_payment.remarks != 'Voided'"
                                                     data-toggle="modal"
@@ -721,12 +721,12 @@
                                                     class="btn btn-primary">
                                                     Update Details
                                                 </button>
-                                                <button
+                                                <!-- <button
                                                     v-if="reservation_payment.or_number && cashier"
                                                     @click="printOR(reservation_payment)"
                                                     class="btn btn-primary">
                                                     Print OR
-                                                </button>
+                                                </button> -->
                                                 <button
                                                     v-if="reservation_payment.invoice_number && cashier"
                                                     @click="printInvoice(reservation_payment)"
@@ -781,7 +781,7 @@
                                                     class="btn btn-primary">
                                                     Update Details
                                                 </button>
-                                                <button v-if="payment.or_number && cashier"
+                                                <button v-if="payment.or_number && payment.invoice_number && cashier"
                                                     @click="printOR(payment)"
                                                     class="btn btn-primary">
                                                     Print OR
@@ -791,6 +791,12 @@
                                                     @click="printInvoice(payment)"
                                                     class="btn btn-primary">
                                                     Print Invoice
+                                                </button>
+                                                <button
+                                                    v-if="payment.invoice_number && cashier"
+                                                    @click="printInvoice(payment,1)"
+                                                    class="btn btn-primary">
+                                                    Print Invoice A
                                                 </button>
                                                 <button
                                                     v-if="payment.mode && payment.status == 'Paid' && payment.remarks != 'Voided' && cashier && finance_manager_privilages"
@@ -920,7 +926,7 @@
     </div>
     <form ref="print_or"
         method="post"
-        :action="base_url + 'pdf/print_or_new'"
+        :action="base_url + 'pdf/print_updated_or'"
         target="_blank">
         <input type="hidden"
             name="student_name"
@@ -973,11 +979,14 @@
     </form>    
     <form ref="print_invoice"
         method="post"
-        :action="base_url + 'pdf/print_invoice'"
+        :action="base_url + 'pdf/print_invoice/' + assessment "
         target="_blank">
         <input type="hidden"
             name="student_name"
             v-model="or_print.student_name">
+        <input type="hidden"
+            name="slug"
+            v-model="slug">
         <input type="hidden"
             name="campus"
             :value="request.student_campus">
@@ -1255,6 +1264,7 @@ new Vue({
         base_url: '<?php echo base_url(); ?>',
         selected_items: [],
         ready: false,
+        assessment: 0,
         applicant_data: {
             reserve_enroll: 0,
         },
@@ -1471,6 +1481,7 @@ new Vue({
                             this.or_update.or_number = this.cashier.or_current;
                             this.request.cashier_id = this.cashier.user_id;
                             this.or_update.cashier_id = this.cashier.user_id;
+                            this.invoice_update.cashier_id = this.cashier.user_id;
                             this.or_update.student_campus = this.request.student_campus;
                             this.soa.logo = (this.or_update.student_campus == "Cebu") ? "https://i.ibb.co/9hgbYNB/seal.png" : "https://i.ibb.co/kcYVsS7/i-ACADEMY-Seal-Makati.png";
                             this.soa.address = (this.or_update.student_campus == "Cebu") ? "5F Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City, Philippines" : "iACADEMY Nexus Campus, 7434 Yakal, Makati, 1203 Metro Manila, Philippines";
@@ -1934,8 +1945,8 @@ new Vue({
         updateInvoice: function() {
             let url = api_url + 'finance/update_invoice';
             let slug = this.slug;
-            this.loader_spinner = true;
-
+            this.loader_spinner = true;            
+            
             Swal.fire({
                 title: 'Continue with the update',
                 text: "Are you sure you want to update the payment?",
@@ -1952,21 +1963,83 @@ new Vue({
                             headers: {
                                 Authorization: `Bearer ${window.token}`
                             }
-                        })
-                        .then(data => {
+                        }).then(data => {
                             this.loader_spinner = false;
                             if (data.data.success) {
+                                var formdata = new FormData();
+                                formdata.append('intID', this.cashier.intID);
+                                formdata.append('invoice_current', this.cashier.invoice_current);
+                                formdata.append('invoice_used', this.cashier.invoice_current);
+                                formdata.append('sy', this.student.sy_reference);
+                                axios.post(base_url + 'finance/next_or/1',
+                                        formdata, {
+                                            headers: {
+                                                Authorization: `Bearer ${window.token}`
+                                            }
+                                        })
+                                    .then(function(data) {
+                                        if (data.data.send_notif) {
+                                            let url = api_url +
+                                                'registrar/send_notif_enrolled/' +
+                                                this.student_data
+                                                .slug;
+                                            let payload = {
+                                                'message': "This message serves as a notification that you have been officially enrolled."
+                                            }
 
-                                this.loader_spinner = false;
+                                            Swal.fire({
+                                                showCancelButton: false,
+                                                showCloseButton: false,
+                                                allowEscapeKey: false,
+                                                title: 'Loading',
+                                                text: 'Processing Data do not leave page',
+                                                icon: 'info',
+                                            })
+                                            Swal.showLoading();
+                                            axios.post(url,
+                                                    payload, {
+                                                        headers: {
+                                                            Authorization: `Bearer ${window.token}`
+                                                        }
+                                                    })
+                                                .then(data => {
+                                                    this.loader_spinner =
+                                                        false;
+                                                    Swal.fire({
+                                                        title: "Success",
+                                                        text: data
+                                                            .data
+                                                            .message,
+                                                        icon: "success"
+                                                    }).then(
+                                                        function() {
+                                                            location
+                                                                .reload();
+                                                        });
+                                                });
+                                        } else {
+                                            Swal.fire({
+                                                title: "Success",
+                                                text: data
+                                                    .data
+                                                    .message,
+                                                icon: "success"
+                                            }).then(function() {
+                                                location
+                                                    .reload();
+                                            });
+
+                                        }
+
+                                    })
+                            } else
                                 Swal.fire({
-                                    title: "Success",
-                                    text: "Update Success",
-                                    icon: "success"
+                                    title: "Failed",
+                                    text: data.data.message,
+                                    icon: "error"
                                 }).then(function() {
-                                    location.reload();
+                                    //location.reload();
                                 });
-
-                            }
                         });
 
                 },
@@ -2170,7 +2243,7 @@ new Vue({
 
             });
         },
-        printInvoice: function(payment) {
+        printInvoice: function(payment, assessment = 0) {
             Swal.fire({
                 title: 'Continue with Printing Invoice',
                 text: "Are you sure you want to continue? You can only print the Invoice once",
@@ -2201,6 +2274,7 @@ new Vue({
                     this.or_print.check_number = payment.check_number;
                     this.or_print.sem = payment.sy_reference;
                     this.or_print.cashier_id = payment.cashier_id;
+                    this.assessment = assessment;
                 }
             }).then((result) => {
                 var delayInMilliseconds = 1000; //1 second
