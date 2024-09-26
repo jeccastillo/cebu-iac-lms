@@ -2758,11 +2758,34 @@ class Data_fetcher extends CI_Model {
         
         
 
-        foreach($misc as $m){            
-            if($stype != 'new' || strtoupper(trim($m['name'])) != 'ID VALIDATION' ){
-                $misc_list[$m['name']] = getExtraFee($m, $class_type, 'misc');
-                $total_misc += $misc_list[$m['name']];
-            }
+        foreach($misc as $m){         
+            if($level == "college"){   
+                if($stype != 'new' || strtoupper(trim($m['name'])) != 'ID VALIDATION' ){                
+                    $misc_list[$m['name']] = getExtraFee($m, $class_type, 'misc');
+                    $total_misc += $misc_list[$m['name']];
+                }
+            else
+                if($stype != 'new' || strtoupper(trim($m['name'])) != 'ID VALIDATION' ){   
+                    switch($year_level){
+                        case 1:
+                            $ctype = 'regular';
+                        break;
+                        case 2:
+                            $ctype = 'online';
+                        break;
+                        case 3:
+                            $ctype = 'hybrid';
+                        break;
+                        case 4:
+                            $ctype = 'hyflex';
+                        break;
+                        default:
+                            $ctype = 'regular';
+                        
+                    }             
+                    $misc_list[$m['name']] = getExtraFee($m, $class_type, 'misc');
+                    $total_misc += $misc_list[$m['name']];
+                }
         }
         
         if($hasInternship){
