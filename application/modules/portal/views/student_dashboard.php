@@ -79,7 +79,24 @@
             
             <!-- small box -->
        </div>
-     
+       <div class="col-md-4 col-sm-8 col-xs-12">
+            <!-- small box -->
+          <div class="small-box bg-green">
+            <div class="inner">
+              <h3>Advising</h3>
+
+              <p>Select Subjects for Enlistment</p>
+            </div>
+            <div class="icon">
+              <i class="fa fa-pencil"></i>
+            </div>
+            <a href="<?php echo base_url(); ?>portal/enlistment" class="small-box-footer">
+              View Form <i class="fa fa-arrow-circle-right"></i>
+            </a>
+          </div>
+            
+            <!-- small box -->
+       </div>
        <div class="col-md-4 col-sm-8 col-xs-12">
            
             <div class="small-box bg-gray">
