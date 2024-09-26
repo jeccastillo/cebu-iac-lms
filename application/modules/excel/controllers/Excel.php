@@ -7421,27 +7421,21 @@ class Excel extends CI_Controller {
                         'dteBirthDate' => date("Y-m-d",strtotime($student['date_of_birth'])),
                         'strAddress' => $student['address'],
                         'place_of_birth' => $student['place_of_birth'],
-                        'enumGender' => $student['gender'],
-                        // 'strCivilStatus' => $student['M'],
+                        'enumGender' => strtolower($student['gender']),
                         'strCitizenship' => $student['citizenship'],
-                        // 'strReligion' => $student['O'],
                         'strTelNumber' => $student['tel_number'],
                         'strMobileNumber' => $student['mobile_number'],
                         'strEmail' => $student['email'],
                         'father' => $student['father_name'],
-                        // 'father_occupation' => $student['U'],
                         'father_contact' => $student['father_contact'],
                         'father_email' => $student['father_email'],
                         'mother' => $student['mother_name'],
-                        // 'mother_occupation' => $student['Z'],
                         'mother_contact' => $student['mother_contact'],
                         'mother_email' => $student['mother_email'],
                         'guardian' => $student['guardian_name'],
-                        // 'relationship' => $student['AE'],
                         'guardian_contact' => $student['guardian_contact'],
                         'guardian_email' => $student['guardian_email'],
                         'intTuitionYear' => $tuitionYear,
-                        
                         'high_school' => isset($student['high_school']) ? $student['high_school'] : null,
                         'high_school_address' => isset($student['high_school_address']) ? $student['high_school_address'] : null,
                         'high_school_attended' => isset($student['high_school_attended']) ? $student['high_school_attended'] : null,
@@ -7451,45 +7445,52 @@ class Excel extends CI_Controller {
                         'college' => isset($student['college']) ? $student['college'] : null,
                         'college_address' => isset($student['college_address']) ? $student['college_address'] : null,
                         'college_attended' => isset($student['college_attended']) ? $student['college_attended'] : null,
-                        
                         'strLRN' => $student['lrn'],
                     );
                
                     $this->data_poster->post_data('tb_mas_users',$data);
-                    $active_sem = $this->data_fetcher->get_active_sem();
-
-                    if($post['student_level'] == 'shs')
-                        $active_sem = $this->data_fetcher->get_active_sem_shs();
-
-                    $newStudentInformation = $this->db->get_where('tb_mas_users',array('slug'=> $student['slug']))->first_row('array');
-                    $modeOfPayment = 'partial';
-
-                    if(isset($student['mode_of_payment']))
-                        if($student['mode_of_payment'] == 'FULL PAYMENT')
-                            $modeOfPayment = 'full';
-                    
-                    $regData = array(
-                        'intStudentID' => $newStudentInformation['intID'],
-                        'enlisted_by' => 1186,
-                        'dteRegistered' => date("Y-m-d",strtotime($student['date_enrolled'])),
-                        'date_enlisted' => date("Y-m-d",strtotime($student['date_enrolled'])),
-                        'intAYID' => $active_sem['intID'],
-                        'enumRegistrationStatus' => 'regular',
-                        'enumStudentType' => isset($student['enrollment_status']) ? strtolower($student['enrollment_status']) : 'continuing',
-                        'intYearLevel' => $student['student_year'],
-                        'intROG' => 1,
-                        'enumScholarship' => 0,
-                        'paymentType' => $modeOfPayment,
-                        'paymentStatus' => 'pending payment',
-                        'downpayment' => 0,
-                        'type_of_class' => 'regular',
-                        // 'current_program' => 'regular',
-                        'current_curriculum' => $getCurriculum ? $getCurriculum['intID'] : '',
-                        'tuition_year' => $tuitionYear,
-                        'late_enrollment' => '0',
-
+                }else{
+                    $data = array(
+                        'level' => $post['student_level'],
+                        'strStudentNumber' => $studentNumber,
+                        'strLastname' => $student['last_name'],
+                        'strFirstname' => $student['first_name'],
+                        'strMiddlename' => $student['middle_name'],
+                        'intProgramID' => $studentProgramId,
+                        'intStudentYear' => $student['student_year'],
+                        'blockSection' => $student['block_section'],
+                        'intCurriculumID' => isset($getCurriculum) ? $getCurriculum['intID'] : '',
+                        'dteBirthDate' => date("Y-m-d",strtotime($student['date_of_birth'])),
+                        'strAddress' => $student['address'],
+                        'place_of_birth' => $student['place_of_birth'],
+                        'enumGender' => strtolower($student['gender']),
+                        'strCitizenship' => $student['citizenship'],
+                        'strTelNumber' => $student['tel_number'],
+                        'strMobileNumber' => $student['mobile_number'],
+                        'strEmail' => $student['email'],
+                        'father' => $student['father_name'],
+                        'father_contact' => $student['father_contact'],
+                        'father_email' => $student['father_email'],
+                        'mother' => $student['mother_name'],
+                        'mother_contact' => $student['mother_contact'],
+                        'mother_email' => $student['mother_email'],
+                        'guardian' => $student['guardian_name'],
+                        'guardian_contact' => $student['guardian_contact'],
+                        'guardian_email' => $student['guardian_email'],
+                        'intTuitionYear' => $tuitionYear,
+                        'high_school' => isset($student['high_school']) ? $student['high_school'] : null,
+                        'high_school_address' => isset($student['high_school_address']) ? $student['high_school_address'] : null,
+                        'high_school_attended' => isset($student['high_school_attended']) ? $student['high_school_attended'] : null,
+                        'senior_high' => isset($student['senior_high']) ? $student['senior_high'] : null,
+                        'senior_high_address' => isset($student['senior_high_address']) ? $student['senior_high_address'] : null,
+                        'senior_high_attended' => isset($student['senior_high_attended']) ? $student['senior_high_attended'] : null,
+                        'college' => isset($student['college']) ? $student['college'] : null,
+                        'college_address' => isset($student['college_address']) ? $student['college_address'] : null,
+                        'college_attended_to' => isset($student['college_attended']) ? $student['college_attended'] : null,                        
+                        'strLRN' => $student['lrn'],
                     );
-                    $this->data_poster->post_data('tb_mas_registration', $regData);
+
+                    $this->data_poster->post_data('tb_mas_users',$data,$checkExists->intID);
                 }
             }
             $data['message'] = "success";
