@@ -220,7 +220,7 @@ class Portal extends CI_Controller {
     public function enlistment($sem = 0){
         $id = $this->session->userdata('intID');
         $this->data['id'] = $id;     
-        $this->data['page']="enlistment form";   
+        $this->data['page']="enlistment";   
         $this->data['sem'] = $sem;        
 
         $this->load->view("common/header",$this->data);
