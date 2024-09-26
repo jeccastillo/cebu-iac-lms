@@ -7394,7 +7394,6 @@ class Excel extends CI_Controller {
 
                 $getCurriculum = $this->db->get_where('tb_mas_curriculum',array('strName'=>$student['curriculum']))->first_row('array');
 
-                $studentNumber = $student['student_number'];
                 $studentProgram = str_replace('.', '', $student['program_code']);
 
                 foreach($programs as $program){
@@ -7411,7 +7410,7 @@ class Excel extends CI_Controller {
                     $data = array(
                         'level' => $post['student_level'],
                         'slug' => $student['slug'],
-                        'strStudentNumber' => $studentNumber,
+                        'strStudentNumber' => $student['student_number'],
                         'strLastname' => $student['last_name'],
                         'strFirstname' => $student['first_name'],
                         'strMiddlename' => $student['middle_name'],
@@ -7454,7 +7453,7 @@ class Excel extends CI_Controller {
                 }else{
                     $data = array(
                         'level' => $post['student_level'],
-                        'strStudentNumber' => $studentNumber,
+                        'strStudentNumber' => isset($student['student_number']) ? $studentNumber : $checkExists->strStudentNumber,
                         'strLastname' => $student['last_name'],
                         'strFirstname' => $student['first_name'],
                         'strMiddlename' => $student['middle_name'],
