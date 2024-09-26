@@ -7453,7 +7453,7 @@ class Excel extends CI_Controller {
                 }else{
                     $data = array(
                         'level' => $post['student_level'],
-                        'strStudentNumber' => isset($student['student_number']) ? $studentNumber : $checkExists->strStudentNumber,
+                        'strStudentNumber' => isset($student['student_number']) ? $student['student_number'] : $checkExists->strStudentNumber,
                         'strLastname' => $student['last_name'],
                         'strFirstname' => $student['first_name'],
                         'strMiddlename' => $student['middle_name'],
