@@ -39,6 +39,19 @@
                                 class="form-control" id="strMiddlename" placeholder="Enter Middle Name">
                         </div>
                         <div class="form-group col-xs-4">
+                            <label for="enumGender">Level: </label>
+                            <select class="form-control" name="level">
+                                <option <?php echo ($student['level'] == "college")?'selected':''; ?> value="college">
+                                college</option>
+                                <option <?php echo ($student['level'] == "shs")?'selected':''; ?>
+                                    value="shs">shs</option>
+                                <option <?php echo ($student['level'] == "drive")?'selected':''; ?>
+                                    value="drive">drive</option>
+                                <option <?php echo ($student['level'] == "other")?'selected':''; ?>
+                                    value="other">other</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-xs-4">
                             <label for="enumGender">Gender: </label>
                             <select class="form-control" name="enumGender">
                                 <option <?php echo ($student['enumGender'] == "male")?'selected':''; ?> value="male">
