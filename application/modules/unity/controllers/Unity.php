@@ -639,7 +639,7 @@ class Unity extends CI_Controller {
                         $balance = $tuition['total'] - $paid;
                     else
                         $balance = $tuition['total_installment'] - $paid;
-
+                    if(number_format($balance,2) != "0.00")
                     $term_balances[] = [
                         'formatted_balance'=> number_format($balance,2),
                         'balance'=>$balance,
