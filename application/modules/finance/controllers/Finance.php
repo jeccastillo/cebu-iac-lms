@@ -667,7 +667,7 @@ class Finance extends CI_Controller {
         }
         echo json_encode($data);
     }
-    public function next_or_other(){
+    public function next_or_other($invoice = 0){
         $post = $this->input->post();
         $data = $post;
         $current_or = $post['or_current'];        
@@ -675,10 +675,18 @@ class Finance extends CI_Controller {
         
         $cashier = $this->db->get_where('tb_mas_cashier',array('intID'=>$data['intID']))->row();
         
-        if($data['or_current'] >= $cashier->or_end)
-            $data['or_current'] = null;
-        else
-            $data['or_current'] += 1;
+        if($invoice == 0){
+            if($data['or_current'] >= $cashier->or_end)
+                $data['or_current'] = null;
+            else
+                $data['or_current'] += 1;
+        }
+        else{            
+            if($data['invoice_current'] >= $cashier->invoice_end)
+                $data['invoice_current'] = null;
+            else
+                $data['invoice_current'] += 1;        
+        }
 
         $this->db
             ->where('intID',$data['intID'])
