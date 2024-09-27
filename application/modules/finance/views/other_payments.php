@@ -196,7 +196,7 @@ new Vue({
                 this.cashier = data.data.cashier;
                 this.request.sy_reference = data.data.current_sem;                
                 if(this.cashier){
-                    this.request.or_number = this.cashier.or_current;                    
+                    //this.request.or_number = this.cashier.or_current;                    
                     this.request.invoice_number = this.cashier.invoice_current;
                     this.request.cashier_id = this.cashier.user_id;    
                     this.payees = data.data.payees;   
