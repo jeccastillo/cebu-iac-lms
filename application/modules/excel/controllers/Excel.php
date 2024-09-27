@@ -7447,8 +7447,7 @@ class Excel extends CI_Controller {
                         'college_attended_to' => isset($student['college_attended_to']) ? $student['college_attended_to'] : null,
                         'strLRN' => $student['lrn'],
                     );
-                    print('New Student : ');
-                    print_r($data);
+                    
                     $this->data_poster->post_data('tb_mas_users',$data);
                 }else{
                     $data = array(
