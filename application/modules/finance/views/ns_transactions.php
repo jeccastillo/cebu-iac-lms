@@ -34,6 +34,7 @@
                             <table class="table table-bordered">
                                 <tr>
                                     <th>OR Number</th>
+                                    <th>Invoice Number</th>
                                     <th>Cashier</th>
                                     <th>Payment Type</th>
                                     <th>Reference No.</th>
@@ -47,6 +48,7 @@
                                 </tr>                                                                                                                        
                                 <tr v-for="payment in payments">
                                     <td>{{ payment.or_number }}</td>
+                                    <td>{{ payment.invoice_number }}</td>
                                     <td><a href="#" @click.prevent.stop="cashierDetails(payment.cashier_id)">{{ payment.cashier_id }}</a></td>
                                     <td>{{ payment.description }}</td>
                                     <td>{{ payment.check_number }}</td>
@@ -79,6 +81,7 @@
             <input type="hidden" name="is_cash" v-model="or_print.is_cash">
             <input type="hidden" name="check_number" v-model="or_print.check_number">
             <input type="hidden" name="or_number" v-model="or_print.or_number" />
+            <input type="hidden" name="invoice_number" v-model="or_print.invoice_number" />
             <input type="hidden" name="remarks" v-model="or_print.remarks">
             <input type="hidden" name="description" v-model="or_print.description" />
             <input type="hidden" name="total_amount_due" v-model="or_print.total_amount_due" /> 
@@ -115,9 +118,11 @@ new Vue({
         },              
         payments: [],                          
         cashier: undefined, 
-        sy: [],      
+        sy: [],  
+            
         or_print: {
             or_number: undefined,
+            invoice_number: undefined,
             description: undefined,
             total_amount_due: undefined,
             student_name: undefined,
