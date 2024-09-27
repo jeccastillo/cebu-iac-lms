@@ -106,8 +106,8 @@
                                     </div>                                    
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label>OR Number:</label>
-                                            <div>{{ request.or_number }}</div>
+                                            <label>Invoice Number:</label>
+                                            <div>{{ request.invoice_number }}</div>
                                             <input type="hidden" class="form-control" v-model="request.or_number" />
                                         </div>
                                     </div>  
@@ -167,6 +167,7 @@ new Vue({
             description: undefined, 
             sy_reference: undefined,
             or_number:undefined,
+            invoice_number: undefined,
             remarks:'',
             subtotal_order: 0,
             convenience_fee: 0,
@@ -196,6 +197,7 @@ new Vue({
                 this.request.sy_reference = data.data.current_sem;                
                 if(this.cashier){
                     this.request.or_number = this.cashier.or_current;                    
+                    this.request.invoice_number = this.cashier.invoice_current;
                     this.request.cashier_id = this.cashier.user_id;    
                     this.payees = data.data.payees;   
                     this.sy = data.data.sy;             
@@ -255,12 +257,8 @@ new Vue({
                     showCloseButton: true,
                     showLoaderOnConfirm: true,
                         preConfirm: (login) => {
-
-
                             
-                            this.request.description = this.description_other;                                
-                            
-
+                            this.request.description = this.description_other;                                                            
                             this.request.subtotal_order = this.amount_to_pay;
                             this.request.total_amount_due = this.amount_to_pay;
 
@@ -275,8 +273,8 @@ new Vue({
                                         if(data.data.success){
                                             var formdata= new FormData();
                                             formdata.append('intID',this.cashier.intID);
-                                            formdata.append('or_current',this.cashier.or_current);
-                                            axios.post(base_url + 'finance/next_or_other', formdata, {
+                                            formdata.append('invoice_current',this.cashier.invoice_current);
+                                            axios.post(base_url + 'finance/next_or_other/1', formdata, {
                                             headers: {
                                                 Authorization: `Bearer ${window.token}`
                                             }
