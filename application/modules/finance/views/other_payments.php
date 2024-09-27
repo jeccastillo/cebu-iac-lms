@@ -124,7 +124,7 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-12">
-                                        <button :disabled="!request.or_number" class="btn btn-primary btn-lg" type="submit">Submit Payment</button>
+                                        <button :disabled="!request.or_number && !request.invoice_number" class="btn btn-primary btn-lg" type="submit">Submit Payment</button>
                                     </div>
                                 </form>                                
                             </div>                            
