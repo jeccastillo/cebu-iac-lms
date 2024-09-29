@@ -961,8 +961,9 @@ new Vue({
                             this.change_payment_type = this.payment_type;
                             this.tuition_years = data.data.tuition_years;
                             this.tuition_year = this.registration.tuition_year;
-                            console.log("Reg");
+                            
                         }
+                        console.log(this.registration);
                         this.user = data.data.user;
                         this.reg_status = data.data.reg_status;                        
                         this.student = data.data.student;  
