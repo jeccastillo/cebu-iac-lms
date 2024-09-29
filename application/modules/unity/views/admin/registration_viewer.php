@@ -930,6 +930,7 @@ new Vue({
             axios.get(this.base_url + 'unity/registration_viewer_data/' + this.id + '/' + this.sem)
                 .then((data) => {  
                     if(data.data.success){      
+                        console.log("Registration",this.registration);
                         this.sem = data.data.active_sem.intID;                                                
                         this.or_update.sy_reference = this.sem;
                         this.request.sy_reference = this.sem;                                                                                                                 
@@ -963,7 +964,7 @@ new Vue({
                             this.tuition_year = this.registration.tuition_year;
                             
                         }
-                        console.log(this.registration);
+                        
                         this.user = data.data.user;
                         this.reg_status = data.data.reg_status;                        
                         this.student = data.data.student;  
