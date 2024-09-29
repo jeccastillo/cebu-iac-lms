@@ -22,7 +22,7 @@
                 <div class="box box-widget widget-user-2">
                     <!-- Add the bg color to the header using any of the bg-* classes -->
                     <div class="widget-user-header bg-red">                        
-                        <div class="pull-right" style="margin-left:1rem;">
+                        <div v-if="registration" class="pull-right" style="margin-left:1rem;">
                             Tuition Year
                             <select class="form-control" @change="selectTuitionYear($event)" v-model="tuition_year">
                                 <option v-for="ty in tuition_years" :value="ty.intID">{{ ty.year}}</option>
@@ -890,9 +890,7 @@ new Vue({
         finance_manager_privilages: false, 
         description: 'Tuition Fee', 
         description_other: '',
-        registration: {
-            downpayment:0,
-        },
+        registration: undefined,
         other_payments:[],
         tuition:'',
         tuition_data: {},
