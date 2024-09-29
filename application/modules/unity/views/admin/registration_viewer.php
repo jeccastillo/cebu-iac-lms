@@ -260,7 +260,7 @@
                                                     <textarea type="text" required class="form-control" v-model="request.remarks"></textarea>
                                                 </div>                                                                                           
                                             </div>
-                                            <div v-if="description == 'Tuition Fee' && registration" class="col-sm-4" v-if="cashier">
+                                            <div v-if="description == 'Tuition Fee' && registration" class="col-sm-4">
                                                 <label>Select Type:</label>  
                                                 <select v-if="registration.downpayment == 0 && registration.fullpayment == 0" @change="description_other = ''; amount_to_pay = 0 " v-model="payment_type" class="form-control">
                                                     <option value="full">Full Payment</option>
