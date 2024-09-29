@@ -890,7 +890,7 @@ new Vue({
         finance_manager_privilages: false, 
         description: 'Tuition Fee', 
         description_other: '',
-        registration: false,
+        registration: undefined,
         other_payments:[],
         tuition:'',
         tuition_data: {},
@@ -961,6 +961,7 @@ new Vue({
                             this.change_payment_type = this.payment_type;
                             this.tuition_years = data.data.tuition_years;
                             this.tuition_year = this.registration.tuition_year;
+                            console.log("Reg");
                         }
                         this.user = data.data.user;
                         this.reg_status = data.data.reg_status;                        
