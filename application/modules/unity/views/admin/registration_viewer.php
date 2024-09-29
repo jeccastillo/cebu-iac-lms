@@ -168,7 +168,7 @@
                     </ul>                                        
                     <div class="tab-content">
                         <div :class="cashier?'active tab-pane':'tab-pane'" id="tab_1">    
-                            <div v-if="registration_status" class="box box-solid">
+                            <div class="box box-solid">
                                 <div class="box-header">
                                     <h4 class="box-title">Payment</h4>                                    
                                 </div>                                    
@@ -180,7 +180,7 @@
                                                     <div class="form-group">
                                                         <label>Payment For</label>
                                                         <select class="form-control" v-model="description">
-                                                            <option value="Tuition Fee">Tuition Fee</option>                                                            
+                                                            <option v-if="registration" value="Tuition Fee">Tuition Fee</option>                                                            
                                                             <option value="Other">Other</option>
                                                         </select>
                                                     </div>
@@ -260,7 +260,7 @@
                                                     <textarea type="text" required class="form-control" v-model="request.remarks"></textarea>
                                                 </div>                                                                                           
                                             </div>
-                                            <div v-if="description == 'Tuition Fee'" class="col-sm-4" v-if="cashier">
+                                            <div v-if="description == 'Tuition Fee' && registration" class="col-sm-4" v-if="cashier">
                                                 <label>Select Type:</label>  
                                                 <select v-if="registration.downpayment == 0 && registration.fullpayment == 0" @change="description_other = ''; amount_to_pay = 0 " v-model="payment_type" class="form-control">
                                                     <option value="full">Full Payment</option>
