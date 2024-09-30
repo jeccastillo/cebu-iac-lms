@@ -22,7 +22,7 @@
                 <div class="box box-widget widget-user-2">
                     <!-- Add the bg color to the header using any of the bg-* classes -->
                     <div class="widget-user-header bg-red">                        
-                        <div v-if="registration" class="pull-right" style="margin-left:1rem;">
+                        <div class="pull-right" style="margin-left:1rem;">
                             Tuition Year
                             <select class="form-control" @change="selectTuitionYear($event)" v-model="tuition_year">
                                 <option v-for="ty in tuition_years" :value="ty.intID">{{ ty.year}}</option>
@@ -168,7 +168,7 @@
                     </ul>                                        
                     <div class="tab-content">
                         <div :class="cashier?'active tab-pane':'tab-pane'" id="tab_1">    
-                            <div class="box box-solid">
+                            <div v-if="registration_status" class="box box-solid">
                                 <div class="box-header">
                                     <h4 class="box-title">Payment</h4>                                    
                                 </div>                                    
@@ -180,7 +180,7 @@
                                                     <div class="form-group">
                                                         <label>Payment For</label>
                                                         <select class="form-control" v-model="description">
-                                                            <option v-if="registration" value="Tuition Fee">Tuition Fee</option>                                                            
+                                                            <option value="Tuition Fee">Tuition Fee</option>                                                            
                                                             <option value="Other">Other</option>
                                                         </select>
                                                     </div>
@@ -260,7 +260,7 @@
                                                     <textarea type="text" required class="form-control" v-model="request.remarks"></textarea>
                                                 </div>                                                                                           
                                             </div>
-                                            <div v-if="description == 'Tuition Fee' && registration" class="col-sm-4">
+                                            <div v-if="description == 'Tuition Fee'" class="col-sm-4" v-if="cashier">
                                                 <label>Select Type:</label>  
                                                 <select v-if="registration.downpayment == 0 && registration.fullpayment == 0" @change="description_other = ''; amount_to_pay = 0 " v-model="payment_type" class="form-control">
                                                     <option value="full">Full Payment</option>
@@ -890,7 +890,9 @@ new Vue({
         finance_manager_privilages: false, 
         description: 'Tuition Fee', 
         description_other: '',
-        registration: undefined,
+        registration: {
+            downpayment:0,
+        },
         other_payments:[],
         tuition:'',
         tuition_data: {},
@@ -930,7 +932,6 @@ new Vue({
             axios.get(this.base_url + 'unity/registration_viewer_data/' + this.id + '/' + this.sem)
                 .then((data) => {  
                     if(data.data.success){      
-                        console.log("Registration",this.registration);
                         this.sem = data.data.active_sem.intID;                                                
                         this.or_update.sy_reference = this.sem;
                         this.request.sy_reference = this.sem;                                                                                                                 
@@ -962,9 +963,7 @@ new Vue({
                             this.change_payment_type = this.payment_type;
                             this.tuition_years = data.data.tuition_years;
                             this.tuition_year = this.registration.tuition_year;
-                            
                         }
-                        
                         this.user = data.data.user;
                         this.reg_status = data.data.reg_status;                        
                         this.student = data.data.student;  
