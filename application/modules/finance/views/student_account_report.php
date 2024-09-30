@@ -42,7 +42,7 @@ new Vue({
     el: '#applicant-container',
     data: {
         base_url : "<?php echo base_url(); ?>",
-        api_url : "<?php echo $this->config->item('api_url') ?>",
+        // api_url : "<?php echo $this->config->item('api_url') ?>",
         campus : "<?php echo $campus;?>",
         report_date: null,
         sem : null,
@@ -57,7 +57,7 @@ new Vue({
             if(this.report_date == ""){
                 alert("Please select report date");
             }else{
-                axios.get(this.api_url + 'sms/admissions/student-info/view-students/' + this.sem)
+                axios.get(api_url + 'sms/admissions/student-info/view-students/' + this.sem)
                 .then((data) => {
                     this.students = data.data.data;
                     let url = this.base_url + 'excel/student_account_report/' + this.sem + '/' + this.campus + '/' + this.report_date;
