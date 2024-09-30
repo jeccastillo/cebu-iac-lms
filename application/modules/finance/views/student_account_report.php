@@ -42,7 +42,7 @@ new Vue({
     el: '#applicant-container',
     data: {
         base_url : "<?php echo base_url(); ?>",
-        api_url : "<?php echo $this->config->item('api_url') ?>",
+        api_url : "<?php echo $api_url ?>",
         campus : "<?php echo $campus;?>",
         report_date: null,
         sem : null,
