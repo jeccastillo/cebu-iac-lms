@@ -1274,6 +1274,7 @@ class Excel extends CI_Controller {
                 )
             );
 
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->getStyle("B7:L8")->getFont()->setBold( true );
             $objPHPExcel->setActiveSheetIndex($active_sheet)->getStyle("D6")->applyFromArray($style2);
 
             $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('B1:C1');
