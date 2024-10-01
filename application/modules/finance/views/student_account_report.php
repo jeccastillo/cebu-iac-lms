@@ -57,7 +57,7 @@ new Vue({
             if(this.report_date == ""){
                 alert("Please select report date");
             }else{
-                axios.get(this.api_url + 'sms/admissions/student-info/view-students/' + this.sem)
+                axios.get('https://smsapi.iacademy.edu.ph/api/v1/sms/admissions/student-info/view-students/' + this.sem)
                 .then((data) => {
                     this.students = data.data.data;
                     let url = this.base_url + 'excel/student_account_report/' + this.sem + '/' + this.campus + '/' + this.report_date;
