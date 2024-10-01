@@ -967,11 +967,9 @@ class Excel extends CI_Controller {
          
          $objWriter->save('php://output');
          exit;          
-        
-        
     }
 
-    public function ched_enrollment_list($course = 0, $year=0,$gender = 0,$sem=0, $type='college'){
+    public function ched_enrollment_list_makati($course = 0, $year=0,$gender = 0,$sem=0, $type='college'){
 
         if($sem == 0 )
         {
@@ -1010,11 +1008,11 @@ class Excel extends CI_Controller {
             $objPHPExcel->setActiveSheetIndex($active_sheet)
             ->setCellValue('A1', 'Name of Institution:');
             $objPHPExcel->setActiveSheetIndex($active_sheet)
-                    ->setCellValue('C1', 'iACADEMY Cebu');
+                    ->setCellValue('C1', 'iACADEMY');
             $objPHPExcel->setActiveSheetIndex($active_sheet)
                     ->setCellValue('A2', 'Address:');
             $objPHPExcel->setActiveSheetIndex($active_sheet)
-                    ->setCellValue('C2', 'Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City');                                        
+                    ->setCellValue('C2', 'iACADEMY Nexus 7434 Yakal Street Brgy. San Antonio, Makati City');                                        
             $objPHPExcel->setActiveSheetIndex($active_sheet)
                     ->setCellValue('A3', "Institutional Identifier");
             $objPHPExcel->setActiveSheetIndex($active_sheet)
@@ -1199,6 +1197,236 @@ class Excel extends CI_Controller {
        exit;
 
 
+    }
+
+    public function ched_enrollment_list_cebu($course = 0, $year=0,$gender = 0,$sem=0, $type='college'){
+
+        if($sem == 0 )
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+        
+        $active_sem = $this->data_fetcher->get_sem_by_id($sem);
+                
+        $this->data['sy'] = $active_sem;
+
+        if($course != 0)
+            $programs = $this->db->get_where('tb_mas_programs',array('intProgramID'=>$course))->result_array();
+        else
+            $programs = $this->db->get_where('tb_mas_programs',array('type'=>$type))->result_array();
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("Jec Castillo")
+                                     ->setLastModifiedBy("Jec Castillo")
+                                     ->setTitle("Student List")
+                                     ->setSubject("Student List Download")
+                                     ->setDescription("Student List Download.")
+                                     ->setKeywords("office 2007 openxml php")
+                                     ->setCategory("Student List");
+        
+        $active_sheet = 0;
+        foreach($programs as $program){
+            $objPHPExcel->createSheet($active_sheet);
+            //--------------------------------HEADER----------------------------------------------
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+                    ->setCellValue('B1', 'Name of Institution:');
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+                    ->setCellValue('D1', 'iACADEMY Cebu');
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+                    ->setCellValue('B2', 'Address:');
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+                    ->setCellValue('D2', 'Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City');                                        
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+                    ->setCellValue('B3', "Institutional Identifier");
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+                    ->setCellValue('D3', '07209');
+            
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+                    ->setCellValue('B4', $active_sem['term_label']);
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+                    ->setCellValue('D4', $active_sem['enumSem'].' '.$active_sem['term_label'].', AY '.$active_sem['strYearStart']."-".$active_sem['strYearEnd']);                
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+                    ->setCellValue('B5', "Course / Program:");
+            
+            $major = ($program['strMajor'] != "None" && $program['strMajor'] != "")?"Major in ".$program['strMajor']:'';
+
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+                    ->setCellValue('D5', $program['strProgramDescription']." ".$major);     
+                    
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+                    ->setCellValue('B6', "Year Level:");
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+                    ->setCellValue('D6', $year);
+
+            $style = array(
+                'alignment' => array(
+                    'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                )
+            );
+
+            $style2 = array(
+                'alignment' => array(
+                    'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+                )
+            );
+
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->getStyle("D6")->applyFromArray($style2);
+
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('B1:C1');
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('B2:C2');
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('B3:C3');
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('B4:C4');
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('B5:C5');      
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('B6:C6');  
+            //--------------------------------HEADER----------------------------------------------
+
+            $term_label = ($active_sem['term_label'] == "Sem")?'Semester':'Term';
+            // Add some datat
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+                        ->setCellValue('B7', $term_label)
+                        ->setCellValue('C7', 'Student No.')
+                        ->setCellValue('D7', 'Student Name')
+                        ->setCellValue('G7', 'Course')
+                        ->setCellValue('H7', 'Gender')
+                        ->setCellValue('I7', 'Bdate')                                        
+                        ->setCellValue('J7', 'Current Year')     
+                        ->setCellValue('K7', 'Subjects Enrolled')
+                        ->setCellValue('L7', 'No. of Units');
+
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->getStyle("B7")->applyFromArray($style);
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->getStyle("C7")->applyFromArray($style);
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->getStyle("D7")->applyFromArray($style);
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->getStyle("G7")->applyFromArray($style);
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->getStyle("H7")->applyFromArray($style);
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->getStyle("I7")->applyFromArray($style);
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->getStyle("J7")->applyFromArray($style);                    
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->getStyle("K7")->applyFromArray($style);                    
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->getStyle("L7")->applyFromArray($style);                    
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->getStyle("D8")->applyFromArray($style);
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->getStyle("E8")->applyFromArray($style);
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->getStyle("F8")->applyFromArray($style);
+
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('B7:B8');
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('C7:C8');
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('G7:G8');
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('H7:H8');
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('I7:I8');
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('J7:J8');                    
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('K7:K8');
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('L7:L8');
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('D7:F7');
+
+            $objPHPExcel->setActiveSheetIndex($active_sheet)                                        
+                        ->setCellValue('D8', 'Surname')
+                        ->setCellValue('E8', 'First Name')
+                        ->setCellValue('F8', 'Middle Name');                    
+                        
+            $i = 9;
+
+            $st = [];
+            $students = $this->data_fetcher->getStudents($program['intProgramID'],0,$year,$gender,0,0,2,$sem);
+            if(!empty($students)){        
+                foreach($students as $student)
+                {
+                    $classes = "";
+                    $total_units = 0;    
+                    $cl = $this->data_fetcher->getClassListStudentsSt($student['intID'],$sem);
+                    foreach($cl as $class){
+                
+                        $classes .=($classes=="")?$class['strCode']:",".$class['strCode'];                                                        
+                        $total_units += $class['strUnits'];                   
+                    }
+
+                    // Add some datat
+                    $objPHPExcel->setActiveSheetIndex($active_sheet)
+                    ->setCellValue('B'.$i, $active_sem['enumSem'])
+                    ->setCellValue('C'.$i, preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']))
+                    ->setCellValue('D'.$i, $student['strLastname'])
+                    ->setCellValue('E'.$i, $student['strFirstname'])
+                    ->setCellValue('F'.$i, strtoupper($student['strMiddlename']))
+                    ->setCellValue('G'.$i, $student['strProgramCode'])
+                    ->setCellValue('H'.$i, $student['enumGender'])
+                    ->setCellValue('I'.$i, date("m/d/Y", strtotime($student['dteBirthDate'])))
+                    ->setCellValue('J'.$i, $student['intYearLevel'])
+                    ->setCellValue('K'.$i, $classes)
+                    ->setCellValue('L'.$i, $total_units);
+                    
+            
+                    $objPHPExcel->setActiveSheetIndex($active_sheet)->getStyle("J".$i)->applyFromArray($style);
+                    $objPHPExcel->setActiveSheetIndex($active_sheet)->getStyle("L".$i)->applyFromArray($style);
+                    $i++;
+                }
+            }
+
+            $objPHPExcel->getActiveSheet()->getStyle('B7:L' . ($i - 1))->applyFromArray(
+                array(
+                    'borders' => array(
+                        'allborders' => array(
+                            'style' => PHPExcel_Style_Border::BORDER_THIN,
+                            'color' => array('rgb' => '000000'),
+                        ),
+                    ),
+                )
+            );
+
+            $i += 4;
+
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+            ->setCellValue('C'.$i, "Prepared By: ____________________________")
+            ->setCellValue('C'.($i + 1), "                                           Registrar Officer ");
+
+            $objPHPExcel->setActiveSheetIndex($active_sheet)
+            ->setCellValue('J'.$i, "Certified Correct: ____________________________")
+            ->setCellValue('J'.($i + 1), "                                  VP for Academic Affairs and College Dean");
+
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('C'.$i.':F'.$i);
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('C'.($i+1).':F'.($i+1));
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('J'.$i.':K'.$i);
+            $objPHPExcel->setActiveSheetIndex($active_sheet)->mergeCells('J'.($i+1).':K'.($i+1));
+
+            $objPHPExcel->getActiveSheet()->getStyle('D7:L7')
+            ->getAlignment()->setWrapText(true);
+            $objPHPExcel->getActiveSheet()->getStyle('D8:L8')
+            ->getAlignment()->setWrapText(true);
+
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(40);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(80);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(15);
+        
+            $objPHPExcel->getActiveSheet()->setTitle($program['strProgramCode']);
+            $active_sheet++;            
+        }
+       
+       $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+       // Redirect output to a client’s web browser (Excel2007)
+       header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+       header('Content-Disposition: attachment;filename="ched_enrollment_list'.$active_sem['enumSem'].$active_sem['strYearStart'].$active_sem['strYearEnd'].'.xls"');
+       header('Cache-Control: max-age=0');
+       // If you're serving to IE 9, then the following may be needed
+       header('Cache-Control: max-age=1');
+
+       // If you're serving to IE over SSL, then the following may be needed
+       header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+       header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+       header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+       header ('Pragma: public'); // HTTP/1.0
+
+       
+       $objWriter->save('php://output');
+       exit;
     }
 
     public function download_students_new($course = 0,$regular= 0, $year=0,$gender = 0,$graduate=0,$scholarship=0,$registered=0,$sem = 0, $studNumStart, $studNumEnd)
@@ -7498,138 +7726,130 @@ class Excel extends CI_Controller {
         }
     }
 
+    public function import_student_grades()
+    {
+        $post = $this->input->post();
 
-    // public function import_student_data()
-    // {
-    //     $post = $this->input->post();
+        $config['upload_path'] = './assets/excel/student-grades';
+        $config['allowed_types'] = 'xlsx|xls';
+        $config['max_size'] = '1000000';
 
-    //     $config['upload_path'] = './assets/excel';
-    //     $config['allowed_types'] = 'xlsx|xls';
-    //     $config['max_size'] = '1000000';
-    //     // $config['file_name'] = '01test0918';
+        $this->load->library('upload', $config);
 
-    //     $this->load->library('upload', $config);
-        
-    //     if ( !$this->upload->do_upload("student_data_excel"))
-    //     {
-    //         // $error = $this->upload->display_errors();
+        // if ( !$this->upload->do_upload("studentGradeExcel"))
+        // {
+        //     $error = array('error' => $this->upload->display_errors());
+        //     print_r($error);
+        //     die();
+        // }
+        // else
+        // {
+            $fileData = $this->upload->data();
+            $filePath = './assets/excel/student-grades/' . $fileData['file_name'];
+            $filePath = './assets/excel/student-grades/Test_SHS_Grade.xls';
+            // $filePath = './assets/excel/student-grades/Grade_12-_SHS_List_of_Student_Grades-SHS_1st_Sem_SY_2024-2025.xls';
 
-    //         $error = array('error' => $this->upload->display_errors());
-    //         print_r($error);
-    //         die();
-    //     }
-    //     else
-    //     {
-    //         $fileData = $this->upload->data();
-    //         $filePath = './assets/excel/' . $fileData['file_name'];
+            // Load PhpSpreadsheet to read the file
+            $spreadsheet = PHPExcel_IOFactory::load($filePath);
+            $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
 
-    //         // Load PhpSpreadsheet to read the file
-    //         $spreadsheet = PHPExcel_IOFactory::load($filePath);
-    //         $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
-    //         $tuitionYear = '';
-    //         $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
+            print_r($sheetData);
+            // $tuitionYear = '';
+            // $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
 
-    //         if($post['student_level'] == 'college'){
-    //             $getTuitionYear = $this->db->get_where('tb_mas_tuition_year',array('isDefault'=> 1))->first_row('array');
-    //             $tuitionYear = $getTuitionYear ? $getTuitionYear['intID'] : '';
-    //         }else if($post['student_level'] == 'shs'){
-    //             $getTuitionYear = $this->db->get_where('tb_mas_tuition_year',array('isDefaultShs'=> 1))->first_row('array');
-    //             $tuitionYear = $getTuitionYear ? $getTuitionYear['intID'] : '';
-    //         }
+            // if($post['student_level'] == 'college'){
+            //     $getTuitionYear = $this->db->get_where('tb_mas_tuition_year',array('isDefault'=> 1))->first_row('array');
+            //     $tuitionYear = $getTuitionYear ? $getTuitionYear['intID'] : '';
+            // }else if($post['student_level'] == 'shs'){
+            //     $getTuitionYear = $this->db->get_where('tb_mas_tuition_year',array('isDefaultShs'=> 1))->first_row('array');
+            //     $tuitionYear = $getTuitionYear ? $getTuitionYear['intID'] : '';
+            // }
 
-    //         // Now you can loop through the $sheetData array and insert into your database
-    //         foreach ($sheetData as $index => $row) {
-    //             if($index >= 7){
-    //                 $studentProgramId = '';
+            // Now you can loop through the $sheetData array and insert into your database
+            foreach ($sheetData as $index => $row) {
+                if($index >= 10){
+                    // if($row['A']){
+                        $facultyLastName = $facultyFirstName = '';
 
-    //                 // format student number
-    //                 $studentNumber = substr_replace($row['A'], '-', strlen($row['A']) - 5, 0);
-    //                 $studentNumber = substr_replace($studentNumber, '-', strlen($studentNumber) - 3, 0);
-    //                 $studentProgram = str_replace('.', '', $row['E']);
-
-    //                 foreach($programs as $program){
-    //                     if($studentProgram == $program['strProgramCode']){
-    //                         $studentProgramId = $program['intProgramID'];
-    //                         break;
-    //                     }
-    //                 }
-
-    //                 $data = array(
-    //                     'level' => $post['student_level'],
-    //                     'slug' => $this->generateRandomString(8) . '-' . $this->generateRandomString(4) . '-' . $this->generateRandomString(4) . '-' . $this->generateRandomString(4) . '-' . $this->generateRandomString(12),
-    //                     'strStudentNumber' => $studentNumber,
-    //                     'strLastname' => ucfirst($row['B']),
-    //                     'strFirstname' => ucfirst($row['C']),
-    //                     'strMiddlename' => ucfirst($row['D']),
-    //                     'intProgramID' => $studentProgramId,
-    //                     'intStudentYear' => $row['G'],
-    //                     'blockSection' => $row['H'],
-    //                     // 'CY' => $row['I'],
-    //                     'dteBirthDate' => date("Y-m-d",strtotime($row['J'])),
-    //                     'place_of_birth' => $row['K'],
-    //                     'enumGender' => $row['L'],
-    //                     // 'strCivilStatus' => $row['M'],
-    //                     // 'strCitizenship' => $row['N'],
-    //                     // 'strReligion' => $row['O'],
-    //                     'strTelNumber' => $row['Q'],
-    //                     'strMobileNumber' => $row['R'],
-    //                     'strEmail' => $row['S'],
-    //                     'father' => $row['T'],
-    //                     // 'father_occupation' => $row['U'],
-    //                     'father_contact' => $row['V'],
-    //                     'father_email' => $row['X'],
-    //                     'mother' => $row['Y'],
-    //                     // 'mother_occupation' => $row['Z'],
-    //                     'mother_contact' => $row['AA'],
-    //                     'mother_email' => $row['AC'],
-    //                     'guardian' => $row['AD'],
-    //                     // 'relationship' => $row['AE'],
-    //                     'guardian_contact' => $row['AG'],
-    //                     'guardian_email' => $row['AH'],
-    //                     'intTuitionYear' => $tuitionYear,
+                        // format student number
+                        $studentNumber = substr_replace($row['B'], '-', strlen($row['B']) - 5, 0);
+                        $studentNumber = substr_replace($studentNumber, '-', strlen($studentNumber) - 3, 0);
                         
-    //                     'high_school' => $row['AM'],
-    //                     'high_school_address' => $row['AN'],
-    //                     'high_school_attended' => $row['AO'],
-    //                     'senior_high' => $row['AP'],
-    //                     'senior_high_address' => $row['AQ'],
-    //                     'senior_high_attended' => $row['AR'],
+            print_r($studentNumber);
+            die();
+                        //Check if student exists
+                        $student = $this->db->get_where('tb_mas_users',array('strStudentNumber' => $studentNumber))->first_row('array');
                         
-    //                     // 'college' => $row['AS'],
-    //                     // 'college_address' => $row['AT'],
-    //                     // 'college_attended_from' => $row['AU'],
-    //                     // 'college_attended_to' => $row['AV'],
-    //                     'strLRN' => $row['AZ'],
-    //                 );
+                        if($student){
+                            $facultyName = explode(',', ltrim($row['I']));
+                            $facultyLastName = $facultyName[0];
+                            if(isset($facultyName[1])){
+                                $facultyName = explode(' ', ltrim($facultyName[1]));
+                                $facultyFirstName = $facultyName[0];
+                            }
+                            
+                            $faculty = $this->db->from('tb_mas_faculty')->like(array('strLastname' => $facultyLastName, 'strFirstName' => $facultyFirstName))->get()->first_row('array');
+                            $subject = $this->db->get_where('tb_mas_subjects',array('strCode' => $row['E']))->first_row('array');
+                            if($faculty && $subject){
+                                $classlistID = '';
+                                //Check if classlist exists
+                                $classlist = $this->db->get_where('tb_mas_classlist',array('strAcademicYear' => $post['sem'], 'intFacultyID' => $faculty['intID'], 'intSubjectID' => $subject['intID'], 'strSection' => $row['D']))->first_row('array');
+                                if(!$classlist){
+                                    $newClasslist = array(
+                                        'intFacultyID' => $faculty['intID'],
+                                        'intSubjectID' => $faculty['intID'],
+                                        'strClassName' => $faculty['intID'],
+                                        'intFinalized' => $faculty['intID'],
+                                        'strAcademicYear' => $post['sem'],
+                                        'slots' => 0,
+                                        'strUnits' => 3,
+                                        'strSection' => $row['D'],
+                                        'intWithPayment' => 0,
+                                        'intCurriculumID' => 0,
+                                        'year' => 0,
+                                        'isDissolved' => 0,
+                                        'conduct_grade' => 0
+                                    );
 
-    //                 if($post['student_level'] == 'shs'){
-    //                     $data['high_school'] = $row['AI'];
-    //                 }
-    //                 if($post['student_level'] == 'college'){
-    //                     $data['high_school'] = $row['AI'];
-    //                 }
+                                    $this->data_poster->post_data('tb_mas_classlist',$data);
+                                    $classlistID = $this->db->insert_id();
+                                }else{
+                                    $classlistID = $classlist['intID'];
+                                }
 
-    //                 //Check if student exists
-    //                 $checkExists = $this->db->get_where('tb_mas_users',array('strStudentNumber' => $studentNumber))->first_row('array');
-                    
-    //                 // Insert into the database
-    //                 if(!$checkExists)
-    //                     $this->data_poster->post_data('tb_mas_users',$data);
-    //             }
-    //         }
+                                if($classlistID){
+                                    $classlistStudent = array(
+                                        'intStudentID' => $student['intID'],
+                                        'intClassListID' => $classlistID,
+                                        'floatFinalGrade' => $row['H'],
+                                        'enumStatus' => 'act',
+                                        'strRemarks' => '--',
+                                        'intsyID' => $post['sem'],
+                                    );
+                                }
 
-    //         // Optionally, you can delete the uploaded file after import
-    //         unlink($filePath);
+                                $checkClasslistStudent = $this->db->get_where('tb_mas_classlist',array('intStudentID' => $$student['intID'], 'intClassListID' => $classlistID, 'intsyID' => $post['sem']))->first_row();
+                                
+                                if(!$checkClasslistStudent){
+                                    $this->data_poster->post_data('tb_m as_classlist_student',$classlistStudent);
+                                }else{
+                                    $this->data_poster->post_data('tb_mas_classlist_student',$classlistStudent,$checkClasslistStudent->intID);
+                                }
+                                
+                            }
+                        }
+                    // }else{
+                    // }
+                }
+            }
 
-    //         // Redirect or show success message
-    //         redirect('student/add_student');
-    //     }
-        
-       
-    //     redirect(base_url().'student/add_student');
-    //     // redirect(base_url().'unity/student_viewer/'.$ret['studentID']);
-        
-    // }
+            // Optionally, you can delete the uploaded file after import
+            unlink($filePath);
+
+            // Redirect or show success message
+            redirect('registrar/add_student_grades');
+        // }
+    }
 
     private function generateRandomString($length) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
