@@ -850,7 +850,6 @@ class Registrar extends CI_Controller {
 
     public function enrollment_report($course = 0, $year=1,$gender = 0,$sem=0)    
     {
-
         $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
         $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
         $this->data['programs'] = $this->data_fetcher->fetch_table('tb_mas_programs');
@@ -859,7 +858,12 @@ class Registrar extends CI_Controller {
         $this->data['gender'] = $gender;                
         $this->data['sem'] = $sem;
         $this->data['pdf_link'] = base_url()."pdf/ched_enrollment_list/".$course."/".$year."/".$gender."/".$sem;
-        $this->data['excel_link'] = base_url()."excel/ched_enrollment_list/".$course."/".$year."/".$gender."/".$sem;
+        
+        if($this->data['campus'] == 'Cebu'){
+            $this->data['excel_link'] = base_url()."excel/ched_enrollment_list_cebu/".$course."/".$year."/".$gender."/".$sem;
+        }else{
+            $this->data['excel_link'] = base_url()."excel/ched_enrollment_list_makati/".$course."/".$year."/".$gender."/".$sem;
+        }
 
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/enrollment_report",$this->data);
@@ -2790,6 +2794,26 @@ class Registrar extends CI_Controller {
         $data['data'] = $students_array;
 
         echo json_encode($data);
+    }
+
+    public function add_student_grades()
+    {        
+        
+        if($this->is_super_admin() || $this->is_registrar())
+        {
+            $term = $this->data_fetcher->get_processing_sem();
+    
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['current_sem'] = $term['intID'];
+            $this->data['page'] = "add_student_grades";
+            $this->data['opentree'] = "registrar";
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/add_student_grade",$this->data);
+            $this->load->view("common/footer",$this->data);
+        }
+        else
+            redirect(base_url()."unity");  
+       
     }
     
     public function faculty_logged_in()
