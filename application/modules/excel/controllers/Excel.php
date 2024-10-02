@@ -7730,116 +7730,98 @@ class Excel extends CI_Controller {
     {
         $post = $this->input->post();
 
-        $config['upload_path'] = './assets/excel/student-grades';
+        $config['upload_path'] = './assets/excel';
         $config['allowed_types'] = 'xlsx|xls';
         $config['max_size'] = '1000000';
 
         $this->load->library('upload', $config);
 
-        // if ( !$this->upload->do_upload("studentGradeExcel"))
-        // {
-        //     $error = array('error' => $this->upload->display_errors());
-        //     print_r($error);
-        //     die();
-        // }
-        // else
-        // {
+        if ( !$this->upload->do_upload("studentGradeExcel"))
+        {
+            $error = array('error' => $this->upload->display_errors());
+            print_r($error);
+            die();
+        }
+        else
+        {
             $fileData = $this->upload->data();
-            $filePath = './assets/excel/student-grades/' . $fileData['file_name'];
-            $filePath = './assets/excel/student-grades/Test_SHS_Grade.xls';
-            // $filePath = './assets/excel/student-grades/Grade_12-_SHS_List_of_Student_Grades-SHS_1st_Sem_SY_2024-2025.xls';
+            $filePath = './assets/excel/' . $fileData['file_name'];
 
             // Load PhpSpreadsheet to read the file
             $spreadsheet = PHPExcel_IOFactory::load($filePath);
             $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
 
-            print_r($sheetData);
-            // $tuitionYear = '';
-            // $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
-
-            // if($post['student_level'] == 'college'){
-            //     $getTuitionYear = $this->db->get_where('tb_mas_tuition_year',array('isDefault'=> 1))->first_row('array');
-            //     $tuitionYear = $getTuitionYear ? $getTuitionYear['intID'] : '';
-            // }else if($post['student_level'] == 'shs'){
-            //     $getTuitionYear = $this->db->get_where('tb_mas_tuition_year',array('isDefaultShs'=> 1))->first_row('array');
-            //     $tuitionYear = $getTuitionYear ? $getTuitionYear['intID'] : '';
-            // }
 
             // Now you can loop through the $sheetData array and insert into your database
             foreach ($sheetData as $index => $row) {
                 if($index >= 10){
-                    // if($row['A']){
-                        $facultyLastName = $facultyFirstName = '';
+                    $facultyLastName = $facultyFirstName = '';
 
-                        // format student number
-                        $studentNumber = substr_replace($row['B'], '-', strlen($row['B']) - 5, 0);
-                        $studentNumber = substr_replace($studentNumber, '-', strlen($studentNumber) - 3, 0);
+                    // format student number
+                    $studentNumber = substr_replace($row['B'], '-', strlen($row['B']) - 5, 0);
+                    $studentNumber = substr_replace($studentNumber, '-', strlen($studentNumber) - 3, 0);
+                    
+                    //Check if student exists
+                    $student = $this->db->get_where('tb_mas_users',array('strStudentNumber' => $studentNumber))->first_row('array');
+                    
+                    if($student){
+                        $facultyName = explode(',', ltrim($row['I']));
+                        $facultyLastName = $facultyName[0];
+                        if(isset($facultyName[1])){
+                            $facultyName = explode(' ', ltrim($facultyName[1]));
+                            $facultyFirstName = $facultyName[0];
+                        }
                         
-            print_r($studentNumber);
-            die();
-                        //Check if student exists
-                        $student = $this->db->get_where('tb_mas_users',array('strStudentNumber' => $studentNumber))->first_row('array');
+                        $faculty = $this->db->from('tb_mas_faculty')->like(array('strLastname' => $facultyLastName, 'strFirstName' => $facultyFirstName))->get()->first_row('array');
+                        $subject = $this->db->get_where('tb_mas_subjects',array('strCode' => $row['E']))->first_row('array');
                         
-                        if($student){
-                            $facultyName = explode(',', ltrim($row['I']));
-                            $facultyLastName = $facultyName[0];
-                            if(isset($facultyName[1])){
-                                $facultyName = explode(' ', ltrim($facultyName[1]));
-                                $facultyFirstName = $facultyName[0];
+                        if($faculty && $subject){
+                            $classlistID = '';
+                            //Check if classlist exists
+                            $classlist = $this->db->get_where('tb_mas_classlist',array('strAcademicYear' => $post['sem'], 'intFacultyID' => $faculty['intID'], 'intSubjectID' => $subject['intID'], 'strSection' => $row['D']))->first_row('array');
+            
+                            if(!$classlist){
+                                $newClasslist = array(
+                                    'intFacultyID' => $faculty['intID'],
+                                    'intSubjectID' => $subject['intID'],
+                                    'strClassName' => $row['E'],
+                                    'intFinalized' => 0,
+                                    'strAcademicYear' => $post['sem'],
+                                    'slots' => 0,
+                                    'strUnits' => 3,
+                                    'strSection' => $row['D'],
+                                    'intWithPayment' => 0,
+                                    'intCurriculumID' => 0,
+                                    'year' => 0,
+                                    'isDissolved' => 0,
+                                    'conduct_grade' => 0
+                                );
+
+                                $this->data_poster->post_data('tb_mas_classlist',$newClasslist);
+                                $classlistID = $this->db->insert_id();
+                            }else{
+                                $classlistID = $classlist['intID'];
                             }
-                            
-                            $faculty = $this->db->from('tb_mas_faculty')->like(array('strLastname' => $facultyLastName, 'strFirstName' => $facultyFirstName))->get()->first_row('array');
-                            $subject = $this->db->get_where('tb_mas_subjects',array('strCode' => $row['E']))->first_row('array');
-                            if($faculty && $subject){
-                                $classlistID = '';
-                                //Check if classlist exists
-                                $classlist = $this->db->get_where('tb_mas_classlist',array('strAcademicYear' => $post['sem'], 'intFacultyID' => $faculty['intID'], 'intSubjectID' => $subject['intID'], 'strSection' => $row['D']))->first_row('array');
-                                if(!$classlist){
-                                    $newClasslist = array(
-                                        'intFacultyID' => $faculty['intID'],
-                                        'intSubjectID' => $faculty['intID'],
-                                        'strClassName' => $faculty['intID'],
-                                        'intFinalized' => $faculty['intID'],
-                                        'strAcademicYear' => $post['sem'],
-                                        'slots' => 0,
-                                        'strUnits' => 3,
-                                        'strSection' => $row['D'],
-                                        'intWithPayment' => 0,
-                                        'intCurriculumID' => 0,
-                                        'year' => 0,
-                                        'isDissolved' => 0,
-                                        'conduct_grade' => 0
-                                    );
 
-                                    $this->data_poster->post_data('tb_mas_classlist',$data);
-                                    $classlistID = $this->db->insert_id();
-                                }else{
-                                    $classlistID = $classlist['intID'];
-                                }
-
-                                if($classlistID){
-                                    $classlistStudent = array(
-                                        'intStudentID' => $student['intID'],
-                                        'intClassListID' => $classlistID,
-                                        'floatFinalGrade' => $row['H'],
-                                        'enumStatus' => 'act',
-                                        'strRemarks' => '--',
-                                        'intsyID' => $post['sem'],
-                                    );
-                                }
-
-                                $checkClasslistStudent = $this->db->get_where('tb_mas_classlist',array('intStudentID' => $$student['intID'], 'intClassListID' => $classlistID, 'intsyID' => $post['sem']))->first_row();
+                            if($classlistID){
+                                $classlistStudent = array(
+                                    'intStudentID' => $student['intID'],
+                                    'intClassListID' => $classlistID,
+                                    'floatFinalGrade' => $row['H'],
+                                    'enumStatus' => 'act',
+                                    'strRemarks' => '--',
+                                    'intsyID' => $post['sem'],
+                                );
+                                $checkClasslistStudent = $this->db->get_where('tb_mas_classlist_student',array('intStudentID' => $student['intID'], 'intClassListID' => $classlistID, 'intsyID' => $post['sem']))->first_row();
                                 
                                 if(!$checkClasslistStudent){
-                                    $this->data_poster->post_data('tb_m as_classlist_student',$classlistStudent);
+                                    $this->data_poster->post_data('tb_mas_classlist_student',$classlistStudent);
                                 }else{
-                                    $this->data_poster->post_data('tb_mas_classlist_student',$classlistStudent,$checkClasslistStudent->intID);
+                                    $this->data_poster->post_data('tb_mas_classlist_student',$classlistStudent,$checkClasslistStudent->intCSID);
                                 }
-                                
                             }
                         }
-                    // }else{
-                    // }
+                    }
                 }
             }
 
@@ -7847,8 +7829,8 @@ class Excel extends CI_Controller {
             unlink($filePath);
 
             // Redirect or show success message
-            redirect('registrar/add_student_grades');
-        // }
+            redirect(base_url() . 'registrar/add_student_grades');
+        }
     }
 
     private function generateRandomString($length) {
