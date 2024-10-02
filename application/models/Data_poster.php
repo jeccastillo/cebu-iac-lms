@@ -34,6 +34,12 @@ class Data_poster extends CI_Model {
                      ->where('student_id',$update)
                      ->update($table,$post);
             }
+            elseif($table == 'tb_mas_classlist_student')
+            {
+                $this->db
+                     ->where('intCSID',$update)
+                     ->update($table,$post);
+            }
             else
             {
             $this->db
