@@ -746,7 +746,7 @@
                 style="margin-left: 10px;"><i class="ion ion-eye"></i> View Block Sections</a></li>
             <li class="<?php echo (isset($page) && $page=="add_student_grades")?'active':''; ?>"><a
                 href="<?php echo base_url(); ?>registrar/add_student_grades"
-                style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add Student Grades</a></li>
+                style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add Student Grade</a></li>
           </ul>
         </li>
         <li
