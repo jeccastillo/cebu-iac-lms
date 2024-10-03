@@ -890,7 +890,7 @@
                                             <td>{{ student.strProgramCode }}</td>
                                         </tr>
                                     </table>
-                                    <div v-if="payment_type != 'full'">
+                                    <div v-if="payment_type != 'full' && registration">
                                         <table class="table table-bordered">
                                             <tr v-if="registration.downpayment == 0">
                                                 <td>Down Payment</td>
@@ -1043,7 +1043,7 @@
         <input type="hidden"
             name="down_payment"
             v-model="tuition_data.down_payment">
-        <input type="hidden"
+        <input v-if="registration" type="hidden"
             name="is_paid_dp"
             :value="registration.downpayment">
         <input type="hidden"
