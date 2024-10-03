@@ -7833,6 +7833,72 @@ class Excel extends CI_Controller {
         }
     }
 
+    public function import_previous_balance()
+    {
+        $post = $this->input->post();
+
+        $config['upload_path'] = './assets/excel';
+        $config['allowed_types'] = 'xlsx|xls';
+        $config['max_size'] = '1000000';
+
+        $this->load->library('upload', $config);
+
+        if ( !$this->upload->do_upload("previous_balance_excel"))
+        {
+            $error = array('error' => $this->upload->display_errors());
+            
+            print_r($error['error']);
+            return false;
+        }
+        else
+        {
+            $fileData = $this->upload->data();
+            $filePath = './assets/excel/' . $fileData['file_name'];
+
+            // Load PhpSpreadsheet to read the file
+            $spreadsheet = PHPExcel_IOFactory::load($filePath);
+            $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+            
+            // Now you can loop through the $sheetData array and insert into your database
+            foreach ($sheetData as $index => $row) {
+                if($index >= 2){
+
+                    //Check if student exists
+                    $student = $this->db->get_where('tb_mas_users',array('strStudentNumber' => $row['A']))->first_row('array');
+                    
+                    if($student){
+                        $term = explode(' ', ltrim($row['C']));
+    
+                        $year = explode('-', ltrim($term[1]));
+                        $yearStart = $year[0];
+                        $yearEnd = $year[1];
+
+                        $sy = $this->db->get_where('tb_mas_sy',array('enumSem' => $term[0], 'strYearStart' => $yearStart, 'strYearEnd' => $yearEnd))->first_row('array');
+                        
+                        $data = array(
+                            'student_number' => $row['A'],
+                            'balance' => $row['B'],
+                            'term' => $sy['intID']
+                        );
+
+                        $previousBalance = $this->db->get_where('tb_mas_prev_balance',array('student_number' => $row['A'], 'term' => $sy['intID']))->first_row('array');
+                        if($previousBalance){
+                            $this->data_poster->post_data('tb_mas_prev_balance', $data, $previousBalance['id']);
+                        }else{
+                            $this->data_poster->post_data('tb_mas_prev_balance', $data);
+                        }
+                    }
+                }
+            }
+
+            // Optionally, you can delete the uploaded file after import
+            unlink($filePath);
+
+            print('true');
+            return true;
+        }
+    }
+
     private function generateRandomString($length) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
         $charactersLength = strlen($characters);
