@@ -300,7 +300,7 @@
                                             class="row">
                                             <div class="col-sm-4"
                                                 v-if="cashier">
-                                                <!-- <div class="form-group">
+                                                <div class="form-group">
                                                     <label>Payment For</label>
                                                     <select class="form-control"
                                                         v-model="description">
@@ -362,7 +362,7 @@
                                                         required
                                                         class="form-control"
                                                         v-model="amount_to_pay" />
-                                                </div> -->
+                                                </div>
                                             </div>
                                             <div class="col-sm-4"
                                                 v-if="cashier">
