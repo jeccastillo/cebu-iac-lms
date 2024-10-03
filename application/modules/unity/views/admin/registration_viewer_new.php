@@ -1536,7 +1536,7 @@ new Vue({
                                             .toFixed(2)
                                     }
                                 }
-                                if (this.registration.enumStudentType == "new") {
+                                if (this.registration && this.registration.enumStudentType == "new") {
                                     axios.get(api_url + 'finance/reservation/' +
                                             this.slug + '/' + this.sem)
                                         .then((data) => {
