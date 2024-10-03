@@ -300,7 +300,7 @@
                                             class="row">
                                             <div class="col-sm-4"
                                                 v-if="cashier">
-                                                <div class="form-group">
+                                                <!-- <div class="form-group">
                                                     <label>Payment For</label>
                                                     <select class="form-control"
                                                         v-model="description">
@@ -331,8 +331,7 @@
                                                         v-model="description_other">
                                                         <option v-for="p in particulars"
                                                             :value="p.name">{{p.name}}</option>
-                                                    </select>
-                                                    <!-- <input type="text" required class="form-control" v-model="description_other" /> -->
+                                                    </select>                                                   
                                                 </div>
                                                 <input type="hidden"
                                                     v-model="request.status"
@@ -363,7 +362,7 @@
                                                         required
                                                         class="form-control"
                                                         v-model="amount_to_pay" />
-                                                </div>
+                                                </div> -->
                                             </div>
                                             <div class="col-sm-4"
                                                 v-if="cashier">
