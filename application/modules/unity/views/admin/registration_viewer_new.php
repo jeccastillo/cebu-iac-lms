@@ -840,13 +840,13 @@
                                                 </button>
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <tr v-if="registration">
                                             <td class="text-green"
                                                 colspan="10">
                                                 amount paid: P{{ amount_paid_formatted }}
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <tr v-if="registration">
                                             <td class="text-green"
                                                 colspan="10">
                                                 remaining balance: P{{ remaining_amount_formatted }}
