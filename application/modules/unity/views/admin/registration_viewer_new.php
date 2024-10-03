@@ -309,7 +309,8 @@
                                                         <option v-if="isInvoice" value="Other">Other</option>
                                                     </select>
                                                 </div>
-                                                <div v-if="description == 'Tuition Fee'"
+                                            </div>
+                                                <!-- <div v-if="description == 'Tuition Fee'"
                                                     class="form-group">
                                                     <label>Particulars:</label>
                                                     <select required
@@ -476,7 +477,7 @@
                                                         </td>
                                                     </tr>
                                                 </table>
-                                            </div>
+                                            </div> -->
                                         </div>
                                         <hr />
 
