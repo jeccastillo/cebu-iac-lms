@@ -68,7 +68,7 @@
                             </select>
                         </div>
                         <div class="pull-right"
-                            v-if="description == 'Tuition Fee'"
+                            v-if="description == 'Tuition Fee' && registration"
                             class="col-sm-4"
                             v-if="cashier">
                             Select Type
@@ -1437,9 +1437,8 @@ new Vue({
                         this.installment_dates.push(data.data.active_sem.installment4_formatted);
                         this.installment_dates.push(data.data.active_sem.installment5_formatted);
                         this.registration = data.data.registration;
-                        console.log("registration",this.registration);
-                        if (data.data.registration) {
-                            this.registration = data.data.registration;
+                        
+                        if (data.data.registration) {                            
                             this.downpayment_status = this.registration.downpayment;
                             this.registration_status = data.data.registration.intROG;
                             this.allow_enroll = data.data.registration.allow_enroll;
@@ -1592,7 +1591,7 @@ new Vue({
                                                 .replace(/\d(?=(\d{3})+\.)/g,
                                                     '$&,');
                                             //installment amounts                                
-                                            if (this.registration.downpayment ==
+                                            if (this.registration && this.registration.downpayment ==
                                                 1) {
                                                 var temp = (this.tuition_data
                                                         .installment_fee * 5) -
