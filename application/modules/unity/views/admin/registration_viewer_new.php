@@ -168,7 +168,7 @@
                                     href="#">Class Type <span
                                         class="pull-right">{{ registration.type_of_class }}</span></a>
                             </li>
-                            <li>
+                            <li v-if="registration">
                                 <a style="font-size:13px;"
                                     href="#">Date Registered <span class="pull-right">
                                         <span style="color:#009000"
