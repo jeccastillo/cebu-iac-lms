@@ -44,7 +44,7 @@
                 <div class="box box-widget widget-user-2">
                     <!-- Add the bg color to the header using any of the bg-* classes -->
                     <div class="widget-user-header bg-red">
-                        <div class="pull-right"
+                        <div v-if="registration" class="pull-right"
                             style="margin-left:1rem;">
                             Tuition Year
                             <select class="form-control"
@@ -68,7 +68,7 @@
                             </select>
                         </div>
                         <div class="pull-right"
-                            v-if="description == 'Tuition Fee'"
+                            v-if="description == 'Tuition Fee' && registration"
                             class="col-sm-4"
                             v-if="cashier">
                             Select Type
@@ -168,7 +168,7 @@
                                     href="#">Class Type <span
                                         class="pull-right">{{ registration.type_of_class }}</span></a>
                             </li>
-                            <li>
+                            <li v-if="registration">
                                 <a style="font-size:13px;"
                                     href="#">Date Registered <span class="pull-right">
                                         <span style="color:#009000"
@@ -304,7 +304,7 @@
                                                     <label>Payment For</label>
                                                     <select class="form-control"
                                                         v-model="description">
-                                                        <option value="Tuition Fee">Tuition Fee
+                                                        <option v-if="registration" value="Tuition Fee">Tuition Fee
                                                         </option>
                                                         <option v-if="isInvoice" value="Other">Other</option>
                                                     </select>
@@ -441,7 +441,7 @@
                                                         v-model="request.remarks"></textarea>
                                                 </div>
                                             </div>
-                                            <div v-if="description == 'Tuition Fee'"
+                                            <div v-if="description == 'Tuition Fee' && registration"
                                                 class="col-sm-4"
                                                 v-if="cashier">
                                                 <label>Select Type:</label>
@@ -470,7 +470,7 @@
                                                     v-else>
                                                     <tr>
                                                         <td>Down Payment</td>
-                                                        <td v-if="registration.downpayment == 0"><a
+                                                        <td v-if="registration && registration.downpayment == 0"><a
                                                                 href="#"
                                                                 @click="setValue(tuition_data.down_payment,'down',0)">{{ tuition_data.down_payment }}</a>
                                                         </td>
@@ -890,7 +890,7 @@
                                             <td>{{ student.strProgramCode }}</td>
                                         </tr>
                                     </table>
-                                    <div v-if="payment_type != 'full'">
+                                    <div v-if="payment_type != 'full' && registration">
                                         <table class="table table-bordered">
                                             <tr v-if="registration.downpayment == 0">
                                                 <td>Down Payment</td>
@@ -1043,7 +1043,7 @@
         <input type="hidden"
             name="down_payment"
             v-model="tuition_data.down_payment">
-        <input type="hidden"
+        <input v-if="registration" type="hidden"
             name="is_paid_dp"
             :value="registration.downpayment">
         <input type="hidden"
@@ -1437,9 +1437,8 @@ new Vue({
                         this.installment_dates.push(data.data.active_sem.installment4_formatted);
                         this.installment_dates.push(data.data.active_sem.installment5_formatted);
                         this.registration = data.data.registration;
-                        console.log("registration",this.registration);
-                        if (data.data.registration) {
-                            this.registration = data.data.registration;
+                        
+                        if (data.data.registration) {                            
                             this.downpayment_status = this.registration.downpayment;
                             this.registration_status = data.data.registration.intROG;
                             this.allow_enroll = data.data.registration.allow_enroll;
@@ -1536,7 +1535,7 @@ new Vue({
                                             .toFixed(2)
                                     }
                                 }
-                                if (this.registration.enumStudentType == "new") {
+                                if (this.registration && this.registration.enumStudentType == "new") {
                                     axios.get(api_url + 'finance/reservation/' +
                                             this.slug + '/' + this.sem)
                                         .then((data) => {
@@ -1592,7 +1591,7 @@ new Vue({
                                                 .replace(/\d(?=(\d{3})+\.)/g,
                                                     '$&,');
                                             //installment amounts                                
-                                            if (this.registration.downpayment ==
+                                            if (this.registration && this.registration.downpayment ==
                                                 1) {
                                                 var temp = (this.tuition_data
                                                         .installment_fee * 5) -
@@ -1659,7 +1658,7 @@ new Vue({
                                         .remaining_amount.toFixed(2).replace(
                                             /\d(?=(\d{3})+\.)/g, '$&,');
                                     //installment amounts                                
-                                    if (this.registration.downpayment == 1) {
+                                    if (this.registration && this.registration.downpayment == 1) {
                                         var temp = (this.tuition_data
                                             .installment_fee * 5) - parseFloat(
                                             this.remaining_amount);
