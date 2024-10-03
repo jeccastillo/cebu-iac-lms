@@ -1499,10 +1499,12 @@ new Vue({
                                 this.applicant_data = data.data.student;
                                 this.applicant_id = "A" + this.current_term.strYearStart + "-" + String(this.applicant_data.id).padStart(4, '0');
                                 this.getInvoiceNumber()
-                                if (this.registration && this.registration.paymentType == 'partial')
-                                    this.has_partial = true;
-                                if (this.has_partial)
-                                    this.remaining_amount = this.tuition_data.total_installment;
+                                if(this.registration){
+                                    if (this.registration.paymentType == 'partial')
+                                        this.has_partial = true;
+                                    if (this.has_partial)
+                                        this.remaining_amount = this.tuition_data.total_installment;
+                                }
 
                                 for (i in this.payments) {
                                     if (this.payments[i].status == "Paid" || this
