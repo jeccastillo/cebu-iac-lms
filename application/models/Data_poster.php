@@ -40,6 +40,12 @@ class Data_poster extends CI_Model {
                      ->where('intCSID',$update)
                      ->update($table,$post);
             }
+            elseif($table == 'tb_mas_prev_balance')
+            {
+                $this->db
+                     ->where('id',$update)
+                     ->update($table,$post);
+            }
             else
             {
             $this->db
