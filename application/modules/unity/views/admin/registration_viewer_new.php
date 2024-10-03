@@ -441,7 +441,7 @@
                                                         v-model="request.remarks"></textarea>
                                                 </div>
                                             </div>
-                                            <div v-if="description == 'Tuition Fee'"
+                                            <div v-if="description == 'Tuition Fee' && registration"
                                                 class="col-sm-4"
                                                 v-if="cashier">
                                                 <label>Select Type:</label>
@@ -470,7 +470,7 @@
                                                     v-else>
                                                     <tr>
                                                         <td>Down Payment</td>
-                                                        <td v-if="registration.downpayment == 0"><a
+                                                        <td v-if="registration && registration.downpayment == 0"><a
                                                                 href="#"
                                                                 @click="setValue(tuition_data.down_payment,'down',0)">{{ tuition_data.down_payment }}</a>
                                                         </td>
