@@ -1705,6 +1705,9 @@ new Vue({
                                         this.ready = true;
                                     }
                                 }
+                                else{
+                                    this.ready = true;
+                                }
 
 
 
