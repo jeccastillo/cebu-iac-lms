@@ -605,7 +605,6 @@ class Unity extends CI_Controller {
             $role = $this->session->userdata('special_role');
             $ret['advanced_privilages'] = (in_array($role,array(1,2)) )?true:false;            
             $ret['finance_manager_privilages'] = ($role == 2)?true:false;    
-            
                
             
             //--------TUITION-------------------------------------------------------------------
@@ -720,7 +719,7 @@ class Unity extends CI_Controller {
         $this->load->view("common/footer",$this->data);         
     }
 
-    public function registration_viewer_new($id,$sem = 0)
+    public function registration_viewer_legacy($id,$sem = 0)
     {
         
         //$active_sem = $this->data_fetcher->get_active_sem();        
@@ -731,7 +730,7 @@ class Unity extends CI_Controller {
         $data['id'] =  $id;
 
         $this->load->view("common/header",$this->data);
-        $this->load->view("admin/registration_viewer_new",$data);
+        $this->load->view("admin/registration_viewer",$data);
         $this->load->view("common/footer",$this->data);         
     }
 
