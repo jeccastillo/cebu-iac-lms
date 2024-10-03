@@ -365,7 +365,7 @@
                                                         v-model="amount_to_pay" />
                                                 </div>
                                             </div>
-                                            <div class="col-sm-4"
+                                            <!-- <div class="col-sm-4"
                                                 v-if="cashier">
                                                 <div class="form-group">
                                                     <label>Term:</label>
@@ -373,9 +373,7 @@
                                                         class="form-control"
                                                         v-model="request.sy_reference">
                                                     {{ sem }}
-                                                    <!-- <select class="form-control" v-model="request.or_number" required>
-                                                        <option v-for="i in (parseInt(cashier_start), parseInt(cashier_end))" :value="i">{{ i }}</option>
-                                                    </select>                                                     -->
+                                                    
                                                 </div>
                                                 <div v-if="isOR"
                                                     class="form-group">
@@ -391,10 +389,7 @@
                                                             class="form-control"
                                                             v-model="request.or_number">
                                                         {{ request.or_number }}
-                                                    </div>
-                                                    <!-- <select class="form-control" v-model="request.or_number" required>
-                                                        <option v-for="i in (parseInt(cashier_start), parseInt(cashier_end))" :value="i">{{ i }}</option>
-                                                    </select>                                                     -->
+                                                    </div>                                                    
                                                 </div>
                                                 <div v-if="isOR"
                                                     class="form-group">
@@ -440,7 +435,7 @@
                                                         class="form-control"
                                                         v-model="request.remarks"></textarea>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             <div v-if="description == 'Tuition Fee' && registration"
                                                 class="col-sm-4">
                                                 <label>Select Type:</label>
