@@ -371,6 +371,11 @@
                   class="fa fa-user"></i>
                 Discipline Report</a>
             </li>
+            <li class="<?php echo (isset($page) && $page=="enlistments")?'active':''; ?>">
+              <a href="<?php echo base_url()."academics/enlistments" ?>"><i
+                  class="fa fa-user"></i>
+                For Advising</a>
+            </li>
           </ul>
         </li>
         <?php endif; ?>
@@ -739,6 +744,9 @@
             <li class="<?php echo (isset($page) && $page=="view_blocksection")?'active':''; ?>"><a
                 href="<?php echo base_url(); ?>blocksection/view_block_sections"
                 style="margin-left: 10px;"><i class="ion ion-eye"></i> View Block Sections</a></li>
+            <li class="<?php echo (isset($page) && $page=="add_student_grades")?'active':''; ?>"><a
+                href="<?php echo base_url(); ?>registrar/add_student_grades"
+                style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add Student Grade</a></li>
           </ul>
         </li>
         <li
