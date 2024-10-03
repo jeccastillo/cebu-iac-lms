@@ -365,7 +365,7 @@
                                                         v-model="amount_to_pay" />
                                                 </div>
                                             </div>
-                                            <!-- <div class="col-sm-4"
+                                            <div class="col-sm-4"
                                                 v-if="cashier">
                                                 <div class="form-group">
                                                     <label>Term:</label>
@@ -435,7 +435,7 @@
                                                         class="form-control"
                                                         v-model="request.remarks"></textarea>
                                                 </div>
-                                            </div> -->
+                                            </div>
                                             <div v-if="description == 'Tuition Fee' && registration"
                                                 class="col-sm-4">
                                                 <label>Select Type:</label>
