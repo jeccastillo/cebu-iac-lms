@@ -1436,7 +1436,8 @@ new Vue({
                         this.installment_dates.push(data.data.active_sem.installment3_formatted);
                         this.installment_dates.push(data.data.active_sem.installment4_formatted);
                         this.installment_dates.push(data.data.active_sem.installment5_formatted);
-
+                        this.registration = data.data.registration;
+                        console.log("registration",this.registration);
                         if (data.data.registration) {
                             this.registration = data.data.registration;
                             this.downpayment_status = this.registration.downpayment;
