@@ -304,7 +304,7 @@
                                                     <label>Payment For</label>
                                                     <select class="form-control"
                                                         v-model="description">
-                                                        <option value="Tuition Fee">Tuition Fee
+                                                        <option v-if="registration" value="Tuition Fee">Tuition Fee
                                                         </option>
                                                         <option v-if="isInvoice" value="Other">Other</option>
                                                     </select>
