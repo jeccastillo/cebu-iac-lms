@@ -1436,13 +1436,13 @@ new Vue({
                         this.installment_dates.push(data.data.active_sem.installment4_formatted);
                         this.installment_dates.push(data.data.active_sem.installment5_formatted);
                         this.registration = data.data.registration;
+                        this.tuition = data.data.tuition;
+                        this.tuition_data = data.data.tuition_data;
                         
                         if (data.data.registration) {                            
                             this.downpayment_status = this.registration.downpayment;
                             this.registration_status = data.data.registration.intROG;
-                            this.allow_enroll = data.data.registration.allow_enroll;
-                            this.tuition = data.data.tuition;
-                            this.tuition_data = data.data.tuition_data;
+                            this.allow_enroll = data.data.registration.allow_enroll;                            
                             this.payment_type = this.registration.paymentType;
                             this.remaining_amount = data.data.tuition_data.total;
                             this.change_payment_type = this.payment_type;
