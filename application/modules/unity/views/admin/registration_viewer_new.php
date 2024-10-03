@@ -1534,8 +1534,9 @@ new Vue({
                                             .toFixed(2)
                                     }
                                 }
-                                if (this.registration && this.registration.enumStudentType == "new") {
-                                    axios.get(api_url + 'finance/reservation/' +
+                                if(this.registration && this.tuition_data)
+                                    if (this.registration.enumStudentType == "new") {
+                                        axios.get(api_url + 'finance/reservation/' +
                                             this.slug + '/' + this.sem)
                                         .then((data) => {
                                             this.reservation_payments = data.data.data;
@@ -1657,7 +1658,7 @@ new Vue({
                                         .remaining_amount.toFixed(2).replace(
                                             /\d(?=(\d{3})+\.)/g, '$&,');
                                     //installment amounts                                
-                                    if (this.registration && this.tuition_data && this.registration.downpayment == 1) {
+                                    if (this.registration.downpayment == 1) {
                                         var temp = (this.tuition_data
                                             .installment_fee * 5) - parseFloat(
                                             this.remaining_amount);
