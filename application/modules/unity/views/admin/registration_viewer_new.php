@@ -300,7 +300,7 @@
                                             class="row">
                                             <div class="col-sm-4"
                                                 v-if="cashier">
-                                                <div class="form-group">
+                                                <!-- <div class="form-group">
                                                     <label>Payment For</label>
                                                     <select class="form-control"
                                                         v-model="description">
@@ -308,7 +308,7 @@
                                                         </option>
                                                         <option v-if="isInvoice" value="Other">Other</option>
                                                     </select>
-                                                </div>
+                                                </div> -->
                                                 <div v-if="description == 'Tuition Fee'"
                                                     class="form-group">
                                                     <label>Particulars:</label>
