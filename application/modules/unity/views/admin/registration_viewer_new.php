@@ -261,9 +261,9 @@
                         <li v-if="cashier"
                             :class="cashier?'active':''"><a href="#tab_1"
                                 data-toggle="tab">Payment</a></li>
-                        <li :class="!cashier?'active':''"><a href="#tab_2"
+                        <li v-if="registration" :class="!cashier?'active':''"><a href="#tab_2"
                                 data-toggle="tab">Details</a></li>
-                        <li :class="!cashier?'active':''"><a href="#tab_3"
+                        <li v-if="registration" :class="!cashier?'active':''"><a href="#tab_3"
                                 data-toggle="tab">SOA</a></li>
                         <!-- <li>
                             <a :href="base_url + 'unity/accounting/' + student.intID">                                
@@ -494,7 +494,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div :class="!cashier?'active tab-pane':'tab-pane'"
+                        <div v-if="registration" :class="!cashier?'active tab-pane':'tab-pane'"
                             id="tab_2">
                             <div class="box box-solid">
                                 <div class="box-header">
