@@ -261,9 +261,9 @@
                         <li v-if="cashier"
                             :class="cashier?'active':''"><a href="#tab_1"
                                 data-toggle="tab">Payment</a></li>
-                        <li :class="!cashier?'active':''"><a href="#tab_2"
+                        <li  :class="!cashier?'active':''"><a href="#tab_2"
                                 data-toggle="tab">Details</a></li>
-                        <li :class="!cashier?'active':''"><a href="#tab_3"
+                        <li v-if="registration" :class="!cashier?'active':''"><a href="#tab_3"
                                 data-toggle="tab">SOA</a></li>
                         <!-- <li>
                             <a :href="base_url + 'unity/accounting/' + student.intID">                                
@@ -274,7 +274,7 @@
                     <div class="tab-content">
                         <div :class="cashier?'active tab-pane':'tab-pane'"
                             id="tab_1">
-                            <div v-if="registration_status"
+                            <div
                                 class="box box-solid">
                                 <div class="box-header">
                                     <h4 class="box-title">{{windowPayment}}</h4>
@@ -287,7 +287,7 @@
                                                 v-model="windowPayment"
                                                 value="invoice"> Invoice
                                         </label>
-                                        <label class="radio-inline">
+                                        <label v-if="registration" class="radio-inline">
                                             <input type="radio"
                                                 v-model="windowPayment"
                                                 value="official receipt"> Official Receipt
@@ -331,8 +331,7 @@
                                                         v-model="description_other">
                                                         <option v-for="p in particulars"
                                                             :value="p.name">{{p.name}}</option>
-                                                    </select>
-                                                    <!-- <input type="text" required class="form-control" v-model="description_other" /> -->
+                                                    </select>                                                   
                                                 </div>
                                                 <input type="hidden"
                                                     v-model="request.status"
@@ -373,9 +372,7 @@
                                                         class="form-control"
                                                         v-model="request.sy_reference">
                                                     {{ sem }}
-                                                    <!-- <select class="form-control" v-model="request.or_number" required>
-                                                        <option v-for="i in (parseInt(cashier_start), parseInt(cashier_end))" :value="i">{{ i }}</option>
-                                                    </select>                                                     -->
+                                                    
                                                 </div>
                                                 <div v-if="isOR"
                                                     class="form-group">
@@ -391,10 +388,7 @@
                                                             class="form-control"
                                                             v-model="request.or_number">
                                                         {{ request.or_number }}
-                                                    </div>
-                                                    <!-- <select class="form-control" v-model="request.or_number" required>
-                                                        <option v-for="i in (parseInt(cashier_start), parseInt(cashier_end))" :value="i">{{ i }}</option>
-                                                    </select>                                                     -->
+                                                    </div>                                                    
                                                 </div>
                                                 <div v-if="isOR"
                                                     class="form-group">
@@ -840,13 +834,13 @@
                                                 </button>
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <tr v-if="registration">
                                             <td class="text-green"
                                                 colspan="10">
                                                 amount paid: P{{ amount_paid_formatted }}
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <tr v-if="registration">
                                             <td class="text-green"
                                                 colspan="10">
                                                 remaining balance: P{{ remaining_amount_formatted }}
@@ -858,7 +852,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane"
+                        <div v-if="registration" class="tab-pane"
                             id="tab_3">
                             <h3>Statement of Account</h3>
                             <!-- <img :src="soa.logo" height="300px" width="300px"/> -->
@@ -1040,6 +1034,7 @@
         :action="base_url + 'pdf/print_soa'"
         target="_blank">
         <input type="hidden"
+            v-if="tuition_data"
             name="down_payment"
             v-model="tuition_data.down_payment">
         <input v-if="registration" type="hidden"
@@ -1436,13 +1431,13 @@ new Vue({
                         this.installment_dates.push(data.data.active_sem.installment4_formatted);
                         this.installment_dates.push(data.data.active_sem.installment5_formatted);
                         this.registration = data.data.registration;
+                        this.tuition_data = data.data.tuition_data; 
                         
-                        if (data.data.registration) {                            
+                        if (data.data.registration) {        
+                            this.tuition = data.data.tuition;                                               
                             this.downpayment_status = this.registration.downpayment;
                             this.registration_status = data.data.registration.intROG;
-                            this.allow_enroll = data.data.registration.allow_enroll;
-                            this.tuition = data.data.tuition;
-                            this.tuition_data = data.data.tuition_data;
+                            this.allow_enroll = data.data.registration.allow_enroll;                            
                             this.payment_type = this.registration.paymentType;
                             this.remaining_amount = data.data.tuition_data.total;
                             this.change_payment_type = this.payment_type;
@@ -1499,10 +1494,12 @@ new Vue({
                                 this.applicant_data = data.data.student;
                                 this.applicant_id = "A" + this.current_term.strYearStart + "-" + String(this.applicant_data.id).padStart(4, '0');
                                 this.getInvoiceNumber()
-                                if (this.registration && this.registration.paymentType == 'partial')
-                                    this.has_partial = true;
-                                if (this.has_partial)
-                                    this.remaining_amount = this.tuition_data.total_installment;
+                                if(this.registration){
+                                    if (this.registration.paymentType == 'partial')
+                                        this.has_partial = true;
+                                    if (this.has_partial)
+                                        this.remaining_amount = this.tuition_data.total_installment;
+                                }
 
                                 for (i in this.payments) {
                                     if (this.payments[i].status == "Paid" || this
@@ -1534,8 +1531,9 @@ new Vue({
                                             .toFixed(2)
                                     }
                                 }
-                                if (this.registration && this.registration.enumStudentType == "new") {
-                                    axios.get(api_url + 'finance/reservation/' +
+                                if(this.registration && this.tuition_data){
+                                    if (this.registration.enumStudentType == "new") {
+                                        axios.get(api_url + 'finance/reservation/' +
                                             this.slug + '/' + this.sem)
                                         .then((data) => {
                                             this.reservation_payments = data.data.data;
@@ -1590,7 +1588,7 @@ new Vue({
                                                 .replace(/\d(?=(\d{3})+\.)/g,
                                                     '$&,');
                                             //installment amounts                                
-                                            if (this.registration && this.registration.downpayment ==
+                                            if (this.registration.downpayment ==
                                                 1) {
                                                 var temp = (this.tuition_data
                                                         .installment_fee * 5) -
@@ -1650,63 +1648,66 @@ new Vue({
                                         .catch((error) => {
                                             console.log(error);
                                         })
-                                } else {
-                                    this.remaining_amount = (this.remaining_amount <
-                                        0.02) ? 0 : this.remaining_amount;
-                                    this.remaining_amount_formatted = this
-                                        .remaining_amount.toFixed(2).replace(
-                                            /\d(?=(\d{3})+\.)/g, '$&,');
-                                    //installment amounts                                
-                                    if (this.registration && this.registration.downpayment == 1) {
-                                        var temp = (this.tuition_data
-                                            .installment_fee * 5) - parseFloat(
-                                            this.remaining_amount);
-                                        for (i = 0; i < 5; i++) {
-                                            if (this.tuition_data.installment_fee >
-                                                temp) {
-                                                val = this.tuition_data
-                                                    .installment_fee - temp;
-                                                val = val.toFixed(2);
-                                                this.installments.push(val);
-                                                temp = 0;
-                                            } else {
-                                                this.installments.push(0);
-                                                temp = temp - this.tuition_data
-                                                    .installment_fee;
+                                    } else {
+                                        this.remaining_amount = (this.remaining_amount <
+                                            0.02) ? 0 : this.remaining_amount;
+                                        this.remaining_amount_formatted = this
+                                            .remaining_amount.toFixed(2).replace(
+                                                /\d(?=(\d{3})+\.)/g, '$&,');
+                                        //installment amounts                                
+                                        if (this.registration.downpayment == 1) {
+                                            var temp = (this.tuition_data
+                                                .installment_fee * 5) - parseFloat(
+                                                this.remaining_amount);
+                                            for (i = 0; i < 5; i++) {
+                                                if (this.tuition_data.installment_fee >
+                                                    temp) {
+                                                    val = this.tuition_data
+                                                        .installment_fee - temp;
+                                                    val = val.toFixed(2);
+                                                    this.installments.push(val);
+                                                    temp = 0;
+                                                } else {
+                                                    this.installments.push(0);
+                                                    temp = temp - this.tuition_data
+                                                        .installment_fee;
+                                                }
+
                                             }
+                                        } else
+                                            for (i = 0; i < 5; i++)
+                                                this.installments.push(this.tuition_data
+                                                    .installment_fee);
 
+
+
+                                        var val = 0;
+
+
+                                        this.amount_paid_formatted = this.amount_paid
+                                            .toFixed(2).replace(/\d(?=(\d{3})+\.)/g,
+                                                '$&,');
+                                        this.loader_spinner = false;
+                                        if (this.remaining_amount <= 0)
+                                            this.description = "Other";
+
+                                        this.soa.installments = this.installments;
+                                        for (i in this.installments) {
+                                            this.soa.total += parseFloat(this
+                                                .installments[i]);
+                                            this.installments[i] = parseFloat(this
+                                                .installments[i]).toFixed(2);
                                         }
-                                    } else
-                                        for (i = 0; i < 5; i++)
-                                            this.installments.push(this.tuition_data
-                                                .installment_fee);
-
-
-
-                                    var val = 0;
-
-
-                                    this.amount_paid_formatted = this.amount_paid
-                                        .toFixed(2).replace(/\d(?=(\d{3})+\.)/g,
-                                            '$&,');
-                                    this.loader_spinner = false;
-                                    if (this.remaining_amount <= 0)
-                                        this.description = "Other";
-
-                                    this.soa.installments = this.installments;
-                                    for (i in this.installments) {
-                                        this.soa.total += parseFloat(this
-                                            .installments[i]);
-                                        this.installments[i] = parseFloat(this
-                                            .installments[i]).toFixed(2);
+                                        //this.soa.total += this.registration.downpayment == 0 ? parseFloat(this.tuition_data.down_payment):0; 
+                                        //this.soa.total = this.soa.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                                        this.soa.total = this
+                                            .remaining_amount_formatted;
+                                        this.ready = true;
                                     }
-                                    //this.soa.total += this.registration.downpayment == 0 ? parseFloat(this.tuition_data.down_payment):0; 
-                                    //this.soa.total = this.soa.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                                    this.soa.total = this
-                                        .remaining_amount_formatted;
+                                }
+                                else{
                                     this.ready = true;
                                 }
-
 
 
 
