@@ -578,6 +578,9 @@
                 href="<?php echo base_url(); ?>finance/scholarship_view"
                 style="margin-left: 10px;">
                 Students with Scholarships</a></li> 
+            <li class="<?php echo (isset($page) && $page=="import_previous_balance")?'active':''; ?>"><a
+                href="<?php echo base_url(); ?>finance/import_previous_balance"
+                style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i> Add Previous Balance</a></li>
             
             <!-- <li class="<?php echo (isset($page) && $page=="other_payments_report")?'active':''; ?>"><a
                                 href="<?php echo base_url() ?>finance/payments/0/1"><i class="ion ion-cash"></i>

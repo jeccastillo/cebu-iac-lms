@@ -1279,6 +1279,26 @@ class Finance extends CI_Controller {
         $data['success'] = true;
         echo json_encode($data);       
     }
+
+    public function import_previous_balance()
+    {        
+        
+        if($this->is_super_admin() || $this->is_registrar())
+        {
+            // $term = $this->data_fetcher->get_processing_sem();
+    
+            // $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            // $this->data['current_sem'] = $term['intID'];
+            $this->data['page'] = "import_previous_balance";
+            $this->data['opentree'] = "registrar";
+            $this->load->view("common/header",$this->data);
+            $this->load->view("import_previous_balance",$this->data);
+            $this->load->view("common/footer",$this->data);
+        }
+        else
+            redirect(base_url()."unity");  
+       
+    }
 		
     // public function get_other_payments($slug){
 
