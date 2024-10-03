@@ -261,7 +261,7 @@
                         <li v-if="cashier"
                             :class="cashier?'active':''"><a href="#tab_1"
                                 data-toggle="tab">Payment</a></li>
-                        <li v-if="registration" :class="!cashier?'active':''"><a href="#tab_2"
+                        <li  :class="!cashier?'active':''"><a href="#tab_2"
                                 data-toggle="tab">Details</a></li>
                         <li v-if="registration" :class="!cashier?'active':''"><a href="#tab_3"
                                 data-toggle="tab">SOA</a></li>
@@ -494,7 +494,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div v-if="registration" :class="!cashier?'active tab-pane':'tab-pane'"
+                        <div :class="!cashier?'active tab-pane':'tab-pane'"
                             id="tab_2">
                             <div class="box box-solid">
                                 <div class="box-header">
