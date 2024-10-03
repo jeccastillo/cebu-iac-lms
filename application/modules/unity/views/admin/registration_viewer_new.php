@@ -442,8 +442,7 @@
                                                 </div>
                                             </div>
                                             <div v-if="description == 'Tuition Fee' && registration"
-                                                class="col-sm-4"
-                                                v-if="cashier">
+                                                class="col-sm-4">
                                                 <label>Select Type:</label>
                                                 <select
                                                     v-if="registration.downpayment == 0 && registration.fullpayment == 0"
@@ -470,7 +469,7 @@
                                                     v-else>
                                                     <tr>
                                                         <td>Down Payment</td>
-                                                        <td v-if="registration && registration.downpayment == 0"><a
+                                                        <td v-if="registration.downpayment == 0"><a
                                                                 href="#"
                                                                 @click="setValue(tuition_data.down_payment,'down',0)">{{ tuition_data.down_payment }}</a>
                                                         </td>
