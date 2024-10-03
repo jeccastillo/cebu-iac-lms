@@ -17,6 +17,9 @@
                 <a class="btn btn-app"
                     :href="base_url + 'finance/student_ledger/' + student.intID"><i
                         class="ion ion-edit"></i> Ledger</a>
+                <a class="btn btn-app"
+                    :href="base_url + 'unity/registration_viewer_legacy/' + student.intID"><i
+                        class="ion ion-edit"></i> Legacy View</a>
                 <a v-if="user_level == 2 || user_level == 3"
                     target="_blank"
                     v-if="registration"
