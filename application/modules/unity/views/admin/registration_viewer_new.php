@@ -441,7 +441,7 @@
                                                         v-model="request.remarks"></textarea>
                                                 </div>
                                             </div>
-                                            <!-- <div v-if="description == 'Tuition Fee' && registration"
+                                            <div v-if="description == 'Tuition Fee' && registration"
                                                 class="col-sm-4">
                                                 <label>Select Type:</label>
                                                 <select
@@ -482,7 +482,7 @@
                                                         </td>
                                                     </tr>
                                                 </table>
-                                            </div> -->
+                                            </div>
                                         </div>
                                         <hr />
 
