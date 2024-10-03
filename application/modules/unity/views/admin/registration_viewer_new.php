@@ -274,7 +274,7 @@
                     <div class="tab-content">
                         <div :class="cashier?'active tab-pane':'tab-pane'"
                             id="tab_1">
-                            <div v-if="registration_status"
+                            <div
                                 class="box box-solid">
                                 <div class="box-header">
                                     <h4 class="box-title">{{windowPayment}}</h4>
