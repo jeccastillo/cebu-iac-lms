@@ -44,7 +44,7 @@
                 <div class="box box-widget widget-user-2">
                     <!-- Add the bg color to the header using any of the bg-* classes -->
                     <div class="widget-user-header bg-red">
-                        <div class="pull-right"
+                        <div v-if="registration" class="pull-right"
                             style="margin-left:1rem;">
                             Tuition Year
                             <select class="form-control"
