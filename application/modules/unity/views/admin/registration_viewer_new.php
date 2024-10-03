@@ -858,7 +858,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane"
+                        <div v-if="registration" class="tab-pane"
                             id="tab_3">
                             <h3>Statement of Account</h3>
                             <!-- <img :src="soa.logo" height="300px" width="300px"/> -->
