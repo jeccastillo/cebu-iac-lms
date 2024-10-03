@@ -1534,7 +1534,7 @@ new Vue({
                                             .toFixed(2)
                                     }
                                 }
-                                if(this.registration && this.tuition_data)
+                                if(this.registration && this.tuition_data){
                                     if (this.registration.enumStudentType == "new") {
                                         axios.get(api_url + 'finance/reservation/' +
                                             this.slug + '/' + this.sem)
@@ -1591,7 +1591,7 @@ new Vue({
                                                 .replace(/\d(?=(\d{3})+\.)/g,
                                                     '$&,');
                                             //installment amounts                                
-                                            if (this.registration && this.registration.downpayment ==
+                                            if (this.registration.downpayment ==
                                                 1) {
                                                 var temp = (this.tuition_data
                                                         .installment_fee * 5) -
@@ -1651,63 +1651,63 @@ new Vue({
                                         .catch((error) => {
                                             console.log(error);
                                         })
-                                } else {
-                                    this.remaining_amount = (this.remaining_amount <
-                                        0.02) ? 0 : this.remaining_amount;
-                                    this.remaining_amount_formatted = this
-                                        .remaining_amount.toFixed(2).replace(
-                                            /\d(?=(\d{3})+\.)/g, '$&,');
-                                    //installment amounts                                
-                                    if (this.registration.downpayment == 1) {
-                                        var temp = (this.tuition_data
-                                            .installment_fee * 5) - parseFloat(
-                                            this.remaining_amount);
-                                        for (i = 0; i < 5; i++) {
-                                            if (this.tuition_data.installment_fee >
-                                                temp) {
-                                                val = this.tuition_data
-                                                    .installment_fee - temp;
-                                                val = val.toFixed(2);
-                                                this.installments.push(val);
-                                                temp = 0;
-                                            } else {
-                                                this.installments.push(0);
-                                                temp = temp - this.tuition_data
-                                                    .installment_fee;
+                                    } else {
+                                        this.remaining_amount = (this.remaining_amount <
+                                            0.02) ? 0 : this.remaining_amount;
+                                        this.remaining_amount_formatted = this
+                                            .remaining_amount.toFixed(2).replace(
+                                                /\d(?=(\d{3})+\.)/g, '$&,');
+                                        //installment amounts                                
+                                        if (this.registration.downpayment == 1) {
+                                            var temp = (this.tuition_data
+                                                .installment_fee * 5) - parseFloat(
+                                                this.remaining_amount);
+                                            for (i = 0; i < 5; i++) {
+                                                if (this.tuition_data.installment_fee >
+                                                    temp) {
+                                                    val = this.tuition_data
+                                                        .installment_fee - temp;
+                                                    val = val.toFixed(2);
+                                                    this.installments.push(val);
+                                                    temp = 0;
+                                                } else {
+                                                    this.installments.push(0);
+                                                    temp = temp - this.tuition_data
+                                                        .installment_fee;
+                                                }
+
                                             }
+                                        } else
+                                            for (i = 0; i < 5; i++)
+                                                this.installments.push(this.tuition_data
+                                                    .installment_fee);
 
+
+
+                                        var val = 0;
+
+
+                                        this.amount_paid_formatted = this.amount_paid
+                                            .toFixed(2).replace(/\d(?=(\d{3})+\.)/g,
+                                                '$&,');
+                                        this.loader_spinner = false;
+                                        if (this.remaining_amount <= 0)
+                                            this.description = "Other";
+
+                                        this.soa.installments = this.installments;
+                                        for (i in this.installments) {
+                                            this.soa.total += parseFloat(this
+                                                .installments[i]);
+                                            this.installments[i] = parseFloat(this
+                                                .installments[i]).toFixed(2);
                                         }
-                                    } else
-                                        for (i = 0; i < 5; i++)
-                                            this.installments.push(this.tuition_data
-                                                .installment_fee);
-
-
-
-                                    var val = 0;
-
-
-                                    this.amount_paid_formatted = this.amount_paid
-                                        .toFixed(2).replace(/\d(?=(\d{3})+\.)/g,
-                                            '$&,');
-                                    this.loader_spinner = false;
-                                    if (this.remaining_amount <= 0)
-                                        this.description = "Other";
-
-                                    this.soa.installments = this.installments;
-                                    for (i in this.installments) {
-                                        this.soa.total += parseFloat(this
-                                            .installments[i]);
-                                        this.installments[i] = parseFloat(this
-                                            .installments[i]).toFixed(2);
+                                        //this.soa.total += this.registration.downpayment == 0 ? parseFloat(this.tuition_data.down_payment):0; 
+                                        //this.soa.total = this.soa.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                                        this.soa.total = this
+                                            .remaining_amount_formatted;
+                                        this.ready = true;
                                     }
-                                    //this.soa.total += this.registration.downpayment == 0 ? parseFloat(this.tuition_data.down_payment):0; 
-                                    //this.soa.total = this.soa.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                                    this.soa.total = this
-                                        .remaining_amount_formatted;
-                                    this.ready = true;
                                 }
-
 
 
 
