@@ -36,7 +36,9 @@
                                 <th>Name</th>
                                 <th>Program</th>                                
                                 <th>MIDTERM GRADE</th>
-                                <th>FINAL GRADE</th>
+                                <th v-if="subject.intMajor == 0">FINAL GRADE</th>
+                                <th v-else>FINALS GRADE</th>
+                                <th v-if="subject.intMajor == 1">FINAL GRADE</th>
                                 <th>Remarks</th>                                
                                 <th>Enrolled</th>
                                 <th v-if="pre_req.length > 0">Passed Pre-requisite(s)</th>
@@ -77,7 +79,8 @@
                                             {{ grading_item.value }}
                                         </option>                                        
                                     </select>                                    
-                                </td>                             
+                                </td>   
+                                <td v-if="subject.intMajor == 1">{{ (student.floatFinalsGrade)?student.floatFinalsGrade:"NGS" }}</td>                          
                                 <td  v-else></td>                                   
                                 <td >{{ student.strRemarks }}</td>
                                 <td  class="text-left">
