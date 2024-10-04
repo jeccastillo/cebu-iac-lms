@@ -146,7 +146,7 @@ class Registrar extends CI_Controller {
                                                       
             $classlists = $this->db
                               ->select('tb_mas_classlist.intID as classlistID, tb_mas_faculty.intID as facultyID, strClassName,year,strSection,sub_section,strCode,strFirstname,strMiddlename,strLastname')
-                              ->where(array('intFacultyID !='=>999))
+                              ->where(array('intFacultyID !='=>999,'strAcademicYear' => $this->data['item']['syid']))
                               ->join('tb_mas_faculty','tb_mas_classlist.intFacultyID = tb_mas_faculty.intID')
                               ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
                               ->get('tb_mas_classlist')
