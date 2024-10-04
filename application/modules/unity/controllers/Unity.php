@@ -3004,6 +3004,8 @@ class Unity extends CI_Controller {
                 $post['date_final_submitted'] = date("Y-m-d H:i:s");
             
             $post['intFinalized'] += 1;
+
+            //Compute for final grade if SHS and encode if final submission
             
 		    $this->data_poster->post_data('tb_mas_classlist',$post,$post['intID']);
         }

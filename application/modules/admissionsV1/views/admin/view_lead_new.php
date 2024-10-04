@@ -142,6 +142,7 @@
                     </div>
                     <div v-if="true">
                         <strong>School</strong>
+                        <p>{{ schoolName }}</p>
                         <div class="form-inline">
                             <v-select :options="schoolList"
                                 label="name"
