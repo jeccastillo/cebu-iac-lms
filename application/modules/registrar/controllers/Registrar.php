@@ -247,7 +247,7 @@ class Registrar extends CI_Controller {
 
     public function delete_month(){
         $post = $this->input->post();
-        $attendance = $this->db->where('tb_mas_student_attendance',array('month_id'=>$post['id']))->first_row();
+        $attendance = $this->db->get_where('tb_mas_student_attendance',array('month_id'=>$post['id']))->first_row();
 
         if(!$attendance){
             $this->db->where('id',$post['id'])
