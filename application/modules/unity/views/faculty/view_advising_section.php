@@ -27,7 +27,7 @@
                             <td>{{ student.strFirstname }}</td>
                             <td>{{ student.strMiddlename }}</td>
                             <td>
-                                <a @click="loadAttendance(student.intID)" class="btn btn-primary" data-toggle="modal" data-target="#attendance-modal">
+                                <a @click="loadAttendance(student)" class="btn btn-primary" data-toggle="modal" data-target="#attendance-modal">
                                     View Attendance
                                 </a>
                             </td>
@@ -47,8 +47,9 @@
             <div class="modal-content">            
                 <div class="modal-header">
                     <h3>Attendance</h3>
+                    <p>{{ selected_student.strLastname +  " " + selected_student.strFirstname + ", " + selected_student.strMiddlename }}</p>
                 </div>
-            
+
                 <div v-if="!loading_attendance" class="modal-body">
                     <table class="table table-bordered table-striped">
                         <thead>
@@ -97,7 +98,8 @@ new Vue({
         active_sem: undefined,
         students: [],
         loading_attendance: false,
-        attendance_data: [],
+        attendance_data: [],     
+        selected_student: undefined,   
     },
 
     mounted() {
@@ -119,12 +121,13 @@ new Vue({
     },
 
     methods: {      
-        loadAttendance: function(id){
+        loadAttendance: function(student){
             this.loading = true;
-            axios.get(base_url + 'unity/attendance_data/' + id + '/' + this.active_sem.intID)
+            axios.get(base_url + 'unity/attendance_data/' + student.intID + '/' + this.active_sem.intID)
             .then((data) => {
                 this.attendance_data = data.data.attendance;
                 this.loading = false;
+                this.selected_student = student;
             }
             )
             .catch((error) => {
