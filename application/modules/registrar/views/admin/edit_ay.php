@@ -164,6 +164,56 @@
     <hr />
     <div class="box box-primary">
         <div class="box-header">
+                <h3 class="box-title">Add Term Months</h3>
+        </div>                           
+        <form action="<?php echo base_url(); ?>registrar/submit_month" method="post" role="form">
+            <input type="hidden" name="id" value="<?php echo $item['intID'] ?>" />                
+            <div class="box-body">               
+                <div class="form-group col-md-4">                        
+                </div>
+                <div style="clear:both"></div>            
+                <div class="form-group col-md-4">                    
+                    <select required name="type" class="form-control">
+                        <option value="January">January</option>
+                        <option value="February">February</option>
+                        <option value="March">March</option>
+                        <option value="April">April</option>
+                        <option value="May">May</option>
+                        <option value="June">June</option>
+                        <option value="July">July</option>
+                        <option value="August">August</option>
+                        <option value="September">September</option>
+                        <option value="October">October</option>
+                        <option value="November">November</option>
+                        <option value="December">December</option>                            
+                    </select>
+                </div>                              
+                <div class="form-group col-md-4">
+                    <label for="submit">&nbsp;</label>
+                    <input type="submit" value="add" class="btn btn-default  btn-flat">
+                </div>
+                <div style="clear:both"></div>
+                <hr />
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Month</th>                        
+                        <th>Actions</th>
+                    </tr>                    
+                    <?php foreach($term_months as $item): ?>
+                    <tr>
+                        <td><?php echo $item['month']; ?></td>                        
+                        <td>
+                            <button class="delete-month btn btn-danger" rel="<?php echo $item['id']; ?>">Delete</button>                            
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </table> 
+            </div>            
+        </form>    
+    </div>
+    <hr />
+    <div class="box box-primary">
+        <div class="box-header">
                 <h3 class="box-title">Add Grading Extension</h3>
         </div>                           
         <form action="<?php echo base_url(); ?>registrar/submit_extension" method="post" role="form">
