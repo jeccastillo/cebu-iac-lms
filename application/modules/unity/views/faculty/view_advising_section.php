@@ -48,12 +48,30 @@
                 <div class="modal-header">
                     <h3>Attendance</h3>
                 </div>
-            </div>
-            <div v-if="!loading_attendance" class="modal-body">
-
-            </div>
-            <div v-else class="modal-body">
-                <h3>Loading Data</h3>
+            
+                <div v-if="!loading_attendance" class="modal-body">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Month</th>
+                                <th>Days</th>
+                                <th>Abscences</th>
+                                <th>Tardies</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="ad in attendance_data">
+                                <td>{{ ad.month }}</td>
+                                <td>{{ ad.school_days }}</td>
+                                <td>{{ ad.abscences }}</td>
+                                <td>{{ ad.tardy }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div v-else class="modal-body">
+                    <h3>Loading Data</h3>
+                </div>
             </div>
         </div>
     </div>
@@ -79,7 +97,7 @@ new Vue({
         active_sem: undefined,
         students: [],
         loading_attendance: false,
-        attendance_data: undefined,
+        attendance_data: [],
     },
 
     mounted() {
@@ -102,10 +120,11 @@ new Vue({
 
     methods: {      
         loadAttendance: function(id){
+            this.loading = true;
             axios.get(base_url + 'unity/attendance_data/' + id + '/' + this.active_sem.intID)
             .then((data) => {
-            
-                
+                this.attendance_data = data.data.attendance;
+                this.loading = false;
             }
             )
             .catch((error) => {
