@@ -17,12 +17,11 @@
         <div class="overlay" style="display:none;"></div>
         <div class="loading-img" style="display:none;"></div>
         <div class="box-header">
-                <h3 class="box-title" style="padding-left:27px;">My Classlists</h3>
-                
+                <h3 class="box-title" style="padding-left:27px;">My Classlists</h3>                
         </div>
         
         <div class="box-body">    
-        
+        <div class="row">
         <?php foreach($classlist as $class): ?>
             <div class="col-lg-3 col-xs-6">
             <!-- small box -->
@@ -78,14 +77,35 @@
                 </div>
                 <a href="<?php echo base_url(); ?>unity/classlist_viewer/<?php echo $class['intID']; ?>" class="small-box-footer">
                     View <i class="fa fa-arrow-circle-right"></i>
-                </a>
-                
+                </a>                
             </div>
         </div>
             
         
             
         <?php endforeach; ?>
+    </div>
+    <div class="row">
+        <?php foreach($advised as $class): ?>
+            <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-blue" >                
+                <div class="inner">
+                    <h3>
+                        <?php echo $class['name']; ?>
+                    </h3>                   
+                </div>
+                <div class="icon">
+                    <i class="ion ion-android-book"></i>
+                </div>
+                <a href="<?php echo base_url(); ?>unity/view_section/<?php echo $class['intID']; ?>" class="small-box-footer">
+                    View <i class="fa fa-arrow-circle-right"></i>
+                </a>                
+            </div>
+        </div>            
+                    
+        <?php endforeach; ?>
+    </div>
         <hr style="clear:both;" />
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
