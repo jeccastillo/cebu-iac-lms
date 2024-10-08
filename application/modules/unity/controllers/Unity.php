@@ -540,18 +540,18 @@ class Unity extends CI_Controller {
     //     }
     // }    
 
-    public function sync_block_sections(){
-        $registrations = $this->db->get('tb_mas_registration')->result_array();
-        foreach($registrations as $reg){
-            $student = $this->db->get_where('tb_mas_users',array('intID'=>$reg['intStudentID']))->first_row();
+    // public function sync_block_sections(){
+    //     $registrations = $this->db->get('tb_mas_registration')->result_array();
+    //     foreach($registrations as $reg){
+    //         $student = $this->db->get_where('tb_mas_users',array('intID'=>$reg['intStudentID']))->first_row();
             
-            $data = [
-                'block_section' => $student->preferedSection
-            ];
+    //         $data = [
+    //             'block_section' => $student->preferedSection
+    //         ];
 
-            $this->db->where(array('intRegistrationID'=>$reg['intRegistrationID']))->update('tb_mas_registration',$data);
-        }
-    }
+    //         $this->db->where(array('intRegistrationID'=>$reg['intRegistrationID']))->update('tb_mas_registration',$data);
+    //     }
+    // }
     public function registration_viewer_data($id,$sem =  0){
         if($this->is_super_admin() || $this->is_accounting() || $this->is_registrar())
         {
