@@ -44,8 +44,13 @@
       role="dialog">
         <div class="modal-dialog"
         role="document">
-            <div class="modal-content">
-               <h3>Attendance</h3>
+            <div class="modal-content">            
+                <div class="modal-header">
+                    <h3>Attendance</h3>
+                </div>
+            </div>
+            <div class="modal-body">
+                
             </div>
         </div>
     </div>
