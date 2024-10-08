@@ -98,6 +98,32 @@
             
         });
         
+        $("#save-sections").click(function(e){
+           e.preventDefault();
+            var sections = Array();
+            $('#loaded-section option').each(function(i, selected){ 
+                sections[i] = $(selected).val();
+            });
+                        
+            
+            var fid = $("#faculty-id").val();
+            var ay = $("#active-sem").val();
+            
+            data = {'sections':sections,'facultyID':fid,'ay':ay,};
+            
+            
+            $.ajax({
+                'url':'<?php echo base_url(); ?>department/submit_loaded_sections/',
+                'method':'post',
+                'data':data,
+                'dataType':'json',
+                'success':function(ret){
+                    location.reload();
+                }
+            });
+            
+        });
+
         //Classlists
         
         $("#load-classlist").click(function(e){ 

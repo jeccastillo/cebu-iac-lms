@@ -509,6 +509,29 @@ class Department extends CI_Controller {
         echo json_encode($data);
     }
     
+    public function submit_loaded_sections(){
+        $post = $this->input->post();
+        $faculty = $post['facultyID'];
+        $ay = $post['ay'];
+
+        $this->db->where(array('faculty_id'=>$faculty))->delete('tb_mas_faculty_adviser');
+        foreach($post['sections'] as $cs)
+        {
+            $data = [
+                "block_id" => $cs,
+                "faculty_id"=>$faculty,
+                "term_id" => $ay
+            ];
+
+            
+            $this->db->insert('tb_mas_faculty_adviser',$data);
+        }
+
+        $data['message'] = "Success";
+        
+        echo json_encode($data);
+
+    }
     
     public function submit_loaded_classlist()
     {
