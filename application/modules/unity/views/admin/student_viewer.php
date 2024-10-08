@@ -673,6 +673,15 @@
                 </div>
                 <div class="modal-body">
                 <form @submit.prevent="submitAttendance()">
+                  <div>
+                    Student: 
+                    {{ student.strLastname.toUpperCase() }}, {{ student.strFirstname.toUpperCase() }}
+                    {{ student.strMiddlename?student.strMiddlename.toUpperCase():'' }}
+                  </div>
+                  <div>
+                    Term: {{ active_sem.enumSem + " " + active_sem.term_label + " " + active_sem.strYearStart + " - " + active_sem.strYearEnd }}
+                  </div>
+                  <hr />
                   <div class="form-group">
                     <label>Select Month</label>
                     <select v-model="add_attendance.month_id"                  
@@ -698,10 +707,18 @@
                     <input type="number" min="0" placeholder="Enter number" v-model="add_attendance.tardy"                  
                       class="form-control" />                                          
                   </div> 
+                  <div class="form-group">
+                    <div>
+                        <button type="submit"
+                        class="btn btn-default">Submit</button>
+                    </div>
+                  </div>
                 </form>
                 </div>
                 <div class="modal-footer"
                 style="margin-top:0">
+                               
+                 
                 <button type="button"
                     class="btn btn-secondary"
                     data-dismiss="modal">Close</button>
