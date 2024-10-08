@@ -431,6 +431,48 @@
                     </div>
                 </div>
             </div>
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h3>Load Advising Sections</h3>
+                    
+                </div>
+                            
+                <div class="box-body">                    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>Sections</h4>
+                            <select style="width:200px" class="select2" id="section-selector" multiple>
+                                <?php foreach($unassigned_sections as $sn):                                                                             
+                                    ?>
+                                    
+                                    <option value="<?php echo $sn['intID']; ?>"><?php echo $sn['name']; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="col-md-12" style="text-center">
+                        <br />
+                            <a href="#" id="load-section" class="btn btn-default  btn-flat">Load <i class="ion ion-arrow-down-c"></i> </a>
+                            <a href="#" id="unload-section" class="btn btn-default  btn-flat"><i class="ion ion-arrow-up-c"></i> Remove</a>
+                        
+                        </div>
+                        <div class="col-md-12">
+                            <h4>Loaded Sections</h4>
+                            <select style="height:200px" class="form-control" id="loaded-section" multiple>
+                                <?php foreach($faculty_sections as $sn):                                    
+                                    ?>
+                                    <option value="<?php echo $sn['intID']; ?>"><?php echo $sn['name']; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="col-md-12" style="text-center">
+                            <br />
+                    
+                            <a href="#" id="save-sections" class="btn btn-default  btn-flat">Save</a>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>              
     </div>
             <!-- /.tab-content -->
