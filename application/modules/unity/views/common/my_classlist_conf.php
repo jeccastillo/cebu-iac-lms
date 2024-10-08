@@ -1,6 +1,8 @@
 <script type="text/javascript">
     $(document).ready(function(){
-        
+        $(".select-sem-classlist").change(function(e){
+            alert(e.val())
+        });
         $(".trash-classlist").click(function(e){
                     conf = confirm("Are you sure you want to delete?");
                     if(conf)
