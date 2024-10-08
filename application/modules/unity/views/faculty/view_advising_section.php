@@ -30,11 +30,6 @@
                                 <a @click="loadAttendance(student)" class="btn btn-primary" data-toggle="modal" data-target="#attendance-modal">
                                     View Attendance
                                 </a>
-                                <a @click="setSelected(student)" class="btn btn-primary"
-                                    data-toggle="modal"
-                                    data-target="#attendance-modal">
-                                        Add Attendance Record
-                                </a>
                             </td>
                         </tr>
                     </tbody>
@@ -55,7 +50,12 @@
                     <p>{{ selected_student.strLastname +  " " + selected_student.strFirstname + ", " + selected_student.strMiddlename }}</p>
                 </div>
 
-                <div v-if="!loading_attendance" class="modal-body">                    
+                <div v-if="!loading_attendance" class="modal-body">
+                    <a class="btn btn-primary"
+                        data-toggle="modal"
+                        data-target="#add-attendance-modal">
+                            Add Attendance Record
+                    </a>
                     <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
@@ -84,7 +84,7 @@
     <!-- modal end -->
      <!-- modal start -->
     <div class="modal fade"
-      id="attendance-modal"
+      id="add-attendance-modal"
       tabindex="-1"
       role="dialog">
         <div class="modal-dialog"
@@ -218,16 +218,14 @@ new Vue({
             axios.get(base_url + 'unity/attendance_data/' + student.intID + '/' + this.active_sem.intID)
             .then((data) => {
                 this.attendance_data = data.data.attendance;
-                this.loading = false;                
+                this.loading = false;
+                this.selected_student = student;
                 this.add_attendance.student_id = student.intID;
             }
             )
             .catch((error) => {
             console.log(error);
             })
-        },
-        setSelected: function(student){
-            this.selected_student = student;
         },
         submitAttendance: function(){
             Swal.fire({
