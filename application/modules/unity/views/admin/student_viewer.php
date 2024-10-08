@@ -417,8 +417,8 @@
                           <tr>
                             <th>Month</th>
                             <th>School Days</th>
-                            <th>No. of Abscences</th>
-                            <th>No. of Tardys</th>
+                            <th>No. of Days Abscent</th>
+                            <th>No. of Days Tardy</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -429,6 +429,18 @@
                             <td>{{ at.tardy }}</td>
                           </tr>
                         </tbody>
+                        <tfoot>
+                          <tr>
+                            <td colspan="4">
+                              <a v-if="user_level == 2 || user_level == 3"
+                                class="btn btn-primary"
+                                data-toggle="modal"
+                                data-target="#attendance-modal">
+                                  Add Attendance Record
+                              </a>
+                            </td>
+                          </tr>
+                        </tfoot>
                     </table>
                     <hr />
                     <a target="_blank"
@@ -661,7 +673,31 @@
                 </div>
                 <div class="modal-body">
                 <form @submit.prevent="submitAttendance()">
-                    
+                  <div class="form-group">
+                    <label>Select Month</label>
+                    <select v-model="add_attendance.month_id"                  
+                      class="form-control">
+                      <option v-for="m in term_months"
+                        :value="m.id">
+                        {{ m.month }}
+                      </option>
+                    </select>
+                  </div> 
+                  <div class="form-group">
+                    <label>School Days</label>
+                    <input type="number" min="0" placeholder="Enter number" v-model="add_attendance.school_days"                  
+                      class="form-control" />                                          
+                  </div> 
+                  <div class="form-group">
+                    <label>Number of Days Abscent</label>
+                    <input type="number" min="0" placeholder="Enter number" v-model="add_attendance.abscences"                  
+                      class="form-control" />                                          
+                  </div> 
+                  <div class="form-group">
+                    <label>Number of Days Tardy</label>
+                    <input type="number" min="0" placeholder="Enter number" v-model="add_attendance.tardy"                  
+                      class="form-control" />                                          
+                  </div> 
                 </form>
                 </div>
                 <div class="modal-footer"
@@ -732,6 +768,13 @@ new Vue({
     term_type: undefined,
     sem_student: undefined,
     prev_year_sem: 0,
+    add_attendance: {
+      student_id: undefined,
+      month_id: undefined,
+      school_days: undefined,
+      abscences: undefined,
+      tardy: undefined,
+    },
     add_subject: {
       code: undefined,
       section: undefined,
@@ -850,6 +893,7 @@ new Vue({
                     this.reg_status = data.data.reg_status;
                     this.selected_ay = data.data.selected_ay;
                     this.attendance = data.data.attendance;
+                    this.add_attendance.student_id = this.student.intID;                    
                     this.term_months = data.data.term_months;
                     this.curriculum_subjects = data.data.curriculum_subjects;
                     this.sections = data.data.sections;
