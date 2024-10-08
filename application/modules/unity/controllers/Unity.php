@@ -2512,7 +2512,7 @@ class Unity extends CI_Controller {
     }
 
     public function advising_section_data($id,$sem){
-        $data['section'] = $this->db->get_where('tb_mas_block_section',array('intID'=>$id))->first_row();
+        $data['section'] = $this->db->get_where('tb_mas_block_sections',array('intID'=>$id))->first_row();
         $data['students'] = $this->db
                                  ->select('tb_mas_users.*')
                                  ->from('tb_mas_registration')
