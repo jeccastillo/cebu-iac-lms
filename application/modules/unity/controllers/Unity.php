@@ -2514,7 +2514,7 @@ class Unity extends CI_Controller {
     public function advising_section_data($id,$sem){
         $data['section'] = $this->db->get_where('tb_mas_block_sections',array('intID'=>$id))->first_row();
         $data['students'] = $this->db
-                                 ->select('tb_mas_users.*')
+                                 ->select('tb_mas_users.strFirstname, tb_mas_users.strLastname, tb_mas_users.strMiddlename,tb_mas_users.intID')
                                  ->from('tb_mas_registration')
                                  ->join('tb_mas_users','tb_mas_users.intID = tb_mas_registration.intStudentID')
                                  ->where(array('tb_mas_registration.intAYID'=>$sem,'block_section'=>$id))
