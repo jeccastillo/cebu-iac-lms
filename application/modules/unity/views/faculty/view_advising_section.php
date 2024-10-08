@@ -63,6 +63,7 @@
                                 <th>Days</th>
                                 <th>Abscences</th>
                                 <th>Tardies</th>
+                                <th>Actions</th>
                             </tr>                            
                         </thead>
                         <tbody>
@@ -71,6 +72,7 @@
                                 <td>{{ ad.school_days }}</td>
                                 <td>{{ ad.abscences }}</td>
                                 <td>{{ ad.tardy }}</td>
+                                <td><button class="btn btn-danger" @click="deleteAttendance(at.id)">Delete</button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -272,7 +274,49 @@ new Vue({
             }).then((result) => {
 
             })
-            },
+        },
+        deleteAttendance(id){
+            Swal.fire({
+                title: 'Delete Attendance?',
+                text: "Continue deleting attendance record?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                var formdata = new FormData();
+                formdata.append("id", id);
+                return axios
+                    .post('<?php echo base_url(); ?>unity/delete_attendance', formdata, {
+                    headers: {
+                        Authorization: `Bearer ${window.token}`
+                    }
+                    })
+                    .then(data => {
+                    console.log(data.data);
+                    if (data.data.success) {
+                        Swal.fire({
+                        title: "Success",
+                        text: data.data.message,
+                        icon: "success"
+                        }).then(function() {
+                        location.reload();
+                        });
+                    } else {
+                        Swal.fire(
+                        'Failed!',
+                        data.data.message,
+                        'error'
+                        )
+                    }
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+        },
     }
 
 })
