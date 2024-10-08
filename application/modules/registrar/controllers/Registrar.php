@@ -2448,31 +2448,49 @@ class Registrar extends CI_Controller {
             $data['prev_reg'] = null;
         
         $data['reg_status'] = $this->data_fetcher->getRegistrationStatus($data['student']['intID'],$active_sem['intID']);
-            $sem = 1;
-            
-            switch($active_sem['enumSem'])
-            {
-                case "1st":
-                    $sem = 1;
-                    break;
-                case "2nd":
-                    $sem = 2;
-                    break;
-                case "3rd":
-                    $sem = 3;
-                    break;
-                default:
-                    $sem = 1;
-            }
-            
-            $data['active_sem'] = $active_sem;
-            $data['term_type'] = $this->data['term_type'];
+        $sem = 1;
+        
+        switch($data['student']['level']){
+            case 'shs':
+                $stype = 'shs';
+            break;
+            case 'drive':
+                $stype = 'shs';
+            break;
+            case 'college':
+                $stype = 'college';
+            break;
+            case 'other':
+                $stype = 'college';
+            break;
+            default: 
+                $stype = 'college';
+        }
+        
+        $data['block_sections'] = $this->db->get_where('tb_mas_block_sections',array('type'=>$stype))->result_array();
+        switch($active_sem['enumSem'])
+        {
+            case "1st":
+                $sem = 1;
+                break;
+            case "2nd":
+                $sem = 2;
+                break;
+            case "3rd":
+                $sem = 3;
+                break;
+            default:
+                $sem = 1;
+        }
+        
+        $data['active_sem'] = $active_sem;
+        $data['term_type'] = $this->data['term_type'];
 
-            $ret['data'] = $data;
-            $ret['success'] = true;
-            $ret['message'] = "Success";
+        $ret['data'] = $data;
+        $ret['success'] = true;
+        $ret['message'] = "Success";
 
-            echo json_encode($ret);
+        echo json_encode($ret);
 
     }    
     
