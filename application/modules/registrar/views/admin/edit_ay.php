@@ -173,7 +173,7 @@
                 </div>
                 <div style="clear:both"></div>            
                 <div class="form-group col-md-4">                    
-                    <select required name="type" class="form-control">
+                    <select required name="month" class="form-control">
                         <option value="January">January</option>
                         <option value="February">February</option>
                         <option value="March">March</option>
