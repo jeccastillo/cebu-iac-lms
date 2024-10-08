@@ -1929,7 +1929,7 @@ class Unity extends CI_Controller {
                 $data['success'] = false;
                 $data['message'] = "Oops something went wrong.";
             }
-        elseif($post['id']){
+        elseif(isset($post['id'])){
             if($this->db->where('id',$post['id'])->update('tb_mas_student_attendance',$post)){
                 $data['success'] = true;
                 $data['message'] = "Successfully updated Attendance";
