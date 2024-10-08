@@ -247,11 +247,21 @@ class Registrar extends CI_Controller {
 
     public function delete_month(){
         $post = $this->input->post();
-        $this->db->where('id',$post['id'])
+        $attendance = $this->db->where('tb_mas_student_attendance',array('month_id'=>$post['id']))->first_row();
+
+        if(!$attendance){
+            $this->db->where('id',$post['id'])
                  ->delete('tb_mas_sy_months');
 
-        $data['message'] = "Deleted";
-        $data['success'] = true;
+
+                $data['message'] = "Deleted";
+                $data['success'] = true;
+        }
+
+        else{
+            $data['message'] = "Can not be deleted. This Month is tied to data that is being used";
+            $data['success'] = false;
+        }
 
         echo json_encode($data);
     }
