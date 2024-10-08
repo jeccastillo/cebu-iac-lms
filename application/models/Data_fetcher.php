@@ -956,30 +956,6 @@ class Data_fetcher extends CI_Model {
                         ->result_array();
         
     }
-
-    function fetch_advised_sections($limit=null,$sem = false,$sem_sel=null)
-    {
-        $faculty_id = $this->session->userdata("intID");
-                    $this->db
-                     ->select("tb_mas_classlist.intID as intID, strSection, year, sub_section, intFacultyID,intSubjectID,strClassName,strCode,intFinalized,strAcademicYear,enumSem,strYearStart,strYearEnd,count(tb_mas_classlist_student.intCSID) as numStudents")
-                     ->from("tb_mas_classlist")
-                     ->where(array("intFacultyID"=>$faculty_id));
-                    
-                    if($sem_sel!=null)
-                        $this->db->where(array('strAcademicYear'=>$sem_sel));
-        
-                     $this->db->join('tb_mas_subjects', 'tb_mas_subjects.intID = tb_mas_classlist.intSubjectID')
-                     ->join('tb_mas_sy', 'tb_mas_sy.intID = tb_mas_classlist.strAcademicYear')
-                    ->join('tb_mas_classlist_student','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID','left outer');
-                if($limit != null)
-                    $this->db->limit($limit);
-                 return $this->db
-                        ->group_by('tb_mas_classlist.intID')
-                        ->get()
-                        ->result_array();
-        
-    }
-    
     
     
     function fetch_classlists_all($limit=null,$sem_sel=null)
