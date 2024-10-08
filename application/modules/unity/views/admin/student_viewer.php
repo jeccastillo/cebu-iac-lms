@@ -229,7 +229,7 @@
                         <div v-if="registration">                          
                           <label>Change Block Section</label>
                           <select @change="updateBlock($event)" id="block_section" name="block_section" class="form-control" v-model="registration.block_section">                        
-                              <option v-for="block in block_sections" :value="block.id">{{ block.name }}</option>                                  
+                              <option v-for="block in block_sections" :value="block.intID">{{ block.name }}</option>                                  
                           </select>
                         </div>
                             
