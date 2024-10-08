@@ -52,6 +52,7 @@
 
                 <div v-if="!loading_attendance" class="modal-body">
                     <a class="btn btn-primary"
+                        @click="resetForm"
                         data-toggle="modal"
                         data-target="#add-attendance-modal">
                             Add Attendance Record
@@ -72,7 +73,10 @@
                                 <td>{{ ad.school_days }}</td>
                                 <td>{{ ad.abscences }}</td>
                                 <td>{{ ad.tardy }}</td>
-                                <td><button class="btn btn-danger" @click="deleteAttendance(ad.id)">Delete</button></td>
+                                <td>
+                                    <button class="btn btn-danger" @click="deleteAttendance(ad.id)">Delete</button>
+                                    <button class="btn btn-primary" @click="setForEdit(ad)">Edit</button>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -103,7 +107,7 @@
                     id="modalLabel">Add Attendance Record</h4>
                 </div>
                 <div class="modal-body">
-                <form @submit.prevent="submitAttendance()">
+                <form @submit.prevent="submitAttendance(for_update)">
                   <div>
                     Student: 
                     {{ selected_student.strLastname.toUpperCase() }}, {{ selected_student.strFirstname.toUpperCase() }}
@@ -193,6 +197,7 @@ new Vue({
             abscences: undefined,
             tardy: undefined,
         },
+        for_update: 0,
     },
 
     mounted() {
@@ -276,6 +281,20 @@ new Vue({
             }).then((result) => {
 
             })
+        },
+        setForEdit: function(attendance){
+            this.for_edit = attendance.id;
+            this.add_attendance.month_id = attendance.month_id;
+            this.add_attendance.school_days = attendance.school_days;
+            this.add_attendance.abscences = attendance.abscences;
+            this.add_attendance.tardy = attendance.tardy;
+        },
+        resetForm: function(attendance){
+            this.for_edit = 0;
+            this.add_attendance.month_id = attendance.month_id;
+            this.add_attendance.school_days = attendance.school_days;
+            this.add_attendance.abscences = attendance.abscences;
+            this.add_attendance.tardy = attendance.tardy;
         },
         deleteAttendance(id){
             Swal.fire({
