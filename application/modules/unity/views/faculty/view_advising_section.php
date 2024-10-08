@@ -99,8 +99,8 @@
                 <form @submit.prevent="submitAttendance()">
                   <div>
                     Student: 
-                    {{ student_selected.strLastname.toUpperCase() }}, {{ student_selected.strFirstname.toUpperCase() }}
-                    {{ student_selected.strMiddlename?student_selected.strMiddlename.toUpperCase():'' }}
+                    {{ selected_student.strLastname.toUpperCase() }}, {{ selected_student.strFirstname.toUpperCase() }}
+                    {{ selected_student.strMiddlename?selected_student.strMiddlename.toUpperCase():'' }}
                   </div>
                   <div>
                     Term: {{ active_sem.enumSem + " " + active_sem.term_label + " " + active_sem.strYearStart + " - " + active_sem.strYearEnd }}
