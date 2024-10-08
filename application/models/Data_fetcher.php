@@ -958,7 +958,6 @@ class Data_fetcher extends CI_Model {
     }
     
     
-    
     function fetch_classlists_all($limit=null,$sem_sel=null)
     {
                     $this->db
