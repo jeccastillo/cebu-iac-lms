@@ -406,6 +406,16 @@ class Department extends CI_Controller {
                 $ret[] = $classlist;
             }
 
+            $this->data['unassigned_sections'] = $this->data_fetcher->getSectionsNotAssigned($post['sem'],$this->data['active_sem']['term_student_type']);
+            
+            $this->data['faculty_sections'] = $this->db
+                                                    ->select('tb_mas_block_sections.*')
+                                                    ->from('tb_mas_block_sections')
+                                                    ->join('tb_mas_faculty_adviser','tb_mas_faculty_adviser.block_id = tb_mas_block_sections.intID')
+                                                    ->where(array('tb_mas_faculty_adviser.term_id'=>$post['sem'],'tb_mas_faculty_adviser.faculty_id'=>$id))
+                                                    ->get()
+                                                    ->result_array();                                                    
+
             $this->data['all_classlist'] = $ret;
             
             $this->load->view("common/header",$this->data);
@@ -499,6 +509,29 @@ class Department extends CI_Controller {
         echo json_encode($data);
     }
     
+    public function submit_loaded_sections(){
+        $post = $this->input->post();
+        $faculty = $post['facultyID'];
+        $ay = $post['ay'];
+
+        $this->db->where(array('faculty_id'=>$faculty))->delete('tb_mas_faculty_adviser');
+        foreach($post['sections'] as $cs)
+        {
+            $data = [
+                "block_id" => $cs,
+                "faculty_id"=>$faculty,
+                "term_id" => $ay
+            ];
+
+            
+            $this->db->insert('tb_mas_faculty_adviser',$data);
+        }
+
+        $data['message'] = "Success";
+        
+        echo json_encode($data);
+
+    }
     
     public function submit_loaded_classlist()
     {
