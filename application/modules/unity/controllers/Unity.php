@@ -2468,12 +2468,24 @@ class Unity extends CI_Controller {
         redirect(base_url()."unity/view_classlist_archive_admin");
             
     }
-    public function view_classlist()
+    public function view_classlist($sem = 0)
     {
         if($this->faculty_logged_in())
         {
-            $active_sem = $this->data_fetcher->get_active_sem();
+            if($sem == 0)
+                $active_sem = $this->data_fetcher->get_active_sem();
+            else
+                $active_sem = $this->data_fetcher->get_sem_by_id($sem);
+
             $this->data['classlist'] = $this->data_fetcher->fetch_classlists(null,false,$active_sem['intID']);
+            $this->data['advised'] = $this->db
+                                        ->select('tb_mas_block_sections.*')
+                                        ->from('tb_mas_block_sections')
+                                        ->join('tb_mas_faculty_adviser','tb_mas_faculty_adviser.block_id = tb_mas_block_sections.intID')
+                                        ->where(array('tb_mas_faculty_adviser.term_id'=>$active_sem['intID'],'tb_mas_faculty_adviser.faculty_id'=>$this->session->userdata("intID")))
+                                        ->get()
+                                        ->result_array();
+                                        
             $this->data['page'] = "view_classlist";
             $this->load->view("common/header",$this->data);
             $this->load->view("faculty/classlist",$this->data);
