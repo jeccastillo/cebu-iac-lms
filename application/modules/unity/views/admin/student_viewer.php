@@ -416,15 +416,14 @@
                     <hr />
                     <table class="table table-bordered table-striped">
                         <thead>
-                          <tr class="text-center" colspan="5">
+                          <tr class="text-center" colspan="4">
                             Attendance
                           </tr>
                           <tr>
                             <th>Month</th>
                             <th>School Days</th>
                             <th>No. of Days Abscent</th>
-                            <th>No. of Days Tardy</th>
-                            <th>Actions</th>
+                            <th>No. of Days Tardy</th>                            
                           </tr>
                         </thead>
                         <tbody>
@@ -432,22 +431,9 @@
                             <td>{{ at.month }}</td>
                             <td>{{ at.school_days }}</td>
                             <td>{{ at.abscences }}</td>
-                            <td>{{ at.tardy }}</td>
-                            <td><button class="btn btn-danger" @click="deleteAttendance(at.id)">Delete</button></td>
+                            <td>{{ at.tardy }}</td>                            
                           </tr>
-                        </tbody>
-                        <tfoot>
-                          <tr>
-                            <td colspan="5">
-                              <a v-if="user_level == 2 || user_level == 3"
-                                class="btn btn-primary"
-                                data-toggle="modal"
-                                data-target="#attendance-modal">
-                                  Add Attendance Record
-                              </a>
-                            </td>
-                          </tr>
-                        </tfoot>
+                        </tbody>                        
                     </table>
                     <hr />
                     <a target="_blank"
@@ -659,81 +645,7 @@
             </div>
         </div>
     </div>
-    <!-- modal end -->
-    <!-- modal start -->
-    <div class="modal fade"
-      id="attendance-modal"
-      tabindex="-1"
-      role="dialog">
-        <div class="modal-dialog"
-        role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                <button type="button"
-                    class="close"
-                    data-dismiss="modal"
-                    aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title"
-                    id="modalLabel">Add Attendance Record</h4>
-                </div>
-                <div class="modal-body">
-                <form @submit.prevent="submitAttendance()">
-                  <div>
-                    Student: 
-                    {{ student.strLastname.toUpperCase() }}, {{ student.strFirstname.toUpperCase() }}
-                    {{ student.strMiddlename?student.strMiddlename.toUpperCase():'' }}
-                  </div>
-                  <div>
-                    Term: {{ active_sem.enumSem + " " + active_sem.term_label + " " + active_sem.strYearStart + " - " + active_sem.strYearEnd }}
-                  </div>
-                  <hr />
-                  <div class="form-group">
-                    <label>Select Month</label>
-                    <select v-model="add_attendance.month_id"                  
-                      class="form-control">
-                      <option v-for="m in term_months"
-                        :value="m.id">
-                        {{ m.month }}
-                      </option>
-                    </select>
-                  </div> 
-                  <div class="form-group">
-                    <label>School Days</label>
-                    <input type="number" min="0" placeholder="Enter number" v-model="add_attendance.school_days"                  
-                      class="form-control" />                                          
-                  </div> 
-                  <div class="form-group">
-                    <label>Number of Days Abscent</label>
-                    <input type="number" min="0" placeholder="Enter number" v-model="add_attendance.abscences"                  
-                      class="form-control" />                                          
-                  </div> 
-                  <div class="form-group">
-                    <label>Number of Days Tardy</label>
-                    <input type="number" min="0" placeholder="Enter number" v-model="add_attendance.tardy"                  
-                      class="form-control" />                                          
-                  </div> 
-                  <div class="form-group">
-                    <div>
-                        <button type="submit"
-                        class="btn btn-default">Submit</button>
-                    </div>
-                  </div>
-                </form>
-                </div>
-                <div class="modal-footer"
-                style="margin-top:0">
-                               
-                 
-                <button type="button"
-                    class="btn btn-secondary"
-                    data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- modal end -->
+    <!-- modal end -->    
   </div>
 </aside>
 
@@ -1127,95 +1039,7 @@ new Vue({
         allowOutsideClick: () => !Swal.isLoading()
       });
 
-    },
-    deleteAttendance(id){
-      Swal.fire({
-        title: 'Delete Attendance?',
-        text: "Continue deleting attendance record?",
-        showCancelButton: true,
-        confirmButtonText: "Yes",
-        imageWidth: 100,
-        icon: "question",
-        cancelButtonText: "No, cancel!",
-        showCloseButton: true,
-        showLoaderOnConfirm: true,
-        preConfirm: (login) => {
-          var formdata = new FormData();
-          formdata.append("id", id);
-          return axios
-            .post('<?php echo base_url(); ?>unity/delete_attendance', formdata, {
-              headers: {
-                Authorization: `Bearer ${window.token}`
-              }
-            })
-            .then(data => {
-              console.log(data.data);
-              if (data.data.success) {
-                Swal.fire({
-                  title: "Success",
-                  text: data.data.message,
-                  icon: "success"
-                }).then(function() {
-                  location.reload();
-                });
-              } else {
-                Swal.fire(
-                  'Failed!',
-                  data.data.message,
-                  'error'
-                )
-              }
-            });
-        },
-        allowOutsideClick: () => !Swal.isLoading()
-      });
-    },
-    submitAttendance: function(){
-      Swal.fire({
-        title: 'Submit Attendance Record',
-        text: "Are you sure you want to proceed?",
-        showCancelButton: true,
-        confirmButtonText: "Yes",
-        imageWidth: 100,
-        icon: "question",
-        cancelButtonText: "No, cancel!",
-        showCloseButton: true,
-        showLoaderOnConfirm: true,
-        preConfirm: (login) => {
-          
-          var formdata = new FormData();
-          for (const [key, value] of Object.entries(this.add_attendance)) {
-          formdata.append(key, value);
-          }          
-                    
-          return axios.post(base_url + 'unity/add_attendance_record', formdata, {
-              headers: {
-                  Authorization: `Bearer ${window.token}`
-              },
-
-          })
-          .then(data => {
-              if(data.data.success)
-                  Swal.fire({
-                      title: "Success",
-                      text: data.data.message,
-                      icon: "success"
-                  }).then(function() {
-                      location.reload();
-                  });
-              else
-                  Swal.fire({
-                      title: "Error",
-                      text: data.data.message,
-                      icon: "error"
-                  })
-          })
-        },
-        allowOutsideClick: () => !Swal.isLoading()
-      }).then((result) => {
-
-      })
-    },
+    },    
     submitSubject: function() {
       if (add_subject.section) {
         var formdata = new FormData();
