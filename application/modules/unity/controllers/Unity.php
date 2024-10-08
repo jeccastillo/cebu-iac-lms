@@ -549,7 +549,7 @@ class Unity extends CI_Controller {
                 'block_section' => $student->preferedSection
             ];
 
-            $this->db->where(array('intID'=>$reg['intID']))->update('tb_mas_registration',$data);
+            $this->db->where(array('intRegistrationID'=>$reg['intRegistrationID']))->update('tb_mas_registration',$data);
         }
     }
     public function registration_viewer_data($id,$sem =  0){
