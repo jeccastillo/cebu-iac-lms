@@ -99,7 +99,11 @@ new Vue({
         students: [],
         loading_attendance: false,
         attendance_data: [],     
-        selected_student: undefined,   
+        selected_student: {
+            strFirstname: "",
+            strLastname: "",
+            strMiddlename: "",
+        },   
     },
 
     mounted() {
