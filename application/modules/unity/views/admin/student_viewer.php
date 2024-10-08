@@ -712,6 +712,7 @@ new Vue({
     img_dir: undefined,
     grad_status: 0,
     selected_ay: undefined,
+    term_months: [],
     base_url: '<?php echo base_url(); ?>',
     registration_status: 0,
     loader_spinner: true,
@@ -816,6 +817,7 @@ new Vue({
                     this.reg_status = data.data.reg_status;
                     this.selected_ay = data.data.selected_ay;
                     this.attendance = data.data.attendance;
+                    this.term_months = data.data.term_months;
                     this.curriculum_subjects = data.data.curriculum_subjects;
                     this.sections = data.data.sections;
                     this.tuition_payment_link =  data.data.tuition_payment_link;
