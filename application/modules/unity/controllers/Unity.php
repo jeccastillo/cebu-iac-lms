@@ -2518,6 +2518,7 @@ class Unity extends CI_Controller {
             $data['active_sem'] =  $this->data_fetcher->get_sem_by_id($sem);
 
         $data['section'] = $this->db->get_where('tb_mas_block_sections',array('intID'=>$id))->first_row();
+        $ret['term_months'] = $this->db->get_where('tb_mas_sy_months',array('term_id'=>$data['active_sem']['intID']))->result_array();
         $data['students'] = $this->db
                                  ->select('tb_mas_users.strFirstname, tb_mas_users.strLastname, tb_mas_users.strMiddlename,tb_mas_users.intID')
                                  ->from('tb_mas_registration')
