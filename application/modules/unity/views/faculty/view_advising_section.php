@@ -57,6 +57,7 @@
                         data-target="#add-attendance-modal">
                             Add Attendance Record
                     </a>
+                    <hr />
                     <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
