@@ -1120,7 +1120,65 @@ new Vue({
 
     },
     submitAttendance: function(){
+      //   console.log(this.loaDetails);
+      if (this.loaDetails.loa_remarks == '' || this.loaDetails.loa_date == '') {
+        Swal.fire({
+          title: 'Error',
+          text: "No Data",
+          confirmButtonText: "Yes",
+          imageWidth: 100,
+          icon: "error",
+          cancelButtonText: "No, cancel!",
+          showCloseButton: true,
+          showLoaderOnConfirm: true,
+        })
+        return
+      }
 
+      Swal.fire({
+        title: 'Submit Attendance Record',
+        text: "Are you sure you want to proceed?",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        imageWidth: 100,
+        icon: "question",
+        cancelButtonText: "No, cancel!",
+        showCloseButton: true,
+        showLoaderOnConfirm: true,
+        preConfirm: (login) => {
+          
+          var formdata = new FormData();
+          for (const [key, value] of Object.entries(this.add_attendance)) {
+          formdata.append(key, value);
+          }          
+                    
+          return axios.post(base_url + 'unity/add_attendance_record', formdata, {
+              headers: {
+                  Authorization: `Bearer ${window.token}`
+              },
+
+          })
+          .then(data => {
+              if(data.data.success)
+                  Swal.fire({
+                      title: "Success",
+                      text: data.data.message,
+                      icon: "success"
+                  }).then(function() {
+                      location.reload();
+                  });
+              else
+                  Swal.fire({
+                      title: "Error",
+                      text: data.data.message,
+                      icon: "error"
+                  })
+          })
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+      }).then((result) => {
+
+      })
     },
     submitSubject: function() {
       if (add_subject.section) {
