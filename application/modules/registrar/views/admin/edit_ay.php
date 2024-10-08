@@ -199,11 +199,11 @@
                         <th>Month</th>                        
                         <th>Actions</th>
                     </tr>                    
-                    <?php foreach($term_months as $item): ?>
+                    <?php foreach($term_months as $month): ?>
                     <tr>
-                        <td><?php echo $item['month']; ?></td>                        
+                        <td><?php echo $month['month']; ?></td>                        
                         <td>
-                            <button class="delete-month btn btn-danger" rel="<?php echo $item['id']; ?>">Delete</button>                            
+                            <button class="delete-month btn btn-danger" rel="<?php echo $month['id']; ?>">Delete</button>                            
                         </td>
                     </tr>
                     <?php endforeach; ?>
@@ -249,23 +249,23 @@
                         <th>End Extension</th>
                         <th>Actions</th>
                     </tr>
-                    <?php foreach($midterm_extensions as $item): ?>
+                    <?php foreach($midterm_extensions as $ext): ?>
                     <tr>
-                        <td><?php echo $item['type']; ?></td>
-                        <td><?php echo date("M j, Y",strtotime($item['date'])); ?></td>
+                        <td><?php echo $ext['type']; ?></td>
+                        <td><?php echo date("M j, Y",strtotime($ext['date'])); ?></td>
                         <td>
-                            <button class="delete-extension btn btn-danger" rel="<?php echo $item['id']; ?>">Delete</button>
-                            <a class="btn btn-success" href="<?php echo base_url().'registrar/view_extension/'.$item['id']; ?>">View</a>
+                            <button class="delete-extension btn btn-danger" rel="<?php echo $ext['id']; ?>">Delete</button>
+                            <a class="btn btn-success" href="<?php echo base_url().'registrar/view_extension/'.$ext['id']; ?>">View</a>
                         </td>
                     </tr>
                     <?php endforeach; ?>
-                    <?php foreach($final_extensions as $item): ?>
+                    <?php foreach($final_extensions as $ext): ?>
                     <tr>
-                        <td><?php echo $item['type']; ?></td>
-                        <td><?php echo date("M j, Y",strtotime($item['date'])); ?></td>
+                        <td><?php echo $ext['type']; ?></td>
+                        <td><?php echo date("M j, Y",strtotime($ext['date'])); ?></td>
                         <td>
-                            <button class="delete-extension btn btn-danger" rel="<?php echo $item['id']; ?>">Delete</button>
-                            <a class="btn btn-success" href="<?php echo base_url().'registrar/view_extension/'.$item['id']; ?>">View</a>
+                            <button class="delete-extension btn btn-danger" rel="<?php echo $ext['id']; ?>">Delete</button>
+                            <a class="btn btn-success" href="<?php echo base_url().'registrar/view_extension/'.$ext['id']; ?>">View</a>
                         </td>
                     </tr>
                     <?php endforeach; ?>
