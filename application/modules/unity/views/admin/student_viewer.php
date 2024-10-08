@@ -223,11 +223,9 @@
                       <div class="col-lg-3">
                         <p><strong>Student Number:
                           </strong>{{ student.strStudentNumber.replace(/-/g, '') }}</p>
-                        <!-- <p><strong>Learner Reference Number(LRN): </strong>{{ student.strLRN'] }}</p> -->
-                        <p v-if="registration"><strong>Block Section:
-                          </strong>{{ registration.block_name ? registration.block_name : 'Not yet selected' }}</p>
+                        <!-- <p><strong>Learner Reference Number(LRN): </strong>{{ student.strLRN'] }}</p> -->                        
                         <div v-if="registration">                          
-                          <label>Change Block Section</label>
+                          <label>Block Section</label>
                           <select @change="updateBlock($event)" id="block_section" name="block_section" class="form-control" v-model="registration.block_section">                        
                               <option v-for="block in block_sections" :value="block.intID">{{ block.name }}</option>                                  
                           </select>
