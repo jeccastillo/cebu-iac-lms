@@ -2502,6 +2502,17 @@ class Unity extends CI_Controller {
             redirect(base_url()."unity");   
     
     }
+
+    public function view_section($id){
+        $this->data['id'] = $id;
+        $this->load->view("common/header",$this->data);
+        $this->load->view("faculty/view_advising_section",$this->data);
+        $this->load->view("common/footer",$this->data); 
+    }
+
+    public function advising_section_data(){
+
+    }
     
     
     
