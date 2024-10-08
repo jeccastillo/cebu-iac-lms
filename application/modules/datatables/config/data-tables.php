@@ -45,7 +45,7 @@ $config['tb_mas_curriculum_index'] = "intID";
 $config['tb_mas_applications_columns'] = array("intApplicationID","strAppNumber","strLastname","strFirstname","strMiddlename","enumCourse1","strAppDate","strConfirmationCode");
 $config['tb_mas_applications_index'] = "intApplicationID";
 
-$config['tb_mas_block_sections_columns'] = array("intID","name","strProgramCode");
+$config['tb_mas_block_sections_columns'] = array("intID","name","strProgramCode","type");
 $config['tb_mas_block_sections_index'] = "intID";
 
 $config['tb_mas_exam_columns'] = array("intID","strName","type","programType");

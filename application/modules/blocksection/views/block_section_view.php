@@ -25,6 +25,7 @@
                         <th>id</th>
                         <th>Name</th>
                         <th>Program</th>                        
+                        <th>Type</th>
                         <th>Select Actions</th>
                     </tr>
                     </thead>
