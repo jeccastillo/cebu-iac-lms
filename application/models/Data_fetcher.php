@@ -288,9 +288,9 @@ class Data_fetcher extends CI_Model {
         return $subjects;
     }
 
-    function getSectionsNotAssigned($id)
+    function getSectionsNotAssigned($id,$type)
     {
-        $bucket = "SELECT * FROM tb_mas_block_sections WHERE intID NOT IN (SELECT block_id from tb_mas_faculty_adviser WHERE term_id = ".$id.") ORDER BY name ASC"; 
+        $bucket = "SELECT * FROM tb_mas_block_sections WHERE intID NOT IN (SELECT block_id from tb_mas_faculty_adviser WHERE term_id = ".$id.") AND type = '".$type."' ORDER BY name ASC"; 
         
         $sections = $this->db
              ->query($bucket)
