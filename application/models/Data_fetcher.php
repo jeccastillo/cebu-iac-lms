@@ -2281,10 +2281,11 @@ class Data_fetcher extends CI_Model {
     function getRegistrationInfo($id,$sem)
     {
         return  $this->db
-                    ->select('tb_mas_registration.*, tb_mas_scholarships.name as scholarshipName')
+                    ->select('tb_mas_registration.*, tb_mas_scholarships.name as scholarshipName, tb_mas_block_sections.name as block_name')
                     ->from('tb_mas_registration')
                     ->where(array('intStudentID'=>$id,'intAYID'=>$sem))
                     ->join('tb_mas_scholarships', 'tb_mas_scholarships.intID = tb_mas_registration.enumScholarship', 'left')
+                    ->join('tb_mas_block_sections', 'tb_mas_block_sections.intID = tb_mas_registration.block_section', 'left')
                     ->get()
                     ->first_row('array');
     }
