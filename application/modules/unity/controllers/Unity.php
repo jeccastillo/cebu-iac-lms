@@ -1680,7 +1680,7 @@ class Unity extends CI_Controller {
                                       ->from('tb_mas_student_attendance')
                                       ->join('tb_mas_sy_months', 'tb_mas_student_attendance.month_id = tb_mas_sy_months.id')
                                       ->where(array('term_id'=>$ret['active_sem']['intID'],'student_id'=>$id))
-                                      ->order_by("STR_TO_DATE(CONCAT('0001 ',month,' 01'),'%Y %M %d')")
+                                      //->order_by("STR_TO_DATE(CONCAT('0001 ',month,' 01'),'%Y %M %d')")
                                       ->get()
                                       ->result_array();
                                       
@@ -2557,7 +2557,7 @@ class Unity extends CI_Controller {
                                     ->from('tb_mas_student_attendance')
                                     ->join('tb_mas_sy_months', 'tb_mas_student_attendance.month_id = tb_mas_sy_months.id')
                                     ->where(array('term_id'=>$sem,'student_id'=>$id))
-                                    ->order_by("STR_TO_DATE(CONCAT('0001 ',month,' 01'),'%Y %M %d')")
+                                    //->order_by("STR_TO_DATE(CONCAT('0001 ',month,' 01'),'%Y %M %d')")
                                     ->get()
                                     ->result_array();
 
