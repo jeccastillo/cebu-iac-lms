@@ -1575,6 +1575,25 @@ class Unity extends CI_Controller {
             $ret['notif_message'] = "Congratulations, you have been registered for ".$ret['active_sem']['enumSem']." ".$ret['active_sem']['term_label']." S.Y. ".$ret['active_sem']['strYearStart']."-".$ret['active_sem']['strYearEnd'];
             $sem_id = $ret['active_sem']['intID'];
 
+            switch($ret['student']['level']){
+                case 'shs':
+                    $stype = 'shs';
+                break;
+                case 'drive':
+                    $stype = 'shs';
+                break;
+                case 'college':
+                    $stype = 'college';
+                break;
+                case 'other':
+                    $stype = 'college';
+                break;
+                default: 
+                    $stype = 'college';
+            }
+            
+            $ret['block_sections'] = $this->db->get_where('tb_mas_block_sections',array('type'=>$stype))->result_array();
+
             $ret['selected_ay'] = $ret['active_sem']['intID'];
 
             $records = $this->data_fetcher->getClassListStudentsSt($id,$ret['selected_ay']);        
