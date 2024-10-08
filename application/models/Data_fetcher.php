@@ -287,6 +287,18 @@ class Data_fetcher extends CI_Model {
         //echo $this->db->last_query();
         return $subjects;
     }
+
+    function getSectionsNotAssigned($id,$type)
+    {
+        $bucket = "SELECT * FROM tb_mas_block_sections WHERE intID NOT IN (SELECT block_id from tb_mas_faculty_adviser WHERE term_id = ".$id.") AND type = '".$type."' ORDER BY name ASC"; 
+        
+        $sections = $this->db
+             ->query($bucket)
+             ->result_array();
+        
+        //echo $this->db->last_query();
+        return $sections;
+    }
     
     function getRoomsNotSelected($id)
     {
