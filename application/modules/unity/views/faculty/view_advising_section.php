@@ -51,6 +51,12 @@
                 </div>
 
                 <div v-if="!loading_attendance" class="modal-body">
+                    <a class="btn btn-primary"
+                        @click="resetForm"
+                        data-toggle="modal"
+                        data-target="#add-attendance-modal">
+                            Add Attendance Record
+                    </a>
                     <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
@@ -58,7 +64,8 @@
                                 <th>Days</th>
                                 <th>Abscences</th>
                                 <th>Tardies</th>
-                            </tr>
+                                <th>Actions</th>
+                            </tr>                            
                         </thead>
                         <tbody>
                             <tr v-for="ad in attendance_data">
@@ -66,12 +73,91 @@
                                 <td>{{ ad.school_days }}</td>
                                 <td>{{ ad.abscences }}</td>
                                 <td>{{ ad.tardy }}</td>
+                                <td>
+                                    <button class="btn btn-danger" @click="deleteAttendance(ad.id)">Delete</button>
+                                    <button class="btn btn-primary" data-toggle="modal"
+                                    data-target="#add-attendance-modal" @click="setForEdit(ad)">Edit</button>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <div v-else class="modal-body">
                     <h3>Loading Data</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- modal end -->
+     <!-- modal start -->
+    <div class="modal fade"
+      id="add-attendance-modal"
+      tabindex="-1"
+      role="dialog">
+        <div class="modal-dialog"
+        role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <button type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title"
+                    id="modalLabel">Add Attendance Record</h4>
+                </div>
+                <div class="modal-body">
+                <form @submit.prevent="submitAttendance(for_update)">
+                  <div>
+                    Student: 
+                    {{ selected_student.strLastname.toUpperCase() }}, {{ selected_student.strFirstname.toUpperCase() }}
+                    {{ selected_student.strMiddlename?selected_student.strMiddlename.toUpperCase():'' }}
+                  </div>
+                  <div>
+                    Term: {{ active_sem.enumSem + " " + active_sem.term_label + " " + active_sem.strYearStart + " - " + active_sem.strYearEnd }}
+                  </div>
+                  <hr />
+                  <div class="form-group">
+                    <label>Select Month</label>
+                    <select v-model="add_attendance.month_id"                  
+                      class="form-control">
+                      <option v-for="m in term_months"
+                        :value="m.id">
+                        {{ m.month }}
+                      </option>
+                    </select>
+                  </div> 
+                  <div class="form-group">
+                    <label>School Days</label>
+                    <input type="number" min="0" placeholder="Enter number" v-model="add_attendance.school_days"                  
+                      class="form-control" />                                          
+                  </div> 
+                  <div class="form-group">
+                    <label>Number of Days Abscent</label>
+                    <input type="number" min="0" placeholder="Enter number" v-model="add_attendance.abscences"                  
+                      class="form-control" />                                          
+                  </div> 
+                  <div class="form-group">
+                    <label>Number of Days Tardy</label>
+                    <input type="number" min="0" placeholder="Enter number" v-model="add_attendance.tardy"                  
+                      class="form-control" />                                          
+                  </div> 
+                  <div class="form-group">
+                    <div>
+                        <button type="submit"
+                        class="btn btn-default">Submit</button>
+                    </div>
+                  </div>
+                </form>
+                </div>
+                <div class="modal-footer"
+                style="margin-top:0">
+                               
+                 
+                <button type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -96,10 +182,23 @@ new Vue({
         sem: '<?php echo $sem; ?>',       
         section: undefined,
         active_sem: undefined,
+        term_months: [],
         students: [],
         loading_attendance: false,
         attendance_data: [],     
-        selected_student: undefined,   
+        selected_student: {
+            strFirstname: "",
+            strLastname: "",
+            strMiddlename: "",
+        },   
+        add_attendance: {            
+            student_id: undefined,
+            month_id: undefined,
+            school_days: undefined,
+            abscences: undefined,
+            tardy: undefined,
+        },
+        for_update: 0,
     },
 
     mounted() {
@@ -112,6 +211,7 @@ new Vue({
                     this.section = data.data.section;
                     this.students = data.data.students;
                     this.active_sem = data.data.active_sem;
+                    this.term_months = data.data.term_months;
                 })
                 .catch((error) => {
                     console.log(error);
@@ -128,11 +228,116 @@ new Vue({
                 this.attendance_data = data.data.attendance;
                 this.loading = false;
                 this.selected_student = student;
+                this.add_attendance.student_id = student.intID;
             }
             )
             .catch((error) => {
             console.log(error);
             })
+        },
+        submitAttendance: function(update = 0){
+            Swal.fire({
+                title: 'Submit Attendance Record',
+                text: "Are you sure you want to proceed?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                
+                var formdata = new FormData();
+                for (const [key, value] of Object.entries(this.add_attendance)) {
+                formdata.append(key, value);
+                }          
+                if(update != 0)
+                    formdata.append('id', update);
+                            
+                return axios.post(base_url + 'unity/add_attendance_record', formdata, {
+                    headers: {
+                        Authorization: `Bearer ${window.token}`
+                    },
+
+                })
+                .then(data => {
+                    if(data.data.success)
+                        Swal.fire({
+                            title: "Success",
+                            text: data.data.message,
+                            icon: "success"
+                        }).then(function() {
+                            location.reload();
+                        });
+                    else
+                        Swal.fire({
+                            title: "Error",
+                            text: data.data.message,
+                            icon: "error"
+                        })
+                })
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+
+            })
+        },
+        setForEdit: function(attendance){
+            this.for_update = attendance.id;
+            this.add_attendance.month_id = attendance.month_id;
+            this.add_attendance.school_days = attendance.school_days;
+            this.add_attendance.abscences = attendance.abscences;
+            this.add_attendance.tardy = attendance.tardy;
+        },
+        resetForm: function(attendance){
+            this.for_update = 0;
+            this.add_attendance.month_id = attendance.month_id;
+            this.add_attendance.school_days = attendance.school_days;
+            this.add_attendance.abscences = attendance.abscences;
+            this.add_attendance.tardy = attendance.tardy;
+        },
+        deleteAttendance(id){
+            Swal.fire({
+                title: 'Delete Attendance?',
+                text: "Continue deleting attendance record?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                var formdata = new FormData();
+                formdata.append("id", id);
+                return axios
+                    .post('<?php echo base_url(); ?>unity/delete_attendance', formdata, {
+                    headers: {
+                        Authorization: `Bearer ${window.token}`
+                    }
+                    })
+                    .then(data => {
+                    console.log(data.data);
+                    if (data.data.success) {
+                        Swal.fire({
+                        title: "Success",
+                        text: data.data.message,
+                        icon: "success"
+                        }).then(function() {
+                        location.reload();
+                        });
+                    } else {
+                        Swal.fire(
+                        'Failed!',
+                        data.data.message,
+                        'error'
+                        )
+                    }
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
         },
     }
 
