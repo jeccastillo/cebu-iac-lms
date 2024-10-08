@@ -60,7 +60,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="ad as attendance_data">
+                        <tr v-for="ad in attendance_data">
                             <td>{{ ad.month }}</td>
                             <td>{{ ad.school_days }}</td>
                             <td>{{ ad.abscences }}</td>
