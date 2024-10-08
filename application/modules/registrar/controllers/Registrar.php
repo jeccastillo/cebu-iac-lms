@@ -221,6 +221,16 @@ class Registrar extends CI_Controller {
         redirect(base_url()."registrar/edit_ay/".$post['id']);  
     }
 
+    public function submit_month(){
+        $post = $this->input->post();
+        $data = array(
+                "month" => $post['month'],                
+                "term_id" => $post['id']
+        );
+        $this->data_poster->post_data('tb_mas_sy_months',$data);
+        redirect(base_url()."registrar/edit_ay/".$post['id']);  
+    }
+
     public function delete_extension(){
         $post = $this->input->post();
         $this->db->where('id',$post['id'])
@@ -228,6 +238,17 @@ class Registrar extends CI_Controller {
 
         $this->db->where('grading_extension_id',$post['id'])
                  ->delete('tb_mas_sy_grading_extension_faculty');
+
+        $data['message'] = "Deleted";
+        $data['success'] = true;
+
+        echo json_encode($data);
+    }
+
+    public function delete_month(){
+        $post = $this->input->post();
+        $this->db->where('id',$post['id'])
+                 ->delete('tb_mas_sy_months');
 
         $data['message'] = "Deleted";
         $data['success'] = true;
@@ -406,6 +427,11 @@ class Registrar extends CI_Controller {
         {
           
             $this->data['item'] = $this->data_fetcher->getAy($id);
+            
+            $this->data['term_months'] = $this->db->where(array('term_id'=>$id))                                                 
+                                                 ->get('tb_mas_sy_months')
+                                                 ->result_array();
+
             $this->data['midterm_extensions'] = $this->db->where(array('syid'=>$id,'type'=>'midterm'))
                                                  ->order_by('date','DESC')
                                                  ->get('tb_mas_sy_grading_extension')
