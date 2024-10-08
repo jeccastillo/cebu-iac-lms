@@ -1929,6 +1929,18 @@ class Unity extends CI_Controller {
                 $data['success'] = false;
                 $data['message'] = "Oops something went wrong.";
             }
+        elseif($post['id']){
+            if($this->db->where('id',$post['id'])->update('tb_mas_student_attendance',$post)){
+                $data['success'] = true;
+                $data['message'] = "Successfully updated Attendance";
+                //Make more elaborate
+                $this->data_poster->log_action('Attendance','Added a new Attendance Record: '.$this->db->insert_id(),'yellow');
+            }
+            else{
+                $data['success'] = false;
+                $data['message'] = "Oops something went wrong.";
+            }
+        }
         else{
             $data['success'] = false;
             $data['message'] = "Record already exists.";

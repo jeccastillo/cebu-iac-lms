@@ -186,7 +186,7 @@ new Vue({
             strLastname: "",
             strMiddlename: "",
         },   
-        add_attendance: {
+        add_attendance: {            
             student_id: undefined,
             month_id: undefined,
             school_days: undefined,
@@ -229,7 +229,7 @@ new Vue({
             console.log(error);
             })
         },
-        submitAttendance: function(){
+        submitAttendance: function(update = 0){
             Swal.fire({
                 title: 'Submit Attendance Record',
                 text: "Are you sure you want to proceed?",
@@ -246,6 +246,8 @@ new Vue({
                 for (const [key, value] of Object.entries(this.add_attendance)) {
                 formdata.append(key, value);
                 }          
+                if(update != 0)
+                    formdata.append('id', update);
                             
                 return axios.post(base_url + 'unity/add_attendance_record', formdata, {
                     headers: {
