@@ -1,7 +1,7 @@
 <script type="text/javascript">
     $(document).ready(function(){
         $("#select-sem-classlist").on('change',function(e){
-            document.location = "<?php echo base_url(); ?>unity_view_classlist/" + this.value;
+            document.location = "<?php echo base_url(); ?>unity/view_classlist/" + this.value;
         });
         $(".trash-classlist").click(function(e){
                     conf = confirm("Are you sure you want to delete?");
