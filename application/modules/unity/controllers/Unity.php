@@ -546,7 +546,7 @@ class Unity extends CI_Controller {
             $student = $this->db->get_where('tb_mas_users',array('intID'=>$reg['intStudentID']))->first_row();
             
             $data = [
-                'block_section' => $student['preferedSection']
+                'block_section' => $student->preferedSection
             ];
 
             $this->db->where(array('intID'=>$reg['intID']))->update('tb_mas_registration',$data);
