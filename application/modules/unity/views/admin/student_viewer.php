@@ -411,7 +411,7 @@
                     <hr />
                     <table class="table table-bordered table-striped">
                         <thead>
-                          <tr class="text-center" colspan="4">
+                          <tr class="text-center" colspan="5">
                             Attendance
                           </tr>
                           <tr>
@@ -419,6 +419,7 @@
                             <th>School Days</th>
                             <th>No. of Days Abscent</th>
                             <th>No. of Days Tardy</th>
+                            <th>Actions</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -427,11 +428,12 @@
                             <td>{{ at.school_days }}</td>
                             <td>{{ at.abscences }}</td>
                             <td>{{ at.tardy }}</td>
+                            <td><button class="btn btn-danger" @click="deleteAttendance(at.id)">Delete</button></td>
                           </tr>
                         </tbody>
                         <tfoot>
                           <tr>
-                            <td colspan="4">
+                            <td colspan="5">
                               <a v-if="user_level == 2 || user_level == 3"
                                 class="btn btn-primary"
                                 data-toggle="modal"
@@ -1119,8 +1121,93 @@ new Vue({
       });
 
     },
+    deleteAttendance(id){
+      Swal.fire({
+        title: 'Delete Attendance?',
+        text: "Continue deleting attendance record?",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        imageWidth: 100,
+        icon: "question",
+        cancelButtonText: "No, cancel!",
+        showCloseButton: true,
+        showLoaderOnConfirm: true,
+        preConfirm: (login) => {
+          var formdata = new FormData();
+          formdata.append("id", id);
+          return axios
+            .post('<?php echo base_url(); ?>unity/delete_attendance', formdata, {
+              headers: {
+                Authorization: `Bearer ${window.token}`
+              }
+            })
+            .then(data => {
+              console.log(data.data);
+              if (data.data.success) {
+                Swal.fire({
+                  title: "Success",
+                  text: data.data.message,
+                  icon: "success"
+                }).then(function() {
+                  location.reload();
+                });
+              } else {
+                Swal.fire(
+                  'Failed!',
+                  data.data.message,
+                  'error'
+                )
+              }
+            });
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+      });
+    },
     submitAttendance: function(){
+      Swal.fire({
+        title: 'Submit Attendance Record',
+        text: "Are you sure you want to proceed?",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        imageWidth: 100,
+        icon: "question",
+        cancelButtonText: "No, cancel!",
+        showCloseButton: true,
+        showLoaderOnConfirm: true,
+        preConfirm: (login) => {
+          
+          var formdata = new FormData();
+          for (const [key, value] of Object.entries(this.add_attendance)) {
+          formdata.append(key, value);
+          }          
+                    
+          return axios.post(base_url + 'unity/add_attendance_record', formdata, {
+              headers: {
+                  Authorization: `Bearer ${window.token}`
+              },
 
+          })
+          .then(data => {
+              if(data.data.success)
+                  Swal.fire({
+                      title: "Success",
+                      text: data.data.message,
+                      icon: "success"
+                  }).then(function() {
+                      location.reload();
+                  });
+              else
+                  Swal.fire({
+                      title: "Error",
+                      text: data.data.message,
+                      icon: "error"
+                  })
+          })
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+      }).then((result) => {
+
+      })
     },
     submitSubject: function() {
       if (add_subject.section) {
