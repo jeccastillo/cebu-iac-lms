@@ -75,7 +75,8 @@
                                 <td>{{ ad.tardy }}</td>
                                 <td>
                                     <button class="btn btn-danger" @click="deleteAttendance(ad.id)">Delete</button>
-                                    <button class="btn btn-primary" @click="setForEdit(ad)">Edit</button>
+                                    <button class="btn btn-primary" data-toggle="modal"
+                                    data-target="#add-attendance-modal" @click="setForEdit(ad)">Edit</button>
                                 </td>
                             </tr>
                         </tbody>
