@@ -105,7 +105,7 @@
                 <div class="icon">
                     <i class="ion ion-android-book"></i>
                 </div>
-                <a href="<?php echo base_url(); ?>unity/view_section/<?php echo $class['intID']; ?>" class="small-box-footer">
+                <a href="<?php echo base_url(); ?>unity/view_section/<?php echo $class['intID']."/".$selected_ay; ?>" class="small-box-footer">
                     View <i class="fa fa-arrow-circle-right"></i>
                 </a>                
             </div>
