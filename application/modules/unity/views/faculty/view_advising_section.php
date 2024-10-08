@@ -26,13 +26,30 @@
                             <td>{{ student.strLastname }}</td>
                             <td>{{ student.strFirstname }}</td>
                             <td>{{ student.strMiddlename }}</td>
-                            <td></td>
+                            <td>
+                                <a @click="loadAttendance(student.intID)" class="btn btn-primary" data-toggle="modal" data-target="#attendance-modal">
+                                    View Attendance
+                                </a>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+    <!-- modal start -->
+    <div class="modal fade"
+      id="attendance-modal"
+      tabindex="-1"
+      role="dialog">
+        <div class="modal-dialog"
+        role="document">
+            <div class="modal-content">
+               <h3>Attendance</h3>
+            </div>
+        </div>
+    </div>
+    <!-- modal end -->
     
 </aside>
 
@@ -72,6 +89,9 @@ new Vue({
     },
 
     methods: {      
+        loadAttendance: function(id){
+
+        },
     }
 
 })
