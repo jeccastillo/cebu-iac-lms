@@ -1917,15 +1917,21 @@ class Unity extends CI_Controller {
     public function add_attendance_record(){
         $post = $this->input->post();
 
-        if($this->db->insert('tb_mas_student_attendance',$post)){
-            $data['success'] = true;
-            $data['message'] = "Successfully added Attendance";
-            //Make more elaborate
-            $this->data_poster->log_action('Attendance','Added a new Attendance Record: '.$this->db->insert_id(),'yellow');
-        }
+        $exists = $this->db->get_where('tb_mas_student_attendance',array('month_id'=>$post['month_id'],'student_id'=>$post['student_id']))->first_row();
+        if(!$exists)
+            if($this->db->insert('tb_mas_student_attendance',$post)){
+                $data['success'] = true;
+                $data['message'] = "Successfully added Attendance";
+                //Make more elaborate
+                $this->data_poster->log_action('Attendance','Added a new Attendance Record: '.$this->db->insert_id(),'yellow');
+            }
+            else{
+                $data['success'] = false;
+                $data['message'] = "Oops something went wrong.";
+            }
         else{
             $data['success'] = false;
-            $data['message'] = "Oops something went wrong.";
+            $data['message'] = "Record already exists.";
         }
 
         echo json_encode($data);
