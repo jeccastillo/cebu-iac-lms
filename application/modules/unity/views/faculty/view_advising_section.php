@@ -7,7 +7,11 @@
         </h1>
     </section>        
     <div class="content">        
-        
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3>{{ section.name }}</h3>
+            </div>
+        </div>
     </div>
     
 </aside>
@@ -26,6 +30,8 @@ new Vue({
     data: {
         id: '<?php echo $id; ?>',            
         sem: '<?php echo $sem; ?>',       
+        section: undefined,
+        students: [],
     },
 
     mounted() {
@@ -35,7 +41,8 @@ new Vue({
             //this.loader_spinner = true;
             axios.get(base_url + 'unity/advising_section_data/' + this.id + "/" + this.sem)
                 .then((data) => {                                          
-                    
+                    this.section = data.data.section;
+                    this.students = data.data.students;
                 })
                 .catch((error) => {
                     console.log(error);
