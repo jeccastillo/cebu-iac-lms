@@ -2533,7 +2533,7 @@ class Unity extends CI_Controller {
     }
 
     public function attendance_data($id,$sem){
-        $ret['term_months'] = $this->db->get_where('tb_mas_sy_months',array('term_id'=>$ret['active_sem']['intID']))->result_array();
+        $ret['term_months'] = $this->db->get_where('tb_mas_sy_months',array('term_id'=>$sem))->result_array();
         $ret['attendance'] = $this->db->select('tb_mas_student_attendance.*,month')
                                     ->from('tb_mas_student_attendance')
                                     ->join('tb_mas_sy_months', 'tb_mas_student_attendance.month_id = tb_mas_sy_months.id')
