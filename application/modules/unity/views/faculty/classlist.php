@@ -17,8 +17,7 @@
         <div class="overlay" style="display:none;"></div>
         <div class="loading-img" style="display:none;"></div>
         <div class="box-header">
-                <h3 class="box-title" style="padding-left:27px;">My Classlists</h3>
-                
+                <h3 class="box-title" style="padding-left:27px;">My Classlists</h3>                
         </div>
         
         <div class="box-body">    
@@ -78,8 +77,7 @@
                 </div>
                 <a href="<?php echo base_url(); ?>unity/classlist_viewer/<?php echo $class['intID']; ?>" class="small-box-footer">
                     View <i class="fa fa-arrow-circle-right"></i>
-                </a>
-                
+                </a>                
             </div>
         </div>
             
