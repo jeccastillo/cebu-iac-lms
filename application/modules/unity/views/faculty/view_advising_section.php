@@ -170,6 +170,7 @@ new Vue({
         sem: '<?php echo $sem; ?>',       
         section: undefined,
         active_sem: undefined,
+        months: [],
         students: [],
         loading_attendance: false,
         attendance_data: [],     
@@ -197,6 +198,7 @@ new Vue({
                     this.section = data.data.section;
                     this.students = data.data.students;
                     this.active_sem = data.data.active_sem;
+                    this.months = data.data.months;
                 })
                 .catch((error) => {
                     console.log(error);
