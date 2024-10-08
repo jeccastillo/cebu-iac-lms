@@ -409,6 +409,28 @@
                       </tbody>
                     </table>
                     <hr />
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                          <tr class="text-center" colspan="4">
+                            Attendance
+                          </tr>
+                          <tr>
+                            <th>Month</th>
+                            <th>School Days</th>
+                            <th>No. of Abscences</th>
+                            <th>No. of Tardys</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr v-for="at in attendance">
+                            <td>{{ at.month }}</td>
+                            <td>{{ at.school_days }}</td>
+                            <td>{{ at.abscences }}</td>
+                            <td>{{ at.tardy }}</td>
+                          </tr>
+                        </tbody>
+                    </table>
+                    <hr />
                     <a target="_blank"
                       class="btn btn-default  btn-flat"
                       :href="base_url + 'pdf/student_viewer_rog_print/' + student.intID + '/' + active_sem.intID">
