@@ -3533,6 +3533,20 @@ class Unity extends CI_Controller {
             
         }
     }
+
+    public function delete_attendance(){
+        $post = $this->input->post();
+        
+        $this->db->where('id',$post['id'])
+                ->delete('tb_mas_student_attendance');
+
+
+        $data['message'] = "Deleted";
+        $data['success'] = true;
+        
+
+        echo json_encode($data);
+    }
     
     public function delete_subject_curriculum()
     {
