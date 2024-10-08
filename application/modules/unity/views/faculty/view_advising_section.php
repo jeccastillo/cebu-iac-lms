@@ -49,8 +49,11 @@
                     <h3>Attendance</h3>
                 </div>
             </div>
-            <div class="modal-body">
-                
+            <div v-if="!loading_attendance" class="modal-body">
+
+            </div>
+            <div v-else class="modal-body">
+                <h3>Loading Data</h3>
             </div>
         </div>
     </div>
@@ -74,6 +77,7 @@ new Vue({
         sem: '<?php echo $sem; ?>',       
         section: undefined,
         students: [],
+        loading_attendance: false,
     },
 
     mounted() {
