@@ -187,7 +187,13 @@
                         <option value="November">November</option>
                         <option value="December">December</option>                            
                     </select>
-                </div>                              
+                </div>  
+                <div class="form-group col-md-4">                    
+                    <select required name="grading_period" class="form-control">
+                        <option value="0">Midterm</option>
+                        <option value="1">Finals</option>                                                   
+                    </select>
+                </div>                            
                 <div class="form-group col-md-4">
                     <label for="submit">&nbsp;</label>
                     <input type="submit" value="add" class="btn btn-default  btn-flat">
@@ -197,11 +203,13 @@
                 <table class="table table-bordered table-striped">
                     <tr>
                         <th>Month</th>                        
+                        <th>Period</th>
                         <th>Actions</th>
                     </tr>                    
                     <?php foreach($term_months as $month): ?>
                     <tr>
                         <td><?php echo $month['month']; ?></td>                        
+                        <td><?php echo $month['grading_period'] == 0 ?'midterm':'finals'; ?></td>
                         <td>
                             <button class="delete-month btn btn-danger" rel="<?php echo $month['id']; ?>">Delete</button>                            
                         </td>
