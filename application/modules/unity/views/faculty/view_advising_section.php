@@ -2,13 +2,62 @@
     <section class="content-header">
         <h1>
             <small>
-                <a class="btn btn-app" :href="base_url + 'unity/view_classlist'"><i class="ion ion-arrow-left-a"></i>All Classes</a>                                     
+                <a class="btn btn-app" :href="base_url + 'unity/view_classlist/' + sem"><i class="ion ion-arrow-left-a"></i>All Classes</a>                                     
             </small>
         </h1>
     </section>        
     <div class="content">        
-        
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3>{{ section.name }}</h3>
+            </div>
+            <div class="box-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Last Name</th>
+                            <th>First Name</th>
+                            <th>Middle Name</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="student in students">
+                            <td>{{ student.strLastname }}</td>
+                            <td>{{ student.strFirstname }}</td>
+                            <td>{{ student.strMiddlename }}</td>
+                            <td>
+                                <a @click="loadAttendance(student.intID)" class="btn btn-primary" data-toggle="modal" data-target="#attendance-modal">
+                                    View Attendance
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
+    <!-- modal start -->
+    <div class="modal fade"
+      id="attendance-modal"
+      tabindex="-1"
+      role="dialog">
+        <div class="modal-dialog"
+        role="document">
+            <div class="modal-content">            
+                <div class="modal-header">
+                    <h3>Attendance</h3>
+                </div>
+            </div>
+            <div v-if="!loading_attendance" class="modal-body">
+
+            </div>
+            <div v-else class="modal-body">
+                <h3>Loading Data</h3>
+            </div>
+        </div>
+    </div>
+    <!-- modal end -->
     
 </aside>
 
@@ -26,6 +75,11 @@ new Vue({
     data: {
         id: '<?php echo $id; ?>',            
         sem: '<?php echo $sem; ?>',       
+        section: undefined,
+        active_sem: undefined,
+        students: [],
+        loading_attendance: false,
+        attendance_data: undefined,
     },
 
     mounted() {
@@ -33,9 +87,11 @@ new Vue({
         let url_string = window.location.href;        
         if(this.id != 0){            
             //this.loader_spinner = true;
-            axios.get(this.base_url + 'unity/advising_section_data/' + this.id + "/" + this.sem)
+            axios.get(base_url + 'unity/advising_section_data/' + this.id + "/" + this.sem)
                 .then((data) => {                                          
-                    
+                    this.section = data.data.section;
+                    this.students = data.data.students;
+                    this.active_sem = data.data.active_sem;
                 })
                 .catch((error) => {
                     console.log(error);
@@ -45,6 +101,17 @@ new Vue({
     },
 
     methods: {      
+        loadAttendance: function(id){
+            axios.get(base_url + 'unity/attendance_data/' + id + '/' + this.active_sem.intID)
+            .then((data) => {
+            
+                
+            }
+            )
+            .catch((error) => {
+            console.log(error);
+            })
+        },
     }
 
 })
