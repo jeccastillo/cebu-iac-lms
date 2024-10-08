@@ -681,6 +681,7 @@
                   <div>
                     Term: {{ active_sem.enumSem + " " + active_sem.term_label + " " + active_sem.strYearStart + " - " + active_sem.strYearEnd }}
                   </div>
+                  <hr />
                   <div class="form-group">
                     <label>Select Month</label>
                     <select v-model="add_attendance.month_id"                  
