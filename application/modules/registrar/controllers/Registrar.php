@@ -225,6 +225,7 @@ class Registrar extends CI_Controller {
         $post = $this->input->post();
         $data = array(
                 "month" => $post['month'],                
+                "grading_period" => $post['grading_period'], 
                 "term_id" => $post['id']
         );
         $this->data_poster->post_data('tb_mas_sy_months',$data);
