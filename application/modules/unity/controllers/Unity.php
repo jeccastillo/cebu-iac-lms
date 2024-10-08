@@ -2502,6 +2502,27 @@ class Unity extends CI_Controller {
             redirect(base_url()."unity");   
     
     }
+
+    public function view_section($id,$sem){
+        $this->data['id'] = $id;
+        $this->data['sem'] = $sem;
+        $this->load->view("common/header",$this->data);
+        $this->load->view("faculty/view_advising_section",$this->data);
+        $this->load->view("common/footer",$this->data); 
+    }
+
+    public function advising_section_data($id,$sem){
+        $data['section'] = $this->db->get_where('tb_mas_block_section',array('intID'=>$id))->first_row();
+        $data['students'] = $this->db
+                                 ->select('tb_mas_users.*')
+                                 ->from('tb_mas_registration')
+                                 ->join('tb_mas_users','tb_mas_users.intID = tb_mas_registration.intStudentID')
+                                 ->where(array('tb_mas_registration.intAYID'=>$sem,'block_section'=>$id))
+                                 ->get()
+                                 ->result_array();
+                                 
+        echo json_encode($data);
+    }
     
     
     
