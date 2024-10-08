@@ -30,6 +30,11 @@
                                 <a @click="loadAttendance(student)" class="btn btn-primary" data-toggle="modal" data-target="#attendance-modal">
                                     View Attendance
                                 </a>
+                                <a @click="setSelected(student)" class="btn btn-primary"
+                                    data-toggle="modal"
+                                    data-target="#attendance-modal">
+                                        Add Attendance Record
+                                </a>
                             </td>
                         </tr>
                     </tbody>
@@ -50,12 +55,7 @@
                     <p>{{ selected_student.strLastname +  " " + selected_student.strFirstname + ", " + selected_student.strMiddlename }}</p>
                 </div>
 
-                <div v-if="!loading_attendance" class="modal-body">
-                    <a class="btn btn-primary"
-                        data-toggle="modal"
-                        data-target="#attendance-modal">
-                            Add Attendance Record
-                    </a>
+                <div v-if="!loading_attendance" class="modal-body">                    
                     <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
@@ -218,14 +218,16 @@ new Vue({
             axios.get(base_url + 'unity/attendance_data/' + student.intID + '/' + this.active_sem.intID)
             .then((data) => {
                 this.attendance_data = data.data.attendance;
-                this.loading = false;
-                this.selected_student = student;
+                this.loading = false;                
                 this.add_attendance.student_id = student.intID;
             }
             )
             .catch((error) => {
             console.log(error);
             })
+        },
+        setSelected: function(student){
+            this.selected_student = student;
         },
         submitAttendance: function(){
             Swal.fire({
