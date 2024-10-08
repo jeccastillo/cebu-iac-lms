@@ -23,9 +23,9 @@
                     </thead>
                     <tbody>
                         <tr v-for="student in students">
-                            <td>{{ student.strLastname }}</td>
-                            <td>{{ student.strFirstname }}</td>
-                            <td>{{ student.strMiddlename }}</td>
+                            <td>{{ student.strLastname.toUpperCase() }}</td>
+                            <td>{{ student.strFirstname.toUpperCase() }}</td>
+                            <td>{{ student.strMiddlename?student.strMiddlename.toUpperCase():"" }}</td>
                             <td>
                                 <a @click="loadAttendance(student)" class="btn btn-primary" data-toggle="modal" data-target="#attendance-modal">
                                     View Attendance
@@ -47,7 +47,7 @@
             <div class="modal-content">            
                 <div class="modal-header">
                     <h3>Attendance</h3>
-                    <p>{{ selected_student.strLastname +  " " + selected_student.strFirstname + ", " + selected_student.strMiddlename }}</p>
+                    <p>{{ selected_student.strLastname.toUpperCase() +  " " + selected_student.strFirstname.toUpperCase() }} {{ selected_student.strMiddlename?", "+selected_student.strMiddlename.toUpperCase():"" }}</p>
                 </div>
 
                 <div v-if="!loading_attendance" class="modal-body">
