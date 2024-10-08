@@ -2,7 +2,7 @@
     <section class="content-header">
         <h1>
             <small>
-                <a class="btn btn-app" :href="base_url + 'unity/view_classlist'"><i class="ion ion-arrow-left-a"></i>All Classes</a>                                     
+                <a class="btn btn-app" :href="base_url + 'unity/view_classlist/' + sem"><i class="ion ion-arrow-left-a"></i>All Classes</a>                                     
             </small>
         </h1>
     </section>        
