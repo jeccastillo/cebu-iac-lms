@@ -92,8 +92,8 @@
             <div class="small-box bg-blue" >
                 <div class="box-tools">
                  <div class="btn-group">
-                    <button type="button" class="btn <?php echo ($class['intFinalized']==0)?'btn-success':'btn-danger'; ?>"><i class="ion ion-android-settings"></i></button>
-                    <button type="button" class="btn <?php echo ($class['intFinalized']==0)?'btn-success':'btn-danger'; ?> dropdown-toggle" data-toggle="dropdown">
+                    <button type="button" class="btn btn-success"><i class="ion ion-android-settings"></i></button>
+                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
                         <span class="caret"></span>
                         <span class="sr-only">Toggle Dropdown</span>
                     </button>
