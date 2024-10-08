@@ -694,6 +694,7 @@ new Vue({
     registration_status: 0,
     loader_spinner: true,
     change_grade: [],
+    attendance: [],
     total_units: 0,
     tuition_payment_link: undefined,
     notif_message: undefined,
@@ -792,6 +793,7 @@ new Vue({
                     this.active_sem = data.data.active_sem;
                     this.reg_status = data.data.reg_status;
                     this.selected_ay = data.data.selected_ay;
+                    this.attendance = data.data.attendance;
                     this.curriculum_subjects = data.data.curriculum_subjects;
                     this.sections = data.data.sections;
                     this.tuition_payment_link =  data.data.tuition_payment_link;

@@ -1656,6 +1656,12 @@ class Unity extends CI_Controller {
             $ret['user_logged'] = $this->data['user']['intID'];
             $ret['user_level'] = $this->data['user']['intUserLevel'];
 
+            $ret['attendance'] = $this->db->select('tb_mas_student_attendance,month')
+                                      ->from('tb_mas_student_attendance')
+                                      ->join('tb_mas_sy_months', 'tb_mas_student_attendance.month_id = tb_mas_sy_months.id')
+                                      ->where(array('term_id'=>$ret['active_sem']['intID'],'student_id'=>$id))
+                                      ->result_array();
+                                      
             $ret['enlistment'] = $this->db->get_where('tb_mas_student_enlistment',array('student_id'=>$id,'term_id'=>$ret['active_sem']['intID'],'status'=>'approved'))->first_row();
             $ret['enlisted_subjects'] = [];
             if($ret['enlistment']){
