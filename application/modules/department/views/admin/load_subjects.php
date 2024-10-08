@@ -439,9 +439,9 @@
                             
                 <div class="box-body">                    
                     <div class="row">
-                        <div class="col-md-5">
+                        <div class="col-md-12">
                             <h4>Sections</h4>
-                            <select style="height:200px" id="section-selector" multiple>
+                            <select style="height:200px" class="select2" id="section-selector" multiple>
                                 <?php foreach($unassigned_sections as $sn):                                                                             
                                     ?>
                                     
@@ -449,13 +449,13 @@
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                        <div class="col-md-2" style="text-center">
+                        <div class="col-md-12" style="text-center">
                         <br />
                             <a href="#" id="load-section" class="btn btn-default  btn-flat">Load <i class="ion ion-arrow-down-c"></i> </a>
                             <a href="#" id="unload-section" class="btn btn-default  btn-flat"><i class="ion ion-arrow-up-c"></i> Remove</a>
                         
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-12">
                             <h4>Loaded Sections</h4>
                             <select style="height:200px" class="form-control" id="loaded-section" multiple>
                                 <?php foreach($faculty_sections as $sn):                                    
