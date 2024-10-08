@@ -36,7 +36,7 @@
                                 </div>
                                 <div class="form-group col-xs-6">
                                     <label for="intYearLevel">Type</label>
-                                    <select class="form-control" name="type" v-model="request.enhanced">    
+                                    <select class="form-control" name="type" v-model="request.type">    
                                         <option value="college">COLLEGE</option>                                                                            
                                         <option value="shs">SHS</option>                                                                                
                                     </select>
@@ -91,6 +91,7 @@ new Vue({
             intProgramID: undefined,
             intSYID: undefined,
             year: undefined,
+            type: undefined,
             enhanced: 0,
         },                  
         programs:[],
