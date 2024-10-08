@@ -51,6 +51,11 @@
                 </div>
 
                 <div v-if="!loading_attendance" class="modal-body">
+                    <a class="btn btn-primary"
+                        data-toggle="modal"
+                        data-target="#attendance-modal">
+                            Add Attendance Record
+                    </a>
                     <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
@@ -58,7 +63,7 @@
                                 <th>Days</th>
                                 <th>Abscences</th>
                                 <th>Tardies</th>
-                            </tr>
+                            </tr>                            
                         </thead>
                         <tbody>
                             <tr v-for="ad in attendance_data">
