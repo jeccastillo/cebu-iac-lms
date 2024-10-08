@@ -76,8 +76,10 @@ new Vue({
         id: '<?php echo $id; ?>',            
         sem: '<?php echo $sem; ?>',       
         section: undefined,
+        active_sem: undefined,
         students: [],
         loading_attendance: false,
+        attendance_data: undefined,
     },
 
     mounted() {
@@ -89,6 +91,7 @@ new Vue({
                 .then((data) => {                                          
                     this.section = data.data.section;
                     this.students = data.data.students;
+                    this.active_sem = data.data.active_sem;
                 })
                 .catch((error) => {
                     console.log(error);
@@ -99,7 +102,15 @@ new Vue({
 
     methods: {      
         loadAttendance: function(id){
-
+            axios.get(base_url + 'unity/attendance_data/' + id + '/' + this.active_sem.intID)
+            .then((data) => {
+            
+                
+            }
+            )
+            .catch((error) => {
+            console.log(error);
+            })
         },
     }
 
