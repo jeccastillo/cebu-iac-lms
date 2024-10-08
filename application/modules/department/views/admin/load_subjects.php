@@ -441,7 +441,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <h4>Sections</h4>
-                            <select style="height:200px" class="select2" id="section-selector" multiple>
+                            <select style="width:200px" class="select2" id="section-selector" multiple>
                                 <?php foreach($unassigned_sections as $sn):                                                                             
                                     ?>
                                     
