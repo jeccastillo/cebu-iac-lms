@@ -2479,7 +2479,7 @@ class Unity extends CI_Controller {
             else
                 $active_sem = $this->data_fetcher->get_sem_by_id($sem);
 
-            $this->data['selected_sem'] = $active_sem['intID'];
+            $this->data['selected_ay'] = $active_sem['intID'];
             $this->data['sy'] = $this->db->get('tb_mas_sy')->result_array();
             $this->data['classlist'] = $this->data_fetcher->fetch_classlists(null,false,$active_sem['intID']);
             $this->data['advised'] = $this->db
