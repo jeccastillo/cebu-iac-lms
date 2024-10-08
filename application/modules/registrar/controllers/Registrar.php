@@ -1592,6 +1592,7 @@ class Registrar extends CI_Controller {
             $reg['current_program'] =$student['intProgramID'];
             $reg['current_curriculum'] =$student['intCurriculumID'];
             $reg['tuition_year'] = $student['intTuitionYear'];
+            $reg['block_section'] = $post['block_section'];
             $s = $this->data_fetcher->get_sem_by_id($data['ayid']);
             $data['message'] = "Success";
             $data['tuition_payment_link'] = base_url()."unity/student_tuition_payment/".$student['slug'];
