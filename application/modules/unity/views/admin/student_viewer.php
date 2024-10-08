@@ -226,6 +226,13 @@
                         <!-- <p><strong>Learner Reference Number(LRN): </strong>{{ student.strLRN'] }}</p> -->
                         <p v-if="registration"><strong>Block Section:
                           </strong>{{ registration.block_name ? registration.block_name : 'Not yet selected' }}</p>
+                        <div v-if="registration">                          
+                          <label>Change Block Section</label>
+                          <select id="block_section" name="block_section" class="form-control" v-model="registration.block_section">                        
+                              <option v-for="block in block_sections" :value="block.id">{{ block.name }}</option>                                  
+                          </select>
+                        </div>
+                            
                         <p><strong>Gender:
                           </strong>{{ student.enumGender }}</p>
                           
@@ -783,6 +790,7 @@ new Vue({
     other_data: undefined,
     reg_status: '',
     deficiencies: [],
+    block_sections: [],
     sy: undefined,
     term_type: undefined,
     sem_student: undefined,
@@ -912,6 +920,7 @@ new Vue({
                     this.reg_status = data.data.reg_status;
                     this.selected_ay = data.data.selected_ay;
                     this.attendance = data.data.attendance;
+                    this.block_sections = data.data.block_sections;
                     this.add_attendance.student_id = this.student.intID;                    
                     this.term_months = data.data.term_months;
                     this.curriculum_subjects = data.data.curriculum_subjects;
