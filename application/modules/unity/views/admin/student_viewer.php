@@ -224,8 +224,8 @@
                         <p><strong>Student Number:
                           </strong>{{ student.strStudentNumber.replace(/-/g, '') }}</p>
                         <!-- <p><strong>Learner Reference Number(LRN): </strong>{{ student.strLRN'] }}</p> -->
-                        <p><strong>Block Section:
-                          </strong>{{ student.block ? student.block : 'Not yet selected' }}</p>
+                        <p v-if="registration"><strong>Block Section:
+                          </strong>{{ registration.block_name ? registration.block_name : 'Not yet selected' }}</p>
                         <p><strong>Gender:
                           </strong>{{ student.enumGender }}</p>
                           
