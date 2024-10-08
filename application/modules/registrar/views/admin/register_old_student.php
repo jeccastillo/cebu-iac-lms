@@ -74,6 +74,11 @@
                                     <option value="5">5</option>
                                     <option value="6">6</option>
                                 </select>
+                                <br />    
+                                <label for="block_section">Block Section</label>
+                                <select id="block_section" name="block_section" class="form-control" v-model="request.block_section">                        
+                                    <option v-for="block in block_sections" :value="block.id">{{ block.name }}</option>                                  
+                                </select>
                                 <br />                                                                    
                                 <label for="type_of_class">Class Type</label>
                                 <select id="type_of_class" class="form-control" name="enumStudentType" v-model="request.type_of_class">                        
@@ -139,11 +144,13 @@ new Vue({
             strAcademicYear: undefined,
             type_of_class: 'regular',
             intYearLevel: 1,
+            block_section: undefined,
         },
         scholarship: {
             intID: 0
         },
         school_years: [],
+        block_sections: [], 
         term_type: 'Term',
         tuition_data: undefined,
         applicant_data: undefined,
@@ -215,6 +222,7 @@ new Vue({
                     this.request.strAcademicYear = data.data.data.active_sem.intID;
                     this.reg_status = data.data.data.reg_status;
                     this.student_data = data.data.data.student;
+                    this.block_sections = data.data.data.block_sections;
                     
 
                      //this.loader_spinner = true;
