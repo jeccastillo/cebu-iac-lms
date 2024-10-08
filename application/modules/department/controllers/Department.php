@@ -406,7 +406,7 @@ class Department extends CI_Controller {
                 $ret[] = $classlist;
             }
 
-            $this->data['unassigned_sections'] = $this->data_fetcher->getSectionsNotAssigned($post['sem'],$this->data['active_sem']['term_type']);
+            $this->data['unassigned_sections'] = $this->data_fetcher->getSectionsNotAssigned($post['sem'],$this->data['active_sem']['term_student_type']);
             
             $this->data['faculty_sections'] = $this->db
                                                     ->select('tb_mas_block_sections.*')
