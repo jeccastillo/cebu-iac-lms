@@ -45,8 +45,8 @@ $(document).ready(function(){
                 'data':data,
                 'dataType':'json',
                 'success':function(ret){
-                    if(ret.message == "failed"){
-                        alert('Error in deleting.')                        
+                    if(ret.success == false){
+                        alert(ret.message)                        
                     }
                     else
                         location.reload();
