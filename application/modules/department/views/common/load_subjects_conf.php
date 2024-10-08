@@ -131,6 +131,37 @@
                 
                 
         });
+        //Sections
+        $("#load-section").click(function(e){ 
+                e.preventDefault();
+                $('#section-selector :selected').each(function(i, selected){ 
+                    itemVal = $(selected).val(); 
+                    itemText = $(selected).text();
+                    $("#loaded-section").append($('<option>', { 
+                                    value: itemVal,
+                                    text : itemText
+                                }));
+                        $("#section-selector option[value='"+itemVal+"']").remove();
+                    
+                });
+                
+                
+        });
+        
+        $("#unload-section").click(function(e){ 
+                e.preventDefault();
+                $('#loaded-section :selected').each(function(i, selected){ 
+                    itemVal = $(selected).val(); 
+                    itemText = $(selected).text();
+                    $("#section-selector").prepend($('<option>', { 
+                                    value: itemVal,
+                                    text : itemText
+                                }));
+                        $("#loaded-section option[value='"+itemVal+"']").remove();
+                    
+                });                
+                
+        });
         //DAYS
          $("#load-days").click(function(e){ 
                 e.preventDefault();
