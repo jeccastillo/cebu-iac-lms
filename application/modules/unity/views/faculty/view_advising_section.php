@@ -72,7 +72,7 @@
                                 <td>{{ ad.school_days }}</td>
                                 <td>{{ ad.abscences }}</td>
                                 <td>{{ ad.tardy }}</td>
-                                <td><button class="btn btn-danger" @click="deleteAttendance(at.id)">Delete</button></td>
+                                <td><button class="btn btn-danger" @click="deleteAttendance(ad.id)">Delete</button></td>
                             </tr>
                         </tbody>
                     </table>
