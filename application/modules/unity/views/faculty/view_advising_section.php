@@ -25,6 +25,7 @@ new Vue({
     el: '#registration-container',
     data: {
         id: '<?php echo $id; ?>',            
+        sem: '<?php echo $sem; ?>',       
     },
 
     mounted() {
@@ -32,7 +33,7 @@ new Vue({
         let url_string = window.location.href;        
         if(this.id != 0){            
             //this.loader_spinner = true;
-            axios.get(this.base_url + 'unity/advising_section_data/' + this.id)
+            axios.get(this.base_url + 'unity/advising_section_data/' + this.id + "/" + this.sem)
                 .then((data) => {                                          
                     
                 })
