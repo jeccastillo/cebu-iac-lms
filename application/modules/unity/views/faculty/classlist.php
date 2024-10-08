@@ -22,7 +22,7 @@
         </div>
         
         <div class="box-body">    
-        
+        <div class="row">
         <?php foreach($classlist as $class): ?>
             <div class="col-lg-3 col-xs-6">
             <!-- small box -->
@@ -86,6 +86,8 @@
         
             
         <?php endforeach; ?>
+    </div>
+    <div class="row">
         <?php foreach($advised as $class): ?>
             <div class="col-lg-3 col-xs-6">
             <!-- small box -->
@@ -102,11 +104,10 @@
                     View <i class="fa fa-arrow-circle-right"></i>
                 </a>                
             </div>
-        </div>
-            
-        
-            
+        </div>            
+                    
         <?php endforeach; ?>
+    </div>
         <hr style="clear:both;" />
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
