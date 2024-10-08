@@ -1,7 +1,7 @@
 <script type="text/javascript">
     $(document).ready(function(){
-        $("#select-sem-classlist").change(function(e){
-            alert(e.val())
+        $("#select-sem-classlist").on('change',function(e){
+            alert(this.value)
         });
         $(".trash-classlist").click(function(e){
                     conf = confirm("Are you sure you want to delete?");
