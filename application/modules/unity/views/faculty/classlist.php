@@ -6,7 +6,7 @@
                     <ol class="breadcrumb">
                         <li><a href="<?php echo base_url(); ?>unity/view_classlist"><i class="ion ion-android-book"></i> Classlist</a></li>
                         <li class="active">View Classlists</li>
-                    </ol>
+                    </ol>                    
                 </section>
     <section class="content">
         <div class="alert alert-danger" style="display:none;">
@@ -21,6 +21,13 @@
         </div>
         
         <div class="box-body">    
+        <div class="box-tools pull-right">
+            <select id="select-sem-classlist" class="form-control input-sm" >
+                <?php foreach($sy as $s): ?>
+                    <option <?php echo ($selected_ay == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID']; ?>"><?php echo $s['term_student_type']." ".$s['enumSem']." ".$s['term_label']." ".$s['strYearStart']."-".$s['strYearEnd']; ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
         <div class="row">
         <?php foreach($classlist as $class): ?>
             <div class="col-lg-3 col-xs-6">
