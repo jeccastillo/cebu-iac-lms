@@ -2511,13 +2511,19 @@ class Unity extends CI_Controller {
         $this->load->view("common/footer",$this->data); 
     }
 
-    public function advising_section_data($id,$sem){
-        $data['section'] = $this->db->get_where('tb_mas_block_section',array('intID'=>$id))->first_row();
+    public function advising_section_data($id,$sem = 0){
+        if($sem == 0)
+            $data['active_sem'] =  $this->data_fetcher->get_active_sem();
+        else
+            $data['active_sem'] =  $this->data_fetcher->get_sem_by_id($sem);
+
+        $data['section'] = $this->db->get_where('tb_mas_block_sections',array('intID'=>$id))->first_row();
         $data['students'] = $this->db
-                                 ->select('tb_mas_users.*')
+                                 ->select('tb_mas_users.strFirstname, tb_mas_users.strLastname, tb_mas_users.strMiddlename,tb_mas_users.intID')
                                  ->from('tb_mas_registration')
                                  ->join('tb_mas_users','tb_mas_users.intID = tb_mas_registration.intStudentID')
-                                 ->where(array('tb_mas_registration.intAYID'=>$sem,'block_section'=>$id))
+                                 ->where(array('tb_mas_registration.intAYID'=>$data['active_sem']['intID'],'block_section'=>$id))
+                                 ->order_by('strLastname','asc')
                                  ->get()
                                  ->result_array();
                                  
