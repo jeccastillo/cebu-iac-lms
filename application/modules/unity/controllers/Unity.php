@@ -1917,15 +1917,33 @@ class Unity extends CI_Controller {
     public function add_attendance_record(){
         $post = $this->input->post();
 
-        if($this->db->insert('tb_mas_student_attendance',$post)){
-            $data['success'] = true;
-            $data['message'] = "Successfully added Attendance";
-            //Make more elaborate
-            $this->data_poster->log_action('Attendance','Added a new Attendance Record: '.$this->db->insert_id(),'yellow');
+        $exists = $this->db->get_where('tb_mas_student_attendance',array('month_id'=>$post['month_id'],'student_id'=>$post['student_id']))->first_row();
+        if(!$exists)
+            if($this->db->insert('tb_mas_student_attendance',$post)){
+                $data['success'] = true;
+                $data['message'] = "Successfully added Attendance";
+                //Make more elaborate
+                $this->data_poster->log_action('Attendance','Added a new Attendance Record: '.$this->db->insert_id(),'yellow');
+            }
+            else{
+                $data['success'] = false;
+                $data['message'] = "Oops something went wrong.";
+            }
+        elseif(isset($post['id'])){
+            if($this->db->where('id',$post['id'])->update('tb_mas_student_attendance',$post)){
+                $data['success'] = true;
+                $data['message'] = "Successfully updated Attendance";
+                //Make more elaborate
+                $this->data_poster->log_action('Attendance','Added a new Attendance Record: '.$this->db->insert_id(),'yellow');
+            }
+            else{
+                $data['success'] = false;
+                $data['message'] = "Oops something went wrong.";
+            }
         }
         else{
             $data['success'] = false;
-            $data['message'] = "Oops something went wrong.";
+            $data['message'] = "Record already exists.";
         }
 
         echo json_encode($data);
@@ -2518,6 +2536,7 @@ class Unity extends CI_Controller {
             $data['active_sem'] =  $this->data_fetcher->get_sem_by_id($sem);
 
         $data['section'] = $this->db->get_where('tb_mas_block_sections',array('intID'=>$id))->first_row();
+        $data['term_months'] = $this->db->get_where('tb_mas_sy_months',array('term_id'=>$data['active_sem']['intID']))->result_array();
         $data['students'] = $this->db
                                  ->select('tb_mas_users.strFirstname, tb_mas_users.strLastname, tb_mas_users.strMiddlename,tb_mas_users.intID')
                                  ->from('tb_mas_registration')
@@ -2526,8 +2545,23 @@ class Unity extends CI_Controller {
                                  ->order_by('strLastname','asc')
                                  ->get()
                                  ->result_array();
+
+
                                  
         echo json_encode($data);
+    }
+
+    public function attendance_data($id,$sem){
+        $ret['term_months'] = $this->db->get_where('tb_mas_sy_months',array('term_id'=>$sem))->result_array();
+        $ret['attendance'] = $this->db->select('tb_mas_student_attendance.*,month')
+                                    ->from('tb_mas_student_attendance')
+                                    ->join('tb_mas_sy_months', 'tb_mas_student_attendance.month_id = tb_mas_sy_months.id')
+                                    ->where(array('term_id'=>$sem,'student_id'=>$id))
+                                    ->order_by("STR_TO_DATE(CONCAT('0001 ',month,' 01'),'%Y %M %d')")
+                                    ->get()
+                                    ->result_array();
+
+        echo json_encode($ret);                                    
     }
     
     
