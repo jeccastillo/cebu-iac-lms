@@ -284,14 +284,14 @@ new Vue({
             })
         },
         setForEdit: function(attendance){
-            this.for_edit = attendance.id;
+            this.for_update = attendance.id;
             this.add_attendance.month_id = attendance.month_id;
             this.add_attendance.school_days = attendance.school_days;
             this.add_attendance.abscences = attendance.abscences;
             this.add_attendance.tardy = attendance.tardy;
         },
         resetForm: function(attendance){
-            this.for_edit = 0;
+            this.for_update = 0;
             this.add_attendance.month_id = attendance.month_id;
             this.add_attendance.school_days = attendance.school_days;
             this.add_attendance.abscences = attendance.abscences;
