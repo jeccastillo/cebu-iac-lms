@@ -1,6 +1,6 @@
 <script type="text/javascript">
     $(document).ready(function(){
-        $(".select-sem-classlist").change(function(e){
+        $("#select-sem-classlist").change(function(e){
             alert(e.val())
         });
         $(".trash-classlist").click(function(e){
