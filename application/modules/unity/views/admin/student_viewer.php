@@ -673,7 +673,11 @@
                 </div>
                 <div class="modal-body">
                 <form @submit.prevent="submitAttendance()">
-                  
+                  <div>
+                    Student: 
+                    {{ student.strLastname.toUpperCase() }}, {{ student.strFirstname.toUpperCase() }}
+                    {{ student.strMiddlename?student.strMiddlename.toUpperCase():'' }}
+                  </div>
                   <div class="form-group">
                     <label>Select Month</label>
                     <select v-model="add_attendance.month_id"                  
