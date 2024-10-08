@@ -514,31 +514,44 @@ class Unity extends CI_Controller {
         echo json_encode($data);
     }
 
-    public function sync_tuition()
-    {
-        if($this->is_super_admin()){
-            $registrations = $this->db->get('tb_mas_registration')->result_array();
-            foreach($registrations as $reg){
-                $rec = $this->db->get_where('tb_mas_user_tuition',array('syid'=>$reg['intAYID'],'student_id'=>$reg['intStudentID']))->first();
-                if(!$rec){
-                    $tuition =  $this->data_fetcher->getTuition($reg['intStudentID'],$reg['intAYID']);
-                    $other = $tuition['new_student'] + $tuition['total_foreign'];
-                    $data = [
-                        'student_id' => $reg['intStudentID'],
-                        'syid' => $reg['intAYID'],
-                        'tuition' => $tuition['tuition_before_discount'],
-                        'tuition_installment' => $tuition['tuition_installment_before_discount'],
-                        'misc' => $tuition['misc_before_discount'],
-                        'misc_installment' => $tuition['misc_before_discount'],
-                        'laboratory' => $tuition['lab_before_discount'],
-                        'laboratory_installment' => $tuition['lab_installment_before_discount'],
-                        'other' => $other,
-                        'other_installment' => $other,
-                    ];
-                }
-            }
+    // public function sync_tuition()
+    // {
+    //     if($this->is_super_admin()){
+    //         $registrations = $this->db->get('tb_mas_registration')->result_array();
+    //         foreach($registrations as $reg){
+    //             $rec = $this->db->get_where('tb_mas_user_tuition',array('syid'=>$reg['intAYID'],'student_id'=>$reg['intStudentID']))->first();
+    //             if(!$rec){
+    //                 $tuition =  $this->data_fetcher->getTuition($reg['intStudentID'],$reg['intAYID']);
+    //                 $other = $tuition['new_student'] + $tuition['total_foreign'];
+    //                 $data = [
+    //                     'student_id' => $reg['intStudentID'],
+    //                     'syid' => $reg['intAYID'],
+    //                     'tuition' => $tuition['tuition_before_discount'],
+    //                     'tuition_installment' => $tuition['tuition_installment_before_discount'],
+    //                     'misc' => $tuition['misc_before_discount'],
+    //                     'misc_installment' => $tuition['misc_before_discount'],
+    //                     'laboratory' => $tuition['lab_before_discount'],
+    //                     'laboratory_installment' => $tuition['lab_installment_before_discount'],
+    //                     'other' => $other,
+    //                     'other_installment' => $other,
+    //                 ];
+    //             }
+    //         }
+    //     }
+    // }    
+
+    public function sync_block_sections(){
+        $registrations = $this->db->get('tb_mas_registration')->result_array();
+        foreach($registrations as $reg){
+            $student = $this->db->get_where('tb_mas_users',array('intID'=>$reg['intStudentID']))->first_row();
+            
+            $data = [
+                'block_section' => $student['preferedSection']
+            ];
+
+            $this->db->where(array('intID'=>$reg['intID']))->update('tb_mas_registration',$data);
         }
-    }    
+    }
     public function registration_viewer_data($id,$sem =  0){
         if($this->is_super_admin() || $this->is_accounting() || $this->is_registrar())
         {
