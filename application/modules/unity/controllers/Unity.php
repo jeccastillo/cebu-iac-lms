@@ -1895,6 +1895,24 @@ class Unity extends CI_Controller {
 
     }
 
+    public function add_attendance_record(){
+        $post = $this->input->post();
+
+        if($this->db->insert('tb_mas_student_attendance',$post)){
+            $data['success'] = true;
+            $data['message'] = "Successfully added Attendance";
+            //Make more elaborate
+            $this->data_poster->log_action('Attendance','Added a new Attendance Record: '.$this->db->insert_id(),'yellow');
+        }
+        else{
+            $data['success'] = false;
+            $data['message'] = "Oops something went wrong.";
+        }
+
+        echo json_encode($data);
+
+    }
+
     
     public function student_viewer($id=0,$sem = null,$tab = null)
     {
@@ -3514,6 +3532,20 @@ class Unity extends CI_Controller {
             echo json_encode($data);
             
         }
+    }
+
+    public function delete_attendance(){
+        $post = $this->input->post();
+        
+        $this->db->where('id',$post['id'])
+                ->delete('tb_mas_student_attendance');
+
+
+        $data['message'] = "Deleted";
+        $data['success'] = true;
+        
+
+        echo json_encode($data);
     }
     
     public function delete_subject_curriculum()
