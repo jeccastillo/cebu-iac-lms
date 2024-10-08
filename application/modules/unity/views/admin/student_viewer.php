@@ -228,7 +228,7 @@
                           </strong>{{ registration.block_name ? registration.block_name : 'Not yet selected' }}</p>
                         <div v-if="registration">                          
                           <label>Change Block Section</label>
-                          <select id="block_section" name="block_section" class="form-control" v-model="registration.block_section">                        
+                          <select @change="updateAcademicStatus($event) id="block_section" name="block_section" class="form-control" v-model="registration.block_section">                        
                               <option v-for="block in block_sections" :value="block.id">{{ block.name }}</option>                                  
                           </select>
                         </div>
@@ -1254,6 +1254,32 @@ new Vue({
       var formdata = new FormData();
       formdata.append('intRegistrationID', this.registration.intRegistrationID);
       formdata.append('enumRegistrationStatus', event.target.value);
+
+
+      this.loader_spinner = true;
+      axios.post(base_url + 'unity/update_academic_status', formdata, {
+          headers: {
+            Authorization: `Bearer ${window.token}`
+          }
+        })
+        .then(data => {
+          this.loader_spinner = false;
+          Swal.fire({
+            title: "Success",
+            text: data.data.message,
+            icon: "success"
+          }).then(function() {
+
+          });
+        });
+
+
+    },
+    updateBlock: function(event) {
+
+      var formdata = new FormData();
+      formdata.append('intRegistrationID', this.registration.intRegistrationID);
+      formdata.append('block_section', event.target.value);
 
 
       this.loader_spinner = true;
