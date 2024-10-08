@@ -48,29 +48,30 @@
                 <div class="modal-header">
                     <h3>Attendance</h3>
                 </div>
-            </div>
-            <div v-if="!loading_attendance" class="modal-body">
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>Month</th>
-                            <th>Days</th>
-                            <th>Abscences</th>
-                            <th>Tardies</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="ad in attendance_data">
-                            <td>{{ ad.month }}</td>
-                            <td>{{ ad.school_days }}</td>
-                            <td>{{ ad.abscences }}</td>
-                            <td>{{ ad.tardy }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div v-else class="modal-body">
-                <h3>Loading Data</h3>
+            
+                <div v-if="!loading_attendance" class="modal-body">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Month</th>
+                                <th>Days</th>
+                                <th>Abscences</th>
+                                <th>Tardies</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="ad in attendance_data">
+                                <td>{{ ad.month }}</td>
+                                <td>{{ ad.school_days }}</td>
+                                <td>{{ ad.abscences }}</td>
+                                <td>{{ ad.tardy }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div v-else class="modal-body">
+                    <h3>Loading Data</h3>
+                </div>
             </div>
         </div>
     </div>
