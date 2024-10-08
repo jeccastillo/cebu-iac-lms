@@ -11,6 +11,26 @@
             <div class="box-header">
                 <h3>{{ section.name }}</h3>
             </div>
+            <div class="box-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Last Name</th>
+                            <th>First Name</th>
+                            <th>Middle Name</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="student in students">
+                            <td>{{ student.strLastname }}</td>
+                            <td>{{ student.strFirstname }}</td>
+                            <td>{{ student.strMiddlename }}</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     
