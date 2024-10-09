@@ -1283,7 +1283,7 @@ class Finance extends CI_Controller {
     public function import_previous_balance()
     {        
         
-        if($this->is_super_admin() || $this->is_registrar())
+        if($this->is_super_admin() || $this->is_accounting())
         {
             // $term = $this->data_fetcher->get_processing_sem();
     
