@@ -876,8 +876,10 @@ class Pdf extends CI_Controller {
         $this->data['registration'] = $this->data_fetcher->getRegistrationInfo($id,$this->data['selected_ay']);
         $this->data['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$this->data['selected_ay']);                
         
-
-        $html = $this->load->view("grade_slip",$this->data);
+        if($stype == "college")
+            $html = $this->load->view("grade_slip",$this->data);
+        else
+            $html = $this->load->view("grade_slip_shs",$this->data);
 
     }
 
