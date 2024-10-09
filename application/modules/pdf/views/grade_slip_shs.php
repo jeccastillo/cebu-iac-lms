@@ -81,7 +81,7 @@
                         <font style="font-size: 10;font-weight:bold">LRN:</font>
                     </td>
                     <td width="35%">             
-                        <font style="font-size: 10;">'.$student['strLRNNumber'].'</font>
+                        <font style="font-size: 10;">'.$student['strLRN'].'</font>
                     </td>
                 </tr>
                 <tr>                            

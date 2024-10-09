@@ -879,7 +879,7 @@ class Pdf extends CI_Controller {
         if($this->data['registration']['intYearLevel'] == 1 || $this->data['registration']['intYearLevel'] == 3)
             $this->data['grade_level'] == "Grade 11";
         else 
-            $this->data['grade_level'] == "Grade 11";
+            $this->data['grade_level'] == "Grade 12";
 
         $this->data['reg_status'] = $this->data_fetcher->getRegistrationStatus($id,$this->data['selected_ay']);                
         
