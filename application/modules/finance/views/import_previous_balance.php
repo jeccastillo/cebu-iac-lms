@@ -18,6 +18,17 @@
                             <input @change="attachFile" type="file" name="previous_balance_excel" id="previous_balance_excel" size="20" />
                         </div>
                     </div>
+
+
+                    <div class="row">
+                        <div class="form-group col-xs-4">
+                            <label for="student_level">Student Level</label>
+                            <select id="studentLevel" class="form-control select2" v-model="studentLevel">
+                                <option value="college">College</option>
+                                <option value="shs">Shs</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="form-group col-xs-4">
                             <button type="submit" class="btn btn-lg btn-default  btn-flat">Import</button>
@@ -44,6 +55,7 @@ new Vue({
             const formData = new FormData()
 
             formData.append('previous_balance_excel', this.attachment)
+            formData.append('student_level', $("#studentLevel").val())
 
             const {
                 data
