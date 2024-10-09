@@ -55,7 +55,7 @@
     //             </tr>        
     //         </table>
     //        ';
-    $html .= '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">
+    $html = '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">
                 <tr>                            
                     <td width="20%">             
                         <font style="font-size: 10;font-weight:bold">Name:</font>
