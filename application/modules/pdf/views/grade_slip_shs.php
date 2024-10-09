@@ -99,16 +99,19 @@
                     </td>
                 </tr>
                 <tr>                            
-                    <td>             
-                        <font style="font-size: 8;">'.preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']).'</font>
+                    <td width="15%">             
+                        <font style="font-size: 10;font-weight:bold">Track/Strand:</font>
                     </td>
-                    <td>             
-                        <font style="font-size: 8;">'.$student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename'].'</font>
+                    <td width="35%">             
+                        <font style="font-size: 10;">'.trim($student['strProgramDescription']).'</font>
                     </td>
-                    <td>             
-                        <font style="font-size: 8;">'.trim($student['strProgramDescription']).'</font>
+                    <td width="15%">             
+                        <font style="font-size: 10;font-weight:bold">Grading Period:</font>
                     </td>
-                </tr>        
+                    <td width="35%">             
+                        <font style="font-size: 10;">'.$period.'</font>
+                    </td>
+                </tr>                   
            </table>
           ';
     

@@ -834,9 +834,12 @@ class Pdf extends CI_Controller {
         $this->data['period'] = $period;
         if($period == "final"){
             $this->data['period_label'] = "Final Grade";
+            $this->data['period'] = "Finals";
+            
         }
         else{
             $this->data['period_label'] = "Midterm Grade";
+            $this->data['period'] = "Midterm";
         }
         //pass fail do not include in gwa
         foreach($records as $record)
