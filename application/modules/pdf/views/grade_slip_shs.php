@@ -57,16 +57,16 @@
     //        ';
     $html = '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">
                 <tr>                            
-                    <td width="20%">             
+                    <td width="15%">             
                         <font style="font-size: 10;font-weight:bold">Name:</font>
                     </td>
-                    <td width="30%">             
+                    <td width="35%">             
                         <font style="font-size: 10;">'.strtoupper($student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename']).'</font>
                     </td>
-                    <td width="20%">             
+                    <td width="15%">             
                         <font style="font-size: 10;font-weight:bold">ID No:</font>
                     </td>
-                    <td width="30%">             
+                    <td width="35%">             
                         <font style="font-size: 10;">'.preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']).'</font>
                     </td>
                 </tr>
