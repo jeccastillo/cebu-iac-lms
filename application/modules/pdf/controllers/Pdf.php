@@ -875,12 +875,19 @@ class Pdf extends CI_Controller {
         $this->data['records'] = $sc_ret;
         $this->data['stype'] = $stype;
         $this->data['registration'] = $this->data_fetcher->getRegistrationInfo($id,$this->data['selected_ay']);
-        $this->data['adviser'] = $this->db->select('tb_mas_faculty.*')
+        $adviser = $this->db->select('tb_mas_faculty.*')
                                           ->from('tb_mas_faculty_adviser')
                                           ->join('tb_mas_faculty', 'tb_mas_faculty_adviser.faculty_id = tb_mas_faculty.intID')            
                                           ->where(array('block_id'=>$this->data['registration']['block_section'],'term_id'=>$this->data['selected_ay']))
                                           ->get()
                                           ->first_row('array');
+
+        $this->data['adviser_name'] = "";
+    
+        if($adviser)
+            $this->data['adviser_name'] = strtoupper($adviser['strLastname'].", ".$adviser['strFirstname']);
+        
+
 
         if($this->data['registration']['intYearLevel'] == 1 || $this->data['registration']['intYearLevel'] == 3)
             $this->data['grade_level'] = "Grade 11";

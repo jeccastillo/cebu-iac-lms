@@ -89,7 +89,7 @@
                         <font style="font-size: 10;font-weight:bold">Adviser:</font>
                     </td>
                     <td width="35%">             
-                        <font style="font-size: 10;">'.$adviser['strLastname'].', '.$adviser['strFirstname'].'</font>
+                        <font style="font-size: 10;">'.$adviser_name.'</font>
                     </td>
                     <td width="15%">             
                         <font style="font-size: 10;font-weight:bold">SY & Sem:</font>
