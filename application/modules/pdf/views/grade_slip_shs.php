@@ -55,7 +55,7 @@
     //             </tr>        
     //         </table>
     //        ';
-    $html = '<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">
+    $html = '<table border="1" cellspacing="0" cellpadding="3" style="color:#333; font-size:10;">
                 <tr>                            
                     <td width="15%">             
                         <font style="font-size: 10;font-weight:bold">Name:</font>
@@ -68,6 +68,20 @@
                     </td>
                     <td width="35%">             
                         <font style="font-size: 10;">'.preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']).'</font>
+                    </td>
+                </tr>
+                <tr>                            
+                    <td width="15%">             
+                        <font style="font-size: 10;font-weight:bold">Grade & Sec:</font>
+                    </td>
+                    <td width="35%">             
+                        <font style="font-size: 10;">'.$grade_level.' '.$registration['block_name'].'</font>
+                    </td>
+                    <td width="15%">             
+                        <font style="font-size: 10;font-weight:bold">LRN:</font>
+                    </td>
+                    <td width="35%">             
+                        <font style="font-size: 10;">'.$student['strLRNNumber'].'</font>
                     </td>
                 </tr>
                 <tr>                            
