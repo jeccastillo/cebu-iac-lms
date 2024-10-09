@@ -15,7 +15,7 @@
                 <div class="box-body">
                     <div class="row">
                         <div class="form-group col-xs-4">
-                            <label for="student_level">Student Level</label>
+                            <label for="student_level">Student Type</label>
                             <select id="studentLevel" class="form-control select2" v-model="studentLevel">
                                 <option value="college">College</option>
                                 <option value="shs">Shs</option>
