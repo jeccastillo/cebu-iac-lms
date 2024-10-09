@@ -58,58 +58,58 @@
     $html = '<table border="1" cellspacing="0" cellpadding="3" style="color:#333; font-size:10;">
                 <tr>                            
                     <td width="15%">             
-                        <font style="font-size: 10;font-weight:bold">Name:</font>
+                        <font style="font-size: 9;font-weight:bold">Name:</font>
                     </td>
                     <td width="35%">             
-                        <font style="font-size: 10;">'.strtoupper($student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename']).'</font>
+                        <font style="font-size: 9;">'.strtoupper($student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename']).'</font>
                     </td>
                     <td width="15%">             
-                        <font style="font-size: 10;font-weight:bold">ID No:</font>
+                        <font style="font-size: 9;font-weight:bold">ID No:</font>
                     </td>
                     <td width="35%">             
-                        <font style="font-size: 10;">'.preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']).'</font>
+                        <font style="font-size: 9;">'.preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']).'</font>
                     </td>
                 </tr>
                 <tr>                            
                     <td width="15%">             
-                        <font style="font-size: 10;font-weight:bold">Grade & Sec:</font>
+                        <font style="font-size: 9;font-weight:bold">Grade & Sec:</font>
                     </td>
                     <td width="35%">             
-                        <font style="font-size: 10;">'.$grade_level.' '.$registration['block_name'].'</font>
+                        <font style="font-size: 9;">'.$grade_level.' '.$registration['block_name'].'</font>
                     </td>
                     <td width="15%">             
-                        <font style="font-size: 10;font-weight:bold">LRN:</font>
+                        <font style="font-size: 9;font-weight:bold">LRN:</font>
                     </td>
                     <td width="35%">             
-                        <font style="font-size: 10;">'.$student['strLRN'].'</font>
+                        <font style="font-size: 9;">'.$student['strLRN'].'</font>
                     </td>
                 </tr>
                 <tr>                            
                     <td width="15%">             
-                        <font style="font-size: 10;font-weight:bold">Adviser:</font>
+                        <font style="font-size: 9;font-weight:bold">Adviser:</font>
                     </td>
                     <td width="35%">             
-                        <font style="font-size: 10;">'.$adviser_name.'</font>
+                        <font style="font-size: 9;">'.$adviser_name.'</font>
                     </td>
                     <td width="15%">             
-                        <font style="font-size: 10;font-weight:bold">SY & Sem:</font>
+                        <font style="font-size: 9;font-weight:bold">SY & Sem:</font>
                     </td>
                     <td width="35%">             
-                        <font style="font-size: 10;">'.$active_sem['strYearStart']."-".$active_sem['strYearEnd']." ".$active_sem['enumSem']." ".$active_sem['term_label'].'</font>
+                        <font style="font-size: 9;">'.$active_sem['strYearStart']."-".$active_sem['strYearEnd']." ".$active_sem['enumSem']." ".$active_sem['term_label'].'</font>
                     </td>
                 </tr>
                 <tr>                            
                     <td width="15%">             
-                        <font style="font-size: 10;font-weight:bold">Track/Strand:</font>
+                        <font style="font-size: 9;font-weight:bold">Track/Strand:</font>
                     </td>
                     <td width="35%">             
-                        <font style="font-size: 10;">'.trim($student['strProgramDescription']).'</font>
+                        <font style="font-size: 9;">'.trim($student['strProgramDescription']).'</font>
                     </td>
                     <td width="15%">             
-                        <font style="font-size: 10;font-weight:bold">Grading Period:</font>
+                        <font style="font-size: 9;font-weight:bold">Grading Period:</font>
                     </td>
                     <td width="35%">             
-                        <font style="font-size: 10;">'.$period.'</font>
+                        <font style="font-size: 9;">'.$period.'</font>
                     </td>
                 </tr>                   
            </table>
