@@ -7873,7 +7873,7 @@ class Excel extends CI_Controller {
                         $yearStart = $year[0];
                         $yearEnd = $year[1];
 
-                        $sy = $this->db->get_where('tb_mas_sy',array('enumSem' => $term[0], 'strYearStart' => $yearStart, 'strYearEnd' => $yearEnd))->first_row('array');
+                        $sy = $this->db->get_where('tb_mas_sy',array('enumSem' => $term[0], 'strYearStart' => $yearStart, 'strYearEnd' => $yearEnd, 'term_student_type' => $post['student_level']))->first_row('array');
                         
                         $data = array(
                             'student_number' => $row['A'],
