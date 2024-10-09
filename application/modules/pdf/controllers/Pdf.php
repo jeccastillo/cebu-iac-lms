@@ -880,8 +880,8 @@ class Pdf extends CI_Controller {
                                           ->join('tb_mas_faculty', 'tb_mas_faculty_adviser.faculty_id = tb_mas_faculty.intID')            
                                           ->where(array('block_id'=>$this->data['registration']['block_section'],'term_id'=>$this->data['selected_ay']))
                                           ->get()
-                                          ->first_row();
-                                          
+                                          ->first_row('array');
+
         if($this->data['registration']['intYearLevel'] == 1 || $this->data['registration']['intYearLevel'] == 3)
             $this->data['grade_level'] = "Grade 11";
         else 

@@ -85,6 +85,20 @@
                     </td>
                 </tr>
                 <tr>                            
+                    <td width="15%">             
+                        <font style="font-size: 10;font-weight:bold">Adviser:</font>
+                    </td>
+                    <td width="35%">             
+                        <font style="font-size: 10;">'.$adviser['strLastname'].', '.$adviser['strFirstname'].'</font>
+                    </td>
+                    <td width="15%">             
+                        <font style="font-size: 10;font-weight:bold">SY & Sem:</font>
+                    </td>
+                    <td width="35%">             
+                        <font style="font-size: 10;">'.$active_sem['strYearStart']."-".$active_sem['strYearEnd']." ".$active_sem['enumSem']." ".$active_sem['term_label'].'</font>
+                    </td>
+                </tr>
+                <tr>                            
                     <td>             
                         <font style="font-size: 8;">'.preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']).'</font>
                     </td>
