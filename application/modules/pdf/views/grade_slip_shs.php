@@ -128,9 +128,9 @@ $html .= '
          <th rowspan="2" style="width:10%;font-size:9px;text-align:center;border:1px solid #333;"><b>Semester<br />Final Grade</b></th>
          <th rowspan="2" style="width:15%;font-size:9px;text-align:center;border:1px solid #333;"><b>Remarks</b></th>
      </tr>
-     <tr style="text-align:center;border:1px solid #333;">
-        <th><b>Midterm</b></th>
-        <th><b>Finals</b></th>
+     <tr style="text-align:center;">
+        <th style="border-right:1px solid #333;border-bottom:1px solid #333;"><b>Midterm</b></th>
+        <th style="border-bottom:1px solid #333;"><b>Finals</b></th>
      </tr>  
      ';
          
