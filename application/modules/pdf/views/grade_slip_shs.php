@@ -129,7 +129,7 @@ $html .= '
          <th style="width:40%;font-size:9px;text-align:center;"><b>Descriptive Title</b></th>
          <th style="width:15%;font-size:9px;text-align:center;"><b>Units</b></th>         
          <th style="width:15%;font-size:9px;text-align:center;">
-            <table border="1">
+            <table style="margin:0;" border="1">
                 <tr><td colspan="2">Period</td></tr>
                 <tr><td>Midterm</td><td>Final</td></tr>
             </table>
