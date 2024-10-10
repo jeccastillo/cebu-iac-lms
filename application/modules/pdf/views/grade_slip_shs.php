@@ -193,10 +193,14 @@ $html .= '
 
 $pdf->writeHTML($html, true, false, true, false, '');
 
-
+$rotated = "<table><tr><td></td>";
+    foreach($term_months as $month){
+        $rotated.="<td>".$month['month']."</td>";
+    }
+$rotated .="</tr></table>";
 $pdf->StartTransform();
 $pdf->Rotate(90);
-$pdf->writeHTML('<table><tr><td>Rotated Text</td></tr></table>', false);
+$pdf->writeHTML($rotated, false);
 $pdf->StopTransform();
 
 
