@@ -230,7 +230,7 @@ $html .= '
             $attendance_present = "";
             $attendance_tardy = "";
 
-            $html .= "<table><tr><th style='width:50%;height:70px;border-top:1px solid #333;border-right:1px solid #333;border-left:1px solid #333;'></th>";
+            $html .= "<table border='1'><tr><th style='width:50%;height:70px;border-top:1px solid #333;border-right:1px solid #333;border-left:1px solid #333;'></th>";
             foreach($term_months as $month){
                 $html .="<th style='border-right:1px solid #333;border-top:1px solid #333;' ><div class='rotate'>".strtoupper(substr($month['month'],0,3))."</div></th>";
                 $attendance_days.="<td></td>";
