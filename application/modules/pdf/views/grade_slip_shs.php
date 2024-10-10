@@ -150,7 +150,7 @@ $html .= '
         
         $html .= '            
             <tr>                
-                <td style="font-size:8px;border:0;">'.$item['strDescription'].'</td>                
+                <td style="font-size:8px;">'.$item['strDescription'].'</td>                
                 <td style="font-size:8px;text-align:center;">'.$grade_midterm.'</td>
                 <td style="font-size:8px;text-align:center;">'.$grade_final.'</td>                
                 <td style="font-size:8px;text-align:center;"></td>
