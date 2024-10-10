@@ -22,6 +22,7 @@ section {
 
 table {
     width: 100%;
+    border-spacing:0;
 }
 
 table tr td {
