@@ -376,6 +376,11 @@
                   class="fa fa-user"></i>
                 For Advising</a>
             </li>
+            <li class="<?php echo (isset($page) && $page=="advisers")?'active':''; ?>">
+              <a href="<?php echo base_url()."academics/faculty_advisers" ?>"><i
+                  class="fa fa-user"></i>
+                View Advisers</a>
+            </li>
           </ul>
         </li>
         <?php endif; ?>
