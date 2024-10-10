@@ -1,3 +1,69 @@
+<style>
+body {
+    margin: 0;
+    font-family: Arial, Sans-Serif;
+}
+
+.sheet-outer {
+    margin: 0;
+}
+
+.sheet {
+    margin: 0;
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
+    page-break-after: always;
+}
+
+section {
+    font-size: 12px
+}
+
+table {
+    width: 100%;
+}
+
+table tr td {
+    vertical-align: top;
+}
+
+@media screen {
+    body {
+        background: #e0e0e0
+    }
+
+    .sheet {
+        background: white;
+        box-shadow: 0 .5mm 2mm rgba(0, 0, 0, .3);
+        margin: 5mm auto;
+    }
+}
+
+.sheet-outer.A4 .sheet {
+    width: 210mm;
+    height: 296mm
+}
+
+.sheet.padding-5mm {
+    padding-top: 10mm;
+    padding-left: 8mm;
+    padding-right: 10mm;
+}
+
+@page {
+    size: A4;
+    margin: 0
+}
+
+@media print {
+
+    .sheet-outer.A4,
+    .sheet-outer.A5.landscape {
+        width: 210mm
+    }
+}
+</style>
 <?php
 
     $html = '<table border="1" cellspacing="0" cellpadding="1" style="color:#333; font-size:10;">
