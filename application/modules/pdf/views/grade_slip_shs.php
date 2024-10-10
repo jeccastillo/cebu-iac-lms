@@ -55,7 +55,7 @@
     //             </tr>        
     //         </table>
     //        ';
-    $html = '<table border="1" cellspacing="0" cellpadding="3" style="color:#333; font-size:10;">
+    $html = '<table border="1" cellspacing="0" cellpadding="1" style="color:#333; font-size:10;">
                 <tr>                            
                     <td width="15%">             
                         <font style="font-size: 9;font-weight:bold">Name:</font>
@@ -120,21 +120,19 @@
 
 $html .= '       
      <br />
-     <table border="1" class="table table-bordered table-striped">
+     <table border="1" cell-padding="1" class="table table-bordered table-striped">
      <tr>
          <td style="line-height:10px;" colspan=5></td>         
      </tr> 
      <tr>
-         <th style="width:15%;font-size:9px;border-bottom:1px solid #333;"><b>Course Code</b></th>
-         <th style="width:40%;font-size:9px;border-bottom:1px solid #333;"><b>Descriptive Title</b></th>
-         <th style="width:15%;font-size:9px;border-bottom:1px solid #333;text-align:center;"><b>Units</b></th>         
-         <th style="width:15%;font-size:9px;border-bottom:1px solid #333;text-align:center;">
-            <table>
-                <tr><td colspan="2">Period</td></tr>
-                <tr><td>Midterm</td><td>Final</td></tr>
-            </table>
-         </th>
-         <th style="width:15%;font-size:9px;border-bottom:1px solid #333;text-align:center;"><b>Units Earned</b></th>
+        <th rowspan=2 style="width:15%;font-size:9px;border-bottom:1px solid #333;"><b>Course Code</b></th>
+        <th rowspan=2 style="width:40%;font-size:9px;border-bottom:1px solid #333;"><b>Descriptive Title</b></th>
+        <th rowspan=2 style="width:15%;font-size:9px;border-bottom:1px solid #333;text-align:center;"><b>Units</b></th>         
+        <th rowspan=2 style="width:15%;font-size:9px;border-bottom:1px solid #333;text-align:center;">            
+        <th colspan="2">Period</th>
+        <th rowspan=2>Midterm</th>
+        <th rowspan=2>Final</th>
+        <th rowspan=2 style="width:15%;font-size:9px;border-bottom:1px solid #333;text-align:center;"><b>Units Earned</b></th>
      </tr>
      <tr>
          <td style="line-height:5px;" colspan=5></td>         
