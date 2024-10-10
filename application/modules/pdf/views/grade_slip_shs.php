@@ -237,7 +237,7 @@ $html .= '
                 $attendance_present.="<td></td>";
                 $attendance_tardy.="<td></td>";
             }
-            $html .="</tr>
+            $html .="<th class='rotate'>TOTAL</th></tr>
                 <tr>
                     <th>Number of School Days</th>
                     ".$attendance_days."
