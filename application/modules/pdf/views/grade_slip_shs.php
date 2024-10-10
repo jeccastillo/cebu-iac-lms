@@ -2,6 +2,7 @@
 body {
     margin: 0;
     font-family: Arial, Sans-Serif;
+    font-size:10px;
 }
 
 .sheet-outer {
@@ -17,7 +18,7 @@ body {
 }
 
 section {
-    font-size: 10px
+    font-size: 10px;
 }
 
 table {
