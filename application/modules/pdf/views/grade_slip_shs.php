@@ -154,7 +154,7 @@ $html .= '
                 <td style="font-size:9px;border-left:1px solid #333;text-align:center;">'.$grade_midterm.'</td>
                 <td style="font-size:9px;border-left:1px solid #333;text-align:center;">'.$grade_final.'</td>                
                 <td style="font-size:9px;border-left:1px solid #333;text-align:center;"></td>
-                <td style="font-size:9px;border-right:1px solid #333;text-align:center;">'.$item['strRemarks'].'</td>
+                <td style="font-size:9px;border-right:1px solid #333;border-left:1px solid #333;text-align:center;">'.$item['strRemarks'].'</td>
             </tr>                       
             ';
     }
