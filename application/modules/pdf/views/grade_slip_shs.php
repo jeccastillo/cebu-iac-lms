@@ -126,16 +126,15 @@ $html .= '
          <td style="line-height:10px;" colspan=5></td>         
      </tr> 
      <tr>
-         <th style="width:15%;font-size:9px;text-align:center;"><b>Course Code</b></th>
-         <th style="width:40%;font-size:9px;text-align:center;"><b>Descriptive Title</b></th>
-         <th style="width:15%;font-size:9px;text-align:center;"><b>Units</b></th>         
-         <th style="width:15%;font-size:9px;text-align:center;">
-            <table border="1">
-                <tr><td colspan="2">Period</td></tr>
-                <tr><td>Midterm</td><td>Final</td></tr>
-            </table>
-         </th>
-         <th style="width:15%;font-size:9px;text-align:center;"><b>Units Earned</b></th>
+         <th rowspan="2" style="width:15%;font-size:9px;text-align:center;"><b>Course Code</b></th>
+         <th rowspan="2" style="width:40%;font-size:9px;text-align:center;"><b>Descriptive Title</b></th>
+         <th rowspan="2" style="width:15%;font-size:9px;text-align:center;"><b>Units</b></th>         
+         <th style="width:15%;font-size:9px;text-align:center;">Period</th>
+         <th rowspan="2" style="width:15%;font-size:9px;text-align:center;"><b>Units Earned</b></th>
+     </tr>
+     <tr>
+        <th>Midterm</th>
+        <th>Finals</th>
      </tr>
      <tr>
          <td style="line-height:5px;" colspan=5></td>         
