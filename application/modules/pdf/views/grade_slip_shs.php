@@ -191,7 +191,7 @@ $html .= '
 
 $pdf->writeHTML($html, true, false, true, false, '');
 $pdf->StartTransform();
-$pdf->Rotate(180);
+$pdf->Rotate(90);
 $pdf->writeHTML('<div>Rotated Text</div>', false);
 $pdf->StopTransform();
 
