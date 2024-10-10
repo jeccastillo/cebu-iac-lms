@@ -226,11 +226,31 @@ $html .= '
             <div style="text-align:center;font-weight:bold;">REPORT ON LEARNING PROGRESS AND ACHIEVEMENT</div>
             ';
 
-            $html .= "<table><tr><td style='width:50%;border-top:1px solid #333;border-right:1px solid #333;border-left:1px solid #333;'></td>";
+            $attendance_days = "";
+            $attendance_present = "";
+            $attendance_tardy = "";
+
+            $html .= "<table><tr><th style='width:50%;border-top:1px solid #333;border-right:1px solid #333;border-left:1px solid #333;'></th>";
             foreach($term_months as $month){
-                $html .="<td style='border-right:1px solid #333;border-top:1px solid #333;' ><div class='rotate'>".strtoupper(substr($month['month'],0,3))."</div></td>";
+                $html .="<th style='border-right:1px solid #333;border-top:1px solid #333;' ><div class='rotate'>".strtoupper(substr($month['month'],0,3))."</div></th>";
+                $attendance_days.="<td></td>";
+                $attendance_present.="<td></td>";
+                $attendance_tardy.="<td></td>";
             }
-            $html .="</tr></table>";
+            $html .="</tr>
+                <tr>
+                    <th>Number of School Days</th>
+                    ".$attendance_days."
+                </tr>
+                <tr>
+                    <th>Number of Days Present</th>
+                    ".$attendance_present."
+                </tr>
+                <tr>
+                    <th>Number of Tardiness</th>
+                    ".$attendance_tardy."
+                </tr>
+            </table>";
 
 
             echo $html;
