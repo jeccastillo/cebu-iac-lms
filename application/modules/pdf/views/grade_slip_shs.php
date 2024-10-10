@@ -128,7 +128,12 @@ $html .= '
          <th style="width:15%;font-size:9px;border-bottom:1px solid #333;"><b>Course Code</b></th>
          <th style="width:40%;font-size:9px;border-bottom:1px solid #333;"><b>Descriptive Title</b></th>
          <th style="width:15%;font-size:9px;border-bottom:1px solid #333;text-align:center;"><b>Units</b></th>         
-         <th style="width:15%;font-size:9px;border-bottom:1px solid #333;text-align:center;"><b>'.$period_label.'</b></th>
+         <th style="width:15%;font-size:9px;border-bottom:1px solid #333;text-align:center;">
+            <table>
+                <tr><td colspan="2">Period</td></tr>
+                <tr><td>Midterm</td><td>Final</td></tr>
+            </table>
+         </th>
          <th style="width:15%;font-size:9px;border-bottom:1px solid #333;text-align:center;"><b>Units Earned</b></th>
      </tr>
      <tr>
