@@ -136,10 +136,9 @@ $html .= '
          
     foreach($records as $item){                
         
-        if($period == "final")
-            $grade = ($item['intFinalized'] >= 2)?$item['v3']:'NGS';
-        else
-            $grade = ($item['intFinalized'] >= 1)?$item['v2']:'NGS';
+        
+        $grade_final = ($item['intFinalized'] >= 2)?$item['v3']:'NGS';        
+        $grade_midterm = ($item['intFinalized'] >= 1)?$item['v2']:'NGS';
         
         $units_earned = ($item['strRemarks'] == "Passed" && $item['intFinalized'] >= 2 && $period == "final")?number_format($item['strUnits'],1):0;
         if($item['include_gwa'])
@@ -150,12 +149,12 @@ $html .= '
         }
         
         $html .= '            
-            <tr>
-                <td style="font-size:8px;">'.$item['strCode'].'</td>
-                <td style="font-size:8px;">'.$item['strDescription'].'</td>
-                <td style="font-size:8px;text-align:center;">'.$units.'</td>
-                <td style="font-size:8px;text-align:center;">'.$grade.'</td>
-                <td style="font-size:8px;text-align:center;">'.$units_earned.'</td>
+            <tr>                
+                <td style="font-size:8px;">'.$item['strDescription'].'</td>                
+                <td style="font-size:8px;text-align:center;">'.$grade_midterm.'</td>
+                <td style="font-size:8px;text-align:center;">'.$grade_final.'</td>                
+                <td style="font-size:8px;text-align:center;"></td>
+                <td style="font-size:8px;text-align:center;">'.$item['strRemarks'].'</td>
             </tr>            
             ';
     }
