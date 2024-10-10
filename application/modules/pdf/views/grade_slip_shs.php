@@ -120,6 +120,7 @@
 
 $html .= '       
      <br />
+     <h3 style="text-align:center">REPORT ON LEARNING PROGRESS AND ACHIEVEMENT</h3>
      <table border="1" cell-padding="0" class="table table-bordered table-striped">
      <tr>
          <td style="line-height:10px;" colspan=5></td>         
@@ -129,7 +130,7 @@ $html .= '
          <th style="width:40%;font-size:9px;text-align:center;"><b>Descriptive Title</b></th>
          <th style="width:15%;font-size:9px;text-align:center;"><b>Units</b></th>         
          <th style="width:15%;font-size:9px;text-align:center;">
-            <table style="margin:0;" border="1">
+            <table border="1">
                 <tr><td colspan="2">Period</td></tr>
                 <tr><td>Midterm</td><td>Final</td></tr>
             </table>
