@@ -25,7 +25,11 @@ table {
 }
 
 table tr td {
-    vertical-align: top;
+    vertical-align: top;    
+    font-size:12px;
+}
+
+table tr th{
     font-size:12px;
 }
 
