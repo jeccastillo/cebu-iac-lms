@@ -279,7 +279,7 @@ $html .= '
                 Eligible for transfer/admission to&nbsp;&nbsp;&nbsp; ____________________________
             </div>
             <div style="margin-top:20px;font-weight:bold;">
-                __________________________________<br />
+                ________________________________<br />
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Registrar/Principal
             </div>
             
