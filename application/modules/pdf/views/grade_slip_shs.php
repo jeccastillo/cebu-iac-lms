@@ -124,8 +124,8 @@ $html .= '
      <table border="1" cell-padding="0">     
      <tr>         
          <th rowspan="2" style="width:55%;font-size:9px;text-align:center;"><b>Subject</b></th>         
-         <th colspan="2" style="width:10%;font-size:9px;text-align:center;"><b>Period</b></th>
-         <th rowspan="2" style="width:20%;font-size:9px;text-align:center;"><b>Semester<br />Final Grade</b></th>
+         <th colspan="2" style="width:20%;font-size:9px;text-align:center;"><b>Period</b></th>
+         <th rowspan="2" style="width:10%;font-size:9px;text-align:center;"><b>Semester<br />Final Grade</b></th>
          <th rowspan="2" style="width:15%;font-size:9px;text-align:center;"><b>Remarks</b></th>
      </tr>
      <tr style="text-align:center;">
