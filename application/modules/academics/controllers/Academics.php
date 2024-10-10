@@ -509,6 +509,48 @@ class Academics extends CI_Controller {
     
     }
 
+    public function faculty_advisers($term = 0){
+        
+        if($this->data["user"]["special_role"] >= 1)
+        {  
+            if($term == 0){
+                $term = $this->data_fetcher->get_active_sem();
+                $term = $term['intID'];
+            }            
+            $this->data['page'] = "advisers";
+            $this->data['opentree'] = "academics_students";
+            $this->data['term'] = $term;            
+
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/advisers",$this->data);
+            $this->load->view("common/footer",$this->data);
+        }
+        else
+            redirect(base_url()."unity");
+    }
+
+    public function advisers_data($term){
+        if($this->data["user"]["special_role"] >= 1)
+        { 
+            $data['sy'] = $this->db                            
+                                ->get('tb_mas_sy')
+                                ->result_array();
+
+            $data['faculty_sections'] = $this->db
+                ->select('tb_mas_block_sections.*,tb_mas_faculty.strLastname,tb_mas_faculty.strFirstname')
+                ->from('tb_mas_block_sections')
+                ->join('tb_mas_faculty_adviser','tb_mas_faculty_adviser.block_id = tb_mas_block_sections.intID')
+                ->join('tb_mas_faculty','tb_mas_faculty_adviser.faculty_id = tb_mas_faculty.intID')
+                ->where(array('tb_mas_faculty_adviser.term_id'=>$term))
+                ->get()
+                ->result_array();                                 
+
+            echo json_encode($data);
+        }
+        else
+            echo "error";
+    }
+
     public function deans_listers($term = 0,$period = 0){
         
         if($this->data["user"]["special_role"] >= 1)
