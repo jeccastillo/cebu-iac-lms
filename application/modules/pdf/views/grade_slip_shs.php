@@ -64,6 +64,10 @@ table tr td {
     }
 }
 </style>
+
+<body>
+    <div class="sheet-outer A4">
+        <section class="sheet padding-5mm">
 <?php
 
     $html = '<table border="1" cellspacing="0" cellpadding="1" style="color:#333; font-size:10;">
@@ -211,3 +215,6 @@ $html .= '
 
             echo $html;
 ?>
+        </section>
+    </div>
+</body>
