@@ -121,10 +121,7 @@
 $html .= '       
      <br />
      <h3 style="text-align:center">REPORT ON LEARNING PROGRESS AND ACHIEVEMENT</h3>
-     <table border="1" cell-padding="0" class="table table-bordered table-striped">
-     <tr>
-         <td style="line-height:10px;" colspan=5></td>         
-     </tr> 
+     <table border="1" cell-padding="0">     
      <tr>
          <th rowspan="2" style="width:15%;font-size:9px;text-align:center;"><b>Course Code</b></th>
          <th rowspan="2" style="width:40%;font-size:9px;text-align:center;"><b>Descriptive Title</b></th>
