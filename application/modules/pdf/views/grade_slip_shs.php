@@ -151,10 +151,10 @@ $html .= '
         $html .= '            
             <tr>                
                 <td style="font-size:8px;border:0;">'.$item['strDescription'].'</td>                
-                <td style="font-size:8px;text-align:center;border:0;">'.$grade_midterm.'</td>
-                <td style="font-size:8px;text-align:center;border:0;">'.$grade_final.'</td>                
-                <td style="font-size:8px;text-align:center;border:0;"></td>
-                <td style="font-size:8px;text-align:center;border:0;">'.$item['strRemarks'].'</td>
+                <td style="font-size:8px;text-align:center;border:none;">'.$grade_midterm.'</td>
+                <td style="font-size:8px;text-align:center;border:none;">'.$grade_final.'</td>                
+                <td style="font-size:8px;text-align:center;border:none;"></td>
+                <td style="font-size:8px;text-align:center;border:none;">'.$item['strRemarks'].'</td>
             </tr>            
             ';
     }
