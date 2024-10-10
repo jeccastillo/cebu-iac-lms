@@ -57,8 +57,8 @@ new Vue({
 
     methods: {   
         changeTermSelected: function(){
-            document.location = this.base_url + "academics/deans_listers/" + 
-            this.term + '/' + this.period;
+            document.location = this.base_url + "academics/faculty_advisers/" + 
+            this.term;
         },
 
         deansListPdf:function(){
