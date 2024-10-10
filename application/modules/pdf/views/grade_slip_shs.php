@@ -1,8 +1,7 @@
 <style>
 body {
     margin: 0;
-    font-family: Arial, Sans-Serif;    
-    font-size:12px;
+    font-family: Arial, Sans-Serif;        
 }
 
 .sheet-outer {
@@ -18,7 +17,7 @@ body {
 }
 
 section {
-    font-size: 10px;
+    font-size: 12px;
 }
 .rotate{
     transform: rotate(-90deg);
