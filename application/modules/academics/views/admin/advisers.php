@@ -61,7 +61,7 @@ new Vue({
             axios.get(this.base_url + 'academics/advisers_data/' + this.term)
                 .then((data) => {                                          
                     this.loading = false; 
-                    this.sy = data.data.sy;         \
+                    this.sy = data.data.sy;
                     this.faculty_sections = data.data.faculty_sections;
                          
                 })
