@@ -223,9 +223,9 @@ $html .= '
 
             $html .= "<table border='1'><tr><th style='width:50%;height:70px;border-top:1px solid #333;border-right:1px solid #333;border-left:1px solid #333;'></th>";
             foreach($term_months as $month){
-                $days = $month['attendance']['school_days']?$month['attendance']['school_days']:0;
-                $abscences = $month['attendance']['abscences']?$month['attendance']['abscences']:0;
-                $tardy = $month['attendance']['tardy']?$month['attendance']['tardy']:0;
+                $days = isset($month['attendance']['school_days'])?$month['attendance']['school_days']:0;
+                $abscences = isset($month['attendance']['abscences'])?$month['attendance']['abscences']:0;
+                $tardy = isset($month['attendance']['tardy'])?$month['attendance']['tardy']:0;
                 $present = $days - $abscences;
 
                 $html .="<th style='border-right:1px solid #333;border-top:1px solid #333;' ><div class='rotate'>".strtoupper(substr($month['month'],0,3))."</div></th>";
