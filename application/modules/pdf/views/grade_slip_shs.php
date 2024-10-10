@@ -193,7 +193,7 @@ $html .= '
 
             $html .= "<table><tr><td></td>";
             foreach($term_months as $month){
-                $html .="<td>".$month['month']."</td>";
+                $html .="<td style='transform-origin: 0 0;transform: rotate(90deg);'>".$month['month']."</td>";
             }
             $html .="</tr></table>";
 
