@@ -541,7 +541,7 @@ class Academics extends CI_Controller {
                 ->from('tb_mas_block_sections')
                 ->join('tb_mas_faculty_adviser','tb_mas_faculty_adviser.block_id = tb_mas_block_sections.intID')
                 ->join('tb_mas_faculty','tb_mas_faculty_adviser.faculty_id = tb_mas_faculty.intID')
-                ->where(array('tb_mas_faculty_adviser.term_id'=>$post['sem']))
+                ->where(array('tb_mas_faculty_adviser.term_id'=>$term))
                 ->get()
                 ->result_array();                                 
 
