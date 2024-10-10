@@ -150,11 +150,11 @@ $html .= '
         
         $html .= '            
             <tr>                
-                <td style="font-size:9px;">'.$item['strDescription'].'</td>                
-                <td style="font-size:9px;text-align:center;">'.$grade_midterm.'</td>
-                <td style="font-size:9px;text-align:center;">'.$grade_final.'</td>                
-                <td style="font-size:9px;text-align:center;"></td>
-                <td style="font-size:9px;text-align:center;">'.$item['strRemarks'].'</td>
+                <td style="font-size:9px;border-left:1px solid #333;">'.$item['strDescription'].'</td>                
+                <td style="font-size:9px;border-left:1px solid #333;text-align:center;">'.$grade_midterm.'</td>
+                <td style="font-size:9px;border-left:1px solid #333;text-align:center;">'.$grade_final.'</td>                
+                <td style="font-size:9px;border-left:1px solid #333;text-align:center;"></td>
+                <td style="font-size:9px;border:0 1px 1px 1px solid #333;text-align:center;">'.$item['strRemarks'].'</td>
             </tr>                       
             ';
     }
