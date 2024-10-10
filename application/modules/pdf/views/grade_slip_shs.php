@@ -186,14 +186,20 @@ $html .= '
             </table>
             <div style="text-align:center;">
                 Class Adviser
-            </div>                        
+            </div>               
+            <div style="line-height:20px"></div>         
+            <div style="text-align:center;font-weight:bold;">REPORT ON LEARNING PROGRESS AND ACHIEVEMENT</div>
             ';
 
 $pdf->writeHTML($html, true, false, true, false, '');
+$html = "<table><tr><td></td>";
+$pdf->writeHTML($html, true, false, true, false, '');
 $pdf->StartTransform();
 $pdf->Rotate(90);
-$pdf->writeHTML('<div>Rotated Text</div>', false);
+$pdf->writeHTML('<td>Rotated Text</td>', false);
 $pdf->StopTransform();
+$html = "</tr></table>";
+$pdf->writeHTML($html, true, false, true, false, '');
 
 //$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 

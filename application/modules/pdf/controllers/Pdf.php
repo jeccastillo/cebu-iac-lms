@@ -878,6 +878,9 @@ class Pdf extends CI_Controller {
         $this->data['records'] = $sc_ret;
         $this->data['stype'] = $stype;
         $this->data['registration'] = $this->data_fetcher->getRegistrationInfo($id,$this->data['selected_ay']);
+        $this->data['term_months'] = $this->db->where(array('term_id'=>$this->data['selected_ay']))                                                 
+                                                 ->get('tb_mas_sy_months')
+                                                 ->result_array();
         $adviser = $this->db->select('tb_mas_faculty.*')
                                           ->from('tb_mas_faculty_adviser')
                                           ->join('tb_mas_faculty', 'tb_mas_faculty_adviser.faculty_id = tb_mas_faculty.intID')            
