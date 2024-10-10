@@ -121,7 +121,7 @@
 $html .= '       
      <br />
      <h3 style="text-align:center">REPORT ON LEARNING PROGRESS AND ACHIEVEMENT</h3>
-     <table border="1" cellpadding="2">     
+     <table cellpadding="2">     
      <tr>         
          <th rowspan="2" style="width:55%;font-size:9px;text-align:center;"><b>Subject</b></th>         
          <th colspan="2" style="width:20%;font-size:9px;text-align:center;"><b>Period</b></th>
@@ -151,10 +151,10 @@ $html .= '
         $html .= '            
             <tr>                
                 <td style="font-size:8px;border:0;">'.$item['strDescription'].'</td>                
-                <td style="font-size:8px;text-align:center;border:none;">'.$grade_midterm.'</td>
-                <td style="font-size:8px;text-align:center;border:none;">'.$grade_final.'</td>                
-                <td style="font-size:8px;text-align:center;border:none;"></td>
-                <td style="font-size:8px;text-align:center;border:none;">'.$item['strRemarks'].'</td>
+                <td style="font-size:8px;text-align:center;">'.$grade_midterm.'</td>
+                <td style="font-size:8px;text-align:center;">'.$grade_final.'</td>                
+                <td style="font-size:8px;text-align:center;"></td>
+                <td style="font-size:8px;text-align:center;">'.$item['strRemarks'].'</td>
             </tr>            
             ';
     }
