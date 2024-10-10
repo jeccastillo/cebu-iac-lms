@@ -28,6 +28,7 @@ table {
 table tr td {
     vertical-align: top;    
     font-size:12px;
+    padding:2px;
 }
 
 table tr th{
