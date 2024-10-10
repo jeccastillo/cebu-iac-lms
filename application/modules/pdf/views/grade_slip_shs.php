@@ -176,7 +176,7 @@ $html .= '
             </table>            
             <div style="line-height:20px"></div>
             <table>
-                <tr>
+                <tr style="font-size:10;">
                     <td style="width:25%;"></td>
                     <td style="width:50%;text-align:center;font-size:9px;border-bottom:1px solid #333;">
                                 '.$adviser_name.' 
