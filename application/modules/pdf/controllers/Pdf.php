@@ -886,7 +886,7 @@ class Pdf extends CI_Controller {
         $ret_months = [];                                                 
                                                          
         foreach($term_months as $month){
-            $month['attendance'] = $this->db->get_where('tb_mas_student_attendance',array('month_id'=>$month['id'],'student_id'=>$id))->result_array();
+            //$month['attendance'] = $this->db->get_where('tb_mas_student_attendance',array('month_id'=>$month['id'],'student_id'=>$id))->result_array();
             $ret_months[] = $month;
         }                                                 
 
