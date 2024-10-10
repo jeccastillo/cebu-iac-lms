@@ -14,7 +14,7 @@
     $pdf->SetMargins(15, 35 , 15);
     $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
     $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-    $pdf->SetFont('Arial','',10);
+    $pdf->SetFont('arial','',10);
     //$pdf->SetAutoPageBreak(TRUE, 6);
     
    //font setting
