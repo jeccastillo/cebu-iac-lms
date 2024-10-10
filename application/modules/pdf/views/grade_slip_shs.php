@@ -198,10 +198,11 @@ $rotated = "<table><tr><td></td>";
         $rotated.="<td>".$month['month']."</td>";
     }
 $rotated .="</tr></table>";
-$pdf->StartTransform();
-$pdf->Rotate(90);
-$pdf->writeHTML($rotated, false);
-$pdf->StopTransform();
+$pdf->writeHTML($rotated, true, false, true, false, '');
+// $pdf->StartTransform();
+// $pdf->Rotate(90);
+// $pdf->writeHTML($rotated, false);
+// $pdf->StopTransform();
 
 
 //$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
