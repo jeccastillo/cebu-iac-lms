@@ -13,7 +13,22 @@
     </section>
         <hr />
     <div v-if="!loading" class="content">
-           
+           <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Section</th>
+                        <th>Adviser</th>
+                        <th>Year/Grade (1 = grade 11, 2 = Grade 12)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="section in faculty_sections">
+                        <td>{{ section.name }}</td>
+                        <td>{{ section.strLastname + ", " + section.strFirstname }}</td>
+                        <td>{{ section.year }}</td>
+                    </tr>
+                </tbody>
+           </table>
     </div>    
     <div v-else class="content">             
         <h4>Loading Data Please Wait...</h4>
@@ -35,7 +50,8 @@ new Vue({
         base_url: '<?php echo base_url(); ?>',
         term: '<?php echo $term; ?>',        
         sy: [],
-        loading: true,        
+        loading: true,      
+        faculty_sections: [],  
     },    
     mounted() {
 
@@ -45,7 +61,8 @@ new Vue({
             axios.get(this.base_url + 'academics/advisers_data/' + this.term)
                 .then((data) => {                                          
                     this.loading = false; 
-                    this.sy = data.data.sy;         
+                    this.sy = data.data.sy;         \
+                    this.faculty_sections = data.data.faculty_sections;
                          
                 })
                 .catch((error) => {
