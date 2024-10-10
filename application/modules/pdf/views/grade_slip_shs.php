@@ -177,11 +177,11 @@ $html .= '
             <div style="line-height:20px"></div>
             <table>
                 <tr>
-                    <td style="width:20%;"></td>
-                    <td style="width:60%;text-align:center;font-size:9px;border-bottom:1px solid #333;">
+                    <td style="width:25%;"></td>
+                    <td style="width:50%;text-align:center;font-size:9px;border-bottom:1px solid #333;">
                                 '.$adviser_name.' 
                     </td>
-                    <td style="width:20%;"></td>
+                    <td style="width:25%;"></td>
                 </tr>
             </table>
             <div style="text-align:center;">
