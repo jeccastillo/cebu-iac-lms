@@ -191,17 +191,15 @@ $html .= '
             <div style="text-align:center;font-weight:bold;">REPORT ON LEARNING PROGRESS AND ACHIEVEMENT</div>
             ';
 
-$pdf->writeHTML($html, true, false, true, false, '');
+            $html .= "<table><tr><td></td>";
+            foreach($term_months as $month){
+                $html .="<td>".$month['month']."</td>";
+            }
+            $html .="</tr></table>";
 
-$i = 0;
+    $pdf->writeHTML($html, true, false, true, false, '');
 
-foreach($term_months as $month){
-    $pdf->StartTransform();
-    $pdf->Rotate(90);
-    $pdf->MultiCell(35,20,$month['month'],'L',1,0,'','',true);
-    $pdf->StopTransform();
-    $i++;
-}
+
 
 //$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 
