@@ -26,7 +26,7 @@ table {
 
 table tr td {
     vertical-align: top;
-    font-size:10px;
+    font-size:12px;
 }
 
 @media screen {
