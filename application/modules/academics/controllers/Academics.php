@@ -509,7 +509,7 @@ class Academics extends CI_Controller {
     
     }
 
-    public function faculty_advisers($term = 0,){
+    public function faculty_advisers($term = 0){
         
         if($this->data["user"]["special_role"] >= 1)
         {  
