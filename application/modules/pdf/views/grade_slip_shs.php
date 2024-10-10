@@ -234,8 +234,8 @@ $html .= '
 
                 $html .="<th style='border-right:1px solid #333;border-top:1px solid #333;' ><div class='rotate'>".strtoupper(substr($month['month'],0,3))."</div></th>";
                 $attendance_days.="<td style='text-align:center;'>".$days."</td>";
-                $attendance_present.="<td style='text-align:center;>".$present."</td>";
-                $attendance_tardy.="<td style='text-align:center;>".$tardy."</td>";
+                $attendance_present.="<td style='text-align:center;'>".$present."</td>";
+                $attendance_tardy.="<td style='text-align:center;'>".$tardy."</td>";
             }
             //FOR TOTAL
             $attendance_days .= "<td style='text-align:center;'>".$total_attendance."</td>";
