@@ -1,8 +1,7 @@
 <style>
 body {
     margin: 0;
-    font-family: Arial, Sans-Serif;
-    font-size:10px;
+    font-family: Arial, Sans-Serif;    
 }
 
 .sheet-outer {
@@ -27,6 +26,7 @@ table {
 
 table tr td {
     vertical-align: top;
+    font-size:10px;
 }
 
 @media screen {
