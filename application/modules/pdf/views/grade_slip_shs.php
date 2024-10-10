@@ -1,115 +1,150 @@
+<style>
+body {
+    margin: 0;
+    font-family: Arial, Sans-Serif;        
+}
+
+.sheet-outer {
+    margin: 0;
+}
+
+.sheet {
+    margin: 0;
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
+    page-break-after: always;
+}
+
+section {
+    font-size: 12px;
+}
+.rotate{
+    transform: rotate(-90deg);
+    /* Legacy vendor prefixes that you probably don't need... */
+    /* Safari */
+    -webkit-transform: rotate(-90deg);
+    /* Firefox */
+    -moz-transform: rotate(-90deg);
+    /* IE */
+    -ms-transform: rotate(-90deg);
+    /* Opera */
+    -o-transform: rotate(-90deg);
+    /* Internet Explorer */
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+}
+table {
+    width: 100%;
+    border-spacing:0;
+}
+
+table tr td {
+    vertical-align: top;    
+    font-size:12px;
+    padding:2px;
+}
+
+table tr th{
+    font-size:12px;
+}
+
+@media screen {
+    body {
+        background: #e0e0e0
+    }
+
+    .sheet {
+        background: white;
+        box-shadow: 0 .5mm 2mm rgba(0, 0, 0, .3);
+        margin: 5mm auto;
+    }
+}
+
+.sheet-outer.A4 .sheet {
+    width: 210mm;
+    height: 296mm
+}
+
+.sheet.padding-5mm {
+    padding-top: 10mm;
+    padding-left: 8mm;
+    padding-right: 10mm;
+}
+
+@page {
+    size: A4;
+    margin: 0
+}
+
+@media print {
+
+    .sheet-outer.A4,
+    .sheet-outer.A5.landscape {
+        width: 210mm
+    }
+}
+</style>
+
+<body>
+    <div class="sheet-outer A4">
+        <section class="sheet padding-5mm">
 <?php
 
-    tcpdf();
-    // create new PDF document
-    //$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-    //$pdf = new TCPDF("P", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-    $pdf = new TCPDF("L", "mm", array(210,146), true, 'UTF-8', false);
-
-    // set document information
-    $pdf->SetCreator(PDF_CREATOR);
-    $pdf->SetTitle("Enrollment Summary");
-    
-    // set margins
-    $pdf->SetMargins(10, 5 , 10);
-    $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-    $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-    $pdf->SetFont('helvetica','',10);
-    //$pdf->SetAutoPageBreak(TRUE, 6);
-    
-   //font setting
-    //$pdf->SetFont('calibril_0', '', 10, '', 'false');
-    
-    $pdf->setPrintHeader(false);
-    $pdf->setPrintFooter(false);
-    // Add a page
-    // This method has several options, check the source code documentation for more information.
-    $pdf->AddPage('P', 'LEGAL');            
-
-    $term_type = ($active_sem['term_label'] == "Sem")?"Semester":"Trimester";
-    $cm = ($campus == "Cebu")?"iACADEMY Cebu":"iACADEMY";
-    $seal = ($campus == "Cebu")?"https://i.ibb.co/9hgbYNB/seal.png":"https://i.ibb.co/kcYVsS7/i-ACADEMY-Seal-Makati.png";
-    
-    // Set some content to print
-    // $html = '<table border="0" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">
-    //             <tr>                             
-    //                 <td rowspan="3" width="20%">
-    //                     <img width="60px;" src="'.$seal.'" alt="seal" border="0">
-    //                 </td>
-    //                 <td width="80%">             
-    //                     <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">Information & Communications Technology, Inc.</font>
-    //                 </td>
-    //             </tr>
-    //             <tr>                                                 
-    //                 <td width="80%">             
-    //                     <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">'.$cm.'</font>
-    //                 </td>
-    //             </tr>
-    //             <tr>                                           
-    //                 <td>             
-    //                     <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">'.ucfirst($period).' Grade SY '.$active_sem['strYearStart'].'-'.$active_sem['strYearEnd'].' '.$term_type.' '.switch_num_rev($active_sem['enumSem']).'</font>
-    //                 </td>
-    //             </tr> 
-    //             <tr>
-    //                 <td style="line-height:10px;" colspan=5></td>         
-    //             </tr>        
-    //         </table>
-    //        ';
-    $html = '<table border="1" cellspacing="0" cellpadding="3" style="color:#333; font-size:10;">
+    $html = '<table border="1" cellspacing="0" cellpadding="1" style="color:#333;margin-top:120px;">
                 <tr>                            
                     <td width="15%">             
-                        <font style="font-size: 9;font-weight:bold">Name:</font>
+                        <font style="font-weight:bold">Name:</font>
                     </td>
                     <td width="35%">             
-                        <font style="font-size: 9;">'.strtoupper($student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename']).'</font>
+                        <font style="">'.strtoupper($student['strLastname'].' '.$student['strFirstname'].' '.$student['strMiddlename']).'</font>
                     </td>
                     <td width="15%">             
-                        <font style="font-size: 9;font-weight:bold">ID No:</font>
+                        <font style="font-weight:bold">ID No:</font>
                     </td>
                     <td width="35%">             
-                        <font style="font-size: 9;">'.preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']).'</font>
+                        <font style="">'.preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']).'</font>
                     </td>
                 </tr>
                 <tr>                            
                     <td width="15%">             
-                        <font style="font-size: 9;font-weight:bold">Grade & Sec:</font>
+                        <font style="font-weight:bold">Grade & Sec:</font>
                     </td>
                     <td width="35%">             
-                        <font style="font-size: 9;">'.$grade_level.' '.$registration['block_name'].'</font>
+                        <font style="">'.$grade_level.' '.$registration['block_name'].'</font>
                     </td>
                     <td width="15%">             
-                        <font style="font-size: 9;font-weight:bold">LRN:</font>
+                        <font style="font-weight:bold">LRN:</font>
                     </td>
                     <td width="35%">             
-                        <font style="font-size: 9;">'.$student['strLRN'].'</font>
+                        <font style="">'.$student['strLRN'].'</font>
                     </td>
                 </tr>
                 <tr>                            
                     <td width="15%">             
-                        <font style="font-size: 9;font-weight:bold">Adviser:</font>
+                        <font style="font-weight:bold">Adviser:</font>
                     </td>
                     <td width="35%">             
-                        <font style="font-size: 9;">'.$adviser_name.'</font>
+                        <font style="">'.$adviser_name.'</font>
                     </td>
                     <td width="15%">             
-                        <font style="font-size: 9;font-weight:bold">SY & Sem:</font>
+                        <font style="font-weight:bold">SY & Sem:</font>
                     </td>
                     <td width="35%">             
-                        <font style="font-size: 9;">'.$active_sem['strYearStart']."-".$active_sem['strYearEnd']." ".$active_sem['enumSem']." ".$active_sem['term_label'].'</font>
+                        <font style="">'.$active_sem['strYearStart']."-".$active_sem['strYearEnd']." ".$active_sem['enumSem']." ".$active_sem['term_label'].'</font>
                     </td>
                 </tr>
                 <tr>                            
                     <td width="15%">             
-                        <font style="font-size: 9;font-weight:bold">Track/Strand:</font>
+                        <font style="font-weight:bold">Track/Strand:</font>
                     </td>
                     <td width="35%">             
-                        <font style="font-size: 9;">'.trim($student['strProgramDescription']).'</font>
+                        <font style="">'.trim($student['strProgramDescription']).'</font>
                     </td>
                     <td width="15%">             
-                        <font style="font-size: 9;font-weight:bold">Grading Period:</font>
+                        <font style="font-weight:bold">Grading Period:</font>
                     </td>
                     <td width="35%">             
-                        <font style="font-size: 9;">'.$period.'</font>
+                        <font style="">'.$period.'</font>
                     </td>
                 </tr>                   
            </table>
@@ -120,33 +155,25 @@
 
 $html .= '       
      <br />
-     <table v-if="enrolled" class="table table-bordered table-striped">
-     <tr>
-         <td style="line-height:10px;" colspan=5></td>         
-     </tr> 
-     <tr>
-         <th style="width:15%;font-size:9px;border-bottom:1px solid #333;"><b>Course Code</b></th>
-         <th style="width:40%;font-size:9px;border-bottom:1px solid #333;"><b>Descriptive Title</b></th>
-         <th style="width:15%;font-size:9px;border-bottom:1px solid #333;text-align:center;"><b>Units</b></th>         
-         <th style="width:15%;font-size:9px;border-bottom:1px solid #333;text-align:center;">
-            <table>
-                <tr><td colspan="2">Period</td></tr>
-                <tr><td>Midterm</td><td>Final</td></tr>
-            </table>
-         </th>
-         <th style="width:15%;font-size:9px;border-bottom:1px solid #333;text-align:center;"><b>Units Earned</b></th>
+     <div style="text-align:center;font-weight:bold;">REPORT ON LEARNING PROGRESS AND ACHIEVEMENT</div>
+     <table cellpadding="1">     
+     <tr>         
+         <th rowspan="2" style="width:55%;text-align:center;border:1px solid #333;"><b>Subject</b></th>         
+         <th colspan="2" style="width:20%;text-align:center;border:1px solid #333;"><b>Period</b></th>
+         <th rowspan="2" style="width:10%;text-align:center;border:1px solid #333;"><b>Semester<br />Final Grade</b></th>
+         <th rowspan="2" style="width:15%;text-align:center;border:1px solid #333;"><b>Remarks</b></th>
      </tr>
-     <tr>
-         <td style="line-height:5px;" colspan=5></td>         
-     </tr>     
+     <tr style="text-align:center;">
+        <th style="border-right:1px solid #333;border-bottom:1px solid #333;"><b>Midterm</b></th>
+        <th style="border-bottom:1px solid #333;"><b>Finals</b></th>
+     </tr>  
      ';
          
     foreach($records as $item){                
         
-        if($period == "final")
-            $grade = ($item['intFinalized'] >= 2)?$item['v3']:'NGS';
-        else
-            $grade = ($item['intFinalized'] >= 1)?$item['v2']:'NGS';
+        
+        $grade_final = ($item['intFinalized'] >= 2)?$item['v3']:'NGS';        
+        $grade_midterm = ($item['intFinalized'] >= 1)?$item['v2']:'NGS';
         
         $units_earned = ($item['strRemarks'] == "Passed" && $item['intFinalized'] >= 2 && $period == "final")?number_format($item['strUnits'],1):0;
         if($item['include_gwa'])
@@ -157,30 +184,23 @@ $html .= '
         }
         
         $html .= '            
-            <tr>
-                <td style="font-size:8px;">'.$item['strCode'].'</td>
-                <td style="font-size:8px;">'.$item['strDescription'].'</td>
-                <td style="font-size:8px;text-align:center;">'.$units.'</td>
-                <td style="font-size:8px;text-align:center;">'.$grade.'</td>
-                <td style="font-size:8px;text-align:center;">'.$units_earned.'</td>
-            </tr>            
+            <tr>                
+                <td style="border-left:1px solid #333;">'.$item['strDescription'].'</td>                
+                <td style="border-left:1px solid #333;text-align:center;">'.$grade_midterm.'</td>
+                <td style="border-left:1px solid #333;text-align:center;">'.$grade_final.'</td>                
+                <td style="border-left:1px solid #333;text-align:center;"></td>
+                <td style="border-right:1px solid #333;border-left:1px solid #333;text-align:center;">'.$item['strRemarks'].'</td>
+            </tr>                       
             ';
     }
   
             
     $html .='
             <tr>
-                <td style="line-height:15px;" colspan=5></td>         
-            </tr>
-            
-            <tr style="font-size:9px;">
-                <th colspan="3" style="text-align:right;"><b>General Weighted Average(GWA)</b></th> 
-                <th style="text-align:center;"><b>'.$other_data['gwa'].'</b></th>
-            </tr>
-            <tr style="font-size:9px;">
-                <th colspan="3" style="text-align:right;"><b>Total Units Earned</b></th>
-                <th style="text-align:center;"><b>'.number_format($other_data['total_units'],1).'</b></th>                
-            </tr>
+                <td colspan="3" style="border-top:1px solid #333;border-left:1px solid #333;">General Average for the Semester</td>
+                <td style="text-align:center;border-top:1px solid #333;border-left:1px solid #333;">'.$other_data['gwa'].'</td>
+                <td style="border-top:1px solid #333;border-left:1px solid #333;border-right:1px solid #333;"></td>
+            </tr> 
             <tr>
                 <td style="line-height:2px;border-top:1px solid #333"></td>         
                 <td style="line-height:2px;border-top:1px solid #333"></td>         
@@ -188,27 +208,88 @@ $html .= '
                 <td style="line-height:2px;border-top:1px solid #333"></td>         
                 <td style="line-height:2px;border-top:1px solid #333"></td>         
             </tr>
-            </table>
-            <font style="font-weight:bold;">Grading System</font>      
-            <p style="font-size:8px;">1.00 (98-100) Excelent; 1.25 (95-97); 1.50 (92-94) Very Good; 1.75 (89-91); 2.00 (86-88); 2.25 (83-85);2.50 (80-82) Satisfactory; 2.75 (77-79) Fair; 3.00 (75-76); 5.00 (Below 75) Failed; OD (Officially Dropped); UD (Unofficially Dropped); FA (Failure due to Absences); IP (In Progress) for internship only; P (Passed); F (Failed); OW (Officially Withdrawn); UW (Unofficially Withdrawn); NGS (No Grade Submitted)			
-            </p>      
-            <div style="text-align:center;font-weight:bold;margin-top:10px;font-size:9px;">
-                ___________________________________________________<br />Registrar
-            </div>
-            <p style="font-size:8px;margin-top:10px;">GENERATED BY:'.$user['strFirstname']." ".$user['strLastname'].'<br />                 
-                RUNDATE&TIME:'.date('Y-m-d h:i a').'
-            </p>             
+            </table>                       
+            <div style="line-height:20px"></div>         
+            <div style="text-align:center;font-weight:bold;">REPORT ON LEARNING PROGRESS AND ACHIEVEMENT</div>
             ';
 
-$pdf->writeHTML($html, true, false, true, false, '');
+            $attendance_days = "";
+            $attendance_present = "";
+            $attendance_tardy = "";
 
-//$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
+            $total_attendance = 0;
+            $total_present = 0;
+            $total_tardy = 0;
 
-// ---------------------------------------------------------
+            $html .= "<table border='1'><tr><th style='width:50%;height:70px;border-top:1px solid #333;border-right:1px solid #333;border-left:1px solid #333;'></th>";
+            foreach($term_months as $month){
+                $days = isset($month['attendance']['school_days'])?$month['attendance']['school_days']:0;
+                $abscences = isset($month['attendance']['abscences'])?$month['attendance']['abscences']:0;
+                $tardy = isset($month['attendance']['tardy'])?$month['attendance']['tardy']:0;
+                $present = $days - $abscences;
 
-// Close and output PDF document
-// This method has several options, check the source code documentation for more information.
-$pdf->Output("grade_slip".date("Ymdhis").".pdf", 'I');
+                $total_attendance += $days;
+                $total_present += $present;
+                $total_tardy += $tardy;
 
+                $html .="<th style='border-right:1px solid #333;border-top:1px solid #333;' ><div class='rotate'>".strtoupper(substr($month['month'],0,3))."</div></th>";
+                $attendance_days.="<td style='text-align:center;'>".$days."</td>";
+                $attendance_present.="<td style='text-align:center;'>".$present."</td>";
+                $attendance_tardy.="<td style='text-align:center;'>".$tardy."</td>";
+            }
+            //FOR TOTAL
+            $attendance_days .= "<td style='text-align:center;'>".$total_attendance."</td>";
+            $attendance_present .= "<td style='text-align:center;'>".$total_present."</td>";
+            $attendance_tardy .= "<td style='text-align:center;'>".$total_tardy."</td>";
 
+            $html .="<th style='border-right:1px solid #333;border-top:1px solid #333;'><div class='rotate'>TOTAL</div></th></tr>
+                <tr>
+                    <th>Number of School Days</th>
+                    ".$attendance_days."
+                </tr>
+                <tr>
+                    <th>Number of Days Present</th>
+                    ".$attendance_present."
+                </tr>
+                <tr>
+                    <th>Number of Tardiness</th>
+                    ".$attendance_tardy."
+                </tr>
+            </table>";
+            
+
+            $html .= '
+            <div style="margin-top:50px;"></div>
+            <table>
+                <tr style="font-size:10;">
+                    <td style="width:25%;"></td>
+                    <td style="width:50%;text-align:center;border-bottom:1px solid #333;">
+                                '.$adviser_name.' 
+                    </td>
+                    <td style="width:25%;"></td>
+                </tr>
+            </table>
+            <div style="text-align:center;">
+                Class Adviser
+            </div>
+            <div style="text-align:center;margin-top:20px">
+                CERTIFICATE OF ELIGIBILITY
+            </div>
+            <div style="margin-top:20px">
+                Eligible for transfer/admission to&nbsp;&nbsp;&nbsp; ____________________________
+            </div>
+            <div style="margin-top:30px;font-weight:bold;">
+                ________________________________<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Registrar/Principal
+            </div>
+            
+            <p style="font-size:10px;margin-top:10px;">GENERATED BY:'.$user['strFirstname']." ".$user['strLastname'].'<br />                 
+                RUNDATE&TIME:'.date('Y-m-d h:i a').'
+            </p> 
+            ';
+
+            echo $html;
 ?>
+        </section>
+    </div>
+</body>
