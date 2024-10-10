@@ -120,13 +120,13 @@
 
 $html .= '       
      <br />
-     <table border="1" cell-padding="1" class="table table-bordered table-striped">
+     <table border="1" cell-padding="0" class="table table-bordered table-striped">
      <tr>
          <td style="line-height:10px;" colspan=5></td>         
      </tr> 
      <tr>
-         <th style="width:15%;font-size:9px;"><b>Course Code</b></th>
-         <th style="width:40%;font-size:9px;"><b>Descriptive Title</b></th>
+         <th style="width:15%;font-size:9px;text-align:center;"><b>Course Code</b></th>
+         <th style="width:40%;font-size:9px;text-align:center;"><b>Descriptive Title</b></th>
          <th style="width:15%;font-size:9px;text-align:center;"><b>Units</b></th>         
          <th style="width:15%;font-size:9px;text-align:center;">
             <table border="1">
