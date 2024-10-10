@@ -24,7 +24,7 @@
                 <tbody>
                     <tr v-for="section in faculty_sections">
                         <td>{{ section.name }}</td>
-                        <td>{{ section.strLastname + ", " + section.strFirstname }}</td>
+                        <td>{{ section.strLastname.toUpperCase() + ", " + section.strFirstname.toUpperCase() }}</td>
                         <td>{{ section.year }}</td>
                     </tr>
                 </tbody>
