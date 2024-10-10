@@ -217,17 +217,26 @@ $html .= '
             $attendance_present = "";
             $attendance_tardy = "";
 
+            $total_attendance = 0;
+            $total_present = 0;
+            $total_tardy = 0;
+
             $html .= "<table border='1'><tr><th style='width:50%;height:70px;border-top:1px solid #333;border-right:1px solid #333;border-left:1px solid #333;'></th>";
             foreach($term_months as $month){
+                $days = $month['attendance']['school_days']?$month['attendance']['school_days']:0;
+                $abscences = $month['attendance']['abscences']?$month['attendance']['abscences']:0;
+                $tardy = $month['attendance']['tardy']?$month['attendance']['tardy']:0;
+                $present = $days - $abscences;
+
                 $html .="<th style='border-right:1px solid #333;border-top:1px solid #333;' ><div class='rotate'>".strtoupper(substr($month['month'],0,3))."</div></th>";
-                $attendance_days.="<td></td>";
-                $attendance_present.="<td></td>";
-                $attendance_tardy.="<td></td>";
+                $attendance_days.="<td>".$days."</td>";
+                $attendance_present.="<td>".$present."</td>";
+                $attendance_tardy.="<td>".$tardy."</td>";
             }
             //FOR TOTAL
-            $attendance_days .= "<td></td>";
-            $attendance_present .= "<td></td>";
-            $attendance_tardy .= "<td></td>";
+            $attendance_days .= "<td>".$total_attendance."</td>";
+            $attendance_present .= "<td>".$total_present."</td>";
+            $attendance_tardy .= "<td>".$total_tardy."</td>";
 
             $html .="<th style='border-right:1px solid #333;border-top:1px solid #333;'><div class='rotate'>TOTAL</div></th></tr>
                 <tr>
