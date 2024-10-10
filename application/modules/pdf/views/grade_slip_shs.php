@@ -228,7 +228,7 @@ $html .= '
 
             $html .= "<table><tr><td></td>";
             foreach($term_months as $month){
-                $html .="<td class='rotate'>".strtoupper(substr($month['month'],3))."</td>";
+                $html .="<td class='rotate'>".strtoupper(substr($month['month'],3,0))."</td>";
             }
             $html .="</tr></table>";
 
