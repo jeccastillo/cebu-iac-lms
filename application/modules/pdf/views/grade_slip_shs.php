@@ -138,10 +138,10 @@ $html .= '
      <div style="text-align:center;font-weight:bold;">REPORT ON LEARNING PROGRESS AND ACHIEVEMENT</div>
      <table cellpadding="1">     
      <tr>         
-         <th rowspan="2" style="width:55%;font-size:9px;text-align:center;border:1px solid #333;"><b>Subject</b></th>         
-         <th colspan="2" style="width:20%;font-size:9px;text-align:center;border:1px solid #333;"><b>Period</b></th>
-         <th rowspan="2" style="width:10%;font-size:9px;text-align:center;border:1px solid #333;"><b>Semester<br />Final Grade</b></th>
-         <th rowspan="2" style="width:15%;font-size:9px;text-align:center;border:1px solid #333;"><b>Remarks</b></th>
+         <th rowspan="2" style="width:55%;text-align:center;border:1px solid #333;"><b>Subject</b></th>         
+         <th colspan="2" style="width:20%;text-align:center;border:1px solid #333;"><b>Period</b></th>
+         <th rowspan="2" style="width:10%;text-align:center;border:1px solid #333;"><b>Semester<br />Final Grade</b></th>
+         <th rowspan="2" style="width:15%;text-align:center;border:1px solid #333;"><b>Remarks</b></th>
      </tr>
      <tr style="text-align:center;">
         <th style="border-right:1px solid #333;border-bottom:1px solid #333;"><b>Midterm</b></th>
@@ -165,11 +165,11 @@ $html .= '
         
         $html .= '            
             <tr>                
-                <td style="font-size:9px;border-left:1px solid #333;">'.$item['strDescription'].'</td>                
-                <td style="font-size:9px;border-left:1px solid #333;text-align:center;">'.$grade_midterm.'</td>
-                <td style="font-size:9px;border-left:1px solid #333;text-align:center;">'.$grade_final.'</td>                
-                <td style="font-size:9px;border-left:1px solid #333;text-align:center;"></td>
-                <td style="font-size:9px;border-right:1px solid #333;border-left:1px solid #333;text-align:center;">'.$item['strRemarks'].'</td>
+                <td style="border-left:1px solid #333;">'.$item['strDescription'].'</td>                
+                <td style="border-left:1px solid #333;text-align:center;">'.$grade_midterm.'</td>
+                <td style="border-left:1px solid #333;text-align:center;">'.$grade_final.'</td>                
+                <td style="border-left:1px solid #333;text-align:center;"></td>
+                <td style="border-right:1px solid #333;border-left:1px solid #333;text-align:center;">'.$item['strRemarks'].'</td>
             </tr>                       
             ';
     }
@@ -193,7 +193,7 @@ $html .= '
             <table>
                 <tr style="font-size:10;">
                     <td style="width:25%;"></td>
-                    <td style="width:50%;text-align:center;font-size:9px;border-bottom:1px solid #333;">
+                    <td style="width:50%;text-align:center;border-bottom:1px solid #333;">
                                 '.$adviser_name.' 
                     </td>
                     <td style="width:25%;"></td>
