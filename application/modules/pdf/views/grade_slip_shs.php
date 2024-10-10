@@ -155,7 +155,12 @@ $html .= '
                 <td style="font-size:8px;text-align:center;">'.$grade_final.'</td>                
                 <td style="font-size:8px;text-align:center;"></td>
                 <td style="font-size:8px;text-align:center;">'.$item['strRemarks'].'</td>
-            </tr>            
+            </tr>   
+            <tr>
+                <td colspan="3">General Average for the Semester</td>
+                <td>'.$other_data['gwa'].'</td>
+                <td></td>
+            </tr>         
             ';
     }
   
