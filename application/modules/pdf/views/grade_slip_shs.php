@@ -199,10 +199,10 @@ $rotated = "<table><tr><td></td>";
     }
 $rotated .="</tr></table>";
 $pdf->writeHTML($rotated, true, false, true, false, '');
-// $pdf->StartTransform();
-// $pdf->Rotate(90);
-// $pdf->writeHTML($rotated, false);
-// $pdf->StopTransform();
+$pdf->StartTransform();
+$pdf->Rotate(-90);
+$pdf->Cell(0,0,'This is a sample data',1,1,'L',0,'');
+$pdf->StopTransform();
 
 
 //$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
