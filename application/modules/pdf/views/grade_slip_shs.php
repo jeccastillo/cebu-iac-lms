@@ -2,6 +2,7 @@
 body {
     margin: 0;
     font-family: Arial, Sans-Serif;    
+    font-size:12px;
 }
 
 .sheet-outer {
@@ -246,7 +247,7 @@ $html .= '
             
 
             $html .= '
-            <div style="line-height:20px"></div>
+            <div style="margin-top:50px;"></div>
             <table>
                 <tr style="font-size:10;">
                     <td style="width:25%;"></td>
@@ -259,7 +260,7 @@ $html .= '
             <div style="text-align:center;">
                 Class Adviser
             </div>';
-            
+
             echo $html;
 ?>
         </section>
