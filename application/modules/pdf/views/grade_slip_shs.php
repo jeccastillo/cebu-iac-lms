@@ -129,7 +129,7 @@ $html .= '
          <th colspan="2" style="width:15%;font-size:9px;text-align:center;">Period</th>
          <th rowspan="2" style="width:15%;font-size:9px;text-align:center;"><b>Units Earned</b></th>
      </tr>
-     <tr>
+     <tr style="text-align:center;">
         <th>Midterm</th>
         <th>Finals</th>
      </tr>  
