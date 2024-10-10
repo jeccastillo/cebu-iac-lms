@@ -155,29 +155,17 @@ $html .= '
                 <td style="font-size:8px;text-align:center;">'.$grade_final.'</td>                
                 <td style="font-size:8px;text-align:center;"></td>
                 <td style="font-size:8px;text-align:center;">'.$item['strRemarks'].'</td>
-            </tr>   
-            <tr>
-                <td colspan="3">General Average for the Semester</td>
-                <td>'.$other_data['gwa'].'</td>
-                <td></td>
-            </tr>         
+            </tr>                       
             ';
     }
   
             
     $html .='
             <tr>
-                <td style="line-height:15px;" colspan=5></td>         
-            </tr>
-            
-            <tr style="font-size:9px;">
-                <th colspan="3" style="text-align:right;"><b>General Weighted Average(GWA)</b></th> 
-                <th style="text-align:center;"><b>'.$other_data['gwa'].'</b></th>
-            </tr>
-            <tr style="font-size:9px;">
-                <th colspan="3" style="text-align:right;"><b>Total Units Earned</b></th>
-                <th style="text-align:center;"><b>'.number_format($other_data['total_units'],1).'</b></th>                
-            </tr>
+                <td colspan="3">General Average for the Semester</td>
+                <td>'.$other_data['gwa'].'</td>
+                <td></td>
+            </tr> 
             <tr>
                 <td style="line-height:2px;border-top:1px solid #333"></td>         
                 <td style="line-height:2px;border-top:1px solid #333"></td>         
