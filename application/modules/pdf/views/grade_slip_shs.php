@@ -126,16 +126,13 @@ $html .= '
          <th rowspan="2" style="width:15%;font-size:9px;text-align:center;"><b>Course Code</b></th>
          <th rowspan="2" style="width:40%;font-size:9px;text-align:center;"><b>Descriptive Title</b></th>
          <th rowspan="2" style="width:15%;font-size:9px;text-align:center;"><b>Units</b></th>         
-         <th style="width:15%;font-size:9px;text-align:center;">Period</th>
+         <th colspan="2" style="width:15%;font-size:9px;text-align:center;">Period</th>
          <th rowspan="2" style="width:15%;font-size:9px;text-align:center;"><b>Units Earned</b></th>
      </tr>
      <tr>
         <th>Midterm</th>
         <th>Finals</th>
-     </tr>
-     <tr>
-         <td style="line-height:5px;" colspan=5></td>         
-     </tr>     
+     </tr>  
      ';
          
     foreach($records as $item){                
