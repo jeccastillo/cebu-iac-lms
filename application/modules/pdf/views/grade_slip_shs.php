@@ -154,7 +154,7 @@ $html .= '
                 <td style="font-size:9px;border-left:1px solid #333;text-align:center;">'.$grade_midterm.'</td>
                 <td style="font-size:9px;border-left:1px solid #333;text-align:center;">'.$grade_final.'</td>                
                 <td style="font-size:9px;border-left:1px solid #333;text-align:center;"></td>
-                <td style="font-size:9px;border:0 1px 1px 1px solid #333;text-align:center;">'.$item['strRemarks'].'</td>
+                <td style="font-size:9px;border-right:1px solid #333;text-align:center;">'.$item['strRemarks'].'</td>
             </tr>                       
             ';
     }
@@ -162,9 +162,9 @@ $html .= '
             
     $html .='
             <tr>
-                <td colspan="3">General Average for the Semester</td>
-                <td style="text-align:center;">'.$other_data['gwa'].'</td>
-                <td></td>
+                <td colspan="3" style="border-top:1px solid #333;">General Average for the Semester</td>
+                <td style="text-align:center;border-top:1px solid #333;">'.$other_data['gwa'].'</td>
+                <td style="border-top:1px solid #333;"></td>
             </tr> 
             <tr>
                 <td style="line-height:2px;border-top:1px solid #333"></td>         
