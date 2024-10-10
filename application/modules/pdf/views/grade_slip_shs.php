@@ -120,7 +120,7 @@
 
 $html .= '       
      <br />
-     <table v-if="enrolled" class="table table-bordered table-striped">
+     <table border="1" class="table table-bordered table-striped">
      <tr>
          <td style="line-height:10px;" colspan=5></td>         
      </tr> 
