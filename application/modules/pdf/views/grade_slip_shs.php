@@ -70,7 +70,7 @@ table tr td {
         <section class="sheet padding-5mm">
 <?php
 
-    $html = '<table border="1" cellspacing="0" cellpadding="1" style="color:#333; font-size:10;">
+    $html = '<table border="1" cellspacing="0" cellpadding="1" style="color:#333;">
                 <tr>                            
                     <td width="15%">             
                         <font style="font-weight:bold">Name:</font>
