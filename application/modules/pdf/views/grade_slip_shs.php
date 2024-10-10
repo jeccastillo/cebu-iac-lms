@@ -163,7 +163,7 @@ $html .= '
     $html .='
             <tr>
                 <td colspan="3">General Average for the Semester</td>
-                <td>'.$other_data['gwa'].'</td>
+                <td style="text-align:center;">'.$other_data['gwa'].'</td>
                 <td></td>
             </tr> 
             <tr>
