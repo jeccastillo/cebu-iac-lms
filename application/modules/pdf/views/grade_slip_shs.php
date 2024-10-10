@@ -20,18 +20,18 @@ section {
     font-size: 10px;
 }
 .rotate{
-    transform: rotate(90deg);
+    transform: rotate(-90deg);
     /* Legacy vendor prefixes that you probably don't need... */
     /* Safari */
-    -webkit-transform: rotate(90deg);
+    -webkit-transform: rotate(-90deg);
     /* Firefox */
-    -moz-transform: rotate(90deg);
+    -moz-transform: rotate(-90deg);
     /* IE */
-    -ms-transform: rotate(90deg);
+    -ms-transform: rotate(-90deg);
     /* Opera */
-    -o-transform: rotate(90deg);
+    -o-transform: rotate(-90deg);
     /* Internet Explorer */
-    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 }
 table {
     width: 100%;
