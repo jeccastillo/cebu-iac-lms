@@ -192,14 +192,13 @@ $html .= '
             ';
 
 $pdf->writeHTML($html, true, false, true, false, '');
-$html = "<table><tr><td></td><td>";
-$pdf->writeHTML($html, false);
+
+
 $pdf->StartTransform();
 $pdf->Rotate(90);
-$pdf->writeHTML('Rotated Text', false);
+$pdf->writeHTML('<table><tr><td>Rotated Text</td></tr></table>', false);
 $pdf->StopTransform();
-$html = "</td></tr></table>";
-$pdf->writeHTML($html, false);
+
 
 //$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 
