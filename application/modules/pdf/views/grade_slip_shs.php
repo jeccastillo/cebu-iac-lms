@@ -194,13 +194,15 @@ $html .= '
 $pdf->writeHTML($html, true, false, true, false, '');
 
 $i = 0;
-$pdf->StartTransform();
+
 foreach($term_months as $month){
+    $pdf->StartTransform();
     $pdf->Rotate(90);
-    $pdf->Cell(0,$i,$month['month'],1,1,'L',0,'');
+    $pdf->Cell($i,0,$month['month'],1,1,'L',0,'');
+    $pdf->StopTransform();
     $i++;
 }
-$pdf->StopTransform();
+
 //$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 
 // ---------------------------------------------------------
