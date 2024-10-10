@@ -198,7 +198,7 @@ $i = 0;
 foreach($term_months as $month){
     $pdf->StartTransform();
     $pdf->Rotate(90);
-    $pdf->MultiCell(35,20,$month['month'],1,1,'L',0,'');
+    $pdf->MultiCell(35,1,$month['month'],1,1,'L',0,'');
     $pdf->StopTransform();
     $i++;
 }
