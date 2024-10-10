@@ -19,7 +19,20 @@ body {
 section {
     font-size: 10px;
 }
-
+.rotate{
+    transform: rotate(90deg);
+    /* Legacy vendor prefixes that you probably don't need... */
+    /* Safari */
+    -webkit-transform: rotate(90deg);
+    /* Firefox */
+    -moz-transform: rotate(90deg);
+    /* IE */
+    -ms-transform: rotate(90deg);
+    /* Opera */
+    -o-transform: rotate(90deg);
+    /* Internet Explorer */
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+}
 table {
     width: 100%;
     border-spacing:0;
@@ -215,7 +228,7 @@ $html .= '
 
             $html .= "<table><tr><td></td>";
             foreach($term_months as $month){
-                $html .="<td>".$month['month']."</td>";
+                $html .="<td class='rotate'>".$month['month']."</td>";
             }
             $html .="</tr></table>";
 
