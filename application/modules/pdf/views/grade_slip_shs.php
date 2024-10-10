@@ -120,7 +120,7 @@
 
 $html .= '       
      <br />
-     <h3 style="text-align:center">REPORT ON LEARNING PROGRESS AND ACHIEVEMENT</h3>
+     <div style="text-align:center;font-weight:bold;">REPORT ON LEARNING PROGRESS AND ACHIEVEMENT</div>
      <table cellpadding="1">     
      <tr>         
          <th rowspan="2" style="width:55%;font-size:9px;text-align:center;border:1px solid #333;"><b>Subject</b></th>         
@@ -177,11 +177,11 @@ $html .= '
             <div style="line-height:20px"></div>
             <table>
                 <tr>
-                    <td style="width:20%"></td>
+                    <td style="width:20%;"></td>
                     <td style="width:60%;text-align:center;font-size:9px;border-bottom:1px solid #333;">
                                 '.$adviser_name.' 
                     </td>
-                    <td style="width:20%"></td>
+                    <td style="width:20%;"></td>
                 </tr>
             </table>
             <div style="text-align:center;">
