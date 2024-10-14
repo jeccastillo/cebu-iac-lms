@@ -4861,6 +4861,9 @@ class Excel extends CI_Controller {
         $post = $this->input->post();
         $ar_students = json_decode($post['ar_students']);
 
+        print_r($ar_students);
+        die();
+
         $enrolledSlugs = $notEnrolledSlugs = array();
 
         // $ar_students = "<script> </script>"
