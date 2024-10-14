@@ -5099,7 +5099,7 @@ class Excel extends CI_Controller {
     
                     $date_enrolled = date("Y-m-d",strtotime($reg['date_enlisted']));
                     if(isset($date_enrolled_array[$user['slug']])){
-                        $date_enrolled = date("M d,Y",strtotime($date_enrolled_array[$user['slug']]));
+                        $date_enrolled = date("Y-m-d",strtotime($date_enrolled_array[$user['slug']]));
                     }
                     $tuition_discount = $total_discount = 0;
     
@@ -5130,7 +5130,7 @@ class Excel extends CI_Controller {
                         ->setCellValue('B'.$i, str_replace("-", "",$user['strStudentNumber']))
                         ->setCellValue('C'.$i, strtoupper($user['strLastname']) . ', ' . strtoupper($user['strFirstname']) . ' ' . strtoupper($user['strMiddlename']))
                         // ->setCellValue('D'.$i, isset($date_enrolled_array[$user['slug']]) ? date("M d,Y",strtotime($date_enrolled_array[$user['slug']])) : date("M d, Y",strtotime($reg['date_enlisted'])))
-                        ->setCellValue('D'.$i, $date_enrolled)
+                        ->setCellValue('D'.$i, date("M d,Y",strtotime($date_enrolled)))
                         ->setCellValue('E'.$i, $reg['paymentType'] == 'full' ? 'FULL PAYMENT' : 'INSTALLMENT')
                         ->setCellValue('F'.$i, $course['strProgramCode'])
                         ->setCellValue('G'.$i, $reg['paymentType'] == 'full' && $tuition['tuition_before_discount'] > 0 ? (float)$tuition['tuition_before_discount'] : '')
