@@ -71,7 +71,7 @@ new Vue({
                         }).appendTo(f);
                     f.submit();
                     f.remove();
-                    window.open(url, '_blank');
+                    // window.open(url, '_blank');
                 })
                 .catch((error) => {
                     console.log(error);
