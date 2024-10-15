@@ -2314,12 +2314,12 @@ class Pdf extends CI_Controller {
         $description = $request['description'] == "Tuition Fee" || $request['description'] == "Reservation Payment"  ? "Total Assessment " . $term['enumSem']." ".$term['term_label'] . " AY ".$term['strYearStart']."-".$term['strYearEnd']." ": $request['description'];
 
         $amountNetVat = 0;
-        $less_vat = 0;
+        $lessVat = 0;
 
-        // if($request['description'] != "Tuition Fee" || $request['description'] != "Reservation Payment" || $request['description'] != "Application Payment"){
-        //     $amountNetVat = $request['total_amount_due'] / 1.12;
-        //     $lessVat =  $amountNetVat * .12;            
-        // }
+        if($request['description'] != "Tuition Fee" || $request['description'] != "Reservation Payment" || $request['description'] != "Application Payment"){
+            $amountNetVat = $request['total_amount_due'] / 1.12;
+            $lessVat =  $amountNetVat * .12;            
+        }
         
         $this->data['cashCharge'] = $cashCharge;
         $this->data['term'] = $term;
