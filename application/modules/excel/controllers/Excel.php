@@ -4386,9 +4386,9 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(30);
         $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setWidth(15);
@@ -4472,8 +4472,6 @@ class Excel extends CI_Controller {
 
         
         $objWriter->save('php://output');
-        print_r($data);
-        die();
         exit;
 
     }
