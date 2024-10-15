@@ -117,7 +117,7 @@ table tr td {
                 <?php echo $reservation_amount != 0 ? "-".$reservation_amount : ""; ?>
             </div>
             <!---VAT ZERO RATED--->
-            <div style="position:absolute; top: 325px; left: 650px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 335px; left: 650px; width: 200px; height: 20px;">
                 <?php echo $vat_zero_rated_sale != 0 ? $vat_zero_rated_sale : "" ; ?>
             </div>
             <!---TOTAL SALE--->
@@ -129,7 +129,7 @@ table tr td {
                 <?php echo $less_vat != 0 ? $less_vat : "" ; ?>
             </div>
             <!---- Less EWT--->
-            <div style="position:absolute; top: 390px; left: 650px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 388px; left: 650px; width: 200px; height: 20px;">
                 <?php echo $less_ewt != 0 ? "-".$less_ewt : "" ; ?>
             </div>            
             <!---Payment Left Amount-->
@@ -142,7 +142,7 @@ table tr td {
             <div style="position:absolute; top:  460px; left: 10px; width: 200px; height: 20px;">
                 <?php  echo $total_amount_due == 0 ? "" : $remarks; ?>
             </div>
-            <!--Vat Exempt Sale-->
+            <!--Vatable-->
             <div style="position:absolute; top:  453px; left: 305px; width: 200px; height: 20px;">
                 <?php  echo $vatable != 0 ? $vatable : $vatable; ?>
             </div>
