@@ -2318,8 +2318,7 @@ class Pdf extends CI_Controller {
 
         if($request['description'] != "Tuition Fee" || $request['description'] != "Reservation Payment" || $request['description'] != "Application Payment"){
             $amountNetVat = $request['total_amount_due'] / 1.12;
-            $lessVat =  $amountNetVat * .12;
-            
+            $lessVat =  $amountNetVat * .12;            
         }
         
         $this->data['cashCharge'] = $cashCharge;

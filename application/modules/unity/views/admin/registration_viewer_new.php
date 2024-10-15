@@ -418,9 +418,19 @@
                                                 <div v-if="onInvoice && description != 'Tuition Fee'"
                                                     class="form-group">
                                                     <label>Invoice Amount:</label>    
-                                                    <input  type="number"
+                                                    <input @change="computeVat" type="number"
                                                             class="form-control"
                                                             v-model="request.invoice_amount">                                                
+                                                </div>
+                                                <div v-if="onInvoice && description != 'Tuition Fee'"
+                                                    class="form-group">
+                                                    <label>Amount net VAT:</label>    
+                                                    {{ net_vat }}                                               
+                                                </div>
+                                                <div v-if="onInvoice && description != 'Tuition Fee'"
+                                                    class="form-group">
+                                                    <label>Amount less VAT:</label>    
+                                                    {{ less_vat }}                                               
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Contact Number:</label>
@@ -1404,6 +1414,8 @@ new Vue({
         windowPayment: 'invoice',
         apiUpdate:'',
         invoiceNumbers:'',
+        net_vat: 0,
+        less_vat: 0,
         user: {
             special_role: 0,
         },
@@ -1952,6 +1964,10 @@ new Vue({
                     }
                 });
 
+        },
+        computeVat: function(){
+            this.net_vat = this.request.invoice_amount / 1.12;
+            this.less_vat =  net_vat * .12; 
         },
         updateInvoice: function() {
             let url = api_url + 'finance/update_invoice';
