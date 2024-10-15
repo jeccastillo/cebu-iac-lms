@@ -5032,7 +5032,7 @@ class Excel extends CI_Controller {
 
             if($reg && substr($user['strStudentNumber'], 0, 1) != 'T'){
                 if($reg_status == 'Enrolled'){
-                    print($reg['deduction_type']);
+                    print_r($reg);
                     die();
 
                     $ledger_data = $this->db->get_where('tb_mas_student_ledger', array('syid' => $sem, 'student_id' => $user['intID'], 'date <=' => $report_date . ' 23:59:59'))->result_array();
