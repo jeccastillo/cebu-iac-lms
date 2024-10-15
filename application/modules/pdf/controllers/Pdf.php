@@ -2290,6 +2290,22 @@ class Pdf extends CI_Controller {
             $reservationAmount = 0;
         }
 
+        $description = $request['description'] == "Tuition Fee" || $request['description'] == "Reservation Payment"  ? "Total Assessment " . $term['enumSem']." ".$term['term_label'] . " AY ".$term['strYearStart']."-".$term['strYearEnd']." ": $request['description'];
+
+        $amountNetVat = 0;
+        $lessVat = 0;
+        $totalAmountComputed = 0;
+        $totalSales = 0;
+        $lessEWT = 0;
+
+        if($request['description'] != "Tuition Fee" || $request['description'] != "Reservation Payment" || $request['description'] != "Application Payment"){
+            $amountNetVat = $request['total_amount_due'] / 1.12;
+            $lessVat =  $amountNetVat * .12;            
+            $totalSales = $request['invoice_amount'] + $request['invoice_amount_ves'] + $request['invoice_amount_vzrs'];            
+            $lessEWT = $totalSales * ($request['withholding_tax_percentage'] / 100);
+            $totalAmountComputed = $totalSales + $lessVat - $lessEWT;
+        }
+
         if(isset($tuition) && $request['description'] == "Tuition Fee"){
             if($subtract_assesment){
                 foreach($tuitionPayments as $tp)
@@ -2307,19 +2323,11 @@ class Pdf extends CI_Controller {
                 $totalAssessment = $fullAssessment - $reservationAmount;
             }
         }else{
-            $fullAssessment = $request['total_amount_due'];
-            $totalAssessment = $request['total_amount_due'];
+            $fullAssessment = $totalAmountComputed == 0 ? $request['total_amount_due'] : $totalAmountComputed;
+            $totalAssessment = $totalAmountComputed == 0 ? $request['total_amount_due'] : $totalAmountComputed;
         }
          
-        $description = $request['description'] == "Tuition Fee" || $request['description'] == "Reservation Payment"  ? "Total Assessment " . $term['enumSem']." ".$term['term_label'] . " AY ".$term['strYearStart']."-".$term['strYearEnd']." ": $request['description'];
-
-        $amountNetVat = 0;
-        $lessVat = 0;
-
-        if($request['description'] != "Tuition Fee" || $request['description'] != "Reservation Payment" || $request['description'] != "Application Payment"){
-            $amountNetVat = $request['total_amount_due'] / 1.12;
-            $lessVat =  $amountNetVat * .12;            
-        }
+        
         
         $this->data['cashCharge'] = $cashCharge;
         $this->data['term'] = $term;
@@ -2337,6 +2345,10 @@ class Pdf extends CI_Controller {
         $this->data['total_amount_due'] = number_format($request['total_amount_due'],2,'.',',');
         $this->data['amount_net_vat'] = number_format($amountNetVat,2,'.',',');
         $this->data['less_vat'] = number_format($lessVat,2,'.',',');
+        $this->data['less_ewt'] = number_format($lessEWT,2,'.',',');
+        $this->data['total_sales'] = number_format($totalSales,2,'.',',');
+        $this->data['total_amount_computed'] = number_format($totalAmountComputed,2,'.',',');
+        
         // $this->data['decimal'] = ($this->data['total_amount_due'] - floor( $this->data['total_amount_due'] )) * 100;
         // $this->data['decimal'] = round($this->data['decimal']);        
         $this->data['transaction_date'] =  date("m/d/Y",strtotime($request['transaction_date']));  
