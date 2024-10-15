@@ -363,17 +363,36 @@
                                                         class="form-control"
                                                         v-model="amount_to_pay" />
                                                 </div>
+                                                <div class="form-group">
+                                                    <label>Contact Number:</label>
+                                                    {{ request.contact_number }}
+                                                    <input type="hidden"
+                                                        required
+                                                        class="form-control"
+                                                        v-model="request.contact_number" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Email:
+                                                        {{ request.email_address }}</label>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Remarks:</label>
+                                                    <textarea type="text"
+                                                        required
+                                                        class="form-control"
+                                                        v-model="request.remarks"></textarea>
+                                                </div>
                                             </div>
                                             <div class="col-sm-4"
                                                 v-if="cashier">
-                                                <div class="form-group">
+                                                <!-- <div class="form-group">
                                                     <label>Term:</label>
                                                     <input type="hidden"
                                                         class="form-control"
                                                         v-model="request.sy_reference">
                                                     {{ sem }}
                                                     
-                                                </div>
+                                                </div> -->
                                                 <div v-if="isOR"
                                                     class="form-group">
                                                     <label>OR Number:</label>
@@ -397,8 +416,8 @@
                                                         <option v-for="invoiceNumber in invoiceNumbers" :value="invoiceNumber.invoice_number">{{ invoiceNumber.invoice_number }}</option>
                                                     </select>                                                     
 
-                                                </div>
-                                                <div v-if="onInvoice"
+                                                </div>                                                
+                                                <div v-else
                                                     class="form-group">
                                                     <label>Invoice Number:</label>
                                                     <div
@@ -415,25 +434,61 @@
                                                     </div>
 
                                                 </div>
-                                                <div class="form-group">
-                                                    <label>Contact Number:</label>
-                                                    {{ request.contact_number }}
-                                                    <input type="hidden"
-                                                        required
-                                                        class="form-control"
-                                                        v-model="request.contact_number" />
+                                                <div v-if="!isOR && description != 'Tuition Fee'"
+                                                    class="form-group">
+                                                    <label>Vatable Amount :</label>    
+                                                    <input @change="computeVat" type="number"
+                                                            class="form-control"
+                                                            v-model="request.invoice_amount">                                                
                                                 </div>
-                                                <div class="form-group">
-                                                    <label>Email:
-                                                        {{ request.email_address }}</label>
+                                                <div v-if="!isOR && description != 'Tuition Fee'"
+                                                    class="form-group">
+                                                    <label>Vat Exempt Tax :</label>    
+                                                    <input @change="computeVat" type="number"
+                                                            class="form-control"
+                                                            v-model="request.invoice_amount_ves">                                                
                                                 </div>
-                                                <div class="form-group">
-                                                    <label>Remarks:</label>
-                                                    <textarea type="text"
-                                                        required
-                                                        class="form-control"
-                                                        v-model="request.remarks"></textarea>
+                                                <div v-if="!isOR && description != 'Tuition Fee'"
+                                                    class="form-group">
+                                                    <label>Vat Zero Rated Sales :</label>    
+                                                    <input @change="computeVat" type="number"
+                                                            class="form-control"
+                                                            v-model="request.invoice_amount_vzrs">                                                
                                                 </div>
+                                                <div v-if="!isOR && description != 'Tuition Fee'"
+                                                    class="form-group">
+                                                    <label>Less EWT:</label>    
+                                                    <select @change="computeVat"
+                                                            class="form-control"
+                                                            v-model="request.withholding_tax_percentage">                                                
+                                                            <option value="0">None</option>
+                                                            <option value="1">1%</option>
+                                                            <option value="2">2%</option>
+                                                            <option value="5">5%</option>
+                                                            <option value="10">10%</option>
+                                                            <option value="15">15%</option>
+                                                    </select>
+                                                </div>
+                                                <div v-if="!isOR && description != 'Tuition Fee'"
+                                                    class="form-group">
+                                                    <label>Total Sales:</label>    
+                                                    {{ total_sales_formatted }}                                               
+                                                </div>                                               
+                                                <div v-if="!isOR && description != 'Tuition Fee'"
+                                                    class="form-group">
+                                                    <label>Value Added Tax:</label>    
+                                                    {{ less_vat_formatted }}                                               
+                                                </div>  
+                                                <div v-if="!isOR && description != 'Tuition Fee'"
+                                                    class="form-group">
+                                                    <label>Less EWT:</label>    
+                                                    {{ less_ewt_formatted }}                                               
+                                                </div>                                               
+                                                <div v-if="!isOR && description != 'Tuition Fee'"
+                                                    class="form-group">
+                                                    <label>Total Amount Due:</label>    
+                                                    {{ total_amount_computed_formatted }}                                               
+                                                </div>                                               
                                             </div>
                                             <div v-if="description == 'Tuition Fee' && registration"
                                                 class="col-sm-4">
@@ -1321,7 +1376,7 @@ new Vue({
             mode_of_payment_id: 26,
             description: undefined,
             or_number: '',
-            invoice_number:'',
+            invoice_number:'',                        
             remarks: '',
             subtotal_order: 0,
             convenience_fee: 0,
@@ -1329,6 +1384,10 @@ new Vue({
             charges: 0,
             cashier_id: undefined,
             sy_reference: null,
+            withholding_tax_percentage: 0,
+            invoice_amount: 0,
+            invoice_amount_ves: 0,
+            invoice_amount_vzrs: 0,
             status: 'Paid',
             is_cash: 1,
             check_number: '',
@@ -1396,6 +1455,16 @@ new Vue({
         windowPayment: 'invoice',
         apiUpdate:'',
         invoiceNumbers:'',
+        net_vat: 0,
+        less_vat: 0,
+        less_ewt: 0,
+        total_amount_computed: 0,
+        total_sales: 0,
+        less_vat_formatted: 0,
+        less_ewt_formatted: 0,
+        total_amount_computed_formatted: 0,
+        total_sales_formatted: 0,
+        
         user: {
             special_role: 0,
         },
@@ -1943,6 +2012,20 @@ new Vue({
                         });
                     }
                 });
+
+        },
+        computeVat: function(){
+            this.net_vat = this.request.invoice_amount / 1.12;
+            this.less_vat = this.net_vat * .12;             
+            this.total_sales = parseFloat(this.request.invoice_amount) + parseFloat(this.request.invoice_amount_ves) + parseFloat(this.request.invoice_amount_vzrs);            
+            this.less_ewt = parseFloat(this.total_sales) * parseFloat(this.request.withholding_tax_percentage / 100);
+            this.total_amount_computed = parseFloat(this.total_sales) + parseFloat(this.less_vat) - parseFloat(this.less_ewt);
+            //Formatted
+            this.net_vat_formatted = this.net_vat.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            this.less_vat_formatted = this.less_vat.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            this.total_sales_formatted = this.total_sales.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            this.less_ewt_formatted = this.less_ewt.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            this.total_amount_computed_formatted = this.total_amount_computed.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 
         },
         updateInvoice: function() {
