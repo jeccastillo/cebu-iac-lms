@@ -1967,7 +1967,7 @@ new Vue({
         },
         computeVat: function(){
             this.net_vat = this.request.invoice_amount / 1.12;
-            this.less_vat =  net_vat * .12; 
+            this.less_vat =  this.net_vat * .12; 
         },
         updateInvoice: function() {
             let url = api_url + 'finance/update_invoice';
