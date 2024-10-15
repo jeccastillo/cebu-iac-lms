@@ -130,7 +130,7 @@ table tr td {
             </div>
             <!---- Less EWT--->
             <div style="position:absolute; top: 388px; left: 650px; width: 200px; height: 20px;">
-                <?php echo $less_ewt != 0 ? "-".$less_ewt : "" ; ?>
+                <?php echo $less_ewt != 0 ? $less_ewt : "" ; ?>
             </div>            
             <!---Payment Left Amount-->
             <div style="position:absolute; top:  380px; left: 100px; width: 200px; height: 20px;">
