@@ -417,19 +417,46 @@
                                                 </div>
                                                 <div v-if="onInvoice && description != 'Tuition Fee'"
                                                     class="form-group">
-                                                    <label>Invoice Amount:</label>    
+                                                    <label>Vatable Amount :</label>    
                                                     <input @change="computeVat" type="number"
                                                             class="form-control"
                                                             v-model="request.invoice_amount">                                                
                                                 </div>
                                                 <div v-if="onInvoice && description != 'Tuition Fee'"
                                                     class="form-group">
-                                                    <label>Amount net VAT:</label>    
+                                                    <label>Vat Exempt Tax :</label>    
+                                                    <input @change="computeVat" type="number"
+                                                            class="form-control"
+                                                            v-model="request.invoice_amount_ves">                                                
+                                                </div>
+                                                <div v-if="onInvoice && description != 'Tuition Fee'"
+                                                    class="form-group">
+                                                    <label>Vat Zero Rated Sales :</label>    
+                                                    <input @change="computeVat" type="number"
+                                                            class="form-control"
+                                                            v-model="request.invoice_amount_vzrs">                                                
+                                                </div>
+                                                <div v-if="onInvoice && description != 'Tuition Fee'"
+                                                    class="form-group">
+                                                    <label>Less EWT:</label>    
+                                                    <select @change="computeVat"
+                                                            class="form-control"
+                                                            v-model="request.ewt">                                                
+                                                            <option value="0.01">1%</option>
+                                                            <option value="0.02">2%</option>
+                                                            <option value="0.05">5%</option>
+                                                            <option value="0.10">10%</option>
+                                                            <option value="0.15">15%</option>
+                                                    </select>
+                                                </div>
+                                                <div v-if="onInvoice && description != 'Tuition Fee'"
+                                                    class="form-group">
+                                                    <label>Vatable Amount:</label>    
                                                     {{ net_vat }}                                               
                                                 </div>
                                                 <div v-if="onInvoice && description != 'Tuition Fee'"
                                                     class="form-group">
-                                                    <label>Amount less VAT:</label>    
+                                                    <label>Value Added Tax:</label>    
                                                     {{ less_vat }}                                               
                                                 </div>
                                                 <div class="form-group">
@@ -1338,7 +1365,7 @@ new Vue({
             mode_of_payment_id: 26,
             description: undefined,
             or_number: '',
-            invoice_number:'',
+            invoice_number:'',                        
             remarks: '',
             subtotal_order: 0,
             convenience_fee: 0,
@@ -1347,6 +1374,8 @@ new Vue({
             cashier_id: undefined,
             sy_reference: null,
             invoice_amount: 0,
+            invoice_amount_ves: 0,
+            invoice_amount_vzrs: 0,
             status: 'Paid',
             is_cash: 1,
             check_number: '',
