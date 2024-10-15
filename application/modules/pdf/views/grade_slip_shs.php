@@ -90,7 +90,7 @@ table tr th{
         <section class="sheet padding-5mm">
 <?php
 
-    $html = '<table border="1" cellspacing="0" cellpadding="1" style="color:#333;margin-top:120px;">
+    $html = '<table style="border:1px solid #333;color:#333;margin-top:120px;" cellspacing="0" cellpadding="1" >
                 <tr>                            
                     <td width="15%">             
                         <font style="font-weight:bold">Name:</font>
@@ -210,7 +210,7 @@ $html .= '
             </tr>
             </table>                       
             <div style="line-height:20px"></div>         
-            <div style="text-align:center;font-weight:bold;">REPORT ON LEARNING PROGRESS AND ACHIEVEMENT</div>
+            <div style="text-align:center;font-weight:bold;">REPORT ON ATTENDANCE</div>
             ';
 
             $attendance_days = "";
@@ -221,7 +221,7 @@ $html .= '
             $total_present = 0;
             $total_tardy = 0;
 
-            $html .= "<table border='1'><tr><th style='width:50%;height:70px;border-top:1px solid #333;border-right:1px solid #333;border-left:1px solid #333;'></th>";
+            $html .= "<table border='1'><tr><th style='width:40%;height:70px;border-top:1px solid #333;border-right:1px solid #333;border-left:1px solid #333;'></th>";
             foreach($term_months as $month){
                 $days = isset($month['attendance']['school_days'])?$month['attendance']['school_days']:0;
                 $abscences = isset($month['attendance']['abscences'])?$month['attendance']['abscences']:0;
@@ -232,7 +232,7 @@ $html .= '
                 $total_present += $present;
                 $total_tardy += $tardy;
 
-                $html .="<th style='border-right:1px solid #333;border-top:1px solid #333;' ><div class='rotate'>".strtoupper(substr($month['month'],0,3))."</div></th>";
+                $html .="<th style='border-right:1px solid #333;border-top:1px solid #333;font-weight:200;' ><div class='rotate'>".strtoupper(substr($month['month'],0,3))."</div></th>";
                 $attendance_days.="<td style='text-align:center;'>".$days."</td>";
                 $attendance_present.="<td style='text-align:center;'>".$present."</td>";
                 $attendance_tardy.="<td style='text-align:center;'>".$tardy."</td>";
