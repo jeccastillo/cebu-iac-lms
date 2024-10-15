@@ -144,7 +144,7 @@ table tr td {
             </div>
             <!--Vatable-->
             <div style="position:absolute; top:  453px; left: 305px; width: 200px; height: 20px;">
-                <?php  echo $vatable != 0 ? $vatable : $vatable; ?>
+                <?php  echo $amount_less_vat != 0 ? $amount_less_vat : $amount_less_vat; ?>
             </div>
             <!--Vat Exempt Sale-->
             <div style="position:absolute; top:  475px; left: 305px; width: 200px; height: 20px;">
