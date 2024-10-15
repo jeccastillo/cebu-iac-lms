@@ -130,7 +130,7 @@ table tr td {
             </div>
             <!---- Less EWT--->
             <div style="position:absolute; top: 388px; left: 650px; width: 200px; height: 20px;">
-                <?php echo $less_ewt != 0 ? "-".$less_ewt : "" ; ?>
+                <?php echo $less_ewt != 0 ? $less_ewt : "" ; ?>
             </div>            
             <!---Payment Left Amount-->
             <div style="position:absolute; top:  380px; left: 100px; width: 200px; height: 20px;">
@@ -143,11 +143,11 @@ table tr td {
                 <?php  echo $total_amount_due == 0 ? "" : $remarks; ?>
             </div>
             <!--Vatable-->
-            <div style="position:absolute; top:  453px; left: 305px; width: 200px; height: 20px;">
+            <div style="position:absolute; top:  462px; left: 305px; width: 200px; height: 20px;">
                 <?php  echo $amount_less_vat != 0 ? $amount_less_vat : $amount_less_vat; ?>
             </div>
             <!--Vat Exempt Sale-->
-            <div style="position:absolute; top:  475px; left: 305px; width: 200px; height: 20px;">
+            <div style="position:absolute; top:  482px; left: 305px; width: 200px; height: 20px;">
                 <?php  echo $vat_exempt != 0 ? $vat_exempt : $total_assessment; ?>
             </div>
             <!--Total Amount received-->
