@@ -4161,7 +4161,7 @@ class Excel extends CI_Controller {
         $post = $this->input->post();
         $data = json_decode($post['applicants']);
         
-        print_r($applicants);
+        print_r($data);
         die();
         // $data = $this->input->post();
         // $data = json_decode($data['data']);
