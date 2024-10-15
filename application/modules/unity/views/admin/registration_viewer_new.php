@@ -366,14 +366,14 @@
                                             </div>
                                             <div class="col-sm-4"
                                                 v-if="cashier">
-                                                <div class="form-group">
+                                                <!-- <div class="form-group">
                                                     <label>Term:</label>
                                                     <input type="hidden"
                                                         class="form-control"
                                                         v-model="request.sy_reference">
                                                     {{ sem }}
                                                     
-                                                </div>
+                                                </div> -->
                                                 <div v-if="isOR"
                                                     class="form-group">
                                                     <label>OR Number:</label>
