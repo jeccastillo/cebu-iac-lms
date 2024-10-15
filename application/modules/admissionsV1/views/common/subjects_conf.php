@@ -81,7 +81,6 @@ $(document).ready(function() {
                                 }).appendTo(f);
                             f.submit();
                             f.remove();
-                            // window.open(url, '_blank');
                         })
                         .catch((error) => {
                             console.log(error);
