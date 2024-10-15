@@ -172,6 +172,11 @@ class Site extends CI_Controller {
     }
 
 	public function view_active_programs($syid){
+		if(!$syid){
+            $sy = $this->data_fetcher->get_active_sem();
+            $syid = $sy['intID'];
+		}
+
 		$term = $this->data_fetcher->get_sem_by_id($syid);
         $programs = $this->data_fetcher->fetch_table('tb_mas_programs', null, null, array('enumEnabled'=>1,'type'=>'college'));
         $ret = [];
@@ -196,6 +201,11 @@ class Site extends CI_Controller {
     }
 
 	public function view_active_programs_makati($syid){
+		if(!$syid){
+            $sy = $this->data_fetcher->get_active_sem();
+            $syid = $sy['intID'];
+		}
+
 		$term = $this->data_fetcher->get_sem_by_id($syid);
 		
         $programs_college = $this->data_fetcher->fetch_table('tb_mas_programs', null, null, array('enumEnabled'=>1,'type'=>'college'));
