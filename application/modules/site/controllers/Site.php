@@ -172,7 +172,7 @@ class Site extends CI_Controller {
     }
 
 	public function view_active_programs($syid){
-		if(!$syid){
+		if($syid == 0){
             $sy = $this->data_fetcher->get_active_sem();
             $syid = $sy['intID'];
 		}
@@ -201,7 +201,7 @@ class Site extends CI_Controller {
     }
 
 	public function view_active_programs_makati($syid){
-		if(!$syid){
+		if($syid == 0){
             $sy = $this->data_fetcher->get_active_sem();
             $syid = $sy['intID'];
 		}
