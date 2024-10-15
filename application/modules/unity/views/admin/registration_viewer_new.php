@@ -415,10 +415,10 @@
                                                     </div>
 
                                                 </div>
-                                                <div v-if="onInvoice"
+                                                <div v-if="onInvoice && description != 'Tuition Fee'"
                                                     class="form-group">
                                                     <label>Invoice Amount:</label>    
-                                                    <input type="number"
+                                                    <input  type="number"
                                                             class="form-control"
                                                             v-model="request.invoice_amount">                                                
                                                 </div>
