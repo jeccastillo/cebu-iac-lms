@@ -397,7 +397,7 @@
                                                         <option v-for="invoiceNumber in invoiceNumbers" :value="invoiceNumber.invoice_number">{{ invoiceNumber.invoice_number }}</option>
                                                     </select>                                                     
 
-                                                </div>
+                                                </div>                                                
                                                 <div v-if="onInvoice"
                                                     class="form-group">
                                                     <label>Invoice Number:</label>
@@ -414,6 +414,13 @@
                                                         {{ request.invoice_number }}
                                                     </div>
 
+                                                </div>
+                                                <div v-if="onInvoice"
+                                                    class="form-group">
+                                                    <label>Invoice Amount:</label>    
+                                                    <input type="number"
+                                                            class="form-control"
+                                                            v-model="request.invoice_amount">                                                
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Contact Number:</label>
@@ -1329,6 +1336,7 @@ new Vue({
             charges: 0,
             cashier_id: undefined,
             sy_reference: null,
+            invoice_amount: 0,
             status: 'Paid',
             is_cash: 1,
             check_number: '',
