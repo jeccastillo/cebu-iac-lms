@@ -1084,16 +1084,16 @@
             name="type"
             v-model="or_print.type" />
         <input type="hidden"
-            name="type"
+            name="withholding_tax_percentage"
             v-model="or_print.withholding_tax_percentage" />
         <input type="hidden"
-            name="type"
+            name="invoice_amount"
             v-model="or_print.invoice_amount" />
         <input type="hidden"
-            name="type"
+            name="invoice_amount_ves"
             v-model="or_print.invoice_amount_ves" />
         <input type="hidden"
-            name="type"
+            name="invoice_amount_vzrs"
             v-model="or_print.invoice_amount_vzrs" />
     </form>
     <form ref="print_soa"
