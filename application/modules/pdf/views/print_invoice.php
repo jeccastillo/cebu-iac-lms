@@ -143,11 +143,11 @@ table tr td {
                 <?php  echo $total_amount_due == 0 ? "" : $remarks; ?>
             </div>
             <!--Vatable-->
-            <div style="position:absolute; top:  458px; left: 305px; width: 200px; height: 20px;">
+            <div style="position:absolute; top:  462px; left: 305px; width: 200px; height: 20px;">
                 <?php  echo $amount_less_vat != 0 ? $amount_less_vat : $amount_less_vat; ?>
             </div>
             <!--Vat Exempt Sale-->
-            <div style="position:absolute; top:  478px; left: 305px; width: 200px; height: 20px;">
+            <div style="position:absolute; top:  482px; left: 305px; width: 200px; height: 20px;">
                 <?php  echo $vat_exempt != 0 ? $vat_exempt : $total_assessment; ?>
             </div>
             <!--Total Amount received-->
