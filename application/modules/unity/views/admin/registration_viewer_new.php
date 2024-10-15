@@ -417,7 +417,7 @@
                                                     </select>                                                     
 
                                                 </div>                                                
-                                                <div v-if="onInvoice"
+                                                <div v-else
                                                     class="form-group">
                                                     <label>Invoice Number:</label>
                                                     <div
