@@ -117,7 +117,7 @@ table tr td {
                 <?php echo $reservation_amount != 0 ? "-".$reservation_amount : ""; ?>
             </div>
             <!---VAT ZERO RATED--->
-            <div style="position:absolute; top: 330px; left: 650px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 335px; left: 650px; width: 200px; height: 20px;">
                 <?php echo $vat_zero_rated_sale != 0 ? $vat_zero_rated_sale : "" ; ?>
             </div>
             <!---TOTAL SALE--->
