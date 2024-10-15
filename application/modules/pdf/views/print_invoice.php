@@ -128,6 +128,10 @@ table tr td {
             <div style="position:absolute; top: 370px; left: 650px; width: 200px; height: 20px;">
                 <?php echo $less_vat != 0 ? $less_vat : "" ; ?>
             </div>
+            <!---- Less EWT--->
+            <div style="position:absolute; top: 370px; left: 650px; width: 200px; height: 20px;">
+                <?php echo $less_ewt != 0 ? "-".$less_ewt : "" ; ?>
+            </div>            
             <div style="position:absolute; top:  380px; left: 100px; width: 200px; height: 20px;">
                 <?php  echo $total_amount_due; ?>
             </div>
