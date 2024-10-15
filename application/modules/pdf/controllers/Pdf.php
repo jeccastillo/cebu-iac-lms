@@ -2305,7 +2305,7 @@ class Pdf extends CI_Controller {
             $totalSales = $request['invoice_amount'] + $request['invoice_amount_ves'] + $request['invoice_amount_vzrs'];    
             $totalSaleTaxed = $amountNetVat + $request['invoice_amount_ves'] + $request['invoice_amount_vzrs'];        
             $lessEWT = $totalSaleTaxed * ($request['withholding_tax_percentage'] / 100);
-            $totalAmountComputed = $totalSales + $lessVat - $lessEWT;
+            $totalAmountComputed = $totalSaleTaxed + $lessVat - $lessEWT;
         }
 
         if(isset($tuition) && $request['description'] == "Tuition Fee"){
