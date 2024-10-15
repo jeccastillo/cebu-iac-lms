@@ -67,7 +67,7 @@ $(document).ready(function() {
                     $("#print_form").show();
                     $("#print_form").click(function(e){
                         e.preventDefault();
-                        axios.get('https://smsapi.iacademy.edu.ph/api/v1/sms/admissions/student-info/view-students/' + $("#select-term-leads").val() + '/' + '<?php echo $campus; ?>')
+                        axios.get('https://smsapi.iacademy.edu.ph/api/v1/sms/admissions/student-info/view-applicants/' + $("#select-term-leads").val() + '/' + '<?php echo $campus; ?>')
                         .then((data) => {
                             this.students = data.data.data;
                             let url = "<?php echo base_url()?>" + "excel/export_leads";
