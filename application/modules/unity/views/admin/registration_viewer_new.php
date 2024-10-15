@@ -363,6 +363,25 @@
                                                         class="form-control"
                                                         v-model="amount_to_pay" />
                                                 </div>
+                                                <div class="form-group">
+                                                    <label>Contact Number:</label>
+                                                    {{ request.contact_number }}
+                                                    <input type="hidden"
+                                                        required
+                                                        class="form-control"
+                                                        v-model="request.contact_number" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Email:
+                                                        {{ request.email_address }}</label>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Remarks:</label>
+                                                    <textarea type="text"
+                                                        required
+                                                        class="form-control"
+                                                        v-model="request.remarks"></textarea>
+                                                </div>
                                             </div>
                                             <div class="col-sm-4"
                                                 v-if="cashier">
@@ -459,26 +478,7 @@
                                                     class="form-group">
                                                     <label>Value Added Tax:</label>    
                                                     {{ less_vat }}                                               
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Contact Number:</label>
-                                                    {{ request.contact_number }}
-                                                    <input type="hidden"
-                                                        required
-                                                        class="form-control"
-                                                        v-model="request.contact_number" />
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Email:
-                                                        {{ request.email_address }}</label>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Remarks:</label>
-                                                    <textarea type="text"
-                                                        required
-                                                        class="form-control"
-                                                        v-model="request.remarks"></textarea>
-                                                </div>
+                                                </div>                                                
                                             </div>
                                             <div v-if="description == 'Tuition Fee' && registration"
                                                 class="col-sm-4">
