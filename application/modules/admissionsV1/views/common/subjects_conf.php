@@ -67,24 +67,25 @@ $(document).ready(function() {
                     $("#print_form").show();
                     $("#print_form").click(function(e){
                         e.preventDefault();
-                        // The rest of this code assumes you are not using a library.
-                        // It can be made less verbose if you use one.
-                        const form = document.createElement('form');
-                        form.method = "post";
-                        form.action = "<?php echo base_url() ?>excel/export_leads";
-                        form.dataType = "json";
-
-                        
-                        const hiddenField = document.createElement('input');
-                        hiddenField.type = 'hidden';
-                        hiddenField.name = 'data';
-                        hiddenField.value = JSON.stringify(json.data);
-
-                        form.appendChild(hiddenField);
-                        
-
-                        document.body.appendChild(form);
-                        form.submit();
+                        axios.get('https://smsapi.iacademy.edu.ph/api/v1/sms/admissions/student-info/view-students/' + $("#select-term-leads").val())
+                        .then((data) => {
+                            this.students = data.data.data;
+                            let url = "<?php echo base_url()?>" + "excel/export_leads";
+                            
+                            var f = $("<form target='_blank' method='POST' style='display:none;'></form>").attr({
+                                action: url
+                            }).appendTo(document.body);
+                                $('<input type="hidden" />').attr({
+                                    name: 'applicants',
+                                    value: JSON.stringify(this.students)
+                                }).appendTo(f);
+                            f.submit();
+                            f.remove();
+                            // window.open(url, '_blank');
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        })
                     });
                                         
                 }
