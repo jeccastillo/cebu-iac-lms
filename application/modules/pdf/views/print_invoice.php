@@ -134,14 +134,14 @@ table tr td {
             </div>            
             <!---Payment Left Amount-->
             <div style="position:absolute; top:  380px; left: 100px; width: 200px; height: 20px;">
-                <?php  echo $invoice_amount == 0 ? $total_amount_due : ""; ?>
+                <?php  echo $total_amount_due == 0 ? "" : $total_amount_due; ?>
             </div>
             <!---VAT ZERO RATED--->
             <div style="position:absolute; top:  405px; left: 650px; width: 200px; height: 20px;">
                 <?php  echo $total_assessment; ?>
             </div>
             <div style="position:absolute; top:  460px; left: 10px; width: 200px; height: 20px;">
-                <?php  echo $remarks; ?>
+                <?php  echo $total_amount_due == 0 ? "" : $remarks; ?>
             </div>
             <!--Vat Exempt Sale-->
             <div style="position:absolute; top:  475px; left: 305px; width: 200px; height: 20px;">
@@ -149,7 +149,7 @@ table tr td {
             </div>
             <!--Total Amount received-->
             <div style="position:absolute; top:  565px; left: 50px; width: 200px; height: 20px;">
-                <?php  echo $total_amount_due; ?>
+                <?php  echo $total_amount_due == 0 ? "" : $total_amount_due; ?>
             </div>
             <div style="position:absolute; top: 550px; right: 20px; width: 200px; height: 20px;font-size:15px">
                 <?php echo $cashier_name; ?>
