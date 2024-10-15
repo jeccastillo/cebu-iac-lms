@@ -122,7 +122,7 @@ table tr td {
             </div>
             <!---TOTAL SALE--->
             <div style="position:absolute; top:  353px; left: 650px; width: 200px; height: 20px;">
-                <?php  echo $total_sale_taxed > 0 ? $total_assessment : $total_sale_taxed; ?>
+                <?php  echo $total_sale_taxed == 0 ? $total_assessment : $total_sale_taxed; ?>
             </div>
             <!---- VAT--->
             <div style="position:absolute; top: 370px; left: 650px; width: 200px; height: 20px;">
