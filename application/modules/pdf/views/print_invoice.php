@@ -147,7 +147,7 @@ table tr td {
             <div style="position:absolute; top:  462px; left: 305px; width: 200px; height: 20px;">
                 <?php  echo $amount_less_vat; ?>
             </div>            
-            <?php elseif($less_vat == 0 && $amount_less_vat != 0): ?>
+            <?php elseif($less_vat != 0 && $amount_less_vat == 0): ?>
             <div style="position:absolute; top:  462px; left: 305px; width: 200px; height: 20px;">
                 <?php  echo ""; ?>
             </div>
