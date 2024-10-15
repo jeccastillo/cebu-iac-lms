@@ -129,7 +129,7 @@ table tr td {
                 <?php echo $less_vat != 0 ? $less_vat : "" ; ?>
             </div>
             <!---- Less EWT--->
-            <div style="position:absolute; top: 390px; left: 650px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 388px; left: 650px; width: 200px; height: 20px;">
                 <?php echo $less_ewt != 0 ? "-".$less_ewt : "" ; ?>
             </div>            
             <!---Payment Left Amount-->
