@@ -2304,7 +2304,7 @@ class Pdf extends CI_Controller {
             $lessVat =  $amountNetVat * .12;    
             $totalSales = $request['invoice_amount'] + $request['invoice_amount_ves'] + $request['invoice_amount_vzrs'];    
             $totalSaleTaxed = $amountNetVat + $request['invoice_amount_ves'] + $request['invoice_amount_vzrs'];        
-            $lessEWT = $totalSales * ($request['withholding_tax_percentage'] / 100);
+            $lessEWT = $totalSaleTaxed * ($request['withholding_tax_percentage'] / 100);
             $totalAmountComputed = $totalSales + $lessVat - $lessEWT;
         }
 
