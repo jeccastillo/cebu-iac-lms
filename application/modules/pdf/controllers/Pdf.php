@@ -2297,11 +2297,13 @@ class Pdf extends CI_Controller {
         $totalAmountComputed = 0;
         $totalSales = 0;
         $lessEWT = 0;
+        $totalSaleTaxed = 0;
 
         if($request['description'] != "Tuition Fee" || $request['description'] != "Reservation Payment" || $request['description'] != "Application Payment"){
-            $amountNetVat = $request['invoice_amount']  / 1.12;
-            $lessVat =  $amountNetVat * .12;            
-            $totalSales = $request['invoice_amount'] + $request['invoice_amount_ves'] + $request['invoice_amount_vzrs'];            
+            $amountNetVat = $request['invoice_amount']  / 1.12;            
+            $lessVat =  $amountNetVat * .12;    
+            $totalSales = $request['invoice_amount'] + $request['invoice_amount_ves'] + $request['invoice_amount_vzrs'];    
+            $totalSaleTaxed = $amountNetVat + $request['invoice_amount_ves'] + $request['invoice_amount_vzrs'];        
             $lessEWT = $totalSales * ($request['withholding_tax_percentage'] / 100);
             $totalAmountComputed = $totalSales + $lessVat - $lessEWT;
         }
@@ -2349,6 +2351,7 @@ class Pdf extends CI_Controller {
         $this->data['vatable'] = number_format($request['invoice_amount'],2,'.',',');    
         $this->data['amount_less_vat'] = number_format($amountNetVat,2,'.',',');        
         $this->data['less_ewt'] = number_format($lessEWT,2,'.',',');
+        $this->data['total_sale_taxed'] = number_format($totalSaleTaxed,2,'.',',');
         $this->data['vat_exempt'] = number_format($request['invoice_amount_ves'],2,'.',',');
         $this->data['total_sales'] = number_format($totalSales,2,'.',',');
         $this->data['total_amount_computed'] = number_format($totalAmountComputed,2,'.',',');
