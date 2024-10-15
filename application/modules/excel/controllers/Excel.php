@@ -4161,8 +4161,6 @@ class Excel extends CI_Controller {
         $post = $this->input->post();
         $data = json_decode($post['applicants']);
         
-        print_r($data);
-        die();
         // $data = $this->input->post();
         // $data = json_decode($data['data']);
         $date = date("Y-m-d");
@@ -4474,6 +4472,8 @@ class Excel extends CI_Controller {
 
         
         $objWriter->save('php://output');
+        print_r($data);
+        die();
         exit;
 
     }
