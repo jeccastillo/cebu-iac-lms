@@ -2325,8 +2325,8 @@ class Pdf extends CI_Controller {
                 $totalAssessment = $fullAssessment - $reservationAmount;
             }
         }else{
-            $fullAssessment = $totalAmountComputed == 0 ? $request['total_amount_due'] : $totalAmountComputed;
-            $totalAssessment = $totalAmountComputed == 0 ? $request['total_amount_due'] : $totalAmountComputed;
+            $fullAssessment = $totalSales == 0 ? $request['total_amount_due'] : $totalSales;
+            $totalAssessment = $totalSales == 0 ? $request['total_amount_due'] : $totalSales;
         }
          
         
