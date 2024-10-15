@@ -460,7 +460,7 @@
                                                     <label>Less EWT:</label>    
                                                     <select @change="computeVat"
                                                             class="form-control"
-                                                            v-model="request.ewt">                                                
+                                                            v-model="request.withholding_tax_percentage">                                                
                                                             <option value="0">None</option>
                                                             <option value="0.01">1%</option>
                                                             <option value="0.02">2%</option>
@@ -471,19 +471,24 @@
                                                 </div>
                                                 <div v-if="!isOR && description != 'Tuition Fee'"
                                                     class="form-group">
-                                                    <label>Vatable Amount:</label>    
-                                                    {{ total_sales }}                                               
-                                                </div>
-                                                <div v-if="!isOR && description != 'Tuition Fee'"
-                                                    class="form-group">
-                                                    <label>Vatable Amount:</label>    
-                                                    {{ net_vat }}                                               
-                                                </div>
+                                                    <label>Total Sales:</label>    
+                                                    {{ total_sales_formatted }}                                               
+                                                </div>                                               
                                                 <div v-if="!isOR && description != 'Tuition Fee'"
                                                     class="form-group">
                                                     <label>Value Added Tax:</label>    
-                                                    {{ less_vat }}                                               
-                                                </div>                                                
+                                                    {{ less_vat_formatted }}                                               
+                                                </div>  
+                                                <div v-if="!isOR && description != 'Tuition Fee'"
+                                                    class="form-group">
+                                                    <label>Less EWT:</label>    
+                                                    {{ less_ewt_formatted }}                                               
+                                                </div>                                               
+                                                <div v-if="!isOR && description != 'Tuition Fee'"
+                                                    class="form-group">
+                                                    <label>Total Amount Due:</label>    
+                                                    {{ total_amount_computed_formatted }}                                               
+                                                </div>                                               
                                             </div>
                                             <div v-if="description == 'Tuition Fee' && registration"
                                                 class="col-sm-4">
@@ -1379,6 +1384,7 @@ new Vue({
             charges: 0,
             cashier_id: undefined,
             sy_reference: null,
+            withholding_tax_percentage: 0,
             invoice_amount: 0,
             invoice_amount_ves: 0,
             invoice_amount_vzrs: 0,
@@ -1451,7 +1457,14 @@ new Vue({
         invoiceNumbers:'',
         net_vat: 0,
         less_vat: 0,
+        less_ewt: 0,
+        total_amount_computed: 0,
         total_sales: 0,
+        less_vat_formatted: 0,
+        less_ewt_formatted: 0,
+        total_amount_computed_formatted: 0,
+        total_sales_formatted: 0,
+        
         user: {
             special_role: 0,
         },
@@ -2003,10 +2016,15 @@ new Vue({
         },
         computeVat: function(){
             this.net_vat = this.request.invoice_amount / 1.12;
-            this.less_vat = this.net_vat * .12; 
+            this.less_vat = this.net_vat * .12;             
             this.total_sales = this.request.invoice_amount + this.request.invoice_amount_ves + this.invoice_amount_vzrs;
-            this.net_vat = this.net_vat.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-            this.less_vat = this.less_vat.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            this.less_ewt = this.total_sales * this.request.withholding_tax_percentage;
+            this.total_amount_computed = this.total_sales + this.less_vat - this.less_ewt;
+            //Formatted
+            this.net_vat_formatted = this.net_vat.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            this.total_sales_formatted = this.total_sales.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            this.less_ewt_formatted = this.less_ewt.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            this.total_amount_computed_formatted = this.total_amount_computed.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 
         },
         updateInvoice: function() {
