@@ -2018,8 +2018,8 @@ new Vue({
             this.net_vat = this.request.invoice_amount / 1.12;
             this.less_vat = this.net_vat * .12;             
             this.total_sales = parseFloat(this.request.invoice_amount) + parseFloat(this.request.invoice_amount_ves) + parseFloat(this.invoice_amount_vzrs);
-            this.less_ewt = this.total_sales * this.request.withholding_tax_percentage;
-            this.total_amount_computed = this.total_sales + this.less_vat - this.less_ewt;
+            this.less_ewt = parseFloat(this.total_sales) * parseFloat(this.request.withholding_tax_percentage);
+            this.total_amount_computed = parseFloat(this.total_sales) + parseFloat(this.less_vat) - parseFloat(this.less_ewt);
             //Formatted
             this.net_vat_formatted = this.net_vat.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
             this.total_sales_formatted = this.total_sales.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
