@@ -462,11 +462,11 @@
                                                             class="form-control"
                                                             v-model="request.withholding_tax_percentage">                                                
                                                             <option value="0">None</option>
-                                                            <option value="0.01">1%</option>
-                                                            <option value="0.02">2%</option>
-                                                            <option value="0.05">5%</option>
-                                                            <option value="0.10">10%</option>
-                                                            <option value="0.15">15%</option>
+                                                            <option value="1">1%</option>
+                                                            <option value="2">2%</option>
+                                                            <option value="5">5%</option>
+                                                            <option value="10">10%</option>
+                                                            <option value="15">15%</option>
                                                     </select>
                                                 </div>
                                                 <div v-if="!isOR && description != 'Tuition Fee'"
@@ -2018,7 +2018,7 @@ new Vue({
             this.net_vat = this.request.invoice_amount / 1.12;
             this.less_vat = this.net_vat * .12;             
             this.total_sales = parseFloat(this.request.invoice_amount) + parseFloat(this.request.invoice_amount_ves) + parseFloat(this.request.invoice_amount_vzrs);            
-            this.less_ewt = parseFloat(this.total_sales) * parseFloat(this.request.withholding_tax_percentage);
+            this.less_ewt = parseFloat(this.total_sales) * parseFloat(this.request.withholding_tax_percentage / 100);
             this.total_amount_computed = parseFloat(this.total_sales) + parseFloat(this.less_vat) - parseFloat(this.less_ewt);
             //Formatted
             this.net_vat_formatted = this.net_vat.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
