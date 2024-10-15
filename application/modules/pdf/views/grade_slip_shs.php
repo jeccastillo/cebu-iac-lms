@@ -221,7 +221,7 @@ $html .= '
             $total_present = 0;
             $total_tardy = 0;
 
-            $html .= "<table border='1'><tr><th style='width:50%;height:70px;border-top:1px solid #333;border-right:1px solid #333;border-left:1px solid #333;'></th>";
+            $html .= "<table border='1'><tr><th style='width:40%;height:70px;border-top:1px solid #333;border-right:1px solid #333;border-left:1px solid #333;'></th>";
             foreach($term_months as $month){
                 $days = isset($month['attendance']['school_days'])?$month['attendance']['school_days']:0;
                 $abscences = isset($month['attendance']['abscences'])?$month['attendance']['abscences']:0;
