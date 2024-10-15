@@ -90,7 +90,7 @@ table tr th{
         <section class="sheet padding-5mm">
 <?php
 
-    $html = '<table style="border:1px solid #333;" cellspacing="0" cellpadding="1" style="color:#333;margin-top:120px;">
+    $html = '<table style="border:1px solid #333;color:#333;margin-top:120px;" cellspacing="0" cellpadding="1" >
                 <tr>                            
                     <td width="15%">             
                         <font style="font-weight:bold">Name:</font>
@@ -210,7 +210,7 @@ $html .= '
             </tr>
             </table>                       
             <div style="line-height:20px"></div>         
-            <div style="text-align:center;font-weight:bold;">REPORT ON LEARNING PROGRESS AND ACHIEVEMENT</div>
+            <div style="text-align:center;font-weight:bold;">REPORT ON ATTENDANCE</div>
             ';
 
             $attendance_days = "";
