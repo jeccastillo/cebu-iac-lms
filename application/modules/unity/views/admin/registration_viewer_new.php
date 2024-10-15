@@ -472,6 +472,11 @@
                                                 <div v-if="!isOR && description != 'Tuition Fee'"
                                                     class="form-group">
                                                     <label>Vatable Amount:</label>    
+                                                    {{ total_sales }}                                               
+                                                </div>
+                                                <div v-if="!isOR && description != 'Tuition Fee'"
+                                                    class="form-group">
+                                                    <label>Vatable Amount:</label>    
                                                     {{ net_vat }}                                               
                                                 </div>
                                                 <div v-if="!isOR && description != 'Tuition Fee'"
@@ -1446,6 +1451,7 @@ new Vue({
         invoiceNumbers:'',
         net_vat: 0,
         less_vat: 0,
+        total_sales: 0,
         user: {
             special_role: 0,
         },
@@ -1998,6 +2004,7 @@ new Vue({
         computeVat: function(){
             this.net_vat = this.request.invoice_amount / 1.12;
             this.less_vat = this.net_vat * .12; 
+            this.total_sales = this.request.invoice_amount + this.request.invoice_amount_ves + this.invoice_amount_vzrs;
             this.net_vat = this.net_vat.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
             this.less_vat = this.less_vat.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 
