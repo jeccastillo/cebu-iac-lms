@@ -116,15 +116,21 @@ table tr td {
             <div style="position:absolute; top:  270px; left: 650px; width: 200px; height: 20px;">
                 <?php echo $reservation_amount != 0 ? "-".$reservation_amount : ""; ?>
             </div>
+            <!---VAT ZERO RATED--->
             <div style="position:absolute; top: 325px; left: 650px; width: 200px; height: 20px;">
                 <?php echo $vat_zero_rated_sale != 0 ? $vat_zero_rated_sale : "" ; ?>
             </div>
+            <!---TOTAL SALE--->
             <div style="position:absolute; top:  353px; left: 650px; width: 200px; height: 20px;">
                 <?php  echo $total_assessment; ?>
+            </div>
+            <div style="position:absolute; top: 370px; left: 650px; width: 200px; height: 20px;">
+                <?php echo $vat_zero_rated_sale != 0 ? $vat_zero_rated_sale : "" ; ?>
             </div>
             <div style="position:absolute; top:  380px; left: 100px; width: 200px; height: 20px;">
                 <?php  echo $total_amount_due; ?>
             </div>
+            <!---VAT ZERO RATED--->
             <div style="position:absolute; top:  405px; left: 650px; width: 200px; height: 20px;">
                 <?php  echo $total_assessment; ?>
             </div>
@@ -133,7 +139,7 @@ table tr td {
             </div>
             <!--Vat Exempt Sale-->
             <div style="position:absolute; top:  475px; left: 305px; width: 200px; height: 20px;">
-                <?php  echo $total_assessment; ?>
+                <?php  echo $vat_exempt != 0 ? $vat_exempt : $total_assessment; ?>
             </div>
             <!--Total Amount received-->
             <div style="position:absolute; top:  565px; left: 50px; width: 200px; height: 20px;">

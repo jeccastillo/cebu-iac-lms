@@ -2348,6 +2348,7 @@ class Pdf extends CI_Controller {
         $this->data['vat_zero_rated_sale'] = number_format($request['invoice_amount_vzrs'],2,'.',',');
         $this->data['vatable'] = number_format($request['invoice_amount'],2,'.',',');        
         $this->data['less_ewt'] = number_format($lessEWT,2,'.',',');
+        $this->data['vat_exempt'] = number_format($request['invoice_amount_ves'],2,'.',',');
         $this->data['total_sales'] = number_format($totalSales,2,'.',',');
         $this->data['total_amount_computed'] = number_format($totalAmountComputed,2,'.',',');
         
