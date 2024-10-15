@@ -4292,7 +4292,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('Q'.$i, $d->sd_degree)
                     ->setCellValue('R'.$i, $d->sd_company)
                     ->setCellValue('S'.$i, $d->sd_position)
-                    ->setCellValue('T'.$i, $d->date_of_birth)                    
+                    ->setCellValue('T'.$i, date("M d,Y",strtotime($d->date_of_birth)))
                     ->setCellValue('U'.$i, $d->citizenship)
                     ->setCellValue('V'.$i, $d->address)
                     ->setCellValue('W'.$i, $d->barangay)
