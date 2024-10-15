@@ -4158,12 +4158,14 @@ class Excel extends CI_Controller {
 
     public function export_leads()
     {
+        $post = $this->input->post();
+        $data = json_decode($post['applicants']);
         
-        $data = $this->input->post();
+        // print_r($applicants);
+        // die();
+        // $data = $this->input->post();
+        // $data = json_decode($data['data']);
         $date = date("Y-m-d");
-        $data = json_decode($data['data']);
-        
-        
         
         error_reporting(E_ALL);
         ini_set('display_errors', TRUE);
@@ -4185,51 +4187,67 @@ class Excel extends CI_Controller {
                                      ->setKeywords("office 2007 openxml php")
                                      ->setCategory("Export Leads");
 
-        
-      
-        
-            
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'Last Name')
-                    ->setCellValue('B1', 'First Name')
-                    ->setCellValue('C1', 'Middle Name')
-                    ->setCellValue('D1', 'Mobile Number')
-                    ->setCellValue('E1', 'Address')
-                    ->setCellValue('F1', '1st Choice')
-                    ->setCellValue('G1', '2nd Choice')
-                    ->setCellValue('H1', '3rd Choice')
-                    ->setCellValue('I1', 'Email')
-                    ->setCellValue('J1', 'Status')
-                    ->setCellValue('K1', 'School')
-                    ->setCellValue('L1', 'Father')
-                    ->setCellValue('M1', 'Contact #')
-                    ->setCellValue('N1', 'Email')
-                    ->setCellValue('O1', 'Mother')
-                    ->setCellValue('P1', 'Contact #')
-                    ->setCellValue('Q1', 'Email')                    
-                    ->setCellValue('R1', 'Guardian')
-                    ->setCellValue('S1', 'Contact #')
-                    ->setCellValue('T1', 'Email')
-                    ->setCellValue('U1', 'Date')
-                    ->setCellValue('V1', 'Source')
-                    ->setCellValue('W1', 'Company(SD)')
-                    ->setCellValue('X1', 'Position(SD)')
-                    ->setCellValue('Y1', 'Degree(SD)')
-                    ->setCellValue('Z1', 'Student Type')
-                    ->setCellValue('AA1', 'Country of Citizenship')
-                    ->setCellValue('AB1', 'Date of Birth')
-                    ->setCellValue('AC1', 'Date Enrolled')
-                    ->setCellValue('AD1', 'Student Number')
-                    ->setCellValue('AE1', 'Student Type');
-                    
-                    
+                    ->setCellValue('V1', 'ADDRESS')
+                    ->setCellValue('AA1', 'FATHER')
+                    ->setCellValue('AE1', 'MOTHER')
+                    ->setCellValue('AI1', 'GUARDIAN')
+                    ->setCellValue('A1', 'TIMESTAMP APPLIED')
+                    ->setCellValue('B1', 'APPLICANT NUMBER')
+                    ->setCellValue('C1', 'STATUS')
+                    ->setCellValue('D1', 'STUDENT TYPE')
+                    ->setCellValue('E1', 'LAST NAME')
+                    ->setCellValue('F1', 'FIRST NAME')
+                    ->setCellValue('G1', 'MIDDLE NAME')
+                    ->setCellValue('H1', 'SUFFIX')
+                    ->setCellValue('I1', 'SCHOOL')
+                    ->setCellValue('J1', 'EMAIL')
+                    ->setCellValue('K1', 'MOBILE')
+                    ->setCellValue('L1', '1ST CHOICE')
+                    ->setCellValue('M1', '2ND CHOICE')
+                    ->setCellValue('N1', '3RD CHOICE')
+                    ->setCellValue('O1', 'GRADE LEVEL')
+                    ->setCellValue('P1', 'PROGRAM/ STRAND')
+                    ->setCellValue('Q1', 'DEGREE(SD)')
+                    ->setCellValue('R1', 'COMPANY(SD)')
+                    ->setCellValue('S1', 'POSITION(SD)')
+                    ->setCellValue('T1', 'DATE OF BIRTH')
+                    ->setCellValue('U1', 'NATIONALITY')
+                    ->setCellValue('V2', 'HOME NUMBER/STREET/SUBDIVISION *')
+                    ->setCellValue('W2', 'BARANGAY')
+                    ->setCellValue('X2', 'CITY')
+                    ->setCellValue('Y2', 'STATE')
+                    ->setCellValue('Z2', 'COUNTRY')
+                    ->setCellValue('AA2', 'NAME')
+                    ->setCellValue('AB2', 'OCCUPATION')
+                    ->setCellValue('AC2', 'MOBILE')
+                    ->setCellValue('AD2', 'EMAIL')
+                    ->setCellValue('AE2', 'NAME')
+                    ->setCellValue('AF2', 'OCCUPATION')
+                    ->setCellValue('AG2', 'MOBILE')
+                    ->setCellValue('AH2', 'EMAIL')
+                    ->setCellValue('AI2', 'NAME')
+                    ->setCellValue('AJ2', 'RELATIONSHIP')
+                    ->setCellValue('AK2', 'MOBILE')
+                    ->setCellValue('AL2', 'EMAIL')
+                    ->setCellValue('AM1', 'LRN NUMBER')
+                    ->setCellValue('AN1', 'HEALTH CONCERNS')
+                    ->setCellValue('AO1', 'BEST TIME TO CONTACT')
+                    ->setCellValue('AP1', 'SOURCE')
+                    ->setCellValue('AQ1', 'CALL STATUS')
+                    ->setCellValue('AR1', 'CALL REMARKS');
+
+        $sheet = $objPHPExcel->getActiveSheet(0);
+        $sheet->mergeCells('V1:Z1');
+        $sheet->mergeCells('AA1:AD1');
+        $sheet->mergeCells('AE1:AH1');
+        $sheet->mergeCells('AI1:AL1');
+
+        $i = 3;
         
-        $i = 2;
-        
-        foreach($data as $d){      
+        foreach($data as $d){
             $student = $this->db->get_where('tb_mas_users',array('slug'=> $d->slug))->first_row('array');                 
             $studnum = isset($student)?preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']):'';
-            
             
             $d->mobile_number = str_replace('(+63)', '0', $d->mobile_number);
             $d->mobile_number = str_replace('-', '', $d->mobile_number);
@@ -4238,7 +4256,6 @@ class Excel extends CI_Controller {
             $d->father_contact = str_replace('(+63)', '0', $d->father_contact);
             $d->father_contact = str_replace('-', '', $d->father_contact);
             $d->father_contact = str_replace(' ', '', $d->father_contact);
-
 
             $d->mother_contact = str_replace('(+63)', '0', $d->mother_contact);
             $d->mother_contact = str_replace('-', '', $d->mother_contact);
@@ -4249,82 +4266,192 @@ class Excel extends CI_Controller {
             $d->guardian_contact = str_replace('-', '', $d->guardian_contact);
             $d->guardian_contact = str_replace(' ', '', $d->guardian_contact);
 
-            $objPHPExcel->setActiveSheetIndex(0)                                
-                    ->setCellValue('A'.$i, strtoupper($d->last_name))
-                    ->setCellValue('B'.$i, strtoupper($d->first_name))
-                    ->setCellValue('C'.$i, strtoupper($d->middle_name))
-                    ->setCellValue('D'.$i, $d->mobile_number)
-                    ->setCellValue('E'.$i, $d->address)
-                    ->setCellValue('F'.$i, $d->program)
-                    ->setCellValue('G'.$i, $d->program2)
-                    ->setCellValue('H'.$i, $d->program3)                    
-                    ->setCellValue('I'.$i, $d->email)
-                    ->setCellValue('J'.$i, $d->status)
-                    ->setCellValue('K'.$i, $d->school)
-                    ->setCellValue('L'.$i, $d->father_name)
-                    ->setCellValue('M'.$i, $d->father_contact)
-                    ->setCellValue('N'.$i, $d->father_email)
-                    ->setCellValue('O'.$i, $d->mother_name)
-                    ->setCellValue('P'.$i, $d->mother_contact)
-                    ->setCellValue('Q'.$i, $d->mother_email)
-                    ->setCellValue('R'.$i, $d->guardian_name)
-                    ->setCellValue('S'.$i, $d->guardian_contact)
-                    ->setCellValue('T'.$i, $d->guardian_email)                    
-                    ->setCellValue('U'.$i, $d->datestamp)
-                    ->setCellValue('V'.$i, $d->source)
-                    ->setCellValue('W'.$i, $d->sd_company)
-                    ->setCellValue('X'.$i, $d->sd_position)
-                    ->setCellValue('Y'.$i, $d->sd_degree)
-                    ->setCellValue('Z'.$i, $d->tos)
-                    ->setCellValue('AA'.$i, $d->citizenship)
-                    ->setCellValue('AB'.$i, $d->date_of_birth)
-                    ->setCellValue('AC'.$i, $d->date_enrolled)
-                    ->setCellValue('AD'.$i, $studnum)
-                    ->setCellValue('AE'.$i, $d->tos);
-                    ;
-                    
-                    
-                    
-                                                       
+            $sem = $this->data_fetcher->get_active_sem();
+            if($d->syid != 0)
+                $sem = $this->data_fetcher->get_sem_by_id($d->syid);
+
+            $applicantNumber = "A" . $sem['strYearStart'] . "-" . str_pad($d->id,4,'0');
+
+            $objPHPExcel->setActiveSheetIndex(0)     
+                    ->setCellValue('A'.$i, date("M d,Y",strtotime($d->created_at)))
+                    ->setCellValue('B'.$i, $applicantNumber)
+                    ->setCellValue('C'.$i, $d->status)
+                    ->setCellValue('D'.$i, $d->type . ' : ' . $d->student_type)
+                    ->setCellValue('E'.$i, strtoupper($d->last_name))
+                    ->setCellValue('F'.$i, strtoupper($d->first_name))
+                    ->setCellValue('G'.$i, strtoupper($d->middle_name))
+                    ->setCellValue('H'.$i, strtoupper($d->suffix))
+                    ->setCellValue('I'.$i, $d->school_name)      
+                    ->setCellValue('J'.$i, $d->email)
+                    ->setCellValue('K'.$i, $studnum)
+                    ->setCellValue('L'.$i, $d->program)
+                    ->setCellValue('M'.$i, $d->program2)
+                    ->setCellValue('N'.$i, $d->program3)
+                    ->setCellValue('O'.$i, $d->grade_year_level)
+                    ->setCellValue('P'.$i, $d->program_strand_degree)
+                    ->setCellValue('Q'.$i, $d->sd_degree)
+                    ->setCellValue('R'.$i, $d->sd_company)
+                    ->setCellValue('S'.$i, $d->sd_position)
+                    ->setCellValue('T'.$i, date("M d,Y",strtotime($d->date_of_birth)))
+                    ->setCellValue('U'.$i, $d->citizenship)
+                    ->setCellValue('V'.$i, $d->address)
+                    ->setCellValue('W'.$i, $d->barangay)
+                    ->setCellValue('X'.$i, $d->city)
+                    ->setCellValue('Y'.$i, $d->province)
+                    ->setCellValue('Z'.$i, $d->country)
+                    ->setCellValue('AA'.$i, $d->father_name)
+                    ->setCellValue('AB'.$i, $d->father_occupation)
+                    ->setCellValue('AC'.$i, $d->father_contact)
+                    ->setCellValue('AD'.$i, $d->father_email)
+                    ->setCellValue('AE'.$i, $d->mother_name)
+                    ->setCellValue('AF'.$i, $d->mother_occupation)
+                    ->setCellValue('AG'.$i, $d->mother_contact)
+                    ->setCellValue('AH'.$i, $d->mother_email)
+                    ->setCellValue('AI'.$i, $d->guardian_name)
+                    ->setCellValue('AJ'.$i, $d->guardian_occupation)
+                    ->setCellValue('AK'.$i, $d->guardian_contact)
+                    ->setCellValue('AL'.$i, $d->guardian_email)
+                    ->setCellValue('AM'.$i, $d->lrn)
+                    ->setCellValue('AN'.$i, $d->health_concern)
+                    ->setCellValue('AO'.$i, $d->best_time)
+                    ->setCellValue('AP'.$i, $d->source)
+                    ->setCellValue('AQ'.$i, $d->call_status)
+                    ->setCellValue('AR'.$i, $d->call_remarks);
+
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(40);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(40);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('V')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('W')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('X')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('Y')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('Z')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AA')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AB')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AC')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AD')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('AE')->setWidth(50);
+        $style = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+            ),
+            'font'  => array(
+                'bold'  => true
+            ),
+            'borders' => array(
+                'allborders' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                    'color' => array('rgb' => '000000'),
+                    )
+                )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('A1:AR2')->applyFromArray($style);
+
+        $objPHPExcel->getActiveSheet()->getStyle('V1:Z2')->applyFromArray(
+            array(
+                'fill' => array(
+                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'color' => array('rgb' => 'FFFF66')
+                ),
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('AA1:AD2')->applyFromArray(
+            array(
+                'fill' => array(
+                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'color' => array('rgb' => '93ccea')
+                ),
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('AE1:AH2')->applyFromArray(
+            array(
+                'fill' => array(
+                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'color' => array('rgb' => '2AA9ED')
+                ),
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('AI1:AL2')->applyFromArray(
+            array(
+                'fill' => array(
+                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'color' => array('rgb' => '93ccea')
+                ),
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('A3:AR' . $i)->getAlignment()->setWrapText(true);
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('V')->setWidth(35);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('W')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('X')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('Y')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('Z')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AA')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AB')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AC')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AD')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AE')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AF')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AG')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AH')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AI')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AJ')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AK')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AL')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AM')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AN')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AO')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AP')->setWidth(35);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AQ')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AR')->setWidth(15);
         
-                
-         
         $objPHPExcel->getActiveSheet()->setTitle('Leads');
 
+        $sheet = $objPHPExcel->getActiveSheet();
+        $sheet->mergeCells('A1:A2');
+        $sheet->mergeCells('B1:B2');
+        $sheet->mergeCells('C1:C2');
+        $sheet->mergeCells('D1:D2');
+        $sheet->mergeCells('E1:E2');
+        $sheet->mergeCells('F1:F2');
+        $sheet->mergeCells('G1:G2');
+        $sheet->mergeCells('H1:H2');
+        $sheet->mergeCells('I1:I2');
+        $sheet->mergeCells('J1:J2');
+        $sheet->mergeCells('K1:K2');
+        $sheet->mergeCells('L1:L2');
+        $sheet->mergeCells('M1:M2');
+        $sheet->mergeCells('N1:N2');
+        $sheet->mergeCells('O1:O2');
+        $sheet->mergeCells('P1:P2');
+        $sheet->mergeCells('Q1:Q2');
+        $sheet->mergeCells('R1:R2');
+        $sheet->mergeCells('S1:S2');
+        $sheet->mergeCells('T1:T2');
+        $sheet->mergeCells('U1:U2');
+        $sheet->mergeCells('AM1:AM2');
+        $sheet->mergeCells('AN1:AN2');
+        $sheet->mergeCells('AO1:AO2');
+        $sheet->mergeCells('AP1:AP2');
+        $sheet->mergeCells('AQ1:AQ2');
+        $sheet->mergeCells('AR1:AR2');
 
         // Set active sheet index to the first sheet, so Excel opens this as the first sheet
         $objPHPExcel->setActiveSheetIndex(0);
@@ -4350,6 +4477,8 @@ class Excel extends CI_Controller {
         exit;
 
     }
+
+
     public function daily_collection_report()
     {
         
@@ -5019,7 +5148,7 @@ class Excel extends CI_Controller {
         {
             $applied_from = $applied_to = $other = array();
 
-            $reg = $this->db->select('tb_mas_registration.*, tb_mas_scholarships.name as scholarshipName')
+            $reg = $this->db->select('tb_mas_registration.*, tb_mas_scholarships.deduction_type')
                     ->from('tb_mas_registration')
                     ->where(array('intStudentID'=>$user['intID'],'intAYID'=>$sem, 'date_enlisted !=' => NULL))
                     // ->or_where(array('intStudentID'=>$user['intID'],'intAYID'=>$sem, 'dteRegistered !=' => NULL))
@@ -5031,6 +5160,11 @@ class Excel extends CI_Controller {
 
             if($reg && substr($user['strStudentNumber'], 0, 1) != 'T'){
                 if($reg_status == 'Enrolled'){
+
+                    // if($reg['enumScholarship'] != 0){
+                    //     print_r($reg);
+                    //     die();
+                    // }
 
                     $ledger_data = $this->db->get_where('tb_mas_student_ledger', array('syid' => $sem, 'student_id' => $user['intID'], 'date <=' => $report_date . ' 23:59:59'))->result_array();
     
@@ -5072,7 +5206,7 @@ class Excel extends CI_Controller {
                     }
     
                     $studentsEnrolled = true;
-                    $course = $this->data_fetcher->getProgramDetails($user['intProgramID']);          
+                    $course = $this->data_fetcher->getProgramDetails($user['intProgramID']);
                     $assessment_discount_rate = $assessment_discount_fixed = $tuition_discount_rate = 0;
                     if($reg['paymentType'] == 'full'){
                         if($tuition['scholarship_total_assessment_rate'] > 0){
@@ -5098,11 +5232,11 @@ class Excel extends CI_Controller {
     
                     $date_enrolled = date("Y-m-d",strtotime($reg['date_enlisted']));
                     if(isset($date_enrolled_array[$user['slug']])){
-                        $date_enrolled = date("M d,Y",strtotime($date_enrolled_array[$user['slug']]));
+                        $date_enrolled = date("Y-m-d",strtotime($date_enrolled_array[$user['slug']]));
                     }
                     $tuition_discount = $total_discount = 0;
     
-                    if($date_enrolled < $sy->ar_report_date_generation){
+                    if($date_enrolled <= $sy->ar_report_date_generation || $reg['deduction_type'] == 'scholarship'){
                         if($reg['paymentType'] == 'full' && $tuition['scholarship_tuition_fee_rate'] > 0)
                         $tuition_discount = $tuition['scholarship_tuition_fee_rate'];
                         if($reg['paymentType'] == 'partial' && $tuition['scholarship_tuition_fee_installment_rate'] > 0)
@@ -5128,8 +5262,8 @@ class Excel extends CI_Controller {
                         // ->setCellValue('B'.$i, str_replace(str_split('T-'), "",$user['strStudentNumber']))
                         ->setCellValue('B'.$i, str_replace("-", "",$user['strStudentNumber']))
                         ->setCellValue('C'.$i, strtoupper($user['strLastname']) . ', ' . strtoupper($user['strFirstname']) . ' ' . strtoupper($user['strMiddlename']))
-                        ->setCellValue('D'.$i, isset($date_enrolled_array[$user['slug']]) ? date("M d,Y",strtotime($date_enrolled_array[$user['slug']])) : date("M d, Y",strtotime($reg['date_enlisted'])))
-                        // ->setCellValue('D'.$i, date("M d,Y",strtotime($reg['date_enlisted'])))
+                        // ->setCellValue('D'.$i, isset($date_enrolled_array[$user['slug']]) ? date("M d,Y",strtotime($date_enrolled_array[$user['slug']])) : date("M d, Y",strtotime($reg['date_enlisted'])))
+                        ->setCellValue('D'.$i, date("M d,Y",strtotime($date_enrolled)))
                         ->setCellValue('E'.$i, $reg['paymentType'] == 'full' ? 'FULL PAYMENT' : 'INSTALLMENT')
                         ->setCellValue('F'.$i, $course['strProgramCode'])
                         ->setCellValue('G'.$i, $reg['paymentType'] == 'full' && $tuition['tuition_before_discount'] > 0 ? (float)$tuition['tuition_before_discount'] : '')
@@ -5148,17 +5282,17 @@ class Excel extends CI_Controller {
                         ->setCellValue('S'.$i, $reg['paymentType'] == 'partial' && $tuition['late_enrollment_fee'] > 0 ? (float)$tuition['late_enrollment_fee'] : '')
                         ->setCellValue('T'.$i, '=SUM(N' . $i . ':S' . $i . ')')
                         ->setCellValue('U'.$i, '=M' . $i . '+T' . $i . ')')
-                        ->setCellValue('V'.$i, $date_enrolled < $sy->ar_report_date_generation ? $tuition['scholar_type'] : '')
+                        ->setCellValue('V'.$i, $date_enrolled <= $sy->ar_report_date_generation || $reg['deduction_type'] == 'scholarship' ? $tuition['scholar_type'] : '')
                         ->setCellValue('W'.$i, $tuition_discount )
-                        ->setCellValue('X'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : '')
-                        ->setCellValue('Y'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_lab_fee_rate'] > 0 ? $tuition['scholarship_lab_fee_rate'] : '')
-                        ->setCellValue('Z'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_lab_fee_fixed'] > 0 ? $tuition['scholarship_lab_fee_fixed'] : '')
-                        ->setCellValue('AA'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_misc_fee_rate'] > 0 ? $tuition['scholarship_misc_fee_rate'] : '')
-                        ->setCellValue('AB'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['scholarship_misc_fee_fixed'] > 0 ? $tuition['scholarship_misc_fee_fixed'] : '')
-                        ->setCellValue('AC'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
-                        ->setCellValue('AD'.$i, $date_enrolled < $sy->ar_report_date_generation && $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
-                        ->setCellValue('AE'.$i, $date_enrolled < $sy->ar_report_date_generation && $assessment_discount_rate > 0 ? $assessment_discount_rate : '')
-                        ->setCellValue('AF'.$i, $date_enrolled < $sy->ar_report_date_generation && $assessment_discount_fixed > 0 ? $assessment_discount_fixed : '')
+                        ->setCellValue('X'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $reg['deduction_type'] == 'scholarship') && $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : '')
+                        ->setCellValue('Y'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $reg['deduction_type'] == 'scholarship') && $tuition['scholarship_lab_fee_rate'] > 0 ? $tuition['scholarship_lab_fee_rate'] : '')
+                        ->setCellValue('Z'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $reg['deduction_type'] == 'scholarship') && $tuition['scholarship_lab_fee_fixed'] > 0 ? $tuition['scholarship_lab_fee_fixed'] : '')
+                        ->setCellValue('AA'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $reg['deduction_type'] == 'scholarship') && $tuition['scholarship_misc_fee_rate'] > 0 ? $tuition['scholarship_misc_fee_rate'] : '')
+                        ->setCellValue('AB'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $reg['deduction_type'] == 'scholarship') && $tuition['scholarship_misc_fee_fixed'] > 0 ? $tuition['scholarship_misc_fee_fixed'] : '')
+                        ->setCellValue('AC'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $reg['deduction_type'] == 'scholarship') && $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
+                        ->setCellValue('AD'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $reg['deduction_type'] == 'scholarship') && $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
+                        ->setCellValue('AE'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $reg['deduction_type'] == 'scholarship') && $assessment_discount_rate > 0 ? $assessment_discount_rate : '')
+                        ->setCellValue('AF'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $reg['deduction_type'] == 'scholarship') && $assessment_discount_fixed > 0 ? $assessment_discount_fixed : '')
                         ->setCellValue('AG'.$i, '=SUM(W' . $i . ':AF' . $i . ')')
                         ->setCellValue('AH'.$i, '=U' . $i . '-AG' . $i . ')');
     
@@ -5254,7 +5388,7 @@ class Excel extends CI_Controller {
                     }
     
                     //late tagging
-                    if($date_enrolled >= $sy->reconf_start){
+                    if($date_enrolled > $sy->ar_report_date_generation  || $reg['deduction_type'] != 'scholarship'){
                         $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 8, $i)->setValue($total_discount > 0 ? $date_enrolled : '');
                         $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 9, $i)->setValue($total_discount > 0 ? $tuition['scholar_type'] : '');
                         $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 10, $i)->setValue($total_discount > 0 ? $total_discount : '');
@@ -5268,12 +5402,12 @@ class Excel extends CI_Controller {
     
                     $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 17, $i)->setValue($total_adjustment);
                     $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 18, $i)->setValue('=' . $this->columnIndexToLetter($last_index + 1) . '' . $i . '-' . $this->columnIndexToLetter($last_index + 17) . '' . $i);
-    
+                    
                     $installment_balance = 0;
                     if($reg['paymentType'] == 'partial'){
                         $installment_balance = $tuition['tuition_installment_before_discount'] + $tuition['lab_installment_before_discount'] + $tuition['misc_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
                         
-                        if($date_enrolled < $sy->ar_report_date_generation){
+                        if($date_enrolled <= $sy->ar_report_date_generation  || $reg['deduction_type'] == 'scholarship'){
                             $installment_balance -= $tuition_discount;
                             $installment_balance -= $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : 0;
                             $installment_balance -= $tuition['scholarship_lab_fee_rate'] > 0 ? $tuition['scholarship_lab_fee_rate'] : 0;
