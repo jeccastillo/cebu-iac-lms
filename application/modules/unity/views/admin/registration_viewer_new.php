@@ -2320,11 +2320,7 @@ new Vue({
                     this.or_print.invoice_number = payment.invoice_number;
                     this.or_print.description = payment.description;
                     this.or_print.total_amount_due = payment.subtotal_order;
-                    this.or_print.transaction_date = payment.or_date;
-                    this.or_print.withholding_tax_percentage = payment.withholding_tax_percentage,
-                    this.or_print.invoice_amount = payment.invoice_amount,
-                    this.or_print.invoice_amount_ves = payment.invoice_amount_ves,
-                    this.or_print.invoice_amount_vzrs = payment.invoice_amount_vzrs,
+                    this.or_print.transaction_date = payment.or_date;                    
                     this.or_print.remarks = payment.remarks;
                     this.or_print.student_name = this.request.last_name +
                         ", " + this.request.first_name + ", " + this.request
@@ -2367,6 +2363,10 @@ new Vue({
                     this.or_print.total_amount_due = payment.subtotal_order;
                     this.or_print.transaction_date = payment.or_date;
                     this.or_print.remarks = payment.remarks;
+                    this.or_print.withholding_tax_percentage = payment.withholding_tax_percentage,
+                    this.or_print.invoice_amount = payment.invoice_amount,
+                    this.or_print.invoice_amount_ves = payment.invoice_amount_ves,
+                    this.or_print.invoice_amount_vzrs = payment.invoice_amount_vzrs,
                     this.or_print.student_name = this.request.last_name +
                         ", " + this.request.first_name + ", " + this.request
                         .middle_name;
