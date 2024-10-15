@@ -2299,7 +2299,7 @@ class Pdf extends CI_Controller {
         $lessEWT = 0;
 
         if($request['description'] != "Tuition Fee" || $request['description'] != "Reservation Payment" || $request['description'] != "Application Payment"){
-            $amountNetVat = $request['total_amount_due'] / 1.12;
+            $amountNetVat = $request['invoice_amount']  / 1.12;
             $lessVat =  $amountNetVat * .12;            
             $totalSales = $request['invoice_amount'] + $request['invoice_amount_ves'] + $request['invoice_amount_vzrs'];            
             $lessEWT = $totalSales * ($request['withholding_tax_percentage'] / 100);
