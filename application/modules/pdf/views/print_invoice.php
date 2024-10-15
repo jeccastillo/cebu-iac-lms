@@ -124,8 +124,9 @@ table tr td {
             <div style="position:absolute; top:  353px; left: 650px; width: 200px; height: 20px;">
                 <?php  echo $total_assessment; ?>
             </div>
+            <!---- VAT--->
             <div style="position:absolute; top: 370px; left: 650px; width: 200px; height: 20px;">
-                <?php echo $vat_zero_rated_sale != 0 ? $vat_zero_rated_sale : "" ; ?>
+                <?php echo $less_vat != 0 ? $less_vat : "" ; ?>
             </div>
             <div style="position:absolute; top:  380px; left: 100px; width: 200px; height: 20px;">
                 <?php  echo $total_amount_due; ?>
