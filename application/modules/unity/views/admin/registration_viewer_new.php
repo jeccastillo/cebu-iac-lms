@@ -442,6 +442,7 @@
                                                     <select @change="computeVat"
                                                             class="form-control"
                                                             v-model="request.ewt">                                                
+                                                            <option value="0">None</option>
                                                             <option value="0.01">1%</option>
                                                             <option value="0.02">2%</option>
                                                             <option value="0.05">5%</option>
