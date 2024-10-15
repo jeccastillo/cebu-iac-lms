@@ -143,9 +143,19 @@ table tr td {
                 <?php  echo $total_amount_due == 0 ? "" : $remarks; ?>
             </div>
             <!--Vatable-->
+            <?php if($less_vat != 0 && $amount_less_vat != 0 ): ?>
             <div style="position:absolute; top:  462px; left: 305px; width: 200px; height: 20px;">
-                <?php  echo $amount_less_vat != 0 ? $amount_less_vat : $amount_less_vat; ?>
+                <?php  echo $amount_less_vat; ?>
+            </div>            
+            <?php elseif($less_vat == 0 && $amount_less_vat != 0): ?>
+            <div style="position:absolute; top:  462px; left: 305px; width: 200px; height: 20px;">
+                <?php  echo ""; ?>
             </div>
+            <?php else: ?>
+            <div style="position:absolute; top:  462px; left: 305px; width: 200px; height: 20px;">
+                <?php  echo $total_amount_due; ?>
+            </div>
+            <?php endif; ?>            
             <!--Vat Exempt Sale-->
             <div style="position:absolute; top:  482px; left: 305px; width: 200px; height: 20px;">
                 <?php  echo $vat_exempt != 0 ? $vat_exempt : $total_assessment; ?>
