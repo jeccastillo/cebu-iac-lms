@@ -101,6 +101,18 @@ class Clinic extends CI_Controller {
         echo json_encode($ret);
     }
 
+    public function view_all_records()
+    {
+        
+            $this->data['page'] = "view_records";
+            $this->data['opentree'] = "clinic";            
+            $this->load->view("common/header",$this->data);
+            $this->load->view("records_view",$this->data);
+            $this->load->view("common/footer",$this->data);
+            $this->load->view("common/records_view_conf",$this->data);
+
+    }
+
     public function health_records_employee($id = 0)
     {        
         
