@@ -346,7 +346,7 @@ new Vue({
                     this.or_print.invoice_amount_ves = payment.invoice_amount_ves,
                     this.or_print.invoice_amount_vzrs = payment.invoice_amount_vzrs,
                     this.or_print.student_name =  this.payee.lastname+", "+this.payee.firstname;    
-                    if(this.payee.middlename)
+                    if(this.payee.middlename && this.payee.middlename != "undefined")
                         this.or_print.student_name +=  ", "+this.payee.middlename;
                     this.or_print.student_address = this.payee.address;
                     this.or_print.student_id = '';
