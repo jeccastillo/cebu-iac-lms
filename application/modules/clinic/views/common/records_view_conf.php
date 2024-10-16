@@ -14,7 +14,7 @@
         else
             $(this).html('');
     });
-    
+
     var table = $('#users_table').DataTable( {
             "aLengthMenu":  [10, 20,50,100, 250, 500, 750, 1000],
             "bProcessing": true,
@@ -24,7 +24,7 @@
             "sAjaxSource": "<?php echo base_url(); ?>datatables/data_tables_ajax/tb_mas_health_records",
             "aoColumnDefs":[
                 {
-                    "aTargets":[8],
+                    "aTargets":[9],
                     "mData": null,
                     "bSortable":false,
                     "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a href="#'+row[0]+'">View</a></li>'                                                                
@@ -33,6 +33,10 @@
                 },
                 {
                     "aTargets":[0],
+                    "bVisible": false 
+                },       
+                {
+                    "aTargets":[1],
                     "bVisible": false 
                 },              
             ],
