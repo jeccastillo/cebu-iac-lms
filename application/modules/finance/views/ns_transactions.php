@@ -221,6 +221,7 @@ new Vue({
         base_url: "<?php echo base_url(); ?>", 
         payee_id: "<?php echo $payee_id; ?>",  
         payee: undefined,   
+        finance_manager_privilages: undefined,
         slug: undefined,
         request:{
             first_name: "<?php echo $first_name; ?>",
@@ -280,6 +281,7 @@ new Vue({
                 this.cashier = data.data.cashier;                
                 this.user = data.data.user;  
                 this.payee = data.data.payee;  
+                this.finance_manager_privilages = data.data.finance_manager_privilages;
                 this.sy = data.data.sy;                                                    
                 if(this.cashier){
                     this.request.or_number = this.cashier.or_current;                    
