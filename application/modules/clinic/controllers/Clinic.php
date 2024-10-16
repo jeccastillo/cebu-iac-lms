@@ -131,7 +131,7 @@ class Clinic extends CI_Controller {
         else
             $this->data['id'] = $id;
 
-        $this->data['page'] = "health_records";
+        $this->data['page'] = "health_records_employee";
         $this->data['opentree'] = "clinic";
         $this->load->view("common/header",$this->data);
         $this->load->view("health_records_employee",$this->data);
@@ -150,7 +150,7 @@ class Clinic extends CI_Controller {
     }
 
     public function student_search(){
-        $this->data['opentree'] = "search_student";
+        $this->data['opentree'] = "clinic";
         $this->data['page'] = "health_records";              
         $this->load->view("common/header",$this->data);
         $this->load->view("search_student",$this->data);
@@ -159,8 +159,8 @@ class Clinic extends CI_Controller {
     }
 
     public function employee_search(){
-        $this->data['opentree'] = "search_student";
-        $this->data['page'] = "health_records";              
+        $this->data['opentree'] = "clinic";
+        $this->data['page'] = "health_records_employee";              
         $this->load->view("common/header",$this->data);
         $this->load->view("search_employee",$this->data);
         $this->load->view("common/footer",$this->data);
