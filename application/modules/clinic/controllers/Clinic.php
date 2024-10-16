@@ -115,9 +115,9 @@ class Clinic extends CI_Controller {
 
     public function view_record($id,$type){
         if($type == "employee")
-            redirect(base_url()."health_records_employee/".$id);
+            redirect(base_url()."clinic/health_records_employee/".$id);
         else
-            redirect(base_url()."health_records/".$id);
+            redirect(base_url()."clinic/health_records/".$id);
         
     }
 
