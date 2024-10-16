@@ -101,6 +101,34 @@ class Clinic extends CI_Controller {
         echo json_encode($ret);
     }
 
+    public function health_records_employee($id = 0)
+    {        
+        
+        if($id == 0){
+            $post = $this->input->post();
+            $this->data['id'] = $post['studentID'];
+        }
+        else
+            $this->data['id'] = $id;
+
+        $this->data['page'] = "health_records";
+        $this->data['opentree'] = "clinic";
+        $this->load->view("common/header",$this->data);
+        $this->load->view("health_records_employee",$this->data);
+        $this->load->view("common/footer",$this->data);             
+        //print_r($this->data['classlist']);
+        
+    }
+
+    public function health_records_employee_data($id){
+
+        $ret['employee'] =  $this->data_fetcher->getFaculty($id);
+        $stype = "employee";        
+        $ret['health_records'] =  $this->db->get_where('tb_mas_health_records',array('patient_id'=>$id,'classification'=>$stype))->result_array();
+        $ret['stype'] = $stype;
+        echo json_encode($ret);
+    }
+
     public function student_search(){
         $this->data['opentree'] = "search_student";
         $this->data['page'] = "health_records";              
@@ -108,6 +136,15 @@ class Clinic extends CI_Controller {
         $this->load->view("search_student",$this->data);
         $this->load->view("common/footer",$this->data);
         $this->load->view("common/search_student_conf",$this->data);
+    }
+
+    public function employee_search(){
+        $this->data['opentree'] = "search_student";
+        $this->data['page'] = "health_records";              
+        $this->load->view("common/header",$this->data);
+        $this->load->view("search_employee",$this->data);
+        $this->load->view("common/footer",$this->data);
+        $this->load->view("common/search_employee_conf",$this->data);
     }
     
     public function add_health_record(){

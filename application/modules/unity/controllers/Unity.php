@@ -3380,6 +3380,37 @@ class Unity extends CI_Controller {
         echo $json_response;
 
     }
+
+    public function userTokenEmployee($id = null)
+    {
+        $get = $this->input->get();
+        # Perform the query
+        $query = "SELECT intID, strFirstname, strLastname from tb_mas_faculty WHERE  (strFirstname LIKE '%%%".mysqli_real_escape_string($this->db->conn_id,$get["q"])."%%' OR strLastname LIKE '%%%".mysqli_real_escape_string($this->db->conn_id,$get["q"])."%%') ORDER BY strLastname DESC LIMIT 10";
+        $arr = array();
+        $rs = $this->db->query($query);
+
+        if($id!=null)
+            foreach ($rs->result() as $obj){
+                $arr[] = array('id'=>$obj->intID,'name'=>$obj->strFirstname." ".$obj->strLastname);
+            }
+        else
+            # Collect the results
+            foreach ($rs->result() as $obj){
+                $arr[] = array('id'=>$obj->strStudentNumber,'name'=>$obj->strFirstname." ".$obj->strLastname);
+            }
+
+        # JSON-encode the response
+        $json_response = json_encode($arr);
+
+        # Optionally: Wrap the response in a callback function for JSONP cross-domain support
+        if(isset($get["callback"]) && $get["callback"]) {
+            $json_response = $get["callback"] . "(" . $json_response . ")";
+        }
+
+        # Return the response
+        echo $json_response;
+
+    }
     
     public function add_curriculum()
     {
