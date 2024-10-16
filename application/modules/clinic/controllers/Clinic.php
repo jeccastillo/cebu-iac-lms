@@ -105,7 +105,7 @@ class Clinic extends CI_Controller {
         $this->data['opentree'] = "search_student";
         $this->data['page'] = "health_records";              
         $this->load->view("common/header",$this->data);
-        $this->load->view("admin/search_student",$this->data);
+        $this->load->view("search_student",$this->data);
         $this->load->view("common/footer",$this->data);
         $this->load->view("common/search_student_conf",$this->data);
     }
