@@ -216,6 +216,7 @@ new Vue({
         base_url: "<?php echo base_url(); ?>", 
         payee_id: "<?php echo $payee_id; ?>",  
         payee: undefined,   
+        slug: undefined,
         request:{
             first_name: "<?php echo $first_name; ?>",
             last_name: "<?php echo $last_name; ?>",
