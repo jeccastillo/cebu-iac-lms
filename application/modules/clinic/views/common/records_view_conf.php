@@ -27,7 +27,7 @@
                     "aTargets":[9],
                     "mData": null,
                     "bSortable":false,
-                    "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>clinic/view_record/'+row[1]+'/'+row[4]">View</a></li>'                                                                
+                    "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>clinic/view_record/'+row[1]+'/'+row[4]+'">View</a></li>'                                                                
                                 
                                 +'</ul></div>'; }
                 },
