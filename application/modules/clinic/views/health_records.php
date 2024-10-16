@@ -53,7 +53,7 @@
                     <div class="row">                        
                         <div class="col-sm-12 form-group">
                             <label>Kind of Consultation</label>
-                            <select class="form-control" v-model="request.consultation_type">
+                            <select required class="form-control" v-model="request.consultation_type">
                                 <option value="Face to face">Face to face</option>
                                 <option value="Teleconsultation">Teleconsultation</option>
                             </select>
