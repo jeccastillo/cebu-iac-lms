@@ -12,7 +12,7 @@
             "bServerSide": true,
             "ordering": false,
             "autoWidth": false,
-            "sAjaxSource": "<?php echo base_url(); ?>datatables/data_tables_ajax/tb_mas_health_records; ?>",
+            "sAjaxSource": "<?php echo base_url(); ?>datatables/data_tables_ajax/tb_mas_health_records",
             "aoColumnDefs":[
                 {
                     "aTargets":[8],
