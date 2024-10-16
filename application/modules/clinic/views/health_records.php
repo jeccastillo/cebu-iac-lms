@@ -20,7 +20,8 @@
                             <th>Date</th>
                             <th>Consultation Type</th>
                             <th>Chief Complaint/Reason for the Visit</th>
-                            <th>History of Present Illness</th>                                                       
+                            <th>History of Present Illness</th>      
+                            <th>Actions</th>                                                
                         </tr>
                     </thead>
                     <tbody>
@@ -32,6 +33,7 @@
                             <td>{{ item.consultation_type }}</td>
                             <td>{{ item.chief_complaint }}</td>
                             <td>{{ item.history }}</td>
+                            <td><button class="btn btn-danger" @click="deleteHealthRecord(item.id)">Delete</button></td>
                                                                                     
                         </tr>
                     </tbody>
@@ -163,6 +165,49 @@ new Vue({
                     }                                                              
                     return axios
                         .post('<?php echo base_url(); ?>clinic/add_health_record',formdata, {
+                                headers: {
+                                    Authorization: `Bearer ${window.token}`
+                                }
+                            })
+                        .then(data => {
+                            console.log(data.data);
+                            if (data.data.success) {
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Failed!',
+                                    data.data.message,
+                                    'error'
+                                )
+                            }
+                        });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+        },
+        deleteHealthRecord: function(id){            
+            Swal.fire({
+                title: 'Delete Health Record?',
+                text: "Continue deleting health record?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "danger",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata= new FormData();
+                    formdata.append(key,value);
+                                                                                  
+                    return axios
+                        .post('<?php echo base_url(); ?>clinic/delete_health_record',formdata, {
                                 headers: {
                                     Authorization: `Bearer ${window.token}`
                                 }
