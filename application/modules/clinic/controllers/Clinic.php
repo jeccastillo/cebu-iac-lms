@@ -96,7 +96,7 @@ class Clinic extends CI_Controller {
         }
 
         
-        $ret['health_records'] =  $this->db->get_where('tb_mas_health_records',array('patient_id'=>$id,'type'=>$stype));
+        $ret['health_records'] =  $this->db->get_where('tb_mas_health_records',array('patient_id'=>$id,'classification'=>$stype));
 
         echo json_encode($ret);
     }
