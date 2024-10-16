@@ -17,6 +17,7 @@
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
+                            <th>Date</th>
                             <th>Consultation Type</th>
                             <th>Chief Complaint/Reason for the Visit</th>
                             <th>History of Present Illness</th>                                                       
@@ -27,6 +28,7 @@
                             <td colspan='8'>No Records Found</td>
                         </tr>
                         <tr v-else v-for="item in health_records">
+                            <td>{{ item.consultation_date }}</td>
                             <td>{{ item.consultation_type }}</td>
                             <td>{{ item.chief_complaint }}</td>
                             <td>{{ item.history }}</td>
