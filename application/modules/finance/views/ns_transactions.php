@@ -350,8 +350,7 @@ new Vue({
                     this.or_print.is_cash = payment.is_cash;
                     this.or_print.check_number = payment.check_number;
                     this.or_print.sem = payment.sy_reference;
-                    this.or_print.cashier_id = payment.cashier_id;
-                    this.assessment = 0;
+                    this.or_print.cashier_id = payment.cashier_id;                    
                 }
             }).then((result) => {
                 var delayInMilliseconds = 1000; //1 second
