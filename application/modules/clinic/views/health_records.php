@@ -35,26 +35,62 @@
                                                                                     
                         </tr>
                     </tbody>
-                </table>                              
+                </table>      
+                <hr />
+                <a class="btn btn-success" href="#" data-toggle="modal" data-target="#record">Add Health Record</a>                        
             </div>        
         </div>
         
     </div>
-    <!-- <div class="modal fade" id="record" role="dialog">        
+    <div class="modal fade" id="record" role="dialog">        
         <div class="modal-content">
-            <div class="modal-header">
-        
+            <div class="modal-header">        
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Health Record</h4>
+                <h4 class="modal-title">Add Health Record</h4>
             </div>
-            <div class="modal-body">
-                
+            <div class="modal-body">                
+                <form method="post" @submit.prevent="submitHealthRecord">
+                    <div class="row">                        
+                        <div class="col-sm-12 form-group">
+                            <label>Kind of Consultation</label>
+                            <select class="form-control" v-model="request.consultation_type">
+                                <option value="Face to face">Face to face</option>
+                                <option value="Teleconsultation">Teleconsultation</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-12 form-group">
+                            <label>Classification of Patient</label>
+                            <input type="hidden" v-model="request.classification" :value="stype" />
+                            {{ stype }}
+                        </div>
+                        <div class="col-sm-12 form-group">
+                            <label>Last Name</label>
+                            <input type="hidden" v-model="request.last_name" :value="student.strLastname" />
+                            {{ student.strLastname }}
+                        </div>
+                        <div class="col-sm-12 form-group">
+                            <label>Firstname</label>
+                            <input type="hidden" v-model="request.first_name" :value="student.strFirstname" />
+                            {{ student.strFirstname }}
+                        </div>
+                        <div class="col-sm-12 form-group">
+                            <label>Chief Complaint/Reason for the Visit</label>
+                            <textarea required class="form-control" v-model="request.chief_complaint"></textarea>
+                        </div>
+                        <div class="col-sm-12 form-group">
+                            <label>History of Present Illness</label>
+                            <textarea required class="form-control" v-model="request.history"></textarea>
+                        </div>
+                    </div>  
+                    <hr />
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
             </div>
             <div class=" modal-footer">        
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>        
-    </div> -->
+    </div>
 </aside>
 
 <script src="<?php echo base_url(); ?>assets/themes/default/js/jquery.min.js"></script>
@@ -74,8 +110,17 @@ new Vue({
         health_records:[],
         student: undefined,
         current_record: undefined,
-    
-        
+        stype: undefined,
+        request:{
+            patient_id: <?php echo $id; ?>,
+            consultation_type: undefined,
+            last_name: undefined,
+            first_name: undefined,
+            classification: undefined,            
+            chief_complaint: undefined,
+            history: undefined,
+        }
+            
     },
 
     mounted() {
@@ -87,6 +132,7 @@ new Vue({
                 .then((data) => {                                      
                     this.student = data.data.student
                     this.health_records = data.data.health_records;
+                    this.stype = data.data.stype;
                 })
             .catch((error) => {
                 console.log(error);
@@ -97,7 +143,50 @@ new Vue({
     },
 
     methods: {      
-        
+        submitHealthRecord: function(){            
+            Swal.fire({
+                title: 'Add Health Record?',
+                text: "Continue adding health record?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata= new FormData();
+                    for (const [key, value] of Object.entries(this.request)) {
+                        formdata.append(key,value);
+                    }                                                              
+                    return axios
+                        .post('<?php echo base_url(); ?>clinic/add_health_record',formdata, {
+                                headers: {
+                                    Authorization: `Bearer ${window.token}`
+                                }
+                            })
+                        .then(data => {
+                            console.log(data.data);
+                            if (data.data.success) {
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Failed!',
+                                    data.data.message,
+                                    'error'
+                                )
+                            }
+                        });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+        },
        
                                        
     }
