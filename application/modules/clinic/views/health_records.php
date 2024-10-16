@@ -198,7 +198,7 @@ new Vue({
                 showCancelButton: true,
                 confirmButtonText: "Yes",
                 imageWidth: 100,
-                icon: "danger",
+                icon: "warning",
                 cancelButtonText: "No, cancel!",
                 showCloseButton: true,
                 showLoaderOnConfirm: true,
