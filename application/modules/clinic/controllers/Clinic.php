@@ -110,7 +110,20 @@ class Clinic extends CI_Controller {
         $this->load->view("common/search_student_conf",$this->data);
     }
     
-    
+    public function add_health_record(){
+        $post = $this->input->post();        
+        if($this->db->insert('tb_mas_health_records',$post)){
+            $data['success'] = true;
+            $data['message'] = "Successfully Added Record";
+        }
+        else{
+            $data['success'] = false;
+            $data['message'] = "Failed to Add";
+        }
+
+        echo json_encode($data);
+        
+    }
        
     public function faculty_logged_in()
     {
