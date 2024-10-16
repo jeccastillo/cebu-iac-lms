@@ -124,28 +124,28 @@
                                         </div>
                                     </div>
                                     <div
-                                        class="form-group">
+                                        class="form-group col-sm-6">
                                         <label>Vatable Amount :</label>    
                                         <input @change="computeVat" type="number"
                                                 class="form-control"
                                                 v-model="request.invoice_amount">                                                
                                     </div>
                                     <div
-                                        class="form-group">
+                                        class="form-group col-sm-6">
                                         <label>Vat Exempt Tax :</label>    
                                         <input @change="computeVat" type="number"
                                                 class="form-control"
                                                 v-model="request.invoice_amount_ves">                                                
                                     </div>
                                     <div
-                                        class="form-group">
+                                        class="form-group col-sm-6">
                                         <label>Vat Zero Rated Sales :</label>    
                                         <input @change="computeVat" type="number"
                                                 class="form-control"
                                                 v-model="request.invoice_amount_vzrs">                                                
                                     </div>
                                     <div
-                                        class="form-group">
+                                        class="form-group col-sm-6">
                                         <label>Less EWT:</label>    
                                         <select @change="computeVat"
                                                 class="form-control"
@@ -159,22 +159,22 @@
                                         </select>
                                     </div>
                                     <div
-                                        class="form-group">
+                                        class="form-group col-sm-6">
                                         <label>Total Sales:</label>    
                                         {{ total_sales_formatted }}                                               
                                     </div>                                               
                                     <div
-                                        class="form-group">
+                                        class="form-group col-sm-6">
                                         <label>Value Added Tax:</label>    
                                         {{ less_vat_formatted }}                                               
                                     </div>  
                                     <div
-                                        class="form-group">
+                                        class="form-group col-sm-6">
                                         <label>Less EWT:</label>    
                                         {{ less_ewt_formatted }}                                               
                                     </div>                                               
                                     <div
-                                        class="form-group">
+                                        class="form-group col-sm-6">
                                         <label>Total Amount Due:</label>    
                                         {{ total_amount_computed_formatted }}                                               
                                     </div>   
