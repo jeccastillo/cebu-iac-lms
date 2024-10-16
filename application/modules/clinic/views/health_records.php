@@ -42,8 +42,8 @@
         </div>
         
     </div>
-    <div class="modal modal-md fade" id="record" role="dialog">        
-        <div class="modal-content">
+    <div class="modal modal-md fade" id="record" role="dialog">         
+        <div class="modal-content container">
             <div class="modal-header">        
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Add Health Record</h4>
