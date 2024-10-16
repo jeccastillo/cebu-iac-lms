@@ -44,12 +44,12 @@
     </div>
     <div class="modal modal-md fade" id="record" role="dialog">         
         <div class="modal-content container">
-            <div class="modal-header">        
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Add Health Record</h4>
-            </div>
-            <div class="modal-body">                
-                <form method="post" @submit.prevent="submitHealthRecord">
+            <form method="post" @submit.prevent="submitHealthRecord">
+                <div class="modal-header">        
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add Health Record</h4>
+                </div>
+                <div class="modal-body">                                
                     <div class="row">                        
                         <div class="col-sm-12 form-group">
                             <label>Kind of Consultation</label>
@@ -81,14 +81,13 @@
                             <label>History of Present Illness</label>
                             <textarea required class="form-control" v-model="request.history"></textarea>
                         </div>
-                    </div>  
-                    <hr />
+                    </div>                                         
+                </div>
+                <div class=" modal-footer">        
                     <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
-            </div>
-            <div class=" modal-footer">        
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </form>
         </div>        
     </div>
 </aside>
