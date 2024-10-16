@@ -359,42 +359,17 @@ new Vue({
                         .then(data => {
                             this.loader_spinner = false;
                             if (data.data.success) {
-
+                               
                                 Swal.fire({
-                                    showCancelButton: false,
-                                    showCloseButton: false,
-                                    allowEscapeKey: false,
-                                    title: 'Loading',
-                                    text: 'Updating Data do not leave page',
-                                    icon: 'info',
-                                })
-                                Swal.showLoading();
-
-                                var formdata = new FormData();
-                                formdata.append('description', data.data.description);
-                                formdata.append('total_amount_due', data.data.total_amount_due);
-                                formdata.append('sy_reference', data.data.sy_reference);
-                                formdata.append('student_id', this.student.intID);
-                                formdata.append('or_number', data.data.or_number);
-
-                                axios.post(base_url +
-                                        'finance/remove_from_ledger',
-                                        formdata, {
-                                            headers: {
-                                                Authorization: `Bearer ${window.token}`
-                                            }
-                                        })
-                                    .then(function(data) {
-                                        Swal.fire({
-                                            title: "Success",
-                                            text: data.data
-                                                .message,
-                                            icon: "success"
-                                        }).then(function() {
-                                            location
-                                                .reload();
-                                        });
-                                    })
+                                    title: "Success",
+                                    text: data.data
+                                        .message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location
+                                        .reload();
+                                });
+                                    
                             } else
                                 Swal.fire({
                                     title: "Failed",
