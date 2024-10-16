@@ -56,4 +56,7 @@ $config['tb_mas_questions_index'] = "intID";
 
 $config['tb_mas_student_exam_columns'] = array("tb_mas_student_exam.intID","student_name","date_taken","strName","score","student_id");
 $config['tb_mas_student_exam_index'] = "intID";
+
+$config['tb_mas_health_records_columns'] = array("id","patient_id","last_name","first_name","classification","consultation_date","consultation_type","chief_complaint","history");
+$config['tb_mas_health_records_index'] = "id";
 ?>
