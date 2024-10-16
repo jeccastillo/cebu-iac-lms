@@ -133,7 +133,7 @@
     </form>    
     <form ref="print_invoice"
         method="post"
-        :action="base_url + 'pdf/print_invoice/' + assessment "
+        :action="base_url + 'pdf/print_invoice/0'"
         target="_blank">
         <input type="hidden"
             name="student_name"
