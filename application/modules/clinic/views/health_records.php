@@ -204,8 +204,7 @@ new Vue({
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
                     var formdata= new FormData();
-                    formdata.append(key,value);
-                                                                                  
+                    formdata.append('id',id);                                                                                  
                     return axios
                         .post('<?php echo base_url(); ?>clinic/delete_health_record',formdata, {
                                 headers: {
