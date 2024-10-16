@@ -129,7 +129,7 @@ class Clinic extends CI_Controller {
         $post = $this->input->post();        
         $record = $this->db->where(array('id'=>$post['id']))->get('tb_mas_health_records')->first_row('array');        
         if($this->db->where(array('id'=>$post['id']))->delete('tb_mas_health_records')){
-            $this->data_poster->log_action('Clinic','Deleted Record: '.$record['last_name'].", ".$record['first_name']." ".$record['chief_complaint'],'green');
+            $this->data_poster->log_action('Clinic','Deleted Record: '.$record['last_name'].", ".$record['first_name']." ".$record['chief_complaint'],'red');
             $data['success'] = true;
             $data['message'] = "Successfully Deleted Record";
         }
