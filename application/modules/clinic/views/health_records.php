@@ -60,17 +60,17 @@
                         </div>
                         <div class="col-sm-12 form-group">
                             <label>Classification of Patient</label>
-                            <input type="hidden" v-model="request.classification" :value="stype" />
+                            <input type="hidden" v-model="request.classification"/>
                             {{ stype }}
                         </div>
                         <div class="col-sm-12 form-group">
                             <label>Last Name</label>
-                            <input type="hidden" v-model="request.last_name" :value="student.strLastname" />
+                            <input type="hidden" v-model="request.last_name"  />
                             {{ student.strLastname }}
                         </div>
                         <div class="col-sm-12 form-group">
                             <label>Firstname</label>
-                            <input type="hidden" v-model="request.first_name" :value="student.strFirstname" />
+                            <input type="hidden" v-model="request.first_name"  />
                             {{ student.strFirstname }}
                         </div>
                         <div class="col-sm-12 form-group">
@@ -132,6 +132,9 @@ new Vue({
                     this.student = data.data.student
                     this.health_records = data.data.health_records;
                     this.stype = data.data.stype;
+                    this.request.classification = this.stype;
+                    this.request.last_name = this.student.strLastname;
+                    this.request.first_name = this.student.strFirstname;
                 })
             .catch((error) => {
                 console.log(error);
@@ -192,4 +195,5 @@ new Vue({
 
 })
 </script>
+
 
