@@ -1,33 +1,20 @@
 <aside class="right-side">
     <section class="content-header">
         <h1>
-            Student
+            Health Records
             <small></small>
         </h1> 
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Student</a></li>
-            <li class="active">View All Student</li>
+            <li><a href="#"><i class="fa fa-dashboard"></i> Clinic</a></li>
+            <li class="active">Health Records</li>
         </ol>
     </section>
     <div class="content">
         
         <div class="box box-solid box-default">
-            <div class="box-header">                  
-                <div>
-
-                    <div style="width:50%;float:right; text-align:right;">
-<!--
-                        <form method="post" action="<?php echo base_url(). student/view_all_students/20 ?>">
-                            <h5>Search: <input type="text" name="search_string"/>
-                            </h5>
-                        </form>
--->
-                    </div>
-                </div>
-
+            <div class="box-header">                                  
                 <h3 class="box-title">List of Health Records</h3>
                 <div class="box-tools">
-
                 </div>
             </div><!-- /.box-header -->
             <div class="box-body table-responsive">
