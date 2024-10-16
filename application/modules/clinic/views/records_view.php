@@ -22,6 +22,7 @@
                     <thead>                        
                         <tr>
                             <th>id</th>
+                            <th>patient id</th>
                             <th>Last Name</th>
                             <th>First Name</th>
                             <th>Classification</th>
@@ -33,6 +34,7 @@
                         </tr>                        
                         <tr class="search">
                             <td>id</td>
+                            <td>patient id</td>
                             <td>Last Name</td>
                             <td>First Name</td>
                             <td>Classification</td>
