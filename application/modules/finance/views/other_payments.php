@@ -123,6 +123,61 @@
                                             <input type="email" required class="form-control" v-model="request.email_address" />                                                    
                                         </div>
                                     </div>
+                                    <div
+                                        class="form-group">
+                                        <label>Vatable Amount :</label>    
+                                        <input @change="computeVat" type="number"
+                                                class="form-control"
+                                                v-model="request.invoice_amount">                                                
+                                    </div>
+                                    <div
+                                        class="form-group">
+                                        <label>Vat Exempt Tax :</label>    
+                                        <input @change="computeVat" type="number"
+                                                class="form-control"
+                                                v-model="request.invoice_amount_ves">                                                
+                                    </div>
+                                    <div
+                                        class="form-group">
+                                        <label>Vat Zero Rated Sales :</label>    
+                                        <input @change="computeVat" type="number"
+                                                class="form-control"
+                                                v-model="request.invoice_amount_vzrs">                                                
+                                    </div>
+                                    <div
+                                        class="form-group">
+                                        <label>Less EWT:</label>    
+                                        <select @change="computeVat"
+                                                class="form-control"
+                                                v-model="request.withholding_tax_percentage">                                                
+                                                <option value="0">None</option>
+                                                <option value="1">1%</option>
+                                                <option value="2">2%</option>
+                                                <option value="5">5%</option>
+                                                <option value="10">10%</option>
+                                                <option value="15">15%</option>
+                                        </select>
+                                    </div>
+                                    <div
+                                        class="form-group">
+                                        <label>Total Sales:</label>    
+                                        {{ total_sales_formatted }}                                               
+                                    </div>                                               
+                                    <div
+                                        class="form-group">
+                                        <label>Value Added Tax:</label>    
+                                        {{ less_vat_formatted }}                                               
+                                    </div>  
+                                    <div
+                                        class="form-group">
+                                        <label>Less EWT:</label>    
+                                        {{ less_ewt_formatted }}                                               
+                                    </div>                                               
+                                    <div
+                                        class="form-group">
+                                        <label>Total Amount Due:</label>    
+                                        {{ total_amount_computed_formatted }}                                               
+                                    </div>   
                                     <div class="col-sm-12">
                                         <button :disabled="!request.or_number && !request.invoice_number" class="btn btn-primary btn-lg" type="submit">Submit Payment</button>
                                     </div>
@@ -156,6 +211,15 @@ new Vue({
         selected_payee: undefined,
         sy: [],
         payees: [],
+        net_vat: 0,
+        less_vat: 0,
+        less_ewt: 0,
+        total_amount_computed: 0,
+        total_sales: 0,
+        less_vat_formatted: 0,
+        less_ewt_formatted: 0,
+        total_amount_computed_formatted: 0,
+        total_sales_formatted: 0,
         request:{
             first_name: '',
             slug: 0,
@@ -177,6 +241,10 @@ new Vue({
             status: 'Paid',
             is_cash: 1,            
             check_number: undefined,
+            withholding_tax_percentage: 0,
+            invoice_amount: 0,
+            invoice_amount_ves: 0,
+            invoice_amount_vzrs: 0,
             student_campus: '<?php echo $campus; ?>',
         },
        
