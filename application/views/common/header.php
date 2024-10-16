@@ -669,6 +669,7 @@
           </ul>
         </li>
         <?php endif; ?>
+        
         <?php if(($user['special_role'] >= 2 && $user['intUserLevel'] == 6) || $user['intUserLevel'] == 2): ?>
         <li
           class="treeview <?php echo (isset($opentree) && $opentree=="finance_admin")?'active':''; ?>">
@@ -707,6 +708,35 @@
           </ul>
         </li>
         <?php endif; ?>
+        <?php endif; ?>
+        <!----------------------------------CLINIC-------------------------->
+        <?php if(($user['intUserLevel'] == 10) || $user['intUserLevel'] == 2): ?>
+        <li
+          class="treeview <?php echo (isset($opentree) && $opentree=="clinic")?'active':''; ?>">
+          <a href="#">
+            <i class="fa fa-circle text-green"></i> <span>Clinic</span>
+            <i class="fa pull-right fa-angle-left"></i>
+          </a>
+          <ul class="treeview-menu">
+            <li class="<?php echo (isset($page) && $page=="view_records")?'active':''; ?>"><a
+              style="margin-left: 10px;" href="<?php echo base_url() ?>clinic/view_all_records"><i
+                  class="fa fa-file"></i>
+                <span>Health Records</span> </a>
+            </li>
+            <li
+              class="<?php echo (isset($page) && $page=="health_records")?'active':''; ?>">
+              <a href="<?php echo base_url() ?>clinic/student_search/"
+                style="margin-left: 10px;"><i class="ion ion-android-list"></i>
+                <span>Student Records</span> </a>
+            </li>                 
+            <li
+              class="<?php echo (isset($page) && $page=="health_records_employee")?'active':''; ?>">
+              <a href="<?php echo base_url() ?>clinic/employee_search/"
+                style="margin-left: 10px;"><i class="ion ion-android-list"></i>
+                <span>Employee Records</span> </a>
+            </li>            
+          </ul>
+        </li>
         <?php endif; ?>
         <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 3 ): ?>
         <li class="<?php echo (isset($page) && $page=="classlist_archive")?'active':''; ?>"><a
