@@ -298,7 +298,21 @@ new Vue({
                 })
             })
 
-        },              
+        },            
+        computeVat: function(){
+            this.net_vat = this.request.invoice_amount / 1.12;
+            this.less_vat = this.net_vat * .12;             
+            this.total_sales = parseFloat(this.net_vat) + parseFloat(this.request.invoice_amount_ves) + parseFloat(this.request.invoice_amount_vzrs);            
+            this.less_ewt = parseFloat(this.total_sales) * parseFloat(this.request.withholding_tax_percentage / 100);
+            this.total_amount_computed = parseFloat(this.total_sales) + parseFloat(this.less_vat) - parseFloat(this.less_ewt);
+            //Formatted
+            this.net_vat_formatted = this.net_vat.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            this.less_vat_formatted = this.less_vat.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            this.total_sales_formatted = this.total_sales.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            this.less_ewt_formatted = this.less_ewt.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            this.total_amount_computed_formatted = this.total_amount_computed.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+
+        },  
         submitManualPayment: function(){
             let url = api_url + 'finance/manual_payment';            
             this.loader_spinner = true;
