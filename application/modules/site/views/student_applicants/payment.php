@@ -111,118 +111,137 @@
             <hr>
             <div class="md:w-1/2 w-full">
                 <div>
-                    <h3>Select Mode of Payment</h3>                          
+                    <h3>Select Mode of Payment</h3>
                     <hr />
                     <div>
                         <h5 class="my-3">BDO PAY</h5>
-                        <hr />  
+                        <hr />
                         <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
                             <div style="border:1px solid #000" @click="selectPayment(bdo_pay)"
                                 class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
                                 style="display:flex; align-itenms:center;">
-                                <img class="img-fluid d-block mx-auto" width="51px" src="https://employeeportal.iacademy.edu.ph/images/finance_online_payment/bdo.jpg" alt="">                                                
+                                <img class="img-fluid d-block mx-auto" width="51px"
+                                    src="https://employeeportal.iacademy.edu.ph/images/finance_online_payment/bdo.jpg"
+                                    alt="">
                             </div>
-                        </div>                                                        
+                        </div>
                     </div>
                     <hr />
                     <h5 class="my-3">Maya</h5>
-                        <hr />  
-                        <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
-                            <div style="border:1px solid #000" @click="selectPayment(maya)"
-                                class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
-                                style="display:flex; align-itenms:center;">
-                                <img class="img-fluid d-block mx-auto" width="51px" src="<?php echo base_url() . '/assets/img/maya.jpg';?>" alt="">                                                
-                            </div>
-                        </div>                                                        
-                    </div>
-                    <hr />                    
-                    <h5>PAYNAMICS</h5>
                     <hr />
-                    <h5 class="my-3">Banks</h5>
                     <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
-                        <div v-for="t in payment_modes" style="border:1px solid #000" @click="selectPayment(t)"
+                        <div style="border:1px solid #000" @click="selectPayment(maya)"
                             class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
                             style="display:flex; align-itenms:center;">
-                            <img :src="t.image_url" class="img-fluid d-block mx-auto" width="51px" alt="">
-                        </div>
-                    </div>
-
-                    <hr>
-                    <h5 class="my-3">Non-Banks</h5>
-                    <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
-                        <div v-for="t in payment_modes_nonbanks" style="border:1px solid #000" @click="selectPayment(t)"
-                            class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
-                            style="display:flex; align-itenms:center;">
-                            <img class="img-fluid d-block mx-auto" width="51px" :src="t.image_url" alt="">
-                        </div>
-                    </div>
-                </div>
-                <hr />                
-                
-
-                <div class="d-flex flex-wrap my-5" style="margin-top:50px">
-                    <h5 class="mb-3"><strong>Breakdown of Fees</strong></h5>
-
-                    <table class="table" style="width:100%">
-                        <tbody>
-                            <tr v-if="item">
-                                <td> {{payment_type == 'admissions_student_payment_reservation' ? 'Reservation Fee' :
-                                    'Application Fee'
-                                    }}
-                                </td>
-                                <td>₱ {{ item_details.price }}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Gateway Fee <span class="font-weight-bold"
-                                        v-if="selected_mode_of_payment.type == 'percentage'">(
-                                        {{ selected_mode_of_payment.charge}}% of the gross transaction amount or
-                                        Php
-                                        25.00 whichever is higher )</span> </td>
-                                <td v-if="selected_mode_of_payment">
-                                    <span>
-                                        ₱ {{ new_charge }}
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="border-top:1px solid #000">TOTAL AMOUNT DUE</td>
-                                <td style="border-top:1px solid #000" class="text-nowrap w-[100px]" v-if="item"> <span
-                                        class="font-weight-bold">₱ {{ total_single_format }}</span> </td>
-                                <td style="border-top:1px solid #000" class="text-nowrap w-[100px]" v-if="from_cart">
-                                    <span class="font-weight-bold">₱
-                                        {{ total_price_cart_with_charge_es }}</span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <div class="text-right mt-3">
-                        <div v-if="loading_spinner" class="lds-ring">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                        </div>
-                        <div v-else>
-                            <button type="submit" :disabled="loading_spinner" v-if="selected_mode_of_payment.id"
-                                class="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
-                                name="button">Submit
-                            </button>
-                            <button type="button" disabled v-else
-                                class="inline-flex items-center py-2 px-3 text-sm font-medium text-center disabled:bg-blue-300 text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
-                                name="button">Submit</button>
-                            <button type="button" onclick="window.history.back()"
-                                class="inline-flex items-center py-2 px-3 text-sm font-medium text-center disabled:bg-red-300 text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300"
-                                name="button">Cancel</button>
-                            <a :href="redirect_link" style="opacity:0"
-                                id="payment_link">{{ redirect_link }}</a>
+                            <img class="img-fluid d-block mx-auto" width="51px"
+                                src="<?php echo base_url() . '/assets/img/maya.jpg';?>" alt="">
                         </div>
                     </div>
                 </div>
                 <hr />
-                <p v-if="payment_type == 'admissions_student_payment_reservation'"><i>Reservation Fee is not refundable
-                        and non-transferrable</i></p>
+                <h5>PAYNAMICS</h5>
+                <hr />
+                <h5 class="my-3">Banks</h5>
+                <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
+                    <div v-for="t in payment_modes" style="border:1px solid #000" @click="selectPayment(t)"
+                        class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
+                        style="display:flex; align-itenms:center;">
+                        <img :src="t.image_url" class="img-fluid d-block mx-auto" width="51px" alt="">
+                    </div>
+                </div>
+
+                <hr>
+                <h5 class="my-3">Non-Banks</h5>
+                <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
+                    <div v-for="t in payment_modes_nonbanks" style="border:1px solid #000" @click="selectPayment(t)"
+                        class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
+                        style="display:flex; align-itenms:center;">
+                        <img class="img-fluid d-block mx-auto" width="51px" :src="t.image_url" alt="">
+                    </div>
+                </div>
+            </div>
+            <hr />
+
+
+            <div class="d-flex flex-wrap my-5" style="margin-top:50px">
+                <div v-if="this.selected_mode_of_payment.pchannel == 'bdo_pay'" style="margin-bottom:27px">
+                    <h5><strong>Cardholder Information:</strong>
+                    </h5>
+                    <div style="margin-bottom:10px;">
+                        <span>Cardholder First Name:</span>
+                        <input style="width:240px" type="text" v-model="cardHolderObj.firstName">
+                    </div>
+                    <div style="margin-bottom:10px;">
+                        <span>Cardholder Last Name:</span>
+                        <input style="width:240px" type="text" v-model="cardHolderObj.lastName">
+                    </div>
+                    <div style="margin-bottom:10px;">
+                        <span style="width:172px;display:inline-block">Cardholder
+                            Email:</span>
+                        <input style="width:240px" type="text" v-model="cardHolderObj.email">
+                    </div>
+                </div>
+                <h5 class="mb-3"><strong>Breakdown of Fees</strong></h5>
+
+                <table class="table" style="width:100%">
+                    <tbody>
+                        <tr v-if="item">
+                            <td> {{payment_type == 'admissions_student_payment_reservation' ? 'Reservation Fee' :
+                                    'Application Fee'
+                                    }}
+                            </td>
+                            <td>₱ {{ item_details.price }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Gateway Fee <span class="font-weight-bold"
+                                    v-if="selected_mode_of_payment.type == 'percentage'">(
+                                    {{ selected_mode_of_payment.charge}}% of the gross transaction amount or
+                                    Php
+                                    25.00 whichever is higher )</span> </td>
+                            <td v-if="selected_mode_of_payment">
+                                <span>
+                                    ₱ {{ new_charge }}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border-top:1px solid #000">TOTAL AMOUNT DUE</td>
+                            <td style="border-top:1px solid #000" class="text-nowrap w-[100px]" v-if="item"> <span
+                                    class="font-weight-bold">₱ {{ total_single_format }}</span> </td>
+                            <td style="border-top:1px solid #000" class="text-nowrap w-[100px]" v-if="from_cart">
+                                <span class="font-weight-bold">₱
+                                    {{ total_price_cart_with_charge_es }}</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="text-right mt-3">
+                    <div v-if="loading_spinner" class="lds-ring">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div v-else>
+                        <button type="submit" :disabled="loading_spinner" v-if="selected_mode_of_payment.id"
+                            class="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
+                            name="button">Submit
+                        </button>
+                        <button type="button" disabled v-else
+                            class="inline-flex items-center py-2 px-3 text-sm font-medium text-center disabled:bg-blue-300 text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
+                            name="button">Submit</button>
+                        <button type="button" onclick="window.history.back()"
+                            class="inline-flex items-center py-2 px-3 text-sm font-medium text-center disabled:bg-red-300 text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300"
+                            name="button">Cancel</button>
+                        <a :href="redirect_link" style="opacity:0" id="payment_link">{{ redirect_link }}</a>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <p v-if="payment_type == 'admissions_student_payment_reservation'"><i>Reservation Fee is not refundable
+                    and non-transferrable</i></p>
 
         </form>
         <form ref="bdo_form" action="https://secureacceptance.cybersource.com/pay" method="post">
@@ -303,23 +322,23 @@ new Vue({
         total_price_cart_with_charge: 0,
         payload: {},
         slug: "<?php echo $this->uri->segment('3'); ?>",
-        bdo_pay:{
+        bdo_pay: {
             charge: 0,
             id: 99,
             is_nonbank: false,
             name: "BDO PAY",
             pchannel: "bdo_pay",
-            pmethod: "onlinebanktransfer",            
+            pmethod: "onlinebanktransfer",
             type: "none"
         },
-        maya:{
+        maya: {
             charge: 0,
-            id: 100,        
+            id: 100,
             name: "maya",
             pchannel: "maya",
             type: "none"
         },
-        request_bdo:{
+        request_bdo: {
             access_key: undefined,
             amount: undefined,
             currency: undefined,
@@ -338,7 +357,12 @@ new Vue({
             bill_to_email: undefined,
             bill_to_surname: undefined,
             bill_to_forename: undefined,
-        } 
+        },
+        cardHolderObj: {
+            firstName: '',
+            lastName: '',
+            email: ''
+        }
     },
     mounted() {
 
@@ -475,6 +499,11 @@ new Vue({
 
             //     }
             // })
+            if (this.selected_mode_of_payment.pchannel == "bdo_pay") {
+                if (!this.validateCardHolder()) {
+                    return
+                }
+            }
 
             this.loading_spinner = true;
 
@@ -489,7 +518,9 @@ new Vue({
 
                     if (data.data.success) {
 
-                        if (!this.selected_mode_of_payment.is_nonbank && this.selected_mode_of_payment.pchannel != "bdo_pay" && this.selected_mode_of_payment.pchannel != "maya") {
+                        if (!this.selected_mode_of_payment.is_nonbank && this.selected_mode_of_payment
+                            .pchannel != "bdo_pay" && this.selected_mode_of_payment.pchannel != "maya"
+                        ) {
                             this.redirect_link = data.data.payment_link;
                             this.loading_spinner = false;
 
@@ -498,18 +529,15 @@ new Vue({
                                     .click();
                             }, 500);
 
-                        }
-                        else if(this.selected_mode_of_payment.pchannel == "bdo_pay"){                            
+                        } else if (this.selected_mode_of_payment.pchannel == "bdo_pay") {
                             this.request_bdo = data.data.post_data;
                             setTimeout(() => {
                                 this.$refs.bdo_form.submit();
-                            }, 500);                        
-                        }
-                        else if(this.selected_mode_of_payment.pchannel == "maya"){     
-                            console.log("success");                       
-                            document.location = data.data.post_data.redirectUrl;                     
-                        }
-                        else {
+                            }, 500);
+                        } else if (this.selected_mode_of_payment.pchannel == "maya") {
+                            console.log("success");
+                            document.location = data.data.post_data.redirectUrl;
+                        } else {
                             Swal.fire({
                                 title: "Payment is Pending",
                                 text: data.data.message,
@@ -519,14 +547,35 @@ new Vue({
                             });
 
                         }
-                        } else {
+                    } else {
                         Swal.fire(
                             'Failed!',
                             data.data.message,
                             'error'
                         )
-                        }
+                    }
                 });
+        },
+        validateCardHolder: function() {
+            for (const key in this.cardHolderObj) {
+                if (this.cardHolderObj[key] == '') {
+                    Swal.fire({
+                        showCancelButton: false,
+                        showCloseButton: false,
+                        allowEscapeKey: false,
+                        title: 'Missing Field',
+                        text: 'Please Fill up the missing field in Cardholder Information',
+                        icon: 'error',
+                    })
+                    return false
+                }
+            }
+            this.payload.bill_to_email = this.cardHolderObj.email;
+            this.payload.bill_to_forename = this.cardHolderObj.firstName
+            this.payload.bill_to_surname = this.cardHolderObj.lastName
+
+            return true
+
         }
     }
 
