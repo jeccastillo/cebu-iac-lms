@@ -178,7 +178,7 @@
                     <div style="margin-bottom:10px;">
                         <span style="width:172px;display:inline-block">Cardholder
                             Email:</span>
-                        <input class="form-control" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500" type="text" v-model="cardHolderObj.email">
+                        <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500" type="text" v-model="cardHolderObj.email">
                     </div>
                 </div>
                 <h5 class="mb-3"><strong>Breakdown of Fees</strong></h5>
