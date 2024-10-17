@@ -4161,8 +4161,6 @@ class Excel extends CI_Controller {
         $post = $this->input->post();
         $data = json_decode($post['applicants']);
         
-        // print_r($applicants);
-        // die();
         // $data = $this->input->post();
         // $data = json_decode($data['data']);
         $date = date("Y-m-d");
@@ -4249,7 +4247,7 @@ class Excel extends CI_Controller {
             $student = $this->db->get_where('tb_mas_users',array('slug'=> $d->slug))->first_row('array');                 
             $studnum = isset($student)?preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']):'';
             
-            $d->mobile_number = str_replace('(+63)', '0', $d->mobile_number);
+            $d->mobile_number = str_replace(array('(+63)', '+63'), '0', $d->mobile_number);
             $d->mobile_number = str_replace('-', '', $d->mobile_number);
             $d->mobile_number = str_replace(' ', '', $d->mobile_number);
 
@@ -4273,7 +4271,7 @@ class Excel extends CI_Controller {
             $applicantNumber = "A" . $sem['strYearStart'] . "-" . str_pad($d->id,4,'0');
 
             $objPHPExcel->setActiveSheetIndex(0)     
-                    ->setCellValue('A'.$i, date("M d,Y",strtotime($d->created_at)))
+                    ->setCellValue('A'.$i, date("M d,Y H:i:s",strtotime($d->created_at)))
                     ->setCellValue('B'.$i, $applicantNumber)
                     ->setCellValue('C'.$i, $d->status)
                     ->setCellValue('D'.$i, $d->type . ' : ' . $d->student_type)
@@ -4283,7 +4281,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('H'.$i, strtoupper($d->suffix))
                     ->setCellValue('I'.$i, $d->school_name)      
                     ->setCellValue('J'.$i, $d->email)
-                    ->setCellValue('K'.$i, $studnum)
+                    ->setCellValue('K'.$i, $d->mobile_number)
                     ->setCellValue('L'.$i, $d->program)
                     ->setCellValue('M'.$i, $d->program2)
                     ->setCellValue('N'.$i, $d->program3)
@@ -4388,9 +4386,9 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(30);
         $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setWidth(15);
