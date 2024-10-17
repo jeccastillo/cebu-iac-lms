@@ -4281,7 +4281,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('H'.$i, strtoupper($d->suffix))
                     ->setCellValue('I'.$i, $d->school_name)      
                     ->setCellValue('J'.$i, $d->email)
-                    ->setCellValue('K'.$i, $studnum)
+                    ->setCellValue('K'.$i, $d->mobile_number)
                     ->setCellValue('L'.$i, $d->program)
                     ->setCellValue('M'.$i, $d->program2)
                     ->setCellValue('N'.$i, $d->program3)
