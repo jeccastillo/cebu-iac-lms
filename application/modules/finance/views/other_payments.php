@@ -27,6 +27,19 @@
                                     </select>                        
                                 </div>     
                                 <div class="col-sm-6">
+                                    <div style="margin-bottom:1rem">
+                                        <label class="radio-inline">
+                                            <input type="radio"
+                                                v-model="windowPayment"
+                                                value="invoice"> Invoice
+                                        </label>
+                                        <label v-if="registration" class="radio-inline">
+                                            <input type="radio"
+                                                v-model="windowPayment"
+                                                value="official receipt"> Official Receipt
+                                        </label>
+
+                                    </div>
                                 </div>
                                 <form @submit.prevent="submitManualPayment" method="post">                                                                                                                                
                                     <input type="hidden" required  class="form-control" v-model="request.description">                                                                                        
@@ -108,9 +121,16 @@
                                         <div class="form-group">
                                             <label>Invoice Number:</label>
                                             <div>{{ request.invoice_number }}</div>
-                                            <input type="hidden" class="form-control" v-model="request.or_number" />
+                                            <input type="hidden" class="form-control" v-model="request.invoice_number" />
                                         </div>
                                     </div>  
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>OR Number:</label>
+                                            <div>{{ request.or_number }}</div>
+                                            <input type="hidden" class="form-control" v-model="request.or_number" />
+                                        </div>
+                                    </div>
                                     <!-- <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Amount to Pay:</label>
@@ -210,6 +230,7 @@ new Vue({
         cashier: undefined,
         selected_payee: undefined,
         sy: [],
+        windowPayment: "invoice",
         payees: [],
         net_vat: 0,
         less_vat: 0,
@@ -264,7 +285,7 @@ new Vue({
                 this.cashier = data.data.cashier;
                 this.request.sy_reference = data.data.current_sem;                
                 if(this.cashier){
-                    //this.request.or_number = this.cashier.or_current;                    
+                    this.request.or_number = this.cashier.or_current;                    
                     this.request.invoice_number = this.cashier.invoice_current;
                     this.request.cashier_id = this.cashier.user_id;    
                     this.payees = data.data.payees;   
