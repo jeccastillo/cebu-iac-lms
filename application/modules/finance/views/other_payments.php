@@ -26,7 +26,22 @@
                                         <option v-for="(item,index) in payees" :value="index">{{ item.lastname + " " + item.firstname}}</option>
                                     </select>                        
                                 </div>     
+                            </div>                                
+                            <div class="row">
                                 <div class="col-sm-6">
+                                    <div style="margin-bottom:1rem">
+                                        <label class="radio-inline">
+                                            <input type="radio"
+                                                v-model="windowPayment"
+                                                value="invoice"> Invoice
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio"
+                                                v-model="windowPayment"
+                                                value="official receipt"> Official Receipt
+                                        </label>
+
+                                    </div>
                                 </div>
                                 <form @submit.prevent="submitManualPayment" method="post">                                                                                                                                
                                     <input type="hidden" required  class="form-control" v-model="request.description">                                                                                        
@@ -104,13 +119,20 @@
                                             <textarea type="text" required class="form-control" v-model="request.remarks"></textarea>
                                         </div>                                    
                                     </div>                                    
-                                    <div class="col-sm-6">
+                                    <div v-if="windowPayment == 'invoice'" class="col-sm-6">
                                         <div class="form-group">
                                             <label>Invoice Number:</label>
                                             <div>{{ request.invoice_number }}</div>
-                                            <input type="hidden" class="form-control" v-model="request.or_number" />
+                                            <input type="hidden" class="form-control" v-model="request.invoice_number" />
                                         </div>
                                     </div>  
+                                    <div v-else class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>OR Number:</label>
+                                            <div>{{ request.or_number }}</div>
+                                            <input type="hidden" class="form-control" v-model="request.or_number" />
+                                        </div>
+                                    </div>
                                     <!-- <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Amount to Pay:</label>
@@ -123,6 +145,61 @@
                                             <input type="email" required class="form-control" v-model="request.email_address" />                                                    
                                         </div>
                                     </div>
+                                    <div
+                                        class="form-group col-sm-6">
+                                        <label>Vatable Amount :</label>    
+                                        <input @change="computeVat" type="number"
+                                                class="form-control"
+                                                v-model="request.invoice_amount">                                                
+                                    </div>
+                                    <div
+                                        class="form-group col-sm-6">
+                                        <label>Vat Exempt Tax :</label>    
+                                        <input @change="computeVat" type="number"
+                                                class="form-control"
+                                                v-model="request.invoice_amount_ves">                                                
+                                    </div>
+                                    <div
+                                        class="form-group col-sm-6">
+                                        <label>Vat Zero Rated Sales :</label>    
+                                        <input @change="computeVat" type="number"
+                                                class="form-control"
+                                                v-model="request.invoice_amount_vzrs">                                                
+                                    </div>
+                                    <div
+                                        class="form-group col-sm-6">
+                                        <label>Less EWT:</label>    
+                                        <select @change="computeVat"
+                                                class="form-control"
+                                                v-model="request.withholding_tax_percentage">                                                
+                                                <option value="0">None</option>
+                                                <option value="1">1%</option>
+                                                <option value="2">2%</option>
+                                                <option value="5">5%</option>
+                                                <option value="10">10%</option>
+                                                <option value="15">15%</option>
+                                        </select>
+                                    </div>
+                                    <div
+                                        class="form-group col-sm-6">
+                                        <label>Total Sales:</label>    
+                                        {{ total_sales_formatted }}                                               
+                                    </div>                                               
+                                    <div
+                                        class="form-group col-sm-6">
+                                        <label>Value Added Tax:</label>    
+                                        {{ less_vat_formatted }}                                               
+                                    </div>  
+                                    <div
+                                        class="form-group col-sm-6">
+                                        <label>Less EWT:</label>    
+                                        {{ less_ewt_formatted }}                                               
+                                    </div>                                               
+                                    <div
+                                        class="form-group col-sm-6">
+                                        <label>Total Amount Due:</label>    
+                                        {{ total_amount_computed_formatted }}                                               
+                                    </div>   
                                     <div class="col-sm-12">
                                         <button :disabled="!request.or_number && !request.invoice_number" class="btn btn-primary btn-lg" type="submit">Submit Payment</button>
                                     </div>
@@ -155,7 +232,17 @@ new Vue({
         cashier: undefined,
         selected_payee: undefined,
         sy: [],
+        windowPayment: "invoice",
         payees: [],
+        net_vat: 0,
+        less_vat: 0,
+        less_ewt: 0,
+        total_amount_computed: 0,
+        total_sales: 0,
+        less_vat_formatted: 0,
+        less_ewt_formatted: 0,
+        total_amount_computed_formatted: 0,
+        total_sales_formatted: 0,
         request:{
             first_name: '',
             slug: 0,
@@ -177,6 +264,10 @@ new Vue({
             status: 'Paid',
             is_cash: 1,            
             check_number: undefined,
+            withholding_tax_percentage: 0,
+            invoice_amount: 0,
+            invoice_amount_ves: 0,
+            invoice_amount_vzrs: 0,
             student_campus: '<?php echo $campus; ?>',
         },
        
@@ -196,7 +287,7 @@ new Vue({
                 this.cashier = data.data.cashier;
                 this.request.sy_reference = data.data.current_sem;                
                 if(this.cashier){
-                    //this.request.or_number = this.cashier.or_current;                    
+                    this.request.or_number = this.cashier.or_current;                    
                     this.request.invoice_number = this.cashier.invoice_current;
                     this.request.cashier_id = this.cashier.user_id;    
                     this.payees = data.data.payees;   
@@ -230,7 +321,21 @@ new Vue({
                 })
             })
 
-        },              
+        },            
+        computeVat: function(){
+            this.net_vat = this.request.invoice_amount / 1.12;
+            this.less_vat = this.net_vat * .12;             
+            this.total_sales = parseFloat(this.net_vat) + parseFloat(this.request.invoice_amount_ves) + parseFloat(this.request.invoice_amount_vzrs);            
+            this.less_ewt = parseFloat(this.total_sales) * parseFloat(this.request.withholding_tax_percentage / 100);
+            this.total_amount_computed = parseFloat(this.total_sales) + parseFloat(this.less_vat) - parseFloat(this.less_ewt);
+            //Formatted
+            this.net_vat_formatted = this.net_vat.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            this.less_vat_formatted = this.less_vat.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            this.total_sales_formatted = this.total_sales.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            this.less_ewt_formatted = this.less_ewt.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            this.total_amount_computed_formatted = this.total_amount_computed.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+
+        },  
         submitManualPayment: function(){
             let url = api_url + 'finance/manual_payment';            
             this.loader_spinner = true;
@@ -260,8 +365,16 @@ new Vue({
                             
                             this.request.description = this.description_other;                                                            
                             this.request.subtotal_order = this.amount_to_pay;
-                            this.request.total_amount_due = this.amount_to_pay;
-
+                            this.request.total_amount_due = this.amount_to_pay;    
+                            if(this.windowPayment == "invoice"){
+                                type =  1;
+                                this.request.or_number = null;
+                            }
+                            else{
+                                type = 0;
+                                this.request.invoice_number = null;
+                            }
+                            
                             
                             return axios.post(url, this.request, {
                                         headers: {
@@ -274,7 +387,8 @@ new Vue({
                                             var formdata= new FormData();
                                             formdata.append('intID',this.cashier.intID);
                                             formdata.append('invoice_current',this.cashier.invoice_current);
-                                            axios.post(base_url + 'finance/next_or_other/1', formdata, {
+                                            formdata.append('or_current',this.cashier.or_current);
+                                            axios.post(base_url + 'finance/next_or_other/'+type, formdata, {
                                             headers: {
                                                 Authorization: `Bearer ${window.token}`
                                             }
