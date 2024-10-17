@@ -2409,7 +2409,7 @@ class Pdf extends CI_Controller {
                     $type = "SHS ".$request['description'];
                     break;
                 default:
-                    $type = "SHS ".$request['description'];                    
+                    $type = $request['description'];                    
             }
         }
 
