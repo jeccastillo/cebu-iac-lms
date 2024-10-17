@@ -169,16 +169,16 @@
                     </h5>
                     <div style="margin-bottom:10px;">
                         <span>Cardholder First Name:</span>
-                        <input style="width:240px" type="text" v-model="cardHolderObj.firstName">
+                        <input class="form-control" style="width:240px" type="text" v-model="cardHolderObj.firstName">
                     </div>
                     <div style="margin-bottom:10px;">
                         <span>Cardholder Last Name:</span>
-                        <input style="width:240px" type="text" v-model="cardHolderObj.lastName">
+                        <input class="form-control" style="width:240px" type="text" v-model="cardHolderObj.lastName">
                     </div>
                     <div style="margin-bottom:10px;">
                         <span style="width:172px;display:inline-block">Cardholder
                             Email:</span>
-                        <input style="width:240px" type="text" v-model="cardHolderObj.email">
+                        <input class="form-control" style="width:240px" type="text" v-model="cardHolderObj.email">
                     </div>
                 </div>
                 <h5 class="mb-3"><strong>Breakdown of Fees</strong></h5>
