@@ -2262,9 +2262,15 @@ class Pdf extends CI_Controller {
                 case 'shs':
                     $type = "SHS ".$request['description'];
                     break;
+                case 'ns_payment':
+                        $type = "SHS ".$request['description'];
+                        break;
                 default:
-                    $type = "SHS ".$request['description'];                    
+                    $type = $request['description'];                    
             }
+        }
+        else{
+            $type = $request['description'];
         }
         
         // $request['slug']
