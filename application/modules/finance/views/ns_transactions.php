@@ -280,7 +280,7 @@ new Vue({
             .then((data) => {            
                 this.cashier = data.data.cashier;                
                 this.user = data.data.user;  
-                this.payee = data.data.payee;  
+                this.payee = data.data.payee;                  
                 this.finance_manager_privilages = data.data.finance_manager_privilages;
                 this.sy = data.data.sy;                                                    
                 if(this.cashier){
@@ -324,6 +324,7 @@ new Vue({
                         this.or_print.check_number = payment.check_number;
                         this.or_print.cashier_id = payment.cashier_id;                        
                         this.or_print.sem = payment.sy_reference;
+                        this.or_print.type = "ns_payment";
                         this.$nextTick(() => {
                             this.$refs.print_or.submit();
                         });            
@@ -414,6 +415,7 @@ new Vue({
                     this.or_print.student_address = this.payee.address;
                     this.or_print.student_id = '';
                     this.or_print.is_cash = payment.is_cash;
+                    this.or_print.type = "ns_payment";
                     this.or_print.check_number = payment.check_number;
                     this.or_print.sem = payment.sy_reference;
                     this.or_print.cashier_id = payment.cashier_id;                    
