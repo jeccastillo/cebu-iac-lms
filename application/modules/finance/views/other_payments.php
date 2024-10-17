@@ -365,8 +365,9 @@ new Vue({
                             
                             this.request.description = this.description_other;                                                            
                             this.request.subtotal_order = this.amount_to_pay;
-                            this.request.total_amount_due = this.amount_to_pay;
-
+                            this.request.total_amount_due = this.amount_to_pay;                            
+                            type = this.windowPayment == "invoice" ? 1 : 0;
+                            
                             
                             return axios.post(url, this.request, {
                                         headers: {
@@ -379,7 +380,7 @@ new Vue({
                                             var formdata= new FormData();
                                             formdata.append('intID',this.cashier.intID);
                                             formdata.append('invoice_current',this.cashier.invoice_current);
-                                            axios.post(base_url + 'finance/next_or_other/1', formdata, {
+                                            axios.post(base_url + 'finance/next_or_other/'+type, formdata, {
                                             headers: {
                                                 Authorization: `Bearer ${window.token}`
                                             }
