@@ -64,6 +64,17 @@
                                                 class="btn btn-primary">
                                                 Print OR
                                         </button>
+                                        <button
+                                            v-if="payment.invoice_number"
+                                            @click="printInvoice(payment)"
+                                            class="btn btn-primary">
+                                            Print Invoice
+                                        </button>
+                                        <button
+                                        v-if="cashier && finance_manager_privilages && payment.status == 'Paid'"
+                                        class="btn btn-danger"
+                                        @click="deletePayment(payment.id)">Retract
+                                        Payment</button>
                                     </td>                                    
                                 </tr>                                                                                                                                    
                             </table>                               
@@ -72,24 +83,127 @@
                 </div><!---column--->
             </div><!---row--->
         </div><!---content container--->
-        <form ref="print_or" method="post" :action="base_url + 'pdf/print_or'" target="_blank">
-            <input type="hidden" name="campus" :value="request.student_campus">
-            <input type="hidden" name="student_name" v-model="or_print.student_name">
-            <input type="hidden" name="cashier_id" v-model="or_print.cashier_id">
-            <input type="hidden" name="student_id" v-model="or_print.student_id">
-            <input type="hidden" name="student_address" v-model="or_print.student_address">
-            <input type="hidden" name="is_cash" v-model="or_print.is_cash">
-            <input type="hidden" name="check_number" v-model="or_print.check_number">
-            <input type="hidden" name="or_number" v-model="or_print.or_number" />
-            <input type="hidden" name="invoice_number" v-model="or_print.invoice_number" />
-            <input type="hidden" name="remarks" v-model="or_print.remarks">
-            <input type="hidden" name="description" v-model="or_print.description" />
-            <input type="hidden" name="total_amount_due" v-model="or_print.total_amount_due" /> 
-            <input type="hidden" name="name" v-model="or_print.student_name" />       
-            <input type="hidden" name="transaction_date" v-model="or_print.transaction_date" />               
-            <input type="hidden" name="payee_id" v-model="or_print.payee_id" />   
-            <input type="hidden" name="sem" v-model="or_print.sem" />
-        </form>        
+        <form ref="print_or"
+        method="post"
+        :action="base_url + 'pdf/print_updated_or'"
+        target="_blank">
+        <input type="hidden"
+            name="student_name"
+            v-model="or_print.student_name">
+        <input type="hidden"
+            name="campus"
+            :value="request.student_campus">
+        <input type="hidden"
+            name="cashier_id"
+            v-model="or_print.cashier_id">
+        <input type="hidden"
+            name="student_id"
+            v-model="or_print.student_id">
+        <input type="hidden"
+            name="student_address"
+            v-model="or_print.student_address">
+        <input type="hidden"
+            name="is_cash"
+            v-model="or_print.is_cash">
+        <input type="hidden"
+            name="check_number"
+            v-model="or_print.check_number">
+        <input type="hidden"
+            name="remarks"
+            v-model="or_print.remarks">
+        <input type="hidden"
+            name="or_number"
+            v-model="or_print.or_number" />
+        <input type="hidden"
+            name="invoice_number"
+            v-model="or_print.invoice_number" />
+        <input type="hidden"
+            name="description"
+            v-model="or_print.description" />
+        <input type="hidden"
+            name="total_amount_due"
+            v-model="or_print.total_amount_due" />
+        <input type="hidden"
+            name="name"
+            v-model="or_print.student_name" />
+        <input type="hidden"
+            name="sem"
+            v-model="or_print.sem" />
+        <input type="hidden"
+            name="transaction_date"
+            v-model="or_print.transaction_date" />
+        <input type="hidden"
+            name="type"
+            v-model="or_print.type" />
+    </form>    
+    <form ref="print_invoice"
+        method="post"
+        :action="base_url + 'pdf/print_invoice/0'"
+        target="_blank">
+        <input type="hidden"
+            name="student_name"
+            v-model="or_print.student_name">
+        <input type="hidden"
+            name="slug"
+            v-model="slug">
+        <input type="hidden"
+            name="campus"
+            :value="request.student_campus">
+        <input type="hidden"
+            name="cashier_id"
+            v-model="or_print.cashier_id">
+        <input type="hidden"
+            name="student_id"
+            v-model="or_print.student_id">
+        <input type="hidden"
+            name="student_address"
+            v-model="or_print.student_address">
+        <input type="hidden"
+            name="is_cash"
+            v-model="or_print.is_cash">
+        <input type="hidden"
+            name="check_number"
+            v-model="or_print.check_number">
+        <input type="hidden"
+            name="remarks"
+            v-model="or_print.remarks">
+        <input type="hidden"
+            name="or_number"
+            v-model="or_print.or_number" />
+        <input type="hidden"
+            name="invoice_number"
+            v-model="or_print.invoice_number" />
+        <input type="hidden"
+            name="description"
+            v-model="or_print.description" />
+        <input type="hidden"
+            name="total_amount_due"
+            v-model="or_print.total_amount_due" />
+        <input type="hidden"
+            name="name"
+            v-model="or_print.student_name" />
+        <input type="hidden"
+            name="sem"
+            v-model="or_print.sem" />
+        <input type="hidden"
+            name="transaction_date"
+            v-model="or_print.transaction_date" />
+        <input type="hidden"
+            name="type"
+            v-model="or_print.type" />
+        <input type="hidden"
+            name="withholding_tax_percentage"
+            v-model="or_print.withholding_tax_percentage" />
+        <input type="hidden"
+            name="invoice_amount"
+            v-model="or_print.invoice_amount" />
+        <input type="hidden"
+            name="invoice_amount_ves"
+            v-model="or_print.invoice_amount_ves" />
+        <input type="hidden"
+            name="invoice_amount_vzrs"
+            v-model="or_print.invoice_amount_vzrs" />
+    </form>       
     </div><!---vue container--->
 </aside>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
@@ -107,6 +221,8 @@ new Vue({
         base_url: "<?php echo base_url(); ?>", 
         payee_id: "<?php echo $payee_id; ?>",  
         payee: undefined,   
+        finance_manager_privilages: undefined,
+        slug: undefined,
         request:{
             first_name: "<?php echo $first_name; ?>",
             last_name: "<?php echo $last_name; ?>",
@@ -122,7 +238,6 @@ new Vue({
             
         or_print: {
             or_number: undefined,
-            invoice_number: undefined,
             description: undefined,
             total_amount_due: undefined,
             student_name: undefined,
@@ -130,12 +245,17 @@ new Vue({
             student_name: undefined,
             student_address: undefined,
             student_id: undefined,
+            payee_id: <?php echo $payee_id; ?>,
             remarks: undefined,
             is_cash: undefined,
             cashier_id: undefined,
-            check_number: undefined,    
+            check_number: undefined,
             sem: undefined,
-            payee_id: "<?php echo $payee_id; ?>",        
+            type: undefined,
+            withholding_tax_percentage: 0,
+            invoice_amount: 0,
+            invoice_amount_ves: 0,
+            invoice_amount_vzrs: 0,
         },
              
     },
@@ -160,7 +280,8 @@ new Vue({
             .then((data) => {            
                 this.cashier = data.data.cashier;                
                 this.user = data.data.user;  
-                this.payee = data.data.payee;  
+                this.payee = data.data.payee;                  
+                this.finance_manager_privilages = data.data.finance_manager_privilages;
                 this.sy = data.data.sy;                                                    
                 if(this.cashier){
                     this.request.or_number = this.cashier.or_current;                    
@@ -203,12 +324,111 @@ new Vue({
                         this.or_print.check_number = payment.check_number;
                         this.or_print.cashier_id = payment.cashier_id;                        
                         this.or_print.sem = payment.sy_reference;
+                        this.or_print.type = "ns_payment";
                         this.$nextTick(() => {
                             this.$refs.print_or.submit();
                         });            
                     }
             });  
         },  
+        deletePayment: function(payment_id) {
+            let url = api_url + 'finance/delete_payment';
+
+            this.loader_spinner = true;
+
+            Swal.fire({
+                title: 'Continue with deleting Payment',
+                text: "Are you sure you want to delete payment?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+
+                    let payload = {
+                        'id': payment_id
+                    }
+
+                    return axios.post(url, payload, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                        .then(data => {
+                            this.loader_spinner = false;
+                            if (data.data.success) {
+                               
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data
+                                        .message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location
+                                        .reload();
+                                });
+                                    
+                            } else
+                                Swal.fire({
+                                    title: "Failed",
+                                    text: data.data.message,
+                                    icon: "error"
+                                }).then(function() {
+                                    //location.reload();
+                                });
+                        });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+
+            })
+
+        },
+        printInvoice: function(payment) {
+            Swal.fire({
+                title: 'Continue with Printing Invoice',
+                text: "Are you sure you want to continue? You can only print the Invoice once",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (data) => {
+                    this.or_print.or_number = payment.or_number;
+                    this.or_print.invoice_number = payment.invoice_number;
+                    this.or_print.description = payment.description;
+                    this.or_print.total_amount_due = payment.subtotal_order;
+                    this.or_print.transaction_date = payment.or_date;
+                    this.or_print.remarks = payment.remarks;
+                    this.or_print.withholding_tax_percentage = payment.withholding_tax_percentage,
+                    this.or_print.invoice_amount = payment.invoice_amount,
+                    this.or_print.invoice_amount_ves = payment.invoice_amount_ves,
+                    this.or_print.invoice_amount_vzrs = payment.invoice_amount_vzrs,
+                    this.or_print.student_name =  this.payee.lastname+", "+this.payee.firstname;    
+                    if(this.payee.middlename && this.payee.middlename != "undefined")
+                        this.or_print.student_name +=  ", "+this.payee.middlename;
+                    this.or_print.student_address = this.payee.address;
+                    this.or_print.student_id = '';
+                    this.or_print.is_cash = payment.is_cash;
+                    this.or_print.type = "ns_payment";
+                    this.or_print.check_number = payment.check_number;
+                    this.or_print.sem = payment.sy_reference;
+                    this.or_print.cashier_id = payment.cashier_id;                    
+                }
+            }).then((result) => {
+                var delayInMilliseconds = 1000; //1 second
+                var or_send = this.$refs.print_invoice;
+                setTimeout(function() {
+                    or_send.submit();
+                }, delayInMilliseconds);
+
+            });
+        },
         cashierDetails: function(id){
             axios.get(base_url + 'finance/cashier_details/' + id)
             .then((data) => {            
