@@ -4271,7 +4271,7 @@ class Excel extends CI_Controller {
             $applicantNumber = "A" . $sem['strYearStart'] . "-" . str_pad($d->id,4,'0');
 
             $objPHPExcel->setActiveSheetIndex(0)     
-                    ->setCellValue('A'.$i, date("M d,Y",strtotime($d->created_at)))
+                    ->setCellValue('A'.$i, date("M d,Y H:i:s",strtotime($d->created_at)))
                     ->setCellValue('B'.$i, $applicantNumber)
                     ->setCellValue('C'.$i, $d->status)
                     ->setCellValue('D'.$i, $d->type . ' : ' . $d->student_type)
