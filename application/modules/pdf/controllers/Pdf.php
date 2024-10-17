@@ -2262,9 +2262,15 @@ class Pdf extends CI_Controller {
                 case 'shs':
                     $type = "SHS ".$request['description'];
                     break;
+                case 'ns_payment':
+                        $type = $request['description'];
+                        break;
                 default:
-                    $type = "SHS ".$request['description'];                    
+                    $type = $request['description'];                    
             }
+        }
+        else{
+            $type = $request['description'];
         }
         
         // $request['slug']
@@ -2299,7 +2305,7 @@ class Pdf extends CI_Controller {
         $lessEWT = 0;
         $totalSaleTaxed = 0;
 
-        if(($request['description'] != "Tuition Fee" || $request['description'] != "Reservation Payment" || $request['description'] != "Application Payment") && $request['invoice_amount'] != 0){
+        if(($request['description'] != "Tuition Fee" || $request['description'] != "Reservation Payment" || $request['description'] != "Application Payment") && ($request['invoice_amount'] != 0 || $request['invoice_amount_ves'] != 0 || $request['invoice_amount_vzrs'] != 0)){
             $amountNetVat = $request['invoice_amount']  / 1.12;            
             $lessVat =  $amountNetVat * .12;    
             $totalSales = $request['invoice_amount'] + $request['invoice_amount_ves'] + $request['invoice_amount_vzrs'];    
@@ -2408,9 +2414,15 @@ class Pdf extends CI_Controller {
                 case 'shs':
                     $type = "SHS ".$request['description'];
                     break;
+                case 'ns_payment':
+                        $type = "SHS ".$request['description'];
+                        break;
                 default:
-                    $type = "SHS ".$request['description'];                    
+                    $type = $request['description'];                    
             }
+        }
+        else{
+            $type = $request['description'];
         }
 
         $decimal = ($request['total_amount_due'] - floor( $request['total_amount_due'] )) * 100;
