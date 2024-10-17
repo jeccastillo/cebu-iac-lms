@@ -4248,6 +4248,7 @@ class Excel extends CI_Controller {
             $studnum = isset($student)?preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']):'';
             
             $d->mobile_number = str_replace('(+63)', '0', $d->mobile_number);
+            $d->mobile_number = str_replace('+63', '0', $d->mobile_number);
             $d->mobile_number = str_replace('-', '', $d->mobile_number);
             $d->mobile_number = str_replace(' ', '', $d->mobile_number);
 
