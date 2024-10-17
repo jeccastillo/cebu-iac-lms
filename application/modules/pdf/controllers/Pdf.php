@@ -2412,6 +2412,9 @@ class Pdf extends CI_Controller {
                     $type = $request['description'];                    
             }
         }
+        else{
+            $type = $request['description'];
+        }
 
         $decimal = ($request['total_amount_due'] - floor( $request['total_amount_due'] )) * 100;
         $decimal = round($decimal);
