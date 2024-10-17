@@ -33,7 +33,7 @@
                                                 v-model="windowPayment"
                                                 value="invoice"> Invoice
                                         </label>
-                                        <label v-if="registration" class="radio-inline">
+                                        <label class="radio-inline">
                                             <input type="radio"
                                                 v-model="windowPayment"
                                                 value="official receipt"> Official Receipt
