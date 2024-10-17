@@ -26,6 +26,8 @@
                                         <option v-for="(item,index) in payees" :value="index">{{ item.lastname + " " + item.firstname}}</option>
                                     </select>                        
                                 </div>     
+                            </div>                                
+                            <div class="row">
                                 <div class="col-sm-6">
                                     <div style="margin-bottom:1rem">
                                         <label class="radio-inline">
@@ -117,14 +119,14 @@
                                             <textarea type="text" required class="form-control" v-model="request.remarks"></textarea>
                                         </div>                                    
                                     </div>                                    
-                                    <div class="col-sm-6">
+                                    <div v-if="windowPayment == 'invoice'" class="col-sm-6">
                                         <div class="form-group">
                                             <label>Invoice Number:</label>
                                             <div>{{ request.invoice_number }}</div>
                                             <input type="hidden" class="form-control" v-model="request.invoice_number" />
                                         </div>
                                     </div>  
-                                    <div class="col-sm-6">
+                                    <div v-else class="col-sm-6">
                                         <div class="form-group">
                                             <label>OR Number:</label>
                                             <div>{{ request.or_number }}</div>
