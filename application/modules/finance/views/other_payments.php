@@ -365,8 +365,15 @@ new Vue({
                             
                             this.request.description = this.description_other;                                                            
                             this.request.subtotal_order = this.amount_to_pay;
-                            this.request.total_amount_due = this.amount_to_pay;                            
-                            type = this.windowPayment == "invoice" ? 1 : 0;
+                            this.request.total_amount_due = this.amount_to_pay;    
+                            if(this.windowPayment == "invoice"){
+                                type =  1;
+                                this.request.or_number = null;
+                            }
+                            else{
+                                type = 0;
+                                this.request.invoice_number = null;
+                            }
                             
                             
                             return axios.post(url, this.request, {
