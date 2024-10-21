@@ -49,7 +49,9 @@
                             <tr :style="sid == student.intID?'background-color:#ccc;':''" v-for="(student,index) in students" v-if="show_all || student.registered">                                    
                                 <td v-if="is_super_admin || is_registrar"><input type="checkbox" v-model="checked" :value="student.intID" /></td>                                                                                    
                                 <td >{{ index + 1 }}</td>
-                                <td ><a :href="base_url + 'unity/student_viewer/' + student.intID">{{ student.strLastname.toUpperCase(). +' '+student.strFirstname.toUpperCase() }}</a></td>
+                                <td ><a :href="base_url + 'unity/student_viewer/' + student.intID">{{ student.strLastname.toUpperCase() +' '+student.strFirstname.toUpperCase() }}
+                                    <span v-if="student.strMiddlename">{{ ' '+student.strMiddlename.toUpperCase() }}</span>                                
+                                </a></td>                                
                                 <td >{{ student.strProgramCode }}</td>
                                 <td  v-if="student.registered">        
                                     <span v-if="(student.floatMidtermGrade == 'OW' || student.floatFinalGrade == 'OW' || classlist.intFinalized != 0 || ((cdate < classlist.midterm_start && cdate < classlist.midterm_end ) || (cdate > classlist.midterm_start && cdate > classlist.midterm_end ))) && !is_super_admin || classlist.intFinalized == 2">
@@ -148,7 +150,9 @@
                         <tbody>                        
                             <tr v-for="(student,index) in students">                                                                
                                 <td>{{ index + 1 }}</td>
-                                <td>{{ student.strLastname.toUpperCase() +' '+student.strFirstname.toUpperCase()+' '+student.strMiddlename.toUpperCase() }}</td>
+                                <td>{{ student.strLastname.toUpperCase() +' '+student.strFirstname.toUpperCase() }}
+                                    <span v-if="student.strMiddlename">{{ ' '+student.strMiddlename.toUpperCase() }}</span>
+                                </td>
                                 <td>{{ student.strProgramCode }}</td>
                                 <td v-if="classlist.intFinalized == 0">                                        
                                     {{ (student.floatMidtermGrade && student.floatMidtermGrade != 50)?student.floatMidtermGrade:"NGS" }}                                                                           
