@@ -15,42 +15,46 @@
             
         </h1>     
     </section>
-        <hr />
-    <div class="content">         
-        <div class="row">
-            <div class="col-md-6">
-                <h4>Schools</h4>
-                <table v-if="schools.length > 0" class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>City</th>
-                            <th>Province</th>
-                            <th>Country</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="item in schools">
-                            <td>{{ item.name }}</td>
-                            <td>{{ item.city }}</td>
-                            <td>{{ item.province }}</td>
-                            <td>{{ item.country }}</td>                            
-                            <td>
-                                <div class="btn-group"><button type="button" class="btn btn-default">Actions</button>
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span><span class="sr-only">Toggle Dropdown</span></button>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li>
-                                            <a href="#">Edit</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div v-else>
-                    <h3>No Data</h3>
+    <hr />
+    <div class="box box-primary">
+        <div class="box-body">
+            <div class="content">         
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Schools</h4>
+                        <table v-if="schools.length > 0" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>City</th>
+                                    <th>Province</th>
+                                    <th>Country</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="item in schools">
+                                    <td>{{ item.name }}</td>
+                                    <td>{{ item.city }}</td>
+                                    <td>{{ item.province }}</td>
+                                    <td>{{ item.country }}</td>                            
+                                    <td>
+                                        <div class="btn-group"><button type="button" class="btn btn-default">Actions</button>
+                                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span><span class="sr-only">Toggle Dropdown</span></button>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li>
+                                                    <a href="#">Edit</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div v-else>
+                            <h3>No Data</h3>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
