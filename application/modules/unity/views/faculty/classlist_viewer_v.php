@@ -23,7 +23,7 @@
                             <span v-if="classlist.sub_section">{{ classlist.sub_section }}</span>
                         <small>
                             {{ classlist.enumSem + ' ' + classlist.term_label + ' ' + classlist.strYearStart + '-' + classlist.strYearEnd }} <br />
-                            <strong>{{ classlist.strFirstname+" "+classlist.strLastname}}</strong>
+                            <strong>{{ classlist.strFirstname.toUpperCase()+" "+classlist.strLastname.toUpperCase()}}</strong>
                         </small>
                     </h3>                    
                 </div>
@@ -148,7 +148,7 @@
                         <tbody>                        
                             <tr v-for="(student,index) in students">                                                                
                                 <td>{{ index + 1 }}</td>
-                                <td>{{ student.strLastname +' '+student.strFirstname+' '+student.strMiddlename }}</td>
+                                <td>{{ student.strLastname.toUpperCase() +' '+student.strFirstname.toUpperCase()+' '+student.strMiddlename.toUpperCase() }}</td>
                                 <td>{{ student.strProgramCode }}</td>
                                 <td v-if="classlist.intFinalized == 0">                                        
                                     {{ (student.floatMidtermGrade && student.floatMidtermGrade != 50)?student.floatMidtermGrade:"NGS" }}                                                                           
