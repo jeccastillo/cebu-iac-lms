@@ -182,6 +182,7 @@ new Vue({
             this.request.school_country = undefined
         },
         setEditSchool: function(item){
+            console.log(item);
             this.edit_id = item.id;
             this.request.school_name = item.school_name
             this.request.school_city = item.school_city
