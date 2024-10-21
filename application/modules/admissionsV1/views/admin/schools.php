@@ -210,7 +210,7 @@ new Vue({
                     text: 'Field Updated',
                     icon: 'success',
                 });
-                e.target.reset()
+                //e.target.reset()
                 this.getAllPrevSchool()
                 $('#addSchool').modal('hide')
             } else {
@@ -222,6 +222,21 @@ new Vue({
                     text: 'Error',
                     icon: 'error',
                 });
+            }
+        },
+        async getAllPrevSchool() {
+            const {
+                data
+            } = await axios.get(
+                `${api_url}admissions/previous-schools`, {
+                    headers: {
+                        Authorization: `Bearer ${window.token}`
+                    }
+                })
+
+            if (data.length != 0) {
+                this.schoolList = data
+                this.schoolName = this.request.previous_school.name
             }
         },
        
