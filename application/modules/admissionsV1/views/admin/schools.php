@@ -192,7 +192,7 @@ new Vue({
             if(!this.edit_id)
                 var url = api_url + 'admissions/student-info/new-school';
             else
-                var url = api_url + 'admissions/student-info/update-school/'+ this.edit_school;
+                var url = api_url + 'admissions/student-info/update-school/'+ this.edit_id;
             const {
                 data
             } = await axios
