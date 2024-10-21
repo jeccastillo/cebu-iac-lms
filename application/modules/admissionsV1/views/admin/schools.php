@@ -189,7 +189,7 @@ new Vue({
             this.request.school_country = item.country
         },
         async addNewSchool(e) {
-            if(!this.edit_school)
+            if(!this.edit_id)
                 var url = api_url + 'admissions/student-info/new-school';
             else
                 var url = api_url + 'admissions/student-info/update-school/'+ this.edit_school;
