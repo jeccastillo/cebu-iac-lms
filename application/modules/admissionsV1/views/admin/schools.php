@@ -233,7 +233,7 @@ new Vue({
                         Authorization: `Bearer ${window.token}`
                     }
                 })
-                this.schools = data;  
+                this.schools = data.data;  
             
         },
        
