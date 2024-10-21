@@ -186,6 +186,7 @@ class Site extends CI_Controller {
             $temp['title'] = $prog['strProgramDescription'];
             $temp['type'] = $prog['type'];
             $temp['strMajor'] = $prog['strMajor'];
+			$temp['school'] = $prog['school'];
             $ret[] = $temp;
         }
 
