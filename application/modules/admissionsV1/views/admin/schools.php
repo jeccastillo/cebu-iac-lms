@@ -225,15 +225,14 @@ new Vue({
             }
         },
         async getAllPrevSchool() {
-            const {
-                data
-            } = await axios.get(
-                `${api_url}admissions/previous-schools`, {
-                    headers: {
-                        Authorization: `Bearer ${window.token}`
-                    }
-                })
-                this.schools = data.data;  
+            axios.get(
+            `${api_url}admissions/previous-schools`, {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            }).then((data) => {                          
+                this.schools = data.data;                                   
+            })                
             
         },
        
