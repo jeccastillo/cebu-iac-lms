@@ -3654,6 +3654,8 @@ new Vue({
                 axios.get(base_url + 'admissionsV1/programs/' + this.slug + '/' + this
                         .sy_reference)
                     .then((data) => {
+                        var st_type = "other";
+
                         this.current_term = data.data.current_term;
                         this.request.applicant_id = "A" + this.current_term
                             .strYearStart + "-" + String(this.request.id).padStart(
@@ -3662,6 +3664,11 @@ new Vue({
                         this.programs = data.data.programs;
                         this.entrance_exam = data.data.entrance_exam;
                         this.sections_scores = data.data.section_scores;
+                        
+                        if(this.tos.includes("College"))
+                                st_type = "college";                        
+                        else if(this.tos.includes("SHS"))
+                            st_type = "shs";
 
                         this.status_update_manual = this.request.status;
                         this.sy = data.data.sy;
@@ -3670,7 +3677,7 @@ new Vue({
                         if (this.programs.length > 0)
                             this.filtered_programs = this.programs.filter((
                                 prog) => {
-                                return prog.type == this.request.type
+                                return prog.type == st_type
                             })
 
 
