@@ -254,8 +254,7 @@ class AdmissionsV1 extends CI_Controller {
     
     public function schools(){
         
-        $this->data['page'] = "schools";
-        $this->data['opentree'] = "leads";
+        $this->data['page'] = "schools";        
                            
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/schools",$this->data);
