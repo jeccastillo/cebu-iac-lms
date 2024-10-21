@@ -150,7 +150,9 @@
                         <tbody>                        
                             <tr v-for="(student,index) in students">                                                                
                                 <td>{{ index + 1 }}</td>
-                                <td>{{ student.strLastname +' '+student.strFirstname+' '+student.strMiddlename }}</td>
+                                <td>{{ student.strLastname.toUpperCase() +' '+student.strFirstname.toUpperCase() }}
+                                    <span v-if="student.strMiddlename">{{ ' '+student.strMiddlename.toUpperCase() }}</span>
+                                </td>
                                 <td>{{ student.strProgramCode }}</td>
                                 <td v-if="classlist.intFinalized == 0">                                        
                                     {{ (student.floatMidtermGrade && student.floatMidtermGrade != 50)?student.floatMidtermGrade:"NGS" }}                                                                           
