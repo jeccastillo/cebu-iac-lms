@@ -108,7 +108,7 @@
                                 :value="secondDegreeValue[index]"
                                 name="college"
                                 v-model="request.student_type"
-                                @click="filterCourses('college')"
+                                @click="filterCourses()"
                                 required
                                 class="mr-1">
                             {{college}}
@@ -1317,11 +1317,11 @@
     </form>
 </div>
 <!-- Start of HubSpot Embed Code -->
-<!-- <script type="text/javascript"
+<script type="text/javascript"
     id="hs-script-loader"
     async
     defer
-    src="//js.hs-scripts.com/45758391.js"></script> -->
+    src="//js.hs-scripts.com/45758391.js"></script>
 <!-- End of HubSpot Embed Code -->
 
 <style>
@@ -1409,7 +1409,7 @@ input[type="number"] {
 }
 </style>
 
-<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script> -->
 <script src="https://unpkg.com/vue-select@3.0.0"></script>
 <link rel="stylesheet"
     href="https://unpkg.com/vue-select@3.0.0/dist/vue-select.css">
@@ -1780,7 +1780,7 @@ new Vue({
             }, 500);
         },
 
-        filterCourses: function(type) {
+        filterCourses: function(type) {            
             if (type === 'shs')
                 this.filtered_programs = this.programs.shs;
             else if (type === 'college')
