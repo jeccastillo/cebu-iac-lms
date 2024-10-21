@@ -62,14 +62,11 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Particulars:</label>
-                                            <select required class="form-control" v-model="description_other">
-                                                <option value="Cash Return">Cash Return</option>
-                                                <option value="Other Liability">Other Liability</option>                                                        
-                                                <option value="Refund from Supplier">Refund from Supplier</option>
-                                                <option value="Accounts Receivable Others">Accounts Receivable Others</option>    
-                                                <option value="Other Revenue">Other Revenue</option>     
-                                                <option value="EHT SCHOLARSHIP FOR iACADEMY CEBU">EHT SCHOLARSHIP FOR iACADEMY CEBU</option>   
-                                                <option value="Library Sales">Library Sales</option>
+                                            <label>Particulars:</label>
+                                            <select class="form-control"
+                                                v-model="description_other">
+                                                <option v-for="p in particulars"
+                                                    :value="p.name">{{p.name}}</option>
                                             </select>                                            
                                         </div>
                                     </div>
@@ -241,6 +238,7 @@ new Vue({
         total_sales: 0,
         less_vat_formatted: 0,
         less_ewt_formatted: 0,
+        particulars:[],
         total_amount_computed_formatted: 0,
         total_sales_formatted: 0,
         request:{
@@ -291,6 +289,7 @@ new Vue({
                     this.request.invoice_number = this.cashier.invoice_current;
                     this.request.cashier_id = this.cashier.user_id;    
                     this.payees = data.data.payees;   
+                    this.particulars = data.data.particulars;
                     this.sy = data.data.sy;             
                 }
             })
