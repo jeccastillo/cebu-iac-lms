@@ -62,6 +62,8 @@ class Finance extends CI_Controller {
         $data['current_sem'] = $sem['intID'];
         $data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
         $data['sem_year'] = $sem['strYearStart'];
+        $ret['particulars'] = $this->db->get_where('tb_mas_particulars',array('type'=>'particular'))
+                                        ->result_array();
         $data['payees'] = $this->db->get('tb_mas_ns_payee')->result_array();
         $data['message'] = "Success";
         $data['success'] = true;
@@ -1084,7 +1086,7 @@ class Finance extends CI_Controller {
         else{
             $active_sem = $this->data_fetcher->get_active_sem();
             $this->data['sem'] = $active_sem['intID'];
-        }        
+        }
 
         $this->load->view("common/header",$this->data);
         $this->load->view("ns_transactions",$this->data);
@@ -1099,13 +1101,8 @@ class Finance extends CI_Controller {
         $data['payee'] = $this->db->get_where('tb_mas_ns_payee',array('id'=>$payee))->first_row('array');
         $data['current_sem'] = $sem['intID'];
         $data['sem_year'] = $sem['strYearStart'];
-        $role = $this->session->userdata('special_role');
-        $data['advanced_privilages'] = (in_array($role,array(1,2)) )?true:false;            
-        $data['finance_manager_privilages'] = ($role == 2)?true:false;  
-
         $data['message'] = "Success";
         $data['success'] = true;
-
         echo json_encode($data);
     }
 
@@ -1380,4 +1377,3 @@ class Finance extends CI_Controller {
 
 
    }
-
