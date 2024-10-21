@@ -3665,9 +3665,9 @@ new Vue({
                         this.entrance_exam = data.data.entrance_exam;
                         this.sections_scores = data.data.section_scores;
                         
-                        if(this.tos.includes("College"))
+                        if(this.request.tos.includes("College"))
                                 st_type = "college";                        
-                        else if(this.tos.includes("SHS"))
+                        else if(this.request.tos.includes("SHS"))
                             st_type = "shs";
 
                         this.status_update_manual = this.request.status;
