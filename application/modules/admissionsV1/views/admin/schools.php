@@ -181,13 +181,12 @@ new Vue({
             this.request.school_province = undefined
             this.request.school_country = undefined
         },
-        setEditSchool: function(item){
-            console.log(item);
+        setEditSchool: function(item){            
             this.edit_id = item.id;
-            this.request.school_name = item.school_name
-            this.request.school_city = item.school_city
-            this.request.school_province = item.school_province
-            this.request.school_country = item.school_country
+            this.request.school_name = item.name
+            this.request.school_city = item.city
+            this.request.school_province = item.province
+            this.request.school_country = item.country
         },
         async addNewSchool(e) {
             if(!this.edit_school)
