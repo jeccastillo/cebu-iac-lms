@@ -225,7 +225,7 @@ class Site extends CI_Controller {
             $temp['title'] = $prog['strProgramDescription'];
             $temp['type'] = $prog['type'];
             $temp['strMajor'] = $prog['strMajor'];
-			$temp['school'] = $prog['school'];
+			$temp['program_school'] = $prog['school'];
             $ret['college'][] = $temp;
         }
 
@@ -235,7 +235,7 @@ class Site extends CI_Controller {
             $temp['title'] = $prog['strProgramDescription'];
             $temp['type'] = $prog['type'];
             $temp['strMajor'] = $prog['strMajor'];
-			$temp['school'] = $prog['school'];
+			$temp['program_school'] = $prog['school'];
             $ret['shs'][] = $temp;
         }
 
@@ -245,7 +245,7 @@ class Site extends CI_Controller {
             $temp['title'] = $prog['strProgramDescription'];
             $temp['type'] = $prog['type'];
             $temp['strMajor'] = $prog['strMajor'];
-			$temp['school'] = $prog['school'];
+			$temp['program_school'] = $prog['school'];
             $ret['sd'][] = $temp;
         }
 
@@ -255,7 +255,7 @@ class Site extends CI_Controller {
             $temp['title'] = $prog['strProgramDescription'];
             $temp['type'] = $prog['type'];
             $temp['strMajor'] = $prog['strMajor'];
-			$temp['school'] = $prog['school'];
+			$temp['program_school'] = $prog['school'];
             $ret['drive'][] = $temp;
         }
 
