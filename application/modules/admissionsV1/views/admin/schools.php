@@ -233,11 +233,8 @@ new Vue({
                         Authorization: `Bearer ${window.token}`
                     }
                 })
-
-            if (data.length != 0) {
-                this.schoolList = data
-                this.schoolName = this.request.previous_school.name
-            }
+                this.schools = data;  
+            
         },
        
                                        
