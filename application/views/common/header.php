@@ -249,6 +249,10 @@
             href="<?php echo base_url() ?>admissionsV1/edit_ay/"><i class="fa fa-calendar"></i>
             <span>Edit Application Dates</span> </a>
         </li>
+        <li class="<?php echo (isset($page) && $page=="admissions_sy_setup")?'active':''; ?>"><a
+            href="<?php echo base_url() ?>admissionsV1/schools/"><i class="fa fa-list"></i>
+            <span>Schools</span> </a>
+        </li>
         <?php endif; ?>
         <li class="treeview <?php echo (isset($opentree) && $opentree=="leads")?'active':''; ?>">
           <a href="#">
