@@ -7,6 +7,7 @@
                     href="#"
                     data-toggle="modal"                
                     data-target="#addSchool"
+                    @click="setAddSchool"
                 >
                     <i class="fa fa-plus"></i>
                     Add School
@@ -43,7 +44,11 @@
                                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span><span class="sr-only">Toggle Dropdown</span></button>
                                             <ul class="dropdown-menu" role="menu">
                                                 <li>
-                                                    <a href="#">Edit</a>
+                                                    <a href="#"                                         
+                                                        data-toggle="modal"                
+                                                        data-target="#addSchool"
+                                                        @click="setEditSchool(item)"
+                                                    >Edit</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -70,13 +75,14 @@
                     <button type="button"
                         class="close"
                         data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Add School</h4>
+                    <h4 class="modal-title">School</h4>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body">                      
                     <div class="form-group">
                         <label>School Name</label>
                         <input type="text"
                             name="school_name"
+                            v-model="request.school_name"
                             class="form-control"
                             required
                             required
@@ -86,6 +92,7 @@
                         <label>City</label>
                         <input type="text"
                             name="school_city"
+                            v-model="request.school_city"
                             class="form-control"
                             required
                             placeholder="City">
@@ -94,6 +101,7 @@
                         <label>State/Province</label>
                         <input type="text"
                             name="school_province"
+                            v-model="request.school_province"
                             class="form-control"
                             required
                             placeholder="State/Province">
@@ -102,6 +110,7 @@
                         <label>Country</label>
                         <input type="text"
                             name="school_country"
+                            v-model="request.school_country"
                             class="form-control"
                             required
                             placeholder="Country">
@@ -135,7 +144,15 @@ new Vue({
     data: {                    
         base_url: '<?php echo base_url(); ?>',
         current_sem: '<?php echo $current_sem; ?>',
-        schools: [],                      
+        schools: [],     
+        edit_id: undefined,
+        request:{            
+            school_name: undefined,
+            school_city: undefined,
+            school_province: undefined,
+            school_country: undefined,
+        }
+                
     },
 
     mounted() {
@@ -157,14 +174,29 @@ new Vue({
     },
 
     methods: {      
+        setAddSchool: function(){
+            this.edit_id = undefined;
+            this.request.school_name = undefined
+            this.request.school_city = undefined
+            this.request.school_province = undefined
+            this.request.school_country = undefined
+        },
+        setEditSchool: function(item){            
+            this.edit_id = item.id;
+            this.request.school_name = item.name
+            this.request.school_city = item.city
+            this.request.school_province = item.province
+            this.request.school_country = item.country
+        },
         async addNewSchool(e) {
-            let formData = new FormData(e.target);
-            const payload = Object.assign(Object.fromEntries(formData.entries()))
-
+            if(!this.edit_id)
+                var url = api_url + 'admissions/student-info/new-school';
+            else
+                var url = api_url + 'admissions/student-info/update-school/'+ this.edit_id;
             const {
                 data
             } = await axios
-                .post(`${api_url}admissions/student-info/new-school`, payload, {
+                .post(url, this.request, {
                     headers: {
                         Authorization: `Bearer ${window.token}`
                     }
@@ -178,7 +210,7 @@ new Vue({
                     text: 'Field Updated',
                     icon: 'success',
                 });
-                e.target.reset()
+                //e.target.reset()
                 this.getAllPrevSchool()
                 $('#addSchool').modal('hide')
             } else {
@@ -192,6 +224,18 @@ new Vue({
                 });
             }
         },
+        async getAllPrevSchool() {
+            axios.get(
+            `${api_url}admissions/previous-schools`, {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            }).then((data) => {                          
+                this.schools = data.data;                                   
+            })                
+            
+        },
+       
                                        
     }
 
