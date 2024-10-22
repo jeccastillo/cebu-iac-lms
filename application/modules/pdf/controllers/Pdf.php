@@ -859,15 +859,19 @@ class Pdf extends CI_Controller {
                 
                 //Get Ave Grade
                 if($stype == "shs"){
-                    $record['grade_ave'] = round(((float)$record['v3'] + (float)$record['v2'])/2,0);
-                    $sum += $record['grade_ave'] * $record['strUnits'];                             
+                    if($record['strDescription'] == "Conduct")
+                        $record['grade_ave'] = "T";
+                    else{
+                        $record['grade_ave'] = round(((float)$record['v3'] + (float)$record['v2'])/2,0);
+                        $sum += $record['grade_ave'] * $record['strUnits'];                             
+                    }
                 }
                 else{
                     $sum += (float)$record['v3'] * $record['strUnits'];
                 }
 
                 $total += $record['strUnits'];
-            }
+            }            
             if($record['include_gwa'] && $record['v2'] && $period == "midterm" && $record['intFinalized'] >= 1 && $record['v2'] != 50 && isset($record['v2'])){
                 $sum += (float)$record['v2'] * $record['strUnits'];                
                 $total += $record['strUnits'];
