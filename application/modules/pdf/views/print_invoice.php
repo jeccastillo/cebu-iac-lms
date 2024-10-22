@@ -157,7 +157,7 @@ table tr td {
             </div>
             <?php else: ?>
             <div style="position:absolute; top:  487px; left: 305px; width: 200px; height: 20px;">
-                <?php  echo $total_amount_due; ?>
+                <?php  echo $total_assessment; ?>
             </div>
             <?php endif; ?>
             <!--Total Amount received-->
