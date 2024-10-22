@@ -148,15 +148,15 @@ table tr td {
             </div>
             <!--Vat Exempt Sale-->
             <?php if($vat_exempt != 0 && $less_vat != 0): ?>
-            <div style="position:absolute; top:  482px; left: 305px; width: 200px; height: 20px;">
+            <div style="position:absolute; top:  487px; left: 305px; width: 200px; height: 20px;">
                 <?php  echo $vat_exempt; ?>
             </div>
             <?php elseif($vat_exempt == 0 && $less_vat != 0): ?>
-            <div style="position:absolute; top:  482px; left: 305px; width: 200px; height: 20px;">
+            <div style="position:absolute; top:  487px; left: 305px; width: 200px; height: 20px;">
                 <?php  echo ""; ?>
             </div>
             <?php else: ?>
-            <div style="position:absolute; top:  482px; left: 305px; width: 200px; height: 20px;">
+            <div style="position:absolute; top:  487px; left: 305px; width: 200px; height: 20px;">
                 <?php  echo $total_amount_due; ?>
             </div>
             <?php endif; ?>
