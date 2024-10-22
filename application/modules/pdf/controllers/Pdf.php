@@ -855,19 +855,23 @@ class Pdf extends CI_Controller {
         foreach($records as $record)
         {
             
-            if($record['include_gwa'] && $record['v3'] && $period == "final" && $record['intFinalized'] > 1 && ($record['strRemarks'] == "Passed" || $record['strRemarks'] == "Failed")){
+            if($record['include_gwa'] && $record['v3'] && $period == "final" && $record['intFinalized'] > 1){
                 
                 //Get Ave Grade
                 if($stype == "shs"){
-                    $record['grade_ave'] = ((float)$record['v3'] + (float)$record['v2'])/2;
-                    $sum += $record['grade_ave'] * $record['strUnits'];                             
+                    if($record['strDescription'] == "Conduct")
+                        $record['grade_ave'] = "T";
+                    else{
+                        $record['grade_ave'] = round(((float)$record['v3'] + (float)$record['v2'])/2,0);
+                        $sum += $record['grade_ave'] * $record['strUnits'];                             
+                    }
                 }
                 else{
                     $sum += (float)$record['v3'] * $record['strUnits'];
                 }
 
                 $total += $record['strUnits'];
-            }
+            }            
             if($record['include_gwa'] && $record['v2'] && $period == "midterm" && $record['intFinalized'] >= 1 && $record['v2'] != 50 && isset($record['v2'])){
                 $sum += (float)$record['v2'] * $record['strUnits'];                
                 $total += $record['strUnits'];
@@ -881,8 +885,12 @@ class Pdf extends CI_Controller {
             $record['schedule'] = $schedule;
             $sc_ret[] = $record;
         }                 
-        if($total > 0)
-            $gwa =  number_format(round(($sum/$total),3),3);
+        if($total > 0){
+            if($stype == "shs")
+                $gwa =  round(($sum/$total),0);
+            else
+                $gwa =  number_format(round(($sum/$total),3),3);
+        }
 
 
         $this->data['other_data'] = 
