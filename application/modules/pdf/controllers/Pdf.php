@@ -824,7 +824,17 @@ class Pdf extends CI_Controller {
 
             $this->data['selected_ay'] = $this->data['active_sem']['intID'];
 
-        $records = $this->data_fetcher->getClassListStudentsSt($id,$this->data['selected_ay']);                
+        $records = $this->data_fetcher->getClassListStudentsSt($id,$this->data['selected_ay']); 
+        $i = 0;
+        foreach($records as $record){
+            if($record['strDescription'] == "Conduct"){
+                $temp = $records[$i];
+                unset($records[$i]);
+            }
+            $i++;
+        }
+        if(isset($temp))
+            $records[] = $temp;
                 
         $sc_ret = [];
         $gwa = 0;
