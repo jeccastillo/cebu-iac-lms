@@ -182,6 +182,10 @@ $html .= '
             $units = "(".number_format($item['strUnits'],1).")";
             $units_earned = "(".$units_earned.")";
         }
+
+        if($period != "final")
+            $other_data['gwa'] = "";
+        
         
         $html .= '            
             <tr>                
@@ -198,9 +202,9 @@ $html .= '
     $html .='
             <tr>
                 <td colspan="3" style="border-top:1px solid #333;border-left:1px solid #333;">General Average for the Semester</td>
-                <td style="text-align:center;border-top:1px solid #333;border-left:1px solid #333;">'.$period == "final"?$other_data['gwa']:"".'</td>
+                <td style="text-align:center;border-top:1px solid #333;border-left:1px solid #333;">'.$other_data['gwa'].'</td>
                 <td style="border-top:1px solid #333;border-left:1px solid #333;border-right:1px solid #333;"></td>
-            </tr> 
+            </tr>
             <tr>
                 <td style="line-height:2px;border-top:1px solid #333"></td>         
                 <td style="line-height:2px;border-top:1px solid #333"></td>         
