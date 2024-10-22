@@ -3095,6 +3095,8 @@ class Unity extends CI_Controller {
                 $data['eq'] = $post['floatFinalGrade'];                                                            
                 if($stype == "shs"){
                     $post['floatFinalsGrade'] = round(((float)$item['floatMidtermGrade'] + (float)$post['floatFinalGrade'])/2,0);
+                    echo $post['floatFinalsGrade']; 
+                    die();
                 }
             }
             elseif($term == 2){
