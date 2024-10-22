@@ -859,7 +859,7 @@ class Pdf extends CI_Controller {
                 
                 //Get Ave Grade
                 if($stype == "shs"){
-                    $record['grade_ave'] = round(((float)$record['v3'] + (float)$record['v2'])/2);
+                    $record['grade_ave'] = round(((float)$record['v3'] + (float)$record['v2'])/2,0);
                     $sum += $record['grade_ave'] * $record['strUnits'];                             
                 }
                 else{
