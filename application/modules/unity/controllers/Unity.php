@@ -3069,12 +3069,34 @@ class Unity extends CI_Controller {
          $post = $this->input->post();
          $item = $this->data_fetcher->getItem('tb_mas_classlist_student',$post['intCSID'],'intCSID');
          $clist = $this->data_fetcher->fetch_classlist_by_id(null,$item['intClassListID']);
+         $student = $this->data_fetcher->getStudent($id);
+
+         switch($student['level']){
+            case 'shs':
+                $stype = 'shs';
+            break;
+            case 'drive':
+                $stype = 'shs';
+            break;
+            case 'college':
+                $stype = 'college';
+            break;
+            case 'other':
+                $stype = 'college';
+            break;
+            default: 
+                $stype = 'college';
+        }
         
         //if($this->is_super_admin() || $active_sem['enumGradingPeriod'] == "active"){   
         if($this->is_super_admin() || ($this->session->userdata('intID') == $clist['intFacultyID'])){                
            
-            if($term == 3)
+            if($term == 3){
                 $data['eq'] = $post['floatFinalGrade'];                                                            
+                if($stype == "shs"){
+                    $post['floatFinalsGrade'] = round(((float)$item['floatMidtermGrade'] + (float)$post['floatFinalGrade'])/2,0);
+                }
+            }
             elseif($term == 2){
                 $data['eq'] = $post['floatMidtermGrade'];                                
                 unset($post['strRemarks']);
