@@ -3098,9 +3098,12 @@ class Unity extends CI_Controller {
             if($term == 3){
                 $data['eq'] = $post['floatFinalGrade'];                                                            
                 if($stype == "shs"){
-                    $post['floatFinalsGrade'] = round(((float)$item['floatMidtermGrade'] + (float)$post['floatFinalGrade'])/2,0);                    
+                    if($clist['strDescription'] == "Conduct")
+                        $post['floatFinalsGrade'] = "T";
+                    else
+                        $post['floatFinalsGrade'] = round(((float)$item['floatMidtermGrade'] + (float)$post['floatFinalGrade'])/2,0);                    
                     $grading_item = $this->db->get_where('tb_mas_grading_item',array('grading_id'=>$grading_system,'value'=>$post['floatFinalsGrade']))->first_row();
-                    $post['strRemarks'] = $grading_item->remarks;
+                    $post['strRemarks'] = isset($grading_item)?$grading_item->remarks:$post['strRemarks'];
 
                 }
             }
