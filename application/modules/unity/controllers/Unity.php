@@ -3069,7 +3069,7 @@ class Unity extends CI_Controller {
          $post = $this->input->post();
          $item = $this->data_fetcher->getItem('tb_mas_classlist_student',$post['intCSID'],'intCSID');
          $clist = $this->data_fetcher->fetch_classlist_by_id(null,$item['intClassListID']);
-         $student = $this->data_fetcher->getStudent($id);
+         $student = $this->data_fetcher->getStudent($item['intStudentID']);
 
          switch($student['level']){
             case 'shs':
@@ -3094,9 +3094,7 @@ class Unity extends CI_Controller {
             if($term == 3){
                 $data['eq'] = $post['floatFinalGrade'];                                                            
                 if($stype == "shs"){
-                    $post['floatFinalsGrade'] = round(((float)$item['floatMidtermGrade'] + (float)$post['floatFinalGrade'])/2,0);
-                    echo $post['floatFinalsGrade']; 
-                    die();
+                    $post['floatFinalsGrade'] = round(((float)$item['floatMidtermGrade'] + (float)$post['floatFinalGrade'])/2,0);                    
                 }
             }
             elseif($term == 2){
