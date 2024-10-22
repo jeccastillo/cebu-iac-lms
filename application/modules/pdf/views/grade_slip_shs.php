@@ -192,7 +192,7 @@ $html .= '
                 <td style="border-left:1px solid #333;">'.$item['strDescription'].'</td>                
                 <td style="border-left:1px solid #333;text-align:center;">'.$grade_midterm.'</td>
                 <td style="border-left:1px solid #333;text-align:center;">'.$grade_final.'</td>                
-                <td style="border-left:1px solid #333;text-align:center;">'.$item['grade_ave'].'</td>
+                <td style="border-left:1px solid #333;text-align:center;">'.isset($item['grade_ave'])?$item['grade_ave']:"".'</td>
                 <td style="border-right:1px solid #333;border-left:1px solid #333;text-align:center;">'.$item['strRemarks'].'</td>
             </tr>                       
             ';
