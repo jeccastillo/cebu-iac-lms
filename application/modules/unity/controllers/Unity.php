@@ -3072,6 +3072,8 @@ class Unity extends CI_Controller {
          $item = $this->data_fetcher->getItem('tb_mas_classlist_student',$post['intCSID'],'intCSID');
          $clist = $this->data_fetcher->fetch_classlist_by_id(null,$item['intClassListID']);
          $student = $this->data_fetcher->getStudent($item['intStudentID']);
+         $grading_system = $post['grading_system'];
+         unset($post['grading_system']);
 
          switch($student['level']){
             case 'shs':
@@ -3097,6 +3099,9 @@ class Unity extends CI_Controller {
                 $data['eq'] = $post['floatFinalGrade'];                                                            
                 if($stype == "shs"){
                     $post['floatFinalsGrade'] = round(((float)$item['floatMidtermGrade'] + (float)$post['floatFinalGrade'])/2,0);                    
+                    $grading_item = $this->db->get_where('tb_mas_grading_item',array('grading_id'=>$grading_system,'value'=>$post['floatFinalsGrade']))->first_row();
+                    $post['strRemarks'] = $grading_item['remarks'];
+
                 }
             }
             elseif($term == 2){
