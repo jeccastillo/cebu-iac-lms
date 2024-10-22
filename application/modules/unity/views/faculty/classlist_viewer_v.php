@@ -220,6 +220,8 @@ new Vue({
         classlist:undefined,
         grading_items: [],
         grading_items_midterm:[],
+        grading_system_midterm: undefined,
+        grading_system_finals: undefined,
         pre_req: undefined,
         is_admin: false,
         is_registrar: false,
@@ -262,6 +264,8 @@ new Vue({
                 this.grading_items_midterm =  data.data.grading_items_midterm;
                 this.is_admin = data.data.is_admin;
                 this.is_registrar = data.data.is_registrar;
+                this.grading_system_midterm = data.data.grading_system_midterm;
+                this.grading_system_finals = data.data.grading_system_finals;
                 this.is_super_admin = data.data.is_super_admin;
                 this.show_all = data.data.showall;
                 this.students = data.data.students;
@@ -297,8 +301,10 @@ new Vue({
                 formdata.append("floatMidtermGrade",values[0]);
                 type = 2;
             }
-            else
+            else{
                 formdata.append("floatFinalGrade",values[0]);
+                formdata.append("grading_system",this.grading_system_finals);
+            }
             
 
             this.loader_spinner = true;

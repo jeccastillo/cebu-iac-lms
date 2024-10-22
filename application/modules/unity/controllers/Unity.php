@@ -2897,6 +2897,8 @@ class Unity extends CI_Controller {
             }
             
             $data['students'] = $st;
+            $data['grading_system_midterm'] = $grading_system_midterm;
+            $data['grading_system_finals'] = $grading_system;
             $data['pre_req'] = $pre_req;
             
             $data['label'] = "Submit"; 
