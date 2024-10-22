@@ -855,7 +855,7 @@ class Pdf extends CI_Controller {
         foreach($records as $record)
         {
             
-            if($record['include_gwa'] && $record['v3'] && $period == "final" && $record['intFinalized'] > 1 && ($record['strRemarks'] == "Passed" || $record['strRemarks'] == "Failed")){
+            if($record['include_gwa'] && $record['v3'] && $period == "final" && $record['intFinalized'] > 1){
                 
                 //Get Ave Grade
                 if($stype == "shs"){
