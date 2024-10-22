@@ -3100,7 +3100,7 @@ class Unity extends CI_Controller {
                 if($stype == "shs"){
                     $post['floatFinalsGrade'] = round(((float)$item['floatMidtermGrade'] + (float)$post['floatFinalGrade'])/2,0);                    
                     $grading_item = $this->db->get_where('tb_mas_grading_item',array('grading_id'=>$grading_system,'value'=>$post['floatFinalsGrade']))->first_row();
-                    $post['strRemarks'] = $grading_item['remarks'];
+                    $post['strRemarks'] = $grading_item->remarks;
 
                 }
             }
