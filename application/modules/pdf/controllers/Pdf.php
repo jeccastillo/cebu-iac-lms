@@ -881,8 +881,12 @@ class Pdf extends CI_Controller {
             $record['schedule'] = $schedule;
             $sc_ret[] = $record;
         }                 
-        if($total > 0)
-            $gwa =  number_format(round(($sum/$total),3),3);
+        if($total > 0){
+            if($stype == "shs")
+                $gwa =  round(($sum/$total),0);
+            else
+                $gwa =  number_format(round(($sum/$total),3),3);
+        }
 
 
         $this->data['other_data'] = 
