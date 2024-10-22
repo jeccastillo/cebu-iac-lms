@@ -824,7 +824,17 @@ class Pdf extends CI_Controller {
 
             $this->data['selected_ay'] = $this->data['active_sem']['intID'];
 
-        $records = $this->data_fetcher->getClassListStudentsSt($id,$this->data['selected_ay']);                
+        $records = $this->data_fetcher->getClassListStudentsSt($id,$this->data['selected_ay']); 
+        $i = 0;
+        foreach($records as $record){
+            if($record['strDescription'] == "Conduct"){
+                $temp = $records[$i];
+                unset($records[$i]);
+            }
+            $i++;
+        }
+        if(isset($temp))
+            $records[] = $temp;
                 
         $sc_ret = [];
         $gwa = 0;
@@ -846,8 +856,17 @@ class Pdf extends CI_Controller {
         {
             
             if($record['include_gwa'] && $record['v3'] && $period == "final" && $record['intFinalized'] > 1 && ($record['strRemarks'] == "Passed" || $record['strRemarks'] == "Failed")){
-                $sum += (float)$record['v3'] * $record['strUnits'];
-                $total += $record['strUnits'];                
+                
+                //Get Ave Grade
+                if($stype == "shs"){
+                    $record['grade_ave'] = ((float)$record['v3'] + (float)$record['v2'])/2;
+                    $sum += $record['grade_ave'] * $record['strUnits'];                             
+                }
+                else{
+                    $sum += (float)$record['v3'] * $record['strUnits'];
+                }
+
+                $total += $record['strUnits'];
             }
             if($record['include_gwa'] && $record['v2'] && $period == "midterm" && $record['intFinalized'] >= 1 && $record['v2'] != 50 && isset($record['v2'])){
                 $sum += (float)$record['v2'] * $record['strUnits'];                
