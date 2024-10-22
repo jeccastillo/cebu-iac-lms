@@ -38,7 +38,7 @@
                                 <th>MIDTERM GRADE</th>
                                 <th v-if="subject.intMajor == 0">FINAL GRADE</th>
                                 <th v-else>FINALS GRADE</th>
-                                <th v-if="subject.intMajor == 1">FINAL GRADE</th>
+                                <th v-if="subject.intMajor == 1">SEMESTER FINAL GRADE</th>
                                 <th>Remarks</th>                                
                                 <th>Enrolled</th>
                                 <th v-if="pre_req.length > 0">Passed Pre-requisite(s)</th>
