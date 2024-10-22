@@ -2897,6 +2897,8 @@ class Unity extends CI_Controller {
             }
             
             $data['students'] = $st;
+            $data['grading_system_midterm'] = $grading_system_midterm;
+            $data['grading_system_finals'] = $grading_system;
             $data['pre_req'] = $pre_req;
             
             $data['label'] = "Submit"; 
@@ -3069,12 +3071,42 @@ class Unity extends CI_Controller {
          $post = $this->input->post();
          $item = $this->data_fetcher->getItem('tb_mas_classlist_student',$post['intCSID'],'intCSID');
          $clist = $this->data_fetcher->fetch_classlist_by_id(null,$item['intClassListID']);
+         $student = $this->data_fetcher->getStudent($item['intStudentID']);
+         $grading_system = $post['grading_system'];
+         unset($post['grading_system']);
+
+         switch($student['level']){
+            case 'shs':
+                $stype = 'shs';
+            break;
+            case 'drive':
+                $stype = 'shs';
+            break;
+            case 'college':
+                $stype = 'college';
+            break;
+            case 'other':
+                $stype = 'college';
+            break;
+            default: 
+                $stype = 'college';
+        }
         
         //if($this->is_super_admin() || $active_sem['enumGradingPeriod'] == "active"){   
         if($this->is_super_admin() || ($this->session->userdata('intID') == $clist['intFacultyID'])){                
            
-            if($term == 3)
+            if($term == 3){
                 $data['eq'] = $post['floatFinalGrade'];                                                            
+                if($stype == "shs"){
+                    if($clist['strDescription'] == "Conduct")
+                        $post['floatFinalsGrade'] = "T";
+                    else
+                        $post['floatFinalsGrade'] = round(((float)$item['floatMidtermGrade'] + (float)$post['floatFinalGrade'])/2,0);                    
+                    $grading_item = $this->db->get_where('tb_mas_grading_item',array('grading_id'=>$grading_system,'value'=>$post['floatFinalsGrade']))->first_row();
+                    $post['strRemarks'] = isset($grading_item)?$grading_item->remarks:$post['strRemarks'];
+
+                }
+            }
             elseif($term == 2){
                 $data['eq'] = $post['floatMidtermGrade'];                                
                 unset($post['strRemarks']);
@@ -3355,6 +3387,37 @@ class Unity extends CI_Controller {
         $get = $this->input->get();
         # Perform the query
         $query = "SELECT intID, strFirstname, strLastname from tb_mas_faculty WHERE teaching = 1 AND (strFirstname LIKE '%%%".mysqli_real_escape_string($this->db->conn_id,$get["q"])."%%' OR strLastname LIKE '%%%".mysqli_real_escape_string($this->db->conn_id,$get["q"])."%%') ORDER BY strLastname DESC LIMIT 10";
+        $arr = array();
+        $rs = $this->db->query($query);
+
+        if($id!=null)
+            foreach ($rs->result() as $obj){
+                $arr[] = array('id'=>$obj->intID,'name'=>$obj->strFirstname." ".$obj->strLastname);
+            }
+        else
+            # Collect the results
+            foreach ($rs->result() as $obj){
+                $arr[] = array('id'=>$obj->strStudentNumber,'name'=>$obj->strFirstname." ".$obj->strLastname);
+            }
+
+        # JSON-encode the response
+        $json_response = json_encode($arr);
+
+        # Optionally: Wrap the response in a callback function for JSONP cross-domain support
+        if(isset($get["callback"]) && $get["callback"]) {
+            $json_response = $get["callback"] . "(" . $json_response . ")";
+        }
+
+        # Return the response
+        echo $json_response;
+
+    }
+
+    public function userTokenEmployee($id = null)
+    {
+        $get = $this->input->get();
+        # Perform the query
+        $query = "SELECT intID, strFirstname, strLastname from tb_mas_faculty WHERE  (strFirstname LIKE '%%%".mysqli_real_escape_string($this->db->conn_id,$get["q"])."%%' OR strLastname LIKE '%%%".mysqli_real_escape_string($this->db->conn_id,$get["q"])."%%') ORDER BY strLastname DESC LIMIT 10";
         $arr = array();
         $rs = $this->db->query($query);
 
