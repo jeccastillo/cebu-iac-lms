@@ -174,6 +174,7 @@ $html .= '
         
         $grade_final = ($item['intFinalized'] >= 2)?$item['v3']:'NGS';        
         $grade_midterm = ($item['intFinalized'] >= 1)?$item['v2']:'NGS';
+        $sem_grade = isset($item['grade_ave'])?$item['grade_ave']:"";
         
         $units_earned = ($item['strRemarks'] == "Passed" && $item['intFinalized'] >= 2 && $period == "final")?number_format($item['strUnits'],1):0;
         if($item['include_gwa'])
@@ -192,7 +193,7 @@ $html .= '
                 <td style="border-left:1px solid #333;">'.$item['strDescription'].'</td>                
                 <td style="border-left:1px solid #333;text-align:center;">'.$grade_midterm.'</td>
                 <td style="border-left:1px solid #333;text-align:center;">'.$grade_final.'</td>                
-                <td style="border-left:1px solid #333;text-align:center;">'.isset($item['grade_ave'])?$item['grade_ave']:"".'</td>
+                <td style="border-left:1px solid #333;text-align:center;">'.$sem_grade.'</td>
                 <td style="border-right:1px solid #333;border-left:1px solid #333;text-align:center;">'.$item['strRemarks'].'</td>
             </tr>                       
             ';
