@@ -5233,7 +5233,7 @@ class Excel extends CI_Controller {
                     }
                     $tuition_discount = $total_discount = 0;
                     
-                    if($user['strLastname'] == 'DERIT'){
+                    if($user['intID'] == 72){
                         print_r($reg['deduction_type']);
                         die();
                     }
