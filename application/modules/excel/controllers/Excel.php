@@ -5227,6 +5227,11 @@ class Excel extends CI_Controller {
                         }
                     }
     
+                    if($user['intID'] == 72){
+                        print_r($tuition['scholarship']);
+                        die();
+                    }
+
                     $date_enrolled = date("Y-m-d",strtotime($reg['date_enlisted']));
                     if(isset($date_enrolled_array[$user['slug']])){
                         $date_enrolled = date("Y-m-d",strtotime($date_enrolled_array[$user['slug']]));
