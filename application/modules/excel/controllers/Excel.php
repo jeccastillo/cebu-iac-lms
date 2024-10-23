@@ -5235,6 +5235,7 @@ class Excel extends CI_Controller {
                     
                     if($user['strLastname'] == 'DERIT'){
                         print_r($reg['deduction_type']);
+                        die();
                     }
                     if($date_enrolled <= $sy->ar_report_date_generation || $reg['deduction_type'] == 'scholarship'){
                         if($reg['paymentType'] == 'full' && $tuition['scholarship_tuition_fee_rate'] > 0)
