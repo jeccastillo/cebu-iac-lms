@@ -5234,7 +5234,7 @@ class Excel extends CI_Controller {
                     $tuition_discount = $total_discount = 0;
                     
                     if($user['intID'] == 72){
-                        print_r($reg);
+                        print_r($tuition);
                         die();
                     }
                     if($date_enrolled <= $sy->ar_report_date_generation || $reg['deduction_type'] == 'scholarship'){
