@@ -5018,7 +5018,6 @@ class Excel extends CI_Controller {
         foreach($ar_students as $studentInformation){
             if($studentInformation->status != 'Enrolled')
                 array_push($notEnrolledSlugs, $studentInformation->slug);
-            // array_push($enrolledSlugs, $studentInformation->slug);
         }
 
         $users = $this->db->select('tb_mas_users.*')
@@ -5233,7 +5232,10 @@ class Excel extends CI_Controller {
                         $date_enrolled = date("Y-m-d",strtotime($date_enrolled_array[$user['slug']]));
                     }
                     $tuition_discount = $total_discount = 0;
-    
+                    
+                    if($user['strLastname'] == 'DERIT'){
+                        print_r($reg['deduction_type']);
+                    }
                     if($date_enrolled <= $sy->ar_report_date_generation || $reg['deduction_type'] == 'scholarship'){
                         if($reg['paymentType'] == 'full' && $tuition['scholarship_tuition_fee_rate'] > 0)
                         $tuition_discount = $tuition['scholarship_tuition_fee_rate'];
@@ -5386,7 +5388,7 @@ class Excel extends CI_Controller {
                     }
     
                     //late tagging
-                    if($date_enrolled > $sy->ar_report_date_generation  || $reg['deduction_type'] != 'scholarship'){
+                    if($date_enrolled > $sy->ar_report_date_generation && $reg['deduction_type'] != 'scholarship'){
                         $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 8, $i)->setValue($total_discount > 0 ? $date_enrolled : '');
                         $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 9, $i)->setValue($total_discount > 0 ? $tuition['scholar_type'] : '');
                         $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 10, $i)->setValue($total_discount > 0 ? $total_discount : '');
