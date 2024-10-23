@@ -5228,7 +5228,7 @@ class Excel extends CI_Controller {
                     }
     
                     if($user['intID'] == 72){
-                        print_r($tuition['scholarship'][0]);
+                        print_r($tuition['scholarship'][0]->deduction_type);
                         die();
                     }
 
