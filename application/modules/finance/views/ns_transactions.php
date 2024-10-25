@@ -73,7 +73,7 @@
                                         <button
                                             v-if="cashier && payment.remarks != 'Voided'"
                                             data-toggle="modal"
-                                            @click="or_details.id = payment.id; or_details.status = payment.status"
+                                            @click="or_details.id = payment.id; or_details.status = payment.status; or_details.or_date = payment.or_date;"
                                             data-target="#orDetailsUpdate"
                                             class="btn btn-primary">
                                             Update Details
