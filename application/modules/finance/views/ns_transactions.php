@@ -238,8 +238,7 @@
                 </div>
                 <div class=" modal-footer">
                     <!-- modal footer  -->
-                    <button type="submit"
-                        :disabled="!or_update.or_number"
+                    <button type="submit"                        
                         class="btn btn-primary">Submit</button>
                     <button type="button"
                         class="btn btn-default"
