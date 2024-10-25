@@ -287,6 +287,7 @@ new Vue({
         or_details: {
             id: undefined,
             or_date: undefined,
+            status: undefined,
         }, 
         payments: [],                          
         cashier: undefined, 
