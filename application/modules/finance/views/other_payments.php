@@ -73,7 +73,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Enter amount to pay/refund:</label>
-                                            <input type="text" required class="form-control" v-model="amount_to_pay" />
+                                            <input type="number" step=".01" required class="form-control" v-model="amount_to_pay" />
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
@@ -145,21 +145,21 @@
                                     <div
                                         class="form-group col-sm-6">
                                         <label>Vatable Amount :</label>    
-                                        <input @change="computeVat" type="number"
+                                        <input @change="computeVat" step=".01" type="number"
                                                 class="form-control"
                                                 v-model="request.invoice_amount">                                                
                                     </div>
                                     <div
                                         class="form-group col-sm-6">
                                         <label>Vat Exempt Tax :</label>    
-                                        <input @change="computeVat" type="number"
+                                        <input @change="computeVat" step=".01" type="number"
                                                 class="form-control"
                                                 v-model="request.invoice_amount_ves">                                                
                                     </div>
                                     <div
                                         class="form-group col-sm-6">
                                         <label>Vat Zero Rated Sales :</label>    
-                                        <input @change="computeVat" type="number"
+                                        <input @change="computeVat" step=".01" type="number"
                                                 class="form-control"
                                                 v-model="request.invoice_amount_vzrs">                                                
                                     </div>
