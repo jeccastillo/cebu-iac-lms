@@ -71,7 +71,7 @@
                                             Print Invoice
                                         </button>
                                         <button
-                                            v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided'"
+                                            v-if="cashier && payment.remarks != 'Voided'"
                                             data-toggle="modal"
                                             @click="or_details.id = payment.id;"
                                             data-target="#orDetailsUpdate"
