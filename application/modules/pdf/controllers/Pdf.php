@@ -2347,7 +2347,7 @@ class Pdf extends CI_Controller {
                     $fullAssessment -= $tp['subtotal_order'];
 
                 $fullAssessment += $request['total_amount_due'];                
-            }
+            }            
 
             if($reg['paymentType'] == 'partial'){
                 $cashCharge = false;
@@ -2378,6 +2378,10 @@ class Pdf extends CI_Controller {
         $this->data['description'] = $description;
         // $this->data['total_amount_due'] = number_format($request['total_amount_due'],2,'.',',');
         $this->data['total_amount_due'] = number_format($request['total_amount_due'],2,'.',',');
+        
+        if($this->data['total_amount_due'] == 0)
+            $cashCharge = false;
+        
         $this->data['amount_net_vat'] = number_format($amountNetVat,2,'.',',');
         $this->data['less_vat'] = number_format($lessVat,2,'.',',');
         $this->data['vat_zero_rated_sale'] = number_format($request['invoice_amount_vzrs'],2,'.',',');
