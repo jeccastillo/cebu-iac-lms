@@ -140,7 +140,7 @@ table tr td {
                 <?php  echo $total_assessment; ?>
             </div>
             <div style="position:absolute; top:  460px; left: 10px; width: 200px; height: 20px;">
-                <?php  echo $total_amount_due == 0 ? "" : $remarks; ?>
+                <?php  echo $remarks; ?>
             </div>
             <!--Vatable-->
             <div style="position:absolute; top:  462px; left: 305px; width: 200px; height: 20px;">
