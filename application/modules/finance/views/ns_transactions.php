@@ -71,6 +71,14 @@
                                             Print Invoice
                                         </button>
                                         <button
+                                            v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided'"
+                                            data-toggle="modal"
+                                            @click="or_details.id = payment.id;"
+                                            data-target="#orDetailsUpdate"
+                                            class="btn btn-primary">
+                                            Update Details
+                                        </button>
+                                        <button
                                         v-if="cashier && finance_manager_privilages && payment.status == 'Paid'"
                                         class="btn btn-danger"
                                         @click="deletePayment(payment.id)">Retract
@@ -204,6 +212,43 @@
             name="invoice_amount_vzrs"
             v-model="or_print.invoice_amount_vzrs" />
     </form>       
+    <div class="modal fade"
+        id="orDetailsUpdate"
+        role="dialog">
+        <form @submit.prevent="updateORDetails"
+            class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- modal header  -->
+                    <button type="button"
+                        class="close"
+                        data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Update Details</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Issued Date <span class="text-danger">*</span> </label>
+                        <input type="date"
+                            class="form-control"
+                            v-model="or_details.or_date"
+                            required />
+                    </div>
+                </div>
+                <div class=" modal-footer">
+                    <!-- modal footer  -->
+                    <button type="submit"
+                        :disabled="!or_update.or_number"
+                        class="btn btn-primary">Submit</button>
+                    <button type="button"
+                        class="btn btn-default"
+                        data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
     </div><!---vue container--->
 </aside>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
@@ -231,7 +276,11 @@ new Vue({
         base_url: "<?php echo base_url(); ?>",                   
         user: {
             special_role:0,
-        },              
+        },             
+        or_details: {
+            id: undefined,
+            or_date: undefined,
+        }, 
         payments: [],                          
         cashier: undefined, 
         sy: [],  
@@ -331,6 +380,46 @@ new Vue({
                     }
             });  
         },  
+        updateORDetails: function() {
+            let url = api_url + 'finance/update_or_details';
+            let slug = this.slug;
+            this.loader_spinner = true;
+
+            Swal.fire({
+                title: 'Continue with the update',
+                text: "Are you sure you want to update the payment details?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    return axios.post(url, this.or_details, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                        .then(data => {
+                            this.loader_spinner = false;
+                            if (data.data.success) {
+
+                                this.loader_spinner = false;
+                                Swal.fire({
+                                    title: "Success",
+                                    text: "Update Success",
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });
+
+                            }
+                        });
+
+                },
+            });
+        },
         deletePayment: function(payment_id) {
             let url = api_url + 'finance/delete_payment';
 
