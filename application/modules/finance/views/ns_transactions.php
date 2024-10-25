@@ -43,7 +43,7 @@
                                     <th>Total Due</th>
                                     <th>Status</th>
                                     <th>Online Response Message</th>
-                                    <th>Date Updated</th>
+                                    <th>Transaction Date</th>
                                     <th>Actions</th>
                                 </tr>                                                                                                                        
                                 <tr v-for="payment in payments">
@@ -57,7 +57,7 @@
                                     <td>{{ payment.total_amount_due }}</td>
                                     <td>{{ payment.status }}</td>                                            
                                     <td>{{ payment.response_message }}</td>
-                                    <td>{{ payment.updated_at }}</td>            
+                                    <td>{{ payment.or_date }}</td>            
                                     <td>                                        
                                         <button v-if="payment.or_number"                                             
                                                 @click="printOR(payment)" 
@@ -71,9 +71,9 @@
                                             Print Invoice
                                         </button>
                                         <button
-                                            v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided'"
+                                            v-if="cashier && payment.remarks != 'Voided'"
                                             data-toggle="modal"
-                                            @click="or_details.id = payment.id;"
+                                            @click="or_details.id = payment.id; or_details.status = payment.status; or_details.or_date = payment.or_date;"
                                             data-target="#orDetailsUpdate"
                                             class="btn btn-primary">
                                             Update Details
@@ -235,7 +235,15 @@
                             v-model="or_details.or_date"
                             required />
                     </div>
-                </div>
+                    <div class="form-group">
+                        <label>Payment Status</label>
+                        <select class="form-control" v-model="or_details.status">
+                            <option value="Paid">Paid</option>
+                            <option value="Pending">Pending</option>                                                        
+                            <option value="Refunded">Refunded</option>
+                        </select>
+                    </div>
+                </div>                
                 <div class=" modal-footer">
                     <!-- modal footer  -->
                     <button type="submit"                        
@@ -279,6 +287,7 @@ new Vue({
         or_details: {
             id: undefined,
             or_date: undefined,
+            status: undefined,
         }, 
         payments: [],                          
         cashier: undefined, 
