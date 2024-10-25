@@ -2364,7 +2364,7 @@ class Pdf extends CI_Controller {
          
         
         
-        $this->data['cashCharge'] = $cashCharge;
+        
         $this->data['term'] = $term;
         $this->data['student_name'] = strtoupper($request['student_name']);        
         $this->data['cashier_name'] = strtoupper($cashier->strFirstname." ".$cashier->strLastname);        
@@ -2382,6 +2382,7 @@ class Pdf extends CI_Controller {
         if($this->data['total_amount_due'] == 0)
             $cashCharge = false;
         
+        $this->data['cashCharge'] = $cashCharge;
         $this->data['amount_net_vat'] = number_format($amountNetVat,2,'.',',');
         $this->data['less_vat'] = number_format($lessVat,2,'.',',');
         $this->data['vat_zero_rated_sale'] = number_format($request['invoice_amount_vzrs'],2,'.',',');
