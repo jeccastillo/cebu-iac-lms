@@ -73,7 +73,7 @@
                                         <button
                                             v-if="cashier && payment.remarks != 'Voided'"
                                             data-toggle="modal"
-                                            @click="or_details.id = payment.id;"
+                                            @click="or_details.id = payment.id; or_details.status = payment.status"
                                             data-target="#orDetailsUpdate"
                                             class="btn btn-primary">
                                             Update Details
@@ -235,7 +235,15 @@
                             v-model="or_details.or_date"
                             required />
                     </div>
-                </div>
+                    <div class="form-group">
+                        <label>Payment Status</label>
+                        <select class="form-control" v-model="or_details.status">
+                            <option value="Paid">Paid</option>
+                            <option value="Pending">Pending</option>                                                        
+                            <option value="Refunded">Refunded</option>
+                        </select>
+                    </div>
+                </div>                
                 <div class=" modal-footer">
                     <!-- modal footer  -->
                     <button type="submit"                        
