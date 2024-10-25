@@ -437,21 +437,21 @@
                                                 <div v-if="!isOR && description != 'Tuition Fee'"
                                                     class="form-group">
                                                     <label>Vatable Amount :</label>    
-                                                    <input @change="computeVat" type="number"
+                                                    <input @change="computeVat" step=".01" type="number"
                                                             class="form-control"
                                                             v-model="request.invoice_amount">                                                
                                                 </div>
                                                 <div v-if="!isOR && description != 'Tuition Fee'"
                                                     class="form-group">
                                                     <label>Vat Exempt Tax :</label>    
-                                                    <input @change="computeVat" type="number"
+                                                    <input @change="computeVat" step=".01" type="number"
                                                             class="form-control"
                                                             v-model="request.invoice_amount_ves">                                                
                                                 </div>
                                                 <div v-if="!isOR && description != 'Tuition Fee'"
                                                     class="form-group">
                                                     <label>Vat Zero Rated Sales :</label>    
-                                                    <input @change="computeVat" type="number"
+                                                    <input @change="computeVat" step=".01" type="number"
                                                             class="form-control"
                                                             v-model="request.invoice_amount_vzrs">                                                
                                                 </div>
