@@ -43,7 +43,7 @@
                                     <th>Total Due</th>
                                     <th>Status</th>
                                     <th>Online Response Message</th>
-                                    <th>Date Updated</th>
+                                    <th>Transaction Date</th>
                                     <th>Actions</th>
                                 </tr>                                                                                                                        
                                 <tr v-for="payment in payments">
@@ -57,7 +57,7 @@
                                     <td>{{ payment.total_amount_due }}</td>
                                     <td>{{ payment.status }}</td>                                            
                                     <td>{{ payment.response_message }}</td>
-                                    <td>{{ payment.updated_at }}</td>            
+                                    <td>{{ payment.or_date }}</td>            
                                     <td>                                        
                                         <button v-if="payment.or_number"                                             
                                                 @click="printOR(payment)" 
