@@ -123,7 +123,13 @@
                                             <input type="hidden" class="form-control" v-model="request.invoice_number" />
                                         </div>
                                     </div>  
-                                    <div v-else class="col-sm-6">
+                                    <div v-if="windowPayment == 'official receipt'" class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Invoice Number:</label>
+                                            <input type="number" class="form-control" v-model="request.invoice_number" />
+                                        </div>
+                                    </div>  
+                                    <div v-if="windowPayment == 'official receipt'" class="col-sm-6">
                                         <div class="form-group">
                                             <label>OR Number:</label>
                                             <div>{{ request.or_number }}</div>
