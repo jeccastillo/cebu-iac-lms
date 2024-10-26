@@ -317,12 +317,12 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         </table>
                     </td>';
                     $html .= '
-                        <td width="180px">
+                        <td width="200px">
                             <table cellpadding="0"  style="color:#333; font-size:7;">                            
                             <tr>
-                                <td>DOWN PAYMENT 30%</td>                                
-                                <td></td>
-                                <td style="text-align:right;">'.number_format($tuition['dp_before_deductions30'], 2, '.' ,',').'</td>
+                                <td width="85px">DOWN PAYMENT 30%</td>                                
+                                <td width="65px"></td>
+                                <td width="50px" style="text-align:right;">'.number_format($tuition['dp_before_deductions30'], 2, '.' ,',').'</td>
                                 
                             </tr>';
                             
