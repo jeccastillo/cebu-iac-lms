@@ -276,14 +276,18 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                 <td width="185px">
                                     <table cellpadding="0"  style="color:#333; font-size:7;"> 
                                     <tr>
-                                        <td width="80px" style="font-weight:bold;">DOWN PAYMENT 50%</td>                                
+                                        <td width="80px" style="font-weight:bold;">50% DP</td>                                
                                         <td width="60px"></td>
+                                        <td width="40px"></td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td>DOWN PAYMENT</td>                                
+                                        <td></td>
                                         <td width="40px" style="text-align:right;">'.number_format($tuition['dp_before_deductions50'], 2, '.' ,',').'</td>
                                         
-                                    </tr>';
-                                    
-                                        $html .= '
-                                        <tr>
+                                    </tr>
+                                    <tr>
                                             <td>1st INSTALLMENT</td>                                    
                                             <td style="text-align:right;">'.date('m/d/Y',strtotime($active_sem['installment1'])).' ('.switch_day(date('N',strtotime($active_sem['installment1']))).')</td>
                                             <td style="text-align:right;">'.number_format($tuition['installment_fee50'], 2, '.' ,',').'</td>
@@ -316,10 +320,16 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                     </table>
                                 </td>
                                 <td width="185px">
-                                    <table cellpadding="0"  style="color:#333; font-size:7;">                            
+                                    <table cellpadding="0"  style="color:#333; font-size:7;">              
                                         <tr>
-                                            <td width="80px" style="font-weight:bold;">DOWN PAYMENT 30%</td>                                
+                                            <td width="80px" style="font-weight:bold;">30% DP</td>                                
                                             <td width="60px"></td>
+                                            <td width="40px"></td>
+                                            
+                                        </tr>              
+                                        <tr>
+                                            <td">DOWN PAYMENT</td>                                
+                                            <td></td>
                                             <td width="40px" style="text-align:right;">'.number_format($tuition['dp_before_deductions30'], 2, '.' ,',').'</td>
                                             
                                         </tr>
