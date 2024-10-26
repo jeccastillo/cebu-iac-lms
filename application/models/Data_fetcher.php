@@ -3183,6 +3183,8 @@ class Data_fetcher extends CI_Model {
         $data['misc'] = $total_misc - $misc_scholarship - $misc_discount;  
         $data['tuition_before_discount'] =  $tuition; 
         $data['tuition_installment_before_discount'] =  $data['tuition_installment'];
+        $data['tuition_installment_before_discount30'] =  $data['tuition_installment30'];
+        $data['tuition_installment_before_discount50'] =  $data['tuition_installment50'];
         $data['tuition'] = $tuition - $tuition_scholarship - $tuition_discount;
         $data['tuition_installment'] = $data['tuition_installment'] - $tuition_scholarship - $tuition_discount;
         $data['scholarship'] = $scholarship_array;
