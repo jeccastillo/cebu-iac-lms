@@ -2756,10 +2756,10 @@ class Data_fetcher extends CI_Model {
                         $tuition = $shs_rate['tuition_amount_online'];
                     break;
                     case 3:
-                        $tuition = $shs_rate['tuition_amount_hybrid'];
+                        $tuition = $shs_rate['tuition_amount_hyflex'];
                     break;
                     case 4:
-                        $tuition = $shs_rate['tuition_amount_hyflex'];
+                        $tuition = $shs_rate['tuition_amount_hybrid'];
                     break;
                     default:
                         $tuition = $shs_rate['tuition_amount'];
