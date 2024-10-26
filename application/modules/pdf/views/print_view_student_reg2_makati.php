@@ -239,7 +239,8 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                     $html .='   <tr>
                                     <td style="font-weight:bold;"></td>
                                     <td style="font-weight:bold;border-top: 1px solid #555; text-align:right;">'.number_format($tuition['total_before_deductions'], 2, '.' ,',').'</td>
-                                    <td style="font-weight:bold;border-top: 1px solid #555; text-align:right;">'.number_format($tuition['ti_before_deductions'], 2, '.' ,',').'</td>
+                                    <td style="font-weight:bold;border-top: 1px solid #555; text-align:right;">'.number_format($tuition['ti_before_deductions50'], 2, '.' ,',').'</td>
+                                    <td style="font-weight:bold;border-top: 1px solid #555; text-align:right;">'.number_format($tuition['ti_before_deductions30'], 2, '.' ,',').'</td>
                                 </tr>
                                 <tr>
                                     <td colspan="3" style= "font-size:7; line-height:1.0;"></td>                
