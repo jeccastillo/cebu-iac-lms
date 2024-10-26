@@ -3217,8 +3217,11 @@ class Data_fetcher extends CI_Model {
         if(!isset($tuition_year['installmentFixed']) || $tuition_year['installmentFixed'] == 0){                        
             if($level == "shs" && ($year_level == 2 || $year_level == 4))
                 $data['down_payment'] = $data['total_installment']/2;
-            else
-                $data['down_payment'] = $data['total_installment'] * ($tuition_year['installmentDP']/100);
+            else{
+                $data['down_payment'] = $data['total_installment'] * 0.30;
+                $data['down_payment_50'] = $data['total_installment'] * 0.50;
+            }
+                
 
             $data['down_payment'] = round($data['down_payment'],2);
 
@@ -3246,7 +3249,8 @@ class Data_fetcher extends CI_Model {
         }
 
         $data['installment_fee'] = ($data['total_installment'] - $data['down_payment'])/5;
-        $data['installment_fee'] = $data['installment_fee'];
+        $data['installment_fee_50'] = ($data['total_installment'] - $data['down_payment_50'])/5;
+        //$data['installment_fee'] = $data['installment_fee'];
 
         $data['if_before_deductions'] = ($data['ti_before_deductions'] - $data['dp_before_deductions'])/5;
         $data['if_before_deductions'] = round($data['if_before_deductions'],2);
