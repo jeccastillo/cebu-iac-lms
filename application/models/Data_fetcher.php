@@ -2838,9 +2838,16 @@ class Data_fetcher extends CI_Model {
         $tuition_fee_rate = $tuition_fee_installment_rate = $tuition_fee_fixed = $lab_fee_rate = $lab_fee_fixed = $misc_fee_rate = $misc_fee_fixed = 0;
         $total_assessment_rate = $total_assessment_fixed = $total_assessment_rate_installment = $total_assessment_fixed_installment = 0;
         $total_assessment += $tuition + $total_lab + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
-                    $total_assessment_installment += ($tuition  + ($tuition * ($tuition_year['installmentIncrease']/100)))   
+        $total_assessment_installment += ($tuition  + ($tuition * ($tuition_year['installmentIncrease']/100)))   
                                                 + ($total_lab + ($total_lab * ($tuition_year['installmentIncrease']/100)))
                                                 + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
+
+        $total_assessment_installment30 += ($tuition  + ($tuition * 0.15))   
+                                                + ($total_lab + ($total_lab * 0.15))
+                                                + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;                                                
+        $total_assessment_installment50 += ($tuition  + ($tuition * 0.09))   
+                                                + ($total_lab + ($total_lab * 0.09))
+                                                + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;                                                                                                
                                                 
         if(!empty($scholarships)){
             foreach($scholarships as $scholar){
@@ -2871,8 +2878,8 @@ class Data_fetcher extends CI_Model {
                     if($scholar->total_assessment_rate > 0){                        
                         $total_scholarship_temp += $total_assessment * ($scholar->total_assessment_rate/100);
                         $total_scholarship_installment_temp += $total_assessment_installment * ($scholar->total_assessment_rate/100);
-                        $total_scholarship_installment_temp30 += $total_assessment_installment * ($scholar->total_assessment_rate/100);
-                        $total_scholarship_installment_temp50 += $total_assessment_installment * ($scholar->total_assessment_rate/100);
+                        $total_scholarship_installment_temp30 += $total_assessment_installment30 * ($scholar->total_assessment_rate/100);
+                        $total_scholarship_installment_temp50 += $total_assessment_installment50 * ($scholar->total_assessment_rate/100);
                         $total_assessment_rate = $total_assessment * ($scholar->total_assessment_rate/100);
                         $total_assessment_rate_installment = $total_assessment_installment * ($scholar->total_assessment_rate/100);
                         $data['sc_rate'] = $total_scholarship_temp * ($scholar->total_assessment_rate/100);
