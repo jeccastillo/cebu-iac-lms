@@ -315,6 +315,53 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                             <td style="text-align:right; font-weight:bold; border-top:1px solid #333;">'.number_format($tuition['total_installment'], 2, '.' ,',').'</td>
                         </tr>
                         </table>
+                    </td>';
+                    $html .= '
+                        <td width="220px">
+                            <table cellpadding="0"  style="color:#333; font-size:7;">                            
+                            <tr>
+                                <td>DOWN PAYMENT 30%</td>                                
+                                <td></td>
+                                <td style="text-align:right;">'.number_format($tuition['dp_before_deductions30'], 2, '.' ,',').'</td>
+                                
+                            </tr>';
+                            
+                                $html .= '
+                                <tr>
+                                    <td>1st INSTALLMENT</td>                                    
+                                    <td style="text-align:right;">'.date('m/d/Y',strtotime($active_sem['installment1'])).' ('.switch_day(date('N',strtotime($active_sem['installment1']))).')</td>
+                                    <td style="text-align:right;">'.number_format($tuition['installment_fee30'], 2, '.' ,',').'</td>
+                                </tr>
+                                <tr>
+                                    <td>2nd INSTALLMENT</td>                                    
+                                    <td style="text-align:right;">'.date('m/d/Y',strtotime($active_sem['installment2'])).' ('.switch_day(date('N',strtotime($active_sem['installment2']))).')</td>
+                                    <td style="text-align:right;">'.number_format($tuition['installment_fee30'], 2, '.' ,',').'</td>
+                                </tr>
+                                <tr>
+                                    <td>3rd INSTALLMENT</td>                                    
+                                    <td style="text-align:right;">'.date('m/d/Y',strtotime($active_sem['installment3'])).' ('.switch_day(date('N',strtotime($active_sem['installment3']))).')</td>
+                                    <td style="text-align:right;">'.number_format($tuition['installment_fee30'], 2, '.' ,',').'</td>
+                                </tr>
+                                <tr>
+                                    <td>4th INSTALLMENT</td>                                    
+                                    <td style="text-align:right;">'.date('m/d/Y',strtotime($active_sem['installment4'])).' ('.switch_day(date('N',strtotime($active_sem['installment4']))).')</td>
+                                    <td style="text-align:right;">'.number_format($tuition['installment_fee30'], 2, '.' ,',').'</td>
+                                </tr>
+                                <tr>
+                                    <td>5th INSTALLMENT</td>                                    
+                                    <td style="text-align:right;">'.date('m/d/Y',strtotime($active_sem['installment5'])).' ('.switch_day(date('N',strtotime($active_sem['installment5']))).')</td>
+                                    <td style="text-align:right;">'.number_format($tuition['installment_fee30'], 2, '.' ,',').'</td>
+                                </tr>
+                                ';                    
+                            
+
+                    $html .= 
+                        '<tr>
+                            <td style="font-weight:bold;">Total</td>                                                        
+                            <td></td>
+                            <td style="text-align:right; font-weight:bold; border-top:1px solid #333;">'.number_format($tuition['total_installment'], 2, '.' ,',').'</td>
+                        </tr>
+                        </table>
                     </td>
                     <td width="180px">                                
                         <table style="color:#333; font-size:7; ">
