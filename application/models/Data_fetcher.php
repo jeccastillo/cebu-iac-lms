@@ -2568,6 +2568,8 @@ class Data_fetcher extends CI_Model {
         $total_assessment_installment_temp = 0;
         $total_assessment = 0;
         $total_assessment_installment = 0;
+        $total_assessment_installment30 = 0;
+        $total_assessment_installment50 = 0;
         $discount_array = [];
         $scholarship_array = [];
         $late_enrollment_fee = 0;
