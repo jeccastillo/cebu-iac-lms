@@ -3228,6 +3228,12 @@ class Data_fetcher extends CI_Model {
 
             $data['dp_before_deductions'] = $data['ti_before_deductions'] * ($tuition_year['installmentDP']/100);
             $data['dp_before_deductions'] = round($data['dp_before_deductions'],2);
+
+            $data['dp_before_deductions30'] = $data['ti_before_deductions'] * 0.30;
+            $data['dp_before_deductions30'] = round($data['dp_before_deductions30'],2);
+
+            $data['dp_before_deductions50'] = $data['ti_before_deductions'] * 0.50;
+            $data['dp_before_deductions50'] = round($data['dp_before_deductions50'],2);
         }
         else{
             if($level == "shs" && ($year_level == 2 || $year_level == 4)){
