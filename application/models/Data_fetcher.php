@@ -3300,24 +3300,25 @@ class Data_fetcher extends CI_Model {
         $data['ti_before_deductions'] = round($data['ti_before_deductions'],2);        
         
         if(!isset($tuition_year['installmentFixed']) || $tuition_year['installmentFixed'] == 0){                        
-            if($level == "shs" && ($year_level == 2 || $year_level == 4))
-                $data['down_payment'] = $data['total_installment']/2;
+            if($level == "shs" && ($year_level == 2 || $year_level == 4)){
+                $data['down_payment'] = $data['total_installment']/2;                
+            }
             else{
-                $data['down_payment'] = $data['total_installment'] * ($tuition_year['installmentDP']/100);
-                $data['down_payment30'] = $data['total_installment'] * 0.30;
-                $data['down_payment50'] = $data['total_installment'] * 0.50;
+                $data['down_payment'] = $data['total_installment'] * ($tuition_year['installmentDP']/100);                
             }
                 
 
             $data['down_payment'] = round($data['down_payment'],2);
+            $data['down_payment30'] = $data['total_installment30'] * 0.30;
+            $data['down_payment50'] = $data['total_installment50'] * 0.50;
 
             $data['dp_before_deductions'] = $data['ti_before_deductions'] * ($tuition_year['installmentDP']/100);
             $data['dp_before_deductions'] = round($data['dp_before_deductions'],2);
 
-            $data['dp_before_deductions30'] = $data['ti_before_deductions'] * 0.30;
+            $data['dp_before_deductions30'] = $data['ti_before_deductions30'] * 0.30;
             $data['dp_before_deductions30'] = round($data['dp_before_deductions30'],2);
 
-            $data['dp_before_deductions50'] = $data['ti_before_deductions'] * 0.50;
+            $data['dp_before_deductions50'] = $data['ti_before_deductions50'] * 0.50;
             $data['dp_before_deductions50'] = round($data['dp_before_deductions50'],2);
         }
         else{
