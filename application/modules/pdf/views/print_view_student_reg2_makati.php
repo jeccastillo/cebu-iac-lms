@@ -190,7 +190,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
         $html .='
             <table cellpadding="0" style="color:#333; text-align:left; font-size:8;" width="570px">                                
                 <tr>
-                    <td width="360px">
+                    <td width="380px">
                         <table cellpadding="0"  style="color:#333; font-size:7;">
                             <tr>
                                 <td colspan="3" style= "font-size:8; font-weight:bold;">ASSESSMENT SUMMARY</td>                                
