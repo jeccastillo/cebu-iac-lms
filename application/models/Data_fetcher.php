@@ -3141,12 +3141,18 @@ class Data_fetcher extends CI_Model {
         $data['lab_before_discount'] = $total_lab;
         $data['lab'] = $total_lab - $lab_scholarship - $lab_discount;
         $data['lab_installment_before_discount'] = $total_lab + ($total_lab * ($tuition_year['installmentIncrease']/100));
+        $data['lab_installment_before_discount30'] = $total_lab + ($total_lab * 0.15);
+        $data['lab_installment_before_discount50'] = $total_lab + ($total_lab * 0.09);
         $data['lab_installment'] = $data['lab_installment_before_discount'] - $lab_scholarship - $lab_discount;
+        $data['lab_installment30'] = $data['lab_installment_before_discount30'] - $lab_scholarship - $lab_discount;
+        $data['lab_installment50'] = $data['lab_installment_before_discount50'] - $lab_scholarship - $lab_discount;
         $data['lab_list'] = $lab_list;
         $data['tuition_discount'] = $tuition_scholarship;        
         $data['tuition_discount_dc'] = $tuition_discount; 
         $data['tuition'] = $tuition;        
         $data['tuition_installment'] = $data['tuition'] + $data['tuition'] * ($tuition_year['installmentIncrease']/100);
+        $data['tuition_installment30'] = $data['tuition'] + $data['tuition'] * 0.15;
+        $data['tuition_installment50'] = $data['tuition'] + $data['tuition'] * 0.09;
         $data['installment_dp'] = $tuition_year['installmentDP'];
         $data['misc_discount'] = $misc_scholarship;
         $data['misc_discount_dc'] = $misc_discount;
@@ -3167,7 +3173,9 @@ class Data_fetcher extends CI_Model {
         $data['other_discount_dc'] = $other_discount;
         $data['total_other_before_discount'] = $data['new_student'] + $data['total_foreign'];                
         $data['total_before_deductions'] = $data['tuition'] + $data['lab_before_discount'] + $data['misc'] + $thesis_fee + $data['total_other_before_discount'] + $nsf + $total_internship_fee + $late_enrollment_fee;
-        $data['ti_before_deductions'] = $data['tuition_installment'] + $data['lab_installment_before_discount'] + $data['misc'] + $thesis_fee + $data['total_other_before_discount'] + $nsf + $total_internship_fee + $late_enrollment_fee;                
+        $data['ti_before_deductions'] = $data['tuition_installment'] + $data['lab_installment_before_discount'] + $data['misc'] + $thesis_fee + $data['total_other_before_discount'] + $nsf + $total_internship_fee + $late_enrollment_fee;
+        $data['ti_before_deductions30'] = $data['tuition_installment30'] + $data['lab_installment_before_discount30'] + $data['misc'] + $thesis_fee + $data['total_other_before_discount'] + $nsf + $total_internship_fee + $late_enrollment_fee;
+        $data['ti_before_deductions50'] = $data['tuition_installment50'] + $data['lab_installment_before_discount50'] + $data['misc'] + $thesis_fee + $data['total_other_before_discount'] + $nsf + $total_internship_fee + $late_enrollment_fee;                
         $data['total_installment'] = $data['ti_before_deductions'];
         //deduct discounts/scholarships
         $data['total_other'] = $data['new_student'] + $data['total_foreign'] - $other_scholarship - $other_discount;
@@ -3203,6 +3211,8 @@ class Data_fetcher extends CI_Model {
         $data['scholar_type'] = $scholar_type;
 
         $data['total_installment'] = $data['ti_before_deductions']  - $scholarship_installment_grand_total  - $discount_installment_grand_total;
+        $data['total_installment30'] = $data['ti_before_deductions30']  - $scholarship_installment_grand_total  - $discount_installment_grand_total;
+        $data['total_installment50'] = $data['ti_before_deductions50']  - $scholarship_installment_grand_total  - $discount_installment_grand_total;
         
         if($data['total'] < 0)
             $data['total'] = 0;
@@ -3212,6 +3222,9 @@ class Data_fetcher extends CI_Model {
 
         
         $data['total_installment'] = round($data['total_installment'],2);   
+        $data['total_installment30'] = round($data['total_installment30'],2);
+        $data['total_installment50'] = round($data['total_installment50'],2);
+
         $data['ti_before_deductions'] = round($data['ti_before_deductions'],2);        
         
         if(!isset($tuition_year['installmentFixed']) || $tuition_year['installmentFixed'] == 0){                        
@@ -3256,8 +3269,8 @@ class Data_fetcher extends CI_Model {
         }
 
         $data['installment_fee'] = ($data['total_installment'] - $data['down_payment'])/5;
-        $data['installment_fee30'] = ($data['total_installment'] - $data['down_payment30'])/5;
-        $data['installment_fee50'] = ($data['total_installment'] - $data['down_payment50'])/5;
+        $data['installment_fee30'] = ($data['total_installment30'] - $data['down_payment30'])/5;
+        $data['installment_fee50'] = ($data['total_installment50'] - $data['down_payment50'])/5;
         //$data['installment_fee'] = $data['installment_fee'];
 
         $data['if_before_deductions'] = ($data['ti_before_deductions'] - $data['dp_before_deductions'])/5;
