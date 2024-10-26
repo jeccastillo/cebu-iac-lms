@@ -2871,6 +2871,8 @@ class Data_fetcher extends CI_Model {
                     if($scholar->total_assessment_rate > 0){                        
                         $total_scholarship_temp += $total_assessment * ($scholar->total_assessment_rate/100);
                         $total_scholarship_installment_temp += $total_assessment_installment * ($scholar->total_assessment_rate/100);
+                        $total_scholarship_installment_temp30 += $total_assessment_installment * ($scholar->total_assessment_rate/100);
+                        $total_scholarship_installment_temp50 += $total_assessment_installment * ($scholar->total_assessment_rate/100);
                         $total_assessment_rate = $total_assessment * ($scholar->total_assessment_rate/100);
                         $total_assessment_rate_installment = $total_assessment_installment * ($scholar->total_assessment_rate/100);
                         $data['sc_rate'] = $total_scholarship_temp * ($scholar->total_assessment_rate/100);
@@ -2878,7 +2880,7 @@ class Data_fetcher extends CI_Model {
                     elseif($scholar->total_assessment_fixed > 0){
                         if($scholar->total_assessment_fixed > $total_assessment){
                             $total_scholarship_temp += $total_assessment;
-                            $total_scholarship_installment_temp += $total_assessment_installment;
+                            $total_scholarship_installment_temp += $total_assessment_installment;                            
                             $total_assessment_fixed = $total_assessment;
                             $total_assessment_fixed_installment = $total_assessment_installment;
                         }
