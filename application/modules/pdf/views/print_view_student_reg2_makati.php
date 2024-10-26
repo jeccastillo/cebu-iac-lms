@@ -317,7 +317,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         </table>
                     </td>';
                     $html .= '
-                        <td width="220px">
+                        <td width="180px">
                             <table cellpadding="0"  style="color:#333; font-size:7;">                            
                             <tr>
                                 <td>DOWN PAYMENT 30%</td>                                
