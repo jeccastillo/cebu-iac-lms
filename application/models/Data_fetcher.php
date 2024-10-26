@@ -2787,10 +2787,10 @@ class Data_fetcher extends CI_Model {
                             $ctype = 'online';
                         break;
                         case 3:
-                            $ctype = 'hybrid';
+                            $ctype = 'hyflex';
                         break;
                         case 4:
-                            $ctype = 'hyflex';
+                            $ctype = 'hybrid';
                         break;
                         default:
                             $ctype = 'regular';
