@@ -355,7 +355,9 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                         </tr>
                                     </table>
                                 </td>
-                            </tr>';                    
+                            </tr>
+                        </table>
+                    </td>';                    
                                                 
                     $html .= '                        
                     <td width="180px">                                
