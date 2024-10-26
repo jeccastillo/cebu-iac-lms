@@ -190,7 +190,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
         $html .='
             <table cellpadding="0" style="color:#333; text-align:left; font-size:8;" width="570px">                                
                 <tr>
-                    <td width="380px">
+                    <td width="320px">
                         <table cellpadding="0"  style="color:#333; font-size:7;">
                             <tr>
                                 <td colspan="3" style= "font-size:8; font-weight:bold;">ASSESSMENT SUMMARY</td>                                
@@ -283,7 +283,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                 <td style="font-size:8; line-height:1; color:#fff;">Space</td>
                             </tr>
                             <tr>
-                                <td width="380px">
+                                <td width="320px">
                                     <table cellpadding="0"  style="color:#333; font-size:7;">                                     
                                     <tr>
                                         <td width="80px">DOWN PAYMENT</td>                                
