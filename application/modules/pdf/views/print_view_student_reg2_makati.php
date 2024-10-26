@@ -273,9 +273,9 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                     $html .='
                             <tr>
                                 <td style="font-weight:bold;">Total</td>
-                                <td style="font-weight:bold;border-top: 1px solid #555; text-align:right;">'.number_format($tuition['total'], 2, '.' ,',').'</td>
-                                <td style="font-weight:bold;border-top: 1px solid #555; text-align:right;">'.number_format($tuition['total_installment50'], 2, '.' ,',').'</td>
-                                <td style="font-weight:bold;border-top: 1px solid #555; text-align:right;">'.number_format($tuition['total_installment30'], 2, '.' ,',').'</td>
+                                <td style="font-weight:bold;text-decoration: underline; text-align:right;">'.number_format($tuition['total'], 2, '.' ,',').'</td>
+                                <td style="font-weight:bold;text-decoration: underline; text-align:right;">'.number_format($tuition['total_installment50'], 2, '.' ,',').'</td>
+                                <td style="font-weight:bold;text-decoration: underline; text-align:right;">'.number_format($tuition['total_installment30'], 2, '.' ,',').'</td>
                             </tr>                        
                             <tr>
                                 <td style="font-size:8; line-height:1; color:#fff;">Space</td>
@@ -323,10 +323,10 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                             <td style="text-align:right;">'.number_format($tuition['installment_fee30'], 2, '.' ,',').'</td>
                                         </tr>
                                         <tr>
-                                            <td style="font-weight:bold;">Total</td>                                                        
+                                            <td style="font-weight:bold;"></td>                                                        
                                             <td></td>
-                                            <td style="text-align:right; font-weight:bold; border-top:1px solid #333;">'.number_format($tuition['total_installment50'], 2, '.' ,',').'</td>
-                                            <td style="text-align:right; font-weight:bold; border-top:1px solid #333;">'.number_format($tuition['total_installment30'], 2, '.' ,',').'</td>
+                                            <td style="text-align:right; font-weight:bold; text-decoration: underline;">'.number_format($tuition['total_installment50'], 2, '.' ,',').'</td>
+                                            <td style="text-align:right; font-weight:bold; text-decoration: underline;">'.number_format($tuition['total_installment30'], 2, '.' ,',').'</td>
                                         </tr>
                                     </table>
                                 </td>                                
