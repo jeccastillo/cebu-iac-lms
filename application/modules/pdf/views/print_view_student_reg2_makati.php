@@ -198,8 +198,8 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                             <tr>
                                 <td width="80px"></td>
                                 <td width="60px" style="text-decoration:underline; text-align:right;">FULL PAYMENT</td>
-                                <td width="60px" style="text-decoration:underline; text-align:right;">INSTALLMENT 50% DP</td>
-                                <td width="60px" style="text-decoration:underline; text-align:right;">INSTALLMENT 30% DP</td>
+                                <td width="80px" style="text-decoration:underline; text-align:right;">INSTALLMENT 50% DP</td>
+                                <td width="80px" style="text-decoration:underline; text-align:right;">INSTALLMENT 30% DP</td>
                             </tr>
                             <tr>
                                 <td style="text-align:left;">Tuition Fee</td>
@@ -272,7 +272,8 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                             <tr>
                                 <td style="font-weight:bold;">Total</td>
                                 <td style="font-weight:bold;border-top: 1px solid #555; text-align:right;">'.number_format($tuition['total'], 2, '.' ,',').'</td>
-                                <td style="font-weight:bold;border-top: 1px solid #555; text-align:right;">'.number_format($tuition['total_installment'], 2, '.' ,',').'</td>
+                                <td style="font-weight:bold;border-top: 1px solid #555; text-align:right;">'.number_format($tuition['total_installment50'], 2, '.' ,',').'</td>
+                                <td style="font-weight:bold;border-top: 1px solid #555; text-align:right;">'.number_format($tuition['total_installment30'], 2, '.' ,',').'</td>
                             </tr>                        
                             <tr>
                                 <td style="font-size:8; line-height:1; color:#fff;">Space</td>
