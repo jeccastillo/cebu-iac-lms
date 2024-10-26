@@ -3292,8 +3292,8 @@ class Data_fetcher extends CI_Model {
         $data['scholar_type'] = $scholar_type;
 
         $data['total_installment'] = $data['ti_before_deductions']  - $scholarship_installment_grand_total  - $discount_installment_grand_total;
-        $data['total_installment30'] = $data['ti_before_deductions30']  - $scholarship_installment_grand_total  - $discount_installment_grand_total;
-        $data['total_installment50'] = $data['ti_before_deductions50']  - $scholarship_installment_grand_total  - $discount_installment_grand_total;
+        $data['total_installment30'] = $data['ti_before_deductions30']  - $scholarship_installment_grand_total30  - $discount_installment_grand_total;
+        $data['total_installment50'] = $data['ti_before_deductions50']  - $scholarship_installment_grand_total50  - $discount_installment_grand_total;
         
         if($data['total'] < 0)
             $data['total'] = 0;
