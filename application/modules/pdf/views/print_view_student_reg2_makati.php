@@ -188,7 +188,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
         </table>
         ';
         $html .='
-            <table cellpadding="0" style="color:#333; text-align:left; font-size:8;" width="540px">                                
+            <table cellpadding="0" style="color:#333; text-align:left; font-size:8;" width="570px">                                
                 <tr>
                     <td width="220px">
                         <table cellpadding="0"  style="color:#333; font-size:7;">
@@ -198,7 +198,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                             <tr>
                                 <td width="85px"></td>
                                 <td width="70px" style="text-decoration:underline;">FULL PAYMENT</td>
-                                <td width="70px" style="text-decoration:underline;">INSTALLMENT</td>
+                                <td width="50px" style="text-decoration:underline;">INSTALLMENT</td>
                             </tr>
                             <tr>
                                 <td style="text-align:left;">Tuition Fee</td>
