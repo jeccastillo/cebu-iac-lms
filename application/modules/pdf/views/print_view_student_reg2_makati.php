@@ -329,7 +329,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                     </td>';                    
                                                 
                     $html .= '                        
-                    <td width="180px">                                
+                    <td width="140px">                                
                         <table style="color:#333; font-size:7; ">
                             <tr>
                                 <td colspan="2" style= "font-size:8; font-weight:bold;">MISCELLANEOUS DETAIL</td>            
@@ -341,8 +341,8 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         foreach($tuition['misc_list'] as $key=>$val){
         
                             $html .= '<tr>
-                                        <td width="110px">'.$key.'</td>
-                                        <td width="60px" style="text-align:right;">'.number_format($val, 2, '.' ,',').'</td>
+                                        <td width="100px">'.$key.'</td>
+                                        <td width="40px" style="text-align:right;">'.number_format($val, 2, '.' ,',').'</td>
                                     </tr>';                
                         }
                         $html.=' 
