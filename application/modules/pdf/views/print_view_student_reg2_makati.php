@@ -252,7 +252,8 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         $html .='   <tr>
                                         <td style="font-size:7px">'.$sch->name.'</td>
                                         <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_array'][$ctr], 2, '.' ,',').'</td>
-                                        <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_installment_array'][$ctr], 2, '.' ,',').'</td>
+                                        <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_installment_array50'][$ctr], 2, '.' ,',').'</td>
+                                        <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_installment_array30'][$ctr], 2, '.' ,',').'</td>
                                     </tr>';
                         $ctr++;
                         endforeach;
@@ -263,7 +264,8 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                         $html .='   <tr>
                                         <td style="font-size:7px">'.$sch->name.'</td>
                                         <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_dc_array'][$ctr], 2, '.' ,',').'</td>
-                                        <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_installment_dc_array'][$ctr], 2, '.' ,',').'</td>
+                                        <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_installment_dc_array30'][$ctr], 2, '.' ,',').'</td>
+                                        <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_installment_dc_array50'][$ctr], 2, '.' ,',').'</td>
                                     </tr>';
                         $ctr++;
                         endforeach;
