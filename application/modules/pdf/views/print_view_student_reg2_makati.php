@@ -329,7 +329,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                     </td>';                    
                                                 
                     $html .= '                        
-                    <td width="140px">                                
+                    <td width="145px">                                
                         <table style="color:#333; font-size:7; ">
                             <tr>
                                 <td colspan="2" style= "font-size:8; font-weight:bold;">MISCELLANEOUS DETAIL</td>            
@@ -354,7 +354,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                     $html .= 
                         '</table>  
                     </td>
-                    <td width="130px">
+                    <td width="100px">
                         <table style="color:#333; font-size:7;">';
                         if(($tuition['new_student'] + $tuition['total_foreign'])  != 0){
                             $html .='
@@ -372,8 +372,8 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                             foreach($tuition['new_student_list'] as $key=>$val){
             
                                 $html .= '<tr>
-                                            <td width="80px">'.$key.'</td>
-                                            <td width="60px" style="text-align:right;">'.number_format($val, 2, '.' ,',').'</td>
+                                            <td width="70px">'.$key.'</td>
+                                            <td width="40px" style="text-align:right;">'.number_format($val, 2, '.' ,',').'</td>
                                         </tr>';                
                             }                       
                         }
