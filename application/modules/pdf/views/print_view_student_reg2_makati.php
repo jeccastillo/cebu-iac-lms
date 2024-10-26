@@ -328,7 +328,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                             
                                         </tr>              
                                         <tr>
-                                            <td">DOWN PAYMENT</td>                                
+                                            <td>DOWN PAYMENT</td>                                
                                             <td></td>
                                             <td width="40px" style="text-align:right;">'.number_format($tuition['dp_before_deductions30'], 2, '.' ,',').'</td>
                                             
