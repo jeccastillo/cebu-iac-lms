@@ -3355,6 +3355,12 @@ class Data_fetcher extends CI_Model {
 
             $data['dp_before_deductions'] = $data['down_payment'];
             $data['dp_before_deductions'] = round($data['dp_before_deductions'],2);
+
+            $data['dp_before_deductions30'] = $data['ti_before_deductions30'] * 0.30;
+            $data['dp_before_deductions30'] = round($data['dp_before_deductions30'],2);
+
+            $data['dp_before_deductions50'] = $data['ti_before_deductions50'] * 0.50;
+            $data['dp_before_deductions50'] = round($data['dp_before_deductions50'],2);
         }
 
         $data['installment_fee'] = ($data['total_installment'] - $data['down_payment'])/5;
