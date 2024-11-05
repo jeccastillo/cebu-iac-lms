@@ -4568,7 +4568,8 @@ class Excel extends CI_Controller {
 
             }
             $remarks = $d->remarks == "Paynamics" ? $d->request_id : $d->remarks;
-
+            print_r($term);
+            die();
             $objPHPExcel->setActiveSheetIndex(0)                    
                     ->setCellValue('A'.$i, $d->or_date)
                     ->setCellValue('B'.$i, $or_number)
