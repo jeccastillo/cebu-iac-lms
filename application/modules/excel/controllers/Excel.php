@@ -4485,6 +4485,8 @@ class Excel extends CI_Controller {
         $date = $data['date'];
         $data = json_decode($data['data']);
         
+        print_r($data);
+        die();
         
         
         error_reporting(E_ALL);
