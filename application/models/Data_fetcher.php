@@ -3310,6 +3310,8 @@ class Data_fetcher extends CI_Model {
         $data['total_installment'] = round($data['total_installment'],2);   
         $data['total_installment30'] = round($data['total_installment30'],2);
         $data['total_installment50'] = round($data['total_installment50'],2);
+        $data['dp_before_deductions50'] = 0;
+        $data['dp_before_deductions30'] = 0;
 
         $data['ti_before_deductions'] = round($data['ti_before_deductions'],2);        
         
