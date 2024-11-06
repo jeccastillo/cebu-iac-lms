@@ -52,6 +52,15 @@
                         </select>
                     </div>
                     <div class="form-group col-xs-6">
+                        <label for="type">School</label>
+                        <select class="form-control" name="school" id="school">
+                            <option <?php echo ($item['school'] == "Computing")?'selected':''; ?> value="Computing">Computing
+                            </option>
+                            <option <?php echo ($item['school'] == "Business")?'selected':''; ?> value="Business">Business</option>
+                            <option <?php echo ($item['school'] == "Design")?'selected':''; ?> value="Design">Design</option>                            
+                        </select>
+                    </div>
+                    <div class="form-group col-xs-6">
                         <label for="enumEnabled">Enable Program Status</label>
                         <select class="form-control" name="enumEnabled" id="enumEnabled">
                             <option <?php echo ($item['enumEnabled'] == 0)?'selected':''; ?> value="0">No</option>
