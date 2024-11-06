@@ -10,7 +10,7 @@
             "sAjaxSource": "<?php echo base_url(); ?>index.php/datatables/data_tables_ajax/tb_mas_programs",
             "aoColumnDefs":[
                 {
-                    "aTargets":[6],
+                    "aTargets":[7],
                     "mData": null,
                     "bSortable":false,
                     "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>program/edit_program/'+row[0]+'">Edit</a></li><li><a href="#" rel="'+row[0]+'" class="trash-item">Delete</a></li><li><a href="<?php echo base_url(); ?>program/program_viewer/'+row[0]+'">View</a></li></ul></div>'; }
