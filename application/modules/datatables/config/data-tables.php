@@ -30,7 +30,7 @@ $config['tb_mas_room_schedule_columns'] = array("intRoomSchedID","strCode","strC
 $config['tb_mas_room_schedule_index'] = "intRoomSchedID";
 
 
-$config['tb_mas_programs_columns'] = array("intProgramID","strProgramCode","strProgramDescription","strMajor","type","enumEnabled");
+$config['tb_mas_programs_columns'] = array("intProgramID","strProgramCode","strProgramDescription","strMajor","type","enumEnabled","school");
 $config['tb_mas_programs_index'] = "intProgramID";
 
 $config['tb_mas_subjects_columns'] = array("intID","strCode","strDescription","strUnits");
