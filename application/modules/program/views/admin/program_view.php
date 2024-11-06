@@ -26,8 +26,9 @@
                             <th>Code</th>
                             <th>Description</th>
                             <th>Major</th>
-                            <th>Type</th>
+                            <th>Type</th>                            
                             <th>Enabled</th>
+                            <th>School</th>
                             <th>Select Actions</th>
                         </tr>
                         </thead>
