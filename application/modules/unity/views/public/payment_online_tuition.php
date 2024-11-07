@@ -41,7 +41,7 @@
                                             <h3>Select Mode of Payment</h3>
                                             <hr />
                                             <div>
-                                                <h5 class="my-3">Maxx Payment</h5>
+                                                <h5 class="my-3">BDO installment</h5>
                                                 <hr />
                                                 <div class="d-flex flex-wrap"
                                                     style="display:flex; flex:wrap;">
@@ -50,8 +50,8 @@
                                                         class="box_mode_payment d-flex align-items-center justify-content-center mr-3 my-3 p-1"
                                                         style="display:flex; align-items:center;">
                                                         <img class="img-fluid d-block mx-auto"
-                                                            width="51px" height="35px"
-                                                            src="<?php echo base_url() . '/assets/img/maxx.jpg';?>"
+                                                            width="51px"
+                                                            src="https://employeeportal.iacademy.edu.ph/images/finance_online_payment/bdo.jpg"
                                                             alt="">
                                                     </div>
                                                 </div>
