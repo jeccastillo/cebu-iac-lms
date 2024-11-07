@@ -454,7 +454,7 @@ new Vue({
         },
         maxx: {
             charge: 0,
-            id: 100,
+            id: 101,
             is_nonbank: false,
             name: "maxx",
             pchannel: "maxx",
