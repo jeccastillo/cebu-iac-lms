@@ -80,9 +80,16 @@ table tr td {
             <div style="position:absolute; top: 125px; right: 60px; width: 200px; height: 20px;">
                 Invoice No: <?php echo $invoice_number; ?>
             </div>
+            <!---DATE--->
             <div style="position:absolute; top: 170px; right: -60px; width: 200px; height: 20px;">
                 <?php echo $transaction_date; ?>
             </div>
+            <!---TIN--->
+            <?php if($payee): ?>
+            <div style="position:absolute; top: 180px; right: -60px; width: 200px; height: 20px;">
+                <?php echo $payee['tin']; ?>
+            </div>
+            <?php endif; ?>
             <div style="position:absolute; top: 170px; left: 60px; width: 500px; height: 20px;">
                 <?php if($student_id != 'undefined' && $student_id != ''): ?>
                 <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?>

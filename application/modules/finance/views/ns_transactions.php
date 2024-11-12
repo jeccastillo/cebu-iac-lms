@@ -147,10 +147,7 @@
     <form ref="print_invoice"
         method="post"
         :action="base_url + 'pdf/print_invoice/0'"
-        target="_blank">
-        <input type="hidden"
-            name="student_name"
-            v-model="or_print.student_name">
+        target="_blank">       
         <input type="hidden"
             name="slug"
             v-model="slug">
@@ -190,6 +187,12 @@
         <input type="hidden"
             name="name"
             v-model="or_print.student_name" />
+        <input type="hidden"
+            name="first_name"
+            v-model="or_print.first_name" />
+        <input type="hidden"
+            name="last_name"
+            v-model="or_print.last_name" />
         <input type="hidden"
             name="sem"
             v-model="or_print.sem" />
@@ -300,6 +303,8 @@ new Vue({
             student_name: undefined,
             transaction_date: undefined,
             student_name: undefined,
+            first_name: undefined,
+            last_name: undefined,
             student_address: undefined,
             student_id: undefined,
             payee_id: <?php echo $payee_id; ?>,
@@ -501,6 +506,8 @@ new Vue({
                     this.or_print.description = payment.description;
                     this.or_print.total_amount_due = payment.subtotal_order;
                     this.or_print.transaction_date = payment.or_date;
+                    this.or_print_first_name = payment.firstname;
+                    this.or_print_last_name = payment.lastname;
                     this.or_print.remarks = payment.remarks;
                     this.or_print.withholding_tax_percentage = payment.withholding_tax_percentage,
                     this.or_print.invoice_amount = payment.invoice_amount,
