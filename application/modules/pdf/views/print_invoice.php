@@ -86,7 +86,7 @@ table tr td {
             </div>
             <!---TIN--->
             <?php if($payee): ?>
-            <div style="position:absolute; top: 185px; right: -80px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 185px; right: -30px; width: 200px; height: 20px;">
                 <?php echo $payee['tin']; ?>
             </div>
             <?php endif; ?>
