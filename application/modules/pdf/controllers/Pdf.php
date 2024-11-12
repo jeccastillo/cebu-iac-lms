@@ -2276,6 +2276,9 @@ class Pdf extends CI_Controller {
             $reg = $this->db->get_where('tb_mas_registration',array('intStudentID'=>$student['intID'],'intAYID'=>$request['sem'], 'date_enlisted !=' => NULL))->first_row('array');
             $tuition = $this->data_fetcher->getTuition($student['intID'], $request['sem']);
         }
+        else{
+            $this->data['payee'] = $this->db->get_where('tb_mas_ns_payee',array('firstname'=>$request['first_name'],'lastname'=>$request['last_name']))->first_row('array');
+        }
 
         $type = "";
         if(isset($request['type'])){
