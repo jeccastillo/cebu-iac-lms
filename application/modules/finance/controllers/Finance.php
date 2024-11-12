@@ -208,9 +208,11 @@ class Finance extends CI_Controller {
                 }
             }
             else{                
-                $details = $this->db->get_where('tb_mas_ns_payee',array('lastname LIKE'=>"%".$item->lastname."%",'firstname LIKE'=>"%".$item->firstname."%"))->first_row();                 
+                $details = $this->db->get_where('tb_mas_ns_payee',array('lastname'=>$item->lastname,'firstname'=>$item->firstname))->first_row();                 
+                print_r($details);
                 if($details)
-                    $item->student_number = $details->id_number;                                
+                    $item->student_number = $details->id_number;                
+
             }
             
             
