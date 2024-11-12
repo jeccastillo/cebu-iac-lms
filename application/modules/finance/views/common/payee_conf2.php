@@ -37,7 +37,7 @@
                     "bVisible": false 
                 },
             ],
-            "aaSorting": [[3,'asc']],
+            "aaSorting": [[2,'asc']],
             "fnDrawCallback": function () {  
                 $(".trash-item").click(function(e){
                     conf = confirm("Are you sure you want to delete?");
