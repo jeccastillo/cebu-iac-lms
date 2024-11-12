@@ -177,293 +177,301 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                 }    
 
                          
-        $html.='
-        <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">        
-            <tr>
-                <td colspan="2" style= "font-size:8; line-height:1.5; border-top:1px solid #333;"></td>                
-            </tr>
-        </table>
-        
-        <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">        
+            $html.='
+            <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">        
+                <tr>
+                    <td colspan="2" style= "font-size:8; line-height:1.5; border-top:1px solid #333;"></td>                
+                </tr>
+            </table>
             
-        </table>
-        ';
-        $html .='
-            <table cellpadding="0" style="color:#333; text-align:left; font-size:8;" width="540px">                                
-                <tr>
-                    <td width="240px">
-                        <table cellpadding="0"  style="color:#333; font-size:8;">
-                            <tr>
-                                <td colspan="3" style= "font-size:9; font-weight:bold;">ASSESSMENT SUMMARY</td>                                
-                            </tr>
-                            <tr>
-                                <td width="85px"></td>
-                                <td width="70px" style="text-decoration:underline;">FULL PAYMENT</td>
-                                <td width="70px" style="text-decoration:underline;">INSTALLMENT</td>
-                            </tr>
-                            <tr>
-                                <td style="text-align:left;">Tuition Fee</td>
-                                <td style="text-align:right;">'.number_format($tuition['tuition_before_discount'], 2, '.' ,',') .'</td>
-                                <td style="text-align:right;">'.number_format($tuition['tuition_installment_before_discount'], 2, '.' ,',') .'</td>
-                            </tr>
-                            <tr>
-                                <td>Laboratory</td>
-                                <td style="text-align:right;">'.number_format($tuition['lab_before_discount'], 2, '.' ,',') .'</td>
-                                <td style="text-align:right;">'.number_format($tuition['lab_installment_before_discount'], 2, '.' ,',') .'</td>
-                            </tr>
-                            <tr>
-                                <td>Miscellaneous</td>
-                                <td style="text-align:right;">'.number_format($tuition['misc_before_discount'], 2, '.' ,',') .'</td>
-                                <td style="text-align:right;">'.number_format($tuition['misc_before_discount'], 2, '.' ,',') .'</td>
-                            </tr>
-                            <tr>
-                                <td>Other Fees</td>
-                                <td style="text-align:right;">'.number_format($tuition['new_student'] + $tuition['total_foreign'], 2, '.' ,',') .'</td>
-                                <td style="text-align:right;">'.number_format($tuition['new_student'] + $tuition['total_foreign'], 2, '.' ,',') .'</td>
-                            </tr>';
-                            if($tuition['late_enrollment_fee'] > 0):
-                                $html .='<tr>
-                                        <td>Late Enrollment</td>
-                                        <td style="text-align:right;">'.number_format($tuition['late_enrollment_fee'], 2, '.' ,',') .'</td>
-                                        <td style="text-align:right;">'.number_format($tuition['late_enrollment_fee'], 2, '.' ,',') .'</td>
-                                    </tr>';
-                            endif;
-
-                if($tuition['scholarship_deductions'] > 0 || $tuition['discount_deductions'] > 0):              
-                    $html .='   <tr>
-                                    <td style="font-weight:bold;"></td>
-                                    <td style="font-weight:bold;border-top: 1px solid #555; text-align:right;">'.number_format($tuition['total_before_deductions'], 2, '.' ,',').'</td>
-                                    <td style="font-weight:bold;border-top: 1px solid #555; text-align:right;">'.number_format($tuition['ti_before_deductions'], 2, '.' ,',').'</td>
+            <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">        
+                
+            </table>
+            ';
+            $html .='
+                <table cellpadding="0" style="color:#333; text-align:left; font-size:8;" width="570px">                                
+                    <tr>
+                        <td width="320px">
+                            <table cellpadding="0"  style="color:#333; font-size:7;">
+                                <tr>
+                                    <td colspan="3" style= "font-size:8; font-weight:bold;">ASSESSMENT SUMMARY</td>                                
                                 </tr>
                                 <tr>
-                                    <td colspan="3" style= "font-size:8; line-height:1.0;"></td>                
+                                    <td width="80px"></td>
+                                    <td width="60px" style="text-decoration:underline; text-align:right;">FULL PAYMENT</td>
+                                    <td width="80px" style="text-decoration:underline; text-align:right;">50% DOWN PAYMENT</td>
+                                    <td width="80px" style="text-decoration:underline; text-align:right;">30% DOWN PAYMENT</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;">Tuition Fee</td>
+                                    <td style="text-align:right;">'.number_format($tuition['tuition_before_discount'], 2, '.' ,',') .'</td>
+                                    <td style="text-align:right;">'.number_format($tuition['tuition_installment_before_discount50'], 2, '.' ,',') .'</td>
+                                    <td style="text-align:right;">'.number_format($tuition['tuition_installment_before_discount30'], 2, '.' ,',') .'</td>
+                                </tr>
+                                <tr>
+                                    <td>Laboratory</td>
+                                    <td style="text-align:right;">'.number_format($tuition['lab_before_discount'], 2, '.' ,',') .'</td>
+                                    <td style="text-align:right;">'.number_format($tuition['lab_installment_before_discount50'], 2, '.' ,',') .'</td>
+                                    <td style="text-align:right;">'.number_format($tuition['lab_installment_before_discount30'], 2, '.' ,',') .'</td>
+                                </tr>
+                                <tr>
+                                    <td>Miscellaneous</td>
+                                    <td style="text-align:right;">'.number_format($tuition['misc_before_discount'], 2, '.' ,',') .'</td>
+                                    <td style="text-align:right;">'.number_format($tuition['misc_before_discount'], 2, '.' ,',') .'</td>
+                                    <td style="text-align:right;">'.number_format($tuition['misc_before_discount'], 2, '.' ,',') .'</td>
+                                </tr>
+                                <tr>
+                                    <td>Other Fees</td>
+                                    <td style="text-align:right;">'.number_format($tuition['new_student'] + $tuition['total_foreign'], 2, '.' ,',') .'</td>
+                                    <td style="text-align:right;">'.number_format($tuition['new_student'] + $tuition['total_foreign'], 2, '.' ,',') .'</td>
+                                    <td style="text-align:right;">'.number_format($tuition['new_student'] + $tuition['total_foreign'], 2, '.' ,',') .'</td>
                                 </tr>';
-                endif;
-                    if(!empty($tuition['scholarship'])):
-                        $ctr = 0;
-                        foreach($tuition['scholarship'] as $sch):                                      
+                                if($tuition['late_enrollment_fee'] > 0):
+                                    $html .='<tr>
+                                            <td>Late Enrollment</td>
+                                            <td style="text-align:right;">'.number_format($tuition['late_enrollment_fee'], 2, '.' ,',') .'</td>
+                                            <td style="text-align:right;">'.number_format($tuition['late_enrollment_fee'], 2, '.' ,',') .'</td>
+                                            <td style="text-align:right;">'.number_format($tuition['late_enrollment_fee'], 2, '.' ,',') .'</td>
+                                        </tr>';
+                                endif;
+                                
+    
+                    if($tuition['scholarship_deductions'] > 0 || $tuition['discount_deductions'] > 0):              
                         $html .='   <tr>
-                                        <td style="font-size:7px">'.$sch->name.'</td>
-                                        <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_array'][$ctr], 2, '.' ,',').'</td>
-                                        <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_installment_array'][$ctr], 2, '.' ,',').'</td>
+                                        <td style="font-weight:bold;"></td>
+                                        <td style="font-weight:bold;border-top: 1px solid #555; text-align:right;">'.number_format($tuition['total_before_deductions'], 2, '.' ,',').'</td>
+                                        <td style="font-weight:bold;border-top: 1px solid #555; text-align:right;">'.number_format($tuition['ti_before_deductions50'], 2, '.' ,',').'</td>
+                                        <td style="font-weight:bold;border-top: 1px solid #555; text-align:right;">'.number_format($tuition['ti_before_deductions30'], 2, '.' ,',').'</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" style= "font-size:7; line-height:1.0;"></td>                
                                     </tr>';
-                        $ctr++;
-                        endforeach;
                     endif;
-                    if(!empty($tuition['discount'])):
-                        $ctr = 0;
-                        foreach($tuition['discount'] as $sch):                                      
-                        $html .='   <tr>
-                                        <td style="font-size:7px">'.$sch->name.'</td>
-                                        <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_dc_array'][$ctr], 2, '.' ,',').'</td>
-                                        <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_installment_dc_array'][$ctr], 2, '.' ,',').'</td>
-                                    </tr>';
-                        $ctr++;
-                        endforeach;
-                    endif;                                        
-                    $html .='
-                            <tr>
-                                <td style="font-weight:bold;">Total</td>
-                                <td style="font-weight:bold;border-top: 1px solid #555; text-align:right;">'.number_format($tuition['total'], 2, '.' ,',').'</td>
-                                <td style="font-weight:bold;border-top: 1px solid #555; text-align:right;">'.number_format($tuition['total_installment'], 2, '.' ,',').'</td>
-                            </tr>                        
-                            <tr>
-                                <td style="font-size:8; line-height:1; color:#fff;">Space</td>
-                                <td style="font-size:8; line-height:1; color:#fff;">Space</td>
-                                <td style="font-size:8; line-height:1; color:#fff;">Space</td>
-                            </tr>
-                            <tr>
-                                <td>DOWN PAYMENT</td>                                
-                                <td></td>
-                                <td style="text-align:right;">'.number_format($tuition['dp_before_deductions'], 2, '.' ,',').'</td>
-                                
-                            </tr>';
-                            
-                                $html .= '
-                                <tr>
-                                    <td>1st INSTALLMENT</td>                                    
-                                    <td style="text-align:right;">'.date('m/d/Y',strtotime($active_sem['installment1'])).' ('.switch_day(date('N',strtotime($active_sem['installment1']))).')</td>
-                                    <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').'</td>
-                                </tr>
-                                <tr>
-                                    <td>2nd INSTALLMENT</td>                                    
-                                    <td style="text-align:right;">'.date('m/d/Y',strtotime($active_sem['installment2'])).' ('.switch_day(date('N',strtotime($active_sem['installment2']))).')</td>
-                                    <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').'</td>
-                                </tr>
-                                <tr>
-                                    <td>3rd INSTALLMENT</td>                                    
-                                    <td style="text-align:right;">'.date('m/d/Y',strtotime($active_sem['installment3'])).' ('.switch_day(date('N',strtotime($active_sem['installment3']))).')</td>
-                                    <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').'</td>
-                                </tr>
-                                <tr>
-                                    <td>4th INSTALLMENT</td>                                    
-                                    <td style="text-align:right;">'.date('m/d/Y',strtotime($active_sem['installment4'])).' ('.switch_day(date('N',strtotime($active_sem['installment4']))).')</td>
-                                    <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').'</td>
-                                </tr>
-                                <tr>
-                                    <td>5th INSTALLMENT</td>                                    
-                                    <td style="text-align:right;">'.date('m/d/Y',strtotime($active_sem['installment5'])).' ('.switch_day(date('N',strtotime($active_sem['installment5']))).')</td>
-                                    <td style="text-align:right;">'.number_format($tuition['installment_fee'], 2, '.' ,',').'</td>
-                                </tr>
-                                ';                    
-                            
-
-                    $html .= 
-                        '<tr>
-                            <td style="font-weight:bold;">Total</td>                                                        
-                            <td></td>
-                            <td style="text-align:right; font-weight:bold; border-top:1px solid #333;">'.number_format($tuition['total_installment'], 2, '.' ,',').'</td>
-                        </tr>
-                        </table>
-                    </td>
-                    <td width="180px">                                
-                        <table style="color:#333; font-size:8; ">
-                            <tr>
-                                <td colspan="2" style= "font-size:9; font-weight:bold;">MISCELLANEOUS DETAIL</td>            
-                            </tr>
-                        ';
-                        
-                        if($tuition['misc'] != 0){
-                            
-                        foreach($tuition['misc_list'] as $key=>$val){
-        
-                            $html .= '<tr>
-                                        <td width="110px">'.$key.'</td>
-                                        <td width="60px" style="text-align:right;">'.number_format($val, 2, '.' ,',').'</td>
-                                    </tr>';                
-                        }
-                        $html.=' 
-                            <tr>
-                                <td style="font-weight:bold;">Total</td>
-                                <td style="border-top: 1px solid #555; font-weight:bold; text-align:right;">'.number_format($tuition['misc_before_discount'], 2, '.' ,',').'</td>                
-                            </tr>';
-                    }
-                    $html .= 
-                        '</table>  
-                    </td>
-                    <td width="130px">
-                        <table style="color:#333; font-size:8;">';
-                        
-                    if(($tuition['new_student'] + $tuition['total_foreign'])  != 0){
+                        if(!empty($tuition['scholarship'])):
+                            $ctr = 0;
+                            foreach($tuition['scholarship'] as $sch):                                      
+                            $html .='   <tr>
+                                            <td style="font-size:7px">'.$sch->name.'</td>
+                                            <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_array'][$ctr], 2, '.' ,',').'</td>
+                                            <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_installment_array50'][$ctr], 2, '.' ,',').'</td>
+                                            <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_installment_array30'][$ctr], 2, '.' ,',').'</td>
+                                        </tr>';
+                            $ctr++;
+                            endforeach;
+                        endif;
+                        if(!empty($tuition['discount'])):
+                            $ctr = 0;
+                            foreach($tuition['discount'] as $sch):                                      
+                            $html .='   <tr>
+                                            <td style="font-size:7px">'.$sch->name.'</td>
+                                            <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_dc_array'][$ctr], 2, '.' ,',').'</td>
+                                            <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_installment_dc_array30'][$ctr], 2, '.' ,',').'</td>
+                                            <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_installment_dc_array50'][$ctr], 2, '.' ,',').'</td>
+                                        </tr>';
+                            $ctr++;
+                            endforeach;
+                        endif;                                        
                         $html .='
-                            <tr>
-                                <td colspan="2" style= "font-size:9; font-weight:bold;">OTHER FEES DETAIL</td>
+                                <tr>
+                                    <td style="font-weight:bold;">Total</td>
+                                    <td style="font-weight:bold;text-decoration: underline; text-align:right;">'.number_format($tuition['total'], 2, '.' ,',').'</td>
+                                    <td style="font-weight:bold;text-decoration: underline; text-align:right;">'.number_format($tuition['total_installment50'], 2, '.' ,',').'</td>
+                                    <td style="font-weight:bold;text-decoration: underline; text-align:right;">'.number_format($tuition['total_installment30'], 2, '.' ,',').'</td>
+                                </tr>                        
+                                <tr>
+                                    <td style="font-size:8; line-height:1; color:#fff;">Space</td>
+                                    <td style="font-size:8; line-height:1; color:#fff;">Space</td>
+                                    <td style="font-size:8; line-height:1; color:#fff;">Space</td>
+                                </tr>                                                           
+                                <tr>
+                                    <td width="80px">DOWN PAYMENT</td>                                
+                                    <td width="60px"></td>
+                                    <td width="80px" style="text-align:right;">'.number_format($tuition['dp_before_deductions50'], 2, '.' ,',').'</td>
+                                    <td width="80px" style="text-align:right;">'.number_format($tuition['dp_before_deductions30'], 2, '.' ,',').'</td>
+                                    
+                                </tr>
+                                <tr>
+                                        <td>1st INSTALLMENT</td>                                    
+                                        <td style="text-align:right;">'.date('m/d/Y',strtotime($active_sem['installment1'])).' ('.switch_day(date('N',strtotime($active_sem['installment1']))).')</td>
+                                        <td style="text-align:right;">'.number_format($tuition['installment_fee50'], 2, '.' ,',').'</td>
+                                        <td style="text-align:right;">'.number_format($tuition['installment_fee30'], 2, '.' ,',').'</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2nd INSTALLMENT</td>                                    
+                                        <td style="text-align:right;">'.date('m/d/Y',strtotime($active_sem['installment2'])).' ('.switch_day(date('N',strtotime($active_sem['installment2']))).')</td>
+                                        <td style="text-align:right;">'.number_format($tuition['installment_fee50'], 2, '.' ,',').'</td>
+                                        <td style="text-align:right;">'.number_format($tuition['installment_fee30'], 2, '.' ,',').'</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3rd INSTALLMENT</td>                                    
+                                        <td style="text-align:right;">'.date('m/d/Y',strtotime($active_sem['installment3'])).' ('.switch_day(date('N',strtotime($active_sem['installment3']))).')</td>
+                                        <td style="text-align:right;">'.number_format($tuition['installment_fee50'], 2, '.' ,',').'</td>
+                                        <td style="text-align:right;">'.number_format($tuition['installment_fee30'], 2, '.' ,',').'</td>
+                                    </tr>
+                                    <tr>
+                                        <td>4th INSTALLMENT</td>                                    
+                                        <td style="text-align:right;">'.date('m/d/Y',strtotime($active_sem['installment4'])).' ('.switch_day(date('N',strtotime($active_sem['installment4']))).')</td>
+                                        <td style="text-align:right;">'.number_format($tuition['installment_fee50'], 2, '.' ,',').'</td>
+                                        <td style="text-align:right;">'.number_format($tuition['installment_fee30'], 2, '.' ,',').'</td>
+                                    </tr>
+                                    <tr>
+                                        <td>5th INSTALLMENT</td>                                    
+                                        <td style="text-align:right;">'.date('m/d/Y',strtotime($active_sem['installment5'])).' ('.switch_day(date('N',strtotime($active_sem['installment5']))).')</td>
+                                        <td style="text-align:right;">'.number_format($tuition['installment_fee50'], 2, '.' ,',').'</td>
+                                        <td style="text-align:right;">'.number_format($tuition['installment_fee30'], 2, '.' ,',').'</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight:bold;"></td>                                                        
+                                        <td></td>
+                                        <td style="text-align:right; font-weight:bold; text-decoration: underline;">'.number_format($tuition['total_installment50'], 2, '.' ,',').'</td>
+                                        <td style="text-align:right; font-weight:bold; text-decoration: underline;">'.number_format($tuition['total_installment30'], 2, '.' ,',').'</td>                                                                      
+                                    </tr>                            
+                            </table>
+                        </td>';                    
+                                                    
+                        $html .= '                        
+                        <td width="145px">                                
+                            <table style="color:#333; font-size:7; ">
+                                <tr>
+                                    <td colspan="2" style= "font-size:8; font-weight:bold;">MISCELLANEOUS DETAIL</td>            
+                                </tr>
+                            ';
+                            
+                            if($tuition['misc'] != 0){
                                 
-                            </tr>';
-                    }
-
-                    if($tuition['new_student'] != 0){
-
-                        $html.='<tr>
-                        <td colspan="2" style= "font-size:8;">NEW STUDENT FEES</td></tr>';
-                    
-                        foreach($tuition['new_student_list'] as $key=>$val){
-        
-                            $html .= '<tr>
-                                        <td width="80px">'.$key.'</td>
-                                        <td width="60px" style="text-align:right;">'.number_format($val, 2, '.' ,',').'</td>
-                                    </tr>';                
-                        }                       
-                    }
-
-                    
-                    
-                     
-
-                    if($tuition['total_foreign'] != 0){
-                        $html .= '<tr>
-                            <td width="80px"></td>
-                            <td width="60px" style="text-align:right;"></td>
-                        </tr>
-                        <tr>
-                        <td colspan="2" style= "font-size:8;">FOREIGN STUDENT FEES</td></tr>';
-                    
-                        foreach($tuition['foreign_fee_list'] as $key=>$val){
-        
-                            $html .= '<tr>
-                                        <td width="80px">'.$key.'</td>
-                                        <td width="60px" style="text-align:right;">'.number_format($val, 2, '.' ,',').'</td>
-                                    </tr>';                
+                            foreach($tuition['misc_list'] as $key=>$val){
+            
+                                $html .= '<tr>
+                                            <td width="100px">'.$key.'</td>
+                                            <td width="40px" style="text-align:right;">'.number_format($val, 2, '.' ,',').'</td>
+                                        </tr>';                
+                            }
+                            $html.=' 
+                                <tr>
+                                    <td style="font-weight:bold;">Total</td>
+                                    <td style="border-top: 1px solid #555; font-weight:bold; text-align:right;">'.number_format($tuition['misc_before_discount'], 2, '.' ,',').'</td>                
+                                </tr>';
                         }
-                      
-                    }        
-                    if(($tuition['new_student'] + $tuition['total_foreign'])  != 0){
-                        $html.=' 
-                        <tr>
-                            <td style="font-weight:bold;">Total</td>
-                            <td style="border-top: 1px solid #555; font-weight:bold; text-align:right;">'.number_format($tuition['total_foreign'] + $tuition['new_student'], 2, '.' ,',').'</td>                
-                        </tr>';
-                    }
-                        
-                    $html.='                        
-                    </table>
-                    </td>
-                </tr>
-            </table>
-            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="570px">
-                <tr>
-                    <td colspan="2" style="font-size:9; line-height:2; color:#fff;">Space</td>
-                </tr>
-            </table>
-            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="570px">        
-                <tr>
-                    <td width="120px" style= "font-size:9;">Official Receipt Number/date</td>
-                    <td width="120px" style= "font-size:9; border-bottom:1px solid #333;"></td>            
-                </tr>
-            </table>
-            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="570px">        
-                <tr>
-                    <td width="264px" style= "font-size:9;">Enrollment Confirmed by:</td>
-                    <td width="264px" style= "font-size:9;"></td>            
-                </tr>
-            </table>            
-            <table border="0" cellspacing="5px" cellpadding="0" style="color:#333; font-size:9; " width="500px">        
-                <tr>
-                    <td width="230px" style= "font-size:9; text-align:center; border-bottom:1px solid #333;">&nbsp;</td>
-                    <td width="30px" style= "font-size:9; text-align:center;">&nbsp;</td>
-                    <td width="230px" style= "font-size:9; text-align:center; border-bottom:1px solid #333;">&nbsp;</td>            
-                </tr>                   
-                <tr>
-                    <td style= "font-size:9; text-align:center">Authorized Signatory</td>
-                    <td style= "font-size:9; text-align:center;">&nbsp;</td>
-                    <td style= "font-size:9; text-align:center">Registrar</td>            
-                </tr>
-            </table>
-            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="570px">
-                <tr>
-                    <td colspan="2" style="font-size:9; line-height:1; color:#fff;">Space</td>
-                </tr>
-            </table>
-            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="570px">        
-                <tr>
-                    <td width="264px" style= "font-size:9;">Note: Class schedule is subject to change</td>
-                    <td width="264px" style= "font-size:8;">Generated: '.date("Y-m-d h:i A").' by '.$user['strFirstname'].' '.$user['strLastname'].'</td>            
-                </tr>
-            </table>
-            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="570px">
-                <tr>
-                    <td colspan="2" style="font-size:9; line-height:1; color:#fff;">Space</td>
-                </tr>
-            </table>
-            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="570px">
-                <tr>
-                    <td colspan="2" style="font-size:9;">I shall abide by all existing rules and regulations of the School and those that may be promulgated from time to time.
-                    I understand that the school has to collect my personal data and I allow the school to process all my information and all
-                    purposes related to this.</td>
-                </tr>
-            </table> 
-            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="570px">
-                <tr>
-                    <td colspan="2" style="font-size:9; line-height:1; color:#fff;">Space</td>
-                </tr>
-            </table>               
-            <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="570px">
-                <tr>
-                    <td colspan="2" style="font-size:9; line-height:1; color:#fff;">Space</td>
-                </tr>
-            </table>               
-                          
-        ';
+                        $html .= 
+                            '</table>  
+                        </td>
+                        <td width="100px">
+                            <table style="color:#333; font-size:7;">';
+                            if(($tuition['new_student'] + $tuition['total_foreign'])  != 0){
+                                $html .='
+                                    <tr>
+                                        <td colspan="2" style= "font-size:9; font-weight:bold;">OTHER FEES DETAIL</td>
+                                        
+                                    </tr>';
+                            }
+        
+                            if($tuition['new_student'] != 0){
+        
+                                $html.='<tr>
+                                <td colspan="2" style= "font-size:8;">NEW STUDENT FEES</td></tr>';
+                            
+                                foreach($tuition['new_student_list'] as $key=>$val){
+                
+                                    $html .= '<tr>
+                                                <td width="70px">'.$key.'</td>
+                                                <td width="40px" style="text-align:right;">'.number_format($val, 2, '.' ,',').'</td>
+                                            </tr>';                
+                                }                       
+                            }
+        
+                            
+                            
+                                
+        
+                            if($tuition['total_foreign'] != 0){
+                                $html .= '<tr>
+                                    <td width="80px"></td>
+                                    <td width="60px" style="text-align:right;"></td>
+                                </tr>
+                                <tr>
+                                <td colspan="2" style= "font-size:8;">FOREIGN STUDENT FEES</td></tr>';
+                            
+                                foreach($tuition['foreign_fee_list'] as $key=>$val){
+                
+                                    $html .= '<tr>
+                                                <td width="80px">'.$key.'</td>
+                                                <td width="60px" style="text-align:right;">'.number_format($val, 2, '.' ,',').'</td>
+                                            </tr>';                
+                                }
+                                
+                            }        
+                            if(($tuition['new_student'] + $tuition['total_foreign'])  != 0){
+                                $html.=' 
+                                <tr>
+                                    <td style="font-weight:bold;">Total</td>
+                                    <td style="border-top: 1px solid #555; font-weight:bold; text-align:right;">'.number_format($tuition['total_foreign'] + $tuition['new_student'], 2, '.' ,',').'</td>                
+                                </tr>';
+                            }
+                            
+                        $html.='                        
+                        </table>
+                        </td>
+                    </tr>
+                </table>
+                <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="570px">
+                    <tr>
+                        <td colspan="2" style="font-size:9; line-height:2; color:#fff;">Space</td>
+                    </tr>
+                </table>
+                <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="570px">        
+                    <tr>
+                        <td width="120px" style= "font-size:9;">Official Receipt Number/date</td>
+                        <td width="120px" style= "font-size:9; border-bottom:1px solid #333;"></td>            
+                    </tr>
+                </table>
+                <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="570px">        
+                    <tr>
+                        <td width="264px" style= "font-size:9;">Enrollment Confirmed by:</td>
+                        <td width="264px" style= "font-size:9;"></td>            
+                    </tr>
+                </table>            
+                <table border="0" cellspacing="5px" cellpadding="0" style="color:#333; font-size:9; " width="500px">        
+                    <tr>
+                        <td width="230px" style= "font-size:9; text-align:center; border-bottom:1px solid #333;">&nbsp;</td>
+                        <td width="30px" style= "font-size:9; text-align:center;">&nbsp;</td>
+                        <td width="230px" style= "font-size:9; text-align:center; border-bottom:1px solid #333;">&nbsp;</td>            
+                    </tr>                   
+                    <tr>
+                        <td style= "font-size:9; text-align:center">Authorized Signatory</td>
+                        <td style= "font-size:9; text-align:center;">&nbsp;</td>
+                        <td style= "font-size:9; text-align:center">Registrar</td>            
+                    </tr>
+                </table>
+                <table border="0" cellpadding="0" style="color:#333; font-size:9; " width="570px">
+                    <tr>
+                        <td colspan="2" style="font-size:9; line-height:1; color:#fff;">Space</td>
+                    </tr>
+                </table>
+                <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">        
+                    <tr>
+                        <td width="264px" style= "font-size:8;">Note: Class schedule is subject to change</td>
+                        <td width="264px" style= "font-size:8;">Generated: '.date("Y-m-d h:i A").' by '.$user['strFirstname'].' '.$user['strLastname'].'</td>            
+                    </tr>
+                </table>
+                <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">
+                    <tr>
+                        <td colspan="2" style="font-size:9; line-height:1; color:#fff;">Space</td>
+                    </tr>
+                </table>
+                <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">
+                    <tr>
+                        <td colspan="2" style="font-size:8;">I shall abide by all existing rules and regulations of the School and those that may be promulgated from time to time.
+                        I understand that the school has to collect my personal data and I allow the school to process all my information and all
+                        purposes related to this.</td>
+                    </tr>
+                </table> 
+                <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">
+                    <tr>
+                        <td colspan="2" style="font-size:9; line-height:1; color:#fff;">Space</td>
+                    </tr>
+                </table>                  
+                                
+            ';
 
         $html .=' <table border="0" cellspacing="5px" cellpadding="0" style="color:#333; font-size:9; " width="570px">        
         <tr>
