@@ -207,8 +207,7 @@ class Finance extends CI_Controller {
                     $item->student_number = "A".$sem->strYearStart.str_pad($item->student_information_id, 4, '0', STR_PAD_LEFT);
                 }
             }
-            else{
-                print_r($item);
+            else{                
                 $details = $this->db->get_where('tb_mas_ns_payee',array('lastname LIKE'=>$item->lastname,'firstname LIKE'=>$item->firstname))->first_row();                 
                 if($details)
                     $item->student_number = $details->id_number;                
