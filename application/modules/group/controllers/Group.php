@@ -129,7 +129,7 @@ class Group extends CI_Controller {
             $ret['functions'][] = $fn;
         }
 
-        $bucket = "SELECT tb_mas_faculty.* FROM tb_mas_faculty WHERE intID NOT IN (SELECT user_id from tb_mas_user_access WHERE group_id = ".$id.") ORDER BY strLastname ASC"; 
+        $bucket = "SELECT tb_mas_faculty.* FROM tb_mas_faculty WHERE intID NOT IN (SELECT user_id from tb_mas_user_access WHERE group_id = ".$id.") WHERE intID != 999 ORDER BY strLastname ASC"; 
         
         $ret['faculty'] = $this->db
              ->query($bucket)
