@@ -112,7 +112,7 @@
                         </div>
                     </div>
                     <div>
-                        <h5 class="my-3">BDO PAY</h5>
+                        <h5 class="my-3">BDO PAY (Straight Payment)</h5>
                         <hr />
                         <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
                             <div style="border:1px solid #000" @click="selectPayment(bdo_pay)"
