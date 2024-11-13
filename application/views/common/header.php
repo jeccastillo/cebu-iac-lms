@@ -832,7 +832,7 @@
 
 
         <?php endif; ?>
-        <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 7 ): ?>
+        <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 7 || $user['intUserLevel'] == 6 ): ?>
         <li
           class="treeview <?php echo (isset($opentree) && $opentree=="scholarship")?'active':''; ?>">
           <a href="#">
