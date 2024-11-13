@@ -135,7 +135,11 @@ class Group extends CI_Controller {
              ->query($bucket)
              ->result_array();
 
-        $ret['group_users'] = $this->db->get_where('tb_mas_user_access',array('id' => $id))->result_array();
+        $ret['group_users'] = $this->db->select('tb_mas_faculty.*,tb_mas_user_access.id as uaid')
+                                       ->join('tb_mas_faculty','tb_mas_faculty.intID = tb_mas_user_access.user_id')
+                                       ->where(array('id' => $id))
+                                       ->get('tb_mas_user_access')
+                                       ->result_array();
         echo json_encode($ret);
     }
 

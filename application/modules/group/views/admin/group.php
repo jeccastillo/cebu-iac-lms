@@ -49,18 +49,10 @@
                         </div>
                     </div>
                 </div>
-                <!-- <table class="table table-bordered table-striped">
+                <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>Term</th>
-                            <th>Deficiency</th>
-                            <th>Department</th>
-                            <th>Remarks</th>
-                            <th>Date Added</th>
-                            <th>Added By</th>
-                            <th>Date Resolved</th>
-                            <th>Resolved By</th>
-                            <th>Status</th>                             
+                            <th>User</th>                                                    
                             <th>Actions</th>                                                       
                         </tr>
                     </thead>
@@ -84,7 +76,7 @@
                             <td v-else></td>
                         </tr>
                     </tbody>
-                </table>                               -->
+                </table>                              
             </div>        
         </div>
         
@@ -160,7 +152,8 @@ new Vue({
                     if(data.data.group){
                         this.request = data.data.group;                        
                         this.group_users = data.data.group_users;   
-                        this.group_functions = data.data.functions;                                     
+                        this.group_functions = data.data.functions;      
+                        this.faculty = data.data.faculty;                               
                     }
                 })
             .catch((error) => {
