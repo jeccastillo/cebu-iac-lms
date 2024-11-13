@@ -57,7 +57,7 @@
                                                 </div>
                                             </div>
                                             <div>
-                                                <h5 class="my-3">BDO PAY</h5>
+                                                <h5 class="my-3">BDO PAY (Straight Payment)</h5>
                                                 <hr />
                                                 <div class="d-flex flex-wrap"
                                                     style="display:flex; flex:wrap;">
