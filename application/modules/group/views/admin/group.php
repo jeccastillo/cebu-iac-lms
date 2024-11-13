@@ -49,6 +49,19 @@
                         </div>
                     </div>
                 </div>
+                <form method="post" @submit.prevent="submitUser">
+                    <div class="row">
+                        <div class="col-sm-6 form-group">
+                            <label>User</label>
+                            <select name="user_id" v-model="add_user.user_id">
+                                <option v-for="item in faculty" :value="item.intID">{{ item.strLastname + " " + item.strFirstname }}</option>
+                            </select>
+                        </div>
+                    </div>  
+                    <hr />
+                    <button type="submit" class="btn btn-primary">Add User</button>
+                </form>
+                <hr />
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
@@ -58,7 +71,7 @@
                     </thead>
                     <tbody>
                         <tr v-if="group_users.length == 0">
-                            <td colspan='8'>No Deficiencies for this term</td>
+                            <td colspan='8'>No Users for this Group</td>
                         </tr>
                         <tr v-else v-for="item in group_users">
                             <td>{{ item.strLastname + " " + item.strFirstname }}</td>                            
@@ -130,8 +143,11 @@ new Vue({
         add_function:{
             name: undefined,
             serial: undefined,
+        },
+        add_user:{
+            user_id: undefined,
+            group_id: undefined,
         }
-        
     },
 
     mounted() {
@@ -142,6 +158,7 @@ new Vue({
             axios.get(this.base_url + 'group/group_data/'+this.id)
                 .then((data) => {  
                     if(data.data.group){
+                        this.add_user.group_id = this.id;
                         this.request = data.data.group;                        
                         this.group_users = data.data.group_users;   
                         this.group_functions = data.data.functions;      
@@ -243,6 +260,51 @@ new Vue({
                 },
                 allowOutsideClick: () => !Swal.isLoading()
             });  
+        },
+        submitUser: function(){
+            Swal.fire({
+                title: 'Add User?',
+                text: "Continue adding user?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata= new FormData();
+                    for (const [key, value] of Object.entries(this.add_user)) {
+                        formdata.append(key,value);
+                    }
+                    return axios
+                    .post(base_url + 'group/submit_user',formdata, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                    .then(data => {
+                        console.log(data.data);
+                        if (data.data.success) {
+                            Swal.fire({
+                                title: "Success",
+                                text: data.data.message,
+                                icon: "success"
+                            }).then(function() {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire(
+                                'Failed!',
+                                data.data.message,
+                                'error'
+                            )
+                        }
+                    });
+                    
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });   
         },
         addFunction: function(){
             Swal.fire({
