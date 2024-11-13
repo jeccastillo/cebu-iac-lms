@@ -129,9 +129,32 @@ class Group extends CI_Controller {
             $ret['functions'][] = $fn;
         }
 
+        $bucket = "SELECT tb_mas_faculty.* FROM tb_mas_faculty WHERE intID NOT IN (SELECT user_id from tb_mas_user_access WHERE group_id = ".$id.") ORDER BY strLastname ASC"; 
+        
+        $ret['faculty'] = $this->db
+             ->query($bucket)
+             ->result_array();
 
         $ret['group_users'] = $this->db->get_where('tb_mas_user_access',array('id' => $id))->result_array();
         echo json_encode($ret);
+    }
+
+    public function submit_user(){
+        $post = $this->input->post();
+        $this->db->insert('tb_mas_user_access',$post);
+
+        $data['success'] = true;
+        echo json_encode($data);
+    }
+
+    public function delete_user(){
+        $post = $this->input->post();
+        $this->db
+            ->where(array('id'=>$post['id']))
+            ->delete('tb_mas_user_access');
+
+        $data['success'] = true;
+        echo json_encode($data);
     }
 
     public function submit_group(){
