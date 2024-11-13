@@ -137,7 +137,7 @@ class Group extends CI_Controller {
 
         $ret['group_users'] = $this->db->select('tb_mas_faculty.*,tb_mas_user_access.id as uaid')
                                        ->join('tb_mas_faculty','tb_mas_faculty.intID = tb_mas_user_access.user_id','left')
-                                       ->where(array('id' => $id))
+                                       ->where(array('group_id' => $id))
                                        ->get('tb_mas_user_access')
                                        ->result_array();
         echo json_encode($ret);
