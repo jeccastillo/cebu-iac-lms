@@ -49,42 +49,39 @@
                         </div>
                     </div>
                 </div>
-                <!-- <table class="table table-bordered table-striped">
+                <form method="post" @submit.prevent="submitUser">
+                    <h4>Add User</h4>
+                    <div class="row">
+                        <div class="col-sm-6 form-group">
+                            <label>User</label>
+                            <select class="form-control" name="user_id" v-model="add_user.user_id">
+                                <option v-for="item in faculty" :value="item.intID">{{ item.strLastname + " " + item.strFirstname }}</option>
+                            </select>
+                        </div>
+                    </div>  
+                    <hr />
+                    <button type="submit" class="btn btn-primary">Add User</button>
+                </form>
+                <hr />
+                <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>Term</th>
-                            <th>Deficiency</th>
-                            <th>Department</th>
-                            <th>Remarks</th>
-                            <th>Date Added</th>
-                            <th>Added By</th>
-                            <th>Date Resolved</th>
-                            <th>Resolved By</th>
-                            <th>Status</th>                             
+                            <th>User</th>                                                    
                             <th>Actions</th>                                                       
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-if="deficiencies.length == 0">
-                            <td colspan='8'>No Deficiencies for this term</td>
+                        <tr v-if="group_users.length == 0">
+                            <td colspan='8'>No Users for this Group</td>
                         </tr>
-                        <tr v-else v-for="item in deficiencies">
-                            <td>{{ item.enumSem + " " + item.term_label + " " + item.strYearStart + "-" + item.strYearEnd}}</td>
-                            <td>{{ item.details }}</td>
-                            <td>{{ item.department }}</td>
-                            <td>{{ item.remarks }}</td>
-                            <td>{{ item.date_added }}</td>
-                            <td>{{ item.added_by }}</td>
-                            <td>{{ item.date_resolved }}</td>
-                            <td>{{ item.resolved_by }}</td>
-                            <td>{{ item.status  }}</td>
-                            <td v-if="item.department == request.department && item.status != 'resolved' || user.intUserLevel == 2">
-                                <a class="btn btn-primary" @click.prevent="resolveDeficiency(item.id)">Resolve</a> <a v-if="user.intUserLevel == 2 || user.special_role == 2" class="btn btn-success" href="#" data-toggle="modal" data-target="#temporaryResolve" @click="setResolveID(item.id)">Temp Resolve</a>
-                            </td>
-                            <td v-else></td>
+                        <tr v-else v-for="item in group_users">
+                            <td>{{ item.strLastname + " " + item.strFirstname }}</td>                            
+                            <td>
+                                <a class="btn btn-primary" @click.prevent="deleteUser(item.uaid)">Delete</a> 
+                            </td>                            
                         </tr>
                     </tbody>
-                </table>                               -->
+                </table>                              
             </div>        
         </div>
         
@@ -138,6 +135,7 @@ new Vue({
         id: '<?php echo $id; ?>',                
         group_users:[],
         group_functions:[],
+        faculty: [],
         request:{
             id: '<?php echo $id; ?>',
             group_name: undefined,    
@@ -146,8 +144,11 @@ new Vue({
         add_function:{
             name: undefined,
             serial: undefined,
+        },
+        add_user:{
+            user_id: undefined,
+            group_id: undefined,
         }
-        
     },
 
     mounted() {
@@ -158,9 +159,11 @@ new Vue({
             axios.get(this.base_url + 'group/group_data/'+this.id)
                 .then((data) => {  
                     if(data.data.group){
+                        this.add_user.group_id = this.id;
                         this.request = data.data.group;                        
                         this.group_users = data.data.group_users;   
-                        this.group_functions = data.data.functions;                                     
+                        this.group_functions = data.data.functions;      
+                        this.faculty = data.data.faculty;                               
                     }
                 })
             .catch((error) => {
@@ -215,6 +218,94 @@ new Vue({
                 },
                 allowOutsideClick: () => !Swal.isLoading()
             });
+        },
+        deleteUser: function(id){
+            Swal.fire({
+                title: 'Delete User?',
+                text: "Continue deleting user?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata= new FormData();                    
+                    formdata.append('id',id);                    
+                    return axios
+                    .post(base_url + 'group/delete_user',formdata, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                    .then(data => {
+                        console.log(data.data);
+                        if (data.data.success) {
+                            Swal.fire({
+                                title: "Success",
+                                text: data.data.message,
+                                icon: "success"
+                            }).then(function() {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire(
+                                'Failed!',
+                                data.data.message,
+                                'error'
+                            )
+                        }
+                    });
+                    
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });  
+        },
+        submitUser: function(){
+            Swal.fire({
+                title: 'Add User?',
+                text: "Continue adding user?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata= new FormData();
+                    for (const [key, value] of Object.entries(this.add_user)) {
+                        formdata.append(key,value);
+                    }
+                    return axios
+                    .post(base_url + 'group/submit_user',formdata, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        })
+                    .then(data => {
+                        console.log(data.data);
+                        if (data.data.success) {
+                            Swal.fire({
+                                title: "Success",
+                                text: data.data.message,
+                                icon: "success"
+                            }).then(function() {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire(
+                                'Failed!',
+                                data.data.message,
+                                'error'
+                            )
+                        }
+                    });
+                    
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });   
         },
         addFunction: function(){
             Swal.fire({
