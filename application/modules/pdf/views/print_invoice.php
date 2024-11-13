@@ -85,7 +85,7 @@ table tr td {
                 <?php echo $transaction_date; ?>
             </div>
             <!---TIN--->
-            <?php if($payee): ?>
+            <?php if(isset($payee)): ?>
             <div style="position:absolute; top: 190px; right: -45px; width: 200px; height: 20px;">
                 <?php echo $payee['tin']; ?>
             </div>
