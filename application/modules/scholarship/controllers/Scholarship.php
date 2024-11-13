@@ -9,8 +9,10 @@ class Scholarship extends CI_Controller {
 	
     function __construct() {
         parent::__construct();
-        
-        if(!$this->is_osas() && !$this->is_super_admin())
+        $group = $this->db->get_where('tb_mas_user_group',array('group_name'=>'Scholarship'))->first_row();
+        $group_members = $this->db->get_where('tb_mas_user_access',array('group_id'=>$group->id))->result_array();
+
+        if(!$this->is_osas() && !$this->is_super_admin() && !$this->allowed_user($group_members))
 		  redirect(base_url()."unity");
         
 		$this->config->load('themes');		
@@ -452,6 +454,16 @@ class Scholarship extends CI_Controller {
             return true;
         else
             return false;
+    }
+
+    public function allowed_user($users)
+    {
+        $user_id = $this->session->userdata('intID');
+        foreach($users as $user)
+            if($user['user_id'] == $user_id)
+                return true;
+    
+        return false;
     }
     
     public function is_registrar()
