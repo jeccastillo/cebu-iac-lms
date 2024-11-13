@@ -50,10 +50,11 @@
                     </div>
                 </div>
                 <form method="post" @submit.prevent="submitUser">
+                    <h4>Add User</h4>
                     <div class="row">
                         <div class="col-sm-6 form-group">
                             <label>User</label>
-                            <select name="user_id" v-model="add_user.user_id">
+                            <select class="form-control" name="user_id" v-model="add_user.user_id">
                                 <option v-for="item in faculty" :value="item.intID">{{ item.strLastname + " " + item.strFirstname }}</option>
                             </select>
                         </div>
