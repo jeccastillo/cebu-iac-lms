@@ -253,6 +253,15 @@
                               <option value="returning">returning</option>
                             </select>
                           </p>
+                          <p><strong>Year Level: </strong>
+                            <select @change="updateStudentYearLevel($event)"
+                              v-model="registration.intYearLevel">
+                              <option value=1>1</option>
+                              <option value=2>2</option>
+                              <option value=3>3</option>
+                              <option value=4>4</option>
+                            </select>
+                          </p>
                           <p><strong>Academic Status: </strong>
                             <select @change="updateAcademicStatus($event)"
                               v-model="registration.enumRegistrationStatus">
@@ -1151,6 +1160,32 @@ new Vue({
       var formdata = new FormData();
       formdata.append('intRegistrationID', this.registration.intRegistrationID);
       formdata.append('enumStudentType', event.target.value);
+
+
+      this.loader_spinner = true;
+      axios.post(base_url + 'unity/update_academic_status', formdata, {
+          headers: {
+            Authorization: `Bearer ${window.token}`
+          }
+        })
+        .then(data => {
+          this.loader_spinner = false;
+          Swal.fire({
+            title: "Success",
+            text: data.data.message,
+            icon: "success"
+          }).then(function() {
+
+          });
+        });
+
+
+      },
+      updateStudentYearLevel: function(event) {
+
+      var formdata = new FormData();
+      formdata.append('intRegistrationID', this.registration.intRegistrationID);
+      formdata.append('intYearLevel', event.target.value);
 
 
       this.loader_spinner = true;
