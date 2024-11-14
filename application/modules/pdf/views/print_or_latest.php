@@ -81,7 +81,7 @@ table tr td {
             <div style="position:absolute; top: 190px; left: 95px; width: 200px; height: 20px;">
                 <?php echo $total_amount_due; ?>
             </div>
-            <div style="position:absolute; top: 340px; left: 5px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 340px; left: 5px; width: 100px; height: 20px;">
                 <?php echo $remarks; ?>
             </div>
             <div style="position:absolute; top: 340px; left: 95px; width: 200px; height: 20px;">
