@@ -26,19 +26,19 @@
                             </div>
                             <div class="form-group col-xs-6">
                                 <label for="year">Price Per Unit Regular</label>
-                                <input type="number" name="pricePerUnit" required class="form-control" id="pricePerUnit" placeholder="Enter Price per unit" v-model='request.pricePerUnit'>
+                                <input type="number" step=".01" name="pricePerUnit" required class="form-control" id="pricePerUnit" placeholder="Enter Price per unit" v-model='request.pricePerUnit'>
                             </div>
                             <div class="form-group col-xs-6">
                                 <label for="year">Price Per Unit Online</label>
-                                <input type="number" name="pricePerUnitOnline" required class="form-control" id="pricePerUnitOnline" placeholder="Enter Price per unit" v-model='request.pricePerUnitOnline'>
+                                <input type="number" step=".01" name="pricePerUnitOnline" required class="form-control" id="pricePerUnitOnline" placeholder="Enter Price per unit" v-model='request.pricePerUnitOnline'>
                             </div>
                             <div class="form-group col-xs-6">
                                 <label for="year">Price Per Unit Hyflex</label>
-                                <input type="number" name="pricePerUnitHyflex" required class="form-control" id="pricePerUnitHyflex" placeholder="Enter Price per unit" v-model='request.pricePerUnitHyflex'>
+                                <input type="number" step=".01" name="pricePerUnitHyflex" required class="form-control" id="pricePerUnitHyflex" placeholder="Enter Price per unit" v-model='request.pricePerUnitHyflex'>
                             </div>
                             <div class="form-group col-xs-6">
                                 <label for="year">Price Per Unit Hybrid</label>
-                                <input type="number" name="pricePerUnitHybrid" required class="form-control" id="pricePerUnitHybrid" placeholder="Enter Price per unit" v-model='request.pricePerUnitHybrid'>
+                                <input type="number" step=".01" name="pricePerUnitHybrid" required class="form-control" id="pricePerUnitHybrid" placeholder="Enter Price per unit" v-model='request.pricePerUnitHybrid'>
                             </div> 
                             <div class="form-group col-sm-6">
                                 <label for="year">Percent Increase for installment</label>
