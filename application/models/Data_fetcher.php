@@ -3324,9 +3324,7 @@ class Data_fetcher extends CI_Model {
             }
                 
 
-            $data['down_payment'] = round($data['down_payment'],2);
-            $data['down_payment30'] = $data['total_installment30'] * 0.30;
-            $data['down_payment50'] = $data['total_installment50'] * 0.50;
+            $data['down_payment'] = round($data['down_payment'],2);            
 
             $data['dp_before_deductions'] = $data['ti_before_deductions'] * ($tuition_year['installmentDP']/100);
             $data['dp_before_deductions'] = round($data['dp_before_deductions'],2);
@@ -3363,6 +3361,8 @@ class Data_fetcher extends CI_Model {
             $data['dp_before_deductions50'] = round($data['dp_before_deductions50'],2);
         }
 
+        $data['down_payment30'] = $data['total_installment30'] * 0.30;
+        $data['down_payment50'] = $data['total_installment50'] * 0.50;
         $data['installment_fee'] = ($data['total_installment'] - $data['down_payment'])/5;
         $data['installment_fee30'] = ($data['total_installment30'] - $data['down_payment30'])/5;
         $data['installment_fee50'] = ($data['total_installment50'] - $data['down_payment50'])/5;
