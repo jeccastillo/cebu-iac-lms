@@ -1687,6 +1687,7 @@ class Unity extends CI_Controller {
 
             $ret['user_logged'] = $this->data['user']['intID'];
             $ret['user_level'] = $this->data['user']['intUserLevel'];
+            $ret['tuition_years'] = $this->db->get_where('tb_mas_tuition_year')->result_array();
 
             $ret['term_months'] = $this->db->get_where('tb_mas_sy_months',array('term_id'=>$ret['active_sem']['intID']))->result_array();
             $ret['attendance'] = $this->db->select('tb_mas_student_attendance.*,month')

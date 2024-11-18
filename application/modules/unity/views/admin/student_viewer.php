@@ -245,7 +245,7 @@
                           </li>
                         <div v-if="registration">
                           <p><strong>Enrollment Type: </strong>
-                            <select @change="updateStudentType($event)"
+                            <select class="form-control" @change="updateStudentType($event)"
                               v-model="registration.enumStudentType">
                               <option value="new">new</option>
                               <option value="continuing">continuing</option>
@@ -254,7 +254,7 @@
                             </select>
                           </p>
                           <p><strong>Year Level: </strong>
-                            <select @change="updateStudentYearLevel($event)"
+                            <select class="form-control" @change="updateStudentYearLevel($event)"
                               v-model="registration.intYearLevel">
                               <option value=1>1</option>
                               <option value=2>2</option>
@@ -263,15 +263,23 @@
                             </select>
                           </p>
                           <p><strong>Academic Status: </strong>
-                            <select @change="updateAcademicStatus($event)"
+                            <select class="form-control" @change="updateAcademicStatus($event)"
                               v-model="registration.enumRegistrationStatus">
                               <option value="regular">Regular</option>
                               <option value="irregular">Irregular</option>
                             </select>
                           </p>
                           <p><strong>Date Enrolled: </strong>
-                            <input type="datetime-local" @blur="updateDateEnrolled($event)"
+                            <input class="form-control" type="datetime-local" @blur="updateDateEnrolled($event)"
                               v-model="registration.dteRegistered">                                                          
+                          </p>
+                          <p><strong>Tuition Year</strong>
+                            <select class="form-control"
+                                @change="selectTuitionYear($event)"
+                                v-model="registration.tuition_year">
+                                <option v-for="ty in tuition_years"
+                                    :value="ty.intID">{{ ty.year}}</option>
+                            </select>
                           </p>
                         </div>
                         <hr />
@@ -700,6 +708,7 @@ new Vue({
     user_level: undefined,
     registration: undefined,
     applicant_data: {},
+    tuition_years: [],
     enlistment: undefined,
     enlisted_subjects: [],
     active_sem: {},
@@ -799,6 +808,7 @@ new Vue({
                   console.log(data);
                   if (data.data.success) {
                     this.student = data.data.student;
+                    this.tuition_years = data.data.tuition_years;
                     this.term_balances = data.data.term_balances;
                     for (i in this.term_balances)
                       if (this.term_balances[i].balance > 0)
@@ -1105,6 +1115,29 @@ new Vue({
         });
 
 
+    },
+    selectTuitionYear: function(event){
+      var formdata = new FormData();
+      formdata.append('intRegistrationID', this.registration.intRegistrationID);
+      formdata.append('tuition_year', event.target.value);
+
+
+      this.loader_spinner = true;
+      axios.post(base_url + 'unity/update_academic_status', formdata, {
+          headers: {
+            Authorization: `Bearer ${window.token}`
+          }
+        })
+        .then(data => {
+          this.loader_spinner = false;
+          Swal.fire({
+            title: "Success",
+            text: data.data.message,
+            icon: "success"
+          }).then(function() {
+
+          });
+        });
     },
     updateBlock: function(event) {
 
