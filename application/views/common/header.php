@@ -149,6 +149,9 @@
                     </li> -->
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
+          <a href="#">              
+              <span><?php echo $campus; ?></span>
+            </a>
             <a href="#"
               class="dropdown-toggle"
               data-toggle="dropdown">
@@ -832,7 +835,7 @@
 
 
         <?php endif; ?>
-        <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 7 ): ?>
+        <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 7 || $user['intUserLevel'] == 6 ): ?>
         <li
           class="treeview <?php echo (isset($opentree) && $opentree=="scholarship")?'active':''; ?>">
           <a href="#">
