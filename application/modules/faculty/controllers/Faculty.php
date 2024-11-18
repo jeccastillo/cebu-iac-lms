@@ -29,6 +29,7 @@ class Faculty extends CI_Controller {
         $this->data['terms'] = $this->config->item('terms');
         $this->data['term_type'] = $this->config->item('term_type');
         $this->data['unit_fee'] = $this->config->item('unit_fee');
+        $this->data['campus'] = $this->config->item('campus');
         $this->data['misc_fee'] = $this->config->item('misc_fee');
         $this->data['lab_fee'] = $this->config->item('lab_fee');
         $this->data['id_fee'] = $this->config->item('id_fee');
