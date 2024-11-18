@@ -32,7 +32,7 @@ class Department extends CI_Controller {
 		$this->load->model("facebook_login");	
 		$this->load->model("user_model");
         $this->config->load('courses');
-        
+        $this->data['campus'] = $this->config->item('campus');
         $this->data['department_config'] = $this->config->item('department');
         $this->data['terms'] = $this->config->item('terms');
         $this->data['term_type'] = $this->config->item('term_type');
