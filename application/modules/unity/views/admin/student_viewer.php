@@ -791,15 +791,7 @@ new Vue({
 
         .then((data) => {
           var formdata = new FormData();
-          formdata.append('data', JSON.stringify(data.data.data));
-          axios
-            .post(base_url + 'finance/sync_payment_details_data/', formdata, {
-              headers: {
-                Authorization: `Bearer ${window.token}`
-              },
-            })
-
-            .then((data) => {
+         
               Swal.close();
               //this.loader_spinner = true;
               axios.get(this.base_url + 'unity/student_viewer_data/' + this.id + '/' + this
@@ -918,8 +910,7 @@ new Vue({
                 .catch((error) => {
                   console.log(error);
                 })
-
-            });
+            
         });
     }
 
