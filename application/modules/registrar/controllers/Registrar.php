@@ -1592,7 +1592,7 @@ class Registrar extends CI_Controller {
             $reg['type_of_class'] = $post['type_of_class'];
             $reg['current_program'] =$student['intProgramID'];
             $reg['current_curriculum'] =$student['intCurriculumID'];
-            $reg['tuition_year'] = $student['intTuitionYear'];
+            $reg['tuition_year'] = $post['tuition_year'];
             $reg['block_section'] = $post['block_section'];
             $s = $this->data_fetcher->get_sem_by_id($data['ayid']);
             $data['message'] = "Success";
@@ -2487,6 +2487,7 @@ class Registrar extends CI_Controller {
         
         $data['active_sem'] = $active_sem;
         $data['term_type'] = $this->data['term_type'];
+        $data['tuition_years'] = $this->db->get_where('tb_mas_tuition_year')->result_array();
 
         $ret['data'] = $data;
         $ret['success'] = true;
