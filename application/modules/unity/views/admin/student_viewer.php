@@ -1138,7 +1138,7 @@ new Vue({
 
           });
         });
-    }
+    },
     updateBlock: function(event) {
 
       var formdata = new FormData();
