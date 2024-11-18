@@ -90,7 +90,7 @@
                                 <br />     
                                 <label for="tuition_year">TUITION YEAR</label>
                                 <select id="tuition_year" name="tuition_year" class="form-control" v-model="request.tuition_year">                        
-                                    <option v-for="ty in tuition_years" :value="ty.id">{{ ty.year }}</option>                                  
+                                    <option v-for="ty in tuition_years" :value="ty.intID">{{ ty.year }}</option>                                  
                                 </select>
                                 <br />                   
                                 <label for="enumScholarship">Scholarship Grant</label><br />
