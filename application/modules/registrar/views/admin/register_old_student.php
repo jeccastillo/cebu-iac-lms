@@ -87,7 +87,12 @@
                                     <option value="hyflex">Hyflex</option>
                                     <option value="hybrid">Hybrid</option>                                    
                                 </select>
-                                <br />                    
+                                <br />     
+                                <label for="tuition_year">TUITION YEAR</label>
+                                <select id="tuition_year" name="tuition_year" class="form-control" v-model="request.tuition_year">                        
+                                    <option v-for="ty in tuition_years" :value="ty.id">{{ ty.year }}</option>                                  
+                                </select>
+                                <br />                   
                                 <label for="enumScholarship">Scholarship Grant</label><br />
                                 <input type="hidden" model="request.enumScholarship">
                                 {{ scholarship.intID != 0?scholarship.name:'None' }}
@@ -145,11 +150,13 @@ new Vue({
             type_of_class: 'regular',
             intYearLevel: 1,
             block_section: undefined,
+            tuition_year: undefined,
         },
         scholarship: {
             intID: 0
         },
         school_years: [],
+        tuition_years: [],
         block_sections: [], 
         term_type: 'Term',
         tuition_data: undefined,
@@ -204,6 +211,7 @@ new Vue({
 
                     this.request.enumScholarship = this.scholarship.intID;
                     this.prev_registration = data.data.data.prev_reg;
+                    this.tuition_years = data.data.data.tuition_years;
                     if(this.prev_registration){
                         if(this.prev_registration.shifted_program)
                             this.request.enumStudentType = "shiftee";
@@ -292,6 +300,7 @@ new Vue({
                         formdata.append("type_of_class",this.request.type_of_class);   
                         formdata.append("sem",this.sem);
                         formdata.append("year",this.request.intYearLevel);
+                        formdata.append("tuition_year",this.request.tuition_year);
 
                         axios.post('<?php echo base_url(); ?>unity/get_tuition_ajax', formdata, {
                             headers: {
