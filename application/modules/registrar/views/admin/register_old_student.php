@@ -75,7 +75,7 @@
                                     <option value="6">6</option>
                                 </select>
                                 <br />    
-                                <label for="internship">Student Type</label>
+                                <label for="internship">Internship</label>
                                 <select id="internship" class="form-control" name="internship" v-model="request.internship">                        
                                     <option value=0>No</option>
                                     <option value=1>Yes</option>                                    
