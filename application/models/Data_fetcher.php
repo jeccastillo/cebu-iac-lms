@@ -2804,15 +2804,15 @@ class Data_fetcher extends CI_Model {
                 }
         }
         
-        if($hasInternship){
-            $internship = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'internship'))
-            ->get('tb_mas_tuition_year_misc')->result_array();
+        // if($hasInternship){
+        //     $internship = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'internship'))
+        //     ->get('tb_mas_tuition_year_misc')->result_array();
 
-            foreach($internship as $m){            
-                $internship_fee_list[$m['name']] = getExtraFee($m, $class_type, 'misc');
-                $total_internship_fee += $internship_fee_list[$m['name']];
-            }                  
-        }
+        //     foreach($internship as $m){            
+        //         $internship_fee_list[$m['name']] = getExtraFee($m, $class_type, 'misc');
+        //         $total_internship_fee += $internship_fee_list[$m['name']];
+        //     }                  
+        // }
         
         
         
