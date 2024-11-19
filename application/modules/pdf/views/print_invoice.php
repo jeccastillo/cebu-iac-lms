@@ -86,13 +86,10 @@ table tr td {
                 &nbsp; <?php echo $student_name; ?> </div>
             <div style="position:absolute; top: 190px; left: 60px; width: 500px; height: 20px;">
                 <?php echo $student_address; ?> </div>
-            <div style="position:absolute; top: 245px; left:10px; width: 500px; height: 20px;"> <?php 
-                 if (isset($payee)) {
-                    echo $type . " / " . $term['enumSem'] . " " . $term['term_label'] . " " . $term['strYearStart'] . "-" . $term['strYearEnd'];                    
-                } else {
-                    echo $type;
-                }
-                ?> </div>
+            <div style="position:absolute; top: 245px; left:10px; width: 500px; height: 20px;"> <?php echo $type; 
+                 if(!isset($payee)): 
+                    echo " /  ".$term['enumSem']." ".$term['term_label']." ".$term['strYearStart']."-".$term['strYearEnd'];
+                endif; ?> </div>
             <div style="position:absolute; top: 245px; left: 500px; width: 500px; height: 20px;"> 1
             </div>
             <div style="position:absolute; top: 245px; left: 550px; width: 200px; height: 20px;">
