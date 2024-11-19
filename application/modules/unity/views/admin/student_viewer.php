@@ -269,6 +269,13 @@
                               <option value="irregular">Irregular</option>
                             </select>
                           </p>
+                          <p><strong>Internship: </strong>
+                            <select class="form-control" @change="updateInternshipStatus($event)"
+                              v-model="registration.internship">
+                              <option value=0>No</option>
+                              <option value=1>Yes</option>
+                            </select>
+                          </p>
                           <p><strong>Date Enrolled: </strong>
                             <input class="form-control" type="datetime-local" @blur="updateDateEnrolled($event)"
                               v-model="registration.dteRegistered">                                                          
@@ -1178,6 +1185,30 @@ new Vue({
 
           });
         });
+    },
+    updateInternshipStatus: function(event){
+      var formdata = new FormData();
+      formdata.append('intRegistrationID', this.registration.intRegistrationID);
+      formdata.append('internship', event.target.value);
+
+
+      this.loader_spinner = true;
+      axios.post(base_url + 'unity/update_academic_status', formdata, {
+          headers: {
+            Authorization: `Bearer ${window.token}`
+          }
+        })
+        .then(data => {
+          this.loader_spinner = false;
+          Swal.fire({
+            title: "Success",
+            text: data.data.message,
+            icon: "success"
+          }).then(function() {
+
+          });
+        });
+
     },
     updateStudentType: function(event) {
 

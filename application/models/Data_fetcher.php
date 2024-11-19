@@ -2496,7 +2496,7 @@ class Data_fetcher extends CI_Model {
         }
         
         if(isset($registration))
-            return $this->getTuitionSubjects($registration['enumStudentType'],$sch,$discount,$subjects,$id,$registration['type_of_class'],$sem,$registration['tuition_year'],$registration['dteRegistered'],$registration['intYearLevel']);
+            return $this->getTuitionSubjects($registration['enumStudentType'],$sch,$discount,$subjects,$id,$registration['type_of_class'],$sem,$registration['tuition_year'],$registration['dteRegistered'],$registration['intYearLevel'],$registration['internship']);
         else                              
             return null;
         
@@ -2542,7 +2542,7 @@ class Data_fetcher extends CI_Model {
         
     }   
 
-    function getTuitionSubjects($stype,$sch,$discount,$subjects,$id,$class_type="regular",$syid,$tuition_year_id,$dr="1970-01-01",$year_level = 1)
+    function getTuitionSubjects($stype,$sch,$discount,$subjects,$id,$class_type="regular",$syid,$tuition_year_id,$dr="1970-01-01",$year_level = 1,$internship = 0)
     {
         $tuition = 0;
         $total_lab = 0;
@@ -2634,9 +2634,10 @@ class Data_fetcher extends CI_Model {
 
         // $discount = $this->db->where('intID',$student['enumDiscount'])->get('tb_mas_scholarships')->row();
         
-
-        $misc = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'regular'))
+        $misc_type = ($internship == 0)?'regular':'internship';
+            $misc = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => $misc_type))
                          ->get('tb_mas_tuition_year_misc')->result_array();  
+        
                          
         if($stype == 'new'){
             $new_student_data = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'new_student'))
