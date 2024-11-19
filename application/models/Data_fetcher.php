@@ -2635,7 +2635,7 @@ class Data_fetcher extends CI_Model {
         // $discount = $this->db->where('intID',$student['enumDiscount'])->get('tb_mas_scholarships')->row();
         
         $misc_type = 'regular';
-            $misc = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => $misc_type))
+            $misc = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'regular'))
                          ->get('tb_mas_tuition_year_misc')->result_array();  
         
                          
