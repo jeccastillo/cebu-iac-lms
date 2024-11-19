@@ -87,7 +87,7 @@ table tr td {
             <div style="position:absolute; top: 190px; left: 60px; width: 500px; height: 20px;">
                 <?php echo $student_address; ?> </div>
             <div style="position:absolute; top: 245px; left:10px; width: 500px; height: 20px;"> <?php 
-                 if ($payee) {
+                 if (isset($payee)) {
                     echo $type . " / " . $term['enumSem'] . " " . $term['term_label'] . " " . $term['strYearStart'] . "-" . $term['strYearEnd'];                    
                 } else {
                     echo $type;
