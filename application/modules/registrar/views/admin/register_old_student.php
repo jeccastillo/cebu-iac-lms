@@ -64,6 +64,12 @@
                                     <option value="shiftee">Shiftee</option>                                    
                                     <option value="returning">Returning</option>
                                 </select>
+                                <br /> 
+                                <label for="enumStudentType">Internship</label>
+                                <select id="internship" class="form-control" name="internship" v-model="request.internship">                        
+                                    <option value="0">Yes</option>
+                                    <option value="1">No</option>                                    
+                                </select>
                                 <br />       
                                 <label for="intYearLevel">Year Level</label>
                                 <select id="intYearLevel" name="intYearLevel" class="form-control" v-model="request.intYearLevel">                        
@@ -151,6 +157,7 @@ new Vue({
             intYearLevel: 1,
             block_section: undefined,
             tuition_year: undefined,
+            internship: 0,
         },
         scholarship: {
             intID: 0
@@ -301,6 +308,8 @@ new Vue({
                         formdata.append("sem",this.sem);
                         formdata.append("year",this.request.intYearLevel);
                         formdata.append("tuition_year",this.request.tuition_year);
+                        formdata.append("internship",this.request.internship);
+                        
 
                         axios.post('<?php echo base_url(); ?>unity/get_tuition_ajax', formdata, {
                             headers: {
