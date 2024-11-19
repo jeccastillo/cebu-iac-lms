@@ -67,8 +67,8 @@
                                 <br /> 
                                 <label for="enumStudentType">Internship</label>
                                 <select id="internship" class="form-control" name="internship" v-model="request.internship">                        
-                                    <option value="0">Yes</option>
-                                    <option value="1">No</option>                                    
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>                                    
                                 </select>
                                 <br />       
                                 <label for="intYearLevel">Year Level</label>
