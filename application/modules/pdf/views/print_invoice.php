@@ -67,113 +67,83 @@ table tr td {
 
 <body>
     <div class="sheet-outer A4">
-        <section class="sheet padding-5mm">
-            <?php if($cashCharge): ?>
-                <div style="position:absolute; top: 140px; left: 40px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
-                    &#10003;
-                </div>
-            <?php else: ?>
-                <div style="position:absolute; top: 140px; left: 142px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
-                    &#10003;
-                </div>
-            <?php endif; ?>
-            <div style="position:absolute; top: 125px; right: 60px; width: 200px; height: 20px;">
-                Invoice No: <?php echo $invoice_number; ?>
-            </div>
+        <section class="sheet padding-5mm"> <?php if($cashCharge): ?> <div
+                style="position:absolute; top: 140px; left: 40px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
+                &#10003; </div> <?php else: ?> <div
+                style="position:absolute; top: 140px; left: 142px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
+                &#10003; </div> <?php endif; ?> <div
+                style="position:absolute; top: 125px; right: 60px; width: 200px; height: 20px;">
+                Invoice No: <?php echo $invoice_number; ?> </div>
             <!---DATE--->
             <div style="position:absolute; top: 170px; right: -60px; width: 200px; height: 20px;">
-                <?php echo $transaction_date; ?>
-            </div>
-            <!---TIN--->
-            <?php if(isset($payee)): ?>
-            <div style="position:absolute; top: 190px; right: -45px; width: 200px; height: 20px;">
-                <?php echo $payee['tin']; ?>
-            </div>
-            <?php endif; ?>
-            <div style="position:absolute; top: 170px; left: 60px; width: 500px; height: 20px;">
+                <?php echo $transaction_date; ?> </div>
+            <!---TIN---> <?php if(isset($payee)): ?> <div
+                style="position:absolute; top: 190px; right: -45px; width: 200px; height: 20px;">
+                <?php echo $payee['tin']; ?> </div> <?php endif; ?> <div
+                style="position:absolute; top: 170px; left: 60px; width: 500px; height: 20px;">
                 <?php if($student_id != 'undefined' && $student_id != ''): ?>
-                <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?>
-                <?php endif; ?>
-                &nbsp; <?php echo $student_name; ?>
-            </div>
+                <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?> <?php endif; ?>
+                &nbsp; <?php echo $student_name; ?> </div>
             <div style="position:absolute; top: 190px; left: 60px; width: 500px; height: 20px;">
-                <?php echo $student_address; ?>
+                <?php echo $student_address; ?> </div>
+            <div style="position:absolute; top: 245px; left:10px; width: 500px; height: 20px;"> <?php 
+                 if ($payee) {
+                    echo $type . " / " . $term['enumSem'] . " " . $term['term_label'] . " " . $term['strYearStart'] . "-" . $term['strYearEnd'];                    
+                } else {
+                    echo $type;
+                }
+                ?> </div>
+            <div style="position:absolute; top: 245px; left: 500px; width: 500px; height: 20px;"> 1
             </div>
-            <div style="position:absolute; top: 245px; left:10px; width: 500px; height: 20px;">
-                <?php echo $type." /  ".$term['enumSem']." ".$term['term_label']." ".$term['strYearStart']."-".$term['strYearEnd']; ?>
-            </div>
-            <div style="position:absolute; top: 245px; left: 500px; width: 500px; height: 20px;">
-                1
-            </div>            
             <div style="position:absolute; top: 245px; left: 550px; width: 200px; height: 20px;">
-                <?php echo $full_assessment; ?>
-            </div>
+                <?php echo $full_assessment; ?> </div>
             <div style="position:absolute; top:  245px; left: 650px; width: 200px; height: 20px;">
-                <?php echo $full_assessment; ?>
-            </div>
+                <?php echo $full_assessment; ?> </div>
             <div style="position:absolute; top: 270px; left:10px; width: 500px; height: 20px;">
-                <?php echo $reservation_description; ?>
-            </div>
+                <?php echo $reservation_description; ?> </div>
             <div style="position:absolute; top: 270px; left: 500px; width: 500px; height: 20px;">
-               <?php echo $reservation_amount != 0 ? 1 : ""; ?>
-            </div>
+                <?php echo $reservation_amount != 0 ? 1 : ""; ?> </div>
             <div style="position:absolute; top: 270px; left: 550px; width: 200px; height: 20px;">
-                <?php echo $reservation_amount != 0 ? "-".$reservation_amount : ""; ?>
-            </div>
+                <?php echo $reservation_amount != 0 ? "-".$reservation_amount : ""; ?> </div>
             <div style="position:absolute; top:  270px; left: 650px; width: 200px; height: 20px;">
-                <?php echo $reservation_amount != 0 ? "-".$reservation_amount : ""; ?>
-            </div>
+                <?php echo $reservation_amount != 0 ? "-".$reservation_amount : ""; ?> </div>
             <!---VAT ZERO RATED--->
             <div style="position:absolute; top: 335px; left: 650px; width: 200px; height: 20px;">
-                <?php echo $vat_zero_rated_sale != 0 ? $vat_zero_rated_sale : "" ; ?>
-            </div>
+                <?php echo $vat_zero_rated_sale != 0 ? $vat_zero_rated_sale : "" ; ?> </div>
             <!---TOTAL SALE--->
             <div style="position:absolute; top:  353px; left: 650px; width: 200px; height: 20px;">
                 <?php  echo $total_sale_taxed == 0 ? $total_assessment : $total_sale_taxed; ?>
             </div>
             <!---- VAT--->
             <div style="position:absolute; top: 370px; left: 650px; width: 200px; height: 20px;">
-                <?php echo $less_vat != 0 ? $less_vat : "" ; ?>
-            </div>
+                <?php echo $less_vat != 0 ? $less_vat : "" ; ?> </div>
             <!---- Less EWT--->
             <div style="position:absolute; top: 388px; left: 650px; width: 200px; height: 20px;">
-                <?php echo $less_ewt != 0 ? $less_ewt : "" ; ?>
-            </div>            
+                <?php echo $less_ewt != 0 ? $less_ewt : "" ; ?> </div>
             <!---Payment Left Amount-->
             <div style="position:absolute; top:  380px; left: 100px; width: 200px; height: 20px;">
-                <?php  echo $total_amount_due == 0 ? "" : $total_amount_due; ?>
-            </div>            
+                <?php  echo $total_amount_due == 0 ? "" : $total_amount_due; ?> </div>
             <div style="position:absolute; top:  405px; left: 650px; width: 200px; height: 20px;">
-                <?php  echo $total_assessment; ?>
-            </div>
+                <?php  echo $total_assessment; ?> </div>
             <div style="position:absolute; top:  460px; left: 10px; width: 200px; height: 20px;">
-                <?php  echo $remarks; ?>
-            </div>
+                <?php  echo $remarks; ?> </div>
             <!--Vatable-->
             <div style="position:absolute; top:  462px; left: 305px; width: 200px; height: 20px;">
-                <?php  echo $amount_less_vat != 0 ? $amount_less_vat : ""; ?>
-            </div>
-            <!--Vat Exempt Sale-->
-            <?php if($vat_exempt != 0 && $less_vat != 0): ?>
-            <div style="position:absolute; top:  487px; left: 305px; width: 200px; height: 20px;">
-                <?php  echo $vat_exempt; ?>
-            </div>
-            <?php elseif($vat_exempt == 0 && $less_vat != 0): ?>
-            <div style="position:absolute; top:  487px; left: 305px; width: 200px; height: 20px;">
-                <?php  echo ""; ?>
-            </div>
-            <?php else: ?>
-            <div style="position:absolute; top:  487px; left: 305px; width: 200px; height: 20px;">
-                <?php  echo $total_assessment; ?>
-            </div>
-            <?php endif; ?>
+                <?php  echo $amount_less_vat != 0 ? $amount_less_vat : ""; ?> </div>
+            <!--Vat Exempt Sale--> <?php if($vat_exempt != 0 && $less_vat != 0): ?> <div
+                style="position:absolute; top:  487px; left: 305px; width: 200px; height: 20px;">
+                <?php  echo $vat_exempt; ?> </div>
+            <?php elseif($vat_exempt == 0 && $less_vat != 0): ?> <div
+                style="position:absolute; top:  487px; left: 305px; width: 200px; height: 20px;">
+                <?php  echo ""; ?> </div> <?php else: ?> <div
+                style="position:absolute; top:  487px; left: 305px; width: 200px; height: 20px;">
+                <?php  echo $total_assessment; ?> </div> <?php endif; ?>
             <!--Total Amount received-->
             <div style="position:absolute; top:  565px; left: 50px; width: 200px; height: 20px;">
-                <?php  echo $total_amount_due == 0 ? "" : $total_amount_due; ?>
-            </div>
-            <div style="position:absolute; top: 550px; right: 20px; width: 200px; height: 20px;font-size:15px">
-                <?php echo $cashier_name; ?>
-            </div>
+                <?php  echo $total_amount_due == 0 ? "" : $total_amount_due; ?> </div>
+            <div
+                style="position:absolute; top: 550px; right: 20px; width: 200px; height: 20px;font-size:15px">
+                <?php echo $cashier_name; ?> </div>
         </section>
     </div>
 </body>
