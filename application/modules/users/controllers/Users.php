@@ -27,6 +27,8 @@ class Users extends CI_Controller {
 		$this->load->model("google_login");	
 		$this->load->model("facebook_login");	
 		$this->load->model("user_model");
+        $this->config->load('courses');
+        $this->data['campus'] = $this->config->item('campus');
 		$this->data['title'] = "Login/Signup";
 		
     }
