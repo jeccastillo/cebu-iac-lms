@@ -32,6 +32,7 @@ class Subject extends CI_Controller {
         $this->config->load('courses');
         $this->data['department_config'] = $this->config->item('department');
         $this->data['terms'] = $this->config->item('terms');
+        $this->data["campus"] = $this->config->item('campus');
         $this->data['term_type'] = $this->config->item('term_type');
         $this->data['unit_fee'] = $this->config->item('unit_fee');
         $this->data['misc_fee'] = $this->config->item('misc_fee');
