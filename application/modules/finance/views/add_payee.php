@@ -106,7 +106,9 @@ new Vue({
         .then((data) => {
             if(data.data.payee){
                 this.request = data.data.payee;           
-                this.prev_payee = data.data.payee;
+                this.prev_payee = { 'firstname': data.data.payee.firstname,
+                                    'lastname': data.data.payee.lastname,
+                                  };
                 console.log(this.prev_payee);
             }
         })
