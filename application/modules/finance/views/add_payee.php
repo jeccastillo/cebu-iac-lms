@@ -107,6 +107,7 @@ new Vue({
             if(data.data.payee){
                 this.request = data.data.payee;           
                 this.prev_payee = data.data.payee;
+                console.log(this.prev_payee);
             }
         })
         .catch((error) => {
