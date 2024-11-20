@@ -82,6 +82,7 @@ new Vue({
         not_edit_mode: true,
         edit_text:"Turn on Edit Mode",
         edit_class:"btn-primary",
+        prev_payee: undefined,
         request:{
             id: undefined,
             id_number: undefined,
@@ -103,8 +104,10 @@ new Vue({
         this.loader_spinner = true;
         axios.get(base_url + 'finance/payee_data/<?php echo $id; ?>')
         .then((data) => {
-            if(data.data.payee)
+            if(data.data.payee){
                 this.request = data.data.payee;           
+                this.prev_payee = data.data.payee;
+            }
         })
         .catch((error) => {
             console.log(error);
@@ -128,7 +131,33 @@ new Vue({
             .then(data => {                
 
                 if (data.data.success) {
-                    document.location = base_url+"finance/payee/"+data.data.id;
+                    if(prev_payee){
+                        var formdata = new FormData();  
+                        formdata.append('old_lastname',prev_payee.lastname);
+                        formdata.append('old_firstname',prev_payee.firstname);
+                        formdata.append('new_lastname',request.lastname);
+                        formdata.append('new_firstname',request.firstname);
+                        axios
+                            .post(api_url + 'finance/submit_payee', formdata, {
+                                headers: {
+                                    Authorization: `Bearer ${window.token}`
+                                }
+                            })
+                            .then(data => {                
+
+                                if (data.data.success) {                    
+                                    document.location = base_url+"finance/payee/"+data.data.id;
+                                } else {
+                                    Swal.fire(
+                                        'Failed!',
+                                        data.data.message,
+                                        'error'
+                                    )
+                                }
+                            });
+                    }
+                    else
+                        document.location = base_url+"finance/payee/"+data.data.id;
                 } else {
                     Swal.fire(
                         'Failed!',
