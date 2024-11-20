@@ -148,7 +148,14 @@ new Vue({
                             .then(data => {                
 
                                 if (data.data.success) {                    
-                                    document.location = base_url+"finance/payee/"+ret_id;
+                                    Swal.fire(
+                                        'Updated',
+                                        data.data.message,
+                                        'success'
+                                    ).then(function(){
+                                        document.location = base_url+"finance/payee/"+ret_id;
+                                    });
+                                    
                                 } else {
                                     Swal.fire(
                                         'Failed!',
