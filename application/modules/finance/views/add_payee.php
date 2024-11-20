@@ -131,12 +131,12 @@ new Vue({
             .then(data => {                
 
                 if (data.data.success) {
-                    if(prev_payee){
+                    if(this.prev_payee){
                         var formdata = new FormData();  
-                        formdata.append('old_lastname',prev_payee.lastname);
-                        formdata.append('old_firstname',prev_payee.firstname);
-                        formdata.append('new_lastname',request.lastname);
-                        formdata.append('new_firstname',request.firstname);
+                        formdata.append('old_lastname',this.prev_payee.lastname);
+                        formdata.append('old_firstname',this.prev_payee.firstname);
+                        formdata.append('new_lastname',this.request.lastname);
+                        formdata.append('new_firstname',this.request.firstname);
                         axios
                             .post(api_url + 'finance/update-payment-name', formdata, {
                                 headers: {
