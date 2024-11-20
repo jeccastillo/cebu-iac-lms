@@ -138,7 +138,7 @@ new Vue({
                         formdata.append('new_lastname',request.lastname);
                         formdata.append('new_firstname',request.firstname);
                         axios
-                            .post(api_url + 'finance/submit_payee', formdata, {
+                            .post(api_url + 'finance/update-payment-name', formdata, {
                                 headers: {
                                     Authorization: `Bearer ${window.token}`
                                 }
