@@ -2267,6 +2267,9 @@ class Pdf extends CI_Controller {
         if($userlevel != 2 && $userlevel != 6)
 		  redirect(base_url()."unity");
 
+        if(!isset($request['invoice_amount']))
+            $request['invoice_amount'] = 0;
+
         $cashier = $this->db->get_where('tb_mas_faculty',array('intID'=>$request['cashier_id']))->row();
         //$student = $this->db->get_where('tb_mas_users',array('slug'=> 'c9316f71-8991-4c93-a8d8-fd20f776aea1'))->first_row('array');
         $student = $this->db->get_where('tb_mas_users',array('slug'=>$request['slug']))->first_row('array');
