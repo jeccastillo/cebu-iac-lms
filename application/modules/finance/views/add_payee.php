@@ -132,6 +132,7 @@ new Vue({
             .then(data => {                
 
                 if (data.data.success) {
+                    var ret_id = data.data.id;
                     if(this.prev_payee){
                         var formdata = new FormData();  
                         formdata.append('old_lastname',this.prev_payee.lastname);
@@ -147,7 +148,7 @@ new Vue({
                             .then(data => {                
 
                                 if (data.data.success) {                    
-                                    document.location = base_url+"finance/payee/"+data.data.id;
+                                    document.location = base_url+"finance/payee/"+ret_id;
                                 } else {
                                     Swal.fire(
                                         'Failed!',
@@ -158,7 +159,7 @@ new Vue({
                             });
                     }
                     else
-                        document.location = base_url+"finance/payee/"+data.data.id;
+                        document.location = base_url+"finance/payee/"+ret_id;
                 } else {
                     Swal.fire(
                         'Failed!',
