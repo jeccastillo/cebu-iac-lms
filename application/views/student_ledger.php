@@ -40,8 +40,7 @@
                             <thead>
                                 <tr>
                                     <th>Date</th>    
-                                    <th>Credit/Debit</th>
-                                    <th>Type</th>                                
+                                    <th>Type</th>                                    
                                     <th>Particulars</th>
                                     <th>Sem/Term</th>                                    
                                     <th>Amount</th>
@@ -58,21 +57,18 @@
                                             <option value="debit">Debit</option>
                                         </select>
                                     </td>
-                                    <td>
+                                    <input type="hidden" v-model="request.type">
+                                    <!-- <td>
                                         <select class="form-control" required v-model="request.type">
                                             <option value="tuition">Tuition</option>
                                             <option value="other">Other</option>
                                         </select>
-                                    </td>
-                                    <td v-if="request.type == 'tuition'" class="form-group">                                    
-                                        <select required class="form-control" v-model="request.name">
-                                            <option value="full">Full Tuition</option>                                                            
-                                            <option value="down">Down Payment</option>
-                                            <option value="installment">Installment</option>                                                            
-                                        </select>
-                                    </td>
+                                    </td> -->                                    
                                     <td v-else class="form-group">                                     
                                         <select class="form-control" v-model="request.name">
+                                            <option value="full">Full Tuition</option>                                                            
+                                            <option value="down">Down Payment</option>
+                                            <option value="installment">Installment</option>
                                             <option v-for="p in particulars" :value="p.name">{{p.name}}</option>
                                         </select>                                        
                                     </td>                                    
@@ -363,7 +359,7 @@ new Vue({
             date: undefined,
             name: undefined,
             syid: 0,
-            stype: undefined,
+            stype: 'credit',
             amount: undefined, 
             type: 'tuition',   
             remarks: "",        
