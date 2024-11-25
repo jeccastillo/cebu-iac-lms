@@ -31,16 +31,16 @@
             Application Form for {{ term.term_student_type.toUpperCase() }}
             <br />
         </h4>
-        <p>Hello future Game Changers! Kindly fill out your information sheet. If you have any
+        <p>Hello future Students! Kindly fill out your information sheet. If you have any
             questions, feel free
-            to email us at <strong><u>admissions@iacademy.edu.ph</u></strong> </p>
+            to email us at <strong><u>admissions@edunique.edu.ph</u></strong> </p>
 
-        <p style="margin-top:15px;">
+        <!-- <p style="margin-top:15px;">
             Note: You are applying for iACADEMY Cebu Campus, if you want to apply to iACADEMY Makati
             click
             <a style="text-decoration: underline;"
                 href="https://sms-makati.iacademy.edu.ph/">here</a>.
-        </p>
+        </p> -->
     </div>
 
     <form @submit.prevent="
