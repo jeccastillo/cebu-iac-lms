@@ -692,11 +692,12 @@ class Finance extends CI_Controller {
             else
                 $data['or_current'] += 1;
         }
-        else{            
-            if($data['invoice_current'] >= $cashier->invoice_end)
-                $data['invoice_current'] = null;
-            else
-                $data['invoice_current'] += 1;        
+        else{         
+            if($cashier->invoice_current == $post['invoice_used'])   
+                if($data['invoice_current'] >= $cashier->invoice_end)
+                    $data['invoice_current'] = null;
+                else
+                    $data['invoice_current'] += 1;        
         }
 
         $this->db
