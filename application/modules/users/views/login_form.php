@@ -1,6 +1,6 @@
 <div class="login-box">
     <div class="login-logo">
-        <a href="#"><b>edUNIQUE</b><?php //echo $campus; ?></a>
+        <a href="#"><b>ed</b>UNIQUE<?php //echo $campus; ?></a>
     </div>
     <div class="login-box-body">
         <p class="login-box-msg">Sign in to start your session</p>
