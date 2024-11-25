@@ -35,14 +35,14 @@
             <div class="box box-primary">
                 <div class="box-header">Credit/Debit Memo</div>
                 <div class="box-body">
-                    <form @submit.prevent="submitLedgerItem" method="post">
+                    <form v-if="particulars.length > 0" @submit.prevent="submitLedgerItem" method="post">
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Date</th>                                    
+                                    <th>Date</th>    
+                                    <th>Type</th>                                
                                     <th>Particulars</th>
-                                    <th>Sem/Term</th>
-                                    <th>Type</th>
+                                    <th>Sem/Term</th>                                    
                                     <th>Amount</th>
                                     <th>Remarks</th>
                                     <th>Submit</th>
@@ -51,18 +51,30 @@
                             <tbody>
                                 <tr v-if="finance && finance.special_role != 0">                                
                                     <td><input class="form-control" type="datetime-local" required v-model="request.date"></td>                                   
-                                    <td><input type="text" class="form-control" required v-model="request.name"></td>
-                                    <td>
-                                        <select class="form-control" required v-model="request.syid">
-                                            <option v-for="opt_sy in sy" :value="opt_sy.intID">{{ opt_sy.term_student_type + " " + opt_sy.enumSem + " " + opt_sy.term_label + " " + opt_sy.strYearStart + " - " + opt_sy.strYearEnd }}</option>
-                                        </select>
-                                    </td>
                                     <td>
                                         <select class="form-control" required v-model="request.type">
                                             <option value="tuition">Tuition</option>
                                             <option value="other">Other</option>
                                         </select>
                                     </td>
+                                    <td v-if="request.type == 'Tuition'" class="form-group">                                    
+                                        <select required class="form-control" v-model="request.name">
+                                            <option value="full">Full Tuition</option>                                                            
+                                            <option value="down">Down Payment</option>
+                                            <option value="installment">Installment</option>                                                            
+                                        </select>
+                                    </td>
+                                    <td v-else class="form-group">                                     
+                                        <select class="form-control" v-model="request.name">
+                                            <option v-for="p in particulars" :value="p.name">{{p.name}}</option>
+                                        </select>                                        
+                                    </td>                                    
+                                    <td>
+                                        <select class="form-control" required v-model="request.syid">
+                                            <option v-for="opt_sy in sy" :value="opt_sy.intID">{{ opt_sy.term_student_type + " " + opt_sy.enumSem + " " + opt_sy.term_label + " " + opt_sy.strYearStart + " - " + opt_sy.strYearEnd }}</option>
+                                        </select>
+                                    </td>
+                                    
                                     <td><input type="number" required step=".01" v-model="request.amount" class="form-control"></td>
                                     <td><input type="text" v-model="request.remarks" class="form-control"></td>
                                     <td><input type="submit" class="btn btn-primary" value="Add to Ledger"></td>           
@@ -317,6 +329,7 @@ new Vue({
         tuition: [],
         apply_term: undefined,
         apply_description: 'Tuition Fee',
+        particulars: [],
         update_id: undefined,
         sy_from: undefined,
         apply_term_amount: undefined,
@@ -409,6 +422,7 @@ new Vue({
                         this.student = data.data.student;
                         this.student_type = data.data.current_type;
                         this.sy = data.data.sy;
+                        this.particulars = data.data.particulars;
                         this.request.syid = data.data.active_sem;  
                         var current_sy_id = 0;                                               
 

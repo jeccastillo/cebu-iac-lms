@@ -402,6 +402,9 @@ class Finance extends CI_Controller {
                 $temp['ledger'][] = $item;
             }
 
+            $ret['particulars'] = $this->db->get_where('tb_mas_particulars',array('type'=>'particular'))
+                                        ->result_array();
+
             $other = $this->db->select('tb_mas_student_ledger.*, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')        
             ->from('tb_mas_student_ledger')
             ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
