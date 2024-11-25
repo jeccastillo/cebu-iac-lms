@@ -64,7 +64,7 @@
                                             <option value="other">Other</option>
                                         </select>
                                     </td> -->                                    
-                                    <td v-else class="form-group">                                     
+                                    <td class="form-group">                                     
                                         <select class="form-control" v-model="request.name">
                                             <option value="full">Full Tuition</option>                                                            
                                             <option value="down">Down Payment</option>
