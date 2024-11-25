@@ -539,6 +539,10 @@ class Finance extends CI_Controller {
     public function submit_ledger_item(){
         $post =  $this->input->post();
         $post['added_by'] = $this->session->userdata('intID');
+        $type = $post['stype'];
+        unset($post['stype']);
+        $post['amount'] = ($type == "credit") ? ($post['amount'] * -1) : $post['amount'];
+        
         $this->db->insert('tb_mas_student_ledger',$post);
 
         $data['success'] =  true;
