@@ -112,9 +112,9 @@
     <a href="<?php echo base_url().'unity/faculty_dashboard'; ?>"
       class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini">iAC</span>
+      <span class="logo-mini">UNQ</span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>iACADEMY</b>SMS</span>
+      <span class="logo-lg"><b>ed</b>UNIQUE</span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
