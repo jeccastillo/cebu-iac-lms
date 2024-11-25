@@ -35,7 +35,7 @@
             <div class="box box-primary">
                 <div class="box-header">Credit/Debit Memo</div>
                 <div class="box-body">
-                    <form v-if="particulars.length > 0" @submit.prevent="submitLedgerItem" method="post">
+                    <form @submit.prevent="submitLedgerItem" method="post">
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
