@@ -19,7 +19,7 @@
 <div class=" block mx-auto mt-[60px]"
     data-aos="fade-up">
     <h1 class="text-4xl font-[900] text-center color-primary">
-        iACADEMY
+        edUNIQUE
     </h1>
 </div>
 
