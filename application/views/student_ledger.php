@@ -35,7 +35,7 @@
             <div class="box box-primary">
                 <div class="box-header">Credit/Debit Memo</div>
                 <div class="box-body">
-                    <form @submit.prevent="submitLedgerItem" method="post">
+                    <form v-if="particulars" @submit.prevent="submitLedgerItem" method="post">
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
@@ -329,7 +329,7 @@ new Vue({
         tuition: [],
         apply_term: undefined,
         apply_description: 'Tuition Fee',
-        particulars: [],
+        particulars: undefined,
         update_id: undefined,
         sy_from: undefined,
         apply_term_amount: undefined,
