@@ -1574,7 +1574,7 @@ new Vue({
                                     text: "No Current OR or Invoice is set please contact cashier administrator",
                                     icon: "success"
                                 }).then(function() {
-                                    document.location = base_url + 'faculty/dashboard';
+                                    document.location = base_url + 'unity/faculty_dashboard';
                                 });
                             }
                         }
