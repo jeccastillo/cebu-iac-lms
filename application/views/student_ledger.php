@@ -57,7 +57,7 @@
                                             <option value="other">Other</option>
                                         </select>
                                     </td>
-                                    <td v-if="request.type == 'Tuition'" class="form-group">                                    
+                                    <td v-if="request.type == 'tuition'" class="form-group">                                    
                                         <select required class="form-control" v-model="request.name">
                                             <option value="full">Full Tuition</option>                                                            
                                             <option value="down">Down Payment</option>
