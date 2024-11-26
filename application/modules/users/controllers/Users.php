@@ -146,7 +146,7 @@ class Users extends CI_Controller {
         $get = $this->input->get();
         $token = $get['token'];        
 
-        $user = $this->db->get_where('tb_mas_faculty',array('login_hash' => $token))->first_row();
+        $user = $this->db->get_where('tb_mas_faculty',array('login_hash' => $token))->first_row('array');
         if(isset($user))
             $authentication = $this->user_model->authenticate_portal($user);
         else
