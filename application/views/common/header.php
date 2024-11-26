@@ -230,7 +230,7 @@
             <span>Dashboard</span></a>
         </li>
         <li><a
-            href="https://employeeportal.iacademy.edu.ph"><i
+            href="https://employeeportal.iacademy.edu.ph" target="_blank"><i
               class="fa fa-users text-green"></i>
             <span>Employee Portal</span></a>
         </li>
