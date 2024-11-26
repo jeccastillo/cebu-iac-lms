@@ -153,7 +153,7 @@
                 <span><?php echo $campus; ?></span>
               </a>
            </li>
-           <li><a class="btn btn-info"
+           <li><a
             href="https://employeeportal.iacademy.edu.ph">
             <span>Employee Portal</span></a>
           </li>
