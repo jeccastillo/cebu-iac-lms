@@ -147,12 +147,14 @@ class Users extends CI_Controller {
         $token = $get['token'];        
 
         $user = $this->db->get_where('tb_mas_faculty',array('login_hash' => $token))->first_row('array');
-        if(isset($user))
+        if(isset($user)){
             $authentication = $this->user_model->authenticate_portal($user);
+            redirect(base_url()."unity/faculty_dashboard");
+        }
         else
             echo "Invalid Authentication User not Found";
 
-        redirect(base_url()."unity/faculty_dashboard");
+        
 
     }
 
