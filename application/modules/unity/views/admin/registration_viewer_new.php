@@ -812,7 +812,7 @@
                                             <td>{{ payment.void_reason }}</td>
                                             <td>
                                                 <button
-                                                    v-if="(!payment.or_number && payment.status == 'Paid') &&  && cashier.or_current"
+                                                    v-if="(!payment.or_number && payment.status == 'Paid') && cashier && cashier.or_current"
                                                     data-toggle="modal"
                                                     @click="prepUpdate(payment.id,payment.description,payment.subtotal_order)"
                                                     data-target="#myModal"
