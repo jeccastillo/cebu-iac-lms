@@ -63,7 +63,7 @@
 			$data = array('intIsOnline'=>date("H:i:s"));
 			$data['login_attempts'] = 0;
 
-			$auth_data = $this->db->get_where($table, array('intID'=>$user['intID']), 1)->first_row();
+			$auth_data = $this->db->get_where('tb_mas_faculty', array('intID'=>$user['intID']), 1)->first_row();
 
 			$this->db
 					->where('intID',$user['intID'])
@@ -72,10 +72,8 @@
 			foreach($auth_data as $key => $value):
 				$this->session->set_userdata($key, $value);			
 			endforeach;
-			if($table == "tb_mas_users")					
-				$this->session->set_userdata('student_logged', true);	
-			else
-				$this->session->set_userdata('faculty_logged', true);    
+			
+			$this->session->set_userdata('faculty_logged', true);    
 			
 			return 1;	
 		}

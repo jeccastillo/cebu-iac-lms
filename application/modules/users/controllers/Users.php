@@ -152,6 +152,8 @@ class Users extends CI_Controller {
         else
             echo "Invalid Authentication User not Found";
 
+        redirect(base_url()."unity/faculty_dashboard");
+
     }
 
     public function logout() {
