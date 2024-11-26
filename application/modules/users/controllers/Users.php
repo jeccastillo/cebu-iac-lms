@@ -117,7 +117,7 @@ class Users extends CI_Controller {
             $token = $post['token'];
             $email = $post['email'];
 
-            $user = $this->db->get_where('tb_mas_faculty',array('strEmail' => $email))->first_row();
+            $user = $this->db->get_where('tb_mas_faculty',array('strEmail' => $email))->first_row('array');
 
             if(isset($user)){
                 
