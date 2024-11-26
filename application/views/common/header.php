@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
     name="viewport">
-  <title>iACADEMY-SMS</title>
+  <title>edUNIQUE SMS</title>
   <!-----CSS----------------------------------------------->
   <link rel="stylesheet"
     href="<?php echo base_url(); ?>assets/lib/adminlte/css/jQueryUI/jquery-ui-1.10.3.custom.min.css">
@@ -114,7 +114,7 @@
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini">iAC</span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>iACADEMY</b>SMS</span>
+      <span class="logo-lg"><b>edUNIQUE</b>SMS</span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
