@@ -112,7 +112,7 @@
     <a href="<?php echo base_url().'unity/faculty_dashboard'; ?>"
       class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini">iAC</span>
+      <span class="logo-mini">SMS</span>
       <!-- logo for regular state and mobile devices -->
       <span class="logo-lg"><b>edUNIQUE</b>SMS</span>
     </a>
