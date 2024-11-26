@@ -228,7 +228,11 @@
             href="<?php echo base_url() ?>unity/faculty_dashboard"><i
               class="fa fa-home text-green"></i>
             <span>Dashboard</span></a>
-
+        </li>
+        <li><a
+            href="htttps://employeeportal.iacademy.edu.ph"><i
+              class="fa fa-users text-green"></i>
+            <span>Employee Portal</span></a>
         </li>
         <li class="<?php echo (isset($page) && $page=="my_profile")?'active':''; ?>"><a
             href="<?php echo base_url()."faculty/my_profile" ?>"><i
