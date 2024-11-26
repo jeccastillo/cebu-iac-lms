@@ -627,7 +627,7 @@
                                                     Update OR
                                                 </button> -->
                                                 <button
-                                                    v-if="application_payment.status == 'Paid' && cashier && application_payment.remarks != 'Voided'"
+                                                    v-if="application_payment.status == 'Paid' && cashier && application_payment.remarks != 'Voided' && cashier.invoice_current"
                                                     data-toggle="modal"
                                                     @click="invoice_update.id = application_payment.id;"
                                                     data-target="#invoiceUpdate"
@@ -679,7 +679,7 @@
                                             <td>{{ payment.void_reason }}</td>
                                             <td>
                                                 <button
-                                                    v-if="!payment.or_number && payment.status == 'Paid' && cashier"
+                                                    v-if="!payment.or_number && payment.status == 'Paid' && cashier && cashier.or_current"
                                                     data-toggle="modal"
                                                     @click="prepUpdate(payment.id,payment.description,payment.subtotal_order)"
                                                     data-target="#myModal"
@@ -687,7 +687,7 @@
                                                     Update OR
                                                 </button>
                                                 <button
-                                                    v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided'"
+                                                    v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided' && cashier.invoice_current"
                                                     data-toggle="modal"
                                                     @click="invoice_update.id = payment.id;"
                                                     data-target="#invoiceUpdate"
@@ -760,7 +760,7 @@
                                                     Update OR
                                                 </button> -->
                                                 <button
-                                                    v-if="reservation_payment.status == 'Paid' && cashier && reservation_payment.remarks != 'Voided'"
+                                                    v-if="reservation_payment.status == 'Paid' && cashier && reservation_payment.remarks != 'Voided' && cashier.invoice_current"
                                                     data-toggle="modal"
                                                     @click="invoice_update.id = reservation_payment.id;"
                                                     data-target="#invoiceUpdate"
@@ -812,7 +812,7 @@
                                             <td>{{ payment.void_reason }}</td>
                                             <td>
                                                 <button
-                                                    v-if="(!payment.or_number && payment.status == 'Paid') && cashier"
+                                                    v-if="(!payment.or_number && payment.status == 'Paid') &&  && cashier.or_current"
                                                     data-toggle="modal"
                                                     @click="prepUpdate(payment.id,payment.description,payment.subtotal_order)"
                                                     data-target="#myModal"
@@ -820,7 +820,7 @@
                                                     Update OR
                                                 </button>
                                                 <button
-                                                    v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided'"
+                                                    v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided' && cashier.invoice_current"
                                                     data-toggle="modal"
                                                     @click="invoice_update.id = payment.id;"
                                                     data-target="#invoiceUpdate"
