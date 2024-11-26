@@ -111,6 +111,48 @@ class Users extends CI_Controller {
         echo json_encode($data);
     }
 
+    public function set_token(){
+        if($ip == "172.16.110.48"){
+            $post = $this->input->post();
+            $token = $post['token'];
+            $email = $post['email'];
+
+            $user = $this->db->get_where('tb_mas_faculty',array('strEmail' => $email))->first_row();
+
+            if(isset($user)){
+                
+                $data = [
+                    'login_hash' => $token
+                ];
+
+                $this->db
+                        ->where('intID',$user['intID'])
+                        ->update('tb_mas_faculty',$data);
+
+                $ret['success'] = true;
+            }
+            else
+                $ret['success'] = false;
+        }
+        else
+            $ret['success'] = false;
+
+        echo json_encode($ret);
+            
+    }
+    
+    public function auth_portal(){
+        $get = $this->input->get();
+        $token = $get['token'];        
+
+        $user = $this->db->get_where('tb_mas_faculty',array('login_hash' => $token))->first_row();
+        if(isset($user))
+            $authentication = $this->user_model->authenticate_portal($user);
+        else
+            echo "Invalid Authentication User not Found";
+
+    }
+
     public function logout() {
         
         $data = array('intIsOnline'=>'00:00:00');

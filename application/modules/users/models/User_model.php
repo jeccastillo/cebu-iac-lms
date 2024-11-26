@@ -57,8 +57,25 @@
 				}
 			}
 			
+		}
+
+		public function authenticate_portal($user){
+			$data = array('intIsOnline'=>date("H:i:s"));
+			$data['login_attempts'] = 0;
+
+			$this->db
+					->where('intID',$user['intID'])
+					->update('tb_mas_faculty',$data);
 			
-		
+			foreach($auth_data as $key => $value):
+				$this->session->set_userdata($key, $value);			
+			endforeach;
+			if($table == "tb_mas_users")					
+				$this->session->set_userdata('student_logged', true);	
+			else
+				$this->session->set_userdata('faculty_logged', true);    
+			
+			return 1;	
 		}
         
         public function authenticate_student($username,$password,$table)
