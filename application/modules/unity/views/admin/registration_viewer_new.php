@@ -274,7 +274,7 @@
                     <div class="tab-content">
                         <div :class="cashier?'active tab-pane':'tab-pane'"
                             id="tab_1">
-                            <div
+                            <div v-if="cashier.invoice_current && cashier.or_current"
                                 class="box box-solid">
                                 <div class="box-header">
                                     <h4 class="box-title">{{windowPayment}}</h4>
@@ -541,6 +541,9 @@
 
                                     </form>
                                 </div>
+                            </div>
+                            <div v-else>
+                                <h3 class="text-center">No Current OR or Invoice is set please contact cashier administrator</h3>
                             </div>
                         </div>
                         <div :class="!cashier?'active tab-pane':'tab-pane'"
@@ -1556,27 +1559,18 @@ new Vue({
                         this.cashier = data.data.cashier;
 
                         if (this.cashier) {
-                            if(this.cashier.or_current && this.cashier.invoice_current){
-                                this.cashier_start = this.cashier.or_start;
-                                this.cashier_end = this.cashier.or_current ? this.cashier.or_current : this.cashier.or_end;
-                                // this.request.or_number = this.cashier.or_current;
-                                this.or_update.or_number = this.cashier.or_current;
-                                this.request.cashier_id = this.cashier.user_id;
-                                this.or_update.cashier_id = this.cashier.user_id;
-                                this.invoice_update.cashier_id = this.cashier.user_id;
-                                this.or_update.student_campus = this.request.student_campus;
-                                this.soa.logo = (this.or_update.student_campus == "Cebu") ? "https://i.ibb.co/9hgbYNB/seal.png" : "https://i.ibb.co/kcYVsS7/i-ACADEMY-Seal-Makati.png";
-                                this.soa.address = (this.or_update.student_campus == "Cebu") ? "5F Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City, Philippines" : "iACADEMY Nexus Campus, 7434 Yakal, Makati, 1203 Metro Manila, Philippines";
-                            }
-                            else{
-                                Swal.fire({
-                                    title: "Warning",
-                                    text: "No Current OR or Invoice is set please contact cashier administrator",
-                                    icon: "success"
-                                }).then(function() {
-                                    document.location = base_url + 'unity/faculty_dashboard';
-                                });
-                            }
+                        
+                            this.cashier_start = this.cashier.or_start;
+                            this.cashier_end = this.cashier.or_current ? this.cashier.or_current : this.cashier.or_end;
+                            // this.request.or_number = this.cashier.or_current;
+                            this.or_update.or_number = this.cashier.or_current;
+                            this.request.cashier_id = this.cashier.user_id;
+                            this.or_update.cashier_id = this.cashier.user_id;
+                            this.invoice_update.cashier_id = this.cashier.user_id;
+                            this.or_update.student_campus = this.request.student_campus;
+                            this.soa.logo = (this.or_update.student_campus == "Cebu") ? "https://i.ibb.co/9hgbYNB/seal.png" : "https://i.ibb.co/kcYVsS7/i-ACADEMY-Seal-Makati.png";
+                            this.soa.address = (this.or_update.student_campus == "Cebu") ? "5F Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City, Philippines" : "iACADEMY Nexus Campus, 7434 Yakal, Makati, 1203 Metro Manila, Philippines";
+                            
                         }
 
 
