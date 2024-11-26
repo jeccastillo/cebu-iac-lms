@@ -63,6 +63,8 @@
 			$data = array('intIsOnline'=>date("H:i:s"));
 			$data['login_attempts'] = 0;
 
+			$auth_data = $this->db->get_where($table, array('intID'=>$user['intID']), 1)->first_row();
+
 			$this->db
 					->where('intID',$user['intID'])
 					->update('tb_mas_faculty',$data);
