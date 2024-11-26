@@ -153,6 +153,10 @@
                 <span><?php echo $campus; ?></span>
               </a>
            </li>
+           <li><a class="btn btn-info"
+            href="https://employeeportal.iacademy.edu.ph">
+            <span>Employee Portal</span></a>
+          </li>
           <li class="dropdown user user-menu">            
             <a href="#"
               class="dropdown-toggle"
@@ -228,12 +232,7 @@
             href="<?php echo base_url() ?>unity/faculty_dashboard"><i
               class="fa fa-home text-green"></i>
             <span>Dashboard</span></a>
-        </li>
-        <li><a
-            href="https://employeeportal.iacademy.edu.ph"><i
-              class="fa fa-users text-green"></i>
-            <span>Employee Portal</span></a>
-        </li>
+        </li>        
         <li class="<?php echo (isset($page) && $page=="my_profile")?'active':''; ?>"><a
             href="<?php echo base_url()."faculty/my_profile" ?>"><i
               class="fa fa-user text-blue"></i>
