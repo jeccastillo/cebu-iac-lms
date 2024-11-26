@@ -152,7 +152,7 @@ class Users extends CI_Controller {
             redirect(base_url()."unity/faculty_dashboard");
         }
         else
-            echo "Invalid Authentication User not Found";
+            echo "<h3>You do not have access to the SMS. Please contact the MIS team for details.</h3>";
 
         
 
