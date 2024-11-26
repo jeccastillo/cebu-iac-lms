@@ -112,6 +112,7 @@ class Users extends CI_Controller {
     }
 
     public function set_token(){
+        $ip = $this->input->ip_address();
         if($ip == "172.16.110.48"){
             $post = $this->input->post();
             $token = $post['token'];
