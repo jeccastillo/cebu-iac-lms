@@ -150,7 +150,7 @@
           <!-- User Account: style can be found in dropdown.less -->
            <li class="dropdown user user-menu">
             <a href="#">              
-                <span><?php echo $campus; ?></span>
+                <span>Demo</span>
               </a>
            </li>
            <li><a
