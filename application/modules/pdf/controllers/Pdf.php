@@ -1854,6 +1854,8 @@ class Pdf extends CI_Controller {
         }
 
         $this->data['snum'] = 1;
+        $this->data['header_title'] = $this->data['campus'] == "Makati" ? "iACADEMY" : "iACADEMY CEBU";
+        $this->data['header_address'] = $this->data['campus'] == "Makati" ? "iACADEMY Nexus, 7434 Yakal St., Makati City" : "Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City";
         $html = $this->load->view('enlisted_students',$this->data,true);
 
 

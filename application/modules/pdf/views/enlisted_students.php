@@ -6,8 +6,8 @@
             </tr>        
             <tr>            
                 <td colspan = "3" width="100%" style="text-align: center;line-height:1">             
-                    <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">iACADEMY CEBU</font><br />
-                    <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br />             
+                    <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;"><?php echo $header_title; ?></font><br />
+                    <font style="font-family:Calibri Light; font-size: 10;"><?php echo $header_address; ?></font><br />             
                 </td>           
             </tr>
 <table border="0">
