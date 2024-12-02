@@ -1889,11 +1889,11 @@ class Pdf extends CI_Controller {
 
             if($ret > $per_page){                
                 $ret = $ret - $per_page;                            
-                $this->data['nothing_follows'] = true;
+                $this->data['nothing_follows'] = 0;
             }
             else{
                 $ret = 0;
-                $this->data['nothing_follows'] = false;
+                $this->data['nothing_follows'] = 1;
             }
             
         }
