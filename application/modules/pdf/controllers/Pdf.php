@@ -1883,9 +1883,6 @@ class Pdf extends CI_Controller {
                 $st[] = $student;
             }
             $this->data['students'] = $st;
-            
-            $html = $this->load->view('enlisted_students',$this->data,true);
-            $pdf->writeHTML($html, true, false, true, false, '');
 
             if($ret > $per_page){                
                 $ret = $ret - $per_page;                            
@@ -1895,6 +1892,11 @@ class Pdf extends CI_Controller {
                 $ret = 0;
                 $this->data['nothing_follows'] = true;
             }
+            
+            $html = $this->load->view('enlisted_students',$this->data,true);
+            $pdf->writeHTML($html, true, false, true, false, '');
+
+            
             
         }
             
