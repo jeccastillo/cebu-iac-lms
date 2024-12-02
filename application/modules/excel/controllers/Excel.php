@@ -5141,6 +5141,7 @@ class Excel extends CI_Controller {
 
         $studentsEnrolled = false;
 
+        $last_index = 37;
         foreach($users as $index => $user)
         {
             $applied_from = $applied_to = $other = array();
@@ -5363,7 +5364,6 @@ class Excel extends CI_Controller {
                         $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(36))->setWidth(15);
                     }
     
-                    $last_index = 37;
                     if(count($payments) > 0){
                         $last_index = 34 + (count($payments) * 3);
                     }
