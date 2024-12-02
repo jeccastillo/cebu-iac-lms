@@ -1854,6 +1854,8 @@ class Pdf extends CI_Controller {
         }
 
         $this->data['snum'] = 1;
+        $this->data['header_title'] = $this->data['campus'] == "Makati" ? "iACADEMY" : "iACADEMY CEBU";
+        $this->data['header_address'] = $this->data['campus'] == "Makati" ? "iACADEMY Nexus, 7434 Yakal St., Makati City" : "Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City";
         $html = $this->load->view('enlisted_students',$this->data,true);
 
 
@@ -1881,9 +1883,6 @@ class Pdf extends CI_Controller {
                 $st[] = $student;
             }
             $this->data['students'] = $st;
-            
-            $html = $this->load->view('enlisted_students',$this->data,true);
-            $pdf->writeHTML($html, true, false, true, false, '');
 
             if($ret > $per_page){                
                 $ret = $ret - $per_page;                            
@@ -1893,6 +1892,11 @@ class Pdf extends CI_Controller {
                 $ret = 0;
                 $this->data['nothing_follows'] = true;
             }
+            
+            $html = $this->load->view('enlisted_students',$this->data,true);
+            $pdf->writeHTML($html, true, false, true, false, '');
+
+            
             
         }
             
