@@ -66,10 +66,15 @@
                                     </td> -->                                    
                                     <td class="form-group">                                     
                                         <select class="form-control" v-model="request.name">
-                                            <option value="full">Full Tuition</option>                                                            
+                                            <!-- <option value="full">Full Tuition</option>                                                            
                                             <option value="down">Down Payment</option>
-                                            <option value="installment">Installment</option>
-                                            <option v-for="p in particulars" :value="p.name">{{p.name}}</option>
+                                            <option value="installment">Installment</option> -->
+                                            <option value="Late Enrollment Fee">Late Enrollment Fee</option>
+                                            <option value="Excess Payment Refund">Excess Payment Refund</option>
+                                            <option value="Excess Payment Applied to College">Excess Payment Applied to College</option>
+                                            <option value="Change of Payment Type">Change of Payment Type</option>
+                                            <option value="Withdrawal Charges">Withdrawal Charges</option>
+                                            <option value="To Close Balance">To Close Balance</option>
                                         </select>                                        
                                     </td>                                    
                                     <td>
