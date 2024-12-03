@@ -78,23 +78,26 @@ if (!function_exists('getUnitPrice')) {
     }
 }
 if (!function_exists('getExtraFee')) {
-    function getExtraFee($entry, $type, $pretext){        
-        switch($type){
-            case 'regular':
-                $ret = $entry[$pretext.'Regular'];
-                break;
-            case 'online':
-                $ret = $entry[$pretext.'Online'];
-                break;
-            case 'hyflex':
-                $ret = $entry[$pretext.'Hyflex'];
-                break;
-            case 'hybrid':
-                $ret = $entry[$pretext.'Hybrid'];
-                break;
-            default:
-                $ret = $entry[$pretext.'Regular'];
-        }
+    function getExtraFee($entry, $type, $pretext){     
+        if(isset($entry))   
+            switch($type){
+                case 'regular':
+                    $ret = $entry[$pretext.'Regular'];
+                    break;
+                case 'online':
+                    $ret = $entry[$pretext.'Online'];
+                    break;
+                case 'hyflex':
+                    $ret = $entry[$pretext.'Hyflex'];
+                    break;
+                case 'hybrid':
+                    $ret = $entry[$pretext.'Hybrid'];
+                    break;
+                default:
+                    $ret = $entry[$pretext.'Regular'];
+            }
+        else
+            $ret = 0;
         return $ret;
     }
 }
