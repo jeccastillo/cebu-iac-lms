@@ -34,7 +34,7 @@ $html = '<table border="0" cellpadding="0" style="color:#333; font-size:10;">
             </tr>         
             <tr>            
                 <td colspan = "3" width="100%" style="text-align: center; vertical-align: middle; line-height:100%">             
-                    <font style="font-family:Calibri Light; font-size: 16;font-weight: bold;">iACADEMY Inc. </font><br /><br />
+                    <font style="font-family:Calibri Light; font-size: 16;font-weight: bold;">iACADEMY, Inc. </font><br /><br />
                     <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br />             
                 </td>           
             </tr>               
