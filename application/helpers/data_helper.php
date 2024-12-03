@@ -93,7 +93,7 @@ if (!function_exists('getExtraFee')) {
                 $ret = $entry[$pretext.'Hybrid'];
                 break;
             default:
-                $ret = $entry[$pretext.'Regular'];
+                $ret = 0;
         }
         return $ret;
     }
