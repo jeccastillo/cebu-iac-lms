@@ -11,7 +11,7 @@
     </tr><br>
     <tr>
         <td width="100%" align="center" style="text-align:center;vertical-align: middle; font-size:14px; font-weight:bold">
-            INFORMATION & COMMUNICATIONS TECHNOLOGY ACADEMY
+            iACADEMY, Inc.
         </td>
     </tr>
     <tr>

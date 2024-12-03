@@ -915,7 +915,7 @@
                             <h3>Statement of Account</h3>
                             <!-- <img :src="soa.logo" height="300px" width="300px"/> -->
                             <div class="text-center">
-                                <h3>Information & Communications Technology Academy</h3>
+                                <h3>iACADEMY, Inc.</h3>
                                 <h4>{{ soa.address }}</h4>
                                 <h4>AY {{ current_term.strYearStart }} -
                                     {{ current_term.strYearEnd }} {{ current_term.enumSem }}

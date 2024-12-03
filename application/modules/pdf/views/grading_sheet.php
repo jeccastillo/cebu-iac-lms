@@ -9,7 +9,7 @@
             </tr>            
 <table border="0">    
     <tr style="line-height:12px;">
-        <td style="font-size:9px;text-align:center;"><b>Information and Communications Technology Academy, Inc.</b></td>
+        <td style="font-size:9px;text-align:center;"><b>iACADEMY, Inc.</b></td>
     </tr>
     <tr style="line-height:12px;">
         <td style="font-size:9px;text-align:center;"><b>(iACADEMY <?php echo $campus; ?>)</b></td>

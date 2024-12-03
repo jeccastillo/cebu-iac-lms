@@ -3,7 +3,7 @@
         <td width="64" align="right"><img src= "<?php echo $img_dir .'tagaytayseal.png'; ?>"  width="50" height="50"/></td>
         <td width="400" style="text-align: center; line-height:100%">
          
-         <font style="font-family:Calibri Light; font-size: 10;font-weight: bold;">Information & Communications Technology Academy</font><br />
+         <font style="font-family:Calibri Light; font-size: 10;font-weight: bold;">iACADEMY Inc.</font><br />
          <font style="font-family:Calibri Light; font-size: 10;">Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City</font><br />
          <font style="font-family:Calibri Light; font-size: 10;">Telephone No: (046) 483-0470 / (046) 483-0672</font><br />
         </td>

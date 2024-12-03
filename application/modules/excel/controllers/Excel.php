@@ -5884,7 +5884,7 @@ class Excel extends CI_Controller {
         }
 
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A2', 'INFORMATION AND COMMUNICATIONS TECHNOLOGY ACADEMY INC., (iACADEMY ' . ucfirst(strtolower($campus))  . ' )')
+                    ->setCellValue('A2', 'iACADEMY, Inc., (iACADEMY ' . ucfirst(strtolower($campus))  . ' )')
                     ->setCellValue('A3', $campus == 'Cebu' ? '5th Floor Filinvest Cyberzone Tower 2 Salinas Drive Cor. W. Geonzon St., Cebu IT Park, Apas, Cebu City' : '7434 Yakal Street Brgy. San Antonio, Makati City')
                     ->setCellValue('B5', 'CHED FORM XIX FOR')
                     ->setCellValue('C5', $sy->enumSem . ' ' . $this->data["term_type"])
