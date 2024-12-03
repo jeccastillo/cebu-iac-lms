@@ -392,6 +392,7 @@ new Vue({
                                             var formdata= new FormData();
                                             formdata.append('intID',this.cashier.intID);
                                             formdata.append('invoice_current',this.cashier.invoice_current);
+                                            formdata.append('invoice_used',this.request.invoice_number);
                                             formdata.append('or_current',this.cashier.or_current);
                                             axios.post(base_url + 'finance/next_or_other/'+type, formdata, {
                                             headers: {
