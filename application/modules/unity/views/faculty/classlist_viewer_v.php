@@ -65,6 +65,7 @@
                                         <option v-for="grading_item in grading_items_midterm" :selected="student.floatMidtermGrade == grading_item.value"  :value="grading_item.value+'-'+grading_item.remarks">
                                             {{ grading_item.value }}
                                         </option>                                        
+                                        <option v-if="is_super_admin || is_registrar" value = "OW">OW</option>
                                     </select>                                    
                                 </td>                             
                                 <td  v-else></td>
@@ -79,7 +80,8 @@
                                         <option :selected="(!student.floatFinalGrade)? true : false" value="NGS">NGS</option>                                                                              
                                         <option v-for="grading_item in grading_items" :selected="student.floatFinalGrade == grading_item.value"  :value="grading_item.value+'-'+grading_item.remarks">
                                             {{ grading_item.value }}
-                                        </option>                                        
+                                        </option>            
+                                        <option v-if="is_super_admin || is_registrar" value = "OW">OW</option>                            
                                     </select>                                    
                                 </td>   
                                 <td v-if="subject.intMajor == 1">{{ (student.floatFinalsGrade)?student.floatFinalsGrade:"NGS" }}</td>                          
