@@ -1531,6 +1531,15 @@ new Vue({
                             this.tuition_years = data.data.tuition_years;
                             this.tuition_year = this.registration.tuition_year;
                         }
+                        else{
+                            Swal.fire({
+                                title: "Warning",
+                                text: "This student has no enlistment data for this term",
+                                icon: "warning"
+                            }).then(function() {
+                                document.location = base_url + "finance/view_all_students"
+                            });
+                        }
                         this.user = data.data.user;
                         this.reg_status = data.data.reg_status;
                         this.student = data.data.student;
