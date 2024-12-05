@@ -459,7 +459,7 @@ new Vue({
             }            
 
             for(i in balance){                       
-                var paid = balance[i].balance;
+                var paid = parseFloat(balance[i].balance);
                 this.term_balance += paid;
                 this.ledger_term.push({                    
                     'type':'balance',
