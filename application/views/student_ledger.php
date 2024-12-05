@@ -334,6 +334,7 @@ new Vue({
         apply_term_balance: 0,
         apply_term_type: 'tuition',
         balance_change: 0,
+        balance_data: [],
         tuition: [],
         apply_term: undefined,
         apply_description: 'Tuition Fee',
@@ -428,7 +429,7 @@ new Vue({
                     .then((data) => {                                                  
                         this.finance = data.data.user;
                         this.tuition = data.data.tuition;
-                        this.student = data.data.student;
+                        this.student = data.data.student;                        
                         this.student_type = data.data.current_type;
                         this.sy = data.data.sy;
                         this.particulars = data.data.particulars;
@@ -493,7 +494,8 @@ new Vue({
                 'balance': this.term_balance.toFixed(2),
             });
 
-            var payments = tuition.payments_tuition;                
+            var payments = tuition.payments_tuition;    
+            var balance = tuition.balance;            
             
             for(i in payments){                       
                 var paid = payments[i].subtotal_order * -1;
@@ -518,7 +520,29 @@ new Vue({
                     'is_disabled':0,
                     'balance': this.term_balance.toFixed(2),
                 });                
-            }            
+            } 
+            
+            for(i in balance){                       
+                var paid = balance[i].balance;
+                this.term_balance += paid;
+                this.ledger_term.push({                    
+                    'type':'balance',
+                    'strYearStart':tuition.term.strYearStart,
+                    'strYearEnd':tuition.term.strYearEnd,
+                    'enumSem':tuition.term.enumSem,
+                    'term_label':tuition.term.term_label,
+                    'syid':tuition.term.intID,
+                    'scholarship_name':'',                    
+                    'name': "Uploaded Balance",   
+                    'or_number':'',
+                    'invoice_number':'',
+                    'remarks':'',                                     
+                    'amount': parseFloat(balance[i].balance).toFixed(2),
+                    'added_by': 0,                     
+                    'is_disabled':0,
+                    'balance': this.term_balance.toFixed(2),
+                });                
+            } 
 
             for(i in tuition.scholarship){
                 var scholarship_amount = 0;
