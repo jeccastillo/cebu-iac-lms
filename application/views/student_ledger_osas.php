@@ -458,6 +458,28 @@ new Vue({
                 });                
             }            
 
+            for(i in balance){                       
+                var paid = balance[i].balance;
+                this.term_balance += paid;
+                this.ledger_term.push({                    
+                    'type':'balance',
+                    'strYearStart':tuition.term.strYearStart,
+                    'strYearEnd':tuition.term.strYearEnd,
+                    'enumSem':tuition.term.enumSem,
+                    'term_label':tuition.term.term_label,
+                    'syid':tuition.term.intID,
+                    'scholarship_name':'',                    
+                    'name': "Uploaded Balance",   
+                    'or_number':'',
+                    'invoice_number':'',
+                    'remarks':'',                                     
+                    'amount': parseFloat(balance[i].balance).toFixed(2),
+                    'added_by': 0,                     
+                    'is_disabled':0,
+                    'balance': this.term_balance.toFixed(2),
+                });                
+            }
+
             for(i in tuition.scholarship){
                 var scholarship_amount = 0;
                 var sa = 0;
