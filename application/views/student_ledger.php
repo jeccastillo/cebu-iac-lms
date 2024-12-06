@@ -262,7 +262,8 @@
                                 <div class="form-group">     
                                     <label>Term to Apply</label>                               
                                     <select class="form-control" required v-model="apply_term">                                
-                                        <option v-for="sy_select in sy" :value="sy_select.intID">{{ sy_select.enumSem + " Term " + sy_select.strYearStart + " - " + sy_select.strYearEnd }}</option>
+                                        <option v-for="sy_select in sy" :value="sy_select.intID">{{ sy_select.term_student_type}} {{ sy_select.enumSem }}
+                                        {{ sy_select.term_label }} {{ sy_select.strYearStart }} - {{ sy_select.strYearEnd }}</option>
                                     </select>
                                 </div>
                             </div>
