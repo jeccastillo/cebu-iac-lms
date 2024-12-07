@@ -1689,7 +1689,7 @@ new Vue({
                                                 .replace(/\d(?=(\d{3})+\.)/g,
                                                     '$&,');
                                             //installment amounts 
-                                            if(if(this.registration))                               
+                                            if(this.registration)                               
                                             if (this.registration.downpayment ==
                                                 1) {
                                                 var temp = (this.tuition_data
