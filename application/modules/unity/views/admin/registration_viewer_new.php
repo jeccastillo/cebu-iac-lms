@@ -186,790 +186,792 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-12">
-                <div class=""
-                    v-if="show_alert">
-                    <div class="alert alert-danger col-sm-6"
+            <div v-if="registration">
+                <div class="col-sm-12">
+                    <div class=""
+                        v-if="show_alert">
+                        <div class="alert alert-danger col-sm-6"
+                            role="alert">
+                            <h4 class="alert-heading">Alert!</h4>
+                            <p>This Student still has remaining balances:</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <table class="table table-bordered thead-dark table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Term</th>
+                                        <th>Payment Type</th>
+                                        <th>Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="item in term_balances"
+                                        v-if="item.balance > 0">
+                                        <td>{{ item.term }}</td>
+                                        <td>{{ item.payment_type }}</td>
+                                        <td><strong>P{{ item.formatted_balance }}</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div v-if="applicant_data.reserve_enroll"
+                        class="alert alert-success"
                         role="alert">
-                        <h4 class="alert-heading">Alert!</h4>
-                        <p>This Student still has remaining balances:</p>
-                    </div>
-                    <div class="col-sm-6">
-                        <table class="table table-bordered thead-dark table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Term</th>
-                                    <th>Payment Type</th>
-                                    <th>Balance</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="item in term_balances"
-                                    v-if="item.balance > 0">
-                                    <td>{{ item.term }}</td>
-                                    <td>{{ item.payment_type }}</td>
-                                    <td><strong>P{{ item.formatted_balance }}</strong></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <h4 class="alert-heading">Reserve Enroll</h4>
+                        <p>This student has been tagged for reserve enrollment promo please update
+                            tuition year if it hasn't been updated</p>
                     </div>
                 </div>
-            </div>
-            <div class="col-sm-12">
-                <div v-if="applicant_data.reserve_enroll"
-                    class="alert alert-success"
-                    role="alert">
-                    <h4 class="alert-heading">Reserve Enroll</h4>
-                    <p>This student has been tagged for reserve enrollment promo please update
-                        tuition year if it hasn't been updated</p>
-                </div>
-            </div>
-            <div class="col-sm-12">
-                <div class="nav-tabs-custom">
-                    <ul class="nav nav-tabs">
-                        <li v-if="advanced_privilages">
-                            <a
-                                :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_1'">
-                                Personal Information
-                            </a>
-                        </li>
+                <div class="col-sm-12">
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li v-if="advanced_privilages">
+                                <a
+                                    :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_1'">
+                                    Personal Information
+                                </a>
+                            </li>
 
-                        <li v-if="advanced_privilages">
-                            <a
-                                :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_2'">
-                                Report of Grades
-                            </a>
-                        </li>
-                        <li v-if="advanced_privilages">
-                            <a
-                                :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_3'">
-                                Assessment
-                            </a>
-                        </li>
+                            <li v-if="advanced_privilages">
+                                <a
+                                    :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_2'">
+                                    Report of Grades
+                                </a>
+                            </li>
+                            <li v-if="advanced_privilages">
+                                <a
+                                    :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_3'">
+                                    Assessment
+                                </a>
+                            </li>
 
-                        <li v-if="advanced_privilages">
-                            <a
-                                :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_5'">
-                                Schedule
-                            </a>
-                        </li>
-                        <li v-if="advanced_privilages">
-                            <a :href="base_url + 'unity/adjustments/' + student.intID + '/' + sem">
-                                Adjustments
-                            </a>
-                        </li>
-                        <li v-if="cashier"
-                            :class="cashier?'active':''"><a href="#tab_1"
-                                data-toggle="tab">Payment</a></li>
-                        <li  :class="!cashier?'active':''"><a href="#tab_2"
-                                data-toggle="tab">Details</a></li>
-                        <li v-if="registration" :class="!cashier?'active':''"><a href="#tab_3"
-                                data-toggle="tab">SOA</a></li>
-                        <!-- <li>
-                            <a :href="base_url + 'unity/accounting/' + student.intID">                                
-                                Accounting Summary
-                            </a>
-                        </li> -->
-                    </ul>
-                    <div class="tab-content">
-                        <div :class="cashier?'active tab-pane':'tab-pane'"
-                            id="tab_1">
-                            <div v-if="cashier.invoice_current && cashier.or_current"
-                                class="box box-solid">
-                                <div class="box-header">
-                                    <h4 class="box-title">{{windowPayment}}</h4>
-                                </div>
-                                <div class="box-body">
-                                    <h4 class="box-title">Cashier {{ cashier.intID }}</h4>
-                                    <div style="margin-bottom:1rem">
-                                        <label class="radio-inline">
-                                            <input type="radio"
-                                                v-model="windowPayment"
-                                                value="invoice"> Invoice
-                                        </label>
-                                        <label v-if="registration" class="radio-inline">
-                                            <input type="radio"
-                                                v-model="windowPayment"
-                                                value="official receipt"> Official Receipt
-                                        </label>
-
+                            <li v-if="advanced_privilages">
+                                <a
+                                    :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_5'">
+                                    Schedule
+                                </a>
+                            </li>
+                            <li v-if="advanced_privilages">
+                                <a :href="base_url + 'unity/adjustments/' + student.intID + '/' + sem">
+                                    Adjustments
+                                </a>
+                            </li>
+                            <li v-if="cashier"
+                                :class="cashier?'active':''"><a href="#tab_1"
+                                    data-toggle="tab">Payment</a></li>
+                            <li  :class="!cashier?'active':''"><a href="#tab_2"
+                                    data-toggle="tab">Details</a></li>
+                            <li v-if="registration" :class="!cashier?'active':''"><a href="#tab_3"
+                                    data-toggle="tab">SOA</a></li>
+                            <!-- <li>
+                                <a :href="base_url + 'unity/accounting/' + student.intID">                                
+                                    Accounting Summary
+                                </a>
+                            </li> -->
+                        </ul>
+                        <div class="tab-content">
+                            <div :class="cashier?'active tab-pane':'tab-pane'"
+                                id="tab_1">
+                                <div v-if="cashier.invoice_current && cashier.or_current"
+                                    class="box box-solid">
+                                    <div class="box-header">
+                                        <h4 class="box-title">{{windowPayment}}</h4>
                                     </div>
-                                    <form @submit.prevent="submitManualPayment"
-                                        method="post">
-                                        <div v-if="cashier && cashier.or_current"
-                                            class="row">
-                                            <div class="col-sm-4"
-                                                v-if="cashier">
-                                                <div class="form-group">
-                                                    <label>Payment For</label>
-                                                    <select class="form-control"
-                                                        v-model="description">
-                                                        <option v-if="registration" value="Tuition Fee">Tuition Fee
-                                                        </option>
-                                                        <option v-if="isInvoice" value="Other">Other</option>
-                                                    </select>
-                                                </div>
-                                                <div v-if="description == 'Tuition Fee'"
-                                                    class="form-group">
-                                                    <label>Particulars:</label>
-                                                    <select required
-                                                        class="form-control"
-                                                        v-model="description_other">
-                                                        <option v-if="isInvoice"
-                                                            value="full">Full Tuition</option>
-                                                        <option v-if="isInvoice"
-                                                            value="down">Down Payment</option>
-                                                        <option v-if="isOR"
-                                                            value="installment">Installment
-                                                        </option>
-                                                    </select>
-                                                </div>
-                                                <div v-else
-                                                    class="form-group">
-                                                    <label>Particulars:</label>
-                                                    <select class="form-control"
-                                                        v-model="description_other">
-                                                        <option v-for="p in particulars"
-                                                            :value="p.name">{{p.name}}</option>
-                                                    </select>                                                   
-                                                </div>
-                                                <input type="hidden"
-                                                    v-model="request.status"
-                                                    value="Paid" />
-                                                <div class="form-group">
-                                                    <label>Payment Type</label>
-                                                    <select class="form-control"
-                                                        v-model="request.is_cash">
-                                                        <option value="1">Cash</option>
-                                                        <option value="0">Check</option>
-                                                        <option value="2">Credit Card</option>
-                                                        <option value="3">Debit Card</option>
-                                                        <option value="4">Online Payment</option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Reference No.:</label>
-                                                    <input type="text"
-                                                        :disabled="request.is_cash == 1"
-                                                        required
-                                                        class="form-control"
-                                                        v-model="request.check_number" />
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Enter amount to pay:</label>
-                                                    <input type="number"
-                                                        step="0.01"
-                                                        required
-                                                        class="form-control"
-                                                        v-model="amount_to_pay" />
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Contact Number:</label>
-                                                    {{ request.contact_number }}
+                                    <div class="box-body">
+                                        <h4 class="box-title">Cashier {{ cashier.intID }}</h4>
+                                        <div style="margin-bottom:1rem">
+                                            <label class="radio-inline">
+                                                <input type="radio"
+                                                    v-model="windowPayment"
+                                                    value="invoice"> Invoice
+                                            </label>
+                                            <label v-if="registration" class="radio-inline">
+                                                <input type="radio"
+                                                    v-model="windowPayment"
+                                                    value="official receipt"> Official Receipt
+                                            </label>
+
+                                        </div>
+                                        <form @submit.prevent="submitManualPayment"
+                                            method="post">
+                                            <div v-if="cashier && cashier.or_current"
+                                                class="row">
+                                                <div class="col-sm-4"
+                                                    v-if="cashier">
+                                                    <div class="form-group">
+                                                        <label>Payment For</label>
+                                                        <select class="form-control"
+                                                            v-model="description">
+                                                            <option v-if="registration" value="Tuition Fee">Tuition Fee
+                                                            </option>
+                                                            <option v-if="isInvoice" value="Other">Other</option>
+                                                        </select>
+                                                    </div>
+                                                    <div v-if="description == 'Tuition Fee'"
+                                                        class="form-group">
+                                                        <label>Particulars:</label>
+                                                        <select required
+                                                            class="form-control"
+                                                            v-model="description_other">
+                                                            <option v-if="isInvoice"
+                                                                value="full">Full Tuition</option>
+                                                            <option v-if="isInvoice"
+                                                                value="down">Down Payment</option>
+                                                            <option v-if="isOR"
+                                                                value="installment">Installment
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                    <div v-else
+                                                        class="form-group">
+                                                        <label>Particulars:</label>
+                                                        <select class="form-control"
+                                                            v-model="description_other">
+                                                            <option v-for="p in particulars"
+                                                                :value="p.name">{{p.name}}</option>
+                                                        </select>                                                   
+                                                    </div>
                                                     <input type="hidden"
-                                                        required
-                                                        class="form-control"
-                                                        v-model="request.contact_number" />
+                                                        v-model="request.status"
+                                                        value="Paid" />
+                                                    <div class="form-group">
+                                                        <label>Payment Type</label>
+                                                        <select class="form-control"
+                                                            v-model="request.is_cash">
+                                                            <option value="1">Cash</option>
+                                                            <option value="0">Check</option>
+                                                            <option value="2">Credit Card</option>
+                                                            <option value="3">Debit Card</option>
+                                                            <option value="4">Online Payment</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Reference No.:</label>
+                                                        <input type="text"
+                                                            :disabled="request.is_cash == 1"
+                                                            required
+                                                            class="form-control"
+                                                            v-model="request.check_number" />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Enter amount to pay:</label>
+                                                        <input type="number"
+                                                            step="0.01"
+                                                            required
+                                                            class="form-control"
+                                                            v-model="amount_to_pay" />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Contact Number:</label>
+                                                        {{ request.contact_number }}
+                                                        <input type="hidden"
+                                                            required
+                                                            class="form-control"
+                                                            v-model="request.contact_number" />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Email:
+                                                            {{ request.email_address }}</label>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Remarks:</label>
+                                                        <textarea type="text"
+                                                            required
+                                                            class="form-control"
+                                                            v-model="request.remarks"></textarea>
+                                                    </div>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label>Email:
-                                                        {{ request.email_address }}</label>
+                                                <div class="col-sm-4"
+                                                    v-if="cashier">
+                                                    <!-- <div class="form-group">
+                                                        <label>Term:</label>
+                                                        <input type="hidden"
+                                                            class="form-control"
+                                                            v-model="request.sy_reference">
+                                                        {{ sem }}
+                                                        
+                                                    </div> -->
+                                                    <div v-if="isOR"
+                                                        class="form-group">
+                                                        <label>OR Number:</label>
+                                                        <div
+                                                            v-if="user.special_role == 2 || cashier.temporary_admin ==  1">
+                                                            <input type="number"
+                                                                class="form-control"
+                                                                v-model="request.or_number" />
+                                                        </div>
+                                                        <div v-else>
+                                                            <input type="hidden"
+                                                                class="form-control"
+                                                                v-model="request.or_number">
+                                                            {{ request.or_number }}
+                                                        </div>                                                    
+                                                    </div>
+                                                    <div v-if="isOR"
+                                                        class="form-group">
+                                                        <label>Invoice Number:</label>
+                                                        <select class="form-control" v-model="request.invoice_number">
+                                                            <option v-for="invoiceNumber in invoiceNumbers" :value="invoiceNumber.invoice_number">{{ invoiceNumber.invoice_number }}</option>
+                                                        </select>                                                     
+
+                                                    </div>                                                
+                                                    <div v-else
+                                                        class="form-group">
+                                                        <label>Invoice Number:</label>
+                                                        <div
+                                                            v-if="user.special_role == 2 || cashier.temporary_admin ==  1">
+                                                            <input type="number"
+                                                                class="form-control"
+                                                                v-model="request.invoice_number" />
+                                                        </div>
+                                                        <div v-else>
+                                                            <input type="hidden"
+                                                                class="form-control"
+                                                                v-model="request.invoice_number">
+                                                            {{ request.invoice_number }}
+                                                        </div>
+
+                                                    </div>
+                                                    <div v-if="!isOR && description != 'Tuition Fee'"
+                                                        class="form-group">
+                                                        <label>Vatable Amount :</label>    
+                                                        <input @change="computeVat" step=".01" type="number"
+                                                                class="form-control"
+                                                                v-model="request.invoice_amount">                                                
+                                                    </div>
+                                                    <div v-if="!isOR && description != 'Tuition Fee'"
+                                                        class="form-group">
+                                                        <label>Vat Exempt Tax :</label>    
+                                                        <input @change="computeVat" step=".01" type="number"
+                                                                class="form-control"
+                                                                v-model="request.invoice_amount_ves">                                                
+                                                    </div>
+                                                    <div v-if="!isOR && description != 'Tuition Fee'"
+                                                        class="form-group">
+                                                        <label>Vat Zero Rated Sales :</label>    
+                                                        <input @change="computeVat" step=".01" type="number"
+                                                                class="form-control"
+                                                                v-model="request.invoice_amount_vzrs">                                                
+                                                    </div>
+                                                    <div v-if="!isOR && description != 'Tuition Fee'"
+                                                        class="form-group">
+                                                        <label>Less EWT:</label>    
+                                                        <select @change="computeVat"
+                                                                class="form-control"
+                                                                v-model="request.withholding_tax_percentage">                                                
+                                                                <option value="0">None</option>
+                                                                <option value="1">1%</option>
+                                                                <option value="2">2%</option>
+                                                                <option value="5">5%</option>
+                                                                <option value="10">10%</option>
+                                                                <option value="15">15%</option>
+                                                        </select>
+                                                    </div>
+                                                    <div v-if="!isOR && description != 'Tuition Fee'"
+                                                        class="form-group">
+                                                        <label>Total Sales:</label>    
+                                                        {{ total_sales_formatted }}                                               
+                                                    </div>                                               
+                                                    <div v-if="!isOR && description != 'Tuition Fee'"
+                                                        class="form-group">
+                                                        <label>Value Added Tax:</label>    
+                                                        {{ less_vat_formatted }}                                               
+                                                    </div>  
+                                                    <div v-if="!isOR && description != 'Tuition Fee'"
+                                                        class="form-group">
+                                                        <label>Less EWT:</label>    
+                                                        {{ less_ewt_formatted }}                                               
+                                                    </div>                                               
+                                                    <div v-if="!isOR && description != 'Tuition Fee'"
+                                                        class="form-group">
+                                                        <label>Total Amount Due:</label>    
+                                                        {{ total_amount_computed_formatted }}                                               
+                                                    </div>                                               
                                                 </div>
-                                                <div class="form-group">
-                                                    <label>Remarks:</label>
-                                                    <textarea type="text"
-                                                        required
-                                                        class="form-control"
-                                                        v-model="request.remarks"></textarea>
+                                                <div v-if="description == 'Tuition Fee' && registration"
+                                                    class="col-sm-4">
+                                                    <label>Select Type:</label>
+                                                    <select
+                                                        v-if="registration.downpayment == 0 && registration.fullpayment == 0"
+                                                        @change="description_other = ''; amount_to_pay = 0 "
+                                                        v-model="payment_type"
+                                                        class="form-control">
+                                                        <option value="full">Full Payment</option>
+                                                        <option value="partial">Installment</option>
+                                                    </select>
+                                                    <div v-else>
+                                                        {{ payment_type }}
+                                                    </div>
+                                                    <hr />
+                                                    <table class="table table-striped"
+                                                        v-if="payment_type == 'full'">
+                                                        <tr>
+                                                            <td>Full Tuition</td>
+                                                            <td><a href="#"
+                                                                    @click="setValue(remaining_amount,'full')">{{ remaining_amount }}</a>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <table class="table table-striped"
+                                                        v-else>
+                                                        <tr>
+                                                            <td>Down Payment</td>
+                                                            <td v-if="registration.downpayment == 0"><a
+                                                                    href="#"
+                                                                    @click="setValue(tuition_data.down_payment,'down',0)">{{ tuition_data.down_payment }}</a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr v-for="(inst,ctr) in installments">
+                                                            <td>Installment{{ '(' + installment_dates[ctr]+ ')' }}
+                                                            </td>
+                                                            <td><a href="#"
+                                                                    @click="setValue(inst,'installment',ctr)">{{ inst }}</a>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-4"
-                                                v-if="cashier">
-                                                <!-- <div class="form-group">
-                                                    <label>Term:</label>
-                                                    <input type="hidden"
-                                                        class="form-control"
-                                                        v-model="request.sy_reference">
-                                                    {{ sem }}
+                                            <hr />
+
+                                            <button class="btn btn-primary btn-lg pull-right"
+                                                :disabled="!request.or_number && !request.invoice_number || !ready"
+                                                type="submit">Submit Payment</button>
+
+                                        </form>
+                                    </div>
+                                </div>
+                                <div v-else>
+                                    <h3 class="text-center">No Current OR or Invoice is set please contact cashier administrator</h3>
+                                </div>
+                            </div>
+                            <div :class="!cashier?'active tab-pane':'tab-pane'"
+                                id="tab_2">
+                                <div class="box box-solid">
+                                    <div class="box-header">
+                                        <h4 class="box-title">DETAILS</h4>
+                                    </div>
+                                    <div class="box-body">
+                                        <table v-if="ledger_items.length > 0"
+                                            class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="9">Manually Added Ledger Items</th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Payment Description</th>
+                                                    <th>Date Added</th>
+                                                    <th>Remarks</th>
+                                                    <th>Assessment</th>
+                                                    <th>Payment</th>
+                                                    <th>Added By</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="item in ledger_items">
+                                                    <td :class="item.muted">{{ item.name }}</td>
+                                                    <td :class="item.muted">{{ item.date }}</td>
+                                                    <td :class="item.muted">{{ item.remarks }}</td>
+                                                    <td :class="item.muted">
+                                                        {{ (item.type != 'payment')?numberWithCommas(item.amount):'-' }}
+                                                    </td>
+                                                    <td :class="item.muted">
+                                                        {{ (item.type == 'payment')?numberWithCommas(item.amount):'-' }}
+                                                    </td>
+                                                    <td :class="item.muted"><a
+                                                            @click="cashierDetails(item.added_by)"
+                                                            href="#">{{ item.added_by }}</a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <table class="table table-bordered table-striped">
+                                            <tr>
+                                                <th></th>
+                                                <th>Invoice Number</th>
+                                                <th>OR Number</th>
+                                                <th>Payment Type</th>
+                                                <th>Reference No.</th>
+                                                <th>Amount Paid</th>
+                                                <th>Online Payment Charge</th>
+                                                <th>Total Due</th>
+                                                <th>Status</th>
+                                                <th>Issued Date</th>
+                                                <th>Info</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="11">
+                                                    Other Payments:
+                                                </th>
+                                            </tr>
+                                            <tr v-if="application_payment">
+                                                <td></td>
+                                                <td>{{ application_payment.invoice_number }}</td>
+                                                <td>{{ application_payment.or_number }}</td>
+                                                <td>{{ application_payment.description }}</td>
+                                                <td>{{ application_payment.check_number }}</td>
+                                                <td>{{ application_payment.subtotal_order }}</td>
+                                                <td>{{ application_payment.charges }}</td>
+                                                <td>{{ application_payment.total_amount_due }}</td>
+                                                <td>{{ application_payment.status }}</td>
+                                                <td>{{ application_payment.or_date }}</td>
+                                                <td>{{ application_payment.void_reason }}</td>
+                                                <td>
+                                                    <!-- <button
+                                                        v-if="!application_payment.or_number && application_payment.status == 'Paid' && cashier && application_payment.remarks != 'Voided'"
+                                                        data-toggle="modal"
+                                                        @click="prepUpdate(application_payment.id,application_payment.description,application_payment.subtotal_order)"
+                                                        data-target="#myModal"
+                                                        class="btn btn-primary">
+                                                        Update OR
+                                                    </button> -->
+                                                    <button
+                                                        v-if="application_payment.status == 'Paid' && cashier && application_payment.remarks != 'Voided' && cashier.invoice_current"
+                                                        data-toggle="modal"
+                                                        @click="invoice_update.id = application_payment.id;"
+                                                        data-target="#invoiceUpdate"
+                                                        class="btn btn-primary">
+                                                        Update Invoice
+                                                    </button>
+                                                    <button
+                                                        v-if="application_payment.status == 'Paid' && cashier && application_payment.remarks != 'Voided'"
+                                                        data-toggle="modal"
+                                                        @click="or_details.id = application_payment.id;"
+                                                        data-target="#orDetailsUpdate"
+                                                        class="btn btn-primary">
+                                                        Update Details
+                                                    </button>
+                                                    <!-- <button
+                                                        v-if="application_payment.or_number && cashier"
+                                                        @click="printOR(application_payment)"
+                                                        class="btn btn-primary">
+                                                        Print OR
+                                                    </button> -->
+                                                    <button
+                                                        v-if="application_payment.invoice_number && cashier"
+                                                        @click="printInvoice(application_payment)"
+                                                        class="btn btn-primary">
+                                                        Print Invoice
+                                                    </button>
+                                                    <button
+                                                        v-if="application_payment.status == 'Paid' && application_payment.remarks != 'Voided' && cashier && finance_manager_privilages"
+                                                        data-toggle="modal"
+                                                        data-target="#voidPaymentModal"
+                                                        class="btn btn-primary"
+                                                        @click="setToVoid(application_payment.id)">Void/Cancel</button>
+                                                </td>
+                                            </tr>
+                                            <tr v-for="payment in other_payments">
+                                                <td><input v-if="user.special_role > 1"
+                                                        type="checkbox"
+                                                        :value="payment.or_number"
+                                                        v-model="selected_items" /></td>
+                                                <td>{{ payment.invoice_number }}</td>
+                                                <td>{{ payment.or_number }}</td>
+                                                <td>{{ payment.description }}</td>
+                                                <td>{{ payment.check_number }}</td>
+                                                <td>{{ payment.subtotal_order }}</td>
+                                                <td>{{ payment.charges }}</td>
+                                                <td>{{ payment.total_amount_due }}</td>
+                                                <td>{{ payment.status }}</td>
+                                                <td>{{ payment.or_date }}</td>
+                                                <td>{{ payment.void_reason }}</td>
+                                                <td>
+                                                    <button
+                                                        v-if="!payment.or_number && payment.status == 'Paid' && cashier && cashier.or_current"
+                                                        data-toggle="modal"
+                                                        @click="prepUpdate(payment.id,payment.description,payment.subtotal_order)"
+                                                        data-target="#myModal"
+                                                        class="btn btn-primary">
+                                                        Update OR
+                                                    </button>
+                                                    <button
+                                                        v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided' && cashier.invoice_current"
+                                                        data-toggle="modal"
+                                                        @click="invoice_update.id = payment.id;"
+                                                        data-target="#invoiceUpdate"
+                                                        class="btn btn-primary">
+                                                        Update Invoice
+                                                    </button>
+                                                    <button
+                                                        v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided'"
+                                                        data-toggle="modal"
+                                                        @click="or_details.id = payment.id;"
+                                                        data-target="#orDetailsUpdate"
+                                                        class="btn btn-primary">
+                                                        Update Details
+                                                    </button>
+                                                    <!-- <button v-if="payment.or_number && cashier"
+                                                        @click="printOR(payment)"
+                                                        class="btn btn-primary">
+                                                        Print OR
+                                                    </button> -->
+                                                    <button
+                                                        v-if="payment.invoice_number && cashier"
+                                                        @click="printInvoice(payment)"
+                                                        class="btn btn-primary">
+                                                        Print Invoice
+                                                    </button>
                                                     
-                                                </div> -->
-                                                <div v-if="isOR"
-                                                    class="form-group">
-                                                    <label>OR Number:</label>
-                                                    <div
-                                                        v-if="user.special_role == 2 || cashier.temporary_admin ==  1">
-                                                        <input type="number"
-                                                            class="form-control"
-                                                            v-model="request.or_number" />
-                                                    </div>
-                                                    <div v-else>
-                                                        <input type="hidden"
-                                                            class="form-control"
-                                                            v-model="request.or_number">
-                                                        {{ request.or_number }}
-                                                    </div>                                                    
-                                                </div>
-                                                <div v-if="isOR"
-                                                    class="form-group">
-                                                    <label>Invoice Number:</label>
-                                                    <select class="form-control" v-model="request.invoice_number">
-                                                        <option v-for="invoiceNumber in invoiceNumbers" :value="invoiceNumber.invoice_number">{{ invoiceNumber.invoice_number }}</option>
-                                                    </select>                                                     
-
-                                                </div>                                                
-                                                <div v-else
-                                                    class="form-group">
-                                                    <label>Invoice Number:</label>
-                                                    <div
-                                                        v-if="user.special_role == 2 || cashier.temporary_admin ==  1">
-                                                        <input type="number"
-                                                            class="form-control"
-                                                            v-model="request.invoice_number" />
-                                                    </div>
-                                                    <div v-else>
-                                                        <input type="hidden"
-                                                            class="form-control"
-                                                            v-model="request.invoice_number">
-                                                        {{ request.invoice_number }}
-                                                    </div>
-
-                                                </div>
-                                                <div v-if="!isOR && description != 'Tuition Fee'"
-                                                    class="form-group">
-                                                    <label>Vatable Amount :</label>    
-                                                    <input @change="computeVat" step=".01" type="number"
-                                                            class="form-control"
-                                                            v-model="request.invoice_amount">                                                
-                                                </div>
-                                                <div v-if="!isOR && description != 'Tuition Fee'"
-                                                    class="form-group">
-                                                    <label>Vat Exempt Tax :</label>    
-                                                    <input @change="computeVat" step=".01" type="number"
-                                                            class="form-control"
-                                                            v-model="request.invoice_amount_ves">                                                
-                                                </div>
-                                                <div v-if="!isOR && description != 'Tuition Fee'"
-                                                    class="form-group">
-                                                    <label>Vat Zero Rated Sales :</label>    
-                                                    <input @change="computeVat" step=".01" type="number"
-                                                            class="form-control"
-                                                            v-model="request.invoice_amount_vzrs">                                                
-                                                </div>
-                                                <div v-if="!isOR && description != 'Tuition Fee'"
-                                                    class="form-group">
-                                                    <label>Less EWT:</label>    
-                                                    <select @change="computeVat"
-                                                            class="form-control"
-                                                            v-model="request.withholding_tax_percentage">                                                
-                                                            <option value="0">None</option>
-                                                            <option value="1">1%</option>
-                                                            <option value="2">2%</option>
-                                                            <option value="5">5%</option>
-                                                            <option value="10">10%</option>
-                                                            <option value="15">15%</option>
+                                                    <button
+                                                        v-if="payment.status == 'Paid' && payment.remarks != 'Voided' && cashier && finance_manager_privilages"
+                                                        class="btn btn-primary"
+                                                        data-toggle="modal"
+                                                        data-target="#voidPaymentModal"
+                                                        @click="setToVoid(payment.id)">Void/Cancel</button>
+                                                    <button
+                                                        v-if="payment.status == 'Pending' && payment.mode.name == 'Onsite Payment' && cashier"
+                                                        class="btn btn-primary"
+                                                        @click="setToPaid(payment.id)">Set to
+                                                        paid</button>
+                                                    <button
+                                                        v-if="cashier && finance_manager_privilages && payment.status == 'Paid' &&  payment.mode.name == 'Onsite Payment' "
+                                                        class="btn btn-danger"
+                                                        @click="deletePayment(payment.id)">Retract
+                                                        Payment</button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="11">
+                                                    Tuition Payments:
+                                                </th>
+                                            </tr>
+                                            <tr v-if="reservation_payments"
+                                                v-for="reservation_payment in reservation_payments">
+                                                <td></td>
+                                                <td>{{ reservation_payment.invoice_number }}</td>
+                                                <td>{{ reservation_payment.or_number }}</td>
+                                                <td>{{ reservation_payment.description }}</td>
+                                                <td>{{ reservation_payment.check_number }}</td>
+                                                <td>{{ reservation_payment.subtotal_order }}</td>
+                                                <td>{{ reservation_payment.charges }}</td>
+                                                <td>{{ reservation_payment.total_amount_due }}</td>
+                                                <td>{{ reservation_payment.status }}</td>
+                                                <td>{{ reservation_payment.or_date }}</td>
+                                                <td>{{ reservation_payment.void_reason }}</td>
+                                                <td>
+                                                    <!-- <button
+                                                        v-if="!reservation_payment.or_number && reservation_payment.status == 'Paid' && cashier"
+                                                        data-toggle="modal"
+                                                        @click="prepUpdate(reservation_payment.id,reservation_payment.description,reservation_payment.subtotal_order)"
+                                                        data-target="#myModal"
+                                                        class="btn btn-primary">
+                                                        Update OR
+                                                    </button> -->
+                                                    <button
+                                                        v-if="reservation_payment.status == 'Paid' && cashier && reservation_payment.remarks != 'Voided' && cashier.invoice_current"
+                                                        data-toggle="modal"
+                                                        @click="invoice_update.id = reservation_payment.id;"
+                                                        data-target="#invoiceUpdate"
+                                                        class="btn btn-primary">
+                                                        Update Invoice
+                                                    </button>
+                                                    <button
+                                                        v-if="reservation_payment.status == 'Paid' && cashier && reservation_payment.remarks != 'Voided'"
+                                                        data-toggle="modal"
+                                                        @click="or_details.id = reservation_payment.id;"
+                                                        data-target="#orDetailsUpdate"
+                                                        class="btn btn-primary">
+                                                        Update Details
+                                                    </button>
+                                                    <!-- <button
+                                                        v-if="reservation_payment.or_number && cashier"
+                                                        @click="printOR(reservation_payment)"
+                                                        class="btn btn-primary">
+                                                        Print OR
+                                                    </button> -->
+                                                    <button
+                                                        v-if="reservation_payment.invoice_number && cashier"
+                                                        @click="printInvoice(reservation_payment)"
+                                                        class="btn btn-primary">
+                                                        Print Invoice
+                                                    </button>
+                                                    <button
+                                                        v-if="reservation_payment.status == 'Paid' && reservation_payment.remarks != 'Voided' && cashier && finance_manager_privilages"
+                                                        data-toggle="modal"
+                                                        data-target="#voidPaymentModal"
+                                                        class="btn btn-primary"
+                                                        @click="setToVoid(reservation_payment.id)">Void/Cancel</button>
+                                                </td>
+                                            </tr>
+                                            <tr v-for="payment in payments">
+                                                <td><input v-if="user.special_role > 1"
+                                                        type="checkbox"
+                                                        :value="payment.or_number"
+                                                        v-model="selected_items" /></td>
+                                                <td>{{ payment.invoice_number }}</td>
+                                                <td>{{ payment.or_number }}</td>
+                                                <td>{{ payment.description }}</td>
+                                                <td>{{ payment.check_number }}</td>
+                                                <td>{{ payment.subtotal_order }}</td>
+                                                <td>{{ payment.charges }}</td>
+                                                <td>{{ payment.total_amount_due }}</td>
+                                                <td>{{ payment.status }}</td>
+                                                <td>{{ payment.or_date }}</td>
+                                                <td>{{ payment.void_reason }}</td>
+                                                <td>
+                                                    <button
+                                                        v-if="(!payment.or_number && payment.status == 'Paid') && cashier && cashier.or_current"
+                                                        data-toggle="modal"
+                                                        @click="prepUpdate(payment.id,payment.description,payment.subtotal_order)"
+                                                        data-target="#myModal"
+                                                        class="btn btn-primary">
+                                                        Update OR
+                                                    </button>
+                                                    <button
+                                                        v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided' && cashier.invoice_current"
+                                                        data-toggle="modal"
+                                                        @click="invoice_update.id = payment.id;"
+                                                        data-target="#invoiceUpdate"
+                                                        class="btn btn-primary">
+                                                        Update Invoice
+                                                    </button>
+                                                    <button
+                                                        v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided'"
+                                                        data-toggle="modal"
+                                                        @click="or_details.id = payment.id;"
+                                                        data-target="#orDetailsUpdate"
+                                                        class="btn btn-primary">
+                                                        Update Details
+                                                    </button>
+                                                    <button v-if="payment.or_number && payment.invoice_number && cashier"
+                                                        @click="printOR(payment)"
+                                                        class="btn btn-primary">
+                                                        Print OR
+                                                    </button>
+                                                    <button
+                                                        v-if="payment.invoice_number && cashier"
+                                                        @click="printInvoice(payment)"
+                                                        class="btn btn-primary">
+                                                        Print Invoice
+                                                    </button>
+                                                    <button
+                                                        v-if="payment.invoice_number && cashier"
+                                                        @click="printInvoice(payment,1)"
+                                                        class="btn btn-primary">
+                                                        Print Invoice A
+                                                    </button>
+                                                    <button
+                                                        v-if="payment.mode && payment.status == 'Paid' && payment.remarks != 'Voided' && cashier && finance_manager_privilages"
+                                                        data-toggle="modal"
+                                                        data-target="#voidPaymentModal"
+                                                        class="btn btn-primary"
+                                                        @click="setToVoid(payment.id)">Void/Cancel</button>
+                                                    <button
+                                                        v-if="(payment.mode && payment.status == 'Pending' && payment.mode.name == 'Onsite Payment') && cashier"
+                                                        class="btn btn-primary"
+                                                        @click="setToPaid(payment.id)">Set to
+                                                        paid</button>
+                                                    <button
+                                                        v-if="(payment.mode && payment.mode.name == 'Onsite Payment')  && cashier && finance_manager_privilages"
+                                                        class="btn btn-danger"
+                                                        @click="deletePayment(payment.id)">Retract
+                                                        Payment</button>
+                                                </td>
+                                            </tr>
+                                            <tr v-if="user.special_role > 1">
+                                                <td class="text-right"
+                                                    colspan="2">
+                                                    Do with selected:
+                                                </td>
+                                                <td colspan="3">
+                                                    <select class="form-control"
+                                                        v-model="switch_term">
+                                                        <option v-for="s in sy"
+                                                            :value="s.intID">{{ s.term_student_type}}
+                                                            {{ s.enumSem }} {{ s.term_label }}
+                                                            {{ s.strYearStart }} - {{ s.strYearEnd }}
+                                                        </option>
                                                     </select>
-                                                </div>
-                                                <div v-if="!isOR && description != 'Tuition Fee'"
-                                                    class="form-group">
-                                                    <label>Total Sales:</label>    
-                                                    {{ total_sales_formatted }}                                               
-                                                </div>                                               
-                                                <div v-if="!isOR && description != 'Tuition Fee'"
-                                                    class="form-group">
-                                                    <label>Value Added Tax:</label>    
-                                                    {{ less_vat_formatted }}                                               
-                                                </div>  
-                                                <div v-if="!isOR && description != 'Tuition Fee'"
-                                                    class="form-group">
-                                                    <label>Less EWT:</label>    
-                                                    {{ less_ewt_formatted }}                                               
-                                                </div>                                               
-                                                <div v-if="!isOR && description != 'Tuition Fee'"
-                                                    class="form-group">
-                                                    <label>Total Amount Due:</label>    
-                                                    {{ total_amount_computed_formatted }}                                               
-                                                </div>                                               
-                                            </div>
-                                            <div v-if="description == 'Tuition Fee' && registration"
-                                                class="col-sm-4">
-                                                <label>Select Type:</label>
-                                                <select
-                                                    v-if="registration.downpayment == 0 && registration.fullpayment == 0"
-                                                    @change="description_other = ''; amount_to_pay = 0 "
-                                                    v-model="payment_type"
-                                                    class="form-control">
-                                                    <option value="full">Full Payment</option>
-                                                    <option value="partial">Installment</option>
-                                                </select>
-                                                <div v-else>
-                                                    {{ payment_type }}
-                                                </div>
-                                                <hr />
-                                                <table class="table table-striped"
-                                                    v-if="payment_type == 'full'">
-                                                    <tr>
-                                                        <td>Full Tuition</td>
-                                                        <td><a href="#"
-                                                                @click="setValue(remaining_amount,'full')">{{ remaining_amount }}</a>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                                <table class="table table-striped"
-                                                    v-else>
-                                                    <tr>
-                                                        <td>Down Payment</td>
-                                                        <td v-if="registration.downpayment == 0"><a
-                                                                href="#"
-                                                                @click="setValue(tuition_data.down_payment,'down',0)">{{ tuition_data.down_payment }}</a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr v-for="(inst,ctr) in installments">
-                                                        <td>Installment{{ '(' + installment_dates[ctr]+ ')' }}
-                                                        </td>
-                                                        <td><a href="#"
-                                                                @click="setValue(inst,'installment',ctr)">{{ inst }}</a>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </div>
+                                                </td>
+                                                <td colspan="6">
+                                                    <button @click="forwardSelected"
+                                                        class="btn btn-primary">
+                                                        Forward Selected
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr v-if="registration">
+                                                <td class="text-green"
+                                                    colspan="10">
+                                                    amount paid: P{{ amount_paid_formatted }}
+                                                </td>
+                                            </tr>
+                                            <tr v-if="registration">
+                                                <td class="text-green"
+                                                    colspan="10">
+                                                    remaining balance: P{{ remaining_amount_formatted }}
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <div v-html="tuition"
+                                            class="col-sm-6"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-if="registration" class="tab-pane"
+                                id="tab_3">
+                                <h3>Statement of Account</h3>
+                                <!-- <img :src="soa.logo" height="300px" width="300px"/> -->
+                                <div class="text-center">
+                                    <h3>iACADEMY, Inc.</h3>
+                                    <h4>{{ soa.address }}</h4>
+                                    <h4>AY {{ current_term.strYearStart }} -
+                                        {{ current_term.strYearEnd }} {{ current_term.enumSem }}
+                                        {{ current_term_full_label }}
+                                    </h4>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <table class="table">
+                                            <tr>
+                                                <th>NAME OF STUDENT:</th>
+                                                <td>{{ student.strLastname.toUpperCase() }},
+                                                    {{ student.strFirstname.toUpperCase() }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>ID NUMBER:</th>
+                                                <td>{{ student.strStudentNumber.replace(/-/g, '') }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>COURSE:</th>
+                                                <td>{{ student.strProgramCode }}</td>
+                                            </tr>
+                                        </table>
+                                        <div v-if="payment_type != 'full' && registration">
+                                            <table class="table table-bordered">
+                                                <tr v-if="registration.downpayment == 0">
+                                                    <td>Down Payment</td>
+                                                    <td>{{ tuition_data.down_payment }}</td>
+                                                </tr>
+                                                <tr v-for="(inst,ctr) in installments"
+                                                    v-if="inst > 0">
+                                                    <td>{{ addSuffix(ctr + 1) + ' installment due ' + installment_dates[ctr]+ ' ' }}
+                                                    </td>
+                                                    <td>P{{ inst }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>TOTAL BALANCE</td>
+                                                    <td>P{{ soa.total }}</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div v-else>
+                                            <table class="table table-bordered">
+                                                <tr>
+                                                    <td>TOTAL BALANCE</td>
+                                                    <td>P{{ remaining_amount_formatted }}</td>
+                                                </tr>
+                                            </table>
                                         </div>
                                         <hr />
-
-                                        <button class="btn btn-primary btn-lg pull-right"
-                                            :disabled="!request.or_number && !request.invoice_number || !ready"
-                                            type="submit">Submit Payment</button>
-
-                                    </form>
-                                </div>
-                            </div>
-                            <div v-else>
-                                <h3 class="text-center">No Current OR or Invoice is set please contact cashier administrator</h3>
-                            </div>
-                        </div>
-                        <div :class="!cashier?'active tab-pane':'tab-pane'"
-                            id="tab_2">
-                            <div class="box box-solid">
-                                <div class="box-header">
-                                    <h4 class="box-title">DETAILS</h4>
-                                </div>
-                                <div class="box-body">
-                                    <table v-if="ledger_items.length > 0"
-                                        class="table table-bordered table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th colspan="9">Manually Added Ledger Items</th>
-                                            </tr>
-                                            <tr>
-                                                <th>Payment Description</th>
-                                                <th>Date Added</th>
-                                                <th>Remarks</th>
-                                                <th>Assessment</th>
-                                                <th>Payment</th>
-                                                <th>Added By</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="item in ledger_items">
-                                                <td :class="item.muted">{{ item.name }}</td>
-                                                <td :class="item.muted">{{ item.date }}</td>
-                                                <td :class="item.muted">{{ item.remarks }}</td>
-                                                <td :class="item.muted">
-                                                    {{ (item.type != 'payment')?numberWithCommas(item.amount):'-' }}
-                                                </td>
-                                                <td :class="item.muted">
-                                                    {{ (item.type == 'payment')?numberWithCommas(item.amount):'-' }}
-                                                </td>
-                                                <td :class="item.muted"><a
-                                                        @click="cashierDetails(item.added_by)"
-                                                        href="#">{{ item.added_by }}</a></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <table class="table table-bordered table-striped">
-                                        <tr>
-                                            <th></th>
-                                            <th>Invoice Number</th>
-                                            <th>OR Number</th>
-                                            <th>Payment Type</th>
-                                            <th>Reference No.</th>
-                                            <th>Amount Paid</th>
-                                            <th>Online Payment Charge</th>
-                                            <th>Total Due</th>
-                                            <th>Status</th>
-                                            <th>Issued Date</th>
-                                            <th>Info</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                        <tr>
-                                            <th colspan="11">
-                                                Other Payments:
-                                            </th>
-                                        </tr>
-                                        <tr v-if="application_payment">
-                                            <td></td>
-                                            <td>{{ application_payment.invoice_number }}</td>
-                                            <td>{{ application_payment.or_number }}</td>
-                                            <td>{{ application_payment.description }}</td>
-                                            <td>{{ application_payment.check_number }}</td>
-                                            <td>{{ application_payment.subtotal_order }}</td>
-                                            <td>{{ application_payment.charges }}</td>
-                                            <td>{{ application_payment.total_amount_due }}</td>
-                                            <td>{{ application_payment.status }}</td>
-                                            <td>{{ application_payment.or_date }}</td>
-                                            <td>{{ application_payment.void_reason }}</td>
-                                            <td>
-                                                <!-- <button
-                                                    v-if="!application_payment.or_number && application_payment.status == 'Paid' && cashier && application_payment.remarks != 'Voided'"
-                                                    data-toggle="modal"
-                                                    @click="prepUpdate(application_payment.id,application_payment.description,application_payment.subtotal_order)"
-                                                    data-target="#myModal"
-                                                    class="btn btn-primary">
-                                                    Update OR
-                                                </button> -->
-                                                <button
-                                                    v-if="application_payment.status == 'Paid' && cashier && application_payment.remarks != 'Voided' && cashier.invoice_current"
-                                                    data-toggle="modal"
-                                                    @click="invoice_update.id = application_payment.id;"
-                                                    data-target="#invoiceUpdate"
-                                                    class="btn btn-primary">
-                                                    Update Invoice
-                                                </button>
-                                                <button
-                                                    v-if="application_payment.status == 'Paid' && cashier && application_payment.remarks != 'Voided'"
-                                                    data-toggle="modal"
-                                                    @click="or_details.id = application_payment.id;"
-                                                    data-target="#orDetailsUpdate"
-                                                    class="btn btn-primary">
-                                                    Update Details
-                                                </button>
-                                                <!-- <button
-                                                    v-if="application_payment.or_number && cashier"
-                                                    @click="printOR(application_payment)"
-                                                    class="btn btn-primary">
-                                                    Print OR
-                                                </button> -->
-                                                <button
-                                                    v-if="application_payment.invoice_number && cashier"
-                                                    @click="printInvoice(application_payment)"
-                                                    class="btn btn-primary">
-                                                    Print Invoice
-                                                </button>
-                                                <button
-                                                    v-if="application_payment.status == 'Paid' && application_payment.remarks != 'Voided' && cashier && finance_manager_privilages"
-                                                    data-toggle="modal"
-                                                    data-target="#voidPaymentModal"
-                                                    class="btn btn-primary"
-                                                    @click="setToVoid(application_payment.id)">Void/Cancel</button>
-                                            </td>
-                                        </tr>
-                                        <tr v-for="payment in other_payments">
-                                            <td><input v-if="user.special_role > 1"
-                                                    type="checkbox"
-                                                    :value="payment.or_number"
-                                                    v-model="selected_items" /></td>
-                                            <td>{{ payment.invoice_number }}</td>
-                                            <td>{{ payment.or_number }}</td>
-                                            <td>{{ payment.description }}</td>
-                                            <td>{{ payment.check_number }}</td>
-                                            <td>{{ payment.subtotal_order }}</td>
-                                            <td>{{ payment.charges }}</td>
-                                            <td>{{ payment.total_amount_due }}</td>
-                                            <td>{{ payment.status }}</td>
-                                            <td>{{ payment.or_date }}</td>
-                                            <td>{{ payment.void_reason }}</td>
-                                            <td>
-                                                <button
-                                                    v-if="!payment.or_number && payment.status == 'Paid' && cashier && cashier.or_current"
-                                                    data-toggle="modal"
-                                                    @click="prepUpdate(payment.id,payment.description,payment.subtotal_order)"
-                                                    data-target="#myModal"
-                                                    class="btn btn-primary">
-                                                    Update OR
-                                                </button>
-                                                <button
-                                                    v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided' && cashier.invoice_current"
-                                                    data-toggle="modal"
-                                                    @click="invoice_update.id = payment.id;"
-                                                    data-target="#invoiceUpdate"
-                                                    class="btn btn-primary">
-                                                    Update Invoice
-                                                </button>
-                                                <button
-                                                    v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided'"
-                                                    data-toggle="modal"
-                                                    @click="or_details.id = payment.id;"
-                                                    data-target="#orDetailsUpdate"
-                                                    class="btn btn-primary">
-                                                    Update Details
-                                                </button>
-                                                <!-- <button v-if="payment.or_number && cashier"
-                                                    @click="printOR(payment)"
-                                                    class="btn btn-primary">
-                                                    Print OR
-                                                </button> -->
-                                                <button
-                                                    v-if="payment.invoice_number && cashier"
-                                                    @click="printInvoice(payment)"
-                                                    class="btn btn-primary">
-                                                    Print Invoice
-                                                </button>
-                                                
-                                                <button
-                                                    v-if="payment.status == 'Paid' && payment.remarks != 'Voided' && cashier && finance_manager_privilages"
-                                                    class="btn btn-primary"
-                                                    data-toggle="modal"
-                                                    data-target="#voidPaymentModal"
-                                                    @click="setToVoid(payment.id)">Void/Cancel</button>
-                                                <button
-                                                    v-if="payment.status == 'Pending' && payment.mode.name == 'Onsite Payment' && cashier"
-                                                    class="btn btn-primary"
-                                                    @click="setToPaid(payment.id)">Set to
-                                                    paid</button>
-                                                <button
-                                                    v-if="cashier && finance_manager_privilages && payment.status == 'Paid' &&  payment.mode.name == 'Onsite Payment' "
-                                                    class="btn btn-danger"
-                                                    @click="deletePayment(payment.id)">Retract
-                                                    Payment</button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th colspan="11">
-                                                Tuition Payments:
-                                            </th>
-                                        </tr>
-                                        <tr v-if="reservation_payments"
-                                            v-for="reservation_payment in reservation_payments">
-                                            <td></td>
-                                            <td>{{ reservation_payment.invoice_number }}</td>
-                                            <td>{{ reservation_payment.or_number }}</td>
-                                            <td>{{ reservation_payment.description }}</td>
-                                            <td>{{ reservation_payment.check_number }}</td>
-                                            <td>{{ reservation_payment.subtotal_order }}</td>
-                                            <td>{{ reservation_payment.charges }}</td>
-                                            <td>{{ reservation_payment.total_amount_due }}</td>
-                                            <td>{{ reservation_payment.status }}</td>
-                                            <td>{{ reservation_payment.or_date }}</td>
-                                            <td>{{ reservation_payment.void_reason }}</td>
-                                            <td>
-                                                <!-- <button
-                                                    v-if="!reservation_payment.or_number && reservation_payment.status == 'Paid' && cashier"
-                                                    data-toggle="modal"
-                                                    @click="prepUpdate(reservation_payment.id,reservation_payment.description,reservation_payment.subtotal_order)"
-                                                    data-target="#myModal"
-                                                    class="btn btn-primary">
-                                                    Update OR
-                                                </button> -->
-                                                <button
-                                                    v-if="reservation_payment.status == 'Paid' && cashier && reservation_payment.remarks != 'Voided' && cashier.invoice_current"
-                                                    data-toggle="modal"
-                                                    @click="invoice_update.id = reservation_payment.id;"
-                                                    data-target="#invoiceUpdate"
-                                                    class="btn btn-primary">
-                                                    Update Invoice
-                                                </button>
-                                                <button
-                                                    v-if="reservation_payment.status == 'Paid' && cashier && reservation_payment.remarks != 'Voided'"
-                                                    data-toggle="modal"
-                                                    @click="or_details.id = reservation_payment.id;"
-                                                    data-target="#orDetailsUpdate"
-                                                    class="btn btn-primary">
-                                                    Update Details
-                                                </button>
-                                                <!-- <button
-                                                    v-if="reservation_payment.or_number && cashier"
-                                                    @click="printOR(reservation_payment)"
-                                                    class="btn btn-primary">
-                                                    Print OR
-                                                </button> -->
-                                                <button
-                                                    v-if="reservation_payment.invoice_number && cashier"
-                                                    @click="printInvoice(reservation_payment)"
-                                                    class="btn btn-primary">
-                                                    Print Invoice
-                                                </button>
-                                                <button
-                                                    v-if="reservation_payment.status == 'Paid' && reservation_payment.remarks != 'Voided' && cashier && finance_manager_privilages"
-                                                    data-toggle="modal"
-                                                    data-target="#voidPaymentModal"
-                                                    class="btn btn-primary"
-                                                    @click="setToVoid(reservation_payment.id)">Void/Cancel</button>
-                                            </td>
-                                        </tr>
-                                        <tr v-for="payment in payments">
-                                            <td><input v-if="user.special_role > 1"
-                                                    type="checkbox"
-                                                    :value="payment.or_number"
-                                                    v-model="selected_items" /></td>
-                                            <td>{{ payment.invoice_number }}</td>
-                                            <td>{{ payment.or_number }}</td>
-                                            <td>{{ payment.description }}</td>
-                                            <td>{{ payment.check_number }}</td>
-                                            <td>{{ payment.subtotal_order }}</td>
-                                            <td>{{ payment.charges }}</td>
-                                            <td>{{ payment.total_amount_due }}</td>
-                                            <td>{{ payment.status }}</td>
-                                            <td>{{ payment.or_date }}</td>
-                                            <td>{{ payment.void_reason }}</td>
-                                            <td>
-                                                <button
-                                                    v-if="(!payment.or_number && payment.status == 'Paid') && cashier && cashier.or_current"
-                                                    data-toggle="modal"
-                                                    @click="prepUpdate(payment.id,payment.description,payment.subtotal_order)"
-                                                    data-target="#myModal"
-                                                    class="btn btn-primary">
-                                                    Update OR
-                                                </button>
-                                                <button
-                                                    v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided' && cashier.invoice_current"
-                                                    data-toggle="modal"
-                                                    @click="invoice_update.id = payment.id;"
-                                                    data-target="#invoiceUpdate"
-                                                    class="btn btn-primary">
-                                                    Update Invoice
-                                                </button>
-                                                <button
-                                                    v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided'"
-                                                    data-toggle="modal"
-                                                    @click="or_details.id = payment.id;"
-                                                    data-target="#orDetailsUpdate"
-                                                    class="btn btn-primary">
-                                                    Update Details
-                                                </button>
-                                                <button v-if="payment.or_number && payment.invoice_number && cashier"
-                                                    @click="printOR(payment)"
-                                                    class="btn btn-primary">
-                                                    Print OR
-                                                </button>
-                                                <button
-                                                    v-if="payment.invoice_number && cashier"
-                                                    @click="printInvoice(payment)"
-                                                    class="btn btn-primary">
-                                                    Print Invoice
-                                                </button>
-                                                <button
-                                                    v-if="payment.invoice_number && cashier"
-                                                    @click="printInvoice(payment,1)"
-                                                    class="btn btn-primary">
-                                                    Print Invoice A
-                                                </button>
-                                                <button
-                                                    v-if="payment.mode && payment.status == 'Paid' && payment.remarks != 'Voided' && cashier && finance_manager_privilages"
-                                                    data-toggle="modal"
-                                                    data-target="#voidPaymentModal"
-                                                    class="btn btn-primary"
-                                                    @click="setToVoid(payment.id)">Void/Cancel</button>
-                                                <button
-                                                    v-if="(payment.mode && payment.status == 'Pending' && payment.mode.name == 'Onsite Payment') && cashier"
-                                                    class="btn btn-primary"
-                                                    @click="setToPaid(payment.id)">Set to
-                                                    paid</button>
-                                                <button
-                                                    v-if="(payment.mode && payment.mode.name == 'Onsite Payment')  && cashier && finance_manager_privilages"
-                                                    class="btn btn-danger"
-                                                    @click="deletePayment(payment.id)">Retract
-                                                    Payment</button>
-                                            </td>
-                                        </tr>
-                                        <tr v-if="user.special_role > 1">
-                                            <td class="text-right"
-                                                colspan="2">
-                                                Do with selected:
-                                            </td>
-                                            <td colspan="3">
-                                                <select class="form-control"
-                                                    v-model="switch_term">
-                                                    <option v-for="s in sy"
-                                                        :value="s.intID">{{ s.term_student_type}}
-                                                        {{ s.enumSem }} {{ s.term_label }}
-                                                        {{ s.strYearStart }} - {{ s.strYearEnd }}
-                                                    </option>
-                                                </select>
-                                            </td>
-                                            <td colspan="6">
-                                                <button @click="forwardSelected"
-                                                    class="btn btn-primary">
-                                                    Forward Selected
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr v-if="registration">
-                                            <td class="text-green"
-                                                colspan="10">
-                                                amount paid: P{{ amount_paid_formatted }}
-                                            </td>
-                                        </tr>
-                                        <tr v-if="registration">
-                                            <td class="text-green"
-                                                colspan="10">
-                                                remaining balance: P{{ remaining_amount_formatted }}
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    <div v-html="tuition"
-                                        class="col-sm-6"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div v-if="registration" class="tab-pane"
-                            id="tab_3">
-                            <h3>Statement of Account</h3>
-                            <!-- <img :src="soa.logo" height="300px" width="300px"/> -->
-                            <div class="text-center">
-                                <h3>iACADEMY, Inc.</h3>
-                                <h4>{{ soa.address }}</h4>
-                                <h4>AY {{ current_term.strYearStart }} -
-                                    {{ current_term.strYearEnd }} {{ current_term.enumSem }}
-                                    {{ current_term_full_label }}
-                                </h4>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <table class="table">
-                                        <tr>
-                                            <th>NAME OF STUDENT:</th>
-                                            <td>{{ student.strLastname.toUpperCase() }},
-                                                {{ student.strFirstname.toUpperCase() }}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>ID NUMBER:</th>
-                                            <td>{{ student.strStudentNumber.replace(/-/g, '') }}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>COURSE:</th>
-                                            <td>{{ student.strProgramCode }}</td>
-                                        </tr>
-                                    </table>
-                                    <div v-if="payment_type != 'full' && registration">
-                                        <table class="table table-bordered">
-                                            <tr v-if="registration.downpayment == 0">
-                                                <td>Down Payment</td>
-                                                <td>{{ tuition_data.down_payment }}</td>
-                                            </tr>
-                                            <tr v-for="(inst,ctr) in installments"
-                                                v-if="inst > 0">
-                                                <td>{{ addSuffix(ctr + 1) + ' installment due ' + installment_dates[ctr]+ ' ' }}
-                                                </td>
-                                                <td>P{{ inst }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>TOTAL BALANCE</td>
-                                                <td>P{{ soa.total }}</td>
-                                            </tr>
-                                        </table>
+                                        <button class="btn btn-primary btn-lg"
+                                            @click="printSOA">Print</button>
                                     </div>
-                                    <div v-else>
-                                        <table class="table table-bordered">
-                                            <tr>
-                                                <td>TOTAL BALANCE</td>
-                                                <td>P{{ remaining_amount_formatted }}</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                    <hr />
-                                    <button class="btn btn-primary btn-lg"
-                                        @click="printSOA">Print</button>
                                 </div>
                             </div>
                         </div>
