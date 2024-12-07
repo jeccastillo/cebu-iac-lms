@@ -1538,9 +1538,10 @@ new Vue({
                                 title: "Warning",
                                 text: "This student has no enlistment data for this term",
                                 icon: "warning"
-                            }).then(function() {
-                                document.location = base_url + "finance/view_all_students"
-                            });
+                            })
+                            // .then(function() {
+                            //     document.location = base_url + "finance/view_all_students"
+                            // });
                         }
                         this.user = data.data.user;
                         this.reg_status = data.data.reg_status;
