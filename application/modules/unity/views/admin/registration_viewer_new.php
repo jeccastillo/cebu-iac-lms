@@ -1534,6 +1534,9 @@ new Vue({
                             this.tuition_year = this.registration.tuition_year;
                         }
                         else{
+                            this.registration = {
+                                downpayment: 0
+                            }
                             Swal.fire({
                                 title: "Warning",
                                 text: "This student has no enlistment data for this term",
@@ -1688,9 +1691,8 @@ new Vue({
                                                 this.remaining_amount.toFixed(2)
                                                 .replace(/\d(?=(\d{3})+\.)/g,
                                                     '$&,');
-                                            //installment amounts 
-                                            if(this.registration)                               
-                                            if (this.registration.downpayment ==
+                                            //installment amounts                                
+                                            if (this.registration && this.registration.downpayment ==
                                                 1) {
                                                 var temp = (this.tuition_data
                                                         .installment_fee * 5) -
@@ -1757,8 +1759,7 @@ new Vue({
                                             .remaining_amount.toFixed(2).replace(
                                                 /\d(?=(\d{3})+\.)/g, '$&,');
                                         //installment amounts                                
-                                        if(this.registration)
-                                        if (this.registration.downpayment == 1) {
+                                        if (this.registration && this.registration.downpayment == 1) {
                                             var temp = (this.tuition_data
                                                 .installment_fee * 5) - parseFloat(
                                                 this.remaining_amount);
