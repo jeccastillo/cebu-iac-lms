@@ -2194,7 +2194,7 @@ class Unity extends CI_Controller {
         if($isOld)
             $subjects = $this->data_fetcher->getRequiredSubjects($post['sid'],$post['cid'],$post['sem'],$post['year']);
         else
-            $subjects = $this->data_fetcher->getRequiredSubjects($post['sid'],$post['cid'],1,1);
+            $subjects = $this->data_fetcher->getRequiredSubjects($post['sid'],$post['cid'],$post['sem'],1);
        
         $data = $subjects;
         echo json_encode($data);  
