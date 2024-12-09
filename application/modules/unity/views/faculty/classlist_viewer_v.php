@@ -278,7 +278,14 @@ new Vue({
                 this.disable_submit = data.data.disable_submit;
             }
             else{
-                document.location = base_url + 'unity';
+                Swal.fire({
+                    title: "Warning",
+                    text: "This Page is Forbidden",
+                    icon: "warning"
+                }).then(function() {
+                    document.location = base_url + 'unity';
+                });
+                
             }
             
         })
