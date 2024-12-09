@@ -2758,6 +2758,8 @@ class Unity extends CI_Controller {
         {            
             
             $data['classlist'] = $clist;
+            $grading_system = [];
+            $grading_system_midterm = [];
             
             if(!$data['classlist']['grading_system'])
                 $data['classlist']['grading_system'] = 1;
