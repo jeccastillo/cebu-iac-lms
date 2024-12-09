@@ -44,7 +44,7 @@
                 <div class="box box-widget widget-user-2">
                     <!-- Add the bg color to the header using any of the bg-* classes -->
                     <div class="widget-user-header bg-red">
-                        <div v-if="registration" class="pull-right"
+                        <div v-if="registration && user.special_role >= 1 || (registration.downpayment == 0 && registration.fullpayment == 0)" class="pull-right"
                             style="margin-left:1rem;">
                             Tuition Year
                             <select class="form-control"
@@ -86,7 +86,7 @@
                         </div>
                         <!-- /.widget-user-image -->
 
-                        <div v-if="registration && user.special_role >= 1"
+                        <div v-if="registration && user.special_role >= 0"
                             style="margin-right:1rem;"
                             class="pull-right">
                             Payment Type
