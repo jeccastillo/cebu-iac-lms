@@ -286,8 +286,8 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                             <tr>
                                 <td width="80px">DOWN PAYMENT</td>                                
                                 <td width="60px"></td>
-                                <td width="80px" style="text-align:right;">'.number_format($tuition['dp_before_deductions50'], 2, '.' ,',').'</td>
-                                <td width="80px" style="text-align:right;">'.number_format($tuition['dp_before_deductions30'], 2, '.' ,',').'</td>
+                                <td width="80px" style="text-align:right;">'.number_format($tuition['down_payment30'], 2, '.' ,',').'</td>
+                                <td width="80px" style="text-align:right;">'.number_format($tuition['down_payment50'], 2, '.' ,',').'</td>
                                 
                             </tr>
                             <tr>
