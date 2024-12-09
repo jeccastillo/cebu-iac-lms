@@ -49,7 +49,7 @@
                 <td width="20%" align="center" style="text-align:center;vertical-align: bottom"><img src= "https://i.ibb.co/kcYVsS7/i-ACADEMY-Seal-Makati.png"  width="100" height="95"/></td>
                 <td width="80%" style="text-align: center;line-height:1;vertical-align: middle">  
                     <br /><br /><br />
-                    <font style="font-family:Calibri Light; font-size: 12;font-weight: bold;">iACADEMY Inc. </font><br /><br />
+                    <font style="font-family:Calibri Light; font-size: 12;font-weight: bold;">iACADEMY, Inc. </font><br /><br />
                     <font style="font-family:Calibri Light; font-size: 10;">iACADEMY Nexus Campus, 7434 Yakal, Makati, 1203 Metro Manila, Philippines</font>
                 </td>  
             </tr>
@@ -286,8 +286,8 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                             <tr>
                                 <td width="80px">DOWN PAYMENT</td>                                
                                 <td width="60px"></td>
-                                <td width="80px" style="text-align:right;">'.number_format($tuition['dp_before_deductions50'], 2, '.' ,',').'</td>
-                                <td width="80px" style="text-align:right;">'.number_format($tuition['dp_before_deductions30'], 2, '.' ,',').'</td>
+                                <td width="80px" style="text-align:right;">'.number_format($tuition['down_payment30'], 2, '.' ,',').'</td>
+                                <td width="80px" style="text-align:right;">'.number_format($tuition['down_payment50'], 2, '.' ,',').'</td>
                                 
                             </tr>
                             <tr>
