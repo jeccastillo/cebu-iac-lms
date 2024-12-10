@@ -44,7 +44,7 @@
                 <div class="box box-widget widget-user-2">
                     <!-- Add the bg color to the header using any of the bg-* classes -->
                     <div class="widget-user-header bg-red">
-                        <div v-if="registration" class="pull-right"
+                        <div v-if="registration && user.special_role >= 1 || (registration.downpayment == 0 && registration.fullpayment == 0)" class="pull-right"
                             style="margin-left:1rem;">
                             Tuition Year
                             <select class="form-control"
@@ -86,7 +86,7 @@
                         </div>
                         <!-- /.widget-user-image -->
 
-                        <div v-if="registration && user.special_role >= 1"
+                        <div v-if="registration && user.special_role >= 0"
                             style="margin-right:1rem;"
                             class="pull-right">
                             Payment Type
@@ -1891,7 +1891,7 @@ new Vue({
         setInvoice() {
             this.request.invoice_number = this.cashier.invoice_current
             this.request.or_number = ''
-            this.apiUpdate = 'finance/update_cashier_invoice'
+            this.apiUpdate = 'finance/next_or/1'
         },
         cashierDetails: function(id) {
             axios.get(base_url + 'finance/cashier_details/' + id)
@@ -2657,9 +2657,10 @@ new Vue({
 
                                 if (this.windowPayment == 'invoice') {
                                     formdata.append('intID', this.cashier.intID);
-                                    formdata.append('start', this.cashier.invoice_start);
-                                    formdata.append('end', this.cashier.invoice_end);
-                                    formdata.append('current', (parseInt(this.cashier.invoice_current) + 1).toString());
+                                    formdata.append('invoice_current', this.cashier.invoice_current);
+                                    formdata.append('invoice_used', this.invoice_update.invoice_number);
+                                    formdata.append('registration_id', this.registration.intRegistrationID);
+                                    formdata.append('sy', this.student.sy_reference);
                                 }
                              
                                 axios.post(base_url + this.apiUpdate, formdata, {
