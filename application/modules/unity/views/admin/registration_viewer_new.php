@@ -1891,7 +1891,7 @@ new Vue({
         setInvoice() {
             this.request.invoice_number = this.cashier.invoice_current
             this.request.or_number = ''
-            this.apiUpdate = 'finance/update_cashier_invoice'
+            this.apiUpdate = 'finance/next_or/1'
         },
         cashierDetails: function(id) {
             axios.get(base_url + 'finance/cashier_details/' + id)
@@ -2657,9 +2657,10 @@ new Vue({
 
                                 if (this.windowPayment == 'invoice') {
                                     formdata.append('intID', this.cashier.intID);
-                                    formdata.append('start', this.cashier.invoice_start);
-                                    formdata.append('end', this.cashier.invoice_end);
-                                    formdata.append('current', (parseInt(this.cashier.invoice_current) + 1).toString());
+                                    formdata.append('invoice_current', this.cashier.invoice_current);
+                                    formdata.append('invoice_used', this.invoice_update.invoice_number);
+                                    formdata.append('registration_id', this.registration.intRegistrationID);
+                                    formdata.append('sy', this.student.sy_reference);
                                 }
                              
                                 axios.post(base_url + this.apiUpdate, formdata, {
