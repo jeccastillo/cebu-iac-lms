@@ -104,7 +104,7 @@ $html .= '
          
     foreach($records as $item){                
         
-        if($period == "final")
+        if($period == "Finals")
             $grade = ($item['intFinalized'] >= 2)?$item['v3']:'NGS';
         else
             $grade = ($item['intFinalized'] >= 1)?$item['v2']:'NGS';
