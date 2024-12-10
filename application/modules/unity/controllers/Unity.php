@@ -1536,7 +1536,9 @@ class Unity extends CI_Controller {
     {
         $post = $this->input->post();
         $id = $post['studentid'];
+        $student = $this->data_fetcher->getStudent($id); 
         $this->data_poster->removeRegistration($id,$post['sem']);
+        $this->data_poster->log_action('Reset Registration','Reset Registration: '.$student['strLastname'].", ".$student['strFirstname']." ".$post['sem'],'yellow');
         redirect(base_url()."unity/student_viewer/".$id);
     }
     
