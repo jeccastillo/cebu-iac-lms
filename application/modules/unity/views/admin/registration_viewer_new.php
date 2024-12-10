@@ -2659,8 +2659,15 @@ new Vue({
                                     formdata.append('intID', this.cashier.intID);
                                     formdata.append('invoice_current', this.cashier.invoice_current);
                                     formdata.append('invoice_used', this.invoice_update.invoice_number);
-                                    formdata.append('registration_id', this.registration.intRegistrationID);
+                                    formdata.append('payments', this.payments_paid.length);
+                                    formdata.append('total_amount', this.request.total_amount_due);                                    
                                     formdata.append('sy', this.student.sy_reference);
+                                    formdata.append('student_id', this.student.intID);
+                                    formdata.append('description', this.request.description);
+                                    formdata.append('description_other',this.description_other);
+                                    formdata.append('registration_id', this.registration.intRegistrationID);
+                                    formdata.append('installment', this.tuition_data.total_installment);
+                                    formdata.append('payment_type', this.payment_type);
                                 }
                              
                                 axios.post(base_url + this.apiUpdate, formdata, {
