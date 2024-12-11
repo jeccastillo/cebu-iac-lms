@@ -439,6 +439,7 @@ class Portal extends CI_Controller {
         if($this->logged_in()) {
             $this->data['page']="grades";
             $this->data['sy'] = $this->data_fetcher->getSyStudentEnrolled($this->session->userdata('intID'), 1);
+            $this->data['sem_selected'] = $this->db->get_where('tb_mas_sy',array('intID'=>$this->data['selected_ay']))->first_row();
     
             $this->data['registration'] = $this->data_fetcher->getRegistrationInfo($this->session->userdata('intID'),$this->data['selected_ay']);
             $this->data['student'] = $this->data_fetcher->getStudent($this->session->userdata('intID'));
