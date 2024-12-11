@@ -439,28 +439,34 @@ class Portal extends CI_Controller {
         if($this->logged_in()) {
             $this->data['page']="grades";
             $this->data['sy'] = $this->data_fetcher->getSyStudentEnrolled($this->session->userdata('intID'), 1);
-            $this->data['sem_selected'] = $this->db->get_where('tb_mas_sy',array('intID'=>$this->data['selected_ay']))->first_row();
-    
-            $this->data['registration'] = $this->data_fetcher->getRegistrationInfo($this->session->userdata('intID'),$this->data['selected_ay']);
-            $this->data['student'] = $this->data_fetcher->getStudent($this->session->userdata('intID'));
-            $this->data['records'] = $this->data_fetcher->getClassListStudentsSt($this->session->userdata('intID'),$this->data['selected_ay']);
-            $this->data['academic_standing'] = $this->data_fetcher->getAcademicStanding($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
-            $this->data['reg_status'] = $this->data_fetcher->getRegistrationStatus($this->data['student']['intID'],$this->data['selected_ay']);
-            //$this->data['home'] = true;
-            //$this->data['body_class'] = "homepage";
+            if($this->data['sy']){
+                $this->data['selected_ay'] = $this->data['sy'][0]['intID'];
+                $this->data['sem_selected'] = $this->db->get_where('tb_mas_sy',array('intID'=>$this->data['selected_ay']))->first_row();
+        
+                $this->data['registration'] = $this->data_fetcher->getRegistrationInfo($this->session->userdata('intID'),$this->data['selected_ay']);
+                $this->data['student'] = $this->data_fetcher->getStudent($this->session->userdata('intID'));
+                $this->data['records'] = $this->data_fetcher->getClassListStudentsSt($this->session->userdata('intID'),$this->data['selected_ay']);
+                $this->data['academic_standing'] = $this->data_fetcher->getAcademicStanding($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
+                $this->data['reg_status'] = $this->data_fetcher->getRegistrationStatus($this->data['student']['intID'],$this->data['selected_ay']);
+                //$this->data['home'] = true;
+                //$this->data['body_class'] = "homepage";
 
-                        
-            $this->data['subjects_not_taken'] = $this->data_fetcher->getRequiredSubjects($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
-            $grades = $this->data_fetcher->assessCurriculum($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
-            array_unshift($grades,array('strCode'=>'none','floatFinalGrade'=>'n/a','strRemarks'=>'n/a'));
-            $this->data['grades'] = $grades;
-            $this->data['curriculum_subjects'] = $this->data_fetcher->getSubjectsInCurriculumMain($this->data['student']['intCurriculumID']);
-            $this->data['equivalent_subjects'] = $this->data_fetcher->getSubjectsInCurriculumEqu($this->data['student']['intCurriculumID']);
-            $this->data['deficiencies'] = $this->db
-            ->get_where('tb_mas_student_deficiencies',array('student_id'=>$this->session->userdata('intID'),'status'=>'active','temporary_resolve_date <'=> date("Y-m-d")))->result_array();
-            $this->load->view('common/header',$this->data);
-            $this->load->view('content',$this->data);
-            $this->load->view('common/footer',$this->data);
+                            
+                $this->data['subjects_not_taken'] = $this->data_fetcher->getRequiredSubjects($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
+                $grades = $this->data_fetcher->assessCurriculum($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
+                array_unshift($grades,array('strCode'=>'none','floatFinalGrade'=>'n/a','strRemarks'=>'n/a'));
+                $this->data['grades'] = $grades;
+                $this->data['curriculum_subjects'] = $this->data_fetcher->getSubjectsInCurriculumMain($this->data['student']['intCurriculumID']);
+                $this->data['equivalent_subjects'] = $this->data_fetcher->getSubjectsInCurriculumEqu($this->data['student']['intCurriculumID']);
+                $this->data['deficiencies'] = $this->db
+                ->get_where('tb_mas_student_deficiencies',array('student_id'=>$this->session->userdata('intID'),'status'=>'active','temporary_resolve_date <'=> date("Y-m-d")))->result_array();
+                $this->load->view('common/header',$this->data);
+                $this->load->view('content',$this->data);
+                $this->load->view('common/footer',$this->data);
+            }
+            else{
+                echo "No Enrollement Data";
+            }
         }
            
         else
