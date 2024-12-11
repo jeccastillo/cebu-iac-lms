@@ -78,7 +78,7 @@
     <!-- <div class="box box-solid box-warning"> -->
     <div class="box box-warning">
           <div class="box-header">
-            <h3 class="box-title" ><?php echo 'Grades - A.Y. ' . $active_sem['strYearStart']."-".$active_sem['strYearEnd'] . " " .  $active_sem['enumSem']." ".$term_type." "; ?></h3>            
+            <h3 class="box-title" ><?php echo 'Grades - A.Y. ' . $selected_ay['strYearStart']."-".$selected_ay['strYearEnd'] . " " .  $selected_ay['enumSem']." ".$selected_ay['term_type']." "; ?></h3>            
          </div>
         
         <?php if ($reg_status =="For Subject Enlistment"):  { ?>
