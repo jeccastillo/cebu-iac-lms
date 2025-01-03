@@ -305,22 +305,22 @@ class Portal extends CI_Controller {
                 redirect(base_url().'portal');
                 break;
             case 'grades':
-                redirect(base_url().'portal/grades');
+                redirect(base_url().'portal/grades/'.$sem);
                 break;
             case 'profile':
                 redirect(base_url().'portal/profile');
                 break;
             case 'mycourses':
-                    redirect(base_url().'portal/mycourses');
+                    redirect(base_url().'portal/mycourses/'.$sem);
                     break;
             case 'accounting_summary':
-                    redirect(base_url().'portal/accounting_summary');
+                    redirect(base_url().'portal/accounting_summary/'.$sem);
                     break;
             case 'schedule':
-                redirect(base_url().'portal/schedule');
+                redirect(base_url().'portal/schedule/'.$sem);
                 break;
             case 'enlistment':
-                redirect(base_url().'portal/enlistment');
+                redirect(base_url().'portal/enlistment/'.$sem);
                 break;
         }
     }
