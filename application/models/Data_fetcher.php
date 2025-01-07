@@ -2651,7 +2651,7 @@ class Data_fetcher extends CI_Model {
                 $total_new_student += $new_student_list[$nsd['name']];
             }
         }   
-        elseif($dr >= $sem['reconf_start']){
+        elseif(date("Y-m-d",strtotime($dr)) >= $sem['reconf_start']){
 
             $late_enrollment = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'late_enrollment'))
                          ->get('tb_mas_tuition_year_misc')->result_array();
