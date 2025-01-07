@@ -434,13 +434,17 @@ class Portal extends CI_Controller {
       
 	}
 
-    public function grades()
+    public function grades($sem = null)
 	{ 
         if($this->logged_in()) {
             $this->data['page']="grades";
             $this->data['sy'] = $this->data_fetcher->getSyStudentEnrolled($this->session->userdata('intID'), 1);
             if($this->data['sy']){
-                $this->data['selected_ay'] = $this->data['sy'][0]['intID'];
+                if($sem == null)
+                    $this->data['selected_ay'] = $this->data['sy'][0]['intID'];
+                else
+                    $this->data['selected_ay'] = $sem;
+
                 $this->data['sem_selected'] = $this->db->get_where('tb_mas_sy',array('intID'=>$this->data['selected_ay']))->first_row();
         
                 $this->data['registration'] = $this->data_fetcher->getRegistrationInfo($this->session->userdata('intID'),$this->data['selected_ay']);
