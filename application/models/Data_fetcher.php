@@ -2499,7 +2499,7 @@ class Data_fetcher extends CI_Model {
         }
         
         if(isset($registration))
-            return $this->getTuitionSubjects($registration['enumStudentType'],$sch,$discount,$subjects,$id,$registration['type_of_class'],$sem,$registration['tuition_year'],$registration['date_enlisted'],$registration['intYearLevel'],$registration['internship']);
+            return $this->getTuitionSubjects($registration['enumStudentType'],$sch,$discount,$subjects,$id,$registration['type_of_class'],$sem,$registration['dteRegistered'],$registration['date_enlisted'],$registration['intYearLevel'],$registration['internship']);
         else                              
             return null;
         
