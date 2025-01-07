@@ -280,6 +280,10 @@
                             <input class="form-control" type="datetime-local" @blur="updateDateEnrolled($event)"
                               v-model="registration.dteRegistered">                                                          
                           </p>
+                          <p><strong>Date Enlisted (date student is going to enroll): </strong>
+                            <input class="form-control" type="datetime-local" @blur="updateDateEnlisted($event)"
+                              v-model="registration.date_enlisted">                                                          
+                          </p>                          
                           <p><strong>Tuition Year</strong>
                             <select class="form-control"
                                 @change="selectTuitionYear($event)"
@@ -1163,6 +1167,30 @@ new Vue({
 
 
     },
+    updateDateEnlisted: function(event){
+      var formdata = new FormData();
+      formdata.append('intRegistrationID', this.registration.intRegistrationID);
+      formdata.append('date_enlisted', event.target.value);
+
+
+      this.loader_spinner = true;
+      axios.post(base_url + 'unity/update_academic_status', formdata, {
+          headers: {
+            Authorization: `Bearer ${window.token}`
+          }
+        })
+        .then(data => {
+          this.loader_spinner = false;
+          Swal.fire({
+            title: "Success",
+            text: data.data.message,
+            icon: "success"
+          }).then(function() {
+
+          });
+        });
+    },
+    
     updateDateEnrolled: function(event){
       var formdata = new FormData();
       formdata.append('intRegistrationID', this.registration.intRegistrationID);
