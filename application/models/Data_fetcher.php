@@ -2642,9 +2642,7 @@ class Data_fetcher extends CI_Model {
                          ->get('tb_mas_tuition_year_misc')->result_array();  
         
             
-        echo $dr." ".$sem['reconf_start'];
-
-        die();
+        
         if($stype == 'new'){
             $new_student_data = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'new_student'))
                          ->get('tb_mas_tuition_year_misc')->result_array();
@@ -2656,7 +2654,8 @@ class Data_fetcher extends CI_Model {
         }   
         elseif(date("Y-m-d",strtotime($dr)) >= $sem['reconf_start']){
             
-
+            echo $dr." ".$sem['reconf_start'];
+            die();
             $late_enrollment = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'late_enrollment'))
                          ->get('tb_mas_tuition_year_misc')->result_array();
 
