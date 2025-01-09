@@ -2264,7 +2264,7 @@ class Registrar extends CI_Controller {
 
                     $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj);                                          
                     //delete student from classlist
-                    $this->db->where(array('intStudentID'=>$post['id'],'intClassListID'=>$record['intID']))->delete('tb_mas_classlist_student');
+                    $this->db->where(array('intStudentID'=>$post['id'],'intClassListID'=>$record['intClassListID']))->delete('tb_mas_classlist_student');
                 }               
             }
             else{
