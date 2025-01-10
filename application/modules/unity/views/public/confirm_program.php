@@ -217,7 +217,7 @@
                             <div class="col-md-4 form-group"> <label>LRN</label>
                                 <input type="text" maxlength="13" class="form-control" v-model="request.strLRN" />
                             </div>
-                            <div class="col-md-4 form-group"> <label>Voucher</label>
+                            <div class="col-md-4 form-group"> <label>Voucher (for incoming Grade 11 Students Only)</label>
                                 <input type="file" accept="image/*" ref="voucher_file" class="form-control"
                                     @change="changeVoucher" />
                             </div>
