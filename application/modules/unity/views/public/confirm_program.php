@@ -211,18 +211,19 @@
 
                         <!--  -->
                         <hr>
-                        <h3>LRN & Voucher</h3>
+                        <div v-if="api_data.type == 'shs'">
+                            <h3>LRN & Voucher</h3>
 
-                        <div class="row">
-                            <div class="col-md-4 form-group"> <label>LRN</label>
-                                <input type="text" maxlength="13" class="form-control" v-model="request.strLRN" />
-                            </div>
-                            <div class="col-md-4 form-group"> <label>Voucher (for incoming Grade 11 Students Only)</label>
-                                <input type="file" accept="image/*" ref="voucher_file" class="form-control"
-                                    @change="changeVoucher" />
+                            <div class="row">
+                                <div class="col-md-4 form-group"> <label>LRN</label>
+                                    <input type="text" maxlength="13" class="form-control" v-model="request.strLRN" />
+                                </div>
+                                <div class="col-md-4 form-group"> <label>Voucher</label>
+                                    <input type="file" accept="image/*" ref="voucher_file" class="form-control"
+                                        @change="changeVoucher" />
+                                </div>
                             </div>
                         </div>
-
                         <hr />
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary" v-if="loaded">Confirm Selected Program and
