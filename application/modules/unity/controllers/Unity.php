@@ -3766,8 +3766,9 @@ class Unity extends CI_Controller {
         
         if($this->is_registrar() || $this->is_super_admin()){
             $post = $this->input->post();
+            print_r($post);
             $this->data_poster->deleteItem('tb_mas_curriculum_subject',$post['id'],'intID');
-            $data['table'] = $table." ".$post['id'];
+            $data['table'] = $table;
             $data['message'] = "success";
             $this->data_poster->log_action('Curriculum','Deleted a Subject from Curriculum '.$post['code'],'red');
         }
