@@ -586,6 +586,20 @@ class Data_fetcher extends CI_Model {
         return $subjects;
     }
 
+    function getSubjectsInSecondary($id)
+    {
+        $subjects = $this->db
+                         ->select('tb_mas_curriculum_second.intID,tb_mas_subjects.strCode,tb_mas_subjects.strUnits,tb_mas_subjects.intID as intSubjectID,tb_mas_subjects.strDescription,tb_mas_subjects.intLab, tb_mas_subjects.intLectHours,tb_mas_subjects.strUnits,include_gwa')
+                         ->from('tb_mas_curriculum_second')
+                         ->join('tb_mas_subjects','tb_mas_subjects.intID = tb_mas_curriculum_second.intSubjectID')
+                         ->where('tb_mas_curriculum_second.intCurriculumID',$id)
+                         ->order_by('tb_mas_subjects.strCode asc')
+                         ->get()
+                         ->result_array();
+        
+        return $subjects;
+    }
+
     function getSubjectsInCurriculumAlphabetical($id)
     {
         $subjects = $this->db
