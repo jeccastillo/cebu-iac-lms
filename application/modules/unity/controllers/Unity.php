@@ -2219,7 +2219,9 @@ class Unity extends CI_Controller {
             $this->data['programs'] = $this->data_fetcher->fetch_table('tb_mas_programs');
             $this->data['subjects'] = $this->data_fetcher->getSubjectsNotInCurriculum($id);
             $curriculum = $this->data_fetcher->getSubjectsInCurriculum($id);
+            $curriculum_second = $this->data_fetcher->getSubjectsInSecondary($id);
             $this->data['curriculum_subjects'] = [];
+            $this->data['curriculum_second'] = [];
              
             foreach($curriculum as $subject){
                 $prereq_array = 
@@ -2236,7 +2238,24 @@ class Unity extends CI_Controller {
                 }       
     
                 $this->data['curriculum_subjects'][] = $subject;
-            }   
+            }
+            
+            foreach($curriculum_second as $subject){
+                $prereq_array = 
+                        $this->db->select('tb_mas_subjects.*,tb_mas_prerequisites.program')
+                         ->from('tb_mas_prerequisites')
+                         ->join('tb_mas_subjects', 'tb_mas_prerequisites.intPrerequisiteID = tb_mas_subjects.intID')
+                         ->where('intSubjectID',$subject['intSubjectID'])
+                         ->get()
+                         ->result_array();
+                $subject['prereq'] = [];    
+                foreach($prereq_array as $prereq){
+                        if(isset($prereq['program']) && ($prereq['program'] == 0  || $prereq['program'] == $this->data['item']['intID'] || $prereq['program'] == NULL))
+                            $subject['prereq'][] =  $prereq;     
+                }       
+    
+                $this->data['curriculum_second'][] = $subject;
+            }
 
             
             $this->load->view("common/header",$this->data);

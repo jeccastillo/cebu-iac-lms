@@ -205,8 +205,54 @@
             $i++;
             endforeach; ?>
             
-        
-        </div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th colspan="2">
+                            Second Specialization Subjects                            
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>Course Code</th>
+                        <th>Course Description</th>
+                        <th>Lecture Units</th>
+                        <th>Lab Units</th>
+                        <th>Total Units</th>
+                        <th>Pre-requisites</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                
+                <tbody>                                 
+                    <?php foreach($curriculum_subjects as $s): ?>
+                    <tr>
+                        <td><a target="_blank" href="<?php echo base_url(); ?>subject/subject_viewer/<?php echo $s['intSubjectID']; ?>"><?php echo $s['strCode']; ?></a></td>
+                        <td><?php echo $s['strDescription']; ?></td>
+                        <td><?php echo $s['intLectHours']; ?></td>
+                        <td><?php echo $s['intLab']; ?></td>
+                        <td><?php echo $s['strUnits']; ?></td>
+                        <td style="width:20%;">
+                            <?php
+                            $i = 0;
+                            foreach($s['prereq'] as $pre){ 
+                                if($i != 0)
+                                    echo ", ";
+                                    echo $pre['strCode']; 
+                                
+                                $i++;
+                            }
+                            ?>
+                            <br />
+                            <a style="font-size:.8em;" target="_blank" href="<?php echo base_url(); ?>subject/edit_prerequisite/<?php echo $s['intSubjectID']."/".$item['intID']; ?>">[add/edit]</a>
+                        </td>
+                        <td>
+                            <a rel="<?php echo $s['intID']; ?>" class="btn btn-danger remove-subject-curriculum" href="#">Remove</a>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>            
+            </div>
         </div>
     </div>
     
