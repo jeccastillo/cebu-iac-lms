@@ -278,7 +278,7 @@ class Data_fetcher extends CI_Model {
     
     function getSubjectsNotInCurriculum($id)
     {
-        $bucket = "SELECT intID,strCode,strDescription FROM tb_mas_subjects WHERE intID NOT IN (SELECT intSubjectID from tb_mas_curriculum_subject WHERE intCurriculumID = ".$id.") ORDER BY strCode ASC"; 
+        $bucket = "SELECT intID,strCode,strDescription FROM tb_mas_subjects WHERE intID NOT IN (SELECT intSubjectID from tb_mas_curriculum_subject WHERE intCurriculumID = ".$id.") AND intID NOT IN (SELECT intSubjectID from tb_mas_curriculum_second WHERE intCurriculumID = ".$id.") ORDER BY strCode ASC"; 
         
         $subjects = $this->db
              ->query($bucket)
@@ -580,6 +580,20 @@ class Data_fetcher extends CI_Model {
                          ->join('tb_mas_subjects','tb_mas_subjects.intID = tb_mas_curriculum_subject.intSubjectID OR tb_mas_subjects.intEquivalentID1 = tb_mas_curriculum_subject.intSubjectID OR tb_mas_subjects.intEquivalentID2 = tb_mas_curriculum_subject.intSubjectID')
                          ->where('tb_mas_curriculum_subject.intCurriculumID',$id)
                          ->order_by('intYearLevel asc, intSem asc, strCode asc')
+                         ->get()
+                         ->result_array();
+        
+        return $subjects;
+    }
+
+    function getSubjectsInSecondary($id)
+    {
+        $subjects = $this->db
+                         ->select('tb_mas_curriculum_second.intID,tb_mas_subjects.strCode,tb_mas_subjects.strUnits,tb_mas_subjects.intID as intSubjectID,tb_mas_subjects.strDescription,tb_mas_subjects.intLab, tb_mas_subjects.intLectHours,tb_mas_subjects.strUnits,include_gwa')
+                         ->from('tb_mas_curriculum_second')
+                         ->join('tb_mas_subjects','tb_mas_subjects.intID = tb_mas_curriculum_second.intSubjectID')
+                         ->where('tb_mas_curriculum_second.intCurriculumID',$id)
+                         ->order_by('tb_mas_subjects.strCode asc')
                          ->get()
                          ->result_array();
         
@@ -2545,7 +2559,7 @@ class Data_fetcher extends CI_Model {
         
     }   
 
-    function getTuitionSubjects($stype,$sch,$discount,$subjects,$id,$class_type="regular",$syid,$tuition_year_id,$dr="1970-01-01",$year_level = 1,$internship = 0)
+    function getTuitionSubjects($stype,$sch,$discount,$subjects,$id,$class_type="regular",$syid,$tuition_year_id,$dr=null,$year_level = 1,$internship = 0)
     {
         $tuition = 0;
         $total_lab = 0;
@@ -2651,7 +2665,7 @@ class Data_fetcher extends CI_Model {
                 $total_new_student += $new_student_list[$nsd['name']];
             }
         }   
-        elseif($dr >= $sem['reconf_start']){
+        elseif(date("Y-m-d",strtotime($dr)) >= $sem['reconf_start']){
 
             $late_enrollment = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'late_enrollment'))
                          ->get('tb_mas_tuition_year_misc')->result_array();
