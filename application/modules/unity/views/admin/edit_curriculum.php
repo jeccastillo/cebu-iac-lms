@@ -83,8 +83,16 @@
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer">
-                    <div class="form-group col-xs-4">
-                    <input type="hidden" name="intCurriculumID" value="<?php echo $item['intID']; ?>" >
+                    <div class="form-group col-sm-3">
+                        <label for="type">Type</label>
+                        <select class="form-control" name="type" id="type" >
+                            <option value="regular">Regular</option>
+                            <option value="2nd Specialization">2nd Specialization</option>
+                            <option value="Elective">Elective</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-sm-3">
+                        <input type="hidden" name="intCurriculumID" value="<?php echo $item['intID']; ?>" >
                         <label for="intYearLevel">Year Level</label>
                         <select class="form-control" name="intYearLevel" id="intYearLevel" >
                             <option value="1">1</option>
@@ -94,7 +102,7 @@
                             <option value="5">5</option>
                         </select>
                     </div>
-                    <div class="form-group col-xs-4">
+                    <div class="form-group col-sm-3">
                         <label for="intSem">Term</label>
                         <select class="form-control" name="intSem" id="intSem" >
                             <option value="1">1</option>
@@ -102,7 +110,7 @@
                             <option value="3">3</option>
                         </select>
                     </div>
-                    <div class="form-group col-xs-4">
+                    <div class="form-group col-sm-3">
                         <label for="intSem"></label>
                         <input type="submit" value="Add Subjects" class="form-control btn btn-default  btn-flat">
                     </div>
