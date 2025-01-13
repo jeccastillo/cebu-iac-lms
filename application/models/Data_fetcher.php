@@ -278,7 +278,7 @@ class Data_fetcher extends CI_Model {
     
     function getSubjectsNotInCurriculum($id)
     {
-        $bucket = "SELECT intID,strCode,strDescription FROM tb_mas_subjects WHERE intID NOT IN (SELECT intSubjectID from tb_mas_curriculum_subject WHERE intCurriculumID = ".$id.") ORDER BY strCode ASC"; 
+        $bucket = "SELECT intID,strCode,strDescription FROM tb_mas_subjects WHERE intID NOT IN (SELECT intSubjectID from tb_mas_curriculum_subject WHERE intCurriculumID = ".$id.") AND intID NOT IN (SELECT intSubjectID from tb_mas_curriculum_second WHERE intCurriculumID = ".$id.") ORDER BY strCode ASC"; 
         
         $subjects = $this->db
              ->query($bucket)
@@ -2575,7 +2575,7 @@ class Data_fetcher extends CI_Model {
         $total_assessment_installment50 = 0;
         $discount_array = [];
         $scholarship_array = [];
-        $late_enrollment_fee = 0;        
+        $late_enrollment_fee = 0;
         if(!isset($dr))
             $dr = date("Y-m-d");
 
@@ -2641,8 +2641,7 @@ class Data_fetcher extends CI_Model {
             $misc = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => $misc_type))
                          ->get('tb_mas_tuition_year_misc')->result_array();  
         
-            
-        
+                         
         if($stype == 'new'){
             $new_student_data = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'new_student'))
                          ->get('tb_mas_tuition_year_misc')->result_array();
@@ -2653,7 +2652,7 @@ class Data_fetcher extends CI_Model {
             }
         }   
         elseif(date("Y-m-d",strtotime($dr)) >= $sem['reconf_start']){
-                        
+
             $late_enrollment = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'late_enrollment'))
                          ->get('tb_mas_tuition_year_misc')->result_array();
 
