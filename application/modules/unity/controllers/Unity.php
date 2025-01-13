@@ -3759,9 +3759,10 @@ class Unity extends CI_Controller {
         echo json_encode($data);
     }
     
-    public function delete_subject_curriculum()
+    public function delete_subject_curriculum($type = 0)
     {
         $data['message'] = "failed";
+        $table = ($type == 0)?'tb_mas_curriculum_subject':'tb_mas_curriculum_second';
         if($this->is_registrar() || $this->is_super_admin()){
             $post = $this->input->post();
             $this->data_poster->deleteItem('tb_mas_curriculum_subject',$post['id'],'intID');
