@@ -278,7 +278,7 @@ class Data_fetcher extends CI_Model {
     
     function getSubjectsNotInCurriculum($id)
     {
-        $bucket = "SELECT intID,strCode,strDescription FROM tb_mas_subjects WHERE intID NOT IN (SELECT intSubjectID from tb_mas_curriculum_subject WHERE intCurriculumID = ".$id.") AND NOT IN (SELECT intSubjectID from tb_mas_curriculum_second WHERE intCurriculumID = ".$id.") ORDER BY strCode ASC"; 
+        $bucket = "SELECT intID,strCode,strDescription FROM tb_mas_subjects WHERE intID NOT IN (SELECT intSubjectID from tb_mas_curriculum_subject WHERE intCurriculumID = ".$id.") AND intID NOT IN (SELECT intSubjectID from tb_mas_curriculum_second WHERE intCurriculumID = ".$id.") ORDER BY strCode ASC"; 
         
         $subjects = $this->db
              ->query($bucket)
