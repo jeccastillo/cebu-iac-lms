@@ -2261,13 +2261,22 @@ class Unity extends CI_Controller {
         if($this->is_registrar() || $this->is_super_admin())
         {
             $post = $this->input->post();
-            //print_r($post);
+            $type = $post['type'];
             
-            foreach($post['subject'] as $subject)
-            {
-                $data = array('intSubjectID'=>$subject,'intCurriculumID'=>$post['intCurriculumID'],'intYearLevel'=>$post['intYearLevel'],'intSem'=>$post['intSem']);
-                $this->data_poster->post_data('tb_mas_curriculum_subject',$data);
-            }
+            //print_r($post);
+            if($type == "regular")                
+                foreach($post['subject'] as $subject)
+                {
+                    $data = array('intSubjectID'=>$subject,'intCurriculumID'=>$post['intCurriculumID'],'intYearLevel'=>$post['intYearLevel'],'intSem'=>$post['intSem']);
+                    $this->data_poster->post_data('tb_mas_curriculum_subject',$data);
+                }
+            else
+                foreach($post['subject'] as $subject)
+                {
+                    $data = array('intSubjectID'=>$subject,'intCurriculumID'=>$post['intCurriculumID'],'type'=>$post['type']);
+                    $this->data_poster->post_data('tb_mas_curriculum_second',$data);
+                }
+            
             
         }
         redirect(base_url()."unity/edit_curriculum/".$post['intCurriculumID']);
