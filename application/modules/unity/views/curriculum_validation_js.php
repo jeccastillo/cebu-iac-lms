@@ -35,6 +35,41 @@
                     }
             
         });
+
+        $(".remove-subject-second").click(function(e){
+            e.preventDefault();
+             conf = confirm("Are you sure you want to delete?");
+                    if(conf)
+                    {
+                        $(".loading-img").show();
+                        $(".overlay").show();
+                        var id = $(this).attr('rel');
+                        var parent = $(this).parent().parent();
+                        var code = parent.children(':first-child').html();
+                        var data = {'id':id,'code':code};
+                        $.ajax({
+                            'url':'<?php echo base_url(); ?>index.php/unity/delete_subject_curriculum/1',
+                            'method':'post',
+                            'data':data,
+                            'dataType':'json',
+                            'success':function(ret){
+                                if(ret.message == "failed"){
+                                    $("#alert-text").html('<b>Alert! '+code+'</b> cannot be deleted it is connected to classlist.')
+                                    $(".alert").show();
+                                    setTimeout(function() {
+                                        $(".alert").hide('fade', {}, 500)
+                                    }, 3000);
+                                }
+                                else
+                                    parent.hide();
+
+                                $(".loading-img").hide();
+                                $(".overlay").hide();
+                        }
+                    });
+                    }
+            
+        });
         
         //FORM VALIDATION FOR SUBJECT
         $("input[name='strName']").blur(function(){
