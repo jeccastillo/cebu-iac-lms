@@ -1333,6 +1333,226 @@ class Finance extends CI_Controller {
     //     echo json_encode($data);
     // }
 
+    public function finance_deleted_or_invoice_data($sem = 0, $report_type=‘or’, $report_date)
+    {
+        $report_date = ($report_date) ? $report_date : date("Y-m-d");
+        $response_array = array();
+
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+        $export_type = ($report_type == 'invoice') ? 'Invoice' : 'Official Receipt';
+
+        $results = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
+                   ->from('payment_details')
+                    ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->where(array('status' => 'void', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.or_number !=' => null))
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->group_by('tb_mas_users.intID')
+                    ->get()
+                    ->result_array();
+
+        if($report_type == 'invoice'){
+            $results = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
+                        ->from('payment_details')
+                        ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
+                        ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                        ->where(array('status' => 'void', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.invoice_number !=' => null))
+                        ->order_by('tb_mas_users.strLastname', 'ASC')
+                        ->group_by('tb_mas_users.intID')
+                        ->get()
+                        ->result_array();
+        }
+
+        foreach($results as $index => $result){
+
+            $course = $this->data_fetcher->getProgramDetails($result['intProgramID']);
+            
+            $response_data['index'] = $index + 1;
+            $response_data['studentNumber'] = str_replace("-", "", $result['strStudentNumber']);
+            $response_data['studentName'] = ucfirst($result['strLastname']) . ', ' . ucfirst($result['strFirstname']) . ' ' . ucfirst($result['strMiddlename'][0]) . '.';
+            $response_data['course'] = $course['strProgramCode'];
+            $response_data['dateEnrolled'] = date("d-M-Y",strtotime($result['date_enlisted']));
+            $response_data['or_invoice_date'] =  $report_type == 'invoice' ? date("d-M-Y", strtotime($result['invoice_date'])) : date("d-M-Y",strtotime($result['or_date']));
+            $response_data['or_invoice_number'] = $report_type == 'invoice' ? $result
+['invoice_number'] : $result['or_number'];
+            $response_data['amount'] = $result['subtotal_order'];
+            $response_data['date_deleted'] = date("d-M-Y", strtotime($result['updated_at']));
+            $response_data['deleted_by'] = '';
+            $response_data['remarls'] = $result['remarks'];
+            $response_array[] = $response_data;
+        }
+        
+        $data['data'] = $response_array;
+
+        echo json_encode($data);
+    }
+
+    public function finance_cancelled_or_invoice_data($sem = 0, $report_type ='or', $report_date)
+    {
+        $report_date =  date("Y-m-d");
+        $response_array = array();
+
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+        $export_type = ($report_type == 'invoice') ? 'Invoice' : 'Official Receipt';
+
+        $results = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
+                   ->from('payment_details')
+                    ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->where(array('status' => 'cancel', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.or_number !=' => null))
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->group_by('tb_mas_users.intID')
+                    ->get()
+                    ->result_array();
+
+        if($report_type == 'invoice'){
+            $results = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
+                        ->from('payment_details')
+                        ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
+                        ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                        ->where(array('status' => 'cancel', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.invoice_number !=' => null))
+                        ->order_by('tb_mas_users.strLastname', 'ASC')
+                        ->group_by('tb_mas_users.intID')
+                        ->get()
+                        ->result_array();
+        }
+
+        foreach($results as $index => $result){
+
+            $course = $this->data_fetcher->getProgramDetails($result['intProgramID']);
+            
+            $response_data['index'] = $index + 1;
+            $response_data['studentNumber'] = str_replace("-", "", $result['strStudentNumber']);
+            $response_data['studentName'] = ucfirst($result['strLastname']) . ', ' . ucfirst($result['strFirstname']) . ' ' . ucfirst($result['strMiddlename'][0]) . '.';
+            $response_data['course'] = $course['strProgramCode'];
+            $response_data['dateEnrolled'] = date("d-M-Y",strtotime($result['date_enlisted']));
+            $response_data['or_invoice_date'] =  $report_type == 'invoice' ? date("d-M-Y", strtotime($result['invoice_date'])) : date("d-M-Y",strtotime($result['or_date']));
+            $response_data['or_invoice_number'] = $report_type == 'invoice' ? $result['invoice_number'] : $result['or_number'];
+            $response_data['amount'] = $result['subtotal_order'];
+            $response_data['date_deleted'] = date("d-M-Y", strtotime($result['updated_at']));
+            $response_data['deleted_by'] = '';
+            $response_data['remarls'] = $result['remarks'];
+            $response_array[] = $response_data;
+        }
+        
+        $data['data'] = $response_array;
+
+        echo json_encode($data);
+    }
+
+
+    public function finance_scholarship_report_data($sem, $scholar_type = 0, $report_date = null)
+    {
+        $report_date = ($report_date) ? $report_date : date("Y-m-d");
+        $students_array = array();
+
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+
+        $scholarship = $this->db->get_where('tb_mas_scholarships', array('intID' => $scholar_type))->first_row();
+
+        $students = $this->db->select('tb_mas_student_discount.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
+                    ->from('tb_mas_student_discount')
+                    ->join('tb_mas_users','tb_mas_users.intID = tb_mas_student_discount.student_id')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->where(array('tb_mas_student_discount.status' => 'applied', 'tb_mas_student_discount.syid' => $sem, 'tb_mas_student_discount.discount_id' => $scholar_type, 'tb_mas_student_discount.date_applied <=' => $report_date))
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->group_by('tb_mas_users.intID')
+                    ->get()
+                    ->result_array();
+
+        foreach($students as $index => $student){
+            
+            $tuition = $this->data_fetcher->getTuition($student['intID'], $sem);
+            $total_discount = 0;
+
+            if($tuition){
+                if($student['paymentType'] == 'full'){
+                    $total_discount += ($tuition['scholarship_total_assessment_rate'] > 0) ? $tuition['scholarship_total_assessment_rate'] : 0;
+                    $total_discount += ($tuition['scholarship_total_assessment_fixed'] > 0) ? $tuition['scholarship_total_assessment_fixed'] : 0;
+                        $total_discount += ($tuition['scholarship_tuition_fee_rate'] > 0) ? $tuition['scholarship_tuition_fee_rate'] : 0;
+                }else{ 
+                        $total_discount += ($tuition['scholarship_total_assessment_rate_installment'] > 0) ? $tuition['scholarship_total_assessment_rate_installment'] : 0;
+                        $total_discount += ($tuition['scholarship_total_assessment_fixed_installment'] > 0) ? $tuition['scholarship_total_assessment_fixed_installment'] : 0;
+                        $total_discount += ($tuition['scholarship_tuition_fee_installment_rate'] > 0) ? $tuition['scholarship_tuition_fee_installment_rate'] : 0;
+                }
+            }
+
+            $course = $this->data_fetcher->getProgramDetails($student['intProgramID']);  
+            
+            $student_data['index'] = $index + 1;
+            $student_data['studentNumber'] = str_replace("-", "", $student['strStudentNumber']);
+            $student_data['studentName'] = ucfirst($student['strLastname']) . ', ' . ucfirst($student['strFirstname']) . ' ' . ucfirst($student['strMiddlename'][0]) . '.';
+            $student_data['course'] = $course['strProgramCode'];
+            $student_data['dateEnrolled'] = date("d-M-Y",strtotime($student['date_enlisted']));
+            $student_data['amount'] = $total_discount;
+            $students_array[] = $student_data;
+        }
+        
+        $data['data'] = $students_array;
+
+        echo json_encode($data);
+    }
+
+    public function finance_credit_debit_memo_data($sem = 0, $report_date)
+    {
+        $report_date = ($report_date) ? $report_date : date("Y-m-d");
+        $response_array = array();
+
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+        
+        $results = $this->db->select('tb_mas_student_ledger.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
+                   ->from('tb_mas_student_ledger')
+                    ->join('tb_mas_users','tb_mas_users.intID = tb_mas_student_ledger.student_id')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->where(array('tb_mas_student_ledger.syid' => $sem, 'tb_mas_student_ledger.DATE <=' => $report_date))
+                    ->where_in('name', ['Late Enrollment Fee', 'Excess Payment Refund', 'Excess Payment Applied to College', 'Change of Payment Type', 'Withdrawal Charges', 'To Close Balance'])
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->group_by('tb_mas_student_ledger.id')
+                    ->get()
+                    ->result_array();
+
+        foreach($results as $index => $result){
+
+            $course = $this->data_fetcher->getProgramDetails($result['intProgramID']);
+            $added_by = $this->data_fetcher->getUserData($result['added_by']);
+
+            $response_data['index'] = $index + 1;
+            $response_data['student_number'] = str_replace("-", "", $result['strStudentNumber']);
+            $response_data['student_name'] = ucfirst($result['strLastname']) . ', ' . ucfirst($result['strFirstname']) . ' ' . ucfirst($result['strMiddlename'][0]) . '.';
+            $response_data['course'] = $course['strProgramCode'];
+            $response_data['date'] = date("d-M-Y",strtotime($result['date']));
+            $response_data['added_by'] =  ucfirst($added_by->strLastname) . ', ' . ucfirst($added_by->strFirstname);
+            $response_data['particular'] = $result['name'];
+            $response_data['debit_memo'] = $result['amount'] >= 0 ? $result['amount'] : '';
+            $response_data['credit_memo'] = $result['amount'] < 0 ? abs($result['amount']) : '';
+            $response_array[] = $response_data;
+        }
+        
+        $data['data'] = $response_array;
+
+        echo json_encode($data);
+    }
+
     public function faculty_logged_in()
     {
         if($this->session->userdata('faculty_logged'))
