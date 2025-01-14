@@ -770,19 +770,20 @@ class Finance extends CI_Controller {
 
         if(isset($post['registration_id'])){
             
-
-            if($post['description_other'] == "full"){                                
-                $update['fullpayment'] = 1;
-                $update['paymentType'] = $post['payment_type'];
-            }
-            if($post['description_other'] == "down"){                
-                
-                $update['downpayment'] = 1;
-                $update['paymentType'] = $post['payment_type'];
-                
-                $this->db
-                     ->where(array('name'=>'tuition','syid'=>$sem['intID']))
-                     ->update('tb_mas_student_ledger',array('amount'=>$post['installment']));
+            if(isset($post['description_other'])){
+                if($post['description_other'] == "full"){                                
+                    $update['fullpayment'] = 1;
+                    $update['paymentType'] = $post['payment_type'];
+                }
+                if($post['description_other'] == "down"){                
+                    
+                    $update['downpayment'] = 1;
+                    $update['paymentType'] = $post['payment_type'];
+                    
+                    $this->db
+                        ->where(array('name'=>'tuition','syid'=>$sem['intID']))
+                        ->update('tb_mas_student_ledger',array('amount'=>$post['installment']));
+                }
             }
             
            
