@@ -630,7 +630,7 @@
                                                     <button
                                                         v-if="application_payment.status == 'Paid' && cashier && application_payment.remarks != 'Voided' && cashier.invoice_current"
                                                         data-toggle="modal"
-                                                        @click="invoice_update.id = application_payment.id;"
+                                                        @click="invoice_update.id = application_payment.id; invoice_update_description = application_payment.description;"
                                                         data-target="#invoiceUpdate"
                                                         class="btn btn-primary">
                                                         Update Invoice
@@ -690,7 +690,7 @@
                                                     <button
                                                         v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided' && cashier.invoice_current"
                                                         data-toggle="modal"
-                                                        @click="invoice_update.id = payment.id;"
+                                                        @click="invoice_update.id = payment.id; invoice_update_description = payment.description;"
                                                         data-target="#invoiceUpdate"
                                                         class="btn btn-primary">
                                                         Update Invoice
@@ -763,7 +763,7 @@
                                                     <button
                                                         v-if="reservation_payment.status == 'Paid' && cashier && reservation_payment.remarks != 'Voided' && cashier.invoice_current"
                                                         data-toggle="modal"
-                                                        @click="invoice_update.id = reservation_payment.id;"
+                                                        @click="invoice_update.id = reservation_payment.id; invoice_update_description = reservation_payment.description;"
                                                         data-target="#invoiceUpdate"
                                                         class="btn btn-primary">
                                                         Update Invoice
@@ -823,7 +823,7 @@
                                                     <button
                                                         v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided' && cashier.invoice_current"
                                                         data-toggle="modal"
-                                                        @click="invoice_update.id = payment.id;"
+                                                        @click="invoice_update.id = payment.id; invoice_update_description = payment.description;"
                                                         data-target="#invoiceUpdate"
                                                         class="btn btn-primary">
                                                         Update Invoice
@@ -2093,7 +2093,7 @@ new Vue({
                                 formdata.append('invoice_used', this.invoice_update.invoice_number);
                                 formdata.append('registration_id', this.registration.intRegistrationID);
                                 formdata.append('sy', this.sem);
-                                formdata.append('description', this.or_update_description);
+                                formdata.append('description', this.invoice_update_description);
                                 formdata.append('description_other',this.description_other);
                                 formdata.append('sy', this.student.sy_reference);
                                 axios.post(base_url + 'finance/next_or/1',
