@@ -2092,6 +2092,9 @@ new Vue({
                                 formdata.append('invoice_current', this.cashier.invoice_current);
                                 formdata.append('invoice_used', this.invoice_update.invoice_number);
                                 formdata.append('registration_id', this.registration.intRegistrationID);
+                                formdata.append('sy', this.sem);
+                                formdata.append('description', this.or_update_description);
+                                formdata.append('description_other',this.description_other);
                                 formdata.append('sy', this.student.sy_reference);
                                 axios.post(base_url + 'finance/next_or/1',
                                         formdata, {
