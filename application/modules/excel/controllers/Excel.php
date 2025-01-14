@@ -8029,64 +8029,6 @@ class Excel extends CI_Controller {
         }
     }
 
-    public function finance_deleted_or_invoice_data($sem = 0, $report_type=‘or’, $report_date)
-    {
-        $report_date = ($report_date) ? $report_date : date("Y-m-d");
-        $response_array = array();
-
-        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
-        if($sem == 0 )
-        {
-            $s = $this->data_fetcher->get_active_sem();
-            $sem = $s['intID'];
-        }
-        $export_type = ($report_type == 'invoice') ? 'Invoice' : 'Official Receipt';
-
-        $results = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
-                   ->from('payment_details')
-                    ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
-                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
-                    ->where(array('status' => 'void', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.or_number !=' => null))
-                    ->order_by('tb_mas_users.strLastname', 'ASC')
-                    ->group_by('tb_mas_users.intID')
-                    ->get()
-                    ->result_array();
-
-        if($report_type == 'invoice'){
-            $results = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
-                        ->from('payment_details')
-                        ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
-                        ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
-                        ->where(array('status' => 'void', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.invoice_number !=' => null))
-                        ->order_by('tb_mas_users.strLastname', 'ASC')
-                        ->group_by('tb_mas_users.intID')
-                        ->get()
-                        ->result_array();
-        }
-
-        foreach($results as $index => $result){
-
-            $course = $this->data_fetcher->getProgramDetails($result['intProgramID']);
-            
-            $response_data['index'] = $index + 1;
-            $response_data['studentNumber'] = str_replace("-", "", $result['strStudentNumber']);
-            $response_data['studentName'] = ucfirst($result['strLastname']) . ', ' . ucfirst($result['strFirstname']) . ' ' . ucfirst($result['strMiddlename'][0]) . '.';
-            $response_data['course'] = $course['strProgramCode'];
-            $response_data['dateEnrolled'] = date("d-M-Y",strtotime($result['date_enlisted']));
-            $response_data['or_invoice_date'] =  $report_type == 'invoice' ? date("d-M-Y", strtotime($result['invoice_date'])) : date("d-M-Y",strtotime($result['or_date']));
-            $response_data['or_invoice_number'] = $report_type == 'invoice' ? $result['invoice_number'] : $result['or_number'];
-            $response_data['amount'] = $result['subtotal_order'];
-            $response_data['date_deleted'] = date("d-M-Y", strtotime($result['updated_at']));
-            $response_data['deleted_by'] = '';
-            $response_data['remarls'] = $result['remarks'];
-            $response_array[] = $response_data;
-        }
-        
-        $data['data'] = $response_array;
-
-        echo json_encode($data);
-    }
-
     public function finance_deleted_or_invoice($sem = 0, $campus, $report_type, $report_date)
     {
         $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
@@ -8629,6 +8571,182 @@ class Excel extends CI_Controller {
         $objWriter->save('php://output');
         exit;
     }
+
+    public function finance_credit_debit_memo_report($sem = 0, $campus, $report_date)
+    {
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0)
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+
+        $results = $this->db->select('tb_mas_student_ledger.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
+                   ->from('tb_mas_student_ledger')
+                    ->join('tb_mas_users','tb_mas_users.intID = tb_mas_student_ledger.student_id')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->where(array('tb_mas_student_ledger.syid' => $sem, 'tb_mas_student_ledger.DATE <=' => $report_date))
+                    ->where_in('name', ['Late Enrollment Fee', 'Excess Payment Refund', 'Excess Payment Applied to College', 'Change of Payment Type', 'Withdrawal Charges', 'To Close Balance'])
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->group_by('tb_mas_student_ledger.id')
+                    ->get()
+                    ->result_array();
+
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
+
+        if (PHP_SAPI == 'cli')
+            die('This example should only be run from a Web Browser');
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+        $title = 'Credit/Debit Memo';
+
+        $i = 10;
+
+        foreach($results as $index => $result){
+            $course = $this->data_fetcher->getProgramDetails($result['intProgramID']);
+            $added_by = $this->data_fetcher->getUserData($result['added_by']);
+            
+            // Add some data
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A'.$i, $index + 1)
+                ->setCellValue('B'.$i, str_replace("-", "", $result['strStudentNumber']))
+                ->setCellValue('C'.$i, ucfirst($result['strLastname']) . ', ' . ucfirst($result['strFirstname']) . ' ' . ucfirst($result['strMiddlename'][0]) . '.')
+                ->setCellValue('D'.$i, $course['strProgramCode'])
+                ->setCellValue('E'.$i, date("d-M-Y",strtotime($result['date'])))
+                ->setCellValue('F'.$i, ucfirst($added_by->strLastname) . ', ' . ucfirst($added_by->strFirstname))
+                ->setCellValue('G'.$i, $result['name'])
+                ->setCellValue('H'.$i, $result['amount'] >= 0 ? $result['amount'] : '')
+                ->setCellValue('I'.$i, $result['amount'] < 0 ? abs($result['amount']) : '');
+
+            $i++;
+        }
+        
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'iACADEMY, Inc.')
+                    ->setCellValue('A2', $campus == 'Makati' ? 'iACADEMY Nexus 7434 Yakal Street Brgy. San Antonio, Makati City' : '5th Floor Filinvest Cyberzone Tower 2 Salinas Drive Cor. W. Geonzon St., Cebu IT Park, Apas, Cebu City')
+                    ->setCellValue('A3', $campus == 'Makati' ? 'NCR, Fourth District Philippines' : '')
+                    ->setCellValue('A5', 'Summary of Debit / Credit Memo Report')
+                    ->setCellValue('A7', strtoupper($sy->term_student_type) . ' ' . $sy->enumSem . ' ' . $this->data["term_type"] . ' ' . $sy->strYearStart . '-' . $sy->strYearEnd)
+                    ->setCellValue('A9', 'No.')
+                    ->setCellValue('B9', 'Student Number')
+                    ->setCellValue('C9', 'Student Name')
+                    ->setCellValue('D9', 'Course')
+                    ->setCellValue('E9', 'Date')
+                    ->setCellValue('F9', 'Entered By')
+                    ->setCellValue('G9', 'Particular')
+                    ->setCellValue('H9', 'Debit Memo')
+                    ->setCellValue('I9', 'Credit Memo')
+                    ->setCellValue('G' . ($i + 1), 'Total')
+                    ->setCellValue('H' . ($i + 1), '=SUM(H10:H' . ($i-1) . ')')
+                    ->setCellValue('I' . ($i + 1), '=SUM(I10:I' . ($i-1) . ')')
+                    ->setCellValue('A' . ($i + 6), 'Prepared By:')
+                    ->setCellValue('A' . ($i + 8), $this->data['user']['strFirstname'] . ' ' . $this->data['user']['strLastname']);
+
+        $objPHPExcel->getActiveSheet()->getStyle('H10:I' . ($i + 1))->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle('A1:K8')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 14,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('G' . ($i + 1))->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 11,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('A2:I9')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 11,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('A9:I' . ($i-1))->applyFromArray(
+            array(
+                'borders' => array(
+                    'allborders' => array(
+                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        'color' => array('rgb' => '000000'),
+                    ),
+                ),
+            )
+        );
+
+        $style = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+            )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A9:I'.$i)->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('A9:I'.$i)->getAlignment()->setWrapText(true);
+
+        $objPHPExcel->getActiveSheet()->getStyle('G10:G' . ($i + 2))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+        $objPHPExcel->getActiveSheet()->getStyle('H10:I' . ($i + 2))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(35);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
+        
+        $sheet = $objPHPExcel->getActiveSheet();
+        $sheet->mergeCells('A1:I1');
+        $sheet->mergeCells('A2:I2');
+        $sheet->mergeCells('A3:I3');
+        $sheet->mergeCells('A5:I5');
+        $sheet->mergeCells('A6:I6');
+        $sheet->mergeCells('A7:I7');
+        $sheet->mergeCells('A8:I8');
+
+        $objPHPExcel->getActiveSheet()->setTitle(ucwords($sy->term_student_type));
+
+        $date = date("ymdhis");
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+        header('Content-Disposition: attachment;filename="Debit/Credit Memo Report - ' . ucwords($sy->term_student_type) . ' ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '(As of ' . date("M d, Y", strtotime($report_date)) . ').xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        $objWriter->save('php://output');
+        exit;
+    }
+
 
     private function generateRandomString($length) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
