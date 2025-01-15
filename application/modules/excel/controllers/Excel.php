@@ -5141,7 +5141,6 @@ class Excel extends CI_Controller {
 
         $studentsEnrolled = false;
 
-        $last_index = 37;
         foreach($users as $index => $user)
         {
             $applied_from = $applied_to = $other = array();
@@ -5158,11 +5157,6 @@ class Excel extends CI_Controller {
 
             if($reg && substr($user['strStudentNumber'], 0, 1) != 'T'){
                 if($reg_status == 'Enrolled'){
-
-                    // if($reg['enumScholarship'] != 0){
-                    //     print_r($reg);
-                    //     die();
-                    // }
 
                     $ledger_data = $this->db->get_where('tb_mas_student_ledger', array('syid' => $sem, 'student_id' => $user['intID'], 'date <=' => $report_date . ' 23:59:59'))->result_array();
     
@@ -5364,6 +5358,7 @@ class Excel extends CI_Controller {
                         $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(36))->setWidth(15);
                     }
     
+                    $last_index = 37;
                     if(count($payments) > 0){
                         $last_index = 34 + (count($payments) * 3);
                     }
@@ -8033,6 +8028,725 @@ class Excel extends CI_Controller {
             return true;
         }
     }
+
+    public function finance_deleted_or_invoice($sem = 0, $campus, $report_type, $report_date)
+    {
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+        $export_type = ($report_type == 'invoice') ? 'Invoice' : 'Official Receipt';
+
+        $payment_details = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
+                    ->from('payment_details')
+                    ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->where(array('status' => 'void', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.or_number !=' => null))
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->group_by('tb_mas_users.intID')
+                    ->get()
+                    ->result_array();
+
+        if($report_type == 'invoice'){
+            $payment_details = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
+                        ->from('payment_details')
+                        ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
+                        ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                        ->where(array('status' => 'void', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.invoice_number !=' => null))
+                        ->order_by('tb_mas_users.strLastname', 'ASC')
+                        ->group_by('tb_mas_users.intID')
+                        ->get()
+                        ->result_array();
+        }
+
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
+
+        if (PHP_SAPI == 'cli')
+            die('This example should only be run from a Web Browser');
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+        $title = 'Deleted ' . $export_type;
+
+        $i = 11;
+
+        foreach($payment_details as $index => $payment_detail){
+            $course = $this->data_fetcher->getProgramDetails($payment_detail['intProgramID']);  
+            
+            // Add some data
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A'.$i, $index + 1)
+                ->setCellValue('B'.$i, str_replace("-", "", $payment_detail['strStudentNumber']))
+                ->setCellValue('C'.$i, ucfirst($payment_detail['strLastname']) . ', ' . ucfirst($payment_detail['strFirstname']) . ' ' . ucfirst($payment_detail['strMiddlename'][0]) . '.')
+                ->setCellValue('D'.$i, $course['strProgramCode'])
+                ->setCellValue('E'.$i, $report_type == 'invoice' ? date("d-M-Y",strtotime($payment_detail['invoice_date'])) : date("d-M-Y",strtotime($payment_detail['or_date'])))
+                ->setCellValue('F'.$i, $report_type == 'invoice' ? $payment_detail['invoice_number'] : $payment_detail['or_number'])
+                ->setCellValue('G'.$i, $payment_detail['subtotal_order'])
+                ->setCellValue('H'.$i, date("d-M-Y", strtotime($payment_detail['updated_at'])))
+                ->setCellValue('I'.$i, '')
+                ->setCellValue('J'.$i, $payment_detail['remarks']);
+
+            $i++;
+        }
+        
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'iACADEMY, Inc.')
+                    ->setCellValue('A2', $campus == 'Makati' ? 'iACADEMY Nexus 7434 Yakal Street Brgy. San Antonio, Makati City' : '5th Floor Filinvest Cyberzone Tower 2 Salinas Drive Cor. W. Geonzon St., Cebu IT Park, Apas, Cebu City')
+                    ->setCellValue('A3', $campus == 'Makati' ? 'NCR, Fourth District Philippines' : '')
+                    ->setCellValue('A5', 'Summary of Deleted Report')
+                    ->setCellValue('A7', $export_type)
+                    ->setCellValue('A8', strtoupper($sy->term_student_type) . ' ' . $sy->enumSem . ' ' . $this->data["term_type"] . ' ' . $sy->strYearStart . '-' . $sy->strYearEnd)
+                    ->setCellValue('A10', 'No.')
+                    ->setCellValue('B10', 'Student Number')
+                    ->setCellValue('C10', 'Student Name')
+                    ->setCellValue('D10', 'Course')
+                    ->setCellValue('E10', $export_type . ' Date')
+                    ->setCellValue('F10', $export_type . ' No.')
+                    ->setCellValue('G10', 'Amount')
+                    ->setCellValue('H10', 'Date Deleted')
+                    ->setCellValue('I10', 'Deleted By')
+                    ->setCellValue('J10', 'Remarks')
+                    ->setCellValue('F' . ($i + 1), 'Total')
+                    ->setCellValue('G' . ($i + 1), '=SUM(G11:G' . ($i-1) . ')')
+                    ->setCellValue('A' . ($i + 6), 'Prepared By:')
+                    ->setCellValue('A' . ($i + 8), $this->data['user']['strFirstname'] . ' ' . $this->data['user']['strLastname']);
+
+        $objPHPExcel->getActiveSheet()->getStyle('G11:G' . ($i + 1))->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle('A1:F8')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 14,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('F' . ($i + 1))->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 11,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('A2:J10')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 11,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('A10:J' . ($i-1))->applyFromArray(
+            array(
+                'borders' => array(
+                    'allborders' => array(
+                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        'color' => array('rgb' => '000000'),
+                    ),
+                ),
+            )
+        );
+
+        $style = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+            )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A10:J'.$i)->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('A10:J'.$i)->getAlignment()->setWrapText(true);
+
+        $objPHPExcel->getActiveSheet()->getStyle('G11:G' . ($i + 2))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
+        
+        $sheet = $objPHPExcel->getActiveSheet();
+        $sheet->mergeCells('A1:J1');
+        $sheet->mergeCells('A2:J2');
+        $sheet->mergeCells('A3:J3');
+        $sheet->mergeCells('A5:J5');
+        $sheet->mergeCells('A6:J6');
+        $sheet->mergeCells('A7:J7');
+        $sheet->mergeCells('A8:J8');
+
+        $objPHPExcel->getActiveSheet()->setTitle(ucwords($sy->term_student_type));
+
+        $date = date("ymdhis");
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+        header('Content-Disposition: attachment;filename="Deleted ' . $export_type . ' - ' . ucwords($sy->term_student_type) . ' ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '(As of ' . date("M d, Y", strtotime($report_date)) . ').xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        
+        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
+        exit;
+    }
+
+    public function finance_cancelled_or_invoice($sem = 0, $campus, $report_type, $report_date)
+    {
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0)
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+        $export_type = ($report_type == 'invoice') ? 'Invoice' : 'Official Receipt';
+
+        $payment_details = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
+                   ->from('payment_details')
+                    ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->where(array('status' => 'cancel', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.or_number !=' => null))
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->group_by('tb_mas_users.intID')
+                    ->get()
+                    ->result_array();
+
+        if($report_type == 'invoice'){
+            $payment_details = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
+                        ->from('payment_details')
+                        ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
+                        ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                        ->where(array('status' => 'cancel', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.invoice_number !=' => null))
+                        ->order_by('tb_mas_users.strLastname', 'ASC')
+                        ->group_by('tb_mas_users.intID')
+                        ->get()
+                        ->result_array();
+        }
+
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
+
+        if (PHP_SAPI == 'cli')
+            die('This example should only be run from a Web Browser');
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+        $title = 'Cancelled ' . $export_type;
+
+        $i = 11;
+
+        foreach($payment_details as $index => $payment_detail){
+            $course = $this->data_fetcher->getProgramDetails($payment_detail['intProgramID']);  
+            
+            // Add some data
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A'.$i, $index + 1)
+                ->setCellValue('B'.$i, str_replace("-", "", $payment_detail['strStudentNumber']))
+                ->setCellValue('C'.$i, ucfirst($payment_detail['strLastname']) . ', ' . ucfirst($payment_detail['strFirstname']) . ' ' . ucfirst($payment_detail['strMiddlename'][0]) . '.')
+                ->setCellValue('D'.$i, $course['strProgramCode'])
+                ->setCellValue('E'.$i, $report_type == 'invoice' ? date("d-M-Y",strtotime($payment_detail['invoice_date'])) : date("d-M-Y",strtotime($payment_detail['or_date'])))
+                ->setCellValue('F'.$i, $report_type == 'invoice' ? $payment_detail['invoice_number'] : $payment_detail['or_number'])
+                ->setCellValue('G'.$i, $payment_detail['subtotal_order'])
+                ->setCellValue('H'.$i, date("d-M-Y", strtotime($payment_detail['updated_at'])))
+                ->setCellValue('I'.$i, '')
+                ->setCellValue('J'.$i, $payment_detail['remarks']);
+
+            $i++;
+        }
+        
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'iACADEMY, Inc.')
+                    ->setCellValue('A2', $campus == 'Makati' ? 'iACADEMY Nexus 7434 Yakal Street Brgy. San Antonio, Makati City' : '5th Floor Filinvest Cyberzone Tower 2 Salinas Drive Cor. W. Geonzon St., Cebu IT Park, Apas, Cebu City')
+                    ->setCellValue('A3', $campus == 'Makati' ? 'NCR, Fourth District Philippines' : '')
+                    ->setCellValue('A5', 'Summary of Cancelled Report')
+                    ->setCellValue('A7', $export_type)
+                    ->setCellValue('A8', strtoupper($sy->term_student_type) . ' ' . $sy->enumSem . ' ' . $this->data["term_type"] . ' ' . $sy->strYearStart . '-' . $sy->strYearEnd)
+                    ->setCellValue('A10', 'No.')
+                    ->setCellValue('B10', 'Student Number')
+                    ->setCellValue('C10', 'Student Name')
+                    ->setCellValue('D10', 'Course')
+                    ->setCellValue('E10', $export_type . ' Date')
+                    ->setCellValue('F10', $export_type . ' No.')
+                    ->setCellValue('G10', 'Amount')
+                    ->setCellValue('H10', 'Date Cancelled')
+                    ->setCellValue('I10', 'Cancelled By')
+                    ->setCellValue('J10', 'Remarks')
+                    ->setCellValue('F' . ($i + 1), 'Total')
+                    ->setCellValue('G' . ($i + 1), '=SUM(G11:G' . ($i-1) . ')')
+                    ->setCellValue('A' . ($i + 6), 'Prepared By:')
+                    ->setCellValue('A' . ($i + 8), $this->data['user']['strFirstname'] . ' ' . $this->data['user']['strLastname']);
+
+        $objPHPExcel->getActiveSheet()->getStyle('G11:G' . ($i + 1))->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle('A1:F8')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 14,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('F' . ($i + 1))->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 11,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('A2:J10')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 11,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('A10:J' . ($i-1))->applyFromArray(
+            array(
+                'borders' => array(
+                    'allborders' => array(
+                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        'color' => array('rgb' => '000000'),
+                    ),
+                ),
+            )
+        );
+
+        $style = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+            )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A10:J'.$i)->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('A10:J'.$i)->getAlignment()->setWrapText(true);
+
+        $objPHPExcel->getActiveSheet()->getStyle('G11:G' . ($i + 2))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
+        
+        $sheet = $objPHPExcel->getActiveSheet();
+        $sheet->mergeCells('A1:J1');
+        $sheet->mergeCells('A2:J2');
+        $sheet->mergeCells('A3:J3');
+        $sheet->mergeCells('A5:J5');
+        $sheet->mergeCells('A6:J6');
+        $sheet->mergeCells('A7:J7');
+        $sheet->mergeCells('A8:J8');
+
+        $objPHPExcel->getActiveSheet()->setTitle(ucwords($sy->term_student_type));
+
+        $date = date("ymdhis");
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+        header('Content-Disposition: attachment;filename="Cancelled ' . $export_type . ' - ' . ucwords($sy->term_student_type) . ' ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '(As of ' . date("M d, Y", strtotime($report_date)) . ').xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        
+        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
+        exit;
+    }
+
+    public function finance_scholarship_report($sem = 0, $scholar_type = 0, $campus, $report_date)
+    {
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+
+        $scholarship = $this->db->get_where('tb_mas_scholarships', array('intID' => $scholar_type))->first_row();
+
+        $students = $this->db->select('tb_mas_student_discount.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
+                    ->from('tb_mas_student_discount')
+                    ->join('tb_mas_users','tb_mas_users.intID = tb_mas_student_discount.student_id')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->where(array('tb_mas_student_discount.status' => 'applied', 'tb_mas_student_discount.syid' => $sem, 'tb_mas_student_discount.discount_id' => $scholar_type, 'tb_mas_student_discount.date_applied <=' => $report_date))
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->group_by('tb_mas_users.intID')
+                    ->get()
+                    ->result_array();
+
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
+
+        if (PHP_SAPI == 'cli')
+            die('This example should only be run from a Web Browser');
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+        $title = 'Ched TES Report';
+
+        $i = 9;
+
+        foreach($students as $index => $student){
+            
+
+            $tuition = $this->data_fetcher->getTuition($student['intID'], $sem);
+            $total_discount = 0;
+
+            if($tuition){
+                if($student['paymentType'] == 'full'){
+                    $total_discount += ($tuition['scholarship_total_assessment_rate'] > 0) ? $tuition['scholarship_total_assessment_rate'] : 0;
+                    $total_discount += ($tuition['scholarship_total_assessment_fixed'] > 0) ? $tuition['scholarship_total_assessment_fixed'] : 0;
+                        $total_discount += ($tuition['scholarship_tuition_fee_rate'] > 0) ? $tuition['scholarship_tuition_fee_rate'] : 0;
+                }else{ 
+                        $total_discount += ($tuition['scholarship_total_assessment_rate_installment'] > 0) ? $tuition['scholarship_total_assessment_rate_installment'] : 0;
+                        $total_discount += ($tuition['scholarship_total_assessment_fixed_installment'] > 0) ? $tuition['scholarship_total_assessment_fixed_installment'] : 0;
+                        $total_discount += ($tuition['scholarship_tuition_fee_installment_rate'] > 0) ? $tuition['scholarship_tuition_fee_installment_rate'] : 0;
+                }
+            }
+
+            $course = $this->data_fetcher->getProgramDetails($student['intProgramID']);  
+            
+            // Add some data
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A'.$i, $index + 1)
+                ->setCellValue('B'.$i, str_replace("-", "", $student['strStudentNumber']))
+                ->setCellValue('C'.$i, ucfirst($student['strLastname']) . ', ' . ucfirst($student['strFirstname']) . ' ' . ucfirst($student['strMiddlename'][0]) . '.')
+                ->setCellValue('D'.$i, $course['strProgramCode'])
+                ->setCellValue('E'.$i, date("d-M-Y",strtotime($student['date_enlisted'])))
+                ->setCellValue('F'.$i, $total_discount);
+
+            $i++;
+        }
+        
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'iACADEMY, Inc.')
+                    ->setCellValue('A2', $campus == 'Makati' ? 'iACADEMY Nexus 7434 Yakal Street Brgy. San Antonio, Makati City' : '5th Floor Filinvest Cyberzone Tower 2 Salinas Drive Cor. W. Geonzon St., Cebu IT Park, Apas, Cebu City')
+                    ->setCellValue('A3', $campus == 'Makati' ? 'NCR, Fourth District Philippines' : '')
+                    ->setCellValue('A5', $scholarship->name)
+                    ->setCellValue('A6', strtoupper($sy->term_student_type) . ' ' . $sy->enumSem . ' ' . $this->data["term_type"] . ' ' . $sy->strYearStart . '-' . $sy->strYearEnd)
+                    ->setCellValue('A8', 'No.')
+                    ->setCellValue('B8', 'Student Number')
+                    ->setCellValue('C8', 'Student Name')
+                    ->setCellValue('D8', 'Course')
+                    ->setCellValue('E8', 'Date Enrolled')
+                    ->setCellValue('F8', 'Amount')
+                    ->setCellValue('A'. ($i + 2), 'Prepared By:')
+                    ->setCellValue('A'. ($i + 4), $this->data['user']['strFirstname'] . ' ' . $this->data['user']['strLastname']);
+
+        $objPHPExcel->getActiveSheet()->getStyle('F8:F' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle('A1:F8')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 14,
+                )
+            )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A2:F8')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 11,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('A8:F' . ($i-1))->applyFromArray(
+            array(
+                'borders' => array(
+                    'allborders' => array(
+                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        'color' => array('rgb' => '000000'),
+                    ),
+                ),
+            )
+        );
+
+        $style = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+            )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A8:F'.$i)->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('A8:F'.$i)->getAlignment()->setWrapText(true);
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+        
+        $sheet = $objPHPExcel->getActiveSheet();
+        $sheet->mergeCells('A1:F1');
+        $sheet->mergeCells('A2:F2');
+        $sheet->mergeCells('A3:F3');
+        $sheet->mergeCells('A5:F5');
+        $sheet->mergeCells('A6:F6');
+
+        $objPHPExcel->getActiveSheet()->setTitle(ucwords($sy->term_student_type));
+
+        $date = date("ymdhis");
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+        header('Content-Disposition: attachment;filename="Scholarship and Discount Report - ' . ucwords($sy->term_student_type) . ' ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '(As of ' . date("M d, Y", strtotime($report_date)) . ').xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        
+        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
+        exit;
+    }
+
+    public function finance_credit_debit_memo_report($sem = 0, $campus, $report_date)
+    {
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0)
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+
+        $results = $this->db->select('tb_mas_student_ledger.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
+                   ->from('tb_mas_student_ledger')
+                    ->join('tb_mas_users','tb_mas_users.intID = tb_mas_student_ledger.student_id')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->where(array('tb_mas_student_ledger.syid' => $sem, 'tb_mas_student_ledger.DATE <=' => $report_date))
+                    ->where_in('name', ['Late Enrollment Fee', 'Excess Payment Refund', 'Excess Payment Applied to College', 'Change of Payment Type', 'Withdrawal Charges', 'To Close Balance'])
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->group_by('tb_mas_student_ledger.id')
+                    ->get()
+                    ->result_array();
+
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
+
+        if (PHP_SAPI == 'cli')
+            die('This example should only be run from a Web Browser');
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+        $title = 'Credit/Debit Memo';
+
+        $i = 10;
+
+        foreach($results as $index => $result){
+            $course = $this->data_fetcher->getProgramDetails($result['intProgramID']);
+            $added_by = $this->data_fetcher->getUserData($result['added_by']);
+            
+            // Add some data
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A'.$i, $index + 1)
+                ->setCellValue('B'.$i, str_replace("-", "", $result['strStudentNumber']))
+                ->setCellValue('C'.$i, ucfirst($result['strLastname']) . ', ' . ucfirst($result['strFirstname']) . ' ' . ucfirst($result['strMiddlename'][0]) . '.')
+                ->setCellValue('D'.$i, $course['strProgramCode'])
+                ->setCellValue('E'.$i, date("d-M-Y",strtotime($result['date'])))
+                ->setCellValue('F'.$i, ucfirst($added_by->strLastname) . ', ' . ucfirst($added_by->strFirstname))
+                ->setCellValue('G'.$i, $result['name'])
+                ->setCellValue('H'.$i, $result['amount'] >= 0 ? $result['amount'] : '')
+                ->setCellValue('I'.$i, $result['amount'] < 0 ? abs($result['amount']) : '');
+
+            $i++;
+        }
+        
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'iACADEMY, Inc.')
+                    ->setCellValue('A2', $campus == 'Makati' ? 'iACADEMY Nexus 7434 Yakal Street Brgy. San Antonio, Makati City' : '5th Floor Filinvest Cyberzone Tower 2 Salinas Drive Cor. W. Geonzon St., Cebu IT Park, Apas, Cebu City')
+                    ->setCellValue('A3', $campus == 'Makati' ? 'NCR, Fourth District Philippines' : '')
+                    ->setCellValue('A5', 'Summary of Debit / Credit Memo Report')
+                    ->setCellValue('A7', strtoupper($sy->term_student_type) . ' ' . $sy->enumSem . ' ' . $this->data["term_type"] . ' ' . $sy->strYearStart . '-' . $sy->strYearEnd)
+                    ->setCellValue('A9', 'No.')
+                    ->setCellValue('B9', 'Student Number')
+                    ->setCellValue('C9', 'Student Name')
+                    ->setCellValue('D9', 'Course')
+                    ->setCellValue('E9', 'Date')
+                    ->setCellValue('F9', 'Entered By')
+                    ->setCellValue('G9', 'Particular')
+                    ->setCellValue('H9', 'Debit Memo')
+                    ->setCellValue('I9', 'Credit Memo')
+                    ->setCellValue('G' . ($i + 1), 'Total')
+                    ->setCellValue('H' . ($i + 1), '=SUM(H10:H' . ($i-1) . ')')
+                    ->setCellValue('I' . ($i + 1), '=SUM(I10:I' . ($i-1) . ')')
+                    ->setCellValue('A' . ($i + 6), 'Prepared By:')
+                    ->setCellValue('A' . ($i + 8), $this->data['user']['strFirstname'] . ' ' . $this->data['user']['strLastname']);
+
+        $objPHPExcel->getActiveSheet()->getStyle('H10:I' . ($i + 1))->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle('A1:K8')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 14,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('G' . ($i + 1))->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 11,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('A2:I9')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 11,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('A9:I' . ($i-1))->applyFromArray(
+            array(
+                'borders' => array(
+                    'allborders' => array(
+                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        'color' => array('rgb' => '000000'),
+                    ),
+                ),
+            )
+        );
+
+        $style = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+            )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A9:I'.$i)->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('A9:I'.$i)->getAlignment()->setWrapText(true);
+
+        $objPHPExcel->getActiveSheet()->getStyle('G10:G' . ($i + 2))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+        $objPHPExcel->getActiveSheet()->getStyle('H10:I' . ($i + 2))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(35);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
+        
+        $sheet = $objPHPExcel->getActiveSheet();
+        $sheet->mergeCells('A1:I1');
+        $sheet->mergeCells('A2:I2');
+        $sheet->mergeCells('A3:I3');
+        $sheet->mergeCells('A5:I5');
+        $sheet->mergeCells('A6:I6');
+        $sheet->mergeCells('A7:I7');
+        $sheet->mergeCells('A8:I8');
+
+        $objPHPExcel->getActiveSheet()->setTitle(ucwords($sy->term_student_type));
+
+        $date = date("ymdhis");
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+        header('Content-Disposition: attachment;filename="Debit/Credit Memo Report - ' . ucwords($sy->term_student_type) . ' ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '(As of ' . date("M d, Y", strtotime($report_date)) . ').xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        $objWriter->save('php://output');
+        exit;
+    }
+
 
     private function generateRandomString($length) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
