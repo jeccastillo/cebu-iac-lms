@@ -437,6 +437,14 @@ class Data_fetcher extends CI_Model {
         $subjects = $this->db
              ->query($bucket)
              ->result_array();
+
+
+        $bucket = "SELECT tb_mas_subjects.intID,strCode,strDescription FROM tb_mas_subjects JOIN tb_mas_curriculum_second ON tb_mas_curriculum_second.intSubjectID = tb_mas_subjects.intID JOIN tb_mas_curriculum on tb_mas_curriculum.intID = tb_mas_curriculum_second.intCurriculumID JOIN tb_mas_classlist on tb_mas_classlist.intSubjectID = tb_mas_subjects.intID WHERE tb_mas_subjects.intID NOT IN (SELECT intSubjectID from tb_mas_classlist_student  JOIN tb_mas_classlist ON intClassListID = tb_mas_classlist.intID WHERE intStudentID = ".$studentID." AND strRemarks = 'Passed') AND tb_mas_subjects.intID NOT IN (SELECT intSubjectID from tb_mas_credited_grades WHERE intStudentID =".$studentID.") AND  tb_mas_curriculum.intID = '".$curriculumID."' ";
+        $bucket .= "GROUP BY tb_mas_classlist.intSubjectID"; 
+        
+        $subjects_extra = $this->db
+            ->query($bucket)
+            ->result_array();
         
         //echo $this->db->last_query();
         //print_r($subjects);
@@ -445,38 +453,12 @@ class Data_fetcher extends CI_Model {
         //PREREQUISITES CODE----------------------------------------------------------------------------
         
         foreach($subjects as $subj)
-        {
-            // $add = true;
-            
-            // $r = $this->db
-            //           ->get_where('tb_mas_prerequisites',array('intSubjectID'=>$subj['intID']))
-            //           ->result_array();
-            
-            // if(!empty($r))
-            // {
-            //     foreach($r as $res){
-            //         $s = $this->db
-            //           ->select('tb_mas_classlist_student.intCSID')
-            //           ->from('tb_mas_classlist_student')
-            //           ->join('tb_mas_classlist','tb_mas_classlist.intID = tb_mas_classlist_student.intClassListID')
-            //           ->where(array('intSubjectID'=>$res['intPrerequisiteID'],'strRemarks'=>'Passed','intStudentID'=>$studentID))
-            //           ->get()
-            //           ->result_array();
-                    
-            //         if(empty($s))
-            //         {
-            //             $add = false;
-            //             break;
-            //         }
-                    
-            //     }
-                
-                
-            // }
-            
-            // if($add)
-            $ret[] = $subj;
-                    
+        {            
+            $ret[] = $subj;                    
+        }
+        foreach($subjects_extra as $subj)
+        {            
+            $ret[] = $subj;                    
         }
         return $ret;
 
