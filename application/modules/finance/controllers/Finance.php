@@ -705,6 +705,8 @@ class Finance extends CI_Controller {
                     $data['invoice_current'] += 1;        
         }
 
+        unset($post['invoice_used']);
+
         $this->db
             ->where('intID',$data['intID'])
             ->update('tb_mas_cashier',$data);
