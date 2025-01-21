@@ -1676,7 +1676,67 @@ class Finance extends CI_Controller {
         else
             return false;
     }
-    
+
+    public function finance_lab_fee_report_data($sem = 0, $lab_type_id, $report_date)
+    {
+        $response_array = array();
+
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+        
+        $misc = $this->db->get_where('tb_mas_tuition_year_lab_fee', array('intID' => $lab_type_id))->first_row();
+
+        $results = $this->db->select('tb_mas_users.*, tb_mas_tuition_year_lab_fee.name, tb_mas_tuition_year_lab_fee.intID as labID, tb_mas_registration.paymentType, tb_mas_registration.date_enlisted')
+                    ->from('tb_mas_registration')
+                    ->join('tb_mas_users','tb_mas_users.intID = tb_mas_registration.intStudentID')
+                    ->join('tb_mas_tuition_year','tb_mas_tuition_year.intID = tb_mas_registration.tuition_year')
+                    ->join('tb_mas_tuition_year_lab_fee','tb_mas_tuition_year_lab_fee.tuitionYearID = tb_mas_tuition_year.intID')
+                    ->where(array('tb_mas_registration.intAYID' => $sem, 'tb_mas_tuition_year_lab_fee.name' => $misc->name, 'tb_mas_registration.date_enlisted <=' => $report_date))
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->group_by('tb_mas_users.intID')
+                    ->get()
+                    ->result_array();
+
+        foreach($results as $index => $result){
+            $tuition_data = $this->data_fetcher->getTuition($result['intID'], $sem);
+
+            $lab_total_amount = isset($tuition_data['lab_list_per_type'][$misc->name]) ? $tuition_data['lab_list_per_type'][$misc->name] : '';
+
+            if($lab_total_amount > 0){
+
+                $course = $this->data_fetcher->getProgramDetails($result['intProgramID']);
+
+                $response_data['index'] = $index + 1;
+                $response_data['student_number'] = str_replace("-", "", $result['strStudentNumber']);
+                $response_data['student_name'] = ucfirst($result['strLastname']) . ', ' . ucfirst($result['strFirstname']) . ' ' . ucfirst($result['strMiddlename']) . '.';
+                $response_data['course'] = $course['strProgramCode'];
+                $response_data['date_enlisted'] = date("d-M-Y",strtotime($result['date_enlisted']));
+                $response_data['lab_fee_amount'] = number_format($lab_total_amount, 2);
+                $response_data['mode_of_payment'] = $result['paymentType'] == 'full' ? 'FULL PAYMENT' : 'INSTALLMENT';
+                $response_array[] = $response_data;
+            }
+        }
+        
+        $data['data'] = $response_array;
+
+        echo json_encode($data);
+    }
+
+    public function lab_fee_list()
+    {
+        $data = $this->db->select('intID, name')
+                    ->from('tb_mas_tuition_year_lab_fee')
+                    ->order_by('name', 'ASC')
+                    ->group_by('name')
+                    ->get()
+                    ->result_array();
+
+        echo json_encode($data);
+    }
     
     public function is_admin()
     {
