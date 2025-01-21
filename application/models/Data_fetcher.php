@@ -2570,6 +2570,7 @@ class Data_fetcher extends CI_Model {
         $total_other = 0;
         $afee = 0;
         $lab_list = [];
+        $lab_list_per_type = [];
         $misc_list = [];    
         $new_student_list = [];    
         $foreign_fee_list = [];        
@@ -2747,6 +2748,8 @@ class Data_fetcher extends CI_Model {
                     $tuition_year_lab = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'],'name' => $lab_class))
                                                 ->get('tb_mas_tuition_year_lab_fee')->first_row('array');
                     $lab_list[$class['strCode']] = getExtraFee($tuition_year_lab, $class_type, 'lab') * $class['intLab'];
+                    $lab_list_per_type[$class['strLabClassification']] = isset($lab_list_per_type[$class['strLabClassification']]) ? $lab_list_per_type[$class['strLabClassification']] + getExtraFee($tuition_year_lab, $class_type, 'lab') * $class['intLab'] :
+                                                getExtraFee($tuition_year_lab, $class_type, 'lab') * $class['intLab'];
                     $total_lab += $lab_list[$class['strCode']];
                 }
                 
@@ -3242,6 +3245,7 @@ class Data_fetcher extends CI_Model {
         $data['lab_installment30'] = $data['lab_installment_before_discount30'] - $lab_scholarship - $lab_discount;
         $data['lab_installment50'] = $data['lab_installment_before_discount50'] - $lab_scholarship - $lab_discount;
         $data['lab_list'] = $lab_list;
+        $data['lab_list_per_type'] = $lab_list_per_type;
         $data['tuition_discount'] = $tuition_scholarship;        
         $data['tuition_discount_dc'] = $tuition_discount; 
         $data['tuition'] = $tuition;        
