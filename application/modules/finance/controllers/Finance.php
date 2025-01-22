@@ -1510,117 +1510,6 @@ class Finance extends CI_Controller {
 
         echo json_encode($data);
     }
-
-    function finance_reports(){
-        $this->data['page'] = "reports";
-        $this->data['opentree'] = "finance";
-        $sem = $this->data_fetcher->get_active_sem();
-        $this->data['sem'] = $sem['intID'];
-        $this->load->view("common/header",$this->data);
-        $this->load->view("finance_reports",$this->data);
-        $this->load->view("common/footer",$this->data);            
-    }
-
-    public function deleted_or_invoice($term = 0, $report_type = 'or', $date = 0)    
-    {
-        if($this->faculty_logged_in())
-        {
-            if($term == 0)
-                $term = $this->data_fetcher->get_processing_sem();        
-            else
-                $term = $this->data_fetcher->get_sem_by_id($term); 
-
-
-            if (empty($date)) {
-                $date = date('Y-m-d');
-            }
-                 
-            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
-            $this->data['current_sem'] = $term['intID'];            
-            $this->data['date'] = $date;
-            $this->data['report_type'] = $report_type;
-
-            $this->load->view("common/header",$this->data);
-            $this->load->view("deleted_or_invoice_list",$this->data);
-            $this->load->view("common/footer",$this->data); 
-            $this->load->view("common/deleted_or_invoice_list_conf",$this->data);
-        }
-    }
-
-    public function cancelled_or_invoice($term = 0, $report_type = 'or', $date = 0)    
-    {
-        if($this->faculty_logged_in())
-        {
-            if($term == 0)
-                $term = $this->data_fetcher->get_processing_sem();        
-            else
-                $term = $this->data_fetcher->get_sem_by_id($term); 
-
-            if (empty($date)) {
-                $date = date('Y-m-d');
-            }
-                 
-            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
-            $this->data['current_sem'] = $term['intID'];            
-            $this->data['date'] = $date;
-            $this->data['report_type'] = $report_type;
-
-            $this->load->view("common/header",$this->data);
-            $this->load->view("cancelled_or_invoice_list",$this->data);
-            $this->load->view("common/footer",$this->data); 
-            $this->load->view("common/cancelled_or_invoice_list_conf",$this->data);
-        }
-    }
-
-    public function scholarship_report($term = 0, $scholar_type = 'or', $date = 0)    
-    {
-        if($this->faculty_logged_in())
-        {
-            if($term == 0)
-                $term = $this->data_fetcher->get_processing_sem();        
-            else
-                $term = $this->data_fetcher->get_sem_by_id($term); 
-
-            if (empty($date)) {
-                $date = date('Y-m-d');
-            }
-                 
-            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
-            $this->data['current_sem'] = $term['intID'];            
-            $this->data['date'] = $date;
-            $this->data['scholar_type'] = $scholar_type;
-
-            $this->load->view("common/header",$this->data);
-            $this->load->view("scholarship_report_list",$this->data);
-            $this->load->view("common/footer",$this->data); 
-            $this->load->view("common/scholarship_report_list_conf",$this->data);
-        }
-    }
-
-    public function credit_debit_memo($term = 0, $date = 0)    
-    {
-        if($this->faculty_logged_in())
-        {
-            if($term == 0)
-                $term = $this->data_fetcher->get_processing_sem();        
-            else
-                $term = $this->data_fetcher->get_sem_by_id($term); 
-
-
-            if (empty($date)) {
-                $date = date('Y-m-d');
-            }
-                 
-            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
-            $this->data['current_sem'] = $term['intID'];            
-            $this->data['date'] = $date;
-
-            $this->load->view("common/header",$this->data);
-            $this->load->view("credit_debit_memo_list",$this->data);
-            $this->load->view("common/footer",$this->data); 
-            $this->load->view("common/credit_debit_memo_list_conf",$this->data);
-        }
-    }
 		
     // public function get_other_payments($slug){
 
@@ -1735,7 +1624,146 @@ class Finance extends CI_Controller {
                     ->get()
                     ->result_array();
 
-        echo json_encode($data);
+        return $data;
+    }
+
+    function finance_reports(){
+        $this->data['page'] = "reports";
+        $this->data['opentree'] = "finance";
+        $sem = $this->data_fetcher->get_active_sem();
+        $this->data['sem'] = $sem['intID'];
+        $this->load->view("common/header",$this->data);
+        $this->load->view("finance_reports",$this->data);
+        $this->load->view("common/footer",$this->data);            
+    }
+
+    public function deleted_or_invoice($term = 0, $report_type = 'or', $date = 0)    
+    {
+        if($this->faculty_logged_in())
+        {
+            if($term == 0)
+                $term = $this->data_fetcher->get_processing_sem();        
+            else
+                $term = $this->data_fetcher->get_sem_by_id($term); 
+
+
+            if (empty($date)) {
+                $date = date('Y-m-d');
+            }
+                 
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['current_sem'] = $term['intID'];            
+            $this->data['date'] = $date;
+            $this->data['report_type'] = $report_type;
+
+            $this->load->view("common/header",$this->data);
+            $this->load->view("deleted_or_invoice_list",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/deleted_or_invoice_list_conf",$this->data);
+        }
+    }
+
+    public function cancelled_or_invoice($term = 0, $report_type = 'or', $date = 0)    
+    {
+        if($this->faculty_logged_in())
+        {
+            if($term == 0)
+                $term = $this->data_fetcher->get_processing_sem();        
+            else
+                $term = $this->data_fetcher->get_sem_by_id($term); 
+
+            if (empty($date)) {
+                $date = date('Y-m-d');
+            }
+                 
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['current_sem'] = $term['intID'];            
+            $this->data['date'] = $date;
+            $this->data['report_type'] = $report_type;
+
+            $this->load->view("common/header",$this->data);
+            $this->load->view("cancelled_or_invoice_list",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/cancelled_or_invoice_list_conf",$this->data);
+        }
+    }
+
+    public function scholarship_report($term = 0, $scholar_type = 'or', $date = 0)    
+    {
+        if($this->faculty_logged_in())
+        {
+            if($term == 0)
+                $term = $this->data_fetcher->get_processing_sem();        
+            else
+                $term = $this->data_fetcher->get_sem_by_id($term); 
+
+            if (empty($date)) {
+                $date = date('Y-m-d');
+            }
+                 
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['current_sem'] = $term['intID'];            
+            $this->data['date'] = $date;
+            $this->data['scholar_type'] = $scholar_type;
+
+            $this->load->view("common/header",$this->data);
+            $this->load->view("scholarship_report_list",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/scholarship_report_list_conf",$this->data);
+        }
+    }
+
+    public function credit_debit_memo($term = 0, $date = 0)    
+    {
+        if($this->faculty_logged_in())
+        {
+            if($term == 0)
+                $term = $this->data_fetcher->get_processing_sem();        
+            else
+                $term = $this->data_fetcher->get_sem_by_id($term); 
+
+
+            if (empty($date)) {
+                $date = date('Y-m-d');
+            }
+                 
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['current_sem'] = $term['intID'];            
+            $this->data['date'] = $date;
+
+            $this->load->view("common/header",$this->data);
+            $this->load->view("credit_debit_memo_list",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/credit_debit_memo_list_conf",$this->data);
+        }
+    }
+
+    public function laboratory($term = 0, $lab_type_id = 0,  $date = 0)    
+    {
+        if($this->faculty_logged_in())
+        {
+            if($term == 0)
+                $term = $this->data_fetcher->get_processing_sem();        
+            else
+                $term = $this->data_fetcher->get_sem_by_id($term); 
+
+
+            if (empty($date)) {
+                $date = date('Y-m-d');
+            }
+                             
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['current_sem'] = $term['intID'];            
+            $this->data['date'] = $date;
+            $this->data['lab_fee_list'] = $this->lab_fee_list();
+            $this->data['lab_type_id'] = $lab_type_id;
+
+
+            $this->load->view("common/header",$this->data);
+            $this->load->view("laboratory_list",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/laboratory_list_conf",$this->data);
+        }
     }
     
     public function is_admin()
