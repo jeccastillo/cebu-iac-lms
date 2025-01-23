@@ -5022,7 +5022,7 @@ class Excel extends CI_Controller {
 
         $users = $this->db->select('tb_mas_users.*')
                     ->from('tb_mas_users')
-                    ->where_not_in('slug', $notEnrolledSlugs)
+                    // ->where_not_in('slug', $notEnrolledSlugs)
                     ->order_by('strStudentNumber', 'ASC')
                     ->get()
                     ->result_array();
@@ -5140,6 +5140,8 @@ class Excel extends CI_Controller {
         }
 
         $studentsEnrolled = false;
+        $last_index = 37;
+        $studentCount = 1;
 
         foreach($users as $index => $user)
         {
@@ -5358,7 +5360,6 @@ class Excel extends CI_Controller {
                         $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(36))->setWidth(15);
                     }
     
-                    $last_index = 37;
                     if(count($payments) > 0){
                         $last_index = 34 + (count($payments) * 3);
                     }
@@ -5573,6 +5574,8 @@ class Excel extends CI_Controller {
     
                 $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($index) . '4:' . $this->columnIndexToLetter($index) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
             }
+
+            // $studentCount++;
     
             $objPHPExcel->getActiveSheet()->getStyle('G4:AH' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
             $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index) . '4:' . $this->columnIndexToLetter($last_index) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
@@ -5797,8 +5800,6 @@ class Excel extends CI_Controller {
         header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
         header ('Pragma: public'); // HTTP/1.0
 
-        
-        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save('php://output');
         exit;
     }
@@ -8747,6 +8748,169 @@ class Excel extends CI_Controller {
         exit;
     }
 
+    public function finance_lab_fee_report($sem = 0, $campus, $lab_type_id, $report_date)
+    {
+
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+
+        $misc = $this->db->get_where('tb_mas_tuition_year_lab_fee', array('intID' => $lab_type_id))->first_row();
+
+        $students = $this->db->select('tb_mas_users.*, tb_mas_tuition_year_lab_fee.name, tb_mas_tuition_year_lab_fee.intID as labID, tb_mas_registration.paymentType, tb_mas_registration.date_enlisted')
+                    ->from('tb_mas_registration')
+                    ->join('tb_mas_users','tb_mas_users.intID = tb_mas_registration.intStudentID')
+                    ->join('tb_mas_tuition_year','tb_mas_tuition_year.intID = tb_mas_registration.tuition_year')
+                    ->join('tb_mas_tuition_year_lab_fee','tb_mas_tuition_year_lab_fee.tuitionYearID = tb_mas_tuition_year.intID')
+                    ->where(array('tb_mas_registration.intAYID' => $sem, 'tb_mas_tuition_year_lab_fee.name' => $misc->name, 'tb_mas_registration.date_enlisted <=' => $report_date))
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->group_by('tb_mas_users.intID')
+                    ->get()
+                    ->result_array();
+
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
+
+        if (PHP_SAPI == 'cli')
+            die('This example should only be run from a Web Browser');
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+        $title = 'Laboratory Fee Report';
+
+        $i = 9;
+        $count = 1;
+
+        foreach($students as $index => $student){
+            
+            $tuition_data = $this->data_fetcher->getTuition($student['intID'],$sem);
+
+            $lab_total_amount = isset($tuition_data['lab_list_per_type'][$misc->name]) ? $tuition_data['lab_list_per_type'][$misc->name] : '';
+
+            if($lab_total_amount > 0){
+                $course = $this->data_fetcher->getProgramDetails($student['intProgramID']);  
+                
+                // Add some data
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A'.$i, $count + 1)
+                    ->setCellValue('B'.$i, str_replace("-", "", $student['strStudentNumber']))
+                    ->setCellValue('C'.$i, ucfirst($student['strLastname']) . ', ' . ucfirst($student['strFirstname']) . ' ' . ucfirst($student['strMiddlename']) . '.')
+                    ->setCellValue('D'.$i, $course['strProgramCode'])
+                    ->setCellValue('E'.$i, date("d-M-Y",strtotime($student['date_enlisted'])))
+                    ->setCellValue('F'.$i, (float)$lab_total_amount)
+                    ->setCellValue('G'.$i, $student['paymentType'] == 'full' ? 'FULL PAYMENT' : 'INSTALLMENT');
+
+                $i++;
+                $count++;
+            }
+        }
+        
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'iACADEMY, Inc.')
+                    ->setCellValue('A2', $campus == 'Makati' ? 'iACADEMY Nexus 7434 Yakal Street Brgy. San Antonio, Makati City' : '5th Floor Filinvest Cyberzone Tower 2 Salinas Drive Cor. W. Geonzon St., Cebu IT Park, Apas, Cebu City')
+                    ->setCellValue('A3', $campus == 'Makati' ? 'NCR, Fourth District Philippines' : '')
+                    ->setCellValue('A5', $misc->name)
+                    ->setCellValue('A6', strtoupper($sy->term_student_type) . ' ' . $sy->enumSem . ' ' . $this->data["term_type"] . ' ' . $sy->strYearStart . '-' . $sy->strYearEnd)
+                    ->setCellValue('A8', 'No.')
+                    ->setCellValue('B8', 'Student Number')
+                    ->setCellValue('C8', 'Student Name')
+                    ->setCellValue('D8', 'Course')
+                    ->setCellValue('E8', 'Date Enrolled')
+                    ->setCellValue('F8', 'Amount')
+                    ->setCellValue('G8', 'Mode of Payment')
+                    ->setCellValue('E' . ($i + 1), 'Total')
+                    ->setCellValue('F' . ($i + 1), '=SUM(F9:F' . ($i-1) . ')')
+                    ->setCellValue('A'. ($i + 6), 'Prepared By:')
+                    ->setCellValue('A'. ($i + 8), $this->data['user']['strFirstname'] . ' ' . $this->data['user']['strLastname']);
+
+        $objPHPExcel->getActiveSheet()->getStyle('F9:F' . ($i + 1))->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle('A1:G8')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 14,
+                )
+            )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A2:G8')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 11,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('A8:G' . ($i-1))->applyFromArray(
+            array(
+                'borders' => array(
+                    'allborders' => array(
+                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        'color' => array('rgb' => '000000'),
+                    ),
+                ),
+            )
+        );
+
+        $style = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+            )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A8:G'.$i)->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('A8:G'.$i)->getAlignment()->setWrapText(true);
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(25);
+        
+        $sheet = $objPHPExcel->getActiveSheet();
+        $sheet->mergeCells('A1:F1');
+        $sheet->mergeCells('A2:F2');
+        $sheet->mergeCells('A3:F3');
+        $sheet->mergeCells('A5:F5');
+        $sheet->mergeCells('A6:F6');
+
+        $objPHPExcel->getActiveSheet()->setTitle(ucwords($sy->term_student_type));
+
+        $date = date("ymdhis");
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+        header('Content-Disposition: attachment;filename="Laboratory Fee Report - ' . ucwords($sy->term_student_type) . ' ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '(As of ' . date("M d, Y", strtotime($report_date)) . ').xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        
+        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
+        exit;
+    }
 
     private function generateRandomString($length) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
