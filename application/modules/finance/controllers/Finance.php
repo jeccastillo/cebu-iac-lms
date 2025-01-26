@@ -1558,13 +1558,6 @@ class Finance extends CI_Controller {
         echo json_encode($data);
     }
 
-    public function faculty_logged_in()
-    {
-        if($this->session->userdata('faculty_logged'))
-            return true;
-        else
-            return false;
-    }
 
     public function finance_lab_fee_report_data($sem = 0, $lab_type_id, $report_date)
     {
@@ -1577,15 +1570,15 @@ class Finance extends CI_Controller {
             $sem = $s['intID'];
         }
         
-        $misc = $this->db->get_where('tb_mas_tuition_year_lab_fee', array('intID' => $lab_type_id))->first_row();
+        $lab = $this->db->get_where('tb_mas_tuition_year_lab_fee', array('intID' => $lab_type_id))->first_row();
 
-        if($misc){
+        if($lab){
             $results = $this->db->select('tb_mas_users.*, tb_mas_tuition_year_lab_fee.name, tb_mas_tuition_year_lab_fee.intID as labID, tb_mas_registration.paymentType, tb_mas_registration.date_enlisted')
                         ->from('tb_mas_registration')
                         ->join('tb_mas_users','tb_mas_users.intID = tb_mas_registration.intStudentID')
                         ->join('tb_mas_tuition_year','tb_mas_tuition_year.intID = tb_mas_registration.tuition_year')
                         ->join('tb_mas_tuition_year_lab_fee','tb_mas_tuition_year_lab_fee.tuitionYearID = tb_mas_tuition_year.intID')
-                        ->where(array('tb_mas_registration.intAYID' => $sem, 'tb_mas_tuition_year_lab_fee.name' => $misc->name, 'tb_mas_registration.date_enlisted <=' => $report_date))
+                        ->where(array('tb_mas_registration.intAYID' => $sem, 'tb_mas_tuition_year_lab_fee.name' => $lab->name, 'tb_mas_registration.date_enlisted <=' => $report_date))
                         ->order_by('tb_mas_users.strLastname', 'ASC')
                         ->group_by('tb_mas_users.intID')
                         ->get()
@@ -1595,7 +1588,7 @@ class Finance extends CI_Controller {
                 foreach($results as $index => $result){
                     $tuition_data = $this->data_fetcher->getTuition($result['intID'], $sem);
         
-                    $lab_total_amount = isset($tuition_data['lab_list_per_type'][$misc->name]) ? $tuition_data['lab_list_per_type'][$misc->name] : '';
+                    $lab_total_amount = isset($tuition_data['lab_list_per_type'][$lab->name]) ? $tuition_data['lab_list_per_type'][$lab->name] : '';
         
                     if($lab_total_amount > 0){
         
@@ -1620,6 +1613,70 @@ class Finance extends CI_Controller {
         echo json_encode($data);
     }
 
+    public function miscellaneous_fee_report_data($sem = 0, $particular_id, $report_date)
+    {
+        $response_array = array();
+
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+        
+        $misc = $this->db->get_where('tb_mas_tuition_year_misc', array('intID' => $particular_id))->first_row();
+
+        if($misc){
+    
+            $results = $this->db
+                        ->select('tb_mas_users.*, tb_mas_tuition_year_misc.name, tb_mas_tuition_year_misc.type, tb_mas_registration.paymentType, tb_mas_registration.date_enlisted')
+                        ->from('tb_mas_registration')
+                        ->join('tb_mas_users','tb_mas_users.intID = tb_mas_registration.intStudentID')
+                        ->join('tb_mas_tuition_year','tb_mas_tuition_year.intID = tb_mas_registration.tuition_year')
+                        ->join('tb_mas_tuition_year_misc','tb_mas_tuition_year_misc.tuitionYearID = tb_mas_tuition_year.intID')
+                        ->where(array('tb_mas_registration.intAYID' => $sem, 'tb_mas_tuition_year_misc.name' => $misc->name, 'tb_mas_registration.date_enlisted <=' => $report_date))
+                        ->order_by('tb_mas_users.strLastname', 'ASC')
+                        ->group_by('tb_mas_users.intID')
+                        ->get()
+                        ->result_array();
+            if($results){
+                foreach($results as $index => $result){
+                    $count = 1;
+                    $tuition_data = $this->data_fetcher->getTuition($result['intID'],$sem);
+
+                    $misc_list = $tuition_data['misc_list'];
+        
+                    foreach($misc_list as $misc_name => $amount){
+                        
+                        if($misc_name == $misc->name){
+                            $course = $this->data_fetcher->getProgramDetails($result['intProgramID']);
+            
+                            $response_data['index'] = $count;
+                            $response_data['student_number'] = str_replace("-", "", $result['strStudentNumber']);
+                            $response_data['student_name'] = ucfirst($result['strLastname']) . ', ' . ucfirst($result['strFirstname']) . ' ' . ucfirst($result['strMiddlename']) . '.';
+                            $response_data['course'] = $course['strProgramCode'];
+                            $response_data['date_enlisted'] = date("d-M-Y",strtotime($result['date_enlisted']));
+
+                            $response_data['regular'] = $result['type'] == 'regular' ? $amount : '' ;
+                            $response_data['new_student'] = $result['type'] == 'new_student' ? $amount : '' ;
+                            $response_data['internship'] = $result['type'] == 'internship' ? $amount : '' ;
+                            $response_data['nstp'] = $result['type'] == 'nstp' ? $amount : '' ;
+                            $response_data['regular'] = $result['type'] == 'regular' ? $amount : '' ;
+                            $response_data['thesis'] = $result['type'] == 'thesis' ? $amount : '' ;
+                            $response_data['late_enrollment'] = $result['type'] == 'late_enrollment' ? $amount : '' ;
+                            $response_array[] = $response_data;
+                            $count++;
+                        }
+                    }
+                }
+            }
+        }
+        
+        $data['data'] = $response_array;
+
+        echo json_encode($data);
+    }
+    
     public function lab_fee_list()
     {
         $data = $this->db->select('intID, name')
@@ -1630,6 +1687,26 @@ class Finance extends CI_Controller {
                     ->result_array();
 
         return $data;
+    }
+    
+    public function misc_list()
+    {
+        $data = $this->db->select('intID, name')
+                    ->from('tb_mas_tuition_year_misc')
+                    ->order_by('name', 'ASC')
+                    ->group_by('name')
+                    ->get()
+                    ->result_array();
+
+        echo json_encode($data);
+    }
+
+    public function faculty_logged_in()
+    {
+        if($this->session->userdata('faculty_logged'))
+            return true;
+        else
+            return false;
     }
 
     function finance_reports(){
