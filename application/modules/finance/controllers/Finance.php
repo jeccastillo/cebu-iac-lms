@@ -1701,6 +1701,20 @@ class Finance extends CI_Controller {
         echo json_encode($data);
     }
 
+    public function scholarship_list()
+    {
+
+        $data = $this->db->select('intID, name, description, type')
+                    ->from('tb_mas_scholarships')
+                    ->where('status', 'active')
+                    ->order_by('name', 'ASC')
+                    ->group_by('name')
+                    ->get()
+                    ->result_array();
+
+        echo json_encode($data);
+    }
+
     public function faculty_logged_in()
     {
         if($this->session->userdata('faculty_logged'))
