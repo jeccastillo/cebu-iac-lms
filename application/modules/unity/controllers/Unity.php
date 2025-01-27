@@ -504,7 +504,7 @@ class Unity extends CI_Controller {
                     $adj['classlist_student_id'] = $record['subjectID'];
                     $adj['from_subject'] = "";
                     $adj['to_subject'] =  "";
-                    $adj['syid'] = $post['sem'];
+                    $adj['syid'] = $post['term_id'];
                     $adj['date'] = date("Y-m-d H:i:s");  
                     $adj['student_id'] =  $post['student_id'];
                     $adj['remarks'] =  "LOA";
