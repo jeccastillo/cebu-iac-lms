@@ -513,7 +513,7 @@ class Unity extends CI_Controller {
 
                     $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj);                                          
                     //delete student from classlist
-                    $this->db->where(array('intStudentID'=>$post['student_id'],'intClassListID'=>$record['intClassListID']))->delete('tb_mas_classlist_student');    
+                    $this->db->where(array('intStudentID'=>$post['student_id'],'intClassListID'=>$record['classlistID']))->delete('tb_mas_classlist_student');    
                 
                 }
             }  
