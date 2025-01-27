@@ -486,9 +486,9 @@ class Unity extends CI_Controller {
                         ->update('tb_mas_registration',$reg_data);
 
             }
-            if($registration->intROG == 1){
-                $records = $this->data_fetcher->getClassListStudentsSt($post['student_id'],$post['term_id']);
             
+            $records = $this->data_fetcher->getClassListStudentsSt($post['student_id'],$post['term_id']);
+            if($registration->intROG == 1){
                 foreach($records as $record){
                     $data =[
                         'floatMidtermGrade' => "OW",
@@ -497,8 +497,26 @@ class Unity extends CI_Controller {
                     ];
                 
                     $this->db->where(array('intStudentID'=>$post['student_id'],'intClassListID'=>$record['classlistID']))->update('tb_mas_classlist_student',$data);
-                }     
-            }           
+                }                 
+            }         
+            else{
+                foreach($records as $record){   
+                    $adj['classlist_student_id'] = $record['subjectID'];
+                    $adj['from_subject'] = "";
+                    $adj['to_subject'] =  "";
+                    $adj['syid'] = $post['term_id'];
+                    $adj['date'] = date("Y-m-d H:i:s");  
+                    $adj['student_id'] =  $post['student_id'];
+                    $adj['remarks'] =  "LOA";
+                    $adj['adjustment_type'] =  "LOA";
+                    $adj['adjusted_by'] =  $this->session->userdata('intID');                    
+
+                    $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj);                                          
+                    //delete student from classlist
+                    $this->db->where(array('intStudentID'=>$post['student_id'],'intClassListID'=>$record['classlistID']))->delete('tb_mas_classlist_student');    
+                
+                }
+            }  
         
             $data['message'] = "successfully updated";
             $data['success'] = true;
