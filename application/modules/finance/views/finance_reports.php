@@ -70,6 +70,22 @@
                 </div>
                 <!-- small box -->
             </div>
+            <div class="col-md-4 col-sm-8 col-xs-12">
+                <!-- small box -->
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3>Miscellaneous Fee Report</h3>
+                        <p>Miscellaneous Fee List</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-list"></i>
+                    </div>
+                    <a href="<?php echo base_url(); ?>finance/miscellaneous_report"
+                        class="small-box-footer"> View <i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+                <!-- small box -->
+            </div>
         </div>
     </div>
 </aside>
