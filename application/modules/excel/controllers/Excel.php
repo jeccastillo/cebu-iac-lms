@@ -5141,7 +5141,6 @@ class Excel extends CI_Controller {
 
         $studentsEnrolled = false;
         $last_index = 37;
-        $studentCount = 1;
 
         foreach($users as $index => $user)
         {
@@ -5574,8 +5573,6 @@ class Excel extends CI_Controller {
     
                 $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($index) . '4:' . $this->columnIndexToLetter($index) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
             }
-
-            // $studentCount++;
     
             $objPHPExcel->getActiveSheet()->getStyle('G4:AH' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
             $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index) . '4:' . $this->columnIndexToLetter($last_index) . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
