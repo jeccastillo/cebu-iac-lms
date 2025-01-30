@@ -2344,7 +2344,7 @@ class Pdf extends CI_Controller {
         $totalSaleTaxed = 0;
 
         if(($request['description'] != "Tuition Fee" || $request['description'] != "Reservation Payment" || $request['description'] != "Application Payment") && ($request['invoice_amount'] != 0 || $request['invoice_amount_ves'] != 0 || $request['invoice_amount_vzrs'] != 0)){
-            $amountNetVat = $request['invoice_amount']  / 1.12;            
+            $amountNetVat = (float)$request['invoice_amount']  / 1.12;            
             $lessVat =  $amountNetVat * .12;    
             $totalSales = $request['invoice_amount'] + $request['invoice_amount_ves'] + $request['invoice_amount_vzrs'];    
             $totalSaleTaxed = $amountNetVat + $request['invoice_amount_ves'] + $request['invoice_amount_vzrs'];        
