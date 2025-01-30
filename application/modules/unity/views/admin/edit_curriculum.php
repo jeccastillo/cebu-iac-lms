@@ -89,6 +89,7 @@
                             <option value="regular">Regular</option>
                             <option value="2nd Specialization">2nd Specialization</option>
                             <option value="Elective">Elective</option>
+                            <option value="Equivalent">Equivalent</option>
                         </select>
                     </div>
                     <div class="form-group col-sm-3">
@@ -209,7 +210,7 @@
                 <thead>
                     <tr>
                         <th colspan="2">
-                            Second Specialization Subjects                            
+                            Other Subjects                            
                         </th>
                     </tr>
                     <tr>
@@ -218,6 +219,7 @@
                         <th>Lecture Units</th>
                         <th>Lab Units</th>
                         <th>Total Units</th>
+                        <th>Type</th>
                         <th>Pre-requisites</th>
                         <th>Actions</th>
                     </tr>
@@ -231,6 +233,7 @@
                         <td><?php echo $s['intLectHours']; ?></td>
                         <td><?php echo $s['intLab']; ?></td>
                         <td><?php echo $s['strUnits']; ?></td>
+                        <td><?php echo $s['type']; ?></td>
                         <td style="width:20%;">
                             <?php
                             $i = 0;
