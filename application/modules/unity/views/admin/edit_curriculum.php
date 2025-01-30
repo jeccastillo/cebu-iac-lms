@@ -233,7 +233,7 @@
                         <td><?php echo $s['intLectHours']; ?></td>
                         <td><?php echo $s['intLab']; ?></td>
                         <td><?php echo $s['strUnits']; ?></td>
-                        <td><?php print_r($s); ?></td>
+                        <td><?php echo $s['type']; ?></td>
                         <td style="width:20%;">
                             <?php
                             $i = 0;
