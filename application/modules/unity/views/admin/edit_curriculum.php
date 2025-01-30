@@ -89,6 +89,7 @@
                             <option value="regular">Regular</option>
                             <option value="2nd Specialization">2nd Specialization</option>
                             <option value="Elective">Elective</option>
+                            <option value="Equivalent">Equivalent</option>
                         </select>
                     </div>
                     <div class="form-group col-sm-3">
