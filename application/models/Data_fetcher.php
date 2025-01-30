@@ -425,7 +425,9 @@ class Data_fetcher extends CI_Model {
         if($ay_data)
             $sem_num = switch_num_rev($ay_data['enumSem']);
 
-        $bucket = "SELECT tb_mas_subjects.intID,strCode,strDescription FROM tb_mas_subjects JOIN tb_mas_curriculum_subject ON tb_mas_curriculum_subject.intSubjectID = tb_mas_subjects.intID JOIN tb_mas_curriculum on tb_mas_curriculum.intID = tb_mas_curriculum_subject.intCurriculumID JOIN tb_mas_classlist on tb_mas_classlist.intSubjectID = tb_mas_subjects.intID WHERE tb_mas_subjects.intID NOT IN (SELECT intSubjectID from tb_mas_classlist_student  JOIN tb_mas_classlist ON intClassListID = tb_mas_classlist.intID WHERE intStudentID = ".$studentID." AND strRemarks = 'Passed') AND tb_mas_subjects.intID NOT IN (SELECT intSubjectID from tb_mas_credited_grades WHERE intStudentID =".$studentID.") AND  tb_mas_curriculum.intID = '".$curriculumID."' ";
+        $bucket = "SELECT tb_mas_subjects.intID,strCode,strDescription FROM tb_mas_subjects JOIN tb_mas_curriculum_subject ON tb_mas_curriculum_subject.intSubjectID = tb_mas_subjects.intID JOIN tb_mas_curriculum on tb_mas_curriculum.intID = tb_mas_curriculum_subject.intCurriculumID JOIN tb_mas_classlist on tb_mas_classlist.intSubjectID = tb_mas_subjects.intID 
+                WHERE (tb_mas_subjects.intEquivalentID1 = tb_mas_curriculum_subject.intSubjectID OR tb_mas_subjects.intEquivalentID2 = tb_mas_curriculum_subject.intSubjectID) AND tb_mas_subjects.intID NOT IN (SELECT intSubjectID from tb_mas_classlist_student  JOIN tb_mas_classlist ON intClassListID = tb_mas_classlist.intID WHERE intStudentID = ".$studentID." AND strRemarks = 'Passed')
+                AND tb_mas_subjects.intID NOT IN (SELECT intSubjectID from tb_mas_credited_grades WHERE intStudentID =".$studentID.") AND  tb_mas_curriculum.intID = '".$curriculumID."' ";
  
         if(isset($ay_data) && $year!=null)
             $bucket .= "AND tb_mas_curriculum_subject.intYearLevel = ".$year." AND tb_mas_curriculum_subject.intSem = ".$sem_num." ";        
@@ -437,14 +439,6 @@ class Data_fetcher extends CI_Model {
         $subjects = $this->db
              ->query($bucket)
              ->result_array();
-
-
-        $bucket = "SELECT tb_mas_subjects.intID,strCode,strDescription FROM tb_mas_subjects JOIN tb_mas_curriculum_second ON tb_mas_curriculum_second.intSubjectID = tb_mas_subjects.intID JOIN tb_mas_curriculum on tb_mas_curriculum.intID = tb_mas_curriculum_second.intCurriculumID JOIN tb_mas_classlist on tb_mas_classlist.intSubjectID = tb_mas_subjects.intID WHERE tb_mas_subjects.intID NOT IN (SELECT intSubjectID from tb_mas_classlist_student  JOIN tb_mas_classlist ON intClassListID = tb_mas_classlist.intID WHERE intStudentID = ".$studentID." AND strRemarks = 'Passed') AND tb_mas_subjects.intID NOT IN (SELECT intSubjectID from tb_mas_credited_grades WHERE intStudentID =".$studentID.") AND  tb_mas_curriculum.intID = '".$curriculumID."' ";
-        $bucket .= "GROUP BY tb_mas_classlist.intSubjectID"; 
-        
-        $subjects_extra = $this->db
-            ->query($bucket)
-            ->result_array();
         
         //echo $this->db->last_query();
         //print_r($subjects);
@@ -453,12 +447,38 @@ class Data_fetcher extends CI_Model {
         //PREREQUISITES CODE----------------------------------------------------------------------------
         
         foreach($subjects as $subj)
-        {            
-            $ret[] = $subj;                    
-        }
-        foreach($subjects_extra as $subj)
-        {            
-            $ret[] = $subj;                    
+        {
+            // $add = true;
+            
+            // $r = $this->db
+            //           ->get_where('tb_mas_prerequisites',array('intSubjectID'=>$subj['intID']))
+            //           ->result_array();
+            
+            // if(!empty($r))
+            // {
+            //     foreach($r as $res){
+            //         $s = $this->db
+            //           ->select('tb_mas_classlist_student.intCSID')
+            //           ->from('tb_mas_classlist_student')
+            //           ->join('tb_mas_classlist','tb_mas_classlist.intID = tb_mas_classlist_student.intClassListID')
+            //           ->where(array('intSubjectID'=>$res['intPrerequisiteID'],'strRemarks'=>'Passed','intStudentID'=>$studentID))
+            //           ->get()
+            //           ->result_array();
+                    
+            //         if(empty($s))
+            //         {
+            //             $add = false;
+            //             break;
+            //         }
+                    
+            //     }
+                
+                
+            // }
+            
+            // if($add)
+            $ret[] = $subj;
+                    
         }
         return $ret;
 
@@ -2552,6 +2572,7 @@ class Data_fetcher extends CI_Model {
         $total_other = 0;
         $afee = 0;
         $lab_list = [];
+        $lab_list_per_type = [];
         $misc_list = [];    
         $new_student_list = [];    
         $foreign_fee_list = [];        
@@ -2729,6 +2750,8 @@ class Data_fetcher extends CI_Model {
                     $tuition_year_lab = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'],'name' => $lab_class))
                                                 ->get('tb_mas_tuition_year_lab_fee')->first_row('array');
                     $lab_list[$class['strCode']] = getExtraFee($tuition_year_lab, $class_type, 'lab') * $class['intLab'];
+                    $lab_list_per_type[$class['strLabClassification']] = isset($lab_list_per_type[$class['strLabClassification']]) ? $lab_list_per_type[$class['strLabClassification']] + getExtraFee($tuition_year_lab, $class_type, 'lab') * $class['intLab'] :
+                                                getExtraFee($tuition_year_lab, $class_type, 'lab') * $class['intLab'];
                     $total_lab += $lab_list[$class['strCode']];
                 }
                 
@@ -3224,6 +3247,7 @@ class Data_fetcher extends CI_Model {
         $data['lab_installment30'] = $data['lab_installment_before_discount30'] - $lab_scholarship - $lab_discount;
         $data['lab_installment50'] = $data['lab_installment_before_discount50'] - $lab_scholarship - $lab_discount;
         $data['lab_list'] = $lab_list;
+        $data['lab_list_per_type'] = $lab_list_per_type;
         $data['tuition_discount'] = $tuition_scholarship;        
         $data['tuition_discount_dc'] = $tuition_discount; 
         $data['tuition'] = $tuition;        
