@@ -210,7 +210,7 @@
                 <thead>
                     <tr>
                         <th colspan="2">
-                            Second Specialization Subjects                            
+                            Other Subjects                            
                         </th>
                     </tr>
                     <tr>
@@ -219,6 +219,7 @@
                         <th>Lecture Units</th>
                         <th>Lab Units</th>
                         <th>Total Units</th>
+                        <th>Type</th>
                         <th>Pre-requisites</th>
                         <th>Actions</th>
                     </tr>
@@ -232,6 +233,7 @@
                         <td><?php echo $s['intLectHours']; ?></td>
                         <td><?php echo $s['intLab']; ?></td>
                         <td><?php echo $s['strUnits']; ?></td>
+                        <td><?php print_r($s); ?></td>
                         <td style="width:20%;">
                             <?php
                             $i = 0;
