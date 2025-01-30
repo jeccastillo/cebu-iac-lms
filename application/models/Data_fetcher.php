@@ -425,7 +425,9 @@ class Data_fetcher extends CI_Model {
         if($ay_data)
             $sem_num = switch_num_rev($ay_data['enumSem']);
 
-        $bucket = "SELECT tb_mas_subjects.intID,strCode,strDescription FROM tb_mas_subjects JOIN tb_mas_curriculum_subject ON tb_mas_curriculum_subject.intSubjectID = tb_mas_subjects.intID JOIN tb_mas_curriculum on tb_mas_curriculum.intID = tb_mas_curriculum_subject.intCurriculumID JOIN tb_mas_classlist on tb_mas_classlist.intSubjectID = tb_mas_subjects.intID WHERE tb_mas_subjects.intID NOT IN (SELECT intSubjectID from tb_mas_classlist_student  JOIN tb_mas_classlist ON intClassListID = tb_mas_classlist.intID WHERE intStudentID = ".$studentID." AND strRemarks = 'Passed') AND tb_mas_subjects.intID NOT IN (SELECT intSubjectID from tb_mas_credited_grades WHERE intStudentID =".$studentID.") AND  tb_mas_curriculum.intID = '".$curriculumID."' ";
+        $bucket = "SELECT tb_mas_subjects.intID,strCode,strDescription FROM tb_mas_subjects JOIN tb_mas_curriculum_subject ON tb_mas_curriculum_subject.intSubjectID = tb_mas_subjects.intID JOIN tb_mas_curriculum on tb_mas_curriculum.intID = tb_mas_curriculum_subject.intCurriculumID JOIN tb_mas_classlist on tb_mas_classlist.intSubjectID = tb_mas_subjects.intID 
+                WHERE (tb_mas_subjects.intEquivalentID1 = tb_mas_curriculum_subject.intSubjectID OR tb_mas_subjects.intEquivalentID2 = tb_mas_curriculum_subject.intSubjectID) AND tb_mas_subjects.intID NOT IN (SELECT intSubjectID from tb_mas_classlist_student  JOIN tb_mas_classlist ON intClassListID = tb_mas_classlist.intID WHERE intStudentID = ".$studentID." AND strRemarks = 'Passed')
+                AND tb_mas_subjects.intID NOT IN (SELECT intSubjectID from tb_mas_credited_grades WHERE intStudentID =".$studentID.") AND  tb_mas_curriculum.intID = '".$curriculumID."' ";
  
         if(isset($ay_data) && $year!=null)
             $bucket .= "AND tb_mas_curriculum_subject.intYearLevel = ".$year." AND tb_mas_curriculum_subject.intSem = ".$sem_num." ";        
