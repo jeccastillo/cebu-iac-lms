@@ -77,14 +77,18 @@ table tr td {
                 <?php echo "  ".date("m/d/Y",strtotime($transaction_date)); ?> </div>
             <div style="position:absolute; top: 200px; right: -60px; width: 200px; height: 20px; font-size:12px">
                 Account No. </div>
-            <div style="position:absolute; top: 260px; left: 70px; width: 200px; height: 20px; font-size:12px">
+            <div style="position:absolute; top: 260px; left: 70px; height: 20px; font-size:12px">
                 <?php echo $student_name; ?> </div>
             <div style="position:absolute; top: 290px; left: 70px; width: 200px; height: 20px; font-size:12px">
-                <?php echo $tin; ?> </div>
-            <div style="position:absolute; top: 320px; left: 70px; width: 200px; height: 20px; font-size:12px">
+                <?php //echo $tin; ?>
+                TIN
+            </div>
+            <div style="position:absolute; top: 320px; left: 70px; height: 20px; font-size:12px">
                 <?php echo $student_address; ?> </div>
             <div style="position:absolute; top: 380px; left: 70px; width: 200px; height: 20px; font-size:12px">
-                <?php echo $description == "Reservation Payment" ? "NON REFUNDABLE AND NON TRANSFERABLE":""; ?><br />
+                <?php //echo $description == "Reservation Payment" ? "NON REFUNDABLE AND NON TRANSFERABLE":""; ?>
+                PAYMENT FOR
+                <br />
             </div>
             <div style="position:absolute; top: 380px; right: -70px; width: 200px; height: 20px; font-size:12px">
                 <?php echo $total_amount_due; ?> </div>
