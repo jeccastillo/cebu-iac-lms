@@ -5233,7 +5233,7 @@ class Excel extends CI_Controller {
                         $deduction_type = isset($tuition['scholarship'][0]) ? $tuition['scholarship'][0]->deduction_type : '';
                     }
                     
-                    if($user['strLastname'] == 'PACAÑA'){
+                    if($user['intID'] == 132){
                         print($deduction_type);
                         die();
                     }
