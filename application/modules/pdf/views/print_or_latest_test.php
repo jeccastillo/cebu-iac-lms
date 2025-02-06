@@ -71,7 +71,7 @@ table tr td {
             <div
                 style="position:absolute; top: 170px; left: 140px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
                 &#10003; </div>
-            <div style="position:absolute; top: 150px; right: -60px; width: 200px; height: 20px; font-size:12px">
+            <div style="position:absolute; top: 40px; right: -100px; width: 200px; height: 20px; font-size:16px">
                 <?php echo $or_number; ?> </div>
             <div style="position:absolute; top: 170px; right: -60px; width: 200px; height: 20px; font-size:12px">
                 <?php echo "  ".date("m/d/Y",strtotime($transaction_date)); ?> </div>
