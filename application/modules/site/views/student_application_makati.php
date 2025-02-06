@@ -7,13 +7,11 @@
         BACK
     </a>
 </div>
-
 <div class=" block mx-auto mt-[60px]" data-aos="fade-up">
     <h1 class="text-4xl font-[900] text-center color-primary">
         iACADEMY
     </h1>
 </div>
-
 <div class="custom-container max-w-[1080px]" id="adminssions-form" style="margin-top:10px;">
     <div class="color-primary text-center">
         <h4 class="font-medium text-2xl mb-5">
@@ -23,14 +21,12 @@
         <p>Hello future Game Changers! Kindly fill out your information sheet. If you have any
             questions, feel free
             to email us at <strong><u>admissions@iacademy.edu.ph</u></strong> </p>
-
         <p style="margin-top:15px;">
             Note: You are applying for iACADEMY Makati Campus, if you want to apply to iACADEMY Cebu
             click
             <a style="text-decoration: underline;" href="http://cebu.iacademy.edu.ph/site/student_application">here</a>.
         </p>
     </div>
-
     <form @submit.prevent="
             customSubmit(
                 'submit',
@@ -40,7 +36,6 @@
                 'admissions/student-info'
             )
         " method="post" class="">
-
         <div v-if="true" class="flex flex-wrap md:space-x-5 mb-6 mt-10 justify-center ">
             <div id="select-term" class=" pr-4 flex-[1_0_188px]">
                 <div class="mb-5">
@@ -54,7 +49,6 @@
                         <option v-for="s in sy" :value="s.intID">
                             {{ `${s.enumSem} ${s.term_label} SY ${s.strYearStart}-${s.strYearEnd}`}}
                         </option>
-
                     </select>
                 </div>
                 <div id="applicant-type" class="border-[1px] border-neutral-100 p-2.5 rounded-lg">
@@ -92,7 +86,6 @@
                             @click="filterCourses(filterShs[index])" class="mr-1" required>
                         {{shs}}
                     </label>
-
                 </div>
             </div>
             <div id=applying-for class=" flex-[4_1_auto] max-w-[710px]" v-if="request.student_type">
@@ -143,13 +136,9 @@
                                 </option>
                             </select>
                         </div>
-
                     </div>
-
-
                 </div>
             </div>
-
         </div>
         <div v-if="true" class=" mb-6 mt-10">
             <h4 class="color-primary font-bold text-xl">BASIC INFORMATION</h4>
@@ -163,8 +152,6 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" name="first_name" required v-model="request.first_name">
-
-
                     </div>
                     <div id="middle-name" class="flex-grow">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -173,8 +160,6 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" name="middle_name" v-model="request.middle_name">
-
-
                     </div>
                     <div class="flex-grow">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -183,8 +168,6 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" name="last_name" required v-model="request.last_name">
-
-
                     </div>
                     <div id="suffix" class="basis-[100px]">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -193,8 +176,6 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" v-model="request.suffix">
-
-
                     </div>
                 </div>
                 <div class="flex flex-wrap gap-x-2 gap-y-2 mb-4">
@@ -205,7 +186,6 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="date" v-model="request.date_of_birth" required>
-
                     </div>
                     <div id="place-birth" class="basis-[300px]">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -214,9 +194,7 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" name="place_of_birth" v-model="request.place_of_birth" required>
-
                     </div>
-
                     <div id="gender" class="basis-[120px]">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
                             Gender <span class="text-red-500">*</span>
@@ -256,7 +234,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
         <div v-if="true" class=" mb-6 mt-10">
             <h4 class="color-primary font-bold text-xl">CONTACT INFORMATION</h4>
@@ -271,8 +248,6 @@
                         <input v-model="request.email"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="email" name="confirm-email" required>
-
-
                     </div>
                     <div id="email-confirm">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -281,9 +256,7 @@
                         <input v-model="request.email_confirmation"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="email" name="confirm-email" required>
-
                     </div>
-
                 </div>
                 <div class="grid grid-cols-[repeat(auto-fit,_minmax(0,420px))] gap-x-16 gap-y-2 mb-4">
                     <div class="">
@@ -300,7 +273,6 @@
                             <input
                                 class="w-2/3 bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                 type="number" v-model="request.mobile_number" required>
-
                         </div>
                     </div>
                     <div>
@@ -317,11 +289,8 @@
                             <input
                                 class="w-2/3 bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                 type="number" v-model="request.mobile_number_confirmation" required>
-
-
                         </div>
                     </div>
-
                 </div>
             </div>
             <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
@@ -334,7 +303,6 @@
                         <input v-model="request.address"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             name="address" type="text" required>
-
                     </div>
                     <div id="">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -343,7 +311,6 @@
                         <input v-model="addressObj.barangay"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             name="barangay" type="text" required>
-
                     </div>
                     <div id="">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -352,7 +319,6 @@
                         <input v-model="addressObj.city"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" name="city" required>
-
                         <!-- <select v-if="addressObj.country == 'Philippines'"
                             @change="getBarangay"
                             v-model="addressObj.city"
@@ -423,12 +389,10 @@
                     </div>
                 </div>
             </div>
-
         </div>
         <div v-if="true" class=" mb-6 mt-10">
             <h4 class="color-primary font-bold text-xl">PARENT'S INFORMATION</h4>
             <hr class="mb-5 bg-[#10326f] h-1 w-3/5" />
-
             <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
                 <h5 class="color-primary mb-2.5">MOTHER <span class="text-red-500">*</span> </h5>
                 <div class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-2.5 mb-4 ">
@@ -447,7 +411,6 @@
                         <input v-model="request.mother_occupation"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" name="job_title" required />
-
                     </div>
                     <div>
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -456,7 +419,6 @@
                         <input v-model="request.mother_email"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="email" name="email" required>
-
                     </div>
                     <div>
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -465,10 +427,7 @@
                         <input v-model="request.mother_contact"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="number" name="number" required>
-
                     </div>
-
-
                 </div>
                 <div>
                     <label class="block color-primary mb-1 ml-1.5">
@@ -477,7 +436,6 @@
                         SET AS PRIMARY CONTACT
                     </label>
                 </div>
-
             </div>
             <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
                 <h5 class="color-primary mb-2.5">FATHER <span class="text-red-500">*</span> </h5>
@@ -505,7 +463,6 @@
                         <input v-model="request.father_email"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             name="email" type="email" required>
-
                     </div>
                     <div>
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -514,10 +471,7 @@
                         <input v-model="request.father_contact"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="number" name="number" required>
-
                     </div>
-
-
                 </div>
                 <div>
                     <label class="block color-primary mb-1 ml-1.5">
@@ -526,7 +480,6 @@
                         SET AS PRIMARY CONTACT
                     </label>
                 </div>
-
             </div>
             <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
                 <h5 class="color-primary mb-2.5">GUARDIAN <span class="text-red-500">*</span> </h5>
@@ -546,7 +499,6 @@
                         <input v-model="request.guardian_occupation"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" required>
-
                     </div>
                     <div>
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -555,7 +507,6 @@
                         <input v-model="request.guardian_email"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="email" name="email" required>
-
                     </div>
                     <div>
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -564,10 +515,7 @@
                         <input v-model="request.guardian_contact"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="number" name="number" required>
-
                     </div>
-
-
                 </div>
                 <div>
                     <label class="block color-primary mb-1 ml-1.5">
@@ -576,23 +524,20 @@
                         SET AS PRIMARY CONTACT
                     </label>
                 </div>
-
             </div>
         </div>
         <div v-if="true" class=" mb-6 mt-10">
             <h4 class="color-primary font-bold text-xl">EDUCATIONAL BACKGROUND</h4>
             <hr class="mb-5 bg-[#10326f] h-1 w-3/5" />
-
             <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
-
                 <div class="flex flex-wrap gap-2.5 mb-4 ">
                     <div class="grow">
                         <label class="block color-primary font-bold mb-3 pr-4">
                             Last School Attended
                         </label>
-                        <v-select :options="prevSchoolList" label="name" class="style-chooser" @input="onInputChange">
+                        <v-select :options="prevSchoolList" label="name" class="style-chooser" @input="onInputChange"
+                            v-model="selectedSchool">
                         </v-select>
-
                     </div>
                     <div v-if="!hide_school_address" class="basis-[154px]">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -601,7 +546,6 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" v-model="request.school_city">
-
                     </div>
                     <div v-if="!hide_school_address" class="basis-[154px]">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -610,7 +554,6 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" v-model="request.school_province">
-
                     </div>
                     <div v-if="!hide_school_address">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -619,10 +562,16 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" v-model="request.school_country">
-
                     </div>
-
-
+                </div>
+                <div class="flex flex-wrap gap-2.5 mb-4 ">
+                    <div>
+                        <label class="block color-primary mb-1 ml-1.5">
+                            <input type="radio" class="mr-1" value="yes" v-model="notOnTheList"
+                                @change="onSelectChange">
+                            NOT ON THE LIST
+                        </label>
+                    </div>
                 </div>
                 <div class="flex flex-wrap gap-2.5 mb-4 ">
                     <div class="grow lg:grow-0">
@@ -632,8 +581,6 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" name="number" v-model="request.grade_year_level">
-
-
                     </div>
                     <div class="grow">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -642,7 +589,6 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" name="strand" v-model="request.program_strand_degree">
-
                     </div>
                     <div class="grow">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -651,10 +597,8 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             v-model="request.lrn" type="text">
-
                     </div>
                 </div>
-
             </div>
             <div v-if="isOnList" class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
                 <h5 class="color-primary mb-2.5">Register your school if not in the list </h5>
@@ -666,8 +610,6 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" v-model="register.school_name" required>
-
-
                     </div>
                     <div class="basis-[154px]">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -676,7 +618,6 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" v-model="register.school_city" required>
-
                     </div>
                     <div class="basis-[154px]">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -685,7 +626,6 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" v-model="register.school_province" required>
-
                     </div>
                     <div>
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -694,13 +634,9 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" v-model="register.school_country" required>
-
                     </div>
-
-
                 </div>
             </div>
-
         </div>
         <div v-if="true" class=" mb-6 mt-10">
             <h4 class="color-primary font-bold text-xl">ADDITIONAL INFORMATION</h4>
@@ -761,7 +697,6 @@
                     <input
                         class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                         type="text" v-model="request.other_health_concern" required>
-
                 </div>
                 <div class="border-[1px] border-neutral-100 p-2.5 rounded-lg">
                     <h5 class="color-primary mb-2.5">Do you have any of the following? (check all
@@ -798,7 +733,6 @@
                     </label>
                 </div>
             </div>
-
             <div v-if="isSecondaDegree" class="border-[1px] border-neutral-100 rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
                 <h5 class="color-primary text-base mb-2.5">Professional Background </h5>
                 <div class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-2.5 mb-4 ">
@@ -809,8 +743,6 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" v-model="request.sd_company">
-
-
                     </div>
                     <div>
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -819,7 +751,6 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" v-model="request.sd_position">
-
                     </div>
                     <div>
                         <label class="block t color-primary font-bold  mb-3  pr-4">
@@ -828,7 +759,6 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" v-model="request.sd_degree">
-
                     </div>
                 </div>
             </div>
@@ -837,14 +767,12 @@
             <h4 class="color-primary font-bold text-xl">HOW DID YOU FIND OUT ABOUT iACADEMY?</h4>
             <hr class="mb-5 bg-[#10326f] h-1 w-3/5" />
             <div class="grid grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-6">
-
                 <div>
                     <div class="border-[1px] border-neutral-100 p-2.5 mb-4 rounded-lg">
                         <h5 class="color-primary mb-2.5">How did you know about us?<span class="text-red-500">*</span>
                         </h5>
                         <div class="flex ">
                             <div class="w-1/2">
-
                                 <template v-for="source,index in sourceList">
                                     <label v-if="index <= 4" class="custom-checkbox mb-1">
                                         <input type="checkbox" :id="index" :name="source" :value="source"
@@ -871,7 +799,6 @@
                             receive
                             application updates/announcement/etc)
                             <em>Best time to contact you?</em><span class="text-red-500">*</span>
-
                         </h5>
                         <div class="flex ">
                             <div class="w-1/2">
@@ -881,7 +808,6 @@
                                         <span class="custom-checkbox-button"></span>
                                         {{time}}
                                     </label>
-
                                 </template>
                             </div>
                             <div class="w-1/2">
@@ -896,7 +822,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div>
                     <div v-if="sources.includes('event')" v-bind:key="1"
                         class="border-[1px] border-neutral-100 p-2.5 mb-4 rounded-lg ">
@@ -905,8 +830,6 @@
                             <input v-model="sourcesSpecify.event"
                                 class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                 type="text" required>
-
-
                         </div>
                     </div>
                     <!-- v-if="sources === 'referral'" -->
@@ -944,14 +867,11 @@
                                         required>
                                     <span class="custom-radio-button"></span>
                                     iACADEMY Student/Alumni/Applicant/Employee/Partner
-
                                 </label>
                                 <input
                                     class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                     type="text" required v-model="refferalName" placeholder="Name of your referrer">
-
                             </div>
-
                         </div>
                     </div>
                     <div v-if="sources.includes('others')" v-bind:key="2"
@@ -961,14 +881,10 @@
                             <input
                                 class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                 type="text" v-model="sourcesSpecify.others" required>
-
-
                         </div>
                     </div>
-
                 </div>
             </div>
-
         </div>
         <div class="text-center color-primary mt-[50px]" v-if="true">
             iACADEMY shall retain in confidence all confidential information concerning and
@@ -976,7 +892,6 @@
             student and the school.
             <a href=" https://iacademy.edu.ph/privacypolicy.htm" target="_blank" class="underline font-bold">
                 https://iacademy.edu.ph/privacypolicy.htm</a>
-
             <div class="mt-4">
                 <input type="checkbox" required id="agreement"> <label for="agreement" class="italic">I have read and
                     I
@@ -985,10 +900,7 @@
                     policy.</label>
             </div>
         </div>
-
         <hr class="my-5 bg-gray-400 h-[3px]" />
-
-
         <div class=" text-right" sv-if="true">
             <div v-if="loading_spinner" class="lds-ring">
                 <div></div>
@@ -1000,19 +912,16 @@
                 <button type="submit">
                     <img src="<?php echo $img_dir; ?>admissions/form/Asset 10.png">
                 </button>
-
                 <button type="button">
                     <img src="<?php echo $img_dir; ?>admissions/form/Asset 9.png">
                 </button>
             </div>
         </div>
-
     </form>
 </div>
 <!-- Start of HubSpot Embed Code -->
 <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/45758391.js"></script>
 <!-- End of HubSpot Embed Code -->
-
 <style>
 input::placeholder {
     text-align: center;
@@ -1097,15 +1006,10 @@ input[type="number"] {
     background-color: rgb(245 245 245)
 }
 </style>
-
 <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script> -->
 <script src="https://unpkg.com/vue-select@3.0.0"></script>
 <link rel="stylesheet" href="https://unpkg.com/vue-select@3.0.0/dist/vue-select.css">
-
-
-
 <script src="<?php echo $js_dir ?>dataExport.js"></script>
-
 <script>
 const sourcesLeft = ['Google', 'Facebook', 'Instagram', 'Tiktok', 'News']
 const sourcesRight = ['School Fair/Orientation', 'Billboard', 'Event', 'Referral', 'Others']
@@ -1205,6 +1109,11 @@ new Vue({
             province: '',
             city: '',
             barangay: '',
+        },
+        notOnTheList: '',
+        selectedSchool: '',
+        setSelectedSchool: {
+            name: "Not on the list"
         },
         term: undefined,
         loading_spinner: false,
@@ -1402,6 +1311,7 @@ new Vue({
                 this.request.school_city = ""
                 this.request.school_province = ""
                 this.request.school_country = ""
+                this.notOnTheList = null
                 for (const key in this.register) {
                     this.register[key] = ''
                 }
@@ -1417,12 +1327,14 @@ new Vue({
                 this.request.school_province = ""
                 this.request.school_country = ""
                 this.hide_school_address = true
+                this.notOnTheList = 'yes'
                 return
             }
 
 
             if (value.name != '') {
                 this.isOnList = false
+                this.notOnTheList = null
             }
 
 
@@ -1572,6 +1484,12 @@ new Vue({
             this.request.program_school = result.school
         },
 
+        onSelectChange() {
+            this.isOnList = true
+            this.hide_school_address = true
+            this.selectedSchool = this.setSelectedSchool
+        },
+
 
         customSubmit: function(type, title, text, data, url, redirect) {
             if (this.confirmEmail()) {
@@ -1711,8 +1629,6 @@ new Vue({
     },
 });
 </script>
-
-
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 
@@ -1720,7 +1636,6 @@ new Vue({
     font-family: "Roboto", sans-serif;
 }
 </style>
-
 <!-- Start of HubSpot Embed Code -->
 <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/45758391.js"></script>
 <!-- End of HubSpot Embed Code -->
