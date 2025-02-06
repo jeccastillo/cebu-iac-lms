@@ -5294,7 +5294,7 @@ class Excel extends CI_Controller {
                         ->setCellValue('AC'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'scholarship') && $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
                         ->setCellValue('AD'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'scholarship') && $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
                         ->setCellValue('AE'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'discount') && $tuition_discount > 0 ? $tuition_discount : '')
-                        ->setCellValue('AF'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'discount') && $$tuition['scholarship_tuition_fee_fixed'] > 0 ? $$tuition['scholarship_tuition_fee_fixed'] : '')
+                        ->setCellValue('AF'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'discount') && $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : '')
                         // ->setCellValue('AE'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'scholarship') && $assessment_discount_rate > 0 ? $assessment_discount_rate : '')
                         // ->setCellValue('AF'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'scholarship') && $assessment_discount_fixed > 0 ? $assessment_discount_fixed : '')
                         ->setCellValue('AG'.$i, '=SUM(W' . $i . ':AF' . $i . ')')
