@@ -5233,6 +5233,11 @@ class Excel extends CI_Controller {
                         $deduction_type = isset($tuition['scholarship'][0]) ? $tuition['scholarship'][0]->deduction_type : '';
                     }
                     
+                    if($user['strLastname'] == 'PACAÑA'){
+                        print($deduction_type);
+                        die();
+                    }
+                    
                     if($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'scholarship'){
                         if($reg['paymentType'] == 'full' && $tuition['scholarship_tuition_fee_rate'] > 0)
                         $tuition_discount = $tuition['scholarship_tuition_fee_rate'];
