@@ -5234,7 +5234,7 @@ class Excel extends CI_Controller {
                     }
                     
                     if($user['intID'] == 132){
-                        print($tuition['scholarship']);
+                        print_r($tuition['scholarship']);
                         die();
                     }
                     
