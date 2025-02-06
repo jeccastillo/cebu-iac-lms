@@ -5230,12 +5230,18 @@ class Excel extends CI_Controller {
                     $tuition_discount = $total_discount = 0;
                     $deduction_type = $reg['deduction_type'];
                     if(!$deduction_type){
-                        $deduction_type = isset($tuition['scholarship'][0]) ? $tuition['scholarship'][0]->deduction_type : $tuition['discount'][0]->deduction_type;
+                        if(isset($tuition['scholarship'][0])){
+                            $deduction_type = 'scholarship';
+                        }else if(isset($tuition['discount'][0])){
+                            $deduction_type = 'discount';
+                        }
+                        // $deduction_type = isset($tuition['scholarship'][0]) ? $tuition['scholarship'][0]->deduction_type : $tuition['discount']->deduction_type;
                     }
                     
                     if($user['intID'] == 132){
                         print_r($tuition);
                         print('@@@ = ' . $deduction_type);
+                        print_r($tuition['discount']);
                         die();
                     }
                     
