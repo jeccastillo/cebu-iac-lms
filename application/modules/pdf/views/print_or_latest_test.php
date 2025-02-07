@@ -67,16 +67,16 @@ table tr td {
         <section class="sheet padding-5mm">
             <div
                 style="position:absolute; top: 80px; left: 30px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
-                &#10003; </div>
-            <div
-                style="position:absolute; top: 100px; left: 30px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
-                &#10003; </div>
-            <div
+                <?php echo $is_cash == 1?"&#10003":""; ?> ; </div>
+            <!-- <div
+                style="position:absolute; top: 105px; left: 30px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
+                &#10003; </div> -->
+            <!-- <div
                 style="position:absolute; top: 80px; left: 120px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
-                &#10003; </div>
-            <div
-                style="position:absolute; top: 100px; left: 120px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
-                &#10003; </div>
+                &#10003; </div> -->
+            <!-- <div
+                style="position:absolute; top: 105px; left: 120px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
+                &#10003; </div> -->
             <div
                 style="position:absolute; top: 60px; right: -80px; width: 200px; height: 20px; font-size:16px">
                 <?php echo $or_number; ?> </div>
@@ -85,7 +85,9 @@ table tr td {
                 <?php echo "  ".date("m/d/Y",strtotime($transaction_date)); ?> </div>
             <div
                 style="position:absolute; top: 120px; right: -60px; width: 200px; height: 20px; font-size:12px">
-                Account No. </div>
+                <?php if($student_id != 'undefined' && $student_id != ''): ?>
+                <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?> <?php endif; ?>
+            </div>
             <div style="position:absolute; top: 170px; left: 150px; height: 20px; font-size:12px">
                 <?php echo $student_name; ?> </div>
             <div
@@ -95,7 +97,7 @@ table tr td {
                 <?php echo $student_address; ?> </div>
             <div
                 style="position:absolute; top: 270px; left: 160px; width: 200px; height: 20px; font-size:12px">
-                <?php echo $description == "Reservation Payment" ? "NON REFUNDABLE AND NON TRANSFERABLE":""; ?>
+                <?php echo $type." /  ".$term['enumSem']." ".$term['term_label']." ".$term['strYearStart']."-".$term['strYearEnd']; ?>
                 <br />
             </div>
             <div
@@ -106,7 +108,7 @@ table tr td {
                 <?php echo $total_amount_due; ?> </div>
             <div
                 style="position:absolute; top: 355px; right: -50px; width: 200px; height: 20px; font-size:12px">
-                Invoice Ref</div>
+                <?php echo $invoice_number; ?> </div>
         </section>
     </div>
 </body>
