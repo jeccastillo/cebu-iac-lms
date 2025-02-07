@@ -3,7 +3,7 @@
         <a href="#"><b>iACADEMY</b><?php echo $campus; ?></a>
     </div>
     <div class="login-box-body">
-        <p class="login-box-msg">Sign in to start your session</p>
+        <p class="login-box-msg">Sign in to start your session.</p>
         <form id="login-form" action="#" onsubmit="return false;" method="post">
             <div class="form-group has-feedback">
                 <input type="text" id="strUsername" name="strUsername" class="form-control reg-box"
