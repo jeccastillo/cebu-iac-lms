@@ -7871,17 +7871,13 @@ class Excel extends CI_Controller {
 
         $this->load->library('upload', $config);
 
-        if ( !$this->upload->do_upload("studentGradeExcel"))
+        if ( !$this->upload->do_upload("student_grade_excel"))
         {
-            print('1');
-            die();
             $error = array('error' => $this->upload->display_errors());
             return $error;
         }
         else
         {
-            print('2');
-            die();
             $fileData = $this->upload->data();
             $filePath = './assets/excel/' . $fileData['file_name'];
 
@@ -7916,15 +7912,23 @@ class Excel extends CI_Controller {
                         if($faculty && $subject){
                             $classlistID = '';
                             //Check if classlist exists
-                            $classlist = $this->db->get_where('tb_mas_classlist',array('strAcademicYear' => $post['sem'], 'intFacultyID' => $faculty['intID'], 'intSubjectID' => $subject['intID'], 'strSection' => $row['D']))->first_row('array');
+                            // $classlist = $this->db->get_where('tb_mas_classlist',array('strAcademicYear' => $sem, 'intFacultyID' => $faculty['intID'], 'intSubjectID' => $subject['intID'], 'strSection' => $row['D']))->first_row('array');
+                            $classlist = $this->db->get_where('tb_mas_classlist',array('strAcademicYear' => $sem, 'intFacultyID' => $faculty['intID']))->first_row('array');
             
+                            // if($row['E'] == 'SH_GENMATH')
+                            // {
+                                // print_r($classlist);
+                                // print('1');
+                                // die();
+                            // }
+                            
                             if(!$classlist){
                                 $newClasslist = array(
                                     'intFacultyID' => $faculty['intID'],
                                     'intSubjectID' => $subject['intID'],
                                     'strClassName' => $row['E'],
                                     'intFinalized' => 0,
-                                    'strAcademicYear' => $post['sem'],
+                                    'strAcademicYear' => $sem,
                                     'slots' => 0,
                                     'strUnits' => 3,
                                     'strSection' => $row['D'],
@@ -7945,13 +7949,19 @@ class Excel extends CI_Controller {
                                 $classlistStudent = array(
                                     'intStudentID' => $student['intID'],
                                     'intClassListID' => $classlistID,
-                                    'floatMidtermGrade' => $term =='Midterm' ? $row['H'] : '',
-                                    'floatFinalGrade' => $term =='Final' ? $row['H'] : '',
+                                    // 'floatMidtermGrade' => $term =='Midterm' ? $row['H'] : '',
+                                    // 'floatFinalGrade' => $term =='Final' ? $row['H'] : '',
                                     'enumStatus' => 'act',
                                     'strRemarks' => '--',
-                                    'intsyID' => $post['sem'],
+                                    'intsyID' => $sem,
                                 );
-                                $checkClasslistStudent = $this->db->get_where('tb_mas_classlist_student',array('intStudentID' => $student['intID'], 'intClassListID' => $classlistID, 'intsyID' => $post['sem']))->first_row();
+
+                                if($term == 'Midterm'){
+                                    $classlistStudent['floatMidtermGrade'] = $row['H'];
+                                }else if($term == 'Final'){
+                                    $classlistStudent['floatFinalGrade'] = $row['H'];
+                                }
+                                $checkClasslistStudent = $this->db->get_where('tb_mas_classlist_student',array('intStudentID' => $student['intID'], 'intClassListID' => $classlistID, 'intsyID' => $sem))->first_row();
                                 
                                 if(!$checkClasslistStudent){
                                     $this->data_poster->post_data('tb_mas_classlist_student',$classlistStudent);
@@ -7967,8 +7977,8 @@ class Excel extends CI_Controller {
             // Optionally, you can delete the uploaded file after import
             unlink($filePath);
 
-            // Redirect or show success message
-            redirect(base_url() . 'registrar/add_student_grades');
+            print('true');
+            return true;
         }
     }
 
