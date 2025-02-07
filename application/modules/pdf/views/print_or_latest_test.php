@@ -69,13 +69,19 @@ table tr td {
                 style="position:absolute; top: 80px; left: 30px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
                 &#10003; </div>
             <div
+                style="position:absolute; top: 100px; left: 30px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
+                &#10003; </div>
+            <div
                 style="position:absolute; top: 80px; left: 120px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
+                &#10003; </div>
+            <div
+                style="position:absolute; top: 100px; left: 120px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
                 &#10003; </div>
             <div
                 style="position:absolute; top: 60px; right: -80px; width: 200px; height: 20px; font-size:16px">
                 <?php echo $or_number; ?> </div>
             <div
-                style="position:absolute; top: 90px; right: -60px; width: 200px; height: 20px; font-size:12px">
+                style="position:absolute; top: 95px; right: -60px; width: 200px; height: 20px; font-size:12px">
                 <?php echo "  ".date("m/d/Y",strtotime($transaction_date)); ?> </div>
             <div
                 style="position:absolute; top: 120px; right: -60px; width: 200px; height: 20px; font-size:12px">
@@ -84,22 +90,22 @@ table tr td {
                 <?php echo $student_name; ?> </div>
             <div
                 style="position:absolute; top: 190px; left: 150px; width: 200px; height: 20px; font-size:12px">
-                <?php //echo $tin; ?> TIN </div>
+                <?php echo $tin; ?> </div>
             <div style="position:absolute; top: 220px; left: 150px; height: 20px; font-size:12px">
                 <?php echo $student_address; ?> </div>
             <div
                 style="position:absolute; top: 270px; left: 160px; width: 200px; height: 20px; font-size:12px">
-                <?php //echo $description == "Reservation Payment" ? "NON REFUNDABLE AND NON TRANSFERABLE":""; ?>
-                PAYMENT FOR <br />
+                <?php echo $description == "Reservation Payment" ? "NON REFUNDABLE AND NON TRANSFERABLE":""; ?>
+                <br />
             </div>
             <div
                 style="position:absolute; top: 270px; right: -100px; width: 200px; height: 20px; font-size:12px">
                 <?php echo $total_amount_due; ?> </div>
             <div
-                style="position:absolute; top: 320px; right: -100px; width: 200px; height: 20px; font-size:12px">
+                style="position:absolute; top: 325px; right: -100px; width: 200px; height: 20px; font-size:12px">
                 <?php echo $total_amount_due; ?> </div>
             <div
-                style="position:absolute; top: 350px; right: -50px; width: 200px; height: 20px; font-size:12px">
+                style="position:absolute; top: 355px; right: -50px; width: 200px; height: 20px; font-size:12px">
                 Invoice Ref</div>
         </section>
     </div>
