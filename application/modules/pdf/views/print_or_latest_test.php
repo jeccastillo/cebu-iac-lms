@@ -66,16 +66,16 @@ table tr td {
     <div class="sheet-outer A4">
         <section class="sheet padding-5mm">
             <div
-                style="position:absolute; top: 90px; left: 40px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
+                style="position:absolute; top: 80px; left: 30px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
                 &#10003; </div>
             <div
-                style="position:absolute; top: 90px; left: 130px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
+                style="position:absolute; top: 80px; left: 120px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
                 &#10003; </div>
             <div
-                style="position:absolute; top: 65px; right: -80px; width: 200px; height: 20px; font-size:16px">
+                style="position:absolute; top: 60px; right: -80px; width: 200px; height: 20px; font-size:16px">
                 <?php echo $or_number; ?> </div>
             <div
-                style="position:absolute; top: 100px; right: -60px; width: 200px; height: 20px; font-size:12px">
+                style="position:absolute; top: 90px; right: -60px; width: 200px; height: 20px; font-size:12px">
                 <?php echo "  ".date("m/d/Y",strtotime($transaction_date)); ?> </div>
             <div
                 style="position:absolute; top: 120px; right: -60px; width: 200px; height: 20px; font-size:12px">
@@ -99,7 +99,7 @@ table tr td {
                 style="position:absolute; top: 320px; right: -100px; width: 200px; height: 20px; font-size:12px">
                 <?php echo $total_amount_due; ?> </div>
             <div
-                style="position:absolute; top: 360px; right: -70px; width: 200px; height: 20px; font-size:12px">
+                style="position:absolute; top: 350px; right: -50px; width: 200px; height: 20px; font-size:12px">
                 Invoice Ref</div>
         </section>
     </div>
