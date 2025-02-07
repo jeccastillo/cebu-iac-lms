@@ -65,14 +65,14 @@ table tr td {
 <body>
     <div class="sheet-outer A4">
         <section class="sheet padding-5mm">
-            <!-- <div
-                style="position:absolute; top: 170px; left: 40px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
-                &#10003; </div> -->
-            <!-- <div
-                style="position:absolute; top: 170px; left: 140px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
-                &#10003; </div> -->
             <div
-                style="position:absolute; top: 50px; right: -80px; width: 200px; height: 20px; font-size:16px">
+                style="position:absolute; top: 90px; left: 40px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
+                &#10003; </div>
+            <div
+                style="position:absolute; top: 90px; left: 130px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
+                &#10003; </div>
+            <div
+                style="position:absolute; top: 65px; right: -80px; width: 200px; height: 20px; font-size:16px">
                 <?php echo $or_number; ?> </div>
             <div
                 style="position:absolute; top: 100px; right: -60px; width: 200px; height: 20px; font-size:12px">
@@ -88,18 +88,18 @@ table tr td {
             <div style="position:absolute; top: 220px; left: 150px; height: 20px; font-size:12px">
                 <?php echo $student_address; ?> </div>
             <div
-                style="position:absolute; top: 260px; left: 160px; width: 200px; height: 20px; font-size:12px">
+                style="position:absolute; top: 270px; left: 160px; width: 200px; height: 20px; font-size:12px">
                 <?php //echo $description == "Reservation Payment" ? "NON REFUNDABLE AND NON TRANSFERABLE":""; ?>
                 PAYMENT FOR <br />
             </div>
             <div
-                style="position:absolute; top: 260px; right: -90px; width: 200px; height: 20px; font-size:12px">
+                style="position:absolute; top: 270px; right: -100px; width: 200px; height: 20px; font-size:12px">
                 <?php echo $total_amount_due; ?> </div>
             <div
-                style="position:absolute; top: 320px; right: -90px; width: 200px; height: 20px; font-size:12px">
+                style="position:absolute; top: 320px; right: -100px; width: 200px; height: 20px; font-size:12px">
                 <?php echo $total_amount_due; ?> </div>
             <div
-                style="position:absolute; top: 340px; right: -70px; width: 200px; height: 20px; font-size:12px">
+                style="position:absolute; top: 360px; right: -70px; width: 200px; height: 20px; font-size:12px">
                 Invoice Ref</div>
         </section>
     </div>
