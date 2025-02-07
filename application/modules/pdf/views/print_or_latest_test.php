@@ -80,26 +80,26 @@ table tr td {
             <div
                 style="position:absolute; top: 120px; right: -60px; width: 200px; height: 20px; font-size:12px">
                 Account No. </div>
-            <div style="position:absolute; top: 170px; left: 120px; height: 20px; font-size:12px">
+            <div style="position:absolute; top: 170px; left: 150px; height: 20px; font-size:12px">
                 <?php echo $student_name; ?> </div>
             <div
-                style="position:absolute; top: 200px; left: 120px; width: 200px; height: 20px; font-size:12px">
+                style="position:absolute; top: 190px; left: 150px; width: 200px; height: 20px; font-size:12px">
                 <?php //echo $tin; ?> TIN </div>
-            <div style="position:absolute; top: 220px; left: 120px; height: 20px; font-size:12px">
+            <div style="position:absolute; top: 220px; left: 150px; height: 20px; font-size:12px">
                 <?php echo $student_address; ?> </div>
             <div
-                style="position:absolute; top: 280px; left: 120px; width: 200px; height: 20px; font-size:12px">
+                style="position:absolute; top: 260px; left: 160px; width: 200px; height: 20px; font-size:12px">
                 <?php //echo $description == "Reservation Payment" ? "NON REFUNDABLE AND NON TRANSFERABLE":""; ?>
                 PAYMENT FOR <br />
             </div>
             <div
-                style="position:absolute; top: 280px; right: -90px; width: 200px; height: 20px; font-size:12px">
+                style="position:absolute; top: 260px; right: -90px; width: 200px; height: 20px; font-size:12px">
                 <?php echo $total_amount_due; ?> </div>
             <div
-                style="position:absolute; top: 350px; right: -90px; width: 200px; height: 20px; font-size:12px">
+                style="position:absolute; top: 320px; right: -90px; width: 200px; height: 20px; font-size:12px">
                 <?php echo $total_amount_due; ?> </div>
             <div
-                style="position:absolute; top: 380px; right: -70px; width: 200px; height: 20px; font-size:12px">
+                style="position:absolute; top: 340px; right: -70px; width: 200px; height: 20px; font-size:12px">
                 Invoice Ref</div>
         </section>
     </div>
