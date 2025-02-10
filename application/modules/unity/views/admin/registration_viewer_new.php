@@ -1,18 +1,13 @@
-<aside class="right-side"
-    id="registration-container">
+<aside class="right-side" id="registration-container">
     <section class="content-header">
         <h1>
             <small>
-                <a v-if="cashier"
-                    class="btn btn-app"
+                <a v-if="cashier" class="btn btn-app"
                     :href="base_url + 'finance/view_all_students'"><i
                         class="ion ion-arrow-left-a"></i>All Students</a>
-                <a v-else
-                    class="btn btn-app"
-                    :href="base_url + 'student/view_all_students'"><i
+                <a v-else class="btn btn-app" :href="base_url + 'student/view_all_students'"><i
                         class="ion ion-arrow-left-a"></i>All Students</a>
-                <a class="btn btn-app"
-                    :href="base_url + 'student/edit_student/' + student.intID"><i
+                <a class="btn btn-app" :href="base_url + 'student/edit_student/' + student.intID"><i
                         class="ion ion-edit"></i> Edit</a>
                 <a class="btn btn-app"
                     :href="base_url + 'finance/student_ledger/' + student.intID"><i
@@ -20,20 +15,14 @@
                 <a class="btn btn-app"
                     :href="base_url + 'unity/registration_viewer_legacy/' + student.intID"><i
                         class="ion ion-edit"></i> Legacy View</a>
-                <a v-if="user_level == 2 || user_level == 3"
-                    target="_blank"
-                    v-if="registration"
+                <a v-if="user_level == 2 || user_level == 3" target="_blank" v-if="registration"
                     class="btn btn-app"
                     :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ application_payment.student_information_id">
-                    <i class="ion ion-printer"></i>RF Print
-                </a>
-                <a v-if="user_level == 2 || user_level == 3"
-                    target="_blank"
-                    v-if="registration"
+                    <i class="ion ion-printer"></i>RF Print </a>
+                <a v-if="user_level == 2 || user_level == 3" target="_blank" v-if="registration"
                     class="btn btn-app"
                     :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ application_payment.student_information_id +'/0/35'">
-                    <i class="ion ion-printer"></i>RF No Header
-                </a>
+                    <i class="ion ion-printer"></i>RF No Header </a>
             </small>
         </h1>
     </section>
@@ -44,39 +33,27 @@
                 <div class="box box-widget widget-user-2">
                     <!-- Add the bg color to the header using any of the bg-* classes -->
                     <div class="widget-user-header bg-red">
-                        <div v-if="registration && user.special_role >= 1 || (registration.downpayment == 0 && registration.fullpayment == 0)" class="pull-right"
-                            style="margin-left:1rem;">
-                            Tuition Year
-                            <select class="form-control"
-                                @change="selectTuitionYear($event)"
+                        <div v-if="registration && user.special_role >= 1 || (registration.downpayment == 0 && registration.fullpayment == 0)"
+                            class="pull-right" style="margin-left:1rem;"> Tuition Year <select
+                                class="form-control" @change="selectTuitionYear($event)"
                                 v-model="tuition_year">
-                                <option v-for="ty in tuition_years"
-                                    :value="ty.intID">{{ ty.year}}</option>
+                                <option v-for="ty in tuition_years" :value="ty.intID">{{ ty.year}}
+                                </option>
                             </select>
                         </div>
-
-                        <div class="pull-right"
-                            style="margin-left:1rem;">
-                            School Year & Term
-                            <select class="form-control"
-                                @change="selectTerm($event)"
-                                v-model="sem">
-                                <option v-for="s in sy"
-                                    :value="s.intID">{{ s.term_student_type}} {{ s.enumSem }}
+                        <div class="pull-right" style="margin-left:1rem;"> School Year & Term
+                            <select class="form-control" @change="selectTerm($event)" v-model="sem">
+                                <option v-for="s in sy" :value="s.intID">{{ s.term_student_type}}
+                                    {{ s.enumSem }}
                                     {{ s.term_label }} {{ s.strYearStart }} - {{ s.strYearEnd }}
                                 </option>
                             </select>
                         </div>
-                        <div class="pull-right"
-                            v-if="description == 'Tuition Fee' && registration"
-                            class="col-sm-4"
-                            v-if="cashier">
-                            Select Type
-                            <select
+                        <div class="pull-right" v-if="description == 'Tuition Fee' && registration"
+                            class="col-sm-4" v-if="cashier"> Select Type <select
                                 v-if="registration.downpayment == 0 && registration.fullpayment == 0"
                                 @change="description_other = ''; amount_to_pay = 0 "
-                                v-model="payment_type"
-                                class="form-control">
+                                v-model="payment_type" class="form-control">
                                 <option value="full">Full Payment</option>
                                 <option value="partial">Installment</option>
                             </select>
@@ -85,113 +62,84 @@
                             </div>
                         </div>
                         <!-- /.widget-user-image -->
-
                         <div v-if="registration && user.special_role >= 0"
-                            style="margin-right:1rem;"
-                            class="pull-right">
-                            Payment Type
-                            <select v-model="change_payment_type"
-                                @change="changeType($event)"
+                            style="margin-right:1rem;" class="pull-right"> Payment Type <select
+                                v-model="change_payment_type" @change="changeType($event)"
                                 class="form-control">
                                 <option value="full">Full Payment</option>
                                 <option value="partial">Installment</option>
                             </select>
-
                         </div>
                         <div v-if="registration && user.special_role >= 1"
-                            style="margin-right:1rem;"
-                            class="pull-right">
-                            Enrollment Status
-                            <select v-if="registration_status!=1"
-                                v-model="registration_status"
-                                @change="changeRegStatus"
-                                class="form-control">
+                            style="margin-right:1rem;" class="pull-right"> Enrollment Status <select
+                                v-if="registration_status!=1" v-model="registration_status"
+                                @change="changeRegStatus" class="form-control">
                                 <option value="0">Enlisted</option>
                                 <option value="1">Enrolled</option>
                             </select>
-                            <div v-else>
-                                Enrolled
-                            </div>
+                            <div v-else> Enrolled </div>
                         </div>
-                        <div v-if="registration && cashier"
-                            style="margin-right:1rem;"
-                            class="pull-right">
-                            Has DP
-                            <select v-model="downpayment_status"
-                                @change="changeDownPaymentStatus"
-                                class="form-control">
+                        <div v-if="registration && cashier" style="margin-right:1rem;"
+                            class="pull-right"> Has DP <select v-model="downpayment_status"
+                                @change="changeDownPaymentStatus" class="form-control">
                                 <option value="0">No</option>
                                 <option value="1">Yes</option>
                             </select>
                         </div>
                         <div v-if="registration && user.special_role >= 1"
-                            style="margin-right:1rem;"
-                            class="pull-right">
-                            Allow To Print RF
-                            <select v-model="allow_enroll"
-                                @change="changeAllowEnroll"
+                            style="margin-right:1rem;" class="pull-right"> Allow To Print RF <select
+                                v-model="allow_enroll" @change="changeAllowEnroll"
                                 class="form-control">
                                 <option value="0">No</option>
                                 <option value="1">Yes</option>
                             </select>
-
                         </div>
                         <h3 class="widget-user-username"
                             style="text-transform:capitalize;margin-left:0;font-size:1.3em;">
                             {{ student.strLastname }}, {{ student.strFirstname }}
-                            {{ student.strMiddlename }}
-                            &nbsp;<button class="btn btn-default"
-                                data-toggle="collapse"
-                                data-target="#student-info">More Info</button>
+                            {{ student.strMiddlename }} &nbsp;<button class="btn btn-default"
+                                data-toggle="collapse" data-target="#student-info">More
+                                Info</button>
                         </h3>
-                        <h5 class="widget-user-desc"
-                            style="margin-left:0;">{{ student.strProgramDescription }}
+                        <h5 class="widget-user-desc" style="margin-left:0;">
+                            {{ student.strProgramDescription }}
                             {{ (student.strMajor != 'None')?'Major in '+student.strMajor:'' }}
                         </h5>
                     </div>
-                    <div class="collapse"
-                        class="box-footer no-padding"
-                        id="student-info">
+                    <div class="collapse" class="box-footer no-padding" id="student-info">
                         <ul class="nav nav-stacked">
-                            <li><a href="#"
-                                    style="font-size:13px;">Student Number <span
+                            <li><a href="#" style="font-size:13px;">Student Number <span
                                         class="pull-right text-blue">{{ student.strStudentNumber.replace(/-/g, '') }}</span></a>
                             </li>
-                            <li><a href="#"
-                                    style="font-size:13px;">Curriculum <span
+                            <li><a href="#" style="font-size:13px;">Curriculum <span
                                         class="pull-right text-blue">{{ student.strName }}</span></a>
                             </li>
-                            <li v-if="registration"><a style="font-size:13px;"
-                                    href="#">Registration Status <span
-                                        class="pull-right">{{ reg_status }}</span></a></li>
-                            <li v-if="registration"><a style="font-size:13px;"
-                                    href="#">Class Type <span
+                            <li v-if="registration"><a style="font-size:13px;" href="#">Registration
+                                    Status <span class="pull-right">{{ reg_status }}</span></a></li>
+                            <li v-if="registration"><a style="font-size:13px;" href="#">Class Type
+                                    <span
                                         class="pull-right">{{ registration.type_of_class }}</span></a>
                             </li>
                             <li v-if="registration">
-                                <a style="font-size:13px;"
-                                    href="#">Date Registered <span class="pull-right">
+                                <a style="font-size:13px;" href="#">Date Registered <span
+                                        class="pull-right">
                                         <span style="color:#009000"
                                             v-if="registration">{{ registration.date_enlisted }}</span>
-                                        <span style="color:#900000;"
-                                            v-else>N/A</span>
+                                        <span style="color:#900000;" v-else>N/A</span>
                                 </a>
                             </li>
-                            <li v-if="registration"><a style="font-size:13px;"
-                                    href="#">Scholarship Type <span
+                            <li v-if="registration"><a style="font-size:13px;" href="#">Scholarship
+                                    Type <span
                                         class="pull-right">{{ registration.scholarshipName }}</span></a>
                             </li>
-
                         </ul>
                     </div>
                 </div>
             </div>
             <div v-if="registration">
                 <div class="col-sm-12">
-                    <div class=""
-                        v-if="show_alert">
-                        <div class="alert alert-danger col-sm-6"
-                            role="alert">
+                    <div class="" v-if="show_alert">
+                        <div class="alert alert-danger col-sm-6" role="alert">
                             <h4 class="alert-heading">Alert!</h4>
                             <p>This Student still has remaining balances:</p>
                         </div>
@@ -205,8 +153,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="item in term_balances"
-                                        v-if="item.balance > 0">
+                                    <tr v-for="item in term_balances" v-if="item.balance > 0">
                                         <td>{{ item.term }}</td>
                                         <td>{{ item.payment_type }}</td>
                                         <td><strong>P{{ item.formatted_balance }}</strong></td>
@@ -217,8 +164,7 @@
                     </div>
                 </div>
                 <div class="col-sm-12">
-                    <div v-if="applicant_data.reserve_enroll"
-                        class="alert alert-success"
+                    <div v-if="applicant_data.reserve_enroll" class="alert alert-success"
                         role="alert">
                         <h4 class="alert-heading">Reserve Enroll</h4>
                         <p>This student has been tagged for reserve enrollment promo please update
@@ -231,38 +177,31 @@
                             <li v-if="advanced_privilages">
                                 <a
                                     :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_1'">
-                                    Personal Information
-                                </a>
+                                    Personal Information </a>
                             </li>
-
                             <li v-if="advanced_privilages">
                                 <a
                                     :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_2'">
-                                    Report of Grades
-                                </a>
+                                    Report of Grades </a>
                             </li>
                             <li v-if="advanced_privilages">
                                 <a
                                     :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_3'">
-                                    Assessment
-                                </a>
+                                    Assessment </a>
                             </li>
-
                             <li v-if="advanced_privilages">
                                 <a
                                     :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_5'">
-                                    Schedule
-                                </a>
+                                    Schedule </a>
                             </li>
                             <li v-if="advanced_privilages">
-                                <a :href="base_url + 'unity/adjustments/' + student.intID + '/' + sem">
-                                    Adjustments
-                                </a>
+                                <a
+                                    :href="base_url + 'unity/adjustments/' + student.intID + '/' + sem">
+                                    Adjustments </a>
                             </li>
-                            <li v-if="cashier"
-                                :class="cashier?'active':''"><a href="#tab_1"
+                            <li v-if="cashier" :class="cashier?'active':''"><a href="#tab_1"
                                     data-toggle="tab">Payment</a></li>
-                            <li  :class="!cashier?'active':''"><a href="#tab_2"
+                            <li :class="!cashier?'active':''"><a href="#tab_2"
                                     data-toggle="tab">Details</a></li>
                             <li v-if="registration" :class="!cashier?'active':''"><a href="#tab_3"
                                     data-toggle="tab">SOA</a></li>
@@ -273,8 +212,7 @@
                             </li> -->
                         </ul>
                         <div class="tab-content">
-                            <div :class="cashier?'active tab-pane':'tab-pane'"
-                                id="tab_1">
+                            <div :class="cashier?'active tab-pane':'tab-pane'" id="tab_1">
                                 <div v-if="cashier.invoice_current && cashier.or_current"
                                     class="box box-solid">
                                     <div class="box-header">
@@ -284,58 +222,49 @@
                                         <h4 class="box-title">Cashier {{ cashier.intID }}</h4>
                                         <div style="margin-bottom:1rem">
                                             <label class="radio-inline">
-                                                <input type="radio"
-                                                    v-model="windowPayment"
-                                                    value="invoice"> Invoice
-                                            </label>
+                                                <input type="radio" v-model="windowPayment"
+                                                    value="invoice"> Invoice </label>
                                             <label v-if="registration" class="radio-inline">
-                                                <input type="radio"
-                                                    v-model="windowPayment"
+                                                <input type="radio" v-model="windowPayment"
                                                     value="official receipt"> Official Receipt
                                             </label>
-
                                         </div>
-                                        <form @submit.prevent="submitManualPayment"
-                                            method="post">
-                                            <div v-if="cashier && cashier.or_current"
-                                                class="row">
-                                                <div class="col-sm-4"
-                                                    v-if="cashier">
+                                        <form @submit.prevent="submitManualPayment" method="post">
+                                            <div v-if="cashier && cashier.or_current" class="row">
+                                                <div class="col-sm-4" v-if="cashier">
                                                     <div class="form-group">
                                                         <label>Payment For</label>
                                                         <select class="form-control"
                                                             v-model="description">
-                                                            <option v-if="registration" value="Tuition Fee">Tuition Fee
+                                                            <option v-if="registration"
+                                                                value="Tuition Fee">Tuition Fee
                                                             </option>
-                                                            <option v-if="isInvoice" value="Other">Other</option>
+                                                            <option v-if="isInvoice" value="Other">
+                                                                Other</option>
                                                         </select>
                                                     </div>
                                                     <div v-if="description == 'Tuition Fee'"
                                                         class="form-group">
                                                         <label>Particulars:</label>
-                                                        <select required
-                                                            class="form-control"
+                                                        <select required class="form-control"
                                                             v-model="description_other">
-                                                            <option v-if="isInvoice"
-                                                                value="full">Full Tuition</option>
-                                                            <option v-if="isInvoice"
-                                                                value="down">Down Payment</option>
-                                                            <option v-if="isOR"
-                                                                value="installment">Installment
-                                                            </option>
+                                                            <option v-if="isInvoice" value="full">
+                                                                Full Tuition</option>
+                                                            <option v-if="isInvoice" value="down">
+                                                                Down Payment</option>
+                                                            <option v-if="isOR" value="installment">
+                                                                Installment </option>
                                                         </select>
                                                     </div>
-                                                    <div v-else
-                                                        class="form-group">
+                                                    <div v-else class="form-group">
                                                         <label>Particulars:</label>
                                                         <select class="form-control"
                                                             v-model="description_other">
                                                             <option v-for="p in particulars"
                                                                 :value="p.name">{{p.name}}</option>
-                                                        </select>                                                   
+                                                        </select>
                                                     </div>
-                                                    <input type="hidden"
-                                                        v-model="request.status"
+                                                    <input type="hidden" v-model="request.status"
                                                         value="Paid" />
                                                     <div class="form-group">
                                                         <label>Payment Type</label>
@@ -345,30 +274,27 @@
                                                             <option value="0">Check</option>
                                                             <option value="2">Credit Card</option>
                                                             <option value="3">Debit Card</option>
-                                                            <option value="4">Online Payment</option>
+                                                            <option value="4">Online Payment
+                                                            </option>
                                                         </select>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Reference No.:</label>
                                                         <input type="text"
                                                             :disabled="request.is_cash == 1"
-                                                            required
-                                                            class="form-control"
+                                                            required class="form-control"
                                                             v-model="request.check_number" />
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Enter amount to pay:</label>
-                                                        <input type="number"
-                                                            step="0.01"
-                                                            required
+                                                        <input type="number" step="0.01" required
                                                             class="form-control"
                                                             v-model="amount_to_pay" />
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Contact Number:</label>
                                                         {{ request.contact_number }}
-                                                        <input type="hidden"
-                                                            required
+                                                        <input type="hidden" required
                                                             class="form-control"
                                                             v-model="request.contact_number" />
                                                     </div>
@@ -378,14 +304,12 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Remarks:</label>
-                                                        <textarea type="text"
-                                                            required
+                                                        <textarea type="text" required
                                                             class="form-control"
                                                             v-model="request.remarks"></textarea>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-4"
-                                                    v-if="cashier">
+                                                <div class="col-sm-4" v-if="cashier">
                                                     <!-- <div class="form-group">
                                                         <label>Term:</label>
                                                         <input type="hidden"
@@ -394,8 +318,7 @@
                                                         {{ sem }}
                                                         
                                                     </div> -->
-                                                    <div v-if="isOR"
-                                                        class="form-group">
+                                                    <div v-if="isOR" class="form-group">
                                                         <label>OR Number:</label>
                                                         <div
                                                             v-if="user.special_role == 2 || cashier.temporary_admin ==  1">
@@ -408,18 +331,20 @@
                                                                 class="form-control"
                                                                 v-model="request.or_number">
                                                             {{ request.or_number }}
-                                                        </div>                                                    
+                                                        </div>
                                                     </div>
-                                                    <div v-if="isOR"
-                                                        class="form-group">
+                                                    <div v-if="isOR" class="form-group">
                                                         <label>Invoice Number:</label>
-                                                        <select class="form-control" v-model="request.invoice_number">
-                                                            <option v-for="invoiceNumber in invoiceNumbers" :value="invoiceNumber.invoice_number">{{ invoiceNumber.invoice_number }}</option>
-                                                        </select>                                                     
-
-                                                    </div>                                                
-                                                    <div v-else
-                                                        class="form-group">
+                                                        <select class="form-control"
+                                                            v-model="request.invoice_number">
+                                                            <option
+                                                                v-for="invoiceNumber in invoiceNumbers"
+                                                                :value="invoiceNumber.invoice_number">
+                                                                {{ invoiceNumber.invoice_number }}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                    <div v-else class="form-group">
                                                         <label>Invoice Number:</label>
                                                         <div
                                                             v-if="user.special_role == 2 || cashier.temporary_admin ==  1">
@@ -433,63 +358,62 @@
                                                                 v-model="request.invoice_number">
                                                             {{ request.invoice_number }}
                                                         </div>
-
                                                     </div>
                                                     <div v-if="!isOR && description != 'Tuition Fee'"
                                                         class="form-group">
-                                                        <label>Vatable Amount :</label>    
-                                                        <input @change="computeVat" step=".01" type="number"
-                                                                class="form-control"
-                                                                v-model="request.invoice_amount">                                                
+                                                        <label>Vatable Amount :</label>
+                                                        <input @change="computeVat" step=".01"
+                                                            type="number" class="form-control"
+                                                            v-model="request.invoice_amount">
                                                     </div>
                                                     <div v-if="!isOR && description != 'Tuition Fee'"
                                                         class="form-group">
-                                                        <label>Vat Exempt Tax :</label>    
-                                                        <input @change="computeVat" step=".01" type="number"
-                                                                class="form-control"
-                                                                v-model="request.invoice_amount_ves">                                                
+                                                        <label>Vat Exempt Tax :</label>
+                                                        <input @change="computeVat" step=".01"
+                                                            type="number" class="form-control"
+                                                            v-model="request.invoice_amount_ves">
                                                     </div>
                                                     <div v-if="!isOR && description != 'Tuition Fee'"
                                                         class="form-group">
-                                                        <label>Vat Zero Rated Sales :</label>    
-                                                        <input @change="computeVat" step=".01" type="number"
-                                                                class="form-control"
-                                                                v-model="request.invoice_amount_vzrs">                                                
+                                                        <label>Vat Zero Rated Sales :</label>
+                                                        <input @change="computeVat" step=".01"
+                                                            type="number" class="form-control"
+                                                            v-model="request.invoice_amount_vzrs">
                                                     </div>
                                                     <div v-if="!isOR && description != 'Tuition Fee'"
                                                         class="form-group">
-                                                        <label>Less EWT:</label>    
+                                                        <label>Less EWT:</label>
                                                         <select @change="computeVat"
-                                                                class="form-control"
-                                                                v-model="request.withholding_tax_percentage">                                                
-                                                                <option value="0">None</option>
-                                                                <option value="1">1%</option>
-                                                                <option value="2">2%</option>
-                                                                <option value="5">5%</option>
-                                                                <option value="10">10%</option>
-                                                                <option value="15">15%</option>
+                                                            class="form-control"
+                                                            v-model="request.withholding_tax_percentage">
+                                                            <option value="0">None</option>
+                                                            <option value="1">1%</option>
+                                                            <option value="2">2%</option>
+                                                            <option value="5">5%</option>
+                                                            <option value="10">10%</option>
+                                                            <option value="15">15%</option>
                                                         </select>
                                                     </div>
                                                     <div v-if="!isOR && description != 'Tuition Fee'"
                                                         class="form-group">
-                                                        <label>Total Sales:</label>    
-                                                        {{ total_sales_formatted }}                                               
-                                                    </div>                                               
+                                                        <label>Total Sales:</label>
+                                                        {{ total_sales_formatted }}
+                                                    </div>
                                                     <div v-if="!isOR && description != 'Tuition Fee'"
                                                         class="form-group">
-                                                        <label>Value Added Tax:</label>    
-                                                        {{ less_vat_formatted }}                                               
-                                                    </div>  
+                                                        <label>Value Added Tax:</label>
+                                                        {{ less_vat_formatted }}
+                                                    </div>
                                                     <div v-if="!isOR && description != 'Tuition Fee'"
                                                         class="form-group">
-                                                        <label>Less EWT:</label>    
-                                                        {{ less_ewt_formatted }}                                               
-                                                    </div>                                               
+                                                        <label>Less EWT:</label>
+                                                        {{ less_ewt_formatted }}
+                                                    </div>
                                                     <div v-if="!isOR && description != 'Tuition Fee'"
                                                         class="form-group">
-                                                        <label>Total Amount Due:</label>    
-                                                        {{ total_amount_computed_formatted }}                                               
-                                                    </div>                                               
+                                                        <label>Total Amount Due:</label>
+                                                        {{ total_amount_computed_formatted }}
+                                                    </div>
                                                 </div>
                                                 <div v-if="description == 'Tuition Fee' && registration"
                                                     class="col-sm-4">
@@ -497,8 +421,7 @@
                                                     <select
                                                         v-if="registration.downpayment == 0 && registration.fullpayment == 0"
                                                         @change="description_other = ''; amount_to_pay = 0 "
-                                                        v-model="payment_type"
-                                                        class="form-control">
+                                                        v-model="payment_type" class="form-control">
                                                         <option value="full">Full Payment</option>
                                                         <option value="partial">Installment</option>
                                                     </select>
@@ -515,12 +438,12 @@
                                                             </td>
                                                         </tr>
                                                     </table>
-                                                    <table class="table table-striped"
-                                                        v-else>
+                                                    <table class="table table-striped" v-else>
                                                         <tr>
                                                             <td>Down Payment</td>
-                                                            <td v-if="registration.downpayment == 0"><a
-                                                                    href="#"
+                                                            <td
+                                                                v-if="registration.downpayment == 0">
+                                                                <a href="#"
                                                                     @click="setValue(tuition_data.down_payment,'down',0)">{{ tuition_data.down_payment }}</a>
                                                             </td>
                                                         </tr>
@@ -535,20 +458,18 @@
                                                 </div>
                                             </div>
                                             <hr />
-
                                             <button class="btn btn-primary btn-lg pull-right"
                                                 :disabled="!request.or_number && !request.invoice_number || !ready"
                                                 type="submit">Submit Payment</button>
-
                                         </form>
                                     </div>
                                 </div>
                                 <div v-else>
-                                    <h3 class="text-center">No Current OR or Invoice is set please contact cashier administrator</h3>
+                                    <h3 class="text-center">No Current OR or Invoice is set please
+                                        contact cashier administrator</h3>
                                 </div>
                             </div>
-                            <div :class="!cashier?'active tab-pane':'tab-pane'"
-                                id="tab_2">
+                            <div :class="!cashier?'active tab-pane':'tab-pane'" id="tab_2">
                                 <div class="box box-solid">
                                     <div class="box-header">
                                         <h4 class="box-title">DETAILS</h4>
@@ -602,9 +523,7 @@
                                                 <th>Actions</th>
                                             </tr>
                                             <tr>
-                                                <th colspan="11">
-                                                    Other Payments:
-                                                </th>
+                                                <th colspan="11"> Other Payments: </th>
                                             </tr>
                                             <tr v-if="application_payment">
                                                 <td></td>
@@ -632,16 +551,14 @@
                                                         data-toggle="modal"
                                                         @click="invoice_update.id = application_payment.id; invoice_update_description = application_payment.description;"
                                                         data-target="#invoiceUpdate"
-                                                        class="btn btn-primary">
-                                                        Update Invoice
+                                                        class="btn btn-primary"> Update Invoice
                                                     </button>
                                                     <button
                                                         v-if="application_payment.status == 'Paid' && cashier && application_payment.remarks != 'Voided'"
                                                         data-toggle="modal"
                                                         @click="or_details.id = application_payment.id;"
                                                         data-target="#orDetailsUpdate"
-                                                        class="btn btn-primary">
-                                                        Update Details
+                                                        class="btn btn-primary"> Update Details
                                                     </button>
                                                     <!-- <button
                                                         v-if="application_payment.or_number && cashier"
@@ -652,8 +569,7 @@
                                                     <button
                                                         v-if="application_payment.invoice_number && cashier"
                                                         @click="printInvoice(application_payment)"
-                                                        class="btn btn-primary">
-                                                        Print Invoice
+                                                        class="btn btn-primary"> Print Invoice
                                                     </button>
                                                     <button
                                                         v-if="application_payment.status == 'Paid' && application_payment.remarks != 'Voided' && cashier && finance_manager_privilages"
@@ -665,8 +581,7 @@
                                             </tr>
                                             <tr v-for="payment in other_payments">
                                                 <td><input v-if="user.special_role > 1"
-                                                        type="checkbox"
-                                                        :value="payment.or_number"
+                                                        type="checkbox" :value="payment.or_number"
                                                         v-model="selected_items" /></td>
                                                 <td>{{ payment.invoice_number }}</td>
                                                 <td>{{ payment.or_number }}</td>
@@ -684,41 +599,33 @@
                                                         data-toggle="modal"
                                                         @click="prepUpdate(payment.id,payment.description,payment.subtotal_order)"
                                                         data-target="#myModal"
-                                                        class="btn btn-primary">
-                                                        Update OR
-                                                    </button>
+                                                        class="btn btn-primary"> Update OR </button>
                                                     <button
                                                         v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided' && cashier.invoice_current"
                                                         data-toggle="modal"
                                                         @click="invoice_update.id = payment.id; invoice_update_description = payment.description;"
                                                         data-target="#invoiceUpdate"
-                                                        class="btn btn-primary">
-                                                        Update Invoice
+                                                        class="btn btn-primary"> Update Invoice
                                                     </button>
                                                     <button
                                                         v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided'"
                                                         data-toggle="modal"
                                                         @click="or_details.id = payment.id;"
                                                         data-target="#orDetailsUpdate"
-                                                        class="btn btn-primary">
-                                                        Update Details
+                                                        class="btn btn-primary"> Update Details
                                                     </button>
                                                     <!-- <button v-if="payment.or_number && cashier"
                                                         @click="printOR(payment)"
                                                         class="btn btn-primary">
                                                         Print OR
                                                     </button> -->
-                                                    <button
-                                                        v-if="payment.invoice_number && cashier"
+                                                    <button v-if="payment.invoice_number && cashier"
                                                         @click="printInvoice(payment)"
-                                                        class="btn btn-primary">
-                                                        Print Invoice
+                                                        class="btn btn-primary"> Print Invoice
                                                     </button>
-                                                    
                                                     <button
                                                         v-if="payment.status == 'Paid' && payment.remarks != 'Voided' && cashier && finance_manager_privilages"
-                                                        class="btn btn-primary"
-                                                        data-toggle="modal"
+                                                        class="btn btn-primary" data-toggle="modal"
                                                         data-target="#voidPaymentModal"
                                                         @click="setToVoid(payment.id)">Void/Cancel</button>
                                                     <button
@@ -734,9 +641,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th colspan="11">
-                                                    Tuition Payments:
-                                                </th>
+                                                <th colspan="11"> Tuition Payments: </th>
                                             </tr>
                                             <tr v-if="reservation_payments"
                                                 v-for="reservation_payment in reservation_payments">
@@ -765,16 +670,14 @@
                                                         data-toggle="modal"
                                                         @click="invoice_update.id = reservation_payment.id; invoice_update_description = reservation_payment.description;"
                                                         data-target="#invoiceUpdate"
-                                                        class="btn btn-primary">
-                                                        Update Invoice
+                                                        class="btn btn-primary"> Update Invoice
                                                     </button>
                                                     <button
                                                         v-if="reservation_payment.status == 'Paid' && cashier && reservation_payment.remarks != 'Voided'"
                                                         data-toggle="modal"
                                                         @click="or_details.id = reservation_payment.id;"
                                                         data-target="#orDetailsUpdate"
-                                                        class="btn btn-primary">
-                                                        Update Details
+                                                        class="btn btn-primary"> Update Details
                                                     </button>
                                                     <!-- <button
                                                         v-if="reservation_payment.or_number && cashier"
@@ -785,8 +688,7 @@
                                                     <button
                                                         v-if="reservation_payment.invoice_number && cashier"
                                                         @click="printInvoice(reservation_payment)"
-                                                        class="btn btn-primary">
-                                                        Print Invoice
+                                                        class="btn btn-primary"> Print Invoice
                                                     </button>
                                                     <button
                                                         v-if="reservation_payment.status == 'Paid' && reservation_payment.remarks != 'Voided' && cashier && finance_manager_privilages"
@@ -798,8 +700,7 @@
                                             </tr>
                                             <tr v-for="payment in payments">
                                                 <td><input v-if="user.special_role > 1"
-                                                        type="checkbox"
-                                                        :value="payment.or_number"
+                                                        type="checkbox" :value="payment.or_number"
                                                         v-model="selected_items" /></td>
                                                 <td>{{ payment.invoice_number }}</td>
                                                 <td>{{ payment.or_number }}</td>
@@ -817,41 +718,28 @@
                                                         data-toggle="modal"
                                                         @click="prepUpdate(payment.id,payment.description,payment.subtotal_order)"
                                                         data-target="#myModal"
-                                                        class="btn btn-primary">
-                                                        Update OR
-                                                    </button>
+                                                        class="btn btn-primary"> Update OR </button>
                                                     <button
                                                         v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided' && cashier.invoice_current"
                                                         data-toggle="modal"
                                                         @click="invoice_update.id = payment.id; invoice_update_description = payment.description;"
                                                         data-target="#invoiceUpdate"
-                                                        class="btn btn-primary">
-                                                        Update Invoice
+                                                        class="btn btn-primary"> Update Invoice
                                                     </button>
                                                     <button
                                                         v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided'"
                                                         data-toggle="modal"
                                                         @click="or_details.id = payment.id;"
                                                         data-target="#orDetailsUpdate"
-                                                        class="btn btn-primary">
-                                                        Update Details
+                                                        class="btn btn-primary"> Update Details
                                                     </button>
-                                                    <button v-if="payment.or_number && payment.invoice_number && cashier"
+                                                    <button
+                                                        v-if="payment.or_number && payment.invoice_number && cashier"
                                                         @click="printOR(payment)"
-                                                        class="btn btn-primary">
-                                                        Print OR
-                                                    </button>
-                                                    <button
-                                                        v-if="payment.invoice_number && cashier"
+                                                        class="btn btn-primary"> Print OR </button>
+                                                    <button v-if="payment.invoice_number && cashier"
                                                         @click="printInvoice(payment)"
-                                                        class="btn btn-primary">
-                                                        Print Invoice
-                                                    </button>
-                                                    <button
-                                                        v-if="payment.invoice_number && cashier"
-                                                        @click="printInvoice(payment,1)"
-                                                        class="btn btn-primary">
-                                                        Print Invoice A
+                                                        class="btn btn-primary"> Print Invoice
                                                     </button>
                                                     <button
                                                         v-if="payment.mode && payment.status == 'Paid' && payment.remarks != 'Voided' && cashier && finance_manager_privilages"
@@ -872,47 +760,41 @@
                                                 </td>
                                             </tr>
                                             <tr v-if="user.special_role > 1">
-                                                <td class="text-right"
-                                                    colspan="2">
-                                                    Do with selected:
-                                                </td>
+                                                <td class="text-right" colspan="2"> Do with
+                                                    selected: </td>
                                                 <td colspan="3">
                                                     <select class="form-control"
                                                         v-model="switch_term">
-                                                        <option v-for="s in sy"
-                                                            :value="s.intID">{{ s.term_student_type}}
+                                                        <option v-for="s in sy" :value="s.intID">
+                                                            {{ s.term_student_type}}
                                                             {{ s.enumSem }} {{ s.term_label }}
-                                                            {{ s.strYearStart }} - {{ s.strYearEnd }}
+                                                            {{ s.strYearStart }} -
+                                                            {{ s.strYearEnd }}
                                                         </option>
                                                     </select>
                                                 </td>
                                                 <td colspan="6">
                                                     <button @click="forwardSelected"
-                                                        class="btn btn-primary">
-                                                        Forward Selected
+                                                        class="btn btn-primary"> Forward Selected
                                                     </button>
                                                 </td>
                                             </tr>
                                             <tr v-if="registration">
-                                                <td class="text-green"
-                                                    colspan="10">
-                                                    amount paid: P{{ amount_paid_formatted }}
+                                                <td class="text-green" colspan="10"> amount paid:
+                                                    P{{ amount_paid_formatted }}
                                                 </td>
                                             </tr>
                                             <tr v-if="registration">
-                                                <td class="text-green"
-                                                    colspan="10">
-                                                    remaining balance: P{{ remaining_amount_formatted }}
+                                                <td class="text-green" colspan="10"> remaining
+                                                    balance: P{{ remaining_amount_formatted }}
                                                 </td>
                                             </tr>
                                         </table>
-                                        <div v-html="tuition"
-                                            class="col-sm-6"></div>
+                                        <div v-html="tuition" class="col-sm-6"></div>
                                     </div>
                                 </div>
                             </div>
-                            <div v-if="registration" class="tab-pane"
-                                id="tab_3">
+                            <div v-if="registration" class="tab-pane" id="tab_3">
                                 <h3>Statement of Account</h3>
                                 <!-- <img :src="soa.logo" height="300px" width="300px"/> -->
                                 <div class="text-center">
@@ -980,190 +862,78 @@
             </div>
         </div>
     </div>
-    <form ref="print_or"
-        method="post"
-        :action="base_url + 'pdf/print_updated_or'"
+    <form ref="print_or" method="post" :action="base_url + 'pdf/print_updated_or'" target="_blank">
+        <input type="hidden" name="student_name" v-model="or_print.student_name">
+        <input type="hidden" name="campus" :value="request.student_campus">
+        <input type="hidden" name="cashier_id" v-model="or_print.cashier_id">
+        <input type="hidden" name="student_id" v-model="or_print.student_id">
+        <input type="hidden" name="student_address" v-model="or_print.student_address">
+        <input type="hidden" name="is_cash" v-model="or_print.is_cash">
+        <input type="hidden" name="check_number" v-model="or_print.check_number">
+        <input type="hidden" name="remarks" v-model="or_print.remarks">
+        <input type="hidden" name="or_number" v-model="or_print.or_number" />
+        <input type="hidden" name="invoice_number" v-model="or_print.invoice_number" />
+        <input type="hidden" name="description" v-model="or_print.description" />
+        <input type="hidden" name="total_amount_due" v-model="or_print.total_amount_due" />
+        <input type="hidden" name="name" v-model="or_print.student_name" />
+        <input type="hidden" name="sem" v-model="or_print.sem" />
+        <input type="hidden" name="transaction_date" v-model="or_print.transaction_date" />
+        <input type="hidden" name="type" v-model="or_print.type" />
+    </form>
+    <form ref="print_invoice" method="post" :action="base_url + 'pdf/print_invoice/' + assessment "
         target="_blank">
-        <input type="hidden"
-            name="student_name"
-            v-model="or_print.student_name">
-        <input type="hidden"
-            name="campus"
-            :value="request.student_campus">
-        <input type="hidden"
-            name="cashier_id"
-            v-model="or_print.cashier_id">
-        <input type="hidden"
-            name="student_id"
-            v-model="or_print.student_id">
-        <input type="hidden"
-            name="student_address"
-            v-model="or_print.student_address">
-        <input type="hidden"
-            name="is_cash"
-            v-model="or_print.is_cash">
-        <input type="hidden"
-            name="check_number"
-            v-model="or_print.check_number">
-        <input type="hidden"
-            name="remarks"
-            v-model="or_print.remarks">
-        <input type="hidden"
-            name="or_number"
-            v-model="or_print.or_number" />
-        <input type="hidden"
-            name="invoice_number"
-            v-model="or_print.invoice_number" />
-        <input type="hidden"
-            name="description"
-            v-model="or_print.description" />
-        <input type="hidden"
-            name="total_amount_due"
-            v-model="or_print.total_amount_due" />
-        <input type="hidden"
-            name="name"
-            v-model="or_print.student_name" />
-        <input type="hidden"
-            name="sem"
-            v-model="or_print.sem" />
-        <input type="hidden"
-            name="transaction_date"
-            v-model="or_print.transaction_date" />
-        <input type="hidden"
-            name="type"
-            v-model="or_print.type" />
-    </form>    
-    <form ref="print_invoice"
-        method="post"
-        :action="base_url + 'pdf/print_invoice/' + assessment "
-        target="_blank">
-        <input type="hidden"
-            name="student_name"
-            v-model="or_print.student_name">
-        <input type="hidden"
-            name="slug"
-            v-model="slug">
-        <input type="hidden"
-            name="campus"
-            :value="request.student_campus">
-        <input type="hidden"
-            name="cashier_id"
-            v-model="or_print.cashier_id">
-        <input type="hidden"
-            name="student_id"
-            v-model="or_print.student_id">
-        <input type="hidden"
-            name="student_address"
-            v-model="or_print.student_address">
-        <input type="hidden"
-            name="is_cash"
-            v-model="or_print.is_cash">
-        <input type="hidden"
-            name="check_number"
-            v-model="or_print.check_number">
-        <input type="hidden"
-            name="remarks"
-            v-model="or_print.remarks">
-        <input type="hidden"
-            name="or_number"
-            v-model="or_print.or_number" />
-        <input type="hidden"
-            name="invoice_number"
-            v-model="or_print.invoice_number" />
-        <input type="hidden"
-            name="description"
-            v-model="or_print.description" />
-        <input type="hidden"
-            name="total_amount_due"
-            v-model="or_print.total_amount_due" />
-        <input type="hidden"
-            name="name"
-            v-model="or_print.student_name" />
-        <input type="hidden"
-            name="sem"
-            v-model="or_print.sem" />
-        <input type="hidden"
-            name="transaction_date"
-            v-model="or_print.transaction_date" />
-        <input type="hidden"
-            name="type"
-            v-model="or_print.type" />
-        <input type="hidden"
-            name="withholding_tax_percentage"
+        <input type="hidden" name="student_name" v-model="or_print.student_name">
+        <input type="hidden" name="slug" v-model="slug">
+        <input type="hidden" name="campus" :value="request.student_campus">
+        <input type="hidden" name="cashier_id" v-model="or_print.cashier_id">
+        <input type="hidden" name="student_id" v-model="or_print.student_id">
+        <input type="hidden" name="student_address" v-model="or_print.student_address">
+        <input type="hidden" name="is_cash" v-model="or_print.is_cash">
+        <input type="hidden" name="check_number" v-model="or_print.check_number">
+        <input type="hidden" name="remarks" v-model="or_print.remarks">
+        <input type="hidden" name="or_number" v-model="or_print.or_number" />
+        <input type="hidden" name="invoice_number" v-model="or_print.invoice_number" />
+        <input type="hidden" name="description" v-model="or_print.description" />
+        <input type="hidden" name="total_amount_due" v-model="or_print.total_amount_due" />
+        <input type="hidden" name="name" v-model="or_print.student_name" />
+        <input type="hidden" name="sem" v-model="or_print.sem" />
+        <input type="hidden" name="transaction_date" v-model="or_print.transaction_date" />
+        <input type="hidden" name="type" v-model="or_print.type" />
+        <input type="hidden" name="withholding_tax_percentage"
             v-model="or_print.withholding_tax_percentage" />
-        <input type="hidden"
-            name="invoice_amount"
-            v-model="or_print.invoice_amount" />
-        <input type="hidden"
-            name="invoice_amount_ves"
-            v-model="or_print.invoice_amount_ves" />
-        <input type="hidden"
-            name="invoice_amount_vzrs"
-            v-model="or_print.invoice_amount_vzrs" />
+        <input type="hidden" name="invoice_amount" v-model="or_print.invoice_amount" />
+        <input type="hidden" name="invoice_amount_ves" v-model="or_print.invoice_amount_ves" />
+        <input type="hidden" name="invoice_amount_vzrs" v-model="or_print.invoice_amount_vzrs" />
     </form>
-    <form ref="print_soa"
-        method="post"
-        :action="base_url + 'pdf/print_soa'"
-        target="_blank">
-        <input type="hidden"
-            v-if="tuition_data"
-            name="down_payment"
+    <form ref="print_soa" method="post" :action="base_url + 'pdf/print_soa'" target="_blank">
+        <input type="hidden" v-if="tuition_data" name="down_payment"
             v-model="tuition_data.down_payment">
-        <input v-if="registration" type="hidden"
-            name="is_paid_dp"
+        <input v-if="registration" type="hidden" name="is_paid_dp"
             :value="registration.downpayment">
-        <input type="hidden"
-            name="cashier_id"
-            v-model="or_print.cashier_id">
-        <input type="hidden"
-            name="student_id"
-            v-model="soa.student_id">
-        <input type="hidden"
-            name="student_name"
-            v-model="soa.student_name">
-        <input type="hidden"
-            name="campus_address"
-            v-model="soa.address">
-        <input type="hidden"
-            name="campus_logo"
-            v-model="soa.logo">
-        <input type="hidden"
-            name="installments"
-            v-model="soa.installments">
-        <input type="hidden"
-            name="term"
-            v-model="soa.term">
-        <input type="hidden"
-            name="total"
-            v-model="remaining_amount_formatted">
-        <input type="hidden"
-            name="user_id"
-            v-model="student.intID">
-        <input type="hidden"
-            name="sem"
-            v-model="sem">
+        <input type="hidden" name="cashier_id" v-model="or_print.cashier_id">
+        <input type="hidden" name="student_id" v-model="soa.student_id">
+        <input type="hidden" name="student_name" v-model="soa.student_name">
+        <input type="hidden" name="campus_address" v-model="soa.address">
+        <input type="hidden" name="campus_logo" v-model="soa.logo">
+        <input type="hidden" name="installments" v-model="soa.installments">
+        <input type="hidden" name="term" v-model="soa.term">
+        <input type="hidden" name="total" v-model="remaining_amount_formatted">
+        <input type="hidden" name="user_id" v-model="student.intID">
+        <input type="hidden" name="sem" v-model="sem">
     </form>
-    <div class="modal fade"
-        id="myModal"
-        role="dialog">
-        <form @submit.prevent="updateOR"
-            class="modal-dialog modal-lg">
-
+    <div class="modal fade" id="myModal" role="dialog">
+        <form @submit.prevent="updateOR" class="modal-dialog modal-lg">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
                     <!-- modal header  -->
-                    <button type="button"
-                        class="close"
-                        data-dismiss="modal">&times;</button>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Add OR Number</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
                         <label>OR Number <span class="text-danger">*</span> </label>
-                        <select class="form-control"
-                            v-model="or_update.or_number"
-                            required>
+                        <select class="form-control" v-model="or_update.or_number" required>
                             <option v-for="i in (parseInt(cashier_start), parseInt(cashier_end))"
                                 :value="i">{{ i }}</option>
                         </select>
@@ -1171,39 +941,31 @@
                 </div>
                 <div class=" modal-footer">
                     <!-- modal footer  -->
-                    <button type="submit"
-                        :disabled="!or_update.or_number"
+                    <button type="submit" :disabled="!or_update.or_number"
                         class="btn btn-primary">Submit</button>
-                    <button type="button"
-                        class="btn btn-default"
+                    <button type="button" class="btn btn-default"
                         data-dismiss="modal">Close</button>
                 </div>
             </div>
-
         </form>
     </div>
-    <div class="modal fade"
-        id="invoiceUpdate"
-        role="dialog">
-        <form @submit.prevent="updateInvoice"
-            class="modal-dialog modal-lg">
-
+    <div class="modal fade" id="invoiceUpdate" role="dialog">
+        <form @submit.prevent="updateInvoice" class="modal-dialog modal-lg">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
                     <!-- modal header  -->
-                    <button type="button"
-                        class="close"
-                        data-dismiss="modal">&times;</button>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Update Invoice Number</h4>
                 </div>
                 <div class="modal-body">
+                    <div class="form-group">
                         <div class="form-group">
-                            <div class="form-group">
-                             <label>Invoice Number <span class="text-danger">*</span> </label>                        
-                             <input type="text" class="form-control" v-model="invoice_update.invoice_number" required />
+                            <label>Invoice Number <span class="text-danger">*</span> </label>
+                            <input type="text" class="form-control"
+                                v-model="invoice_update.invoice_number" required />
                         </div>
-                            <!-- <template v-if="invoiceNumbers.length !== 0">
+                        <!-- <template v-if="invoiceNumbers.length !== 0">
                                  <select class="form-control" v-model="invoice_update.invoice_number" required>
                                     <option v-for="i in (parseInt(invoiceStart), parseInt(invoiceEnd))" :value="i">{{ i }}</option>
                                  </select>          
@@ -1220,109 +982,77 @@
                                     v-model="invoice_update.invoice_number"
                                     required />
                             </template>   -->
-                            
-                        </div>
                     </div>
+                </div>
                 <div class=" modal-footer">
                     <!-- modal footer  -->
-                     <!-- :disabled="!or_update.or_number" -->
-                    <button type="submit"
-                        :disabled="!or_update.or_number"
+                    <!-- :disabled="!or_update.or_number" -->
+                    <button type="submit" :disabled="!or_update.or_number"
                         class="btn btn-primary">Submit</button>
-                    <button type="button"
-                        class="btn btn-default"
+                    <button type="button" class="btn btn-default"
                         data-dismiss="modal">Close</button>
                 </div>
             </div>
-
         </form>
     </div>
-    <div class="modal fade"
-        id="orDetailsUpdate"
-        role="dialog">
-        <form @submit.prevent="updateORDetails"
-            class="modal-dialog modal-lg">
-
+    <div class="modal fade" id="orDetailsUpdate" role="dialog">
+        <form @submit.prevent="updateORDetails" class="modal-dialog modal-lg">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
                     <!-- modal header  -->
-                    <button type="button"
-                        class="close"
-                        data-dismiss="modal">&times;</button>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Update Details</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Issued Date <span class="text-danger">*</span> </label>
-                        <input type="date"
-                            class="form-control"
-                            v-model="or_details.or_date"
+                        <input type="date" class="form-control" v-model="or_details.or_date"
                             required />
                     </div>
                 </div>
                 <div class=" modal-footer">
                     <!-- modal footer  -->
-                    <button type="submit"                        
-                        class="btn btn-primary">Submit</button>
-                    <button type="button"
-                        class="btn btn-default"
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-default"
                         data-dismiss="modal">Close</button>
                 </div>
             </div>
-
         </form>
     </div>
-    <div class="modal fade"
-        id="voidPaymentModal"
-        role="dialog">
-        <form @submit.prevent="voidPayment"
-            class="modal-dialog modal-lg">
-
+    <div class="modal fade" id="voidPaymentModal" role="dialog">
+        <form @submit.prevent="voidPayment" class="modal-dialog modal-lg">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
                     <!-- modal header  -->
-                    <button type="button"
-                        class="close"
-                        data-dismiss="modal">&times;</button>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Set Payment to Void</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <textarea class="form-control"
-                            v-model="void_reason"
-                            required></textarea>
+                        <textarea class="form-control" v-model="void_reason" required></textarea>
                     </div>
                 </div>
                 <div class=" modal-footer">
                     <!-- modal footer  -->
-                    <button type="submit"
-                        class="btn btn-primary">Submit</button>
-                    <button type="button"
-                        class="btn btn-default"
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-default"
                         data-dismiss="modal">Close</button>
                 </div>
             </div>
-
         </form>
     </div>
 </aside>
-
 <script src="<?php echo base_url(); ?>assets/themes/default/js/jquery.min.js"></script>
-<script type="text/javascript"
-    src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js">
+</script>
 <script src="<?php echo base_url(); ?>assets/themes/default/js/vue.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
     integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"></script>
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="<?php echo base_url(); ?>assets/themes/default/js/axios.min.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
-
-
-
 <script>
 new Vue({
     el: '#registration-container',
@@ -1396,7 +1126,7 @@ new Vue({
             mode_of_payment_id: 26,
             description: undefined,
             or_number: '',
-            invoice_number:'',                        
+            invoice_number: '',
             remarks: '',
             subtotal_order: 0,
             convenience_fee: 0,
@@ -1473,8 +1203,8 @@ new Vue({
         void_reason: undefined,
         void_id: undefined,
         windowPayment: 'invoice',
-        apiUpdate:'',
-        invoiceNumbers:'',
+        apiUpdate: '',
+        invoiceNumbers: '',
         net_vat: 0,
         less_vat: 0,
         less_ewt: 0,
@@ -1484,356 +1214,335 @@ new Vue({
         less_ewt_formatted: 0,
         total_amount_computed_formatted: 0,
         total_sales_formatted: 0,
-        
         user: {
             special_role: 0,
         },
     },
-
     mounted() {
-
         let url_string = window.location.href;
         if (this.id != 0) {
             //this.loader_spinner = true;            
             axios.get(this.base_url + 'unity/registration_viewer_data/' + this.id + '/' +
-                    this.sem)
-                .then((data) => {
-                    if (data.data.success) {
-                        this.sem = data.data.active_sem.intID;
-                        this.or_update.sy_reference = this.sem;
-                        this.invoice_update.sy_reference = this.sem;
-                        this.request.sy_reference = this.sem;
-                        this.user_level = data.data.user_level;
-                        this.sy = data.data.sy;
-                        this.ledger_items = data.data.ledger;
-                        this.term_balances = data.data.term_balances;
-                        this.particulars = data.data.particulars;
-                        for (i in this.term_balances)
-                            if (this.term_balances[i].balance > 0)
-                                this.show_alert = true;
-                        this.current_term = data.data.active_sem;
-                        this.current_term_full_label = this.current_term.term_label ==
-                            "Term" ? "Trimester" : "Semester";
-                        this.installment_dates.push(data.data.active_sem.installment1_formatted);
-                        this.installment_dates.push(data.data.active_sem.installment2_formatted);
-                        this.installment_dates.push(data.data.active_sem.installment3_formatted);
-                        this.installment_dates.push(data.data.active_sem.installment4_formatted);
-                        this.installment_dates.push(data.data.active_sem.installment5_formatted);
-                        this.registration = data.data.registration;
-                        this.tuition_data = data.data.tuition_data; 
-                        
-                        if (data.data.registration) {        
-                            this.tuition = data.data.tuition;                                               
-                            this.downpayment_status = this.registration.downpayment;
-                            this.registration_status = data.data.registration.intROG;
-                            this.allow_enroll = data.data.registration.allow_enroll;                            
-                            this.payment_type = this.registration.paymentType;
-                            this.remaining_amount = data.data.tuition_data.total;
-                            this.change_payment_type = this.payment_type;
-                            this.tuition_years = data.data.tuition_years;
-                            this.tuition_year = this.registration.tuition_year;
+                this.sem).then((data) => {
+                if (data.data.success) {
+                    this.sem = data.data.active_sem.intID;
+                    this.or_update.sy_reference = this.sem;
+                    this.invoice_update.sy_reference = this.sem;
+                    this.request.sy_reference = this.sem;
+                    this.user_level = data.data.user_level;
+                    this.sy = data.data.sy;
+                    this.ledger_items = data.data.ledger;
+                    this.term_balances = data.data.term_balances;
+                    this.particulars = data.data.particulars;
+                    for (i in this.term_balances)
+                        if (this.term_balances[i].balance > 0) this.show_alert =
+                            true;
+                    this.current_term = data.data.active_sem;
+                    this.current_term_full_label = this.current_term.term_label ==
+                        "Term" ? "Trimester" : "Semester";
+                    this.installment_dates.push(data.data.active_sem
+                        .installment1_formatted);
+                    this.installment_dates.push(data.data.active_sem
+                        .installment2_formatted);
+                    this.installment_dates.push(data.data.active_sem
+                        .installment3_formatted);
+                    this.installment_dates.push(data.data.active_sem
+                        .installment4_formatted);
+                    this.installment_dates.push(data.data.active_sem
+                        .installment5_formatted);
+                    this.registration = data.data.registration;
+                    this.tuition_data = data.data.tuition_data;
+                    if (data.data.registration) {
+                        this.tuition = data.data.tuition;
+                        this.downpayment_status = this.registration.downpayment;
+                        this.registration_status = data.data.registration.intROG;
+                        this.allow_enroll = data.data.registration.allow_enroll;
+                        this.payment_type = this.registration.paymentType;
+                        this.remaining_amount = data.data.tuition_data.total;
+                        this.change_payment_type = this.payment_type;
+                        this.tuition_years = data.data.tuition_years;
+                        this.tuition_year = this.registration.tuition_year;
+                    } else {
+                        this.registration = {
+                            downpayment: 0
                         }
-                        else{
-                            this.registration = {
-                                downpayment: 0
+                        Swal.fire({
+                            title: "Warning",
+                            text: "This student has no enlistment data for this term",
+                            icon: "warning"
+                        })
+                        // .then(function() {
+                        //     document.location = base_url + "finance/view_all_students"
+                        // });
+                    }
+                    this.user = data.data.user;
+                    this.reg_status = data.data.reg_status;
+                    this.student = data.data.student;
+                    this.or_print.type = this.student.type;
+                    this.or_print.student_name = this.request.strFirstname + ' ' +
+                        this.request.strLastname;
+                    this.slug = this.student.slug;
+                    this.request.slug = this.slug;
+                    this.request.first_name = this.student.strFirstname;
+                    this.request.middle_name = this.student.strMiddlename;
+                    this.request.last_name = this.student.strLastname;
+                    if (this.student.strMobileNumber || this.student
+                        .strMobileNumber != "") this.request.contact_number = this
+                        .student.strMobileNumber;
+                    else this.request.contact_number = "000000";
+                    this.request.email_address = this.student.strEmail;
+                    this.advanced_privilages = data.data.advanced_privilages;
+                    this.finance_manager_privilages = data.data
+                        .finance_manager_privilages;
+                    this.cashier = data.data.cashier;
+                    if (this.cashier) {
+                        this.cashier_start = this.cashier.or_start;
+                        this.cashier_end = this.cashier.or_current ? this.cashier
+                            .or_current : this.cashier.or_end;
+                        // this.request.or_number = this.cashier.or_current;
+                        this.or_update.or_number = this.cashier.or_current;
+                        this.request.cashier_id = this.cashier.user_id;
+                        this.or_update.cashier_id = this.cashier.user_id;
+                        this.invoice_update.cashier_id = this.cashier.user_id;
+                        this.or_update.student_campus = this.request.student_campus;
+                        this.soa.logo = (this.or_update.student_campus == "Cebu") ?
+                            "https://i.ibb.co/9hgbYNB/seal.png" :
+                            "https://i.ibb.co/kcYVsS7/i-ACADEMY-Seal-Makati.png";
+                        this.soa.address = (this.or_update.student_campus ==
+                            "Cebu") ?
+                            "5F Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City, Philippines" :
+                            "iACADEMY Nexus Campus, 7434 Yakal, Makati, 1203 Metro Manila, Philippines";
+                    }
+                    axios.get(api_url + 'finance/transactions/' + this.slug + '/' +
+                        this.sem).then((data) => {
+                        this.setInvoice()
+                        this.payments = data.data.data;
+                        this.other_payments = data.data.other;
+                        this.applicant_data = data.data.student;
+                        this.applicant_id = "A" + this.current_term
+                            .strYearStart + "-" + String(this.applicant_data
+                                .id).padStart(4, '0');
+                        this.getInvoiceNumber()
+                        if (this.registration) {
+                            if (this.registration.paymentType == 'partial')
+                                this.has_partial = true;
+                            if (this.has_partial) this.remaining_amount =
+                                this.tuition_data.total_installment;
+                        }
+                        for (i in this.payments) {
+                            if (this.payments[i].status == "Paid" || this
+                                .payments[i].status == "Void") {
+                                if (!this.payments[i].mode) this.payments[i]
+                                    .mode = {
+                                        name: 'Other'
+                                    };
+                                this.payments_paid.push(this.payments[i]);
+                                this.remaining_amount = this
+                                    .remaining_amount - this.payments[i]
+                                    .subtotal_order;
+                                this.amount_paid = this.amount_paid + this
+                                    .payments[i].subtotal_order;
                             }
-                            Swal.fire({
-                                title: "Warning",
-                                text: "This student has no enlistment data for this term",
-                                icon: "warning"
-                            })
-                            // .then(function() {
-                            //     document.location = base_url + "finance/view_all_students"
-                            // });
                         }
-                        this.user = data.data.user;
-                        this.reg_status = data.data.reg_status;
-                        this.student = data.data.student;
-                        this.or_print.type = this.student.type;
-                        this.or_print.student_name = this.request.strFirstname + ' ' +
-                            this.request.strLastname;
-                        this.slug = this.student.slug;
-                        this.request.slug = this.slug;
-                        this.request.first_name = this.student.strFirstname;
-                        this.request.middle_name = this.student.strMiddlename;
-                        this.request.last_name = this.student.strLastname;
-
-
-
-                        if (this.student.strMobileNumber || this.student
-                            .strMobileNumber != "")
-                            this.request.contact_number = this.student.strMobileNumber;
-                        else
-                            this.request.contact_number = "000000";
-
-                        this.request.email_address = this.student.strEmail;
-                        this.advanced_privilages = data.data.advanced_privilages;
-                        this.finance_manager_privilages = data.data
-                            .finance_manager_privilages;
-
-                        this.cashier = data.data.cashier;
-
-                        if (this.cashier) {
-                        
-                            this.cashier_start = this.cashier.or_start;
-                            this.cashier_end = this.cashier.or_current ? this.cashier.or_current : this.cashier.or_end;
-                            // this.request.or_number = this.cashier.or_current;
-                            this.or_update.or_number = this.cashier.or_current;
-                            this.request.cashier_id = this.cashier.user_id;
-                            this.or_update.cashier_id = this.cashier.user_id;
-                            this.invoice_update.cashier_id = this.cashier.user_id;
-                            this.or_update.student_campus = this.request.student_campus;
-                            this.soa.logo = (this.or_update.student_campus == "Cebu") ? "https://i.ibb.co/9hgbYNB/seal.png" : "https://i.ibb.co/kcYVsS7/i-ACADEMY-Seal-Makati.png";
-                            this.soa.address = (this.or_update.student_campus == "Cebu") ? "5F Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City, Philippines" : "iACADEMY Nexus Campus, 7434 Yakal, Makati, 1203 Metro Manila, Philippines";
-                            
+                        for (i in this.ledger_items) {
+                            this.remaining_amount += parseFloat(this
+                                .ledger_items[i].amount);
+                            if (this.ledger_items[i].amount < 0) {
+                                this.ledger_items[i].type = "payment";
+                                this.ledger_items[i].amount = this
+                                    .ledger_items[i].amount * -1;
+                                this.ledger_items[i].amount = this
+                                    .ledger_items[i].amount.toFixed(2);
+                            } else {
+                                this.ledger_items[i].amount = parseFloat(
+                                        this.ledger_items[i].amount)
+                                    .toFixed(2)
+                            }
                         }
-
-
-                        axios.get(api_url + 'finance/transactions/' + this.slug + '/' +
-                                this.sem)
-                            .then((data) => {
-                                this.setInvoice()                              
-                                this.payments = data.data.data;
-                                this.other_payments = data.data.other;
-                                this.applicant_data = data.data.student;
-                                this.applicant_id = "A" + this.current_term.strYearStart + "-" + String(this.applicant_data.id).padStart(4, '0');
-                                this.getInvoiceNumber()
-                                if(this.registration){
-                                    if (this.registration.paymentType == 'partial')
-                                        this.has_partial = true;
-                                    if (this.has_partial)
-                                        this.remaining_amount = this.tuition_data.total_installment;
-                                }
-
-                                for (i in this.payments) {
-                                    if (this.payments[i].status == "Paid" || this
-                                        .payments[i].status == "Void") {
-                                        if (!this.payments[i].mode)
-                                            this.payments[i].mode = {
+                        if (this.registration && this.tuition_data) {
+                            if (this.registration.enumStudentType ==
+                                "new") {
+                                axios.get(api_url + 'finance/reservation/' +
+                                    this.slug + '/' + this.sem).then((
+                                    data) => {
+                                    this.reservation_payments = data
+                                        .data.data;
+                                    this.application_payment = data
+                                        .data.application;
+                                    for (i in this
+                                        .reservation_payments) {
+                                        if (!this
+                                            .reservation_payments[i]
+                                            .mode) this
+                                            .reservation_payments[i]
+                                            .mode = {
                                                 name: 'Other'
                                             };
-                                        this.payments_paid.push(this.payments[i]);
-                                        this.remaining_amount = this
-                                            .remaining_amount - this.payments[i]
-                                            .subtotal_order;
-                                        this.amount_paid = this.amount_paid + this
-                                            .payments[i].subtotal_order;
-                                    }
-                                }
-                                for (i in this.ledger_items) {
-                                    this.remaining_amount += parseFloat(this
-                                        .ledger_items[i].amount);
-                                    if (this.ledger_items[i].amount < 0) {
-                                        this.ledger_items[i].type = "payment";
-                                        this.ledger_items[i].amount = this
-                                            .ledger_items[i].amount * -1;
-                                        this.ledger_items[i].amount = this
-                                            .ledger_items[i].amount.toFixed(2);
-                                    } else {
-                                        this.ledger_items[i].amount = parseFloat(
-                                                this.ledger_items[i].amount)
-                                            .toFixed(2)
-                                    }
-                                }
-                                if(this.registration && this.tuition_data){
-                                    if (this.registration.enumStudentType == "new") {
-                                        axios.get(api_url + 'finance/reservation/' +
-                                            this.slug + '/' + this.sem)
-                                        .then((data) => {
-                                            this.reservation_payments = data.data.data;
-                                            this.application_payment = data.data.application;
-
-                                            for (i in this
-                                                .reservation_payments) {
-                                                if (!this.reservation_payments[
-                                                        i].mode)
-                                                    this.reservation_payments[i]
-                                                    .mode = {
-                                                        name: 'Other'
-                                                    };
-
-                                                if (this.reservation_payments[i]
-                                                    .status == "Paid" && data
-                                                    .data.student_sy == this.sem
-                                                ) {
-                                                    this.remaining_amount = this
-                                                        .remaining_amount - this
-                                                        .reservation_payments[i]
-                                                        .subtotal_order;
-                                                    this.amount_paid = this
-                                                        .amount_paid + this
-                                                        .reservation_payments[i]
-                                                        .subtotal_order;
-                                                    this.tuition_data
-                                                        .down_payment = this
-                                                        .tuition_data
-                                                        .down_payment - this
-                                                        .reservation_payments[i]
-                                                        .subtotal_order;
-                                                }
-                                            }
-
-                                            if (this.application_payment && !
-                                                this.application_payment.mode)
-                                                this.application_payment
-                                                .mode = {
-                                                    name: 'Other'
-                                                };
-
-
-
-
-
-                                            this.remaining_amount = (this
-                                                    .remaining_amount < 0.02) ?
-                                                0 : this.remaining_amount;
-                                            this.remaining_amount_formatted =
-                                                this.remaining_amount.toFixed(2)
-                                                .replace(/\d(?=(\d{3})+\.)/g,
-                                                    '$&,');
-                                            //installment amounts                                
-                                            if (this.registration && this.registration.downpayment ==
-                                                1) {
-                                                var temp = (this.tuition_data
-                                                        .installment_fee * 5) -
-                                                    parseFloat(this
-                                                        .remaining_amount);
-                                                for (i = 0; i < 5; i++) {
-                                                    if (this.tuition_data
-                                                        .installment_fee > temp
-                                                    ) {
-                                                        val = this.tuition_data
-                                                            .installment_fee -
-                                                            temp;
-                                                        val = val.toFixed(2);
-                                                        this.installments.push(
-                                                            val);
-                                                        temp = 0;
-                                                    } else {
-                                                        this.installments.push(
-                                                            0);
-                                                        temp = temp - this
-                                                            .tuition_data
-                                                            .installment_fee;
-                                                    }
-
-                                                }
-                                            } else
-                                                for (i = 0; i < 5; i++)
-                                                    this.installments.push(this
-                                                        .tuition_data
-                                                        .installment_fee);
-
-
-
-
-                                            var val = 0;
-
-
-                                            this.amount_paid_formatted = this
-                                                .amount_paid.toFixed(2).replace(
-                                                    /\d(?=(\d{3})+\.)/g, '$&,');
-                                            this.loader_spinner = false;
-                                            if (this.remaining_amount <= 0)
-                                                this.description = "Other";
-
-                                            this.soa.installments = this
-                                                .installments;
-                                            for (i in this.installments) {
-                                                this.soa.total += parseFloat(
-                                                    this.installments[i]);
-                                            }
-                                            //this.soa.total += this.registration.downpayment == 0 ? parseFloat(this.tuition_data.down_payment):0; 
-                                            //this.soa.total = this.soa.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                                            this.soa.total = this.remaining_amount_formatted;
-                                            this.ready = true;
-
-                                        })
-                                        .catch((error) => {
-                                            console.log(error);
-                                        })
-                                    } else {
-                                        this.remaining_amount = (this.remaining_amount <
-                                            0.02) ? 0 : this.remaining_amount;
-                                        this.remaining_amount_formatted = this
-                                            .remaining_amount.toFixed(2).replace(
-                                                /\d(?=(\d{3})+\.)/g, '$&,');
-                                        //installment amounts                                
-                                        if (this.registration && this.registration.downpayment == 1) {
-                                            var temp = (this.tuition_data
-                                                .installment_fee * 5) - parseFloat(
-                                                this.remaining_amount);
-                                            for (i = 0; i < 5; i++) {
-                                                if (this.tuition_data.installment_fee >
-                                                    temp) {
-                                                    val = this.tuition_data
-                                                        .installment_fee - temp;
-                                                    val = val.toFixed(2);
-                                                    this.installments.push(val);
-                                                    temp = 0;
-                                                } else {
-                                                    this.installments.push(0);
-                                                    temp = temp - this.tuition_data
-                                                        .installment_fee;
-                                                }
-
-                                            }
-                                        } else
-                                            for (i = 0; i < 5; i++)
-                                                this.installments.push(this.tuition_data
-                                                    .installment_fee);
-
-
-
-                                        var val = 0;
-
-
-                                        this.amount_paid_formatted = this.amount_paid
-                                            .toFixed(2).replace(/\d(?=(\d{3})+\.)/g,
-                                                '$&,');
-                                        this.loader_spinner = false;
-                                        if (this.remaining_amount <= 0)
-                                            this.description = "Other";
-
-                                        this.soa.installments = this.installments;
-                                        for (i in this.installments) {
-                                            this.soa.total += parseFloat(this
-                                                .installments[i]);
-                                            this.installments[i] = parseFloat(this
-                                                .installments[i]).toFixed(2);
+                                        if (this
+                                            .reservation_payments[i]
+                                            .status == "Paid" &&
+                                            data.data.student_sy ==
+                                            this.sem) {
+                                            this.remaining_amount =
+                                                this
+                                                .remaining_amount -
+                                                this
+                                                .reservation_payments[
+                                                    i]
+                                                .subtotal_order;
+                                            this.amount_paid = this
+                                                .amount_paid + this
+                                                .reservation_payments[
+                                                    i]
+                                                .subtotal_order;
+                                            this.tuition_data
+                                                .down_payment = this
+                                                .tuition_data
+                                                .down_payment - this
+                                                .reservation_payments[
+                                                    i]
+                                                .subtotal_order;
                                         }
-                                        //this.soa.total += this.registration.downpayment == 0 ? parseFloat(this.tuition_data.down_payment):0; 
-                                        //this.soa.total = this.soa.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                                        this.soa.total = this
-                                            .remaining_amount_formatted;
-                                        this.ready = true;
                                     }
-                                }
-                                else{
+                                    if (this.application_payment &&
+                                        !this.application_payment
+                                        .mode) this
+                                        .application_payment
+                                        .mode = {
+                                            name: 'Other'
+                                        };
+                                    this.remaining_amount = (this
+                                            .remaining_amount < 0.02
+                                            ) ? 0 : this
+                                        .remaining_amount;
+                                    this.remaining_amount_formatted =
+                                        this.remaining_amount
+                                        .toFixed(2).replace(
+                                            /\d(?=(\d{3})+\.)/g,
+                                            '$&,');
+                                    //installment amounts                                
+                                    if (this.registration && this
+                                        .registration.downpayment ==
+                                        1) {
+                                        var temp = (this
+                                            .tuition_data
+                                            .installment_fee * 5
+                                            ) - parseFloat(this
+                                            .remaining_amount);
+                                        for (i = 0; i < 5; i++) {
+                                            if (this.tuition_data
+                                                .installment_fee >
+                                                temp) {
+                                                val = this
+                                                    .tuition_data
+                                                    .installment_fee -
+                                                    temp;
+                                                val = val.toFixed(
+                                                2);
+                                                this.installments
+                                                    .push(val);
+                                                temp = 0;
+                                            } else {
+                                                this.installments
+                                                    .push(0);
+                                                temp = temp - this
+                                                    .tuition_data
+                                                    .installment_fee;
+                                            }
+                                        }
+                                    } else
+                                        for (i = 0; i < 5; i++) this
+                                            .installments.push(this
+                                                .tuition_data
+                                                .installment_fee);
+                                    var val = 0;
+                                    this.amount_paid_formatted =
+                                        this.amount_paid.toFixed(2)
+                                        .replace(
+                                            /\d(?=(\d{3})+\.)/g,
+                                            '$&,');
+                                    this.loader_spinner = false;
+                                    if (this.remaining_amount <= 0)
+                                        this.description = "Other";
+                                    this.soa.installments = this
+                                        .installments;
+                                    for (i in this.installments) {
+                                        this.soa.total +=
+                                            parseFloat(this
+                                                .installments[i]);
+                                    }
+                                    //this.soa.total += this.registration.downpayment == 0 ? parseFloat(this.tuition_data.down_payment):0; 
+                                    //this.soa.total = this.soa.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                                    this.soa.total = this
+                                        .remaining_amount_formatted;
                                     this.ready = true;
+                                }).catch((error) => {
+                                    console.log(error);
+                                })
+                            } else {
+                                this.remaining_amount = (this
+                                        .remaining_amount < 0.02) ? 0 : this
+                                    .remaining_amount;
+                                this.remaining_amount_formatted = this
+                                    .remaining_amount.toFixed(2).replace(
+                                        /\d(?=(\d{3})+\.)/g, '$&,');
+                                //installment amounts                                
+                                if (this.registration && this.registration
+                                    .downpayment == 1) {
+                                    var temp = (this.tuition_data
+                                            .installment_fee * 5) -
+                                        parseFloat(this.remaining_amount);
+                                    for (i = 0; i < 5; i++) {
+                                        if (this.tuition_data
+                                            .installment_fee > temp) {
+                                            val = this.tuition_data
+                                                .installment_fee - temp;
+                                            val = val.toFixed(2);
+                                            this.installments.push(val);
+                                            temp = 0;
+                                        } else {
+                                            this.installments.push(0);
+                                            temp = temp - this.tuition_data
+                                                .installment_fee;
+                                        }
+                                    }
+                                } else
+                                    for (i = 0; i < 5; i++) this
+                                        .installments.push(this.tuition_data
+                                            .installment_fee);
+                                var val = 0;
+                                this.amount_paid_formatted = this
+                                    .amount_paid.toFixed(2).replace(
+                                        /\d(?=(\d{3})+\.)/g, '$&,');
+                                this.loader_spinner = false;
+                                if (this.remaining_amount <= 0) this
+                                    .description = "Other";
+                                this.soa.installments = this.installments;
+                                for (i in this.installments) {
+                                    this.soa.total += parseFloat(this
+                                        .installments[i]);
+                                    this.installments[i] = parseFloat(this
+                                        .installments[i]).toFixed(2);
                                 }
-
-
-
-                            })
-                            .catch((error) => {
-                                console.log(error);
-                            })
-
-
-
-
-                    } else {
-                        //document.location = this.base_url + 'users/login';
-                    }
-
-
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
+                                //this.soa.total += this.registration.downpayment == 0 ? parseFloat(this.tuition_data.down_payment):0; 
+                                //this.soa.total = this.soa.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                                this.soa.total = this
+                                    .remaining_amount_formatted;
+                                this.ready = true;
+                            }
+                        } else {
+                            this.ready = true;
+                        }
+                    }).catch((error) => {
+                        console.log(error);
+                    })
+                } else {
+                    //document.location = this.base_url + 'users/login';
+                }
+            }).catch((error) => {
+                console.log(error);
+            })
         }
-
     },
     watch: {
         'windowPayment': {
@@ -1863,7 +1572,6 @@ new Vue({
             if (this.description_other == 'full') {
                 return true
             }
-
             if (this.description == 'Other') {
                 return true
             }
@@ -1874,16 +1582,17 @@ new Vue({
             }
         }
     },
-
     methods: {
-        async getInvoiceNumber(){                                    
-           const {data} = await axios.get(`${api_url}finance/invoice-list/${this.sem}/${this.applicant_data.campus}/${this.slug}`)
-           
-           this.invoiceNumbers = data.data
-
-           if (this.invoiceNumbers.length === 0) {
-               this.invoice_update.invoice_number = this.cashier?.invoice_current
-           }           
+        async getInvoiceNumber() {
+            const {
+                data
+            } = await axios.get(
+                `${api_url}finance/invoice-list/${this.sem}/${this.applicant_data.campus}/${this.slug}`
+                )
+            this.invoiceNumbers = data.data
+            if (this.invoiceNumbers.length === 0) {
+                this.invoice_update.invoice_number = this.cashier?.invoice_current
+            }
         },
         numberWithCommas: function(x) {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -1894,17 +1603,15 @@ new Vue({
             this.apiUpdate = 'finance/next_or/1'
         },
         cashierDetails: function(id) {
-            axios.get(base_url + 'finance/cashier_details/' + id)
-                .then((data) => {
-                    var cashier_details = data.data.cashier_data;
-                    Swal.fire({
-                        title: "Cashier/Appointer",
-                        text: cashier_details.strFirstname + " " +
-                            cashier_details.strLastname,
-                        icon: "info"
-                    })
+            axios.get(base_url + 'finance/cashier_details/' + id).then((data) => {
+                var cashier_details = data.data.cashier_data;
+                Swal.fire({
+                    title: "Cashier/Appointer",
+                    text: cashier_details.strFirstname + " " +
+                        cashier_details.strLastname,
+                    icon: "info"
                 })
-
+            })
         },
         printSOA: function() {
             this.soa.term = "AY " + this.current_term.strYearStart + " - " + this
@@ -1913,17 +1620,14 @@ new Vue({
             this.soa.student_name = this.request.last_name + ", " + this.request
                 .first_name + ", " + this.request.middle_name;
             //this.or_print.student_address = this.student.strAddress;
-            if (this.student.strStudentNumber.charAt(0) != "T")
-                this.soa.student_id = this.student.strStudentNumber;
-            else
-                this.soa.student_id = this.applicant_id;
-
+            if (this.student.strStudentNumber.charAt(0) != "T") this.soa.student_id =
+                this.student.strStudentNumber;
+            else this.soa.student_id = this.applicant_id;
             var delayInMilliseconds = 1000; //1 second
             var soa_send = this.$refs.print_soa;
             setTimeout(function() {
                 soa_send.submit();
             }, delayInMilliseconds);
-
         },
         addSuffix: function(i) {
             let j = i % 10,
@@ -1957,47 +1661,41 @@ new Vue({
                     showCloseButton: true,
                     showLoaderOnConfirm: true,
                     preConfirm: (login) => {
-
                         return axios.post(url, data, {
-                                headers: {
-                                    Authorization: `Bearer ${window.token}`
-                                }
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        }).then(data => {
+                            this.loader_spinner = false;
+                            var formdata = new FormData();
+                            formdata.append('payments', this
+                                .selected_items);
+                            formdata.append('sy_reference', this
+                                .switch_term);
+                            axios.post(base_url +
+                                'finance/transfer_ledger_update',
+                                formdata, {
+                                    headers: {
+                                        Authorization: `Bearer ${window.token}`
+                                    }
+                                }).then(function(data) {
+                                location.reload();
                             })
-                            .then(data => {
-                                this.loader_spinner = false;
-                                var formdata = new FormData();
-                                formdata.append('payments', this.selected_items);
-                                formdata.append('sy_reference', this.switch_term);
-                                axios.post(base_url +'finance/transfer_ledger_update',
-                                        formdata, {
-                                            headers: {
-                                                Authorization: `Bearer ${window.token}`
-                                            }
-                                        })
-                                    .then(function(data) {
-                                        location.reload();
-                                    })
-
-                            })
+                        })
                     }
                 });
-
             } else {
-                if (this.selected_items.length == 0)
-                    Swal.fire({
-                        title: "Warning",
-                        text: "Please check at least one item",
-                        icon: "success"
-                    });
-                else
-                    Swal.fire({
-                        title: "Warning",
-                        text: "Select a term to for transfer",
-                        icon: "success"
-                    });
+                if (this.selected_items.length == 0) Swal.fire({
+                    title: "Warning",
+                    text: "Please check at least one item",
+                    icon: "success"
+                });
+                else Swal.fire({
+                    title: "Warning",
+                    text: "Select a term to for transfer",
+                    icon: "success"
+                });
             }
-
-
         },
         prepUpdate: function(id, desc, amount) {
             this.or_update.id = id;
@@ -2026,48 +1724,49 @@ new Vue({
             var formdata = new FormData();
             formdata.append("intRegistrationID", this.registration.intRegistrationID);
             formdata.append("tuition_year", event.target.value);
-
             this.loader_spinner = true;
-
             //validate description
-
             axios.post(url, formdata, {
-                    headers: {
-                        Authorization: `Bearer ${window.token}`
-                    }
-                })
-                .then(data => {
-                    if (data.data.success) {
-                        Swal.fire({
-                            title: "Success",
-                            text: data.data.message,
-                            icon: "success"
-                        }).then(function() {
-                            location.reload();
-                        });
-                    }
-                });
-
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            }).then(data => {
+                if (data.data.success) {
+                    Swal.fire({
+                        title: "Success",
+                        text: data.data.message,
+                        icon: "success"
+                    }).then(function() {
+                        location.reload();
+                    });
+                }
+            });
         },
-        computeVat: function(){
+        computeVat: function() {
             this.net_vat = this.request.invoice_amount / 1.12;
-            this.less_vat = this.net_vat * .12;             
-            this.total_sales = parseFloat(this.net_vat) + parseFloat(this.request.invoice_amount_ves) + parseFloat(this.request.invoice_amount_vzrs);            
-            this.less_ewt = parseFloat(this.total_sales) * parseFloat(this.request.withholding_tax_percentage / 100);
-            this.total_amount_computed = parseFloat(this.total_sales) + parseFloat(this.less_vat) - parseFloat(this.less_ewt);
+            this.less_vat = this.net_vat * .12;
+            this.total_sales = parseFloat(this.net_vat) + parseFloat(this.request
+                .invoice_amount_ves) + parseFloat(this.request.invoice_amount_vzrs);
+            this.less_ewt = parseFloat(this.total_sales) * parseFloat(this.request
+                .withholding_tax_percentage / 100);
+            this.total_amount_computed = parseFloat(this.total_sales) + parseFloat(this
+                .less_vat) - parseFloat(this.less_ewt);
             //Formatted
-            this.net_vat_formatted = this.net_vat.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-            this.less_vat_formatted = this.less_vat.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-            this.total_sales_formatted = this.total_sales.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-            this.less_ewt_formatted = this.less_ewt.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-            this.total_amount_computed_formatted = this.total_amount_computed.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-
+            this.net_vat_formatted = this.net_vat.toFixed(2).replace(
+                /\d(?=(\d{3})+\.)/g, '$&,');
+            this.less_vat_formatted = this.less_vat.toFixed(2).replace(
+                /\d(?=(\d{3})+\.)/g, '$&,');
+            this.total_sales_formatted = this.total_sales.toFixed(2).replace(
+                /\d(?=(\d{3})+\.)/g, '$&,');
+            this.less_ewt_formatted = this.less_ewt.toFixed(2).replace(
+                /\d(?=(\d{3})+\.)/g, '$&,');
+            this.total_amount_computed_formatted = this.total_amount_computed.toFixed(2)
+                .replace(/\d(?=(\d{3})+\.)/g, '$&,');
         },
         updateInvoice: function() {
             let url = api_url + 'finance/update_invoice';
             let slug = this.slug;
-            this.loader_spinner = true;            
-            
+            this.loader_spinner = true;
             Swal.fire({
                 title: 'Continue with the update',
                 text: "Are you sure you want to update the payment?",
@@ -2079,93 +1778,92 @@ new Vue({
                 showCloseButton: true,
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
-
                     return axios.post(url, this.invoice_update, {
-                            headers: {
-                                Authorization: `Bearer ${window.token}`
-                            }
-                        }).then(data => {
-                            this.loader_spinner = false;
-                            if (data.data.success) {
-                                var formdata = new FormData();
-                                formdata.append('intID', this.cashier.intID);
-                                formdata.append('invoice_current', this.cashier.invoice_current);
-                                formdata.append('invoice_used', this.invoice_update.invoice_number);
-                                formdata.append('registration_id', this.registration.intRegistrationID);
-                                formdata.append('sy', this.sem);
-                                formdata.append('description', this.invoice_update_description);
-                                formdata.append('description_other',this.description_other);
-                                formdata.append('sy', this.student.sy_reference);
-                                axios.post(base_url + 'finance/next_or/1',
-                                        formdata, {
-                                            headers: {
-                                                Authorization: `Bearer ${window.token}`
-                                            }
-                                        })
-                                    .then(function(data) {
-                                        if (data.data.send_notif) {
-                                            let url = api_url +
-                                                'registrar/send_notif_enrolled/' +
-                                                slug;
-                                            let payload = {
-                                                'message': "This message serves as a notification that you have been officially enrolled."
-                                            }
-
-                                            Swal.fire({
-                                                showCancelButton: false,
-                                                showCloseButton: false,
-                                                allowEscapeKey: false,
-                                                title: 'Loading',
-                                                text: 'Processing Data do not leave page',
-                                                icon: 'info',
-                                            })
-                                            Swal.showLoading();
-                                            axios.post(url,
-                                                    payload, {
-                                                        headers: {
-                                                            Authorization: `Bearer ${window.token}`
-                                                        }
-                                                    })
-                                                .then(data => {
-                                                    this.loader_spinner =
-                                                        false;
-                                                    Swal.fire({
-                                                        title: "Success",
-                                                        text: data
-                                                            .data
-                                                            .message,
-                                                        icon: "success"
-                                                    }).then(
-                                                        function() {
-                                                            location
-                                                                .reload();
-                                                        });
-                                                });
-                                        } else {
-                                            Swal.fire({
-                                                title: "Success",
-                                                text: data
-                                                    .data
-                                                    .message,
-                                                icon: "success"
-                                            }).then(function() {
+                        headers: {
+                            Authorization: `Bearer ${window.token}`
+                        }
+                    }).then(data => {
+                        this.loader_spinner = false;
+                        if (data.data.success) {
+                            var formdata = new FormData();
+                            formdata.append('intID', this.cashier
+                                .intID);
+                            formdata.append('invoice_current', this
+                                .cashier.invoice_current);
+                            formdata.append('invoice_used', this
+                                .invoice_update.invoice_number);
+                            formdata.append('registration_id', this
+                                .registration.intRegistrationID);
+                            formdata.append('sy', this.sem);
+                            formdata.append('description', this
+                                .invoice_update_description);
+                            formdata.append('description_other',
+                                this.description_other);
+                            formdata.append('sy', this.student
+                                .sy_reference);
+                            axios.post(base_url +
+                                'finance/next_or/1', formdata, {
+                                    headers: {
+                                        Authorization: `Bearer ${window.token}`
+                                    }
+                                }).then(function(data) {
+                                if (data.data.send_notif) {
+                                    let url = api_url +
+                                        'registrar/send_notif_enrolled/' +
+                                        slug;
+                                    let payload = {
+                                        'message': "This message serves as a notification that you have been officially enrolled."
+                                    }
+                                    Swal.fire({
+                                        showCancelButton: false,
+                                        showCloseButton: false,
+                                        allowEscapeKey: false,
+                                        title: 'Loading',
+                                        text: 'Processing Data do not leave page',
+                                        icon: 'info',
+                                    })
+                                    Swal.showLoading();
+                                    axios.post(url,
+                                    payload, {
+                                        headers: {
+                                            Authorization: `Bearer ${window.token}`
+                                        }
+                                    }).then(data => {
+                                        this.loader_spinner =
+                                            false;
+                                        Swal.fire({
+                                            title: "Success",
+                                            text: data
+                                                .data
+                                                .message,
+                                            icon: "success"
+                                        }).then(
+                                            function() {
                                                 location
                                                     .reload();
                                             });
-
-                                        }
-
-                                    })
-                            } else
-                                Swal.fire({
-                                    title: "Failed",
-                                    text: data.data.message,
-                                    icon: "error"
-                                }).then(function() {
-                                    //location.reload();
-                                });
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: "Success",
+                                        text: data
+                                            .data
+                                            .message,
+                                        icon: "success"
+                                    }).then(function() {
+                                        location
+                                            .reload();
+                                    });
+                                }
+                            })
+                        } else Swal.fire({
+                            title: "Failed",
+                            text: data.data.message,
+                            icon: "error"
+                        }).then(function() {
+                            //location.reload();
                         });
-
+                    });
                 },
             });
         },
@@ -2173,7 +1871,6 @@ new Vue({
             let url = api_url + 'finance/update_or_details';
             let slug = this.slug;
             this.loader_spinner = true;
-
             Swal.fire({
                 title: 'Continue with the update',
                 text: "Are you sure you want to update the payment details?",
@@ -2186,26 +1883,22 @@ new Vue({
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
                     return axios.post(url, this.or_details, {
-                            headers: {
-                                Authorization: `Bearer ${window.token}`
-                            }
-                        })
-                        .then(data => {
+                        headers: {
+                            Authorization: `Bearer ${window.token}`
+                        }
+                    }).then(data => {
+                        this.loader_spinner = false;
+                        if (data.data.success) {
                             this.loader_spinner = false;
-                            if (data.data.success) {
-
-                                this.loader_spinner = false;
-                                Swal.fire({
-                                    title: "Success",
-                                    text: "Update Success",
-                                    icon: "success"
-                                }).then(function() {
-                                    location.reload();
-                                });
-
-                            }
-                        });
-
+                            Swal.fire({
+                                title: "Success",
+                                text: "Update Success",
+                                icon: "success"
+                            }).then(function() {
+                                location.reload();
+                            });
+                        }
+                    });
                 },
             });
         },
@@ -2213,7 +1906,6 @@ new Vue({
             let url = api_url + 'finance/update_or';
             let slug = this.slug;
             this.loader_spinner = true;
-
             Swal.fire({
                 title: 'Continue with the update',
                 text: "Are you sure you want to update the payment?",
@@ -2225,106 +1917,103 @@ new Vue({
                 showCloseButton: true,
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
-
                     return axios.post(url, this.or_update, {
-                            headers: {
-                                Authorization: `Bearer ${window.token}`
-                            }
-                        })
-                        .then(data => {
-                            this.loader_spinner = false;
-                            if (data.data.success) {
-                                const pay_length = this.payments_paid
-                                    .length - 1;
-                                var formdata = new FormData();
-                                formdata.append('payments', this.payments.length);
-                                //formdata.append('tuition_total',this.tuition_data.total_before_deductions);
-                                formdata.append('student_id', this.student.intID);
-                                formdata.append('installment', this.tuition_data.total_installment);
-                                formdata.append('intID', this.cashier.intID);
-                                formdata.append('or_current', this.cashier.or_current);
-                                formdata.append('or_used', this.or_update.or_number);
-                                formdata.append('payments', pay_length);
-                                formdata.append('sy', this.sem);
-                                formdata.append('description', this.or_update_description);
-                                formdata.append('description_other',this.description_other);
-                                formdata.append('total_amount', this.or_update.total_amount_due);
-                                formdata.append('registration_id', this.registration.intRegistrationID);
-
-                                axios.post(base_url + 'finance/next_or',
-                                        formdata, {
-                                            headers: {
-                                                Authorization: `Bearer ${window.token}`
-                                            }
-                                        })
-                                    .then(function(data) {
-                                        if (data.data.send_notif) {
-                                            let url = api_url +
-                                                'registrar/send_notif_enrolled/' +
-                                                slug;
-                                            let payload = {
-                                                'message': "This message serves as a notification that you have been officially enrolled."
-                                            }
-
-                                            Swal.fire({
-                                                showCancelButton: false,
-                                                showCloseButton: false,
-                                                allowEscapeKey: false,
-                                                title: 'Loading',
-                                                text: 'Updating Data do not leave page',
-                                                icon: 'info',
-                                            })
-                                            Swal.showLoading();
-                                            axios.post(url,
-                                                    payload, {
-                                                        headers: {
-                                                            Authorization: `Bearer ${window.token}`
-                                                        }
-                                                    })
-                                                .then(data => {
-                                                    this.loader_spinner =
-                                                        false;
-                                                    Swal.fire({
-                                                        title: "Success",
-                                                        text: "Update Success",
-                                                        icon: "success"
-                                                    }).then(
-                                                        function() {
-                                                            location
-                                                                .reload();
-                                                        });
-                                                });
-                                        } else {
-                                            Swal.fire({
-                                                title: "Success",
-                                                text: data
-                                                    .data
-                                                    .message,
-                                                icon: "success"
-                                            }).then(function() {
+                        headers: {
+                            Authorization: `Bearer ${window.token}`
+                        }
+                    }).then(data => {
+                        this.loader_spinner = false;
+                        if (data.data.success) {
+                            const pay_length = this.payments_paid
+                                .length - 1;
+                            var formdata = new FormData();
+                            formdata.append('payments', this
+                                .payments.length);
+                            //formdata.append('tuition_total',this.tuition_data.total_before_deductions);
+                            formdata.append('student_id', this
+                                .student.intID);
+                            formdata.append('installment', this
+                                .tuition_data.total_installment);
+                            formdata.append('intID', this.cashier
+                                .intID);
+                            formdata.append('or_current', this
+                                .cashier.or_current);
+                            formdata.append('or_used', this
+                                .or_update.or_number);
+                            formdata.append('payments', pay_length);
+                            formdata.append('sy', this.sem);
+                            formdata.append('description', this
+                                .or_update_description);
+                            formdata.append('description_other',
+                                this.description_other);
+                            formdata.append('total_amount', this
+                                .or_update.total_amount_due);
+                            formdata.append('registration_id', this
+                                .registration.intRegistrationID);
+                            axios.post(base_url + 'finance/next_or',
+                                formdata, {
+                                    headers: {
+                                        Authorization: `Bearer ${window.token}`
+                                    }
+                                }).then(function(data) {
+                                if (data.data.send_notif) {
+                                    let url = api_url +
+                                        'registrar/send_notif_enrolled/' +
+                                        slug;
+                                    let payload = {
+                                        'message': "This message serves as a notification that you have been officially enrolled."
+                                    }
+                                    Swal.fire({
+                                        showCancelButton: false,
+                                        showCloseButton: false,
+                                        allowEscapeKey: false,
+                                        title: 'Loading',
+                                        text: 'Updating Data do not leave page',
+                                        icon: 'info',
+                                    })
+                                    Swal.showLoading();
+                                    axios.post(url,
+                                    payload, {
+                                        headers: {
+                                            Authorization: `Bearer ${window.token}`
+                                        }
+                                    }).then(data => {
+                                        this.loader_spinner =
+                                            false;
+                                        Swal.fire({
+                                            title: "Success",
+                                            text: "Update Success",
+                                            icon: "success"
+                                        }).then(
+                                            function() {
                                                 location
                                                     .reload();
                                             });
-
-                                        }
-
-                                    })
-                            } else
-                                Swal.fire({
-                                    title: "Failed",
-                                    text: data.data.message,
-                                    icon: "error"
-                                }).then(function() {
-                                    //location.reload();
-                                });
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: "Success",
+                                        text: data
+                                            .data
+                                            .message,
+                                        icon: "success"
+                                    }).then(function() {
+                                        location
+                                            .reload();
+                                    });
+                                }
+                            })
+                        } else Swal.fire({
+                            title: "Failed",
+                            text: data.data.message,
+                            icon: "error"
+                        }).then(function() {
+                            //location.reload();
                         });
-
+                    });
                 },
                 allowOutsideClick: () => !Swal.isLoading()
-            }).then((result) => {
-
-            })
-
+            }).then((result) => {})
         },
         printOR: function(payment) {
             Swal.fire({
@@ -2342,17 +2031,16 @@ new Vue({
                     this.or_print.invoice_number = payment.invoice_number;
                     this.or_print.description = payment.description;
                     this.or_print.total_amount_due = payment.subtotal_order;
-                    this.or_print.transaction_date = payment.or_date;                    
+                    this.or_print.transaction_date = payment.or_date;
                     this.or_print.remarks = payment.remarks;
                     this.or_print.student_name = this.request.last_name +
                         ", " + this.request.first_name + ", " + this.request
                         .middle_name;
                     this.or_print.student_address = this.student.strAddress;
-                    if (this.student.strStudentNumber.charAt(0) != "T")
-                        this.or_print.student_id = this.student
+                    if (this.student.strStudentNumber.charAt(0) != "T") this
+                        .or_print.student_id = this.student
                         .strStudentNumber;
-                    else
-                        this.or_print.student_id = this.applicant_id;
+                    else this.or_print.student_id = this.applicant_id;
                     this.or_print.is_cash = payment.is_cash;
                     this.or_print.check_number = payment.check_number;
                     this.or_print.sem = payment.sy_reference;
@@ -2364,7 +2052,6 @@ new Vue({
                 setTimeout(function() {
                     or_send.submit();
                 }, delayInMilliseconds);
-
             });
         },
         printInvoice: function(payment, assessment = 0) {
@@ -2385,19 +2072,22 @@ new Vue({
                     this.or_print.total_amount_due = payment.subtotal_order;
                     this.or_print.transaction_date = payment.or_date;
                     this.or_print.remarks = payment.remarks;
-                    this.or_print.withholding_tax_percentage = payment.withholding_tax_percentage,
-                    this.or_print.invoice_amount = payment.invoice_amount,
-                    this.or_print.invoice_amount_ves = payment.invoice_amount_ves,
-                    this.or_print.invoice_amount_vzrs = payment.invoice_amount_vzrs,
-                    this.or_print.student_name = this.request.last_name +
-                        ", " + this.request.first_name + ", " + this.request
-                        .middle_name;
+                    this.or_print.withholding_tax_percentage = payment
+                        .withholding_tax_percentage,
+                        this.or_print.invoice_amount = payment
+                        .invoice_amount,
+                        this.or_print.invoice_amount_ves = payment
+                        .invoice_amount_ves,
+                        this.or_print.invoice_amount_vzrs = payment
+                        .invoice_amount_vzrs,
+                        this.or_print.student_name = this.request
+                        .last_name + ", " + this.request.first_name + ", " +
+                        this.request.middle_name;
                     this.or_print.student_address = this.student.strAddress;
-                    if (this.student.strStudentNumber.charAt(0) != "T")
-                        this.or_print.student_id = this.student
+                    if (this.student.strStudentNumber.charAt(0) != "T") this
+                        .or_print.student_id = this.student
                         .strStudentNumber;
-                    else
-                        this.or_print.student_id = this.applicant_id;
+                    else this.or_print.student_id = this.applicant_id;
                     this.or_print.is_cash = payment.is_cash;
                     this.or_print.check_number = payment.check_number;
                     this.or_print.sem = payment.sy_reference;
@@ -2410,14 +2100,11 @@ new Vue({
                 setTimeout(function() {
                     or_send.submit();
                 }, delayInMilliseconds);
-
             });
         },
         deletePayment: function(payment_id) {
             let url = api_url + 'finance/delete_payment';
-
             this.loader_spinner = true;
-
             Swal.fire({
                 title: 'Continue with deleting Payment',
                 text: "Are you sure you want to delete payment?",
@@ -2429,70 +2116,64 @@ new Vue({
                 showCloseButton: true,
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
-
                     let payload = {
                         'id': payment_id
                     }
-
                     return axios.post(url, payload, {
-                            headers: {
-                                Authorization: `Bearer ${window.token}`
-                            }
-                        })
-                        .then(data => {
-                            this.loader_spinner = false;
-                            if (data.data.success) {
-
+                        headers: {
+                            Authorization: `Bearer ${window.token}`
+                        }
+                    }).then(data => {
+                        this.loader_spinner = false;
+                        if (data.data.success) {
+                            Swal.fire({
+                                showCancelButton: false,
+                                showCloseButton: false,
+                                allowEscapeKey: false,
+                                title: 'Loading',
+                                text: 'Updating Data do not leave page',
+                                icon: 'info',
+                            })
+                            Swal.showLoading();
+                            var formdata = new FormData();
+                            formdata.append('description', data.data
+                                .description);
+                            formdata.append('total_amount_due', data
+                                .data.total_amount_due);
+                            formdata.append('sy_reference', data
+                                .data.sy_reference);
+                            formdata.append('student_id', this
+                                .student.intID);
+                            formdata.append('or_number', data.data
+                                .or_number);
+                            axios.post(base_url +
+                                'finance/remove_from_ledger',
+                                formdata, {
+                                    headers: {
+                                        Authorization: `Bearer ${window.token}`
+                                    }
+                                }).then(function(data) {
                                 Swal.fire({
-                                    showCancelButton: false,
-                                    showCloseButton: false,
-                                    allowEscapeKey: false,
-                                    title: 'Loading',
-                                    text: 'Updating Data do not leave page',
-                                    icon: 'info',
-                                })
-                                Swal.showLoading();
-
-                                var formdata = new FormData();
-                                formdata.append('description', data.data.description);
-                                formdata.append('total_amount_due', data.data.total_amount_due);
-                                formdata.append('sy_reference', data.data.sy_reference);
-                                formdata.append('student_id', this.student.intID);
-                                formdata.append('or_number', data.data.or_number);
-
-                                axios.post(base_url +
-                                        'finance/remove_from_ledger',
-                                        formdata, {
-                                            headers: {
-                                                Authorization: `Bearer ${window.token}`
-                                            }
-                                        })
-                                    .then(function(data) {
-                                        Swal.fire({
-                                            title: "Success",
-                                            text: data.data
-                                                .message,
-                                            icon: "success"
-                                        }).then(function() {
-                                            location
-                                                .reload();
-                                        });
-                                    })
-                            } else
-                                Swal.fire({
-                                    title: "Failed",
-                                    text: data.data.message,
-                                    icon: "error"
+                                    title: "Success",
+                                    text: data.data
+                                        .message,
+                                    icon: "success"
                                 }).then(function() {
-                                    //location.reload();
+                                    location
+                                    .reload();
                                 });
+                            })
+                        } else Swal.fire({
+                            title: "Failed",
+                            text: data.data.message,
+                            icon: "error"
+                        }).then(function() {
+                            //location.reload();
                         });
+                    });
                 },
                 allowOutsideClick: () => !Swal.isLoading()
-            }).then((result) => {
-
-            })
-
+            }).then((result) => {})
         },
         setToVoid: function(payment_id) {
             this.void_id = payment_id;
@@ -2500,9 +2181,7 @@ new Vue({
         },
         voidPayment: function() {
             let url = api_url + 'finance/set_void';
-
             this.loader_spinner = true;
-
             Swal.fire({
                 title: 'Continue with processing Payment',
                 text: "Are you sure you want to process payment?",
@@ -2514,48 +2193,38 @@ new Vue({
                 showCloseButton: true,
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
-
                     let payload = {
                         'id': this.void_id,
                         'void_reason': this.void_reason
                     }
-
                     return axios.post(url, payload, {
-                            headers: {
-                                Authorization: `Bearer ${window.token}`
-                            }
-                        })
-                        .then(data => {
-                            this.loader_spinner = false;
-                            if (data.data.success)
-                                Swal.fire({
-                                    title: "Success",
-                                    text: data.data.message,
-                                    icon: "success"
-                                }).then(function() {
-                                    location.reload();
-                                });
-                            else
-                                Swal.fire({
-                                    title: "Failed",
-                                    text: data.data.message,
-                                    icon: "error"
-                                }).then(function() {
-                                    //location.reload();
-                                });
+                        headers: {
+                            Authorization: `Bearer ${window.token}`
+                        }
+                    }).then(data => {
+                        this.loader_spinner = false;
+                        if (data.data.success) Swal.fire({
+                            title: "Success",
+                            text: data.data.message,
+                            icon: "success"
+                        }).then(function() {
+                            location.reload();
                         });
+                        else Swal.fire({
+                            title: "Failed",
+                            text: data.data.message,
+                            icon: "error"
+                        }).then(function() {
+                            //location.reload();
+                        });
+                    });
                 },
                 allowOutsideClick: () => !Swal.isLoading()
-            }).then((result) => {
-
-            })
-
+            }).then((result) => {})
         },
         setToPaid: function(payment_id) {
             let url = api_url + 'finance/set_paid';
-
             this.loader_spinner = true;
-
             Swal.fire({
                 title: 'Continue with processing Payment',
                 text: "Are you sure you want to process payment?",
@@ -2567,47 +2236,38 @@ new Vue({
                 showCloseButton: true,
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
-
                     let payload = {
                         'id': payment_id
                     }
-
                     return axios.post(url, payload, {
-                            headers: {
-                                Authorization: `Bearer ${window.token}`
-                            }
-                        })
-                        .then(data => {
-                            this.loader_spinner = false;
-                            if (data.data.success)
-                                Swal.fire({
-                                    title: "Success",
-                                    text: data.data.message,
-                                    icon: "success"
-                                }).then(function() {
-                                    location.reload();
-                                });
-                            else
-                                Swal.fire({
-                                    title: "Failed",
-                                    text: data.data.message,
-                                    icon: "error"
-                                }).then(function() {
-                                    //location.reload();
-                                });
+                        headers: {
+                            Authorization: `Bearer ${window.token}`
+                        }
+                    }).then(data => {
+                        this.loader_spinner = false;
+                        if (data.data.success) Swal.fire({
+                            title: "Success",
+                            text: data.data.message,
+                            icon: "success"
+                        }).then(function() {
+                            location.reload();
                         });
+                        else Swal.fire({
+                            title: "Failed",
+                            text: data.data.message,
+                            icon: "error"
+                        }).then(function() {
+                            //location.reload();
+                        });
+                    });
                 },
                 allowOutsideClick: () => !Swal.isLoading()
-            }).then((result) => {
-
-            })
-
+            }).then((result) => {})
         },
         submitManualPayment: function() {
             let url = api_url + 'finance/manual_payment';
             let slug = this.slug;
             this.loader_spinner = true;
-
             Swal.fire({
                 title: 'Continue with Payment',
                 text: "Are you sure you want to add payment?",
@@ -2619,160 +2279,169 @@ new Vue({
                 showCloseButton: true,
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
-
-                    if (this.description == 'Other')
-                        this.request.description = this.description_other;
-                    else
-                        this.request.description = this.description;
-
+                    if (this.description == 'Other') this.request
+                        .description = this.description_other;
+                    else this.request.description = this.description;
                     this.request.subtotal_order = this.amount_to_pay;
                     this.request.total_amount_due = this.amount_to_pay;
-                    
                     console.log(this.request);
-                    
                     // return 
                     return axios.post(url, this.request, {
-                            headers: {
-                                Authorization: `Bearer ${window.token}`
+                        headers: {
+                            Authorization: `Bearer ${window.token}`
+                        }
+                    }).then(data => {
+                        this.loader_spinner = false;
+                        if (data.data.success) {
+                            var formdata = new FormData();
+                            if (this.windowPayment ==
+                                'official receipt') {
+                                formdata.append('intID', this
+                                    .cashier.intID);
+                                formdata.append('or_current', this
+                                    .cashier.or_current);
+                                formdata.append('or_used', this
+                                    .request.or_number);
+                                formdata.append('payments', this
+                                    .payments_paid.length);
+                                formdata.append('total_amount', this
+                                    .request.total_amount_due);
+                                formdata.append('sy', this.sem);
+                                //formdata.append('tuition_total',this.tuition_data.total_before_deductions);
+                                formdata.append('student_id', this
+                                    .student.intID);
+                                formdata.append('description', this
+                                    .request.description);
+                                formdata.append('description_other',
+                                    this.description_other);
+                                formdata.append('registration_id',
+                                    this.registration
+                                    .intRegistrationID);
+                                formdata.append('installment', this
+                                    .tuition_data
+                                    .total_installment);
+                                formdata.append('payment_type', this
+                                    .payment_type);
                             }
-                        })
-                        .then(data => {
-                            this.loader_spinner = false;
-                            if (data.data.success) {
-                                var formdata = new FormData();
-
-                                if (this.windowPayment == 'official receipt') {
-                                    formdata.append('intID', this.cashier.intID);
-                                    formdata.append('or_current', this.cashier.or_current);
-                                    formdata.append('or_used', this.request.or_number);
-                                    formdata.append('payments', this.payments_paid.length);
-                                    formdata.append('total_amount', this.request.total_amount_due);
-                                    formdata.append('sy', this.sem);
-                                    //formdata.append('tuition_total',this.tuition_data.total_before_deductions);
-                                    formdata.append('student_id', this.student.intID);
-                                    formdata.append('description', this.request.description);
-                                    formdata.append('description_other',this.description_other);
-                                    formdata.append('registration_id', this.registration.intRegistrationID);
-                                    formdata.append('installment', this.tuition_data.total_installment);
-                                    formdata.append('payment_type', this.payment_type);
-                                }
-
-                                if (this.windowPayment == 'invoice') {
-                                    formdata.append('intID', this.cashier.intID);
-                                    formdata.append('invoice_current', this.cashier.invoice_current);
-                                    formdata.append('invoice_used', this.invoice_update.invoice_number);
-                                    formdata.append('payments', this.payments_paid.length);
-                                    formdata.append('total_amount', this.request.total_amount_due);                                    
-                                    formdata.append('sy', this.student.sy_reference);
-                                    formdata.append('student_id', this.student.intID);
-                                    formdata.append('description', this.request.description);
-                                    formdata.append('description_other',this.description_other);
-                                    formdata.append('registration_id', this.registration.intRegistrationID);
-                                    formdata.append('installment', this.tuition_data.total_installment);
-                                    formdata.append('payment_type', this.payment_type);
-                                }
-                             
-                                axios.post(base_url + this.apiUpdate, formdata, {
-                                            headers: {
-                                                Authorization: `Bearer ${window.token}`
-                                            }
-                                        })
-                                    .then(function(data) {
-                                        if (data.data.send_notif) {
-                                            let url = api_url +
-                                                'registrar/send_notif_enrolled/' +
-                                                slug;
-                                            let payload = {
-                                                'message': "This message serves as a notification that you have been officially enrolled."
-                                            }
-
-                                            Swal.fire({
-                                                showCancelButton: false,
-                                                showCloseButton: false,
-                                                allowEscapeKey: false,
-                                                title: 'Loading',
-                                                text: 'Processing Data do not leave page',
-                                                icon: 'info',
-                                            })
-                                            Swal.showLoading();
-                                            axios.post(url,
-                                                    payload, {
-                                                        headers: {
-                                                            Authorization: `Bearer ${window.token}`
-                                                        }
-                                                    })
-                                                .then(data => {
-                                                    this.loader_spinner =
-                                                        false;
-                                                    Swal.fire({
-                                                        title: "Success",
-                                                        text: data
-                                                            .data
-                                                            .message,
-                                                        icon: "success"
-                                                    }).then(
-                                                        function() {
-                                                            location
-                                                                .reload();
-                                                        });
-                                                });
-                                        } else {
-                                            Swal.fire({
-                                                title: "Success",
-                                                text: data
-                                                    .data
-                                                    .message,
-                                                icon: "success"
-                                            }).then(function() {
+                            if (this.windowPayment == 'invoice') {
+                                formdata.append('intID', this
+                                    .cashier.intID);
+                                formdata.append('invoice_current',
+                                    this.cashier.invoice_current
+                                    );
+                                formdata.append('invoice_used', this
+                                    .invoice_update
+                                    .invoice_number);
+                                formdata.append('payments', this
+                                    .payments_paid.length);
+                                formdata.append('total_amount', this
+                                    .request.total_amount_due);
+                                formdata.append('sy', this.student
+                                    .sy_reference);
+                                formdata.append('student_id', this
+                                    .student.intID);
+                                formdata.append('description', this
+                                    .request.description);
+                                formdata.append('description_other',
+                                    this.description_other);
+                                formdata.append('registration_id',
+                                    this.registration
+                                    .intRegistrationID);
+                                formdata.append('installment', this
+                                    .tuition_data
+                                    .total_installment);
+                                formdata.append('payment_type', this
+                                    .payment_type);
+                            }
+                            axios.post(base_url + this.apiUpdate,
+                                formdata, {
+                                    headers: {
+                                        Authorization: `Bearer ${window.token}`
+                                    }
+                                }).then(function(data) {
+                                if (data.data.send_notif) {
+                                    let url = api_url +
+                                        'registrar/send_notif_enrolled/' +
+                                        slug;
+                                    let payload = {
+                                        'message': "This message serves as a notification that you have been officially enrolled."
+                                    }
+                                    Swal.fire({
+                                        showCancelButton: false,
+                                        showCloseButton: false,
+                                        allowEscapeKey: false,
+                                        title: 'Loading',
+                                        text: 'Processing Data do not leave page',
+                                        icon: 'info',
+                                    })
+                                    Swal.showLoading();
+                                    axios.post(url,
+                                    payload, {
+                                        headers: {
+                                            Authorization: `Bearer ${window.token}`
+                                        }
+                                    }).then(data => {
+                                        this.loader_spinner =
+                                            false;
+                                        Swal.fire({
+                                            title: "Success",
+                                            text: data
+                                                .data
+                                                .message,
+                                            icon: "success"
+                                        }).then(
+                                            function() {
                                                 location
                                                     .reload();
                                             });
-
-                                        }
-
-                                    })
-                            } else
-                                Swal.fire({
-                                    title: "Failed",
-                                    text: data.data.message,
-                                    icon: "error"
-                                }).then(function() {
-                                    //location.reload();
-                                });
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: "Success",
+                                        text: data
+                                            .data
+                                            .message,
+                                        icon: "success"
+                                    }).then(function() {
+                                        location
+                                            .reload();
+                                    });
+                                }
+                            })
+                        } else Swal.fire({
+                            title: "Failed",
+                            text: data.data.message,
+                            icon: "error"
+                        }).then(function() {
+                            //location.reload();
                         });
+                    });
                 },
                 allowOutsideClick: () => !Swal.isLoading()
-            }).then((result) => {
-
-            })
-
+            }).then((result) => {})
         },
         changeType: function(event) {
             let url = this.base_url + 'unity/update_registration_payment_type';
             var formdata = new FormData();
             formdata.append("intRegistrationID", this.registration.intRegistrationID);
             formdata.append("paymentType", event.target.value);
-
             this.loader_spinner = true;
-
             //validate description
-
             axios.post(url, formdata, {
-                    headers: {
-                        Authorization: `Bearer ${window.token}`
-                    }
-                })
-                .then(data => {
-                    if (data.data.success) {
-                        Swal.fire({
-                            title: "Success",
-                            text: data.data.message,
-                            icon: "success"
-                        }).then(function() {
-                            location.reload();
-                        });
-                    }
-                });
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            }).then(data => {
+                if (data.data.success) {
+                    Swal.fire({
+                        title: "Success",
+                        text: data.data.message,
+                        icon: "success"
+                    }).then(function() {
+                        location.reload();
+                    });
+                }
+            });
         },
         changeRegStatus: function() {
             let url = this.base_url + 'unity/update_rog_status';
@@ -2781,66 +2450,51 @@ new Vue({
             formdata.append("intROG", this.registration_status);
             var missing_fields = false;
             this.loader_spinner = true;
-
             //validate description
-
             axios.post(url, formdata, {
-                    headers: {
-                        Authorization: `Bearer ${window.token}`
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            }).then(data => {
+                this.loader_spinner = false;
+                if (data.data.success) {
+                    var st = "Enrolled";
+                    var date_enrolled = null;
+                    if (this.registration_status == 0) {
+                        st = "Enlisted";
                     }
-                })
-                .then(data => {
-                    this.loader_spinner = false;
-                    if (data.data.success) {
-                        var st = "Enrolled";
-                        var date_enrolled = null;
-                        if (this.registration_status == 0) {
-                            st = "Enlisted";
-                        }
-
-
-                        return axios
-                            .post(api_url + 'admissions/student-info/' + this.slug +
-                                '/update-status', {
-                                    status: st,
-                                    remarks: "Finance Admin Update",
-                                    admissions_officer: this.user.strFirstname +
-                                        " " + this.user.strLastname,
-                                }, {
-                                    headers: {
-                                        Authorization: `Bearer ${window.token}`
-                                    }
-                                })
-                            .then(data => {
-                                if (data.data.success) {
-                                    Swal.fire({
-                                        title: "Success",
-                                        text: data.data.message,
-                                        icon: "success"
-                                    }).then(function() {
-                                        location.reload();
-                                    });
-                                } else {
-                                    Swal.fire(
-                                        'Failed!',
-                                        data.data.message,
-                                        'error'
-                                    )
-                                }
+                    return axios.post(api_url + 'admissions/student-info/' +
+                        this.slug + '/update-status', {
+                            status: st,
+                            remarks: "Finance Admin Update",
+                            admissions_officer: this.user.strFirstname +
+                                " " + this.user.strLastname,
+                        }, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        }).then(data => {
+                        if (data.data.success) {
+                            Swal.fire({
+                                title: "Success",
+                                text: data.data.message,
+                                icon: "success"
+                            }).then(function() {
+                                location.reload();
                             });
-
-                    } else
-                        Swal.fire({
-                            title: "Failed",
-                            text: data.data.message,
-                            icon: "error"
-                        }).then(function() {
-                            //location.reload();
-                        });
+                        } else {
+                            Swal.fire('Failed!', data.data.message,
+                                'error')
+                        }
+                    });
+                } else Swal.fire({
+                    title: "Failed",
+                    text: data.data.message,
+                    icon: "error"
+                }).then(function() {
+                    //location.reload();
                 });
-
-
-
+            });
         },
         changeDownPaymentStatus: function() {
             let url = this.base_url + 'unity/update_registration_field';
@@ -2849,36 +2503,29 @@ new Vue({
             formdata.append("downpayment", this.downpayment_status);
             var missing_fields = false;
             this.loader_spinner = true;
-
             //validate description
-
             axios.post(url, formdata, {
-                    headers: {
-                        Authorization: `Bearer ${window.token}`
-                    }
-                })
-                .then(data => {
-                    this.loader_spinner = false;
-                    if (data.data.success) {
-                        Swal.fire({
-                            title: "Success",
-                            text: data.data.message,
-                            icon: "success"
-                        }).then(function() {
-                            location.reload();
-                        });
-                    } else
-                        Swal.fire({
-                            title: "Failed",
-                            text: data.data.message,
-                            icon: "error"
-                        }).then(function() {
-                            //location.reload();
-                        });
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            }).then(data => {
+                this.loader_spinner = false;
+                if (data.data.success) {
+                    Swal.fire({
+                        title: "Success",
+                        text: data.data.message,
+                        icon: "success"
+                    }).then(function() {
+                        location.reload();
+                    });
+                } else Swal.fire({
+                    title: "Failed",
+                    text: data.data.message,
+                    icon: "error"
+                }).then(function() {
+                    //location.reload();
                 });
-
-
-
+            });
         },
         changeAllowEnroll: function() {
             let url = this.base_url + 'unity/update_allow_enroll';
@@ -2887,42 +2534,30 @@ new Vue({
             formdata.append("allow_enroll", this.allow_enroll);
             var missing_fields = false;
             this.loader_spinner = true;
-
             //validate description
-
             axios.post(url, formdata, {
-                    headers: {
-                        Authorization: `Bearer ${window.token}`
-                    }
-                })
-                .then(data => {
-                    this.loader_spinner = false;
-                    if (data.data.success) {
-                        Swal.fire({
-                            title: "Success",
-                            text: data.data.message,
-                            icon: "success"
-                        }).then(function() {
-                            //location.reload();
-                        });
-
-
-
-                    } else
-                        Swal.fire({
-                            title: "Failed",
-                            text: data.data.message,
-                            icon: "error"
-                        }).then(function() {
-                            //location.reload();
-                        });
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                }
+            }).then(data => {
+                this.loader_spinner = false;
+                if (data.data.success) {
+                    Swal.fire({
+                        title: "Success",
+                        text: data.data.message,
+                        icon: "success"
+                    }).then(function() {
+                        //location.reload();
+                    });
+                } else Swal.fire({
+                    title: "Failed",
+                    text: data.data.message,
+                    icon: "error"
+                }).then(function() {
+                    //location.reload();
                 });
-
-
-
+            });
         }
-
     }
-
 })
 </script>
