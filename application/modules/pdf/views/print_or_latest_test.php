@@ -107,7 +107,7 @@ table tr td {
                 style="position:absolute; top: 325px; right: -100px; width: 200px; height: 20px; font-size:12px">
                 <?php echo $total_amount_due; ?> </div>
             <div
-                style="position:absolute; top: 355px; right: -50px; width: 200px; height: 20px; font-size:12px">
+                style="position:absolute; top: 80px; left: 320px; width: 200px; height: 20px; font-size:12px">
                 <?php echo $invoice_number; ?> </div>
         </section>
     </div>
