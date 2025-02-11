@@ -5230,7 +5230,12 @@ class Excel extends CI_Controller {
                     $tuition_discount = $total_discount = 0;
                     $deduction_type = $reg['deduction_type'];
                     if(!$deduction_type){
-                        $deduction_type = isset($tuition['scholarship'][0]) ? $tuition['scholarship'][0]->deduction_type : '';
+                        if(isset($tuition['scholarship'][0])){
+                            $deduction_type = 'scholarship';
+                        }else if(isset($tuition['discount'][0])){
+                            $deduction_type = 'discount';
+                        }
+                        // $deduction_type = isset($tuition['scholarship'][0]) ? $tuition['scholarship'][0]->deduction_type : $tuition['discount']->deduction_type;
                     }
                     
                     if($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'scholarship'){
@@ -5279,17 +5284,19 @@ class Excel extends CI_Controller {
                         ->setCellValue('S'.$i, $reg['paymentType'] == 'partial' && $tuition['late_enrollment_fee'] > 0 ? (float)$tuition['late_enrollment_fee'] : '')
                         ->setCellValue('T'.$i, '=SUM(N' . $i . ':S' . $i . ')')
                         ->setCellValue('U'.$i, '=M' . $i . '+T' . $i . ')')
-                        ->setCellValue('V'.$i, $date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'scholarship' ? $tuition['scholar_type'] : '')
-                        ->setCellValue('W'.$i, $tuition_discount )
-                        ->setCellValue('X'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'scholarship') && $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : '')
-                        ->setCellValue('Y'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'scholarship') && $tuition['scholarship_lab_fee_rate'] > 0 ? $tuition['scholarship_lab_fee_rate'] : '')
-                        ->setCellValue('Z'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'scholarship') && $tuition['scholarship_lab_fee_fixed'] > 0 ? $tuition['scholarship_lab_fee_fixed'] : '')
-                        ->setCellValue('AA'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'scholarship') && $tuition['scholarship_misc_fee_rate'] > 0 ? $tuition['scholarship_misc_fee_rate'] : '')
-                        ->setCellValue('AB'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'scholarship') && $tuition['scholarship_misc_fee_fixed'] > 0 ? $tuition['scholarship_misc_fee_fixed'] : '')
-                        ->setCellValue('AC'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'scholarship') && $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
-                        ->setCellValue('AD'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'scholarship') && $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
-                        ->setCellValue('AE'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'scholarship') && $assessment_discount_rate > 0 ? $assessment_discount_rate : '')
-                        ->setCellValue('AF'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'scholarship') && $assessment_discount_fixed > 0 ? $assessment_discount_fixed : '')
+                        ->setCellValue('V'.$i, $date_enrolled <= $sy->ar_report_date_generation ? $tuition['scholar_type'] : '')
+                        ->setCellValue('W'.$i, ($date_enrolled <= $sy->ar_report_date_generation && $deduction_type == 'scholarship') && $tuition_discount > 0 ? $tuition_discount : ($assessment_discount_rate > 0 ? $assessment_discount_rate : '') )
+                        ->setCellValue('X'.$i, ($date_enrolled <= $sy->ar_report_date_generation && $deduction_type == 'scholarship') && $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : ($assessment_discount_fixed > 0 ? $assessment_discount_fixed : ''))
+                        ->setCellValue('Y'.$i, ($date_enrolled <= $sy->ar_report_date_generation && $deduction_type == 'scholarship') && $tuition['scholarship_lab_fee_rate'] > 0 ? $tuition['scholarship_lab_fee_rate'] : '')
+                        ->setCellValue('Z'.$i, ($date_enrolled <= $sy->ar_report_date_generation && $deduction_type == 'scholarship') && $tuition['scholarship_lab_fee_fixed'] > 0 ? $tuition['scholarship_lab_fee_fixed'] : '')
+                        ->setCellValue('AA'.$i, ($date_enrolled <= $sy->ar_report_date_generation && $deduction_type == 'scholarship') && $tuition['scholarship_misc_fee_rate'] > 0 ? $tuition['scholarship_misc_fee_rate'] : '')
+                        ->setCellValue('AB'.$i, ($date_enrolled <= $sy->ar_report_date_generation && $deduction_type == 'scholarship') && $tuition['scholarship_misc_fee_fixed'] > 0 ? $tuition['scholarship_misc_fee_fixed'] : '')
+                        ->setCellValue('AC'.$i, ($date_enrolled <= $sy->ar_report_date_generation && $deduction_type == 'scholarship') && $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
+                        ->setCellValue('AD'.$i, ($date_enrolled <= $sy->ar_report_date_generation && $deduction_type == 'scholarship') && $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
+                        ->setCellValue('AE'.$i, ($date_enrolled <= $sy->ar_report_date_generation && $deduction_type == 'discount') && $tuition_discount > 0 ? $tuition_discount : '')
+                        ->setCellValue('AF'.$i, ($date_enrolled <= $sy->ar_report_date_generation && $deduction_type == 'discount') && $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : '')
+                        // ->setCellValue('AE'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'scholarship') && $assessment_discount_rate > 0 ? $assessment_discount_rate : '')
+                        // ->setCellValue('AF'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'scholarship') && $assessment_discount_fixed > 0 ? $assessment_discount_fixed : '')
                         ->setCellValue('AG'.$i, '=SUM(W' . $i . ':AF' . $i . ')')
                         ->setCellValue('AH'.$i, '=U' . $i . '-AG' . $i . ')');
     
@@ -7854,7 +7861,7 @@ class Excel extends CI_Controller {
         }
     }
 
-    public function import_student_grades()
+    public function import_student_grades($sem, $term)
     {
         $post = $this->input->post();
 
@@ -7866,12 +7873,15 @@ class Excel extends CI_Controller {
 
         if ( !$this->upload->do_upload("studentGradeExcel"))
         {
-            $error = array('error' => $this->upload->display_errors());
-            print_r($error);
+            print('1');
             die();
+            $error = array('error' => $this->upload->display_errors());
+            return $error;
         }
         else
         {
+            print('2');
+            die();
             $fileData = $this->upload->data();
             $filePath = './assets/excel/' . $fileData['file_name'];
 
@@ -7935,7 +7945,8 @@ class Excel extends CI_Controller {
                                 $classlistStudent = array(
                                     'intStudentID' => $student['intID'],
                                     'intClassListID' => $classlistID,
-                                    'floatFinalGrade' => $row['H'],
+                                    'floatMidtermGrade' => $term =='Midterm' ? $row['H'] : '',
+                                    'floatFinalGrade' => $term =='Final' ? $row['H'] : '',
                                     'enumStatus' => 'act',
                                     'strRemarks' => '--',
                                     'intsyID' => $post['sem'],

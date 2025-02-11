@@ -499,7 +499,8 @@
                         <label class="block color-primary font-bold mb-3 pr-4">
                             Last School Attended
                         </label>
-                        <v-select :options="prevSchoolList" label="name" class="style-chooser" @input="onInputChange">
+                        <v-select :options="prevSchoolList" label="name" class="style-chooser" @input="onInputChange"
+                            v-model="selectedSchool">
                         </v-select>
                     </div>
                     <div v-if="!hide_school_address" class="basis-[154px]">
@@ -525,6 +526,15 @@
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" v-model="request.school_country">
+                    </div>
+                </div>
+                <div class="flex flex-wrap gap-2.5 mb-4 ">
+                    <div>
+                        <label class="block color-primary mb-1 ml-1.5">
+                            <input type="radio" class="mr-1" value="yes" v-model="notOnTheList"
+                                @change="onSelectChange">
+                            NOT ON THE LIST
+                        </label>
                     </div>
                 </div>
                 <div class="flex flex-wrap gap-2.5 mb-4 ">
@@ -1065,6 +1075,11 @@ new Vue({
             city: '',
             barangay: '',
         },
+        notOnTheList: '',
+        selectedSchool: '',
+        setSelectedSchool: {
+            name: "Not on the list"
+        },
         term: undefined,
         loading_spinner: false,
         programs: [],
@@ -1263,6 +1278,7 @@ new Vue({
                 this.request.school_city = ""
                 this.request.school_province = ""
                 this.request.school_country = ""
+                this.notOnTheList = null
                 for (const key in this.register) {
                     this.register[key] = ''
                 }
@@ -1278,6 +1294,7 @@ new Vue({
                 this.request.school_province = ""
                 this.request.school_country = ""
                 this.hide_school_address = true
+                this.notOnTheList = 'yes'
                 return
             }
 
@@ -1285,6 +1302,7 @@ new Vue({
 
             if (value.name != '') {
                 this.isOnList = false
+                this.notOnTheList = null
             }
 
 
@@ -1420,6 +1438,11 @@ new Vue({
         setThirdChoice: function(e) {
             this.request.program3 = e.target.selectedOptions[0].getAttribute(
                 'data-title')
+        },
+        onSelectChange() {
+            this.isOnList = true
+            this.hide_school_address = true
+            this.selectedSchool = this.setSelectedSchool
         },
 
 
