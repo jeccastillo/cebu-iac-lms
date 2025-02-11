@@ -67,6 +67,13 @@
                                 </select>
                             </div>
                             <div class="form-group col-xs-6">
+                                <label for="isElective">Elective Subject?</label>
+                                <select class="form-control" name="isElective" id="isElective" >
+                                    <option <?php echo ($subject['isElective'] == 0)?'selected':''; ?> value="0">No</option>
+                                    <option <?php echo ($subject['isElective'] == 1)?'selected':''; ?> value="1">Yes</option>
+                                </select>
+                            </div> 
+                            <div class="form-group col-xs-6">
                                 <label for="grading_system_id">Select Grading System</label>
                                 <select class="form-control" name="grading_system_id" id="grading_system_id" >
                                     <?php foreach($grading_systems as $gs): ?>
