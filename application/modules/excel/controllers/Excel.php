@@ -7914,13 +7914,6 @@ class Excel extends CI_Controller {
                             //Check if classlist exists
                             $classlist = $this->db->get_where('tb_mas_classlist',array('strAcademicYear' => $sem, 'intFacultyID' => $faculty['intID'], 'intSubjectID' => $subject['intID'], 'strSection' => $row['D']))->first_row('array');
                             // $classlist = $this->db->get_where('tb_mas_classlist',array('strAcademicYear' => $sem, 'intFacultyID' => $faculty['intID']))->first_row('array');
-            
-                            // if($row['E'] == 'SH_GENMATH')
-                            // {
-                                // print_r($classlist);
-                                // print('1');
-                                // die();
-                            // }
                             
                             if(!$classlist){
                                 $newClasslist = array(
