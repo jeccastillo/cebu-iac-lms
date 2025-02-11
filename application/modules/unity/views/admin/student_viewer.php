@@ -441,6 +441,9 @@
 
                       </tbody>
                     </table>
+                    <div v-if="registration">
+                      <h3>Set Elective</h3>                      
+                    </div>
                     <hr />
                     <table class="table table-bordered table-striped">
                         <thead>
