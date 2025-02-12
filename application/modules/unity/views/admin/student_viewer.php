@@ -1002,7 +1002,7 @@ new Vue({
                         Swal.fire({
                           title: "Failed",
                           text: data.data.message,
-                          icon: "failed"
+                          icon: "error"
                         })
 
                   });
@@ -1015,7 +1015,7 @@ new Vue({
         Swal.fire({
             title: "Failed",
             text: "Please complete selections",
-            icon: "failed"
+            icon: "error"
           })
       }
     },
@@ -1053,7 +1053,7 @@ new Vue({
                       Swal.fire({
                         title: "Failed",
                         text: data.data.message,
-                        icon: "failed"
+                        icon: "error"
                       })
 
                   });
