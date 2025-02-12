@@ -457,7 +457,7 @@
                           </select>
                         </div>
                         <div class="col-md-2">
-                          <label>&nbsp;</label>
+                          <label>Submit</label>
                           <button class="btn btn-primary">Assign</button>
                         </div>
                       </div>              
