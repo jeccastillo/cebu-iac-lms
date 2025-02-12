@@ -7928,7 +7928,7 @@ class Excel extends CI_Controller {
                                     'intFacultyID' => $faculty['intID'],
                                     'intSubjectID' => $subject['intID'],
                                     'strClassName' => $row['E'],
-                                    'intFinalized' => 0,
+                                    'intFinalized' => 2,
                                     'strAcademicYear' => $sem,
                                     'slots' => 0,
                                     'strUnits' => 3,
