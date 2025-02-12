@@ -444,22 +444,24 @@
                     <div v-if="registration && electives.length > 0">
                       <h4>Set Subject as Elective</h4>        
                       <div class="row">
-                        <div class="col-md-5">
-                          <label>Select Subject</label>
-                          <select v-model="elective_classlist" class="form-control">
-                            <option v-for="record in records" :value='record.classlistID'>{{ record.strCode }}</option>
-                          </select>
-                        </div>
-                        <div class="col-md-5">
-                          <label>Select Subject</label>
-                          <select class="form-control">
-                            <option v-model="elective_subj" v-for="elective in electives" :value='elective.intSubjectID'>{{ elective.strCode }}</option>
-                          </select>
-                        </div>
-                        <div class="col-md-2">
-                          <label style="color:#fff;">Submit</label>
-                          <button @click="assignElective" class="btn btn-primary btn-block">Assign</button>
-                        </div>
+                        <form @submit.prevent='assignElective'>
+                          <div class="col-md-5">
+                            <label>Select Subject</label>
+                            <select v-model="elective_classlist" required class="form-control">
+                              <option v-for="record in records" :value='record.classlistID'>{{ record.strCode }}</option>
+                            </select>
+                          </div>
+                          <div class="col-md-5">
+                            <label>Select Subject</label>
+                            <select class="form-control">
+                              <option v-model="elective_subj" required v-for="elective in electives" :value='elective.intSubjectID'>{{ elective.strCode }}</option>
+                            </select>
+                          </div>
+                          <div class="col-md-2">
+                            <label style="color:#fff;">Submit</label>
+                            <button type="submit" class="btn btn-primary btn-block">Assign</button>
+                          </div>
+                        </form>
                       </div>              
                     </div>
                     <hr />
@@ -971,53 +973,44 @@ new Vue({
         }
       });
     },
-    assignElective: function(){
-      if(this.elective_classlist && this.elective_subj){
+    assignElective: function(){      
         Swal.fire({
-              title: 'Assign Elective?',
-              text: "Continue?",
-              showCancelButton: true,
-              confirmButtonText: "Yes",
-              imageWidth: 100,
-              icon: "question",
-              cancelButtonText: "No, cancel!",
-              showCloseButton: true,
-              showLoaderOnConfirm: true,
-              preConfirm: (login) => {
-                  var formdata= new FormData();                  
-                  formdata.append('elective_classlist_id',this.elective_subj);
-                  formdata.append('subject_classlist_id',this.elective_classlist);
-                  
-                  return axios
-                  .post(base_url + 'unity/assign_elective',formdata, {
-                          headers: {
-                              Authorization: `Bearer ${window.token}`
-                          }
+            title: 'Assign Elective?',
+            text: "Continue?",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            imageWidth: 100,
+            icon: "question",
+            cancelButtonText: "No, cancel!",
+            showCloseButton: true,
+            showLoaderOnConfirm: true,
+            preConfirm: (login) => {
+                var formdata= new FormData();                  
+                formdata.append('elective_classlist_id',this.elective_subj);
+                formdata.append('subject_classlist_id',this.elective_classlist);
+                
+                return axios
+                .post(base_url + 'unity/assign_elective',formdata, {
+                        headers: {
+                            Authorization: `Bearer ${window.token}`
+                        }
+                    })
+                .then(data => {
+                    this.loader_spinner = false;                                                                                                                            
+                    if(data.data.success)                        
+                        location.reload();
+                    else
+                      Swal.fire({
+                        title: "Failed",
+                        text: data.data.message,
+                        icon: "error"
                       })
-                  .then(data => {
-                      this.loader_spinner = false;                                                                                                                            
-                      if(data.data.success)                        
-                          location.reload();
-                      else
-                        Swal.fire({
-                          title: "Failed",
-                          text: data.data.message,
-                          icon: "error"
-                        })
 
-                  });
-                  
-              },
-              allowOutsideClick: () => !Swal.isLoading()
-          });
-      } 
-      else{
-        Swal.fire({
-            title: "Failed",
-            text: "Please complete selections",
-            icon: "error"
-          })
-      }
+                });
+                
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        });     
     },
     enlistStudent: function(id){
           Swal.fire({
