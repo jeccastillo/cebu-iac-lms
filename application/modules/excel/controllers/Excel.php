@@ -8507,8 +8507,10 @@ class Excel extends CI_Controller {
                     ->setCellValue('D8', 'Course')
                     ->setCellValue('E8', 'Date Enrolled')
                     ->setCellValue('F8', 'Amount')
-                    ->setCellValue('A'. ($i + 2), 'Prepared By:')
-                    ->setCellValue('A'. ($i + 4), $this->data['user']['strFirstname'] . ' ' . $this->data['user']['strLastname']);
+                    ->setCellValue('E' . ($i + 1), 'Total')
+                    ->setCellValue('F' . ($i + 1), '=SUM(F9:F' . ($i-1) . ')')
+                    ->setCellValue('A'. ($i + 6), 'Prepared By:')
+                    ->setCellValue('A'. ($i + 8), $this->data['user']['strFirstname'] . ' ' . $this->data['user']['strLastname']);
 
         $objPHPExcel->getActiveSheet()->getStyle('F8:F' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
         $objPHPExcel->getActiveSheet()->getStyle('A1:F8')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
