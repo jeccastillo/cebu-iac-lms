@@ -72,7 +72,7 @@ table tr td {
                 &#10003; </div> <?php else: ?> <div
                 style="position:absolute; top: 140px; left: 162px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
                 &#10003; </div> <?php endif; ?> <div
-                style="position:absolute; top: 140px; right: 110px; width: 200px; height: 20px;">
+                style="position:absolute; top: 140px; left: 590px; width: 200px; height: 20px;">
                 Invoice No: <?php echo $invoice_number; ?> </div>
             <!---DATE--->
             <div style="position:absolute; top: 175px; right: -60px; width: 200px; height: 20px;">
@@ -128,18 +128,18 @@ table tr td {
             <div style="position:absolute; top:  462px; left: 305px; width: 200px; height: 20px;">
                 <?php  echo $amount_less_vat != 0 ? $amount_less_vat : ""; ?> </div>
             <!--Vat Exempt Sale--> <?php if($vat_exempt != 0 && $less_vat != 0): ?> <div
-                style="position:absolute; top:  490px; left: 325px; width: 200px; height: 20px;">
+                style="position:absolute; top:  490px; left: 340px; width: 200px; height: 20px;">
                 <?php  echo $vat_exempt; ?> </div>
             <?php elseif($vat_exempt == 0 && $less_vat != 0): ?> <div
-                style="position:absolute; top:  490px; left: 325px; width: 200px; height: 20px;">
+                style="position:absolute; top:  490px; left: 340px; width: 200px; height: 20px;">
                 <?php  echo ""; ?> </div> <?php else: ?> <div
-                style="position:absolute; top:  490px; left: 325px; width: 200px; height: 20px;">
+                style="position:absolute; top:  490px; left: 340px; width: 200px; height: 20px;">
                 <?php  echo $total_assessment; ?> </div> <?php endif; ?>
             <!--Total Amount received-->
             <div style="position:absolute; top:585px; left: 130px; width: 200px; height: 20px;">
                 <?php  echo $total_amount_due == 0 ? "" : $total_amount_due; ?> </div>
             <div
-                style="position:absolute; top: 565px; right: 120px; width: 200px; height: 20px;font-size:15px">
+                style="position:absolute; top: 565px; left: 650px; width: 200px; height: 20px;font-size:15px">
                 <?php echo $cashier_name; ?> </div>
         </section>
     </div>
