@@ -441,14 +441,20 @@
 
                       </tbody>
                     </table>
-                    <div v-if="registration">
-                      <h3>Set Elective</h3>        
+                    <div v-if="registration && electives.length > 0">
+                      <h4>Set Subject as Elective</h4>        
                       <div class="row">
                         <div class="col-md-6">
-                        <label>Select Subject</label>
-                        <select class="form-control">
-                          <option v-for="record in records" :value='record.classlistID'>{{ record.strCode }}</option>
-                        </select>
+                          <label>Select Subject</label>
+                          <select class="form-control">
+                            <option v-for="record in records" :value='record.classlistID'>{{ record.strCode }}</option>
+                          </select>
+                        </div>
+                        <div class="col-md-6">
+                          <label>Select Subject</label>
+                          <select class="form-control">
+                            <option v-for="elective in electives" :value='elective.intSubjectID'>{{ elective.strCode }}</option>
+                          </select>
                         </div>
                       </div>              
                     </div>
