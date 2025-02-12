@@ -7922,10 +7922,6 @@ class Excel extends CI_Controller {
                             //Check if classlist exists
                             $classlist = $this->db->get_where('tb_mas_classlist',array('strAcademicYear' => $sem, 'intFacultyID' => $faculty['intID'], 'intSubjectID' => $subject['intID'], 'strSection' => $row['D'], 'intCurriculumID' => $student['current_curriculum']))->first_row('array');
                             // $classlist = $this->db->get_where('tb_mas_classlist',array('strAcademicYear' => $sem, 'intFacultyID' => $faculty['intID']))->first_row('array');
-                            
-                            print($sem . ' = ' . $faculty['intID'] . ' = ' . $subject['intID'] . ' = ' . $row['D'] . ' = ' . $student['current_curriculum'] );
-                            print_r($classlist);
-                            die();
 
                             if(!$classlist){
                                 $newClasslist = array(
