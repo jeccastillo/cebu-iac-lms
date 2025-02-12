@@ -3795,7 +3795,7 @@ class Data_fetcher extends CI_Model {
         // print_r($cl);
 
         $cl =  $this->db
-                    ->select("tb_mas_classlist_student.intCSID,intClassListID,strCode,strSection,intSubjectID,year,sub_section, strClassName, intLab, intLectHours, tb_mas_subjects.strDescription,floatFinalGrade as v3,floatMidtermGrade as v2,intFinalized,enumStatus,strRemarks,tb_mas_faculty.intID as facID, tb_mas_faculty.strFirstname,tb_mas_faculty.strLastname, tb_mas_subjects.strUnits, tb_mas_subjects.intBridging, tb_mas_classlist.intID as classlistID, tb_mas_subjects.intID as subjectID,include_gwa")                                        
+                    ->select("tb_mas_classlist_student.intCSID,intClassListID,strCode,strSection,intSubjectID,year,sub_section, strClassName, intLab, intLectHours, tb_mas_subjects.strDescription,floatFinalGrade as v3,floatMidtermGrade as v2,intFinalized,enumStatus,strRemarks,tb_mas_faculty.intID as facID, tb_mas_faculty.strFirstname,tb_mas_faculty.strLastname, tb_mas_subjects.strUnits, tb_mas_subjects.intBridging, tb_mas_classlist.intID as classlistID, tb_mas_subjects.intID as subjectID,include_gwa,elective_classlist_id")                                        
                     ->from("tb_mas_classlist_student")            
                     ->where(array("intStudentID"=>$id,"strAcademicYear"=>$classlist,'isDissolved'=>0))                                            
                     ->join('tb_mas_classlist', 'tb_mas_classlist.intID = tb_mas_classlist_student.intClasslistID')
@@ -3803,6 +3803,7 @@ class Data_fetcher extends CI_Model {
                     ->join('tb_mas_faculty','tb_mas_classlist.intFacultyID = tb_mas_faculty.intID','left')
                     ->join('tb_mas_curriculum','tb_mas_classlist.intCurriculumID = tb_mas_curriculum.intID','left')
                     ->join('tb_mas_programs','tb_mas_curriculum.intProgramID = tb_mas_programs.intProgramID','left')
+                    ->join('tb_mas_classlist_student_elective','tb_mas_classlist_student_elective.subject_classlist_id = tb_mas_classlist.intID','left')
                     ->order_by('strCode','asc')   
                     ->get()
                     ->result_array();
