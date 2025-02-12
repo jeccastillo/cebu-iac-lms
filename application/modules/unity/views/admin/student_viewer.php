@@ -458,7 +458,7 @@
                         </div>
                         <div class="col-md-2">
                           <label style="color:#fff;">Submit</label>
-                          <button class="btn btn-primary">Assign</button>
+                          <button class="btn btn-primary btn-block">Assign</button>
                         </div>
                       </div>              
                     </div>
