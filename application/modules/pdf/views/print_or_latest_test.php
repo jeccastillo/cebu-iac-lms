@@ -67,7 +67,7 @@ table tr td {
         <section class="sheet padding-5mm">
             <div
                 style="position:absolute; top: 80px; left: 30px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
-                <?php echo $is_cash == 1?"&#10003":""; ?> ; </div>
+                <?php echo $is_cash == 1?"&#10003":""; ?> </div>
             <!-- <div
                 style="position:absolute; top: 105px; left: 30px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
                 &#10003; </div> -->

@@ -2415,8 +2415,13 @@ class Pdf extends CI_Controller {
         $this->data['payment_type'] = isset($reg) ? $reg['paymentType']: "";
         $this->data['full_assessment'] = number_format($fullAssessment,2,'.',',');
         $this->data['total_assessment'] = number_format($totalAssessment,2,'.',',');
-
-        $this->load->view("print_invoice",$this->data);
+            
+        if($this->data['campus'] == "Cebu"){
+            $this->load->view("print_invoice_cebu",$this->data);
+        }else {
+            $this->load->view("print_invoice",$this->data);
+        }
+        
     }
 
     function print_updated_or(){
@@ -2499,6 +2504,8 @@ class Pdf extends CI_Controller {
         $this->data['description'] = $description;
         $this->data['total_amount_due_text'] = $totalAmountDueText;
         $this->data['total_amount_due'] = number_format($request['total_amount_due'],2,'.',',');
+
+        
                           
         if ($this->data['campus'] == "Cebu") {
             $this->load->view("print_or_latest_test",$this->data);
