@@ -447,7 +447,7 @@
                         <div class="col-md-6">
                         <label>Select Subject</label>
                         <select class="form-control">
-                          <option v-for="record in records" :value='record.classlistID'>record.strCode</option>
+                          <option v-for="record in records" :value='record.classlistID'>{{ record.strCode }}</option>
                         </select>
                         </div>
                       </div>              
