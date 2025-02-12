@@ -72,7 +72,7 @@ table tr td {
                 &#10003; </div> <?php else: ?> <div
                 style="position:absolute; top: 140px; left: 162px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
                 &#10003; </div> <?php endif; ?> <div
-                style="position:absolute; top: 140px; left: 590px; width: 200px; height: 20px;">
+                style="position:absolute; top: 140px; left: 570px; width: 200px; height: 20px;">
                 Invoice No: <?php echo $invoice_number; ?> </div>
             <!---DATE--->
             <div style="position:absolute; top: 175px; right: -60px; width: 200px; height: 20px;">
@@ -139,7 +139,7 @@ table tr td {
             <div style="position:absolute; top:585px; left: 130px; width: 200px; height: 20px;">
                 <?php  echo $total_amount_due == 0 ? "" : $total_amount_due; ?> </div>
             <div
-                style="position:absolute; top: 565px; left: 650px; width: 200px; height: 20px;font-size:15px">
+                style="position:absolute; top: 565px; left: 630px; width: 200px; height: 20px;font-size:15px">
                 <?php echo $cashier_name; ?> </div>
         </section>
     </div>
