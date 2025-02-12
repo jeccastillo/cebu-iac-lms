@@ -444,17 +444,21 @@
                     <div v-if="registration && electives.length > 0">
                       <h4>Set Subject as Elective</h4>        
                       <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-5">
                           <label>Select Subject</label>
-                          <select class="form-control">
+                          <select v-model="elective_classlist" class="form-control">
                             <option v-for="record in records" :value='record.classlistID'>{{ record.strCode }}</option>
                           </select>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-5">
                           <label>Select Subject</label>
                           <select class="form-control">
-                            <option v-for="elective in electives" :value='elective.intSubjectID'>{{ elective.strCode }}</option>
+                            <option v-model="elective_subj" v-for="elective in electives" :value='elective.intSubjectID'>{{ elective.strCode }}</option>
                           </select>
+                        </div>
+                        <div class="col-md-2">
+                          <label>&nbsp;</label>
+                          <button class="btn btn-primary">Assign</button>
                         </div>
                       </div>              
                     </div>
@@ -782,6 +786,8 @@ new Vue({
     notif_message: undefined,
     picture: undefined,
     electives: undefined,
+    elective_subj: undefined,
+    elective_classlist: undefined,
     lab_units: 0,
     gpa: 0,
     assessment: '',
