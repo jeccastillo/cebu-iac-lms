@@ -78,6 +78,9 @@ table tr td {
                 style="position:absolute; top: 105px; left: 120px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
                 &#10003; </div> -->
             <div
+                style="position:absolute; top: 60px; left: 600px; width: 200px; height: 20px; font-size:12px">
+                <?php echo $invoice_number; ?> </div>
+            <div
                 style="position:absolute; top: 60px; right: -80px; width: 200px; height: 20px; font-size:16px">
                 <?php echo $or_number; ?> </div>
             <div
@@ -107,8 +110,8 @@ table tr td {
                 style="position:absolute; top: 325px; right: -100px; width: 200px; height: 20px; font-size:12px">
                 <?php echo $total_amount_due; ?> </div>
             <div
-                style="position:absolute; top: 80px; left: 320px; width: 200px; height: 20px; font-size:12px">
-                <?php echo $invoice_number; ?> </div>
+                style="position:absolute; top: 355px; left: 320px; width: 200px; height: 20px; font-size:12px">
+                <?php echo $cashier_name; ?> </div>
         </section>
     </div>
 </body>
