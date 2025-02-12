@@ -7904,7 +7904,7 @@ class Excel extends CI_Controller {
                     ->where(array("tb_mas_users.strStudentNumber"=>$studentNumber))                                            
                     ->join('tb_mas_registration', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
                     ->get()
-                    ->first_row();
+                    ->first_row('array');
 
                     if($student){
                         $facultyName = explode(',', ltrim($row['I']));
