@@ -7896,8 +7896,16 @@ class Excel extends CI_Controller {
                     $studentNumber = substr_replace($studentNumber, '-', strlen($studentNumber) - 3, 0);
                     
                     //Check if student exists
-                    $student = $this->db->get_where('tb_mas_users',array('strStudentNumber' => $studentNumber))->first_row('array');
+                    // $student = $this->db->get_where('tb_mas_users',array('strStudentNumber' => $studentNumber))->first_row('array');
                     
+                    $student =  $this->db
+                    ->select("tb_mas_users.*,tb_mas_registration.current_curriculum")                                        
+                    ->from("tb_mas_users")            
+                    ->where(array("tb_mas_users.strStudentNumber"=>$studentNumber))                                            
+                    ->join('tb_mas_registration', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->get()
+                    ->first_row();
+
                     if($student){
                         $facultyName = explode(',', ltrim($row['I']));
                         $facultyLastName = $facultyName[0];
@@ -7912,7 +7920,7 @@ class Excel extends CI_Controller {
                         if($faculty && $subject){
                             $classlistID = '';
                             //Check if classlist exists
-                            $classlist = $this->db->get_where('tb_mas_classlist',array('strAcademicYear' => $sem, 'intFacultyID' => $faculty['intID'], 'intSubjectID' => $subject['intID'], 'strSection' => $row['D']))->first_row('array');
+                            $classlist = $this->db->get_where('tb_mas_classlist',array('strAcademicYear' => $sem, 'intFacultyID' => $faculty['intID'], 'intSubjectID' => $subject['intID'], 'strSection' => $row['D'], 'intCurriculumID' => $student['current_curriculum']))->first_row('array');
                             // $classlist = $this->db->get_where('tb_mas_classlist',array('strAcademicYear' => $sem, 'intFacultyID' => $faculty['intID']))->first_row('array');
                             
                             if(!$classlist){
@@ -7926,7 +7934,7 @@ class Excel extends CI_Controller {
                                     'strUnits' => 3,
                                     'strSection' => $row['D'],
                                     'intWithPayment' => 0,
-                                    'intCurriculumID' => 0,
+                                    'intCurriculumID' => $student['current_curriculum'],
                                     'year' => 0,
                                     'isDissolved' => 0,
                                     'conduct_grade' => 0
