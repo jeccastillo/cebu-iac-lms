@@ -442,7 +442,7 @@
                       </tbody>
                     </table>
                     <div v-if="registration && electives.length > 0">
-                      <h4>Set Subject as Elective</h4>        
+                      <h4>Assign/Un-assign Subject as Elective</h4>        
                       <div class="row">
                         <form @submit.prevent='assignElective'>
                           <div class="col-md-5">
@@ -459,7 +459,7 @@
                           </div>
                           <div class="col-md-2">
                             <label style="color:#fff;">Submit</label>
-                            <button type="submit" class="btn btn-primary btn-block">Assign</button>
+                            <button type="submit" class="btn btn-primary btn-block">Assign/Un-assign</button>
                           </div>
                         </form>
                       </div>              
@@ -975,7 +975,7 @@ new Vue({
     },
     assignElective: function(){      
         Swal.fire({
-            title: 'Assign Elective?',
+            title: 'Assign/Un-assign Elective?',
             text: "Continue?",
             showCancelButton: true,
             confirmButtonText: "Yes",
@@ -988,6 +988,7 @@ new Vue({
                 var formdata= new FormData();                  
                 formdata.append('elective_classlist_id',this.elective_subj);
                 formdata.append('subject_classlist_id',this.elective_classlist);
+                formdata.append('student_id',this.student.intID);
                 
                 return axios
                 .post(base_url + 'unity/assign_elective',formdata, {

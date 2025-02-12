@@ -2294,7 +2294,18 @@ class Unity extends CI_Controller {
     }
 
 
-   
+   public function assign_elective(){
+        $post = $this->input->post();
+        $elect = $this->db->get_where('tb_mas_classlist_student_elective',array('subject_classlist_id'=>$post['subject_classlist_id'],'elective_classlist_id'=>$post['elective_classlist_id'],'student_id'=>$post['student_id']))->first_row();
+        if(!isset($elect))
+            $this->db->insert('tb_mas_classlist_student_elective',$post);
+        else
+            $this->db->delete('tb_mas_classlist_student_elective')->where(array('subject_classlist_id'=>$post['subject_classlist_id'],'elective_classlist_id'=>$post['elective_classlist_id'],'student_id'=>$post['student_id']));
+        
+        $data['success'] = true;
+        echo json_encode($data);
+
+   }
     
     public function add_subjects_curriculum()
     {
