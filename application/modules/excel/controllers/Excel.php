@@ -8512,7 +8512,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('A'. ($i + 6), 'Prepared By:')
                     ->setCellValue('A'. ($i + 8), $this->data['user']['strFirstname'] . ' ' . $this->data['user']['strLastname']);
 
-        $objPHPExcel->getActiveSheet()->getStyle('F8:F' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle('F8:F' . ($i + 1))->getNumberFormat()->setFormatCode('#,##0.00');
         $objPHPExcel->getActiveSheet()->getStyle('A1:F8')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
         $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray(
