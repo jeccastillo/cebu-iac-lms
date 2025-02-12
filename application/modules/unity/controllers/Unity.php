@@ -1631,7 +1631,10 @@ class Unity extends CI_Controller {
                     $stype = 'college';
             }
             
+            $ret['electives'] = [];
             $ret['block_sections'] = $this->db->get_where('tb_mas_block_sections',array('type'=>$stype))->result_array();
+            //get electives;
+            $ret['electives'] = $this->data_fetcher->getSubjectsInCurriculumElective($ret['student']['intCurriculumID']);
 
             $ret['selected_ay'] = $ret['active_sem']['intID'];
 

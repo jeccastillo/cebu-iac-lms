@@ -767,6 +767,7 @@ new Vue({
     tuition_payment_link: undefined,
     notif_message: undefined,
     picture: undefined,
+    electives: undefined,
     lab_units: 0,
     gpa: 0,
     assessment: '',
@@ -816,6 +817,7 @@ new Vue({
                     this.student = data.data.student;
                     this.tuition_years = data.data.tuition_years;
                     this.term_balances = data.data.term_balances;
+                    this.electives = data.data.electives;
                     for (i in this.term_balances)
                       if (this.term_balances[i].balance > 0)
                         this.show_alert = true;

@@ -574,6 +574,20 @@ class Data_fetcher extends CI_Model {
         return $subjects;
     }
 
+    function getSubjectsInCurriculumElective($id)
+    {
+        $subjects = $this->db
+                         ->select('tb_mas_curriculum_subject.intID,tb_mas_curriculum_subject.intYearLevel,tb_mas_curriculum_subject.intSem,tb_mas_subjects.strCode,tb_mas_subjects.strUnits,tb_mas_subjects.intID as intSubjectID,tb_mas_subjects.strDescription,tb_mas_subjects.intLab, tb_mas_subjects.intLectHours,tb_mas_subjects.strUnits,include_gwa')
+                         ->from('tb_mas_curriculum_subject')
+                         ->join('tb_mas_subjects','tb_mas_subjects.intID = tb_mas_curriculum_subject.intSubjectID OR tb_mas_subjects.intEquivalentID1 = tb_mas_curriculum_subject.intSubjectID OR tb_mas_subjects.intEquivalentID2 = tb_mas_curriculum_subject.intSubjectID')
+                         ->where(array('tb_mas_curriculum_subject.intCurriculumID'=>$id,'tb_mas_subjects.isElective'=>1))
+                         ->order_by('intYearLevel asc, intSem asc, strCode asc')
+                         ->get()
+                         ->result_array();
+        
+        return $subjects;
+    }
+
     function getSubjectsInSecondary($id)
     {
         $subjects = $this->db
