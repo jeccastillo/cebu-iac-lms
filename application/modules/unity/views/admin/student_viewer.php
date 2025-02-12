@@ -458,7 +458,7 @@
                         </div>
                         <div class="col-md-2">
                           <label style="color:#fff;">Submit</label>
-                          <button class="btn btn-primary btn-block">Assign</button>
+                          <button @click="assignElective" class="btn btn-primary btn-block">Assign</button>
                         </div>
                       </div>              
                     </div>
@@ -970,6 +970,54 @@ new Vue({
           document.location = reset_url;
         }
       });
+    },
+    assignElective: function(){
+      if(this.elective_classlist && this.elective_subj){
+        Swal.fire({
+              title: 'Assign Elective?',
+              text: "Continue?",
+              showCancelButton: true,
+              confirmButtonText: "Yes",
+              imageWidth: 100,
+              icon: "question",
+              cancelButtonText: "No, cancel!",
+              showCloseButton: true,
+              showLoaderOnConfirm: true,
+              preConfirm: (login) => {
+                  var formdata= new FormData();                  
+                  formdata.append('elective_classlist_id',this.elective_subj);
+                  formdata.append('subject_classlist_id',this.elective_classlist);
+                  
+                  return axios
+                  .post(base_url + 'unity/assign_elective',formdata, {
+                          headers: {
+                              Authorization: `Bearer ${window.token}`
+                          }
+                      })
+                  .then(data => {
+                      this.loader_spinner = false;                                                                                                                            
+                      if(data.data.success)                        
+                          location.reload();
+                      else
+                        Swal.fire({
+                          title: "Failed",
+                          text: data.data.message,
+                          icon: "failed"
+                        })
+
+                  });
+                  
+              },
+              allowOutsideClick: () => !Swal.isLoading()
+          });
+      } 
+      else{
+        Swal.fire({
+            title: "Failed",
+            text: "Please complete selections",
+            icon: "failed"
+          })
+      }
     },
     enlistStudent: function(id){
           Swal.fire({
