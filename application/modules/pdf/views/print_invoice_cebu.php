@@ -72,7 +72,7 @@ table tr td {
                 &#10003; </div> <?php else: ?> <div
                 style="position:absolute; top: 140px; left: 162px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
                 &#10003; </div> <?php endif; ?> <div
-                style="position:absolute; top: 140px; right: 90px; width: 200px; height: 20px;">
+                style="position:absolute; top: 140px; right: 110px; width: 200px; height: 20px;">
                 Invoice No: <?php echo $invoice_number; ?> </div>
             <!---DATE--->
             <div style="position:absolute; top: 175px; right: -60px; width: 200px; height: 20px;">
@@ -119,28 +119,28 @@ table tr td {
             <div style="position:absolute; top: 388px; left: 650px; width: 200px; height: 20px;">
                 <?php echo $less_ewt != 0 ? $less_ewt : "" ; ?> </div>
             <!---Payment Left Amount-->
-            <div style="position:absolute; top:  385px; left: 140px; width: 200px; height: 20px;">
+            <div style="position:absolute; top:  385px; left: 130px; width: 200px; height: 20px;">
                 <?php  echo $total_amount_due == 0 ? "" : $total_amount_due; ?> </div>
             <div style="position:absolute; top:  415px; left: 650px; width: 200px; height: 20px;">
                 <?php  echo $total_assessment; ?> </div>
-            <div style="position:absolute; top:  465px; left: 60px; width: 200px; height: 20px;">
+            <div style="position:absolute; top:  465px; left: 50px; width: 200px; height: 20px;">
                 <?php  echo $remarks; ?> </div>
             <!--Vatable-->
             <div style="position:absolute; top:  462px; left: 305px; width: 200px; height: 20px;">
                 <?php  echo $amount_less_vat != 0 ? $amount_less_vat : ""; ?> </div>
             <!--Vat Exempt Sale--> <?php if($vat_exempt != 0 && $less_vat != 0): ?> <div
-                style="position:absolute; top:  500px; left: 360px; width: 200px; height: 20px;">
+                style="position:absolute; top:  500px; left: 320px; width: 200px; height: 20px;">
                 <?php  echo $vat_exempt; ?> </div>
             <?php elseif($vat_exempt == 0 && $less_vat != 0): ?> <div
-                style="position:absolute; top:  487px; left: 305px; width: 200px; height: 20px;">
+                style="position:absolute; top:  487px; left: 320px; width: 200px; height: 20px;">
                 <?php  echo ""; ?> </div> <?php else: ?> <div
-                style="position:absolute; top:  487px; left: 305px; width: 200px; height: 20px;">
+                style="position:absolute; top:  487px; left: 320px; width: 200px; height: 20px;">
                 <?php  echo $total_assessment; ?> </div> <?php endif; ?>
             <!--Total Amount received-->
-            <div style="position:absolute; top:  585px; left: 140px; width: 200px; height: 20px;">
+            <div style="position:absolute; top:585px; left: 130px; width: 200px; height: 20px;">
                 <?php  echo $total_amount_due == 0 ? "" : $total_amount_due; ?> </div>
             <div
-                style="position:absolute; top: 580px; right: 60px; width: 200px; height: 20px;font-size:15px">
+                style="position:absolute; top: 565px; right: 90px; width: 200px; height: 20px;font-size:15px">
                 <?php echo $cashier_name; ?> </div>
         </section>
     </div>
