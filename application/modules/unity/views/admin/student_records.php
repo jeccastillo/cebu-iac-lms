@@ -65,7 +65,7 @@
                                     </thead>
                                     <tbody>                                          
                                         <tr :style="(record.intFinalized == 2)?'background-color:#ccc;':''" v-for="record in term.records" style="font-size: 13px;">
-                                            <td v-if="record.strSection.length > 3">record.strSection</td>
+                                            <td v-if="record.strSection.length > 3">{{ record.strSection }}</td>
                                             <td v-else>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td>
                                             <td>{{ record.strCode }}</td>
                                             <td v-if="record.include_gwa == 1">{{ record.strUnits }}</td>
