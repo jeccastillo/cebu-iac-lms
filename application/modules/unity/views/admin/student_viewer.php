@@ -453,8 +453,8 @@
                           </div>
                           <div class="col-md-5">
                             <label>Select Subject</label>
-                            <select class="form-control">
-                              <option v-model="elective_subj" required v-for="elective in electives" :value='elective.intSubjectID'>{{ elective.strCode }}</option>
+                            <select required class="form-control">
+                              <option v-model="elective_subj"  v-for="elective in electives" :value='elective.intSubjectID'>{{ elective.strCode }}</option>
                             </select>
                           </div>
                           <div class="col-md-2">
