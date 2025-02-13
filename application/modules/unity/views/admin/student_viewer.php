@@ -396,11 +396,11 @@
                           v-for="record in records"
                           style="font-size: 13px;">
                           <td>
-                            {{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}
-                            <span v-if="record.elective_classlist_id">&nbsp;Elective</span>
+                            {{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}                            
                           </td>
                           <td><a
                               :href="base_url + 'unity/classlist_viewer/' + record.classlistID + '/0/' + id">{{ record.strCode }}</a>
+                              <span v-if="record.elective_classlist_id">&nbsp;Elective</span>
                           </td>
                           <td>{{ record.strUnits }}</td>
                           <td v-if="record.v2 != 'OW'" :style="(record.intFinalized == 2)?'font-weight:bold;':''">
