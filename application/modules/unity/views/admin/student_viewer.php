@@ -999,7 +999,13 @@ new Vue({
                 .then(data => {
                     this.loader_spinner = false;                                                                                                                            
                     if(data.data.success)                        
+                      Swal.fire({
+                          title: "Success",
+                          text: data.data.message,
+                          icon: "success"
+                      }).then(function() {
                         location.reload();
+                      });
                     else
                       Swal.fire({
                         title: "Failed",
