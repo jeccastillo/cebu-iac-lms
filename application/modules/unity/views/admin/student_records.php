@@ -59,6 +59,7 @@
                                             <th>Units</th>
                                             <th>Midterm</th>
                                             <th>Final</th>
+                                            <th v-if="student.type == 'shs'">Sem Final Grade</th>
                                             <th>Remarks</th>
                                             <th>Faculty</th>                                      
                                         </tr>
@@ -86,6 +87,7 @@
                                             <td v-else style="font-weight:bold">
                                                 OW
                                             </td>
+                                            <td v-if="student.type == 'shs'">{{ is_numeric(record.v2) && is_numeric(record.v3) ? (record.v2 + record.v3) / 2 : 'T'}}</th>
                                             <td :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">{{ record.intFinalized >=1?record.strRemarks:'---' }}</td>   
                                             <td>{{ record.strFirstname+" "+record.strLastname }}</td>
                                                                                         
