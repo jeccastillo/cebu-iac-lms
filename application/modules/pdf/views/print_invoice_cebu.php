@@ -68,7 +68,7 @@ table tr td {
 <body>
     <div class="sheet-outer A4">
         <section class="sheet padding-5mm"> <?php if($cashCharge): ?> <div
-                style="position:absolute; top: 140px; left: 60px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
+                style="position:absolute; top: 140px; left: 55px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
                 &#10003; </div> <?php else: ?> <div
                 style="position:absolute; top: 140px; left: 162px; width: 200px; height: 20px;font-size:1.6em;font-weight:800;">
                 &#10003; </div> <?php endif; ?> <div
@@ -127,7 +127,7 @@ table tr td {
                 <?php  echo $is_cash == 0 ? $total_amount_due : ''; ?> </div>
             <div style="position:absolute; top: 420px; left: 130px; width: 200px; height: 20px;">
                 <?php  echo $is_cash == 0 ? $remarks : ''; ?> </div>
-            <div style="position:absolute; top: 435px; left: 130px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 440px; left: 130px; width: 200px; height: 20px;">
                 <?php  echo $is_cash == 2 ? $total_amount_due : ''; ?> </div>
             <div style="position:absolute; top:  465px; left: 50px; width: 200px; height: 20px;">
                 <?php  echo $is_cash != 0 ? $remarks : ''; ?> </div>
