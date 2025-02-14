@@ -127,7 +127,7 @@ table tr td {
                 <?php  echo $is_cash == 0 ? $total_amount_due : ''; ?> </div>
             <div style="position:absolute; top: 420px; left: 130px; width: 200px; height: 20px;">
                 <?php  echo $is_cash == 0 ? $remarks : ''; ?> </div>
-            <div style="position:absolute; top: 420px; left: 130px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 435px; left: 130px; width: 200px; height: 20px;">
                 <?php  echo $is_cash == 2 ? $total_amount_due : ''; ?> </div>
             <div style="position:absolute; top:  465px; left: 50px; width: 200px; height: 20px;">
                 <?php  echo $is_cash != 0 ? $remarks : ''; ?> </div>
