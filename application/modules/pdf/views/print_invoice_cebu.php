@@ -117,13 +117,20 @@ table tr td {
             <!---- Less EWT--->
             <div style="position:absolute; top: 388px; left: 650px; width: 200px; height: 20px;">
                 <?php echo $less_ewt != 0 ? $less_ewt : "" ; ?> </div>
-            <!---Payment Left Amount-->
-            <div style="position:absolute; top:  385px; left: 130px; width: 200px; height: 20px;">
-                <?php  echo $total_amount_due == 0 ? "" : $total_amount_due; ?> </div>
+            <!---- Total Payment--->
             <div style="position:absolute; top:  415px; left: 650px; width: 200px; height: 20px;">
                 <?php  echo $total_assessment; ?> </div>
+            <!---Payment Left Amount-->
+            <div style="position:absolute; top:  370px; left: 130px; width: 200px; height: 20px;">
+                <?php  echo $is_cash == 1 ? $total_amount_due : ''; ?> </div>
+            <div style="position:absolute; top:  385px; left: 130px; width: 200px; height: 20px;">
+                <?php  echo $is_cash == 0 ? $total_amount_due : ''; ?> </div>
+            <div style="position:absolute; top: 420px; left: 130px; width: 200px; height: 20px;">
+                <?php  echo $is_cash == 0 ? $remarks : ''; ?> </div>
+            <div style="position:absolute; top: 420px; left: 130px; width: 200px; height: 20px;">
+                <?php  echo $is_cash == 2 ? $total_amount_due : ''; ?> </div>
             <div style="position:absolute; top:  465px; left: 50px; width: 200px; height: 20px;">
-                <?php  echo $remarks; ?> </div>
+                <?php  echo $is_cash != 0 ? $remarks : ''; ?> </div>
             <!--Vatable-->
             <div style="position:absolute; top:  462px; left: 305px; width: 200px; height: 20px;">
                 <?php  echo $amount_less_vat != 0 ? $amount_less_vat : ""; ?> </div>
