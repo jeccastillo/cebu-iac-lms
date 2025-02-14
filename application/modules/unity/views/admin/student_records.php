@@ -87,8 +87,7 @@
                                             <td v-else style="font-weight:bold">
                                                 OW
                                             </td>
-                                            <td v-if="student.type == 'shs'">{{ (parseInt(record.v2) + parseInt(record.v3) ? (parseInt(record.v2) + parseInt(record.v3)) / 2 : 'T')}}</th>
-                                            <!-- <td v-else-if="student.type == 'shs'">T</th> -->
+                                            <td v-if="student.type == 'shs && record.v2 && record.v3'">{{ (parseInt(record.v2) + parseInt(record.v3) ? (parseInt(record.v2) + parseInt(record.v3)) / 2 : 'T')}}</th>
                                             <td :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">{{ record.intFinalized >=1?record.strRemarks:'---' }}</td>   
                                             <td>{{ record.strFirstname+" "+record.strLastname }}</td>
                                                                                         
