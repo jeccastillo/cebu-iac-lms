@@ -7896,8 +7896,16 @@ class Excel extends CI_Controller {
                     $studentNumber = substr_replace($studentNumber, '-', strlen($studentNumber) - 3, 0);
                     
                     //Check if student exists
-                    $student = $this->db->get_where('tb_mas_users',array('strStudentNumber' => $studentNumber))->first_row('array');
+                    // $student = $this->db->get_where('tb_mas_users',array('strStudentNumber' => $studentNumber))->first_row('array');
                     
+                    $student =  $this->db
+                    ->select("tb_mas_users.*,tb_mas_registration.current_curriculum")                                        
+                    ->from("tb_mas_users")            
+                    ->where(array("tb_mas_users.strStudentNumber"=>$studentNumber))                                            
+                    ->join('tb_mas_registration', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->get()
+                    ->first_row('array');
+
                     if($student){
                         $facultyName = explode(',', ltrim($row['I']));
                         $facultyLastName = $facultyName[0];
@@ -7912,21 +7920,21 @@ class Excel extends CI_Controller {
                         if($faculty && $subject){
                             $classlistID = '';
                             //Check if classlist exists
-                            $classlist = $this->db->get_where('tb_mas_classlist',array('strAcademicYear' => $sem, 'intFacultyID' => $faculty['intID'], 'intSubjectID' => $subject['intID'], 'strSection' => $row['D']))->first_row('array');
+                            $classlist = $this->db->get_where('tb_mas_classlist',array('strAcademicYear' => $sem, 'intFacultyID' => $faculty['intID'], 'intSubjectID' => $subject['intID'], 'strSection' => $row['D'], 'intCurriculumID' => $student['current_curriculum']))->first_row('array');
                             // $classlist = $this->db->get_where('tb_mas_classlist',array('strAcademicYear' => $sem, 'intFacultyID' => $faculty['intID']))->first_row('array');
-                            
+
                             if(!$classlist){
                                 $newClasslist = array(
                                     'intFacultyID' => $faculty['intID'],
                                     'intSubjectID' => $subject['intID'],
                                     'strClassName' => $row['E'],
-                                    'intFinalized' => 0,
+                                    'intFinalized' => 2,
                                     'strAcademicYear' => $sem,
                                     'slots' => 0,
                                     'strUnits' => 3,
                                     'strSection' => $row['D'],
                                     'intWithPayment' => 0,
-                                    'intCurriculumID' => 0,
+                                    'intCurriculumID' => $student['current_curriculum'],
                                     'year' => 0,
                                     'isDissolved' => 0,
                                     'conduct_grade' => 0
@@ -8452,6 +8460,7 @@ class Excel extends CI_Controller {
         $title = 'Ched TES Report';
 
         $i = 9;
+        $count = 1;
 
         foreach($students as $index => $student){
             
@@ -8475,7 +8484,7 @@ class Excel extends CI_Controller {
             
             // Add some data
             $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('A'.$i, $index + 1)
+                ->setCellValue('A'.$i, $count)
                 ->setCellValue('B'.$i, str_replace("-", "", $student['strStudentNumber']))
                 ->setCellValue('C'.$i, ucfirst($student['strLastname']) . ', ' . ucfirst($student['strFirstname']) . ' ' . ucfirst($student['strMiddlename'][0]) . '.')
                 ->setCellValue('D'.$i, $course['strProgramCode'])
@@ -8483,6 +8492,7 @@ class Excel extends CI_Controller {
                 ->setCellValue('F'.$i, $total_discount);
 
             $i++;
+            $count++;
         }
         
         $objPHPExcel->setActiveSheetIndex(0)
@@ -8497,10 +8507,12 @@ class Excel extends CI_Controller {
                     ->setCellValue('D8', 'Course')
                     ->setCellValue('E8', 'Date Enrolled')
                     ->setCellValue('F8', 'Amount')
-                    ->setCellValue('A'. ($i + 2), 'Prepared By:')
-                    ->setCellValue('A'. ($i + 4), $this->data['user']['strFirstname'] . ' ' . $this->data['user']['strLastname']);
+                    ->setCellValue('E' . ($i + 1), 'Total')
+                    ->setCellValue('F' . ($i + 1), '=SUM(F9:F' . ($i-1) . ')')
+                    ->setCellValue('A'. ($i + 6), 'Prepared By:')
+                    ->setCellValue('A'. ($i + 8), $this->data['user']['strFirstname'] . ' ' . $this->data['user']['strLastname']);
 
-        $objPHPExcel->getActiveSheet()->getStyle('F8:F' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle('F8:F' . ($i + 1))->getNumberFormat()->setFormatCode('#,##0.00');
         $objPHPExcel->getActiveSheet()->getStyle('A1:F8')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
         $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray(
@@ -8807,7 +8819,7 @@ class Excel extends CI_Controller {
                 
                 // Add some data
                 $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A'.$i, $count + 1)
+                    ->setCellValue('A'.$i, $count)
                     ->setCellValue('B'.$i, str_replace("-", "", $student['strStudentNumber']))
                     ->setCellValue('C'.$i, ucfirst($student['strLastname']) . ', ' . ucfirst($student['strFirstname']) . ' ' . ucfirst($student['strMiddlename']) . '.')
                     ->setCellValue('D'.$i, $course['strProgramCode'])
@@ -8889,11 +8901,11 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(25);
         
         $sheet = $objPHPExcel->getActiveSheet();
-        $sheet->mergeCells('A1:F1');
-        $sheet->mergeCells('A2:F2');
-        $sheet->mergeCells('A3:F3');
-        $sheet->mergeCells('A5:F5');
-        $sheet->mergeCells('A6:F6');
+        $sheet->mergeCells('A1:G1');
+        $sheet->mergeCells('A2:G2');
+        $sheet->mergeCells('A3:G3');
+        $sheet->mergeCells('A5:G5');
+        $sheet->mergeCells('A6:G6');
 
         $objPHPExcel->getActiveSheet()->setTitle(ucwords($sy->term_student_type));
 
@@ -8946,7 +8958,6 @@ class Excel extends CI_Controller {
                     ->get()
                     ->result_array();
 
-
         error_reporting(E_ALL);
         ini_set('display_errors', TRUE);
         ini_set('display_startup_errors', TRUE);
@@ -8960,18 +8971,18 @@ class Excel extends CI_Controller {
 
         $i = 9;
         $count = 1;
+        $misc_type = 'Regular';
 
         foreach($students as $index => $student){
-            
-            $tuition_data = $this->data_fetcher->getTuition($student['intID'],$sem);
 
+            $tuition_data = $this->data_fetcher->getTuition($student['intID'],$sem);
             $misc_list = $tuition_data['misc_list'];
 
             foreach($misc_list as $misc_name => $amount){
                 
                 if($misc_name == $misc->name){
-                    $course = $this->data_fetcher->getProgramDetails($student['intProgramID']); 
-
+                    $course = $this->data_fetcher->getProgramDetails($student['intProgramID']);
+                    
                     // Add some data
                     $objPHPExcel->setActiveSheetIndex(0)
                         ->setCellValue('A'.$i, $count)
@@ -8979,18 +8990,30 @@ class Excel extends CI_Controller {
                         ->setCellValue('C'.$i, ucfirst($student['strLastname']) . ', ' . ucfirst($student['strFirstname']) . ' ' . ucfirst($student['strMiddlename']) . '.')
                         ->setCellValue('D'.$i, $course['strProgramCode'])
                         ->setCellValue('E'.$i, date("d-M-Y",strtotime($student['date_enlisted'])))
-                        ->setCellValue('F'.$i, $student['type'] == 'regular' ? $amount : '')
-                        ->setCellValue('G'.$i, $student['type'] == 'new_student' ? $amount : '')
-                        ->setCellValue('H'.$i, $student['type'] == 'internship' ? $amount : '')
-                        ->setCellValue('I'.$i, $student['type'] == 'nstp' ? $amount : '')
-                        ->setCellValue('J'.$i, $student['type'] == 'thesis' ? $amount : '')
-                        ->setCellValue('K'.$i, $student['type'] == 'late_enrollment' ? $amount : '')
-                        ->setCellValue('L'.$i, '=SUM(F' . $i . ':I' . $i . ')');
+                        ->setCellValue('F'.$i, $amount);
+                        // ->setCellValue('F'.$i, $student['type'] == 'regular' ? $amount : '');
+                        // ->setCellValue('G'.$i, $student['type'] == 'new_student' ? $amount : '')
+                        // ->setCellValue('H'.$i, $student['type'] == 'internship' ? $amount : '')
+                        // ->setCellValue('I'.$i, $student['type'] == 'nstp' ? $amount : '')
+                        // ->setCellValue('J'.$i, $student['type'] == 'thesis' ? $amount : '')
+                        // ->setCellValue('K'.$i, $student['type'] == 'late_enrollment' ? $amount : '')
+                        // ->setCellValue('L'.$i, '=SUM(F' . $i . ':I' . $i . ')');
     
                     $i++;
                     $count++;
-
                 }
+            }
+
+            if($student['type'] == 'new_student'){
+                $misc_type = 'NSF';
+            }else if($student['type'] == 'internship'){
+                $misc_type = 'Internship';
+            }else if($student['type'] == 'nstp'){
+                $misc_type = 'NSTP';
+            }else if($student['type'] == 'thesis'){
+                $misc_type = 'Thesis';
+            }else if($student['type'] == 'late_enrollment'){
+                $misc_type = 'LEF';
             }
         }
         
@@ -9005,26 +9028,27 @@ class Excel extends CI_Controller {
                     ->setCellValue('C8', 'Student Name')
                     ->setCellValue('D8', 'Course')
                     ->setCellValue('E8', 'Date Enrolled')
-                    ->setCellValue('F8', 'Regular')
-                    ->setCellValue('G8', 'NSF')
-                    ->setCellValue('H8', 'Internship')
-                    ->setCellValue('I8', 'NSTP')
-                    ->setCellValue('J8', 'Thesis')
-                    ->setCellValue('K8', 'LEF')
+                    ->setCellValue('F8', $misc_type)
+                    // ->setCellValue('F8', 'Regular')
+                    // ->setCellValue('G8', 'NSF')
+                    // ->setCellValue('H8', 'Internship')
+                    // ->setCellValue('I8', 'NSTP')
+                    // ->setCellValue('J8', 'Thesis')
+                    // ->setCellValue('K8', 'LEF')
                     ->setCellValue('L8', 'Total')
                     ->setCellValue('E' . ($i + 1), 'Total')
                     ->setCellValue('F' . ($i + 1), '=SUM(F9:F' . ($i-1) . ')')
-                    ->setCellValue('G' . ($i + 1), '=SUM(G9:G' . ($i-1) . ')')
-                    ->setCellValue('H' . ($i + 1), '=SUM(H9:H' . ($i-1) . ')')
-                    ->setCellValue('I' . ($i + 1), '=SUM(I9:I' . ($i-1) . ')')
-                    ->setCellValue('J' . ($i + 1), '=SUM(J9:J' . ($i-1) . ')')
-                    ->setCellValue('K' . ($i + 1), '=SUM(K9:K' . ($i-1) . ')')
-                    ->setCellValue('L' . ($i + 1), '=SUM(L9:L' . ($i-1) . ')')
+                    // ->setCellValue('G' . ($i + 1), '=SUM(G9:G' . ($i-1) . ')')
+                    // ->setCellValue('H' . ($i + 1), '=SUM(H9:H' . ($i-1) . ')')
+                    // ->setCellValue('I' . ($i + 1), '=SUM(I9:I' . ($i-1) . ')')
+                    // ->setCellValue('J' . ($i + 1), '=SUM(J9:J' . ($i-1) . ')')
+                    // ->setCellValue('K' . ($i + 1), '=SUM(K9:K' . ($i-1) . ')')
+                    // ->setCellValue('L' . ($i + 1), '=SUM(L9:L' . ($i-1) . ')')
                     ->setCellValue('A'. ($i + 6), 'Prepared By:')
                     ->setCellValue('A'. ($i + 8), $this->data['user']['strFirstname'] . ' ' . $this->data['user']['strLastname']);
 
-        $objPHPExcel->getActiveSheet()->getStyle('F9:L' . ($i + 1))->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle('A1:L8')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('F9:F' . ($i + 1))->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle('A1:F8')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
         $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray(
             array(
@@ -9035,7 +9059,7 @@ class Excel extends CI_Controller {
                 )
             )
         );
-        $objPHPExcel->getActiveSheet()->getStyle('A2:L8')->applyFromArray(
+        $objPHPExcel->getActiveSheet()->getStyle('A2:F8')->applyFromArray(
             array(
                 'font'  => array(
                     'bold'  => true,
@@ -9045,17 +9069,17 @@ class Excel extends CI_Controller {
             )
         );
 
-        $objPHPExcel->getActiveSheet()->getStyle('L9:L' . ($i + 1))->applyFromArray(
-            array(
-                'font'  => array(
-                    'bold'  => true,
-                    'color' => array('rgb' => '000000'),
-                    'size'  => 11,
-                )
-            )
-        );
+        // $objPHPExcel->getActiveSheet()->getStyle('L9:L' . ($i + 1))->applyFromArray(
+        //     array(
+        //         'font'  => array(
+        //             'bold'  => true,
+        //             'color' => array('rgb' => '000000'),
+        //             'size'  => 11,
+        //         )
+        //     )
+        // );
 
-        $objPHPExcel->getActiveSheet()->getStyle('A8:L' . ($i-1))->applyFromArray(
+        $objPHPExcel->getActiveSheet()->getStyle('A8:F' . ($i-1))->applyFromArray(
             array(
                 'borders' => array(
                     'allborders' => array(
@@ -9072,8 +9096,8 @@ class Excel extends CI_Controller {
                 'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
             )
         );
-        $objPHPExcel->getActiveSheet()->getStyle('A8:L'.$i)->applyFromArray($style);
-        $objPHPExcel->getActiveSheet()->getStyle('A8:L'.$i)->getAlignment()->setWrapText(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A8:F'.$i)->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('A8:F'.$i)->getAlignment()->setWrapText(true);
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
@@ -9089,11 +9113,11 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(25);
         
         $sheet = $objPHPExcel->getActiveSheet();
-        $sheet->mergeCells('A1:L1');
-        $sheet->mergeCells('A2:L2');
-        $sheet->mergeCells('A3:L3');
-        $sheet->mergeCells('A5:L5');
-        $sheet->mergeCells('A6:L6');
+        $sheet->mergeCells('A1:F1');
+        $sheet->mergeCells('A2:F2');
+        $sheet->mergeCells('A3:F3');
+        $sheet->mergeCells('A5:F5');
+        $sheet->mergeCells('A6:F6');
 
         $objPHPExcel->getActiveSheet()->setTitle(ucwords($sy->term_student_type));
 
