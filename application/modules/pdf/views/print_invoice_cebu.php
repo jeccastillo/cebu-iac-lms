@@ -127,9 +127,9 @@ table tr td {
                 <?php  echo $is_cash == 0 ? $total_amount_due : ''; ?> </div>
             <div style="position:absolute; top: 420px; left: 130px; width: 200px; height: 20px;">
                 <?php  echo $is_cash == 0 ? $remarks : ''; ?> </div>
-            <div style="position:absolute; top: 440px; left: 130px; width: 200px; height: 20px;">
-                <?php  echo $is_cash == 2 ? $total_amount_due : ''; ?> </div>
-            <div style="position:absolute; top:  465px; left: 50px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 445px; left: 130px; width: 200px; height: 20px;">
+                <?php  echo $is_cash == 2 || $is_cash == 3 ? $total_amount_due : ''; ?> </div>
+            <div style="position:absolute; top:  465px; left: 40px; width: 200px; height: 20px;">
                 <?php  echo $is_cash != 0 ? $remarks : ''; ?> </div>
             <!--Vatable-->
             <div style="position:absolute; top:  462px; left: 305px; width: 200px; height: 20px;">
