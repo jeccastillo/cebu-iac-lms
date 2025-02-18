@@ -469,7 +469,7 @@ class Unity extends CI_Controller {
                     'enumRegistrationStatus' => 'regular',
                     'enumStudentType' => 'continuing',
                     'intYearLevel' => 1,
-                    'intROG' => 4,
+                    'intROG' => $post['awol'],
                     'loa_remarks' => $post['loa_remarks'],
                     'loa_date' => $post['loa_date']
                 ];
