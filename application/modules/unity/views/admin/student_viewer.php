@@ -1478,7 +1478,7 @@ new Vue({
                 }
                 formdata.append('term_id',this.sem_student);              
                 formdata.append('student_id',this.student.intID);
-                fordata.append('awol',this.awol);
+                formdata.append('awol',this.awol);
                 formdata.append('password',inputValue);
                 formdata.append('student_name',this.student.strLastname + ' ' + this.student.strLastname);
 
