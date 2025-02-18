@@ -659,6 +659,14 @@
                 </div>
                 <div class="modal-body">
                 <form @submit.prevent="submitLoa()">
+                  <div class="form-group">
+                    <label>Tag for AWOL?</label>
+                    <select v-model="awol"            
+                      class="form-control">
+                        <option value="4">no</option>
+                        <option value="5">yes</option>
+                    </select>
+                  </div>
                     <div class="form-group">
                     <label for="input-reason">Reason for leave of absence</label>
                     <textarea id="input-reason"
@@ -784,6 +792,7 @@ new Vue({
     loader_spinner: true,
     change_grade: [],
     attendance: [],
+    awol: 4,
     total_units: 0,
     tuition_payment_link: undefined,
     notif_message: undefined,
@@ -1469,6 +1478,7 @@ new Vue({
                 }
                 formdata.append('term_id',this.sem_student);              
                 formdata.append('student_id',this.student.intID);
+                fordata.append('awol',this.awol);
                 formdata.append('password',inputValue);
                 formdata.append('student_name',this.student.strLastname + ' ' + this.student.strLastname);
 
