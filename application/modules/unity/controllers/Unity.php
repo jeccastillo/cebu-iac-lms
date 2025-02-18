@@ -478,7 +478,7 @@ class Unity extends CI_Controller {
             }
             else{
                 $reg_data = [
-                    'intROG' => 4,
+                    'intROG' => $post['awol'],
                     'loa_remarks' => $post['loa_remarks'],
                     'loa_date' => $post['loa_date']
                 ];
