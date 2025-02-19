@@ -86,7 +86,7 @@ table tr td {
                 &nbsp; <?php echo $student_name; ?> </div>
             <div style="position:absolute; top: 200px; left: 90px; width: 500px; height: 20px;">
                 <?php echo $student_address; ?> </div>
-            <div style="position:absolute; top: 250px; left:70px; width: 500px; height: 20px;"> <?php echo $type; 
+            <div style="position:absolute; top: 250px; left:60px; width: 500px; height: 20px;"> <?php echo $type; 
                  if(!isset($payee)): 
                     echo " /  ".$term['enumSem']." ".$term['term_label']." ".$term['strYearStart']."-".$term['strYearEnd'];
                 endif; ?> </div>
@@ -125,7 +125,7 @@ table tr td {
                 <?php  echo $is_cash == 1 ? $total_amount_due : ''; ?> </div>
             <div style="position:absolute; top:  385px; left: 130px; width: 200px; height: 20px;">
                 <?php  echo $is_cash == 0 ? $total_amount_due : ''; ?> </div>
-            <div style="position:absolute; top: 420px; left: 130px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 425px; left: 130px; width: 200px; height: 20px;">
                 <?php  echo $is_cash == 0 ? $remarks : ''; ?> </div>
             <div style="position:absolute; top: 445px; left: 130px; width: 200px; height: 20px;">
                 <?php  echo $is_cash == 2 || $is_cash == 3 ? $total_amount_due : ''; ?> </div>
@@ -143,7 +143,7 @@ table tr td {
                 style="position:absolute; top:  490px; left: 340px; width: 200px; height: 20px;">
                 <?php  echo $total_assessment; ?> </div> <?php endif; ?>
             <!--Total Amount received-->
-            <div style="position:absolute; top:585px; left: 130px; width: 200px; height: 20px;">
+            <div style="position:absolute; top:587px; left: 130px; width: 200px; height: 20px;">
                 <?php  echo $total_amount_due == 0 ? "" : $total_amount_due; ?> </div>
             <div
                 style="position:absolute; top: 565px; left: 600px; width: 200px; height: 20px;font-size:15px">

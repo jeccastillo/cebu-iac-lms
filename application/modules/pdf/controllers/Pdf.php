@@ -2509,8 +2509,8 @@ class Pdf extends CI_Controller {
         if ($this->data['campus'] == "Cebu") {
             $this->load->view("print_or_latest_test",$this->data);
         }else {
-            $this->load->view("print_or_latest_test",$this->data);
-            // $this->load->view("print_or_latest",$this->data);
+            // $this->load->view("print_or_latest_test",$this->data);
+            $this->load->view("print_or_latest",$this->data);
         }
 
     }
