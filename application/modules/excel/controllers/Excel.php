@@ -7866,7 +7866,7 @@ class Excel extends CI_Controller {
         $post = $this->input->post();
 
         $config['upload_path'] = './assets/excel';
-        $config['allowed_types'] = 'xlsx|xls';
+        $config['allowed_types'] = '*';
         $config['max_size'] = '1000000';
 
         $this->load->library('upload', $config);
