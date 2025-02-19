@@ -1882,7 +1882,7 @@ new Vue({
            this.invoiceNumbers = data.data
 
            if (this.invoiceNumbers.length === 0) {
-               this.invoice_update.invoice_number = this.cashier?.invoice_current
+               this.invoice_update.invoice_number = this.cashier.invoice_current
            }           
         },
         numberWithCommas: function(x) {
