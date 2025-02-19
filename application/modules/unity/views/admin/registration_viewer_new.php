@@ -1879,11 +1879,9 @@ new Vue({
         async getInvoiceNumber(){                                    
            const {data} = await axios.get(`${api_url}finance/invoice-list/${this.sem}/${this.applicant_data.campus}/${this.slug}`)
            
-           this.invoiceNumbers = data.data
-
-           if (this.invoiceNumbers.length === 0) {
-               this.invoice_update.invoice_number = this.cashier.invoice_current
-           }           
+            this.invoiceNumbers = data.data
+            this.invoice_update.invoice_number = this.cashier.invoice_current
+                      
         },
         numberWithCommas: function(x) {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
