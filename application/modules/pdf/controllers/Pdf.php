@@ -2416,7 +2416,12 @@ class Pdf extends CI_Controller {
         $this->data['full_assessment'] = number_format($fullAssessment,2,'.',',');
         $this->data['total_assessment'] = number_format($totalAssessment,2,'.',',');
 
-        $this->load->view("print_invoice",$this->data);
+        
+        if($this->data['campus'] == "Cebu"){
+            $this->load->view("print_invoice_cebu",$this->data);
+        }else {
+            $this->load->view("print_invoice",$this->data);
+        }
     }
 
     function print_updated_or(){
