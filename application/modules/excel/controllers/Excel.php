@@ -7905,9 +7905,9 @@ class Excel extends CI_Controller {
                     ->get()
                     ->first_row('array');
 
-                    print_r($student);
+                    // print_r($student);
                     // print_r($subject);
-                    die();
+                    // die();
 
                     if($student){
                         $facultyName = explode(',', ltrim($row['I']));
@@ -7976,7 +7976,7 @@ class Excel extends CI_Controller {
                             }
                         }
                     }else{
-                        return 'Student Not Found';
+                        return 'Student Not Found : ' . $studentNumber;
                     }
                 }
             }
