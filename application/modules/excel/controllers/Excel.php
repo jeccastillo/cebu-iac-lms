@@ -7955,6 +7955,7 @@ class Excel extends CI_Controller {
                                     'enumStatus' => 'act',
                                     'strRemarks' => '--',
                                     'intsyID' => $sem,
+                                    'date_added' => date("Y-m-d h:ia"),
                                 );
 
                                 if($term == 'Midterm'){
