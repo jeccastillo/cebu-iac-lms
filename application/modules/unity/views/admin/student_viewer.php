@@ -396,10 +396,11 @@
                           v-for="record in records"
                           style="font-size: 13px;">
                           <td>
-                            {{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}
+                            {{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}                            
                           </td>
                           <td><a
                               :href="base_url + 'unity/classlist_viewer/' + record.classlistID + '/0/' + id">{{ record.strCode }}</a>
+                              <span v-if="record.elective_classlist_id">&nbsp;Elective</span>
                           </td>
                           <td>{{ record.strUnits }}</td>
                           <td v-if="record.v2 != 'OW'" :style="(record.intFinalized == 2)?'font-weight:bold;':''">
@@ -441,8 +442,28 @@
 
                       </tbody>
                     </table>
-                    <div v-if="registration">
-                      <h3>Set Elective</h3>                      
+                    <div v-if="registration && electives.length > 0">
+                      <h4>Assign/Un-assign Subject as Elective</h4>        
+                      <div class="row">
+                        <form @submit.prevent='assignElective'>
+                          <div class="col-md-5">
+                            <label>Select Subject</label>
+                            <select v-model="elective_classlist" required class="form-control">
+                              <option v-for="record in records" :value='record.classlistID'>{{ record.strCode }}</option>
+                            </select>
+                          </div>
+                          <div class="col-md-5">
+                            <label>Select Subject</label>
+                            <select v-model="elective_subj" required class="form-control">
+                              <option  v-for="elective in electives" :value='elective.intSubjectID'>{{ elective.strCode }}</option>
+                            </select>
+                          </div>
+                          <div class="col-md-2">
+                            <label style="color:#fff;">Submit</label>
+                            <button type="submit" class="btn btn-primary btn-block">Assign/Un-assign</button>
+                          </div>
+                        </form>
+                      </div>              
                     </div>
                     <hr />
                     <table class="table table-bordered table-striped">
@@ -638,6 +659,14 @@
                 </div>
                 <div class="modal-body">
                 <form @submit.prevent="submitLoa()">
+                  <div class="form-group">
+                    <label>Tag for AWOL?</label>
+                    <select v-model="awol"            
+                      class="form-control">
+                        <option value="4">no</option>
+                        <option value="5">yes</option>
+                    </select>
+                  </div>
                     <div class="form-group">
                     <label for="input-reason">Reason for leave of absence</label>
                     <textarea id="input-reason"
@@ -763,11 +792,14 @@ new Vue({
     loader_spinner: true,
     change_grade: [],
     attendance: [],
+    awol: 4,
     total_units: 0,
     tuition_payment_link: undefined,
     notif_message: undefined,
     picture: undefined,
     electives: undefined,
+    elective_subj: undefined,
+    elective_classlist: undefined,
     lab_units: 0,
     gpa: 0,
     assessment: '',
@@ -951,6 +983,52 @@ new Vue({
         }
       });
     },
+    assignElective: function(){      
+        Swal.fire({
+            title: 'Assign/Un-assign Elective?',
+            text: "Continue?",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            imageWidth: 100,
+            icon: "question",
+            cancelButtonText: "No, cancel!",
+            showCloseButton: true,
+            showLoaderOnConfirm: true,
+            preConfirm: (login) => {
+                var formdata= new FormData();                  
+                formdata.append('elective_classlist_id',this.elective_subj);
+                formdata.append('subject_classlist_id',this.elective_classlist);
+                formdata.append('student_id',this.student.intID);
+                
+                return axios
+                .post(base_url + 'unity/assign_elective',formdata, {
+                        headers: {
+                            Authorization: `Bearer ${window.token}`
+                        }
+                    })
+                .then(data => {
+                    this.loader_spinner = false;                                                                                                                            
+                    if(data.data.success)                        
+                      Swal.fire({
+                          title: "Success",
+                          text: data.data.message,
+                          icon: "success"
+                      }).then(function() {
+                        location.reload();
+                      });
+                    else
+                      Swal.fire({
+                        title: "Failed",
+                        text: data.data.message,
+                        icon: "error"
+                      })
+
+                });
+                
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        });     
+    },
     enlistStudent: function(id){
           Swal.fire({
               title: 'Enlist Subjects?',
@@ -985,7 +1063,7 @@ new Vue({
                       Swal.fire({
                         title: "Failed",
                         text: data.data.message,
-                        icon: "failed"
+                        icon: "error"
                       })
 
                   });
@@ -1400,6 +1478,7 @@ new Vue({
                 }
                 formdata.append('term_id',this.sem_student);              
                 formdata.append('student_id',this.student.intID);
+                formdata.append('awol',this.awol);
                 formdata.append('password',inputValue);
                 formdata.append('student_name',this.student.strLastname + ' ' + this.student.strLastname);
 

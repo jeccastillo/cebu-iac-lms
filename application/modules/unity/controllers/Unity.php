@@ -469,7 +469,7 @@ class Unity extends CI_Controller {
                     'enumRegistrationStatus' => 'regular',
                     'enumStudentType' => 'continuing',
                     'intYearLevel' => 1,
-                    'intROG' => 4,
+                    'intROG' => $post['awol'],
                     'loa_remarks' => $post['loa_remarks'],
                     'loa_date' => $post['loa_date']
                 ];
@@ -478,7 +478,7 @@ class Unity extends CI_Controller {
             }
             else{
                 $reg_data = [
-                    'intROG' => 4,
+                    'intROG' => $post['awol'],
                     'loa_remarks' => $post['loa_remarks'],
                     'loa_date' => $post['loa_date']
                 ];
@@ -2294,7 +2294,21 @@ class Unity extends CI_Controller {
     }
 
 
-   
+   public function assign_elective(){
+        $post = $this->input->post();
+        $elect = $this->db->get_where('tb_mas_classlist_student_elective',array('subject_classlist_id'=>$post['subject_classlist_id'],'elective_classlist_id'=>$post['elective_classlist_id'],'student_id'=>$post['student_id']))->first_row();
+        if(!isset($elect)){
+            $this->db->insert('tb_mas_classlist_student_elective',$post);
+            $data['message'] = "Successfully Assigned";
+        }
+        else
+            $this->db->where(array('subject_classlist_id'=>$post['subject_classlist_id'],'elective_classlist_id'=>$post['elective_classlist_id'],'student_id'=>$post['student_id']))->delete('tb_mas_classlist_student_elective');
+            $data['message'] = "Successfully Un-Assigned";
+        
+        $data['success'] = true;
+        echo json_encode($data);
+
+   }
     
     public function add_subjects_curriculum()
     {
