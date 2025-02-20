@@ -130,11 +130,18 @@
                                         </div>
                                     </div>  
                                     <div v-if="windowPayment == 'official receipt'" class="col-sm-6">
-                                        <div class="form-group">
+                                        <div v-if="user.special_role == 2 || cashier.temporary_admin ==  1" class="form-group">
+                                            <label>OR Number:</label>
+                                            <input type="number"
+                                                class="form-control"
+                                                v-model="request.or_number" />
+                                        </div>
+                                        <div v-else class="form-group">
                                             <label>OR Number:</label>
                                             <div>{{ request.or_number }}</div>
                                             <input type="hidden" class="form-control" v-model="request.or_number" />
                                         </div>
+                                        
                                     </div>
                                     <!-- <div class="col-sm-6">
                                         <div class="form-group">
