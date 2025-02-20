@@ -246,6 +246,7 @@ new Vue({
         payees: [],
         net_vat: 0,
         less_vat: 0,
+        user: undefined,
         less_ewt: 0,
         total_amount_computed: 0,
         total_sales: 0,
@@ -303,6 +304,7 @@ new Vue({
                     this.request.cashier_id = this.cashier.user_id;    
                     this.payees = data.data.payees;   
                     this.particulars = data.data.particulars;
+                    this.user = data.data.user;
                     this.sy = data.data.sy;             
                 }
             })

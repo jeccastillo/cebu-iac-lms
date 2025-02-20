@@ -66,6 +66,7 @@ class Finance extends CI_Controller {
                                         ->result_array();
         $data['payees'] = $this->db->get('tb_mas_ns_payee')->result_array();
         $data['message'] = "Success";
+        $data['user'] = $this->data['user'];
         $data['success'] = true;
         echo json_encode($data);
     }
