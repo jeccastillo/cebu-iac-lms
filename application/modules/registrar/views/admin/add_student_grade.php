@@ -153,7 +153,7 @@ new Vue({
                             showCloseButton: true,
                             allowEscapeKey: false,
                             title: 'Import failed',
-                            messge: data,
+                            messge: data.data,
                             icon: 'error',
                         });
                     }
