@@ -7976,7 +7976,11 @@ class Excel extends CI_Controller {
                             }
                         }
                     }else{
-                        return 'Student Not Found : ' . $studentNumber;
+
+                        // Optionally, you can delete the uploaded file after import
+                        unlink($filePath);
+                        print('Student Not Found : ' . $studentNumber);
+                        return false;
                     }
                 }
             }
