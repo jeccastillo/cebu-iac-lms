@@ -155,28 +155,28 @@
                                             <input type="email" required class="form-control" v-model="request.email_address" />                                                    
                                         </div>
                                     </div>
-                                    <div
+                                    <div v-if="windowPayment == 'invoice'"
                                         class="form-group col-sm-6">
                                         <label>Vatable Amount :</label>    
                                         <input @change="computeVat" step=".01" type="number"
                                                 class="form-control"
                                                 v-model="request.invoice_amount">                                                
                                     </div>
-                                    <div
+                                    <div v-if="windowPayment == 'invoice'"
                                         class="form-group col-sm-6">
                                         <label>Vat Exempt Tax :</label>    
                                         <input @change="computeVat" step=".01" type="number"
                                                 class="form-control"
                                                 v-model="request.invoice_amount_ves">                                                
                                     </div>
-                                    <div
+                                    <div v-if="windowPayment == 'invoice'"
                                         class="form-group col-sm-6">
                                         <label>Vat Zero Rated Sales :</label>    
                                         <input @change="computeVat" step=".01" type="number"
                                                 class="form-control"
                                                 v-model="request.invoice_amount_vzrs">                                                
                                     </div>
-                                    <div
+                                    <div v-if="windowPayment == 'invoice'"
                                         class="form-group col-sm-6">
                                         <label>Less EWT:</label>    
                                         <select @change="computeVat"
