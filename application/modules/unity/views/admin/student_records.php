@@ -69,7 +69,8 @@
                                             <td v-if="record.strSection.length > 3">{{ record.strSection }}</td>
                                             <td v-else>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td>
                                             <!-- <td>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td> -->
-                                            <td>{{ record.strCode }}</td>
+                                            <td v-if="!record.elective_subject">{{ record.strCode }}</td>
+                                            <td v-else>({{ record.elective_subject.strCode + ' - ' + record.strCode }})</td>
                                             <td v-if="record.include_gwa == 1">{{ record.strUnits }}</td>
                                             <td v-else>({{ record.strUnits }})</td>
                                             <td v-if="record.v2 != 'OW'" :style="(record.intFinalized == 2)?'font-weight:bold;':''">{{ record.intFinalized >=1?record.v2:'NGS' }}</td>
