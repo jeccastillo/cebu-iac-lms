@@ -3819,6 +3819,7 @@ class Data_fetcher extends CI_Model {
                 $sched_day = '';
                 $sched_time = '';
                 $sched_room = '';                
+                $c['elective_subject'] = $this->db->get_where('tb_mas_subjects',array('intID'=>$c['elective_classlist_id']))->first_row();
                 
                 if(isset($schedule[0]['strDay']))                                                
                     $sched_time = date('g:ia',strtotime($schedule[0]['dteStart'])).' - '.date('g:ia',strtotime($schedule[0]['dteEnd']));  
