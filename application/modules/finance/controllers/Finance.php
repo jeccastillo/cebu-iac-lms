@@ -66,6 +66,7 @@ class Finance extends CI_Controller {
                                         ->result_array();
         $data['payees'] = $this->db->get('tb_mas_ns_payee')->result_array();
         $data['message'] = "Success";
+        $data['user'] = $this->data['user'];
         $data['success'] = true;
         echo json_encode($data);
     }
@@ -1712,7 +1713,7 @@ class Finance extends CI_Controller {
                     ->get()
                     ->result_array();
 
-        echo json_encode($data);
+        return $data;
     }
 
     public function faculty_logged_in()
@@ -1784,7 +1785,7 @@ class Finance extends CI_Controller {
         }
     }
 
-    public function scholarship_report($term = 0, $scholar_type = 'or', $date = 0)    
+    public function scholarship_report($term = 0, $scholar_type = 0, $date = 0)    
     {
         if($this->faculty_logged_in())
         {
@@ -1800,7 +1801,8 @@ class Finance extends CI_Controller {
             $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
             $this->data['current_sem'] = $term['intID'];            
             $this->data['date'] = $date;
-            $this->data['scholar_type'] = $scholar_type;
+            $this->data['scholarship_list'] = $this->scholarship_list();
+            $this->data['scholar_type_id'] = $scholar_type;
 
             $this->load->view("common/header",$this->data);
             $this->load->view("scholarship_report_list",$this->data);
