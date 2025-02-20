@@ -7977,7 +7977,7 @@ class Excel extends CI_Controller {
 
                         // Optionally, you can delete the uploaded file after import
                         unlink($filePath);
-                        print('Student Not Found : ' . $row['C']);
+                        print('Student Registration/Curriculum not found : ' . $row['C']);
                         return false;
                     }
                 }
