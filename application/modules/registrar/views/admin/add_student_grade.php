@@ -137,7 +137,7 @@ new Vue({
                 })
                 .then(data => {
                     Swal.hideLoading();
-                    if (data.data == true) {
+                    if (data) {
                         Swal.fire({
                             showCancelButton: false,
                             showCloseButton: true,
@@ -145,17 +145,18 @@ new Vue({
                             title: 'Successfully Import',
                             icon: 'success',
                         });
-                        $("#previous_balance_excel").val('');
-                    } else {
-                        Swal.fire({
-                            showCancelButton: false,
-                            showCloseButton: true,
-                            allowEscapeKey: false,
-                            title: 'Import failed',
-                            messge: data,
-                            icon: 'error',
-                        });
-                    }
+                        $("#student_grade_excel").val('');
+                    } 
+                    // else {
+                    //     Swal.fire({
+                    //         showCancelButton: false,
+                    //         showCloseButton: true,
+                    //         allowEscapeKey: false,
+                    //         title: 'Import failed',
+                    //         messge: data,
+                    //         icon: 'error',
+                    //     });
+                    // }
                 });
             
 
