@@ -129,30 +129,34 @@ new Vue({
 
             formData.append('student_grade_excel', this.attachment)
 
+            Swal.showLoading();
             const {
                 data
             } = await axios
                 .post('<?php echo base_url(); ?>excel/import_student_grades/' + this.sem + '/' + this.term, formData, {
                 })
+                .then(data => {
+                    Swal.hideLoading();
+                    if (data == true) {
+                        Swal.fire({
+                            showCancelButton: false,
+                            showCloseButton: true,
+                            allowEscapeKey: false,
+                            title: 'Successfully Import',
+                            icon: 'success',
+                        });
+                        $("#previous_balance_excel").val('');
+                    } else {
+                        Swal.fire({
+                            showCancelButton: false,
+                            showCloseButton: true,
+                            allowEscapeKey: false,
+                            title: 'Import failed',
+                            icon: 'error',
+                        });
+                    }
+                });
             
-            if (data == true) {
-                Swal.fire({
-                    showCancelButton: false,
-                    showCloseButton: true,
-                    allowEscapeKey: false,
-                    title: 'Successfully Import',
-                    icon: 'success',
-                });
-                $("#previous_balance_excel").val('');
-            } else {
-                Swal.fire({
-                    showCancelButton: false,
-                    showCloseButton: true,
-                    allowEscapeKey: false,
-                    title: 'Import failed',
-                    icon: 'error',
-                });
-            }
 
 
 
