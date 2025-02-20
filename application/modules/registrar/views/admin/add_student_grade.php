@@ -137,7 +137,8 @@ new Vue({
                 })
                 .then(data => {
                     Swal.hideLoading();
-                    if (data == true) {
+                    console.log(data.data);
+                    if (data.data == true) {
                         Swal.fire({
                             showCancelButton: false,
                             showCloseButton: true,
@@ -152,6 +153,7 @@ new Vue({
                             showCloseButton: true,
                             allowEscapeKey: false,
                             title: 'Import failed',
+                            messge: data,
                             icon: 'error',
                         });
                     }
