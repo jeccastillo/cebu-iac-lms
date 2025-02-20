@@ -145,8 +145,9 @@ new Vue({
                             allowEscapeKey: false,
                             title: 'Successfully Import',
                             icon: 'success',
+                        }).then(function() {
+                            location.reload();
                         });
-                        $("#student_grade_excel").val('');
                     }else {
                         Swal.fire({
                             showCancelButton: false,
@@ -155,6 +156,8 @@ new Vue({
                             title: 'Import failed',
                             text: data.data,
                             icon: 'error',
+                        }).then(function() {
+                            location.reload();
                         });
                     }
                 });
