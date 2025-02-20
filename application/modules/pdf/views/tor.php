@@ -329,6 +329,10 @@ foreach($records as $record){
                 $units_earned = "(".$units_earned.")";
             }
 
+            if(isset($item['elective_subject'])){
+                $item['strCode'] = $item['elective_subject']['strCode']." (".$item['strCode']." )";
+            }
+
             $grade = $item['v3']?$item['v3']:'NGS';
             
             $html .= '            
