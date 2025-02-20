@@ -137,6 +137,7 @@ new Vue({
                 })
                 .then(data => {
                     Swal.hideLoading();
+                    console.log(data);
                     if (data) {
                         Swal.fire({
                             showCancelButton: false,
@@ -146,17 +147,16 @@ new Vue({
                             icon: 'success',
                         });
                         $("#student_grade_excel").val('');
-                    } 
-                    // else {
-                    //     Swal.fire({
-                    //         showCancelButton: false,
-                    //         showCloseButton: true,
-                    //         allowEscapeKey: false,
-                    //         title: 'Import failed',
-                    //         messge: data,
-                    //         icon: 'error',
-                    //     });
-                    // }
+                    }else {
+                        Swal.fire({
+                            showCancelButton: false,
+                            showCloseButton: true,
+                            allowEscapeKey: false,
+                            title: 'Import failed',
+                            messge: data,
+                            icon: 'error',
+                        });
+                    }
                 });
             
 
