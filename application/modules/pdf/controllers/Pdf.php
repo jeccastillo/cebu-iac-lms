@@ -2491,7 +2491,7 @@ class Pdf extends CI_Controller {
         $this->data['or_number'] = (string)$request['or_number'];
         $this->data['or_number'] = str_pad($this->data['or_number'],5,'0', STR_PAD_LEFT);
         $this->data['invoice_number'] = strtoupper($request['invoice_number']);
-        $this->data['invoice_number'] = str_pad($this->data['or_number'],5,'0', STR_PAD_LEFT);
+        $this->data['invoice_number'] = str_pad($this->data['invoice_number'],5,'0', STR_PAD_LEFT);
         // $this->data['description'] = $request['description'];
         // $this->data['total_amount_due'] = $request['total_amount_due'];
         // $this->data['decimal'] = ($this->data['total_amount_due'] - floor( $this->data['total_amount_due'] )) * 100;
@@ -2505,6 +2505,8 @@ class Pdf extends CI_Controller {
         $this->data['total_amount_due_text'] = $totalAmountDueText;
         $this->data['total_amount_due'] = number_format($request['total_amount_due'],2,'.',',');
         
+
+        var_dump($this->data);
 
         if ($this->data['campus'] == "Cebu") {
             $this->load->view("print_or_latest_test",$this->data);
