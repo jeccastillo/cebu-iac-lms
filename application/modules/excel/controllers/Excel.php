@@ -7897,8 +7897,6 @@ class Excel extends CI_Controller {
                     //Check if student exists
                     // $student = $this->db->get_where('tb_mas_users',array('strStudentNumber' => $studentNumber))->first_row('array');
                     
-                    print($studentNumber);
-                    die();
                     $student =  $this->db
                     ->select("tb_mas_users.*,tb_mas_registration.current_curriculum")                                        
                     ->from("tb_mas_users")            
