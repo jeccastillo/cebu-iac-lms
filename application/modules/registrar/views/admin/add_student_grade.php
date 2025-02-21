@@ -138,7 +138,7 @@ new Vue({
                 .then(data => {
                     Swal.hideLoading();
                     console.log(data);
-                    if (data == true) {
+                    if (data.data == true) {
                         Swal.fire({
                             showCancelButton: false,
                             showCloseButton: true,
