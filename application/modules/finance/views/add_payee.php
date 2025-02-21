@@ -30,7 +30,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Last Name</label>
-                                    <input type="text" required v-model="request.lastname" class="form-control" />
+                                    <input type="text" v-model="request.lastname" class="form-control" />
                                 </div>
                                 <div class="form-group">
                                     <label>Middle Name</label>
