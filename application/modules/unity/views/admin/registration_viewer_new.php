@@ -594,6 +594,7 @@
                                                 <td>{{ payment.total_amount_due }}</td>
                                                 <td>{{ payment.status }}</td>
                                                 <td>{{ payment.or_date }}</td>
+                                                <td>{{ payment.remarks }}</td>
                                                 <td>{{ payment.void_reason }}</td>
                                                 <td>
                                                     <button
@@ -657,6 +658,7 @@
                                                 <td>{{ reservation_payment.total_amount_due }}</td>
                                                 <td>{{ reservation_payment.status }}</td>
                                                 <td>{{ reservation_payment.or_date }}</td>
+                                                <td>{{ reservation_payment.remarks }}</td>
                                                 <td>{{ reservation_payment.void_reason }}</td>
                                                 <td>
                                                     <!-- <button
@@ -713,6 +715,7 @@
                                                 <td>{{ payment.total_amount_due }}</td>
                                                 <td>{{ payment.status }}</td>
                                                 <td>{{ payment.or_date }}</td>
+                                                <td>{{ payment.remarks }}</td>
                                                 <td>{{ payment.void_reason }}</td>
                                                 <td>
                                                     <button
