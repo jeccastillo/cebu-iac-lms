@@ -7897,12 +7897,10 @@ class Excel extends CI_Controller {
                     //Check if student exists
                     // $student = $this->db->get_where('tb_mas_users',array('strStudentNumber' => $studentNumber))->first_row('array');
                     
-                    print($studentNumber);
-                    die();
                     $student =  $this->db
                     ->select("tb_mas_users.*,tb_mas_registration.current_curriculum")                                        
                     ->from("tb_mas_users")            
-                    ->where(array("tb_mas_users.strStudentNumber"=>$studentNumber))                                            
+                    ->where(array("tb_mas_users.strStudentNumber"=>$studentNumber))             
                     ->join('tb_mas_registration', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
                     ->get()
                     ->first_row('array');
@@ -7921,9 +7919,19 @@ class Excel extends CI_Controller {
                         if($faculty && $subject){
                             $classlistID = '';
                             //Check if classlist exists
-                            $classlist = $this->db->get_where('tb_mas_classlist',array('strAcademicYear' => $sem, 'intFacultyID' => $faculty['intID'], 'intSubjectID' => $subject['intID'], 'strSection' => $row['D'], 'intCurriculumID' => $student['current_curriculum']))->first_row('array');
-                            // $classlist = $this->db->get_where('tb_mas_classlist',array('strAcademicYear' => $sem, 'intFacultyID' => $faculty['intID']))->first_row('array');
 
+                            $classlist = $this->db->select('tb_mas_classlist.*')
+                                ->from('tb_mas_classlist')
+                                ->join('tb_mas_classlist_student','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
+                                ->where(array('strAcademicYear' => $sem, 'intFacultyID' => $faculty['intID'], 'intSubjectID' => $subject['intID'], 'strSection' => $row['D'], 'intCurriculumID' => $student['current_curriculum']))
+                                ->get()
+                                ->first_row('array');
+
+                            if(!$classlist){
+                                $classlist = $this->db->get_where('tb_mas_classlist',array('strAcademicYear' => $sem, 'intFacultyID' => $faculty['intID'], 'intSubjectID' => $subject['intID'], 'strSection' => $row['D'], 'intCurriculumID' => $student['current_curriculum']))->first_row('array');
+                            }
+                            
+                            
                             if(!$classlist){
                                 $newClasslist = array(
                                     'intFacultyID' => $faculty['intID'],
@@ -7944,6 +7952,8 @@ class Excel extends CI_Controller {
                                 $this->data_poster->post_data('tb_mas_classlist',$newClasslist);
                                 $classlistID = $this->db->insert_id();
                             }else{
+
+                                $this->data_poster->post_data('tb_mas_classlist', array('intFinalized' => 2), $classlist['intID']);
                                 $classlistID = $classlist['intID'];
                             }
 

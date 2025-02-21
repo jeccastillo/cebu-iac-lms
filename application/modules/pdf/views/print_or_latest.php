@@ -65,26 +65,26 @@ table tr td {
 }
 </style>
 
-<body>    
+<body>
     <div class="sheet-outer A4" id="vue-container">
         <section class="sheet padding-5mm">
             <div style="position:absolute; top: 90px; left: 20px; width: 100px; height: 20px;">
-                <?php echo $invoice_number; ?>
+                <?php echo $remarks; ?>
             </div>
             <div style="position:absolute; top: 90px; left: 95px; width: 200px; height: 20px;">
                 <?php echo $total_amount_due; ?>
             </div>
-            <div style="position:absolute; top: 140px; left: 5px; width: 200px; height: 20px;">
+            <div style="display:none;position:absolute; top: 140px; left: 5px; width: 200px; height: 20px;">
                 <?php echo $description == "Reservation Payment" ? "NON REFUNDABLE AND NON TRANSFERABLE":""; ?><br />
                 <?php echo "SY ".$term['strYearStart']."-".$term['strYearEnd']." ".$term['enumSem']." ".$term['term_label']."<br />".$type; ?>
             </div>
-            <div style="position:absolute; top: 190px; left: 95px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 320px; left: 95px; width: 200px; height: 20px;">
                 <?php echo $total_amount_due; ?>
             </div>
             <div style="position:absolute; top: 340px; left: 5px; width: 100px; height: 20px;">
                 <?php echo $remarks; ?>
             </div>
-            <div style="position:absolute; top: 340px; left: 95px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 355px; left: 95px; width: 200px; height: 20px;">
                 <?php echo $total_amount_due; ?>
             </div>
             <div style="position:absolute; top: 100; right: 60px; width: 200px; height: 20px;">
@@ -95,7 +95,7 @@ table tr td {
             </div>
             <div style="position:absolute; top: 140px; left: 336px; width: 500px; height: 20px;">
                 <?php if($student_id != 'undefined' && $student_id != ''): ?>
-                    <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?>
+                <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?>
                 <?php endif; ?>
                 &nbsp; <?php echo $student_name; ?>
             </div>
@@ -112,11 +112,11 @@ table tr td {
                 <?php echo $total_amount_due; ?>
             </div>
             <div style="position:absolute; top: 265px; left: 380px; width: 400px; height: 20px;">
-                 <?php echo $type." /  ".$term['enumSem']." ".$term['term_label']." ".$term['strYearStart']."-".$term['strYearEnd']; ?>            
+                <?php echo $type." /  ".$term['enumSem']." ".$term['term_label']." ".$term['strYearStart']."-".$term['strYearEnd']; ?>
             </div>
-            <div style="position:absolute; top: 330px; right: -20px; width: 200px; height: 20px;font-size:15px">
+            <div style="position:absolute; top: 330px; right: -40px; height: 20px;font-size:15px">
                 <?php echo $cashier_name; ?>
             </div>
         </section>
-    </div>    
+    </div>
 </body>
