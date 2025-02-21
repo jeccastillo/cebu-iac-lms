@@ -519,6 +519,7 @@
                                                 <th>Total Due</th>
                                                 <th>Status</th>
                                                 <th>Issued Date</th>
+                                                <th>Payment Gateway</th>
                                                 <th>Info</th>
                                                 <th>Actions</th>
                                             </tr>
@@ -536,6 +537,7 @@
                                                 <td>{{ application_payment.total_amount_due }}</td>
                                                 <td>{{ application_payment.status }}</td>
                                                 <td>{{ application_payment.or_date }}</td>
+                                                <td>{{ application_payment.remarks }}</td>
                                                 <td>{{ application_payment.void_reason }}</td>
                                                 <td>
                                                     <!-- <button
