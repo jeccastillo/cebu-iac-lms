@@ -7942,6 +7942,8 @@ class Excel extends CI_Controller {
                                 $this->data_poster->post_data('tb_mas_classlist',$newClasslist);
                                 $classlistID = $this->db->insert_id();
                             }else{
+
+                                $this->data_poster->post_data('tb_mas_classlist', array('intFinalized' => 2), $classlist['intID']);
                                 $classlistID = $classlist['intID'];
                             }
 
