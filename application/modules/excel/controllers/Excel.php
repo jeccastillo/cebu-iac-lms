@@ -8301,7 +8301,10 @@ class Excel extends CI_Controller {
 
         $i = 8;
 
+        
         foreach($payment_details as $index => $payment_detail){
+            // print_r($payment_detail['strMiddlename']);
+            // die();
             $payment_for = $particular = '';
 
             $course = $this->data_fetcher->getProgramDetails($payment_detail['intProgramID']);  
@@ -8318,19 +8321,23 @@ class Excel extends CI_Controller {
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A'.$i, $index + 1)
                 ->setCellValue('B'.$i, str_replace("-", "", $payment_detail['strStudentNumber']))
-                ->setCellValue('C'.$i, ucfirst($payment_detail['strLastname']) . ', ' . ucfirst($payment_detail['strFirstname']) . ' ' . ucfirst($payment_detail['strMiddlename'][0]) . '.')
+                ->setCellValue('C'.$i, ucfirst($payment_detail['strLastname']) . ', ' . ucfirst($payment_detail['strFirstname']) . ' ' . ucfirst($payment_detail['strMiddlename']) . '.')
                 ->setCellValue('D'.$i, $payment_detail['description'])
                 ->setCellValue('E'.$i, $particular)
                 ->setCellValue('F'.$i, $payment_detail['remarks'])
                 ->setCellValue('G'.$i, $payment_detail['is_cash'] ? 'Cash Sales' : 'Charge Sales')
                 ->setCellValue('H'.$i, date("d-M-Y", strtotime($payment_detail['invoice_date'])))
                 ->setCellValue('I'.$i, $payment_detail['invoice_number'])
-                ->setCellValue('J'.$i, $payment_detail['withholding_tax_percentage'] > 0 ? $payment_detail['subtotal_order'] : '')
-                ->setCellValue('K'.$i, $payment_detail['withholding_tax_percentage'] == 0 ? $payment_detail['subtotal_order'] : '')
-
-                ->setCellValue('K'.$i, $payment_detail['withholding_tax_percentage'] == 0 ? $payment_detail['subtotal_order'] : '')
-                ->setCellValue('J'.$i, $payment_detail['remarks']);
-                // withholding_tax_percentage
+                ->setCellValue('J'.$i, $payment_detail['invoice_amount'])
+                ->setCellValue('K'.$i, $payment_detail['invoice_amount_ves'])
+                ->setCellValue('L'.$i, $payment_detail['invoice_amount_vzrs'])
+                ->setCellValue('M'.$i, '=SUM(J' . $i . ':L' . $i . ')')
+                ->setCellValue('N'.$i, '=PRODUCT(J' . $i . ',.12)')
+                ->setCellValue('O'.$i, $payment_detail['withholding_tax_percentage'])
+                ->setCellValue('P'.$i, '=PRODUCT(J' . $i . ',O' . $i . ')')
+                ->setCellValue('Q'.$i, '=SUM(M' . $i . '+N' . $i . '+P' . $i . ')')
+                ->setCellValue('R'.$i, $payment_detail['subtotal_order'])
+                ->setCellValue('Q'.$i, '=SUM(Q' . $i . '-R' . $i . ')');
 
             $i++;
         }
@@ -8359,7 +8366,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('P7', 'EWT Amount')
                     ->setCellValue('Q7', 'Net Amount Due')
                     ->setCellValue('R7', 'Payment Received')
-                    ->setCellValue('PS7', 'Balance as of ' .  date("M d, Y", strtotime($report_date)));
+                    ->setCellValue('S7', 'Balance as of ' .  date("M d, Y", strtotime($report_date)));
 
         $objPHPExcel->getActiveSheet()->getStyle('J8:N' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
         $objPHPExcel->getActiveSheet()->getStyle('P8:S' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
@@ -8403,7 +8410,7 @@ class Excel extends CI_Controller {
             )
         );
         $objPHPExcel->getActiveSheet()->getStyle('A7:S'.$i)->applyFromArray($style);
-        $obsPHPExcel->getActiveSheet()->getStyle('A7:J'.$i)->getAlignment()->setWrapText(true);
+        // $obsPHPExcel->getActiveSheet()->getStyle('A7:S'.$i)->getAlignment()->setWrapText(true);
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
