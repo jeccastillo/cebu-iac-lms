@@ -8281,7 +8281,7 @@ class Excel extends CI_Controller {
                         ->from('payment_details')
                         ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
                         ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
-                        ->where(array('status' => 'Paid', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.invoice_number !=' => null))
+                        ->where(array('payment.details.status' => 'Paid', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.invoice_number !=' => null, 'payment.details.student_campus' => $campus))
                         ->order_by('payment_details.invoice_number', 'ASC')
                         ->group_by('tb_mas_users.intID')
                         ->get()
@@ -8303,8 +8303,6 @@ class Excel extends CI_Controller {
 
         
         foreach($payment_details as $index => $payment_detail){
-            // print_r($payment_detail['strMiddlename']);
-            // die();
             $payment_for = $particular = '';
 
             $course = $this->data_fetcher->getProgramDetails($payment_detail['intProgramID']);  
@@ -8333,11 +8331,11 @@ class Excel extends CI_Controller {
                 ->setCellValue('L'.$i, $payment_detail['invoice_amount_vzrs'])
                 ->setCellValue('M'.$i, '=SUM(J' . $i . ':L' . $i . ')')
                 ->setCellValue('N'.$i, '=PRODUCT(J' . $i . ',.12)')
-                ->setCellValue('O'.$i, $payment_detail['withholding_tax_percentage'])
+                ->setCellValue('O'.$i, $payment_detail['withholding_tax_percentage'] > 0 ? $payment_detail['withholding_tax_percentage'] : '')
                 ->setCellValue('P'.$i, '=PRODUCT(J' . $i . ',O' . $i . ')')
                 ->setCellValue('Q'.$i, '=SUM(M' . $i . '+N' . $i . '+P' . $i . ')')
                 ->setCellValue('R'.$i, $payment_detail['subtotal_order'])
-                ->setCellValue('Q'.$i, '=SUM(Q' . $i . '-R' . $i . ')');
+                ->setCellValue('S'.$i, '=SUM(Q' . $i . '-R' . $i . ')');
 
             $i++;
         }
@@ -8347,7 +8345,6 @@ class Excel extends CI_Controller {
                     ->setCellValue('A2', $campus == 'Makati' ? 'iACADEMY Nexus 7434 Yakal Street Brgy. San Antonio, Makati City' : '5th Floor Filinvest Cyberzone Tower 2 Salinas Drive Cor. W. Geonzon St., Cebu IT Park, Apas, Cebu City')
                     ->setCellValue('A3', 'Invoice Report')
                     ->setCellValue('A4', 'As of ' . date("M d, Y", strtotime($report_date)))
-                    // ->setCellValue('A8', strtoupper($sy->term_student_type) . ' ' . $sy->enumSem . ' ' . $this->data["term_type"] . ' ' . $sy->strYearStart . '-' . $sy->strYearEnd)
                     ->setCellValue('A7', 'No.')
                     ->setCellValue('B7', 'Student Number')
                     ->setCellValue('C7', 'Student Name')
@@ -8414,14 +8411,23 @@ class Excel extends CI_Controller {
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(30);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(35);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(5);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setWidth(20);
         
         $sheet = $objPHPExcel->getActiveSheet();
         $sheet->mergeCells('A1:S1');
