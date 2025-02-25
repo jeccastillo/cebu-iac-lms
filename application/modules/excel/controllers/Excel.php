@@ -8326,7 +8326,7 @@ class Excel extends CI_Controller {
                 ->setCellValue('G'.$i, $payment_detail['is_cash'] ? 'Cash Sales' : 'Charge Sales')
                 ->setCellValue('H'.$i, date("d-M-Y", strtotime($payment_detail['invoice_date'])))
                 ->setCellValue('I'.$i, $payment_detail['invoice_number'])
-                ->setCellValue('J'.$i, $payment_detail['invoice_amount'])
+                ->setCellValue('J'.$i, $payment_detail['invoice_amount'] == 0 && $payment_detail['invoice_amount_ves'] == 0 ? $payment_detail['subtotal_order'] : '')
                 ->setCellValue('K'.$i, $payment_detail['invoice_amount_ves'])
                 ->setCellValue('L'.$i, $payment_detail['invoice_amount_vzrs'])
                 ->setCellValue('M'.$i, '=SUM(J' . $i . ':L' . $i . ')')
