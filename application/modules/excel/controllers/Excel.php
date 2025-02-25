@@ -8281,7 +8281,7 @@ class Excel extends CI_Controller {
                         ->from('payment_details')
                         ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
                         ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
-                        ->where(array('payment.details.status' => 'Paid', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.invoice_number !=' => null, 'payment.details.student_campus' => $campus))
+                        ->where(array('payment_details.status' => 'Paid', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.invoice_number !=' => null, 'payment.details.student_campus' => $campus))
                         ->order_by('payment_details.invoice_number', 'ASC')
                         ->group_by('tb_mas_users.intID')
                         ->get()
