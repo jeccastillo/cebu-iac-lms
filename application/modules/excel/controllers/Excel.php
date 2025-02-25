@@ -8067,7 +8067,7 @@ class Excel extends CI_Controller {
         }
     }
 
-    // public function finance_deleted_or_invoice($sem = 0, $campus, $report_type, $report_date)
+    // public function finance_deleted_or_invoice($sem = 0, $report_type, $campus, $report_date)
     // {
     //     $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
     //     if($sem == 0 )
@@ -8256,7 +8256,7 @@ class Excel extends CI_Controller {
     //     exit;
     // }
 
-    public function finance_deleted_or_invoice($sem = 0, $campus, $report_type, $report_date)
+    public function finance_deleted_or_invoice($sem = 0, $report_type, $campus, $report_date)
     {
         $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
         if($sem == 0 )
@@ -8264,7 +8264,7 @@ class Excel extends CI_Controller {
             $s = $this->data_fetcher->get_active_sem();
             $sem = $s['intID'];
         }
-        $export_type = ($report_type == 'invoice') ? 'Invoice' : 'Official Receipt';
+        // $export_type = ($report_type == 'invoice') ? 'Invoice' : 'Official Receipt';
 
         // $payment_details = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
         //             ->from('payment_details')
@@ -8466,7 +8466,7 @@ class Excel extends CI_Controller {
         exit;
     }
 
-    public function finance_cancelled_or_invoice($sem = 0, $campus, $report_type, $report_date)
+    public function finance_cancelled_or_invoice($sem = 0, $report_type, $campus, $report_date)
     {
         $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
         if($sem == 0)
