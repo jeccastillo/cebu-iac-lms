@@ -8331,7 +8331,7 @@ class Excel extends CI_Controller {
                 ->setCellValue('L'.$i, $payment_detail['invoice_amount_vzrs'])
                 ->setCellValue('M'.$i, '=SUM(J' . $i . ':L' . $i . ')')
                 ->setCellValue('N'.$i, $payment_detail['invoice_amount'] > 0 ? '=PRODUCT(J' . $i . ',.12)' : '')
-                ->setCellValue('O'.$i, $payment_detail['withholding_tax_percentage'] > 0 ? $payment_detail['withholding_tax_percentage'] : '')
+                ->setCellValue('O'.$i, $payment_detail['withholding_tax_percentage'] > 0 ? $payment_detail['withholding_tax_percentage'] / 100 : '')
                 ->setCellValue('P'.$i, '=PRODUCT(J' . $i . ',O' . $i . ')')
                 ->setCellValue('Q'.$i, '=SUM(M' . $i . '+N' . $i . '+P' . $i . ')')
                 ->setCellValue('R'.$i, $payment_detail['subtotal_order'])
@@ -8365,8 +8365,8 @@ class Excel extends CI_Controller {
                     ->setCellValue('R7', 'Payment Received')
                     ->setCellValue('S7', 'Balance as of ' .  date("M d, Y", strtotime($report_date)));
 
-        $objPHPExcel->getActiveSheet()->getStyle('J8:N' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle('P8:S' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle('J8:S' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        // $objPHPExcel->getActiveSheet()->getStyle('P8:S' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
         $objPHPExcel->getActiveSheet()->getStyle('A1:S7')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
         $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray(
