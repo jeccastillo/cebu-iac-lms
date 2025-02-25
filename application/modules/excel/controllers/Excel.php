@@ -8407,7 +8407,7 @@ class Excel extends CI_Controller {
             )
         );
         $objPHPExcel->getActiveSheet()->getStyle('A7:S'.$i)->applyFromArray($style);
-        // $obsPHPExcel->getActiveSheet()->getStyle('A7:S'.$i)->getAlignment()->setWrapText(true);
+        $obsPHPExcel->getActiveSheet()->getStyle('A7:S'.$i)->getAlignment()->setWrapText(true);
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
