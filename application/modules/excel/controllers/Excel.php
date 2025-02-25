@@ -8277,10 +8277,10 @@ class Excel extends CI_Controller {
         //             ->result_array();
 
         // if($report_type == 'invoice'){
-            $payment_details = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
+            $payment_details = $this->db->select('payment_details.*, tb_mas_users.*')
                         ->from('payment_details')
                         ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
-                        ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                        // ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
                         ->where(array('payment_details.status' => 'Paid', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.invoice_number !=' => null, 'payment_details.student_campus' => $campus))
                         ->order_by('payment_details.invoice_number', 'ASC')
                         ->group_by('tb_mas_users.intID')
