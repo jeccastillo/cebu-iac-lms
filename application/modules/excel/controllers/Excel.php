@@ -8288,6 +8288,9 @@ class Excel extends CI_Controller {
                         ->result_array();
         // }
 
+        print_r($payment_details);
+        die();
+
         error_reporting(E_ALL);
         ini_set('display_errors', TRUE);
         ini_set('display_startup_errors', TRUE);
@@ -8423,7 +8426,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(5);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setWidth(20);
