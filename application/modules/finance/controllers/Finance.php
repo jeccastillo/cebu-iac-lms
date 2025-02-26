@@ -1381,12 +1381,82 @@ class Finance extends CI_Controller {
             $response_data['course'] = $course['strProgramCode'];
             $response_data['dateEnrolled'] = date("d-M-Y",strtotime($result['date_enlisted']));
             $response_data['or_invoice_date'] =  $report_type == 'invoice' ? date("d-M-Y", strtotime($result['invoice_date'])) : date("d-M-Y",strtotime($result['or_date']));
-            $response_data['or_invoice_number'] = $report_type == 'invoice' ? $result
-['invoice_number'] : $result['or_number'];
+            $response_data['or_invoice_number'] = $report_type == 'invoice' ? $result['invoice_number'] : $result['or_number'];
             $response_data['amount'] = $result['subtotal_order'];
             $response_data['date_deleted'] = date("d-M-Y", strtotime($result['updated_at']));
             $response_data['deleted_by'] = '';
             $response_data['remarls'] = $result['remarks'];
+            $response_array[] = $response_data;
+        }
+        
+        $data['data'] = $response_array;
+
+        echo json_encode($data);
+    }
+
+    public function finance_invoice_report_data($sem = 0, $report_date)
+    {
+        $report_date = ($report_date) ? $report_date : date("Y-m-d");
+        $response_array = array();
+
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+
+        $results = $this->db
+                    ->from('payment_details')
+                    ->where(array('status' => 'Paid', 'sy_reference' => $sem, 'updated_at <=' => $report_date, 'invoice_number !=' => null))
+                    ->order_by('invoice_number', 'ASC')
+                    ->get()
+                    ->result_array();
+
+        foreach($results as $index => $result){
+            $payment_for = $particular = '';
+
+            $student = $this->db->get_where('tb_mas_users', array('slug' => $result['student_number']))->first_row('array');
+
+            if(strpos($result['description'], 'Tuition') !== false || strpos($result['description'], 'Reservation') !== false || strpos($result['description'], 'Application') !== false){
+                $payment_for = $result['description'];
+                $particular = '';
+            }else{
+                $payment_for = 'Others';
+                $particular = $result['description'];
+            }
+            
+            $vat_exempt = $result['invoice_amount'] == 0 && $result['invoice_amount_ves'] == 0 ? $result['subtotal_order'] : $result['invoice_amount_ves'];
+            $ewt_rate = $result['withholding_tax_percentage'] > 0 ? $result['withholding_tax_percentage'] / 100 : 0;
+            $total_sales = $result['invoice_amount'] + $vat_exempt + $result['invoice_amount_vzrs'];
+            $vat = $result['invoice_amount'] > 0 ? $result['invoice_amount'] * .12 : '';
+            $ewt_amount = $ewt_rate > 0 ? $result['invoice_amount'] * $ewt_rate : '';
+
+            $net_amount = 0;
+            $net_amount += $total_sales > 0 ? $total_sales : 0;
+            $net_amount += $vat > 0 ? $vat : 0;
+            $net_amount += $ewt_amount > 0 ? $ewt_amount : 0;
+
+            $response_data['index'] = $index + 1;
+            $response_data['studentNumber'] = $student ? str_replace("-", "", $student['strStudentNumber']) : '';
+            $response_data['studentName'] = ucfirst($result['last_name']) . ', ' . ucfirst($result['first_name']);
+            $response_data['paymentFor'] = $result['description'];
+            $response_data['particular]'] = $particular;
+            $response_data['remarks'] = $result['remarks'];
+            $response_data['isCash'] = $result['is_cash'] ? 'Cash Sales' : 'Charge Sales';
+            $response_data['invoiceDate'] =  $result['invoice_date'] ? date("d-M-Y", strtotime($result['invoice_date'])) : date("d-M-Y", strtotime($result['created_at']));
+            $response_data['invoiceNumber'] = $result['invoice_number'];
+            $response_data['invoiceAmount'] = $result['invoice_amount'];
+            $response_data['vatExempt'] = $vat_exempt;
+            $response_data['zeroRated'] = $result['invoice_amount_vzrs'];
+            $response_data['totalSales'] = $total_sales;
+            $response_data['vat'] = $vat;
+            $response_data['ewtRate'] = $ewt_rate;
+            $response_data['ewtAmount'] = $ewt_amount;
+            $response_data['netAmount'] = $net_amount;
+            $response_data['paymentReceived'] = $result['subtotal_order'];
+            $reponse_data['balance'] = $net_amount - $result['subtotal_order'];
+
             $response_array[] = $response_data;
         }
         
@@ -1628,7 +1698,6 @@ class Finance extends CI_Controller {
         $misc = $this->db->get_where('tb_mas_tuition_year_misc', array('intID' => $particular_id))->first_row();
 
         if($misc){
-    
             $results = $this->db
                         ->select('tb_mas_users.*, tb_mas_tuition_year_misc.name, tb_mas_tuition_year_misc.type, tb_mas_registration.paymentType, tb_mas_registration.date_enlisted')
                         ->from('tb_mas_registration')
@@ -1640,12 +1709,26 @@ class Finance extends CI_Controller {
                         ->group_by('tb_mas_users.intID')
                         ->get()
                         ->result_array();
+
+            $misc_type = 'Regular';
             if($results){
                 foreach($results as $index => $result){
                     $count = 1;
                     $tuition_data = $this->data_fetcher->getTuition($result['intID'],$sem);
 
                     $misc_list = $tuition_data['misc_list'];
+
+                    if($student['type'] == 'new_student'){
+                        $misc_type = 'NSF';
+                    }else if($student['type'] == 'internship'){
+                        $misc_type = 'Internship';
+                    }else if($student['type'] == 'nstp'){
+                        $misc_type = 'NSTP';
+                    }else if($student['type'] == 'thesis'){
+                        $misc_type = 'Thesis';
+                    }else if($student['type'] == 'late_enrollment'){
+                        $misc_type = 'LEF';
+                    }
         
                     foreach($misc_list as $misc_name => $amount){
                         
@@ -1659,12 +1742,15 @@ class Finance extends CI_Controller {
                             $response_data['date_enlisted'] = date("d-M-Y",strtotime($result['date_enlisted']));
 
                             $response_data['regular'] = $result['type'] == 'regular' ? $amount : '' ;
-                            $response_data['new_student'] = $result['type'] == 'new_student' ? $amount : '' ;
-                            $response_data['internship'] = $result['type'] == 'internship' ? $amount : '' ;
-                            $response_data['nstp'] = $result['type'] == 'nstp' ? $amount : '' ;
-                            $response_data['regular'] = $result['type'] == 'regular' ? $amount : '' ;
-                            $response_data['thesis'] = $result['type'] == 'thesis' ? $amount : '' ;
-                            $response_data['late_enrollment'] = $result['type'] == 'late_enrollment' ? $amount : '' ;
+                            $response_data['misc_type'] = $misc_type;
+                            $response_data['amount'] = $amount;
+
+                            // $response_data['new_student'] = $result['type'] == 'new_student' ? $amount : '' ;
+                            // $response_data['internship'] = $result['type'] == 'internship' ? $amount : '' ;
+                            // $response_data['nstp'] = $result['type'] == 'nstp' ? $amount : '' ;
+                            // $response_data['regular'] = $result['type'] == 'regular' ? $amount : '' ;
+                            // $response_data['thesis'] = $result['type'] == 'thesis' ? $amount : '' ;
+                            // $response_data['late_enrollment'] = $result['type'] == 'late_enrollment' ? $amount : '' ;
                             $response_array[] = $response_data;
                             $count++;
                         }
