@@ -1394,7 +1394,7 @@ class Finance extends CI_Controller {
     //     echo json_encode($data);
     // }
 
-    public function finance_deleted_or_invoice_data($sem = 0, $report_type=‘or’, $report_date)
+    public function finance_invoice_report_data($sem = 0, $report_date)
     {
         $report_date = ($report_date) ? $report_date : date("Y-m-d");
         $response_array = array();
@@ -1698,7 +1698,6 @@ class Finance extends CI_Controller {
         $misc = $this->db->get_where('tb_mas_tuition_year_misc', array('intID' => $particular_id))->first_row();
 
         if($misc){
-    
             $results = $this->db
                         ->select('tb_mas_users.*, tb_mas_tuition_year_misc.name, tb_mas_tuition_year_misc.type, tb_mas_registration.paymentType, tb_mas_registration.date_enlisted')
                         ->from('tb_mas_registration')
@@ -1710,12 +1709,26 @@ class Finance extends CI_Controller {
                         ->group_by('tb_mas_users.intID')
                         ->get()
                         ->result_array();
+
+            $misc_type = 'Regular';
             if($results){
                 foreach($results as $index => $result){
                     $count = 1;
                     $tuition_data = $this->data_fetcher->getTuition($result['intID'],$sem);
 
                     $misc_list = $tuition_data['misc_list'];
+
+                    if($student['type'] == 'new_student'){
+                        $misc_type = 'NSF';
+                    }else if($student['type'] == 'internship'){
+                        $misc_type = 'Internship';
+                    }else if($student['type'] == 'nstp'){
+                        $misc_type = 'NSTP';
+                    }else if($student['type'] == 'thesis'){
+                        $misc_type = 'Thesis';
+                    }else if($student['type'] == 'late_enrollment'){
+                        $misc_type = 'LEF';
+                    }
         
                     foreach($misc_list as $misc_name => $amount){
                         
@@ -1729,12 +1742,15 @@ class Finance extends CI_Controller {
                             $response_data['date_enlisted'] = date("d-M-Y",strtotime($result['date_enlisted']));
 
                             $response_data['regular'] = $result['type'] == 'regular' ? $amount : '' ;
-                            $response_data['new_student'] = $result['type'] == 'new_student' ? $amount : '' ;
-                            $response_data['internship'] = $result['type'] == 'internship' ? $amount : '' ;
-                            $response_data['nstp'] = $result['type'] == 'nstp' ? $amount : '' ;
-                            $response_data['regular'] = $result['type'] == 'regular' ? $amount : '' ;
-                            $response_data['thesis'] = $result['type'] == 'thesis' ? $amount : '' ;
-                            $response_data['late_enrollment'] = $result['type'] == 'late_enrollment' ? $amount : '' ;
+                            $response_data['misc_type'] = $misc_type;
+                            $response_data['amount'] = $amount;
+
+                            // $response_data['new_student'] = $result['type'] == 'new_student' ? $amount : '' ;
+                            // $response_data['internship'] = $result['type'] == 'internship' ? $amount : '' ;
+                            // $response_data['nstp'] = $result['type'] == 'nstp' ? $amount : '' ;
+                            // $response_data['regular'] = $result['type'] == 'regular' ? $amount : '' ;
+                            // $response_data['thesis'] = $result['type'] == 'thesis' ? $amount : '' ;
+                            // $response_data['late_enrollment'] = $result['type'] == 'late_enrollment' ? $amount : '' ;
                             $response_array[] = $response_data;
                             $count++;
                         }
