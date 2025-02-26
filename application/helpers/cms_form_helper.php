@@ -275,7 +275,7 @@ function convert_number($number) {
 		/* Ones */
 		$res = "";
 		if ($Gn) {
-			$res .= convert_number($Gn) .  "Million";
+			$res .= convert_number($Gn) .  " Million";
 		}
 		if ($kn) {
 			$res .= (empty($res) ? "" : " ") .convert_number($kn) . " Thousand";
