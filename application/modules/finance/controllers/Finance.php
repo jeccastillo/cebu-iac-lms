@@ -1718,15 +1718,15 @@ class Finance extends CI_Controller {
 
                     $misc_list = $tuition_data['misc_list'];
 
-                    if($student['type'] == 'new_student'){
+                    if($result['type'] == 'new_student'){
                         $misc_type = 'NSF';
-                    }else if($student['type'] == 'internship'){
+                    }else if($result['type'] == 'internship'){
                         $misc_type = 'Internship';
-                    }else if($student['type'] == 'nstp'){
+                    }else if($result['type'] == 'nstp'){
                         $misc_type = 'NSTP';
-                    }else if($student['type'] == 'thesis'){
+                    }else if($result['type'] == 'thesis'){
                         $misc_type = 'Thesis';
-                    }else if($student['type'] == 'late_enrollment'){
+                    }else if($result['type'] == 'late_enrollment'){
                         $misc_type = 'LEF';
                     }
         
@@ -1740,11 +1740,10 @@ class Finance extends CI_Controller {
                             $response_data['student_name'] = ucfirst($result['strLastname']) . ', ' . ucfirst($result['strFirstname']) . ' ' . ucfirst($result['strMiddlename']) . '.';
                             $response_data['course'] = $course['strProgramCode'];
                             $response_data['date_enlisted'] = date("d-M-Y",strtotime($result['date_enlisted']));
-
-                            $response_data['regular'] = $result['type'] == 'regular' ? $amount : '' ;
                             $response_data['misc_type'] = $misc_type;
                             $response_data['amount'] = $amount;
-
+                            
+                            // $response_data['regular'] = $result['type'] == 'regular' ? $amount : '' ;
                             // $response_data['new_student'] = $result['type'] == 'new_student' ? $amount : '' ;
                             // $response_data['internship'] = $result['type'] == 'internship' ? $amount : '' ;
                             // $response_data['nstp'] = $result['type'] == 'nstp' ? $amount : '' ;
