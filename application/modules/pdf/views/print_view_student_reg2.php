@@ -123,7 +123,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                     $units = $record['strUnits'];
                                     //$desc = strlen($record['strDescription']) > 35 ? substr($record['strDescription'],0,35)."..." : $record['strDescription'];
                                     if(isset($record['elective_subject']))
-                                        $desc = $record['elective_subject']['strCode']."(".$record['strDescription'].")";
+                                        $desc = $record['elective_subject']['strCode']." (".$record['strDescription'].")";
                                     else
                                         $desc = $record['strDescription'];
                                     
