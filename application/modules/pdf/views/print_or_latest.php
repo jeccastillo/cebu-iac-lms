@@ -71,7 +71,7 @@ table tr td {
             <div style="position:absolute; top: 90px; left: 20px; width: 100px; height: 20px;">
                 <!-- or number -->
             </div>
-            <div style="position:absolute; top: 90px; left: 120px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 90px; left: 115px; width: 200px; height: 20px;">
                 <?php echo $total_amount_due; ?> </div>
             <div
                 style="display:none;position:absolute; top: 140px; left: 5px; width: 200px; height: 20px;">
@@ -95,8 +95,8 @@ table tr td {
                 &nbsp; <?php echo $student_name; ?> </div>
             <div style="position:absolute; top: 170px; left: 310px; width: 500px; height: 20px;">
                 <?php echo $student_address; ?> </div>
-            <div style="position:absolute; top: 195px; left: 295px; width: 500px; height: 20px;"> As
-                Applicable </div>
+            <div style="position:absolute; top: 195px; left: 295px; width: 500px; height: 20px;">
+                <?php echo $tin; ?> </div>
             <div style="position:absolute; top: 215px; left: 370px; width: 500px; height: 20px;">
                 <?php echo $total_amount_due_text; ?> </div>
             <div style="position:absolute; top: 240px; left: 670px; width: 200px; height: 20px;">
@@ -104,7 +104,7 @@ table tr td {
             <div style="position:absolute; top: 265px; left: 400px; width: 400px; height: 20px;">
                 <?php echo $type." /  ".$term['enumSem']." ".$term['term_label']." ".$term['strYearStart']."-".$term['strYearEnd']; ?>
             </div>
-            <div style="position:absolute; top: 310px; left: 650px; height: 20px;">
+            <div style="position:absolute; top: 310px; left: 575px; height: 20px;">
                 <?php echo $cashier_name; ?> </div>
         </section>
     </div>
