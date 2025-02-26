@@ -8067,7 +8067,7 @@ class Excel extends CI_Controller {
         }
     }
 
-    // public function finance_deleted_or_invoice($sem = 0, $campus, $report_type, $report_date)
+    // public function finance_deleted_or_invoice($sem = 0, $report_type, $campus, $report_date)
     // {
     //     $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
     //     if($sem == 0 )
@@ -8256,7 +8256,7 @@ class Excel extends CI_Controller {
     //     exit;
     // }
 
-    public function finance_deleted_or_invoice($sem = 0, $campus, $report_type, $report_date)
+    public function finance_invoice_report($sem = 0, $campus, $report_date)
     {
         $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
         if($sem == 0 )
@@ -8264,29 +8264,12 @@ class Excel extends CI_Controller {
             $s = $this->data_fetcher->get_active_sem();
             $sem = $s['intID'];
         }
-        $export_type = ($report_type == 'invoice') ? 'Invoice' : 'Official Receipt';
-
-        // $payment_details = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
-        //             ->from('payment_details')
-        //             ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
-        //             ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
-        //             ->where(array('status' => 'void', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.or_number !=' => null))
-        //             ->order_by('tb_mas_users.strLastname', 'ASC')
-        //             ->group_by('tb_mas_users.intID')
-        //             ->get()
-        //             ->result_array();
-
-        // if($report_type == 'invoice'){
-            $payment_details = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
-                        ->from('payment_details')
-                        ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
-                        ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
-                        ->where(array('payment.details.status' => 'Paid', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.invoice_number !=' => null, 'payment.details.student_campus' => $campus))
-                        ->order_by('payment_details.invoice_number', 'ASC')
-                        ->group_by('tb_mas_users.intID')
-                        ->get()
-                        ->result_array();
-        // }
+        $payment_details = $this->db
+                    ->from('payment_details')
+                    ->where(array('status' => 'Paid', 'sy_reference' => $sem, 'updated_at <=' => $report_date, 'invoice_number !=' => null, 'student_campus' => $campus))
+                    ->order_by('invoice_number', 'ASC')
+                    ->get()
+                    ->result_array();
 
         error_reporting(E_ALL);
         ini_set('display_errors', TRUE);
@@ -8305,7 +8288,7 @@ class Excel extends CI_Controller {
         foreach($payment_details as $index => $payment_detail){
             $payment_for = $particular = '';
 
-            $course = $this->data_fetcher->getProgramDetails($payment_detail['intProgramID']);  
+            $student = $this->db->get_where('tb_mas_users', array('slug' => $payment_detail['student_number']))->first_row('array');
 
             if(strpos($payment_detail['description'], 'Tuition') !== false || strpos($payment_detail['description'], 'Reservation') !== false || strpos($payment_detail['description'], 'Application') !== false){
                 $payment_for = $payment_detail['description'];
@@ -8318,20 +8301,20 @@ class Excel extends CI_Controller {
             // Add some data
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A'.$i, $index + 1)
-                ->setCellValue('B'.$i, str_replace("-", "", $payment_detail['strStudentNumber']))
-                ->setCellValue('C'.$i, ucfirst($payment_detail['strLastname']) . ', ' . ucfirst($payment_detail['strFirstname']) . ' ' . ucfirst($payment_detail['strMiddlename']) . '.')
+                ->setCellValue('B'.$i, $student ? str_replace("-", "", $student['strStudentNumber']) : '')
+                ->setCellValue('C'.$i, ucfirst($payment_detail['last_name']) . ', ' . ucfirst($payment_detail['first_name']))
                 ->setCellValue('D'.$i, $payment_detail['description'])
                 ->setCellValue('E'.$i, $particular)
                 ->setCellValue('F'.$i, $payment_detail['remarks'])
                 ->setCellValue('G'.$i, $payment_detail['is_cash'] ? 'Cash Sales' : 'Charge Sales')
-                ->setCellValue('H'.$i, date("d-M-Y", strtotime($payment_detail['invoice_date'])))
+                ->setCellValue('H'.$i, $payment_detail['invoice_date'] ? date("d-M-Y", strtotime($payment_detail['invoice_date'])) : date("d-M-Y", strtotime($payment_detail['created_at'])))
                 ->setCellValue('I'.$i, $payment_detail['invoice_number'])
                 ->setCellValue('J'.$i, $payment_detail['invoice_amount'])
-                ->setCellValue('K'.$i, $payment_detail['invoice_amount_ves'])
+                ->setCellValue('K'.$i, $payment_detail['invoice_amount'] == 0 && $payment_detail['invoice_amount_ves'] == 0 ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount_ves'])
                 ->setCellValue('L'.$i, $payment_detail['invoice_amount_vzrs'])
                 ->setCellValue('M'.$i, '=SUM(J' . $i . ':L' . $i . ')')
-                ->setCellValue('N'.$i, '=PRODUCT(J' . $i . ',.12)')
-                ->setCellValue('O'.$i, $payment_detail['withholding_tax_percentage'] > 0 ? $payment_detail['withholding_tax_percentage'] : '')
+                ->setCellValue('N'.$i, $payment_detail['invoice_amount'] > 0 ? '=PRODUCT(J' . $i . ',.12)' : '')
+                ->setCellValue('O'.$i, $payment_detail['withholding_tax_percentage'] > 0 ? $payment_detail['withholding_tax_percentage'] / 100 : '')
                 ->setCellValue('P'.$i, '=PRODUCT(J' . $i . ',O' . $i . ')')
                 ->setCellValue('Q'.$i, '=SUM(M' . $i . '+N' . $i . '+P' . $i . ')')
                 ->setCellValue('R'.$i, $payment_detail['subtotal_order'])
@@ -8365,8 +8348,8 @@ class Excel extends CI_Controller {
                     ->setCellValue('R7', 'Payment Received')
                     ->setCellValue('S7', 'Balance as of ' .  date("M d, Y", strtotime($report_date)));
 
-        $objPHPExcel->getActiveSheet()->getStyle('J8:N' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle('P8:S' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle('J8:S' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        // $objPHPExcel->getActiveSheet()->getStyle('P8:S' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
         $objPHPExcel->getActiveSheet()->getStyle('A1:S7')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
         $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray(
@@ -8407,7 +8390,7 @@ class Excel extends CI_Controller {
             )
         );
         $objPHPExcel->getActiveSheet()->getStyle('A7:S'.$i)->applyFromArray($style);
-        // $obsPHPExcel->getActiveSheet()->getStyle('A7:S'.$i)->getAlignment()->setWrapText(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A7:S'.$i)->getAlignment()->setWrapText(true);
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
@@ -8423,7 +8406,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(5);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setWidth(20);
@@ -8463,7 +8446,7 @@ class Excel extends CI_Controller {
         exit;
     }
 
-    public function finance_cancelled_or_invoice($sem = 0, $campus, $report_type, $report_date)
+    public function finance_cancelled_or_invoice($sem = 0, $report_type, $campus, $report_date)
     {
         $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
         if($sem == 0)
