@@ -330,7 +330,7 @@ foreach($records as $record){
             }
 
             if(isset($item['elective_subject'])){
-                $item['strCode'] = $item['elective_subject']['strCode']." (".$item['strCode']." )";
+                $item['strCode'] = $item['elective_subject']['strCode'];
             }
 
             $grade = $item['v3']?$item['v3']:'NGS';
