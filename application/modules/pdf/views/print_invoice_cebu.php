@@ -96,13 +96,13 @@ table tr td {
                 <?php echo $full_assessment; ?> </div>
             <div style="position:absolute; top:  250px; left: 710px; width: 200px; height: 20px;">
                 <?php echo $full_assessment; ?> </div>
-            <div style="position:absolute; top: 270px; left:10px; width: 500px; height: 20px;">
+            <div style="position:absolute; top: 270px; left:60px; width: 500px; height: 20px;">
                 <?php echo $reservation_description; ?> </div>
-            <div style="position:absolute; top: 270px; left: 500px; width: 500px; height: 20px;">
+            <div style="position:absolute; top: 270px; left: 525px; width: 500px; height: 20px;">
                 <?php echo $reservation_amount != 0 ? 1 : ""; ?> </div>
-            <div style="position:absolute; top: 270px; left: 550px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 270px; left: 595px; width: 200px; height: 20px;">
                 <?php echo $reservation_amount != 0 ? "-".$reservation_amount : ""; ?> </div>
-            <div style="position:absolute; top:  270px; left: 650px; width: 200px; height: 20px;">
+            <div style="position:absolute; top:  270px; left: 710px; width: 200px; height: 20px;">
                 <?php echo $reservation_amount != 0 ? "-".$reservation_amount : ""; ?> </div>
             <!---VAT ZERO RATED--->
             <div style="position:absolute; top: 335px; left: 650px; width: 200px; height: 20px;">
