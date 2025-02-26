@@ -1740,11 +1740,10 @@ class Finance extends CI_Controller {
                             $response_data['student_name'] = ucfirst($result['strLastname']) . ', ' . ucfirst($result['strFirstname']) . ' ' . ucfirst($result['strMiddlename']) . '.';
                             $response_data['course'] = $course['strProgramCode'];
                             $response_data['date_enlisted'] = date("d-M-Y",strtotime($result['date_enlisted']));
-
-                            $response_data['regular'] = $result['type'] == 'regular' ? $amount : '' ;
                             $response_data['misc_type'] = $misc_type;
                             $response_data['amount'] = $amount;
-
+                            
+                            // $response_data['regular'] = $result['type'] == 'regular' ? $amount : '' ;
                             // $response_data['new_student'] = $result['type'] == 'new_student' ? $amount : '' ;
                             // $response_data['internship'] = $result['type'] == 'internship' ? $amount : '' ;
                             // $response_data['nstp'] = $result['type'] == 'nstp' ? $amount : '' ;
