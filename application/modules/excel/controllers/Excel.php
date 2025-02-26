@@ -8264,29 +8264,13 @@ class Excel extends CI_Controller {
             $s = $this->data_fetcher->get_active_sem();
             $sem = $s['intID'];
         }
-        // $export_type = ($report_type == 'invoice') ? 'Invoice' : 'Official Receipt';
-
-        // $payment_details = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
-        //             ->from('payment_details')
-        //             ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
-        //             ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
-        //             ->where(array('status' => 'void', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.or_number !=' => null))
-        //             ->order_by('tb_mas_users.strLastname', 'ASC')
-        //             ->group_by('tb_mas_users.intID')
-        //             ->get()
-        //             ->result_array();
-
-        // if($report_type == 'invoice'){
-            $payment_details = $this->db->select('payment_details.*, tb_mas_users.*')
-                        ->from('payment_details')
-                        ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
-                        // ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
-                        ->where(array('payment_details.status' => 'Paid', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.invoice_number !=' => null, 'payment_details.student_campus' => $campus))
-                        ->order_by('payment_details.invoice_number', 'ASC')
-                        ->group_by('tb_mas_users.intID')
-                        ->get()
-                        ->result_array();
-        // }
+        $payment_details = $this->db
+                    ->from('payment_details')
+                    ->where(array('status' => 'Paid', 'sy_reference' => $sem, 'updated_at <=' => $report_date, 'invoice_number !=' => null, 'student_campus' => $campus))
+                    ->order_by('invoice_number', 'ASC')
+                    ->group_by('last_name')
+                    ->get()
+                    ->result_array();
 
         error_reporting(E_ALL);
         ini_set('display_errors', TRUE);
@@ -8319,7 +8303,7 @@ class Excel extends CI_Controller {
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A'.$i, $index + 1)
                 ->setCellValue('B'.$i, str_replace("-", "", $payment_detail['strStudentNumber']))
-                ->setCellValue('C'.$i, ucfirst($payment_detail['strLastname']) . ', ' . ucfirst($payment_detail['strFirstname']) . ' ' . ucfirst($payment_detail['strMiddlename']) . '.')
+                ->setCellValue('C'.$i, ucfirst($payment_detail['last_name']) . ', ' . ucfirst($payment_detail['first_name']))
                 ->setCellValue('D'.$i, $payment_detail['description'])
                 ->setCellValue('E'.$i, $particular)
                 ->setCellValue('F'.$i, $payment_detail['remarks'])
