@@ -1442,7 +1442,7 @@ class Finance extends CI_Controller {
             $response_data['studentNumber'] = $student ? str_replace("-", "", $student['strStudentNumber']) : '';
             $response_data['studentName'] = ucfirst($result['last_name']) . ', ' . ucfirst($result['first_name']);
             $response_data['paymentFor'] = $result['description'];
-            $response_data['particular]'] = $result['particular'];
+            $response_data['particular]'] = $particular;
             $response_data['remarks'] = $result['remarks'];
             $response_data['isCash'] = $result['is_cash'] ? 'Cash Sales' : 'Charge Sales';
             $response_data['invoiceDate'] =  $result['invoice_date'] ? date("d-M-Y", strtotime($result['invoice_date'])) : date("d-M-Y", strtotime($result['created_at']));
