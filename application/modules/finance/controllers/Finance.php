@@ -1408,7 +1408,7 @@ class Finance extends CI_Controller {
 
         $results = $this->db
                     ->from('payment_details')
-                    ->where(array('status' => 'Paid', 'sy_reference' => $sem, 'updated_at <=' => $report_date, 'invoice_number !=' => null, 'student_campus' => $campus))
+                    ->where(array('status' => 'Paid', 'sy_reference' => $sem, 'updated_at <=' => $report_date, 'invoice_number !=' => null))
                     ->order_by('invoice_number', 'ASC')
                     ->group_by('last_name')
                     ->get()
