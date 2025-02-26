@@ -8256,7 +8256,7 @@ class Excel extends CI_Controller {
     //     exit;
     // }
 
-    public function finance_deleted_or_invoice($sem = 0, $report_type, $campus, $report_date)
+    public function finance_invoice_report($sem = 0, $campus, $report_date)
     {
         $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
         if($sem == 0 )
