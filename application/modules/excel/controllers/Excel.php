@@ -8289,7 +8289,7 @@ class Excel extends CI_Controller {
         foreach($payment_details as $index => $payment_detail){
             $payment_for = $particular = $course = '';
 
-            // $student = $this->db->get_where('tb_mas_users', array('slug' => $payment_detail['student_number']))->first_row();
+            $student = $this->db->get_where('tb_mas_users', array('slug' => $payment_detail['student_number']))->first_row();
             // if($student){
             //     $course = $this->data_fetcher->getProgramDetails($student['intProgramID']);  
             // }
@@ -8305,7 +8305,7 @@ class Excel extends CI_Controller {
             // Add some data
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A'.$i, $index + 1)
-                ->setCellValue('B'.$i, str_replace("-", "", $payment_detail['strStudentNumber']))
+                ->setCellValue('B'.$i, $student ? str_replace("-", "", $student['strStudentNumber']) : '')
                 ->setCellValue('C'.$i, ucfirst($payment_detail['last_name']) . ', ' . ucfirst($payment_detail['first_name']))
                 ->setCellValue('D'.$i, $payment_detail['description'])
                 ->setCellValue('E'.$i, $particular)
