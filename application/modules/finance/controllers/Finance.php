@@ -1718,15 +1718,15 @@ class Finance extends CI_Controller {
 
                     $misc_list = $tuition_data['misc_list'];
 
-                    if($student['type'] == 'new_student'){
+                    if($result['type'] == 'new_student'){
                         $misc_type = 'NSF';
-                    }else if($student['type'] == 'internship'){
+                    }else if($result['type'] == 'internship'){
                         $misc_type = 'Internship';
-                    }else if($student['type'] == 'nstp'){
+                    }else if($result['type'] == 'nstp'){
                         $misc_type = 'NSTP';
-                    }else if($student['type'] == 'thesis'){
+                    }else if($result['type'] == 'thesis'){
                         $misc_type = 'Thesis';
-                    }else if($student['type'] == 'late_enrollment'){
+                    }else if($result['type'] == 'late_enrollment'){
                         $misc_type = 'LEF';
                     }
         
