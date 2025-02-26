@@ -8287,9 +8287,12 @@ class Excel extends CI_Controller {
 
         
         foreach($payment_details as $index => $payment_detail){
-            $payment_for = $particular = '';
+            $payment_for = $particular = $course = '';
 
-            $course = $this->data_fetcher->getProgramDetails($payment_detail['intProgramID']);  
+            $student = $this->db->get_where('tb_mas_users', array('slug' => $payment_detail['student_number']))->first_row();
+            if($student){
+                $course = $this->data_fetcher->getProgramDetails($payment_detail['intProgramID']);  
+            }
 
             if(strpos($payment_detail['description'], 'Tuition') !== false || strpos($payment_detail['description'], 'Reservation') !== false || strpos($payment_detail['description'], 'Application') !== false){
                 $payment_for = $payment_detail['description'];
