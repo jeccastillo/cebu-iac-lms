@@ -1336,6 +1336,64 @@ class Finance extends CI_Controller {
     //     echo json_encode($data);
     // }
 
+    // public function finance_deleted_or_invoice_data($sem = 0, $report_type=‘or’, $report_date)
+    // {
+    //     $report_date = ($report_date) ? $report_date : date("Y-m-d");
+    //     $response_array = array();
+
+    //     $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+    //     if($sem == 0 )
+    //     {
+    //         $s = $this->data_fetcher->get_active_sem();
+    //         $sem = $s['intID'];
+    //     }
+    //     $export_type = ($report_type == 'invoice') ? 'Invoice' : 'Official Receipt';
+
+    //     $results = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
+    //                ->from('payment_details')
+    //                 ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
+    //                 ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+    //                 ->where(array('status' => 'void', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.or_number !=' => null))
+    //                 ->order_by('tb_mas_users.strLastname', 'ASC')
+    //                 ->group_by('tb_mas_users.intID')
+    //                 ->get()
+    //                 ->result_array();
+
+    //     if($report_type == 'invoice'){
+    //         $results = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
+    //                     ->from('payment_details')
+    //                     ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
+    //                     ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+    //                     ->where(array('status' => 'void', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.invoice_number !=' => null))
+    //                     ->order_by('tb_mas_users.strLastname', 'ASC')
+    //                     ->group_by('tb_mas_users.intID')
+    //                     ->get()
+    //                     ->result_array();
+    //     }
+
+    //     foreach($results as $index => $result){
+
+    //         $course = $this->data_fetcher->getProgramDetails($result['intProgramID']);
+            
+    //         $response_data['index'] = $index + 1;
+    //         $response_data['studentNumber'] = str_replace("-", "", $result['strStudentNumber']);
+    //         $response_data['studentName'] = ucfirst($result['strLastname']) . ', ' . ucfirst($result['strFirstname']) . ' ' . ucfirst($result['strMiddlename'][0]) . '.';
+    //         $response_data['course'] = $course['strProgramCode'];
+    //         $response_data['dateEnrolled'] = date("d-M-Y",strtotime($result['date_enlisted']));
+    //         $response_data['or_invoice_date'] =  $report_type == 'invoice' ? date("d-M-Y", strtotime($result['invoice_date'])) : date("d-M-Y",strtotime($result['or_date']));
+    //         $response_data['or_invoice_number'] = $report_type == 'invoice' ? $result['invoice_number'] : $result['or_number'];
+    //         $response_data['amount'] = $result['subtotal_order'];
+    //         $response_data['date_deleted'] = date("d-M-Y", strtotime($result['updated_at']));
+    //         $response_data['deleted_by'] = '';
+    //         $response_data['remarls'] = $result['remarks'];
+    //         $response_array[] = $response_data;
+    //     }
+        
+    //     $data['data'] = $response_array;
+
+    //     echo json_encode($data);
+    // }
+
     public function finance_deleted_or_invoice_data($sem = 0, $report_type=‘or’, $report_date)
     {
         $report_date = ($report_date) ? $report_date : date("Y-m-d");
@@ -1347,46 +1405,60 @@ class Finance extends CI_Controller {
             $s = $this->data_fetcher->get_active_sem();
             $sem = $s['intID'];
         }
-        $export_type = ($report_type == 'invoice') ? 'Invoice' : 'Official Receipt';
 
-        $results = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
-                   ->from('payment_details')
-                    ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
-                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
-                    ->where(array('status' => 'void', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.or_number !=' => null))
-                    ->order_by('tb_mas_users.strLastname', 'ASC')
-                    ->group_by('tb_mas_users.intID')
+        $results = $this->db
+                    ->from('payment_details')
+                    ->where(array('status' => 'Paid', 'sy_reference' => $sem, 'updated_at <=' => $report_date, 'invoice_number !=' => null))
+                    ->order_by('invoice_number', 'ASC')
+                    ->group_by('last_name')
                     ->get()
                     ->result_array();
 
-        if($report_type == 'invoice'){
-            $results = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
-                        ->from('payment_details')
-                        ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
-                        ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
-                        ->where(array('status' => 'void', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.invoice_number !=' => null))
-                        ->order_by('tb_mas_users.strLastname', 'ASC')
-                        ->group_by('tb_mas_users.intID')
-                        ->get()
-                        ->result_array();
-        }
-
         foreach($results as $index => $result){
+            $payment_for = $particular = '';
 
-            $course = $this->data_fetcher->getProgramDetails($result['intProgramID']);
+            $student = $this->db->get_where('tb_mas_users', array('slug' => $payment_detail['student_number']))->first_row('array');
+
+            if(strpos($payment_detail['description'], 'Tuition') !== false || strpos($payment_detail['description'], 'Reservation') !== false || strpos($payment_detail['description'], 'Application') !== false){
+                $payment_for = $payment_detail['description'];
+                $particular = '';
+            }else{
+                $payment_for = 'Others';
+                $particular = $payment_detail['description'];
+            }
             
+            $vat_exempt = $payment_detail['invoice_amount'] == 0 && $payment_detail['invoice_amount_ves'] == 0 ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount_ves'];
+            $ewt_rate = $payment_detail['withholding_tax_percentage'] > 0 ? $payment_detail['withholding_tax_percentage'] / 100 : 0;
+            $total_sales = $payment_detail['invoice_amount'] + $vat_exempt + $payment_detail['invoice_amount_vzrs'];
+            $vat = $payment_detail['invoice_amount'] > 0 ? $payment_detail['invoice_amount'] * .12 : '';
+            $ewt_amount = $ewt_rate > 0 ? $payment_detail['invoice_amount'] * $ewt_rate : '';
+
+            $net_amount = 0;
+            $net_amount += $total_sales > 0 ? $total_sales : 0;
+            $net_amount += $vat > 0 ? $vat : 0;
+            $net_amount += $ewt_amount > 0 ? $ewt_amount : 0;
+
             $response_data['index'] = $index + 1;
-            $response_data['studentNumber'] = str_replace("-", "", $result['strStudentNumber']);
-            $response_data['studentName'] = ucfirst($result['strLastname']) . ', ' . ucfirst($result['strFirstname']) . ' ' . ucfirst($result['strMiddlename'][0]) . '.';
+            $response_data['studentNumber'] = $student ? str_replace("-", "", $student['strStudentNumber']) : '';
+            $response_data['studentName'] = ucfirst($payment_detail['last_name']) . ', ' . ucfirst($payment_detail['first_name']);
             $response_data['course'] = $course['strProgramCode'];
-            $response_data['dateEnrolled'] = date("d-M-Y",strtotime($result['date_enlisted']));
-            $response_data['or_invoice_date'] =  $report_type == 'invoice' ? date("d-M-Y", strtotime($result['invoice_date'])) : date("d-M-Y",strtotime($result['or_date']));
-            $response_data['or_invoice_number'] = $report_type == 'invoice' ? $result
-['invoice_number'] : $result['or_number'];
-            $response_data['amount'] = $result['subtotal_order'];
-            $response_data['date_deleted'] = date("d-M-Y", strtotime($result['updated_at']));
-            $response_data['deleted_by'] = '';
-            $response_data['remarls'] = $result['remarks'];
+            $response_data['paymentFor'] = $payment_detail['description'];
+            $response_data['particular]'] = $payment_detail['particular'];
+            $response_data['remarks'] = $result['remarks'];
+            $response_data['isCash'] = $payment_detail['is_cash'] ? 'Cash Sales' : 'Charge Sales';
+            $response_data['invoiceDate'] =  $payment_detail['invoice_date'] ? date("d-M-Y", strtotime($payment_detail['invoice_date'])) : date("d-M-Y", strtotime($payment_detail['created_at']));
+            $response_data['invoiceNumber'] = $payment_detail['invoice_number'];
+            $response_data['invoiceAmount'] = $payment_detail['invoice_amount'];
+            $response_data['vatExempt'] = $vat_exempt;
+            $response_data['zeroRated'] = $payment_detail['invoice_amount_vzrs'];
+            $response_data['totalSales'] = $total_sales;
+            $response_data['vat'] = $vat;
+            $response_data['ewtRate'] = $ewt_rate;
+            $response_data['ewtAmount'] = $ewt_amount;
+            $response_data['netAmount'] = $net_amount;
+            $response_data['paymentReceived'] = $payment_detail['subtotal_order'];
+            $reponse_data['balance'] = $net_amount - $payment_detail['subtotal_order'];
+
             $response_array[] = $response_data;
         }
         
