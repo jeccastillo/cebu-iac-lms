@@ -1410,7 +1410,6 @@ class Finance extends CI_Controller {
                     ->from('payment_details')
                     ->where(array('status' => 'Paid', 'sy_reference' => $sem, 'updated_at <=' => $report_date, 'invoice_number !=' => null))
                     ->order_by('invoice_number', 'ASC')
-                    ->group_by('last_name')
                     ->get()
                     ->result_array();
 
