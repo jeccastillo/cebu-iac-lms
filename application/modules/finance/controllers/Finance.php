@@ -1441,7 +1441,6 @@ class Finance extends CI_Controller {
             $response_data['index'] = $index + 1;
             $response_data['studentNumber'] = $student ? str_replace("-", "", $student['strStudentNumber']) : '';
             $response_data['studentName'] = ucfirst($result['last_name']) . ', ' . ucfirst($result['first_name']);
-            $response_data['course'] = $course['strProgramCode'];
             $response_data['paymentFor'] = $result['description'];
             $response_data['particular]'] = $result['particular'];
             $response_data['remarks'] = $result['remarks'];
