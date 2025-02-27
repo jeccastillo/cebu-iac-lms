@@ -7923,7 +7923,13 @@ class Excel extends CI_Controller {
                             $classlist = $this->db->select('tb_mas_classlist.*')
                                 ->from('tb_mas_classlist')
                                 ->join('tb_mas_classlist_student','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
-                                ->where(array('strAcademicYear' => $sem, 'intFacultyID' => $faculty['intID'], 'intSubjectID' => $subject['intID'], 'strSection' => $row['D'], 'intCurriculumID' => $student['current_curriculum']))
+                                ->where(array('strAcademicYear' => $sem, 
+                                        'intFacultyID' => $faculty['intID'], 
+                                        'intSubjectID' => $subject['intID'],
+                                        'strClassName' => $row['D'],
+                                        'year' => $row['E'],
+                                        'strSection' => $row['F'], 
+                                        'intCurriculumID' => $student['current_curriculum']))
                                 ->get()
                                 ->first_row('array');
 
@@ -7931,12 +7937,11 @@ class Excel extends CI_Controller {
                                 $classlist = $this->db->get_where('tb_mas_classlist',array('strAcademicYear' => $sem, 'intFacultyID' => $faculty['intID'], 'intSubjectID' => $subject['intID'], 'strSection' => $row['D'], 'intCurriculumID' => $student['current_curriculum']))->first_row('array');
                             }
                             
-                            
                             if(!$classlist){
                                 $newClasslist = array(
                                     'intFacultyID' => $faculty['intID'],
                                     'intSubjectID' => $subject['intID'],
-                                    'strClassName' => $row['E'],
+                                    'strClassName' => $row['D'],
                                     'intFinalized' => 2,
                                     'strAcademicYear' => $sem,
                                     'slots' => 0,
@@ -7944,7 +7949,7 @@ class Excel extends CI_Controller {
                                     'strSection' => $row['D'],
                                     'intWithPayment' => 0,
                                     'intCurriculumID' => $student['current_curriculum'],
-                                    'year' => 0,
+                                    'year' => $row['E'],
                                     'isDissolved' => 0,
                                     'conduct_grade' => 0
                                 );
