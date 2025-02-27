@@ -134,7 +134,7 @@ table tr td {
                 style="position:absolute; top:  487px; left: 305px; width: 200px; height: 20px;">
                 <?php  echo ""; ?> </div> <?php else: ?> <div
                 style="position:absolute; top:  487px; left: 305px; width: 200px; height: 20px;">
-                <?php  echo $total_assessment; ?> </div> <?php endif; ?>
+                <?php  echo $full_assessment; ?> </div> <?php endif; ?>
             <!--Total Amount received-->
             <div style="position:absolute; top:  565px; left: 50px; width: 200px; height: 20px;">
                 <?php  echo $total_amount_due == 0 ? "" : $total_amount_due; ?> </div>
