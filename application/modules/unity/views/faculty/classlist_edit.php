@@ -60,6 +60,13 @@
                     <input type="text" disabled id="sub_section" name="sub_section" class="form-control" value="<?php echo $classlist['sub_section']; ?>" placeholder="">
                 </div>
                 <div class="form-group">
+                    <label for="is_modular">Is Modular</label>
+                    <select type="text" id="is_modular" name="is_modular" class="form-control" placeholder="">
+                        <option <?php echo ($classlist['is_modular'] == 0)?'selected':''; ?> value="0">No</option>
+                        <option <?php echo ($classlist['is_modular'] == 1)?'selected':''; ?> value="1">Yes</option>
+                    </select>
+                </div>
+                <div class="form-group">
                         <label for="strAcademicYear">Term/Sem</label>
                         <select class="form-control" name="strAcademicYear">
                             <?php foreach($sy as $s): ?>
