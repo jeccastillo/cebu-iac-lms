@@ -581,7 +581,7 @@ class Datatables extends CI_Controller {
 	   echo json_encode( $output );
     }
     
-    public function data_tables_ajax_cs($sem = 0, $program = 0, $dissolved = 0, $has_faculty = 0, $status = 0)
+    public function data_tables_ajax_cs($sem = 0, $program = 0, $dissolved = 0, $has_faculty = 0, $status = 0, $modular = 0)
     {
         /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
          * TABLE CONFIG
@@ -657,11 +657,13 @@ class Datatables extends CI_Controller {
        if($has_faculty > 0)
         $sWhere .= "AND $sTable.intFacultyID != 999 ";
        if($program != 0)
-        $sWhere .= " AND tb_mas_programs.intProgramID = $program ";
+        $sWhere .= " AND tb_mas_programs.intProgramID = $program ";    
        if($status != 0){
         $status_n = $status - 1;
         $sWhere .= " AND tb_mas_classlist.intFinalized = $status_n ";
        }
+       if($modular != 0)
+        $sWhere .= " AND tb_mas_classlist.is_modular = 1 ";
             
         
        if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
