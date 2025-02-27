@@ -7906,7 +7906,7 @@ class Excel extends CI_Controller {
                     ->first_row('array');
 
                     if($student){
-                        $facultyName = explode(',', ltrim($row['I']));
+                        $facultyName = explode(',', ltrim($row['K']));
                         $facultyLastName = $facultyName[0];
                         if(isset($facultyName[1])){
                             $facultyName = explode(' ', ltrim($facultyName[1]));
@@ -7946,7 +7946,7 @@ class Excel extends CI_Controller {
                                     'strAcademicYear' => $sem,
                                     'slots' => 0,
                                     'strUnits' => 3,
-                                    'strSection' => $row['D'],
+                                    'strSection' => $row['F'],
                                     'intWithPayment' => 0,
                                     'intCurriculumID' => $student['current_curriculum'],
                                     'year' => $row['E'],
