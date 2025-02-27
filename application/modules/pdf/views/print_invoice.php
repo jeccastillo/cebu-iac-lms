@@ -129,7 +129,7 @@ table tr td {
                 <?php  echo $amount_less_vat != 0 ? $amount_less_vat : ""; ?> </div>
             <!--Vat Exempt Sale--> <?php if($vat_exempt != 0 && $less_vat != 0): ?> <div
                 style="position:absolute; top:  487px; left: 305px; width: 200px; height: 20px;">
-                <?php  echo $vat_exempt; ?> </div>
+                <?php echo $full_assessment; ?> </div>
             <?php elseif($vat_exempt == 0 && $less_vat != 0): ?> <div
                 style="position:absolute; top:  487px; left: 305px; width: 200px; height: 20px;">
                 <?php  echo ""; ?> </div> <?php else: ?> <div
@@ -138,8 +138,7 @@ table tr td {
             <!--Total Amount received-->
             <div style="position:absolute; top:  565px; left: 50px; width: 200px; height: 20px;">
                 <?php  echo $total_amount_due == 0 ? "" : $total_amount_due; ?> </div>
-            <div
-                style="position:absolute; top: 550px; right: 20px; width: 200px; height: 20px;font-size:15px">
+            <div style="position:absolute; top: 550px; right: 20px; width: 200px; height: 20px;font-size:15px">
                 <?php echo $cashier_name; ?> </div>
         </section>
     </div>
