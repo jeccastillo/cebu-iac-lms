@@ -63,7 +63,14 @@
                         <input type="text" name="sub_section" class="form-control" id="sub_section" >                                
                     </div>
                     <div class="form-group">
-                    <label for="">Curriculum</label>
+                        <label for="">Is Modular</label>
+                        <select class="form-control" name="is_modular" id="is_modular" >
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>                            
+                        </select>                        
+                    </div>
+                    <div class="form-group">
+                        <label for="">Curriculum</label>
                         <select class="form-control" name="intCurriculumID" id="intCurriculumID" >
                             <?php foreach ($curriculum as $curr): ?>
                             <option value="<?php echo $curr['intID']; ?>"><?php echo $curr['strName']; ?></option>
