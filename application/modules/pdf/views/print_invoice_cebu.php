@@ -78,7 +78,7 @@ table tr td {
             <div style="position:absolute; top: 175px; right: -60px; width: 200px; height: 20px;">
                 <?php echo $transaction_date; ?> </div>
             <!---TIN---> <?php if(isset($payee)): ?> <div
-                style="position:absolute; top: 195px; right: -45px; width: 200px; height: 20px;">
+                style="position:absolute; top: 195px; right: -60px; width: 200px; height: 20px;">
                 <?php echo $payee['tin']; ?> </div> <?php endif; ?> <div
                 style="position:absolute; top: 175px; left: 85px; width: 500px; height: 20px;">
                 <?php if($student_id != 'undefined' && $student_id != ''): ?>
@@ -145,8 +145,7 @@ table tr td {
             <!--Total Amount received-->
             <div style="position:absolute; top:587px; left: 130px; width: 200px; height: 20px;">
                 <?php  echo $total_amount_due == 0 ? "" : $total_amount_due; ?> </div>
-            <div
-                style="position:absolute; top: 565px; left: 600px; width: 200px; height: 20px;font-size:15px">
+            <div style="position:absolute; top: 565px; left: 600px; width: 200px; height: 20px;font-size:15px">
                 <?php echo $cashier_name; ?> </div>
         </section>
     </div>
