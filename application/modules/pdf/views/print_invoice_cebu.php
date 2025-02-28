@@ -84,7 +84,7 @@ table tr td {
                 <?php if($student_id != 'undefined' && $student_id != ''): ?>
                 <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?> <?php endif; ?>
                 &nbsp; <?php echo $student_name; ?> </div>
-            <div style="position:absolute; top: 200px; left: 90px; width: 500px; height: 20px;">
+            <div style="position:absolute; top: 195px; left: 90px; width: 500px; height: 20px;">
                 <?php echo $student_address; ?> </div>
             <div style="position:absolute; top: 250px; left:60px; width: 500px; height: 20px;"> <?php echo $type; 
                  if(!isset($payee)): 
@@ -125,7 +125,7 @@ table tr td {
                 <?php  echo $is_cash == 1 ? $total_amount_due : ''; ?> </div>
             <div style="position:absolute; top:  385px; left: 130px; width: 200px; height: 20px;">
                 <?php  echo $is_cash == 0 ? $total_amount_due : ''; ?> </div>
-            <div style="position:absolute; top: 465px; left: 50px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 465px; left: 40px; width: 200px; height: 20px;">
                 <?php  echo $is_cash == 0 ? $remarks : ''; ?> </div>
             <div style="position:absolute; top: 445px; left: 130px; width: 200px; height: 20px;">
                 <?php  echo $is_cash == 2 || $is_cash == 3 ? $total_amount_due : ''; ?> </div>
@@ -145,7 +145,8 @@ table tr td {
             <!--Total Amount received-->
             <div style="position:absolute; top:587px; left: 130px; width: 200px; height: 20px;">
                 <?php  echo $total_amount_due == 0 ? "" : $total_amount_due; ?> </div>
-            <div style="position:absolute; top: 565px; left: 600px; width: 200px; height: 20px;font-size:15px">
+            <div
+                style="position:absolute; top: 565px; left: 600px; width: 200px; height: 20px;font-size:15px">
                 <?php echo $cashier_name; ?> </div>
         </section>
     </div>
