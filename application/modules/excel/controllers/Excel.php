@@ -7906,7 +7906,7 @@ class Excel extends CI_Controller {
                     ->first_row('array');
 
                     if($student){
-                        $facultyName = explode(',', ltrim($row['I']));
+                        $facultyName = explode(',', ltrim($row['K']));
                         $facultyLastName = $facultyName[0];
                         if(isset($facultyName[1])){
                             $facultyName = explode(' ', ltrim($facultyName[1]));
@@ -7914,7 +7914,7 @@ class Excel extends CI_Controller {
                         }
                         
                         $faculty = $this->db->from('tb_mas_faculty')->like(array('strLastname' => $facultyLastName, 'strFirstName' => $facultyFirstName))->get()->first_row('array');
-                        $subject = $this->db->get_where('tb_mas_subjects',array('strCode' => $row['E']))->first_row('array');
+                        $subject = $this->db->get_where('tb_mas_subjects',array('strCode' => $row['G']))->first_row('array');
 
                         if($faculty && $subject){
                             $classlistID = '';
@@ -7923,7 +7923,13 @@ class Excel extends CI_Controller {
                             $classlist = $this->db->select('tb_mas_classlist.*')
                                 ->from('tb_mas_classlist')
                                 ->join('tb_mas_classlist_student','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
-                                ->where(array('strAcademicYear' => $sem, 'intFacultyID' => $faculty['intID'], 'intSubjectID' => $subject['intID'], 'strSection' => $row['D'], 'intCurriculumID' => $student['current_curriculum']))
+                                ->where(array('strAcademicYear' => $sem, 
+                                        'intFacultyID' => $faculty['intID'], 
+                                        'intSubjectID' => $subject['intID'],
+                                        'strClassName' => $row['D'],
+                                        'year' => $row['E'],
+                                        'strSection' => $row['F'], 
+                                        'intCurriculumID' => $student['current_curriculum']))
                                 ->get()
                                 ->first_row('array');
 
@@ -7931,20 +7937,19 @@ class Excel extends CI_Controller {
                                 $classlist = $this->db->get_where('tb_mas_classlist',array('strAcademicYear' => $sem, 'intFacultyID' => $faculty['intID'], 'intSubjectID' => $subject['intID'], 'strSection' => $row['D'], 'intCurriculumID' => $student['current_curriculum']))->first_row('array');
                             }
                             
-                            
                             if(!$classlist){
                                 $newClasslist = array(
                                     'intFacultyID' => $faculty['intID'],
                                     'intSubjectID' => $subject['intID'],
-                                    'strClassName' => $row['E'],
+                                    'strClassName' => $row['D'],
                                     'intFinalized' => 2,
                                     'strAcademicYear' => $sem,
                                     'slots' => 0,
                                     'strUnits' => 3,
-                                    'strSection' => $row['D'],
+                                    'strSection' => $row['F'],
                                     'intWithPayment' => 0,
                                     'intCurriculumID' => $student['current_curriculum'],
-                                    'year' => 0,
+                                    'year' => $row['E'],
                                     'isDissolved' => 0,
                                     'conduct_grade' => 0
                                 );
@@ -7970,11 +7975,11 @@ class Excel extends CI_Controller {
                                 );
 
                                 if($term == 'Midterm'){
-                                    $classlistStudent['floatMidtermGrade'] = $row['H'];
+                                    $classlistStudent['floatMidtermGrade'] = $row['J'];
                                 }else if($term == 'Final'){
-                                    $classlistStudent['floatFinalGrade'] = $row['H'];
+                                    $classlistStudent['floatFinalGrade'] = $row['J'];
                                 }
-                                $checkClasslistStudent = $this->db->get_where('tb_mas_classlist_student',array('intStudentID' => $student['intID'], 'intClassListID' => $classlistID, 'intsyID' => $sem))->first_row();
+                                $checkClasslistStudent = $this->db->get_where('tb_mas_classlist_student',array('intStudentID' => $student['intID'], 'intClassListID' => $classlistID))->first_row();
                                 
                                 if(!$checkClasslistStudent){
                                     $this->data_poster->post_data('tb_mas_classlist_student',$classlistStudent);
