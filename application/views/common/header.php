@@ -647,7 +647,7 @@
                                 style="margin-left: 10px;"><i class="ion ion-android-list"></i>
                                 <span>OR Assignment</span> </a>
                         </li>
-                        <li class="<?php echo (isset($page) && $page=="cashier")?'active':''; ?>"><a
+                        <li class="<?php echo (isset($page) && $page=="cashier_invoice")?'active':''; ?>"><a
                                 href="<?php echo base_url() ?>finance/cashier_invoice"
                                 style="margin-left: 10px;"><i class="ion ion-android-list"></i>
                                 <span>Invoice Assignment</span> </a>
