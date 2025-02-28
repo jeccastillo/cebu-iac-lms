@@ -618,11 +618,7 @@
                                     class="ion ion-cash"></i>
                                 <span>Collection Report</span></a>
                         </li>
-                        <li
-                            class="<?php echo (isset($page) && $page=="scholarship_view_students")?'active':''; ?>">
-                            <a href="<?php echo base_url(); ?>finance/scholarship_view"
-                                style="margin-left: 10px;"> Students with Scholarships</a>
-                        </li>
+                        
                         <!-- <li class="<?php echo (isset($page) && $page=="other_payments_report")?'active':''; ?>"><a
                                 href="<?php echo base_url() ?>finance/payments/0/1"><i class="ion ion-cash"></i>
                                 <span>Non Student Payment Report</span> </a></li> -->
@@ -655,6 +651,12 @@
                                 href="<?php echo base_url() ?>finance/cashier_invoice"
                                 style="margin-left: 10px;"><i class="ion ion-android-list"></i>
                                 <span>Invoice Assignment</span> </a>
+                        </li>
+                        <li
+                            class="<?php echo (isset($page) && $page=="scholarship_view_students")?'active':''; ?>">
+                            <a href="<?php echo base_url(); ?>finance/scholarship_view"
+                                style="margin-left: 10px;"> <i class="ion ion-android-list"></i>
+                                Students with Scholarships</a>
                         </li>
                     </ul>
                 </li> <?php endif; ?>
@@ -906,7 +908,7 @@
                         </li>
                     </ul>
                 </li> <?php endif; ?>
-                <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 7 || $user['intUserLevel'] == 6 ): ?>
+                <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 7): ?>
                 <li
                     class="treeview <?php echo (isset($opentree) && $opentree=="scholarship")?'active':''; ?>">
                     <a href="#">
