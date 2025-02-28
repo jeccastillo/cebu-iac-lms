@@ -2416,7 +2416,12 @@ class Pdf extends CI_Controller {
         $this->data['full_assessment'] = number_format($fullAssessment,2,'.',',');
         $this->data['total_assessment'] = number_format($totalAssessment,2,'.',',');
 
-        $this->load->view("print_invoice",$this->data);
+        
+        if($this->data['campus'] == "Cebu"){
+            $this->load->view("print_invoice_cebu",$this->data);
+        }else {
+            $this->load->view("print_invoice",$this->data);
+        }
     }
 
     function print_updated_or(){
@@ -2432,10 +2437,10 @@ class Pdf extends CI_Controller {
                         ->get('tb_mas_printed_or')
                         ->first_row();
 
-        if($printed && $role <= 1){
-            echo "This OR has already been printed";
-            return;
-        }
+        // if($printed && $role <= 1){
+        //     echo "This OR has already been printed";
+        //     return;
+        // }
 
         $cashier = $this->db->get_where('tb_mas_faculty',array('intID'=>$request['cashier_id']))->row();
         $this->data['term'] = $this->db->get_where('tb_mas_sy',array('intID'=>$request['sem']))->first_row('array');
@@ -2486,7 +2491,7 @@ class Pdf extends CI_Controller {
         $this->data['or_number'] = (string)$request['or_number'];
         $this->data['or_number'] = str_pad($this->data['or_number'],5,'0', STR_PAD_LEFT);
         $this->data['invoice_number'] = strtoupper($request['invoice_number']);
-        $this->data['invoice_number'] = str_pad($this->data['or_number'],5,'0', STR_PAD_LEFT);
+        $this->data['invoice_number'] = str_pad($this->data['invoice_number'],5,'0', STR_PAD_LEFT);
         // $this->data['description'] = $request['description'];
         // $this->data['total_amount_due'] = $request['total_amount_due'];
         // $this->data['decimal'] = ($this->data['total_amount_due'] - floor( $this->data['total_amount_due'] )) * 100;
@@ -2499,8 +2504,14 @@ class Pdf extends CI_Controller {
         $this->data['description'] = $description;
         $this->data['total_amount_due_text'] = $totalAmountDueText;
         $this->data['total_amount_due'] = number_format($request['total_amount_due'],2,'.',',');
-                          
-        $this->load->view("print_or_latest",$this->data);
+        
+
+        if ($this->data['campus'] == "Cebu") {
+            $this->load->view("print_or_latest_test",$this->data);
+        }else {
+            // $this->load->view("print_or_latest_test",$this->data);
+            $this->load->view("print_or_latest",$this->data);
+        }
 
     }
 
