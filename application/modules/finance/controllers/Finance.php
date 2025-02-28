@@ -514,7 +514,7 @@ class Finance extends CI_Controller {
         
         $this->data['module'] = "finance";        
         $this->data['page'] = "scholarship_view_students";
-        $this->data['opentree'] = "cashier";
+        $this->data['opentree'] = "cashier_admin";
                                                                 
 
         $this->load->view("common/header",$this->data);
