@@ -514,7 +514,7 @@ class Finance extends CI_Controller {
         
         $this->data['module'] = "finance";        
         $this->data['page'] = "scholarship_view_students";
-        $this->data['opentree'] = "cashier";
+        $this->data['opentree'] = "cashier_admin";
                                                                 
 
         $this->load->view("common/header",$this->data);
@@ -1172,7 +1172,7 @@ class Finance extends CI_Controller {
         if($role == 0 && $userlevel != 2)
             redirect(base_url()."unity");
 
-        $this->data['page'] = "cashier";
+        $this->data['page'] = "cashier_invoice";
         $this->data['opentree'] = "cashier_admin";
         $this->load->view("common/header",$this->data);
         $this->load->view("cashier_invoice",$this->data);
