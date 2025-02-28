@@ -2437,10 +2437,10 @@ class Pdf extends CI_Controller {
                         ->get('tb_mas_printed_or')
                         ->first_row();
 
-        if($printed && $role <= 1){
-            echo "This OR has already been printed";
-            return;
-        }
+        // if($printed && $role <= 1){
+        //     echo "This OR has already been printed";
+        //     return;
+        // }
 
         $cashier = $this->db->get_where('tb_mas_faculty',array('intID'=>$request['cashier_id']))->row();
         $this->data['term'] = $this->db->get_where('tb_mas_sy',array('intID'=>$request['sem']))->first_row('array');
