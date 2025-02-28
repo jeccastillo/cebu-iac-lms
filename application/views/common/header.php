@@ -238,8 +238,8 @@
                             class="<?php echo (isset($page) && $page=="view_leads")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>admissionsV1/view_all_leads"
                                 style="margin-left: 10px;"><i class="fa fa-book"> </i> View
-                                Applicants</a></li>
-                        <?php if(in_array($user['intUserLevel'],array(2,5,3,6)) ): ?> <li
+                                Applicants</a>
+                        </li> <?php if(in_array($user['intUserLevel'],array(2,5,3,6)) ): ?> <li
                             class="<?php echo (isset($page) && $page=="classlist_archive")?'active':''; ?>">
                             <a href="<?php echo base_url()."admissionsV1/view_classlist_archive_admin" ?>"
                                 style="margin-left: 10px;"><i class="fa fa-user"></i>Slot
@@ -249,21 +249,25 @@
                             class="<?php echo (isset($page) && $page=="awareness_stats")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>admissionsV1/awareness_stats"
                                 style="margin-left: 10px;"><i class="fa fa-book"> </i> Awareness
-                                Report</a></li>
+                                Report</a>
+                        </li>
                         <li
                             class="<?php echo (isset($page) && $page=="view_reserved")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>admissionsV1/view_reserved_leads"
                                 style="margin-left: 10px;"><i class="fa fa-book"> </i> View Reserved
-                                List</a></li>
+                                List</a>
+                        </li>
                         <li
                             class="<?php echo (isset($page) && $page=="fi_calendar")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>admissionsV1/fi_calendar"
                                 style="margin-left: 10px;"><i class="fa fa-book"> </i> View FI
-                                Calendar</a></li>
+                                Calendar</a>
+                        </li>
                         <li class="<?php echo (isset($page) && $page=="view_paid")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>admissionsV1/paid_applicants"
                                 style="margin-left: 10px;"><i class="fa fa-book"> </i> View Paid
-                                Applicants</a></li> <?php endif; ?>
+                                Applicants</a>
+                        </li> <?php endif; ?>
                     </ul>
                 </li> <?php endif; ?> <?php if(in_array($user['intUserLevel'],array(2,5)) ): ?> <li
                     class="treeview <?php echo (isset($opentree) && $opentree=="examination")?'active':''; ?>">
@@ -276,17 +280,20 @@
                             class="<?php echo (isset($page) && $page=="view_exams")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>examination/"
                                 style="margin-left: 10px;"><i class="fa fa-book"> </i> View
-                                Examination</a></li>
+                                Examination</a>
+                        </li>
                         <li
                             class="<?php echo (isset($page) && $page=="exam_type_list")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>examination/exam_type_list"
                                 style="margin-left: 10px;"><i class="fa fa-book"> </i> View Exam
-                                Types</a></li>
+                                Types</a>
+                        </li>
                         <li
                             class="<?php echo (isset($page) && $page=="add_exam_type")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>examination/add_exam_type"
                                 style="margin-left: 10px;"><i class="fa fa-book"> </i> Add Exam
-                                Type</a></li>
+                                Type</a>
+                        </li>
                         <li
                             class="<?php echo (isset($page) && $page=="student_generate_exam")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>examination/student_generate_exam"
@@ -306,7 +313,8 @@
                             class="<?php echo (isset($page) && $page=="view_classlist")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>unity/view_classlist"
                                 style="margin-left: 10px;"><i
-                                    class="ion ion-android-person-add"></i> My Classlists</a></li>
+                                    class="ion ion-android-person-add"></i> My Classlists</a>
+                        </li>
                     </ul>
                 </li> <?php endif; ?>
                 <?php if($user['special_role'] >= 2  || $user['intUserLevel'] == 2): ?> <li
@@ -387,17 +395,20 @@
                             class="<?php echo (isset($page) && $page=="view_students")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>student/view_all_students"
                                 style="margin-left: 10px;"><i class="ion ion-eye"></i> View
-                                Students</a></li>
+                                Students</a>
+                        </li>
                         <li
                             class="<?php echo (isset($page) && $page=="enhanced_list")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>unity/enhanced_list"
                                 style="margin-left: 10px;"><i class="fa fa-user"></i> View Enhanced
-                                List</a></li>
+                                List</a>
+                        </li>
                         <li
                             class="<?php echo (isset($page) && $page=="regular_list")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>unity/regular_list"
                                 style="margin-left: 10px;"><i class="fa fa-user"></i> View Regular
-                                List</a></li>
+                                List</a>
+                        </li>
                         <!--                            <li class="<?php echo (isset($page) && $page=="view_students2")?'active':''; ?>"><a href="<?php echo base_url(); ?>student/view_all_students2" style="margin-left: 10px;"><i class="ion ion-eye"></i> View Students' Pass</a></li> -->
                         <!--li class="<?php echo (isset($page) && $page=="view_registered_students")?'active':''; ?>"><a href="<?php echo base_url(); ?>student/view_all_registered_students" style="margin-left: 10px;"><i class="ion ion-eye"></i>Registered Students</a></li-->
                     </ul>
@@ -420,7 +431,8 @@
                             class="<?php echo (isset($page) && $page=="add_credits")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>department/add_credits"
                                 style="margin-left: 10px;"><i class="fa fa-plus"></i> Credit
-                                Subjects</a></li>
+                                Subjects</a>
+                        </li>
                         <li class="<?php echo (isset($page) && $page=="rog")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>department/student_function/rog"
                                 style="margin-left: 10px;"><i class="fa fa-book"></i> Report of
@@ -429,12 +441,14 @@
                             class="<?php echo (isset($page) && $page=="assessment")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>department/student_function/assessment"
                                 style="margin-left: 10px;"><i class="fa fa-book"></i> Curriculum
-                                Assessment</a></li>
+                                Assessment</a>
+                        </li>
                         <li
                             class="<?php echo (isset($page) && $page=="faculty_loading")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>department/faculty_loading"
                                 style="margin-left: 10px;"><i class="fa fa-plus"></i> Faculty
-                                Loading</a></li>
+                                Loading</a>
+                        </li>
                         <li
                             class="<?php echo (isset($page) && $page=="classlist_archive")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>unity/view_classlist_archive_dept"
@@ -461,12 +475,14 @@
                             class="<?php echo (isset($page) && $page=="view_all_faculty")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>faculty/view_all_faculty"
                                 style="margin-left: 10px;"><i class="ion ion-eye"></i> View User
-                                Accounts</a></li>
+                                Accounts</a>
+                        </li>
                         <li
                             class="<?php echo (isset($page) && $page=="view_groups")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>group/view_all_groups"
                                 style="margin-left: 10px;"><i class="ion ion-eye"></i> All User
-                                Groups</a></li>
+                                Groups</a>
+                        </li>
                         <li class="<?php echo (isset($page) && $page=="group")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>group/add_group"
                                 style="margin-left: 10px;"><i
@@ -495,7 +511,8 @@
                             class="<?php echo (isset($page) && $page=="view_subjects")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>subject/view_all_subjects"
                                 style="margin-left: 10px;"><i class="fa fa-book"></i> View
-                                Subjects</a></li>
+                                Subjects</a>
+                        </li>
                     </ul>
                 </li> <?php endif; ?>
                 <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 3): ?> <li
@@ -509,12 +526,14 @@
                             class="<?php echo (isset($page) && $page=="add_curriculum")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>unity/add_curriculum"
                                 style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i>
-                                Add a Curriculum</a></li>
+                                Add a Curriculum</a>
+                        </li>
                         <li
                             class="<?php echo (isset($page) && $page=="view_curriculum")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>unity/view_all_curriculum"
                                 style="margin-left: 10px;"><i class="fa fa-book"></i> View
-                                Curriculum</a></li>
+                                Curriculum</a>
+                        </li>
                     </ul>
                 </li>
                 <li
@@ -534,7 +553,8 @@
                             class="<?php echo (isset($page) && $page=="view_programs")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>program/view_all_programs"
                                 style="margin-left: 10px;"><i class="fa fa-book"></i> View
-                                Programs</a></li>
+                                Programs</a>
+                        </li>
                     </ul>
                 </li>
                 <li
@@ -554,7 +574,8 @@
                             class="<?php echo (isset($page) && $page=="view_schedules")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>schedule/view_schedules"
                                 style="margin-left: 10px;"><i class="ion ion-eye"></i> View
-                                Schedules</a></li>
+                                Schedules</a>
+                        </li>
                     </ul>
                 </li> <?php endif; ?>
                 <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 6 ): ?> <li
@@ -569,7 +590,8 @@
                             <a style="margin-left: 10px;"
                                 href="<?php echo base_url() ?>finance/view_all_students"><i
                                     class="ion ion-cash"></i>
-                                <span>Collection</span> </a></li>
+                                <span>Collection</span> </a>
+                        </li>
                         <li class="<?php echo (isset($page) && $page=="no_or")?'active':''; ?>"><a
                                 style="margin-left: 10px;"
                                 href="<?php echo base_url() ?>finance/payments_no_or"><i
@@ -580,23 +602,23 @@
                             <a style="margin-left: 10px;"
                                 href="<?php echo base_url() ?>finance/other_payments"><i
                                     class="ion ion-cash"></i>
-                                <span>NS Payment (Non-student)</span> </a></li>
+                                <span>NS Payment (Non-student)</span> </a>
+                        </li>
                         <li
                             class="<?php echo (isset($page) && $page=="view_payees_cashier")?'active':''; ?>">
                             <a style="margin-left: 10px;"
                                 href="<?php echo base_url() ?>finance/view_payees_cashier"><i
                                     class="fa fa-users"></i>
-                                <span>NS Payee List (Non-student)</span> </a></li>
+                                <span>NS Payee List (Non-student)</span> </a>
+                        </li>
                         <li
                             class="<?php echo (isset($page) && $page=="transactions")?'active':''; ?>">
                             <a style="margin-left: 10px;"
                                 href="<?php echo base_url() ?>finance/payments"><i
                                     class="ion ion-cash"></i>
-                                <span>Collection Report</span></a></li>
-                        <li
-                            class="<?php echo (isset($page) && $page=="scholarship_view_students")?'active':''; ?>">
-                            <a href="<?php echo base_url(); ?>finance/scholarship_view"
-                                style="margin-left: 10px;"> Students with Scholarships</a></li>
+                                <span>Collection Report</span></a>
+                        </li>
+                        
                         <!-- <li class="<?php echo (isset($page) && $page=="other_payments_report")?'active':''; ?>"><a
                                 href="<?php echo base_url() ?>finance/payments/0/1"><i class="ion ion-cash"></i>
                                 <span>Non Student Payment Report</span> </a></li> -->
@@ -625,10 +647,16 @@
                                 style="margin-left: 10px;"><i class="ion ion-android-list"></i>
                                 <span>OR Assignment</span> </a>
                         </li>
-                        <li class="<?php echo (isset($page) && $page=="cashier")?'active':''; ?>"><a
+                        <li class="<?php echo (isset($page) && $page=="cashier_invoice")?'active':''; ?>"><a
                                 href="<?php echo base_url() ?>finance/cashier_invoice"
                                 style="margin-left: 10px;"><i class="ion ion-android-list"></i>
                                 <span>Invoice Assignment</span> </a>
+                        </li>
+                        <li
+                            class="<?php echo (isset($page) && $page=="scholarship_view_students")?'active':''; ?>">
+                            <a href="<?php echo base_url(); ?>finance/scholarship_view"
+                                style="margin-left: 10px;"> <i class="ion ion-android-list"></i>
+                                Students with Scholarships</a>
                         </li>
                     </ul>
                 </li> <?php endif; ?>
@@ -692,7 +720,8 @@
                             class="<?php echo (isset($page) && $page=="import_previous_balance")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>finance/import_previous_balance"
                                 style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i>
-                                Add Previous Balance</a></li>
+                                Add Previous Balance</a>
+                        </li>
                         <!-- <li class="<?php echo (isset($page) && $page=="order_detailed_report")?'active':''; ?>">
               <a style="margin-left: 10px;" href="#"><i class="ion"></i>
                 <span>Order Detailed Report</span> </a>
@@ -767,7 +796,8 @@
                 <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 3 ): ?> <li
                     class="<?php echo (isset($page) && $page=="classlist_archive")?'active':''; ?>">
                     <a href="<?php echo base_url(); ?>unity/view_classlist_archive_admin"><i
-                            class="ion ion-android-list"></i> <span>Subject Offering</span></a></li>
+                            class="ion ion-android-list"></i> <span>Subject Offering</span></a>
+                </li>
                 <li
                     class="treeview <?php echo (isset($opentree) && $opentree=="registrar")?'active':''; ?>">
                     <a href="#">
@@ -786,12 +816,14 @@
                             class="<?php echo (isset($page) && $page=="grading_sheet_view")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>registrar/search_grading"
                                 style="margin-left: 10px;"><i class="fa fa-file"></i> Grading
-                                Sheet</a></li>
+                                Sheet</a>
+                        </li>
                         <li
                             class="<?php echo (isset($page) && $page=="register_student")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>registrar/register_student"
                                 style="margin-left: 10px;"><i class="ion ion-compose"></i> Student
-                                Fee Assessment</a></li>
+                                Fee Assessment</a>
+                        </li>
                         <li class="<?php echo (isset($page) && $page=="set_ay")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>registrar/set_ay"
                                 style="margin-left: 10px;"><i class="ion ion-university"></i> Set
@@ -812,17 +844,20 @@
                             class="<?php echo (isset($page) && $page=="add_blocksection")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>blocksection/block_section"
                                 style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i>
-                                Add Block Section</a></li>
+                                Add Block Section</a>
+                        </li>
                         <li
                             class="<?php echo (isset($page) && $page=="view_blocksection")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>blocksection/view_block_sections"
                                 style="margin-left: 10px;"><i class="ion ion-eye"></i> View Block
-                                Sections</a></li>
+                                Sections</a>
+                        </li>
                         <li
                             class="<?php echo (isset($page) && $page=="add_student_grades")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>registrar/add_student_grades"
                                 style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i>
-                                Add Student Grade</a></li>
+                                Add Student Grade</a>
+                        </li>
                     </ul>
                 </li>
                 <li
@@ -842,7 +877,8 @@
                             class="<?php echo (isset($page) && $page=="view_classrooms")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>classroom/view_classrooms"
                                 style="margin-left: 10px;"><i class="ion ion-eye"></i> View
-                                Classrooms</a></li>
+                                Classrooms</a>
+                        </li>
                     </ul>
                 </li>
                 <li
@@ -868,10 +904,11 @@
                             class="<?php echo (isset($page) && $page=="term_override")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>grading/term_override"
                                 style="margin-left: 10px;"><i class="ion ion-android-list"></i> GS
-                                Override</a></li>
+                                Override</a>
+                        </li>
                     </ul>
                 </li> <?php endif; ?>
-                <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 7 || $user['intUserLevel'] == 6 ): ?>
+                <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 7): ?>
                 <li
                     class="treeview <?php echo (isset($opentree) && $opentree=="scholarship")?'active':''; ?>">
                     <a href="#">
@@ -883,22 +920,26 @@
                             class="<?php echo (isset($page) && $page=="assign_scholarship")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>scholarship/select_student"
                                 style="margin-left: 10px;"><i class="fa fa-user"></i> Assign
-                                Scholarship/Discount</a></li>
+                                Scholarship/Discount</a>
+                        </li>
                         <li
                             class="<?php echo (isset($page) && $page=="add_scholarship")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>scholarship/view/0"
                                 style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i>
-                                Add Scholarship/Discount</a></li>
+                                Add Scholarship/Discount</a>
+                        </li>
                         <li
                             class="<?php echo (isset($page) && $page=="scholarships")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>scholarship/scholarships"
                                 style="margin-left: 10px;"><i class="ion ion-android-list"></i>
-                                Scholarships/Discount</a></li>
+                                Scholarships/Discount</a>
+                        </li>
                         <li
                             class="<?php echo (isset($page) && $page=="scholarship_view_students")?'active':''; ?>">
                             <a href="<?php echo base_url(); ?>scholarship/scholarship_view"
                                 style="margin-left: 10px;"><i class="ion ion-android-list"></i>
-                                Students with Scholarships</a></li>
+                                Students with Scholarships</a>
+                        </li>
                     </ul>
                 </li> <?php endif; ?>
             </ul>
