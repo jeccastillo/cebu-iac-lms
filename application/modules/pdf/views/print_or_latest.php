@@ -102,8 +102,7 @@ table tr td {
             <div style="position:absolute; top: 240px; left: 670px; width: 200px; height: 20px;">
                 <?php echo $total_amount_due; ?> </div>
             <div style="position:absolute; top: 265px; left: 400px; width: 400px; height: 20px;">
-                <?php echo $type." /  ".$term['enumSem']." ".$term['strYearStart']."-".$term['strYearEnd']; ?>
-            </div>
+                <?php echo $type;?> </div>
             <div style="position:absolute; top: 310px; left: 575px; height: 20px;">
                 <?php echo $cashier_name; ?> </div>
         </section>
