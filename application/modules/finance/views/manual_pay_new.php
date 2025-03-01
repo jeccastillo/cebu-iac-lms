@@ -916,7 +916,7 @@ new Vue({
                     this.or_print.student_name = this.request.last_name +
                         ", " + this.request.first_name + ", " + this.request
                         .middle_name;
-                    this.or_print.student_address = this.student.strAddress; 
+                    this.or_print.student_address = this.student.address + " " this.student.barangay + " " + this.student.city + " " this.student.province; 
                     this.or_print.student_id = this.applicant_id;
                     this.or_print.is_cash = payment.is_cash;
                     this.or_print.check_number = payment.check_number;
@@ -952,7 +952,7 @@ new Vue({
                     this.or_print.student_name = this.request.last_name +
                         ", " + this.request.first_name + ", " + this.request
                         .middle_name;
-                    this.or_print.student_address = this.student.address;
+                    this.or_print.student_address = this.student.address + " " this.student.barangay + " " + this.student.city + " " this.student.province;
                     this.or_print.student_id = this.applicant_id;
                     this.or_print.is_cash = payment.is_cash;
                     this.or_print.check_number = payment.check_number;
