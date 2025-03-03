@@ -87,7 +87,8 @@ new Vue({
         },
         downloadFormat()
         {
-            alert('test');
+            var url = base_url + 'excel/download_previous_balance_format';
+            window.open(url, '_blank');
         }
     }
 })
