@@ -1147,6 +1147,56 @@ class Finance extends CI_Controller {
         $this->load->view("common/footer",$this->data);
         $this->load->view("common/list2_conf",$this->data); 
     }
+
+    public function modular_subjects($term = 0){
+        
+        $role = $this->session->userdata('special_role');
+        $userlevel = $this->session->userdata('intUserLevel');
+        
+        $active_sem = $this->data_fetcher->get_active_sem();
+        
+        if($term!=0)
+            $this->data['term'] = $term;
+        else
+            $this->data['term'] = $active_sem['intID'];
+        
+        // if($role == 0 && $userlevel != 2)
+        //     redirect(base_url()."unity");
+
+        $this->data['page'] = "cashier";
+        $this->data['opentree'] = "cashier_admin";
+        $this->load->view("common/header",$this->data);
+        $this->load->view("modular",$this->data);
+        $this->load->view("common/footer",$this->data);        
+    }
+
+    public function modular_subjects_data($term){
+        $data['user'] = $this->data['user'];
+        $subjects = $this->db->select('tb_mas_classlist.intID,strCode,strClassName,strSection,year,sub_section,payment_amount')
+                         ->from('tb_mas_classlist')
+                         ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
+                         ->where(array('tb_mas_classlist.strAcademicYear'=>$term,'is_modular'=>1))
+                         ->get()
+                         ->result_array();
+
+        $data['subjects'] = $subjects;
+        $data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+        $data['success'] = true;
+
+        echo json_encode($data);
+    }
+
+    public function update_modular_payment(){
+        $post = $this->input->post();
+        $this->db
+                ->where('intID',$post['intID'])
+                ->update('tb_mas_classlist',$post);
+
+        $this->data_poster->log_action('Finance Details Updated','Updated Payment Amount: '.$post['intID']." Amount: ".$post['payment_amount'],'aqua');                
+        $data['success'] = true;
+        echo json_encode($data);
+
+    }
     
 
     public function cashier(){                                     
@@ -1976,7 +2026,6 @@ class Finance extends CI_Controller {
             $this->load->view("common/miscellaneous_list_conf",$this->data);
         }
     }
-
     public function invoice_report($term = 0,$date = 0)    
     {
         if($this->faculty_logged_in())
