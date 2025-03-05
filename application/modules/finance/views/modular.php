@@ -40,7 +40,7 @@
                         <tr v-for="subject in subjects">
                             <td>{{ subject.strCode }}</td>
                             <td>{{ subject.strClassName + subject.year + subject.strSection + subject.sub_section }}</td>
-                            <td></td>
+                            <td><input type="number" class="form-control" step="0.01" :value="subject.payment_amount" /> </td>
                         </tr>
                     </tbody>
                 </table>
