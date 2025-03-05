@@ -70,19 +70,18 @@ new Vue({
         },
     },
     mounted() {
-        let url_string = window.location.href;
-        if (this.id != 0) {
-            //this.loader_spinner = true;            
-            axios.get(this.base_url + 'finance/modular_subjects_data/' + this.sem).then((data) => {
-                if (data.data.success) {
-                    this.user = data.data.user;
-                    this.sy = data.data.data.sy;
-                    this.subjects  = data.data.subjects;
-                }
-            }).catch((error) => {
-                console.log(error);
-            })
-        }
+        let url_string = window.location.href;                    
+        axios.get(this.base_url + 'finance/modular_subjects_data/' + this.sem).then((data) => {
+            console.log(data);
+            if (data.data.success) {
+                this.user = data.data.user;
+                this.sy = data.data.data.sy;
+                this.subjects  = data.data.subjects;
+            }
+        }).catch((error) => {
+            console.log(error);
+        })
+        
     },
     methods: {
         selectTerm: function(event) {
