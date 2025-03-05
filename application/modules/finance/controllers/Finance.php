@@ -1181,6 +1181,7 @@ class Finance extends CI_Controller {
 
         $data['subjects'] = $subjects;
         $data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+        $data['success'] = true;
 
         echo json_encode($data);
     }

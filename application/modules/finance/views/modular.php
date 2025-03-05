@@ -76,7 +76,7 @@ new Vue({
             axios.get(this.base_url + 'finance/modular_subjects_data/' + this.sem).then((data) => {
                 if (data.data.success) {
                     this.user = data.data.user;
-                    this.sy = data.sy;
+                    this.sy = data.data.data.sy;
                     this.subjects  = data.data.subjects;
                 }
             }).catch((error) => {
