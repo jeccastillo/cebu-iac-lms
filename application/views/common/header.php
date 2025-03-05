@@ -673,6 +673,11 @@
                                 style="margin-left: 10px;"><i class="ion ion-android-list"></i>
                                 Reports</a>
                         </li>
+                        <li class="<?php echo (isset($page) && $page=="modular_subjects")?'active':''; ?>"><a
+                                href="<?php echo base_url(); ?>finance/modular_subjects"
+                                style="margin-left: 10px;"><i class="ion ion-android-list"></i>
+                                Modular Subjects</a>
+                        </li>
                         <li
                             class="<?php echo (isset($page) && $page=="view_all_students")?'active':''; ?>">
                             <a style="margin-left: 10px;"
