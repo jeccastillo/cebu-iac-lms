@@ -87,7 +87,22 @@ new Vue({
             document.location = base_url + "finance/modular_subjects/" + event.target.value;
         },
         updateAmount: function(event,id){
-            console.log("id",id+" "+event.target.value);
+            //console.log("id",id+" "+event.target.value);
+            var formdata = new FormData();
+                            formdata.append('intID', id);
+                            formdata.append('payment_amount', event.target.value);                            
+                            axios.post(base_url +
+                                'finance/update_modular_payment', formdata, {
+                                    headers: {
+                                        Authorization: `Bearer ${window.token}`
+                                    }
+                                }).then(function(data) {
+                                    Swal.fire({
+                                        title: "Success",
+                                        text: "Update Success",
+                                        icon: "success"
+                                    });
+                                });
         }
     }
     

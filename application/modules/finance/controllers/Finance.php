@@ -1185,6 +1185,18 @@ class Finance extends CI_Controller {
 
         echo json_encode($data);
     }
+
+    public function update_modular_payment(){
+        $post = $this->input->post();
+        $this->db
+                ->where('intID',$post['intID'])
+                ->update('tb_mas_classlist',$data);
+
+        $this->data_poster->log_action('Finance Details Updated','Updated Payment Amount: '.$post['intID']." Amount: ".$post['payment_amount'],'aqua');                
+        $data['success'] = true;
+        echo json_encode($data);
+
+    }
     
 
     public function cashier(){                                     
