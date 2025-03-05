@@ -38,9 +38,9 @@
                     </thead>
                     <tbody>
                         <tr v-for="subject in subjects">
-                            <tr>{{ subject.strCode }}</tr>
-                            <tr>{{ subject.strClassName + subject.year + subject.strSection + subject.sub_section }}</tr>
-                            <tr></tr>
+                            <td>{{ subject.strCode }}</td>
+                            <td>{{ subject.strClassName + subject.year + subject.strSection + subject.sub_section }}</td>
+                            <td></td>
                         </tr>
                     </tbody>
                 </table>
