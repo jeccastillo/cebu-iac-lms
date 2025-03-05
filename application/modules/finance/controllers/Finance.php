@@ -1172,7 +1172,7 @@ class Finance extends CI_Controller {
 
     public function modular_subjects_data($term){
         $data['user'] = $this->data['user'];
-        $subjects = $this->db->select('strCode,strClassName,strSection,year,sub_section,payment_amount')
+        $subjects = $this->db->select('intID,strCode,strClassName,strSection,year,sub_section,payment_amount')
                          ->from('tb_mas_classlist')
                          ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
                          ->where(array('tb_mas_classlist.strAcademicYear'=>$term,'is_modular'=>1))
