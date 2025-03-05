@@ -73,7 +73,7 @@ new Vue({
         let url_string = window.location.href;
         if (this.id != 0) {
             //this.loader_spinner = true;            
-            axios.get(this.base_url + 'unity/modular_subjects_data/' + this.sem).then((data) => {
+            axios.get(this.base_url + 'finance/modular_subjects_data/' + this.sem).then((data) => {
                 if (data.data.success) {
                     this.user = data.data.user;
                     this.sy = data.data.sy;
