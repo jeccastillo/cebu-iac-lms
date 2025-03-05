@@ -1152,7 +1152,9 @@ class Finance extends CI_Controller {
         
         $role = $this->session->userdata('special_role');
         $userlevel = $this->session->userdata('intUserLevel');
-        
+        $this->data['page'] = "modular_subjects";
+        $this->data['opentree'] = "finance_student_account";
+
         $active_sem = $this->data_fetcher->get_active_sem();
         
         if($term!=0)
@@ -1162,9 +1164,7 @@ class Finance extends CI_Controller {
         
         // if($role == 0 && $userlevel != 2)
         //     redirect(base_url()."unity");
-
-        $this->data['page'] = "cashier";
-        $this->data['opentree'] = "cashier_admin";
+        
         $this->load->view("common/header",$this->data);
         $this->load->view("modular",$this->data);
         $this->load->view("common/footer",$this->data);        
