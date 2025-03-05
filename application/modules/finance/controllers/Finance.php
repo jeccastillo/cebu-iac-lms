@@ -1190,7 +1190,7 @@ class Finance extends CI_Controller {
         $post = $this->input->post();
         $this->db
                 ->where('intID',$post['intID'])
-                ->update('tb_mas_classlist',$data);
+                ->update('tb_mas_classlist',$post);
 
         $this->data_poster->log_action('Finance Details Updated','Updated Payment Amount: '.$post['intID']." Amount: ".$post['payment_amount'],'aqua');                
         $data['success'] = true;
