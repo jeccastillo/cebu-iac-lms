@@ -71,8 +71,7 @@ new Vue({
     },
     mounted() {
         let url_string = window.location.href;                    
-        axios.get(this.base_url + 'finance/modular_subjects_data/' + this.sem).then((data) => {
-            console.log(data);
+        axios.get(this.base_url + 'finance/modular_subjects_data/' + this.sem).then((data) => {            
             if (data.data.success) {
                 this.user = data.data.user;
                 this.sy = data.data.sy;
