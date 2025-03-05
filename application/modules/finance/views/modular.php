@@ -84,10 +84,11 @@ new Vue({
             })
         }
     },
-    methods:
+    methods: {
         selectTerm: function(event) {
             document.location = base_url + "finance/modular_subjects/" + event.target.value;
         },
+    }
     
 })
 </script>
