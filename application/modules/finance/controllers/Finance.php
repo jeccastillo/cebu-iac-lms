@@ -1152,7 +1152,9 @@ class Finance extends CI_Controller {
         
         $role = $this->session->userdata('special_role');
         $userlevel = $this->session->userdata('intUserLevel');
-        
+        $this->data['page'] = "modular_subjects";
+        $this->data['opentree'] = "finance";
+
         $active_sem = $this->data_fetcher->get_active_sem();
         
         if($term!=0)
