@@ -21,6 +21,10 @@
                                 <option value="shs">Shs</option>
                             </select>
                         </div>
+                        <div class="form-group col-xs-4"></div>
+                        <div class="form-group col-xs-4" style="text-align:right">
+                            <button type="button" @click="downloadFormat" class="btn btn-lg btn-default  btn-flat">Download Format</button>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-xs-4">
@@ -81,6 +85,11 @@ new Vue({
                 });
             }
         },
+        downloadFormat()
+        {
+            var url = base_url + 'excel/download_previous_balance_format';
+            window.open(url, '_blank');
+        }
     }
 })
 </script>

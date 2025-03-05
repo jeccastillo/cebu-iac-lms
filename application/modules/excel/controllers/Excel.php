@@ -7906,7 +7906,7 @@ class Excel extends CI_Controller {
                     ->first_row('array');
 
                     if($student){
-                        $facultyName = explode(',', ltrim($row['K']));
+                        $facultyName = explode(',', ltrim($row['I']));
                         $facultyLastName = $facultyName[0];
                         if(isset($facultyName[1])){
                             $facultyName = explode(' ', ltrim($facultyName[1]));
@@ -7914,7 +7914,7 @@ class Excel extends CI_Controller {
                         }
                         
                         $faculty = $this->db->from('tb_mas_faculty')->like(array('strLastname' => $facultyLastName, 'strFirstName' => $facultyFirstName))->get()->first_row('array');
-                        $subject = $this->db->get_where('tb_mas_subjects',array('strCode' => $row['G']))->first_row('array');
+                        $subject = $this->db->get_where('tb_mas_subjects',array('strCode' => $row['E']))->first_row('array');
 
                         if($faculty && $subject){
                             $classlistID = '';
@@ -7946,7 +7946,7 @@ class Excel extends CI_Controller {
                                     'strAcademicYear' => $sem,
                                     'slots' => 0,
                                     'strUnits' => 3,
-                                    'strSection' => $row['F'],
+                                    'strSection' => $row['D'],
                                     'intWithPayment' => 0,
                                     'intCurriculumID' => $student['current_curriculum'],
                                     'year' => $row['E'],
@@ -7975,11 +7975,11 @@ class Excel extends CI_Controller {
                                 );
 
                                 if($term == 'Midterm'){
-                                    $classlistStudent['floatMidtermGrade'] = $row['J'];
+                                    $classlistStudent['floatMidtermGrade'] = $row['H'];
                                 }else if($term == 'Final'){
-                                    $classlistStudent['floatFinalGrade'] = $row['J'];
+                                    $classlistStudent['floatFinalGrade'] = $row['H'];
                                 }
-                                $checkClasslistStudent = $this->db->get_where('tb_mas_classlist_student',array('intStudentID' => $student['intID'], 'intClassListID' => $classlistID))->first_row();
+                                $checkClasslistStudent = $this->db->get_where('tb_mas_classlist_student',array('intStudentID' => $student['intID'], 'intClassListID' => $classlistID, 'intsyID' => $sem))->first_row();
                                 
                                 if(!$checkClasslistStudent){
                                     $this->data_poster->post_data('tb_mas_classlist_student',$classlistStudent);
@@ -9204,13 +9204,6 @@ class Excel extends CI_Controller {
                         ->setCellValue('D'.$i, $course['strProgramCode'])
                         ->setCellValue('E'.$i, date("d-M-Y",strtotime($student['date_enlisted'])))
                         ->setCellValue('F'.$i, $amount);
-                        // ->setCellValue('F'.$i, $student['type'] == 'regular' ? $amount : '');
-                        // ->setCellValue('G'.$i, $student['type'] == 'new_student' ? $amount : '')
-                        // ->setCellValue('H'.$i, $student['type'] == 'internship' ? $amount : '')
-                        // ->setCellValue('I'.$i, $student['type'] == 'nstp' ? $amount : '')
-                        // ->setCellValue('J'.$i, $student['type'] == 'thesis' ? $amount : '')
-                        // ->setCellValue('K'.$i, $student['type'] == 'late_enrollment' ? $amount : '')
-                        // ->setCellValue('L'.$i, '=SUM(F' . $i . ':I' . $i . ')');
     
                     $i++;
                     $count++;
@@ -9242,21 +9235,9 @@ class Excel extends CI_Controller {
                     ->setCellValue('D8', 'Course')
                     ->setCellValue('E8', 'Date Enrolled')
                     ->setCellValue('F8', $misc_type)
-                    // ->setCellValue('F8', 'Regular')
-                    // ->setCellValue('G8', 'NSF')
-                    // ->setCellValue('H8', 'Internship')
-                    // ->setCellValue('I8', 'NSTP')
-                    // ->setCellValue('J8', 'Thesis')
-                    // ->setCellValue('K8', 'LEF')
                     ->setCellValue('L8', 'Total')
                     ->setCellValue('E' . ($i + 1), 'Total')
                     ->setCellValue('F' . ($i + 1), '=SUM(F9:F' . ($i-1) . ')')
-                    // ->setCellValue('G' . ($i + 1), '=SUM(G9:G' . ($i-1) . ')')
-                    // ->setCellValue('H' . ($i + 1), '=SUM(H9:H' . ($i-1) . ')')
-                    // ->setCellValue('I' . ($i + 1), '=SUM(I9:I' . ($i-1) . ')')
-                    // ->setCellValue('J' . ($i + 1), '=SUM(J9:J' . ($i-1) . ')')
-                    // ->setCellValue('K' . ($i + 1), '=SUM(K9:K' . ($i-1) . ')')
-                    // ->setCellValue('L' . ($i + 1), '=SUM(L9:L' . ($i-1) . ')')
                     ->setCellValue('A'. ($i + 6), 'Prepared By:')
                     ->setCellValue('A'. ($i + 8), $this->data['user']['strFirstname'] . ' ' . $this->data['user']['strLastname']);
 
@@ -9281,16 +9262,6 @@ class Excel extends CI_Controller {
                 )
             )
         );
-
-        // $objPHPExcel->getActiveSheet()->getStyle('L9:L' . ($i + 1))->applyFromArray(
-        //     array(
-        //         'font'  => array(
-        //             'bold'  => true,
-        //             'color' => array('rgb' => '000000'),
-        //             'size'  => 11,
-        //         )
-        //     )
-        // );
 
         $objPHPExcel->getActiveSheet()->getStyle('A8:F' . ($i-1))->applyFromArray(
             array(
@@ -9359,6 +9330,58 @@ class Excel extends CI_Controller {
         exit;
     }
 
+    public function download_previous_balance_format()
+    {
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
+
+        if (PHP_SAPI == 'cli')
+            die('This example should only be run from a Web Browser');
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+        $title = 'Previous Balance';
+
+        // Add some data
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A2', '2022SHA-01-210')
+            ->setCellValue('B2', '1000')
+            ->setCellValue('C2', '1st 2024-2025');
+        
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'Student Number')
+                    ->setCellValue('B1', 'Balance')
+                    ->setCellValue('C1', 'Term (Term + Year)');
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+
+        $objPHPExcel->getActiveSheet()->setTitle('Previous Balance');
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+        header('Content-Disposition: attachment;filename="Previous Balance.xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
+        exit;
+    }
 
     private function generateRandomString($length) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
