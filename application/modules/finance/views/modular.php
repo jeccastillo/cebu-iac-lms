@@ -75,7 +75,7 @@ new Vue({
             console.log(data);
             if (data.data.success) {
                 this.user = data.data.user;
-                this.sy = data.data.data.sy;
+                this.sy = data.data.sy;
                 this.subjects  = data.data.subjects;
             }
         }).catch((error) => {
