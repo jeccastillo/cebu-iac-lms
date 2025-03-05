@@ -33,7 +33,7 @@
                         <tr>
                             <th>Subject Code</th>
                             <th>Section</th>
-                            <th>Price</th>                            
+                            <th>Payment Amount</th>                            
                         </tr>
                     </thead>
                     <tbody>
