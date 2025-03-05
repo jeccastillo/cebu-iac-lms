@@ -1164,9 +1164,7 @@ class Finance extends CI_Controller {
         
         // if($role == 0 && $userlevel != 2)
         //     redirect(base_url()."unity");
-
-        $this->data['page'] = "cashier";
-        $this->data['opentree'] = "cashier_admin";
+        
         $this->load->view("common/header",$this->data);
         $this->load->view("modular",$this->data);
         $this->load->view("common/footer",$this->data);        
