@@ -1147,6 +1147,43 @@ class Finance extends CI_Controller {
         $this->load->view("common/footer",$this->data);
         $this->load->view("common/list2_conf",$this->data); 
     }
+
+    public function modular_subjects($term = 0){
+        
+        $role = $this->session->userdata('special_role');
+        $userlevel = $this->session->userdata('intUserLevel');
+        
+        $active_sem = $this->data_fetcher->get_active_sem();
+        
+        if($term!=null)
+            $this->data['term'] = $term;
+        else
+            $this->data['term'] = $active_sem['intID'];
+        
+        // if($role == 0 && $userlevel != 2)
+        //     redirect(base_url()."unity");
+
+        $this->data['page'] = "cashier";
+        $this->data['opentree'] = "cashier_admin";
+        $this->load->view("common/header",$this->data);
+        $this->load->view("modular",$this->data);
+        $this->load->view("common/footer",$this->data);        
+    }
+
+    public function modular_subjects_data($term){
+        $data['user'] = $this->data['user'];
+        $subjects = $this->db->select('strCode,strClassName,strSection,year,sub_section')
+                         ->from('tb_mas_classlists')
+                         ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
+                         ->where(array('tb_mas_classlist.strAcademicYear'=>$term))
+                         ->get()
+                         ->result_array();
+
+        $data['subjects'] = $subjects;
+        $data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+
+        echo json_encode($data);
+    }
     
 
     public function cashier(){                                     
