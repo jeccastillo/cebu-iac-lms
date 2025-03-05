@@ -1155,7 +1155,7 @@ class Finance extends CI_Controller {
         
         $active_sem = $this->data_fetcher->get_active_sem();
         
-        if($term!=null)
+        if($term!=0)
             $this->data['term'] = $term;
         else
             $this->data['term'] = $active_sem['intID'];
