@@ -2594,10 +2594,6 @@ class Data_fetcher extends CI_Model {
         if($stype == 'new'){
             $nsf = 0;
         }
-        
-        if(is_string($subjects)){
-            $subjects = json_decode($subjects);
-        }
 
         $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array'); 
         $level = get_stype($student['level']);
@@ -2771,8 +2767,7 @@ class Data_fetcher extends CI_Model {
         else{
             //$tuition = $unit_fee;
             $regular = [];
-            $modular = [];
-            print_r($subjects);
+            $modular = [];            
             foreach($subjects as $subj){
                 if($subj['is_modular'])
                     $modular[] = $subj;

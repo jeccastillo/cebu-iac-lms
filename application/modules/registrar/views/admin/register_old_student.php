@@ -305,7 +305,7 @@ new Vue({
 
                         var formdata= new FormData();
                         formdata.append("studentID",this.id);
-                        formdata.append("subjects_loaded",JSON.stringify(JSON.parse(this.subject_ids)));    
+                        formdata.append("subjects_loaded",JSON.stringify(this.subject_ids));    
                         formdata.append("scholarship",this.request.enumScholarship);    
                         formdata.append("stype",this.request.enumStudentType);   
                         formdata.append("type_of_class",this.request.type_of_class);   
@@ -318,8 +318,7 @@ new Vue({
                         axios.post('<?php echo base_url(); ?>unity/get_tuition_ajax', formdata, {
                             headers: {
                                 Authorization: `Bearer ${window.token}`
-                            },
-                            datatype:'json',
+                            },                            
                         })
                         .then(data => {                            
                             this.tuition_text = data.data.tuition;  
