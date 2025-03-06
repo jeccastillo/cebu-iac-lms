@@ -2772,6 +2772,7 @@ class Data_fetcher extends CI_Model {
             //$tuition = $unit_fee;
             $regular = [];
             $modular = [];
+            print_r($subjects);
             foreach($subjects as $subj){
                 if($subj['is_modular'])
                     $modular[] = $subj;
