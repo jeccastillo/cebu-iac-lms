@@ -283,9 +283,9 @@ new Vue({
                     if (data.data.subjects.length > 0) {
                         for (i in data.data.subjects) {
                             this.subject_ids.push({
-                                                    'subjectID':data.data.subjects[i].subjectID,
-                                                    'is_modular':data.data.subjects[i].is_modular,
-                                                    'payment_amount':data.data.subjects[i].payment_amount,
+                                                    subjectID: data.data.subjects[i].subjectID,
+                                                    is_modular: data.data.subjects[i].is_modular,
+                                                    payment_amount: data.data.subjects[i].payment_amount,
                                                 });
                             containerText +=
                                 "<div><input type='hidden' class='subject-id' name='subjects-loaded[]' value='" +
