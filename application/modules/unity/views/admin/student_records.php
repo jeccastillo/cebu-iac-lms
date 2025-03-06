@@ -66,8 +66,7 @@
                                     </thead>
                                     <tbody>                                          
                                         <tr :style="(record.intFinalized == 2)?'background-color:#ccc;':''" v-for="record in term.records" style="font-size: 13px;">
-                                            <td v-if="record.strSection.length > 3">{{ record.strSection }}</td>
-                                            <td v-else>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td>
+                                            <td>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td>
                                             <!-- <td>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td> -->
                                             <td v-if="!record.elective_subject">{{ record.strCode }}</td>
                                             <td v-else>{{ record.elective_subject.strCode + ' - ' + record.strCode }}</td>
@@ -89,7 +88,7 @@
                                                 OW
                                             </td>
                                             <td v-if="student.type == 'shs' && record.v2 && record.v3">{{ (parseInt(record.v2) + parseInt(record.v3) ? Math.round((parseInt(record.v2) + parseInt(record.v3)) / 2) : 'T')}}</td>
-                                            <td v-else>---</td>
+                                            <td v-else-if="student.type == 'shs' && (!record.v2 || !record.v3)">---</td>
                                             <td :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">{{ record.intFinalized >=1?record.strRemarks:'---' }}</td>   
                                             <td>{{ record.strFirstname+" "+record.strLastname }}</td>                                 
                                         </tr>
