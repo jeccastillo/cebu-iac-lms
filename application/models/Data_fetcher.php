@@ -2721,6 +2721,7 @@ class Data_fetcher extends CI_Model {
         if($level == "college"){
             foreach($subjects as $subj)
             {                  
+                $subj = (array) $subj;
                 $sid = $subj['subjectID'];
 
                 $class =  current($this->db
@@ -2769,6 +2770,7 @@ class Data_fetcher extends CI_Model {
             $regular = [];
             $modular = [];            
             foreach($subjects as $subj){
+                $subj = (array) $subj;
                 if($subj['is_modular'])
                     $modular[] = $subj;
                 else
