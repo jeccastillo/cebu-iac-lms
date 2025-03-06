@@ -318,7 +318,8 @@ new Vue({
                         axios.post('<?php echo base_url(); ?>unity/get_tuition_ajax', formdata, {
                             headers: {
                                 Authorization: `Bearer ${window.token}`
-                            }
+                            },
+                            datatype:'json',
                         })
                         .then(data => {                            
                             this.tuition_text = data.data.tuition;  
