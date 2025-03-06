@@ -2595,7 +2595,7 @@ class Data_fetcher extends CI_Model {
             $nsf = 0;
         }
         
-        if(!is_array($subjects)){
+        if(json_validate($subjects)){
             $subjects = json_decode($subjects);
         }
 
