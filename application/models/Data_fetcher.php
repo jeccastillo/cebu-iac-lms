@@ -2595,6 +2595,10 @@ class Data_fetcher extends CI_Model {
             $nsf = 0;
         }
         
+        if(!is_array($subjects)){
+            $subjects = json_decode($subjects);
+        }
+
         $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array'); 
         $level = get_stype($student['level']);
 
