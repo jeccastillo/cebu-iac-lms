@@ -2769,7 +2769,7 @@ class Data_fetcher extends CI_Model {
             $regular = [];
             $modular = [];            
             foreach($subjects as $subj){
-                if($subj['is_modular'])
+                if($subj->is_modular)
                     $modular[] = $subj;
                 else
                     $regular[] = $subj;
