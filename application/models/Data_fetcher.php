@@ -2799,6 +2799,8 @@ class Data_fetcher extends CI_Model {
             else
                 $tuition = 0;
             
+            print_r($modular);
+            die();
             // foreach($modular as $mod_subj){
             //     $tuition += $mod_subj['payment_amount'];
             // }                
