@@ -305,7 +305,7 @@ new Vue({
 
                         var formdata= new FormData();
                         formdata.append("studentID",this.id);
-                        formdata.append("subjects_loaded",this.subject_ids);    
+                        formdata.append("subjects_loaded",JSON.stringify(this.subject_ids));    
                         formdata.append("scholarship",this.request.enumScholarship);    
                         formdata.append("stype",this.request.enumStudentType);   
                         formdata.append("type_of_class",this.request.type_of_class);   
