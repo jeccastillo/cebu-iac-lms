@@ -278,6 +278,10 @@ foreach($records as $record){
                 $units = "(".number_format($item['strUnits'],1).")";
                 $units_earned = "(".$units_earned.")";
             }
+
+            if(isset($item['elective_subject'])){
+                $item['strCode'] = $item['elective_subject']['strCode'];
+            }
             
             $html .= '            
                 <tr>
