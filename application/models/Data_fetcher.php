@@ -2499,20 +2499,15 @@ class Data_fetcher extends CI_Model {
         
         $registration =  $this->db->where(array('intStudentID'=>$id, 'intAYID' => $sem))->get('tb_mas_registration')->first_row('array');                          
         
-        $classes =  $this->db
-                            ->select("tb_mas_subjects.intID as subjectID")
+        $subjects =  $this->db
+                            ->select("tb_mas_subjects.intID as subjectID,tb_mas_classlist.is_modular,tb_mas_classlist.payment_amount")
                             ->from("tb_mas_classlist_student")
                             ->where(array("intStudentID"=>$id,"strAcademicYear"=>$sem,"tb_mas_classlist.intWithPayment"=>"0"))
                             ->join('tb_mas_classlist', 'tb_mas_classlist.intID = tb_mas_classlist_student.intClasslistID')
                             ->join('tb_mas_subjects', 'tb_mas_subjects.intID = tb_mas_classlist.intSubjectID')
                             ->get()
                             ->result_array();
-
-        $subjects = [];
-        foreach($classes as $class)
-        {                                         
-            $subjects[] = $class['subjectID'];                            
-        }
+                 
         
         if(isset($registration))
             return $this->getTuitionSubjects($registration['enumStudentType'],$sch,$discount,$subjects,$id,$registration['type_of_class'],$sem,$registration['tuition_year'],$registration['dteRegistered'],$registration['intYearLevel'],$registration['internship']);
@@ -2724,8 +2719,10 @@ class Data_fetcher extends CI_Model {
         }       
 
         if($level == "college"){
-            foreach($subjects as $sid)
+            foreach($subjects as $subj)
             {                  
+                $sid = $subj['subjectID'];
+
                 $class =  current($this->db
                                     ->select("*")
                                     ->from("tb_mas_subjects")
@@ -2769,10 +2766,19 @@ class Data_fetcher extends CI_Model {
         }
         else{
             //$tuition = $unit_fee;
-            $shs_rate = $this->db->where(array('tuitionyear_id'=>$tuition_year['intID'], 'track_id' => $student['intProgramID']))
-            ->get('tb_mas_tuition_year_track')->first_row('array');            
+            $regular = [];
+            $modular = [];
+            foreach($subjects as $subj){
+                if($subj['is_modular'])
+                    $modular[] = $subj;
+                else
+                    $regular[] = $subj;
+            }
+            if(count($regular) > 0)
+                $shs_rate = $this->db->where(array('tuitionyear_id'=>$tuition_year['intID'], 'track_id' => $student['intProgramID']))
+                ->get('tb_mas_tuition_year_track')->first_row('array');                                    
 
-            if($shs_rate)
+            if(isset($shs_rate))
                 switch($year_level){
                     case 1:
                         $tuition = $shs_rate['tuition_amount'];
@@ -2789,7 +2795,14 @@ class Data_fetcher extends CI_Model {
                     default:
                         $tuition = $shs_rate['tuition_amount'];
                     
-                }                                 
+                } 
+            else
+                $tuition = 0;
+            
+            foreach($modular as $mod_subj){
+                $tuition += $mod_subj['payment_amount'];
+            }                
+                
                     
         }
         
