@@ -2427,8 +2427,6 @@ class Pdf extends CI_Controller {
     function print_updated_or(){
         $request = $this->input->post();
 
-        var_dump($request);
-
         $role = $this->session->userdata('special_role');
         $userlevel = $this->session->userdata('intUserLevel');
 
@@ -2507,7 +2505,6 @@ class Pdf extends CI_Controller {
         $this->data['total_amount_due_text'] = $totalAmountDueText;
         $this->data['total_amount_due'] = number_format($request['total_amount_due'],2,'.',',');
         
-        var_dump($this->data);
         if ($this->data['campus'] == "Cebu") {
             $this->load->view("print_or_latest_test",$this->data);
         }else {
