@@ -602,14 +602,14 @@
                             <a style="margin-left: 10px;"
                                 href="<?php echo base_url() ?>finance/other_payments"><i
                                     class="ion ion-cash"></i>
-                                <span>NS Payment (Non-student)</span> </a>
+                                <span>NS Collection</span> </a>
                         </li>
                         <li
                             class="<?php echo (isset($page) && $page=="view_payees_cashier")?'active':''; ?>">
                             <a style="margin-left: 10px;"
                                 href="<?php echo base_url() ?>finance/view_payees_cashier"><i
                                     class="fa fa-users"></i>
-                                <span>NS Payee List (Non-student)</span> </a>
+                                <span>NS Payee List</span> </a>
                         </li>
                         <li
                             class="<?php echo (isset($page) && $page=="transactions")?'active':''; ?>">
@@ -618,7 +618,6 @@
                                     class="ion ion-cash"></i>
                                 <span>Collection Report</span></a>
                         </li>
-                        
                         <!-- <li class="<?php echo (isset($page) && $page=="other_payments_report")?'active':''; ?>"><a
                                 href="<?php echo base_url() ?>finance/payments/0/1"><i class="ion ion-cash"></i>
                                 <span>Non Student Payment Report</span> </a></li> -->
@@ -647,8 +646,9 @@
                                 style="margin-left: 10px;"><i class="ion ion-android-list"></i>
                                 <span>OR Assignment</span> </a>
                         </li>
-                        <li class="<?php echo (isset($page) && $page=="cashier_invoice")?'active':''; ?>"><a
-                                href="<?php echo base_url() ?>finance/cashier_invoice"
+                        <li
+                            class="<?php echo (isset($page) && $page=="cashier_invoice")?'active':''; ?>">
+                            <a href="<?php echo base_url() ?>finance/cashier_invoice"
                                 style="margin-left: 10px;"><i class="ion ion-android-list"></i>
                                 <span>Invoice Assignment</span> </a>
                         </li>
@@ -673,8 +673,9 @@
                                 style="margin-left: 10px;"><i class="ion ion-android-list"></i>
                                 Reports</a>
                         </li>
-                        <li class="<?php echo (isset($page) && $page=="modular_subjects")?'active':''; ?>"><a
-                                href="<?php echo base_url(); ?>finance/modular_subjects"
+                        <li
+                            class="<?php echo (isset($page) && $page=="modular_subjects")?'active':''; ?>">
+                            <a href="<?php echo base_url(); ?>finance/modular_subjects"
                                 style="margin-left: 10px;"><i class="ion ion-android-list"></i>
                                 Modular Subjects</a>
                         </li>
@@ -913,8 +914,7 @@
                         </li>
                     </ul>
                 </li> <?php endif; ?>
-                <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 7): ?>
-                <li
+                <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 7): ?> <li
                     class="treeview <?php echo (isset($opentree) && $opentree=="scholarship")?'active':''; ?>">
                     <a href="#">
                         <i class="fa fa-circle text-green"></i> <span>Scholarship/Discount</span>
