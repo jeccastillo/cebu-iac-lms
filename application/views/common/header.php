@@ -697,6 +697,11 @@
                                 style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i>
                                 Add Previous Balance</a>
                         </li>
+                        <li class="<?php echo (isset($page))?'active':''; ?>">
+                            <a href="<?php echo base_url(); ?>finance/tuition_other_fees"
+                                style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i>
+                                Tuition & Other Fees </a>
+                        </li>
                         <!-- <li class="<?php echo (isset($page) && $page=="order_detailed_report")?'active':''; ?>">
               <a style="margin-left: 10px;" href="#"><i class="ion"></i>
                 <span>Order Detailed Report</span> </a>
