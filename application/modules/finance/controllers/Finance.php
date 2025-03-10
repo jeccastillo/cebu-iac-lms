@@ -2049,6 +2049,16 @@ class Finance extends CI_Controller {
             $this->load->view("common/invoice_report_list_conf",$this->data);
         }
     }
+
+    function tuition_other_fees(){
+        $this->data['page'] = "reports";
+        $this->data['opentree'] = "finance";
+        $sem = $this->data_fetcher->get_active_sem();
+        $this->data['sem'] = $sem['intID'];
+        $this->load->view("common/header",$this->data);
+        $this->load->view("tuition_other_fees",$this->data);
+        $this->load->view("common/footer",$this->data);            
+    }
     
     
     

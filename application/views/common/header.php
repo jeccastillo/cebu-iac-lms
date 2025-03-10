@@ -697,50 +697,15 @@
                                 style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i>
                                 Add Previous Balance</a>
                         </li>
+                        <li class="<?php echo (isset($page))?'active':''; ?>">
+                            <a href="<?php echo base_url(); ?>finance/tuition_other_fees"
+                                style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i>
+                                Tuition & Other Fees </a>
+                        </li>
                         <!-- <li class="<?php echo (isset($page) && $page=="order_detailed_report")?'active':''; ?>">
               <a style="margin-left: 10px;" href="#"><i class="ion"></i>
                 <span>Order Detailed Report</span> </a>
             </li> -->
-                    </ul>
-                </li> <?php endif; ?>
-                <?php if(($user['special_role'] >= 1 && $user['intUserLevel'] == 6) || $user['intUserLevel'] == 2): ?>
-                <li
-                    class="treeview <?php echo (isset($opentree) && $opentree=="finance_student_account")?'active':''; ?>">
-                    <a href="#">
-                        <i class="fa fa-circle text-green"></i> <span>Tuition & Other Fees </span>
-                        <i class="fa pull-right fa-angle-left"></i>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li
-                            class="<?php echo (isset($page) && $page=="tuitionyear")?'active':''; ?>">
-                            <a href="<?php echo base_url(); ?>tuitionyear/add_tuition_year/0"
-                                style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i>
-                                Add Tuition Fee </a>
-                        </li>
-                        <li
-                            class="<?php echo (isset($page) && $page=="tuitionyear_view")?'active':''; ?>">
-                            <a href="<?php echo base_url(); ?>tuitionyear/view_tuition_years"
-                                style="margin-left: 10px;"><i class="ion ion-android-list"></i>
-                                Tuition Fee List</a>
-                        </li>
-                        <li
-                            class="<?php echo (isset($page) && $page=="installment_dates")?'active':''; ?>">
-                            <a href="<?php echo base_url() ?>finance/edit_ay/"
-                                style="margin-left: 10px;"><i class="fa fa-calendar"></i>
-                                <span>Term Date Setup</span> </a>
-                        </li>
-                        <li
-                            class="<?php echo (isset($page) && $page=="view_particulars")?'active':''; ?>">
-                            <a href="<?php echo base_url(); ?>finance/view_particulars/particular"
-                                style="margin-left: 10px;"><i class="ion ion-android-list"></i>
-                                Particulars</a>
-                        </li>
-                        <li
-                            class="<?php echo (isset($page) && $page=="view_payment_types")?'active':''; ?>">
-                            <a href="<?php echo base_url(); ?>finance/view_particulars/payment_type"
-                                style="margin-left: 10px;"><i class="ion ion-android-list"></i>
-                                Payment Types</a>
-                        </li>
                     </ul>
                 </li> <?php endif; ?>
                 <?php if(($user['special_role'] >= 2 && $user['intUserLevel'] == 6) || $user['intUserLevel'] == 2): ?>
