@@ -676,7 +676,7 @@
                         <li class="<?php echo (isset($page) && $page=="reports")?'active':''; ?>"><a
                                 href="<?php echo base_url(); ?>finance/finance_reports"
                                 style="margin-left: 10px;"><i class="ion ion-android-list"></i>
-                                Reports</a>
+                                Student Accounts Reports</a>
                         </li>
                         <li
                             class="<?php echo (isset($page) && $page=="modular_subjects")?'active':''; ?>">
@@ -690,12 +690,6 @@
                                 href="<?php echo base_url() ?>finance/view_all_students_ledger"><i
                                     class="fa fa-file"></i>
                                 <span>Student Ledger</span> </a>
-                        </li>
-                        <li
-                            class="<?php echo (isset($page) && $page=="student_account_report")?'active':''; ?>">
-                            <a href="<?php echo base_url() ?>finance/student_account_report/"
-                                style="margin-left: 10px;"><i class="ion ion-android-list"></i>
-                                <span>Student Account Report</span> </a>
                         </li>
                         <li
                             class="<?php echo (isset($page) && $page=="tuitionyear")?'active':''; ?>">
