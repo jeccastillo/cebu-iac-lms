@@ -8809,6 +8809,9 @@ class Excel extends CI_Controller {
         exit;
     }
     public function awareness(){
+        $data = $this->input->get();
+        $data['stats'] = json_decode($data['stats']);
+
         error_reporting(E_ALL);
         ini_set('display_errors', TRUE);
         ini_set('display_startup_errors', TRUE);
@@ -8818,9 +8821,21 @@ class Excel extends CI_Controller {
 
         // Create new PHPExcel object
         $objPHPExcel = new PHPExcel();
-        $title = 'Test';
+        $title = 'Awareness Report';
 
+        $i = 2;
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A1', "Source")
+            ->setCellValue('B1', "Count");          
+            $i++;
+
+        foreach($data['stats'] as $stat){
+            $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A'.$i, $stat->source)
+            ->setCellValue('B'.$i, $stat->count);          
+            $i++;
         
+        }
 
         $style = array(
             'alignment' => array(
