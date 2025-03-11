@@ -8843,17 +8843,18 @@ class Excel extends CI_Controller {
         ];
 
         foreach($data['stats'] as $stat){
-            foreach($sources as $index=>$value){
-                
+            $matched = false;
+            foreach($sources as $index=>$value){                
                 $needleLc = $index;
                 $haystackLc = strtolower($stat->source);                
                 $isMatched = strpos($haystackLc, $needleLc,0);                    
-                if($isMatched !== false && $index != "other")
-                    $sources[$index]+=$stat->count;                                
-                elseif($index == "other"){
-                    $sources[$index]+=$stat->count;
-                    echo $index." + ".$stat->count."<br />";
-                }
+                if($isMatched !== false && $index != "other"){
+                    $sources[$index]+=$stat->count;           
+                    $matched = true;
+                }                     
+                elseif($index == "other" && !$matched)
+                    $sources[$index]+=$stat->count;                    
+                
                     
             }            
         }
