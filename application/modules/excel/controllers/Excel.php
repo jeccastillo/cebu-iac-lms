@@ -8846,8 +8846,10 @@ class Excel extends CI_Controller {
         
 
         
-        
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
         $sheet = $objPHPExcel->getActiveSheet();        
+        
 
         $objPHPExcel->getActiveSheet()->setTitle("Awareness Report");
 
