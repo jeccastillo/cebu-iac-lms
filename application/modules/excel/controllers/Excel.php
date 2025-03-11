@@ -8847,7 +8847,7 @@ class Excel extends CI_Controller {
                 $haystackLc = strtolower($stat->source);
                 $isMatched = strpos($haystackLc, $needleLc);
                 if($isMatched)
-                    $sources[$index]++;
+                    $sources[$index]+=$stat->count;
             }
         }
         print_r($sources);
