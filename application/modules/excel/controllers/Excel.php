@@ -8850,8 +8850,10 @@ class Excel extends CI_Controller {
                 $isMatched = strpos($haystackLc, $needleLc,0);                    
                 if($isMatched !== false && $index != "other")
                     $sources[$index]+=$stat->count;                                
-                elseif($index == "other")
+                elseif($index == "other"){
                     $sources[$index]+=$stat->count;
+                    echo $index." + ".$stat->count."<br />";
+                }
                     
             }            
         }
