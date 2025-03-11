@@ -7981,8 +7981,10 @@ class Excel extends CI_Controller {
                                     $classlistStudent['floatFinalGrade'] = $row['J'];
                                     $classlistStudent['strRemarks'] = $row['M'];
                                 }
-                                $checkClasslistStudent = $this->db->get_where('tb_mas_classlist_student',array('intStudentID' => $student['intID'], 'intClassListID' => $classlistID, 'intsyID' => $sem))->first_row();
+                                $checkClasslistStudent = $this->db->get_where('tb_mas_classlist_student',array('intStudentID' => $student['intID'], 'intClassListID' => $classlistID))->first_row();
                                 
+                                print_r($checkClasslistStudent);
+                                die();
                                 if(!$checkClasslistStudent){
                                     $this->data_poster->post_data('tb_mas_classlist_student',$classlistStudent);
                                 }else{
