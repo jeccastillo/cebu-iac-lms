@@ -7905,6 +7905,9 @@ class Excel extends CI_Controller {
                     ->get()
                     ->first_row('array');
 
+                    print($row['B']);
+                    die();
+
                     if($student){
                         $facultyName = explode(',', ltrim($row['I']));
                         $facultyLastName = $facultyName[0];
