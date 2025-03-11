@@ -8850,8 +8850,7 @@ class Excel extends CI_Controller {
                     $sources[$index]+=$stat->count;
             }            
         }
-        print_r($sources);
-        die();
+                
         foreach($data['stats'] as $stat){
             $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue('A'.$i, $stat->source)
