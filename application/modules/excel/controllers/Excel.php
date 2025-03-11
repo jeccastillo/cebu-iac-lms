@@ -7917,12 +7917,6 @@ class Excel extends CI_Controller {
                         $faculty = $this->db->from('tb_mas_faculty')->like(array('strLastname' => $facultyLastName, 'strFirstName' => $facultyFirstName))->get()->first_row('array');
                         $subject = $this->db->get_where('tb_mas_subjects',array('strCode' => $row['G']))->first_row('array');
 
-                        print_r($faculty);
-                        print($facultyLastName);
-                        print($facultyFirstName);
-                        print('@@@@@');
-                        print_r($subject);
-                        die();
                         if($faculty && $subject){
                             $classlistID = '';
                             //Check if classlist exists
@@ -7985,6 +7979,7 @@ class Excel extends CI_Controller {
                                     $classlistStudent['floatMidtermGrade'] = $row['H'];
                                 }else if($term == 'Final'){
                                     $classlistStudent['floatFinalGrade'] = $row['H'];
+                                    $classlistStudent['strRemarks'] = $row['M'];
                                 }
                                 $checkClasslistStudent = $this->db->get_where('tb_mas_classlist_student',array('intStudentID' => $student['intID'], 'intClassListID' => $classlistID, 'intsyID' => $sem))->first_row();
                                 
