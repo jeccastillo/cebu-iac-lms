@@ -7905,7 +7905,7 @@ class Excel extends CI_Controller {
                     ->get()
                     ->first_row('array');
 
-                    print($row['B']);
+                    print($studentNumber);
                     die();
 
                     if($student){
