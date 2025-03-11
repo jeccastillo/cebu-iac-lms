@@ -84,6 +84,7 @@ new Vue({
 
     methods: {      
         exportStats: function(){
+            var formdata = new FormData();
             formdata.append('stats',JSON.stringify(this.stats));
             axios
             .post(base_url + 'excel/awareness/', formdata, {
