@@ -888,7 +888,7 @@
                         </li>
                     </ul>
                 </li> <?php endif; ?>
-                <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 7): ?> <li
+                <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 6 || $user['intUserLevel'] == 7): ?> <li
                     class="treeview <?php echo (isset($opentree) && $opentree=="scholarship")?'active':''; ?>">
                     <a href="#">
                         <i class="fa fa-circle text-green"></i> <span>Scholarship/Discount</span>
