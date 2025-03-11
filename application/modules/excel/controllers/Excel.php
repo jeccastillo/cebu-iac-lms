@@ -8788,7 +8788,7 @@ class Excel extends CI_Controller {
     public function awareness(){
         $data = $this->input->get();        
 
-        $ch = curl_init();
+        $ch = curl_init('https://smsapi.iacademy.edu.ph');
         // Step 2: Set cURL options
         // Specify the URL to fetch
         // $url = $this->data['api_url'] . 'admissions/student-info/view-students/' . $sem;
