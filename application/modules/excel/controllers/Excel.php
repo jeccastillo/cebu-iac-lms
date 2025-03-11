@@ -8792,7 +8792,7 @@ class Excel extends CI_Controller {
         // Step 2: Set cURL options
         // Specify the URL to fetch
         // $url = $this->data['api_url'] . 'admissions/student-info/view-students/' . $sem;
-        $url = 'https://smsapi.iacademy.edu.ph/sms/admissions/applications/awareness?current_sem' . $data['current_sem'] . '&campus=' . $data['campus'];
+        $url = 'https://smsapi.iacademy.edu.ph/sms/applications/awareness?current_sem' . $data['current_sem'] . '&campus=' . $data['campus'];
 
         curl_setopt($ch, CURLOPT_URL, $url); // Set the URL to fetch
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Return the response as a string
