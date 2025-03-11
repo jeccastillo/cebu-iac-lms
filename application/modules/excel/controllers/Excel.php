@@ -8795,8 +8795,6 @@ class Excel extends CI_Controller {
         $params = array('current_sem' => $data['current_sem'],'campus'=>$data['campus']);
         $url = 'https://smsapi.iacademy.edu.ph/api/v1/sms/admissions/applications/awareness?' . http_build_query($params);
 
-        echo $url;
-        die();
         curl_setopt($ch, CURLOPT_URL, $url); // Set the URL to fetch
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Return the response as a string
 
