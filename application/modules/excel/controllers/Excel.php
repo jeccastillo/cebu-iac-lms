@@ -8834,7 +8834,7 @@ class Excel extends CI_Controller {
         
         $sheet = $objPHPExcel->getActiveSheet();        
 
-        $objPHPExcel->getActiveSheet()->setTitle(ucwords($sy->term_student_type));
+        $objPHPExcel->getActiveSheet()->setTitle("Awareness Report");
 
         $date = date("ymdhis");
 
