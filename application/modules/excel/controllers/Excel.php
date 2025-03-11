@@ -7967,8 +7967,6 @@ class Excel extends CI_Controller {
                                 $classlistStudent = array(
                                     'intStudentID' => $student['intID'],
                                     'intClassListID' => $classlistID,
-                                    // 'floatMidtermGrade' => $term =='Midterm' ? $row['H'] : '',
-                                    // 'floatFinalGrade' => $term =='Final' ? $row['H'] : '',
                                     'enumStatus' => 'act',
                                     'strRemarks' => '--',
                                     'intsyID' => $sem,
@@ -7979,7 +7977,11 @@ class Excel extends CI_Controller {
                                     $classlistStudent['floatMidtermGrade'] = $row['J'];
                                 }else if($term == 'Final'){
                                     $classlistStudent['floatFinalGrade'] = $row['J'];
-                                    $classlistStudent['strRemarks'] = isset($row['M']) ? $row['M'] : '--';
+                                    if(isset($row['M'])){
+                                        $remarks = strtolower($row['M']);
+                                        $remarks = ucfirst($row['M']);
+                                        $classlistStudent['strRemarks'] = $remarks;
+                                    }
                                 }
                                 $checkClasslistStudent = $this->db->get_where('tb_mas_classlist_student',array('intStudentID' => $student['intID'], 'intClassListID' => $classlistID))->first_row();
                                 
