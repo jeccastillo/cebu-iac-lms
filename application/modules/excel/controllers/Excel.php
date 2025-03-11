@@ -8829,6 +8829,28 @@ class Excel extends CI_Controller {
             ->setCellValue('B1', "Count");          
             $i++;
 
+        $sources = [
+            'facebook' => 0,
+            'billboard' => 0,
+            'google' => 0,
+            'referal' => 0,
+            'event' => 0,
+            'orientation' => 0,
+            'tiktok' => 0,
+            'instagram' => 0,
+            'other' => 0
+        ];
+
+        foreach($data['stats'] as $stat){
+            foreach($sources as $index=>$value){
+                $needleLc = $index;
+                $haystackLc = strtolower($stat->source);
+                $isMatched = str_contains($haystackLc, $needleLc);
+                $sources[$index]++;
+            }
+        }
+        print_r($sources);
+        die();
         foreach($data['stats'] as $stat){
             $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue('A'.$i, $stat->source)
