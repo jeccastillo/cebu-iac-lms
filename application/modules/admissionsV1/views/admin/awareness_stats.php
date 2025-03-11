@@ -20,6 +20,9 @@
                 <?php endforeach; ?>
             </select>
         </div>
+        <div>
+            <button class="btn btn-primary btn-lg" @click="exportStats">Export to Excel</button>
+        </div>
         <div class="row">
             <div class="col-md-6">
                 <h4>Awareness Stats</h4>
@@ -80,7 +83,19 @@ new Vue({
     },
 
     methods: {      
-       
+        exportStats: function(){
+            formdata.append('stats',JSON.stringify(this.stats));
+            axios
+            .post(base_url + 'excel/awareness/', formdata, {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
+                },
+            })
+            .then((data) => { 
+                                
+            });
+
+        }
                                        
     }
 
