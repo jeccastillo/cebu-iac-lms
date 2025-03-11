@@ -92,7 +92,7 @@ new Vue({
                 action: url
             }).appendTo(document.body);
                 $('<input type="hidden" />').attr({                    
-                    stats: JSON.stringify(this.students)
+                    stats: JSON.stringify(this.stats)
                 }).appendTo(f);
             f.submit();
             f.remove();
