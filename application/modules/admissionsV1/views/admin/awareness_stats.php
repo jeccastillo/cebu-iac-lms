@@ -83,11 +83,9 @@ new Vue({
     },
 
     methods: {      
-        exportStats: function(){
-            var formdata = new FormData();
-            formdata.append('stats',JSON.stringify(this.stats));
-            axios
-            window.open(base_url + 'excel/awareness?stats='+this.stats);
+        exportStats: function(){            
+            var stats = JSON.stringify(this.stats);            
+            window.open(base_url + 'excel/awareness?stats='+stats);
            
 
         }

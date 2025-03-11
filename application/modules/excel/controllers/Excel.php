@@ -8809,9 +8809,7 @@ class Excel extends CI_Controller {
         exit;
     }
     public function awareness(){
-        $data = $this->input->get();
-        print_r($data);
-        die();
+        $data = $this->input->get();        
         $data['stats'] = json_decode($data['stats']);
 
         error_reporting(E_ALL);
