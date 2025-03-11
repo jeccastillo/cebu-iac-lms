@@ -8844,12 +8844,12 @@ class Excel extends CI_Controller {
         foreach($data['stats'] as $stat){
             foreach($sources as $index=>$value){
                 $needleLc = $index;
-                $haystackLc = strtolower($stat->source);
-                echo "$needleLc in $haystackLc <br />";
+                $haystackLc = strtolower($stat->source);                
                 $isMatched = strpos($haystackLc, $needleLc);
                 if($isMatched)
                     $sources[$index]+=$stat->count;
             }
+            echo $stat->count."<br />";
         }
         print_r($sources);
         die();
