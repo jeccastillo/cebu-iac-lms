@@ -8845,7 +8845,7 @@ class Excel extends CI_Controller {
             foreach($sources as $index=>$value){
                 $needleLc = $index;
                 $haystackLc = strtolower($stat->source);
-                $isMatched = str_contains($haystackLc, $needleLc);
+                $isMatched = strpos($haystackLc, $needleLc);
                 $sources[$index]++;
             }
         }
