@@ -83,9 +83,19 @@ new Vue({
     },
 
     methods: {      
-        exportStats: function(){                               
-            window.open(base_url + 'excel/awareness?current_sem=<?php echo $current_sem; ?>&campus=<?php echo $campus; ?>');
-           
+        exportStats: function(){
+            var formdata = new FormData();
+            formdata.append('stats',JSON.stringify(this.stats));
+            var url = base_url + 'excel/awareness/';
+              
+            var f = $("<form target='_blank' method='POST' style='display:none;'></form>").attr({
+                action: url
+            }).appendTo(document.body);
+                $('<input type="hidden" />').attr({                    
+                    stats: JSON.stringify(this.students)
+                }).appendTo(f);
+            f.submit();
+            f.remove();
 
         }
                                        
