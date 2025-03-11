@@ -8793,7 +8793,7 @@ class Excel extends CI_Controller {
         // Specify the URL to fetch
         // $url = $this->data['api_url'] . 'admissions/student-info/view-students/' . $sem;
         $params = array('current_sem' => $data['current_sem'],'campus'=>$data['campus']);
-        $url = 'https://smsapi.iacademy.edu.ph/api/v1/sms/admissions/applications/awareness' . http_build_query($params);
+        $url = 'https://smsapi.iacademy.edu.ph/api/v1/sms/admissions/applications/awareness?' . http_build_query($params);
 
         echo $url;
         die();
