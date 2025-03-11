@@ -4990,30 +4990,7 @@ class Excel extends CI_Controller {
         $enrolledSlugs = $notEnrolledSlugs = array();
 
         // $ar_students = "<script> </script>"
-        // $ch = curl_init();
-        // // Step 2: Set cURL options
-        // // Specify the URL to fetch
-        // // $url = $this->data['api_url'] . 'admissions/student-info/view-students/' . $sem;
-        // $url = 'https://smsapi.iacademy.edu.ph/sms/admissions/student-info/view-students/' . $sem;
-
-        // curl_setopt($ch, CURLOPT_URL, $url); // Set the URL to fetch
-        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Return the response as a string
-
-        // // Step 3: Execute the cURL session
-        // $response = curl_exec($ch);
-        // $data = array();
-        // // Step 4: Check for errors
-        // if (curl_errno($ch)) {
-        //     print 'cURL error: ' . curl_error($ch);
-        // } else {
-        //     // Decode the response if it's JSON
-        //     $data = json_decode($response, true);
-        // }
         
-        // foreach($data['data'] as $studentInformation){
-        //     array_push($enrolledSlugs, $studentInformation['slug']);
-        // }
-        // curl_close($ch);
 
         foreach($ar_students as $studentInformation){
             if($studentInformation->status != 'Enrolled')
@@ -8810,8 +8787,30 @@ class Excel extends CI_Controller {
     }
     public function awareness(){
         $data = $this->input->get();        
-        $data['stats'] = json_decode($data['stats']);
 
+        $ch = curl_init();
+        // Step 2: Set cURL options
+        // Specify the URL to fetch
+        // $url = $this->data['api_url'] . 'admissions/student-info/view-students/' . $sem;
+        $url = 'https://smsapi.iacademy.edu.ph/sms/admissions/applications/awareness?current_sem' . $data['current_sem'] . '&campus=' . $data['campus'];
+
+        curl_setopt($ch, CURLOPT_URL, $url); // Set the URL to fetch
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Return the response as a string
+
+        // Step 3: Execute the cURL session
+        $response = curl_exec($ch);
+        $stats = array();
+        // Step 4: Check for errors
+        if (curl_errno($ch)) {
+            print 'cURL error: ' . curl_error($ch);
+        } else {
+            // Decode the response if it's JSON
+            $stats = json_decode($response, true);
+        }
+                
+        curl_close($ch);
+        print_r($stats);
+        die();
         error_reporting(E_ALL);
         ini_set('display_errors', TRUE);
         ini_set('display_startup_errors', TRUE);

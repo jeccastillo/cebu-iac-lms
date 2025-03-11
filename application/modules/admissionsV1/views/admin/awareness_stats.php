@@ -83,9 +83,8 @@ new Vue({
     },
 
     methods: {      
-        exportStats: function(){            
-            var stats = JSON.stringify(this.stats);            
-            window.open(base_url + 'excel/awareness?stats='+stats);
+        exportStats: function(){                               
+            window.open(base_url + 'excel/awareness?current_sem=<?php echo $current_sem; ?>&campus=<?php echo $campus; ?>');
            
 
         }
