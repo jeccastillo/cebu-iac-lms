@@ -7906,7 +7906,8 @@ class Excel extends CI_Controller {
                     ->first_row('array');
 
                     if($student){
-                        $facultyName = explode(',', ltrim($row['I']));
+
+                        $facultyName = explode(',', ltrim($row['K']));
                         $facultyLastName = $facultyName[0];
                         if(isset($facultyName[1])){
                             $facultyName = explode(' ', ltrim($facultyName[1]));
@@ -7914,7 +7915,7 @@ class Excel extends CI_Controller {
                         }
                         
                         $faculty = $this->db->from('tb_mas_faculty')->like(array('strLastname' => $facultyLastName, 'strFirstName' => $facultyFirstName))->get()->first_row('array');
-                        $subject = $this->db->get_where('tb_mas_subjects',array('strCode' => $row['E']))->first_row('array');
+                        $subject = $this->db->get_where('tb_mas_subjects',array('strCode' => $row['G']))->first_row('array');
 
                         if($faculty && $subject){
                             $classlistID = '';
@@ -7975,11 +7976,12 @@ class Excel extends CI_Controller {
                                 );
 
                                 if($term == 'Midterm'){
-                                    $classlistStudent['floatMidtermGrade'] = $row['H'];
+                                    $classlistStudent['floatMidtermGrade'] = $row['J'];
                                 }else if($term == 'Final'){
-                                    $classlistStudent['floatFinalGrade'] = $row['H'];
+                                    $classlistStudent['floatFinalGrade'] = $row['J'];
+                                    $classlistStudent['strRemarks'] = isset($row['M']) ? $row['M'] : '';
                                 }
-                                $checkClasslistStudent = $this->db->get_where('tb_mas_classlist_student',array('intStudentID' => $student['intID'], 'intClassListID' => $classlistID, 'intsyID' => $sem))->first_row();
+                                $checkClasslistStudent = $this->db->get_where('tb_mas_classlist_student',array('intStudentID' => $student['intID'], 'intClassListID' => $classlistID))->first_row();
                                 
                                 if(!$checkClasslistStudent){
                                     $this->data_poster->post_data('tb_mas_classlist_student',$classlistStudent);

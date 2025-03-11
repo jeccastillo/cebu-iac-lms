@@ -1,6 +1,6 @@
 <aside class="right-side" id="registration-container">
     <section class="content-header">
-        <h1> Finance Reports </h1>
+        <h1> Tuition and Other Fees </h1>
         <hr />
     </section>
     <hr />
@@ -10,13 +10,12 @@
                 <!-- small box -->
                 <div class="small-box bg-yellow">
                     <div class="inner">
-                        <h3>Deleted Official Receipt / Invoice</h3>
-                        <p>Deleted Official Receipt / Invoice List Report </p>
+                        <h3>Add Tuition Fee</h3>
                     </div>
                     <div class="icon">
                         <i class="fa fa-list"></i>
                     </div>
-                    <a href="<?php echo base_url(); ?>finance/deleted_or_invoice"
+                    <a href="<?php echo base_url(); ?>tuitionyear/add_tuition_year/0"
                         class="small-box-footer"> View <i class="fa fa-arrow-circle-right"></i>
                     </a>
                 </div>
@@ -26,13 +25,12 @@
                 <!-- small box -->
                 <div class="small-box bg-blue">
                     <div class="inner">
-                        <h3>Cancelled Official Receipt / Invoice</h3>
-                        <p>Cancelled Official Receipt / Invoice List Report </p>
+                        <h3>Tuition Fee List</h3>
                     </div>
                     <div class="icon">
                         <i class="fa fa-list"></i>
                     </div>
-                    <a href="<?php echo base_url(); ?>finance/cancelled_or_invoice"
+                    <a href="<?php echo base_url(); ?>tuitionyear/view_tuition_years"
                         class="small-box-footer"> View <i class="fa fa-arrow-circle-right"></i>
                     </a>
                 </div>
@@ -42,30 +40,28 @@
                 <!-- small box -->
                 <div class="small-box bg-green">
                     <div class="inner">
-                        <h3>Credit Debit Memo</h3>
-                        <p>Credit Debit Memo List</p>
+                        <h3>Term Date Setup</h3>
                     </div>
                     <div class="icon">
                         <i class="fa fa-list"></i>
                     </div>
-                    <a href="<?php echo base_url(); ?>finance/credit_debit_memo"
-                        class="small-box-footer"> View <i class="fa fa-arrow-circle-right"></i>
-                    </a>
-                </div>
-                <!-- small box -->
-            </div>
-            <div class="col-md-4 col-sm-8 col-xs-12">
-                <!-- small box -->
-                <div class="small-box bg-green">
-                    <div class="inner">
-                        <h3>Laboratory</h3>
-                        <p>Laboratory List</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-list"></i>
-                    </div>
-                    <a href="<?php echo base_url(); ?>finance/laboratory" class="small-box-footer">
+                    <a href="<?php echo base_url(); ?>finance/edit_ay/" class="small-box-footer">
                         View <i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+                <!-- small box -->
+            </div>
+            <div class="col-md-4 col-sm-8 col-xs-12">
+                <!-- small box -->
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3> Particulars</h3>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-list"></i>
+                    </div>
+                    <a href="<?php echo base_url(); ?>finance/view_particulars/particular"
+                        class="small-box-footer"> View <i class="fa fa-arrow-circle-right"></i>
                     </a>
                 </div>
                 <!-- small box -->
@@ -74,45 +70,12 @@
                 <!-- small box -->
                 <div class="small-box bg-yellow">
                     <div class="inner">
-                        <h3>Miscellaneous Fee Report</h3>
-                        <p>Miscellaneous Fee List</p>
+                        <h3>Payment Types</h3>
                     </div>
                     <div class="icon">
                         <i class="fa fa-list"></i>
                     </div>
-                    <a href="<?php echo base_url(); ?>finance/miscellaneous_report"
-                        class="small-box-footer"> View <i class="fa fa-arrow-circle-right"></i>
-                    </a>
-                </div>
-                <!-- small box -->
-            </div>
-            <div class="col-md-4 col-sm-8 col-xs-12">
-                <!-- small box -->
-                <div class="small-box bg-blue">
-                    <div class="inner">
-                        <h3>Scholarship Report</h3>
-                        <p>Scholarship Report List</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-list"></i>
-                    </div>
-                    <a href="<?php echo base_url(); ?>finance/scholarship_report"
-                        class="small-box-footer"> View <i class="fa fa-arrow-circle-right"></i>
-                    </a>
-                </div>
-                <!-- small box -->
-            </div>
-            <div class="col-md-4 col-sm-8 col-xs-12">
-                <!-- small box -->
-                <div class="small-box bg-blue">
-                    <div class="inner">
-                        <h3>Student Assessment Report</h3>
-                        <p>Student Assessment Report List</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-list"></i>
-                    </div>
-                    <a href="<?php echo base_url(); ?>finance/student_account_report/"
+                    <a href="<?php echo base_url(); ?>finance/view_particulars/payment_type"
                         class="small-box-footer"> View <i class="fa fa-arrow-circle-right"></i>
                     </a>
                 </div>

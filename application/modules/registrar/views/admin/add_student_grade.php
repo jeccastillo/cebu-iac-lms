@@ -146,7 +146,7 @@ new Vue({
                             title: 'Successfully Import',
                             icon: 'success',
                         }).then(function() {
-                            location.reload();
+                            // location.reload();
                         });
                     }else {
                         Swal.fire({
@@ -157,7 +157,7 @@ new Vue({
                             text: data.data,
                             icon: 'error',
                         }).then(function() {
-                            location.reload();
+                            // location.reload();
                         });
                     }
                 });
