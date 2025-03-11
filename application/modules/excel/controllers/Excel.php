@@ -8838,7 +8838,8 @@ class Excel extends CI_Controller {
             'orientation' => 0,
             'tiktok' => 0,
             'instagram' => 0,
-            'other' => 0
+            'other' => 0,
+            'ads' => 0,
         ];
 
         foreach($data['stats'] as $stat){
@@ -8848,10 +8849,9 @@ class Excel extends CI_Controller {
                 $haystackLc = strtolower($stat->source);                
                 $isMatched = strpos($haystackLc, $needleLc,0);                    
                 if($isMatched !== false)
-                    $sources[$index]+=$stat->count;
+                    $sources[$index]+=$stat->count;                                
                 elseif($index == "other")
                     $sources[$index]+=$stat->count;
-                
                     
             }            
         }
