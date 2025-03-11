@@ -7979,7 +7979,7 @@ class Excel extends CI_Controller {
                                     $classlistStudent['floatMidtermGrade'] = $row['J'];
                                 }else if($term == 'Final'){
                                     $classlistStudent['floatFinalGrade'] = $row['J'];
-                                    $classlistStudent['strRemarks'] = $row['M'];
+                                    $classlistStudent['strRemarks'] = isset($row['M']) ? $row['M'] : '';
                                 }
                                 $checkClasslistStudent = $this->db->get_where('tb_mas_classlist_student',array('intStudentID' => $student['intID'], 'intClassListID' => $classlistID))->first_row();
                                 
