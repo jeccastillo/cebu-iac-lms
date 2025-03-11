@@ -7906,9 +7906,7 @@ class Excel extends CI_Controller {
                     ->first_row('array');
 
                     if($student){
-                        print_r($student);
-                        die();
-                        
+
                         $facultyName = explode(',', ltrim($row['I']));
                         $facultyLastName = $facultyName[0];
                         if(isset($facultyName[1])){
@@ -7919,6 +7917,9 @@ class Excel extends CI_Controller {
                         $faculty = $this->db->from('tb_mas_faculty')->like(array('strLastname' => $facultyLastName, 'strFirstName' => $facultyFirstName))->get()->first_row('array');
                         $subject = $this->db->get_where('tb_mas_subjects',array('strCode' => $row['E']))->first_row('array');
 
+                        print_r($faculty);
+                        print_r($subject);
+                        die();
                         if($faculty && $subject){
                             $classlistID = '';
                             //Check if classlist exists
