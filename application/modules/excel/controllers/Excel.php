@@ -8858,18 +8858,13 @@ class Excel extends CI_Controller {
 
         
         // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        $data['excel'] = $objWriter->save('php://output');        
+        $objWriter->save('php://output');        
         exit;
     }
     
     public function finance_credit_debit_memo_report($sem = 0, $campus, $report_date)
     {
-        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
-        if($sem == 0)
-        {
-            $s = $this->data_fetcher->get_active_sem();
-            $sem = $s['intID'];
-        }
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();        
 
         $results = $this->db->select('tb_mas_student_ledger.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
                    ->from('tb_mas_student_ledger')
