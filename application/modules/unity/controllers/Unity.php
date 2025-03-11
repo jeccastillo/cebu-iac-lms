@@ -1414,9 +1414,11 @@ class Unity extends CI_Controller {
                             $temp_rec['color'] = "#f2f2f2";
                     }                             
     
-                    if($temp_rec['include_gwa'] && $grade != "OW"){                        
-                        $assessment_units += $temp_rec['strUnits'];   
-                        $assessment_sum += $grade * $temp_rec['strUnits'];         
+                    if($temp_rec['include_gwa'] && $grade != "OW"){
+                        if($temp_rec['strUnits'] > 0){
+                            $assessment_units += $temp_rec['strUnits'];   
+                            $assessment_sum += $grade * $temp_rec['strUnits'];
+                        }                       
                     }
                 }
                 elseif($current){
