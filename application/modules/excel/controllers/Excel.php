@@ -8845,6 +8845,7 @@ class Excel extends CI_Controller {
             foreach($sources as $index=>$value){
                 $needleLc = $index;
                 $haystackLc = strtolower($stat->source);
+                echo "$needleLc in $haystackLc <br />";
                 $isMatched = strpos($haystackLc, $needleLc);
                 if($isMatched)
                     $sources[$index]+=$stat->count;
