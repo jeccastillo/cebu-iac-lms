@@ -87,14 +87,8 @@ new Vue({
             var formdata = new FormData();
             formdata.append('stats',JSON.stringify(this.stats));
             axios
-            .post(base_url + 'excel/awareness/', formdata, {
-                headers: {
-                    Authorization: `Bearer ${window.token}`
-                },
-            })
-            .then((data) => { 
-                                
-            });
+            document.location(base_url + 'excel/awareness?stats='+this.stats);
+           
 
         }
                                        

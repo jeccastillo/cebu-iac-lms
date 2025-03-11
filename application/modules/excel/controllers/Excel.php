@@ -8858,8 +8858,7 @@ class Excel extends CI_Controller {
 
         
         // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        $data['excel'] = $objWriter->save('php://output');
-        echo json_encode($data['excel']);
+        $data['excel'] = $objWriter->save('php://output');        
         exit;
     }
     
