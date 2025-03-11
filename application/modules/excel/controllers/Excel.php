@@ -7905,7 +7905,6 @@ class Excel extends CI_Controller {
                     ->get()
                     ->first_row('array');
 
-
                     if($student){
                         $facultyName = explode(',', ltrim($row['I']));
                         $facultyLastName = $facultyName[0];
@@ -8000,7 +7999,7 @@ class Excel extends CI_Controller {
             }
 
             // Optionally, you can delete the uploaded file after import
-            unlink($filePath);
+            // unlink($filePath);
 
             print('true');
             return true;
