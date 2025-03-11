@@ -91,8 +91,9 @@ new Vue({
             var f = $("<form target='_blank' method='POST' style='display:none;'></form>").attr({
                 action: url
             }).appendTo(document.body);
-                $('<input type="hidden" />').attr({                    
-                    stats: JSON.stringify(this.stats)
+                $('<input type="hidden" />').attr({    
+                    name: 'stats',                
+                    value: JSON.stringify(this.stats)
                 }).appendTo(f);
             f.submit();
             f.remove();
