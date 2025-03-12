@@ -108,7 +108,7 @@ class Finance extends CI_Controller {
         $post = $this->input->post();                
        // $this->data_poster->set
         $this->data_poster->post_data('tb_mas_sy',$post,$post['intID']);
-        $this->data_poster->log_action('Finance Admin','Updated Term Info: '.$post['enumSem']." ".$post['strYearStart']." - ".$post['strYearEnd'],'aqua');
+        $this->data_poster->log_action('Finance_Admin','Updated Term Info: '.$post['enumSem']." ".$post['strYearStart']." - ".$post['strYearEnd'],'aqua');
         redirect(base_url()."finance/edit_ay/".$post['intID']);
             
     }
@@ -625,7 +625,7 @@ class Finance extends CI_Controller {
             'added_by' => $this->session->userdata('intID'),
         ];        
         $this->db->insert('tb_mas_student_ledger',$from);
-        $this->data_poster->log_action('Finance Admin','Student ID: '.$post['student_id'].' Applied to term: '.strtoupper($sy_to['enumSem']." ".$sy_to['term_label']." ".$sy_to['strYearStart']." - ".$sy_to['strYearEnd']).' Applied From: '.strtoupper($sy_from['enumSem']." ".$sy_from['term_label']." ".$sy_from['strYearStart']." - ".$sy_from['strYearEnd']),'aqua');
+        $this->data_poster->log_action('Finance_Admin','Student ID: '.$post['student_id'].' Applied to term: '.strtoupper($sy_to['enumSem']." ".$sy_to['term_label']." ".$sy_to['strYearStart']." - ".$sy_to['strYearEnd']).' Applied From: '.strtoupper($sy_from['enumSem']." ".$sy_from['term_label']." ".$sy_from['strYearStart']." - ".$sy_from['strYearEnd']),'aqua');
         
 
         $data['success'] =  true;
@@ -1192,7 +1192,7 @@ class Finance extends CI_Controller {
                 ->where('intID',$post['intID'])
                 ->update('tb_mas_classlist',$post);
 
-        $this->data_poster->log_action('Finance Admin','Updated Payment Amount: '.$post['intID']." Amount: ".$post['payment_amount'],'aqua');                
+        $this->data_poster->log_action('Finance_Admin','Updated Payment Amount: '.$post['intID']." Amount: ".$post['payment_amount'],'aqua');                
         $data['success'] = true;
         echo json_encode($data);
 
