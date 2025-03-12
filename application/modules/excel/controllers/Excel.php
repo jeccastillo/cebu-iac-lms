@@ -8833,7 +8833,7 @@ class Excel extends CI_Controller {
             'facebook' => 0,
             'billboard' => 0,
             'google' => 0,
-            'referal' => 0,
+            'referral' => 0,
             'event' => 0,
             'orientation' => 0,
             'tiktok' => 0,
