@@ -7906,8 +7906,7 @@ class Excel extends CI_Controller {
                     ->first_row('array');
 
                     if($student){
-
-                        $facultyName = explode(',', ltrim($row['K']));
+                        $facultyName = explode(',', ltrim($row['I']));
                         $facultyLastName = $facultyName[0];
                         if(isset($facultyName[1])){
                             $facultyName = explode(' ', ltrim($facultyName[1]));
@@ -7915,7 +7914,7 @@ class Excel extends CI_Controller {
                         }
                         
                         $faculty = $this->db->from('tb_mas_faculty')->like(array('strLastname' => $facultyLastName, 'strFirstName' => $facultyFirstName))->get()->first_row('array');
-                        $subject = $this->db->get_where('tb_mas_subjects',array('strCode' => $row['G']))->first_row('array');
+                        $subject = $this->db->get_where('tb_mas_subjects',array('strCode' => $row['E']))->first_row('array');
 
                         if($faculty && $subject){
                             $classlistID = '';
@@ -7967,6 +7966,8 @@ class Excel extends CI_Controller {
                                 $classlistStudent = array(
                                     'intStudentID' => $student['intID'],
                                     'intClassListID' => $classlistID,
+                                    // 'floatMidtermGrade' => $term =='Midterm' ? $row['H'] : '',
+                                    // 'floatFinalGrade' => $term =='Final' ? $row['H'] : '',
                                     'enumStatus' => 'act',
                                     'strRemarks' => '--',
                                     'intsyID' => $sem,
@@ -7974,16 +7975,11 @@ class Excel extends CI_Controller {
                                 );
 
                                 if($term == 'Midterm'){
-                                    $classlistStudent['floatMidtermGrade'] = $row['J'];
+                                    $classlistStudent['floatMidtermGrade'] = $row['H'];
                                 }else if($term == 'Final'){
-                                    $classlistStudent['floatFinalGrade'] = $row['J'];
-                                    if(isset($row['M'])){
-                                        $remarks = strtolower($row['M']);
-                                        $remarks = ucfirst($row['M']);
-                                        $classlistStudent['strRemarks'] = $remarks;
-                                    }
+                                    $classlistStudent['floatFinalGrade'] = $row['H'];
                                 }
-                                $checkClasslistStudent = $this->db->get_where('tb_mas_classlist_student',array('intStudentID' => $student['intID'], 'intClassListID' => $classlistID))->first_row();
+                                $checkClasslistStudent = $this->db->get_where('tb_mas_classlist_student',array('intStudentID' => $student['intID'], 'intClassListID' => $classlistID, 'intsyID' => $sem))->first_row();
                                 
                                 if(!$checkClasslistStudent){
                                     $this->data_poster->post_data('tb_mas_classlist_student',$classlistStudent);
@@ -8812,15 +8808,110 @@ class Excel extends CI_Controller {
         $objWriter->save('php://output');
         exit;
     }
+    public function awareness(){
+        $data = $this->input->post();
+        $data['stats'] = json_decode($data['stats']);
+        
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
 
+        if (PHP_SAPI == 'cli')
+            die('This example should only be run from a Web Browser');
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+        $title = 'Awareness Report';
+
+        $i = 2;
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A1', "Source")
+            ->setCellValue('B1', "Count");          
+            $i++;
+
+        $sources = [
+            'facebook' => 0,
+            'billboard' => 0,
+            'google' => 0,
+            'referral' => 0,
+            'event' => 0,
+            'orientation' => 0,
+            'tiktok' => 0,
+            'instagram' => 0,
+            'ads' => 0,
+            'other' => 0,            
+        ];
+
+        foreach($data['stats'] as $stat){
+            $matched = false;
+            foreach($sources as $index=>$value){                
+                $needleLc = $index;
+                $haystackLc = strtolower($stat->source);                
+                $isMatched = strpos($haystackLc, $needleLc,0);                    
+                if($isMatched !== false){
+                    $sources[$index]+=$stat->count;           
+                    $matched = true;
+                }                     
+                elseif($index == "other" && !$matched)
+                    $sources[$index]+=$stat->count;                    
+                
+                    
+            }            
+        }
+        
+        foreach($sources as $source=>$count){
+            $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A'.$i, $source)
+            ->setCellValue('B'.$i, $count);          
+            $i++;
+        
+        }
+
+        $style = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+            )
+        );
+        
+
+        
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
+        $sheet = $objPHPExcel->getActiveSheet();        
+        
+
+        $objPHPExcel->getActiveSheet()->setTitle("Awareness Report");
+
+        $date = date("ymdhis");
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+        header('Content-Disposition: attachment;filename="awareness_report.xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        
+        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');        
+        exit;
+    }
+    
     public function finance_credit_debit_memo_report($sem = 0, $campus, $report_date)
     {
-        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
-        if($sem == 0)
-        {
-            $s = $this->data_fetcher->get_active_sem();
-            $sem = $s['intID'];
-        }
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();        
 
         $results = $this->db->select('tb_mas_student_ledger.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
                    ->from('tb_mas_student_ledger')
@@ -9349,14 +9440,14 @@ class Excel extends CI_Controller {
 
         // Add some data
         $objPHPExcel->setActiveSheetIndex(0)
-            ->setCellValue('A2', '2022SHA-01-210')
-            ->setCellValue('B2', '1000')
-            ->setCellValue('C2', '1st 2024-2025');
+            ->setCellValue('A1', '2022SHA-01-210')
+            ->setCellValue('B1', '1000')
+            ->setCellValue('C1', '1st 2024-2025');
         
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'Student Number')
-                    ->setCellValue('B1', 'Balance')
-                    ->setCellValue('C1', 'Term (Term + Year)');
+                    ->setCellValue('A2', 'Balance')
+                    ->setCellValue('A3', 'Term (Term + Year)');
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
