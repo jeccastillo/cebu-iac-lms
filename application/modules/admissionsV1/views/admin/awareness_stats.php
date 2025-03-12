@@ -84,16 +84,19 @@ new Vue({
 
     methods: {      
         exportStats: function(){
+            var formdata = new FormData();
             formdata.append('stats',JSON.stringify(this.stats));
-            axios
-            .post(base_url + 'excel/awareness/', formdata, {
-                headers: {
-                    Authorization: `Bearer ${window.token}`
-                },
-            })
-            .then((data) => { 
-                                
-            });
+            var url = base_url + 'excel/awareness/';
+              
+            var f = $("<form target='_blank' method='POST' style='display:none;'></form>").attr({
+                action: url
+            }).appendTo(document.body);
+                $('<input type="hidden" />').attr({    
+                    name: 'stats',                
+                    value: JSON.stringify(this.stats)
+                }).appendTo(f);
+            f.submit();
+            f.remove();
 
         }
                                        
