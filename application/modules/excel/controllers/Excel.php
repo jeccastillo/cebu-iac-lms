@@ -7967,7 +7967,6 @@ class Excel extends CI_Controller {
                                     'intStudentID' => $student['intID'],
                                     'intClassListID' => $classlistID,
                                     'enumStatus' => 'act',
-                                    'strRemarks' => '--',
                                     'intsyID' => $sem,
                                     'date_added' => date("Y-m-d h:ia"),
                                 );
