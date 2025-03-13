@@ -77,7 +77,6 @@
                                                 OW
                                             </td>
                                             <td v-if="record.v3 != 'OW'" :style="(record.intFinalized == 2)?'font-weight:bold;':''">
-
                                                 <span v-if="record.intFinalized >=2 && student.type =='shs'" :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">
                                                     {{ record.shsFinalsGrade }}
                                                 </span>
