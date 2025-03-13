@@ -51,7 +51,7 @@
                             <th>Units</th>
                             <th>Midterm Grade</th>
                             <th>Final Grade</th>
-                            <th v-if="student.level == 'shs'">Semestral Final Grade</th>
+                            <th v-if="student.level == 'shs'">Sem Final Grade</th>
                             <th>Units Earned</th>
                         </tr>                        
                     </thead>
@@ -65,7 +65,7 @@
                             <td v-if="item.intFinalized >=2">{{ item.v3 }}</td>
                             <td v-else>NGS</td>
                             <th v-if="student.level == 'shs' && item.intFinalized >=2 && item.semFinalGrade">{{ item.semFinalGrade }}</th>
-                            <th v-else-fif="student.level == 'shs' && item.intFinalized >=2">{{ item.semFinalGrade }}</th>
+                            <th v-else-if="student.level == 'shs' && item.intFinalized >=2">{{ item.semFinalGrade }}</th>
                             <td v-if="item.strRemarks =='Passed'">{{ item.strUnits }}</td>
                             <td v-else>0</td>
                         </tr>
