@@ -530,7 +530,7 @@ if(!function_exists('switch_num'))
                 case '3':
                     $num = "3rd";
                     break;
-                case 'summer':
+                case '4':
                     $num = "Summer";
                     break;
                 case '5':
@@ -566,8 +566,8 @@ if(!function_exists('switch_num_rev'))
                 case '5th':
                     $num = "5";
                     break;
-                case '6th':
-                    $num = "6";
+                case 'summer':
+                    $num = "Summer";
                     break;
             }
         
