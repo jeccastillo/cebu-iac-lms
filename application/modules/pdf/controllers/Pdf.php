@@ -3823,6 +3823,288 @@ class Pdf extends CI_Controller {
 
         die();
     }
+
+    public function certificate_of_unit_earned($id)
+    {
+        $campus = $this->data['campus'];
+        // print($student_id);
+        // die();
+        
+        $data['student'] = $this->data_fetcher->getStudent($id);
+        
+        $all_terms =  $this->db->select('tb_mas_sy.*')  
+                ->join('tb_mas_sy','tb_mas_registration.intAYID = tb_mas_sy.intID')                
+                ->where(array('intStudentID'=>$id))
+                ->order_by("strYearStart asc, enumSem asc")
+                ->get('tb_mas_registration')
+                ->result_array();                          
+
+        if(get_stype($data['student']['level']) == "college")
+            $active_sem = $this->data_fetcher->get_active_sem();
+        else
+            $active_sem = $this->data_fetcher->get_active_sem_shs();
+
+        $data['current_records'] = $this->data_fetcher->getClassListStudentsSt($id,$active_sem['intID']);        
+
+        $registrations = [];
+        foreach($all_terms as $trm){
+            $registration = $this->db->select('tb_mas_registration.*,tb_mas_sy.enumSem,tb_mas_sy.strYearStart,tb_mas_sy.strYearEnd, tb_mas_sy.term_label,tb_mas_sy.intID as term_id, strProgramCode')
+                                  ->join('tb_mas_sy','tb_mas_registration.intAYID = tb_mas_sy.intID')  
+                                  ->join('tb_mas_programs','tb_mas_programs.intProgramID = tb_mas_registration.current_program','left')
+                                  ->where(array('intStudentID'=>$id,'intAYID'=>$trm['intID']))
+                                  ->order_by("strYearStart ASC, enumSem ASC")
+                                  ->get('tb_mas_registration')
+                                  ->first_row('array');
+          
+            if(!isset($registration))
+                $registrations[] = $trm;
+            else    
+                $registrations[] = $registration;                   
+          
+        }
+
+        
+
+        $data['balance'] = $this->data_fetcher->getStudentBalance($id);
+
+
+        $curicculum = $this->data_fetcher->getSubjectsInCurriculum($data['student']['intCurriculumID']);        
+        $data['all_subjects'] = $this->data_fetcher->getSubjectsInCurriculumAlphabetical($data['student']['intCurriculumID']);
+        $data['curriculum_subjects'] = [];
+        
+        $data['deficiencies'] = $this->db
+                ->get_where('tb_mas_student_deficiencies',array('student_id'=>$id,'status'=>'active','temporary_resolve_date <'=> date("Y-m-d")))->result_array();
+
+        $data['generated_tor'] = $this->db->get_where('tb_mas_tor_generated',array('student_id'=>$id))->result_array();
+        
+        $assessment_sum = 0;
+        $assessment_units = 0;
+        $assessment_units_earned = 0;
+        $credited_units = 0;
+        $curriculum_units = 0;     
+        $curriculum_units_na = 0;   
+
+        $change_grade = $this->db->select('tb_mas_student_grade_change.*,strClassName,year,strSection,sub_section,strCode,enumSem,term_label,term_student_type,strYearStart,strYearEnd')
+            ->join('tb_mas_classlist','tb_mas_student_grade_change.classlist_id = tb_mas_classlist.intID')  
+            ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
+            ->join('tb_mas_sy','tb_mas_classlist.strAcademicYear = tb_mas_sy.intID')
+            ->where(array('tb_mas_student_grade_change.student_id'=>$id))            
+            ->order_by('strYearStart asc, enumSem asc')
+            ->get('tb_mas_student_grade_change')
+            ->result_array();
+        
+        foreach($curicculum as $cs){
+            if($cs['include_gwa'])
+                $curriculum_units += $cs['strUnits'];
+            else
+                $curriculum_units_na += $cs['strUnits'];
+
+            $recs = 
+            $this->db->select('floatFinalGrade,strRemarks,tb_mas_subjects.strUnits,tb_mas_subjects.include_gwa,tb_mas_subjects.strCode,intFinalized')
+                     ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')  
+                     ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')                                              
+                     ->where(array('tb_mas_classlist.intSubjectID'=>$cs['intSubjectID'],'tb_mas_classlist_student.intStudentID'=>$data['student']['intID'],'tb_mas_classlist_student.strRemarks !='=>'Officially Withdrawn'))                     
+                     ->get('tb_mas_classlist_student')
+                     ->result_array();            
+            foreach($recs as $temp_rec){
+                $current = false;                
+                foreach($data['current_records'] as $current_rec){
+                    if($temp_rec['strCode'] == $current_rec['strCode']){
+                        $temp_rec['floatFinalGrade'] = $current_rec['v3'];
+                        $current = true;
+                        break;
+                    }
+                }
+                if($temp_rec && $temp_rec['intFinalized'] == 2){                
+                    switch($temp_rec['floatFinalGrade']){
+                        case 'FA':
+                            $grade = 5;
+                            $temp_rec['bg'] = "#990000";
+                            $temp_rec['color'] = "#f2f2f2";
+                        break;
+                        case 'UD':
+                            $grade = 5;
+                            $temp_rec['bg'] = "#990000";
+                            $temp_rec['color'] = "#f2f2f2";
+                        break;
+                        case '5.00':
+                            $grade = 5;
+                            $temp_rec['bg'] = "#990000";
+                            $temp_rec['color'] = "#f2f2f2";
+                        break;
+                        default:
+                            $grade = $temp_rec['floatFinalGrade'];
+                            $temp_rec['bg'] = "#009000";
+                            $temp_rec['color'] = "#f2f2f2";
+                    }                             
+    
+                    if($temp_rec['include_gwa'] && $grade != "OW"){                        
+                        $assessment_units += $temp_rec['strUnits'];   
+                        $assessment_sum += $grade * $temp_rec['strUnits'];         
+                    }
+                }
+                elseif($current){
+                    $temp_rec['bg'] = "#ADD8E6";
+                    $temp_rec['color'] = "#333";
+                }
+                if($temp_rec['strRemarks'] == "Passed" && $temp_rec['intFinalized'] == 2){
+                    $cs['rec'] = $temp_rec;
+                    $assessment_units_earned += $temp_rec['strUnits'];
+                    break;
+                }
+                else
+                    $cs['rec'] = $temp_rec;
+            }
+
+            $cs['equivalent'] = $this->db->get_where('tb_mas_credited',array('equivalent_subject'=>$cs['intSubjectID'],'student_id'=>$data['student']['intID']))->first_row();
+            if(!isset($cs['rec'])){
+                if($cs['equivalent'])
+                    $cs['rec']['bg'] = "#00AA00";               
+            }
+            
+                     
+            $data['curriculum_subjects'][$cs['intYearLevel']][$cs['intSem']]['year'] = $cs['intYearLevel'];
+            $data['curriculum_subjects'][$cs['intYearLevel']][$cs['intSem']]['stringify_year'] = $this->stringifyNumber($cs['intYearLevel']);
+            $data['curriculum_subjects'][$cs['intYearLevel']][$cs['intSem']]['sem'] = $cs['intSem'];
+            $data['curriculum_subjects'][$cs['intYearLevel']][$cs['intSem']]['stringify_sem'] = $this->stringifyNumber($cs['intSem']);
+            $data['curriculum_subjects'][$cs['intYearLevel']][$cs['intSem']]['records'][] = $cs;
+        }
+        $assessment_gwa = 0;
+        if($assessment_units > 0){
+            $assessment_gwa = $assessment_sum/$assessment_units;
+            $assessment_gwa = number_format(round($assessment_gwa,3),3);
+        }
+
+        $terms = [];
+        $total_units_earned = 0;
+        $total_units_gwa = 0;
+        $gwa = 0;
+
+        $credited_subjects = [];
+
+        $terms_in_credited = $this->db->where(array('student_id'=>$id))
+                                      ->order_by('school_year asc, term asc')
+                                      ->group_by(array('school_year','term','completion'))
+                                      ->get('tb_mas_credited')
+                                      ->result_array();
+                    
+        foreach($terms_in_credited as $term_credited){
+
+            $credited = $this->db->select('tb_mas_credited.*,strCode,intID')
+                                ->join('tb_mas_subjects','tb_mas_credited.equivalent_subject = tb_mas_subjects.intID','left')
+                                ->where(array('student_id'=>$id,'term'=>$term_credited['term'],'school_year'=>$term_credited['school_year'],'completion'=>$term_credited['completion']))
+                                ->order_by('course_code','asc')                                
+                                ->get('tb_mas_credited')
+                                ->result_array();
+            
+            $credited_data = array(
+                'term' => $term_credited['term'],
+                'school' => $term_credited['completion'],
+                'school_year' => $term_credited['school_year'],
+            );     
+            
+            foreach($credited as $cr)
+                $credited_units += $cr['units'];
+
+            $credited_subjects[] = array('records'=>$credited,'other_data'=>$credited_data);
+            
+        }
+
+
+        //Check Curriculum for units earned
+        foreach($registrations as $reg){
+            $syid = isset($reg['intAYID'])?$reg['intAYID']:$reg['intID'];
+            $records = $this->data_fetcher->getClassListStudentsSt($id,$syid); 
+            $units = 0;
+            $sum_grades = 0;
+            $units_earned = 0;
+            $total = 0;
+            foreach($records as $record){
+                if($record['intFinalized'] == 2 && $record['strRemarks'] == "Passed")
+                    $units_earned += $record['strUnits'];
+                if($record['intFinalized'] == 2 && $record['include_gwa'] && $record['strRemarks'] != "Officially Withdrawn"){
+                    switch($record['v3']){
+                        case 'FA':
+                            $v3 = 5;
+                        break;
+                        case 'UD':
+                            $v3 = 5;
+                        break;
+                        case '5.00':
+                            $v3 = 5;
+                        break;
+                        default:
+                            $v3 = $record['v3'];
+                    }                  
+                    if($v3 != "OW"){ 
+                        $sum_grades += $v3 * $record['strUnits'];                
+                        $total += $record['strUnits'];
+                    }
+                }
+
+
+            }
+            $total_units_earned += $units_earned;
+            $term_gwa = 0;
+            if($total > 0){
+                $term_gwa = $sum_grades/$total;
+                $term_gwa = number_format(round($term_gwa,3),3);
+            }
+            $gwa += $sum_grades;
+            $total_units_gwa += $total;
+            $terms[] = array('records'=> $records,'reg'=>$reg,'units_earned'=>$units_earned,'gwa'=>$term_gwa);
+        }
+
+        if($total_units_gwa > 0){
+            $gwa = $gwa/$total_units_gwa;
+            $gwa = number_format(round($gwa,3),3);
+        }
+
+        $data['gwa'] = $gwa;
+        $data['change_grades'] = $change_grade;
+        $data['assessment_gwa'] = $assessment_gwa;
+        $data['assessment_units'] = $assessment_units_earned;
+        $data['total_units_earned'] = $total_units_earned;
+        $data['credited_subjects'] = $credited_subjects;
+        $data['credited_units'] = $credited_units;
+        $data['curriculum_units'] = $curriculum_units;
+        $data['curriculum_units_na'] = $curriculum_units_na;        
+        $data['units_left'] =  $curriculum_units - $assessment_units_earned - $credited_units;
+        $data['data'] = $terms;
+        
+        $this->data['student_data'] = $data;
+
+        tcpdf();
+        // create new PDF document
+        $pdf = new TCPDF("P", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);        
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetTitle("Certificate of Unit Earned ");
+        
+        // set margins
+        $pdf->SetMargins(1, 0.75, 1);
+
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        
+        $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
+        
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);    
+             
+        $pdf->AddPage();
+          
+        $html = $this->load->view("registrar_certificate_of_unit_earned",$this->data,true);
+        $pdf->writeHTML($html, true, false, true, false, '');
+          
+        $pdf->Output('Certificate of Unit Earned -.pdf', 'I');
+    }
+
+    private function stringifyNumber($n) {
+        $special = ['0th','1st', '2nd', '3rd', '4th', '5th'];
+        return $special[$n];
+    }
+    
     
     public function is_admin()
     {
