@@ -7980,6 +7980,9 @@ class Excel extends CI_Controller {
                                         $remarks = ucfirst($remarks);
                                         $classlistStudent['strRemarks'] = $remarks;
                                     }
+                                    if(isset($row['N'])){
+                                        $classlistStudent['floatSemFinalGrade'] = $row['N'];
+                                    }
                                 }
                                 $checkClasslistStudent = $this->db->get_where('tb_mas_classlist_student',array('intStudentID' => $student['intID'], 'intClassListID' => $classlistID))->first_row();
                                 if(!$checkClasslistStudent){
