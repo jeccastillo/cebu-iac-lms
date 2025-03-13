@@ -105,7 +105,8 @@
                                         <tr style="font-size: 11px;">
                                             <td></td>
                                             <td align="right"><strong>Term GWA:</strong></td>
-                                            <td>{{ term.gwa }}</td>
+                                            <td v-if="student.type == 'shs'">{{ Math.round(term.gwa) }}</td>
+                                            <td v-else>{{ term.gwa }}</td>
                                             <td colspan="3"></td>
                                         </tr>
 
