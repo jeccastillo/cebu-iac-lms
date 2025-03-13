@@ -59,6 +59,7 @@
                                             <th>Units</th>
                                             <th>Midterm</th>
                                             <th>Final</th>
+                                            <th v-if="student.type == 'shs'">Sem Final Grade</th>
                                             <th>Remarks</th>
                                             <th>Faculty</th>                                      
                                         </tr>
@@ -66,7 +67,9 @@
                                     <tbody>                                          
                                         <tr :style="(record.intFinalized == 2)?'background-color:#ccc;':''" v-for="record in term.records" style="font-size: 13px;">
                                             <td>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td>
-                                            <td>{{ record.strCode }}</td>
+                                            <!-- <td>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td> -->
+                                            <td v-if="!record.elective_subject">{{ record.strCode }}</td>
+                                            <td v-else>({{ record.elective_subject.strCode + ' - ' + record.strCode }})</td>
                                             <td v-if="record.include_gwa == 1">{{ record.strUnits }}</td>
                                             <td v-else>({{ record.strUnits }})</td>
                                             <td v-if="record.v2 != 'OW'" :style="(record.intFinalized == 2)?'font-weight:bold;':''">{{ record.intFinalized >=1?record.v2:'NGS' }}</td>
@@ -74,7 +77,10 @@
                                                 OW
                                             </td>
                                             <td v-if="record.v3 != 'OW'" :style="(record.intFinalized == 2)?'font-weight:bold;':''">
-                                                <span v-if="record.intFinalized >=2" :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">
+                                                <span v-if="record.intFinalized >=2 && student.type =='shs'" :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">
+                                                    {{ record.shsFinalsGrade }}
+                                                </span>
+                                                <span v-else-if="record.intFinalized >=2" :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">
                                                     {{ record.v3 }}
                                                 </span>
                                                 <span v-else>
@@ -84,9 +90,11 @@
                                             <td v-else style="font-weight:bold">
                                                 OW
                                             </td>
+                                            <!-- <td v-if="student.type == 'shs' && record.v2 && record.v3">{{ (parseInt(record.v2) + parseInt(record.v3) ? Math.round((parseInt(record.v2) + parseInt(record.v3)) / 2) : 'T')}}</td> -->
+                                            <td v-if="student.type == 'shs' && record.v3">{{ record.v3 }}</td>
+                                            <td v-else-if="student.type == 'shs' && !record.v3">---</td>
                                             <td :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">{{ record.intFinalized >=1?record.strRemarks:'---' }}</td>   
-                                            <td>{{ record.strFirstname+" "+record.strLastname }}</td>
-                                                                                        
+                                            <td>{{ record.strFirstname+" "+record.strLastname }}</td>                                 
                                         </tr>
                                         <tr style="font-size: 13px;">
                                             <td></td>
