@@ -174,7 +174,9 @@ $html .= '
         
         $grade_final = ($item['intFinalized'] >= 2)?$item['v3']:'NGS';        
         $grade_midterm = ($item['intFinalized'] >= 1)?$item['v2']:'NGS';
-        $sem_grade = isset($item['grade_ave'])?$item['grade_ave']:"";
+        $sem_grade = $item['semFinalGrade'];
+        // $sem_grade = isset($item['grade_ave'])?$item['grade_ave']:"";
+
         
         $units_earned = ($item['strRemarks'] == "Passed" && $item['intFinalized'] >= 2 && $period == "final")?number_format($item['strUnits'],1):0;
         if($item['include_gwa'])
