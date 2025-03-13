@@ -2,7 +2,7 @@
 
 /* Form Configuration */
 
-$config['terms'] = array('1st','2nd','3rd','summer');
+$config['terms'] = array('1st','2nd','3rd','4th');
 $config['term_type'] = "Term";
 $config['department'] = array('School of Design', 'School of Computing', 'School of Business','Other');
 $config['days'] = array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday');

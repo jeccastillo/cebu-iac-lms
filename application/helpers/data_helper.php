@@ -531,7 +531,7 @@ if(!function_exists('switch_num'))
                     $num = "3rd";
                     break;
                 case '4':
-                    $num = "Summer";
+                    $num = "4th";
                     break;
                 case '5':
                     $num = "5th";
@@ -566,7 +566,7 @@ if(!function_exists('switch_num_rev'))
                 case '5th':
                     $num = "5";
                     break;
-                case 'summer':
+                case '4th':
                     $num = "Summer";
                     break;
             }
@@ -591,7 +591,7 @@ if(!function_exists('switch_num_word'))
                     $num = "Third";
                     break;
                 case '4th':
-                    $num = "Fourth";
+                    $num = "Summer";
                     break;
                 case '5th':
                     $num = "Fifth";
@@ -631,7 +631,7 @@ if(!function_exists('switch_num_rev_search'))
                     $num = "03";
                     break;
                 case '4th':
-                    $num = "04";
+                    $num = "Summer";
                     break;
                 case '5th':
                     $num = "05";
