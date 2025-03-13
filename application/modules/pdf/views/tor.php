@@ -334,6 +334,10 @@ foreach($records as $record){
             }
 
             $grade = $item['v3']?$item['v3']:'NGS';
+
+            if($student['level'] == 'shs'){
+                $grade = $item['semFinalGrade']?$item['semFinalGrade']:'NGS';
+            }
             
             $html .= '            
                 <tr>
