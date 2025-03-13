@@ -2506,7 +2506,7 @@ class Pdf extends CI_Controller {
         $this->data['total_amount_due'] = number_format($request['total_amount_due'],2,'.',',');
         
         if ($this->data['campus'] == "Cebu") {
-            $this->load->view("print_or_latest_test",$this->data);
+            $this->load->view("print_or_latest_cebu",$this->data);
         }else {
             // $this->load->view("print_or_latest_test",$this->data);
             $this->load->view("print_or_latest",$this->data);

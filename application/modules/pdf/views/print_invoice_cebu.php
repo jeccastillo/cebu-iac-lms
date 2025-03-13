@@ -106,14 +106,11 @@ table tr td {
             </div> <?php else: ?> <div>
                 <div style="position:absolute; top: 270px; left:60px; width: 500px; height: 20px;">
                     <?php echo $reservation_description; ?> </div>
-                <div
-                    style="position:absolute; top: 270px; left: 525px; width: 500px; height: 20px;">
+                <div style="position:absolute; top: 270px; left: 525px; width: 500px; height: 20px;">
                     <?php echo $reservation_amount != 0 ? 1 : ""; ?> </div>
-                <div
-                    style="position:absolute; top: 270px; left: 595px; width: 200px; height: 20px;">
+                <div style="position:absolute; top: 270px; left: 595px; width: 200px; height: 20px;">
                     <?php echo $reservation_amount != 0 ? "-".$reservation_amount : ""; ?> </div>
-                <div
-                    style="position:absolute; top:  270px; left: 710px; width: 200px; height: 20px;">
+                <div style="position:absolute; top:  270px; left: 710px; width: 200px; height: 20px;">
                     <?php echo $reservation_amount != 0 ? "-".$reservation_amount : ""; ?> </div>
             </div> <?php endif; ?>
             <!---VAT ZERO RATED--->
@@ -138,11 +135,13 @@ table tr td {
             <div style="position:absolute; top:  385px; left: 130px; width: 200px; height: 20px;">
                 <?php  echo $is_cash == 0 ? $total_amount_due : ''; ?> </div>
             <div style="position:absolute; top: 425px; left: 125px; width: 200px; height: 20px;">
-                <?php  echo $is_cash == 0 ? $remarks : ''; ?> </div>
+                <?php  echo $is_cash == 0 &&  $request['type'] != 'ns_payment'? $remarks : ''; ?> </div>
             <div style="position:absolute; top: 445px; left: 130px; width: 200px; height: 20px;">
                 <?php  echo $is_cash == 2 || $is_cash == 3 ? $total_amount_due : ''; ?> </div>
             <div style="position:absolute; top:  465px; left: 40px; width: 200px; height: 20px;">
                 <?php  echo $is_cash != 0 ? $remarks : ''; ?> </div>
+            <div style="position:absolute; top: 465px; left: 40px; width: 200px; height: 20px;">
+                <?php  echo $request['type'] == 'ns_payment'? $remarks : ''; ?> </div>
             <!--Vatable-->
             <div style="position:absolute; top:  462px; left: 305px; width: 200px; height: 20px;">
                 <?php  echo $amount_less_vat != 0 ? $amount_less_vat : ""; ?> </div>
@@ -157,8 +156,7 @@ table tr td {
             <!--Total Amount received-->
             <div style="position:absolute; top:587px; left: 130px; width: 200px; height: 20px;">
                 <?php  echo $total_amount_due == 0 ? "" : $total_amount_due; ?> </div>
-            <div
-                style="position:absolute; top: 565px; left: 600px; width: 200px; height: 20px;font-size:15px">
+            <div style="position:absolute; top: 565px; left: 600px; width: 200px; height: 20px;font-size:15px">
                 <?php echo $cashier_name; ?> </div>
         </section>
     </div>
