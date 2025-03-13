@@ -81,7 +81,7 @@
                                                 <span v-if="record.intFinalized >=2 && student.type =='shs'" :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">
                                                     {{ record.shsFinalsGrade }}
                                                 </span>
-                                                <span v-if="record.intFinalized >=2" :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">
+                                                <span v-else-if="record.intFinalized >=2" :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">
                                                     {{ record.v3 }}
                                                 </span>
                                                 <span v-else>
