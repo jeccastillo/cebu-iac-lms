@@ -7979,9 +7979,9 @@ class Excel extends CI_Controller {
                                         $classlistStudent['strRemarks'] = $remarks;
                                     }
                                     if($student['level'] == 'shs'){
-                                        $classlistStudent['floatFinalsGrade'] = $row['J'];
+                                        $classlistStudent['floatFinalGrade'] = $row['J'];
                                         if(isset($row['N'])){
-                                            $classlistStudent['floatFinalGrade'] = $row['N'];
+                                            $classlistStudent['floatFinalsGrade'] = $row['N'];
                                         }
                                     }
                                 }
