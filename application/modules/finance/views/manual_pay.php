@@ -490,7 +490,8 @@ new Vue({
             this.student = data.data.data;
             this.request.slug = this.slug;   
             this.or_print.type = this.student.type;
-            for(i in this.student.payments){                
+            for(i in this.student.payments){         
+                console.log("#",i);       
                 this.payments.push(this.student.payments[i]);
             }             
             console.log(this.payments);          
