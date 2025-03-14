@@ -4575,8 +4575,13 @@ class Excel extends CI_Controller {
                     ->setCellValue('C'.$i, $invoice_number)
                     ->setCellValue('D'.$i, $d->student_number)
                     ->setCellValue('E'.$i, strtoupper($d->student_name))
-                    ->setCellValue('F'.$i, $d->description)
-                    ->setCellValue('G'.$i, $term['enumSem']." ".$term['term_label']." SY".$term['strYearStart']."-".$term['strYearEnd'])                                        
+                    ->setCellValue('F'.$i, $d->description);
+            
+            if($term)
+                $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue('G'.$i, $term['enumSem']." ".$term['term_label']." SY".$term['strYearStart']."-".$term['strYearEnd']);
+            
+            $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('H'.$i, $remarks)
                     ->setCellValue('N'.$i, '=SUM(I'.$i.':M'.$i.')');
                                                        
@@ -7979,6 +7984,7 @@ class Excel extends CI_Controller {
                                         $classlistStudent['strRemarks'] = $remarks;
                                     }
                                     if($student['level'] == 'shs'){
+                                        $classlistStudent['floatFinalGrade'] = $row['J'];
                                         if(isset($row['N'])){
                                             $classlistStudent['floatFinalsGrade'] = $row['N'];
                                         }
