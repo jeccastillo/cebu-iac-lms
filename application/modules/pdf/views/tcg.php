@@ -269,7 +269,20 @@ foreach($records as $record){
                     break;
                     default:
                         $grade = $item['v3'];                    
-                }                             
+                }
+                
+                if($student['level'] == 'shs'){
+                    switch($item['semFinalGrade']){
+                        case 'FA':
+                            $grade = 5;
+                        break;
+                        case 'UD':
+                            $grade = 5;                    
+                        break;
+                        default:
+                            $grade = $item['semFinalGrade'];                    
+                    }
+                }
                         
                 $grades_sum += $grade * $item['strUnits'];
                 $total_grades_sum += $grade * $item['strUnits'];
@@ -288,7 +301,7 @@ foreach($records as $record){
                     <td style="font-size:9px;">'.$item['strCode'].'</td>
                     <td style="font-size:9px;">'.$item['strDescription'].'</td>
                     <td style="font-size:9px;text-align:center;">'.$units.'</td>
-                    <td style="font-size:9px;text-align:center;">'.$item['v3'].'</td>
+                    <td style="font-size:9px;text-align:center;">'.$grade.'</td>
                     <td style="font-size:9px;text-align:center;"></td>                        
                     <td style="font-size:9px;text-align:center;">'.$units_earned.'</td>
                 </tr>            
