@@ -282,7 +282,11 @@ new Vue({
                     var containerText = "";
                     if (data.data.subjects.length > 0) {
                         for (i in data.data.subjects) {
-                            this.subject_ids.push(data.data.subjects[i].subjectID);
+                            this.subject_ids.push({
+                                                    subjectID: data.data.subjects[i].subjectID,
+                                                    is_modular: data.data.subjects[i].is_modular,
+                                                    payment_amount: data.data.subjects[i].payment_amount,
+                                                });
                             containerText +=
                                 "<div><input type='hidden' class='subject-id' name='subjects-loaded[]' value='" +
                                 data.data.subjects[i].subjectID +
@@ -301,7 +305,7 @@ new Vue({
 
                         var formdata= new FormData();
                         formdata.append("studentID",this.id);
-                        formdata.append("subjects_loaded",this.subject_ids);    
+                        formdata.append("subjects_loaded",JSON.stringify(this.subject_ids));    
                         formdata.append("scholarship",this.request.enumScholarship);    
                         formdata.append("stype",this.request.enumStudentType);   
                         formdata.append("type_of_class",this.request.type_of_class);   
@@ -314,7 +318,7 @@ new Vue({
                         axios.post('<?php echo base_url(); ?>unity/get_tuition_ajax', formdata, {
                             headers: {
                                 Authorization: `Bearer ${window.token}`
-                            }
+                            },                            
                         })
                         .then(data => {                            
                             this.tuition_text = data.data.tuition;  
