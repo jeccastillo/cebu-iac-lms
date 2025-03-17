@@ -2087,10 +2087,10 @@ class Datatables extends CI_Controller {
                     $sWhere .= " AND ";
                 }                
                
-                if($table == "tb_mas_users" && $i > 3)
-                    $col = $i + 2;
-                else
-                    $col = $i;
+                // if($table == "tb_mas_users" && $i > 3)
+                //     $col = $i + 2;
+                // else
+                $col = $i;
                 
                 if($table == "tb_mas_users" && $i  == 2){                        
                     $st = "";
