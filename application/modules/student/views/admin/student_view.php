@@ -171,17 +171,17 @@
                             <th>Actions</th>
                         </tr>                        
                         <tr class="search">
-                            <td>id</td>
-                            <td>slug</td>
-                            <td>Student Number</td>
-                            <td>Last Name</td>
+                            <th>id</th>
+                            <th>slug</th>
+                            <th>Student Number</th>
+                            <th>Last Name</th>
                             <th>First Name</th>
                             <th>Middle Name</th>
-                            <td>Program</td>
-                            <td>Year Level</td>
-                            <td>Status</td>
-                            <td>Student Type</td>
-                            <td>Actions</td>
+                            <th>Program</th>
+                            <th>Year Level</th>
+                            <th>Status</th>
+                            <th>Student Type</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>                    
                     <tbody></tbody>
