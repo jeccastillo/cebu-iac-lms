@@ -53,7 +53,7 @@
                             <td>Student Number</td>
                             <td>Last Name</td>
                             <td>First Name</td>
-                            <th>Middle Name</th>
+                            <td>Middle Name</td>
                             <td>Program</td>
                             <td>Year Level</td>                                                   
                         </tr>
