@@ -2816,11 +2816,7 @@ class Data_fetcher extends CI_Model {
                     $misc_list[$m['name']] = getExtraFee($m, $class_type, 'misc');
                     $total_misc += $misc_list[$m['name']];
                 }
-
-                if($thesis_fee > 0){
-                    $misc_list['thesis fee'] = $thesis_fee;
-                    $total_misc += $misc_list['thesis fee'];
-                }
+                
 
             }
             else
@@ -2846,7 +2842,10 @@ class Data_fetcher extends CI_Model {
                     $total_misc += $misc_list[$m['name']];
                 }
         }
-        
+        if($thesis_fee > 0){
+            $misc_list['thesis fee'] = $thesis_fee;
+            $total_misc += $misc_list['thesis fee'];
+        }
         // if($hasInternship){
         //     $internship = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'internship'))
         //     ->get('tb_mas_tuition_year_misc')->result_array();
