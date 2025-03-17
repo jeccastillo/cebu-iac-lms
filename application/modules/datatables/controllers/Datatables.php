@@ -2065,12 +2065,8 @@ class Datatables extends CI_Controller {
                 $sWhere .= "AND (";
             
             for ( $i=0 ; $i<count($aColumns) ; $i++ )
-            {
-                if(($aColumns[$i] != "strFirstname" && $aColumns[$i] != "strLastname") || $table != 'tb_mas_users')
-                    $sWhere .= $aColumns[$i]." LIKE '%".mysqli_real_escape_string($this->db->conn_id,$_GET['sSearch'] )."%' OR ";
-                else
-                    $sWhere .= "CONCAT_WS(' ',strFirstname,strLastname,strMiddlename) LIKE '%".mysqli_real_escape_string($this->db->conn_id,$_GET['sSearch'])."%' OR ";
-                
+            {                
+                $sWhere .= $aColumns[$i]." LIKE '%".mysqli_real_escape_string($this->db->conn_id,$_GET['sSearch'] )."%' OR ";                                
             }
             $sWhere = substr_replace( $sWhere, "", -3 );
             $sWhere .= ')';
