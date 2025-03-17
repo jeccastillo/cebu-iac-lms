@@ -64,7 +64,7 @@
                     "aTargets":[3],
                     "mData": null,
                     "bSortable":false,
-                    "mRender": function (data,type,row,meta) { return '<a href="<?php echo base_url(); ?>unity/student_viewer/'+row[0]+'">'+row[3]+'</a>'; }
+                    "mRender": function (data,type,row,meta) { return '<a href="<?php echo base_url(); ?>unity/student_viewer/'+row[0]+'">'+row[2]+'</a>'; }
                 },
             ],
             "aaSorting": [[3,'asc']],

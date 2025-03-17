@@ -2242,10 +2242,10 @@ class Datatables extends CI_Controller {
             $row = array();
             for ( $i=0 ; $i<count($aColumns) ; $i++ )
             {
-                if ( $aColumns[$i] == "strLastname" && $table == 'tb_mas_users')
+                if ( ($aColumns[$i] == "strLastname" || $aColumns[$i] == "strMiddlename" || $aColumns[$i] == "strFirstname") && $table == 'tb_mas_users')
                 {
                     /* Special output formatting for 'version' column */
-                    //$row[] = strtoupper($aRow->{$aColumns[$i]});
+                    $row[] = strtoupper($aRow->{$aColumns[$i]});
                 }
                 else if ( $aColumns[$i] == "strStudentNumber" && $table == 'tb_mas_users')
                 {
