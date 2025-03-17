@@ -581,7 +581,7 @@ class Datatables extends CI_Controller {
 	   echo json_encode( $output );
     }
     
-    public function data_tables_ajax_cs($sem = 0, $program = 0, $dissolved = 0, $has_faculty = 0, $status = 0)
+    public function data_tables_ajax_cs($sem = 0, $program = 0, $dissolved = 0, $has_faculty = 0, $status = 0, $modular = 0)
     {
         /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
          * TABLE CONFIG
@@ -657,11 +657,13 @@ class Datatables extends CI_Controller {
        if($has_faculty > 0)
         $sWhere .= "AND $sTable.intFacultyID != 999 ";
        if($program != 0)
-        $sWhere .= " AND tb_mas_programs.intProgramID = $program ";
+        $sWhere .= " AND tb_mas_programs.intProgramID = $program ";    
        if($status != 0){
         $status_n = $status - 1;
         $sWhere .= " AND tb_mas_classlist.intFinalized = $status_n ";
        }
+       if($modular != 0)
+        $sWhere .= " AND tb_mas_classlist.is_modular = 1 ";
             
         
        if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
@@ -2063,12 +2065,8 @@ class Datatables extends CI_Controller {
                 $sWhere .= "AND (";
             
             for ( $i=0 ; $i<count($aColumns) ; $i++ )
-            {
-                if(($aColumns[$i] != "strFirstname" && $aColumns[$i] != "strLastname") || $table != 'tb_mas_users')
-                    $sWhere .= $aColumns[$i]." LIKE '%".mysqli_real_escape_string($this->db->conn_id,$_GET['sSearch'] )."%' OR ";
-                else
-                    $sWhere .= "CONCAT_WS(' ',strFirstname,strLastname,strMiddlename) LIKE '%".mysqli_real_escape_string($this->db->conn_id,$_GET['sSearch'])."%' OR ";
-                
+            {                
+                $sWhere .= $aColumns[$i]." LIKE '%".mysqli_real_escape_string($this->db->conn_id,$_GET['sSearch'] )."%' OR ";                                
             }
             $sWhere = substr_replace( $sWhere, "", -3 );
             $sWhere .= ')';
@@ -2089,10 +2087,10 @@ class Datatables extends CI_Controller {
                     $sWhere .= " AND ";
                 }                
                
-                if($table == "tb_mas_users" && $i > 3)
-                    $col = $i + 2;
-                else
-                    $col = $i;
+                // if($table == "tb_mas_users" && $i > 3)
+                //     $col = $i + 2;
+                // else
+                $col = $i;
                 
                 if($table == "tb_mas_users" && $i  == 2){                        
                     $st = "";
@@ -2240,20 +2238,16 @@ class Datatables extends CI_Controller {
             $row = array();
             for ( $i=0 ; $i<count($aColumns) ; $i++ )
             {
-                if ( $aColumns[$i] == "strLastname" && $table == 'tb_mas_users')
+                if ( ($aColumns[$i] == "strLastname" || $aColumns[$i] == "strMiddlename" || $aColumns[$i] == "strFirstname") && $table == 'tb_mas_users')
                 {
                     /* Special output formatting for 'version' column */
-                    $row[] = strtoupper($aRow->{$aColumns[$i]}."  ".$aRow->{$aColumns[$i+1]}." ".$aRow->{$aColumns[$i+2]});
+                    $row[] = strtoupper($aRow->{$aColumns[$i]});
                 }
                 else if ( $aColumns[$i] == "strStudentNumber" && $table == 'tb_mas_users')
                 {
                     /* Special output formatting for 'version' column */
                     $row[] = preg_replace("/[^a-zA-Z0-9]+/", "", $aRow->{$aColumns[$i]});
-                }
-                else if ( ($aColumns[$i] == "strFirstname" || $aColumns[$i] == "strMiddlename") && $table == 'tb_mas_users')
-                {
-                    
-                }
+                }                
                 else if ( $aColumns[$i] == "strLastname" && $table == 'tb_mas_applications')
                 {
                     /* Special output formatting for 'version' column */
