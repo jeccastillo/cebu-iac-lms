@@ -2844,7 +2844,7 @@ class Data_fetcher extends CI_Model {
         }
         if($thesis_fee > 0){
             $misc_list['thesis fee'] = $thesis_fee;
-            $total_misc += $misc_list['thesis fee'];
+            $total_misc += $misc_list['Thesis Fee'];
         }
         // if($hasInternship){
         //     $internship = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'internship'))
