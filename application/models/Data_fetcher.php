@@ -2843,7 +2843,7 @@ class Data_fetcher extends CI_Model {
                 }
         }
         if($thesis_fee > 0){
-            $misc_list['thesis fee'] = $thesis_fee;
+            $misc_list['Thesis Fee'] = $thesis_fee;
             $total_misc += $misc_list['Thesis Fee'];
         }
         // if($hasInternship){
