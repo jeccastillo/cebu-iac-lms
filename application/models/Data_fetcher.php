@@ -3285,7 +3285,8 @@ class Data_fetcher extends CI_Model {
         $data['new_student_list'] = $new_student_list;
         $data['internship_fee_list'] = $internship_fee_list;
         $data['foreign_fee_list'] = $foreign_fee_list;
-        $data['athletic'] = $afee;        
+        $data['athletic'] = $afee;
+        $data['thesis_fee'] = 0;
         $data['nsf'] = $nsf;             
         $data['total_foreign'] = $total_foreign;        
         $data['internship_fee'] = $total_internship_fee;   
