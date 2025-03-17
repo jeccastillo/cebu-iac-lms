@@ -2816,6 +2816,12 @@ class Data_fetcher extends CI_Model {
                     $misc_list[$m['name']] = getExtraFee($m, $class_type, 'misc');
                     $total_misc += $misc_list[$m['name']];
                 }
+
+                if($thesis_fee > 0){
+                    $misc_list['thesis fee'] = $thesis_fee;
+                    $total_misc += $misc_list['thesis fee'];
+                }
+
             }
             else
                 if($stype != 'new' || strtoupper(trim($m['name'])) != 'ID VALIDATION' ){   
@@ -2877,17 +2883,17 @@ class Data_fetcher extends CI_Model {
 
         $tuition_fee_rate = $tuition_fee_installment_rate = $tuition_fee_fixed = $lab_fee_rate = $lab_fee_fixed = $misc_fee_rate = $misc_fee_fixed = 0;
         $total_assessment_rate = $total_assessment_fixed = $total_assessment_rate_installment = $total_assessment_fixed_installment = 0;
-        $total_assessment += $tuition + $total_lab + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
+        $total_assessment += $tuition + $total_lab + $total_misc + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
         $total_assessment_installment += ($tuition  + ($tuition * ($tuition_year['installmentIncrease']/100)))   
                                                 + ($total_lab + ($total_lab * ($tuition_year['installmentIncrease']/100)))
-                                                + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
+                                                + $total_misc + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
 
         $total_assessment_installment30 += ($tuition  + ($tuition * 0.15))   
                                                 + ($total_lab + ($total_lab * 0.15))
-                                                + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;                                                
+                                                + $total_misc + $total_new_student + $nsf + $total_internship_fee + $total_foreign;                                                
         $total_assessment_installment50 += ($tuition  + ($tuition * 0.09))   
                                                 + ($total_lab + ($total_lab * 0.09))
-                                                + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;                                                                                                
+                                                + $total_misc + $total_new_student + $nsf + $total_internship_fee + $total_foreign;                                                                                                
                                                 
         if(!empty($scholarships)){
             foreach($scholarships as $scholar){
@@ -3279,8 +3285,7 @@ class Data_fetcher extends CI_Model {
         $data['new_student_list'] = $new_student_list;
         $data['internship_fee_list'] = $internship_fee_list;
         $data['foreign_fee_list'] = $foreign_fee_list;
-        $data['athletic'] = $afee;
-        $data['thesis_fee'] = $thesis_fee;
+        $data['athletic'] = $afee;        
         $data['nsf'] = $nsf;             
         $data['total_foreign'] = $total_foreign;        
         $data['internship_fee'] = $total_internship_fee;   
