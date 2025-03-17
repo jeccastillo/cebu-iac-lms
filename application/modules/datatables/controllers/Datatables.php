@@ -2245,17 +2245,13 @@ class Datatables extends CI_Controller {
                 if ( $aColumns[$i] == "strLastname" && $table == 'tb_mas_users')
                 {
                     /* Special output formatting for 'version' column */
-                    $row[] = strtoupper($aRow->{$aColumns[$i]}."  ".$aRow->{$aColumns[$i+1]}." ".$aRow->{$aColumns[$i+2]});
+                    //$row[] = strtoupper($aRow->{$aColumns[$i]});
                 }
                 else if ( $aColumns[$i] == "strStudentNumber" && $table == 'tb_mas_users')
                 {
                     /* Special output formatting for 'version' column */
                     $row[] = preg_replace("/[^a-zA-Z0-9]+/", "", $aRow->{$aColumns[$i]});
-                }
-                else if ( ($aColumns[$i] == "strFirstname" || $aColumns[$i] == "strMiddlename") && $table == 'tb_mas_users')
-                {
-                    
-                }
+                }                
                 else if ( $aColumns[$i] == "strLastname" && $table == 'tb_mas_applications')
                 {
                     /* Special output formatting for 'version' column */

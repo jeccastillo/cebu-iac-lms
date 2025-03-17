@@ -41,7 +41,9 @@
                             <th>id</th>
                             <th>slug</th>
                             <th>Student Number</th>
-                            <th>Name</th>
+                            <th>Last Name</th>
+                            <th>First Name</th>
+                            <th>Middle Name</th>
                             <th>Program</th>
                             <th>Year Level</th>
                         </tr>                        
@@ -50,6 +52,8 @@
                             <td>slug</td>
                             <td>Student Number</td>
                             <td>Last Name</td>
+                            <td>First Name</td>
+                            <th>Middle Name</th>
                             <td>Program</td>
                             <td>Year Level</td>                                                   
                         </tr>
