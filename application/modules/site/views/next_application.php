@@ -538,7 +538,7 @@
         <div v-if="true" class=" mb-6 mt-10">
             <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">                
                 <div class="flex flex-wrap gap-2.5 mb-4 ">
-                    <div class="grow lg:grow-0">
+                    <div>
                         <label class="block color-primary font-bold mb-3 pr-4"> Goverment ID
                         </label>
                         <input @change="attachFile" type="file" id="government_id" required />
@@ -555,7 +555,7 @@
                         <label class="block color-primary font-bold mb-3 pr-4"> Proof </label>
                         <input @change="attachFile" type="file" id="proof" required />
                     </div> -->
-                    <div class="block">
+                    <div>
                         <label class="block color-primary font-bold mb-3 pr-4"> Link to social media handles
                         </label>
                         <input
@@ -563,7 +563,7 @@
                             type="text" v-model="request.social_media_handles">
                     </div>
                    
-                    <div class="grow lg:grow-0">
+                    <div>
                         <label class="block color-primary font-bold mb-3 pr-4"> Video Introduction 
                         </label>
                         <label class="block color-primary italic text-sm mb-5"> (Submit a creative
