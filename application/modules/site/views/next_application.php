@@ -555,7 +555,7 @@
                         <label class="block color-primary font-bold mb-3 pr-4"> Proof </label>
                         <input @change="attachFile" type="file" id="proof" required />
                     </div> -->
-                    <div class="grow lg:grow-0">
+                    <div class="block">
                         <label class="block color-primary font-bold mb-3 pr-4"> Link to social media handles
                         </label>
                         <input
