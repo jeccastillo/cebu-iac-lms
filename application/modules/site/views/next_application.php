@@ -564,15 +564,16 @@
                     </div>
                     <div class="flex flex-wrap gap-2.5 mb-4 ">
                         <div class="grow">
-                            <label class="block color-primary italic text-sm "> (Submit a creative
-                                1-minute video introducing yourself, explaining why you should be
-                                accepted into this program, and sharing how you can contribute to
-                                professionalizing social media practices. Upload)                                                                 
+                                                                                          
                             </div>
                     </div>
                     <div class="grow lg:grow-0">
-                        <label class="block color-primary font-bold mb-3 pr-4"> Video Introduction
+                        <label class="block color-primary font-bold mb-3 pr-4"> Video Introduction 
                         </label>
+                        <label class="block color-primary italic text-sm "> (Submit a creative
+                                1-minute video introducing yourself, explaining why you should be
+                                accepted into this program, and sharing how you can contribute to
+                                professionalizing social media practices. Upload) </label>
                         <input @change="attachFile" type="file" id="video_introduction" required />
                     </div>
                 </div>
