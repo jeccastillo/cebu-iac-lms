@@ -536,27 +536,14 @@
         </div>
         </label>
         <div v-if="true" class=" mb-6 mt-10">
-            <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
-                <div class="flex flex-wrap gap-2.5 mb-4 ">
-                    <div class="grow">
-                        <label class="block color-primary italic text-sm "> (Submit a creative
-                            1-minute video introducing yourself, explaining why you should be
-                            accepted into this program, and sharing how you can contribute to
-                            professionalizing social media practices. Upload) <label
-                                class="block color-primary font-bold mb-3 pr-4"> Link to social
-                                media handles: </label>
-                            <input
-                                class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                type="text" v-model="request.social_media_handles">
-                    </div>
-                </div>
+            <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">                
                 <div class="flex flex-wrap gap-2.5 mb-4 ">
                     <div class="grow lg:grow-0">
                         <label class="block color-primary font-bold mb-3 pr-4"> Goverment ID
                         </label>
                         <input @change="attachFile" type="file" id="government_id" required />
                     </div>
-                    <div class="grow lg:grow-0">
+                    <!-- <div class="grow lg:grow-0">
                         <label class="block color-primary font-bold mb-3 pr-4"> Diploma </label>
                         <input @change="attachFile" type="file" id="diploma" required />
                     </div>
@@ -567,6 +554,19 @@
                     <div class="grow lg:grow-0">
                         <label class="block color-primary font-bold mb-3 pr-4"> Proof </label>
                         <input @change="attachFile" type="file" id="proof" required />
+                    </div> -->
+                    <div class="flex flex-wrap gap-2.5 mb-4 ">
+                        <div class="grow">
+                            <label class="block color-primary italic text-sm "> (Submit a creative
+                                1-minute video introducing yourself, explaining why you should be
+                                accepted into this program, and sharing how you can contribute to
+                                professionalizing social media practices. Upload) <label
+                                    class="block color-primary font-bold mb-3 pr-4"> Link to social
+                                    media handles: </label>
+                                <input
+                                    class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                    type="text" v-model="request.social_media_handles">
+                        </div>
                     </div>
                     <div class="grow lg:grow-0">
                         <label class="block color-primary font-bold mb-3 pr-4"> Video Introduction
