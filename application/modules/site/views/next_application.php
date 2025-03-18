@@ -537,7 +537,7 @@
         </label>
         <div v-if="true" class=" mb-6 mt-10">
             <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">                
-                <div class="flex flex-wrap gap-2.5 mb-4 ">
+                <div class="mb-4 ">
                     <div>
                         <label class="block color-primary font-bold mb-3 pr-4"> Goverment ID
                         </label>
