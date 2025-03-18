@@ -49,14 +49,15 @@
                         </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" name="first_name" v-model="request.first_name">
+                            type="text" name="first_name" v-model="request.first_name" required>
                     </div>
                     <div id="middle-name" class="flex-grow">
                         <label class="block t color-primary font-bold  mb-3  pr-4"> Middle Name
+                            <span class="text-red-500">*</span>
                         </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" name="middle_name" v-model="request.middle_name">
+                            type="text" name="middle_name" v-model="request.middle_name" required>
                     </div>
                     <div class="flex-grow">
                         <label class="block t color-primary font-bold  mb-3  pr-4"> Last Name <span
@@ -64,7 +65,7 @@
                         </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" name="last_name" v-model="request.last_name">
+                            type="text" name="last_name" v-model="request.last_name" required>
                     </div>
                     <div id="suffix" class="basis-[100px]">
                         <label class="block t color-primary font-bold  mb-3  pr-4"> Suffix </label>
