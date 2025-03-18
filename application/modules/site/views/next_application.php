@@ -555,7 +555,7 @@
                     <input @change="attachFile" type="file" id="proof" required />
                 </div> -->
                 <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
-                    <label class="block color-primary font-bold mb-3 pr-4"> Link to social media handles
+                    <label class="block color-primary font-bold mb-3 pr-4"> Link to social media handles (separate multiple links by comma)
                     </label>
                     <input
                         class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
