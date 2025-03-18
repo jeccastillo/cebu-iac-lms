@@ -49,7 +49,7 @@
                         </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" name="first_name" required v-model="request.first_name">
+                            type="text" name="first_name" v-model="request.first_name">
                     </div>
                     <div id="middle-name" class="flex-grow">
                         <label class="block t color-primary font-bold  mb-3  pr-4"> Middle Name
@@ -64,7 +64,7 @@
                         </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" name="last_name" required v-model="request.last_name">
+                            type="text" name="last_name" v-model="request.last_name">
                     </div>
                     <div id="suffix" class="basis-[100px]">
                         <label class="block t color-primary font-bold  mb-3  pr-4"> Suffix </label>
@@ -709,7 +709,7 @@ input[type="number"] {
     background-color: rgb(245 245 245)
 }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script> -->
 <script src="https://unpkg.com/vue-select@3.0.0"></script>
 <link rel="stylesheet" href="https://unpkg.com/vue-select@3.0.0/dist/vue-select.css">
 <script src="<?php echo $js_dir ?>dataExport.js"></script>
