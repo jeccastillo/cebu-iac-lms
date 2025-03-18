@@ -52,8 +52,7 @@
                             type="text" name="first_name" v-model="request.first_name" required>
                     </div>
                     <div id="middle-name" class="flex-grow">
-                        <label class="block t color-primary font-bold  mb-3  pr-4"> Middle Name
-                            <span class="text-red-500">*</span>
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> Middle Name                            
                         </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
