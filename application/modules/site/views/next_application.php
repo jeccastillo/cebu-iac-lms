@@ -186,7 +186,7 @@
                         <div class="flex gap-x-2.5">
                             <input
                                 class="w-2/3 bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                type="number" v-model="request.tel_number" required>
+                                type="number" v-model="request.tel_number">
                         </div>
                     </div>
                     <div>
@@ -1215,11 +1215,13 @@ new Vue({
                     Object.keys(this.request).forEach(key => {
                         formData.append(key, this.request[key])
                     });
-                    axios.post(`${api_url}next_school/register`, formData, {
-                        headers: {
-                            Authorization: `Bearer ${window.token}`
-                        }
-                    }).then(data => {
+                    axios.post(
+                        `https://smsapi.iacademy.edu.ph/api/v1/next_school/register`,
+                        formData, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        }).then(data => {
                         this.is_done = true;
                         if (data.data.success) {
                             this.loading_spinner = false;
