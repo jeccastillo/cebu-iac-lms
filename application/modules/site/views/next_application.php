@@ -19,7 +19,7 @@
             studying various cases with an objective mindset to gain valuable knowledge and wisdom.
             Interested applicants may head to our website to start the application process. </p>
     </div>
-    <ul>
+    <ul class="color-primary">
         <h5>Minimum Requirements</h5>
         <li>&#x2010;Applicants must be at least 17 yo</li>
         <li>&#x2010;Must hold Filipino Citizenship</li>
@@ -555,18 +555,20 @@
                         <label class="block color-primary font-bold mb-3 pr-4"> Proof </label>
                         <input @change="attachFile" type="file" id="proof" required />
                     </div> -->
+                    <div class="grow lg:grow-0">
+                        <label class="block color-primary font-bold mb-3 pr-4"> Link to social media handles
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text" v-model="request.social_media_handles">
+                    </div>
                     <div class="flex flex-wrap gap-2.5 mb-4 ">
                         <div class="grow">
                             <label class="block color-primary italic text-sm "> (Submit a creative
                                 1-minute video introducing yourself, explaining why you should be
                                 accepted into this program, and sharing how you can contribute to
-                                professionalizing social media practices. Upload) <label
-                                    class="block color-primary font-bold mb-3 pr-4"> Link to social
-                                    media handles: </label>
-                                <input
-                                    class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                    type="text" v-model="request.social_media_handles">
-                        </div>
+                                professionalizing social media practices. Upload)                                                                 
+                            </div>
                     </div>
                     <div class="grow lg:grow-0">
                         <label class="block color-primary font-bold mb-3 pr-4"> Video Introduction
