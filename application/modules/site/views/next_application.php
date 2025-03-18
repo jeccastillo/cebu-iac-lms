@@ -407,8 +407,8 @@
                         type="text" v-model="request.other_health_concern" required>
                 </div>
             </div>
-            <div class="border-[1px] border-neutral-100 p-2.5 rounded-lg">
-                <h5 class="color-primary mb-2.5">Do you have any of the following? (check all that
+            <div class="border-[1px] border-neutral-100 p-2.5 color-primary rounded-lg">
+                <h5 class="mb-2.5">Do you have any of the following? (check all that
                     apply) </h5>
                 <label class="custom-checkbox">
                     <input type="checkbox" v-model="request.health_concern" value="Diabetes">
@@ -446,7 +446,7 @@
                         <div class="flex ">
                             <div class="w-1/2">
                                 <template v-for="source,index in sourceList">
-                                    <label v-if="index <= 4" class="custom-checkbox mb-1">
+                                    <label v-if="index <= 4" class="custom-checkbox mb-1 color-primary">
                                         <input type="checkbox" :id="index" :name="source"
                                             :value="source" v-model="sources">
                                         <span class="custom-checkbox-button"></span>
@@ -456,7 +456,7 @@
                             </div>
                             <div class="w-1/2">
                                 <template v-for="source,index in sourceList">
-                                    <label v-if="index >= 5" class="custom-checkbox mb-1">
+                                    <label v-if="index >= 5" class="custom-checkbox mb-1 color-primary">
                                         <input type="checkbox" class="" :id="index" name="source"
                                             :value="source.toLowerCase()" v-model="sources">
                                         <span class="custom-checkbox-button"></span>
