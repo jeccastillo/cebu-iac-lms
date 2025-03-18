@@ -1,5 +1,5 @@
 <div class="custom-container">
-    <a href="https://iacademy.edu.ph/"
+    <a href="https://thenextschool.ph/"
         class="flex mt-10 items-center gap-x-2 text-[#666666] cursor-pointer">
         <svg xmlns="http://www.w3.org/2000/svg" width="8" height="15" viewBox="0 0 8 15"
             fill="none">
