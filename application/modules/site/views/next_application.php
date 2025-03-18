@@ -562,11 +562,7 @@
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" v-model="request.social_media_handles">
                     </div>
-                    <div class="flex flex-wrap gap-2.5 mb-4 ">
-                        <div class="grow">
-                                                                                          
-                            </div>
-                    </div>
+                   
                     <div class="grow lg:grow-0">
                         <label class="block color-primary font-bold mb-3 pr-4"> Video Introduction 
                         </label>
