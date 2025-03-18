@@ -8,7 +8,7 @@
         </svg> BACK </a>
 </div>
 <div class=" block mx-auto mt-[60px]" data-aos="fade-up">
-    <h1 class="text-4xl font-[900] text-center color-primary"> iACADEMY </h1>
+    <h1 class="text-4xl font-[900] text-center color-primary"> iACADEMY (The NEXT School) </h1>
 </div>
 <div class="custom-container max-w-[1080px]" id="adminssions-form" style="margin-top:10px;">
     <div class="color-primary text-center">
