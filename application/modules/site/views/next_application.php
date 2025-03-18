@@ -566,10 +566,11 @@
                     <div class="grow lg:grow-0">
                         <label class="block color-primary font-bold mb-3 pr-4"> Video Introduction 
                         </label>
-                        <label class="block color-primary italic text-sm "> (Submit a creative
+                        <label class="block color-primary italic text-sm mb-5"> (Submit a creative
                                 1-minute video introducing yourself, explaining why you should be
                                 accepted into this program, and sharing how you can contribute to
                                 professionalizing social media practices. Upload) </label>
+                        
                         <input @change="attachFile" type="file" id="video_introduction" required />
                     </div>
                 </div>
