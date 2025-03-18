@@ -540,7 +540,7 @@
                 <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
                     <label class="block color-primary font-bold mb-3 pr-4"> Goverment ID
                     </label>
-                    <input @change="attachFile" type="file" id="government_id" required />
+                    <input class="color-primary" @change="attachFile" type="file" id="government_id" required />
                 </div>
                 <!-- <div class="grow lg:grow-0">
                     <label class="block color-primary font-bold mb-3 pr-4"> Diploma </label>
@@ -570,7 +570,7 @@
                             accepted into this program, and sharing how you can contribute to
                             professionalizing social media practices. Upload) </label>
                     
-                    <input @change="attachFile" type="file" id="video_introduction" required />
+                    <input class="color-primary" @change="attachFile" type="file" id="video_introduction" required />
                 </div>                
             </div>
             <div v-if="isOnList"
