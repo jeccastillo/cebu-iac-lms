@@ -181,7 +181,6 @@
                     class="grid grid-cols-[repeat(auto-fit,_minmax(0,420px))] gap-x-16 gap-y-2 mb-4">
                     <div class="">
                         <label class="block color-primary font-bold mb-3 pr-4"> Landline Number
-                            <span class="text-red-500">*</span>
                         </label>
                         <div class="flex gap-x-2.5">
                             <input
@@ -191,12 +190,11 @@
                     </div>
                     <div>
                         <label class="block t color-primary font-bold  mb-3  pr-4"> Confirm Landline
-                            Number <span class="text-red-500">*</span>
-                        </label>
+                            Number </label>
                         <div class="flex gap-x-2.5">
                             <input
                                 class="w-2/3 bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                type="number" v-model="request.tel_number_confirmation" required>
+                                type="number" v-model="request.tel_number_confirmation">
                         </div>
                     </div>
                 </div>
@@ -535,15 +533,20 @@
                 </div>
             </div>
         </div>
+        </label>
         <div v-if="true" class=" mb-6 mt-10">
             <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
                 <div class="flex flex-wrap gap-2.5 mb-4 ">
                     <div class="grow">
-                        <label class="block color-primary font-bold mb-3 pr-4"> Link to social media
-                            handles: </label>
-                        <input
-                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" v-model="request.social_media_handles">
+                        <label class="block color-primary italic text-sm "> (Submit a creative
+                            1-minute video introducing yourself, explaining why you should be
+                            accepted into this program, and sharing how you can contribute to
+                            professionalizing social media practices. Upload) <label
+                                class="block color-primary font-bold mb-3 pr-4"> Link to social
+                                media handles: </label>
+                            <input
+                                class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                type="text" v-model="request.social_media_handles">
                     </div>
                 </div>
                 <div class="flex flex-wrap gap-2.5 mb-4 ">
