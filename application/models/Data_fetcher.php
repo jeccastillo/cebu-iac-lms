@@ -2816,6 +2816,8 @@ class Data_fetcher extends CI_Model {
                     $misc_list[$m['name']] = getExtraFee($m, $class_type, 'misc');
                     $total_misc += $misc_list[$m['name']];
                 }
+                
+
             }
             else
                 if($stype != 'new' || strtoupper(trim($m['name'])) != 'ID VALIDATION' ){   
@@ -2840,7 +2842,10 @@ class Data_fetcher extends CI_Model {
                     $total_misc += $misc_list[$m['name']];
                 }
         }
-        
+        if($thesis_fee > 0){
+            $misc_list['Thesis Fee'] = $thesis_fee;
+            $total_misc += $misc_list['Thesis Fee'];
+        }
         // if($hasInternship){
         //     $internship = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'internship'))
         //     ->get('tb_mas_tuition_year_misc')->result_array();
@@ -2877,17 +2882,17 @@ class Data_fetcher extends CI_Model {
 
         $tuition_fee_rate = $tuition_fee_installment_rate = $tuition_fee_fixed = $lab_fee_rate = $lab_fee_fixed = $misc_fee_rate = $misc_fee_fixed = 0;
         $total_assessment_rate = $total_assessment_fixed = $total_assessment_rate_installment = $total_assessment_fixed_installment = 0;
-        $total_assessment += $tuition + $total_lab + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
+        $total_assessment += $tuition + $total_lab + $total_misc + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
         $total_assessment_installment += ($tuition  + ($tuition * ($tuition_year['installmentIncrease']/100)))   
                                                 + ($total_lab + ($total_lab * ($tuition_year['installmentIncrease']/100)))
-                                                + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
+                                                + $total_misc + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
 
         $total_assessment_installment30 += ($tuition  + ($tuition * 0.15))   
                                                 + ($total_lab + ($total_lab * 0.15))
-                                                + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;                                                
+                                                + $total_misc + $total_new_student + $nsf + $total_internship_fee + $total_foreign;                                                
         $total_assessment_installment50 += ($tuition  + ($tuition * 0.09))   
                                                 + ($total_lab + ($total_lab * 0.09))
-                                                + $total_misc + $thesis_fee + $total_new_student + $nsf + $total_internship_fee + $total_foreign;                                                                                                
+                                                + $total_misc + $total_new_student + $nsf + $total_internship_fee + $total_foreign;                                                                                                
                                                 
         if(!empty($scholarships)){
             foreach($scholarships as $scholar){
@@ -3280,7 +3285,7 @@ class Data_fetcher extends CI_Model {
         $data['internship_fee_list'] = $internship_fee_list;
         $data['foreign_fee_list'] = $foreign_fee_list;
         $data['athletic'] = $afee;
-        $data['thesis_fee'] = $thesis_fee;
+        $data['thesis_fee'] = 0;
         $data['nsf'] = $nsf;             
         $data['total_foreign'] = $total_foreign;        
         $data['internship_fee'] = $total_internship_fee;   
@@ -3288,10 +3293,10 @@ class Data_fetcher extends CI_Model {
         $data['other_discount'] = $other_scholarship;        
         $data['other_discount_dc'] = $other_discount;
         $data['total_other_before_discount'] = $data['new_student'] + $data['total_foreign'];                
-        $data['total_before_deductions'] = $data['tuition'] + $data['lab_before_discount'] + $data['misc'] + $thesis_fee + $data['total_other_before_discount'] + $nsf + $total_internship_fee + $late_enrollment_fee;
-        $data['ti_before_deductions'] = $data['tuition_installment'] + $data['lab_installment_before_discount'] + $data['misc'] + $thesis_fee + $data['total_other_before_discount'] + $nsf + $total_internship_fee + $late_enrollment_fee;
-        $data['ti_before_deductions30'] = $data['tuition_installment30'] + $data['lab_installment_before_discount30'] + $data['misc'] + $thesis_fee + $data['total_other_before_discount'] + $nsf + $total_internship_fee + $late_enrollment_fee;
-        $data['ti_before_deductions50'] = $data['tuition_installment50'] + $data['lab_installment_before_discount50'] + $data['misc'] + $thesis_fee + $data['total_other_before_discount'] + $nsf + $total_internship_fee + $late_enrollment_fee;                
+        $data['total_before_deductions'] = $data['tuition'] + $data['lab_before_discount'] + $data['misc'] + $data['total_other_before_discount'] + $nsf + $total_internship_fee + $late_enrollment_fee;
+        $data['ti_before_deductions'] = $data['tuition_installment'] + $data['lab_installment_before_discount'] + $data['misc'] + $data['total_other_before_discount'] + $nsf + $total_internship_fee + $late_enrollment_fee;
+        $data['ti_before_deductions30'] = $data['tuition_installment30'] + $data['lab_installment_before_discount30'] + $data['misc'] + $data['total_other_before_discount'] + $nsf + $total_internship_fee + $late_enrollment_fee;
+        $data['ti_before_deductions50'] = $data['tuition_installment50'] + $data['lab_installment_before_discount50'] + $data['misc'] + $data['total_other_before_discount'] + $nsf + $total_internship_fee + $late_enrollment_fee;                
         $data['total_installment'] = $data['ti_before_deductions'];
         //deduct discounts/scholarships
         $data['total_other'] = $data['new_student'] + $data['total_foreign'] - $other_scholarship - $other_discount;
@@ -3810,12 +3815,12 @@ class Data_fetcher extends CI_Model {
         // print_r($cl);
 
         $cl =  $this->db
-                    ->select("tb_mas_classlist_student.intCSID,intClassListID,strCode,strSection,intSubjectID,year,sub_section, strClassName, intLab, intLectHours, tb_mas_subjects.strDescription,floatFinalGrade as v3,floatMidtermGrade as v2, floatFinalsGrade as semFinalGrade, intFinalized,enumStatus,strRemarks,tb_mas_faculty.intID as facID, tb_mas_faculty.strFirstname,tb_mas_faculty.strLastname, tb_mas_subjects.strUnits, tb_mas_subjects.intBridging, tb_mas_classlist.intID as classlistID, tb_mas_subjects.intID as subjectID,include_gwa,elective_classlist_id,payment_amount,is_modular")                                        
+                    ->select("tb_mas_classlist_student.intCSID,intClassListID,strCode,strSection,intSubjectID,year,sub_section, strClassName, intLab, intLectHours, tb_mas_subjects.strDescription,floatFinalGrade as v3,floatMidtermGrade as v2, floatFinalsGrade as semFinalGrade, intFinalized,enumStatus,strRemarks,tb_mas_faculty.intID as facID, tb_mas_faculty.strFirstname,tb_mas_faculty.strLastname, tb_mas_subjects.strUnits, tb_mas_subjects.intBridging, tb_mas_classlist.intID as classlistID, tb_mas_subjects.intID as subjectID,include_gwa,elective_classlist_id,payment_amount,is_modular,enlisted_user")                                        
                     ->from("tb_mas_classlist_student")            
                     ->where(array("intStudentID"=>$id,"strAcademicYear"=>$classlist,'isDissolved'=>0))                                            
                     ->join('tb_mas_classlist', 'tb_mas_classlist.intID = tb_mas_classlist_student.intClasslistID')
                     ->join('tb_mas_subjects','intSubjectID = tb_mas_subjects.intID')
-                    ->join('tb_mas_faculty','tb_mas_classlist.intFacultyID = tb_mas_faculty.intID','left')
+                    ->join('tb_mas_faculty','tb_mas_classlist.intFacultyID = tb_mas_faculty.intID','left')                    
                     ->join('tb_mas_curriculum','tb_mas_classlist.intCurriculumID = tb_mas_curriculum.intID','left')
                     ->join('tb_mas_programs','tb_mas_curriculum.intProgramID = tb_mas_programs.intProgramID','left')
                     ->join('tb_mas_classlist_student_elective','tb_mas_classlist_student_elective.subject_classlist_id = tb_mas_classlist.intID','left')
@@ -3829,6 +3834,8 @@ class Data_fetcher extends CI_Model {
                                           ->order_by('date','desc')
                                           ->get('tb_mas_classlist_student_adjustment_log')
                                           ->first_row('array');
+
+                $enlisted_by = $this->db->get_where('tb_mas_faculty',array('intID'=>$c['enlisted_user']))->first_row('array');                                          
 
                 $schedule = $this->getScheduleByCode($c['intClassListID']);        
                 $sched_day = '';
@@ -3851,6 +3858,7 @@ class Data_fetcher extends CI_Model {
                 $c['sched_day'] = $sched_day;
                 $c['sched_time'] = $sched_time;
                 $c['sched_room'] = $sched_room;                                                           
+                $c['enlistedBy'] = $enlisted_by['strLastname'].", ".$enlisted_by['strFirstname'];
                     
                 $ret[] =  $c;
 
