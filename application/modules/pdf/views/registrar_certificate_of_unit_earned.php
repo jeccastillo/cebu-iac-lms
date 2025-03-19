@@ -117,9 +117,19 @@
                 echo 'Ms. ';
             }
             echo strtoupper($student_data['student']['strFirstname']) . ' ' . strtoupper($student_data['student']['strLastname']); 
-            ?></b>for whatever legal purpose it may serve him.
+            ?></b> for whatever legal purpose it may serve
+            <?php 
+            if($student_data['student']['enumGender'] == 'male'){
+                echo 'him. ';
+            }else{
+                echo 'her. ';
+            }?>
         </div>
-        <div>Issued this
+        <div>Issued this <?php echo date('jS'); ?> day of 
+        <?php 
+            echo date('F Y'); 
+            echo $campus;
+        ?>
         </div>
     </div>
 </div>
