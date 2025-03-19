@@ -111,7 +111,9 @@
                             <th>id</th>
                             <th>slug</th>
                             <th>Student Number</th>
-                            <th>Name</th>
+                            <th>Last Name</th>
+                            <th>First Name</th>
+                            <th>Middle Name</th>
                             <th>Program</th>
                             <th>Year Level</th>                            
                         </tr>
@@ -123,6 +125,8 @@
                             <th>slug</th>
                             <th>Student Number</th>
                             <th>Last Name</th>
+                            <th>First Name</th>
+                            <th>Middle Name</th>
                             <th>Program</th>
                             <th>Year Level</th>                            
                         </tr>
