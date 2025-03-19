@@ -389,6 +389,7 @@
                           <th>Final</th>
                           <th>Remarks</th>
                           <th>Faculty</th>
+                          <th>Enlisted By</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -426,6 +427,7 @@
                             {{ record.intFinalized >=1?record.strRemarks:'---' }}
                           </td>
                           <td>{{ record.facultyName }}</td>
+                          <td>{{ record.enlistedBy }}</td>
                         </tr>
                         <!-- <tr style="font-size: 13px;">
                                                 <td></td>
