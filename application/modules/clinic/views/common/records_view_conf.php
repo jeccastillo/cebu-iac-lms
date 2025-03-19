@@ -4,8 +4,11 @@
     
     $(document).ready(function(){
         
-    //var table = $('#users_table').DataTable( {
-    //$('#users_table').dataTable( {
+    $('#health_record_excel').click(function(e){
+        var base_url = "<?php echo base_url(); ?>";
+        var url = base_url + 'excel/clinic_health_record/0';
+        window.open(url, '_blank');
+    });
 
     $('#users_table thead tr.search td').each( function () {
         var title = $(this).text();
@@ -46,8 +49,8 @@
             },
         });
 
-         //Apply the search
-         table.columns().every( function () {
+        //Apply the search
+        table.columns().every( function () {
             var that = this;
 
             // $( 'input', this.footer() ).on( 'keyup change', function () {

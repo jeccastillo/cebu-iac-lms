@@ -2,7 +2,11 @@
     <section class="content-header">
         <h1>
             Health Records
-            <small></small>
+
+            <small>
+                <button class="btn btn-app" id="health_record_excel" target="_blank" href="#"><i
+                        class="fa fa-book"></i>Download Excel</button>
+            </small>
         </h1> 
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Clinic</a></li>
