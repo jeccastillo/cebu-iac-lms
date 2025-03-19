@@ -3815,12 +3815,12 @@ class Data_fetcher extends CI_Model {
         // print_r($cl);
 
         $cl =  $this->db
-                    ->select("tb_mas_classlist_student.intCSID,intClassListID,strCode,strSection,intSubjectID,year,sub_section, strClassName, intLab, intLectHours, tb_mas_subjects.strDescription,floatFinalGrade as v3,floatMidtermGrade as v2, floatFinalsGrade as semFinalGrade, intFinalized,enumStatus,strRemarks,tb_mas_faculty.intID as facID, tb_mas_faculty.strFirstname,tb_mas_faculty.strLastname, tb_mas_subjects.strUnits, tb_mas_subjects.intBridging, tb_mas_classlist.intID as classlistID, tb_mas_subjects.intID as subjectID,include_gwa,elective_classlist_id,payment_amount,is_modular")                                        
+                    ->select("tb_mas_classlist_student.intCSID,intClassListID,strCode,strSection,intSubjectID,year,sub_section, strClassName, intLab, intLectHours, tb_mas_subjects.strDescription,floatFinalGrade as v3,floatMidtermGrade as v2, floatFinalsGrade as semFinalGrade, intFinalized,enumStatus,strRemarks,tb_mas_faculty.intID as facID, tb_mas_faculty.strFirstname,tb_mas_faculty.strLastname, tb_mas_subjects.strUnits, tb_mas_subjects.intBridging, tb_mas_classlist.intID as classlistID, tb_mas_subjects.intID as subjectID,include_gwa,elective_classlist_id,payment_amount,is_modular,enlisted_user")                                        
                     ->from("tb_mas_classlist_student")            
                     ->where(array("intStudentID"=>$id,"strAcademicYear"=>$classlist,'isDissolved'=>0))                                            
                     ->join('tb_mas_classlist', 'tb_mas_classlist.intID = tb_mas_classlist_student.intClasslistID')
                     ->join('tb_mas_subjects','intSubjectID = tb_mas_subjects.intID')
-                    ->join('tb_mas_faculty','tb_mas_classlist.intFacultyID = tb_mas_faculty.intID','left')
+                    ->join('tb_mas_faculty','tb_mas_classlist.intFacultyID = tb_mas_faculty.intID','left')                    
                     ->join('tb_mas_curriculum','tb_mas_classlist.intCurriculumID = tb_mas_curriculum.intID','left')
                     ->join('tb_mas_programs','tb_mas_curriculum.intProgramID = tb_mas_programs.intProgramID','left')
                     ->join('tb_mas_classlist_student_elective','tb_mas_classlist_student_elective.subject_classlist_id = tb_mas_classlist.intID','left')
@@ -3834,6 +3834,8 @@ class Data_fetcher extends CI_Model {
                                           ->order_by('date','desc')
                                           ->get('tb_mas_classlist_student_adjustment_log')
                                           ->first_row('array');
+
+                $enlisted_by = $this->db->get_where('tb_mas_faculty',array('intID'=>$c['enlisted_user']))->first_row('array');                                          
 
                 $schedule = $this->getScheduleByCode($c['intClassListID']);        
                 $sched_day = '';
@@ -3856,6 +3858,7 @@ class Data_fetcher extends CI_Model {
                 $c['sched_day'] = $sched_day;
                 $c['sched_time'] = $sched_time;
                 $c['sched_room'] = $sched_room;                                                           
+                $c['enlistedBy'] = $enlisted_by['strLastname'].", ".$enlisted_by['strFirstname'];
                     
                 $ret[] =  $c;
 
