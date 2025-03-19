@@ -38,7 +38,7 @@
                     <div class="col-sm-4">
                         <label for="intYearLevel">By Year Level:</label>
                         <select id="intYearLevel" class="form-control select2">                            
-                            <option <?php echo ($postyear == 1)?'selected':''; ?> value="0">-----------------ALL LEVELS---------------</option>
+                            <option <?php echo ($postyear == 0)?'selected':''; ?> value="0">-----------------ALL LEVELS---------------</option>
                             <option <?php echo ($postyear == 1)?'selected':''; ?> value="1">1st</option>
                             <option <?php echo ($postyear == 2)?'selected':''; ?> value="2">2nd</option>
                             <option <?php echo ($postyear == 3)?'selected':''; ?> value="3">3rd</option>
