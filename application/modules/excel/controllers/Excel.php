@@ -6610,6 +6610,7 @@ class Excel extends CI_Controller {
         $title = 'Ched NSTP Report';
 
         $i = 8;
+        $count = 1;
 
         foreach($students as $index => $student){
             
@@ -6650,7 +6651,7 @@ class Excel extends CI_Controller {
 
                 // Add some data
                 $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A'.$i, $index + 1)
+                    ->setCellValue('A'.$i, $count)
                     ->setCellValue('B'.$i, str_replace("-", "", $student['strStudentNumber']))
                     ->setCellValue('C'.$i, ucfirst($student['strLastname']))
                     ->setCellValue('D'.$i, ucfirst($student['strFirstname']))
@@ -6665,6 +6666,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('M'.$i, $student['strEmail']);
 
                 $i++;
+                $count++;
             }
 
         }
