@@ -87,8 +87,7 @@ new Vue({
         },
         downloadFormat()
         {
-            // var url = base_url + 'excel/download_previous_balance_format';
-            var url = base_url + 'pdf/certificate_of_unit_earned/35';
+            var url = base_url + 'excel/download_previous_balance_format';
             window.open(url, '_blank');
         }
     }
