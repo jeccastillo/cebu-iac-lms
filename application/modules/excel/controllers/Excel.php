@@ -6610,44 +6610,64 @@ class Excel extends CI_Controller {
         $title = 'Ched NSTP Report';
 
         $i = 8;
+        $count = 1;
 
         foreach($students as $index => $student){
             
-            $course = $this->data_fetcher->getProgramDetails($student['intProgramID']);
-            $address = explode(",", $student['strAddress']);
-            $city = $province = '';
-            if(count($address) > 1){
-                if(!is_numeric($address[1])){
-                    $city = $address[1];
-                }
-                if(count($address) > 3){
-                    if(is_numeric($address[count($address) - 1]) && !is_numeric($address[count($address) - 2])){
-                        $province = $address[count($address) - 2];
-                    }
-                }else if(count($address) > 2){
-                    if(!is_numeric($address[2])){
-                        $province = $address[2];
-                    }
+            $nstpEnrolled = false;
+            $subjects = $this->db->select('tb_mas_subjects.isNSTP')
+                ->from('tb_mas_classlist_student')
+                ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
+                ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
+                ->where(array('tb_mas_classlist_student.intStudentID'=>$student['intID'],'tb_mas_classlist.strAcademicYear'=>$sem))
+                ->get()
+                ->result_array();
+            
+            foreach($subjects as $subject){
+                if($subject['isNSTP'] == 1){
+                    $nstpEnrolled = true;
+                    break;
                 }
             }
 
-            // Add some data
-            $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('A'.$i, $index + 1)
-                ->setCellValue('B'.$i, str_replace("-", "", $student['strStudentNumber']))
-                ->setCellValue('C'.$i, ucfirst($student['strLastname']))
-                ->setCellValue('D'.$i, ucfirst($student['strFirstname']))
-                ->setCellValue('E'.$i, ucfirst($student['strMiddlename']))
-                ->setCellValue('F'.$i, $course['strProgramDescription'])
-                ->setCellValue('G'.$i, ucfirst($student['enumGender']))
-                ->setCellValue('H'.$i, date("m/d/Y", strtotime($student['dteBirthDate'])))
-                ->setCellValue('I'.$i, $address[0])
-                ->setCellValue('J'.$i, $city)
-                ->setCellValue('K'.$i, $province)
-                ->setCellValue('L'.$i, $student['strMobileNumber'])
-                ->setCellValue('M'.$i, $student['strEmail']);
+            if($nstpEnrolled){
+                $course = $this->data_fetcher->getProgramDetails($student['intProgramID']);
+                $address = explode(",", $student['strAddress']);
+                $city = $province = '';
+                if(count($address) > 1){
+                    if(!is_numeric($address[1])){
+                        $city = $address[1];
+                    }
+                    if(count($address) > 3){
+                        if(is_numeric($address[count($address) - 1]) && !is_numeric($address[count($address) - 2])){
+                            $province = $address[count($address) - 2];
+                        }
+                    }else if(count($address) > 2){
+                        if(!is_numeric($address[2])){
+                            $province = $address[2];
+                        }
+                    }
+                }
 
-            $i++;
+                // Add some data
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A'.$i, $count)
+                    ->setCellValue('B'.$i, str_replace("-", "", $student['strStudentNumber']))
+                    ->setCellValue('C'.$i, ucfirst($student['strLastname']))
+                    ->setCellValue('D'.$i, ucfirst($student['strFirstname']))
+                    ->setCellValue('E'.$i, ucfirst($student['strMiddlename']))
+                    ->setCellValue('F'.$i, $course['strProgramDescription'])
+                    ->setCellValue('G'.$i, ucfirst($student['enumGender']))
+                    ->setCellValue('H'.$i, date("m/d/Y", strtotime($student['dteBirthDate'])))
+                    ->setCellValue('I'.$i, $address[0])
+                    ->setCellValue('J'.$i, $city)
+                    ->setCellValue('K'.$i, $province)
+                    ->setCellValue('L'.$i, $student['strMobileNumber'])
+                    ->setCellValue('M'.$i, $student['strEmail']);
+
+                $i++;
+                $count++;
+            }
 
         }
 
