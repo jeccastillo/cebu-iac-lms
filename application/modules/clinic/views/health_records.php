@@ -2,6 +2,10 @@
 <section class="content-header">
         <h1>
             Student Health Records
+            <small>
+                <button class="btn btn-app" @click="downloadHealthRecord(id)" target="_blank" href="#"><i
+                        class="fa fa-book"></i>Download Excel</button>
+            </small>
         </h1>
         <hr />
     </section>
@@ -233,7 +237,10 @@ new Vue({
                 allowOutsideClick: () => !Swal.isLoading()
             });
         },
-       
+        downloadHealthRecord: function(id){
+            var url = this.base_url + 'excel/clinic_health_record/' + id;
+            window.open(url, '_blank');
+        }
                                        
     }
 
