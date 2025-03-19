@@ -3827,8 +3827,6 @@ class Pdf extends CI_Controller {
     public function certificate_of_unit_earned($id)
     {
         $campus = $this->data['campus'];
-        // print($student_id);
-        // die();
         
         $data['student'] = $this->data_fetcher->getStudent($id);
         
@@ -3863,11 +3861,7 @@ class Pdf extends CI_Controller {
           
         }
 
-        
-
         $data['balance'] = $this->data_fetcher->getStudentBalance($id);
-
-
         $curicculum = $this->data_fetcher->getSubjectsInCurriculum($data['student']['intCurriculumID']);        
         $data['all_subjects'] = $this->data_fetcher->getSubjectsInCurriculumAlphabetical($data['student']['intCurriculumID']);
         $data['curriculum_subjects'] = [];
@@ -3961,7 +3955,6 @@ class Pdf extends CI_Controller {
                 if($cs['equivalent'])
                     $cs['rec']['bg'] = "#00AA00";               
             }
-            
                      
             $data['curriculum_subjects'][$cs['intYearLevel']][$cs['intSem']]['year'] = $cs['intYearLevel'];
             $data['curriculum_subjects'][$cs['intYearLevel']][$cs['intSem']]['stringify_year'] = $this->stringifyNumber($cs['intYearLevel']);
