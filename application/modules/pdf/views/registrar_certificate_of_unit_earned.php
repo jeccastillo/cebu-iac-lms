@@ -16,11 +16,7 @@
     }
 </style>
 <div id="container">
-    <!-- <table border="0" style="color:#333; font-size:9; ">
-        <tr style="font-weight:bold;">         -->
             <b><p style="font-size:12px; text-align:center">Office of the Registrar</p></b>
-        <!-- </tr>
-    </table> -->
     <br><br>
     <div style="text-align:center; font-size:16px; font-weight:bold">C E R T I F I C A T I O N</div>
     <br><br>
@@ -159,10 +155,16 @@
                 echo ', Cebu City, Philippines.';
             }
         ?>
-        <br><br><br><br><br>
+        <br><br><br><br><br><br>
 
-        <div>
-            <b>MS. JOCELYN R. BANIAGO</b>
+        <div> 
+            <b><?php 
+                if($campus == 'Makati'){
+                    echo 'MS. JOCELYN R. BANIAGO';
+                }else if($campus == 'Cebu'){
+                    echo '';
+                }
+            ?></b>
             <br>
             Head Registrar
         </div>
