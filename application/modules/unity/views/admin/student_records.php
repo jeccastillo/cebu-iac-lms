@@ -6,6 +6,7 @@
                 <a class="btn btn-app" :href="base_url + 'unity/student_viewer/' + student.intID"><i class="ion ion-arrow-left-a"></i>All Details</a> 
                 <a class="btn btn-app" href="#" data-toggle="modal" data-target="#printTranscript" ><i class="fa fa-print"></i>Print TOR/TCG</a>                                       
                 <a class="btn btn-app" href="#" data-toggle="modal" data-target="#creditSubjects" ><i class="fa fa-plus"></i>Add Credits</a>                
+                <a class="btn btn-app" href="#" data-toggle="modal" data-target="#unitEarnedModal" ><i class="fa fa-print"></i>Certificate of Unit Earned</a>                
             </small>
         </h1>
         <hr />
@@ -519,6 +520,39 @@
 
         </form>
     </div>
+
+    <div class="modal fade" id="unitEarnedModal" role="dialog">
+        <form ref="print_unit_earned" @submit.prevent="printCertficateUnitEarned" method="post" target="_blank" :action="base_url + 'pdf/certificate_of_unit_earned/' + this.id" class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- modal header  -->
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Certificate of Unit Earned</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label>Select Term</label>
+                            <select name="term" required v-model="tor.included_terms" class="form-control">
+                                <option value='All' selected>All Terms</option>
+                                <option v-for="term in records" :value="term.reg.term_id">
+                                {{ term.reg.enumSem + " " + term.reg.term_label + " SY" + term.reg.strYearStart + "-" + term.reg.strYearEnd }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class=" modal-footer">
+                    <!-- modal footer  -->
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
 </aside>
 
 <script src="<?php echo base_url(); ?>assets/themes/default/js/jquery.min.js"></script>
@@ -863,6 +897,10 @@ new Vue({
                 allowOutsideClick: () => !Swal.isLoading()
             });
             
+        },
+        printCertficateUnitEarned: function(){
+            //window.open(base_url + 'pdf/certificate_of_unit_earned/' + this.id, '_blank');
+                                    this.$refs.print_unit_earned.submit();
         }
     }
 
