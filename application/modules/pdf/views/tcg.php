@@ -290,6 +290,7 @@ foreach($records as $record){
             else{
                 $units = "(".number_format($item['strUnits'],1).")";
                 $units_earned = "(".$units_earned.")";
+                $grade = $item['v3']; 
             }
 
             if(isset($item['elective_subject'])){
