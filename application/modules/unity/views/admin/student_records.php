@@ -899,7 +899,6 @@ new Vue({
             
         },
         printCertficateUnitEarned: function(){
-            //window.open(base_url + 'pdf/certificate_of_unit_earned/' + this.id, '_blank');
                                     this.$refs.print_unit_earned.submit();
         }
     }
