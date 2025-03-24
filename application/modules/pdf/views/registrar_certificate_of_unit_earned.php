@@ -16,11 +16,7 @@
     }
 </style>
 <div id="container">
-    <!-- <table border="0" style="color:#333; font-size:9; ">
-        <tr style="font-weight:bold;">         -->
-            <p style="font-size:12px; text-align:center">Office of the Registrar</p>
-        <!-- </tr>
-    </table> -->
+            <b><p style="font-size:12px; text-align:center">Office of the Registrar</p></b>
     <br><br>
     <div style="text-align:center; font-size:16px; font-weight:bold">C E R T I F I C A T I O N</div>
     <br><br>
@@ -41,18 +37,45 @@
             }else{
                 echo 'She ';
             }
-        ?> already earned a total of <?php echo $student_data['total_units_earned']; ?> units as of
+        ?> already earned a total of <?php 
+        $asOfTerm = '';
+        foreach($student_data['data'] as $index => $term){
+
+            if($selected_term == 'All'){
+                if($term['units_earned'] > 0){
+                    $asOfTerm = $term['reg']['enumSem'] . ' ' . $term['reg']['term_label'] . ', Academic Year ' . $term['reg']['strYearStart'] . '-' . $term['reg']['strYearEnd'];
+                }
+            }else{
+                if($term['reg']['intAYID'] == $selected_term){
+                    echo $term['units_earned'];
+                    $asOfTerm = $term['reg']['enumSem'] . ' ' . $term['reg']['term_label'] . ', Academic Year ' . $term['reg']['strYearStart'] . '-' . $term['reg']['strYearEnd'];
+                }
+            }
+        }
+        ?> units as of <?php echo $asOfTerm; ?>
+
 
         <br><br>
 
-        <?php 
-            foreach($student_data['curriculum_subjects'] as $index => $curriculum_subjects):
-                foreach ($curriculum_subjects as $index => $term):
+        <?php
+            foreach($student_data['data'] as $index => $term):
+                $isRegistered = false;
+
+                //check if the term is selected
+                if($selected_term == 'All'){
+                    $isRegistered = true;
+                }else{
+                    if($term['reg']['intAYID'] == $selected_term){
+                        $isRegistered = true;
+                    }
+                }
+
+                if($isRegistered):
                     $withUnitPassed = false;
 
-                    foreach ($term['records'] as $index => $checkItem){
-                        if(isset($checkItem['rec']))
-                            if($checkItem['rec']['strRemarks'] == 'Passed')
+                    foreach ($term['records'] as $index => $checkItem){  
+                        if(isset($checkItem))
+                            if($checkItem['strRemarks'] == 'Passed')
                                 $withUnitPassed = true;
                     }
 
@@ -63,7 +86,7 @@
         <table>
             <thead>
                 <tr>
-                    <th style="font-size:9px; font-weight:bold; border: none"><?php echo $term['stringify_year'] . ' Year ' . $term['stringify_sem'] . ' Term' ?></th>
+                    <th style="font-size:9px; font-weight:bold; border: none"><?php echo $term['reg']['enumSem'][0] . '<sup>' . substr($term['reg']['enumSem'], 1) . '</sup> ' . $term['reg']['term_label'] . ', AY ' . $term['reg']['strYearStart'] . '-' . $term['reg']['strYearEnd'] ?></th>
                 </tr>
                 <tr style="text-align:center; font-weight:bold;">
                     <th width="22%">Course Code</th>
@@ -75,28 +98,25 @@
 
             <tbody>
                 <?php foreach ($term['records'] as $index => $item): 
-                        if(isset($item['rec'])):
-                            if($item['rec']['strRemarks'] == 'Passed'):
+                        if(isset($item)):
+                            if($item['strRemarks'] == 'Passed'):
                 ?>                                
                 <tr>                                                
                     <td width="22%"><?php echo $item['strCode'] ?></td>
                     <td width="45%"><?php echo $item['strDescription'] ?></td>   
                     <td width="15%" style="text-align:center;">
                         <?php
-                            if($item['equivalent']) 
-                                echo $item['equivalent']['grade'];
-                            else{        
-                                    echo $item['rec']['floatFinalGrade'];
-                            }
+                            if($item['strUnits']) 
+                                if($student_data['student']['level'] == 'college')    
+                                    echo $item['v3'];
+                                else
+                                    echo $item['semFinalGrade']
                         ?>
                     </td>
                     <td width="18%" style="text-align:center;">
                         <?php
-                            if($item['equivalent']) 
-                                echo '(' . parseInt($item['equivalent']['units']).toFixed(1) . ')';
-                            else{        
-                                echo $item['rec']['strUnits'];
-                            }
+                            if($item['strUnits']) 
+                                echo $item['strUnits'];
                         ?>
                     </td>                                                                                                                                                                            
                 </tr>       
@@ -105,8 +125,9 @@
         </table></div>
         <?php 
             endif;
+            endif;
             endforeach;
-            endforeach; 
+            //endforeach; 
         ?><br><br><br>
 
         <div>This certification is issued upon request of
@@ -117,9 +138,42 @@
                 echo 'Ms. ';
             }
             echo strtoupper($student_data['student']['strFirstname']) . ' ' . strtoupper($student_data['student']['strLastname']); 
-            ?></b>for whatever legal purpose it may serve him.
+            ?></b> for whatever legal purpose it may serve
+            <?php 
+            if($student_data['student']['enumGender'] == 'male'){
+                echo 'him. ';
+            }else{
+                echo 'her. ';
+            }?>
         </div>
-        <div>Issued this
+        <div>Issued this <?php echo date('jS'); ?> day of 
+        <?php 
+            echo date('F Y'); 
+            if($campus == 'Makati'){
+                echo ', Makati City, Philippines.';
+            }else if($campus == 'Cebu'){
+                echo ', Cebu City, Philippines.';
+            }
+        ?>
+        <br><br><br><br><br><br>
+
+        <div> 
+            <b><?php 
+                if($campus == 'Makati'){
+                    echo 'MS. JOCELYN R. BANIAGO';
+                }else if($campus == 'Cebu'){
+                    echo '';
+                }
+            ?></b>
+            <br>
+            Head Registrar
+        </div>
+        <br>
+        <div style="font-size:7px; font-style:italic">
+            Prepared By: <?php echo $this->data['user']['strFirstname'] . ' ' . $this->data['user']['strLastname'] ?>
+            <br><br><br>
+            Not valid without School Seal
+        </div>
         </div>
     </div>
 </div>
