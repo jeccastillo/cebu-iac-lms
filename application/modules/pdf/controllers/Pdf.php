@@ -19,7 +19,7 @@ class Pdf extends CI_Controller {
 			$this->settings[$setting['strSettingName']] = $setting['strSettingValue'];
 		}
         //$this->load->model("user_model");
-        //$this->config->load('courses');
+        //$this->config->loa†d('courses');
         $this->data["user"] = $this->session->all_userdata();
         $this->load->helper("cms_form");
         $this->load->helper('pdf');
@@ -3826,6 +3826,8 @@ class Pdf extends CI_Controller {
 
     public function certificate_of_unit_earned($id)
     {
+        $post = $this->input->post();
+        $this->data['selected_term'] = $post['term'];
         $campus = $this->data['campus'];
         
         $data['student'] = $this->data_fetcher->getStudent($id);
