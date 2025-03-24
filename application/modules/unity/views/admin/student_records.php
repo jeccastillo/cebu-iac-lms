@@ -6,6 +6,7 @@
                 <a class="btn btn-app" :href="base_url + 'unity/student_viewer/' + student.intID"><i class="ion ion-arrow-left-a"></i>All Details</a> 
                 <a class="btn btn-app" href="#" data-toggle="modal" data-target="#printTranscript" ><i class="fa fa-print"></i>Print TOR/TCG</a>                                       
                 <a class="btn btn-app" href="#" data-toggle="modal" data-target="#creditSubjects" ><i class="fa fa-plus"></i>Add Credits</a>                
+                <a class="btn btn-app" href="#" data-toggle="modal" data-target="#unitEarnedModal" ><i class="fa fa-print"></i>Certificate of Unit Earned</a>                
             </small>
         </h1>
         <hr />
@@ -77,10 +78,7 @@
                                                 OW
                                             </td>
                                             <td v-if="record.v3 != 'OW'" :style="(record.intFinalized == 2)?'font-weight:bold;':''">
-                                                <span v-if="record.intFinalized >=2 && student.type =='shs'" :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">
-                                                    {{ record.shsFinalsGrade }}
-                                                </span>
-                                                <span v-else-if="record.intFinalized >=2" :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">
+                                                <span v-if="record.intFinalized >=2" :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">
                                                     {{ record.v3 }}
                                                 </span>
                                                 <span v-else>
@@ -91,8 +89,8 @@
                                                 OW
                                             </td>
                                             <!-- <td v-if="student.type == 'shs' && record.v2 && record.v3">{{ (parseInt(record.v2) + parseInt(record.v3) ? Math.round((parseInt(record.v2) + parseInt(record.v3)) / 2) : 'T')}}</td> -->
-                                            <td v-if="student.type == 'shs' && record.v3">{{ record.v3 }}</td>
-                                            <td v-else-if="student.type == 'shs' && !record.v3">---</td>
+                                            <td v-if="student.type == 'shs' && record.semFinalGrade">{{ record.semFinalGrade }}</td>
+                                            <td v-else-if="student.type == 'shs'">---</td>
                                             <td :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">{{ record.intFinalized >=1?record.strRemarks:'---' }}</td>   
                                             <td>{{ record.strFirstname+" "+record.strLastname }}</td>                                 
                                         </tr>
@@ -105,7 +103,8 @@
                                         <tr style="font-size: 11px;">
                                             <td></td>
                                             <td align="right"><strong>Term GWA:</strong></td>
-                                            <td>{{ term.gwa }}</td>
+                                            <td v-if="student.type == 'shs'">{{ Math.round(term.gwa) }}</td>
+                                            <td v-else>{{ term.gwa }}</td>
                                             <td colspan="3"></td>
                                         </tr>
 
@@ -350,7 +349,7 @@
                 <div class="modal-body">
                     <div class="row">
                         <input type="hidden" name="student_id" v-model="tor.student_id" />
-                        <input type="" name="picture" v-model="tor.picture" />
+                        <input type="hidden" name="picture" v-model="tor.picture" />
                         <input type="hidden" name="admission_date" v-model="tor.admission_date" />
                         <div class="form-group col-sm-6">
                             <label>Date Issued</label>
@@ -521,6 +520,39 @@
 
         </form>
     </div>
+
+    <div class="modal fade" id="unitEarnedModal" role="dialog">
+        <form ref="print_unit_earned" @submit.prevent="printCertficateUnitEarned" method="post" target="_blank" :action="base_url + 'pdf/certificate_of_unit_earned/' + this.id" class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- modal header  -->
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Certificate of Unit Earned</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label>Select Term</label>
+                            <select name="term" required v-model="tor.included_terms" class="form-control">
+                                <option value='All' selected>All Terms</option>
+                                <option v-for="term in records" :value="term.reg.term_id">
+                                {{ term.reg.enumSem + " " + term.reg.term_label + " SY" + term.reg.strYearStart + "-" + term.reg.strYearEnd }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class=" modal-footer">
+                    <!-- modal footer  -->
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
 </aside>
 
 <script src="<?php echo base_url(); ?>assets/themes/default/js/jquery.min.js"></script>
@@ -666,7 +698,6 @@ new Vue({
                     }
                     axios.get(api_url + 'admissions/student-info/' + this.student.slug)
                     .then((data) => {
-                        console.log(data)
                         this.applicant_data = data.data.data;
                         for(i in this.applicant_data.uploaded_requirements){
                                 if(this.applicant_data.uploaded_requirements[i].type == "2x2" || this.applicant_data.uploaded_requirements[i].type == "2x2_foreign")
@@ -866,6 +897,9 @@ new Vue({
                 allowOutsideClick: () => !Swal.isLoading()
             });
             
+        },
+        printCertficateUnitEarned: function(){
+                                    this.$refs.print_unit_earned.submit();
         }
     }
 
