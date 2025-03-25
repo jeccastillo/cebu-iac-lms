@@ -102,7 +102,9 @@ table tr td {
                 UNDERGRAD<?php echo " for  ".$term['enumSem']." ".$term['term_label']." ".$term['strYearStart']."-".$term['strYearEnd']; ?>
             </div> <?php endif; ?> <?php if ($type == 'SHS Reservation Payment'): ?> <div
                 style="position:absolute; top: 270px; left:10px; width: 500px; height: 20px;">
-                RESERVATION FEE FOR SENIOR HIGHSCHOOL</div> <?php endif; ?>
+                RESERVATION FEE FOR SENIOR HIGHSCHOOL
+                <?php echo " for  ".$term['enumSem']." ".$term['term_label']." ".$term['strYearStart']."-".$term['strYearEnd']; ?>
+            </div> <?php endif; ?>
             <?php if ($type == 'UG Reservation Payment' || $type == 'SHS Reservation Payment' ): ?>
             <div style="position:absolute; top: 290px; left:10px; width: 500px; height: 20px;"> "NON
                 REFUNDABLE", "NON TRANSFERABLE" </div> <?php endif; ?> <div
