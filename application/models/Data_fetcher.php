@@ -917,7 +917,13 @@ class Data_fetcher extends CI_Model {
         
         if($active['enumSem'] != "1st")
         {
-            $sem = switch_num(switch_num_rev($active['enumSem']) - 1);
+            if($active['enumSem'] != "Summer")
+                $sem = switch_num(switch_num_rev($active['enumSem']) - 1);
+            elseif($active['term_student_type'] == "shs")
+                $sem = "2nd";
+            else
+                $sem = "3rd";
+
             $yearStart = $active['strYearStart'];
             $yearEnd = $active['strYearEnd'];
         }
