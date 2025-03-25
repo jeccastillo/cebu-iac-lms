@@ -19,7 +19,7 @@ class Pdf extends CI_Controller {
 			$this->settings[$setting['strSettingName']] = $setting['strSettingValue'];
 		}
         //$this->load->model("user_model");
-        //$this->config->load('courses');
+        //$this->config->loa†d('courses');
         $this->data["user"] = $this->session->all_userdata();
         $this->load->helper("cms_form");
         $this->load->helper('pdf');
@@ -2505,7 +2505,6 @@ class Pdf extends CI_Controller {
         $this->data['total_amount_due_text'] = $totalAmountDueText;
         $this->data['total_amount_due'] = number_format($request['total_amount_due'],2,'.',',');
         
-
         if ($this->data['campus'] == "Cebu") {
             $this->load->view("print_or_latest_cebu",$this->data);
         }else {
@@ -3826,6 +3825,8 @@ class Pdf extends CI_Controller {
 
     public function certificate_of_unit_earned($id)
     {
+        $post = $this->input->post();
+        $this->data['selected_term'] = $post['term'];
         $campus = $this->data['campus'];
         
         $data['student'] = $this->data_fetcher->getStudent($id);

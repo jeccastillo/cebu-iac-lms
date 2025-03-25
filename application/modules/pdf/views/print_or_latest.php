@@ -71,40 +71,51 @@ table tr td {
             <div style="position:absolute; top: 90px; left: 20px; width: 100px; height: 20px;">
                 <!-- or number -->
             </div>
-            <div style="position:absolute; top: 90px; left: 115px; width: 200px; height: 20px;">
-                <?php echo $total_amount_due; ?> </div>
-            <div
-                style="display:none;position:absolute; top: 140px; left: 5px; width: 200px; height: 20px;">
-                <?php echo $description == "Reservation Payment" ? "NON REFUNDABLE AND NON TRANSFERABLE":""; ?><br />
-                <?php echo "SY ".$term['strYearStart']."-".$term['strYearEnd']." ".$term['enumSem']." ".$term['term_label']."<br />".$type; ?>
-            </div>
-            <div style="position:absolute; top: 320px; left: 95px; width: 200px; height: 20px;">
-                <!--  $total_amount_due -->
-            </div>
-            <div style="position:absolute; top: 330px; left: 15px; width: 350px; ">
-                <?php echo $remarks; ?> </div>
-            <div style="position:absolute; top: 355px; left: 115px; width: 200px; height: 20px;">
-                <?php echo $total_amount_due; ?> </div>
-            <div style="position:absolute; top: 100; right: 60px; width: 200px; height: 20px;"> OR
-                No: <?php echo $or_number; ?> </div>
-            <div style="position:absolute; top: 115px; right: -60px; width: 200px; height: 20px;">
-                <?php echo "  ".date("m/d/Y",strtotime($transaction_date)); ?> </div>
-            <div style="position:absolute; top: 140px; left: 336px; width: 500px; height: 20px;">
-                <?php if($student_id != 'undefined' && $student_id != ''): ?>
-                <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?> <?php endif; ?>
-                &nbsp; <?php echo $student_name; ?> </div>
-            <div style="position:absolute; top: 170px; left: 310px; width: 500px; height: 20px;">
-                <?php echo $student_address; ?> </div>
-            <div style="position:absolute; top: 195px; left: 295px; width: 500px; height: 20px;">
-                <?php echo $tin; ?> </div>
-            <div style="position:absolute; top: 215px; left: 370px; width: 500px; height: 20px;">
-                <?php echo $total_amount_due_text; ?> </div>
-            <div style="position:absolute; top: 240px; left: 670px; width: 200px; height: 20px;">
-                <?php echo $total_amount_due; ?> </div>
-            <div style="position:absolute; top: 265px; left: 400px; width: 400px; height: 20px;">
-                <?php echo $type;?> </div>
-            <div style="position:absolute; top: 310px; left: 575px; height: 20px;">
-                <?php echo $cashier_name; ?> </div>
+            <div style="position:absolute; top: 90px; left: 25px; width: 85px; height: 20px;">
+                <?php echo $type; ?> </div>
+            <div>
+                <div style="position:absolute; top: 90px; left: 115px; width: 200px; height: 20px;">
+                    <?php echo $total_amount_due; ?> </div>
+                <div
+                    style="display:none;position:absolute; top: 140px; left: 5px; width: 200px; height: 20px;">
+                    <?php echo $description == "Reservation Payment" ? "NON REFUNDABLE AND NON TRANSFERABLE":""; ?><br />
+                    <?php echo "SY ".$term['strYearStart']."-".$term['strYearEnd']." ".$term['enumSem']." ".$term['term_label']."<br />".$type; ?>
+                </div>
+                <div style="position:absolute; top: 320px; left: 95px; width: 200px; height: 20px;">
+                    <!--  $total_amount_due -->
+                </div>
+                <div style="position:absolute; top: 330px; left: 15px; width: 350px; ">
+                    <?php echo $remarks; ?> </div>
+                <div
+                    style="position:absolute; top: 355px; left: 115px; width: 200px; height: 20px;">
+                    <?php echo $total_amount_due; ?> </div>
+                <div style="position:absolute; top: 100; right: 60px; width: 200px; height: 20px;">
+                    OR No: <?php echo $or_number; ?> </div>
+                <div
+                    style="position:absolute; top: 115px; right: -60px; width: 200px; height: 20px;">
+                    <?php echo "  ".date("m/d/Y",strtotime($transaction_date)); ?> </div>
+                <div
+                    style="position:absolute; top: 140px; left: 336px; width: 500px; height: 20px;">
+                    <?php if($student_id != 'undefined' && $student_id != ''): ?>
+                    <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?> <?php endif; ?>
+                    &nbsp; <?php  echo $student_name; ?> </div>
+                <div
+                    style="position:absolute; top: 170px; left: 310px; width: 500px; height: 20px;">
+                    <?php echo $student_address; ?> </div>
+                <div
+                    style="position:absolute; top: 195px; left: 295px; width: 500px; height: 20px;">
+                    <?php echo $tin; ?> </div>
+                <div
+                    style="position:absolute; top: 215px; left: 370px; width: 500px; height: 20px;">
+                    <?php echo $total_amount_due_text; ?> </div>
+                <div
+                    style="position:absolute; top: 240px; left: 670px; width: 200px; height: 20px;">
+                    <?php echo $total_amount_due; ?> </div>
+                <div
+                    style="position:absolute; top: 265px; left: 400px; width: 400px; height: 20px;">
+                    <?php echo $type;?> </div>
+                <div style="position:absolute; top: 310px; left: 575px; height: 20px;">
+                    <?php echo $cashier_name; ?> </div>
         </section>
     </div>
 </body>
