@@ -19,12 +19,14 @@
                                     v-model="request.sem">
                                     <option v-for="s in sy" :value="s.intID">
                                         {{ s.term_student_type}} {{ s.enumSem }} {{ s.term_label }}
-                                        {{ s.strYearStart }} - {{ s.strYearEnd }}</option>
+                                        {{ s.strYearStart }} - {{ s.strYearEnd }}
+                                    </option>
                                 </select>
                             </div>
                             <h3 v-if="payee" class="widget-user-username"
                                 style="text-transform:capitalize;margin-left:0;font-size:1.3em;">
-                                {{ payee.firstname+' '+payee.lastname }}</h3>
+                                {{ payee.firstname+' '+payee.lastname }}
+                            </h3>
                         </div>
                     </div>
                 </div>
@@ -279,8 +281,10 @@ new Vue({
                     this.or_print.transaction_date = payment.updated_at;
                     this.or_print.remarks = payment.remarks;
                     this.or_print.student_name = this.payee.lastname +
-                        ", " + this.payee.firstname + ", " + this.payee
-                        ?.middlename;
+                        ", " + this.payee.firstname;
+                    if (this.payee.middlename && this.payee.middlename !=
+                        "undefined") this.or_print.student_name += ", " +
+                        this.payee.middlename;
                     this.or_print.student_address = this.payee.address;
                     this.or_print.student_id = '';
                     this.or_print.is_cash = payment.is_cash;
