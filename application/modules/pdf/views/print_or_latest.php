@@ -71,7 +71,7 @@ table tr td {
             <div style="position:absolute; top: 90px; left: 20px; width: 100px; height: 20px;">
                 <!-- or number -->
             </div>
-            <div style="position:absolute; top: 100px; left: 80px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 90px; left: 25px; width: 85px; height: 20px;">
                 <?php echo $type; ?> </div>
             <div>
                 <div style="position:absolute; top: 90px; left: 115px; width: 200px; height: 20px;">
@@ -98,7 +98,8 @@ table tr td {
                     style="position:absolute; top: 140px; left: 336px; width: 500px; height: 20px;">
                     <?php if($student_id != 'undefined' && $student_id != ''): ?>
                     <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?> <?php endif; ?>
-                    &nbsp; <?php echo $student_name == 'undefined' ? '' : $student_name ; ?> </div>
+                    &nbsp; <?php // echo $student_name == 'undefined' ? '' : $student_name ; ?>
+                </div>
                 <div
                     style="position:absolute; top: 170px; left: 310px; width: 500px; height: 20px;">
                     <?php echo $student_address; ?> </div>
