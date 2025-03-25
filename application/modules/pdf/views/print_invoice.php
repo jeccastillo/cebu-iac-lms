@@ -96,9 +96,17 @@ table tr td {
                 <?php echo $full_assessment; ?> </div>
             <div style="position:absolute; top:  245px; left: 650px; width: 200px; height: 20px;">
                 <?php echo $full_assessment; ?> </div>
-            <div style="position:absolute; top: 270px; left:10px; width: 500px; height: 20px;">
-                <?php echo $reservation_description; ?> </div>
-            <div style="position:absolute; top: 270px; left: 500px; width: 500px; height: 20px;">
+            <?php if ($type == 'UG Reservation Payment'): ?> <div
+                style="position:absolute; top: 270px; left:10px; width: 500px; height: 20px;">
+                RESERVATION FEE,
+                UNDERGRAD<?php echo " for  ".$term['enumSem']." ".$term['term_label']." ".$term['strYearStart']."-".$term['strYearEnd']; ?>
+            </div> <?php endif; ?> <?php if ($type == 'SHS Reservation Payment'): ?> <div
+                style="position:absolute; top: 270px; left:10px; width: 500px; height: 20px;">
+                RESERVATION FEE FOR SENIOR HIGHSCHOOL</div> <?php endif; ?>
+            <?php if ($type == 'UG Reservation Payment' || $type == 'SHS Reservation Payment' ): ?>
+            <div style="position:absolute; top: 290px; left:10px; width: 500px; height: 20px;"> "NON
+                REFUNDABLE", "NON TRANSFERABLE" </div> <?php endif; ?> <div
+                style="position:absolute; top: 270px; left: 500px; width: 500px; height: 20px;">
                 <?php echo $reservation_amount != 0 ? 1 : ""; ?> </div>
             <div style="position:absolute; top: 270px; left: 550px; width: 200px; height: 20px;">
                 <?php echo $reservation_amount != 0 ? "-".$reservation_amount : ""; ?> </div>
@@ -138,7 +146,8 @@ table tr td {
             <!--Total Amount received-->
             <div style="position:absolute; top:  565px; left: 50px; width: 200px; height: 20px;">
                 <?php  echo $total_amount_due == 0 ? "" : $total_amount_due; ?> </div>
-            <div style="position:absolute; top: 550px; right: 20px; width: 200px; height: 20px;font-size:15px">
+            <div
+                style="position:absolute; top: 550px; right: 20px; width: 200px; height: 20px;font-size:15px">
                 <?php echo $cashier_name; ?> </div>
         </section>
     </div>
