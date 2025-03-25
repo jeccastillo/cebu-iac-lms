@@ -71,7 +71,7 @@ table tr td {
             <div style="position:absolute; top: 90px; left: 20px; width: 100px; height: 20px;">
                 <!-- or number -->
             </div>
-            <div style="position:absolute; top: 90px; left: 80px; width: 200px; height: 20px;">
+            <div style="position:absolute; top: 100px; left: 80px; width: 200px; height: 20px;">
                 <?php echo $type; ?> </div>
             <div>
                 <div style="position:absolute; top: 90px; left: 115px; width: 200px; height: 20px;">
