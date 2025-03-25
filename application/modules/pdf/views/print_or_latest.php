@@ -98,7 +98,7 @@ table tr td {
                     style="position:absolute; top: 140px; left: 336px; width: 500px; height: 20px;">
                     <?php if($student_id != 'undefined' && $student_id != ''): ?>
                     <?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student_id); ?> <?php endif; ?>
-                    &nbsp; <?php echo $student_name; ?> </div>
+                    &nbsp; <?php echo $student_name == 'undefined' ? '' : $student_name ; ?> </div>
                 <div
                     style="position:absolute; top: 170px; left: 310px; width: 500px; height: 20px;">
                     <?php echo $student_address; ?> </div>
