@@ -34,6 +34,7 @@
                             <select name="term_student_type" class="form-control">
                                 <option value="college">College</option>
                                 <option value="shs">SHS</option>
+                                <option value="next">Next School</option>
                             </select>
                         </div>
                         <div class="form-group col-xs-12 col-lg-4">

@@ -66,6 +66,7 @@
                         <select name="term_student_type" class="form-control">
                             <option <?php echo $item['term_student_type']=='college'?'selected':''; ?>  value="college">College</option>
                             <option <?php echo $item['term_student_type']=='shs'?'selected':''; ?> value="shs">SHS</option>
+                            <option <?php echo $item['term_student_type']=='next'?'selected':''; ?> value="shs">Next School</option>
                             </select>
                     </div>
                     <div class="form-group col-xs-12 col-lg-4">
