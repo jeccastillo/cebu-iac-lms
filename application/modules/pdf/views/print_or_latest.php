@@ -106,7 +106,7 @@ table tr td {
                     style="position:absolute; top: 195px; left: 295px; width: 500px; height: 20px;">
                     <?php echo $tin; ?> </div>
                 <div
-                    style="position:absolute; top: 215px; left: 360px; width: 500px; height: 20px;">
+                    style="position:absolute; top: 215px; left: 345px; width: 400px; height: 20px;">
                     <?php echo $total_amount_due_text; ?> </div>
                 <div
                     style="position:absolute; top: 240px; left: 670px; width: 200px; height: 20px;">

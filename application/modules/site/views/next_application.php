@@ -52,7 +52,7 @@
                             type="text" name="first_name" v-model="request.first_name" required>
                     </div>
                     <div id="middle-name" class="flex-grow">
-                        <label class="block t color-primary font-bold  mb-3  pr-4"> Middle Name                            
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> Middle Name
                         </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
@@ -407,8 +407,7 @@
                 </div>
             </div>
             <div class="border-[1px] border-neutral-100 p-2.5 color-primary rounded-lg">
-                <h5 class="mb-2.5">Do you have any of the following? (check all that
-                    apply) </h5>
+                <h5 class="mb-2.5">Do you have any of the following? (check all that apply) </h5>
                 <label class="custom-checkbox">
                     <input type="checkbox" v-model="request.health_concern" value="Diabetes">
                     <span class="custom-checkbox-button"></span> Diabetes </label>
@@ -445,7 +444,8 @@
                         <div class="flex ">
                             <div class="w-1/2">
                                 <template v-for="source,index in sourceList">
-                                    <label v-if="index <= 4" class="custom-checkbox mb-1 color-primary">
+                                    <label v-if="index <= 4"
+                                        class="custom-checkbox mb-1 color-primary">
                                         <input type="checkbox" :id="index" :name="source"
                                             :value="source" v-model="sources">
                                         <span class="custom-checkbox-button"></span>
@@ -455,7 +455,8 @@
                             </div>
                             <div class="w-1/2">
                                 <template v-for="source,index in sourceList">
-                                    <label v-if="index >= 5" class="custom-checkbox mb-1 color-primary">
+                                    <label v-if="index >= 5"
+                                        class="custom-checkbox mb-1 color-primary">
                                         <input type="checkbox" class="" :id="index" name="source"
                                             :value="source.toLowerCase()" v-model="sources">
                                         <span class="custom-checkbox-button"></span>
@@ -534,12 +535,12 @@
             </div>
         </div>
         </label>
-        <div v-if="true" class=" mb-6 mt-10">                            
+        <div v-if="true" class=" mb-6 mt-10">
             <div class="mb-4">
                 <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
-                    <label class="block color-primary font-bold mb-3 pr-4"> Goverment ID
-                    </label>
-                    <input class="color-primary" @change="attachFile" type="file" id="government_id" required />
+                    <label class="block color-primary font-bold mb-3 pr-4"> Goverment ID </label>
+                    <input class="color-primary" @change="attachFile" type="file" id="government_id"
+                        required />
                 </div>
                 <!-- <div class="grow lg:grow-0">
                     <label class="block color-primary font-bold mb-3 pr-4"> Diploma </label>
@@ -554,23 +555,22 @@
                     <input @change="attachFile" type="file" id="proof" required />
                 </div> -->
                 <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
-                    <label class="block color-primary font-bold mb-3 pr-4"> Link to social media handles (separate multiple links by comma)
-                    </label>
+                    <label class="block color-primary font-bold mb-3 pr-4"> Link to social media
+                        handles (separate multiple links by comma) </label>
                     <input
                         class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                         type="text" v-model="request.social_media_handles">
                 </div>
-                
                 <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
-                    <label class="block color-primary font-bold mb-3 pr-4"> Video Introduction 
+                    <label class="block color-primary font-bold mb-3 pr-4"> Video Introduction
                     </label>
                     <label class="block color-primary italic text-sm mb-5"> (Submit a creative
-                            1-minute video introducing yourself, explaining why you should be
-                            accepted into this program, and sharing how you can contribute to
-                            professionalizing social media practices. Upload) </label>
-                    
-                    <input class="color-primary" @change="attachFile" type="file" id="video_introduction" required />
-                </div>                
+                        1-minute video introducing yourself, explaining why you should be accepted
+                        into this program, and sharing how you can contribute to professionalizing
+                        social media practices. Upload) </label>
+                    <input class="color-primary" @change="attachFile" type="file"
+                        id="video_introduction" required />
+                </div>
             </div>
             <div v-if="isOnList"
                 class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
@@ -710,7 +710,7 @@ input[type="number"] {
     background-color: rgb(245 245 245)
 }
 </style>
-<!-- <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 <script src="https://unpkg.com/vue-select@3.0.0"></script>
 <link rel="stylesheet" href="https://unpkg.com/vue-select@3.0.0/dist/vue-select.css">
 <script src="<?php echo $js_dir ?>dataExport.js"></script>
@@ -792,6 +792,7 @@ new Vue({
             diploma: '',
             transcript: '',
             proof: '',
+            type: 'next',
             video_introduction: '',
             emergency_contact_first_name: '',
             emergency_contact_middle_name: '',
@@ -833,6 +834,7 @@ new Vue({
             this.programs = data.data.data;
             this.sy = data.data.sy;
             this.term = data.data.term;
+            console.log(this.sy);
         }).catch((e) => {
             console.log("error");
         });
@@ -1216,6 +1218,8 @@ new Vue({
                     Object.keys(this.request).forEach(key => {
                         formData.append(key, this.request[key])
                     });
+                    console.log(this.request);
+                    return
                     axios.post(
                         `https://smsapi.iacademy.edu.ph/api/v1/next_school/register`,
                         formData, {
