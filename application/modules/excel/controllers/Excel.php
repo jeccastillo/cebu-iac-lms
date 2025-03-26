@@ -9469,14 +9469,12 @@ class Excel extends CI_Controller {
 
         // Add some data
         $objPHPExcel->setActiveSheetIndex(0)
-            ->setCellValue('A1', '2022SHA-01-210')
-            ->setCellValue('B1', '1000')
-            ->setCellValue('C1', '1st 2024-2025');
-        
-        $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'Student Number')
-                    ->setCellValue('A2', 'Balance')
-                    ->setCellValue('A3', 'Term (Term + Year)');
+            ->setCellValue('A1', 'Student Number')
+            ->setCellValue('B1', 'Balance')
+            ->setCellValue('C1', 'Term (Term + Year)')
+            ->setCellValue('A2', '2022SHA-01-210')
+            ->setCellValue('B2', '1000')
+            ->setCellValue('C2', '1st 2024-2025');
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
@@ -9614,6 +9612,150 @@ class Excel extends CI_Controller {
         header ('Pragma: public'); // HTTP/1.0
 
         
+        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
+        exit;
+    }
+
+    public function import_credit_subject()
+    {
+        $post = $this->input->post();
+
+        $config['upload_path'] = './assets/excel';
+        $config['allowed_types'] = 'xlsx|xls';
+        $config['max_size'] = '1000000';
+
+        $this->load->library('upload', $config);
+
+        if ( !$this->upload->do_upload("import_credit_subject_excel"))
+        {
+            $error = array('error' => $this->upload->display_errors());
+            
+            print_r($error['error']);
+            return false;
+        }
+        else
+        {
+            $fileData = $this->upload->data();
+            $filePath = './assets/excel/' . $fileData['file_name'];
+
+            // Load PhpSpreadsheet to read the file
+            $spreadsheet = PHPExcel_IOFactory::load($filePath);
+            $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+            
+            // Now you can loop through the $sheetData array and insert into your database
+            foreach ($sheetData as $index => $row) {
+                if($index >= 2){
+
+                    //Check if student exists
+                    $student = $this->db->get_where('tb_mas_users',array('strStudentNumber' => $row['A']))->first_row('array');
+                    $subject = $this->db->get_where('tb_mas_subjects',array('strCode' => $row['J']))->first_row('array');
+
+                    if($student && $subject){
+                        $data = array(
+                            'course_code' => $row['C'],
+                            'descriptive_title' => $row['D'],
+                            'units' => $row['E'],
+                            'grade' => $row['F'],
+                            'completion' => $row['G'],
+                            'date_added' => date("Y-m-d"),
+                            'added_by' => $this->data['user']['strFirstname']." ".$this->data['user']['strLastname'],
+                            'term' => $row['H'],
+                            'school_year' => $row['I'],
+                            'student_id' => $student['intID'],
+                            'equivalent_subject' => $subject['intID'],
+                            'type_of_subject' => 'imported',
+                        );
+
+                        $checkCreditedSubject = $this->db->get_where('tb_mas_credited', array('student_id' => $student['intID'], 'equivalent_subject' => $subject['intID']))->first_row('array');
+                        if($checkCreditedSubject){
+                            $this->data_poster->post_data('tb_mas_credited', $data, $checkCreditedSubject['id']);
+                        }else{
+                            $this->data_poster->post_data('tb_mas_credited', $data);
+                        }
+                    }else{
+                        // Optionally, you can delete the uploaded file after import
+                        unlink($filePath);
+                        print('Student/Subject not found on ' . $row['A']);
+                        return false;
+                    }
+                }
+            }
+
+            // Optionally, you can delete the uploaded file after import
+            unlink($filePath);
+
+            print('true');
+            return true;
+        }
+    }
+
+    public function download_credit_subject_format()
+    {
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
+
+        if (PHP_SAPI == 'cli')
+            die('This example should only be run from a Web Browser');
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+        $title = 'Credit Subject';
+        
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'Student Number')
+                    ->setCellValue('B1', 'Student Name')
+                    ->setCellValue('C1', 'Course Code')
+                    ->setCellValue('D1', 'Descriptive Title')
+                    ->setCellValue('E1', 'Units to credit')
+                    ->setCellValue('F1', 'Grade')
+                    ->setCellValue('G1', 'School')
+                    ->setCellValue('H1', 'Term')
+                    ->setCellValue('I1', 'School Year')
+                    ->setCellValue('J1', 'Equivalent Subject')
+                    ->setCellValue('A2', 'C2023-01-012')
+                    ->setCellValue('B2', 'Doe, John')
+                    ->setCellValue('C2', 'COMPROG1')
+                    ->setCellValue('D2', 'Computer Programming')
+                    ->setCellValue('E2', '3')
+                    ->setCellValue('F2', '90')
+                    ->setCellValue('G2', 'STI')
+                    ->setCellValue('H2', 'First Semester')
+                    ->setCellValue('I2', '2023-2024')
+                    ->setCellValue('J2', 'ANELECT1');	
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(30);
+
+        $objPHPExcel->getActiveSheet()->setTitle('Credit Subject');
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+        header('Content-Disposition: attachment;filename="Credit Subject.xls"');
+        header('Cache-Control: max-age=0'); 
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
         // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save('php://output');
         exit;
