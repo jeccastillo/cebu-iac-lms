@@ -282,9 +282,9 @@ new Vue({
                     this.or_print.remarks = payment.remarks;
                     this.or_print.student_name = this.payee.lastname +
                         ", " + this.payee.firstname;
-                    if (this.payee.middlename && this.payee.middlename !=
-                        "undefined") this.or_print.student_name += ", " +
-                        this.payee.middlename;
+                    // if (this.payee.middlename && this.payee.middlename !=
+                    //     "undefined") this.or_print.student_name += ", " +
+                    //     this.payee.middlename;
                     this.or_print.student_address = this.payee.address;
                     this.or_print.student_id = '';
                     this.or_print.is_cash = payment.is_cash;
