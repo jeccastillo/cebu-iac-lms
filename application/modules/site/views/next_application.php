@@ -710,7 +710,7 @@ input[type="number"] {
     background-color: rgb(245 245 245)
 }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script> -->
 <script src="https://unpkg.com/vue-select@3.0.0"></script>
 <link rel="stylesheet" href="https://unpkg.com/vue-select@3.0.0/dist/vue-select.css">
 <script src="<?php echo $js_dir ?>dataExport.js"></script>
@@ -834,7 +834,6 @@ new Vue({
             this.programs = data.data.data;
             this.sy = data.data.sy;
             this.term = data.data.term;
-            console.log(this.sy);
         }).catch((e) => {
             console.log("error");
         });
@@ -1218,8 +1217,6 @@ new Vue({
                     Object.keys(this.request).forEach(key => {
                         formData.append(key, this.request[key])
                     });
-                    console.log(this.request);
-                    return
                     axios.post(
                         `https://smsapi.iacademy.edu.ph/api/v1/next_school/register`,
                         formData, {
