@@ -275,10 +275,11 @@ class Site extends CI_Controller {
 
 	public function get_next_school_sem()
 	{
-		$data['sy'] = $this->db->where(array('term_student_type'=>$term['next']))
+		$data['sy'] = $this->db->where(array('term_student_type'=>'next'))
 								->order_by("strYearStart ASC, enumSem ASC")
 								->get('tb_mas_sy')
 								->result_array();
+		echo json_encode($data);
 	}
 
 	public function bdo_redirect_url($status) {
