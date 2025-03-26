@@ -9469,14 +9469,12 @@ class Excel extends CI_Controller {
 
         // Add some data
         $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A1', 'Student Number')
+            ->setCellValue('B1', 'Balance')
+            ->setCellValue('C1', 'Term (Term + Year)')
             ->setCellValue('A2', '2022SHA-01-210')
             ->setCellValue('B2', '1000')
             ->setCellValue('C2', '1st 2024-2025');
-        
-        $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'Student Number')
-                    ->setCellValue('B1', 'Balance')
-                    ->setCellValue('C1', 'Term (Term + Year)');
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
