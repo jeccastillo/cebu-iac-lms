@@ -495,6 +495,7 @@ class Data_fetcher extends CI_Model {
              ->query($bucket)
              ->result_array();
         
+        $ret = [];
         //echo $this->db->last_query();
         //print_r($subjects);
        //PREREQUISITES CODE----------------------------------------------------------------------------
