@@ -198,7 +198,6 @@ class Site extends CI_Controller {
         $data['data'] = $ret;
 
         echo json_encode($data);
-
     }
 
 	public function view_active_programs_makati($syid){
@@ -273,6 +272,14 @@ class Site extends CI_Controller {
         echo json_encode($data);
 
     }
+
+	public function get_next_school_sem()
+	{
+		$data['sy'] = $this->db->where(array('term_student_type'=>$term['next']))
+								->order_by("strYearStart ASC, enumSem ASC")
+								->get('tb_mas_sy')
+								->result_array();
+	}
 
 	public function bdo_redirect_url($status) {
 
