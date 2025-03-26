@@ -246,6 +246,7 @@ new Vue({
             axios.get(base_url + 'finance/ns_transactions_data/' + this.payee_id +
                 '/' + this.request.sem).then((data) => {
                 this.cashier = data.data.cashier;
+                console.log(this.payee);
                 this.user = data.data.user;
                 this.payee = data.data.payee;
                 this.finance_manager_privilages = data.data
@@ -282,9 +283,8 @@ new Vue({
                     this.or_print.remarks = payment.remarks;
                     this.or_print.student_name = this.payee.lastname +
                         ", " + this.payee.firstname;
-                    // if (this.payee.middlename && this.payee.middlename !=
-                    //     "undefined") this.or_print.student_name += ", " +
-                    //     this.payee.middlename;
+                    if (this.payee.middlename != "undefined") this.or_print
+                        .student_name += ", " + this.payee.middlename;
                     this.or_print.student_address = this.payee.address;
                     this.or_print.student_id = '';
                     this.or_print.is_cash = payment.is_cash;
