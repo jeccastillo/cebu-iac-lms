@@ -47,6 +47,7 @@
                             <option value="shs">SHS</option>
                             <option value="drive">DRIVE</option>
                             <option value="other">Other</option>
+                            <option value="next">Next School</option>
                         </select>
                     </div>
 
