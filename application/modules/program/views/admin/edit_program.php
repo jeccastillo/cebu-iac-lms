@@ -49,6 +49,7 @@
                             <option <?php echo ($item['type'] == "shs")?'selected':''; ?> value="shs">SHS</option>
                             <option <?php echo ($item['type'] == "drive")?'selected':''; ?> value="other">DRIVE</option>
                             <option <?php echo ($item['type'] == "other")?'selected':''; ?> value="other">Other</option>
+                            <option <?php echo ($item['type'] == "next")?'selected':''; ?> value="next">Next School</option>
                         </select>
                     </div>
                     <div class="form-group col-xs-6">
