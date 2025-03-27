@@ -1,8 +1,6 @@
 <div class="custom-container">
-    <a href="https://thenextschool.ph/"
-        class="flex mt-10 items-center gap-x-2 text-[#666666] cursor-pointer">
-        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="15" viewBox="0 0 8 15"
-            fill="none">
+    <a href="https://thenextschool.ph/" class="flex mt-10 items-center gap-x-2 text-[#666666] cursor-pointer">
+        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="15" viewBox="0 0 8 15" fill="none">
             <path d="M7 1L1 7.5L7 14" stroke="#666666" stroke-width="2" stroke-linecap="round"
                 stroke-linejoin="round" />
         </svg> BACK </a>
@@ -56,7 +54,7 @@
                         </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" name="middle_name" v-model="request.middle_name" required>
+                            type="text" name="middle_name" v-model="request.middle_name">
                     </div>
                     <div class="flex-grow">
                         <label class="block t color-primary font-bold  mb-3  pr-4"> Last Name <span
@@ -88,8 +86,7 @@
                         </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" name="place_of_birth" v-model="request.place_of_birth"
-                            required>
+                            type="text" name="place_of_birth" v-model="request.place_of_birth" required>
                     </div>
                     <div id="gender" class="basis-[120px]">
                         <label class="block t color-primary font-bold  mb-3  pr-4"> Gender <span
@@ -123,8 +120,7 @@
             <hr class="mb-5 bg-[#10326f] h-1 w-3/5" />
             <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
                 <h5 class="color-primary mb-2.5">CONTACT DETAILS</h5>
-                <div
-                    class="grid gap-x-16 grid-cols-[repeat(auto-fit,_minmax(0,420px))] gap-y-2 mb-4 ">
+                <div class="grid gap-x-16 grid-cols-[repeat(auto-fit,_minmax(0,420px))] gap-y-2 mb-4 ">
                     <div id="email" class="">
                         <label class="block  color-primary font-bold mb-3 pr-4"> Email Address <span
                                 class="text-red-500">*</span>
@@ -142,8 +138,7 @@
                             type="email" name="confirm-email" required>
                     </div>
                 </div>
-                <div
-                    class="grid grid-cols-[repeat(auto-fit,_minmax(0,420px))] gap-x-16 gap-y-2 mb-4">
+                <div class="grid grid-cols-[repeat(auto-fit,_minmax(0,420px))] gap-x-16 gap-y-2 mb-4">
                     <div class="">
                         <label class="block color-primary font-bold mb-3 pr-4"> Mobile Number <span
                                 class="text-red-500">*</span>
@@ -177,8 +172,7 @@
                         </div>
                     </div>
                 </div>
-                <div
-                    class="grid grid-cols-[repeat(auto-fit,_minmax(0,420px))] gap-x-16 gap-y-2 mb-4">
+                <div class="grid grid-cols-[repeat(auto-fit,_minmax(0,420px))] gap-x-16 gap-y-2 mb-4">
                     <div class="">
                         <label class="block color-primary font-bold mb-3 pr-4"> Landline Number
                         </label>
@@ -201,8 +195,7 @@
             </div>
             <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
                 <h5 class="color-primary mb-2.5">HOME ADDRESS</h5>
-                <div
-                    class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-2.5 mb-4 ">
+                <div class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-2.5 mb-4 ">
                     <div id="" class="">
                         <label class="block color-primary font-bold mb-3 pr-4"> Home
                             Number/Street/Subdivision <span class="text-red-500">*</span>
@@ -213,6 +206,7 @@
                     </div>
                     <div id="">
                         <label class="block t color-primary font-bold  mb-3  pr-4"> Barangay
+                            <span class="text-red-500">*</span>
                         </label>
                         <input v-model="homeAddressObj.barangay"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
@@ -230,8 +224,8 @@
             </div>
             <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
                 <h5 class="color-primary mb-2.5">CURRENT ADDRESS</h5>
-                <div
-                    class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-2.5 mb-4 ">
+                <div class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-2.5 mb-4 "
+                    v-if="!isSameAddress">
                     <div id="" class="">
                         <label class="block color-primary font-bold mb-3 pr-4"> Home
                             Number/Street/Subdivision <span class="text-red-500">*</span>
@@ -242,6 +236,7 @@
                     </div>
                     <div id="">
                         <label class="block t color-primary font-bold  mb-3  pr-4"> Barangay
+                            <span class="text-red-500">*</span>
                         </label>
                         <input v-model="currentAddressObj.barangay"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
@@ -256,14 +251,17 @@
                             type="text" name="city" required>
                     </div>
                 </div>
+                <label class="block color-primary mb-1 ml-1.5">
+                    <input type="checkbox" class="mr-1" name="primary_contact" v-model="isSameAddress">
+                    SAME AS HOME ADDRESS
+                </label>
             </div>
         </div>
         <div v-if="true" class=" mb-6 mt-10">
             <h4 class="color-primary font-bold text-xl">EMERGENCY CONTACT PERSON</h4>
             <hr class="mb-5 bg-[#10326f] h-1 w-3/5" />
             <div class="border-[1px] border-neutral-100 rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
-                <div
-                    class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-2.5 mb-4 ">
+                <div class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-2.5 mb-4 ">
                     <div>
                         <label class="block  color-primary font-bold mb-3 pr-4"> First Name </label>
                         <input v-model="request.emergency_contact_first_name"
@@ -315,7 +313,7 @@
                         </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" v-model="request.last_school_attended">
+                            type="text" v-model="request.school">
                     </div>
                 </div>
                 <div class="flex flex-wrap gap-2.5 mb-4 ">
@@ -334,9 +332,24 @@
                             type="text" name="strand" v-model="request.degree">
                     </div>
                 </div>
+                <div class="flex flex-wrap gap-2.5 mb-4 ">
+                    <div class="grow lg:grow-0">
+                        <label class="block color-primary font-bold mb-3 pr-4"> Company
+                        </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text" name="number" v-model="request.company">
+                    </div>
+                    <div class="grow">
+                        <label class="block t color-primary font-bold  mb-3  pr-4">
+                            Designation </label>
+                        <input
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text" name="strand" v-model="request.designation">
+                    </div>
+                </div>
             </div>
-            <div v-if="isOnList"
-                class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
+            <div v-if="isOnList" class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
                 <h5 class="color-primary mb-2.5">Register your school if not in the list </h5>
                 <div class="flex flex-wrap gap-2.5 mb-4 ">
                     <div class="grow">
@@ -386,18 +399,17 @@
                         activities? <span class="text-red-500">*</span>
                     </h5>
                     <label class="block color-primary mb-1 ml-1.5">
-                        <input type="radio" class="mr-1" value="Yes" name="crime" required
-                            v-model="request.crime"> Yes </label>
+                        <input type="radio" class="mr-1" value="Yes" name="crime" required v-model="request.crime"> Yes
+                    </label>
                     <label class="block color-primary mb-1 ml-1.5">
-                        <input type="radio" class="mr-1" value="No" name="crime" required
-                            v-model="request.crime"> No </label>
+                        <input type="radio" class="mr-1" value="No" name="crime" required v-model="request.crime"> No
+                    </label>
                 </div>
             </div>
             <div class="grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-6">
                 <div>
                     <label class="block color-primary font-bold text-base mt-2 "> Do you have any
-                        health condition/s that the school should be aware of? <span
-                            class="text-red-500">*</span>
+                        health condition/s that the school should be aware of? <span class="text-red-500">*</span>
                     </label>
                     <label class="block color-primary italic text-sm mb-1"> (Type "none" if you do
                         not have any) </label>
@@ -423,8 +435,7 @@
                 <label class="custom-checkbox">
                     <input type="checkbox" v-model="request.health_concern" value="Others">
                     <span class="custom-checkbox-button"></span> Others (please specify) </label>
-                <label v-if="request.health_concern.includes('Others')"
-                    class="block color-primary mb-1 ml-1.5">
+                <label v-if="request.health_concern.includes('Others')" class="block color-primary mb-1 ml-1.5">
                     <input type="text"
                         class="mr-1 bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                         required v-model="request.health_concern_other">
@@ -438,16 +449,14 @@
             <div class="grid grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-6">
                 <div>
                     <div class="border-[1px] border-neutral-100 p-2.5 mb-4 rounded-lg">
-                        <h5 class="color-primary mb-2.5">How did you know about us?<span
-                                class="text-red-500">*</span>
+                        <h5 class="color-primary mb-2.5">How did you know about us?<span class="text-red-500">*</span>
                         </h5>
                         <div class="flex ">
                             <div class="w-1/2">
                                 <template v-for="source,index in sourceList">
-                                    <label v-if="index <= 4"
-                                        class="custom-checkbox mb-1 color-primary">
-                                        <input type="checkbox" :id="index" :name="source"
-                                            :value="source" v-model="sources">
+                                    <label v-if="index <= 4" class="custom-checkbox mb-1 color-primary">
+                                        <input type="checkbox" :id="index" :name="source" :value="source"
+                                            v-model="sources">
                                         <span class="custom-checkbox-button"></span>
                                         {{source}}
                                     </label>
@@ -455,8 +464,7 @@
                             </div>
                             <div class="w-1/2">
                                 <template v-for="source,index in sourceList">
-                                    <label v-if="index >= 5"
-                                        class="custom-checkbox mb-1 color-primary">
+                                    <label v-if="index >= 5" class="custom-checkbox mb-1 color-primary">
                                         <input type="checkbox" class="" :id="index" name="source"
                                             :value="source.toLowerCase()" v-model="sources">
                                         <span class="custom-checkbox-button"></span>
@@ -480,45 +488,40 @@
                     <!-- v-if="sources === 'referral'" -->
                     <div v-if="sources.includes('referral')"
                         class="border-[1px] border-neutral-100 p-2.5 mb-4 rounded-lg">
-                        <h5 class="color-primary mb-2.5">Referred by<span
-                                class="text-red-500">*</span></h5>
+                        <h5 class="color-primary mb-2.5">Referred by<span class="text-red-500">*</span></h5>
                         <div class="flex">
                             <div class="w-full">
                                 <div class="grid grid-cols-[repeat(2,_1fr)]">
                                     <template v-for="refer,index in referredList">
                                         <label v-if="index < 1" class="custom-radio mb-1">
-                                            <input type="radio" class="mr-1 " :id="index"
-                                                name="refer" :value="refer.toLowerCase()"
-                                                v-model="sourcesSpecify.referral" required>
+                                            <input type="radio" class="mr-1 " :id="index" name="refer"
+                                                :value="refer.toLowerCase()" v-model="sourcesSpecify.referral" required>
                                             <span class="custom-radio-button"></span>
                                             {{refer}}
                                         </label>
                                     </template>
                                     <label class="custom-radio mb-1">
-                                        <input type="radio" class="mr-1 " id="index" name="refer"
-                                            value="teacher" v-model="sourcesSpecify.referral"
-                                            required>
+                                        <input type="radio" class="mr-1 " id="index" name="refer" value="teacher"
+                                            v-model="sourcesSpecify.referral" required>
                                         <span class="custom-radio-button"></span> Teacher/Guardian
                                     </label>
                                 </div>
                                 <template v-for="refer,index in referredList">
                                     <label v-if="index > 1" class="custom-radio mb-1">
-                                        <input type="radio" :id="index" name="refer"
-                                            :value="refer.toLowerCase()"
+                                        <input type="radio" :id="index" name="refer" :value="refer.toLowerCase()"
                                             v-model="sourcesSpecify.referral" required>
                                         <span class="custom-radio-button"></span>
                                         {{refer}}
                                     </label>
                                 </template>
                                 <label class="custom-radio mb-1">
-                                    <input type="radio" name="refer" value="iacademy"
-                                        v-model="sourcesSpecify.referral" required>
+                                    <input type="radio" name="refer" value="iacademy" v-model="sourcesSpecify.referral"
+                                        required>
                                     <span class="custom-radio-button"></span> iACADEMY
                                     Student/Alumni/Applicant/Employee/Partner </label>
                                 <input
                                     class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                    type="text" required v-model="refferalName"
-                                    placeholder="Name of your referrer">
+                                    type="text" required v-model="refferalName" placeholder="Name of your referrer">
                             </div>
                         </div>
                     </div>
@@ -539,8 +542,7 @@
             <div class="mb-4">
                 <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
                     <label class="block color-primary font-bold mb-3 pr-4"> Goverment ID </label>
-                    <input class="color-primary" @change="attachFile" type="file" id="government_id"
-                        required />
+                    <input class="color-primary" @change="attachFile" type="file" id="government_id" required />
                 </div>
                 <!-- <div class="grow lg:grow-0">
                     <label class="block color-primary font-bold mb-3 pr-4"> Diploma </label>
@@ -568,12 +570,10 @@
                         1-minute video introducing yourself, explaining why you should be accepted
                         into this program, and sharing how you can contribute to professionalizing
                         social media practices. Upload) </label>
-                    <input class="color-primary" @change="attachFile" type="file"
-                        id="video_introduction" required />
+                    <input class="color-primary" @change="attachFile" type="file" id="video_introduction" required />
                 </div>
             </div>
-            <div v-if="isOnList"
-                class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
+            <div v-if="isOnList" class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
                 <h5 class="color-primary mb-2.5">Register your school if not in the list </h5>
                 <div class="flex flex-wrap gap-2.5 mb-4 ">
                     <div class="grow">
@@ -624,8 +624,7 @@
     </form>
 </div>
 <!-- Start of HubSpot Embed Code -->
-<script type="text/javascript" id="hs-script-loader" async defer
-    src="//js.hs-scripts.com/45758391.js"></script>
+<script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/45758391.js"></script>
 <!-- End of HubSpot Embed Code -->
 <style>
 input::placeholder {
@@ -710,7 +709,7 @@ input[type="number"] {
     background-color: rgb(245 245 245)
 }
 </style>
-<!-- <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 <script src="https://unpkg.com/vue-select@3.0.0"></script>
 <link rel="stylesheet" href="https://unpkg.com/vue-select@3.0.0/dist/vue-select.css">
 <script src="<?php echo $js_dir ?>dataExport.js"></script>
@@ -773,8 +772,9 @@ new Vue({
         bestTime: [],
         refferalName: '',
         prevSchoolList: [],
-        syid: <?php echo $current_term; ?>,
+        syid: '',
         isDual: false,
+        isSameAddress: false,
         request: {
             date_of_birth: "",
             program: "",
@@ -783,7 +783,7 @@ new Vue({
             citizenship: 'Philippines',
             student_type: '',
             source: '',
-            last_school_attended: '',
+            school: '',
             grade_year_level: '',
             degree: '',
             home_address: '',
@@ -793,6 +793,9 @@ new Vue({
             transcript: '',
             proof: '',
             type: 'next',
+            syid: '',
+            company: '',
+            designation: '',
             video_introduction: '',
             emergency_contact_first_name: '',
             emergency_contact_middle_name: '',
@@ -826,14 +829,13 @@ new Vue({
         base_url: "<?php echo base_url(); ?>",
     },
     mounted() {
-        axios.get(this.base_url + 'site/view_active_programs_makati/' + this.syid, {
+        axios.get(this.base_url + 'site/get_next_school_sem', {
             headers: {
                 Authorization: `Bearer ${window.token}`
             },
         }).then((data) => {
-            this.programs = data.data.data;
-            this.sy = data.data.sy;
-            this.term = data.data.term;
+            this.request.syid = data.data.sy[0].intID
+
         }).catch((e) => {
             console.log("error");
         });
@@ -849,7 +851,7 @@ new Vue({
                         .currentTarget).prop("checked", false);
                     if ($(e.currentTarget).is(":checked")) {
                         this.request.type_id = e.currentTarget
-                        .value;
+                            .value;
                         $(".admissions_submission_cb").removeAttr(
                             "required");
                     } else {
@@ -888,7 +890,7 @@ new Vue({
                 data
             } = await axios.get(
                 `https://psgc.cloud/api/cities/${e.target.selectedOptions[0].id}/barangays`
-                )
+            )
             this.barangay = data
         },
         async getCities(e) {
@@ -1213,12 +1215,18 @@ new Vue({
                     }
                     this.request.health_concern = this.request
                         .health_concern.join(", ");
+
+                    if (this.isSameAddress) {
+                        this.request.current_address = this.request.home_address
+                    }
+
                     const formData = new FormData()
                     Object.keys(this.request).forEach(key => {
                         formData.append(key, this.request[key])
                     });
+
                     axios.post(
-                        `https://smsapi.iacademy.edu.ph/api/v1/next_school/register`,
+                        `https://smsapi.iacademy.edu.ph/api/v1/sms/next_school/register`,
                         formData, {
                             headers: {
                                 Authorization: `Bearer ${window.token}`
@@ -1257,6 +1265,5 @@ new Vue({
 }
 </style>
 <!-- Start of HubSpot Embed Code -->
-<script type="text/javascript" id="hs-script-loader" async defer
-    src="//js.hs-scripts.com/45758391.js"></script>
+<script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/45758391.js"></script>
 <!-- End of HubSpot Embed Code -->
