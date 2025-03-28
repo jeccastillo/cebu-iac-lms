@@ -1226,7 +1226,7 @@ new Vue({
                     });
 
                     axios.post(
-                        `https://smsapi.iacademy.edu.ph/api/v1/sms/next_school/register`,
+                        `https://smsapi.iacademy.edu.ph/api/v1/next_school/register`,
                         formData, {
                             headers: {
                                 Authorization: `Bearer ${window.token}`
