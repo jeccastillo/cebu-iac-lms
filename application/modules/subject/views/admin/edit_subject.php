@@ -100,6 +100,7 @@
                                 <select class="form-control" name="intMajor" id="intMajor" >
                                     <option <?php echo ($subject['intMajor'] == 0)?'selected':''; ?> value="0">College</option>
                                     <option <?php echo ($subject['intMajor'] == 1)?'selected':''; ?> value="1">SHS</option>
+                                    <option <?php echo ($subject['intMajor'] == 2)?'selected':''; ?> value="2">Next School</option>
                                 </select>
                             </div>                        
                             <div class="form-group col-xs-6">
