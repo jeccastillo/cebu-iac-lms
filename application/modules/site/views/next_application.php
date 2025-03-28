@@ -1242,7 +1242,7 @@ new Vue({
                                 icon: "success"
                             }).then(function() {
                                 location.href =
-                                    'http://nextschool.ph/'
+                                    'https://thenextschool.ph/'
                             });
                         } else {
                             this.loading_spinner = false;
