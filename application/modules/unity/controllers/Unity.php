@@ -1631,6 +1631,9 @@ class Unity extends CI_Controller {
                 case 'other':
                     $stype = 'college';
                 break;
+                case 'next':
+                    $stype = 'next';
+                break;
                 default: 
                     $stype = 'college';
             }
