@@ -7991,6 +7991,7 @@ class Excel extends CI_Controller {
                                     'enumStatus' => 'act',
                                     'intsyID' => $sem,
                                     'date_added' => date("Y-m-d h:ia"),
+                                    'enlisted_user' => $this->data["user"]["intID"],
                                 );
 
                                 if($term == 'Midterm'){
