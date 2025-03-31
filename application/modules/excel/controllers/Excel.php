@@ -5262,13 +5262,7 @@ class Excel extends CI_Controller {
                         ->group_by('payment_details.id')
                         ->get()
                         ->result_array();
-    
-                        if($user['intID'] == 271){
-                            // print_r($user);
-                            // print_r($tuition);
-                            print($tuition['scholar_type']);
-                            die();
-                        }
+
                     // Add some data
                     $objPHPExcel->setActiveSheetIndex(0)
                         ->setCellValue('A'.$i, $count)
