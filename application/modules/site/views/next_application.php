@@ -569,8 +569,17 @@
                     <label class="block color-primary italic text-sm mb-5"> (Submit a creative
                         1-minute video introducing yourself, explaining why you should be accepted
                         into this program, and sharing how you can contribute to professionalizing
-                        social media practices. Upload) </label>
-                    <input class="color-primary" @change="attachFile" type="file" id="video_introduction" required />
+                        social media practices. Upload) <br />
+                        <br />
+                        Kindly send your introduction video
+                        <br />    
+                        To:
+                        thenextschool@iacademy.edu.ph
+                        <br />
+                        Subject:
+                        TNSIntroVid_Surname, FirstName
+                    </label>                    
+                    
                 </div>
             </div>
             <div v-if="isOnList" class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
