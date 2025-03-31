@@ -5161,12 +5161,6 @@ class Excel extends CI_Controller {
             $reg_status = $this->data_fetcher->getRegistrationStatus($user['intID'],$sem);
             $tuition = $this->data_fetcher->getTuition($user['intID'], $sem);
 
-            if($user['intID'] == 271){
-                print_r($user);
-                print_r($tuition);
-                die();
-            }
-
             if($reg && substr($user['strStudentNumber'], 0, 1) != 'T'){
                 if($reg_status == 'Enrolled'){
 
@@ -5269,6 +5263,12 @@ class Excel extends CI_Controller {
                         ->get()
                         ->result_array();
     
+                        if($user['intID'] == 271){
+                            // print_r($user);
+                            // print_r($tuition);
+                            print($tuition['scholar_type']);
+                            die();
+                        }
                     // Add some data
                     $objPHPExcel->setActiveSheetIndex(0)
                         ->setCellValue('A'.$i, $count)
