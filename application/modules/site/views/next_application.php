@@ -719,8 +719,8 @@ input[type="number"] {
 }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-<script src="https://unpkg.com/vue-select@3.0.0"></script>
-<link rel="stylesheet" href="https://unpkg.com/vue-select@3.0.0/dist/vue-select.css">
+<!--script src="https://unpkg.com/vue-select@3.0.0"></script-->
+<!--link rel="stylesheet" href="https://unpkg.com/vue-select@3.0.0/dist/vue-select.css"-->
 <script src="<?php echo $js_dir ?>dataExport.js"></script>
 <script>
 const sourcesLeft = ['Google', 'Facebook', 'Instagram', 'Tiktok', 'News']
@@ -738,7 +738,7 @@ const freshmenValue = ['College - Freshmen iACADEMY', 'College - Freshmen Other'
 const secondDegreeValue = ['2nd - Degree iACADEMY', '2nd - Degree Other']
 const applicantTypeShs = ['SHS - New', 'SHS - Transferee']
 const healthConditions = ['Diabetes', 'Allergies', 'High Blood', 'Anemia']
-Vue.component('v-select', VueSelect.VueSelect)
+//Vue.component('v-select', VueSelect.VueSelect)
 new Vue({
     el: "#adminssions-form",
     data: {
