@@ -5073,7 +5073,7 @@ class Excel extends CI_Controller {
                         }
                         if($payments == null){
                             $payment['date'] = date("M d", strtotime($payment_detail['created_at']));
-                            $payment['or_number'] = $payment_detail['or_number'];
+                            $payment['or_number'] = $payment_detail['or_number'] ? $payment_detail['or_number'] : $payment_detail['invoice_number'];
                             $payment['amount'] = (float)number_format($payment_detail['subtotal_order'], 2, '.', '');
                             
                             $payment_month = date("m", strtotime($payment_detail['created_at']));
@@ -5090,7 +5090,7 @@ class Excel extends CI_Controller {
                         }else{
                             if(isset($date['data'][$user['intID']]) && $payment_month == date("m", strtotime($payment_detail['created_at'])) && $payment_year == date("Y", strtotime($payment_detail['created_at']))){
                                 $payments[$current_index]['data'][$user['intID']]['date'] .= ', ' . date("d", strtotime($payment_detail['created_at']));
-                                $payments[$current_index]['data'][$user['intID']]['or_number'] .= ', ' . $payment_detail['or_number'];
+                                $payments[$current_index]['data'][$user['intID']]['or_number'] .= $payment_detail['or_number'] ? ', ' . $payment_detail['or_number'] : ', ' . $payment_detail['invoice_number'] ;
                                 $payments[$current_index]['data'][$user['intID']]['amount'] += (float)number_format($payment_detail['subtotal_order'], 2, '.', '');
                             }else{
                                 $flag = $same_month_year = false;
@@ -5113,7 +5113,7 @@ class Excel extends CI_Controller {
                                 }
 
                                 $payment['date'] = date("M d", strtotime($payment_detail['created_at']));
-                                $payment['or_number'] = $payment_detail['or_number'];
+                                $payment['or_number'] = $payment_detail['or_number'] ? $payment_detail['or_number'] : $payment_detail['invoice_number'];
                                 $payment['amount'] = (float)number_format($payment_detail['subtotal_order'], 2, '.', '');
                                 
                                 $payment_month = date("m", strtotime($payment_detail['created_at']));
@@ -5328,7 +5328,7 @@ class Excel extends CI_Controller {
                             
                             $objPHPExcel->setActiveSheetIndex(0)
                                 ->setCellValue($this->columnIndexToLetter(34 + ($index_payment * 3)) . '2', 'DATE')
-                                ->setCellValue($this->columnIndexToLetter(35 + ($index_payment * 3)) . '2', 'OR NUMBER')
+                                ->setCellValue($this->columnIndexToLetter(35 + ($index_payment * 3)) . '2', 'OR/INVOICE NUMBER')
                                 ->setCellValue($this->columnIndexToLetter(36 + ($index_payment * 3)) . '2', 'AMOUNT');
                             
                             $objPHPExcel->getActiveSheet()->getStyle($column_letter . '4:' . $column_letter . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
@@ -5354,7 +5354,7 @@ class Excel extends CI_Controller {
                             
                         $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue($this->columnIndexToLetter(34) . '2', 'DATE')
-                            ->setCellValue($this->columnIndexToLetter(35) . '2', 'OR NUMBER')
+                            ->setCellValue($this->columnIndexToLetter(35) . '2', 'OR/INVOICE NUMBER')
                             ->setCellValue($this->columnIndexToLetter(36) . '2', 'AMOUNT');
                         
                         $objPHPExcel->getActiveSheet()->getStyle($column_letter . '4:' . $column_letter . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
@@ -8291,21 +8291,18 @@ class Excel extends CI_Controller {
         exit;
     }
 
-    public function finance_invoice_report($sem = 0, $campus, $report_date)
+    // public function finance_invoice_report($sem = 0, $campus, $report_date)
+    public function finance_invoice_report($sem = 0, $campus, $report_date_start, $report_date_end = null)
     {
-        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
-        if($sem == 0 )
-        {
-            $s = $this->data_fetcher->get_active_sem();
-            $sem = $s['intID'];
-        }
+        $report_date_start = ($report_date_start) ? date("Y-m-d 00:00:00", strtotime($report_date_start)) : date("Y-m-d 00:00:00");
+        $report_date_end = ($report_date_end) ? date("Y-m-d 11:59:59", strtotime($report_date_end)) : date("Y-m-d 11:59:59");
         $payment_details = $this->db
                     ->from('payment_details')
-                    ->where(array('status' => 'Paid', 'sy_reference' => $sem, 'updated_at <=' => $report_date, 'invoice_number !=' => null, 'student_campus' => $campus))
+                    ->where(array('status' => 'Paid', 'updated_at >=' => $report_date_start, 'updated_at <=' => $report_date_end, 'invoice_number !=' => null, 'student_campus' => $campus))
                     ->order_by('invoice_number', 'ASC')
                     ->get()
                     ->result_array();
-
+                    
         error_reporting(E_ALL);
         ini_set('display_errors', TRUE);
         ini_set('display_startup_errors', TRUE);
@@ -8362,7 +8359,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('A1', 'iACADEMY, Inc.')
                     ->setCellValue('A2', $campus == 'Makati' ? 'iACADEMY Nexus 7434 Yakal Street Brgy. San Antonio, Makati City' : '5th Floor Filinvest Cyberzone Tower 2 Salinas Drive Cor. W. Geonzon St., Cebu IT Park, Apas, Cebu City')
                     ->setCellValue('A3', 'Invoice Report')
-                    ->setCellValue('A4', 'As of ' . date("M d, Y", strtotime($report_date)))
+                    ->setCellValue('A4', 'As of ' . date("M d, Y", strtotime($report_date_start)) . '-' . date("M d, Y", strtotime($report_date_end)))
                     ->setCellValue('A7', 'No.')
                     ->setCellValue('B7', 'Student Number')
                     ->setCellValue('C7', 'Student Name')
@@ -8381,7 +8378,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('P7', 'EWT Amount')
                     ->setCellValue('Q7', 'Net Amount Due')
                     ->setCellValue('R7', 'Payment Received')
-                    ->setCellValue('S7', 'Balance as of ' .  date("M d, Y", strtotime($report_date)));
+                    ->setCellValue('S7', 'Balance as of ' .  date("M d, Y", strtotime($report_date_start)) . '-' . date("M d, Y", strtotime($report_date_end)));
 
         $objPHPExcel->getActiveSheet()->getStyle('J8:S' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
         // $objPHPExcel->getActiveSheet()->getStyle('P8:S' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
@@ -8453,7 +8450,7 @@ class Excel extends CI_Controller {
         $sheet->mergeCells('A3:S3');
         $sheet->mergeCells('A4:S4');
 
-        $objPHPExcel->getActiveSheet()->setTitle(ucwords($sy->term_student_type));
+        $objPHPExcel->getActiveSheet()->setTitle('Invoice Report');
 
         $date = date("ymdhis");
 
@@ -8464,7 +8461,7 @@ class Excel extends CI_Controller {
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
-        header('Content-Disposition: attachment;filename="Invoice Report - ' . ucwords($sy->term_student_type) . ' ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '(As of ' . date("M d, Y", strtotime($report_date)) . ').xls"');
+        header('Content-Disposition: attachment;filename="Invoice Report - ' . date("M d, Y", strtotime($report_date_start)) . '-' . date("M d, Y", strtotime($report_date_end)) . ').xls"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
