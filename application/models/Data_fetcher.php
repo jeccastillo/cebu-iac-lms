@@ -3865,7 +3865,7 @@ class Data_fetcher extends CI_Model {
                 $c['sched_day'] = $sched_day;
                 $c['sched_time'] = $sched_time;
                 $c['sched_room'] = $sched_room;                                                           
-                $c['enlistedBy'] = $enlisted_by['strLastname'].", ".$enlisted_by['strFirstname'];
+                $c['enlistedBy'] = $enlisted_by ? $enlisted_by['strLastname'].", ".$enlisted_by['strFirstname'] : '';
                     
                 $ret[] =  $c;
 
