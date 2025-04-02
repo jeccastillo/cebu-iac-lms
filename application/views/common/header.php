@@ -779,6 +779,36 @@
                         </li>
                     </ul>
                 </li> <?php endif; ?>
+                <!----------------------------------GUIDANCE-------------------------->
+                <?php if($user['intUserLevel'] == 11 || $user['intUserLevel'] == 2): ?> 
+                    <li class="treeview <?php echo (isset($opentree) && $opentree=="guidance")?'active':''; ?>">
+                    <a href="#">
+                        <i class="fa fa-circle text-green"></i> <span>Guidance</span>
+                        <i class="fa pull-right fa-angle-left"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li
+                            class="<?php echo (isset($page) && $page=="view_records")?'active':''; ?>">
+                            <a style="margin-left: 10px;"
+                                href="<?php echo base_url() ?>guidance/view_all_records"><i
+                                    class="fa fa-file"></i>
+                                <span>Guidance Records</span> </a>
+                        </li>
+                        <li
+                            class="<?php echo (isset($page) && $page=="guidance_records")?'active':''; ?>">
+                            <a href="<?php echo base_url() ?>guidance/student_search/"
+                                style="margin-left: 10px;"><i class="ion ion-android-list"></i>
+                                <span>Student Records</span> </a>
+                        </li>
+                        <li
+                            class="<?php echo (isset($page) && $page=="guidance_records_employee")?'active':''; ?>">
+                            <a href="<?php echo base_url() ?>guidance/employee_search/"
+                                style="margin-left: 10px;"><i class="ion ion-android-list"></i>
+                                <span>Employee Records</span> </a>
+                        </li>
+                    </ul>
+                </li> 
+                <?php endif; ?>
                 <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 3 ): ?> <li
                     class="<?php echo (isset($page) && $page=="classlist_archive")?'active':''; ?>">
                     <a href="<?php echo base_url(); ?>unity/view_classlist_archive_admin"><i
