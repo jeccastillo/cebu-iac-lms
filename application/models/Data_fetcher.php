@@ -2030,8 +2030,8 @@ class Data_fetcher extends CI_Model {
                      $this->db
                          ->select( 'tb_mas_subjects.intID,strCode,strDescription,strUnits,intLab,tb_mas_curriculum_subject.intYearLevel,tb_mas_curriculum_subject.intSem,tb_mas_subjects.intPrerequisiteID')
                          ->from('tb_mas_subjects')
-                         ->join('tb_mas_curriculum_subject','tb_mas_curriculum_subject.intSubjectID = tb_mas_subjects.intID')
-                         ->join('tb_mas_curriculum','tb_mas_curriculum.intID = tb_mas_curriculum_subject.intCurriculumID')
+                         ->join('tb_mas_curriculum_subject','tb_mas_curriculum_subject.intSubjectID = tb_mas_subjects.intID','left')
+                         ->join('tb_mas_curriculum','tb_mas_curriculum.intID = tb_mas_curriculum_subject.intCurriculumID','left')
                          ->where(array('tb_mas_subjects.intID'=>$id,'tb_mas_curriculum.intProgramID'=>$program))
                          ->get()
                          ->result_array());
