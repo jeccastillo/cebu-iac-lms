@@ -1609,8 +1609,11 @@ class Unity extends CI_Controller {
             {
                 if($student_type == "college")
                     $ret['active_sem'] = $this->data_fetcher->get_active_sem();                
-                else
-                    $ret['active_sem'] = $this->data_fetcher->get_active_sem_shs();                
+                elseif($student_type == "shs")
+                    $ret['active_sem'] = $this->data_fetcher->get_active_sem_shs();
+                else {               
+                    $ret['active_sem'] = $this->db->get_where('tb_mas_sy',array('term_student_type'=>'next'))->first_row('array');                
+                }
             }
 
             $data['student_link'] = base_url()."unity/student_viewer/".$ret['student']['intID'];
