@@ -18,7 +18,7 @@
        
         <div class="box box-solid">
             <div class="box-body">                               
-             <form id="advise-student" action="<?php echo base_url(); ?>clinic/guidance_records" method="post" role="form">
+             <form id="advise-student" action="<?php echo base_url(); ?>guidance/guidance_records" method="post" role="form">
                  <p>Search Student</p>
                  <div class="row">
                      <div class="col-sm-6">
