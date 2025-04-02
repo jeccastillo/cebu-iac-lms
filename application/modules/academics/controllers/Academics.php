@@ -981,9 +981,7 @@ class Academics extends CI_Controller {
         $offerings = $this->data_fetcher->getClasslistsNotTaken($data['active_sem']['intID'],0,0,0,0,$data['student']['intID']);
         $data['my_classlists'] = $this->data_fetcher->getClassListStudentsStPortal($id,$data['active_sem']['intID']);
         $data['total_units'] = 0;
-        $program = $this->db->get_where('tb_mas_programs',array('intProgramID'=>$data['student']['intProgramID']))->first_row();
-        print_r($program);
-        die();
+        $program = $this->db->get_where('tb_mas_programs',array('intProgramID'=>$data['student']['intProgramID']))->first_row();        
         $school = "School of ".$program->school;
         $data['dept_head'] = $this->db->get_where('tb_mas_faculty',array('strDepartment'=>$school,'special_role' => 2,'teaching' => 1))->first_row();        
         $data['enlisted_subjects'] = [];
