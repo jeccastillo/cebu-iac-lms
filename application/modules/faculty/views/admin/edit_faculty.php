@@ -107,7 +107,6 @@
                         <option <?php echo ($faculty['intUserLevel'] == 9)?'selected':'' ?> value="9">Discipline</option>
                         <option <?php echo ($faculty['intUserLevel'] == 10)?'selected':'' ?> value="10">Clinic</option>
                         <option <?php echo ($faculty['intUserLevel'] == 11)?'selected':'' ?> value="11">IT</option>                        
-                        <option <?php echo ($faculty['intUserLevel'] == 12)?'selected':'' ?> value="12">Guidance</option>                        
                     </select>
                 </div>   
                 <div class="form-group col-xs-6">
