@@ -1445,22 +1445,16 @@ class Finance extends CI_Controller {
     }
 
     // public function finance_invoice_report_data($sem = 0, $report_date)
-    public function finance_invoice_report_data($sem = 0, $report_date_start, $report_date_end = null)
+    public function finance_invoice_report_data($report_date_start, $report_date_end = null)
     {
         $report_date_start = ($report_date_start) ? date("Y-m-d 00:00:00", strtotime($report_date_start)) : date("Y-m-d 00:00:00");
         $report_date_end = ($report_date_end) ? date("Y-m-d 11:59:59", strtotime($report_date_end)) : date("Y-m-d 11:59:59");
         // $report_date = ($report_date) ? $report_date : date("Y-m-d");
         $response_array = array();
 
-        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
-        if($sem == 0 )
-        {
-            $s = $this->data_fetcher->get_active_sem();
-            $sem = $s['intID'];
-        }
         $results = $this->db
                     ->from('payment_details')
-                    ->where(array('status' => 'Paid', 'sy_reference' => $sem, 'updated_at >=' => $report_date_start, 'updated_at <=' => $report_date_end, 'invoice_number !=' => null))
+                    ->where(array('status' => 'Paid', 'updated_at >=' => $report_date_start, 'updated_at <=' => $report_date_end, 'invoice_number !=' => null))
                     ->order_by('invoice_number', 'ASC')
                     ->get()
                     ->result_array();
