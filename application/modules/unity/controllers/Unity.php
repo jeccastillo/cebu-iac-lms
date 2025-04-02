@@ -2046,11 +2046,9 @@ class Unity extends CI_Controller {
                 $ret['active_sem'] = $this->data_fetcher->get_active_sem();
             elseif($student_type == "shs")
                 $ret['active_sem'] = $this->data_fetcher->get_active_sem_shs();
-            else{
-                echo $student_type;
-                die();
+            else                
                 $ret['active_sem'] = $this->db->get_where('tb_mas_sy',array('term_student_type'=>'next'))->first_row('array');
-            }
+            
         }
         
         if(!empty($post))
