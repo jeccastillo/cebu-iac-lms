@@ -780,7 +780,7 @@
                     </ul>
                 </li> <?php endif; ?>
                 <!----------------------------------GUIDANCE-------------------------->
-                <?php if($user['intUserLevel'] == 11 || $user['intUserLevel'] == 2): ?> 
+                <?php if($user['intUserLevel'] == 12 || $user['intUserLevel'] == 2): ?> 
                     <li class="treeview <?php echo (isset($opentree) && $opentree=="guidance")?'active':''; ?>">
                     <a href="#">
                         <i class="fa fa-circle text-green"></i> <span>Guidance</span>

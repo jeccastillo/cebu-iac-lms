@@ -749,6 +749,9 @@ if(!function_exists('switch_user_level'))
                 case 11:
                     $num = "IT";
                 break;
+                case 12:
+                    $num = "Guidance";
+                break;
             }
         
             return $num;
