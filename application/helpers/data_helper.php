@@ -283,9 +283,6 @@ if (!function_exists('get_stype')) {
             case 'other':
                 $stype = 'college';
             break;
-            case 'next':
-                $stype = 'next';
-            break;
             default: 
                 $stype = 'college';
         }
@@ -533,8 +530,8 @@ if(!function_exists('switch_num'))
                 case '3':
                     $num = "3rd";
                     break;
-                case '4':
-                    $num = "4th";
+                case 'summer':
+                    $num = "Summer";
                     break;
                 case '5':
                     $num = "5th";
@@ -602,9 +599,6 @@ if(!function_exists('switch_num_word'))
                 case '6th':
                     $num = "Sixth";
                     break;
-                case 'Summer':
-                    $num = "Summer";
-                    break;
             }
         
             return $num;
@@ -645,8 +639,6 @@ if(!function_exists('switch_num_rev_search'))
                 case '6th':
                     $num = "06";
                     break;
-                case 'Summer':
-                    $num = "Summer";
             }
         
             return $num;
@@ -756,6 +748,9 @@ if(!function_exists('switch_user_level'))
                 break;
                 case 11:
                     $num = "IT";
+                break;
+                case 12:
+                    $num = "Guidance";
                 break;
             }
         
