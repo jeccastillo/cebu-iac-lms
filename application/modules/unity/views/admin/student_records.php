@@ -544,12 +544,16 @@
                         </div>
                     </div>
                     <div class="row">
-                        <label>Signature By</label>
-                        <input type="text" name="signature_by">
+                        <div class="form-group col-sm-6">
+                            <label>Signature By</label>
+                            <input type="text" name="signature_by">
+                        </div>
                     </div>
                     <div class="row">
-                        <label>Position</label>
-                        <input type="text" name="position">
+                        <div class="form-group col-sm-6">
+                            <label>Position</label>
+                            <input type="text" name="position">
+                        </div>
                     </div>
                 </div>
                 <div class=" modal-footer">
