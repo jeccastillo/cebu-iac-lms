@@ -95,6 +95,7 @@
                         <option value="9">Discipline</option>
                         <option value="10">Clinic</option>
                         <option value="11">IT</option>
+                        <option value="12">Guidance</option>
                     </select>
                 </div>  
                 <div class="form-group col-xs-6">
