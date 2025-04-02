@@ -543,6 +543,14 @@
                             </select>
                         </div>
                     </div>
+                    <div class="row">
+                        <label>Signature By</label>
+                        <input type="text" name="signature_by">
+                    </div>
+                    <div class="row">
+                        <label>Position</label>
+                        <input type="text" name="position">
+                    </div>
                 </div>
                 <div class=" modal-footer">
                     <!-- modal footer  -->
