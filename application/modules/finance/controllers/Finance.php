@@ -1444,21 +1444,17 @@ class Finance extends CI_Controller {
         echo json_encode($data);
     }
 
-    public function finance_invoice_report_data($sem = 0, $report_date)
+    // public function finance_invoice_report_data($sem = 0, $report_date)
+    public function finance_invoice_report_data($report_date_start, $report_date_end = null)
     {
-        $report_date = ($report_date) ? $report_date : date("Y-m-d");
+        $report_date_start = ($report_date_start) ? date("Y-m-d 00:00:00", strtotime($report_date_start)) : date("Y-m-d 00:00:00");
+        $report_date_end = ($report_date_end) ? date("Y-m-d 11:59:59", strtotime($report_date_end)) : date("Y-m-d 11:59:59");
+        // $report_date = ($report_date) ? $report_date : date("Y-m-d");
         $response_array = array();
-
-        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
-        if($sem == 0 )
-        {
-            $s = $this->data_fetcher->get_active_sem();
-            $sem = $s['intID'];
-        }
 
         $results = $this->db
                     ->from('payment_details')
-                    ->where(array('status' => 'Paid', 'sy_reference' => $sem, 'updated_at <=' => $report_date, 'invoice_number !=' => null))
+                    ->where(array('status' => 'Paid', 'updated_at >=' => $report_date_start, 'updated_at <=' => $report_date_end, 'invoice_number !=' => null))
                     ->order_by('invoice_number', 'ASC')
                     ->get()
                     ->result_array();
@@ -2026,22 +2022,26 @@ class Finance extends CI_Controller {
             $this->load->view("common/miscellaneous_list_conf",$this->data);
         }
     }
-    public function invoice_report($term = 0,$date = 0)    
+    public function invoice_report($date_start = 0,$date_end = 0)    
     {
         if($this->faculty_logged_in())
         {
-            if($term == 0)
-                $term = $this->data_fetcher->get_processing_sem();        
-            else
-                $term = $this->data_fetcher->get_sem_by_id($term); 
+            // if($term == 0)
+            //     $term = $this->data_fetcher->get_processing_sem();        
+            // else
+            //     $term = $this->data_fetcher->get_sem_by_id($term); 
 
-            if (empty($date)) {
-                $date = date('Y-m-d');
+            if (empty($date_start)) {
+                $date_start = date('Y-m-d');
+            }
+            if (empty($date_end)) {
+                $date_end = date('Y-m-d');
             }
                  
             $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
-            $this->data['current_sem'] = $term['intID'];            
-            $this->data['date'] = $date;
+            // $this->data['current_sem'] = $term['intID'];            
+            $this->data['date_start'] = $date_start;
+            $this->data['date_end'] = $date_end;
 
             $this->load->view("common/header",$this->data);
             $this->load->view("invoice_report_list",$this->data);

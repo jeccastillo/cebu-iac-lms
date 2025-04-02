@@ -5262,7 +5262,7 @@ class Excel extends CI_Controller {
                         ->group_by('payment_details.id')
                         ->get()
                         ->result_array();
-    
+
                     // Add some data
                     $objPHPExcel->setActiveSheetIndex(0)
                         ->setCellValue('A'.$i, $count)
@@ -5289,7 +5289,8 @@ class Excel extends CI_Controller {
                         ->setCellValue('S'.$i, $reg['paymentType'] == 'partial' && $tuition['late_enrollment_fee'] > 0 ? (float)$tuition['late_enrollment_fee'] : '')
                         ->setCellValue('T'.$i, '=SUM(N' . $i . ':S' . $i . ')')
                         ->setCellValue('U'.$i, '=M' . $i . '+T' . $i . ')')
-                        ->setCellValue('V'.$i, $date_enrolled <= $sy->ar_report_date_generation ? $tuition['scholar_type'] : '')
+                        // ->setCellValue('V'.$i, $date_enrolled <= $sy->ar_report_date_generation ? $tuition['scholar_type'] : '')
+                        ->setCellValue('V'.$i, $tuition['scholar_type'] ? $tuition['scholar_type'] : '')
                         ->setCellValue('W'.$i, ($date_enrolled <= $sy->ar_report_date_generation && $deduction_type == 'scholarship') && $tuition_discount > 0 ? $tuition_discount : ($assessment_discount_rate > 0 ? $assessment_discount_rate : '') )
                         ->setCellValue('X'.$i, ($date_enrolled <= $sy->ar_report_date_generation && $deduction_type == 'scholarship') && $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : ($assessment_discount_fixed > 0 ? $assessment_discount_fixed : ''))
                         ->setCellValue('Y'.$i, ($date_enrolled <= $sy->ar_report_date_generation && $deduction_type == 'scholarship') && $tuition['scholarship_lab_fee_rate'] > 0 ? $tuition['scholarship_lab_fee_rate'] : '')
@@ -8293,7 +8294,7 @@ class Excel extends CI_Controller {
     }
 
     // public function finance_invoice_report($sem = 0, $campus, $report_date)
-    public function finance_invoice_report($sem = 0, $campus, $report_date_start, $report_date_end = null)
+    public function finance_invoice_report($campus, $report_date_start, $report_date_end = null)
     {
         $report_date_start = ($report_date_start) ? date("Y-m-d 00:00:00", strtotime($report_date_start)) : date("Y-m-d 00:00:00");
         $report_date_end = ($report_date_end) ? date("Y-m-d 11:59:59", strtotime($report_date_end)) : date("Y-m-d 11:59:59");

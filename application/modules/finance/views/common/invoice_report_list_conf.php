@@ -7,7 +7,7 @@ $(document).ready(function() {
         "ordering": false,
         "paging": true,
         ajax: {
-            url: "<?php echo base_url(); ?>finance/finance_invoice_report_data/<?php echo $current_sem; ?>/<?php echo $date; ?>",
+            url: "<?php echo base_url(); ?>finance/finance_invoice_report_data/<?php echo $date_start; ?>/<?php echo $date_end; ?>",
             dataSrc: 'data'
         },
         columns: [{
@@ -67,25 +67,28 @@ $(document).ready(function() {
         }]
     });
 });
-$("#select-term-leads").on('change', function(e) {
-    let term = $(this).val();
-    let currentDate = "<?php echo $date; ?>";
-    document.location = "<?php echo base_url()."finance/invoice_report/"; ?>" + term + '/' +
-        currentDate;
+$("#date-picker-from").on('change', function(e) {
+    const dateFrom = $(this).val();
+    document.location = "<?php echo base_url()."finance/invoice_report/"; ?>" + dateFrom +
+        '/' + $("#date-picker-to").val();
 });
-$("#date-picker").on('change', function(e) {
-    let term = "<?php echo $current_sem; ?>";
-    const currentDate = $(this).val();
-    document.location = "<?php echo base_url()."finance/invoice_report/"; ?>" + term + '/' +
-        currentDate;
+$("#date-picker-to").on('change', function(e) {
+    const dateFrom = new Date($("#date-picker-from").val());
+    const dateTo = new Date($(this).val());
+    if (dateFrom > dateTo) {
+        alert(
+            "The start date cannot be later than the end date. Please select a valid date range.");
+        return;
+    }
+    document.location = "<?php echo base_url()."finance/invoice_report/"; ?>" + $(
+        "#date-picker-from").val() + '/' + $("#date-picker-to").val();
 });
 $(document).ready(function() {
     $("#scholarship_report_list_excel").click(function(e) {
         var campus = "<?php echo $campus;?>";
         var base_url = "<?php echo base_url(); ?>";
-        var url = base_url + 'excel/finance_invoice_report/' + $(
-                "#select-term-leads").val() + '/' + campus + '/' + $("#date-picker")
-            .val();
+        var url = base_url + 'excel/finance_invoice_report/' + campus + '/' + $(
+            "#date-picker-from").val(); + '/' + $("#date-picker-to").val();
         window.open(url, '_blank');
     })
 });
