@@ -1,23 +1,22 @@
 <aside class="right-side">
     <section class="content-header">
         <h1>
-            Health Records
-
+            Guidance Records
             <small>
                 <button class="btn btn-app" id="health_record_excel" target="_blank" href="#"><i
                         class="fa fa-book"></i>Download Excel</button>
             </small>
         </h1> 
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Clinic</a></li>
-            <li class="active">Health Records</li>
+            <li><a href="#"><i class="fa fa-dashboard"></i> Guidance</a></li>
+            <li class="active">Guidance Records</li>
         </ol>
     </section>
     <div class="content">
         
         <div class="box box-solid box-default">
             <div class="box-header">                                  
-                <h3 class="box-title">List of Health Records</h3>
+                <h3 class="box-title">List of Guidance Records</h3>
                 <div class="box-tools">
                 </div>
             </div><!-- /.box-header -->
