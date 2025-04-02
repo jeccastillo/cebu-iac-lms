@@ -1097,10 +1097,15 @@ class Pdf extends CI_Controller {
         //for total units
         $this->data['total_units'] = $this->data_fetcher->getTotalUnits($id);
         
-        if($this->data['campus'] == "Cebu")
+        if($this->data['campus'] == "Cebu"){
             $this->load->view("print_view_student_reg2",$this->data);
-        else
-            $this->load->view("print_view_student_reg2_makati",$this->data);
+        }
+        else{
+            if($this->data['student']['level'] == 'next')
+                $this->load->view("print_view_student_reg2_makati_next",$this->data);
+            else
+                $this->load->view("print_view_student_reg2_makati",$this->data);
+        }
         //$this->load->view("save_pdf_reg2",$this->data);
     
     }

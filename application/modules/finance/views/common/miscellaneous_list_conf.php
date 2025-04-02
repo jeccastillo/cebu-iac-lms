@@ -26,23 +26,11 @@ $(document).ready(function() {
             data: 'date_enlisted',
             title: 'Date Enrolled'
         }, {
-            data: 'regular',
-            title: 'Regular'
+            data: 'misc_type',
+            title: 'Type'
         }, {
-            data: 'new_student',
-            title: 'NSF'
-        }, {
-            data: 'internship',
-            title: 'Internship'
-        }, {
-            data: 'nstp',
-            title: 'NSTP'
-        }, {
-            data: 'thesis',
-            title: 'Thesis'
-        }, {
-            data: 'late_enrollment',
-            title: 'LEF'
+            data: 'amount',
+            title: 'Amount'
         }]
     });
 });
