@@ -483,7 +483,7 @@ class Registrar extends CI_Controller {
             {
                 
                 $subject_data = $this->data_fetcher->getSubjectCurr($subject,$post['intProgramID']);
-                               
+                                                               
                 $this->data['col1'][] = $subject_data['strCode'];
 
                 if(!$this->data_fetcher->checkSubjectTaken($post['studentID'],$subject)) //if subject has not been taken
@@ -511,69 +511,8 @@ class Registrar extends CI_Controller {
                         $this->data_poster->addStudentClasslist($cl_data,$this->data["user"]["intID"]);
                         $this->data['col2'][] = "Student Registered to Section ".$cl_get['strSection'];
                         $this->data['col3'][] = "<a href='".base_url()."unity/classlist_viewer/".$cl_get['intID']."'>View Classlist</a>";
-                    }
-                    else // kapag wla pa section
-                    {
-                        
-                        
-                        if(isset($post['section-'.$subject]) && $post['section-'.$subject] == "new")
-                        {
-                            $cl = $this->data_fetcher->checkClasslistExists($subject,$post['strAcademicYear'],$subject_data['strCode'],"new");
-                            
-                        }
-                        else{
-                            $cl = $this->data_fetcher->checkClasslistExists($subject,$post['strAcademicYear'],$subject_data['strCode']); // this is where auto sectioning happens
-                            
-                        }
-                        
-
-                        if(!is_array($cl)) //if $cl is not array
-                        {
-                             
-                            //echo $cl;
-                            if($cl!="1"){
-                                $cl = explode("-",$cl);
-                                $letter = $cl[count($cl)-1];
-                                //echo $letter."<br />";
-                                $letter++;
-                                //echo $letter;
-                            }
-                            else
-                            {
-                                $letter = "A";
-                            }
-                            
-                            
-                            
-
-                            $classlist['intFacultyID'] = 999;
-                            $classlist['intSubjectID'] = $subject;
-                            $classlist['strAcademicYear'] = $post['strAcademicYear'];
-                            $classlist['strUnits'] = $subject_data['strUnits'];                            
-                            $classlist['strSection'] = $subject_data['strCode']."-".$subject_data['intYearLevel']."-".$letter;
-                            $classlist['strClassName'] = $subject_data['strCode'];
-                           
-                            
-                            $this->data_poster->post_data('tb_mas_classlist',$classlist);
-                            $cid = $this->db->insert_id();
-                            $cname = $classlist['strClassName'];
-                        }
-                        else
-                        {
-                            $cname = $cl['strClassName'];
-                            $cid = $cl['intID'];
-                        }
-
-                        
-                        $cl_data['intStudentID'] = $post['studentID'];
-                        $cl_data['intClassListID'] = $cid;
-                        $this->data_poster->addStudentClasslist($cl_data,$this->data["user"]["intID"]);
-                        $this->data['col2'][] = "Student Registered to Section ".$cname;
-                        $this->data['col3'][] = "<a href='".base_url()."unity/classlist_viewer/".$cid."'>View Classlist</a>";
-                        
-
-                    }
-                }              
+                    }   
+                }                       
                 else
                 {
                     
