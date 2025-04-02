@@ -292,7 +292,7 @@ new Vue({
 
     methods: {            
         selectTerm: function($event){
-            document.location = base_url + 'academics/enlistment/' + event.target.value;
+            document.location = base_url + 'academics/enlistment/' + this.student.intID + '/' + event.target.value;
         },
         addSubjectForEnlistment: function(){
             var formdata= new FormData();
