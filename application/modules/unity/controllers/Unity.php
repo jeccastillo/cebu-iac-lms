@@ -1867,7 +1867,7 @@ class Unity extends CI_Controller {
                     </tr>';
 
                 if(isset($grades[$i+1])){
-                    if($prev_year_sem != $grades[$i+1]['syID'] || count($grades) == $i+1 && $scount != 0){
+                    if(($prev_year_sem != $grades[$i+1]['syID'] || count($grades) == $i+1) && $scount != 0){
                         $sgpa_computed = $sgpa/$scount;
                         $scount_counted = $scount;
                         $sgpa = 0;
