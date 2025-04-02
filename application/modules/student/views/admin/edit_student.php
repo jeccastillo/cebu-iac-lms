@@ -49,6 +49,8 @@
                                     value="drive">drive</option>
                                 <option <?php echo ($student['level'] == "other")?'selected':''; ?>
                                     value="other">other</option>
+                                <option <?php echo ($student['level'] == "next")?'selected':''; ?>
+                                    value="next">next</option>
                             </select>
                         </div>
                         <div class="form-group col-xs-4">
