@@ -108,6 +108,10 @@ class Tuitionyear extends CI_Controller {
                                          ->order_by('strProgramCode','asc')       
                                          ->get('tb_mas_programs')
                                          ->result_array();
+        $data['next_programs'] = $this->db->where(array('type'=>'next'))
+                                        ->order_by('strProgramCode','asc')       
+                                        ->get('tb_mas_programs')
+                                        ->result_array();
         $data['college_programs'] = $this->db->where('type','college')
                                              ->or_where('type','other')    
                                              ->order_by('strProgramCode','asc')
@@ -115,6 +119,7 @@ class Tuitionyear extends CI_Controller {
                                              ->result_array();
         $data['success'] = true;        
         $data['message'] ="Successfully Added";
+        $data['shs_programs'] = array_merge($data['shs_programs'],$data['next_programs']);
         echo json_encode($data);
 
     }
