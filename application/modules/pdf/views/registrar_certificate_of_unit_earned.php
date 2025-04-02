@@ -160,7 +160,7 @@
         <div> 
             <b><?php 
                 if($signature_by){
-                    echo strtouuper($signature_by);
+                    echo strtoupper($signature_by);
                 }
                 else{
                     if($campus == 'Makati'){
