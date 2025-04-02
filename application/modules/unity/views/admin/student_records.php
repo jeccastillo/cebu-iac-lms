@@ -544,13 +544,13 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-sm-6">
+                        <div class="form-group col-sm-6" class="form-control">
                             <label>Signature By</label>
                             <input type="text" name="signature_by">
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-sm-6">
+                        <div class="form-group col-sm-6" class="form-control">
                             <label>Position</label>
                             <input type="text" name="position">
                         </div>
