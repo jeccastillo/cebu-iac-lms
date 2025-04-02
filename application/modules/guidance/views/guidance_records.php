@@ -43,7 +43,7 @@
                     </tbody>
                 </table>      
                 <hr />
-                <a class="btn btn-success" href="#" data-toggle="modal" data-target="#record">Add Health Record</a>                        
+                <a class="btn btn-success" href="#" data-toggle="modal" data-target="#record">Add Guidance Record</a>                        
             </div>        
         </div>
         
