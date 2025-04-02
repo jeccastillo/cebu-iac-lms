@@ -18,7 +18,7 @@ class Guidance extends CI_Controller {
 
         $userlevel = $this->session->userdata('intUserLevel');   
         $ip = $this->input->ip_address();        
-        if($userlevel != 2 && $userlevel != 11 &&  $ip != "172.16.80.22")
+        if($userlevel != 2 && $userlevel != 12 &&  $ip != "172.16.80.22")
 		  redirect(base_url()."unity");
         
         $this->data['img_dir'] = base_url()."assets/themes/".$theme."/images/";	
