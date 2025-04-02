@@ -159,14 +159,23 @@
 
         <div> 
             <b><?php 
-                if($campus == 'Makati'){
-                    echo 'MS. JOCELYN R. BANIAGO';
-                }else if($campus == 'Cebu'){
-                    echo '';
+                if($signature_by){
+                    echo strtouuper($signature_by);
+                }
+                else{
+                    if($campus == 'Makati'){
+                        echo 'MS. JOCELYN R. BANIAGO';
+                    }
                 }
             ?></b>
             <br>
-            Head Registrar
+            <?php 
+                if($position){
+                    echo ucfirst($position);
+                }else{
+                    echo 'Head Registrar';
+                }
+            ?>
         </div>
         <br>
         <div style="font-size:7px; font-style:italic">
