@@ -7957,20 +7957,6 @@ class Excel extends CI_Controller {
                                 ->get()
                                 ->first_row('array');
                             
-                            if($row['G'] == 'MATHMODE'){
-                                print_r($classlist);
-                                print("@@@");
-                                print(", strAcademicYear = " . $sem);
-                                print(", intFacultyID = " . $faculty['intID']);
-                                print(", intSubjectID = " . $subject['intID']);
-                                print(", strClassName = " . $row['D']);
-                                print(", year = " . $row['E']);
-                                print(", strSection = " . $row['F']);
-
-                                // print_r($checkClasslistStudent);
-                                die();
-                            }
-                            
                             if(!$classlist){
                                 $newClasslist = array(
                                     'intFacultyID' => $faculty['intID'],
