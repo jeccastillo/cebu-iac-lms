@@ -4153,6 +4153,8 @@ class Pdf extends CI_Controller {
         $this->data['position'] = $post['position'];
         $campus = $this->data['campus'];
         
+        $sem = $this->db->get_where('tb_mas_sy', array('intID' => $post['term']))->first_row('array');
+        
         $data['student'] = $this->data_fetcher->getStudent($id);
         
         $all_terms =  $this->db->select('tb_mas_sy.*')  
@@ -4328,7 +4330,6 @@ class Pdf extends CI_Controller {
             
         }
 
-
         //Check Curriculum for units earned
         foreach($registrations as $reg){
             $syid = isset($reg['intAYID'])?$reg['intAYID']:$reg['intID'];
@@ -4401,7 +4402,7 @@ class Pdf extends CI_Controller {
         $pdf = new TCPDF("P", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);        
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetTitle("Certificate of Enrollment");
+        $pdf->SetTitle("Certificate of GWA");
         
         // set margins
         $pdf->SetMargins(1.5, 1, 1.5);
@@ -4416,10 +4417,126 @@ class Pdf extends CI_Controller {
 
         $pdf->AddPage();
           
-        $html = $this->load->view("registrar_certificate_of_enrollment",$this->data,true);
+        $html = $this->load->view("registrar_certificate_of_gwa",$this->data,true);
         $pdf->writeHTML($html, true, false, true, false, '');
           
-        $pdf->Output('Certificate of Enrollment.pdf', 'I');
+        $pdf->Output('Certificate of GWA.pdf', 'I');
+    }
+
+    public function certificate_of_ranking($id)
+    {
+        $post = $this->input->post();
+        $this->data['selected_term'] = $post['term'];
+        $this->data['signature_by'] = $post['signature_by'];
+        $this->data['position'] = $post['position'];
+        $campus = $this->data['campus'];
+        
+        $sem = $this->db->get_where('tb_mas_sy', array('intID' => $post['term']))->first_row('array');
+        
+        foreach($student_data['data'] as $index => $term){
+            if($term['reg']['intAYID'] == $selected_term){
+                echo $term['gwa'];
+                break;
+            }
+        }
+        $data['student'] = $this->data_fetcher->getStudent($id);
+        
+        $all_terms =  $this->db->select('tb_mas_sy.*')  
+                ->join('tb_mas_sy','tb_mas_registration.intAYID = tb_mas_sy.intID')                
+                ->where(array('intStudentID'=>$id))
+                ->order_by("strYearStart asc, enumSem asc")
+                ->get('tb_mas_registration')
+                ->result_array();                          
+
+        if(get_stype($data['student']['level']) == "college")
+            $active_sem = $this->data_fetcher->get_active_sem();
+        else
+            $active_sem = $this->data_fetcher->get_active_sem_shs();   
+
+        $registration = $this->db->select('tb_mas_registration.*,tb_mas_sy.enumSem,tb_mas_sy.strYearStart,tb_mas_sy.strYearEnd, tb_mas_sy.term_label,tb_mas_sy.intID as term_id, strProgramCode')
+                                ->join('tb_mas_sy','tb_mas_registration.intAYID = tb_mas_sy.intID')  
+                                ->join('tb_mas_programs','tb_mas_programs.intProgramID = tb_mas_registration.current_program','left')
+                                ->where(array('intStudentID'=>$id,'intAYID'=>$post['term']))
+                                ->order_by("strYearStart ASC, enumSem ASC")
+                                ->get('tb_mas_registration')
+                                ->first_row('array');
+
+        //Check Curriculum for units earned
+        // foreach($registrations as $reg){
+            $syid = isset($registration['intAYID'])?$registration['intAYID']:$registration['intID'];
+            $records = $this->data_fetcher->getClassListStudentsSt($id,$syid);
+            $units = 0;
+            $sum_grades = 0;
+            $units_earned = 0;
+            $total = 0;
+            foreach($records as $record){
+                if($record['intFinalized'] == 2 && $record['strRemarks'] == "Passed")
+                    $units_earned += $record['strUnits'];
+                if($record['intFinalized'] == 2 && $record['include_gwa'] && $record['strRemarks'] != "Officially Withdrawn"){
+                    switch($record['v3']){
+                        case 'FA':
+                            $v3 = 5;
+                        break;
+                        case 'UD':
+                            $v3 = 5;
+                        break;
+                        case '5.00':
+                            $v3 = 5;
+                        break;
+                        default:
+                            $v3 = $record['v3'];
+                    }                  
+                    if($v3 != "OW"){ 
+                        $sum_grades += $v3 * $record['strUnits'];                
+                        $total += $record['strUnits'];
+                    }
+                }
+
+
+            }
+            $total_units_earned += $units_earned;
+            $term_gwa = 0;
+            if($total > 0){
+                $term_gwa = $sum_grades/$total;
+                $term_gwa = number_format(round($term_gwa,3),3);
+            }
+            $gwa += $sum_grades;
+            $total_units_gwa += $total;
+            $terms[] = array('records'=> $records,'reg'=>$reg,'units_earned'=>$units_earned,'gwa'=>$term_gwa);
+        // }
+
+        $data['data'] = $terms;
+        
+        $this->data['student_data'] = $data;
+
+        $this->data['sem'] = $sem;
+        
+        $this->data['student_data'] = $data;
+
+        tcpdf();
+        // create new PDF document
+        $pdf = new TCPDF("P", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);        
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetTitle("Certificate of GWA");
+        
+        // set margins
+        $pdf->SetMargins(1.5, 1, 1.5);
+
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        
+        $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
+        
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);    
+
+        $pdf->AddPage();
+          
+        $html = $this->load->view("registrar_certificate_of_gwa",$this->data,true);
+        $pdf->writeHTML($html, true, false, true, false, '');
+          
+        $pdf->Output('Certificate of GWA.pdf', 'I');
     }
 
     private function stringifyNumber($n) {
