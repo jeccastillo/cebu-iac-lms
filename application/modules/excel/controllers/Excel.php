@@ -7960,6 +7960,7 @@ class Excel extends CI_Controller {
                                 $classlist = $this->db->get_where('tb_mas_classlist',
                                     array('strAcademicYear' => $sem, 'intFacultyID' => $faculty['intID'], 'intSubjectID' => $subject['intID'], 'strSection' => $row['F']))
                                     ->order_by('intID', 'ASC')
+                                    ->get()
                                     ->first_row('array');
                             }
                             
