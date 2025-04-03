@@ -4083,8 +4083,7 @@ class Pdf extends CI_Controller {
         $pdf->SetTitle("Certificate of Unit Earned ");
         
         // set margins
-        $pdf->SetMargins(2, 1.5, 2);
-
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
         
@@ -4129,11 +4128,9 @@ class Pdf extends CI_Controller {
         $pdf->SetTitle("Certificate of Enrollment");
         
         // set margins
-        // $pdf->SetMargins(10, 5, 10);
-
         $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-        // $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-        // $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
         
         $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
         
