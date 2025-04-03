@@ -964,29 +964,24 @@
                     <h4 class="modal-title">Update Invoice Number</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <div class="form-group">
-                            <label>Invoice Number <span class="text-danger">*</span> </label>
-                            <input type="text" class="form-control"
-                                v-model="invoice_update.invoice_number" required />
-                        </div>
-                        <!-- <template v-if="invoiceNumbers.length !== 0">
-                                 <select class="form-control" v-model="invoice_update.invoice_number" required>
-                                    <option v-for="i in (parseInt(invoiceStart), parseInt(invoiceEnd))" :value="i">{{ i }}</option>
-                                 </select>          
-                                <select v-model="invoice_update.invoice_number" class="form-control" required>                           
-                                    <option v-for="invoice in invoiceNumbers" :value="invoice.invoice_number">
-                                        {{invoice.invoice_number}}
-                                    </option>                    
-                                </select>
-                            </template>         
-                            <template v-if="invoiceNumbers.length === 0">
-                                <p>{{invoice_update.invoice_number}}</p>                 
-                                <input  type="hidden"
-                                    class="form-control"
-                                    v-model="invoice_update.invoice_number"
-                                    required />
-                            </template>   -->
+                    <div class="form-group">                        
+                        <template v-if="invoiceNumbers.length !== 0">
+                            <select class="form-control" v-model="invoice_update.invoice_number" required>
+                                <option v-for="i in (parseInt(invoiceStart), parseInt(invoiceEnd))" :value="i">{{ i }}</option>
+                            </select>          
+                            <select v-model="invoice_update.invoice_number" class="form-control" required>                           
+                                <option v-for="invoice in invoiceNumbers" :value="invoice.invoice_number">
+                                    {{invoice.invoice_number}}
+                                </option>                    
+                            </select>
+                        </template>         
+                        <template v-if="invoiceNumbers.length === 0">
+                            <div class="form-group">
+                                <label>Invoice Number <span class="text-danger">*</span> </label>
+                                <input type="text" class="form-control"
+                                    v-model="invoice_update.invoice_number" required />
+                            </div>
+                        </template>  
                     </div>
                 </div>
                 <div class=" modal-footer">
