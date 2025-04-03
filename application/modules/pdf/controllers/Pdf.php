@@ -4130,9 +4130,6 @@ class Pdf extends CI_Controller {
         
         // set margins
         $pdf->SetMargins(1.5, 1, 1.5);
-
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
         
         $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
         
@@ -4415,7 +4412,7 @@ class Pdf extends CI_Controller {
         
         $pdf->setPrintHeader(false);
         $pdf->setPrintFooter(false);    
-             
+
         $pdf->AddPage();
           
         $html = $this->load->view("registrar_certificate_of_enrollment",$this->data,true);
