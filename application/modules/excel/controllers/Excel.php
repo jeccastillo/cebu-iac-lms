@@ -7933,7 +7933,8 @@ class Excel extends CI_Controller {
                         $facultyLastName = $facultyName[0];
                         if(isset($facultyName[1])){
                             $facultyName = explode(' ', ltrim($facultyName[1]));
-                            $facultyFirstName = $facultyName[0];
+                            // $facultyFirstName = $facultyName[0];
+                            $facultyFirstName = $facultyName;
                         }
                         
                         $faculty = $this->db->from('tb_mas_faculty')->like(array('strLastname' => $facultyLastName, 'strFirstName' => $facultyFirstName))->get()->first_row('array');
