@@ -7938,11 +7938,7 @@ class Excel extends CI_Controller {
                         
                         $faculty = $this->db->from('tb_mas_faculty')->like(array('strLastname' => $facultyLastName, 'strFirstName' => $facultyFirstName))->get()->first_row('array');
                         $subject = $this->db->get_where('tb_mas_subjects',array('strCode' => $row['G']))->first_row('array');
-                        if($row['G'] == 'MATHMODE'){
-                            print_r($faculty);
-                            print_r($subject);
-                            die();
-                        }
+                        
                         if($faculty && $subject){
                             $classlistID = '';
 
@@ -7959,7 +7955,7 @@ class Excel extends CI_Controller {
                                         'intCurriculumID' => $student['current_curriculum']))
                                 ->get()
                                 ->first_row('array');
-
+                            
                             if(!$classlist){
                                 $classlist = $this->db->get_where('tb_mas_classlist',array('strAcademicYear' => $sem, 'intFacultyID' => $faculty['intID'], 'intSubjectID' => $subject['intID'], 'strSection' => $row['F'], 'intCurriculumID' => $student['current_curriculum']))->first_row('array');
                             }
@@ -8016,7 +8012,14 @@ class Excel extends CI_Controller {
                                         }
                                     }
                                 }
+
                                 $checkClasslistStudent = $this->db->get_where('tb_mas_classlist_student',array('intStudentID' => $student['intID'], 'intClassListID' => $classlistID))->first_row();
+                                if($row['G'] == 'MATHMODE'){
+                                    print_r($classlist);
+                                    print("@@@");
+                                    print_r($checkClasslistStudent);
+                                    die();
+                                }
                                 // if(!$checkClasslistStudent){
                                 //     $this->data_poster->post_data('tb_mas_classlist_student',$classlistStudent);
                                 // }else{
