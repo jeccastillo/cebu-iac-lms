@@ -4129,12 +4129,15 @@ class Pdf extends CI_Controller {
         $pdf->SetTitle("Certificate of Enrollment");
         
         // set margins
-        $pdf->SetMargins(1.5, 1, 1.5);
+        $pdf->SetMargins(2.5, 2, 2.5);
+
+        // $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        // $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
         
-        $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
+        // $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
         
-        $pdf->setPrintHeader(false);
-        $pdf->setPrintFooter(false);    
+        // $pdf->setPrintHeader(false);
+        // $pdf->setPrintFooter(false);    
              
         $pdf->AddPage();
           
