@@ -12,9 +12,23 @@
             }
             echo strtoupper($student_data['student']['strFirstname']) . ' ' . strtoupper($student_data['student']['strLastname']); 
         ?></b>
-        with Student No. <b><?php echo str_replace("-", "", $student_data['student']['strStudentNumber'])?></b> is a bonafide student of iACADEMY. He is currently enrolled this 
-        <?php echo $sem['enumSem'] . ' ' . $sem['term_label'] . ', Academic Year ' . $sem['strYearStart'] . '-' . $sem['strYearEnd']; ?> under the program
-        <?php echo $student_data['student']['strProgramDescription']; ?>.<br>
+        with Student No. <b><?php echo str_replace("-", "", $student_data['student']['strStudentNumber'])?></b> is a bonafide student of iACADEMY under the program 
+        <?php echo $student_data['student']['strProgramDescription']; ?>.
+        <?php 
+            if($student_data['student']['enumGender'] == 'male'){
+                echo 'He. ';
+            }else{
+                echo 'She. ';
+            }?> has earned a Cummulative General Weighted Average (CGWA) of 
+            <?php
+                foreach($student_data['data'] as $index => $term){
+                    if($term['reg']['intAYID'] == $selected_term){
+                        echo $term['gwa'];
+                        break;
+                    }
+                }
+            ?> as of 
+        <?php echo $sem['enumSem'] . ' ' . $sem['term_label'] . ', AY ' . $sem['strYearStart'] . '-' . $sem['strYearEnd']; ?>.<br>
 
         <div>This certification is being issued to
             <b><?php 
