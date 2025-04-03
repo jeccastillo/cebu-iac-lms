@@ -972,7 +972,7 @@
                         </div>
                         <div class="form-group">
                             <label>Update Issued Date <span class="text-danger">*</span> </label>
-                            <input type="checkbox" class="form-control"
+                            <checkbox class="form-control"
                                 v-model="invoice_update.change_or_date" />
                         </div>
                         <!-- <template v-if="invoiceNumbers.length !== 0">
