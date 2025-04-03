@@ -283,6 +283,9 @@ if (!function_exists('get_stype')) {
             case 'other':
                 $stype = 'college';
             break;
+            case 'next':
+                $stype = 'next';
+            break;
             default: 
                 $stype = 'college';
         }
