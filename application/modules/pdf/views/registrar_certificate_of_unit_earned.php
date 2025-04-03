@@ -20,7 +20,7 @@
     <br><br>
     <div style="text-align:center; font-size:16px; font-weight:bold">C E R T I F I C A T I O N</div>
     <br><br>
-    <div style="font-size:11px;">This is to clarify that
+    <div style="font-size:11px;">This is to certify that
         <b><?php 
             if($student_data['student']['enumGender'] == 'male'){
                 echo 'Mr. ';
@@ -29,7 +29,7 @@
             }
             echo strtoupper($student_data['student']['strFirstname']) . ' ' . strtoupper($student_data['student']['strLastname']); 
         ?></b>
-        with Student ID No. <b><?php echo str_replace("-", "", $student_data['student']['strStudentNumber'])?></b> is a bonafide student of iACADEMY under the program
+        with Student No. <b><?php echo str_replace("-", "", $student_data['student']['strStudentNumber'])?></b> is a bonafide student of iACADEMY under the program
         <?php $student_data['student']['strProgramDescription']; ?>.
         <?php 
             if($student_data['student']['enumGender'] == 'male'){
