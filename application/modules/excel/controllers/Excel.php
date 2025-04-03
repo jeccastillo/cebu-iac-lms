@@ -8013,11 +8013,13 @@ class Excel extends CI_Controller {
                                     }
                                 }
                                 $checkClasslistStudent = $this->db->get_where('tb_mas_classlist_student',array('intStudentID' => $student['intID'], 'intClassListID' => $classlistID))->first_row();
-                                if(!$checkClasslistStudent){
-                                    $this->data_poster->post_data('tb_mas_classlist_student',$classlistStudent);
-                                }else{
+                                // if(!$checkClasslistStudent){
+                                //     $this->data_poster->post_data('tb_mas_classlist_student',$classlistStudent);
+                                // }else{
+                                if($checkClasslistStudent){
                                     $this->data_poster->post_data('tb_mas_classlist_student',$classlistStudent,$checkClasslistStudent->intCSID);
                                 }
+                                // }
                             }
                         }
                     }else{
@@ -9600,6 +9602,118 @@ class Excel extends CI_Controller {
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
         header('Content-Disposition: attachment;filename="Clinic Health Record' . $clinicUser . '.xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        
+        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
+        exit;
+    }
+
+    public function guidance_health_record($user = 0)
+    {
+        $clinicUser = '';
+        
+        $records = $this->db->select('tb_mas_guidance_records.*')
+                    ->from('tb_mas_guidance_records')
+                    ->order_by('consultation_date', 'ASC')
+                    ->get()
+                    ->result_array();
+
+        if($user != 0){
+            $records = $this->db->select('tb_mas_guidance_records.*')
+                        ->from('tb_mas_guidance_records')
+                        ->where('patient_id', $user)
+                        ->order_by('consultation_date', 'ASC')
+                        ->get()
+                        ->result_array();
+            $clinicUser = ' - ' . $records[0]['first_name'] . ' ' . $records[0]['last_name'];
+        }
+
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
+
+        if (PHP_SAPI == 'cli')
+            die('This example should only be run from a Web Browser');
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+        $title = 'Guidance Records';
+
+        $i = 2;
+
+        foreach($records as $index => $record){
+
+            // Add some data
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A'.$i, $record['last_name'])
+                ->setCellValue('B'.$i, $record['first_name'])
+                ->setCellValue('C'.$i, $record['classification'])
+                ->setCellValue('D'.$i, date('M d, Y', strtotime($record['consultation_date'])))
+                ->setCellValue('E'.$i, $record['consultation_type'])
+                ->setCellValue('F'.$i, $record['chief_complaint'])
+                ->setCellValue('G'.$i, $record['history']);
+            $i++;
+        }
+        
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'LAST NAME')
+                    ->setCellValue('B1', 'FIRST NAME')
+                    ->setCellValue('C1', 'CLASSIFICATION')
+                    ->setCellValue('D1', 'DATE')
+                    ->setCellValue('E1', 'CONSULTATION TYPE')
+                    ->setCellValue('F1', 'CHIEF COMPLAINT/REASON FOR THE VISIT')
+                    ->setCellValue('G1', 'HISTORY OF PRESENT ILLNESS');
+                    
+        $objPHPExcel->getActiveSheet()->getStyle('A1:G1')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 14,
+                )
+            )
+        );
+
+        $style = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+            )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A1:G'.$i)->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:G'.$i)->getAlignment()->setWrapText(true);
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(17);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(17);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(80);
+        
+
+        $objPHPExcel->getActiveSheet()->setTitle('Guidance Record');
+
+        $date = date("ymdhis");
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+        header('Content-Disposition: attachment;filename="Guidance_Record' . $clinicUser . '.xls"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
