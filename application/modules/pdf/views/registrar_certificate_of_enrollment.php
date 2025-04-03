@@ -3,7 +3,7 @@
     <br><br>
     <div style="text-align:center; font-size:16px; font-weight:bold">C E R T I F I C A T I O N</div>
     <br><br>
-    <div style="font-size:11px;">This is to clarify that
+    <div style="font-size:11px;">This is to certify that
         <b><?php 
             if($student_data['student']['enumGender'] == 'male'){
                 echo 'MR. ';
