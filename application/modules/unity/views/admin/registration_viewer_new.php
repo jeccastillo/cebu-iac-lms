@@ -970,6 +970,11 @@
                             <input type="text" class="form-control"
                                 v-model="invoice_update.invoice_number" required />
                         </div>
+                        <div class="form-group">
+                            <label>Update Issued Date</label>
+                            <input type="checkbox" 
+                                v-model="invoice_update.change_or_date" />
+                        </div>
                         <!-- <template v-if="invoiceNumbers.length !== 0">
                                  <select class="form-control" v-model="invoice_update.invoice_number" required>
                                     <option v-for="i in (parseInt(invoiceStart), parseInt(invoiceEnd))" :value="i">{{ i }}</option>
@@ -1160,6 +1165,7 @@ new Vue({
             sy_reference: undefined,
             total_amount_due: undefined,
             student_campus: undefined,
+            change_or_date: false,
         },
         or_update_description: undefined,
         or_update: {
