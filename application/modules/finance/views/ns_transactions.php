@@ -100,6 +100,7 @@
             <input type="hidden" name="campus" :value="request.student_campus">
             <input type="hidden" name="cashier_id" v-model="or_print.cashier_id">
             <input type="hidden" name="student_id" v-model="or_print.student_id">
+            <input type="hidden" name="payee_id" v-model="or_print.payee_id">
             <input type="hidden" name="student_address" v-model="or_print.student_address">
             <input type="hidden" name="is_cash" v-model="or_print.is_cash">
             <input type="hidden" name="check_number" v-model="or_print.check_number">
@@ -246,7 +247,6 @@ new Vue({
             axios.get(base_url + 'finance/ns_transactions_data/' + this.payee_id +
                 '/' + this.request.sem).then((data) => {
                 this.cashier = data.data.cashier;
-                console.log(this.payee);
                 this.user = data.data.user;
                 this.payee = data.data.payee;
                 this.finance_manager_privilages = data.data
@@ -287,6 +287,7 @@ new Vue({
                         .student_name += ", " + this.payee.middlename;
                     this.or_print.student_address = this.payee.address;
                     this.or_print.student_id = '';
+                    this.or_print.payee_id = this.payee.id;
                     this.or_print.is_cash = payment.is_cash;
                     this.or_print.check_number = payment.check_number;
                     this.or_print.cashier_id = payment.cashier_id;
