@@ -874,6 +874,12 @@
                                 style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i>
                                 Add Student Grade</a>
                         </li>
+                        <li
+                            class="<?php echo (isset($page) && $page=="import_credit_subjects")?'active':''; ?>">
+                            <a href="<?php echo base_url(); ?>registrar/import_credit_subjects"
+                                style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i>
+                                Import Credit Subject</a>
+                        </li>
                     </ul>
                 </li>
                 <li
