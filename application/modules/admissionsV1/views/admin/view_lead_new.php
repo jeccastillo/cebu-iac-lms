@@ -3319,8 +3319,6 @@ new Vue({
                     .program_text2 : this.program_text3,
                 admissions_officer: "<?php echo $user['strFirstname'] . '  ' . $user['strLastname'] ; ?>"
             };
-            console.log(this.payload);
-            return
             axios.post(api_url + 'admissions/student-info/update-field/custom/' + this
                 .slug, this.payload, {
                     headers: {
