@@ -3941,8 +3941,8 @@ class Pdf extends CI_Controller {
                     }                             
     
                     if($temp_rec['include_gwa'] && $grade != "OW"){  
+                        $assessment_units += $temp_rec['strUnits'];   
                         if($grade > 0){
-                            $assessment_units += $temp_rec['strUnits'];   
                             $assessment_sum += $grade * $temp_rec['strUnits'];
                         }                      
                     }
