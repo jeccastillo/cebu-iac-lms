@@ -3940,9 +3940,11 @@ class Pdf extends CI_Controller {
                             $temp_rec['color'] = "#f2f2f2";
                     }                             
     
-                    if($temp_rec['include_gwa'] && $grade != "OW"){                        
+                    if($temp_rec['include_gwa'] && $grade != "OW"){  
                         $assessment_units += $temp_rec['strUnits'];   
-                        $assessment_sum += $grade * $temp_rec['strUnits'];         
+                        if($grade > 0){
+                            $assessment_sum += $grade * $temp_rec['strUnits'];
+                        }                      
                     }
                 }
                 elseif($current){
@@ -4037,7 +4039,7 @@ class Pdf extends CI_Controller {
                         default:
                             $v3 = $record['v3'];
                     }                  
-                    if($v3 != "OW"){ 
+                    if($v3 != "OW" && $v3 > 0){ 
                         $sum_grades += $v3 * $record['strUnits'];                
                         $total += $record['strUnits'];
                     }
