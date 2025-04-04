@@ -4039,7 +4039,7 @@ class Pdf extends CI_Controller {
                         default:
                             $v3 = $record['v3'];
                     }                  
-                    if($v3 != "OW"){ 
+                    if($v3 != "OW" && $v3 > 0){ 
                         $sum_grades += $v3 * $record['strUnits'];                
                         $total += $record['strUnits'];
                     }
