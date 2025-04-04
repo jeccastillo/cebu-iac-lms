@@ -278,13 +278,13 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
             
             <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">
                 <tr>
-                    <td width="264px" style= "font-size:8;">Note:</td>          
+                    <td width="570px" style= "font-size:8;">Note:</td>          
                 </tr>
                 <tr>
-                    <td width="264px" style= "font-size:8;">1. Non-attendance due to illness, or personal or professional reasons, does not provide the right to refund.</td>
+                    <td width="570px" style= "font-size:8;">1. Non-attendance due to illness, or personal or professional reasons, does not provide the right to refund.</td>
                 </tr>
                 <tr>
-                    <td width="264px" style= "font-size:8;">2. The student agrees to pay the FULL COST of the program even if s/he will not be able to complete the course, fail the final exam or complete the final project depending on the course requirements.</td>
+                    <td width="570px" style= "font-size:8;">2. The student agrees to pay the FULL COST of the program even if s/he will not be able to complete the course, fail the final exam or complete the final project depending on the course requirements.</td>
                 </tr>
             </table>
             ';             
