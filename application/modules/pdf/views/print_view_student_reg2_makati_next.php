@@ -253,9 +253,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                     <td width="264px" style= "font-size:8;">Note: Class schedule is subject to change</td>
                     <td width="264px" style= "font-size:8;">Generated: '.date("Y-m-d h:i A").' by '.$user['strFirstname'].' '.$user['strLastname'].'</td>            
                 </tr>
-            </table>
-                         
-                          
+            </table><br/><br/>           
         ';
 
         $html .='<table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">        
