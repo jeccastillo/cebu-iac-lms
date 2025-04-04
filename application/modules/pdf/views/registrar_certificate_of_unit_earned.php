@@ -75,7 +75,7 @@
 
                     foreach ($term['records'] as $index => $checkItem){  
                         if(isset($checkItem))
-                            if($checkItem['strRemarks'] == 'Passed')
+                            if($checkItem['strRemarks'] == 'Passed' || $checkItem['strRemarks'] == 'Taken')
                                 $withUnitPassed = true;
                     }
 
@@ -99,7 +99,7 @@
             <tbody>
                 <?php foreach ($term['records'] as $index => $item): 
                         if(isset($item)):
-                            if($item['strRemarks'] == 'Passed'):
+                            if($item['strRemarks'] == 'Passed' || $checkItem['strRemarks'] == 'Taken'):
                 ?>                                
                 <tr>                                                
                     <td width="22%"><?php echo $item['strCode'] ?></td>
