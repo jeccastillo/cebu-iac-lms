@@ -2830,6 +2830,24 @@ class Registrar extends CI_Controller {
         else
             redirect(base_url()."unity");  
     }
+
+    public function import_credit_subjects()
+    {        
+        if($this->is_super_admin() || $this->is_registrar())
+        {
+            $term = $this->data_fetcher->get_processing_sem();
+    
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['current_sem'] = $term['intID'];
+            $this->data['page'] = "import_credit_subjects";
+            $this->data['opentree'] = "registrar";
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/add_credit_subject",$this->data);
+            $this->load->view("common/footer",$this->data);
+        }
+        else
+            redirect(base_url()."unity");  
+    }
     
     public function faculty_logged_in()
     {
