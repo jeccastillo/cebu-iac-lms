@@ -8159,8 +8159,8 @@ class Excel extends CI_Controller {
                         ->order_by('tb_mas_users.strLastname', 'ASC')
                         ->group_by('tb_mas_users.intID')
                         ->get()
-                        ->result_array();
-                        
+                        ->first_row('array');
+
             if($student){
                 $course = $this->data_fetcher->getProgramDetails($student['intProgramID']);  
                 
