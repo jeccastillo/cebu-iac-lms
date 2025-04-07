@@ -8174,7 +8174,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('E'.$i, $report_type == 'invoice' ? date("d-M-Y",strtotime($payment_detail->invoice_date)) : date("d-M-Y",strtotime($payment_detail->or_date)))
                     ->setCellValue('F'.$i, $report_type == 'invoice' ? $payment_detail->invoice_number : $payment_detail->or_number)
                     ->setCellValue('G'.$i, $payment_detail->subtotal_order)
-                    ->setCellValue('H'.$i, date("d-M-Y", strtotime($payment_detail->updated_at)))
+                    ->setCellValue('H'.$i, date("d-M-Y", strtotime($payment_detail->deleted_at)))
                     ->setCellValue('I'.$i, '')
                     ->setCellValue('J'.$i, $payment_detail->remarks);
     
