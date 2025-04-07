@@ -5073,7 +5073,7 @@ class Excel extends CI_Controller {
                         }
                         if($payments == null){
                             $payment['date'] = date("M d", strtotime($payment_detail['created_at']));
-                            $payment['or_number'] = $payment_detail['or_number'] ? $payment_detail['or_number'] : $payment_detail['invoice_number'];
+                            $payment['or_number'] = $payment_detail['or_number'] ? 'OR' . $payment_detail['or_number'] : 'INV' . $payment_detail['invoice_number'];
                             $payment['amount'] = (float)number_format($payment_detail['subtotal_order'], 2, '.', '');
                             
                             $payment_month = date("m", strtotime($payment_detail['created_at']));
@@ -5090,7 +5090,7 @@ class Excel extends CI_Controller {
                         }else{
                             if(isset($date['data'][$user['intID']]) && $payment_month == date("m", strtotime($payment_detail['created_at'])) && $payment_year == date("Y", strtotime($payment_detail['created_at']))){
                                 $payments[$current_index]['data'][$user['intID']]['date'] .= ', ' . date("d", strtotime($payment_detail['created_at']));
-                                $payments[$current_index]['data'][$user['intID']]['or_number'] .= $payment_detail['or_number'] ? ', ' . $payment_detail['or_number'] : ', ' . $payment_detail['invoice_number'] ;
+                                $payments[$current_index]['data'][$user['intID']]['or_number'] .= $payment_detail['or_number'] ? ', OR' . $payment_detail['or_number'] : ', INV' . $payment_detail['invoice_number'] ;
                                 $payments[$current_index]['data'][$user['intID']]['amount'] += (float)number_format($payment_detail['subtotal_order'], 2, '.', '');
                             }else{
                                 $flag = $same_month_year = false;
@@ -7933,7 +7933,6 @@ class Excel extends CI_Controller {
                         $facultyLastName = $facultyName[0];
                         if(isset($facultyName[1])){
                             $facultyName = explode(' ', ltrim($facultyName[1]));
-                            // $facultyFirstName = $facultyName[0];
                             $facultyFirstName = $facultyName[1];
                         }
                         
