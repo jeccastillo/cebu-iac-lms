@@ -33,7 +33,9 @@
                         <?php if($userlevel != 2 || $item['installment1'] == null): ?>
                         <input required type="date" name="installment1" value="<?php echo $item['installment1']; ?>" class="form-control" />                         
                         <?php else: ?>
+                            <br />
                             <?php echo $item['installment1']; ?>
+                            <br />
                         <?php endif; ?>
                     </div>
                     <div class="form-group col-xs-12 col-lg-4">
