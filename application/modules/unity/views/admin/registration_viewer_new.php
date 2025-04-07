@@ -2157,6 +2157,7 @@ new Vue({
                     let payload = {
                         'id': this.retract_id,
                         'remarks': this.retract_remarks,
+                        'deleted_by': this.user.strLastname + ", " + this.user.strFirstname
                     }
                     return axios.post(url, payload, {
                         headers: {
