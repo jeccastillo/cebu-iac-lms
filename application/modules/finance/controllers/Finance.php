@@ -1399,9 +1399,9 @@ class Finance extends CI_Controller {
         }
         $export_type = ($report_type == 'invoice') ? 'Invoice' : 'Official Receipt';
 
-        $results = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
-                   ->from('payment_details')
-                    ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
+        $results = $this->db->select('tb_mas_deleted_or_invoice.*, tb_mas_users.*, tb_mas_registration.date_enlisted')
+                   ->from('tb_mas_deleted_or_invoice')
+                    ->join('tb_mas_users','tb_mas_users.slug = tb_mas_deleted_or_invoice.student_number')
                     ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
                     ->where(array('status' => 'void', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.or_number !=' => null))
                     ->order_by('tb_mas_users.strLastname', 'ASC')
@@ -1410,9 +1410,9 @@ class Finance extends CI_Controller {
                     ->result_array();
 
         if($report_type == 'invoice'){
-            $results = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
-                        ->from('payment_details')
-                        ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
+            $results = $this->db->select('tb_mas_deleted_or_invoice.*, tb_mas_users.*, tb_mas_registration.date_enlisted')
+                        ->from('tb_mas_deleted_or_invoice')
+                        ->join('tb_mas_users','tb_mas_users.slug = tb_mas_deleted_or_invoice.student_number')
                         ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
                         ->where(array('status' => 'void', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.invoice_number !=' => null))
                         ->order_by('tb_mas_users.strLastname', 'ASC')
