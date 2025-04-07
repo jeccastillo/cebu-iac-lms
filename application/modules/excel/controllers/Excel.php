@@ -8108,8 +8108,6 @@ class Excel extends CI_Controller {
         $post = $this->input->post();
         $deleted_payments = json_decode($post['deleted_payments']);
         
-        print_r($deleted_payments);
-        die();
         $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
         if($sem == 0 )
         {
