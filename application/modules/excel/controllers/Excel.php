@@ -8170,12 +8170,11 @@ class Excel extends CI_Controller {
                     ->setCellValue('B'.$i, str_replace("-", "", $student['strStudentNumber']))
                     ->setCellValue('C'.$i, ucfirst($student['strLastname']) . ', ' . ucfirst($student['strFirstname']) . ' ' . ucfirst($student['strMiddlename'][0]) . '.')
                     ->setCellValue('D'.$i, $course['strProgramCode'])
-                    // ->setCellValue('D'.$i, '')
                     ->setCellValue('E'.$i, $report_type == 'invoice' ? date("d-M-Y",strtotime($payment_detail->invoice_date)) : date("d-M-Y",strtotime($payment_detail->or_date)))
                     ->setCellValue('F'.$i, $report_type == 'invoice' ? $payment_detail->invoice_number : $payment_detail->or_number)
                     ->setCellValue('G'.$i, $payment_detail->subtotal_order)
                     ->setCellValue('H'.$i, date("d-M-Y", strtotime($payment_detail->deleted_at)))
-                    ->setCellValue('I'.$i, '')
+                    ->setCellValue('I'.$i, $payment_detail->deleted_by)
                     ->setCellValue('J'.$i, $payment_detail->remarks);
     
                 $i++;
