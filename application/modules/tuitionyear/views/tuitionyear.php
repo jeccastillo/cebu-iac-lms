@@ -420,7 +420,9 @@ new Vue({
         //this.loader_spinner = true;
         axios.get('<?php echo base_url(); ?>tuitionyear/tuition_info/' + this.id)
             .then((data) => {                    
-                this.request = data.data.data;    
+                this.request = data.data.data;   
+                if(!this.request.final)                                     
+                    this.request.final = 0;
                 this.special_role = data.data.special_role;
                 this.shs_programs = data.data.shs_programs;                
                 this.college_programs = data.data.college_programs;
