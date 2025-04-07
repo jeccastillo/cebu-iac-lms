@@ -88,7 +88,7 @@ class Tuitionyear extends CI_Controller {
         $this->load->view("common/footer",$this->data);                                  
        
     }
-
+    
     public function tuition_info($id){
 
         if($id != 0){
@@ -104,10 +104,16 @@ class Tuitionyear extends CI_Controller {
             $data['data']['lab_fees'] = [];
         }
 
+        $data['special_role'] = $this->session->userdata('special_role');
+
         $data['shs_programs'] = $this->db->where(array('type'=>'shs'))
                                          ->order_by('strProgramCode','asc')       
                                          ->get('tb_mas_programs')
                                          ->result_array();
+        $data['next_programs'] = $this->db->where(array('type'=>'next'))
+                                        ->order_by('strProgramCode','asc')       
+                                        ->get('tb_mas_programs')
+                                        ->result_array();
         $data['college_programs'] = $this->db->where('type','college')
                                              ->or_where('type','other')    
                                              ->order_by('strProgramCode','asc')
@@ -115,6 +121,7 @@ class Tuitionyear extends CI_Controller {
                                              ->result_array();
         $data['success'] = true;        
         $data['message'] ="Successfully Added";
+        $data['shs_programs'] = array_merge($data['shs_programs'],$data['next_programs']);
         echo json_encode($data);
 
     }
@@ -224,6 +231,15 @@ class Tuitionyear extends CI_Controller {
         echo json_encode($data);
        
         
+    }
+
+    public function finalize_tuition(){
+        $post = $this->input->post(); 
+        $this->db->where('intID',$post['intID'])
+                 ->update('tb_mas_tuition_year',$post);
+        $data['success'] = true;        
+        $data['message'] ="Updated";
+        echo json_encode($data);
     }
 
     public function view_tuition_years(){
