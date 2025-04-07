@@ -30,7 +30,7 @@
                 <input type="hidden" name="intID" value="<?php echo $item['intID'] ?>" />                                
                     <div class="form-group col-xs-12 col-lg-4">
                         <label>First Installment Date</label>
-                        <?php if($userlevel != 2 || $item['installment1'] == null): ?>
+                        <?php if($userlevel == 2 || $item['installment1'] == null): ?>
                         <input required type="date" name="installment1" value="<?php echo $item['installment1']; ?>" class="form-control" />                         
                         <?php else: ?>
                             <br />
