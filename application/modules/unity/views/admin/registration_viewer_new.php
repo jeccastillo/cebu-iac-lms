@@ -638,8 +638,9 @@
                                                         paid</button>
                                                     <button
                                                         v-if="cashier && finance_manager_privilages && payment.status == 'Paid' &&  payment.mode.name == 'Onsite Payment' "
-                                                        class="btn btn-danger"
-                                                        @click="deletePayment(payment.id)">Retract
+                                                        class="btn btn-danger" data-toggle="modal"
+                                                        data-target="#retractPaymentModal"
+                                                        @click="setToRetract(payment.id)">Retract
                                                         Payment</button>
                                                 </td>
                                             </tr>
@@ -759,8 +760,9 @@
                                                         paid</button>
                                                     <button
                                                         v-if="(payment.mode && payment.mode.name == 'Onsite Payment')  && cashier && finance_manager_privilages"
-                                                        class="btn btn-danger"
-                                                        @click="deletePayment(payment.id)">Retract
+                                                        class="btn btn-danger" data-toggle="modal"
+                                                        data-target="#retractPaymentModal"
+                                                        @click="setToRetract(payment.id)">Retract
                                                         Payment</button>
                                                 </td>
                                             </tr>
@@ -1041,7 +1043,32 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
+                        <label>Reason</label>
                         <textarea class="form-control" v-model="void_reason" required></textarea>
+                    </div>
+                </div>
+                <div class=" modal-footer">
+                    <!-- modal footer  -->
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-default"
+                        data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal fade" id="retractPaymentModal" role="dialog">
+        <form @submit.prevent="deletePayment" class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- modal header  -->
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Retract Payment</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Remarks</label>
+                        <textarea class="form-control" v-model="retract_remarks" required></textarea>
                     </div>
                 </div>
                 <div class=" modal-footer">
@@ -1216,6 +1243,8 @@ new Vue({
         windowPayment: 'invoice',
         apiUpdate: '',
         invoiceNumbers: '',
+        retract_id: undefined,
+        retract_remarks: '',
         net_vat: 0,
         less_vat: 0,
         less_ewt: 0,
@@ -2111,7 +2140,7 @@ new Vue({
                 }, delayInMilliseconds);
             });
         },
-        deletePayment: function(payment_id) {
+        deletePayment: function() {
             let url = api_url + 'finance/delete_payment';
             this.loader_spinner = true;
             Swal.fire({
@@ -2126,7 +2155,8 @@ new Vue({
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
                     let payload = {
-                        'id': payment_id
+                        'id': this.retract_id,
+                        'remarks': this.retract_remarks,
                     }
                     return axios.post(url, payload, {
                         headers: {
@@ -2187,6 +2217,10 @@ new Vue({
         setToVoid: function(payment_id) {
             this.void_id = payment_id;
             this.void_reason = undefined;
+        },
+        setToRetract: function(payment_id) {
+            this.retract_id = payment_id;
+            this.retract_remarks = undefined;
         },
         voidPayment: function() {
             let url = api_url + 'finance/set_void';
