@@ -96,6 +96,7 @@
                     </table>
                     
                     <hr />
+                    <div v-if="request.final == 0">
                     <p>Add new Tuition for Track</p>
                     <form @submit.prevent="addExtra('track','Track',track)">                                
                         <div class="row">                     
@@ -131,6 +132,7 @@
                     </form>
                     <hr />
                     <hr />
+                    </div>
                     <h3>Tuition per Program (FOR College ONLY)</h3>
                     <table class="table table-bordered table-striped">
                         <thead>
@@ -371,6 +373,7 @@ new Vue({
             misc: [],
             lab_fees: [],
             isDefault: 0,            
+            final: 0,
         },
         misc: {
             name: undefined,
