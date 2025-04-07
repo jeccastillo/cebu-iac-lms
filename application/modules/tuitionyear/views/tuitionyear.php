@@ -22,11 +22,13 @@
                         <div class="row">                     
                             <div class="form-group col-xs-6">
                                 <label for="year">Tuition Year</label>
-                                <input type="text" name="year" required class="form-control" id="year" placeholder="Enter Year" v-model='request.year'>
+                                <input v-if="request.final == 0" type="text" name="year" required class="form-control" id="year" placeholder="Enter Year" v-model='request.year'>
+                                <div v-else>request.year</div>
                             </div>
                             <div class="form-group col-xs-6">
                                 <label for="year">Price Per Unit Regular</label>
-                                <input type="number" step=".01" name="pricePerUnit" required class="form-control" id="pricePerUnit" placeholder="Enter Price per unit" v-model='request.pricePerUnit'>
+                                <input v-if="request.final == 0" type="number" step=".01" name="pricePerUnit" required class="form-control" id="pricePerUnit" placeholder="Enter Price per unit" v-model='request.pricePerUnit'>
+                                <div v-else>request.pricePerUnit</div>
                             </div>
                             <div class="form-group col-xs-6">
                                 <label for="year">Price Per Unit Online</label>
