@@ -313,11 +313,14 @@
                         
                         <div class="row">    
                             <div class="col-sm-6">
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-primary">Submit</button>                                
                             </div>
                         </div>
-                    </form>
+                    </form>                    
                     <hr />
+                    <div class="text-right mt-5">
+                        <button v-if="!request.final" class="btn btn-success">Finalize</button>
+                    </div>
                 </div>
 
             </div>
