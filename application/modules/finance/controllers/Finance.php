@@ -120,9 +120,10 @@ class Finance extends CI_Controller {
         else
             $this->data['item'] = $this->data_fetcher->getAy($id);  
         
+        $this->data['userlevel'] = $this->session->userdata('intUserLevel');
+
         $this->data['page'] = "installment_dates";
         $this->data['opentree'] = "finance_admin";
-            
         
         $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
         
