@@ -319,7 +319,7 @@
                     </form>                    
                     <hr />
                     <div class="text-right mt-5">
-                        <button v-if="!request.final" class="btn btn-success">Finalize</button>
+                        <button v-if="request.final == 0" class="btn btn-success">Finalize</button>
                     </div>
                 </div>
 
