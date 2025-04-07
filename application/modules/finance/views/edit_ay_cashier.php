@@ -27,30 +27,72 @@
             </div>       
             <hr />     
             <form id="validate-subject" action="<?php echo base_url(); ?>finance/edit_submit_ay" method="post" role="form">
-                <input type="hidden" name="intID" value="<?php echo $item['intID'] ?>" />                                   
+                <input type="hidden" name="intID" value="<?php echo $item['intID'] ?>" />                                
                     <div class="form-group col-xs-12 col-lg-4">
                         <label>First Installment Date</label>
+                        <?php if($userlevel == 2 || $item['installment1'] == null): ?>
                         <input required type="date" name="installment1" value="<?php echo $item['installment1']; ?>" class="form-control" />                         
+                        <?php else: ?>
+                            <input type="hidden" name="installment1" value="<?php echo $item['installment1']; ?>"/>
+                            <br />
+                            <?php echo $item['installment1']; ?>
+                            <br />
+                        <?php endif; ?>
                     </div>
                     <div class="form-group col-xs-12 col-lg-4">
                         <label>Second Installment Date</label>
-                        <input required type="date" name="installment2" value="<?php echo $item['installment2']; ?>" class="form-control" />                         
+                        <?php if($userlevel == 2 || $item['installment2'] == null): ?>
+                            <input required type="date" name="installment2" value="<?php echo $item['installment2']; ?>" class="form-control" />                         
+                        <?php else: ?>
+                            <input type="hidden" name="installment2" value="<?php echo $item['installment2']; ?>"/>
+                            <br />
+                            <?php echo $item['installment2']; ?>
+                            <br />
+                        <?php endif; ?>
                     </div>
                     <div class="form-group col-xs-12 col-lg-4">
                         <label>Third Installment Date</label>
-                        <input required type="date" name="installment3" value="<?php echo $item['installment3']; ?>" class="form-control" />                         
+                        <?php if($userlevel == 2 || $item['installment3'] == null): ?>
+                            <input required type="date" name="installment3" value="<?php echo $item['installment3']; ?>" class="form-control" />                         
+                        <?php else: ?>
+                            <input type="hidden" name="installment3" value="<?php echo $item['installment3']; ?>"/>
+                            <br />
+                            <?php echo $item['installment3']; ?>
+                            <br />
+                        <?php endif; ?>
                     </div>
                     <div class="form-group col-xs-12 col-lg-4">
                         <label>Fourth Installment Date</label>
-                        <input required type="date" name="installment4" value="<?php echo $item['installment4']; ?>" class="form-control" />                         
+                        <?php if($userlevel == 2 || $item['installment4'] == null): ?>
+                            <input required type="date" name="installment4" value="<?php echo $item['installment4']; ?>" class="form-control" />                         
+                        <?php else: ?>
+                            <input type="hidden" name="installment4" value="<?php echo $item['installment4']; ?>"/>
+                            <br />
+                            <?php echo $item['installment4']; ?>
+                            <br />
+                        <?php endif; ?>
                     </div>
                     <div class="form-group col-xs-12 col-lg-4">
                         <label>Fifth Installment Date</label>
-                        <input required type="date" name="installment5" value="<?php echo $item['installment5']; ?>" class="form-control" />                         
+                        <?php if($userlevel == 2 || $item['installment5'] == null): ?>
+                            <input required type="date" name="installment5" value="<?php echo $item['installment5']; ?>" class="form-control" />                         
+                        <?php else: ?>
+                            <input type="hidden" name="installment5" value="<?php echo $item['installment5']; ?>"/>
+                            <br />
+                            <?php echo $item['installment5']; ?>
+                            <br />
+                        <?php endif; ?>
                     </div>  
                     <div class="form-group col-xs-12 col-lg-4">
                         <label>Late Enrollment Date Start</label>
-                        <input required type="date" name="reconf_start" value="<?php echo $item['reconf_start']; ?>" class="form-control" />                         
+                        <?php if($userlevel == 2 || $item['reconf_start'] == null): ?>
+                            <input required type="date" name="reconf_start" value="<?php echo $item['reconf_start']; ?>" class="form-control" />                         
+                        <?php else: ?>
+                            <input type="hidden" name="reconf_start" value="<?php echo $item['reconf_start']; ?>"/>
+                            <br />
+                            <?php echo $item['reconf_start']; ?>
+                            <br />
+                        <?php endif; ?>
                     </div> 
                     <!-- <div class="form-group col-xs-12 col-lg-4">
                         <label>Late Enrollment Date End</label>
@@ -58,7 +100,14 @@
                     </div>                                                        -->
                     <div class="form-group col-xs-12 col-lg-4">
                         <label>AR Report Generation Date</label>
-                        <input required type="date" name="ar_report_date_generation" value="<?php echo $item['ar_report_date_generation']; ?>" class="form-control" />                         
+                        <?php if($userlevel == 2 || $item['ar_report_date_generation'] == null): ?>
+                            <input required type="date" name="ar_report_date_generation" value="<?php echo $item['ar_report_date_generation']; ?>" class="form-control" />                         
+                        <?php else: ?>
+                            <input type="hidden" name="ar_report_date_generation" value="<?php echo $item['ar_report_date_generation']; ?>"/>                         
+                            <br />
+                            <?php echo $item['ar_report_date_generation']; ?>
+                            <br />
+                        <?php endif; ?>
                     </div>                            
                     <div class="form-group col-xs-12">
                         <input type="submit" value="update" class="btn btn-default  btn-flat">
