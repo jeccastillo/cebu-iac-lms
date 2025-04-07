@@ -65,13 +65,36 @@ $("#select-report-type").on('change', function(e) {
         '/' + reportType + '/' + currentDate;
 });
 $(document).ready(function() {
+
     $("#deleted_or_invoice_list_excel").click(function(e) {
-        var campus = "<?php echo $campus;?>";
-        var base_url = "<?php echo base_url(); ?>";
-        var url = base_url + 'excel/finance_deleted_or_invoice/' + $(
+        let api_url = "<?php echo $api_url ?>";
+        axios.get(api_url + 'sms/finance/deleted-payment/' + $("#select-term-leads").val())
+                .then((data) => {
+                    let payments = data.data.data;
+                    var campus = "<?php echo $campus;?>";
+                    var base_url = "<?php echo base_url(); ?>";
+                    let url = base_url + 'excel/finance_deleted_or_invoice/' + $(
                 "#select-term-leads").val() + '/' + $("#select-report-type").val() +
             '/' + campus + '/' + $("#date-picker").val();
-        window.open(url, '_blank');
+                    
+                    var f = $("<form target='_blank' method='POST' style='display:none;'></form>").attr({
+                        action: url
+                    }).appendTo(document.body);
+                        $('<input type="hidden" />').attr({
+                            name: 'deleted_payments',
+                            value: JSON.stringify(payments)
+                        }).appendTo(f);
+                    f.submit();
+                    f.remove();
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+                
+        // var url = base_url + 'excel/finance_deleted_or_invoice/' + $(
+        //         "#select-term-leads").val() + '/' + $("#select-report-type").val() +
+        //     '/' + campus + '/' + $("#date-picker").val();
+        // window.open(url, '_blank');
     })
 });
 </script>
