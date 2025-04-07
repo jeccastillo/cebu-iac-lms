@@ -319,7 +319,9 @@
                     </form>                    
                     <hr />
                     <div class="text-right mt-5">
-                        <button v-if="request.final == 0" class="btn btn-success">Finalize</button>
+                        <button @click="finalizeTuition(1)" v-if="request.final == 0" class="btn btn-success">Finalize</button>
+                        <button @click="finalizeTuition(0)" v-else-if="special_role == 2" class="btn btn-danger">Un-Finalize</button>
+
                     </div>
                 </div>
 
@@ -348,6 +350,7 @@ new Vue({
         header_title: 'Add Tuition Year',
         shs_programs: [],
         college_programs: [],
+        special_role: 0,
         request: {
             year: undefined,
             pricePerUnit: undefined,            
@@ -407,6 +410,7 @@ new Vue({
         axios.get('<?php echo base_url(); ?>tuitionyear/tuition_info/' + this.id)
             .then((data) => {                    
                 this.request = data.data.data;    
+                this.special_role = data.data.special_role;
                 this.shs_programs = data.data.shs_programs;                
                 this.college_programs = data.data.college_programs;
                 //this.loader_spinner = false;
@@ -520,6 +524,49 @@ new Vue({
                 allowOutsideClick: () => !Swal.isLoading()
             });
 
+        },
+        finalizeTuition: function(type){
+            Swal.fire({
+                title: 'Finalize Tuition Fee Setup?',
+                text: "Continue with finalization?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata= new FormData();                    
+                    formdata.append("intID",this.request.intID);
+                    formdata.append("final",type);
+                    return axios
+                        .post('<?php echo base_url(); ?>tuitionyear/finalize_tuition/',formdata, {
+                                headers: {
+                                    Authorization: `Bearer ${window.token}`
+                                }
+                            })
+                        .then(data => {
+                            console.log(data.data);
+                            if (data.data.success) {
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data.message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Failed!',
+                                    data.data.message,
+                                    'error'
+                                )
+                            }
+                        });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
         },
         updateData: function() {
             Swal.fire({
