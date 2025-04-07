@@ -97,41 +97,41 @@
                     
                     <hr />
                     <div v-if="request.final == 0">
-                    <p>Add new Tuition for Track</p>
-                    <form @submit.prevent="addExtra('track','Track',track)">                                
-                        <div class="row">                     
-                            <div class="form-group col-sm-3">
-                                <label for="year">Select Track</label>
-                                <select required class="form-control" @change="selectType($event)" placeholder="Enter Fee Amount" v-model='track.track_id'>
-                                    <option v-for="item in shs_programs" :value="item.intProgramID">{{ item.strProgramCode + " " + item.strProgramDescription }}</option>                                    
-                                </select>
-                            </div>   
-                            <div class="form-group col-sm-3">
-                                <label for="year">Regular Fee</label>
-                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='track.tuition_amount'>
+                        <p>Add new Tuition for Track</p>
+                        <form @submit.prevent="addExtra('track','Track',track)">                                
+                            <div class="row">                     
+                                <div class="form-group col-sm-3">
+                                    <label for="year">Select Track</label>
+                                    <select required class="form-control" @change="selectType($event)" placeholder="Enter Fee Amount" v-model='track.track_id'>
+                                        <option v-for="item in shs_programs" :value="item.intProgramID">{{ item.strProgramCode + " " + item.strProgramDescription }}</option>                                    
+                                    </select>
+                                </div>   
+                                <div class="form-group col-sm-3">
+                                    <label for="year">Regular Fee</label>
+                                    <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='track.tuition_amount'>
+                                </div>
+                                <div class="form-group col-sm-3">
+                                    <label for="year">Online Fee</label>
+                                    <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='track.tuition_amount_online'>
+                                </div>
+                                <div class="form-group col-sm-3">
+                                    <label for="year">Hyflex Fee</label>
+                                    <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='track.tuition_amount_hyflex'>
+                                </div>
+                                <div class="form-group col-sm-3">
+                                    <label for="year">Hybrid Fee</label>
+                                    <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='track.tuition_amount_hybrid'>
+                                </div>                                                                                                
                             </div>
-                            <div class="form-group col-sm-3">
-                                <label for="year">Online Fee</label>
-                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='track.tuition_amount_online'>
+                            
+                            <div class="row">    
+                                <div class="col-sm-6">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
                             </div>
-                            <div class="form-group col-sm-3">
-                                <label for="year">Hyflex Fee</label>
-                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='track.tuition_amount_hyflex'>
-                            </div>
-                            <div class="form-group col-sm-3">
-                                <label for="year">Hybrid Fee</label>
-                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='track.tuition_amount_hybrid'>
-                            </div>                                                                                                
-                        </div>
-                        
-                        <div class="row">    
-                            <div class="col-sm-6">
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </div>
-                        </div>
-                    </form>
-                    <hr />
-                    <hr />
+                        </form>
+                        <hr />
+                        <hr />
                     </div>
                     <h3>Tuition per Program (FOR College ONLY)</h3>
                     <table class="table table-bordered table-striped">
@@ -154,46 +154,48 @@
                                 <td>{{ item.tuition_amount_hyflex }}</td>
                                 <td>{{ item.tuition_amount_hybrid }}</td>
                                 <td>{{ item.type }}</td>
-                                <td><a href="#" @click.prevent.stop="deleteItem('program',item.id)">Delete</a></td>
+                                <td><a v-if="request.final == 0" href="#" @click.prevent.stop="deleteItem('program',item.id)">Delete</a></td>
                             </tr>
                         </tbody>
                     </table>
                     
                     <hr />
-                    <p>Add new Tuition for Program</p>
-                    <form @submit.prevent="addExtra('program','Program',program)">                                
-                        <div class="row">                     
-                            <div class="form-group col-sm-3">
-                                <label for="year">Select Program</label>
-                                <select required class="form-control" @change="selectType($event)" placeholder="Enter Fee Amount" v-model='program.track_id'>
-                                    <option v-for="item in college_programs" :value="item.intProgramID">{{ item.strProgramCode + " " + item.strProgramDescription }}</option>                                    
-                                </select>
-                            </div>   
-                            <div class="form-group col-sm-3">
-                                <label for="year">Regular Fee</label>
-                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='program.tuition_amount'>
+                    <div v-if="request.final == 0">
+                        <p>Add new Tuition for Program</p>
+                        <form @submit.prevent="addExtra('program','Program',program)">                                
+                            <div class="row">                     
+                                <div class="form-group col-sm-3">
+                                    <label for="year">Select Program</label>
+                                    <select required class="form-control" @change="selectType($event)" placeholder="Enter Fee Amount" v-model='program.track_id'>
+                                        <option v-for="item in college_programs" :value="item.intProgramID">{{ item.strProgramCode + " " + item.strProgramDescription }}</option>                                    
+                                    </select>
+                                </div>   
+                                <div class="form-group col-sm-3">
+                                    <label for="year">Regular Fee</label>
+                                    <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='program.tuition_amount'>
+                                </div>
+                                <div class="form-group col-sm-3">
+                                    <label for="year">Online Fee</label>
+                                    <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='program.tuition_amount_online'>
+                                </div>
+                                <div class="form-group col-sm-3">
+                                    <label for="year">Hyflex Fee</label>
+                                    <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='program.tuition_amount_hyflex'>
+                                </div>
+                                <div class="form-group col-sm-3">
+                                    <label for="year">Hybrid Fee</label>
+                                    <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='program.tuition_amount_hybrid'>
+                                </div>                                                                                                
                             </div>
-                            <div class="form-group col-sm-3">
-                                <label for="year">Online Fee</label>
-                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='program.tuition_amount_online'>
+                            
+                            <div class="row">    
+                                <div class="col-sm-6">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
                             </div>
-                            <div class="form-group col-sm-3">
-                                <label for="year">Hyflex Fee</label>
-                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='program.tuition_amount_hyflex'>
-                            </div>
-                            <div class="form-group col-sm-3">
-                                <label for="year">Hybrid Fee</label>
-                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='program.tuition_amount_hybrid'>
-                            </div>                                                                                                
-                        </div>
-                        
-                        <div class="row">    
-                            <div class="col-sm-6">
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </div>
-                        </div>
-                    </form>
-                    <hr />
+                        </form>
+                        <hr />
+                    </div>
                     <h3>Miscellaneous Fees</h3>
                     <table class="table table-bordered table-striped">
                         <thead>
@@ -215,61 +217,63 @@
                                 <td>{{ item.miscHyflex }}</td>
                                 <td>{{ item.miscHybrid }}</td>
                                 <td>{{ item.type }}</td>
-                                <td><a href="#" @click.prevent.stop="deleteItem('misc',item.intID)">Delete</a></td>
+                                <td><a v-if="request.final == 0" href="#" @click.prevent.stop="deleteItem('misc',item.intID)">Delete</a></td>
                             </tr>
                         </tbody>
                     </table>
                     
                     <hr />
-                    <p>Add new Miscellaneous Item</p>
-                    <form @submit.prevent="addExtra('misc','Miscellaneous',misc)">    
-                        <div class="row">                     
-                            <div class="form-group col-xs-8">
-                                <label for="year">Name</label>
-                                <input type="text" required class="form-control" placeholder="Enter Name" v-model='misc.name'>
+                    <div v-if="request.final == 0">
+                        <p>Add new Miscellaneous Item</p>
+                        <form @submit.prevent="addExtra('misc','Miscellaneous',misc)">    
+                            <div class="row">                     
+                                <div class="form-group col-xs-8">
+                                    <label for="year">Name</label>
+                                    <input type="text" required class="form-control" placeholder="Enter Name" v-model='misc.name'>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">                     
-                            <div class="form-group col-sm-3">
-                                <label for="year">Regular Fee</label>
-                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='misc.miscRegular'>
+                            <div class="row">                     
+                                <div class="form-group col-sm-3">
+                                    <label for="year">Regular Fee</label>
+                                    <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='misc.miscRegular'>
+                                </div>
+                                <div class="form-group col-sm-3">
+                                    <label for="year">Online Fee</label>
+                                    <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='misc.miscOnline'>
+                                </div>
+                                <div class="form-group col-sm-3">
+                                    <label for="year">Hyflex Fee</label>
+                                    <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='misc.miscHyflex'>
+                                </div>
+                                <div class="form-group col-sm-3">
+                                    <label for="year">Hybrid Fee</label>
+                                    <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='misc.miscHybrid'>
+                                </div>
+                                <div class="form-group col-sm-3">
+                                    <label for="year">Type</label>
+                                    <select required class="form-control" @change="selectType($event)" placeholder="Enter Fee Amount" v-model='misc.type'>
+                                        <option value="regular">Regular</option>
+                                        <option value="nsf">New Student Misc</option>
+                                        <option value="new_student">New Student Fees</option>
+                                        <option value="late_tuition">Late Tuition Fee</option>
+                                        <option value="late_enrollment">Late Enrollment Fee</option>
+                                        <option value="thesis">Thesis</option>
+                                        <option value="internship">Internship</option>
+                                        <option value="nstp">NSTP/ROTC</option>
+                                        <option value="isf">International Student Fee</option>                                    
+                                        <option value="svf">Student Visa Fee</option>                                    
+                                        <option value="other">Other</option>                                    
+                                    </select>
+                                </div>                                                                       
+                            </div>                        
+                            <div class="row">    
+                                <div class="col-sm-6">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
                             </div>
-                            <div class="form-group col-sm-3">
-                                <label for="year">Online Fee</label>
-                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='misc.miscOnline'>
-                            </div>
-                            <div class="form-group col-sm-3">
-                                <label for="year">Hyflex Fee</label>
-                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='misc.miscHyflex'>
-                            </div>
-                            <div class="form-group col-sm-3">
-                                <label for="year">Hybrid Fee</label>
-                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='misc.miscHybrid'>
-                            </div>
-                            <div class="form-group col-sm-3">
-                                <label for="year">Type</label>
-                                <select required class="form-control" @change="selectType($event)" placeholder="Enter Fee Amount" v-model='misc.type'>
-                                    <option value="regular">Regular</option>
-                                    <option value="nsf">New Student Misc</option>
-                                    <option value="new_student">New Student Fees</option>
-                                    <option value="late_tuition">Late Tuition Fee</option>
-                                    <option value="late_enrollment">Late Enrollment Fee</option>
-                                    <option value="thesis">Thesis</option>
-                                    <option value="internship">Internship</option>
-                                    <option value="nstp">NSTP/ROTC</option>
-                                    <option value="isf">International Student Fee</option>                                    
-                                    <option value="svf">Student Visa Fee</option>                                    
-                                    <option value="other">Other</option>                                    
-                                </select>
-                            </div>                                                                       
-                        </div>                        
-                        <div class="row">    
-                            <div class="col-sm-6">
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </div>
-                        </div>
-                    </form>
-                    <hr />
+                        </form>
+                        <hr />
+                    </div>
                     <h3>Lab Fees</h3>
                     <table class="table table-bordered table-striped">
                         <thead>
@@ -289,45 +293,47 @@
                                 <td>{{ item.labOnline }}</td>
                                 <td>{{ item.labHyflex }}</td>
                                 <td>{{ item.labHybrid }}</td>
-                                <td><a href="#" @click.prevent.stop="deleteItem('lab_fee',item.intID)">Delete</a></td>
+                                <td><a v-if="request.final == 0" href="#" @click.prevent.stop="deleteItem('lab_fee',item.intID)">Delete</a></td>
                             </tr>
                         </tbody>
                     </table>
                     <hr />
-                    <p>Add new Lab Fee Type</p>
-                    <form @submit.prevent="addExtra('lab_fee','Laboratory',lab)">    
-                        <div class="row">                     
-                            <div class="form-group col-xs-8">
-                                <label for="year">Name</label>
-                                <input type="text" required class="form-control" placeholder="Enter Name" v-model='lab.name'>
+                    <div v-if="request.final == 0">
+                        <p>Add new Lab Fee Type</p>
+                        <form @submit.prevent="addExtra('lab_fee','Laboratory',lab)">    
+                            <div class="row">                     
+                                <div class="form-group col-xs-8">
+                                    <label for="year">Name</label>
+                                    <input type="text" required class="form-control" placeholder="Enter Name" v-model='lab.name'>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">                     
-                            <div class="form-group col-sm-3">
-                                <label for="year">Regular Fee</label>
-                                <input step="any" type="number"  required class="form-control" placeholder="Enter Fee Amount" v-model='lab.labRegular'>
+                            <div class="row">                     
+                                <div class="form-group col-sm-3">
+                                    <label for="year">Regular Fee</label>
+                                    <input step="any" type="number"  required class="form-control" placeholder="Enter Fee Amount" v-model='lab.labRegular'>
+                                </div>
+                                <div class="form-group col-sm-3">
+                                    <label for="year">Online Fee</label>
+                                    <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='lab.labOnline'>
+                                </div>
+                                <div class="form-group col-sm-3">
+                                    <label for="year">Hyflex Fee</label>
+                                    <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='lab.labHyflex'>
+                                </div>
+                                <div class="form-group col-sm-3">
+                                    <label for="year">Hybrid Fee</label>
+                                    <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='lab.labHybrid'>
+                                </div>                                                                                            
                             </div>
-                            <div class="form-group col-sm-3">
-                                <label for="year">Online Fee</label>
-                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='lab.labOnline'>
+                            
+                            <div class="row">    
+                                <div class="col-sm-6">
+                                    <button type="submit" class="btn btn-primary">Submit</button>                                
+                                </div>
                             </div>
-                            <div class="form-group col-sm-3">
-                                <label for="year">Hyflex Fee</label>
-                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='lab.labHyflex'>
-                            </div>
-                            <div class="form-group col-sm-3">
-                                <label for="year">Hybrid Fee</label>
-                                <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='lab.labHybrid'>
-                            </div>                                                                                            
-                        </div>
-                        
-                        <div class="row">    
-                            <div class="col-sm-6">
-                                <button type="submit" class="btn btn-primary">Submit</button>                                
-                            </div>
-                        </div>
-                    </form>                    
-                    <hr />
+                        </form>                                            
+                        <hr />
+                    </div>                    
                     <div v-if="request.intID" class="text-right mt-5">
                         <button @click="finalizeTuition(1)" v-if="request.final == 0" class="btn btn-success">Finalize</button>
                         <button @click="finalizeTuition(0)" v-else-if="special_role == 2" class="btn btn-danger">Un-Finalize</button>
