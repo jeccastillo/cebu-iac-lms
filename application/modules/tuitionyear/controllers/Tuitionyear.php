@@ -238,7 +238,7 @@ class Tuitionyear extends CI_Controller {
         $this->db->where('intID',$post['intID'])
                  ->update('tb_mas_tuition_year',$post);
         $data['success'] = true;        
-        $data['message'] ="Successfully Finalized";
+        $data['message'] ="Updated";
         echo json_encode($data);
     }
 
