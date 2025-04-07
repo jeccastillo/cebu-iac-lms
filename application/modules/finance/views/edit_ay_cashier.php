@@ -27,7 +27,7 @@
             </div>       
             <hr />     
             <form id="validate-subject" action="<?php echo base_url(); ?>finance/edit_submit_ay" method="post" role="form">
-                <input type="hidden" name="intID" value="<?php echo $item['intID'] ?>" />   <?php echo $userLevel; ?>                                
+                <input type="hidden" name="intID" value="<?php echo $item['intID'] ?>" />   <?php echo $userlevel; ?>                                
                     <div class="form-group col-xs-12 col-lg-4">
                         <label>First Installment Date</label>
                         <input required type="date" name="installment1" value="<?php echo $item['installment1']; ?>" class="form-control" />                         
