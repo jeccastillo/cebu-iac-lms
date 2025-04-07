@@ -5073,7 +5073,7 @@ class Excel extends CI_Controller {
                         }
                         if($payments == null){
                             $payment['date'] = date("M d", strtotime($payment_detail['created_at']));
-                            $payment['or_number'] = $payment_detail['or_number'] ? $payment_detail['or_number'] : $payment_detail['invoice_number'];
+                            $payment['or_number'] = $payment_detail['or_number'] ? 'OR' . $payment_detail['or_number'] : 'INV' . $payment_detail['invoice_number'];
                             $payment['amount'] = (float)number_format($payment_detail['subtotal_order'], 2, '.', '');
                             
                             $payment_month = date("m", strtotime($payment_detail['created_at']));
@@ -5090,7 +5090,7 @@ class Excel extends CI_Controller {
                         }else{
                             if(isset($date['data'][$user['intID']]) && $payment_month == date("m", strtotime($payment_detail['created_at'])) && $payment_year == date("Y", strtotime($payment_detail['created_at']))){
                                 $payments[$current_index]['data'][$user['intID']]['date'] .= ', ' . date("d", strtotime($payment_detail['created_at']));
-                                $payments[$current_index]['data'][$user['intID']]['or_number'] .= $payment_detail['or_number'] ? ', ' . $payment_detail['or_number'] : ', ' . $payment_detail['invoice_number'] ;
+                                $payments[$current_index]['data'][$user['intID']]['or_number'] .= $payment_detail['or_number'] ? ', OR' . $payment_detail['or_number'] : ', INV' . $payment_detail['invoice_number'] ;
                                 $payments[$current_index]['data'][$user['intID']]['amount'] += (float)number_format($payment_detail['subtotal_order'], 2, '.', '');
                             }else{
                                 $flag = $same_month_year = false;
@@ -7933,12 +7933,12 @@ class Excel extends CI_Controller {
                         $facultyLastName = $facultyName[0];
                         if(isset($facultyName[1])){
                             $facultyName = explode(' ', ltrim($facultyName[1]));
-                            $facultyFirstName = $facultyName[0];
+                            $facultyFirstName = $facultyName[1];
                         }
                         
                         $faculty = $this->db->from('tb_mas_faculty')->like(array('strLastname' => $facultyLastName, 'strFirstName' => $facultyFirstName))->get()->first_row('array');
                         $subject = $this->db->get_where('tb_mas_subjects',array('strCode' => $row['G']))->first_row('array');
-
+                        
                         if($faculty && $subject){
                             $classlistID = '';
 
@@ -7951,14 +7951,10 @@ class Excel extends CI_Controller {
                                         'intSubjectID' => $subject['intID'],
                                         'strClassName' => $row['D'],
                                         'year' => $row['E'],
-                                        'strSection' => $row['F'], 
-                                        'intCurriculumID' => $student['current_curriculum']))
+                                        'strSection' => $row['F']))
+                                ->order_by('intID', 'ASC')
                                 ->get()
                                 ->first_row('array');
-
-                            if(!$classlist){
-                                $classlist = $this->db->get_where('tb_mas_classlist',array('strAcademicYear' => $sem, 'intFacultyID' => $faculty['intID'], 'intSubjectID' => $subject['intID'], 'strSection' => $row['F'], 'intCurriculumID' => $student['current_curriculum']))->first_row('array');
-                            }
                             
                             if(!$classlist){
                                 $newClasslist = array(
@@ -8012,6 +8008,7 @@ class Excel extends CI_Controller {
                                         }
                                     }
                                 }
+
                                 $checkClasslistStudent = $this->db->get_where('tb_mas_classlist_student',array('intStudentID' => $student['intID'], 'intClassListID' => $classlistID))->first_row();
                                 // if(!$checkClasslistStudent){
                                 //     $this->data_poster->post_data('tb_mas_classlist_student',$classlistStudent);
