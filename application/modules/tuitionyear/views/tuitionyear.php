@@ -318,7 +318,7 @@
                         </div>
                     </form>                    
                     <hr />
-                    <div class="text-right mt-5">
+                    <div v-if="request.intID" class="text-right mt-5">
                         <button @click="finalizeTuition(1)" v-if="request.final == 0" class="btn btn-success">Finalize</button>
                         <button @click="finalizeTuition(0)" v-else-if="special_role == 2" class="btn btn-danger">Un-Finalize</button>
 

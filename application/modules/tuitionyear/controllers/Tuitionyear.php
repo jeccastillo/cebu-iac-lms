@@ -88,7 +88,7 @@ class Tuitionyear extends CI_Controller {
         $this->load->view("common/footer",$this->data);                                  
        
     }
-
+    
     public function tuition_info($id){
 
         if($id != 0){
@@ -231,6 +231,15 @@ class Tuitionyear extends CI_Controller {
         echo json_encode($data);
        
         
+    }
+
+    public function finalize_tuition(){
+        $post = $this->input->post(); 
+        $this->db->where('intID',$post['intID'])
+                 ->update('tb_mas_tuition_year',$post);
+        $data['success'] = true;        
+        $data['message'] ="Successfully Finalized";
+        echo json_encode($data);
     }
 
     public function view_tuition_years(){
