@@ -23,42 +23,48 @@
                             <div class="form-group col-xs-6">
                                 <label for="year">Tuition Year</label>
                                 <input v-if="request.final == 0" type="text" name="year" required class="form-control" id="year" placeholder="Enter Year" v-model='request.year'>
-                                <div v-else>request.year</div>
+                                <div v-else>{{ request.year }}</div>
                             </div>
                             <div class="form-group col-xs-6">
                                 <label for="year">Price Per Unit Regular</label>
-                                <input v-if="request.final == 0" type="number" step=".01" name="pricePerUnit" required class="form-control" id="pricePerUnit" placeholder="Enter Price per unit" v-model='request.pricePerUnit'>
-                                <div v-else>request.pricePerUnit</div>
+                                <input  v-if="request.final == 0" type="number" step=".01" name="pricePerUnit" required class="form-control" id="pricePerUnit" placeholder="Enter Price per unit" v-model='request.pricePerUnit'>
+                                <div v-else>{{ request.pricePerUnit }}</div>
                             </div>
                             <div class="form-group col-xs-6">
                                 <label for="year">Price Per Unit Online</label>
-                                <input type="number" step=".01" name="pricePerUnitOnline" required class="form-control" id="pricePerUnitOnline" placeholder="Enter Price per unit" v-model='request.pricePerUnitOnline'>
+                                <input v-if="request.final == 0" type="number" step=".01" name="pricePerUnitOnline" required class="form-control" id="pricePerUnitOnline" placeholder="Enter Price per unit" v-model='request.pricePerUnitOnline'>
+                                <div v-else>{{ request.pricePerUnitOnline }}</div>
                             </div>
                             <div class="form-group col-xs-6">
                                 <label for="year">Price Per Unit Hyflex</label>
-                                <input type="number" step=".01" name="pricePerUnitHyflex" required class="form-control" id="pricePerUnitHyflex" placeholder="Enter Price per unit" v-model='request.pricePerUnitHyflex'>
+                                <input v-if="request.final == 0" type="number" step=".01" name="pricePerUnitHyflex" required class="form-control" id="pricePerUnitHyflex" placeholder="Enter Price per unit" v-model='request.pricePerUnitHyflex'>
+                                <div v-else>{{ request.pricePerUnitHyflex }}</div>
                             </div>
                             <div class="form-group col-xs-6">
                                 <label for="year">Price Per Unit Hybrid</label>
-                                <input type="number" step=".01" name="pricePerUnitHybrid" required class="form-control" id="pricePerUnitHybrid" placeholder="Enter Price per unit" v-model='request.pricePerUnitHybrid'>
+                                <input v-if="request.final == 0" type="number" step=".01" name="pricePerUnitHybrid" required class="form-control" id="pricePerUnitHybrid" placeholder="Enter Price per unit" v-model='request.pricePerUnitHybrid'>
+                                <div v-else>{{ request.pricePerUnitHybrid }}</div>
                             </div> 
                             <div class="form-group col-sm-6">
                                 <label for="year">Percent Increase for installment</label>
-                                <input step="any" type="number" required class="form-control" placeholder="Enter Percentage" v-model='request.installmentIncrease'>
+                                <input v-if="request.final == 0" step="any" type="number" required class="form-control" placeholder="Enter Percentage" v-model='request.installmentIncrease'>
+                                <div v-else>{{ request.installmentIncrease }}</div>
                             </div>                            
                             <div class="form-group col-sm-6">
                                 <label for="year">Percent Down Payment for Installment</label>
-                                <input step="any" type="number" required class="form-control" placeholder="Enter Percentage" v-model='request.installmentDP'>
+                                <input v-if="request.final == 0" step="any" type="number" required class="form-control" placeholder="Enter Percentage" v-model='request.installmentDP'>
+                                <div v-else>{{ request.installmentDP }}</div>
                             </div> 
                             <div class="form-group col-sm-6">
                                 <label for="year">Fixed Down Payment for Installment (if blank or set to 0 to choose percent down payment)</label>
-                                <input step="any" type="number" class="form-control" placeholder="Enter Fixed Value" v-model='request.installmentFixed'>
+                                <input v-if="request.final == 0" step="any" type="number" class="form-control" placeholder="Enter Fixed Value" v-model='request.installmentFixed'>
+                                <div v-else>{{ request.installmentFixed }}</div>
                             </div>                                                                                    
                         </div>
                         
                         <div class="row">    
                             <div class="col-sm-6">
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" v-if="request.final == 0" class="btn btn-primary">Submit</button>
                             </div>
                         </div>
                     </form>
