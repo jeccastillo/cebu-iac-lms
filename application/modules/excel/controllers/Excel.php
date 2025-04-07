@@ -8105,6 +8105,11 @@ class Excel extends CI_Controller {
 
     public function finance_deleted_or_invoice($sem = 0, $report_type, $campus, $report_date)
     {
+        $post = $this->input->post();
+        $deleted_payments = json_decode($post['deleted_payments']);
+        
+        // print_r($deleted_payments[0]);
+        // die();
         $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
         if($sem == 0 )
         {
@@ -8113,27 +8118,27 @@ class Excel extends CI_Controller {
         }
         $export_type = ($report_type == 'invoice') ? 'Invoice' : 'Official Receipt';
 
-        $payment_details = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
-                    ->from('payment_details')
-                    ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
-                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
-                    ->where(array('status' => 'void', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.or_number !=' => null))
-                    ->order_by('tb_mas_users.strLastname', 'ASC')
-                    ->group_by('tb_mas_users.intID')
-                    ->get()
-                    ->result_array();
+        // $payment_details = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
+        //             ->from('payment_details')
+        //             ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
+        //             ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+        //             ->where(array('status' => 'void', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.or_number !=' => null))
+        //             ->order_by('tb_mas_users.strLastname', 'ASC')
+        //             ->group_by('tb_mas_users.intID')
+        //             ->get()
+        //             ->result_array();
 
-        if($report_type == 'invoice'){
-            $payment_details = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
-                        ->from('payment_details')
-                        ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
-                        ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
-                        ->where(array('status' => 'void', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.invoice_number !=' => null))
-                        ->order_by('tb_mas_users.strLastname', 'ASC')
-                        ->group_by('tb_mas_users.intID')
-                        ->get()
-                        ->result_array();
-        }
+        // if($report_type == 'invoice'){
+        //     $payment_details = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
+        //                 ->from('payment_details')
+        //                 ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
+        //                 ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+        //                 ->where(array('status' => 'void', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.invoice_number !=' => null))
+        //                 ->order_by('tb_mas_users.strLastname', 'ASC')
+        //                 ->group_by('tb_mas_users.intID')
+        //                 ->get()
+        //                 ->result_array();
+        // }
 
         error_reporting(E_ALL);
         ini_set('display_errors', TRUE);
@@ -8148,23 +8153,35 @@ class Excel extends CI_Controller {
 
         $i = 11;
 
-        foreach($payment_details as $index => $payment_detail){
-            $course = $this->data_fetcher->getProgramDetails($payment_detail['intProgramID']);  
-            
-            // Add some data
-            $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('A'.$i, $index + 1)
-                ->setCellValue('B'.$i, str_replace("-", "", $payment_detail['strStudentNumber']))
-                ->setCellValue('C'.$i, ucfirst($payment_detail['strLastname']) . ', ' . ucfirst($payment_detail['strFirstname']) . ' ' . ucfirst($payment_detail['strMiddlename'][0]) . '.')
-                ->setCellValue('D'.$i, $course['strProgramCode'])
-                ->setCellValue('E'.$i, $report_type == 'invoice' ? date("d-M-Y",strtotime($payment_detail['invoice_date'])) : date("d-M-Y",strtotime($payment_detail['or_date'])))
-                ->setCellValue('F'.$i, $report_type == 'invoice' ? $payment_detail['invoice_number'] : $payment_detail['or_number'])
-                ->setCellValue('G'.$i, $payment_detail['subtotal_order'])
-                ->setCellValue('H'.$i, date("d-M-Y", strtotime($payment_detail['updated_at'])))
-                ->setCellValue('I'.$i, '')
-                ->setCellValue('J'.$i, $payment_detail['remarks']);
-
-            $i++;
+        foreach($deleted_payments as $index => $payment_detail){
+            $student = $this->db->select('tb_mas_users.*, tb_mas_registration.date_enlisted')
+                        ->from('tb_mas_users')
+                        ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                        ->where(array('tb_mas_users.slug' => $payment_detail->student_number))
+                        ->order_by('tb_mas_users.strLastname', 'ASC')
+                        ->group_by('tb_mas_users.intID')
+                        ->get()
+                        ->result_array();
+                        
+            if($student){
+                $course = $this->data_fetcher->getProgramDetails($student['intProgramID']);  
+                
+                // Add some data
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A'.$i, $index + 1)
+                    ->setCellValue('B'.$i, str_replace("-", "", $student['strStudentNumber']))
+                    ->setCellValue('C'.$i, ucfirst($student['strLastname']) . ', ' . ucfirst($student['strFirstname']) . ' ' . ucfirst($student['strMiddlename'][0]) . '.')
+                    //->setCellValue('D'.$i, $course['strProgramCode'])
+                    ->setCellValue('D'.$i, '')
+                    ->setCellValue('E'.$i, $report_type == 'invoice' ? date("d-M-Y",strtotime($payment_detail->invoice_date)) : date("d-M-Y",strtotime($payment_detail->or_date)))
+                    ->setCellValue('F'.$i, $report_type == 'invoice' ? $payment_detail->invoice_number : $payment_detail->or_number)
+                    ->setCellValue('G'.$i, $payment_detail->subtotal_order)
+                    ->setCellValue('H'.$i, date("d-M-Y", strtotime($payment_detail->updated_at)))
+                    ->setCellValue('I'.$i, '')
+                    ->setCellValue('J'.$i, $payment_detail->remarks);
+    
+                $i++;
+            }
         }
         
         $objPHPExcel->setActiveSheetIndex(0)
