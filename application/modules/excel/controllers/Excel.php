@@ -8108,8 +8108,6 @@ class Excel extends CI_Controller {
         $post = $this->input->post();
         $deleted_payments = json_decode($post['deleted_payments']);
         
-        print_r($deleted_payments);
-        die();
         $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
         if($sem == 0 )
         {
@@ -8161,8 +8159,8 @@ class Excel extends CI_Controller {
                         ->order_by('tb_mas_users.strLastname', 'ASC')
                         ->group_by('tb_mas_users.intID')
                         ->get()
-                        ->result_array();
-                        
+                        ->first_row('array');
+
             if($student){
                 $course = $this->data_fetcher->getProgramDetails($student['intProgramID']);  
                 
@@ -8171,12 +8169,12 @@ class Excel extends CI_Controller {
                     ->setCellValue('A'.$i, $index + 1)
                     ->setCellValue('B'.$i, str_replace("-", "", $student['strStudentNumber']))
                     ->setCellValue('C'.$i, ucfirst($student['strLastname']) . ', ' . ucfirst($student['strFirstname']) . ' ' . ucfirst($student['strMiddlename'][0]) . '.')
-                    //->setCellValue('D'.$i, $course['strProgramCode'])
-                    ->setCellValue('D'.$i, '')
+                    ->setCellValue('D'.$i, $course['strProgramCode'])
+                    // ->setCellValue('D'.$i, '')
                     ->setCellValue('E'.$i, $report_type == 'invoice' ? date("d-M-Y",strtotime($payment_detail->invoice_date)) : date("d-M-Y",strtotime($payment_detail->or_date)))
                     ->setCellValue('F'.$i, $report_type == 'invoice' ? $payment_detail->invoice_number : $payment_detail->or_number)
                     ->setCellValue('G'.$i, $payment_detail->subtotal_order)
-                    ->setCellValue('H'.$i, date("d-M-Y", strtotime($payment_detail->updated_at)))
+                    ->setCellValue('H'.$i, date("d-M-Y", strtotime($payment_detail->deleted_at)))
                     ->setCellValue('I'.$i, '')
                     ->setCellValue('J'.$i, $payment_detail->remarks);
     
