@@ -779,6 +779,7 @@ new Vue({
         or_details: {
             id: undefined,
             or_date: undefined,
+            change_or_date: true,
         },
         invoice_update: {
             id: undefined,
