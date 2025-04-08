@@ -59,13 +59,13 @@
                                 <br />                                                    
                                 <label for="enumStudentType">Student Type</label>
                                 <select id="enumStudentType" class="form-control" name="enumStudentType" v-model="request.enumStudentType">                        
-                                    <option value="new">New</option>
-                                    <option value="freshman">Freshman</option>
+                                    <option v-if="student_data.level == 'shs'" value="new">New</option>
+                                    <option v-else value="freshman">Freshman</option>
                                     <option value="continuing">Continuing</option>
                                     <option value="shiftee">Shiftee</option>   
                                     <option value="2nd Degree">2nd Degree</option>
                                     <option value="2nd Degree iAC">2nd Degree iAC</option>                                 
-                                    <option value="returning">Returning</option>
+                                    <option value="returning">Returnee</option>
                                 </select>
                                 <br /> 
                                 <label for="enumStudentType">Internship</label>
