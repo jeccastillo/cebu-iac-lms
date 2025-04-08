@@ -66,12 +66,31 @@ $("#select-report-type").on('change', function(e) {
 });
 $(document).ready(function() {
     $("#cancelled_or_invoice_list_excel").click(function(e) {
-        var campus = "<?php echo $campus;?>";
-        var base_url = "<?php echo base_url(); ?>";
-        var url = base_url + 'excel/finance_cancelled_or_invoice/' + $(
-                "#select-term-leads").val() + '/' + $("#select-report-type").val() +
-            '/' + campus + '/' + $("#date-picker").val();
-        window.open(url, '_blank');
+
+        let api_url = "<?php echo $api_url ?>";
+        // axios.get(api_url + 'sms/finance/voided-payment/' + $("#select-term-leads").val() + '/' + campus + '/' + $("#date-picker-from").val(); + '/' + $("#date-picker-to").val())
+        axios.get('http://cebuapi.iacademy.edu.ph/api/v1/sms/finance/voided-payment/28/Cebu/2024-01-01/2025-04-08')
+                .then((data) => {
+                    let payments = data.data.data;
+                    var campus = "<?php echo $campus;?>";
+                    var base_url = "<?php echo base_url(); ?>";
+                    // let url = base_url + 'excel/finance_cancelled_or_invoice/' + $("#select-term-leads").val() + '/' + campus + '/' + $("#date-picker-from").val(); + '/' + $("#date-picker-to").val();
+                    let url = base_url + 'excel/finance_cancelled_or_invoice/28/Cebu/2024-01-01/2025-04-08';
+                    
+                    var f = $("<form target='_blank' method='POST' style='display:none;'></form>").attr({
+                        action: url
+                    }).appendTo(document.body);
+                        $('<input type="hidden" />').attr({
+                            name: 'cancelled_payments',
+                            value: JSON.stringify(payments)
+                        }).appendTo(f);
+                    f.submit();
+                    f.remove();
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+
     })
 });
 </script>
