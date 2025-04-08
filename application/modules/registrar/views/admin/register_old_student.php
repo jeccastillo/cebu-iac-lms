@@ -65,7 +65,7 @@
                                     <option value="shiftee">Shiftee</option>   
                                     <option value="2nd Degree">2nd Degree</option>
                                     <option value="2nd Degree iAC">2nd Degree iAC</option>                                 
-                                    <option value="returning">Returning</option>
+                                    <option value="returning">Returnee</option>
                                 </select>
                                 <br /> 
                                 <label for="enumStudentType">Internship</label>
