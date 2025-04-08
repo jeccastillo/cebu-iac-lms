@@ -61,7 +61,9 @@
                                 <select id="enumStudentType" class="form-control" name="enumStudentType" v-model="request.enumStudentType">                        
                                     <option value="new">New</option>
                                     <option value="continuing">Continuing</option>
-                                    <option value="shiftee">Shiftee</option>                                    
+                                    <option value="shiftee">Shiftee</option>   
+                                    <option value="2nd Degree">2nd Degree</option>
+                                    <option value="2nd Degree iAC">2nd Degree iAC</option>                                 
                                     <option value="returning">Returning</option>
                                 </select>
                                 <br /> 
