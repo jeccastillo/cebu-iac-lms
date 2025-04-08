@@ -8103,7 +8103,7 @@ class Excel extends CI_Controller {
         }
     }
 
-    public function finance_deleted_or_invoice($sem = 0, $report_type, $campus, $report_date)
+    public function finance_deleted_or_invoice($sem = 0, $campus, $report_date_start, $report_date_end)
     {
         $post = $this->input->post();
         $deleted_payments = json_decode($post['deleted_payments']);
@@ -8114,29 +8114,6 @@ class Excel extends CI_Controller {
             $s = $this->data_fetcher->get_active_sem();
             $sem = $s['intID'];
         }
-        $export_type = ($report_type == 'invoice') ? 'Invoice' : 'Official Receipt';
-
-        // $payment_details = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
-        //             ->from('payment_details')
-        //             ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
-        //             ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
-        //             ->where(array('status' => 'void', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.or_number !=' => null))
-        //             ->order_by('tb_mas_users.strLastname', 'ASC')
-        //             ->group_by('tb_mas_users.intID')
-        //             ->get()
-        //             ->result_array();
-
-        // if($report_type == 'invoice'){
-        //     $payment_details = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
-        //                 ->from('payment_details')
-        //                 ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
-        //                 ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
-        //                 ->where(array('status' => 'void', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.invoice_number !=' => null))
-        //                 ->order_by('tb_mas_users.strLastname', 'ASC')
-        //                 ->group_by('tb_mas_users.intID')
-        //                 ->get()
-        //                 ->result_array();
-        // }
 
         error_reporting(E_ALL);
         ini_set('display_errors', TRUE);
@@ -8147,11 +8124,13 @@ class Excel extends CI_Controller {
 
         // Create new PHPExcel object
         $objPHPExcel = new PHPExcel();
-        $title = 'Deleted ' . $export_type;
+        $title = 'Deleted OR/Invoice';
 
         $i = 11;
+        $count = 1;
 
         foreach($deleted_payments as $index => $payment_detail){
+            $course = $studentNumber = '';
             $student = $this->db->select('tb_mas_users.*, tb_mas_registration.date_enlisted')
                         ->from('tb_mas_users')
                         ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
@@ -8160,25 +8139,30 @@ class Excel extends CI_Controller {
                         ->group_by('tb_mas_users.intID')
                         ->get()
                         ->first_row('array');
-
+                        
+            $name = ucfirst($payment_detail->last_name) . ', ' . ucfirst($payment_detail->first_name);
             if($student){
-                $course = $this->data_fetcher->getProgramDetails($student['intProgramID']);  
+                $studentNumber = str_replace("-", "", $student['strStudentNumber']);
+                $program = $this->data_fetcher->getProgramDetails($student['intProgramID']);
+                $course = $program ? $program['strProgramCode'] : '';
+                $name = ucfirst($student['strLastname']) . ', ' . ucfirst($student['strFirstname']) . ' ' . ucfirst($student['strMiddlename'][0]) . '.';
+            }
                 
                 // Add some data
                 $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A'.$i, $index + 1)
-                    ->setCellValue('B'.$i, str_replace("-", "", $student['strStudentNumber']))
-                    ->setCellValue('C'.$i, ucfirst($student['strLastname']) . ', ' . ucfirst($student['strFirstname']) . ' ' . ucfirst($student['strMiddlename'][0]) . '.')
-                    ->setCellValue('D'.$i, $course['strProgramCode'])
-                    ->setCellValue('E'.$i, $report_type == 'invoice' ? date("d-M-Y",strtotime($payment_detail->invoice_date)) : date("d-M-Y",strtotime($payment_detail->or_date)))
-                    ->setCellValue('F'.$i, $report_type == 'invoice' ? $payment_detail->invoice_number : $payment_detail->or_number)
-                    ->setCellValue('G'.$i, $payment_detail->subtotal_order)
-                    ->setCellValue('H'.$i, date("d-M-Y", strtotime($payment_detail->deleted_at)))
-                    ->setCellValue('I'.$i, $payment_detail->deleted_by)
-                    ->setCellValue('J'.$i, $payment_detail->remarks);
+                    ->setCellValue('A'.$i, $count)
+                    ->setCellValue('B'.$i, $studentNumber)
+                    ->setCellValue('C'.$i, $name)
+                    ->setCellValue('D'.$i, $course)
+                    ->setCellValue('E'.$i, $payment_detail->invoice_date ? date("d-M-Y",strtotime($payment_detail->invoice_date)) : date("d-M-Y",strtotime($payment_detail->or_date)))
+                    ->setCellValue('F'.$i, $payment_detail->or_number)
+                    ->setCellValue('G'.$i, $payment_detail->invoice_number)
+                    ->setCellValue('H'.$i, $payment_detail->subtotal_order)
+                    ->setCellValue('I'.$i, date("d-M-Y", strtotime($payment_detail->deleted_at)))
+                    ->setCellValue('J'.$i, $payment_detail->deleted_by)
+                    ->setCellValue('K'.$i, $payment_detail->remarks);
     
                 $i++;
-            }
         }
         
         $objPHPExcel->setActiveSheetIndex(0)
@@ -8186,24 +8170,25 @@ class Excel extends CI_Controller {
                     ->setCellValue('A2', $campus == 'Makati' ? 'iACADEMY Nexus 7434 Yakal Street Brgy. San Antonio, Makati City' : '5th Floor Filinvest Cyberzone Tower 2 Salinas Drive Cor. W. Geonzon St., Cebu IT Park, Apas, Cebu City')
                     ->setCellValue('A3', $campus == 'Makati' ? 'NCR, Fourth District Philippines' : '')
                     ->setCellValue('A5', 'Summary of Deleted Report')
-                    ->setCellValue('A7', $export_type)
+                    ->setCellValue('A7', 'OR/Invoice')
                     ->setCellValue('A8', strtoupper($sy->term_student_type) . ' ' . $sy->enumSem . ' ' . $this->data["term_type"] . ' ' . $sy->strYearStart . '-' . $sy->strYearEnd)
                     ->setCellValue('A10', 'No.')
                     ->setCellValue('B10', 'Student Number')
                     ->setCellValue('C10', 'Student Name')
                     ->setCellValue('D10', 'Course')
-                    ->setCellValue('E10', $export_type . ' Date')
-                    ->setCellValue('F10', $export_type . ' No.')
-                    ->setCellValue('G10', 'Amount')
-                    ->setCellValue('H10', 'Date Deleted')
-                    ->setCellValue('I10', 'Deleted By')
-                    ->setCellValue('J10', 'Remarks')
-                    ->setCellValue('F' . ($i + 1), 'Total')
-                    ->setCellValue('G' . ($i + 1), '=SUM(G11:G' . ($i-1) . ')')
+                    ->setCellValue('E10', 'Date')
+                    ->setCellValue('F10', 'OR No.')
+                    ->setCellValue('G10', 'Invoice No.')
+                    ->setCellValue('H10', 'Amount')
+                    ->setCellValue('I10', 'Date Deleted')
+                    ->setCellValue('J10', 'Deleted By')
+                    ->setCellValue('K10', 'Remarks')
+                    ->setCellValue('G' . ($i + 1), 'Total')
+                    ->setCellValue('H' . ($i + 1), '=SUM(H11:H' . ($i-1) . ')')
                     ->setCellValue('A' . ($i + 6), 'Prepared By:')
                     ->setCellValue('A' . ($i + 8), $this->data['user']['strFirstname'] . ' ' . $this->data['user']['strLastname']);
 
-        $objPHPExcel->getActiveSheet()->getStyle('G11:G' . ($i + 1))->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle('H11:H' . ($i + 1))->getNumberFormat()->setFormatCode('#,##0.00');
         $objPHPExcel->getActiveSheet()->getStyle('A1:F8')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
         $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray(
@@ -8225,8 +8210,7 @@ class Excel extends CI_Controller {
                 )
             )
         );
-
-        $objPHPExcel->getActiveSheet()->getStyle('A2:J10')->applyFromArray(
+        $objPHPExcel->getActiveSheet()->getStyle('G' . ($i + 1))->applyFromArray(
             array(
                 'font'  => array(
                     'bold'  => true,
@@ -8236,7 +8220,17 @@ class Excel extends CI_Controller {
             )
         );
 
-        $objPHPExcel->getActiveSheet()->getStyle('A10:J' . ($i-1))->applyFromArray(
+        $objPHPExcel->getActiveSheet()->getStyle('A2:K10')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 11,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('A10:K' . ($i-1))->applyFromArray(
             array(
                 'borders' => array(
                     'allborders' => array(
@@ -8253,10 +8247,10 @@ class Excel extends CI_Controller {
                 'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
             )
         );
-        $objPHPExcel->getActiveSheet()->getStyle('A10:J'.$i)->applyFromArray($style);
-        $objPHPExcel->getActiveSheet()->getStyle('A10:J'.$i)->getAlignment()->setWrapText(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A10:K'.$i)->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('A10:K'.$i)->getAlignment()->setWrapText(true);
 
-        $objPHPExcel->getActiveSheet()->getStyle('G11:G' . ($i + 2))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        $objPHPExcel->getActiveSheet()->getStyle('H11:H' . ($i + 2))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
@@ -8266,8 +8260,9 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(25);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
         
         $sheet = $objPHPExcel->getActiveSheet();
         $sheet->mergeCells('A1:J1');
@@ -8289,7 +8284,7 @@ class Excel extends CI_Controller {
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
-        header('Content-Disposition: attachment;filename="Deleted ' . $export_type . ' - ' . ucwords($sy->term_student_type) . ' ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '(As of ' . date("M d, Y", strtotime($report_date)) . ').xls"');
+        header('Content-Disposition: attachment;filename="Deleted OR/Invoice - ' . ucwords($sy->term_student_type) . ' ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '(' . date("M d, Y", strtotime($report_date_start)) . '-' . date("M d, Y", strtotime($report_date_end)) . ').xls"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
@@ -8493,36 +8488,16 @@ class Excel extends CI_Controller {
         exit;
     }
 
-    public function finance_cancelled_or_invoice($sem = 0, $report_type, $campus, $report_date)
+    public function finance_cancelled_or_invoice($sem = 0, $campus, $report_date_start, $report_date_end)
     {
+        $post = $this->input->post();
+        $cancelled_payments = json_decode($post['cancelled_payments']);
+
         $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
         if($sem == 0)
         {
             $s = $this->data_fetcher->get_active_sem();
             $sem = $s['intID'];
-        }
-        $export_type = ($report_type == 'invoice') ? 'Invoice' : 'Official Receipt';
-
-        $payment_details = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
-                   ->from('payment_details')
-                    ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
-                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
-                    ->where(array('status' => 'cancel', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.or_number !=' => null))
-                    ->order_by('tb_mas_users.strLastname', 'ASC')
-                    ->group_by('tb_mas_users.intID')
-                    ->get()
-                    ->result_array();
-
-        if($report_type == 'invoice'){
-            $payment_details = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
-                        ->from('payment_details')
-                        ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
-                        ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
-                        ->where(array('status' => 'cancel', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.invoice_number !=' => null))
-                        ->order_by('tb_mas_users.strLastname', 'ASC')
-                        ->group_by('tb_mas_users.intID')
-                        ->get()
-                        ->result_array();
         }
 
         error_reporting(E_ALL);
@@ -8534,27 +8509,46 @@ class Excel extends CI_Controller {
 
         // Create new PHPExcel object
         $objPHPExcel = new PHPExcel();
-        $title = 'Cancelled ' . $export_type;
+        $title = 'Cancelled OR/Invoice';
 
         $i = 11;
+        $count = 1;
 
-        foreach($payment_details as $index => $payment_detail){
-            $course = $this->data_fetcher->getProgramDetails($payment_detail['intProgramID']);  
+        foreach($cancelled_payments as $index => $payment_detail){
+            $course = $studentNumber = '';
+            $student = $this->db->select('tb_mas_users.*, tb_mas_registration.date_enlisted')
+                        ->from('tb_mas_users')
+                        ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                        ->where(array('tb_mas_users.slug' => $payment_detail->student_number))
+                        ->order_by('tb_mas_users.strLastname', 'ASC')
+                        ->group_by('tb_mas_users.intID')
+                        ->get()
+                        ->first_row('array');
+
+            $name = ucfirst($payment_detail->last_name) . ', ' . ucfirst($payment_detail->first_name);
+            if($student){
+                $studentNumber = str_replace("-", "", $student['strStudentNumber']);
+                $program = $this->data_fetcher->getProgramDetails($student['intProgramID']);
+                $course = $program ? $program['strProgramCode'] : '';
+                $name = ucfirst($student['strLastname']) . ', ' . ucfirst($student['strFirstname']) . ' ' . ucfirst($student['strMiddlename'][0]) . '.';
+            }
             
             // Add some data
             $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('A'.$i, $index + 1)
-                ->setCellValue('B'.$i, str_replace("-", "", $payment_detail['strStudentNumber']))
-                ->setCellValue('C'.$i, ucfirst($payment_detail['strLastname']) . ', ' . ucfirst($payment_detail['strFirstname']) . ' ' . ucfirst($payment_detail['strMiddlename'][0]) . '.')
-                ->setCellValue('D'.$i, $course['strProgramCode'])
-                ->setCellValue('E'.$i, $report_type == 'invoice' ? date("d-M-Y",strtotime($payment_detail['invoice_date'])) : date("d-M-Y",strtotime($payment_detail['or_date'])))
-                ->setCellValue('F'.$i, $report_type == 'invoice' ? $payment_detail['invoice_number'] : $payment_detail['or_number'])
-                ->setCellValue('G'.$i, $payment_detail['subtotal_order'])
-                ->setCellValue('H'.$i, date("d-M-Y", strtotime($payment_detail['updated_at'])))
-                ->setCellValue('I'.$i, '')
-                ->setCellValue('J'.$i, $payment_detail['remarks']);
+                ->setCellValue('A'.$i, $count)
+                ->setCellValue('B'.$i, $studentNumber)
+                ->setCellValue('C'.$i, $name)
+                ->setCellValue('D'.$i, $course)
+                ->setCellValue('E'.$i, $payment_detail->invoice_date ? date("d-M-Y",strtotime($payment_detail->invoice_date)) : date("d-M-Y",strtotime($payment_detail->or_date)))
+                ->setCellValue('F'.$i, $payment_detail->or_number)
+                ->setCellValue('G'.$i, $payment_detail->invoice_number)
+                ->setCellValue('H'.$i, $payment_detail->subtotal_order)
+                ->setCellValue('I'.$i, date("d-M-Y", strtotime($payment_detail->updated_at)))
+                ->setCellValue('J'.$i, $payment_detail->cancelled_by)
+                ->setCellValue('K'.$i, $payment_detail->void_reason);
 
             $i++;
+            $count++;
         }
         
         $objPHPExcel->setActiveSheetIndex(0)
@@ -8562,24 +8556,25 @@ class Excel extends CI_Controller {
                     ->setCellValue('A2', $campus == 'Makati' ? 'iACADEMY Nexus 7434 Yakal Street Brgy. San Antonio, Makati City' : '5th Floor Filinvest Cyberzone Tower 2 Salinas Drive Cor. W. Geonzon St., Cebu IT Park, Apas, Cebu City')
                     ->setCellValue('A3', $campus == 'Makati' ? 'NCR, Fourth District Philippines' : '')
                     ->setCellValue('A5', 'Summary of Cancelled Report')
-                    ->setCellValue('A7', $export_type)
+                    ->setCellValue('A7', 'OR/Invoice')
                     ->setCellValue('A8', strtoupper($sy->term_student_type) . ' ' . $sy->enumSem . ' ' . $this->data["term_type"] . ' ' . $sy->strYearStart . '-' . $sy->strYearEnd)
                     ->setCellValue('A10', 'No.')
                     ->setCellValue('B10', 'Student Number')
                     ->setCellValue('C10', 'Student Name')
                     ->setCellValue('D10', 'Course')
-                    ->setCellValue('E10', $export_type . ' Date')
-                    ->setCellValue('F10', $export_type . ' No.')
-                    ->setCellValue('G10', 'Amount')
-                    ->setCellValue('H10', 'Date Cancelled')
-                    ->setCellValue('I10', 'Cancelled By')
-                    ->setCellValue('J10', 'Remarks')
-                    ->setCellValue('F' . ($i + 1), 'Total')
-                    ->setCellValue('G' . ($i + 1), '=SUM(G11:G' . ($i-1) . ')')
+                    ->setCellValue('E10', 'Date')
+                    ->setCellValue('F10', 'OR No.')
+                    ->setCellValue('G10', 'Invoice No.')
+                    ->setCellValue('H10', 'Amount')
+                    ->setCellValue('I10', 'Date Cancelled')
+                    ->setCellValue('J10', 'Cancelled By')
+                    ->setCellValue('K10', 'Remarks')
+                    ->setCellValue('G' . ($i + 1), 'Total')
+                    ->setCellValue('H' . ($i + 1), '=SUM(G11:G' . ($i-1) . ')')
                     ->setCellValue('A' . ($i + 6), 'Prepared By:')
                     ->setCellValue('A' . ($i + 8), $this->data['user']['strFirstname'] . ' ' . $this->data['user']['strLastname']);
 
-        $objPHPExcel->getActiveSheet()->getStyle('G11:G' . ($i + 1))->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle('H11:H' . ($i + 1))->getNumberFormat()->setFormatCode('#,##0.00');
         $objPHPExcel->getActiveSheet()->getStyle('A1:F8')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
         $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray(
@@ -8592,7 +8587,7 @@ class Excel extends CI_Controller {
             )
         );
 
-        $objPHPExcel->getActiveSheet()->getStyle('F' . ($i + 1))->applyFromArray(
+        $objPHPExcel->getActiveSheet()->getStyle('G' . ($i + 1))->applyFromArray(
             array(
                 'font'  => array(
                     'bold'  => true,
@@ -8602,7 +8597,7 @@ class Excel extends CI_Controller {
             )
         );
 
-        $objPHPExcel->getActiveSheet()->getStyle('A2:J10')->applyFromArray(
+        $objPHPExcel->getActiveSheet()->getStyle('A2:K10')->applyFromArray(
             array(
                 'font'  => array(
                     'bold'  => true,
@@ -8612,7 +8607,7 @@ class Excel extends CI_Controller {
             )
         );
 
-        $objPHPExcel->getActiveSheet()->getStyle('A10:J' . ($i-1))->applyFromArray(
+        $objPHPExcel->getActiveSheet()->getStyle('A10:K' . ($i-1))->applyFromArray(
             array(
                 'borders' => array(
                     'allborders' => array(
@@ -8629,10 +8624,10 @@ class Excel extends CI_Controller {
                 'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
             )
         );
-        $objPHPExcel->getActiveSheet()->getStyle('A10:J'.$i)->applyFromArray($style);
-        $objPHPExcel->getActiveSheet()->getStyle('A10:J'.$i)->getAlignment()->setWrapText(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A10:K'.$i)->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('A10:K'.$i)->getAlignment()->setWrapText(true);
 
-        $objPHPExcel->getActiveSheet()->getStyle('G11:G' . ($i + 2))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        $objPHPExcel->getActiveSheet()->getStyle('H11:H' . ($i + 2))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
@@ -8640,10 +8635,11 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(25);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
         
         $sheet = $objPHPExcel->getActiveSheet();
         $sheet->mergeCells('A1:J1');
@@ -8665,7 +8661,7 @@ class Excel extends CI_Controller {
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
-        header('Content-Disposition: attachment;filename="Cancelled ' . $export_type . ' - ' . ucwords($sy->term_student_type) . ' ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '(As of ' . date("M d, Y", strtotime($report_date)) . ').xls"');
+        header('Content-Disposition: attachment;filename="Cancelled OR/Invoice -' . date("M d, Y", strtotime($report_date_start)) . '-' . date("M d, Y", strtotime($report_date_end)) . ').xls"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
