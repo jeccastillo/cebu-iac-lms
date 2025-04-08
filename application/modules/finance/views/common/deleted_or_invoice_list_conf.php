@@ -68,14 +68,14 @@ $(document).ready(function() {
 
     $("#deleted_or_invoice_list_excel").click(function(e) {
         let api_url = "<?php echo $api_url ?>";
-        axios.get(api_url + 'sms/finance/deleted-payment/' + $("#select-term-leads").val())
+        // axios.get(api_url + 'sms/finance/deleted-payment/' + $("#select-term-leads").val() + '/' + campus + '/' + $("#date-picker-from").val(); + '/' + $("#date-picker-to").val())
+        axios.get('http://cebuapi.iacademy.edu.ph/api/v1/sms/finance/deleted-payment/30/Cebu/2025-01-01/2025-04-08')
                 .then((data) => {
                     let payments = data.data.data;
                     var campus = "<?php echo $campus;?>";
                     var base_url = "<?php echo base_url(); ?>";
-                    let url = base_url + 'excel/finance_deleted_or_invoice/' + $(
-                "#select-term-leads").val() + '/' + $("#select-report-type").val() +
-            '/' + campus + '/' + $("#date-picker").val();
+                    // let url = base_url + 'excel/finance_deleted_or_invoice/' + $("#select-term-leads").val() + '/' + campus + '/' + $("#date-picker-from").val(); + '/' + $("#date-picker-to").val();
+                    let url = base_url + 'excel/finance_deleted_or_invoice/30/Cebu/2025-01-01/2025-04-08';
                     
                     var f = $("<form target='_blank' method='POST' style='display:none;'></form>").attr({
                         action: url
@@ -90,11 +90,6 @@ $(document).ready(function() {
                 .catch((error) => {
                     console.log(error);
                 })
-                
-        // var url = base_url + 'excel/finance_deleted_or_invoice/' + $(
-        //         "#select-term-leads").val() + '/' + $("#select-report-type").val() +
-        //     '/' + campus + '/' + $("#date-picker").val();
-        // window.open(url, '_blank');
     })
 });
 </script>
