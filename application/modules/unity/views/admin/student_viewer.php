@@ -248,6 +248,7 @@
                             <select class="form-control" @change="updateStudentType($event)"
                               v-model="registration.enumStudentType">
                               <option value="new">new</option>
+                              <option value="freshman">Freshman</option>
                               <option value="continuing">continuing</option>
                               <option value="shiftee">shiftee</option>
                               <option value="2nd Degree">2nd Degree</option>
