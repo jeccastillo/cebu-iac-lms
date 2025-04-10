@@ -1191,7 +1191,7 @@ class Unity extends CI_Controller {
     function get_tuition_ajax(){
         
         $post = $this->input->post();              
-        $post['subjects_loaded'] =  json_decode($post['subjects_loaded']);        
+        $post['subjects_loaded'] = json_decode($post['subjects_loaded']);           
         
         if(!isset($post['tuition_year']))
             $ty = $student['intTuitionYear'];
@@ -1375,6 +1375,7 @@ class Unity extends CI_Controller {
             else
                 $curriculum_units_na += $cs['strUnits'];
 
+            $equivalent_subjects = $this->db->get_where('tb_mas_equivalents',array('intSubjectID'=>$cs['intSubjectID']))->result_array();
             $recs = 
             $this->db->select('floatFinalGrade,strRemarks,tb_mas_subjects.strUnits,tb_mas_subjects.include_gwa,tb_mas_subjects.strCode,intFinalized')
                      ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')  
@@ -1382,6 +1383,22 @@ class Unity extends CI_Controller {
                      ->where(array('tb_mas_classlist.intSubjectID'=>$cs['intSubjectID'],'tb_mas_classlist_student.intStudentID'=>$data['student']['intID'],'tb_mas_classlist_student.strRemarks !='=>'Officially Withdrawn'))                     
                      ->get('tb_mas_classlist_student')
                      ->result_array();            
+            if(count($recs) == 0){
+                foreach($equivalent_subjects as $es){
+                    $erecs = 
+                    $this->db->select('floatFinalGrade,strRemarks,tb_mas_subjects.strUnits,tb_mas_subjects.include_gwa,tb_mas_subjects.strCode,intFinalized')
+                            ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')  
+                            ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')                                              
+                            ->where(array('tb_mas_classlist.intSubjectID'=>$es['intSubjectID'],'tb_mas_classlist_student.intStudentID'=>$data['student']['intID'],'tb_mas_classlist_student.strRemarks !='=>'Officially Withdrawn'))                     
+                            ->get('tb_mas_classlist_student')
+                            ->result_array();        
+                    if(count($erecs) > 0){
+                        $recs = $erecs;
+                        break;
+                    }
+                }             
+            }
+            
             foreach($recs as $temp_rec){
                 $current = false;                
                 foreach($data['current_records'] as $current_rec){
@@ -1414,9 +1431,11 @@ class Unity extends CI_Controller {
                             $temp_rec['color'] = "#f2f2f2";
                     }                             
     
-                    if($temp_rec['include_gwa'] && $grade != "OW"){                        
-                        $assessment_units += $temp_rec['strUnits'];   
-                        $assessment_sum += $grade * $temp_rec['strUnits'];         
+                    if($temp_rec['include_gwa'] && $grade != "OW"){
+                        if($temp_rec['strUnits'] > 0){
+                            $assessment_units += $temp_rec['strUnits'];   
+                            $assessment_sum += $grade * $temp_rec['strUnits'];
+                        }                       
                     }
                 }
                 elseif($current){
@@ -1435,7 +1454,7 @@ class Unity extends CI_Controller {
             $cs['equivalent'] = $this->db->get_where('tb_mas_credited',array('equivalent_subject'=>$cs['intSubjectID'],'student_id'=>$data['student']['intID']))->first_row();
             if(!isset($cs['rec'])){
                 if($cs['equivalent'])
-                    $cs['rec']['bg'] = "#00AA00";               
+                    $cs['rec']['bg'] = "#00AA00";                             
             }
             
                      
@@ -1511,8 +1530,10 @@ class Unity extends CI_Controller {
                             $v3 = $record['v3'];
                     }                  
                     if($v3 != "OW"){ 
-                        $sum_grades += $v3 * $record['strUnits'];                
-                        $total += $record['strUnits'];
+                        if($record['strUnits'] > 0){
+                            $sum_grades += $v3 * $record['strUnits'];                
+                            $total += $record['strUnits'];
+                        }
                     }
                 }
 
@@ -1605,8 +1626,11 @@ class Unity extends CI_Controller {
             {
                 if($student_type == "college")
                     $ret['active_sem'] = $this->data_fetcher->get_active_sem();                
-                else
-                    $ret['active_sem'] = $this->data_fetcher->get_active_sem_shs();                
+                elseif($student_type == "shs")
+                    $ret['active_sem'] = $this->data_fetcher->get_active_sem_shs();
+                else {               
+                    $ret['active_sem'] = $this->db->get_where('tb_mas_sy',array('term_student_type'=>'next'))->first_row('array');                
+                }
             }
 
             $data['student_link'] = base_url()."unity/student_viewer/".$ret['student']['intID'];
@@ -1626,6 +1650,9 @@ class Unity extends CI_Controller {
                 break;
                 case 'other':
                     $stype = 'college';
+                break;
+                case 'next':
+                    $stype = 'next';
                 break;
                 default: 
                     $stype = 'college';
@@ -1857,7 +1884,7 @@ class Unity extends CI_Controller {
                     </tr>';
 
                 if(isset($grades[$i+1])){
-                    if($prev_year_sem != $grades[$i+1]['syID'] || count($grades) == $i+1){
+                    if(($prev_year_sem != $grades[$i+1]['syID'] || count($grades) == $i+1) && $scount != 0){
                         $sgpa_computed = $sgpa/$scount;
                         $scount_counted = $scount;
                         $sgpa = 0;
@@ -2037,8 +2064,12 @@ class Unity extends CI_Controller {
             $student_type = get_stype($student['level']);    
             if($student_type == "college")        
                 $ret['active_sem'] = $this->data_fetcher->get_active_sem();
-            else
+            elseif($student_type == "shs")
                 $ret['active_sem'] = $this->data_fetcher->get_active_sem_shs();
+            else {               
+                $ret['active_sem'] = $this->db->get_where('tb_mas_sy',array('term_student_type'=>'next'))->first_row('array');                
+            }
+            
         }
         
         if(!empty($post))
@@ -2681,7 +2712,7 @@ class Unity extends CI_Controller {
     
     }
     
-    public function view_classlist_archive_admin($sem = null, $program = 0, $dissolved = 0, $has_faculty = 0, $status = 0)
+    public function view_classlist_archive_admin($sem = null, $program = 0, $dissolved = 0, $has_faculty = 0, $status = 0, $modular = 0)
     {
         if($this->is_admin() || $this->is_registrar())
         {
@@ -2697,6 +2728,7 @@ class Unity extends CI_Controller {
             $this->data['dissolved'] = $dissolved;
             $this->data['has_faculty'] = $has_faculty;
             $this->data['status'] = $status;
+            $this->data['modular'] = $modular;
            
             //$this->data['classlists'] = $this->data_fetcher->fetch_classlists_all(null,$this->data['selected_ay']);
             $this->data['page'] = "classlist_archive";
