@@ -1394,7 +1394,9 @@ class Unity extends CI_Controller {
                             ->result_array();        
                     if(count($erecs) > 0){
                         $recs = $erecs;
-                        break;
+                        print_r($erecs);
+                        die();
+                        break;                        
                     }
                 }             
             }
