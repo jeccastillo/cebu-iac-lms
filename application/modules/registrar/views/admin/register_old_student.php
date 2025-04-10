@@ -240,8 +240,7 @@ new Vue({
                     this.request.strAcademicYear = data.data.data.active_sem.intID;
                     this.reg_status = data.data.data.reg_status;
                     this.student_data = data.data.data.student;
-                    this.block_sections = data.data.data.block_sections;
-                    this.request.block_section = undefined;
+                    this.block_sections = data.data.data.block_sections;                    
                     
 
                      //this.loader_spinner = true;
