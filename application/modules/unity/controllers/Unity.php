@@ -1383,7 +1383,7 @@ class Unity extends CI_Controller {
                      ->where(array('tb_mas_classlist.intSubjectID'=>$cs['intSubjectID'],'tb_mas_classlist_student.intStudentID'=>$data['student']['intID'],'tb_mas_classlist_student.strRemarks !='=>'Officially Withdrawn'))                     
                      ->get('tb_mas_classlist_student')
                      ->result_array();            
-            if(count($recs) == 0){
+            if(count($recs) == 0){ //EQUIVALENT
                 foreach($equivalent_subjects as $es){
                     $erecs = 
                     $this->db->select('floatFinalGrade,strRemarks,tb_mas_subjects.strUnits,tb_mas_subjects.include_gwa,tb_mas_subjects.strCode,intFinalized')
@@ -1397,6 +1397,16 @@ class Unity extends CI_Controller {
                         break;                        
                     }
                 }             
+            }
+            if(count($recs) == 0){ //ELECTIVE
+                $recs = 
+                    $this->db->select('floatFinalGrade,strRemarks,tb_mas_subjects.strUnits,tb_mas_subjects.include_gwa,tb_mas_subjects.strCode,intFinalized')
+                            ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')  
+                            ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID') 
+                            ->join('tb_mas_classlist_student_elective','tb_mas_classlist_student_elective.subject_classlist_id = tb_mas_classlist.intID','left')                                             
+                            ->where(array('tb_mas_classlist.intSubjectID'=>$cs['intSubjectID'],'tb_mas_classlist_student.intStudentID'=>$data['student']['intID'],'tb_mas_classlist_student.strRemarks !='=>'Officially Withdrawn'))                     
+                            ->get('tb_mas_classlist_student')
+                            ->result_array();
             }
             
             foreach($recs as $temp_rec){
