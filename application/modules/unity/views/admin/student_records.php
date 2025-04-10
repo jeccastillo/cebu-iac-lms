@@ -158,7 +158,7 @@
                     <div class="tab-pane" id="tab_2">
                         <div class="box box-success">                            
                             <div class="box-body">
-                                <span style="color:rgb(0, 144, 0)">&#25A0;</span> Passed
+                                <span style="color:rgb(0, 144, 0)">&#9632;</span> Passed
                                 <hr />
                                 <div v-for="record in curriculum_subjects">
                                     <table v-for="term in record" class="table table-condensed table-bordered">
