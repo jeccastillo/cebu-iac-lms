@@ -161,7 +161,8 @@
                                 <div style="font-size:.8em">
                                     <span style="color:rgb(0, 144, 0);font-size:1.4em;">&#9632;</span> Passed &nbsp;
                                     <span style="color:rgb(144, 0, 0);font-size:1.4em;">&#9632;</span> Failed &nbsp;
-                                    <span style="color:rgb(173, 216, 230);font-size:1.4em;">&#9632;</span> Currently Enrolled &nbsp;
+                                    <span style="color:rgb(0, 0, 144);font-size:1.4em;">&#9632;</span> Currently Enrolled &nbsp;
+                                    <span style="color:rgb(0, 0, 0);font-size:1.4em;">&#9632;</span> Not Yet Taken &nbsp;
                                 </div>
                                 <hr />
                                 <div v-for="record in curriculum_subjects">
