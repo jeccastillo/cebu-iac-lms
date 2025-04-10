@@ -241,6 +241,7 @@ new Vue({
                     this.reg_status = data.data.data.reg_status;
                     this.student_data = data.data.data.student;
                     this.block_sections = data.data.data.block_sections;
+                    this.request.block_section = undefined;
                     
 
                      //this.loader_spinner = true;
@@ -315,8 +316,7 @@ new Vue({
                         formdata.append("sem",this.sem);
                         formdata.append("year",this.request.intYearLevel);
                         formdata.append("tuition_year",this.request.tuition_year);
-                        formdata.append("internship",this.request.internship);
-                        formdata.append("block_section",this.request.block_section);
+                        formdata.append("internship",this.request.internship);                        
                         
 
                         axios.post('<?php echo base_url(); ?>unity/get_tuition_ajax', formdata, {
