@@ -2515,7 +2515,7 @@ class Data_fetcher extends CI_Model {
                  
         
         if(isset($registration))
-            return $this->getTuitionSubjects($registration['enumStudentType'],$sch,$discount,$subjects,$id,$registration['type_of_class'],$sem,$registration['tuition_year'],$registration['dteRegistered'],$registration['intYearLevel'],$registration['internship']);
+            return $this->getTuitionSubjects($registration['enumStudentType'],$sch,$discount,$subjects,$id,$registration['type_of_class'],$sem,$registration['tuition_year'],$registration['dteRegistered'],$registration['intYearLevel'],$registration['internship'], $registration['intROG']);
         else                              
             return null;
         
@@ -2561,7 +2561,7 @@ class Data_fetcher extends CI_Model {
         
     }   
 
-    function getTuitionSubjects($stype,$sch,$discount,$subjects,$id,$class_type="regular",$syid,$tuition_year_id,$dr=null,$year_level = 1,$internship = 0)
+    function getTuitionSubjects($stype,$sch,$discount,$subjects,$id,$class_type="regular",$syid,$tuition_year_id,$dr=null,$year_level = 1,$internship = 0, $intROG = 0)
     {
         $tuition = 0;
         $total_lab = 0;
@@ -3305,7 +3305,7 @@ class Data_fetcher extends CI_Model {
         $data['total_installment'] = $data['ti_before_deductions'];
         //deduct discounts/scholarships
         $data['total_other'] = $data['new_student'] + $data['total_foreign'] - $other_scholarship - $other_discount;
-        $data['misc_before_discount'] = $total_misc;  
+        $data['misc_before_discount'] = $intROG == 3 ? 0 : $total_misc;
         $data['misc'] = $total_misc - $misc_scholarship - $misc_discount;  
         $data['tuition_before_discount'] =  $tuition; 
         $data['tuition_installment_before_discount'] =  $data['tuition_installment'];
