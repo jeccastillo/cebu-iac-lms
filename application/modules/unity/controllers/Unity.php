@@ -1455,7 +1455,7 @@ class Unity extends CI_Controller {
                     }
                 }
                 elseif($current){
-                    $temp_rec['bg'] = "#ADD8E6";
+                    $temp_rec['bg'] = "#000099";
                     $temp_rec['color'] = "#333";
                 }
                 if($temp_rec['strRemarks'] == "Passed" && $temp_rec['intFinalized'] == 2){
