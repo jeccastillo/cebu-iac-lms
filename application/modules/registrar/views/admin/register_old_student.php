@@ -316,6 +316,7 @@ new Vue({
                         formdata.append("year",this.request.intYearLevel);
                         formdata.append("tuition_year",this.request.tuition_year);
                         formdata.append("internship",this.request.internship);
+                        formdata.append("block_section",this.request.block_section);
                         
 
                         axios.post('<?php echo base_url(); ?>unity/get_tuition_ajax', formdata, {
