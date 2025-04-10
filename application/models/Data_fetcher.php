@@ -2659,7 +2659,7 @@ class Data_fetcher extends CI_Model {
                          ->get('tb_mas_tuition_year_misc')->result_array();  
         
                          
-        if($stype == 'new'){
+        if($stype == 'new' || $stype == 'freshman'){
             $new_student_data = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'new_student'))
                          ->get('tb_mas_tuition_year_misc')->result_array();
 
