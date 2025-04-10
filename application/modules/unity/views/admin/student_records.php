@@ -554,7 +554,7 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-sm-6" class="form-control">
-                            <label>Signature By</label>
+                            <label>Signatory</label>
                             <input type="text" class="form-control" name="signature_by">
                         </div>
                     </div>
@@ -598,7 +598,7 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-sm-6" class="form-control">
-                            <label>Signature By</label>
+                            <label>Signatory</label>
                             <input type="text" class="form-control" name="signature_by">
                         </div>
                     </div>
@@ -642,7 +642,7 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-sm-6" class="form-control">
-                            <label>Signature By</label>
+                            <label>Signatory</label>
                             <input type="text" class="form-control" name="signature_by">
                         </div>
                     </div>
