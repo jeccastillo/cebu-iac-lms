@@ -1,10 +1,7 @@
-<link rel="stylesheet"
-    href="<?php echo base_url(); ?>assets/themes/default/css/datepicker.min.css">
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/themes/default/css/datepicker.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/themes/default/js/datepicker.min.js"></script>
-
-<div class="content-wrapper "
-    id="applicant-container">
+<div class="content-wrapper " id="applicant-container">
     <section class="content-header container ">
         <h1>
             Student Applicants
@@ -18,69 +15,48 @@
     <div class="content  container">
         <div action="">
             <div class="box ">
-                <div class="box-header with-border font-weight-bold py-5"
-                    style="text-align:left; font-weight:bold">
-                    <h3 class="box-title text-left text-primary "
-                        style="font-size:2rem">
+                <div class="box-header with-border font-weight-bold py-5" style="text-align:left; font-weight:bold">
+                    <h3 class="box-title text-left text-primary " style="font-size:2rem">
                         Applicant Details
                     </h3>
                     <a class="btn btn-primary" :href="base_url + 'admissionsV1/view_lead_new/' + slug">New View</a>
                 </div>
-
-                <div class="box-body"
-                    style="padding:2rem">
+                <div class="box-body" style="padding:2rem">
                     <div>
                         <strong><i class="fa fa-sitemap margin-r-5"></i>Status</strong>
                         <p>
-                            <span class="label label-danger"
-                                v-if="request.status ==  'New'">New</span>
-                            <span class="label label-primary"
-                                v-if="request.status ==  'For Interview'">For
+                            <span class="label label-danger" v-if="request.status ==  'New'">New</span>
+                            <span class="label label-primary" v-if="request.status ==  'For Interview'">For
                                 Interview</span>
-                            <span class="label label-warning"
-                                v-if="request.status ==  'Waiting For Interview'">Waiting
+                            <span class="label label-warning" v-if="request.status ==  'Waiting For Interview'">Waiting
                                 For
                                 Interview</span>
                             <!-- <span class="label label-warning">Scheduled</span> -->
-                            <span class="label label-info"
-                                v-if="request.status ==  'For Reservation'">For
+                            <span class="label label-info" v-if="request.status ==  'For Reservation'">For
                                 Reservation</span>
-                            <span class="label label-success"
-                                v-if="request.status ==  'Reserved'">Reserved</span>
-                            <span class="label label-success"
-                                v-if="request.status ==  'Confirmed'">Confirmed</span>
-                            <span class="label label-success"
-                                v-if="request.status ==  'For Enrollment'">For
+                            <span class="label label-success" v-if="request.status ==  'Reserved'">Reserved</span>
+                            <span class="label label-success" v-if="request.status ==  'Confirmed'">Confirmed</span>
+                            <span class="label label-success" v-if="request.status ==  'For Enrollment'">For
                                 Enrollment</span>
-                            <span class="label label-success"
-                                v-if="request.status ==  'Enrolled'">Enrolled</span>
-                            <span class="label label-danger"
-                                v-if="request.status ==  'Cancelled'">Cancelled
+                            <span class="label label-success" v-if="request.status ==  'Enrolled'">Enrolled</span>
+                            <span class="label label-danger" v-if="request.status ==  'Cancelled'">Cancelled
                                 Application</span>
-                            <span class="label label-danger"
-                                v-if="request.status ==  'Did Not Reserve'">Did Not
+                            <span class="label label-danger" v-if="request.status ==  'Did Not Reserve'">Did Not
                                 Reserve</span>
-                            <span class="label label-danger"
-                                v-if="request.status ==  'Floating'">Floating
+                            <span class="label label-danger" v-if="request.status ==  'Floating'">Floating
                                 Application</span>
-                            <span class="label label-danger"
-                                v-if="request.status ==  'Will Not Proceed'">Will Not Proceed</span>
-                            <span class="label label-danger"
-                                v-if="request.status ==  'Rejected'">Rejected</span>
-                            <span class="label label-danger"
-                                v-if="request.status ==  'Withdrawn Before'">Withdrawn
+                            <span class="label label-danger" v-if="request.status ==  'Will Not Proceed'">Will Not
+                                Proceed</span>
+                            <span class="label label-danger" v-if="request.status ==  'Rejected'">Rejected</span>
+                            <span class="label label-danger" v-if="request.status ==  'Withdrawn Before'">Withdrawn
                                 Enrollment Before Opening of SY</span>
-                            <span class="label label-danger"
-                                v-if="request.status ==  'Withdrawn After'">Withdrawn
+                            <span class="label label-danger" v-if="request.status ==  'Withdrawn After'">Withdrawn
                                 Enrollment After Opening of SY</span>
-                            <span class="label label-danger"
-                                v-if="request.status ==  'Withdrawn End'">Withdrawn
+                            <span class="label label-danger" v-if="request.status ==  'Withdrawn End'">Withdrawn
                                 Enrollment at the End of the Term</span>
-
                         </p>
                         <hr>
                     </div>
-
                     <div>
                         <strong><i class="fa fa-calendar margin-r-5"></i> Date Applied</strong>
                         <p class="text-muted">
@@ -93,33 +69,26 @@
                         <p class="text-muted">
                             {{request.first_name + ' ' + request.last_name}} <button
                                 v-if="request.status !=  'Game Changer' && request.status !=  'For Enrollment'"
-                                class="btn btn-primary"
-                                @click="showEdit">{{show_edit_title}}</button>
+                                class="btn btn-primary" @click="showEdit">{{show_edit_title}}</button>
                         </p>
                         <hr>
                     </div>
                     <div v-if="show_edit_name">
                         <div>
                             <strong><i class="fa fa-book margin-r-5"></i>Edit First Name</strong>
-                            <input type="text"
-                                class="form-control"
-                                v-model="request.first_name"
+                            <input type="text" class="form-control" v-model="request.first_name"
                                 @blur="updateField('first_name',$event)" />
                             <hr>
                         </div>
                         <div>
                             <strong><i class="fa fa-book margin-r-5"></i>Edit Last Name</strong>
-                            <input type="text"
-                                class="form-control"
-                                v-model="request.last_name"
+                            <input type="text" class="form-control" v-model="request.last_name"
                                 @blur="updateField('last_name',$event)" />
                             <hr>
                         </div>
                         <div>
                             <strong><i class="fa fa-book margin-r-5"></i>Edit Middle Name</strong>
-                            <input type="text"
-                                class="form-control"
-                                v-model="request.middle_name"
+                            <input type="text" class="form-control" v-model="request.middle_name"
                                 @blur="updateField('middle_name',$event)" />
                             <hr>
                         </div>
@@ -131,98 +100,70 @@
                             {{base_url+'site/admissions_student_payment/'+slug+'/'+sy_reference}}
                         </p>
                         <hr>
-
                     </div>
                     <div
                         v-if="request.status !=  'Enrolled' && request.status !=  'Enlisted' && request.status !=  'Confirmed' && request.status !=  'For Enrollment'">
                         <label>Select Term</label>
-                        <select required
-                            @change="updateField('syid',$event)"
-                            v-model="sy_reference"
+                        <select required @change="updateField('syid',$event)" v-model="sy_reference"
                             class="form-control">
-                            <option v-for="sem in sy"
-                                :value="sem.intID">
+                            <option v-for="sem in sy" :value="sem.intID">
                                 {{ sem.term_student_type + " " + sem.enumSem + " SY " + sem.strYearStart + " - " + sem.strYearEnd  }}
                             </option>
-
                         </select>
                         <hr />
                     </div>
                     <div>
                         <strong><i class="fa fa-envelope margin-r-5"></i> Email</strong>
-                        <input type="text"
-                            class="form-control"
-                            v-model="request.email"
+                        <input type="text" class="form-control" v-model="request.email"
                             @blur="updateField('email',$event)" />
                         <hr>
                     </div>
-
                     <div>
                         <strong><i class="fa fa-phone margin-r-5"></i> Mobile Number</strong>
-                        <input
-                            v-if="request.status !=  'Game Changer' && request.status !=  'For Enrollment'"
-                            type="text"
-                            class="form-control"
-                            v-model="request.mobile_number"
+                        <input v-if="request.status !=  'Game Changer' && request.status !=  'For Enrollment'"
+                            type="text" class="form-control" v-model="request.mobile_number"
                             @blur="updateField('mobile_number',$event)" />
-                        <p v-else
-                            class="text-muted">
+                        <p v-else class="text-muted">
                             {{request.mobile_number}}
                         </p>
                         <hr>
                     </div>
-
                     <div>
                         <strong><i class="fa fa-phone-square margin-r-5"></i> Telephone
                             Number</strong>
-                        <input type="text"
-                            class="form-control"
-                            v-model="request.tel_number"
+                        <input type="text" class="form-control" v-model="request.tel_number"
                             @blur="updateField('tel_number',$event)" />
                         <hr>
                     </div>
-
                     <div>
                         <strong><i class="fa fa-location-arrow margin-r-5"></i> Address</strong>
-                        <textarea class="form-control"
-                            v-model="request.address"
+                        <textarea class="form-control" v-model="request.address"
                             @blur="updateField('address',$event)"></textarea>
-
                         <hr>
                     </div>
-
                     <div>
                         <strong><i class="fa fa-calendar margin-r-5"></i> Birthday</strong>
-                        <input type="text"
-                            class="form-control"
-                            v-model="request.date_of_birth"
+                        <input type="text" class="form-control" v-model="request.date_of_birth"
                             @blur="updateField('date_of_birth',$event)" />
-
                         <hr>
                     </div>
                     <?php if($userlevel == "2"):  ?>
                     <div>
                         <strong><i class="fa fa-calendar margin-r-5"></i> Date Enrolled</strong>
-                        <input type="date"
-                            class="form-control"
-                            v-model="request.date_enrolled_u"
+                        <input type="date" class="form-control" v-model="request.date_enrolled_u"
                             @blur="updateField('date_enrolled',$event)" />
-
                         <hr>
                     </div>
                     <?php endif; ?>
                     <div>
                         <strong><i class="fa fa-home margin-r-5"></i> Previous School</strong>
-                        <input type="text"
-                            class="form-control"
-                            v-model="request.school"
+                        <input type="text" class="form-control" v-model="request.school"
                             @blur="updateField('school',$event)" />
                         <hr>
                     </div>
                     <div>
                         <strong><i class="fa fa-user margin-r-5"></i>Waive Application Fee?</strong>
-                        <select class="form-control"
-                            @change="updateField('waive_app_fee',$event)"
+                        <select class="form-control" @change="updateField('waive_app_fee',$event)"
                             v-model="request.waive_app_fee">
                             <option value="0">No</option>
                             <option value="1">Yes</option>
@@ -231,8 +172,7 @@
                     </div>
                     <div>
                         <strong><i class="fa fa-user margin-r-5"></i>Reserve Enroll Promo</strong>
-                        <select class="form-control"
-                            @change="updateField('reserve_enroll',$event)"
+                        <select class="form-control" @change="updateField('reserve_enroll',$event)"
                             v-model="request.reserve_enroll">
                             <option value="0">No</option>
                             <option value="1">Yes</option>
@@ -241,8 +181,7 @@
                     </div>
                     <div v-if="request.waive_app_fee">
                         <strong><i class="fa fa-user margin-r-5"></i>Reason</strong>
-                        <select class="form-control"
-                            @change="updateField('waive_reason',$event)"
+                        <select class="form-control" @change="updateField('waive_reason',$event)"
                             v-model="request.waive_reason">
                             <option value="organic">Organic</option>
                             <option value="scholarship">Scholarship</option>
@@ -252,8 +191,7 @@
                     </div>
                     <div>
                         <strong><i class="fa fa-user margin-r-5"></i>Citizenship</strong>
-                        <select class="form-control"
-                            @change="updateField('citizenship',$event)"
+                        <select class="form-control" @change="updateField('citizenship',$event)"
                             v-model="request.citizenship">
                             <option value="Afghanistan">Afghanistan</option>
                             <option value="Aland Islands">Åland Islands</option>
@@ -441,8 +379,7 @@
                             <option value="Papua New Guinea">Papua New Guinea</option>
                             <option value="Paraguay">Paraguay</option>
                             <option value="Peru">Peru</option>
-                            <option selected
-                                value="Philippines">Philippines</option>
+                            <option selected value="Philippines">Philippines</option>
                             <option value="Pitcairn">Pitcairn Islands</option>
                             <option value="Poland">Poland</option>
                             <option value="Portugal">Portugal</option>
@@ -527,149 +464,114 @@
                     </div>
                     <div>
                         <strong><i class="fa fa-book margin-r-5"></i> Father Name</strong>
-                        <input type="text"
-                            class="form-control"
-                            v-model="request.father_name"
+                        <input type="text" class="form-control" v-model="request.father_name"
                             @blur="updateField('father_name',$event)" />
                         <hr>
                     </div>
                     <div>
                         <strong><i class="fa fa-phone-square margin-r-5"></i>Father Contact
                             No.</strong>
-                        <input type="text"
-                            class="form-control"
-                            v-model="request.father_contact"
+                        <input type="text" class="form-control" v-model="request.father_contact"
                             @blur="updateField('father_contact',$event)" />
                         <hr>
                     </div>
                     <div>
                         <strong><i class="fa fa-envelope margin-r-5"></i>Father Email</strong>
-                        <input type="email"
-                            class="form-control"
-                            v-model="request.father_email"
+                        <input type="email" class="form-control" v-model="request.father_email"
                             @blur="updateField('father_email',$event)" />
                         <hr>
                     </div>
                     <div>
                         <strong><i class="fa fa-book margin-r-5"></i> Mother Name</strong>
-                        <input type="text"
-                            class="form-control"
-                            v-model="request.mother_name"
+                        <input type="text" class="form-control" v-model="request.mother_name"
                             @blur="updateField('mother_name',$event)" />
                         <hr>
                     </div>
                     <div>
                         <strong><i class="fa fa-phone-square margin-r-5"></i>Mother Contact
                             No.</strong>
-                        <input type="text"
-                            class="form-control"
-                            v-model="request.mother_contact"
+                        <input type="text" class="form-control" v-model="request.mother_contact"
                             @blur="updateField('mother_contact',$event)" />
                         <hr>
                     </div>
                     <div>
                         <strong><i class="fa fa-envelope margin-r-5"></i>Mother Email</strong>
-                        <input type="email"
-                            class="form-control"
-                            v-model="request.mother_email"
+                        <input type="email" class="form-control" v-model="request.mother_email"
                             @blur="updateField('mother_email',$event)" />
                         <hr>
                     </div>
                     <div>
                         <strong><i class="fa fa-book margin-r-5"></i> Guardian Name</strong>
-                        <input type="text"
-                            class="form-control"
-                            v-model="request.guardian_name"
+                        <input type="text" class="form-control" v-model="request.guardian_name"
                             @blur="updateField('guardian_name',$event)" />
                         <hr>
                     </div>
                     <div>
                         <strong><i class="fa fa-phone-square margin-r-5"></i>Guardian Contact
                             No.</strong>
-                        <input type="text"
-                            class="form-control"
-                            v-model="request.guardian_contact"
+                        <input type="text" class="form-control" v-model="request.guardian_contact"
                             @blur="updateField('guardian_contact',$event)" />
                         <hr>
                     </div>
                     <div>
                         <strong><i class="fa fa-envelope margin-r-5"></i>Guardian Email</strong>
-                        <input type="email"
-                            class="form-control"
-                            v-model="request.guardian_email"
+                        <input type="email" class="form-control" v-model="request.guardian_email"
                             @blur="updateField('guardian_email',$event)" />
                         <hr>
                     </div>
                     <div>
                         <strong><i class="fa fa-home margin-r-5"></i> How did you find out about
                             iACADEMY?</strong>
-                        <input type="text"
-                            class="form-control"
-                            v-model="request.source"
+                        <input type="text" class="form-control" v-model="request.source"
                             @blur="updateField('source',$event)" />
                         <hr>
                     </div>
-
                     <div>
                         <strong :class="request.good_moral=='No'?'text-red':''"><i
                                 class="fa fa-user margin-r-5"></i>Holds a good moral standing in
                             previous
                             school</strong>
-                        <select class="form-control"
-                            @change="updateField('good_moral',$event)"
+                        <select class="form-control" @change="updateField('good_moral',$event)"
                             v-model="request.good_moral">
                             <option value="Yes">Yes</option>
                             <option value="No">No</option>
                         </select>
                         <hr>
                     </div>
-
                     <div>
-                        <strong :class="request.crime=='Yes'?'text-red':''"><i
-                                class="fa fa-user margin-r-5"></i>Has
+                        <strong :class="request.crime=='Yes'?'text-red':''"><i class="fa fa-user margin-r-5"></i>Has
                             been involved of any illegal activities</strong>
-                        <select class="form-control"
-                            @change="updateField('crime',$event)"
-                            v-model="request.crime">
+                        <select class="form-control" @change="updateField('crime',$event)" v-model="request.crime">
                             <option value="Yes"><span class="text-red">Yes</span></option>
                             <option value="No">No</option>
                         </select>
                         </p>
                         <hr>
                     </div>
-
-                    <div class=""
-                        v-if="request.uploaded_requirements.length > 0">
+                    <div class="" v-if="request.uploaded_requirements.length > 0">
                         <strong><i class="fa  margin-r-5"></i> <span style="font-size:2rem"
                                 class=" text-primary">Initial
                                 Requirements</span>
                         </strong>
-
                         <hr>
                     </div>
-
                     <div v-for="requirement in request.uploaded_requirements">
                         <strong><i
                                 class="fa fa-user margin-r-5"></i>{{ (requirement.type=="2x2_foreign"?"2x2":requirement.type ) }}</strong>
                         <p class="text-muted">
-                            <a :href="requirement.path"
-                                target="_blank">
+                            <a :href="requirement.path" target="_blank">
                                 {{requirement.filename}}</a>
                         </p>
                         <hr>
                     </div>
-
-
                     <div v-if="request.schedule_date">
                         <div class="">
                             <strong><i class="fa  margin-r-5"></i> <span style="font-size:2rem"
                                     class=" text-primary">Interview Schedule
                                 </span>
                             </strong>
-
                             <hr>
                         </div>
-
                         <div>
                             <strong><i class="fa fa-calendar margin-r-5"></i> Date</strong>
                             <p class="text-muted">
@@ -677,7 +579,6 @@
                             </p>
                             <hr>
                         </div>
-
                         <div>
                             <strong><i class="fa fa-clock-o margin-r-5"></i> Time</strong>
                             <p class="text-muted">
@@ -686,17 +587,14 @@
                             <hr>
                         </div>
                     </div>
-
                     <div>
                         <div class="">
                             <strong><i class="fa  margin-r-5"></i> <span style="font-size:2rem"
                                     class=" text-primary">Health Declaration
                                 </span>
                             </strong>
-
                             <hr>
                         </div>
-
                         <div>
                             <strong>Hospitalized?</strong>
                             <p class="text-muted">
@@ -704,7 +602,6 @@
                             </p>
                             <hr>
                         </div>
-
                         <div>
                             <strong>Hospitalized Reason</strong>
                             <p class="text-muted">
@@ -732,62 +629,49 @@
                                 {{request.tos?request.tos:'freshman'}}
                             </p>
                             <hr />
-                            <select v-if="request.campus == 'Cebu'"
-                                class="form-control"
-                                @change="updateField('student_type',$event)"
-                                v-model="request.tos">
+                            <select v-if="request.campus == 'Cebu'" class="form-control"
+                                @change="updateField('student_type',$event)" v-model="request.tos">
                                 <option value="freshman">freshman</option>
                                 <option value="foreign">foreign</option>
                                 <option value="transferee">transferee</option>
                                 <option value="second degree">second degree</option>
                             </select>
-                            <select v-if="request.campus == 'Makati'"
-                                required
-                                class="form-control"
-                                @change="updateField('student_type',$event)"
-                                v-model="request.tos">
-                                <option value="COLLEGE - Freshman">COLLEGE - Freshman</option>
-                                <option value="COLLEGE - Transferee">COLLEGE - Transferee</option>
-                                <option value="SHS - Freshman">SHS - Freshman</option>
-                                <option value="SHS -  Transferee">SHS - Transferee</option>
-                                <option value="SHS - DRIVE HomeSchool Program">SHS - DRIVE
-                                    HomeSchool Program</option>
-                                <option value="2ND - DEGREE">2ND - DEGREE</option>
+                            <select v-if="request.campus == 'Makati'" required class="form-control"
+                                @change="updateField('student_type',$event)" v-model="request.tos">
+                                <option value="College - Freshmen Other">College - Freshmen Other
+                                </option>
+                                <option value="College - Transferee">College - Transferee
+                                </option>
+                                <option value="SHS - New">SHS - New</option>
+                                <option value="SHS - Transferee">SHS - Transferee</option>
+                                <option value="2nd - Degree iACADEMY">2nd - Degree iACADEMY</option>
+                                <option value="2nd - Degree Other">2nd - Degree Other</option>
                             </select>
                             </p>
-
                             <hr>
                         </div>
                         <!-- if second degree  -->
-
                         <div v-if="request.type == 'other'">
                             <div>
                                 <strong><i class="fa fa-home margin-r-5"></i> Company </strong>
-                                <input type="text"
-                                    class="form-control"
-                                    v-model="request.sd_company"
+                                <input type="text" class="form-control" v-model="request.sd_company"
                                     @blur="updateField('school',$event)" />
                                 <hr>
                             </div>
                             <div>
                                 <strong><i class="fa fa-user margin-r-5"></i> Position </strong>
-                                <input type="text"
-                                    class="form-control"
-                                    v-model="request.sd_position"
+                                <input type="text" class="form-control" v-model="request.sd_position"
                                     @blur="updateField('school',$event)" />
                                 <hr>
                             </div>
                             <div>
                                 <strong><i class="fa fa-book margin-r-5"></i> Previous Degree
                                 </strong>
-                                <input type="text"
-                                    class="form-control"
-                                    v-model="request.sd_degree"
+                                <input type="text" class="form-control" v-model="request.sd_degree"
                                     @blur="updateField('school',$event)" />
                                 <hr>
                             </div>
                         </div>
-
                         <!-- end -->
                     </div>
                     <!-- <div>
@@ -806,7 +690,6 @@
                         </div>
                         <hr>
                     </div> -->
-
                     <div>
                         <div class="">
                             <strong><i class="fa  margin-r-5"></i> <span style="font-size:2rem"
@@ -815,7 +698,6 @@
                             </strong>
                             <hr>
                         </div>
-
                         <div>
                             <strong>LRN</strong>
                             <p class="text-muted">
@@ -826,64 +708,41 @@
                         <div>
                             <strong>Voucher</strong>
                             <p class="text-muted">
-                                <a :href="request.voucher_path"
-                                    target="_blank">{{request.voucher}}</a>
+                                <a :href="request.voucher_path" target="_blank">{{request.voucher}}</a>
                             </p>
                             <hr>
                         </div>
-
-
                     </div>
-
                     <div class="text-right">
                         <?php if($userlevel == "2" || $userlevel == "5"): ?>
-                        <button
-                            v-if="request.status == 'Waiting For Interview' || request.status == 'For Interview'"
-                            type="button"
-                            data-toggle="modal"
-                            data-target="#setFISchedule"
+                        <button v-if="request.status == 'Waiting For Interview' || request.status == 'For Interview'"
+                            type="button" data-toggle="modal" data-target="#setFISchedule"
                             class=" btn btn-info">Update/Set FI</button>
-                        <button type="button"
-                            v-if="request.status == 'New'"
-                            @click="deleteApplicant"
+                        <button type="button" v-if="request.status == 'New'" @click="deleteApplicant"
                             class=" btn btn-danger">Delete applicant</button>
                         <button type="button"
                             v-if="request.status == 'Waiting For Interview' && request.campus == 'Cebu'"
-                            data-toggle="modal"
-                            @click="update_status = 'For Interview';"
-                            data-target="#myModal"
-                            class=" btn
+                            data-toggle="modal" @click="update_status = 'For Interview';" data-target="#myModal" class=" btn
                             btn-primary">For
                             Interview</button>
-                        <button type="button"
-                            v-if="request.status == 'For Interview'"
-                            @click="update_status = 'For Reservation'"
-                            data-toggle="modal"
-                            data-target="#myModal"
+                        <button type="button" v-if="request.status == 'For Interview'"
+                            @click="update_status = 'For Reservation'" data-toggle="modal" data-target="#myModal"
                             class=" btn btn-info">For
                             Reservation</button>
-                        <button type="button"
-                            v-if="request.status == 'Reserved'"
-                            @click="update_status = 'For Enrollment'"
-                            data-toggle="modal"
-                            data-target="#myModal"
+                        <button type="button" v-if="request.status == 'Reserved'"
+                            @click="update_status = 'For Enrollment'" data-toggle="modal" data-target="#myModal"
                             class=" btn btn-info">For
                             Enrollment</button>
                         <?php endif; ?>
                         <?php if($userlevel == "2" || $userlevel == "5" || $userlevel == "3"): ?>
-                        <a :href="base_url+'admissionsV1/update_requirements/'+slug"
-                            class="btn btn-info">Update
+                        <a :href="base_url+'admissionsV1/update_requirements/'+slug" class="btn btn-info">Update
                             Requirements</a>
                         <?php endif; ?>
                     </div>
-
                 </div>
-
             </div>
-
         </div>
     </div>
-
     <?php if($userlevel == "2" || $userlevel == "5" || $userlevel == "3"): ?>
     <div class="container">
         <div class="row">
@@ -896,12 +755,9 @@
                             the student if he/she is already enlisted or enrolled</p>
                     </div>
                     <div class="box-body">
-                        <form method="post"
-                            @submit.prevent="updateStatusManual">
+                        <form method="post" @submit.prevent="updateStatusManual">
                             <label>Select Status</label>
-                            <select required
-                                v-model="status_update_manual"
-                                class="form-control">
+                            <select required v-model="status_update_manual" class="form-control">
                                 <option value="New">New</option>
                                 <option value="Waiting For Interview">Waiting For Interview</option>
                                 <option value="For Interview">For Interview</option>
@@ -926,64 +782,40 @@
                                 <?php endif; ?>
                             </select>
                             <hr />
-                            <textarea required
-                                class="form-control"
-                                v-model="remarks_manual"></textarea>
+                            <textarea required class="form-control" v-model="remarks_manual"></textarea>
                             <hr />
-                            <button type="submit"
-                                class="btn btn-primary">Update</button>
+                            <button type="submit" class="btn btn-primary">Update</button>
                         </form>
                     </div>
                 </div>
-
                 <div class="box box-primary">
                     <div class="box-header">
                         <h3 class="box-title text-left text-primary">Entrance Exam</h3>
                     </div>
-
-
-
                     <div class="box-body">
-
                         <!-- if no existing exam link: To Generate-->
-
-                        <form v-if="!entrance_exam"
-                            @submit.prevent="generateExam"
+                        <form v-if="!entrance_exam" @submit.prevent="generateExam"
                             style="text-align:center; display:flex; justify-content:center; margin-bottom:2rem;">
                             <div class="col-xs-5">
-                                <select name="examID"
-                                    v-model="exam_type_id"
-                                    id="selectExamID"
-                                    class="form-control"
-                                    required
-                                    id="">
-                                    <option value=""
-                                        disabled
-                                        selected>--select exam type--</option>
-                                    <option v-for="ex in exam_types"
-                                        :value="ex.intID">{{ex.strName}}</option>
+                                <select name="examID" v-model="exam_type_id" id="selectExamID" class="form-control"
+                                    required id="">
+                                    <option value="" disabled selected>--select exam type--</option>
+                                    <option v-for="ex in exam_types" :value="ex.intID">{{ex.strName}}</option>
                                 </select>
                             </div>
-                            <button type="submit"
-                                class="btn btn-success">
+                            <button type="submit" class="btn btn-success">
                                 Generate Exam Link
                             </button>
                         </form>
                         <!-- end  -->
-
                         Exam Link: <br />
-                        <div class="copy-text"
-                            v-if="entrance_exam">
+                        <div class="copy-text" v-if="entrance_exam">
                             {{student_exam_link}}
-                            <a href="#"
-                                class="btn btn-primary btn-sm"
+                            <a href="#" class="btn btn-primary btn-sm"
                                 @click.prevent="copyClipBoard(student_exam_link)">Copy</a>
                         </div>
                         <hr />
-
-
-                        <table class="table table-sm"
-                            v-if="entrance_exam">
+                        <table class="table table-sm" v-if="entrance_exam">
                             <thead>
                                 <th>Section</th>
                                 <th>Scores</th>
@@ -1001,11 +833,9 @@
                                         {{score.percentage}}
                                     </td>
                                 </tr>
-
                                 <tr>
                                     <td colspan="3">&nbsp</td>
                                 </tr>
-
                                 <tr>
                                     <td> <strong>Date Submitted:</strong>
                                         {{ entrance_exam.date_taken }}</td>
@@ -1016,7 +846,6 @@
                                 </tr>
                             </tbody>
                         </table>
-
                     </div>
                 </div>
             </div>
@@ -1031,9 +860,7 @@
                         <h3 class="box-title text-left text-primary">Program</h3>
                     </div>
                     <!-- for cebu applicant -->
-                    <div v-if="request.campus == 'Cebu'"
-                        class="box-body"
-                        style="padding:2rem">
+                    <div v-if="request.campus == 'Cebu'" class="box-body" style="padding:2rem">
                         <div>
                             <strong><i class="fa fa-user margin-r-5"></i>Selected Program</strong>
                             <p class="text-muted">
@@ -1041,19 +868,15 @@
                             </p>
                             <hr>
                         </div>
-                        <form @submit.prevent="confirmProgram(1)"
-                            method="post">
+                        <form @submit.prevent="confirmProgram(1)" method="post">
                             <table class="table table-bordered table-striped">
                                 <tbody>
                                     <tr>
                                         <th>Select Program to Change</th>
                                         <td>
-                                            <select v-model="program_update"
-                                                @change="changeProgram($event, 1)"
-                                                required
+                                            <select v-model="program_update" @change="changeProgram($event, 1)" required
                                                 class="form-control">
-                                                <option v-for="program in programs"
-                                                    :value="program.intProgramID">
+                                                <option v-for="program in programs" :value="program.intProgramID">
                                                     {{ program.strProgramDescription }}
                                                 </option>
                                             </select>
@@ -1063,22 +886,17 @@
                             </table>
                             <hr />
                             <div class="text-center">
-                                <button type="submit"
-                                    class="btn btn-primary">Update Program</button>
+                                <button type="submit" class="btn btn-primary">Update Program</button>
                             </div>
                         </form>
                     </div>
                     <!-- end -->
-
                     <!-- for Makati applicant -->
-                    <div v-if="request.campus == 'Makati'"
-                        class="box-body"
-                        style="padding:2rem">
+                    <div v-if="request.campus == 'Makati'" class="box-body" style="padding:2rem">
                         <div>
                             <strong><i class="fa fa-user margin-r-5"></i>Enhanced
                                 Curriculum</strong>
-                            <select class="form-control"
-                                @change="updateField('enhanced_curriculum',$event)"
+                            <select class="form-control" @change="updateField('enhanced_curriculum',$event)"
                                 v-model="request.enhanced_curriculum">
                                 <option value="0">No</option>
                                 <option value="1">Yes</option>
@@ -1109,17 +927,13 @@
                             </p>
                             <hr>
                         </div>
-                        <form @submit.prevent="confirmProgram(1)"
-                            class=""
-                            method="post">
+                        <form @submit.prevent="confirmProgram(1)" class="" method="post">
                             <table class="table table-bordered table-striped">
                                 <tbody>
                                     <tr>
                                         <th>Select Program to Change (1st Choice)</th>
                                         <td>
-                                            <select v-model="program_update"
-                                                @change="changeProgram($event,1)"
-                                                required
+                                            <select v-model="program_update" @change="changeProgram($event,1)" required
                                                 class="form-control">
                                                 <option v-for="program in filtered_programs"
                                                     :value="program.intProgramID">
@@ -1132,22 +946,16 @@
                             </table>
                             <hr />
                             <div class="text-center">
-                                <button type="submit"
-                                    class="btn btn-primary">Update Program</button>
+                                <button type="submit" class="btn btn-primary">Update Program</button>
                             </div>
                         </form>
-
-                        <form @submit.prevent="confirmProgram(2)"
-                            method="post"
-                            class="mt-5">
+                        <form @submit.prevent="confirmProgram(2)" method="post" class="mt-5">
                             <table class="table table-bordered table-striped">
                                 <tbody>
                                     <tr>
                                         <th>Select Program to Change (2nd Choice)</th>
                                         <td>
-                                            <select v-model="program_update2"
-                                                @change="changeProgram($event,2)"
-                                                required
+                                            <select v-model="program_update2" @change="changeProgram($event,2)" required
                                                 class="form-control">
                                                 <option v-for="program in filtered_programs"
                                                     :value="program.intProgramID">
@@ -1160,22 +968,16 @@
                             </table>
                             <hr />
                             <div class="text-center">
-                                <button type="submit"
-                                    class="btn btn-primary">Update Program</button>
+                                <button type="submit" class="btn btn-primary">Update Program</button>
                             </div>
                         </form>
-
-                        <form @submit.prevent="confirmProgram(3)"
-                            method="post"
-                            class="mt-5">
+                        <form @submit.prevent="confirmProgram(3)" method="post" class="mt-5">
                             <table class="table table-bordered table-striped">
                                 <tbody>
                                     <tr>
                                         <th>Select Program to Change (3rd Choice)</th>
                                         <td>
-                                            <select v-model="program_update3"
-                                                @change="changeProgram($event,3)"
-                                                required
+                                            <select v-model="program_update3" @change="changeProgram($event,3)" required
                                                 class="form-control">
                                                 <option v-for="program in filtered_programs"
                                                     :value="program.intProgramID">
@@ -1188,35 +990,24 @@
                             </table>
                             <hr />
                             <div class="text-center">
-                                <button type="submit"
-                                    class="btn btn-primary">Update Program</button>
+                                <button type="submit" class="btn btn-primary">Update Program</button>
                             </div>
                         </form>
                     </div>
                     <!-- end -->
-
-
-
-
                 </div>
             </div>
         </div>
     </div>
-
     <div class="container">
-
         <div class="row">
-
             <!-- for interview -->
             <div class="col-lg-12">
                 <div class="box box-primary">
-                    <div class="box-header with-border  font-weight-bold"
-                        style="text-align:left; font-weight:bold">
+                    <div class="box-header with-border  font-weight-bold" style="text-align:left; font-weight:bold">
                         <h3 class="box-title text-left text-primary">Payments Made</h3>
                     </div>
-
-                    <div class="box-body"
-                        style="padding:2rem">
+                    <div class="box-body" style="padding:2rem">
                         <table class="table table-hover table-bordered">
                             <thead>
                                 <tr>
@@ -1242,19 +1033,14 @@
                 </div>
             </div>
         </div>
-
         <div class="row">
-
             <!-- for interview -->
             <div class="col-lg-12">
                 <div class="box box-primary">
-                    <div class="box-header with-border  font-weight-bold"
-                        style="text-align:left; font-weight:bold">
+                    <div class="box-header with-border  font-weight-bold" style="text-align:left; font-weight:bold">
                         <h3 class="box-title text-left text-primary">Status Logs</h3>
                     </div>
-
-                    <div class="box-body"
-                        style="padding:2rem">
+                    <div class="box-body" style="padding:2rem">
                         <table class="table table-hover table-bordered">
                             <thead>
                                 <tr>
@@ -1280,20 +1066,13 @@
             </div>
         </div>
     </div>
-
-    <div class="modal fade"
-        id="setFISchedule"
-        role="dialog">
-        <form @submit.prevent="submitSchedule"
-            class="modal-dialog modal-lg">
-
+    <div class="modal fade" id="setFISchedule" role="dialog">
+        <form @submit.prevent="submitSchedule" class="modal-dialog modal-lg">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
                     <!-- modal header  -->
-                    <button type="button"
-                        class="close"
-                        data-dismiss="modal">&times;</button>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Update FI Schedule</h4>
                 </div>
                 <div class="modal-body">
@@ -1301,15 +1080,10 @@
                         <label for="inline-full-name">
                             Select Date
                         </label>
-                        <date-picker v-model="request_sched.date"
-                            :input-attr="{
+                        <date-picker v-model="request_sched.date" :input-attr="{
                                         required: true,
                                         id: 'date'
-                                    }"
-                            format="YYYY-MM-DD"
-                            lang="en"
-                            type="date"
-                            placeholder="Select date">
+                                    }" format="YYYY-MM-DD" lang="en" type="date" placeholder="Select date">
                         </date-picker>
                     </div>
                     <div class="form-group">
@@ -1318,72 +1092,46 @@
                         </label>
                         <date-picker :time-picker-options="
                                             reserve_time_picker_options
-                                        "
-                            v-model="request_sched.from"
-                            type="time"
-                            lang="en"
-                            format="hh:mm A"
-                            @change="checkTime"
-                            placeholder="HH:MM AM"
-                            :input-attr="{
+                                        " v-model="request_sched.from" type="time" lang="en" format="hh:mm A"
+                            @change="checkTime" placeholder="HH:MM AM" :input-attr="{
                                         required: true,
                                         id: 'time_from'
-                                    }"
-                            input-class="form-control">
+                                    }" input-class="form-control">
                         </date-picker>
                     </div>
                 </div>
                 <div class=" modal-footer">
                     <!-- modal footer  -->
-                    <button type="submit"
-                        class="btn btn-primary">Submit</button>
-                    <button type="button"
-                        class="btn btn-default"
-                        data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
-
         </form>
     </div>
-
-    <div class="modal fade"
-        id="myModal"
-        role="dialog">
-        <form @submit.prevent="updateStatus"
-            class="modal-dialog modal-lg">
-
+    <div class="modal fade" id="myModal" role="dialog">
+        <form @submit.prevent="updateStatus" class="modal-dialog modal-lg">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
                     <!-- modal header  -->
-                    <button type="button"
-                        class="close"
-                        data-dismiss="modal">&times;</button>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">{{update_status}}</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Remarks <span class="text-danger">*</span> </label>
-                        <textarea class="form-control"
-                            v-model="status_remarks"
-                            rows="5"
-                            required></textarea>
+                        <textarea class="form-control" v-model="status_remarks" rows="5" required></textarea>
                     </div>
                 </div>
                 <div class=" modal-footer">
                     <!-- modal footer  -->
-                    <button type="submit"
-                        class="btn btn-primary">Submit</button>
-                    <button type="button"
-                        class="btn btn-default"
-                        data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
-
         </form>
     </div>
 </div>
-
 <style>
 hr {
     margin: 10px
@@ -1407,18 +1155,13 @@ tr>td {
     padding-left: 0
 }
 </style>
-
-
 <script src="<?php echo base_url(); ?>assets/themes/default/js/jquery.min.js"></script>
-<script type="text/javascript"
-    src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
     integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"></script>
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
-
 <script>
 new Vue({
     el: '#applicant-container',
@@ -1468,7 +1211,7 @@ new Vue({
         program_text: undefined,
         program_text2: undefined,
         program_text3: undefined,
-        current_term: undefined,                
+        current_term: undefined,
         reserve_time_picker_options: {
             start: "08:00",
             step: "00:30",
@@ -1490,18 +1233,19 @@ new Vue({
         this.loader_spinner = true;
         axios.get(api_url + 'admissions/student-info/' + this.slug)
             .then((data) => {
-                this.request = data.data.data;     
-                for(i in this.request.uploaded_requirements)
-                {
-                    this.request.uploaded_requirements[i].path = this.request.uploaded_requirements[i].path.replace("116.50.237.244", "smsapi.iacademy.edu.ph"); 
-                }           
+                this.request = data.data.data;
+                for (i in this.request.uploaded_requirements) {
+                    this.request.uploaded_requirements[i].path = this.request.uploaded_requirements[i].path
+                        .replace("116.50.237.244", "smsapi.iacademy.edu.ph");
+                }
                 this.sy_reference = this.request.sy_reference;
                 this.loader_spinner = false;
                 //this.program_update = this.request.type_id;
                 axios.get(base_url + 'admissionsV1/programs/' + this.slug + '/' + this.sy_reference)
                     .then((data) => {
                         this.current_term = data.data.current_term;
-                        this.request.applicant_id = "A"+this.current_term.strYearStart+"-"+String(this.request.id).padStart(4, '0');
+                        this.request.applicant_id = "A" + this.current_term.strYearStart + "-" + String(
+                            this.request.id).padStart(4, '0');
                         console.log(this.request.applicant_id);
                         this.programs = data.data.programs;
                         this.entrance_exam = data.data.entrance_exam;
@@ -1511,7 +1255,7 @@ new Vue({
                         this.sy = data.data.sy;
                         if (this.programs.length > 0)
                             this.filtered_programs = this.programs.filter((
-                            prog) => {
+                                prog) => {
                                 return prog.type == this.request.type
                             })
 

@@ -247,10 +247,13 @@
                           <p><strong>Enrollment Type: </strong>
                             <select class="form-control" @change="updateStudentType($event)"
                               v-model="registration.enumStudentType">
-                              <option value="new">new</option>
-                              <option value="continuing">continuing</option>
-                              <option value="shiftee">shiftee</option>
-                              <option value="returning">returning</option>
+                              <option value="new">New</option>
+                              <option value="freshman">Freshman</option>
+                              <option value="continuing">Continuing</option>
+                              <option value="shiftee">Shiftee</option>
+                              <option value="2nd Degree">2nd Degree</option>
+                              <option value="2nd Degree iAC">2nd Degree iAC</option>
+                              <option value="returning">Returnee</option>
                             </select>
                           </p>
                           <p><strong>Year Level: </strong>

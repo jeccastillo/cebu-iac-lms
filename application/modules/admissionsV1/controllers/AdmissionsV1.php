@@ -220,7 +220,7 @@ class AdmissionsV1 extends CI_Controller {
 
     public function add_new_student(){
         
-        
+    
         $ip = $this->input->ip_address();
         if($ip == "172.16.80.22"){       
             $post = $this->input->post();
@@ -236,6 +236,9 @@ class AdmissionsV1 extends CI_Controller {
                 $post['intTuitionYear'] = (get_stype($post['level']) == "college")?$this->data_fetcher->getDefaultTuitionYearID():$this->data_fetcher->getDefaultTuitionYearIDShs();
                 //IF SHS
                 $this->data_poster->post_data('tb_mas_users',$post);
+            }
+            else{
+                $this->data_poster->post_data('tb_mas_users',$post,$student['intID']);
             }
             $data['message'] = "success";
             $data['success'] = true;
