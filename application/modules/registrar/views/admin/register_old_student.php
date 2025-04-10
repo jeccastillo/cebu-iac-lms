@@ -86,7 +86,7 @@
                                 <br />    
                                 <label for="block_section">Block Section</label>
                                 <select id="block_section" name="block_section" class="form-control" v-model="request.block_section">                        
-                                    <option v-for="block in block_sections" :value="block.id">{{ block.name }}</option>                                  
+                                    <option v-for="block in block_sections" :value="block.intID">{{ block.name }}</option>                                  
                                 </select>
                                 <br />                                                                    
                                 <label for="type_of_class">Class Type</label>
