@@ -86,7 +86,7 @@
                                 <br />    
                                 <label for="block_section">Block Section</label>
                                 <select id="block_section" name="block_section" class="form-control" v-model="request.block_section">                        
-                                    <option v-for="block in block_sections" :value="block.id">{{ block.name }}</option>                                  
+                                    <option v-for="block in block_sections" :value="block.intID">{{ block.name }}</option>                                  
                                 </select>
                                 <br />                                                                    
                                 <label for="type_of_class">Class Type</label>
@@ -240,7 +240,7 @@ new Vue({
                     this.request.strAcademicYear = data.data.data.active_sem.intID;
                     this.reg_status = data.data.data.reg_status;
                     this.student_data = data.data.data.student;
-                    this.block_sections = data.data.data.block_sections;
+                    this.block_sections = data.data.data.block_sections;                    
                     
 
                      //this.loader_spinner = true;
@@ -315,7 +315,7 @@ new Vue({
                         formdata.append("sem",this.sem);
                         formdata.append("year",this.request.intYearLevel);
                         formdata.append("tuition_year",this.request.tuition_year);
-                        formdata.append("internship",this.request.internship);
+                        formdata.append("internship",this.request.internship);                        
                         
 
                         axios.post('<?php echo base_url(); ?>unity/get_tuition_ajax', formdata, {
