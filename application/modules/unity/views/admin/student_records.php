@@ -8,7 +8,7 @@
                 <a class="btn btn-app" href="#" data-toggle="modal" data-target="#creditSubjects" ><i class="fa fa-plus"></i>Add Credits</a>                
                 <a class="btn btn-app" href="#" data-toggle="modal" data-target="#unitEarnedModal" ><i class="fa fa-print"></i>Certificate of Unit Earned</a>
                 <a class="btn btn-app" href="#" data-toggle="modal" data-target="#certificateOfEnrollmentModal" ><i class="fa fa-print"></i>Certificate of Enrollment</a>         
-                <!-- <a class="btn btn-app" href="#" data-toggle="modal" data-target="#certificateOfGWAModal" ><i class="fa fa-print"></i>Certificate of GWA</a>          -->
+                <a class="btn btn-app" href="#" data-toggle="modal" data-target="#certificateOfGWAModal" ><i class="fa fa-print"></i>Certificate of GWA</a>         
             </small>
         </h1>
         <hr />
@@ -158,6 +158,12 @@
                     <div class="tab-pane" id="tab_2">
                         <div class="box box-success">                            
                             <div class="box-body">
+                                <div style="font-size:.8em">
+                                    <span style="color:rgb(0, 144, 0);font-size:1.4em;">&#9632;</span> Passed &nbsp;
+                                    <span style="color:rgb(144, 0, 0);font-size:1.4em;">&#9632;</span> Failed &nbsp;
+                                    <span style="color:rgb(173, 216, 230);font-size:1.4em;">&#9632;</span> Currently Enrolled &nbsp;
+                                </div>
+                                <hr />
                                 <div v-for="record in curriculum_subjects">
                                     <table v-for="term in record" class="table table-condensed table-bordered">
                                         <thead>
@@ -173,7 +179,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>                                          
-                                            <tr :style="(item.rec || item.equivalent)?'background-color:'+item.rec.bg+';color:'+item.rec.color:''" v-for="item in term.records" style="font-size: 13px;">                                                
+                                            <tr :style="(item.rec || item.equivalent)?'color:'+item.rec.bg+';color:'+item.rec.color:''" v-for="item in term.records" style="font-size: 13px;">                                                
                                                 <td>{{ item.strCode }}</td>
                                                 <td>{{ item.strDescription }}</td>   
                                                 <td v-if="item.equivalent">{{ item.equivalent.grade }}</td>
