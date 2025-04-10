@@ -8,7 +8,7 @@
                 <a class="btn btn-app" href="#" data-toggle="modal" data-target="#creditSubjects" ><i class="fa fa-plus"></i>Add Credits</a>                
                 <a class="btn btn-app" href="#" data-toggle="modal" data-target="#unitEarnedModal" ><i class="fa fa-print"></i>Certificate of Unit Earned</a>
                 <a class="btn btn-app" href="#" data-toggle="modal" data-target="#certificateOfEnrollmentModal" ><i class="fa fa-print"></i>Certificate of Enrollment</a>         
-                <!-- <a class="btn btn-app" href="#" data-toggle="modal" data-target="#certificateOfGWAModal" ><i class="fa fa-print"></i>Certificate of GWA</a>          -->
+                <a class="btn btn-app" href="#" data-toggle="modal" data-target="#certificateOfGWAModal" ><i class="fa fa-print"></i>Certificate of GWA</a>         
             </small>
         </h1>
         <hr />
