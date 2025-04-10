@@ -179,7 +179,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>                                          
-                                            <tr :style="(item.rec || item.equivalent)?'color:'+item.rec.bg+';'" v-for="item in term.records" style="font-size: 13px;">                                                
+                                            <tr :style="(item.rec || item.equivalent)?'color:'+item.rec.bg+';:''" v-for="item in term.records" style="font-size: 13px;">                                                
                                                 <td>{{ item.strCode }}</td>
                                                 <td>{{ item.strDescription }}</td>   
                                                 <td v-if="item.equivalent">{{ item.equivalent.grade }}</td>
