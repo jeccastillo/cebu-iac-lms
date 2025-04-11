@@ -292,6 +292,7 @@ new Vue({
                     this.or_print.check_number = payment.check_number;
                     this.or_print.cashier_id = payment.cashier_id;
                     this.or_print.sem = payment.sy_reference;
+                    this.or_print.status = payment.status;
                     this.or_print.type = "ns_payment";
                     this.$nextTick(() => {
                         this.$refs.print_or.submit();
