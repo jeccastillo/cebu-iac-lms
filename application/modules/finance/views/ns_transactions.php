@@ -266,6 +266,7 @@ new Vue({
     },
     methods: {
         printOR: function(payment) {
+            console.log(payment);
             Swal.fire({
                 title: 'Continue with Printing OR',
                 text: "Are you sure you want to continue? You can only print the OR once",
