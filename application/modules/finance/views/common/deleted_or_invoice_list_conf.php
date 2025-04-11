@@ -7,7 +7,7 @@ $(document).ready(function() {
         "ordering": false,
         "paging": true,
         ajax: {
-            url: "http://cebuapi.iacademy.edu.ph/api/v1/sms/finance/deleted-payment/<?php echo $current_sem;?>/<?php echo $campus;?>/<?php echo $date_start;?>/<?php echo $date_end;?>",
+            url: "<?php echo $api_url ?>/finance/deleted-payment/<?php echo $current_sem;?>/<?php echo $campus;?>/<?php echo $date_start;?>/<?php echo $date_end;?>",
             dataSrc: 'data'
         },
         columns: [{
@@ -78,7 +78,7 @@ $(document).ready(function() {
     $("#deleted_or_invoice_list_excel").click(function(e) {
         let api_url = "<?php echo $api_url ?>";
         var campus = "<?php echo $campus;?>"
-        axios.get(`http://cebuapi.iacademy.edu.ph/api/v1/sms/finance/deleted-payment/${$("#select-term-leads").val()}/${campus}/${$(
+        axios.get(`${api_url}/finance/deleted-payment/${$("#select-term-leads").val()}/${campus}/${$(
         "#date-picker-start").val()}/${$("#date-picker-end").val()}`).then((data) => {
             let payments = data.data.data;
             var campus = "<?php echo $campus;?>";
