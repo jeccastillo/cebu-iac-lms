@@ -2269,6 +2269,8 @@ class Pdf extends CI_Controller {
     function print_invoice($subtract_assesment = 0)
     {
         $request = $this->input->post();
+        print_r($this->data['request']);
+        die();
 
         $role = $this->session->userdata('special_role');
         $userlevel = $this->session->userdata('intUserLevel');
@@ -2421,8 +2423,7 @@ class Pdf extends CI_Controller {
         $this->data['full_assessment'] = number_format($fullAssessment,2,'.',',');
         $this->data['total_assessment'] = number_format($totalAssessment,2,'.',',');
         $this->data['status'] = $request['status'];
-        print_r($this->data['request']);
-        die();
+
         if($this->data['campus'] == "Cebu"){
             $this->load->view("print_invoice_cebu",$this->data);
         }else {
