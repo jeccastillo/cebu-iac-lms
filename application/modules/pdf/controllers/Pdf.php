@@ -2420,8 +2420,9 @@ class Pdf extends CI_Controller {
         $this->data['payment_type'] = isset($reg) ? $reg['paymentType']: "";
         $this->data['full_assessment'] = number_format($fullAssessment,2,'.',',');
         $this->data['total_assessment'] = number_format($totalAssessment,2,'.',',');
-
-        
+        $this->data['status'] = $request['status'];
+        print_r($this->data['request']);
+        die();
         if($this->data['campus'] == "Cebu"){
             $this->load->view("print_invoice_cebu",$this->data);
         }else {
