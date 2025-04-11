@@ -7,7 +7,7 @@ $(document).ready(function() {
         "ordering": false,
         "paging": true,
         ajax: {
-            url: "<?php echo $api_url ?>/finance/voided-payment/<?php echo $current_sem;?>/<?php echo $campus;?>/<?php echo $date_start;?>/<?php echo $date_end;?>",
+            url: "<?php echo $api_url ?>sms/finance/voided-payment/<?php echo $current_sem;?>/<?php echo $campus;?>/<?php echo $date_start;?>/<?php echo $date_end;?>",
             dataSrc: 'data'
         },
         columns: [{
@@ -75,7 +75,7 @@ $(document).ready(function() {
     $("#cancelled_or_invoice_list_excel").click(function(e) {
         let api_url = "<?php echo $api_url ?>";
         var campus = "<?php echo $campus;?>"
-        axios.get(`${api_url}/finance/voided-payment/${$("#select-term-leads").val()}/${campus}/${$(
+        axios.get(`${api_url}sms/finance/voided-payment/${$("#select-term-leads").val()}/${campus}/${$(
         "#date-picker-start").val()}/${$("#date-picker-end").val()}`).then((data) => {
             let payments = data.data.data;
             console.log(payments);
