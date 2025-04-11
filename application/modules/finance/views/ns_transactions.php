@@ -123,6 +123,7 @@
             <input type="hidden" name="student_id" v-model="or_print.student_id">
             <input type="hidden" name="student_address" v-model="or_print.student_address">
             <input type="hidden" name="is_cash" v-model="or_print.is_cash">
+            <input type="hidden" name="status" v-model="or_print.status">
             <input type="hidden" name="check_number" v-model="or_print.check_number">
             <input type="hidden" name="remarks" v-model="or_print.remarks">
             <input type="hidden" name="or_number" v-model="or_print.or_number" />
