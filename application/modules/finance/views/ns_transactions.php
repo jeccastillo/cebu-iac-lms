@@ -266,7 +266,6 @@ new Vue({
     },
     methods: {
         printOR: function(payment) {
-            console.log(payment);
             Swal.fire({
                 title: 'Continue with Printing OR',
                 text: "Are you sure you want to continue? You can only print the OR once",
@@ -381,6 +380,7 @@ new Vue({
             }).then((result) => {})
         },
         printInvoice: function(payment) {
+            console.log(payment);
             Swal.fire({
                 title: 'Continue with Printing Invoice',
                 text: "Are you sure you want to continue? You can only print the Invoice once",
@@ -418,6 +418,7 @@ new Vue({
                     this.or_print.type = "ns_payment";
                     this.or_print.check_number = payment.check_number;
                     this.or_print.sem = payment.sy_reference;
+                    this.or_print.status = payment.status;
                     this.or_print.cashier_id = payment.cashier_id;
                 }
             }).then((result) => {
