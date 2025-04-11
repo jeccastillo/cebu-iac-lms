@@ -2269,8 +2269,6 @@ class Pdf extends CI_Controller {
     function print_invoice($subtract_assesment = 0)
     {
         $request = $this->input->post();
-        print_r($request);
-        die();
 
         $role = $this->session->userdata('special_role');
         $userlevel = $this->session->userdata('intUserLevel');
