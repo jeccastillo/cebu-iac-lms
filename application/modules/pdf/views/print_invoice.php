@@ -148,7 +148,7 @@ table tr td {
             <!--Total Amount received-->
             <div style="position:absolute; top:  565px; left: 50px; width: 200px; height: 20px;">
                 <?php  echo $total_amount_due == 0 ? "" : $total_amount_due; ?> </div><br>
-                <?php echo $status ?>
+                <?php echo $request['status'] ?>
             <div
                 style="position:absolute; top: 550px; right: 20px; width: 200px; height: 20px;font-size:15px">
                 <?php echo $cashier_name; ?> </div>
