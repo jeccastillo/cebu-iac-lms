@@ -7,49 +7,60 @@ $(document).ready(function() {
         "ordering": false,
         "paging": true,
         ajax: {
-            url: "<?php echo base_url(); ?>finance/finance_cancelled_or_invoice_data",
+            url: "http://cebuapi.iacademy.edu.ph/api/v1/sms/finance/voided-payment/<?php echo $current_sem;?>/<?php echo $campus;?>/<?php echo $date_start;?>/<?php echo $date_end;?>",
             dataSrc: 'data'
         },
         columns: [{
-            data: 'index',
+            data: 'id',
             title: 'No'
         }, {
-            data: 'studentNumber',
+            data: 'student_number',
             title: 'Student Number'
         }, {
-            data: 'studentName',
-            title: 'Student Name'
+            data: null,
+            title: 'Student Name',
+            render: function(data, type, row, meta) {
+                return `${data.last_name}, ${data.first_name} ${data.middle_name}`;
+            }
         }, {
             data: 'course',
             title: 'Course'
         }, {
-            data: 'or_invoice_date',
-            title: 'OR / Invoice Date'
+            data: 'or_number',
+            title: 'OR No.'
         }, {
-            data: 'or_invoice_number',
-            title: 'OR / Invoice No.'
+            data: 'invoice_number',
+            title: 'Invoice No.'
         }, {
-            data: 'amount',
+            data: 'invoice_amount',
             title: 'Amount'
         }, {
-            data: 'date_deleted',
-            title: 'Date Deleted'
+            data: 'or_date',
+            title: 'Date Cancelled',
         }, {
-            data: 'deleted_by',
-            title: 'Deleted By'
+            data: 'cancelled_by',
+            title: 'Cancelled By'
         }, {
-            data: 'remarls',
+            data: 'remarks',
             title: 'Remarks'
         }]
     });
 });
-$("#date-picker-from").on('change', function(e) {
-    const dateFrom = $(this).val();
-    document.location = "<?php echo base_url()."finance/cancelled_or_invoice/"; ?>" +
-        dateFrom + '/' + $("#date-picker-to").val();
+$("#select-term-leads").on('change', function(e) {
+    let term = $(this).val();
+    let campus = "<?php echo $campus;?>"
+    document.location = "<?php echo base_url()."finance/cancelled_or_invoice/"; ?>" + term +
+        '/' + $("#date-picker-start").val() + '/' + $("#date-picker-end").val();
 });
-$("#date-picker-to").on('change', function(e) {
-    const dateFrom = new Date($("#date-picker-from").val());
+$("#date-picker-start").on('change', function(e) {
+    const dateFrom = $(this).val();
+    const campus = "<?php echo $campus;?>"
+    document.location = "<?php echo base_url()."finance/cancelled_or_invoice/"; ?>" + $(
+        "#select-term-leads").val() + '/' + dateFrom + '/' + $("#date-picker-end").val();
+});
+$("#date-picker-end").on('change', function(e) {
+    const dateFrom = new Date($("#date-picker-start").val());
+    const campus = "<?php echo $campus;?>"
     const dateTo = new Date($(this).val());
     if (dateFrom > dateTo) {
         alert(
@@ -57,22 +68,21 @@ $("#date-picker-to").on('change', function(e) {
         return;
     }
     document.location = "<?php echo base_url()."finance/cancelled_or_invoice/"; ?>" + $(
-        "#date-picker-from").val() + '/' + $("#date-picker-to").val();
+        "#select-term-leads").val() + '/' + $("#date-picker-start").val() + '/' + $(
+        "#date-picker-end").val();
 });
 $(document).ready(function() {
     $("#cancelled_or_invoice_list_excel").click(function(e) {
         let api_url = "<?php echo $api_url ?>";
         var campus = "<?php echo $campus;?>"
-        // axios.get(api_url + 'sms/finance/voided-payment/' + $("#select-term-leads").val() + '/' + campus + '/' + $("#date-picker-from").val(); + '/' + $("#date-picker-to").val())
-        axios.get(`http://cebuapi.iacademy.edu.ph/api/v1/sms/finance/voided-payment/28/${campus}/${$(
-        "#date-picker-from").val()}/${$("#date-picker-to").val()}`).then((data) => {
+        axios.get(`http://cebuapi.iacademy.edu.ph/api/v1/sms/finance/voided-payment/${$("#select-term-leads").val()}/${campus}/${$(
+        "#date-picker-start").val()}/${$("#date-picker-end").val()}`).then((data) => {
             let payments = data.data.data;
             console.log(payments);
             var campus = "<?php echo $campus;?>";
             var base_url = "<?php echo base_url(); ?>";
-            // let url = base_url + 'excel/finance_cancelled_or_invoice/' + $("#select-term-leads").val() + '/' + campus + '/' + $("#date-picker-from").val(); + '/' + $("#date-picker-to").val();
-            let url = base_url + `excel/finance_cancelled_or_invoice/28/${campus}/${$(
-        "#date-picker-from").val()}/${$("#date-picker-to").val()}`;
+            let url = base_url + `excel/finance_cancelled_or_invoice/${$("#select-term-leads").val()}/${campus}/${$(
+        "#date-picker-start").val()}/${$("#date-picker-end").val()}`;
             var f = $(
                 "<form target='_blank' method='POST' style='display:none;'></form>"
                 ).attr({

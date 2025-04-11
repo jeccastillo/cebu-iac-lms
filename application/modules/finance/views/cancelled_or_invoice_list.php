@@ -19,11 +19,17 @@
             <div class="col-md-6">
                 <form class="form-inline text-right">
                     <div class="" style="display: flex; align-items:center;gap:10px;">
-                        <label for="date-picker-from">From:</label>
-                        <input id="date-picker-from" type="date" class="form-control"
+                        <select id="select-term-leads" class="form-control">
+                            <?php foreach($sy as $s): ?> <option
+                                <?php echo ($current_sem == $s['intID'])?'selected':''; ?>
+                                value="<?php echo $s['intID']; ?>">
+                                <?php echo $s['term_student_type']." ".$s['enumSem']." ".$s['term_label']." ".$s['strYearStart']."-".$s['strYearEnd']; ?>
+                            </option> <?php endforeach; ?> </select>
+                        <label for="date-picker-start">From:</label>
+                        <input id="date-picker-start" type="date" class="form-control"
                             value="<?php echo htmlspecialchars($date_start); ?>">
-                        <label for="date-picker-to">To:</label>
-                        <input id="date-picker-to" type="date" class="form-control"
+                        <label for="date-picker-end">To:</label>
+                        <input id="date-picker-end" type="date" class="form-control"
                             value="<?php echo htmlspecialchars($date_end); ?>">
                     </div>
                 </form>
