@@ -230,6 +230,7 @@ new Vue({
             invoice_amount: 0,
             invoice_amount_ves: 0,
             invoice_amount_vzrs: 0,
+            status: undefined,
         },
     },
     mounted() {
