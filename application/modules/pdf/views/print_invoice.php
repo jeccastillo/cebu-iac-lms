@@ -132,6 +132,8 @@ table tr td {
                 <?php  echo $total_amount_due == 0 ? "" : $total_amount_due; ?> </div>
             <div style="position:absolute; top:  405px; left: 650px; width: 200px; height: 20px;">
                 <?php  echo $total_assessment; ?> </div>
+            <div style="position:absolute; top:  370px; left: 50px; width: 200px; height: 20px;">
+                <?php  echo $total_assessment; ?> </div>
             <div style="position:absolute; top:  460px; left: 10px; width: 200px; height: 20px;">
                 <?php  echo $remarks; ?> </div>
             <!--Vatable-->
