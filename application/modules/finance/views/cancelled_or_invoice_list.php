@@ -14,28 +14,27 @@
             <li class="active">View Cancelled OR / Invoice</li>
         </ol>
         <hr />
-        <form class="form-inline text-right" style="display: flex;justify-content: end;gap: 10px;">
-            <div class="">
-                <select id="select-term-leads" class="form-control"> <?php foreach($sy as $s): ?>
-                    <option <?php echo ($current_sem == $s['intID'])?'selected':''; ?>
-                        value="<?php echo $s['intID']; ?>">
-                        <?php echo $s['term_student_type']." ".$s['enumSem']." ".$s['term_label']." ".$s['strYearStart']."-".$s['strYearEnd']; ?>
-                    </option> <?php endforeach; ?> </select>
+        <div class="row">
+            <div class="col-md-6"></div>
+            <div class="col-md-6">
+                <form class="form-inline text-right">
+                    <div class="" style="display: flex; align-items:center;gap:10px;">
+                        <select id="select-term-leads" class="form-control">
+                            <?php foreach($sy as $s): ?> <option
+                                <?php echo ($current_sem == $s['intID'])?'selected':''; ?>
+                                value="<?php echo $s['intID']; ?>">
+                                <?php echo $s['term_student_type']." ".$s['enumSem']." ".$s['term_label']." ".$s['strYearStart']."-".$s['strYearEnd']; ?>
+                            </option> <?php endforeach; ?> </select>
+                        <label for="date-picker-start">From:</label>
+                        <input id="date-picker-start" type="date" class="form-control"
+                            value="<?php echo htmlspecialchars($date_start); ?>">
+                        <label for="date-picker-end">To:</label>
+                        <input id="date-picker-end" type="date" class="form-control"
+                            value="<?php echo htmlspecialchars($date_end); ?>">
+                    </div>
+                </form>
             </div>
-            <div class="">
-                <select id="select-report-type" class="form-control">
-                    <option value="invoice"
-                        <?php echo ($report_type === 'invoice') ? 'selected' : ''; ?>>Invoice
-                    </option>
-                    <option value="or" <?php echo ($report_type === 'or') ? 'selected' : ''; ?>>
-                        Official Receipt </option>
-                </select>
-            </div>
-            <div>
-                <input id="date-picker" type="date" class="form-control"
-                    value="<?php echo htmlspecialchars($date); ?>">
-            </div>
-        </form>
+        </div>
     </section>
     <div class="content">
         <div class="box box-solid box-default">
