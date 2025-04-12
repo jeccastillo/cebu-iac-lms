@@ -813,6 +813,7 @@ new Vue({
             sy_reference: undefined,
             total_amount_due: undefined,
             student_campus: undefined,
+            change_or_date: true,
         },
         or_update: {
             id: undefined,
