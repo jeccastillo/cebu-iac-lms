@@ -1387,56 +1387,42 @@ class Finance extends CI_Controller {
     //     echo json_encode($data);
     // }
 
-    public function finance_deleted_or_invoice_data($sem = 0, $report_type=‘or’, $report_date)
+    public function finance_deleted_or_invoice_data()
     {
-        $report_date = ($report_date) ? $report_date : date("Y-m-d");
+        $post = $this->input->post();
+        $deleted_payments = json_decode($post['deleted_payments']);
+
         $response_array = array();
 
-        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
-        if($sem == 0 )
-        {
-            $s = $this->data_fetcher->get_active_sem();
-            $sem = $s['intID'];
-        }
-        $export_type = ($report_type == 'invoice') ? 'Invoice' : 'Official Receipt';
-
-        $results = $this->db->select('tb_mas_deleted_or_invoice.*, tb_mas_users.*, tb_mas_registration.date_enlisted')
-                   ->from('tb_mas_deleted_or_invoice')
-                    ->join('tb_mas_users','tb_mas_users.slug = tb_mas_deleted_or_invoice.student_number')
-                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
-                    ->where(array('status' => 'void', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.or_number !=' => null))
-                    ->order_by('tb_mas_users.strLastname', 'ASC')
-                    ->group_by('tb_mas_users.intID')
-                    ->get()
-                    ->result_array();
-
-        if($report_type == 'invoice'){
-            $results = $this->db->select('tb_mas_deleted_or_invoice.*, tb_mas_users.*, tb_mas_registration.date_enlisted')
-                        ->from('tb_mas_deleted_or_invoice')
-                        ->join('tb_mas_users','tb_mas_users.slug = tb_mas_deleted_or_invoice.student_number')
-                        ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
-                        ->where(array('status' => 'void', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.invoice_number !=' => null))
+        foreach($deleted_payments as $index => $payment_detail){
+            $student = $this->db->select('tb_mas_users.*')
+                        ->from('tb_mas_users')
+                        ->where(array('tb_mas_users.slug' => $payment_detail->student_number))
                         ->order_by('tb_mas_users.strLastname', 'ASC')
                         ->group_by('tb_mas_users.intID')
                         ->get()
-                        ->result_array();
-        }
+                        ->first_row('array');
 
-        foreach($results as $index => $result){
+            $name = ucfirst($payment_detail->last_name) . ', ' . ucfirst($payment_detail->first_name);
+            if($student){
+                $studentNumber = str_replace("-", "", $student['strStudentNumber']);
+                $program = $this->data_fetcher->getProgramDetails($student['intProgramID']);
+                $course = $program ? $program['strProgramCode'] : '';
+                $name = ucfirst($student['strLastname']) . ', ' . ucfirst($student['strFirstname']) . ' ' . ucfirst($student['strMiddlename'][0]) . '.';
+            }
 
-            $course = $this->data_fetcher->getProgramDetails($result['intProgramID']);
-            
             $response_data['index'] = $index + 1;
             $response_data['studentNumber'] = str_replace("-", "", $result['strStudentNumber']);
             $response_data['studentName'] = ucfirst($result['strLastname']) . ', ' . ucfirst($result['strFirstname']) . ' ' . ucfirst($result['strMiddlename'][0]) . '.';
             $response_data['course'] = $course['strProgramCode'];
             $response_data['dateEnrolled'] = date("d-M-Y",strtotime($result['date_enlisted']));
-            $response_data['or_invoice_date'] =  $report_type == 'invoice' ? date("d-M-Y", strtotime($result['invoice_date'])) : date("d-M-Y",strtotime($result['or_date']));
-            $response_data['or_invoice_number'] = $report_type == 'invoice' ? $result['invoice_number'] : $result['or_number'];
-            $response_data['amount'] = $result['subtotal_order'];
-            $response_data['date_deleted'] = date("d-M-Y", strtotime($result['updated_at']));
-            $response_data['deleted_by'] = '';
-            $response_data['remarls'] = $result['remarks'];
+            $response_data['date'] =  $result->invoice_date ? date("d-M-Y", strtotime($result->invoice_date)) : date("d-M-Y",strtotime($result->or_date));
+            $response_data['or_number'] = $result->or_number;
+            $response_data['invoice_number'] = $result->invoice_number;
+            $response_data['amount'] = $result->subtotal_order;
+            $response_data['date_deleted'] = date("d-M-Y", strtotime($result->updated_at));
+            $response_data['deleted_by'] = $result->deleted_by;
+            $response_data['remarks'] = $result->remarks;
             $response_array[] = $response_data;
         }
         
@@ -1445,7 +1431,6 @@ class Finance extends CI_Controller {
         echo json_encode($data);
     }
 
-    // public function finance_invoice_report_data($sem = 0, $report_date)
     public function finance_invoice_report_data($report_date_start, $report_date_end = null)
     {
         $report_date_start = ($report_date_start) ? date("Y-m-d 00:00:00", strtotime($report_date_start)) : date("Y-m-d 00:00:00");
@@ -1512,59 +1497,45 @@ class Finance extends CI_Controller {
         echo json_encode($data);
     }
 
-    public function finance_cancelled_or_invoice_data($sem = 0, $report_type ='or', $report_date)
+    public function finance_cancelled_or_invoice_data()
     {
-        $report_date =  date("Y-m-d");
+        $post = $this->input->post();
+        $cancelled_payments = json_decode($post['cancelled_payments']);
+
         $response_array = array();
 
-        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
-        if($sem == 0 )
-        {
-            $s = $this->data_fetcher->get_active_sem();
-            $sem = $s['intID'];
-        }
-        $export_type = ($report_type == 'invoice') ? 'Invoice' : 'Official Receipt';
-
-        $results = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
-                   ->from('payment_details')
-                    ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
-                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
-                    ->where(array('status' => 'cancel', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.or_number !=' => null))
-                    ->order_by('tb_mas_users.strLastname', 'ASC')
-                    ->group_by('tb_mas_users.intID')
-                    ->get()
-                    ->result_array();
-
-        if($report_type == 'invoice'){
-            $results = $this->db->select('payment_details.*, tb_mas_users.*, tb_mas_registration.date_enlisted, tb_mas_registration.paymentType')
-                        ->from('payment_details')
-                        ->join('tb_mas_users','tb_mas_users.slug = payment_details.student_number')
-                        ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
-                        ->where(array('status' => 'cancel', 'payment_details.sy_reference' => $sem, 'payment_details.updated_at <=' => $report_date, 'payment_details.invoice_number !=' => null))
+        foreach($cancelled_payments as $index => $payment_detail){
+            $student = $this->db->select('tb_mas_users.*')
+                        ->from('tb_mas_users')
+                        ->where(array('tb_mas_users.slug' => $payment_detail->student_number))
                         ->order_by('tb_mas_users.strLastname', 'ASC')
                         ->group_by('tb_mas_users.intID')
                         ->get()
-                        ->result_array();
-        }
+                        ->first_row('array');
 
-        foreach($results as $index => $result){
+            $name = ucfirst($payment_detail->last_name) . ', ' . ucfirst($payment_detail->first_name);
+            if($student){
+                $studentNumber = str_replace("-", "", $student['strStudentNumber']);
+                $program = $this->data_fetcher->getProgramDetails($student['intProgramID']);
+                $course = $program ? $program['strProgramCode'] : '';
+                $name = ucfirst($student['strLastname']) . ', ' . ucfirst($student['strFirstname']) . ' ' . ucfirst($student['strMiddlename'][0]) . '.';
+            }
 
-            $course = $this->data_fetcher->getProgramDetails($result['intProgramID']);
-            
             $response_data['index'] = $index + 1;
             $response_data['studentNumber'] = str_replace("-", "", $result['strStudentNumber']);
             $response_data['studentName'] = ucfirst($result['strLastname']) . ', ' . ucfirst($result['strFirstname']) . ' ' . ucfirst($result['strMiddlename'][0]) . '.';
             $response_data['course'] = $course['strProgramCode'];
             $response_data['dateEnrolled'] = date("d-M-Y",strtotime($result['date_enlisted']));
-            $response_data['or_invoice_date'] =  $report_type == 'invoice' ? date("d-M-Y", strtotime($result['invoice_date'])) : date("d-M-Y",strtotime($result['or_date']));
-            $response_data['or_invoice_number'] = $report_type == 'invoice' ? $result['invoice_number'] : $result['or_number'];
-            $response_data['amount'] = $result['subtotal_order'];
-            $response_data['date_deleted'] = date("d-M-Y", strtotime($result['updated_at']));
-            $response_data['deleted_by'] = '';
-            $response_data['remarls'] = $result['remarks'];
+            $response_data['date'] =  $result->invoice_date ? date("d-M-Y", strtotime($result->invoice_date)) : date("d-M-Y",strtotime($result->or_date));
+            $response_data['or_number'] = $result->or_number;
+            $response_data['invoice_number'] = $result->invoice_number;
+            $response_data['amount'] = $result->subtotal_order;
+            $response_data['date_cancelled'] = date("d-M-Y", strtotime($result->updated_at));
+            $response_data['cancelled_by'] = $result->deleted_by;
+            $response_data['remarks'] = $result->remarks;
             $response_array[] = $response_data;
         }
-        
+
         $data['data'] = $response_array;
 
         echo json_encode($data);
@@ -1866,7 +1837,7 @@ class Finance extends CI_Controller {
         $this->load->view("common/footer",$this->data);            
     }
 
-    public function deleted_or_invoice($term = 0, $report_type = 'or', $date = 0)    
+    public function deleted_or_invoice($term = 0, $date_start = 0,$date_end = 0)    
     {
         if($this->faculty_logged_in())
         {
@@ -1876,14 +1847,17 @@ class Finance extends CI_Controller {
                 $term = $this->data_fetcher->get_sem_by_id($term); 
 
 
-            if (empty($date)) {
-                $date = date('Y-m-d');
+            if (empty($date_start)) {
+                $date_start = date('Y-m-d');
+            }
+            if (empty($date_end)) {
+                $date_end = date('Y-m-d');
             }
                  
             $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
             $this->data['current_sem'] = $term['intID'];            
-            $this->data['date'] = $date;
-            $this->data['report_type'] = $report_type;
+            $this->data['date_start'] = $date_start;
+            $this->data['date_end'] = $date_end;
 
             $this->load->view("common/header",$this->data);
             $this->load->view("deleted_or_invoice_list",$this->data);
@@ -1892,23 +1866,26 @@ class Finance extends CI_Controller {
         }
     }
 
-    public function cancelled_or_invoice($term = 0, $report_type = 'or', $date = 0)    
+    public function cancelled_or_invoice($term = 0, $date_start = 0,$date_end = 0)    
     {
         if($this->faculty_logged_in())
         {
             if($term == 0)
-                $term = $this->data_fetcher->get_processing_sem();        
+            $term = $this->data_fetcher->get_processing_sem();        
             else
-                $term = $this->data_fetcher->get_sem_by_id($term); 
+            $term = $this->data_fetcher->get_sem_by_id($term);
 
-            if (empty($date)) {
-                $date = date('Y-m-d');
+            if (empty($date_start)) {
+                $date_start = date('Y-m-d');
             }
-                 
+            if (empty($date_end)) {
+                $date_end = date('Y-m-d');
+            }
+                                      
             $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
             $this->data['current_sem'] = $term['intID'];            
-            $this->data['date'] = $date;
-            $this->data['report_type'] = $report_type;
+            $this->data['date_start'] = $date_start;
+            $this->data['date_end'] = $date_end;
 
             $this->load->view("common/header",$this->data);
             $this->load->view("cancelled_or_invoice_list",$this->data);
