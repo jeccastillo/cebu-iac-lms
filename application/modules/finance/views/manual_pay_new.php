@@ -355,6 +355,7 @@
             <input type="hidden" name="student_name" v-model="or_print.student_name">
             <input type="hidden" name="cashier_id" v-model="or_print.cashier_id">
             <input type="hidden" name="student_id" v-model="or_print.student_id">
+            <input type="hidden" name="status" v-model="or_print.status">
             <input type="hidden" name="student_address" v-model="or_print.student_address">
             <input type="hidden" name="is_cash" v-model="or_print.is_cash">
             <input type="hidden" name="check_number" v-model="or_print.check_number">
@@ -613,6 +614,7 @@ new Vue({
             student_address: undefined,
             student_id: undefined,
             remarks: undefined,
+            status: undefined,
             withholding_tax_percentage: 0,
             invoice_amount: 0,
             invoice_amount_ves: 0,
@@ -756,6 +758,7 @@ new Vue({
                     this.or_print.description = payment.description;
                     this.or_print.total_amount_due = payment.subtotal_order;
                     this.or_print.transaction_date = payment.or_date;
+                    this.or_print.status = payment.status;
                     this.or_print.withholding_tax_percentage = payment
                         .withholding_tax_percentage,
                         this.or_print.invoice_amount = payment
@@ -803,6 +806,7 @@ new Vue({
                     this.or_print.total_amount_due = payment.subtotal_order;
                     this.or_print.transaction_date = payment.or_date;
                     this.or_print.remarks = payment.remarks;
+                    this.or_print.status = payment.status;
                     this.or_print.student_name = this.request.last_name +
                         ", " + this.request.first_name + ", " + this.request
                         .middle_name;
