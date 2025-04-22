@@ -22,7 +22,7 @@
           </a>                     
           <a target="_blank" 
             v-if="registration && (user_level == 2 || user_level == 3)"
-            class="btn btn-app" :disabled="show_alert && registration.allow_enroll == 0"
+            class="btn btn-app"
             href="#"
             @click.prevent="printRF">
             <i class="ion ion-printer"></i>RF No Header
