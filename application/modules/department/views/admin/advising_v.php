@@ -106,7 +106,7 @@
                     <div class="col-md-5">
                         <h4>Enlisted Subjects</h4>
                         <select style="height:300px" class="form-control" v-model="subject_selector_advised" multiple>
-                            <option v-for="sn in advised_subjects" :value="sn.intID">{{ sn.strCode }}</option>                            
+                            <option v-for="sn in advised_subjects" :value="sn.intID">{{ sn.strCode + " - " + sn.strDescription }}</option>                            
                         </select>
                     </div>
                 </div>
