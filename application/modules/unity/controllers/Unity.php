@@ -2261,10 +2261,8 @@ class Unity extends CI_Controller {
         $post = $this->input->post();
         $isOld = $this->data_fetcher->checkIfStudentNew($post['sid']);
         
-        if($isOld)
-            $subjects = $this->data_fetcher->getRequiredSubjects($post['sid'],$post['cid'],$post['sem'],$post['year']);
-        else
-            $subjects = $this->data_fetcher->getRequiredSubjects($post['sid'],$post['cid'],$post['sem'],1);
+        $subjects = $this->data_fetcher->getRequiredSubjects($post['sid'],$post['cid'],$post['sem'],$post['year']);
+        
        
         $data = $subjects;
         echo json_encode($data);  
