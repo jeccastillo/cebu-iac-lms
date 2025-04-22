@@ -8211,7 +8211,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('A3', $campus == 'Makati' ? 'NCR, Fourth District Philippines' : '')
                     ->setCellValue('A5', 'Summary of Deleted Report')
                     ->setCellValue('A7', 'OR/Invoice')
-                    ->setCellValue('A8', strtoupper($sy->term_student_type) . ' ' . $sy->enumSem . ' ' . $this->data["term_type"] . ' ' . $sy->strYearStart . '-' . $sy->strYearEnd)
+                    ->setCellValue('A8', date("M d, Y", strtotime($report_date_start)) . '-' . date("M d, Y", strtotime($report_date_end)))
                     ->setCellValue('A10', 'No.')
                     ->setCellValue('B10', 'Student Number')
                     ->setCellValue('C10', 'Student Name')
@@ -8324,7 +8324,7 @@ class Excel extends CI_Controller {
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
-        header('Content-Disposition: attachment;filename="Deleted OR/Invoice ' . date("M d, Y", strtotime($report_date_start)) . '-' . date("M d, Y", strtotime($report_date_end)) . ').xls"');
+        header('Content-Disposition: attachment;filename="Deleted OR/Invoice (' . date("M d, Y", strtotime($report_date_start)) . '-' . date("M d, Y", strtotime($report_date_end)) . ').xls"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
@@ -8597,7 +8597,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('A3', $campus == 'Makati' ? 'NCR, Fourth District Philippines' : '')
                     ->setCellValue('A5', 'Summary of Cancelled Report')
                     ->setCellValue('A7', 'OR/Invoice')
-                    ->setCellValue('A8', strtoupper($sy->term_student_type) . ' ' . $sy->enumSem . ' ' . $this->data["term_type"] . ' ' . $sy->strYearStart . '-' . $sy->strYearEnd)
+                    ->setCellValue('A8', date("M d, Y", strtotime($report_date_start)) . '-' . date("M d, Y", strtotime($report_date_end)))
                     ->setCellValue('A10', 'No.')
                     ->setCellValue('B10', 'Student Number')
                     ->setCellValue('C10', 'Student Name')
@@ -8701,7 +8701,7 @@ class Excel extends CI_Controller {
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
-        header('Content-Disposition: attachment;filename="Cancelled OR/Invoice -' . date("M d, Y", strtotime($report_date_start)) . '-' . date("M d, Y", strtotime($report_date_end)) . ').xls"');
+        header('Content-Disposition: attachment;filename="Cancelled OR/Invoice (' . date("M d, Y", strtotime($report_date_start)) . '-' . date("M d, Y", strtotime($report_date_end)) . ').xls"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
