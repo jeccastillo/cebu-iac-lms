@@ -1145,6 +1145,7 @@ new Vue({
             remarks: undefined,
             is_cash: undefined,
             cashier_id: undefined,
+            status: undefined,
             check_number: undefined,
             sem: undefined,
             type: undefined,
@@ -2084,6 +2085,7 @@ new Vue({
                     this.or_print.check_number = payment.check_number;
                     this.or_print.sem = payment.sy_reference;
                     this.or_print.cashier_id = payment.cashier_id;
+                    this.or_print.status = payment.status;
                 }
             }).then((result) => {
                 var delayInMilliseconds = 1000; //1 second
@@ -2111,6 +2113,7 @@ new Vue({
                     this.or_print.total_amount_due = payment.subtotal_order;
                     this.or_print.transaction_date = payment.or_date;
                     this.or_print.remarks = payment.remarks;
+                    this.or_print.status = payment.status;
                     this.or_print.withholding_tax_percentage = payment
                         .withholding_tax_percentage,
                         this.or_print.invoice_amount = payment
