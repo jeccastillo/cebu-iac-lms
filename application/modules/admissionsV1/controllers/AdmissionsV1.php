@@ -241,7 +241,7 @@ class AdmissionsV1 extends CI_Controller {
                 
             }
             else{
-                $this->data_poster->post_data('tb_mas_users',$post,$student['intID']);
+                $this->data_poster->post_data('tb_mas_users',$post,$student->intID);
             }
             $data['message'] = "success";
             $data['success'] = true;
