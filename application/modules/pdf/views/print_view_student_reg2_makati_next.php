@@ -209,7 +209,40 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                 <td style="text-align:right;">'.number_format($tuition['tuition_before_discount'], 2, '.' ,',') .'</td>
                             </tr>';
                             
-                    $html.='                        
+                        if($tuition['scholarship_deductions'] > 0 || $tuition['discount_deductions'] > 0):              
+                            $html .='   <tr>
+                                            <td style="font-weight:bold;"></td>
+                                            <td style="font-weight:bold;border-top: 1px solid #555; text-align:right;">'.number_format($tuition['total_before_deductions'], 2, '.' ,',').'</td>                                            
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" style= "font-size:7; line-height:1.0;"></td>                
+                                        </tr>';
+                        endif;
+                            if(!empty($tuition['scholarship'])):
+                                $ctr = 0;
+                                foreach($tuition['scholarship'] as $sch):                                      
+                                $html .='   <tr>
+                                                <td style="font-size:7px">'.$sch->name.'</td>
+                                                <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_array'][$ctr], 2, '.' ,',').'</td>                                                
+                                            </tr>';
+                                $ctr++;
+                                endforeach;
+                            endif;
+                            if(!empty($tuition['discount'])):
+                                $ctr = 0;
+                                foreach($tuition['discount'] as $sch):                                      
+                                $html .='   <tr>
+                                                <td style="font-size:7px">'.$sch->name.'</td>
+                                                <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_dc_array'][$ctr], 2, '.' ,',').'</td>                                                                                                                                                
+                                            </tr>';
+                                $ctr++;
+                                endforeach;
+                            endif;            
+                    $html.='  
+                            <tr>
+                                <td style="font-weight:bold;">Total</td>
+                                <td style="font-weight:bold;text-decoration: underline; text-align:right;">'.number_format($tuition['total'], 2, '.' ,',').'</td>                            
+                            </tr>                         
                     </table>
                     </td>
                 </tr>
