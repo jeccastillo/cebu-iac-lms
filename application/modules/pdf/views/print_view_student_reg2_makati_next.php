@@ -209,7 +209,40 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                 <td style="text-align:right;">'.number_format($tuition['tuition_before_discount'], 2, '.' ,',') .'</td>
                             </tr>';
                             
-                    $html.='                        
+                        if($tuition['scholarship_deductions'] > 0 || $tuition['discount_deductions'] > 0):              
+                            $html .='   <tr>
+                                            <td style="font-weight:bold;"></td>
+                                            <td style="font-weight:bold;border-top: 1px solid #555; text-align:right;">'.number_format($tuition['total_before_deductions'], 2, '.' ,',').'</td>                                            
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" style= "font-size:7; line-height:1.0;"></td>                
+                                        </tr>';
+                        endif;
+                            if(!empty($tuition['scholarship'])):
+                                $ctr = 0;
+                                foreach($tuition['scholarship'] as $sch):                                      
+                                $html .='   <tr>
+                                                <td style="font-size:7px">'.$sch->name.'</td>
+                                                <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_array'][$ctr], 2, '.' ,',').'</td>                                                
+                                            </tr>';
+                                $ctr++;
+                                endforeach;
+                            endif;
+                            if(!empty($tuition['discount'])):
+                                $ctr = 0;
+                                foreach($tuition['discount'] as $sch):                                      
+                                $html .='   <tr>
+                                                <td style="font-size:7px">'.$sch->name.'</td>
+                                                <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_dc_array'][$ctr], 2, '.' ,',').'</td>                                                                                                                                                
+                                            </tr>';
+                                $ctr++;
+                                endforeach;
+                            endif;            
+                    $html.='  
+                            <tr>
+                                <td style="font-weight:bold;">Total</td>
+                                <td style="font-weight:bold;text-decoration: underline; text-align:right;">'.number_format($tuition['total'], 2, '.' ,',').'</td>                            
+                            </tr>                         
                     </table>
                     </td>
                 </tr>
@@ -253,10 +286,45 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                     <td width="264px" style= "font-size:8;">Note: Class schedule is subject to change</td>
                     <td width="264px" style= "font-size:8;">Generated: '.date("Y-m-d h:i A").' by '.$user['strFirstname'].' '.$user['strLastname'].'</td>            
                 </tr>
-            </table><br/><br/>           
+            </table>
+            <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">
+                <tr>
+                    <td colspan="2" style="font-size:9; line-height:1; color:#fff;">Space</td>
+                </tr>
+            </table>
+            <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">
+                <tr>
+                    <td colspan="2" style="font-size:8;">I shall abide by all existing rules and regulations of the School and those that may be promulgated from time to time.
+                    I understand that the school has to collect my personal data and I allow the school to process all my information and all
+                    purposes related to this.</td>
+                </tr>
+            </table> 
+            <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">
+                <tr>
+                    <td colspan="2" style="font-size:9; line-height:1; color:#fff;">Space</td>
+                </tr>
+            </table>                  
+                          
         ';
 
-        $html .='<table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">        
+        $html .=' <table border="0" cellspacing="5px" cellpadding="0" style="color:#333; font-size:7; " width="570px">        
+        <tr>
+            <td>Policy on School Charges and Refund of Fees<br />
+                Officially Enrolled Students who withdraw their enrollment before the official start of classes shall be charged a Withdrawal Fee of two thousand
+                five hundred pesos (PhP 2,500.00).<br />
+                Officially Enrolled Students who withdraw their enrollment after the official start of classes, and have already paid the pertinent tuition and other
+                school fees in full or for any length longer than one month (regardless of whether or not he has actually attended classes) shall be charged the
+                appropriate retention fee as stipulated in CHED Manual of Regulations for Private Higher Education (MORPHE) of 2009, as follows:  
+                <ul>
+                    <li>Within the first week of classes - twenty-five percent (25%) of the total school fees.</li>
+                    <li>Within the second week of classes - fifty percent (50%) of the total school fees.</li>
+                    <li>Beyond the second week of classes - one hundred percent (100%) of the total school fees.</li>
+                </ul><br />
+                One-time penalty for the late enrollment (PhP 500.00) shall be charged after the first day of official start of classes per term.
+            </td>
+        </tr>                                              
+    </table> 
+    <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">        
                 <tr>
                     <td width="230px" style= "font-size:9; text-align:center;">&nbsp;</td>
                     <td width="30px" style= "font-size:9; text-align:center;">&nbsp;</td>
@@ -272,20 +340,8 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                     <td style= "font-size:9; text-align:center;">&nbsp;</td>
                     <td style= "font-size:9; text-align:center">Student Signature/Date</td>            
                 </tr>
-            </table>
-            
-            <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">
-                <tr>
-                    <td width="570px" style= "font-size:8;">Note:</td>          
-                </tr>
-                <tr>
-                    <td width="570px" style= "font-size:8;">1. Non-attendance due to illness, or personal or professional reasons, does not provide the right to refund.</td>
-                </tr>
-                <tr>
-                    <td width="570px" style= "font-size:8;">2. The student agrees to pay the FULL COST of the program even if s/he will not be able to complete the course, fail the final exam or complete the final project depending on the course requirements.</td>
-                </tr>
-            </table>
-            ';             
+            </table>    
+    ';             
         
     // </table> ';
 
