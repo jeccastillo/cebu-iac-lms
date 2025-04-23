@@ -2407,8 +2407,10 @@ class Data_fetcher extends CI_Model {
         
         if($type == "college")
             $year = $sem['strYearStart'];        
-        else
+        elseif($type == "shs")
             $year = $sem['strYearStart']."SHA";
+        else
+            $year = $sem['strYearStart']."CE";
                 
         $res = $this->db->where(array(
             'strStudentNumber LIKE' => $year.'-'.$term.'%'
