@@ -1019,7 +1019,7 @@ class Pdf extends CI_Controller {
         $this->data['active_sem'] = $this->data_fetcher->get_sem_by_id($this->data['selected_ay']);
         $this->data['student'] = $this->data_fetcher->getStudent($id);
         $this->data['registration'] = $this->data_fetcher->getRegistrationInfo($id,$this->data['selected_ay']);
-        if($this->data['registration']['enumStudentType'] == "new"){
+        if($this->data['registration']['enumStudentType'] == "new" && $this->data['student']['level'] != 'next'){
             $this->data['snum_label'] = "APP NUMBER";
             $this->data['snum'] = "A".$this->data['active_sem']['strYearStart']."-".str_pad($app_id,4,"0",STR_PAD_LEFT);
         }
