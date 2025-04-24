@@ -594,7 +594,7 @@ class Datatables extends CI_Controller {
         //array("intID","strStudentNumber","strLastname","strFirstname","strMiddlename","strProgramCode","intStudentYear","strAcademicStanding");
         
 
-        $aColumns = array("tb_mas_classlist.intID","strProgramCode","strCode","strClassName","year","strSection","sub_section","slots","strLastname","strFirstname","intFinalized","conduct_grade");
+        $aColumns = array("tb_mas_classlist.intID","strCode","strClassName","year","strSection","sub_section","slots","strLastname","strFirstname","intFinalized","conduct_grade");
         // $aColumns = array("intID","strStudentNumber","strLastname","strFirstname","strMiddlename","strProgramCode","intStudentYear","intROG");
         //$aColumns = array("intID","strFullName","strCourse","strSection");
         $sIndexColumn = "intID";
@@ -708,8 +708,8 @@ class Datatables extends CI_Controller {
         $sJoin = "JOIN tb_mas_faculty ON tb_mas_classlist.intFacultyID = tb_mas_faculty.intID ";
         //$sJoin .= "LEFT JOIN tb_mas_classlist_student ON tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID ";
         $sJoin .= "JOIN tb_mas_subjects ON tb_mas_classlist.intSubjectID = tb_mas_subjects.intID ";
-        $sJoin .= "JOIN tb_mas_curriculum ON tb_mas_classlist.intCurriculumID = tb_mas_curriculum.intID ";
-        $sJoin .= "JOIN tb_mas_programs ON tb_mas_curriculum.intProgramID = tb_mas_programs.intProgramID ";
+        // $sJoin .= "JOIN tb_mas_curriculum ON tb_mas_classlist.intCurriculumID = tb_mas_curriculum.intID ";
+        // $sJoin .= "JOIN tb_mas_programs ON tb_mas_curriculum.intProgramID = tb_mas_programs.intProgramID ";
       
          //CASE WHEN tb_mas_registration.intROG IS NULL THEN -1 ELSE tb_mas_registration.intROG END AS tb_mas_registration.intROG
         /*
