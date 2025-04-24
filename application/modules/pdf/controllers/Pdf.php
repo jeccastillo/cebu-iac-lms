@@ -27,6 +27,7 @@ class Pdf extends CI_Controller {
         $this->config->load('courses');
         
         $this->data['campus'] = $this->config->item('campus');
+        $this->data['campus_address'] = $this->data['campus'] == 'Makati' ? '7434 Yakal Street Brgy. San Antonio, Makati City' : ($this->data['campus'] == 'Cebu' ? 'Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City' : '');
         $this->data["user"] = $this->session->all_userdata();
         $this->data['terms'] = $this->config->item('terms');
         $this->data['term_type'] = $this->config->item('term_type');
