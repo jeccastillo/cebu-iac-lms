@@ -51,12 +51,12 @@
                         <input type="text" name="strSignatory2Title" class="form-control" id="strSignatory2Title" placeholder="Enter Title" value="<?php echo $classlist['strSignatory2Title']; ?>">
                     </div> -->
                 <div class="form-group">
-                    <label for="strClassName">Class Name</label>
-                    <input type="text" disabled id="strClassName" name="strClassName" class="form-control"  value="<?php echo $classlist['strClassName']; ?>" placeholder="">
+                    <label for="strClassName">Class Name (section label)</label>
+                    <input type="text" id="strClassName" name="strClassName" class="form-control"  value="<?php echo $classlist['strClassName']; ?>" placeholder="">
                 </div>
                 <div class="form-group">
                     <label for="year">Year</label>
-                    <input type="text" disabled id="year" name="year" class="form-control"  value="<?php echo $classlist['year']; ?>" placeholder="">
+                    <input type="text" id="year" name="year" class="form-control"  value="<?php echo $classlist['year']; ?>" placeholder="">
                 </div>
                 <div class="form-group">
                     <label for="strSection">Section <a rel="locked" href="#" id="section-lock"><i class="ion ion-locked"></i></a></label>
