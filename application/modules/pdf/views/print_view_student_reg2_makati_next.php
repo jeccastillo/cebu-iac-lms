@@ -209,7 +209,40 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                 <td style="text-align:right;">'.number_format($tuition['tuition_before_discount'], 2, '.' ,',') .'</td>
                             </tr>';
                             
-                    $html.='                        
+                        if($tuition['scholarship_deductions'] > 0 || $tuition['discount_deductions'] > 0):              
+                            $html .='   <tr>
+                                            <td style="font-weight:bold;"></td>
+                                            <td style="font-weight:bold;border-top: 1px solid #555; text-align:right;">'.number_format($tuition['total_before_deductions'], 2, '.' ,',').'</td>                                            
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" style= "font-size:7; line-height:1.0;"></td>                
+                                        </tr>';
+                        endif;
+                            if(!empty($tuition['scholarship'])):
+                                $ctr = 0;
+                                foreach($tuition['scholarship'] as $sch):                                      
+                                $html .='   <tr>
+                                                <td style="font-size:7px">'.$sch->name.'</td>
+                                                <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_array'][$ctr], 2, '.' ,',').'</td>                                                
+                                            </tr>';
+                                $ctr++;
+                                endforeach;
+                            endif;
+                            if(!empty($tuition['discount'])):
+                                $ctr = 0;
+                                foreach($tuition['discount'] as $sch):                                      
+                                $html .='   <tr>
+                                                <td style="font-size:7px">'.$sch->name.'</td>
+                                                <td style="text-align:right;">-'.number_format($tuition['scholarship_deductions_dc_array'][$ctr], 2, '.' ,',').'</td>                                                                                                                                                
+                                            </tr>';
+                                $ctr++;
+                                endforeach;
+                            endif;            
+                    $html.='  
+                            <tr>
+                                <td style="font-weight:bold;">Total</td>
+                                <td style="font-weight:bold;text-decoration: underline; text-align:right;">'.number_format($tuition['total'], 2, '.' ,',').'</td>                            
+                            </tr>                         
                     </table>
                     </td>
                 </tr>
@@ -250,13 +283,35 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
             </table>
             <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">        
                 <tr>
-                    <td width="264px" style= "font-size:8;">Note: Class schedule is subject to change</td>
+                    <td width="264px" style= "font-size:8;">Note:</td>
                     <td width="264px" style= "font-size:8;">Generated: '.date("Y-m-d h:i A").' by '.$user['strFirstname'].' '.$user['strLastname'].'</td>            
                 </tr>
-            </table><br/><br/>           
+            </table>
+            <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">
+                <tr>
+                    <td colspan="2" style="font-size:9; line-height:1; color:#fff;">Space</td>
+                </tr>
+            </table>
+            <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">
+                <tr>
+                    <td colspan="2" style="font-size:8;">
+                            <ol>
+                                <li>Non-attendance due to illness, or personal or professional reasons, does not provide the right to a refund.</li>
+                                <li>The student agrees to pay the FULL COST of the program even if he/she will not be able to complete the course, fail the final exam, or complete the final project depending on the course requirements.</li>
+                            </ol>
+                    </td>
+                </tr>
+            </table> 
+            <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">
+                <tr>
+                    <td colspan="2" style="font-size:9; line-height:1; color:#fff;">Space</td>
+                </tr>
+            </table>                  
+                          
         ';
 
-        $html .='<table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">        
+        $html .='
+    <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">        
                 <tr>
                     <td width="230px" style= "font-size:9; text-align:center;">&nbsp;</td>
                     <td width="30px" style= "font-size:9; text-align:center;">&nbsp;</td>
@@ -272,20 +327,8 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                     <td style= "font-size:9; text-align:center;">&nbsp;</td>
                     <td style= "font-size:9; text-align:center">Student Signature/Date</td>            
                 </tr>
-            </table>
-            
-            <table border="0" cellpadding="0" style="color:#333; font-size:8; " width="570px">
-                <tr>
-                    <td width="570px" style= "font-size:8;">Note:</td>          
-                </tr>
-                <tr>
-                    <td width="570px" style= "font-size:8;">1. Non-attendance due to illness, or personal or professional reasons, does not provide the right to refund.</td>
-                </tr>
-                <tr>
-                    <td width="570px" style= "font-size:8;">2. The student agrees to pay the FULL COST of the program even if s/he will not be able to complete the course, fail the final exam or complete the final project depending on the course requirements.</td>
-                </tr>
-            </table>
-            ';             
+            </table>    
+    ';             
         
     // </table> ';
 

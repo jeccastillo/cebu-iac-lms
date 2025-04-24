@@ -225,20 +225,23 @@ class AdmissionsV1 extends CI_Controller {
         if($ip == "172.16.80.22"){       
             $post = $this->input->post();
             $student = $this->db->get_where('tb_mas_users',array('slug'=>$post['slug']))->first_row();     
+            if($post['level'] == "next"){
+                $post['intProgramID'] = 73;            
+            }
+            $data['data'] = $post;                                
+            $post['strAcademicStanding'] = "regular";                                                
+            $post['intTuitionYear'] = (get_stype($post['level']) == "college")?$this->data_fetcher->getDefaultTuitionYearID():$this->data_fetcher->getDefaultTuitionYearIDShs();
+            $post['intCurriculumID'] = $this->data_fetcher->getCurriculumIDByCourse($post['intProgramID'])?$this->data_fetcher->getCurriculumIDByCourse($post['intProgramID']):'1';                
+            
             if(!$student){
-                $tempNum = $this->data_fetcher->generateNewTempNumber();                                            
-                $data['data'] = $post;       
-                $post['dteCreated'] = date("Y-m-d"); 
+                $tempNum = $this->data_fetcher->generateNewTempNumber();                                                                            
                 $post['strStudentNumber'] = $tempNum;
-                $post['strAcademicStanding'] = "regular";
-                $post['intCurriculumID'] = $this->data_fetcher->getCurriculumIDByCourse($post['intProgramID'])?$this->data_fetcher->getCurriculumIDByCourse($post['intProgramID']):'1';
-                
-                $post['intTuitionYear'] = (get_stype($post['level']) == "college")?$this->data_fetcher->getDefaultTuitionYearID():$this->data_fetcher->getDefaultTuitionYearIDShs();
-                //IF SHS
+                $post['dteCreated'] = date("Y-m-d");
                 $this->data_poster->post_data('tb_mas_users',$post);
+                
             }
             else{
-                $this->data_poster->post_data('tb_mas_users',$post,$student['intID']);
+                $this->data_poster->post_data('tb_mas_users',$post,$student->intID);
             }
             $data['message'] = "success";
             $data['success'] = true;
