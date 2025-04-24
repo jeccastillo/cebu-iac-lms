@@ -67,8 +67,7 @@
             <div class="box-body" style="overflow-x:auto;">
                 <table id="classlist-table-admin" class="table table-bordered table-hover">
                     <thead><tr>
-                        <th>id</th>
-                        <th>Program</th>
+                        <th>id</th>                        
                         <th>Subject</th>
                         <th>Section - Title</th>
                         <th>Section - Year</th>
@@ -90,8 +89,7 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                    <th>id</th>
-                        <th>Program</th>
+                    <th>id</th>                        
                         <th>Subject</th>
                         <th>Section - Title</th>
                         <th>Section - Year</th>
