@@ -399,9 +399,7 @@ class Schedule extends CI_Controller {
         {
             $referer = $this->session->flashdata('ref');
 
-            $classlist = $this->data_fetcher->getClasslistDetails($post['strScheduleCode']);
-            echo $post['date_specific'];
-            die();
+            $classlist = $this->data_fetcher->getClasslistDetails($post['strScheduleCode']);            
             if(isset($post['date_specific'])){
                 $conflict = [];
                 $sconflict = [];
