@@ -103,7 +103,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
    
         <tr>
             <td width="60px" style="text-align:left; font-weight:bold;">SECTION</td>            
-            <td width="220px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">SUBJECT NAME</td>
+            <td width="200px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">SUBJECT NAME</td>
             <td width="40px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">LAB</td>
             <td width="40px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">UNITS</td>
             <td width="45px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">DAY</td>
@@ -128,8 +128,8 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                         $desc = $record['strDescription'];
 
                                     $html.='<tr style="color: #333;">
-                                            <td width="60px" style="font-size:7"> ' . $record['strClassName'].' '.$record['year'].$record['strSection'].$record['sub_section'].'</td>                                            
-                                            <td width="220px" align ="left"> '.$desc. '</td>
+                                            <td width="60px" style="font-size:6"> ' . $record['strClassName'].' '.$record['year'].$record['strSection'].$record['sub_section'].'</td>                                            
+                                            <td width="200px" align ="left"> '.$desc. '</td>
                                             <td width="40px" align = "left"> '. $record['intLab'] . '</td> 
                                             <td width="40px" align = "left"> '. $units . '</td> ';
                                             $html.= '<td width="45px">';
