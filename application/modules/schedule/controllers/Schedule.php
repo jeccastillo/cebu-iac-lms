@@ -316,7 +316,12 @@ class Schedule extends CI_Controller {
         
         $classlist = $this->data_fetcher->getClasslistDetails($post['strScheduleCode']);
         
-        if($schema == 0)
+        if(isset($post['date_specific'])){
+            $conflict = [];
+            $sconflict = [];
+            $fconflict = [];
+        }        
+        elseif($schema == 0)
         {
             //print_r($post);
             $conflict = $this->data_fetcher->schedule_conflict($post,null,$post['intSem']);
