@@ -312,6 +312,7 @@ class Schedule extends CI_Controller {
         $sc = array();                
         $post['intEncoderID'] = $this->session->userdata('intID');
         $schema = $post['strSchema'];
+        echo $post['date_specific'];
         unset($post['strSchema']);
         
         $classlist = $this->data_fetcher->getClasslistDetails($post['strScheduleCode']);
