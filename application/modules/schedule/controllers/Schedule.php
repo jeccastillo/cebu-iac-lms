@@ -395,20 +395,27 @@ class Schedule extends CI_Controller {
             $referer = $this->session->flashdata('ref');
 
             $classlist = $this->data_fetcher->getClasslistDetails($post['strScheduleCode']);
-            $conflict = $this->data_fetcher->schedule_conflict($post,$post['intRoomSchedID'],$post['intSem']);
-            $sconflict = $this->data_fetcher->section_conflict($post,$post['intRoomSchedID'],$post['blockSectionID'],$post['intSem']);
-            $fconflict = $this->data_fetcher->faculty_conflict($post,$post['intRoomSchedID'],$classlist->intFacultyID,$post['intSem']);
+            if(isset($post['date_specific'])){
+                $conflict = [];
+                $sconflict = [];
+                $fconflict = [];
+            }
+            else{
+                $conflict = $this->data_fetcher->schedule_conflict($post,$post['intRoomSchedID'],$post['intSem']);
+                $sconflict = $this->data_fetcher->section_conflict($post,$post['intRoomSchedID'],$post['blockSectionID'],$post['intSem']);
+                $fconflict = $this->data_fetcher->faculty_conflict($post,$post['intRoomSchedID'],$classlist->intFacultyID,$post['intSem']);
+            }
                         
-            if(!empty($conflict) && !isset($post['date_specific'])){
+            if(!empty($conflict)){
                 $this->session->set_flashdata('alert','conflict in  schedule with '.$conflict[0]['strCode']." ".$conflict[0]['strSection']);
                 redirect(base_url()."schedule/edit_schedule/".$post['intRoomSchedID']);
             }
-            elseif(!empty($sconflict) && !isset($post['date_specific']))
+            elseif(!empty($sconflict))
             {
                 $this->session->set_flashdata('alert','conflict in section schedule with '.$sconflict[0]['strCode']." ".$sconflict[0]['strSection']);
                 redirect(base_url()."schedule/edit_schedule/".$post['intRoomSchedID']);
             }
-            elseif(!empty($fconflict) && $classlist->intFacultyID!=999 && !isset($post['date_specific']))
+            elseif(!empty($fconflict) && $classlist->intFacultyID!=999)
             {
                 $this->session->set_flashdata('alert','conflict with faculty schedule with Faculty Sched');
                 redirect(base_url()."schedule/edit_schedule/".$post['intRoomSchedID']);
