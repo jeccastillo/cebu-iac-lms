@@ -2066,7 +2066,7 @@ class Registrar extends CI_Controller {
         $data['message'] = "Done";            
         $remarks = "Added";
         $data['success'] =  true;
-        
+        $student = $this->data_fetcher->getStudent($post['student']);
         $records = $this->data_fetcher->getClassListStudentsSt($post['student'],$post['sem']);
         $add_to = $this->db->where(array('intID'=>$post['section_to_add']))->get('tb_mas_classlist')->first_row('array');
         $section_to = $add_to['strClassName'].$add_to['year'].$add_to['strSection'];
@@ -2095,7 +2095,7 @@ class Registrar extends CI_Controller {
                 $section_from = $classlist_data['strClassName'].$classlist_data['year'].$classlist_data['strSection'];
                 $section_from .= ($classlist_data['sub_section'])?"-".$classlist_data['sub_section']:"";
             }
-            else{
+            elseif($student['level'] != "next"){
                 $conflict = $this->data_fetcher->student_conflict($post['section_to_add'],$record,$post['sem']);
                 foreach($conflict as $c){
                     if($c){
