@@ -103,7 +103,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
    
         <tr>
             <td width="60px" style="text-align:left; font-weight:bold;">SECTION</td>            
-            <td width="200px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">SUBJECT NAME</td>            
+            <td width="280px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">SUBJECT NAME</td>            
             <td width="45px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">DAY</td>
             <td width="90px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">TIME</td>
             <td width="120px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">ROOM</td>
