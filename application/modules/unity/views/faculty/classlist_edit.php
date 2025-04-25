@@ -50,7 +50,14 @@
                         <input type="text" name="strSignatory2Name" class="form-control" id="strSignatory2Name" placeholder="Enter Name" value="<?php echo $classlist['strSignatory2Name']; ?>">
                         <input type="text" name="strSignatory2Title" class="form-control" id="strSignatory2Title" placeholder="Enter Title" value="<?php echo $classlist['strSignatory2Title']; ?>">
                     </div> -->
-                
+                <div class="form-group">
+                    <label for="strClassName">Class Name (section label)</label>
+                    <input type="text" id="strClassName" name="strClassName" class="form-control"  value="<?php echo $classlist['strClassName']; ?>" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="year">Year</label>
+                    <input type="text" id="year" name="year" class="form-control"  value="<?php echo $classlist['year']; ?>" placeholder="">
+                </div>
                 <div class="form-group">
                     <label for="strSection">Section <a rel="locked" href="#" id="section-lock"><i class="ion ion-locked"></i></a></label>
                     <input type="text" disabled id="section" name="strSection" class="form-control"  value="<?php echo $classlist['strSection']; ?>" placeholder="">
