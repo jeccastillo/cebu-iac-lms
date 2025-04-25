@@ -398,23 +398,22 @@ class Schedule extends CI_Controller {
             $conflict = $this->data_fetcher->schedule_conflict($post,$post['intRoomSchedID'],$post['intSem']);
             $sconflict = $this->data_fetcher->section_conflict($post,$post['intRoomSchedID'],$post['blockSectionID'],$post['intSem']);
             $fconflict = $this->data_fetcher->faculty_conflict($post,$post['intRoomSchedID'],$classlist->intFacultyID,$post['intSem']);
-
-            if(!empty($conflict)){
+                        
+            if(!empty($conflict) && !isset($post['date_specific'])){
                 $this->session->set_flashdata('alert','conflict in  schedule with '.$conflict[0]['strCode']." ".$conflict[0]['strSection']);
                 redirect(base_url()."schedule/edit_schedule/".$post['intRoomSchedID']);
             }
-            else if(!empty($sconflict))
+            elseif(!empty($sconflict) && !isset($post['date_specific']))
             {
                 $this->session->set_flashdata('alert','conflict in section schedule with '.$sconflict[0]['strCode']." ".$sconflict[0]['strSection']);
                 redirect(base_url()."schedule/edit_schedule/".$post['intRoomSchedID']);
             }
-            else if(!empty($fconflict) && $classlist->intFacultyID!=999)
+            elseif(!empty($fconflict) && $classlist->intFacultyID!=999 && !isset($post['date_specific']))
             {
                 $this->session->set_flashdata('alert','conflict with faculty schedule with Faculty Sched');
                 redirect(base_url()."schedule/edit_schedule/".$post['intRoomSchedID']);
             }
-            else
-            {
+            else{
                 $this->data_poster->post_data('tb_mas_room_schedule',$post,$post['intRoomSchedID']);
                 $this->data_poster->log_action('Schedule','Updated Schedule Info: '.$post['intRoomSchedID'],'green');
                 if($referer == "")
@@ -422,6 +421,7 @@ class Schedule extends CI_Controller {
                 else
                     redirect($referer);
             }
+            
         }
         else
         {
