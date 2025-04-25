@@ -311,9 +311,7 @@ class Schedule extends CI_Controller {
         $post = $this->input->post();
         $sc = array();                
         $post['intEncoderID'] = $this->session->userdata('intID');
-        $schema = $post['strSchema'];
-        echo $post['date_specific'];
-        die();
+        $schema = $post['strSchema'];        
         unset($post['strSchema']);
         
         $classlist = $this->data_fetcher->getClasslistDetails($post['strScheduleCode']);
@@ -402,6 +400,8 @@ class Schedule extends CI_Controller {
             $referer = $this->session->flashdata('ref');
 
             $classlist = $this->data_fetcher->getClasslistDetails($post['strScheduleCode']);
+            echo $post['date_specific'];
+            die();
             if(isset($post['date_specific'])){
                 $conflict = [];
                 $sconflict = [];
