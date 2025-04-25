@@ -108,7 +108,7 @@
                     </div>
                     <div class="form-group col-xs-12 col-lg-6">
                         <label for="date_specific">Date (for one day class)</label>
-                        <input class="form-control" type="datetime-local" id="date_specific" name="date_specific" /> 
+                        <input class="form-control" type="date" id="date_specific" name="date_specific" /> 
                     </div>
                      <div class="form-group col-xs-12 col-lg-6">
                         <label for="strSchema">Schema</label>
