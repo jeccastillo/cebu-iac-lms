@@ -54,9 +54,11 @@
                                 <option <?php echo ($val == $item['strDay'])?'selected':''; ?> value="<?php echo $key; ?>"><?php echo $val; ?></option>
                             <?php endforeach; ?>
                          </select>
+                    </div>                                
+                    <div class="form-group col-xs-12 col-lg-6">
+                        <label for="date_specific">Date (for one day class)</label>
+                        <input class="form-control" value="<?php echo $item['date_scpecific']; ?>" type="date" id="date_specific" name="date_specific" /> 
                     </div>
-                  
-                     <hr />
                      <div class="form-group col-xs-12 col-lg-6">
                         <label for="dteStart">Time Start</label>
                         <select name="dteStart" id="dteStart" class="form-control">
