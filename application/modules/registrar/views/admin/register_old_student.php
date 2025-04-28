@@ -66,6 +66,7 @@
                                     <option value="2nd Degree">2nd Degree</option>
                                     <option value="2nd Degree iAC">2nd Degree iAC</option>                                 
                                     <option value="returning">Returnee</option>
+                                    <option value="transferee">Transferee</option>
                                 </select>
                                 <br /> 
                                 <label for="enumStudentType">Internship</label>
