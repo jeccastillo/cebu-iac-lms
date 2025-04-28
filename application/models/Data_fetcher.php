@@ -2598,7 +2598,7 @@ class Data_fetcher extends CI_Model {
         if(!isset($dr))
             $dr = date("Y-m-d");
 
-        if($stype == 'new'){
+        if($stype == 'new' || $stype == 'freshman' || $stype == 'transferee'){
             $nsf = 0;
         }
 
@@ -2661,7 +2661,7 @@ class Data_fetcher extends CI_Model {
                          ->get('tb_mas_tuition_year_misc')->result_array();  
         
                          
-        if($stype == 'new' || $stype == 'freshman'){
+        if($stype == 'new' || $stype == 'freshman' || $stype == 'transferee'){
             $new_student_data = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'new_student'))
                          ->get('tb_mas_tuition_year_misc')->result_array();
 
