@@ -1588,7 +1588,7 @@ class Finance extends CI_Controller {
             
             $student_data['index'] = $index + 1;
             $student_data['studentNumber'] = str_replace("-", "", $student['strStudentNumber']);
-            $student_data['studentName'] = ucfirst($student['strLastname']) . ', ' . ucfirst($student['strFirstname']) . ' ' . ucfirst($student['strMiddlename'][0]) . '.';
+            $student_data['studentName'] = ucfirst($student['strLastname']) . ', ' . ucfirst($student['strFirstname']);
             $student_data['course'] = $course['strProgramCode'];
             $student_data['dateEnrolled'] = date("d-M-Y",strtotime($student['date_enlisted']));
             $student_data['amount'] = $total_discount;
