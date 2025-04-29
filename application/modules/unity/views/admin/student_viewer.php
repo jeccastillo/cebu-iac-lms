@@ -276,9 +276,11 @@
                           <p v-if="user_level == 2"><strong>Enrollment Status: </strong>
                             <select class="form-control" @change="updateEnrollmentStatus($event)"
                               v-model="registration.intROG">                              
-                              <option value=1>Enlisted</option>
-                              <option value=2>Enrolled</option>
+                              <option value=0>Enlisted</option>
+                              <option value=1>Enrolled</option>                              
                               <option value=3>Withdrawn</option>
+                              <option value=4>LOA</option>
+                              <option value=5>AWOL</option>
                             </select>
                           </p>
                           <p><strong>Internship: </strong>
