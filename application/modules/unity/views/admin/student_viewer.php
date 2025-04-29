@@ -273,7 +273,7 @@
                               <option value="irregular">Irregular</option>
                             </select>
                           </p>
-                          <p><strong>Enrollment Status: </strong>
+                          <p v-if="user_level == 2"><strong>Enrollment Status: </strong>
                             <select class="form-control" @change="updateEnrollmentStatus($event)"
                               v-model="registration.intROG">                              
                               <option value=1>Enlisted</option>
