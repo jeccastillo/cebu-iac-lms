@@ -273,6 +273,14 @@
                               <option value="irregular">Irregular</option>
                             </select>
                           </p>
+                          <p v-if="user_level == 2"><strong>Enrollment Status: </strong>
+                            <select class="form-control" @change="updateEnrollmentStatus($event)"
+                              v-model="registration.intROG">                              
+                              <option value=1>Enlisted</option>
+                              <option value=2>Enrolled</option>
+                              <option value=3>Withdrawn</option>
+                            </select>
+                          </p>
                           <p><strong>Internship: </strong>
                             <select class="form-control" @change="updateInternshipStatus($event)"
                               v-model="registration.internship">
@@ -1207,6 +1215,32 @@ new Vue({
 
 
     },
+    updateEnrollmentStatus: function(event) {
+
+      var formdata = new FormData();
+      formdata.append('intRegistrationID', this.registration.intRegistrationID);
+      formdata.append('intROG', event.target.value);
+
+
+      this.loader_spinner = true;
+      axios.post(base_url + 'unity/update_academic_status', formdata, {
+          headers: {
+            Authorization: `Bearer ${window.token}`
+          }
+        })
+        .then(data => {
+          this.loader_spinner = false;
+          Swal.fire({
+            title: "Success",
+            text: data.data.message,
+            icon: "success"
+          }).then(function() {
+
+          });
+        });
+
+
+      },
     selectTuitionYear: function(event){
       var formdata = new FormData();
       formdata.append('intRegistrationID', this.registration.intRegistrationID);
