@@ -1405,7 +1405,7 @@ new Vue({
                         if (this.registration && this.tuition_data) {
                             if (this.registration.enumStudentType ==
                                 "new" || this.registration.enumStudentType ==
-                                "freshman") {
+                                "freshman" || "transferee") {
                                 axios.get(api_url + 'finance/reservation/' +
                                     this.slug + '/' + this.sem).then((
                                     data) => {
