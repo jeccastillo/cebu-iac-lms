@@ -8976,7 +8976,7 @@ class Excel extends CI_Controller {
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A'.$i, $count)
                 ->setCellValue('B'.$i, str_replace("-", "", $student['strStudentNumber']))
-                ->setCellValue('C'.$i, ucfirst($student['strLastname']) . ', ' . ucfirst($student['strFirstname']) . ' ' . ucfirst($student['strMiddlename'][0]) . '.')
+                ->setCellValue('C'.$i, ucfirst($student['strLastname']) . ', ' . ucfirst($student['strFirstname']))
                 ->setCellValue('D'.$i, $course['strProgramCode'])
                 ->setCellValue('E'.$i, date("d-M-Y",strtotime($student['date_enlisted'])))
                 ->setCellValue('F'.$i, $total_discount);
