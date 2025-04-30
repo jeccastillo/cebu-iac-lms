@@ -94,8 +94,7 @@ class Scholarship extends CI_Controller {
             
         $this->data['student'] = $student;
         $this->data['page'] = "assign_scholarship";
-        $this->data['opentree'] = "scholarship";
-        $this->data['students'] = $this->data_fetcher->getStudentsNotInReferral();                                                                
+        $this->data['opentree'] = "scholarship";                                                                    
 
         $this->load->view("common/header",$this->data);
         $this->load->view("assign_scholarship",$this->data);
@@ -223,7 +222,7 @@ class Scholarship extends CI_Controller {
         $ret['discounts'] = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'discount'))->result_array();
         $ret['terms'] = $this->db->get('tb_mas_sy')->result_array();
         $ret['student'] = $this->db->get_where('tb_mas_users',array('intID'=>$student))->first_row('array');
-
+        $ret['students'] = $this->data_fetcher->getStudentsNotInReferral();
         $ret['registration'] = $this->data_fetcher->getRegistrationInfo($student,$sem);
         
         if($ret['registration']){
