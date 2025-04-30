@@ -73,6 +73,7 @@
                         <th>Section - Year</th>
                         <th>Section - Number</th>
                         <th>Section - Sub</th>
+                        <th>Desc</th>
                         <th>Slots Enrolled</th>
                         <th>Slots Enlisted</th>
                         <th>Slots Remaining</th>
@@ -95,6 +96,7 @@
                         <th>Section - Year</th>
                         <th>Section - Number</th>
                         <th>Section - Sub</th>
+                        <th>Desc</th>
                         <th>Slots Enrolled</th>
                         <th>Slots Enlisted</th>
                         <th>Slots Remaining</th>
