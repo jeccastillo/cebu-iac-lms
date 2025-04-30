@@ -68,8 +68,7 @@ class Scholarship extends CI_Controller {
 
         $this->data['error_message'] = $this->session->flashdata('error_message');
         $this->data['page'] = "assign_scholarship";
-        $this->data['opentree'] = "scholarship";
-                                                               
+        $this->data['opentree'] = "scholarship";                                                                       
 
         $this->load->view("common/header",$this->data);
         $this->load->view("select_student",$this->data);
@@ -95,7 +94,7 @@ class Scholarship extends CI_Controller {
         $this->data['student'] = $student;
         $this->data['page'] = "assign_scholarship";
         $this->data['opentree'] = "scholarship";
-                                                                
+        $this->data['students'] = $this->data_fetcher->getStudentsNotInReferral();             
 
         $this->load->view("common/header",$this->data);
         $this->load->view("assign_scholarship",$this->data);
