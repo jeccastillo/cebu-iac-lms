@@ -95,7 +95,7 @@ class Scholarship extends CI_Controller {
         $this->data['student'] = $student;
         $this->data['page'] = "assign_scholarship";
         $this->data['opentree'] = "scholarship";
-                                                                
+        $this->data['students'] = $this->data_fetcher->getStudentsNotInReferral();                                                                
 
         $this->load->view("common/header",$this->data);
         $this->load->view("assign_scholarship",$this->data);
