@@ -1158,6 +1158,29 @@ class Data_fetcher extends CI_Model {
             
 
     }
+
+    function getStudentsNotInReferral(){
+        
+        $students = $this->db
+            ->select('strLastname, strFirstname')
+            ->from('tb_mas_users')            
+            ->group_by('tb_mas_users.intID')
+            ->order_by('strLastname','asc')
+            ->get()
+            ->result_array();
+
+        $ret = [];
+        foreach($students as $student)
+        {
+            $disc = $this->db->get_where('tb_mas_student_discount',array('referrer LIKE'=>$student['strLastname'].", ".$student['strFirstname']."%"))->first_row();
+            if(empty($disc))
+                $ret[] = $student;
+        }
+
+        return $ret;
+            
+             
+    }
     
     function getStudents($course = 0,$regular= 0, $year=0,$gender = 0,$graduate=0,$scholarship=0,$registered=0,$sem=0,$type=0, $level = 0)
     {
@@ -4710,6 +4733,7 @@ class Data_fetcher extends CI_Model {
         return $results;
         
     }
+
 
     function student_conflict_enlistment($csid,$record,$sem)
     {
