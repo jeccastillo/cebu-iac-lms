@@ -19,7 +19,7 @@
             <div class="box">                                
                 <div class="box-header">
                     <h3 class="box-title">
-                            {{ classlist.strCode + ' - ' + classlist.strClassName + ' ' + classlist.year + classlist.strSection + ' ' }}
+                            {{ classlist.strCode + ' - ' + classlist.strClassName + ' ' + classlist.year + classlist.strSection + ' ' + classlist.cl_desc }}
                             <span v-if="classlist.sub_section">{{ classlist.sub_section }}</span>
                         <small>
                             {{ classlist.enumSem + ' ' + classlist.term_label + ' ' + classlist.strYearStart + '-' + classlist.strYearEnd }} <br />
@@ -261,6 +261,8 @@ new Vue({
                 this.legend = data.data.legend;
                 this.cl = data.data.cl;
                 this.classlist = data.data.classlist;
+                if(this.classlist.cl_desc == null)
+                    this.classlist.cl_desc = "";
                 this.section = this.classlist.strCode + ' - ' + this.classlist.strClassName + ' ' + this.classlist.year + this.classlist.strSection + ' ' + (this.classlist.sub_section?this.classlist.sub_section:'') ;
                 this.grading_items =  data.data.grading_items;
                 this.grading_items_midterm =  data.data.grading_items_midterm;
