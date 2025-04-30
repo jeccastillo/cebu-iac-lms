@@ -3936,12 +3936,10 @@ class Data_fetcher extends CI_Model {
         }
 
         $classlists = $this->db
-        ->select('tb_mas_classlist.intID,strProgramCode,strCode,tb_mas_subjects.strDescription as subjectDescription,strClassName,year,strSection,sub_section,slots,strLastname,strFirstname,strMiddlename,intFinalized,tb_mas_subjects.strUnits')
+        ->select('tb_mas_classlist.intID,strCode,tb_mas_subjects.strDescription as subjectDescription,strClassName,year,strSection,sub_section,slots,strLastname,strFirstname,strMiddlename,intFinalized,tb_mas_subjects.strUnits')
         ->from('tb_mas_classlist')
         ->join('tb_mas_subjects','intSubjectID = tb_mas_subjects.intID')
-        ->join('tb_mas_faculty','tb_mas_classlist.intFacultyID = tb_mas_faculty.intID')
-        ->join('tb_mas_curriculum','tb_mas_classlist.intCurriculumID = tb_mas_curriculum.intID')
-        ->join('tb_mas_programs','tb_mas_curriculum.intProgramID = tb_mas_programs.intProgramID')        
+        ->join('tb_mas_faculty','tb_mas_classlist.intFacultyID = tb_mas_faculty.intID')                
         ->where($where)
         ->order_by('tb_mas_faculty.strLastname','asc')
         ->get()
