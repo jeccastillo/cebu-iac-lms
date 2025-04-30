@@ -61,7 +61,9 @@
                                         </select>                            
                                         <hr />    
                                         <label>Referree Name</label>
-                                        <input type="text" class="form-control" v-model="request_discount.referrer" />       
+                                        <select class="form-control" v-model="request_discount.referrer">       
+                                            <option v-for="st in students" :value="st.strLastname+', '+st.strFirstname+' '+st.strMiddlename">{{ st.strLastname+', '+st.strFirstname+' '+st.strMiddlename }}</option>
+                                        </select>
                                         <hr />
                                         <input class="btn btn-primary" type="submit" value="Add">
                                         <!-- Input group -->
@@ -261,7 +263,8 @@ new Vue({
         amount_paid_formatted: 0,
         installments:[],
         remaining_amount_formatted:0,
-        student: undefined,    
+        student: undefined,  
+        students: [],  
         request_scholarship:{
             discount_id: undefined,
             student_id: <?php echo $student; ?>,
@@ -287,6 +290,7 @@ new Vue({
                 this.student_scholarships = data.data.student_scholarships;
                 this.student_discounts = data.data.student_discounts;
                 this.student = data.data.student;
+                this.students = data.data.students;
                 this.request_discount.syid = this.current_sem;
                 
                 if(data.data.registration){         
