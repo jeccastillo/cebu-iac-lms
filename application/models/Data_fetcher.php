@@ -1162,7 +1162,7 @@ class Data_fetcher extends CI_Model {
     function getStudentsNotInReferral(){
         
         $students = $this->db
-            ->select('strLastname, strFirstname')
+            ->select('strLastname, strFirstname, strMiddlename')
             ->from('tb_mas_users')            
             ->group_by('tb_mas_users.intID')
             ->order_by('strLastname','asc')
