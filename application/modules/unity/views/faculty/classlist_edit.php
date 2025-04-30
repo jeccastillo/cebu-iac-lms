@@ -67,6 +67,10 @@
                     <input type="text" disabled id="sub_section" name="sub_section" class="form-control" value="<?php echo $classlist['sub_section']; ?>" placeholder="">
                 </div>
                 <div class="form-group">
+                    <label for="cl_desc">Classlist Description</label>
+                    <input type="text" id="cl_desc" name="cl_desc" class="form-control" value="<?php echo $classlist['cl_desc']; ?>" placeholder="">
+                </div>
+                <div class="form-group">
                     <label for="is_modular">Is Modular</label>
                     <select type="text" id="is_modular" name="is_modular" class="form-control" placeholder="">
                         <option <?php echo ($classlist['is_modular'] == 0)?'selected':''; ?> value="0">No</option>
