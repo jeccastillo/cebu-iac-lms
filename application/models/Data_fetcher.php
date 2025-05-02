@@ -4244,7 +4244,7 @@ class Data_fetcher extends CI_Model {
     {
        $ret = array();
        $sched = $this->db
-                        ->select('intRoomSchedID,strDay, dteStart, dteEnd, strRoomCode,strSection,strCode')
+                        ->select('intRoomSchedID,strDay, dteStart, dteEnd, strRoomCode,strSection,strCode,date_specific')
                         ->from('tb_mas_room_schedule')
                         ->where(array('strScheduleCode'=>$schedCode))
                         ->join('tb_mas_classrooms','tb_mas_room_schedule.intRoomID = tb_mas_classrooms.intID')
