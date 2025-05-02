@@ -132,8 +132,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                             <td width="280px" style="font-size:8" align ="left"> '.$desc. '</td>'.
                                             '<td width="60px" align = "left"> '. date("M j,Y",strtotime($record['schedule'][0]['date_specific'])) . '</td> ';
                                             //<td width="40px" align = "left"> '. $units . '</td> ';
-                                            $html.= '</td>
-                                            <td width="90px">';                                            
+                                            $html.= '<td width="90px">';                                            
                                                 if(isset($record['schedule'][0]['strDay']))                                                
                                                     $html.= date('g:ia',strtotime($record['schedule'][0]['dteStart'])).' - '.date('g:ia',strtotime($record['schedule'][0]['dteEnd']));                                                            
                                             $html.= '</td>'; 
