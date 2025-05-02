@@ -103,9 +103,8 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
    
         <tr>
             <td width="60px" style="text-align:left; font-weight:bold;">SECTION</td>            
-            <td width="280px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">SUBJECT NAME</td>            
-            <td width="45px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">DAY</td>
-            <td width="90px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">TIME</td>
+            <td width="280px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">SUBJECT NAME</td>                        
+            <td width="60px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">SCHEDULE</td>
             <td width="120px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">ROOM</td>
         </tr> ';        
         //<td width="40px" style="text-align:left; font-weight:bold;  border-bottom: 1px solid #333;">LAB</td>
@@ -129,22 +128,9 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
 
                                     $html.='<tr style="color: #333;">
                                             <td width="60px" style="font-size:7"> ' . $record['strClassName'].' '.$record['year'].$record['strSection'].$record['sub_section'].'</td>                                            
-                                            <td width="280px" style="font-size:8" align ="left"> '.$desc. '</td>';
-                                            //<td width="40px" align = "left"> '. $record['intLab'] . '</td> 
+                                            <td width="280px" style="font-size:8" align ="left"> '.$desc. '</td>'.
+                                            '<td width="60px" align = "left"> '. date("M j,Y",strtotime($record['date_specific'])) . '</td> ';
                                             //<td width="40px" align = "left"> '. $units . '</td> ';
-                                            $html.= '<td width="45px">';
-
-                                            foreach($record['schedule'] as $sched) {
-                                                if(isset($sched['strDay']))
-                                                    $html.= $sched['strDayAbvr'];                    
-                                                    //$html.= date('g:ia',strtotime($sched['dteStart'])).'  '.date('g:ia',strtotime($sched['dteEnd']))." ".$sched['strDay']." ".$sched['strRoomCode'] . " ";                    
-                                            }
-                                            $html.= '</td>
-                                            <td width="90px">';                                            
-                                                if(isset($record['schedule'][0]['strDay']))                                                
-                                                    $html.= date('g:ia',strtotime($record['schedule'][0]['dteStart'])).' - '.date('g:ia',strtotime($record['schedule'][0]['dteEnd']));                                                            
-                                            $html.= '</td>                                            
-                                            ';
                                             $html.= '<td width="120px" style="font-size:8px;">';                                            
                                                 if(isset($record['schedule'][0]['strDay']))
                                                     $html.= $record['schedule'][0]['strRoomCode'];
