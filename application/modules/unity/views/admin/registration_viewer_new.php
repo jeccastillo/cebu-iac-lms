@@ -523,7 +523,7 @@
                                                     <td>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td>
                                                     <td>{{ record.strCode }} <span v-if="record.elective_classlist_id">&nbsp;( {{ record.elective_subject.strCode }} )</span></td>
                                                     <td>{{ record.strUnits }}</td>
-                                                    <td v-if="intLab != 0">yes</td>
+                                                    <td v-if="intLab != '0'">yes</td>
                                                     <td v-else>no</td>
                                                 </tr>
                                             </tbody>
