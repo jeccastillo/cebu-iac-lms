@@ -1408,12 +1408,12 @@ class Finance extends CI_Controller {
                 $studentNumber = str_replace("-", "", $student['strStudentNumber']);
                 $program = $this->data_fetcher->getProgramDetails($student['intProgramID']);
                 $course = $program ? $program['strProgramCode'] : '';
-                $name = ucfirst($student['strLastname']) . ', ' . ucfirst($student['strFirstname']) . ' ' . ucfirst($student['strMiddlename'][0]) . '.';
+                $name = ucfirst($student['strLastname']) . ', ' . ucfirst($student['strFirstname']);
             }
 
             $response_data['index'] = $index + 1;
             $response_data['studentNumber'] = str_replace("-", "", $result['strStudentNumber']);
-            $response_data['studentName'] = ucfirst($result['strLastname']) . ', ' . ucfirst($result['strFirstname']) . ' ' . ucfirst($result['strMiddlename'][0]) . '.';
+            $response_data['studentName'] = ucfirst($result['strLastname']) . ', ' . ucfirst($result['strFirstname']);
             $response_data['course'] = $course['strProgramCode'];
             $response_data['dateEnrolled'] = date("d-M-Y",strtotime($result['date_enlisted']));
             $response_data['date'] =  $result->invoice_date ? date("d-M-Y", strtotime($result->invoice_date)) : date("d-M-Y",strtotime($result->or_date));
@@ -1518,12 +1518,12 @@ class Finance extends CI_Controller {
                 $studentNumber = str_replace("-", "", $student['strStudentNumber']);
                 $program = $this->data_fetcher->getProgramDetails($student['intProgramID']);
                 $course = $program ? $program['strProgramCode'] : '';
-                $name = ucfirst($student['strLastname']) . ', ' . ucfirst($student['strFirstname']) . ' ' . ucfirst($student['strMiddlename'][0]) . '.';
+                $name = ucfirst($student['strLastname']) . ', ' . ucfirst($student['strFirstname']);
             }
 
             $response_data['index'] = $index + 1;
-            $response_data['studentNumber'] = str_replace("-", "", $result['strStudentNumber']);
-            $response_data['studentName'] = ucfirst($result['strLastname']) . ', ' . ucfirst($result['strFirstname']) . ' ' . ucfirst($result['strMiddlename'][0]) . '.';
+            $response_data['studentNumber'] = $studentNumber;
+            $response_data['studentName'] = ucfirst($result['strLastname']) . ', ' . ucfirst($result['strFirstname']);
             $response_data['course'] = $course['strProgramCode'];
             $response_data['dateEnrolled'] = date("d-M-Y",strtotime($result['date_enlisted']));
             $response_data['date'] =  $result->invoice_date ? date("d-M-Y", strtotime($result->invoice_date)) : date("d-M-Y",strtotime($result->or_date));
@@ -1632,7 +1632,7 @@ class Finance extends CI_Controller {
 
             $response_data['index'] = $index + 1;
             $response_data['student_number'] = str_replace("-", "", $result['strStudentNumber']);
-            $response_data['student_name'] = ucfirst($result['strLastname']) . ', ' . ucfirst($result['strFirstname']) . ' ' . ucfirst($result['strMiddlename'][0]) . '.';
+            $response_data['student_name'] = ucfirst($result['strLastname']) . ', ' . ucfirst($result['strFirstname']);
             $response_data['course'] = $course['strProgramCode'];
             $response_data['date'] = date("d-M-Y",strtotime($result['date']));
             $response_data['added_by'] =  ucfirst($added_by->strLastname) . ', ' . ucfirst($added_by->strFirstname);
