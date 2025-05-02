@@ -515,7 +515,7 @@
                                                     <th>Section</th>
                                                     <th>Subject</th>
                                                     <th>Units</th>
-                                                    <th>Has Lab</th>
+                                                    <th>Lab Units</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -523,8 +523,7 @@
                                                     <td>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td>
                                                     <td>{{ record.strCode }} <span v-if="record.elective_classlist_id">&nbsp;( {{ record.elective_subject.strCode }} )</span></td>
                                                     <td>{{ record.strUnits }}</td>
-                                                    <td v-if="record.intLab == 0">no</td>
-                                                    <td v-else>yes</td>
+                                                    <td>{{ record.intLab }}</td>                                                    
                                                 </tr>
                                             </tbody>
                                         </table>
