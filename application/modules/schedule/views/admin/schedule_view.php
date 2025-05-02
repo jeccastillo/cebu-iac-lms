@@ -45,6 +45,7 @@
                             <th>Day</th>
                             <th>Start</th>
                             <th>End</th>
+                            <th>Date</th>
                             <th>Class Type</th>
                             <th>Room</th>
                             <th>Actions</th>
@@ -63,6 +64,7 @@
                         <th>Day</th>
                         <th>Start</th>
                         <th>End</th>
+                        <th>Date</th>
                         <th>Class Type</th>
                         <th>Room</th>
                         <th>Actions</th>                                           
