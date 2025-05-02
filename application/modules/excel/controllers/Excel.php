@@ -8512,7 +8512,7 @@ class Excel extends CI_Controller {
         $sheet->mergeCells('A7:J7');
         $sheet->mergeCells('A8:J8');
 
-        $objPHPExcel->getActiveSheet()->setTitle('Deleted OR/Invoice');
+        $objPHPExcel->getActiveSheet()->setTitle('Deleted OR and Invoice');
 
         $date = date("ymdhis");
 
@@ -8889,7 +8889,7 @@ class Excel extends CI_Controller {
         $sheet->mergeCells('A7:J7');
         $sheet->mergeCells('A8:J8');
 
-        $objPHPExcel->getActiveSheet()->setTitle('Cancelled OR/Invoice');
+        $objPHPExcel->getActiveSheet()->setTitle('Cancelled OR and Invoice');
 
         $date = date("ymdhis");
 
