@@ -507,6 +507,28 @@
                                                 </tr>
                                             </tbody>
                                         </table>
+                                        <h4>Subjects</h4>
+                                        <hr />
+                                        <table class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Section</th>
+                                                    <th>Subject</th>
+                                                    <th>Units</th>
+                                                    <th>Has Lab</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="record in records">
+                                                    <td>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td>
+                                                    <td>{{ record.strCode }} <span v-if="record.elective_classlist_id">&nbsp;( {{ record.elective_subject.strCode }} )</span></td>
+                                                    <td>{{ record.strUnits }}</td>
+                                                    <td v-if="record.intLab == 0">no</td>
+                                                    <td v-else>yes</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <hr />
                                         <table class="table table-bordered table-striped">
                                             <tr>
                                                 <th></th>
