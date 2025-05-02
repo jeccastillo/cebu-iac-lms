@@ -129,7 +129,7 @@ $html.= '<table border="0" cellpadding="0" cellspacing="0" style="color:#333; fo
                                     $html.='<tr style="color: #333;">
                                             <td width="60px" style="font-size:7"> ' . $record['strClassName'].' '.$record['year'].$record['strSection'].$record['sub_section'].'</td>                                            
                                             <td width="280px" style="font-size:8" align ="left"> '.$desc. '</td>'.
-                                            '<td width="60px" align = "left"> '. date("M j,Y",strtotime($record['date_specific'])) . '</td> ';
+                                            '<td width="60px" align = "left"> '. date("M j,Y",strtotime($record['schedule'][0]['date_specific'])) . '</td> ';
                                             //<td width="40px" align = "left"> '. $units . '</td> ';
                                             $html.= '<td width="120px" style="font-size:8px;">';                                            
                                                 if(isset($record['schedule'][0]['strDay']))
