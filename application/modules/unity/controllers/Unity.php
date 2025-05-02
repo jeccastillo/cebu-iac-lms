@@ -602,9 +602,11 @@ class Unity extends CI_Controller {
                 $ret['tuition_data'] = $data['tuition'];
                 $ret['tuition'] = $this->load->view('tuition/tuition_view', $data, true);
                 $ret['discounts'] = $this->db->get_where('tb_mas_registration_discount',array('registration_id'=>$ret['registration']['intRegistrationID']))->result_array();
+                $ret['records'] = $this->data_fetcher->getClassListStudentsSt($id,$ret['selected_ay']);
             }
             else
                 $data['tuition'] = "";
+
 
             
             

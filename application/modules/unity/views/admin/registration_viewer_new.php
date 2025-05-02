@@ -1135,6 +1135,7 @@ new Vue({
         change_payment_type: undefined,
         payment_type: 'full',
         tuition_year: undefined,
+        records: [],
         or_print: {
             or_number: undefined,
             description: undefined,
@@ -1276,6 +1277,7 @@ new Vue({
                     this.sy = data.data.sy;
                     this.ledger_items = data.data.ledger;
                     this.term_balances = data.data.term_balances;
+                    this.records = data.data.records;
                     this.particulars = data.data.particulars;
                     for (i in this.term_balances)
                         if (this.term_balances[i].balance > 0) this.show_alert =
