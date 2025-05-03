@@ -60,22 +60,15 @@
                 </tr>                
             </thead>
             <tbody>
-                <tr v-if="dates" v-if="date.total > 0" v-for="date in dates">
-                    <td>{{ date.date }}</td>
-                    <td v-if="date.freshman > 0"><b>{{ date.freshman }}</b></td>
-                    <td v-else>{{ date.freshman }}</td>
-                    <td v-if="date.transferee > 0"><b>{{ date.transferee }}</b></td>
-                    <td v-else>{{ date.transferee }}</td>
-                    <td v-if="date.second > 0"><b>{{ date.second }}</b></td>
-                    <td v-else>{{ date.second }}</td> 
-                    <td v-if="date.second > 0"><b>{{ date.continuing }}</b></td>
-                    <td v-else>{{ date.continuing }}</td>     
-                    <td v-if="date.second > 0"><b>{{ date.shiftee }}</b></td>
-                    <td v-else>{{ date.shiftee }}</td>      
-                    <td v-if="date.second > 0"><b>{{ date.returning }}</b></td>
-                    <td v-else>{{ date.returning }}</td>           
-                    <td v-if="date.total > 0"><b>{{ date.total }}</b></td>
-                    <td v-else>{{ date.total }}</td>                    
+                <tr v-if="dates" v-for="date in dates">
+                    <td v-if="date.total > 0">{{ date.date }}</td>
+                    <td v-if="date.total > 0"><b>{{ date.freshman }}</b></td>                    
+                    <td v-if="date.total > 0"><b>{{ date.transferee }}</b></td>                    
+                    <td v-if="date.total > 0"><b>{{ date.second }}</b></td>                    
+                    <td v-if="date.total > 0"><b>{{ date.continuing }}</b></td>
+                    <td v-if="date.total > 0"><b>{{ date.shiftee }}</b></td>                    
+                    <td v-if="date.total > 0"><b>{{ date.returning }}</b></td>                    
+                    <td v-if="date.total > 0"><b>{{ date.total }}</b></td>                    
                 </tr>
                 <tr v-if="totals">
                     <td>Total:</td>
