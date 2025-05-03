@@ -3955,10 +3955,10 @@ class Excel extends CI_Controller {
 
             $objPHPExcel->setActiveSheetIndex(0)                    
                         ->setCellValue('B'.$i, '=SUM(B4:B'.($i-1).')')                        
-                        ->setCellValue('C'.$i, '=SUM(H4:H'.($i-1).')');
+                        ->setCellValue('C'.$i, '=SUM(C4:C'.($i-1).')');
             
-            $objPHPExcel->setActiveSheetIndex(0)->getStyle('H'.$i)->getFont()->setBold( true );                    
-            $objPHPExcel->setActiveSheetIndex(0)->getStyle('A3:H3')->getFont()->setBold( true );
+            $objPHPExcel->setActiveSheetIndex(0)->getStyle('C'.$i)->getFont()->setBold( true );                    
+            $objPHPExcel->setActiveSheetIndex(0)->getStyle('A3:B3')->getFont()->setBold( true );
 
             $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(50);
             $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
