@@ -32,10 +32,10 @@
                     "mRender": function (data,type,row,meta) { return '<?php echo $d_open; ?><li><a href="<?php echo base_url(); ?>schedule/edit_schedule/'+row[0]+'">Edit</a></li><li><a href="#" rel="'+row[0]+'" class="trash-item">Delete</a></li></ul></div>'; }
                 },
                 {
-                    "aTargets":[8],                    
+                    "aTargets":[7],                    
                     "mRender": function (data,type,row,meta) { 
                         var day = "Monday";                        
-                        switch(row[6]){
+                        switch(row[7]){
                             case "1":
                                 day = "Monday";
                                 break;
