@@ -95,17 +95,17 @@ table tr td {
             <div style="position:absolute; top: 245px; left: 550px; width: 200px; height: 20px;">
                 <?php echo $full_assessment; ?> </div>
             <div style="position:absolute; top:  245px; left: 650px; width: 200px; height: 20px;">
-                <?php echo $full_assessment." ".$type; ?> </div>
-            <?php if ($type == 'UG Reservation Payment'): ?> <div
+                <?php echo $full_assessment; ?> </div>
+            <?php if ($level == 'college'): ?> <div
                 style="position:absolute; top: 270px; left:10px; width: 500px; height: 20px;">
                 RESERVATION FEE,
                 UNDERGRAD<?php echo " for  ".$term['enumSem']." ".$term['term_label']." ".$term['strYearStart']."-".$term['strYearEnd']; ?>
-            </div> <?php endif; ?> <?php if ($type == 'SHS Reservation Payment'): ?> <div
+            </div> <?php endif; ?> <?php if ($level == 'shs'): ?> <div
                 style="position:absolute; top: 270px; left:10px; width: 500px; height: 20px;">
                 RESERVATION FEE FOR SENIOR HIGHSCHOOL
                 <?php echo " for  ".$term['enumSem']." ".$term['term_label']." ".$term['strYearStart']."-".$term['strYearEnd']; ?>
             </div> <?php endif; ?>
-            <?php if ($type == 'UG Reservation Payment' || $type == 'SHS Reservation Payment' ): ?>
+            <?php if ($reservation_amount != 0 ): ?>
             <div style="position:absolute; top: 290px; left:10px; width: 500px; height: 20px;"> "NON
                 REFUNDABLE", "NON TRANSFERABLE" </div> <?php endif; ?> <div
                 style="position:absolute; top: 270px; left: 500px; width: 500px; height: 20px;">
