@@ -3933,7 +3933,7 @@ class Excel extends CI_Controller {
         }
         else{
             $objPHPExcel->setActiveSheetIndex(0)                    
-                        ->setCellValue('A3', 'Program')
+                        ->setCellValue('A3', 'Date')
                         ->setCellValue('B3', 'Short Course')                        
                         ->setCellValue('C3', 'Total Enrollment');
                                 
