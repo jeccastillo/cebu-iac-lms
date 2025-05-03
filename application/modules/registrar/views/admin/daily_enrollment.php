@@ -59,7 +59,7 @@
                     <th>Total Enrollment</th>
                 </tr>                
             </thead>
-            <tbody>
+            <tbody v-if="sem_type != 'next'">
                 <tr v-if="dates" v-for="date in dates">
                     <td v-if="date.total > 0">{{ date.date }}</td>
                     <td v-if="date.total > 0"><b>{{ date.freshman }}</b></td>                    
