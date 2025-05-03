@@ -122,6 +122,7 @@ new Vue({
         full_total: 0,
         totals: undefined,
         sy: [],
+        sem_type: undefined,
                       
     },
 
@@ -141,6 +142,7 @@ new Vue({
 
                 this.dates = data.data.data;
                 this.totals = data.data.totals;
+                this.sem_type = data.data.sem_type;
                 this.sy = data.data.sy;
                 for(i in this.dates){
                     this.full_total += this.dates[i].total;
