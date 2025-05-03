@@ -2223,6 +2223,7 @@ class Registrar extends CI_Controller {
                 'intROG' => 3,  
                 'dteRegistered' => NULL,
                 'date_enlisted'=> NULL,
+                'withdrawal_period'=> $post['period']
             ];         
             $this->db->where(array('intStudentID'=>$post['id'],'intAYID'=>$post['sem']))->update('tb_mas_registration',$data);
 
