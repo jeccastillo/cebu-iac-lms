@@ -3880,7 +3880,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:G1');
         if($sem_type != "next"){
             $objPHPExcel->setActiveSheetIndex(0)                    
-                        ->setCellValue('A3', 'Program')
+                        ->setCellValue('A3', 'Date')
                         ->setCellValue('B3', 'Freshman')
                         ->setCellValue('C3', 'Transferee')
                         ->setCellValue('D3', 'Second Degree')                    
