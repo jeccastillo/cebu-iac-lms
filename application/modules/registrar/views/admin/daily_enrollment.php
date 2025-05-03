@@ -11,12 +11,14 @@
                     <input type="hidden" name="dates" v-model="data_post" />
                     <input type="hidden" name="totals" v-model="totals_post" />
                     <input type="hidden" name="full_total" v-model="full_total_post" />
+                    <input type="hidden" name="sem_type" v-model="sem_type" />
                     <a class="btn btn-app" target="_blank" href="#" @click.prevent.stop="submitForm('pdf')" ><i class="fa fa-book"></i>Generate PDF</a> 
                 </form>
                 <form style="display: inline;" ref="excelform" target="_blank" method="post" action="<?php echo $excel_link; ?>">                     
                     <input type="hidden" name="dates" v-model="data_post" />
                     <input type="hidden" name="totals" v-model="totals_post" />
                     <input type="hidden" name="full_total" v-model="full_total_post" />
+                    <input type="hidden" name="sem_type" v-model="sem_type" />
                     <a class="btn btn-app" target="_blank" href="#" @click.prevent.stop="submitForm('excel')" ><i class="fa fa-book"></i>Generate Excel</a> 
                 </form>
             </small>
