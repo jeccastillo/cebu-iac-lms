@@ -1209,6 +1209,10 @@ class Data_fetcher extends CI_Model {
                 case 3:
                 $this->db->where(array('tb_mas_registration.intAYID'=>$sem,'tb_mas_registration.intROG'=>2));
                 break;
+                case 4:
+                    $this->db->where(array('tb_mas_registration.intAYID'=>$sem,'tb_mas_registration.intROG'=>4))
+                             ->or_where(array('tb_mas_registration.intAYID'=>$sem,'tb_mas_registration.intROG'=>1));
+                break;
             }
 
             if($year!=0)
