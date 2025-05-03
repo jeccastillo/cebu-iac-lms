@@ -82,7 +82,27 @@
                 </tr>                               
             </tbody>
         </table>
-                         
+        <table v-else class="table table-bordered table-striped">
+            <thead style="position: sticky;top: 0" class="thead-dark">
+                <tr>
+                    <th>Date</th>
+                    <th>Short Course</th>                    
+                    <th>Total Enrollment</th>
+                </tr>                
+            </thead>
+            <tbody>
+                <tr v-if="dates" v-for="date in dates">
+                    <td v-if="date.total > 0">{{ date.date }}</td>
+                    <td v-if="date.total > 0"><b>{{ date.freshman }}</b></td>                                        
+                    <td v-if="date.total > 0"><b>{{ date.total }}</b></td>                    
+                </tr>
+                <tr v-if="totals">
+                    <td>Total:</td>
+                    <td><strong>{{ totals.freshman }}</strong></td>                    
+                    <td><strong>{{ full_total }}</strong></td>
+                </tr>                               
+            </tbody>
+        </table>             
       
     </div>
   
