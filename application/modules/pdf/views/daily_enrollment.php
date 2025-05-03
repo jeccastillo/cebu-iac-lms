@@ -131,8 +131,8 @@ else{
      <table v-if="enrolled" class="table table-bordered table-striped">
      <tr>
          <th style="width:30%;font-size:9px;">Date</th>
-         <th style="width:10%;font-size:9px;">Short Course</th>        
-         <th style="width:10%;font-size:9px;">Total Enrollment</th>
+         <th style="width:50%;font-size:9px;">Short Course</th>        
+         <th style="width:20%;font-size:9px;">Total Enrollment</th>
      </tr>
      <tr style="line-height:10px;">
         <th colspan="3"></th>
