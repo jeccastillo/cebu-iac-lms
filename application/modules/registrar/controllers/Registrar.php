@@ -718,15 +718,17 @@ class Registrar extends CI_Controller {
             ]; 
         
             $enrollment = $this->db->select('tb_mas_registration.*,tb_mas_users.student_type')
-                    ->from('tb_mas_registration')
-                    ->join('tb_mas_users','tb_mas_users.intID = tb_mas_registration.intStudentID')
-                    ->where('intAYID',$active_sem['intID'])
-                    ->where('intROG >=',1)
-                    ->where('dteRegistered LIKE', $date."%")                     
-                    ->order_by('intRegistrationID','desc')
-                    ->group_by('intStudentID')
-                    ->get()
-                    ->result_array();  
+                                    ->from('tb_mas_registration')
+                                    ->join('tb_mas_users','tb_mas_users.intID = tb_mas_registration.intStudentID')
+                                    ->where('intAYID',$active_sem['intID'])
+                                    ->where('intROG >=',1)
+                                    ->where('intROG !=',5)
+                                    ->where('withdrawal_period !=','before')
+                                    ->where('dteRegistered LIKE', $date."%")                     
+                                    ->order_by('intRegistrationID','desc')
+                                    ->group_by('intStudentID')
+                                    ->get()
+                                    ->result_array();  
                                 
             
             foreach($enrollment as $st){
