@@ -144,11 +144,11 @@ else{
         
         $html .= '            
             <tr>
-                <td style="font-size:8px;">'.$item->date.'</td>
-                <td style="font-size:8px;">
+                <td style="font-size:9px;">'.$item->date.'</td>
+                <td style="font-size:9px;">
                     '.$item->freshman.'
                 </td>                
-                <td style="font-size:8px;">
+                <td style="font-size:9px;text-align:center;">
                     '.$item->total.'
                 </td>
             </tr>
