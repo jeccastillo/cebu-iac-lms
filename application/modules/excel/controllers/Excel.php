@@ -3846,6 +3846,7 @@ class Excel extends CI_Controller {
         $dates = json_decode($post['dates']);
         $totals = json_decode($post['totals']);
         $full_total = json_decode($post['full_total']);
+        $sem_type = $post['sem_type'];
         
         $active_sem = $this->data_fetcher->get_sem_by_id($sem);
 
@@ -3877,59 +3878,92 @@ class Excel extends CI_Controller {
                     ->setCellValue('A1', $title);
 
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:G1');
-
-        $objPHPExcel->setActiveSheetIndex(0)                    
-                    ->setCellValue('A3', 'Program')
-                    ->setCellValue('B3', 'Freshman')
-                    ->setCellValue('C3', 'Transferee')
-                    ->setCellValue('D3', 'Second Degree')                    
-                    ->setCellValue('E3', 'Continuing')
-                    ->setCellValue('F3', 'Shiftee')
-                    ->setCellValue('G3', 'Returning')
-                    ->setCellValue('H3', 'Total Enrollment');
-                            
-        $i = 4;
-        
-        
-        foreach($dates as $item){  
+        if($sem_type != "next"){
+            $objPHPExcel->setActiveSheetIndex(0)                    
+                        ->setCellValue('A3', 'Program')
+                        ->setCellValue('B3', 'Freshman')
+                        ->setCellValue('C3', 'Transferee')
+                        ->setCellValue('D3', 'Second Degree')                    
+                        ->setCellValue('E3', 'Continuing')
+                        ->setCellValue('F3', 'Shiftee')
+                        ->setCellValue('G3', 'Returning')
+                        ->setCellValue('H3', 'Total Enrollment');
+                                
+            $i = 4;
             
-                    
-            $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A'.$i, $item->date)
-                    ->setCellValue('B'.$i, $item->freshman)
-                    ->setCellValue('C'.$i, $item->transferee)                    
-                    ->setCellValue('D'.$i, $item->second)
-                    ->setCellValue('E'.$i, $item->continuing)
-                    ->setCellValue('F'.$i, $item->shiftee)
-                    ->setCellValue('G'.$i, $item->returning)
-                    ->setCellValue('H'.$i, '=SUM(B'.$i.':G'.$i.')');                                                
-                             
-        
-            $i++;
-         
+            
+            foreach($dates as $item){  
+                
+                        
+                $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue('A'.$i, $item->date)
+                        ->setCellValue('B'.$i, $item->freshman)
+                        ->setCellValue('C'.$i, $item->transferee)                    
+                        ->setCellValue('D'.$i, $item->second)
+                        ->setCellValue('E'.$i, $item->continuing)
+                        ->setCellValue('F'.$i, $item->shiftee)
+                        ->setCellValue('G'.$i, $item->returning)
+                        ->setCellValue('H'.$i, '=SUM(B'.$i.':G'.$i.')');                                                
+                                
+            
+                $i++;
+            
+            }
+
+            $objPHPExcel->setActiveSheetIndex(0)                    
+                        ->setCellValue('B'.$i, '=SUM(B4:B'.($i-1).')')
+                        ->setCellValue('C'.$i, '=SUM(C4:C'.($i-1).')')                    
+                        ->setCellValue('D'.$i, '=SUM(D4:D'.($i-1).')')
+                        ->setCellValue('E'.$i, '=SUM(E4:E'.($i-1).')')                    
+                        ->setCellValue('F'.$i, '=SUM(F4:F'.($i-1).')')
+                        ->setCellValue('G'.$i, '=SUM(G4:G'.($i-1).')')
+                        ->setCellValue('H'.$i, '=SUM(H4:H'.($i-1).')');
+            
+            $objPHPExcel->setActiveSheetIndex(0)->getStyle('H'.$i)->getFont()->setBold( true );                    
+            $objPHPExcel->setActiveSheetIndex(0)->getStyle('A3:H3')->getFont()->setBold( true );
+
+            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(50);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
         }
+        else{
+            $objPHPExcel->setActiveSheetIndex(0)                    
+                        ->setCellValue('A3', 'Program')
+                        ->setCellValue('B3', 'Short Course')                        
+                        ->setCellValue('C3', 'Total Enrollment');
+                                
+            $i = 4;
+            
+            
+            foreach($dates as $item){  
+                
+                        
+                $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue('A'.$i, $item->date)
+                        ->setCellValue('B'.$i, $item->freshman)                        
+                        ->setCellValue('C'.$i, '=SUM(B'.$i.':G'.$i.')');                                                
+                                
+            
+                $i++;
+            
+            }
 
-        $objPHPExcel->setActiveSheetIndex(0)                    
-                    ->setCellValue('B'.$i, '=SUM(B4:B'.($i-1).')')
-                    ->setCellValue('C'.$i, '=SUM(C4:C'.($i-1).')')                    
-                    ->setCellValue('D'.$i, '=SUM(D4:D'.($i-1).')')
-                    ->setCellValue('E'.$i, '=SUM(E4:E'.($i-1).')')                    
-                    ->setCellValue('F'.$i, '=SUM(F4:F'.($i-1).')')
-                    ->setCellValue('G'.$i, '=SUM(G4:G'.($i-1).')')
-                    ->setCellValue('H'.$i, '=SUM(H4:H'.($i-1).')');
-        
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle('H'.$i)->getFont()->setBold( true );                    
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle('A3:H3')->getFont()->setBold( true );
+            $objPHPExcel->setActiveSheetIndex(0)                    
+                        ->setCellValue('B'.$i, '=SUM(B4:B'.($i-1).')')                        
+                        ->setCellValue('C'.$i, '=SUM(H4:H'.($i-1).')');
+            
+            $objPHPExcel->setActiveSheetIndex(0)->getStyle('H'.$i)->getFont()->setBold( true );                    
+            $objPHPExcel->setActiveSheetIndex(0)->getStyle('A3:H3')->getFont()->setBold( true );
 
-        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
-        
+            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(50);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+        }
                 
          
         $objPHPExcel->getActiveSheet()->setTitle('Total Daily Enrollment Students');
