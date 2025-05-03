@@ -35,7 +35,7 @@
                     "aTargets":[8],                    
                     "mRender": function (data,type,row,meta) { 
                         var day = "Monday";                        
-                        switch(row[7]){
+                        switch(row[6]){
                             case "1":
                                 day = "Monday";
                                 break;
