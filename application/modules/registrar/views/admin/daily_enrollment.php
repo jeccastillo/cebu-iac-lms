@@ -46,7 +46,7 @@
                     <option v-for="s in sy" :value="s.intID">{{s.term_student_type + ' ' + s.enumSem + ' ' + s.term_label + ' ' + s.strYearStart + '-' + s.strYearEnd}}</option>                      
                 </select>   
         </div>
-        <table class="table table-bordered table-striped">
+        <table v-if="sem_type != 'next'" class="table table-bordered table-striped">
             <thead style="position: sticky;top: 0" class="thead-dark">
                 <tr>
                     <th>Date</th>
@@ -59,7 +59,7 @@
                     <th>Total Enrollment</th>
                 </tr>                
             </thead>
-            <tbody v-if="sem_type != 'next'">
+            <tbody>
                 <tr v-if="dates" v-for="date in dates">
                     <td v-if="date.total > 0">{{ date.date }}</td>
                     <td v-if="date.total > 0"><b>{{ date.freshman }}</b></td>                    
