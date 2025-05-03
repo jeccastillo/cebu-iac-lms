@@ -1159,7 +1159,7 @@ class Data_fetcher extends CI_Model {
 
     }
 
-    function getStudentsNotInReferral(){
+    function getStudentsNotInReferral($sem){
         
         $students = $this->db
             ->select('strLastname, strFirstname, strMiddlename')
@@ -1172,7 +1172,7 @@ class Data_fetcher extends CI_Model {
         $ret = [];
         foreach($students as $student)
         {
-            $disc = $this->db->get_where('tb_mas_student_discount',array('referrer LIKE'=>$student['strLastname'].", ".$student['strFirstname']."%"))->first_row();
+            $disc = $this->db->get_where('tb_mas_student_discount',array('referrer LIKE'=>$student['strLastname'].", ".$student['strFirstname']."%",'syid'=>$sem))->first_row();
             if(empty($disc))
                 $ret[] = $student;
         }
