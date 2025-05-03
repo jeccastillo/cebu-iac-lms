@@ -2416,6 +2416,7 @@ class Pdf extends CI_Controller {
         $this->data['transaction_date'] =  date("m/d/Y",strtotime($request['transaction_date']));  
         $this->data['request'] = $request;
         $this->data['type'] = $type == "Tuition Fee" ? "Total Assessment" : $type;
+        $this->data['level'] = $request['type'];
         $this->data['reservation_description'] = $reservationDescription;
         $this->data['reservation_amount'] = $reservationAmount != 0 ? number_format($reservationAmount,2,'.',',') : $reservationAmount;
         $this->data['payment_type'] = isset($reg) ? $reg['paymentType']: "";
