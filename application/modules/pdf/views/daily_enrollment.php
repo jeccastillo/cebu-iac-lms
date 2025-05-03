@@ -132,7 +132,7 @@ else{
      <tr>
          <th style="width:25%;font-size:9px;">Date</th>
          <th style="width:50%;font-size:9px;text-align:center;">Short Course</th>        
-         <th style="width:25%;font-size:9px;">Total Enrollment</th>
+         <th style="width:25%;font-size:9px;text-align:center;">Total Enrollment</th>
      </tr>
      <tr style="line-height:10px;">
         <th colspan="3"></th>
@@ -148,7 +148,7 @@ else{
                 <td style="font-size:9px;text-align:center;">
                     '.$item->freshman.'
                 </td>                
-                <td style="font-size:9px;">
+                <td style="font-size:9px;text-align:center;">
                     '.$item->total.'
                 </td>
             </tr>
@@ -163,8 +163,8 @@ $html .= '
     </tr>
      <tr>
          <td>Total</td>
-         <td>'.$totals->freshman.'</td>         
-         <td><strong>'.$full_total.'</strong></td>
+         <td style="text-align:center;">'.$totals->freshman.'</td>         
+         <td style="text-align:center;"><strong>'.$full_total.'</strong></td>
      </tr>
      <tr style="line-height:30px;">
         <th colspan="3"></th>
