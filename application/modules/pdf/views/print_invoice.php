@@ -96,9 +96,19 @@ table tr td {
                 <?php echo $full_assessment; ?> </div>
             <div style="position:absolute; top:  245px; left: 650px; width: 200px; height: 20px;">
                 <?php echo $full_assessment; ?> </div>
-            <div style="position:absolute; top: 270px; left:10px; width: 500px; height: 20px;">
-                <?php echo $reservation_description; ?> </div>
-            <div style="position:absolute; top: 270px; left: 500px; width: 500px; height: 20px;">
+            <?php if ($level == 'college'): ?> <div
+                style="position:absolute; top: 270px; left:10px; width: 500px; height: 20px;">
+                RESERVATION FEE,
+                UNDERGRAD<?php echo " for  ".$term['enumSem']." ".$term['term_label']." ".$term['strYearStart']."-".$term['strYearEnd']; ?>
+            </div> <?php endif; ?> <?php if ($level == 'shs'): ?> <div
+                style="position:absolute; top: 270px; left:10px; width: 500px; height: 20px;">
+                RESERVATION FEE FOR SENIOR HIGHSCHOOL
+                <?php echo " for  ".$term['enumSem']." ".$term['term_label']." ".$term['strYearStart']."-".$term['strYearEnd']; ?>
+            </div> <?php endif; ?>
+            <?php if ($reservation_amount != 0 ): ?>
+            <div style="position:absolute; top: 290px; left:10px; width: 500px; height: 20px;"> "NON
+                REFUNDABLE", "NON TRANSFERABLE" </div> <?php endif; ?> <div
+                style="position:absolute; top: 270px; left: 500px; width: 500px; height: 20px;">
                 <?php echo $reservation_amount != 0 ? 1 : ""; ?> </div>
             <div style="position:absolute; top: 270px; left: 550px; width: 200px; height: 20px;">
                 <?php echo $reservation_amount != 0 ? "-".$reservation_amount : ""; ?> </div>
@@ -122,6 +132,8 @@ table tr td {
                 <?php  echo $total_amount_due == 0 ? "" : $total_amount_due; ?> </div>
             <div style="position:absolute; top:  405px; left: 650px; width: 200px; height: 20px;">
                 <?php  echo $total_assessment; ?> </div>
+            <!-- <div style="position:absolute; top:  370px; left: 50px; width: 200px; height: 20px;">
+            </div> -->
             <div style="position:absolute; top:  460px; left: 10px; width: 200px; height: 20px;">
                 <?php  echo $remarks; ?> </div>
             <!--Vatable-->
@@ -129,7 +141,7 @@ table tr td {
                 <?php  echo $amount_less_vat != 0 ? $amount_less_vat : ""; ?> </div>
             <!--Vat Exempt Sale--> <?php if($vat_exempt != 0 && $less_vat != 0): ?> <div
                 style="position:absolute; top:  487px; left: 305px; width: 200px; height: 20px;">
-                <?php  echo $vat_exempt; ?> </div>
+                <?php echo $full_assessment; ?> </div>
             <?php elseif($vat_exempt == 0 && $less_vat != 0): ?> <div
                 style="position:absolute; top:  487px; left: 305px; width: 200px; height: 20px;">
                 <?php  echo ""; ?> </div> <?php else: ?> <div
@@ -137,7 +149,7 @@ table tr td {
                 <?php  echo $total_assessment; ?> </div> <?php endif; ?>
             <!--Total Amount received-->
             <div style="position:absolute; top:  565px; left: 50px; width: 200px; height: 20px;">
-                <?php  echo $total_amount_due == 0 ? "" : $total_amount_due; ?> </div>
+                <?php  echo $request['status'] == "Pending" ? '' : $full_assessment; ?> </div><br>
             <div
                 style="position:absolute; top: 550px; right: 20px; width: 200px; height: 20px;font-size:15px">
                 <?php echo $cashier_name; ?> </div>
