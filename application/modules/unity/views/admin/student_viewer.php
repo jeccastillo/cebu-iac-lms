@@ -283,6 +283,14 @@
                               <option value=5>AWOL</option>
                             </select>
                           </p>
+                          <p v-if="user_level == 2"><strong>Withdrawal Period (for students that withdrawn for the term): </strong>
+                            <select class="form-control" @change="updateWithdrawalPeriod($event)"
+                              v-model="registration.withdrawal_period">                              
+                              <option value="before">before</option>
+                              <option value="after">after</option>                              
+                              <option value="end">end</option>                              
+                            </select>
+                          </p>
                           <p><strong>Internship: </strong>
                             <select class="form-control" @change="updateInternshipStatus($event)"
                               v-model="registration.internship">
@@ -1243,6 +1251,32 @@ new Vue({
 
 
       },
+    updateWithdrawalPeriod: function(event) {
+
+        var formdata = new FormData();
+        formdata.append('intRegistrationID', this.registration.intRegistrationID);
+        formdata.append('withdrawal_period', event.target.value);
+
+
+        this.loader_spinner = true;
+        axios.post(base_url + 'unity/update_academic_status', formdata, {
+            headers: {
+              Authorization: `Bearer ${window.token}`
+            }
+          })
+          .then(data => {
+            this.loader_spinner = false;
+            Swal.fire({
+              title: "Success",
+              text: data.data.message,
+              icon: "success"
+            }).then(function() {
+
+            });
+          });
+
+
+    },
     selectTuitionYear: function(event){
       var formdata = new FormData();
       formdata.append('intRegistrationID', this.registration.intRegistrationID);
