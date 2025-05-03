@@ -95,7 +95,7 @@ table tr td {
             <div style="position:absolute; top: 245px; left: 550px; width: 200px; height: 20px;">
                 <?php echo $full_assessment; ?> </div>
             <div style="position:absolute; top:  245px; left: 650px; width: 200px; height: 20px;">
-                <?php echo $full_assessment; ?> </div>
+                <?php echo $full_assessment." ".$type; ?> </div>
             <?php if ($type == 'UG Reservation Payment'): ?> <div
                 style="position:absolute; top: 270px; left:10px; width: 500px; height: 20px;">
                 RESERVATION FEE,
