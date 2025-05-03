@@ -60,7 +60,7 @@
                 </tr>                
             </thead>
             <tbody>
-                <tr v-if="dates" v-for="date in dates">
+                <tr v-if="dates" v-if="date.total > 0" v-for="date in dates">
                     <td>{{ date.date }}</td>
                     <td v-if="date.freshman > 0"><b>{{ date.freshman }}</b></td>
                     <td v-else>{{ date.freshman }}</td>
