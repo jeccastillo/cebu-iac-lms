@@ -1211,7 +1211,8 @@ class Data_fetcher extends CI_Model {
                 break;
                 case 4:
                     $this->db->where(array('tb_mas_registration.intAYID'=>$sem,'tb_mas_registration.intROG >='=>1))
-                             ->where(array('tb_mas_registration.intAYID'=>$sem,'tb_mas_registration.intROG !='=>5));
+                             ->where(array('tb_mas_registration.intAYID'=>$sem,'tb_mas_registration.intROG !='=>5))
+                             ->where(array('tb_mas_registration.intAYID'=>$sem,'tb_mas_registration.withdrawal_period !='=>'before'));
                 break;
             }
 
