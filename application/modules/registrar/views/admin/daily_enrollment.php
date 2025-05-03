@@ -159,7 +159,8 @@ new Vue({
                 this.sy = data.data.sy;
                 for(i in this.dates){
                     this.full_total += this.dates[i].total;
-                    this.data_post.push(this.dates[i]);
+                    if(this.dates[i].total > 0)
+                        this.data_post.push(this.dates[i]);
                 }
                 this.data_post = JSON.stringify(this.data_post);
                 this.full_total_post = JSON.stringify(this.full_total);
