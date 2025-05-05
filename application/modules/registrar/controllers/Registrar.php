@@ -637,7 +637,7 @@ class Registrar extends CI_Controller {
                                  ->or_where('type','other')
                                  ->get('tb_mas_programs')
                                  ->result_array();
-        else
+        elseif($type == "next")
             $programs = $this->db->where('type','next')
             ->or_where('type','other')
             ->get('tb_mas_programs')
