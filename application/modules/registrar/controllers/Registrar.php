@@ -728,7 +728,7 @@ class Registrar extends CI_Controller {
                                     ->where('intAYID',$active_sem['intID'])
                                     ->where('intROG >=',1)
                                     ->where('intROG !=',5)
-                                    ->where('withdrawal_period !=','before')
+                                    // ->where('withdrawal_period !=','before')
                                     ->where('dteRegistered LIKE', $date."%")                     
                                     ->order_by('intRegistrationID','desc')
                                     ->group_by('intStudentID')
