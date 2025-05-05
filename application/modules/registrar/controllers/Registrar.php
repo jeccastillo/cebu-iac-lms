@@ -632,11 +632,16 @@ class Registrar extends CI_Controller {
         $type = $active_sem['term_student_type'];
         if($type == "shs")
             $programs = $this->db->get_where('tb_mas_programs',array('type'=>$type))->result_array();
-        else
+        elseif($type == "college")
             $programs = $this->db->where('type','college')
                                  ->or_where('type','other')
                                  ->get('tb_mas_programs')
                                  ->result_array();
+        elseif($type == "next")
+            $programs = $this->db->where('type','next')
+            ->or_where('type','other')
+            ->get('tb_mas_programs')
+            ->result_array();
                                  
         $data['programs'] = $programs;
         $ret = [];        
@@ -718,17 +723,17 @@ class Registrar extends CI_Controller {
             ]; 
         
             $enrollment = $this->db->select('tb_mas_registration.*,tb_mas_users.student_type')
-                    ->from('tb_mas_registration')
-                    ->join('tb_mas_users','tb_mas_users.intID = tb_mas_registration.intStudentID')
-                    ->where('intAYID',$active_sem['intID'])
-                    ->where('intROG >=',1)
-                    ->where('intROG !=',5)
-                    ->where('withdrawal_period !=','before')
-                    ->where('dteRegistered LIKE', $date."%")                     
-                    ->order_by('intRegistrationID','desc')
-                    ->group_by('intStudentID')
-                    ->get()
-                    ->result_array();  
+                                    ->from('tb_mas_registration')
+                                    ->join('tb_mas_users','tb_mas_users.intID = tb_mas_registration.intStudentID')
+                                    ->where('intAYID',$active_sem['intID'])
+                                    ->where('intROG >=',1)
+                                    ->where('intROG !=',5)
+                                    ->where('withdrawal_period !=','before')
+                                    ->where('dteRegistered LIKE', $date."%")                     
+                                    ->order_by('intRegistrationID','desc')
+                                    ->group_by('intStudentID')
+                                    ->get()
+                                    ->result_array();  
                                 
             
             foreach($enrollment as $st){
@@ -755,6 +760,10 @@ class Registrar extends CI_Controller {
                             $data[$date]['freshman'] += 1;
                             $totals['freshman'] += 1;
                             break;
+                        case 'new':
+                                $data[$date]['freshman'] += 1;
+                                $totals['freshman'] += 1;
+                                break;
                         case 'transferee':
                             $data[$date]['transferee'] += 1;
                             $totals['transferee'] += 1;
@@ -778,6 +787,7 @@ class Registrar extends CI_Controller {
                             
         $ret['totals'] = $totals;
         $ret['data'] = $data;
+        $ret['sem_type'] = $active_sem['term_student_type'];
         $ret['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
         echo json_encode($ret);
 
@@ -2068,7 +2078,7 @@ class Registrar extends CI_Controller {
         $data['message'] = "Done";            
         $remarks = "Added";
         $data['success'] =  true;
-        
+        $student = $this->data_fetcher->getStudent($post['student']);
         $records = $this->data_fetcher->getClassListStudentsSt($post['student'],$post['sem']);
         $add_to = $this->db->where(array('intID'=>$post['section_to_add']))->get('tb_mas_classlist')->first_row('array');
         $section_to = $add_to['strClassName'].$add_to['year'].$add_to['strSection'];
@@ -2097,7 +2107,7 @@ class Registrar extends CI_Controller {
                 $section_from = $classlist_data['strClassName'].$classlist_data['year'].$classlist_data['strSection'];
                 $section_from .= ($classlist_data['sub_section'])?"-".$classlist_data['sub_section']:"";
             }
-            else{
+            elseif($student['level'] != "next"){
                 $conflict = $this->data_fetcher->student_conflict($post['section_to_add'],$record,$post['sem']);
                 foreach($conflict as $c){
                     if($c){
