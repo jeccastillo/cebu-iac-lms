@@ -632,11 +632,16 @@ class Registrar extends CI_Controller {
         $type = $active_sem['term_student_type'];
         if($type == "shs")
             $programs = $this->db->get_where('tb_mas_programs',array('type'=>$type))->result_array();
-        else
+        elseif($type == "college")
             $programs = $this->db->where('type','college')
                                  ->or_where('type','other')
                                  ->get('tb_mas_programs')
                                  ->result_array();
+        else
+            $programs = $this->db->where('type','next')
+            ->or_where('type','other')
+            ->get('tb_mas_programs')
+            ->result_array();
                                  
         $data['programs'] = $programs;
         $ret = [];        
