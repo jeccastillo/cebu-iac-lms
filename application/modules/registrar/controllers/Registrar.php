@@ -729,7 +729,7 @@ class Registrar extends CI_Controller {
                                     ->where('intROG >=',1)
                                     ->where('intROG !=',5)                                    
                                     ->where('dteRegistered LIKE', $date."%")                     
-                                    ->where('tb_mas_registration.withdrawal_period !=','before')                                    
+                                    ->where('tb_mas_registration.withdrawal_period !=',null)                                    
                                     ->order_by('intRegistrationID','desc')
                                     ->group_by('intStudentID')
                                     ->get()
