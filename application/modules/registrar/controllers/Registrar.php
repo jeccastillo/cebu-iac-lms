@@ -760,6 +760,10 @@ class Registrar extends CI_Controller {
                             $data[$date]['freshman'] += 1;
                             $totals['freshman'] += 1;
                             break;
+                        case 'new':
+                                $data[$date]['freshman'] += 1;
+                                $totals['freshman'] += 1;
+                                break;
                         case 'transferee':
                             $data[$date]['transferee'] += 1;
                             $totals['transferee'] += 1;
