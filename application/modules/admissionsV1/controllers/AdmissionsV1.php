@@ -291,6 +291,7 @@ class AdmissionsV1 extends CI_Controller {
 
     public function enrollment_summary($sem = 0)    
     {
+        $this->data['page'] = "enrollment_summary";
         if($sem == 0){
             $active_sem = $this->data_fetcher->get_active_sem();
             $this->data['sem'] = $active_sem['intID'];
