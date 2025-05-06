@@ -227,7 +227,14 @@
                         href="<?php echo base_url() ?>admissionsV1/schools/"><i
                             class="fa fa-list"></i>
                         <span>Schools</span> </a>
-                </li> <?php endif; ?> <li
+                </li> 
+                <li
+                    class="<?php echo (isset($page) && $page=="enrollment_summary")?'active':''; ?>">
+                    <a href="<?php echo base_url() ?>admissionsV1/enrollment_summary/"><i
+                            class="fa fa-list"></i>
+                        <span>Enrollment Summary</span> </a>
+                </li>
+                <?php endif; ?> <li
                     class="treeview <?php echo (isset($opentree) && $opentree=="leads")?'active':''; ?>">
                     <a href="#">
                         <i class="ion ion-email"></i> <span>Student Applicants</span>
