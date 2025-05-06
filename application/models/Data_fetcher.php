@@ -2545,7 +2545,7 @@ class Data_fetcher extends CI_Model {
                  
         
         if(isset($registration))
-            return $this->getTuitionSubjects($registration['enumStudentType'],$sch,$discount,$subjects,$id,$registration['type_of_class'],$sem,$registration['tuition_year'],$registration['dteRegistered'],$registration['intYearLevel'],$registration['internship'], $registration['intROG']);
+            return $this->getTuitionSubjects($registration['enumStudentType'],$sch,$discount,$subjects,$id,$registration['type_of_class'],$sem,$registration['tuition_year'],$registration['dteRegistered'],$registration['intYearLevel'],$registration['internship'], $registration['intROG'],$registrar['withdrawal_period']);
         else                              
             return null;
         
@@ -2591,7 +2591,7 @@ class Data_fetcher extends CI_Model {
         
     }   
 
-    function getTuitionSubjects($stype,$sch,$discount,$subjects,$id,$class_type="regular",$syid,$tuition_year_id,$dr=null,$year_level = 1,$internship = 0, $intROG = 0)
+    function getTuitionSubjects($stype,$sch,$discount,$subjects,$id,$class_type="regular",$syid,$tuition_year_id,$dr=null,$year_level = 1,$internship = 0, $intROG = 0,$w_status="")
     {
         $tuition = 0;
         $total_lab = 0;
@@ -2703,7 +2703,7 @@ class Data_fetcher extends CI_Model {
             $late_enrollment = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'late_enrollment'))
                          ->get('tb_mas_tuition_year_misc')->result_array();
 
-            if($intROG != 3)
+            if($w_status != "before")
             foreach($late_enrollment as $late){
                 $late_fee = getExtraFee($late, $class_type, 'misc');
                 $late_enrollment_fee += $late_fee;
