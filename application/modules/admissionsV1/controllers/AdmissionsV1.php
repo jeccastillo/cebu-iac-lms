@@ -218,6 +218,75 @@ class AdmissionsV1 extends CI_Controller {
         
     }
 
+    public function enrollment_summary($sem = 0)    
+    {
+        if($sem == 0){
+            $active_sem = $this->data_fetcher->get_active_sem();
+            $this->data['sem'] = $active_sem['intID'];
+        }
+        else{
+            $active_sem = $this->data_fetcher->get_sem_by_id($sem);
+            $this->data['sem'] = $active_sem['intID'];
+        }        
+        $this->data['pdf_link'] = base_url()."pdf/enrollment_summary/".$this->data['sem'];
+        $this->data['excel_link'] = base_url()."excel/enrollment_summary/".$this->data['sem'];
+
+        
+        $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/enrollment_summary",$this->data);
+        $this->load->view("common/footer",$this->data); 
+        
+    }
+
+    public function enrollment_summary_data($sem = 0){
+
+        if($sem == 0){
+            $active_sem = $this->data_fetcher->get_active_sem();
+            $sem = $active_sem['intID'];
+        }
+        else{
+            $active_sem = $this->data_fetcher->get_sem_by_id($sem);
+            $sem = $active_sem['intID'];
+        }
+
+
+        $data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+        $type = $active_sem['term_student_type'];
+        if($type == "shs")
+            $programs = $this->db->get_where('tb_mas_programs',array('type'=>$type))->result_array();
+        elseif($type == "college")
+            $programs = $this->db->where('type','college')
+                                 ->or_where('type','other')
+                                 ->get('tb_mas_programs')
+                                 ->result_array();
+        elseif($type == "next")
+            $programs = $this->db->where('type','next')
+            ->or_where('type','other')
+            ->get('tb_mas_programs')
+            ->result_array();
+                                 
+        $data['programs'] = $programs;
+        $ret = [];        
+
+        foreach($programs as $program){
+            $st = [];
+            $program['enrolled_transferee'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,2));
+            $program['enrolled_freshman'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,1));
+            $program['enrolled_foreign'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,3));
+            $program['enrolled_second'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,4));            
+            $program['enrolled_continuing'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,5));
+            $program['enrolled_shiftee'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,6));
+            $program['enrolled_returnee'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,7));
+            $ret[] = $program; 
+        }
+
+        $data['data'] = $ret;
+
+        echo json_encode($data);
+
+    }
+
     public function add_new_student(){
         
     
