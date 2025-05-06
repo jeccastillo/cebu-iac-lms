@@ -2701,7 +2701,7 @@ class Data_fetcher extends CI_Model {
 
             $late_enrollment = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'late_enrollment'))
                          ->get('tb_mas_tuition_year_misc')->result_array();
-
+            if($intROG != 3)
             foreach($late_enrollment as $late){
                 $late_fee = getExtraFee($late, $class_type, 'misc');
                 $late_enrollment_fee += $late_fee;
