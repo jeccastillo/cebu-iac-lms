@@ -112,6 +112,9 @@ table tr td {
                     SIGNATURE</div>
                 <?php endif; ?> 
                 <div
+                style="position:absolute; top: 270px; left: 10px; width: 500px; height: 20px;">
+                <?php echo $reservation_amount != 0 ? "Reservation Payment" : ""; ?> </div>
+                <div
                 style="position:absolute; top: 270px; left: 500px; width: 500px; height: 20px;">
                 <?php echo $reservation_amount != 0 ? 1 : ""; ?> </div>
             <input type="hidden" name="user_id" value="<?php echo $reservation_amount;?>">
