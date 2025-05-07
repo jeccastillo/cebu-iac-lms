@@ -227,13 +227,7 @@
                         href="<?php echo base_url() ?>admissionsV1/schools/"><i
                             class="fa fa-list"></i>
                         <span>Schools</span> </a>
-                </li> 
-                <li
-                    class="<?php echo (isset($page) && $page=="view_students")?'active':''; ?>">
-                    <a href="<?php echo base_url(); ?>student/view_all_students"
-                        style="margin-left: 10px;"><i class="ion ion-eye"></i> View
-                        Students</a>
-                </li>  
+                </li>                 
                 <li
                     class="<?php echo (isset($page) && $page=="enrollment_summary")?'active':''; ?>">
                     <a href="<?php echo base_url() ?>admissionsV1/enrollment_summary/"><i
