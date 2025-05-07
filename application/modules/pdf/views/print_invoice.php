@@ -96,12 +96,12 @@ table tr td {
                 <?php echo $full_assessment; ?> </div>
             <div style="position:absolute; top:  245px; left: 650px; width: 200px; height: 20px;">
                 <?php echo $full_assessment; ?> </div>
-            <?php if ($level == 'college' && $type != "UG Reservation Payment"): ?> <div
+            <?php if ($level == 'college' && $type == "UG Reservation Payment"): ?> <div
                 style="position:absolute; top: 270px; left:10px; width: 500px; height: 20px;">
                 RESERVATION FEE,
                 UNDERGRAD<?php echo " for  ".$term['enumSem']." ".$term['term_label']." ".$term['strYearStart']."-".$term['strYearEnd']; ?>
             </div> <?php endif; ?>
-            <?php if ($level == 'shs'  && $type != "SHS Reservation Payment"): ?> <div
+            <?php if ($level == 'shs'  && $type == "SHS Reservation Payment"): ?> <div
                 style="position:absolute; top: 270px; left:10px; width: 500px; height: 20px;">
                 RESERVATION FEE FOR SENIOR HIGHSCHOOL
                 <?php echo " for  ".$term['enumSem']." ".$term['term_label']." ".$term['strYearStart']."-".$term['strYearEnd']; ?>
