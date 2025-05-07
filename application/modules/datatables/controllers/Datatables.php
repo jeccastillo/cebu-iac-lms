@@ -1969,6 +1969,14 @@ class Datatables extends CI_Controller {
                 $sWhere = "WHERE ($table.student_status = 'active' OR $table.student_status = 'loa' OR $table.student_status = 'awol') ";
             else
                 $sWhere = "WHERE $table.student_status = '$student_type' ";
+        }        
+        if($gender!=0  && $table =='tb_mas_users'){
+            
+            if($gender == 1)
+                $sWhere .= "AND $table.enumGender = 'male' ";
+            else
+                $sWhere .= "AND $table.enumGender = 'female' ";
+                        
         }
         if($gender!=0  && $table =='tb_mas_users'){
             
@@ -1978,7 +1986,7 @@ class Datatables extends CI_Controller {
                 $sWhere .= "AND $table.enumGender = 'female' ";
             
             
-        }
+        }        
         if($graduate!=0  && $table =='tb_mas_users'){
             
             if($graduate == 1)
@@ -2130,7 +2138,7 @@ class Datatables extends CI_Controller {
         
         if($table == 'tb_mas_users')
         {
-            $join = " JOIN tb_mas_programs ON tb_mas_users.intProgramID = tb_mas_programs.intProgramID ";            
+            $join = "LEFT JOIN tb_mas_programs ON tb_mas_users.intProgramID = tb_mas_programs.intProgramID ";            
             
             $join .= "LEFT JOIN tb_mas_registration ON tb_mas_users.intID = tb_mas_registration.intStudentID ";
         }
