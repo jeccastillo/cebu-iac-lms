@@ -2197,8 +2197,10 @@ class Datatables extends CI_Controller {
          * SQL queries
          * Get data to display
          */
+        $sColumns = $Columns;
+        
         $sQuery = "
-            SELECT SQL_CALC_FOUND_ROWS ".str_replace(" , ", " ", implode(", ", $aColumns)). 
+            SELECT SQL_CALC_FOUND_ROWS ".str_replace(" , ", " ", implode(", ", $sColumns)). 
             " FROM $sTable
             $join
             $sWhere
