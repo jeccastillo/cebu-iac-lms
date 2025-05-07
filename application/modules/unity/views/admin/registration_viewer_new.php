@@ -638,11 +638,11 @@
                                                         data-target="#orDetailsUpdate"
                                                         class="btn btn-primary"> Update Details
                                                     </button>
-                                                    <!-- <button v-if="payment.or_number && cashier"
+                                                    <button v-if="payment.or_number && cashier"
                                                         @click="printOR(payment)"
                                                         class="btn btn-primary">
                                                         Print OR
-                                                    </button> -->
+                                                    </button>
                                                     <button v-if="payment.invoice_number && cashier"
                                                         @click="printInvoice(payment)"
                                                         class="btn btn-primary"> Print Invoice
