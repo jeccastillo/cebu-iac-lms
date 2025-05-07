@@ -239,7 +239,7 @@
                                                             <option v-if="registration"
                                                                 value="Tuition Fee">Tuition Fee
                                                             </option>
-                                                            <option v-if="isInvoice" value="Other">
+                                                            <option value="Other">
                                                                 Other</option>
                                                         </select>
                                                     </div>
