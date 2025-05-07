@@ -108,7 +108,7 @@ table tr td {
             </div> <?php endif; ?> <?php if ($request['description'] == 'Reservation Payment'  ): ?> <div
                 style="position:absolute; top: 290px; left:10px; width: 500px; height: 20px;"> "NON
                 REFUNDABLE", "NON TRANSFERABLE" </div> 
-                <div style="position:absolute; top: 310px; left:10px; width: 500px; height: 20px;">
+                <div style="position:absolute; top: 310px; left:60px; width: 500px; height: 20px;">
                     SIGNATURE: </div>
                 <?php endif; ?> 
                 <div
