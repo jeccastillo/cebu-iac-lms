@@ -2196,10 +2196,7 @@ class Datatables extends CI_Controller {
         /*
          * SQL queries
          * Get data to display
-         */        
-        if($table == "tb_mas_users"){
-            $aColumns = $this->config->item($table.'_columns_cl');
-        }
+         */
         $sQuery = "
             SELECT SQL_CALC_FOUND_ROWS ".str_replace(" , ", " ", implode(", ", $aColumns)). 
             " FROM $sTable
@@ -2212,7 +2209,6 @@ class Datatables extends CI_Controller {
             
         ";
         
-        $aColumns = $this->config->item($table.'_columns');
         $rResult = $this->db->query($sQuery);
         
 

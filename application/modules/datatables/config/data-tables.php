@@ -17,7 +17,6 @@ $config['tb_mas_grading_columns'] = array("id","name");
 $config['tb_mas_grading_index'] = "id";
 
 $config['tb_mas_users_columns'] = array("intID","slug","strStudentNumber","strLastname","strFirstname","strMiddlename","strProgramCode","intYearLevel","strAcademicStanding","level");
-$config['tb_mas_users_columns_cl'] = array("intID","slug","strStudentNumber","strLastname","strFirstname","strMiddlename","strProgramCode","MAX(intYearLevel)","strAcademicStanding","level");
 
 $config['tb_mas_users_columns2'] = array("intID","strStudentNumber","strLastname","strFirstname","strMiddlename","strProgramCode","intStudentYear","strAcademicStanding", "dteBirthDate", "strPass");
 
