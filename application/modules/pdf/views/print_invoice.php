@@ -105,9 +105,13 @@ table tr td {
                 style="position:absolute; top: 270px; left:10px; width: 500px; height: 20px;">
                 RESERVATION FEE FOR SENIOR HIGHSCHOOL
                 <?php echo " for  ".$term['enumSem']." ".$term['term_label']." ".$term['strYearStart']."-".$term['strYearEnd']; ?>
-            </div> <?php endif; ?> <?php if ($total_assessment == '10,000.00'  ): ?> <div
+            </div> <?php endif; ?> <?php if ($request['description'] == 'Reservation Payment'  ): ?> <div
                 style="position:absolute; top: 290px; left:10px; width: 500px; height: 20px;"> "NON
-                REFUNDABLE", "NON TRANSFERABLE" </div> <?php endif; ?> <div
+                REFUNDABLE", "NON TRANSFERABLE" </div> 
+                <div style="position:absolute; top: 310px; left:10px; width: 500px; height: 20px;">
+                    SIGNATURE: </div>
+                <?php endif; ?> 
+                <div
                 style="position:absolute; top: 270px; left: 500px; width: 500px; height: 20px;">
                 <?php echo $reservation_amount != 0 ? 1 : ""; ?> </div>
             <input type="hidden" name="user_id" value="<?php echo $reservation_amount;?>">
