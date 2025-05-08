@@ -25,7 +25,7 @@ class Grading extends CI_Controller {
         $this->data['student_pics'] = base_url()."assets/photos/";
         $this->data['css_dir'] = base_url()."assets/themes/".$theme."/css/";
         $this->data['js_dir'] = base_url()."assets/themes/".$theme."/js/";
-        $this->data['title'] = "iACADEMY";
+        $this->data['title'] = "iACADEMY";        
         $this->load->library("email");	
         $this->load->helper("cms_form");	
 		$this->load->model("user_model");
@@ -41,6 +41,7 @@ class Grading extends CI_Controller {
         $this->data['srf'] = $this->config->item('srf');
         $this->data['sfdf'] = $this->config->item('sfdf');
         $this->data['csg'] = $this->config->item('csg');
+        $this->data['campus'] = $this->config->item('campus');
         $this->data["subjects"] = $this->data_fetcher->fetch_table('tb_mas_subjects');
         $this->data["students"] = $this->data_fetcher->fetch_table('tb_mas_users',array('strLastname','asc'));
         $this->data["user"] = $this->session->all_userdata();
