@@ -3294,6 +3294,7 @@ class Data_fetcher extends CI_Model {
             $total_misc = 0;
             $tuition = 0;
             $misc_list = [];
+            $late_enrollment_fee = 0;
         }
         $data['lab_discount'] = $lab_scholarship;
         $data['lab_discount_dc'] = $lab_discount;
