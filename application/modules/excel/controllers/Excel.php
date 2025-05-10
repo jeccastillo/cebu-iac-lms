@@ -8589,7 +8589,7 @@ class Excel extends CI_Controller {
     public function finance_invoice_report($campus, $report_date_start, $report_date_end = null)
     {
         $report_date_start = ($report_date_start) ? date("Y-m-d 00:00:00", strtotime($report_date_start)) : date("Y-m-d 00:00:00");
-        $report_date_end = ($report_date_end) ? date("Y-m-d 11:59:59", strtotime($report_date_end)) : date("Y-m-d 11:59:59");
+        $report_date_end = ($report_date_end) ? date("Y-m-d 23:59:59", strtotime($report_date_end)) : date("Y-m-d 23:59:59");
         $payment_details = $this->db
                     ->from('payment_details')
                     ->where(array('status' => 'Paid', 'updated_at >=' => $report_date_start, 'updated_at <=' => $report_date_end, 'invoice_number !=' => null, 'student_campus' => $campus))
