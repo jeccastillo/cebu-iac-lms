@@ -1486,6 +1486,7 @@ class Finance extends CI_Controller {
             $response_data['ewtAmount'] = $ewt_amount;
             $response_data['netAmount'] = $net_amount;
             $response_data['paymentReceived'] = $result['subtotal_order'];
+            $response_data['status'] = $result['status'];
             $reponse_data['balance'] = $net_amount - $result['subtotal_order'];
 
             $response_array[] = $response_data;
