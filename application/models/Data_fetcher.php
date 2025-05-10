@@ -3290,7 +3290,7 @@ class Data_fetcher extends CI_Model {
                 $ctr++;
             }
         }
-        if($intROG == 3){
+        if($intROG == 3 || $intROG == 4  || $intROG == 5){
             $total_misc = 0;
             $tuition = 0;
             $misc_list = [];
