@@ -1434,12 +1434,13 @@ class Finance extends CI_Controller {
     public function finance_invoice_report_data($report_date_start, $report_date_end = null)
     {
         $report_date_start = ($report_date_start) ? date("Y-m-d 00:00:00", strtotime($report_date_start)) : date("Y-m-d 00:00:00");
-        $report_date_end = ($report_date_end) ? date("Y-m-d 23:59:59", strtotime($report_date_end)) : date("Y-m-d 23:59:59");
+        $report_date_end = ($report_date_end) ? date("Y-m-d 11:59:59", strtotime($report_date_end)) : date("Y-m-d 11:59:59");
+        // $report_date = ($report_date) ? $report_date : date("Y-m-d");
         $response_array = array();
 
         $results = $this->db
                     ->from('payment_details')
-                    ->where(array('updated_at >=' => $report_date_start, 'updated_at <=' => $report_date_end, 'invoice_number !=' => null))
+                    ->where(array('status !=' => 'expired','status !=' => 'Transaction Failed','status !=' => 'cancel','status !=' => 'declined','status !=' => 'error', 'updated_at >=' => $report_date_start, 'updated_at <=' => $report_date_end, 'invoice_number !=' => null))
                     ->order_by('invoice_number', 'ASC')
                     ->get()
                     ->result_array();
