@@ -1434,8 +1434,7 @@ class Finance extends CI_Controller {
     public function finance_invoice_report_data($report_date_start, $report_date_end = null)
     {
         $report_date_start = ($report_date_start) ? date("Y-m-d 00:00:00", strtotime($report_date_start)) : date("Y-m-d 00:00:00");
-        $report_date_end = ($report_date_end) ? date("Y-m-d 11:59:59", strtotime($report_date_end)) : date("Y-m-d 11:59:59");
-        // $report_date = ($report_date) ? $report_date : date("Y-m-d");
+        $report_date_end = ($report_date_end) ? date("Y-m-d 23:59:59", strtotime($report_date_end)) : date("Y-m-d 23:59:59");
         $response_array = array();
 
         $results = $this->db
