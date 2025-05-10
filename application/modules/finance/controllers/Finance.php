@@ -1434,7 +1434,7 @@ class Finance extends CI_Controller {
     public function finance_invoice_report_data($report_date_start, $report_date_end = null)
     {
         $report_date_start = ($report_date_start) ? date("Y-m-d 00:00:00", strtotime($report_date_start)) : date("Y-m-d 00:00:00");
-        $report_date_end = ($report_date_end) ? date("Y-m-d 11:59:59", strtotime($report_date_end)) : date("Y-m-d 11:59:59");
+        $report_date_end = ($report_date_end) ? date("Y-m-d 23:59:59", strtotime($report_date_end)) : date("Y-m-d 11:59:59");
         // $report_date = ($report_date) ? $report_date : date("Y-m-d");
         $response_array = array();
 
@@ -1467,8 +1467,7 @@ class Finance extends CI_Controller {
             $net_amount = 0;
             $net_amount += $total_sales > 0 ? $total_sales : 0;
             $net_amount += $vat > 0 ? $vat : 0;
-            $net_amount += $ewt_amount > 0 ? $ewt_amount : 0;
-            $response_data['date_end'] = $report_date_end;
+            $net_amount += $ewt_amount > 0 ? $ewt_amount : 0;            
             $response_data['index'] = $index + 1;
             $response_data['studentNumber'] = $student ? str_replace("-", "", $student['strStudentNumber']) : '';
             $response_data['studentName'] = ucfirst($result['last_name']) . ', ' . ucfirst($result['first_name']);
