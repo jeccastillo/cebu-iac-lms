@@ -597,6 +597,7 @@ class Unity extends CI_Controller {
             
 
             $ret['registration'] = $this->data_fetcher->getRegistrationInfo($id,$ret['selected_ay']);
+            print_r($ret['registration']);
             if($ret['registration']){
                 $data['tuition'] = $this->data_fetcher->getTuition($id,$ret['selected_ay']);
                 $ret['tuition_data'] = $data['tuition'];
