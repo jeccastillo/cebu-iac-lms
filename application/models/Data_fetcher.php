@@ -2703,8 +2703,7 @@ class Data_fetcher extends CI_Model {
             foreach($late_enrollment as $late){
                 $late_fee = getExtraFee($late, $class_type, 'misc');
                 $late_enrollment_fee += $late_fee;
-            }   
-            echo $late_enrollment_fee." ";         
+            }                      
         }   
         
         if($student['strCitizenship'] != "Philippines"){
