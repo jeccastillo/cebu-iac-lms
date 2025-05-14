@@ -2620,8 +2620,7 @@ class Data_fetcher extends CI_Model {
         $total_assessment_installment50 = 0;
         $discount_array = [];
         $scholarship_array = [];
-        $late_enrollment_fee = 0;
-        echo $dr;
+        $late_enrollment_fee = 0;        
         if(!isset($dr))
             $dr = date("Y-m-d");
 
