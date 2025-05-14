@@ -2305,7 +2305,7 @@ class Pdf extends CI_Controller {
                         $type = "UG ".$request['description'];
                         break;                    
                 case 'shs':
-                    $type = "SHS ".$request['description'];
+                    $type = $request['description'];
                     break;
                 case 'ns_payment':
                         $type = $request['description'];
