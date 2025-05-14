@@ -2532,6 +2532,7 @@ class Data_fetcher extends CI_Model {
     {
         
         $registration =  $this->db->where(array('intStudentID'=>$id, 'intAYID' => $sem))->get('tb_mas_registration')->first_row('array');                                  
+        print_r($registration);
         $subjects =  $this->db
                             ->select("tb_mas_subjects.intID as subjectID,tb_mas_classlist.is_modular,tb_mas_classlist.payment_amount")
                             ->from("tb_mas_classlist_student")
