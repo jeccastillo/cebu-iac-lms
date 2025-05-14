@@ -66,7 +66,7 @@
                             <td v-else>NGS</td>
                             <th v-if="student.level == 'shs' && item.intFinalized >=2 && item.semFinalGrade">{{ item.semFinalGrade }}</th>
                             <th v-else-if="student.level == 'shs' && item.intFinalized >=2">{{ item.semFinalGrade }}</th>
-                            <td v-if="item.strRemarks =='Passed'">{{ item.strUnits }}</td>
+                            <td v-if="item.strRemarks =='Passed' && item.intFinalized >=2">{{ item.strUnits }}</td>
                             <td v-else>0</td>
                         </tr>
                     </tbody>
