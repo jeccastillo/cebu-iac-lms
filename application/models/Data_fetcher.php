@@ -2671,8 +2671,7 @@ class Data_fetcher extends CI_Model {
             $disc->date_applied = date('M j, Y h:ia',strtotime($disc->date_applied));
             $scholarship_array[] = $disc;
         }
-
-        echo $sem['reconf_start']."<br />";
+        
         
         // if($scholarship != 0 && $scholarship != null)
         //     $scholar = $this->db->where('intID',$scholarship)->get('tb_mas_scholarships')->row();
