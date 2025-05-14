@@ -28,7 +28,7 @@
 
     $term_type = ($active_sem['term_label'] == "Sem")?"Semester":"Trimester";
     $cm = ($campus == "Cebu")?"iACADEMY Cebu":"iACADEMY";
-    $seal = ($campus == "Cebu")?"https://i.ibb.co/9hgbYNB/seal.png":"https://i.ibb.co/kcYVsS7/i-ACADEMY-Seal-Makati.png";
+    $seal = ($campus == "Cebu")?"https://i.ibb.co/XfC3YwMG/seal-cebu.png":"https://i.ibb.co/HT6nr7pz/seal-makati.png";
     
     // Set some content to print
     $html = '<table border="0" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">
