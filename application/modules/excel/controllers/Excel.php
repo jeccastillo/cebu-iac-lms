@@ -7688,7 +7688,7 @@ class Excel extends CI_Controller {
             $sem = $s['intID'];
         }
 
-        $gradeLevel = 'All Grade Level';
+        $gradeLevel = 'All Year Level';
         $students = $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramCode, tb_mas_registration.intYearLevel')
                     ->from('tb_mas_users')
                     ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
@@ -8755,7 +8755,7 @@ class Excel extends CI_Controller {
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
-        header('Content-Disposition: attachment;filename="Invoice Report - ' . date("M d, Y", strtotime($report_date_start)) . '-' . date("M d, Y", strtotime($report_date_end)) . ').xls"');
+        header('Content-Disposition: attachment;filename="Invoice Report - (' . date("M d, Y", strtotime($report_date_start)) . '-' . date("M d, Y", strtotime($report_date_end)) . ').xls"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
