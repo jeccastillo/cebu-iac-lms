@@ -8612,7 +8612,7 @@ class Excel extends CI_Controller {
 
         foreach($payment_details as $index => $payment_detail){
             $payment_for = $particular = '';
-            $tuition_fee = 0;
+            $tuition_fee = $tuition_discount = $total_discount = $assessment_discount_rate = $assessment_discount_fixed = $tuition_discount_rate = 0;
 
             $student = $this->db->get_where('tb_mas_users', array('slug' => $payment_detail['student_number']))->first_row('array');
             $tuition = $student ? $this->data_fetcher->getTuition($student['intID'], $payment_detail['sy_reference']) : '';
@@ -8636,52 +8636,50 @@ class Excel extends CI_Controller {
                         if($reg['installmentDP'] == 50)
                             $tuition_fee = $tuition['tuition_installment_before_discount50'] + $tuition['lab_installment_before_discount50'] + $tuition['misc_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
                     }
+
+                    $deduction_type = $reg['deduction_type'];
+                    if(!$deduction_type){
+                        if(isset($tuition['scholarship'][0])){
+                            $deduction_type = 'scholarship';
+                        }else if(isset($tuition['discount'][0])){
+                            $deduction_type = 'discount';
+                        }
+                    }
+                    
+                    if($reg['paymentType'] == 'full'){
+                        if($tuition['scholarship_total_assessment_rate'] > 0){
+                            $assessment_discount_rate = $tuition['scholarship_total_assessment_rate'];
+                        }
+                        if($tuition['scholarship_total_assessment_fixed'] > 0){
+                            $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed'];
+                        }
+                        if($tuition['scholarship_tuition_fee_rate'] > 0){
+                            $tuition_discount_rate = $tuition['scholarship_tuition_fee_rate'];
+                        }
+                    }else{ 
+                        if($tuition['scholarship_total_assessment_rate_installment'] > 0){
+                            $assessment_discount_rate = $tuition['scholarship_total_assessment_rate_installment'];
+                        }
+                        if($tuition['scholarship_total_assessment_fixed_installment'] > 0){
+                            $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed_installment'];
+                        }
+                        if($tuition['scholarship_tuition_fee_installment_rate'] > 0){
+                            $tuition_discount_rate = $tuition['scholarship_tuition_fee_installment_rate'];
+                        }
+                    }
+                    
+                    if($reg['deduction_type'] == 'scholarship'){
+                        if($reg['paymentType'] == 'full' && $tuition['scholarship_tuition_fee_rate'] > 0)
+                        $total_discount = $tuition['scholarship_tuition_fee_rate'];
+                        if($reg['paymentType'] == 'partial' && $tuition['scholarship_tuition_fee_installment_rate'] > 0)
+                        $total_discount = $tuition['scholarship_tuition_fee_installment_rate'];
+                    }else{
+                        $total_discount = $tuition_discount_rate + $tuition['scholarship_tuition_fee_fixed'] + $tuition['scholarship_lab_fee_rate'] + $tuition['scholarship_lab_fee_fixed'] + $tuition['scholarship_misc_fee_rate'] + 
+                                            $tuition['scholarship_misc_fee_fixed'] + $tuition['nsf'] + $tuition['scholarship_misc_fee_fixed'] + $assessment_discount_rate + $assessment_discount_fixed;
+                    }
+
                 }
 
-            }
-
-            $tuition_discount = $total_discount = 0;
-            $deduction_type = $reg['deduction_type'];
-            if(!$deduction_type){
-                if(isset($tuition['scholarship'][0])){
-                    $deduction_type = 'scholarship';
-                }else if(isset($tuition['discount'][0])){
-                    $deduction_type = 'discount';
-                }
-                // $deduction_type = isset($tuition['scholarship'][0]) ? $tuition['scholarship'][0]->deduction_type : $tuition['discount']->deduction_type;
-            }
-            
-            $assessment_discount_rate = $assessment_discount_fixed = $tuition_discount_rate = 0;
-            if($reg['paymentType'] == 'full'){
-                if($tuition['scholarship_total_assessment_rate'] > 0){
-                    $assessment_discount_rate = $tuition['scholarship_total_assessment_rate'];
-                }
-                if($tuition['scholarship_total_assessment_fixed'] > 0){
-                    $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed'];
-                }
-                if($tuition['scholarship_tuition_fee_rate'] > 0){
-                    $tuition_discount_rate = $tuition['scholarship_tuition_fee_rate'];
-                }
-            }else{ 
-                if($tuition['scholarship_total_assessment_rate_installment'] > 0){
-                    $assessment_discount_rate = $tuition['scholarship_total_assessment_rate_installment'];
-                }
-                if($tuition['scholarship_total_assessment_fixed_installment'] > 0){
-                    $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed_installment'];
-                }
-                if($tuition['scholarship_tuition_fee_installment_rate'] > 0){
-                    $tuition_discount_rate = $tuition['scholarship_tuition_fee_installment_rate'];
-                }
-            }
-            
-            if($reg['deduction_type'] == 'scholarship'){
-                if($reg['paymentType'] == 'full' && $tuition['scholarship_tuition_fee_rate'] > 0)
-                $total_discount = $tuition['scholarship_tuition_fee_rate'];
-                if($reg['paymentType'] == 'partial' && $tuition['scholarship_tuition_fee_installment_rate'] > 0)
-                $total_discount = $tuition['scholarship_tuition_fee_installment_rate'];
-            }else{
-                $total_discount = $tuition_discount_rate + $tuition['scholarship_tuition_fee_fixed'] + $tuition['scholarship_lab_fee_rate'] + $tuition['scholarship_lab_fee_fixed'] + $tuition['scholarship_misc_fee_rate'] + 
-                                    $tuition['scholarship_misc_fee_fixed'] + $tuition['nsf'] + $tuition['scholarship_misc_fee_fixed'] + $assessment_discount_rate + $assessment_discount_fixed;
             }
 
             if(strpos($payment_detail['description'], 'Tuition') !== false || strpos($payment_detail['description'], 'Reservation') !== false || strpos($payment_detail['description'], 'Application') !== false){
