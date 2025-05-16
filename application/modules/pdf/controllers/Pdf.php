@@ -2425,8 +2425,7 @@ class Pdf extends CI_Controller {
 
         if($this->data['campus'] == "Cebu"){            
             if ($_SERVER['HTTP_HOST'] == 'cebustaging.iacademy.edu.ph') {                
-                $this->load->view("print_invoice_cebu_new",$this->data);
-                return
+                $this->load->view("print_invoice_cebu_new",$this->data);                          
             }
             $this->load->view("print_invoice_cebu",$this->data);
         }else {
