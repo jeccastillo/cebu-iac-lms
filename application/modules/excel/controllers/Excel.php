@@ -8627,13 +8627,13 @@ class Excel extends CI_Controller {
                 
                 if($reg && $tuition){
                     if($reg['paymentType'] == 'full'){
-                        $tuition_fee = $tuition['lab_before_discount'] + $tuition['misc_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
+                        $tuition_fee = $tuition['tuition'] + $tuition['lab_before_discount'] + $tuition['misc_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
                     }else{
-                        $tuition_fee = $tuition['tuition_installment_before_discount'] + $tuition['lab_installment_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
+                        $tuition_fee = $tuition['tuition_installment_before_discount'] + $tuition['lab_installment_before_discount'] + $tuition['misc_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
                         if($reg['installmentDP'] == 30)
-                            $tuition_fee = $tuition['tuition_installment_before_discount30'] + $tuition['lab_installment_before_discount30'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
+                            $tuition_fee = $tuition['tuition_installment_before_discount30'] + $tuition['lab_installment_before_discount30'] + $tuition['misc_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
                         if($reg['installmentDP'] == 50)
-                            $tuition_fee = $tuition['tuition_installment_before_discount50'] + $tuition['lab_installment_before_discount50'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
+                            $tuition_fee = $tuition['tuition_installment_before_discount50'] + $tuition['lab_installment_before_discount50'] + $tuition['misc_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
                     }
                 }
 
@@ -8645,6 +8645,7 @@ class Excel extends CI_Controller {
                 $payment_for = 'Others';
                 $particular = $payment_detail['description'];
             }
+
 
             // Add some data
             $objPHPExcel->setActiveSheetIndex(0)
