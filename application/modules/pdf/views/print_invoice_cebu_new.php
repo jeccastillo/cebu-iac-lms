@@ -151,8 +151,8 @@ hr {
                 <img style="position: absolute;width: 80; left: 145;top: 25;"
                     src="<?php echo $img_dir; ?>receipt-logo.jpg" alt="">
                 <h1>iACADEMY, INC.</h1>
-                <p><small>5th Floor Filinvest Cebu Cyberzone Tower Two, Salinas Drive cor.
-                        Geonzon</small></p>
+                <p><small>5th Floor Filinvest Cebu Cyberzone Tower Two, Salinas Drive cor. W.
+                        Geonzon St.,</small></p>
                 <p><small>Cebu IT Park, Apas 6000 City of Cebu, Cebu Philippines</small></p>
                 <p><small>VAT REG TIN: 214-749-003-00003</small></p>
             </div>
