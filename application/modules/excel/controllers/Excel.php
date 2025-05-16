@@ -8618,13 +8618,22 @@ class Excel extends CI_Controller {
             $tuition = $student ? $this->data_fetcher->getTuition($student['intID'], $payment_detail['sy_reference']) : '';
             
             if($student){
-                $registration = $this->db->get_where('tb_mas_registration', array('intStudentID' => $student['intID']))->first_row('array');
-
-                if($registration && $tuition){
-                    if($registration['paymentType'] == 'full'){
+                $reg = $this->db->select('tb_mas_registration.*, tb_mas_tuition_year.installmentDP')
+                            ->from('tb_mas_registration')
+                            ->where(array('intStudentID' => $student['intID']))
+                            ->join('tb_mas_tuition_year', 'tb_mas_tuition_year.intID = tb_mas_registration.tuition_year')
+                            ->get()
+                            ->first_row('array');
+                
+                if($reg && $tuition){
+                    if($reg['paymentType'] == 'full'){
                         $tuition_fee = $tuition['lab_before_discount'] + $tuition['misc_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
                     }else{
                         $tuition_fee = $tuition['tuition_installment_before_discount'] + $tuition['lab_installment_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
+                        if($reg['installmentDP'] == 30)
+                            $tuition_fee = $tuition['tuition_installment_before_discount30'] + $tuition['lab_installment_before_discount30'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
+                        if($reg['installmentDP'] == 50)
+                            $tuition_fee = $tuition['tuition_installment_before_discount50'] + $tuition['lab_installment_before_discount50'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
                     }
                 }
 
@@ -8636,6 +8645,10 @@ class Excel extends CI_Controller {
                 $payment_for = 'Others';
                 $particular = $payment_detail['description'];
             }
+
+            print_r($student);
+            print_r($tuition);
+            die();
 
             // Add some data
             $objPHPExcel->setActiveSheetIndex(0)
