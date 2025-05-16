@@ -8652,7 +8652,7 @@ class Excel extends CI_Controller {
                 ->setCellValue('K'.$i, $tuition_fee == 0 && $payment_detail['invoice_amount_ves'] == 0 ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount_ves'])
                 ->setCellValue('L'.$i, $payment_detail['invoice_amount_vzrs'])
                 ->setCellValue('M'.$i, '=SUM(J' . $i . ':L' . $i . ')')
-                ->setCellValue('N'.$i, $payment_detail['invoice_amount'] > 0 ? '=PRODUCT(J' . $i . ',.12)' : 0)
+                ->setCellValue('N'.$i, $tuition_fee > 0 ? '=PRODUCT(J' . $i . ',.12)' : 0)
                 ->setCellValue('O'.$i, $payment_detail['withholding_tax_percentage'] > 0 ? $payment_detail['withholding_tax_percentage'] / 100 : 0)
                 ->setCellValue('P'.$i, '=PRODUCT(J' . $i . ',O' . $i . ')')
                 ->setCellValue('Q'.$i, '=SUM(M' . $i . '+N' . $i . '+P' . $i . ')')
