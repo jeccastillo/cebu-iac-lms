@@ -8646,10 +8646,6 @@ class Excel extends CI_Controller {
                 $particular = $payment_detail['description'];
             }
 
-            print_r($student);
-            print_r($tuition);
-            die();
-
             // Add some data
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A'.$i, $index + 1)
