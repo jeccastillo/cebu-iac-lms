@@ -8620,7 +8620,7 @@ class Excel extends CI_Controller {
             if($student){
                 $registration = $this->db->get_where('tb_mas_registration', array('intStudentID' => $student['intID']))->first_row('array');
 
-                if($registration){
+                if($registration && $tuition){
                     if($registration['paymentType'] == 'full'){
                         $tuition_fee = $tuition['lab_before_discount'] + $tuition['misc_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
                     }else{
