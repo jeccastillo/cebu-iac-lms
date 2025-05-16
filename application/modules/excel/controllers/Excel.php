@@ -8610,12 +8610,25 @@ class Excel extends CI_Controller {
 
         $i = 8;
 
-        
         foreach($payment_details as $index => $payment_detail){
             $payment_for = $particular = '';
+            $tuition_fee = 0;
 
             $student = $this->db->get_where('tb_mas_users', array('slug' => $payment_detail['student_number']))->first_row('array');
+            $tuition = $student ? $this->data_fetcher->getTuition($student['intID'], $payment_detail['sy_reference']) : '';
+            
+            if($student){
+                $registration = $this->db->get_where('tb_mas_registration', array('intStudentID' => $student['intID']))->first_row('array');
 
+                if($registration){
+                    if($registration['paymentType'] == 'full'){
+                        $tuition_fee = $tuition['lab_before_discount'] + $tuition['misc_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
+                    }else{
+                        $tuition_fee = $tuition['tuition_installment_before_discount'] + $tuition['lab_installment_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
+                    }
+                }
+
+            }
             if(strpos($payment_detail['description'], 'Tuition') !== false || strpos($payment_detail['description'], 'Reservation') !== false || strpos($payment_detail['description'], 'Application') !== false){
                 $payment_for = $payment_detail['description'];
                 $particular = '';
@@ -8635,8 +8648,8 @@ class Excel extends CI_Controller {
                 ->setCellValue('G'.$i, $payment_detail['is_cash'] ? 'Cash Sales' : 'Charge Sales')
                 ->setCellValue('H'.$i, $payment_detail['invoice_date'] ? date("d-M-Y", strtotime($payment_detail['invoice_date'])) : date("d-M-Y", strtotime($payment_detail['created_at'])))
                 ->setCellValue('I'.$i, $payment_detail['invoice_number'])
-                ->setCellValue('J'.$i, $payment_detail['invoice_amount'])
-                ->setCellValue('K'.$i, $payment_detail['invoice_amount'] == 0 && $payment_detail['invoice_amount_ves'] == 0 ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount_ves'])
+                ->setCellValue('J'.$i, $tuition_fee)
+                ->setCellValue('K'.$i, $tuition_fee == 0 && $payment_detail['invoice_amount_ves'] == 0 ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount_ves'])
                 ->setCellValue('L'.$i, $payment_detail['invoice_amount_vzrs'])
                 ->setCellValue('M'.$i, '=SUM(J' . $i . ':L' . $i . ')')
                 ->setCellValue('N'.$i, $payment_detail['invoice_amount'] > 0 ? '=PRODUCT(J' . $i . ',.12)' : '')
@@ -8999,7 +9012,6 @@ class Excel extends CI_Controller {
 
         foreach($students as $index => $student){
             
-
             $tuition = $this->data_fetcher->getTuition($student['intID'], $sem);
             $total_discount = 0;
 
