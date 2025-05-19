@@ -88,7 +88,7 @@ $(document).ready(function() {
         var campus = "<?php echo $campus;?>";
         var base_url = "<?php echo base_url(); ?>";
         var url = base_url + 'excel/finance_invoice_report/' + campus + '/' + $(
-            "#date-picker-from").val(); + '/' + $("#date-picker-to").val();
+            "#date-picker-from").val() + '/' + $("#date-picker-to").val();
         window.open(url, '_blank');
     })
 });
