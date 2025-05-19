@@ -8650,7 +8650,7 @@ class Excel extends CI_Controller {
         }
         
         $asOfDate = 'As of ' . date("M d, Y", strtotime($report_date_start)) . '-' . date("M d, Y", strtotime($report_date_end));
-        $asOfDate = $report_date_start != $report_date_end ? 'As of ' . date("M d, Y", strtotime($report_date_start)) . '-' . date("M d, Y", strtotime($report_date_end)) : $asOfDate;
+        $asOfDate .= $report_date_start != $report_date_end ? '-' . date("M d, Y", strtotime($report_date_end)) : '';
 
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'iACADEMY, Inc.')
