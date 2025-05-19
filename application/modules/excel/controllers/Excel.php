@@ -8588,6 +8588,9 @@ class Excel extends CI_Controller {
     // public function finance_invoice_report($sem = 0, $campus, $report_date)
     public function finance_invoice_report($campus, $report_date_start, $report_date_end = null)
     {
+        
+        $asOfDate = 'As of ' . date("M d, Y", strtotime($report_date_start)) . '-' . date("M d, Y", strtotime($report_date_end));
+        $asOfDate .= $report_date_start != $report_date_end ? '-' . date("M d, Y", strtotime($report_date_end)) : '';
         $report_date_start = ($report_date_start) ? date("Y-m-d 00:00:00", strtotime($report_date_start)) : date("Y-m-d 00:00:00");
         $report_date_end = ($report_date_end) ? date("Y-m-d 23:59:59", strtotime($report_date_end)) : date("Y-m-d 23:59:59");
         $payment_details = $this->db
@@ -8648,9 +8651,6 @@ class Excel extends CI_Controller {
 
             $i++;
         }
-        
-        $asOfDate = 'As of ' . date("M d, Y", strtotime($report_date_start)) . '-' . date("M d, Y", strtotime($report_date_end));
-        $asOfDate .= $report_date_start != $report_date_end ? '-' . date("M d, Y", strtotime($report_date_end)) : '';
 
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'iACADEMY, Inc.')
