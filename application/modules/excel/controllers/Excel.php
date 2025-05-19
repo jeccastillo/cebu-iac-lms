@@ -8588,9 +8588,8 @@ class Excel extends CI_Controller {
     // public function finance_invoice_report($sem = 0, $campus, $report_date)
     public function finance_invoice_report($campus, $report_date_start, $report_date_end = null)
     {
+        $asOfDate = $report_date_start == $report_date_end ? date("M d, Y", strtotime($report_date_start)) :  date("M d, Y", strtotime($report_date_start)) . '-' . date("M d, Y", strtotime($report_date_end));
         
-        $asOfDate = 'As of ' . date("M d, Y", strtotime($report_date_start)) . '-' . date("M d, Y", strtotime($report_date_end));
-        $asOfDate .= $report_date_start != $report_date_end ? '-' . date("M d, Y", strtotime($report_date_end)) : '';
         $report_date_start = ($report_date_start) ? date("Y-m-d 00:00:00", strtotime($report_date_start)) : date("Y-m-d 00:00:00");
         $report_date_end = ($report_date_end) ? date("Y-m-d 23:59:59", strtotime($report_date_end)) : date("Y-m-d 23:59:59");
         $payment_details = $this->db
@@ -8656,7 +8655,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('A1', 'iACADEMY, Inc.')
                     ->setCellValue('A2', $campus == 'Makati' ? 'iACADEMY Nexus 7434 Yakal Street Brgy. San Antonio, Makati City' : '5th Floor Filinvest Cyberzone Tower 2 Salinas Drive Cor. W. Geonzon St., Cebu IT Park, Apas, Cebu City')
                     ->setCellValue('A3', 'Invoice Report')
-                    ->setCellValue('A4', $asOfDate)
+                    ->setCellValue('A4', 'As of ' . $asOfDate)
                     ->setCellValue('A7', 'No.')
                     ->setCellValue('B7', 'Student Number')
                     ->setCellValue('C7', 'Student Name')
@@ -8758,7 +8757,7 @@ class Excel extends CI_Controller {
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
-        header('Content-Disposition: attachment;filename="Invoice Report ( ' . date("M d, Y", strtotime($report_date_start)) . '-' . date("M d, Y", strtotime($report_date_end)) . ').xls"');
+        header('Content-Disposition: attachment;filename="Invoice Report (' . $asOfDate . ').xls"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
