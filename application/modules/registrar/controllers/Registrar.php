@@ -305,6 +305,9 @@ class Registrar extends CI_Controller {
             case 'other':
                 $stype = 'college';
             break;
+            case 'next':
+                $stype = 'next';
+            break;
             default: 
                 $stype = 'college';
         }
@@ -313,6 +316,8 @@ class Registrar extends CI_Controller {
             $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
         elseif($stype == 'shs')
             $ret['active_sem'] = $this->data_fetcher->get_active_sem_shs();
+        elseif($stype == 'next')
+            $ret['active_sem'] = $this->db->get_where('tb_mas_sy',array('term_student_type'=>'next'))->first_row();
         else
             $ret['active_sem'] = $this->data_fetcher->get_active_sem();
 
