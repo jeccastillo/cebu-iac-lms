@@ -5299,6 +5299,11 @@ class Excel extends CI_Controller {
                     //     ->get()
                     //     ->result_array();
 
+                    if($user['strLastname'] == 'DE LOS REYES'){
+                        print_r($tuition);
+                        die();
+                    }
+
                     // Add some data
                     $objPHPExcel->setActiveSheetIndex(0)
                         ->setCellValue('A'.$i, $count)
