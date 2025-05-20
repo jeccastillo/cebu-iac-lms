@@ -5301,6 +5301,13 @@ class Excel extends CI_Controller {
                     //     ->get()
                     //     ->result_array();
 
+                    if($user['intID'] == 37){
+                        print_r($tuition);
+                        print('assessment_discount_rate_scholar : ' . $assessment_discount_rate_scholar);
+                        print('assessment_discount_rate_referrer : ' . $assessment_discount_rate_referrer);
+                        die();
+                    }
+
                     // Add some data
                     $objPHPExcel->setActiveSheetIndex(0)
                         ->setCellValue('A'.$i, $count)
