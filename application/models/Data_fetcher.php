@@ -2532,8 +2532,7 @@ class Data_fetcher extends CI_Model {
     function getTuition($id,$sem,$sch = 0,$discount = 0)
     {
         
-        $registration =  $this->db->where(array('intStudentID'=>$id, 'intAYID' => $sem))->get('tb_mas_registration')->first_row('array');                          
-        
+        $registration =  $this->db->where(array('intStudentID'=>$id, 'intAYID' => $sem))->get('tb_mas_registration')->first_row('array');                                          
         $subjects =  $this->db
                             ->select("tb_mas_subjects.intID as subjectID,tb_mas_classlist.is_modular,tb_mas_classlist.payment_amount")
                             ->from("tb_mas_classlist_student")
@@ -2673,7 +2672,6 @@ class Data_fetcher extends CI_Model {
             $disc->date_applied = date('M j, Y h:ia',strtotime($disc->date_applied));
             $scholarship_array[] = $disc;
         }
-
         
         
         // if($scholarship != 0 && $scholarship != null)
@@ -2702,12 +2700,11 @@ class Data_fetcher extends CI_Model {
 
             $late_enrollment = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'late_enrollment'))
                          ->get('tb_mas_tuition_year_misc')->result_array();
-
             if($w_status != "before")
             foreach($late_enrollment as $late){
                 $late_fee = getExtraFee($late, $class_type, 'misc');
                 $late_enrollment_fee += $late_fee;
-            }
+            }                      
         }   
         
         if($student['strCitizenship'] != "Philippines"){
@@ -2915,9 +2912,11 @@ class Data_fetcher extends CI_Model {
         $ctr = 0;        
         $scholarships_for_ledger = [];
         $scholar_type = '';
+        $scholar_type_scholarship = '';
+        $scholar_type_discount = '';
 
         $tuition_fee_rate = $tuition_fee_installment_rate = $tuition_fee_fixed = $lab_fee_rate = $lab_fee_fixed = $misc_fee_rate = $misc_fee_fixed = 0;
-        $total_assessment_rate = $total_assessment_fixed = $total_assessment_rate_installment = $total_assessment_fixed_installment = 0;
+        $total_assessment_rate = $total_assessment_fixed = $total_assessment_rate_installment = $total_assessment_rate_installment_scholarship = $total_assessment_rate_installment_discount = $total_assessment_fixed_installment = 0;
         $total_assessment += $tuition + $total_lab + $total_misc + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
         $total_assessment_installment += ($tuition  + ($tuition * ($tuition_year['installmentIncrease']/100)))   
                                                 + ($total_lab + ($total_lab * ($tuition_year['installmentIncrease']/100)))
@@ -2948,6 +2947,7 @@ class Data_fetcher extends CI_Model {
                 $total_scholarship_installment_temp30 = 0;
                 $total_scholarship_installment_temp50 = 0;
                 $scholar_type .= $scholar->name . ' ';
+                $scholar_type_scholarship .= $scholar->name . ' ';
 
                 if($scholar->total_assessment_rate > 0 || $scholar->total_assessment_fixed > 0){                
                     
@@ -2963,6 +2963,7 @@ class Data_fetcher extends CI_Model {
                         $total_scholarship_installment_temp50 += $total_assessment_installment50 * ($scholar->total_assessment_rate/100);
                         $total_assessment_rate = $total_assessment * ($scholar->total_assessment_rate/100);
                         $total_assessment_rate_installment = $total_assessment_installment * ($scholar->total_assessment_rate/100);
+                        $total_assessment_rate_installment_scholarship = $total_assessment_installment * ($scholar->total_assessment_rate/100);
                         $data['sc_rate'] = $total_scholarship_temp * ($scholar->total_assessment_rate/100);
                     }
                     elseif($scholar->total_assessment_fixed > 0){
@@ -3140,6 +3141,7 @@ class Data_fetcher extends CI_Model {
                 $total_scholarship_installment_temp30 = 0;
                 $total_scholarship_installment_temp50 = 0;
                 $scholar_type .= $scholar->name . ' ';
+                $scholar_type_discount .= $scholar->name . ' ';
 
                 if($scholar->total_assessment_rate > 0 || $scholar->total_assessment_fixed > 0){                                    
 
@@ -3150,6 +3152,7 @@ class Data_fetcher extends CI_Model {
                         $total_scholarship_installment_temp += $total_assessment_installment * ($scholar->total_assessment_rate/100);
                         $total_assessment_rate = $total_assessment * ($scholar->total_assessment_rate/100);
                         $total_assessment_rate_installment = $total_assessment_installment * ($scholar->total_assessment_rate/100);
+                        $total_assessment_rate_installment_discount = $total_assessment_installment * ($scholar->total_assessment_rate/100);
                     }
                     elseif($scholar->total_assessment_fixed > 0){
                         if($scholar->total_assessment_fixed > $total_assessment){
@@ -3377,9 +3380,13 @@ class Data_fetcher extends CI_Model {
         $data['scholarship_misc_fee_fixed'] = $misc_fee_fixed;
         $data['scholarship_total_assessment_rate'] = $total_assessment_rate;
         $data['scholarship_total_assessment_rate_installment'] = $total_assessment_rate_installment;
+        $data['scholarship_total_assessment_rate_installment_scholar'] = $total_assessment_rate_installment_scholarship;
+        $data['scholarship_total_assessment_rate_installment_discount'] = $total_assessment_rate_installment_discount;
         $data['scholarship_total_assessment_fixed'] = $total_assessment_fixed;
         $data['scholarship_total_assessment_fixed_installment'] = $total_assessment_fixed_installment;
         $data['scholar_type'] = $scholar_type;
+        $data['scholar_type_scholarship'] = $scholar_type_scholarship;
+        $data['scholar_type_discount'] = $scholar_type_discount;
         $data['down_payment30'] = 0;
         $data['down_payment50'] = 0;
         $data['total_installment'] = $data['ti_before_deductions']  - $scholarship_installment_grand_total  - $discount_installment_grand_total;
@@ -4251,7 +4258,7 @@ class Data_fetcher extends CI_Model {
     {
        $ret = array();
        $sched = $this->db
-                        ->select('intRoomSchedID,strDay, dteStart, dteEnd, strRoomCode,strSection,strCode')
+                        ->select('intRoomSchedID,strDay, dteStart, dteEnd, strRoomCode,strSection,strCode,date_specific')
                         ->from('tb_mas_room_schedule')
                         ->where(array('strScheduleCode'=>$schedCode))
                         ->join('tb_mas_classrooms','tb_mas_room_schedule.intRoomID = tb_mas_classrooms.intID')
