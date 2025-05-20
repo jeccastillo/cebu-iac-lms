@@ -5243,6 +5243,8 @@ class Excel extends CI_Controller {
                     if($reg['paymentType'] == 'full'){
                         if($tuition['scholarship_total_assessment_rate'] > 0){
                             $assessment_discount_rate = $tuition['scholarship_total_assessment_rate'];
+                            $assessment_discount_rate_referrer = $tuition['scholarship_total_assessment_rate_discount'];
+                            $assessment_discount_rate_scholar = $tuition['scholarship_total_assessment_rate_scholar'];
                         }
                         if($tuition['scholarship_total_assessment_fixed'] > 0){
                             $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed'];
@@ -5253,8 +5255,8 @@ class Excel extends CI_Controller {
                     }else{ 
                         if($tuition['scholarship_total_assessment_rate_installment'] > 0){
                             $assessment_discount_rate = $tuition['scholarship_total_assessment_rate_installment'];
-                            $assessment_discount_rate_referrer = $tuition['scholarship_total_assessment_rate_installment_discount'];
-                            $assessment_discount_rate_scholar = $tuition['scholarship_total_assessment_rate_installment_scholar'];
+                            $assessment_discount_rate_referrer = $tuition['scholarship_total_assessment_rate_discount'];
+                            $assessment_discount_rate_scholar = $tuition['scholarship_total_assessment_rate_scholar'];
                         }
                         if($tuition['scholarship_total_assessment_fixed_installment'] > 0){
                             $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed_installment'];
