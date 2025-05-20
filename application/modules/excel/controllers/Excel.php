@@ -5301,13 +5301,13 @@ class Excel extends CI_Controller {
                     //     ->get()
                     //     ->result_array();
 
-                    // if($user['intID'] == 37){
-                    //     print_r($user);
-                    //     print_r($tuition);
-                    //     print(' assessment_discount_rate_scholar : ' . $assessment_discount_rate_scholar);
-                    //     print(' assessment_discount_rate_referrer : ' . $assessment_discount_rate_referrer);
-                    //     die();
-                    // }
+                    if($user['intID'] == 37){
+                        print_r($user);
+                        print_r($tuition);
+                        print(' assessment_discount_rate_scholar : ' . $assessment_discount_rate_scholar . ' = ' . $tuition['scholarship_total_assessment_rate_scholar']);
+                        print(' assessment_discount_rate_referrer : ' . $assessment_discount_rate_referrer . ' = ' . $tuition['scholarship_total_assessment_rate_discount']);
+                        die();
+                    }
 
                     // Add some data
                     $objPHPExcel->setActiveSheetIndex(0)
