@@ -5343,7 +5343,7 @@ class Excel extends CI_Controller {
                         ->setCellValue('AA'.$i, '=M' . $i . '+Z' . $i . ')')
                         // ->setCellValue('V'.$i, $date_enrolled <= $sy->ar_report_date_generation ? $tuition['scholar_type'] : '')
                         ->setCellValue('AB'.$i, ($deduction_type == 'scholarship' || ($deduction_type == 'discount' && $date_enrolled <= $sy->ar_report_date_generation)) && $tuition['scholar_type'] ? $tuition['scholar_type'] : '')
-                        ->setCellValue('AC'.$i, $deduction_type == 'scholarship' && $tuition_discount > 0 ? $tuition_discount : ($tuition['scholarship_total_assessment_rate_scholar'] > 0 ? '132' : '') )
+                        ->setCellValue('AC'.$i, $deduction_type == 'scholarship' && $tuition_discount > 0 ? $tuition['scholarship_total_assessment_rate_scholar'] : ($tuition['scholarship_total_assessment_rate_scholar'] > 0 ? $tuition['scholarship_total_assessment_rate_scholar'] : '') )
                         ->setCellValue('AD'.$i, $deduction_type == 'scholarship' && $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : ($assessment_discount_fixed > 0 ? $assessment_discount_fixed : ''))
                         ->setCellValue('AE'.$i, $deduction_type == 'scholarship' && $tuition['scholarship_lab_fee_rate'] > 0 ? $tuition['scholarship_lab_fee_rate'] : '')
                         ->setCellValue('AF'.$i, $deduction_type == 'scholarship' && $tuition['scholarship_lab_fee_fixed'] > 0 ? $tuition['scholarship_lab_fee_fixed'] : '')
@@ -5453,7 +5453,8 @@ class Excel extends CI_Controller {
                     if($date_enrolled > $sy->ar_report_date_generation && $deduction_type != 'scholarship'){
                         $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 8, $i)->setValue($total_discount > 0 ? date("M d,Y",strtotime($date_enrolled)) : '');
                         $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 9, $i)->setValue($total_discount > 0 ? $tuition['scholar_type_discount'] : '');
-                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 10, $i)->setValue($total_discount > 0 ? $total_discount : '');
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 10, $i)->setValue($$tuition['scholarship_total_assessment_rate_discount'] > 0 ? $$tuition['scholarship_total_assessment_rate_discount'] : '');
+                        // $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 10, $i)->setValue($total_discount > 0 ? $total_discount : '');
                     }
     
                     // if($date_enrolled >= $sy->reconf_start){
