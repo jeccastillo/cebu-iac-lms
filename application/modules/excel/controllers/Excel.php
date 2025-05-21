@@ -5241,7 +5241,7 @@ class Excel extends CI_Controller {
                     $course = $this->data_fetcher->getProgramDetails($user['intProgramID']);
                     $assessment_discount_rate = $assessment_discount_rate_scholar = $assessment_discount_rate_referrer = $assessment_discount_fixed = $tuition_discount_rate = 0;
                     if($reg['paymentType'] == 'full'){
-                        if($tuition['scholarship_tuition_fee_rate'] > 0){
+                        if($tuition['scholarship_tuition_fee_rate'] > 0 || $tuition['scholarship_total_assessment_rate'] > 0){
                             $assessment_discount_rate = $tuition['scholarship_total_assessment_rate'];
                             $assessment_discount_rate_referrer = $tuition['scholarship_total_assessment_rate_discount'];
                             $assessment_discount_rate_scholar = $tuition['scholarship_total_assessment_rate_scholar'];
