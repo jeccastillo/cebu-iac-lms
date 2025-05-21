@@ -5253,7 +5253,7 @@ class Excel extends CI_Controller {
                             $tuition_discount_rate = $tuition['scholarship_tuition_fee_rate'];
                         }
                     }else{ 
-                        if($tuition['scholarship_total_assessment_rate_installment'] > 0){
+                        // if($tuition['scholarship_total_assessment_rate_installment'] > 0){
                             $assessment_discount_rate = $tuition['scholarship_total_assessment_rate_installment'];
                             if($reg['installmentDP'] == 50){
                                 $assessment_discount_rate_referrer = $tuition['scholarship_total_assessment_rate_discount_installment50'];
@@ -5265,7 +5265,7 @@ class Excel extends CI_Controller {
                                 $assessment_discount_rate_referrer = $tuition['scholarship_total_assessment_rate_discount_installment'];
                                 $assessment_discount_rate_scholar = $tuition['scholarship_total_assessment_rate_installment'];
                             }
-                        }
+                        // }
                         if($tuition['scholarship_total_assessment_fixed_installment'] > 0){
                             $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed_installment'];
                         }
