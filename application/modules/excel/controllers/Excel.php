@@ -5240,10 +5240,12 @@ class Excel extends CI_Controller {
                     $studentsEnrolled = true;
                     $course = $this->data_fetcher->getProgramDetails($user['intProgramID']);
                     $assessment_discount_rate = $assessment_discount_rate_scholar = $assessment_discount_rate_referrer = $assessment_discount_fixed = $tuition_discount_rate = 0;
+                    $late_tagged_referrer = 0;
+
                     if($reg['paymentType'] == 'full'){
                         if($tuition['scholarship_tuition_fee_rate'] > 0 || $tuition['scholarship_total_assessment_rate'] > 0){
                             $assessment_discount_rate = $tuition['scholarship_total_assessment_rate'];
-                            $assessment_discount_rate_referrer = $tuition['scholarship_total_assessment_rate_discount'];
+                            $assessment_discount_rate_referrer = $tuition['ar_discounts_full'];
                             $assessment_discount_rate_scholar = $tuition['scholarship_total_assessment_rate_scholar'];
                         }
                         if($tuition['scholarship_total_assessment_fixed'] > 0){
@@ -5252,17 +5254,19 @@ class Excel extends CI_Controller {
                         if($tuition['scholarship_tuition_fee_rate'] > 0){
                             $tuition_discount_rate = $tuition['scholarship_tuition_fee_rate'];
                         }
+                        $late_tagged_referrer = $tuition['ar_late_tagged_discounts_full'];
                     }else{ 
                         // if($tuition['scholarship_total_assessment_rate_installment'] > 0){
                             $assessment_discount_rate = $tuition['scholarship_total_assessment_rate_installment'];
+                            $assessment_discount_rate_referrer = $tuition['ar_discounts_installment'];
                             if($reg['installmentDP'] == 50){
-                                $assessment_discount_rate_referrer = $tuition['scholarship_total_assessment_rate_discount_installment50'];
+                                // $assessment_discount_rate_referrer = $tuition['scholarship_total_assessment_rate_discount_installment50'];
                                 $assessment_discount_rate_scholar = $tuition['scholarship_total_assessment_rate_installment50'];
                             }else if($reg['installmentDP'] == 30){
-                                $assessment_discount_rate_referrer = $tuition['scholarship_total_assessment_rate_discount_installment30'];
+                                // $assessment_discount_rate_referrer = $tuition['scholarship_total_assessment_rate_discount_installment30'];
                                 $assessment_discount_rate_scholar = $tuition['scholarship_total_assessment_rate_installment30'];
                             }else{
-                                $assessment_discount_rate_referrer = $tuition['scholarship_total_assessment_rate_discount_installment'];
+                                // $assessment_discount_rate_referrer = $tuition['scholarship_total_assessment_rate_discount_installment'];
                                 $assessment_discount_rate_scholar = $tuition['scholarship_total_assessment_rate_installment'];
                             }
                         // }
@@ -5272,6 +5276,7 @@ class Excel extends CI_Controller {
                         if($tuition['scholarship_tuition_fee_installment_rate'] > 0){
                             $tuition_discount_rate = $tuition['scholarship_tuition_fee_installment_rate'];
                         }
+                        $late_tagged_referrer = $tuition['ar_late_tagged_discounts_installment'];
                     }
 
                     $date_enrolled = date("Y-m-d",strtotime($reg['date_enlisted']));
@@ -5364,6 +5369,7 @@ class Excel extends CI_Controller {
                         // ->setCellValue('AK'.$i, ($date_enrolled <= $sy->ar_report_date_generation && $deduction_type == 'discount') && $tuition_discount > 0 ? $tuition_discount : '')
                         // ->setCellValue('AK'.$i, ($date_enrolled <= $sy->ar_report_date_generation) && $tuition['scholarship_total_assessment_rate_discount'] > 0 ? $tuition['scholarship_total_assessment_rate_discount'] : '')
                         ->setCellValue('AK'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $assessment_discount_rate_scholar > 0) && $assessment_discount_rate_referrer > 0 ? $assessment_discount_rate_referrer : '')
+                        // ->setCellValue('AK'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $assessment_discount_rate_scholar > 0) && $assessment_discount_rate_referrer > 0 ? $assessment_discount_rate_referrer : '')
                         ->setCellValue('AL'.$i, ($date_enrolled <= $sy->ar_report_date_generation && $deduction_type == 'discount') && $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : '')
                         // ->setCellValue('AE'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'scholarship') && $assessment_discount_rate > 0 ? $assessment_discount_rate : '')
                         // ->setCellValue('AF'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'scholarship') && $assessment_discount_fixed > 0 ? $assessment_discount_fixed : '')
@@ -5463,7 +5469,7 @@ class Excel extends CI_Controller {
                     //late tagging
                     if($date_enrolled > $sy->ar_report_date_generation && $deduction_type != 'scholarship'){
                         $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 8, $i)->setValue($total_discount > 0 ? date("M d,Y",strtotime($date_enrolled)) : '');
-                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 9, $i)->setValue($total_discount > 0 ? $tuition['scholar_type_discount'] : '');
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 9, $i)->setValue($total_discount > 0 ? $tuition['$late_tagged_referrer'] : '');
                         // $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 10, $i)->setValue($tuition['scholarship_total_assessment_rate_discount'] > 0 ? $tuition['scholarship_total_assessment_rate_discount'] : '');
                         $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 10, $i)->setValue($total_discount > 0 ? $total_discount : '');
                     }
