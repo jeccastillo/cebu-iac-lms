@@ -2995,6 +2995,9 @@ class Data_fetcher extends CI_Model {
                         $tuition_scholarship += $tuition * ($scholar->tuition_fee_rate/100);
                         $tuition_fee_rate += $tuition * ($scholar->tuition_fee_rate/100);
                         $total_assessment_rate_scholarship += $tuition * ($scholar->tuition_fee_rate/100);
+                        $total_assessment_rate_installment += $tuition_scholarship_installment_current * ($scholar->tuition_fee_rate/100);
+                        $total_assessment_rate_installment30 += $tuition_scholarship_installment_current30 * ($scholar->tuition_fee_rate/100);
+                        $total_assessment_rate_installment50 += $tuition_scholarship_installment_current50 * ($scholar->tuition_fee_rate/100);
                         $tuition_fee_installment_rate = $tuition_scholarship_installment * ($scholar->tuition_fee_rate/100);
                     }
                     elseif($scholar->tuition_fee_fixed > 0){
