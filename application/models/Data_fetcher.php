@@ -1211,8 +1211,7 @@ class Data_fetcher extends CI_Model {
                 break;
                 case 4:
                     $this->db->where(array('tb_mas_registration.intAYID'=>$sem,'tb_mas_registration.intROG >='=>1))
-                             ->where(array('tb_mas_registration.intAYID'=>$sem,'tb_mas_registration.intROG !='=>5))
-                             ->where(array('tb_mas_registration.intAYID'=>$sem,'tb_mas_registration.withdrawal_period !='=>'before'));
+                             ->where(array('tb_mas_registration.intAYID'=>$sem,'tb_mas_registration.intROG !='=>5));
                 break;
             }
 
@@ -3295,8 +3294,8 @@ class Data_fetcher extends CI_Model {
                 $ctr++;
             }
         }
-        if(($intROG == 3 && $w_status != "before") || $intROG == 4  || $intROG == 5){
-            $total_misc = 0;            
+        if(($intROG == 3 && $w_status == "before") || $intROG == 4  || $intROG == 5){
+            $total_misc = 0;
             $tuition = 0;
             $misc_list = [];
             $late_enrollment_fee = 0;
