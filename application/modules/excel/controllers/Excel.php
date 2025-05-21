@@ -5310,7 +5310,8 @@ class Excel extends CI_Controller {
                     //     ->result_array();
 
                     // if($user['intID'] == 37){
-                    if($user['intID'] == 72){
+                    // if($user['intID'] == 72){
+                    if($user['intID'] == 77){
                         print_r($user);
                         print_r($tuition);
                         print(' assessment_discount_rate_scholar : ' . $assessment_discount_rate_scholar . ' = ' . $tuition['scholarship_total_assessment_rate_installment']  . ' @@ ' );
