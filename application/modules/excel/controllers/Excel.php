@@ -5322,7 +5322,7 @@ class Excel extends CI_Controller {
                         print(' assessment_discount_rate_scholar : ' . $assessment_discount_rate_scholar . ' = ' . $tuition['scholarship_total_assessment_rate_installment']  . ' @@ ' );
                         print(' assessment_discount_rate_referrer : ' . $assessment_discount_rate_referrer);
                         print(' scholar_type_late_tagged : ' . $tuition['scholar_type_late_tagged']);
-                        print(' late_tagged_referrer : ' . $tuition['late_tagged_referrer']);
+                        print(' late_tagged_referrer : ' . $late_tagged_referrer);
                         die();
                     }
 
