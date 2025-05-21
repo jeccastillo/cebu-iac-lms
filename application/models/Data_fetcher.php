@@ -3390,8 +3390,8 @@ class Data_fetcher extends CI_Model {
         $data['scholarship_total_assessment_rate'] = $total_assessment_rate;
         $data['scholarship_total_assessment_rate_scholar'] = $total_assessment_rate_scholarship;
         $data['scholarship_total_assessment_rate_installment'] = $total_assessment_rate_installment;
-        $data['scholarship_total_assessment_rate_installment30'] = $total_assessment_rate_installment30;
-        $data['scholarship_total_assessment_rate_installment50'] = $total_assessment_rate_installment50;
+        // $data['scholarship_total_assessment_rate_installment30'] = $total_assessment_rate_installment30;
+        // $data['scholarship_total_assessment_rate_installment50'] = $total_assessment_rate_installment50;
         $data['scholarship_total_assessment_rate_discount'] = $total_assessment_rate_discount;
         $data['scholarship_total_assessment_rate_discount_installment'] = $total_assessment_rate_discount_installment;
         $data['scholarship_total_assessment_rate_discount_installment30'] = $total_assessment_rate_discount_installment30;
