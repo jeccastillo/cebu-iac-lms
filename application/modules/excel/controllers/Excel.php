@@ -5469,13 +5469,13 @@ class Excel extends CI_Controller {
                     }
     
                     //late tagging
-                    if($date_enrolled > $sy->ar_report_date_generation && $deduction_type != 'scholarship'){
+                    // if($date_enrolled > $sy->ar_report_date_generation){
                         $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 8, $i)->setValue($late_tagged_referrer > 0 ? date("M d,Y",strtotime($date_enrolled)) : '');
                         $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 9, $i)->setValue($late_tagged_referrer > 0 ? $tuition['scholar_type_late_tagged'] : '');
                         // $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 10, $i)->setValue($tuition['scholarship_total_assessment_rate_discount'] > 0 ? $tuition['scholarship_total_assessment_rate_discount'] : '');
                         $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 10, $i)->setValue($late_tagged_referrer > 0 ? $late_tagged_referrer : '');
                         // $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 10, $i)->setValue($total_discount > 0 ? $total_discount : '');
-                    }
+                    // }
     
                     // if($date_enrolled >= $sy->reconf_start){
                     //     $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 14, $i)->setValue($total_discount > 0 ? $date_enrolled : '');
