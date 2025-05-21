@@ -5255,8 +5255,16 @@ class Excel extends CI_Controller {
                     }else{ 
                         if($tuition['scholarship_total_assessment_rate_installment'] > 0){
                             $assessment_discount_rate = $tuition['scholarship_total_assessment_rate_installment'];
-                            $assessment_discount_rate_referrer = $tuition['scholarship_total_assessment_rate_discount'];
-                            $assessment_discount_rate_scholar = $tuition['scholarship_total_assessment_rate_scholar'];
+                            if($reg['installmentDP'] == 50){
+                                $assessment_discount_rate_referrer = $tuition['scholarship_total_assessment_rate_discount_installment50'];
+                                $assessment_discount_rate_scholar = $tuition['scholarship_total_assessment_rate_installment50'];
+                            }else if($reg['installmentDP'] == 30){
+                                $assessment_discount_rate_referrer = $tuition['scholarship_total_assessment_rate_discount_installment30'];
+                                $assessment_discount_rate_scholar = $tuition['scholarship_total_assessment_rate_installment30'];
+                            }else{
+                                $assessment_discount_rate_referrer = $tuition['scholarship_total_assessment_rate_discount_installment'];
+                                $assessment_discount_rate_scholar = $tuition['scholarship_total_assessment_rate_installment'];
+                            }
                         }
                         if($tuition['scholarship_total_assessment_fixed_installment'] > 0){
                             $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed_installment'];
@@ -5341,9 +5349,9 @@ class Excel extends CI_Controller {
                         ->setCellValue('Y'.$i, ($reg['paymentType'] == 'partial' && $reg['installmentDP'] != 50) && $tuition['late_enrollment_fee'] > 0 ? (float)$tuition['late_enrollment_fee'] : '')
                         ->setCellValue('Z'.$i, '=SUM(N' . $i . ':Y' . $i . ')')
                         ->setCellValue('AA'.$i, '=M' . $i . '+Z' . $i . ')')
-                        // ->setCellValue('V'.$i, $date_enrolled <= $sy->ar_report_date_generation ? $tuition['scholar_type'] : '')
                         ->setCellValue('AB'.$i, ($deduction_type == 'scholarship' || ($deduction_type == 'discount' && $date_enrolled <= $sy->ar_report_date_generation)) && $tuition['scholar_type'] ? $tuition['scholar_type'] : '')
-                        ->setCellValue('AC'.$i, $deduction_type == 'scholarship' && $tuition_discount > 0 ? $tuition['scholarship_total_assessment_rate_scholar'] : ($tuition['scholarship_total_assessment_rate_scholar'] > 0 ? $tuition['scholarship_total_assessment_rate_scholar'] : '') )
+                        // ->setCellValue('AC'.$i, $deduction_type == 'scholarship' && $tuition_discount > 0 ? $tuition['scholarship_total_assessment_rate_scholar'] : ($tuition['scholarship_total_assessment_rate_scholar'] > 0 ? $tuition['scholarship_total_assessment_rate_scholar'] : '') )
+                        ->setCellValue('AC'.$i, $deduction_type == 'scholarship' && $tuition_discount > 0 ? $assessment_discount_rate_scholar : ($assessment_discount_rate_scholar > 0 ? $assessment_discount_rate_scholar : '') )
                         ->setCellValue('AD'.$i, $deduction_type == 'scholarship' && $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : ($assessment_discount_fixed > 0 ? $assessment_discount_fixed : ''))
                         ->setCellValue('AE'.$i, $deduction_type == 'scholarship' && $tuition['scholarship_lab_fee_rate'] > 0 ? $tuition['scholarship_lab_fee_rate'] : '')
                         ->setCellValue('AF'.$i, $deduction_type == 'scholarship' && $tuition['scholarship_lab_fee_fixed'] > 0 ? $tuition['scholarship_lab_fee_fixed'] : '')
@@ -5353,7 +5361,7 @@ class Excel extends CI_Controller {
                         ->setCellValue('AJ'.$i, $deduction_type == 'scholarship' && $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
                         // ->setCellValue('AK'.$i, ($date_enrolled <= $sy->ar_report_date_generation && $deduction_type == 'discount') && $tuition_discount > 0 ? $tuition_discount : '')
                         // ->setCellValue('AK'.$i, ($date_enrolled <= $sy->ar_report_date_generation) && $tuition['scholarship_total_assessment_rate_discount'] > 0 ? $tuition['scholarship_total_assessment_rate_discount'] : '')
-                        ->setCellValue('AK'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $tuition['scholarship_total_assessment_rate_scholar'] > 0) && $tuition['scholarship_total_assessment_rate_discount'] > 0 ? $tuition['scholarship_total_assessment_rate_discount'] : '')
+                        ->setCellValue('AK'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $assessment_discount_rate_scholar > 0) && $assessment_discount_rate_referrer > 0 ? $assessment_discount_rate_referrer : '')
                         ->setCellValue('AL'.$i, ($date_enrolled <= $sy->ar_report_date_generation && $deduction_type == 'discount') && $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : '')
                         // ->setCellValue('AE'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'scholarship') && $assessment_discount_rate > 0 ? $assessment_discount_rate : '')
                         // ->setCellValue('AF'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'scholarship') && $assessment_discount_fixed > 0 ? $assessment_discount_fixed : '')
