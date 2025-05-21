@@ -5314,17 +5314,17 @@ class Excel extends CI_Controller {
                     //     ->get()
                     //     ->result_array();
 
-                    if($user['intID'] == 37){
+                    // if($user['intID'] == 37){
                     // if($user['intID'] == 72){
                     // if($user['intID'] == 213){
-                        print_r($user);
-                        print_r($tuition);
-                        print(' assessment_discount_rate_scholar : ' . $assessment_discount_rate_scholar . ' = ' . $tuition['scholarship_total_assessment_rate_installment']  . ' @@ ' );
-                        print(' assessment_discount_rate_referrer : ' . $assessment_discount_rate_referrer);
-                        print(' scholar_type_late_tagged : ' . $tuition['scholar_type_late_tagged']);
-                        print(' late_tagged_referrer : ' . $late_tagged_referrer);
-                        die();
-                    }
+                    //     print_r($user);
+                    //     print_r($tuition);
+                    //     print(' assessment_discount_rate_scholar : ' . $assessment_discount_rate_scholar . ' = ' . $tuition['scholarship_total_assessment_rate_installment']  . ' @@ ' );
+                    //     print(' assessment_discount_rate_referrer : ' . $assessment_discount_rate_referrer);
+                    //     print(' scholar_type_late_tagged : ' . $tuition['scholar_type_late_tagged']);
+                    //     print(' late_tagged_referrer : ' . $late_tagged_referrer);
+                    //     die();
+                    // }
 
                     // Add some data
                     $objPHPExcel->setActiveSheetIndex(0)
