@@ -3148,10 +3148,10 @@ class Data_fetcher extends CI_Model {
                 $total_scholarship_installment_temp = 0;
                 $total_scholarship_installment_temp30 = 0;
                 $total_scholarship_installment_temp50 = 0;
-                if($scholar->deduction_type == 'discount' && $scholar->date_applied > $sem['ar_report_date_generation']){
-                    $scholar_type .= $scholar->name . ' ';
-                }else{
+                if($scholar->date_applied > $sem['ar_report_date_generation']){
                     $scholar_type_late_tagged .= $scholar->name . ' ';
+                }else{
+                    $scholar_type .= $scholar->name . ' ';
                 }
 
                 if($scholar->total_assessment_rate > 0 || $scholar->total_assessment_fixed > 0){                                    
