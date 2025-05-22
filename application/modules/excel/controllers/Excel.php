@@ -5303,16 +5303,6 @@ class Excel extends CI_Controller {
                         $total_discount = $tuition_discount_rate + $tuition['scholarship_tuition_fee_fixed'] + $tuition['scholarship_lab_fee_rate'] + $tuition['scholarship_lab_fee_fixed'] + $tuition['scholarship_misc_fee_rate'] + 
                                             $tuition['scholarship_misc_fee_fixed'] + $tuition['nsf'] + $tuition['scholarship_misc_fee_fixed'] + $assessment_discount_rate + $assessment_discount_fixed + $assessment_discount_rate_referrer + $assessment_discount_rate_scholar;
                     }
-                    
-                    // $tuition_payments = $this->db->select('payment_details.*')
-                    //     ->from('payment_details')
-                    //     ->join('tb_mas_users', 'tb_mas_users.slug = payment_details.student_number')
-                    //     ->join('tb_mas_registration', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
-                    //     ->where(array('payment_details.sy_reference' => $sem, 'payment_details.student_campus' => $campus, 'payment_details.student_number' => $user['slug'], 'payment_details.status' => 'Paid', 'payment_details.updated_at <=' => $report_date . ' 23:59:59'))
-                    //     ->order_by('payment_details.created_at', 'asc')
-                    //     ->group_by('payment_details.id')
-                    //     ->get()
-                    //     ->result_array();
 
                     // Add some data
                     $objPHPExcel->setActiveSheetIndex(0)
