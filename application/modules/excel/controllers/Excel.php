@@ -5303,28 +5303,6 @@ class Excel extends CI_Controller {
                         $total_discount = $tuition_discount_rate + $tuition['scholarship_tuition_fee_fixed'] + $tuition['scholarship_lab_fee_rate'] + $tuition['scholarship_lab_fee_fixed'] + $tuition['scholarship_misc_fee_rate'] + 
                                             $tuition['scholarship_misc_fee_fixed'] + $tuition['nsf'] + $tuition['scholarship_misc_fee_fixed'] + $assessment_discount_rate + $assessment_discount_fixed + $assessment_discount_rate_referrer + $assessment_discount_rate_scholar;
                     }
-                    
-                    // $tuition_payments = $this->db->select('payment_details.*')
-                    //     ->from('payment_details')
-                    //     ->join('tb_mas_users', 'tb_mas_users.slug = payment_details.student_number')
-                    //     ->join('tb_mas_registration', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
-                    //     ->where(array('payment_details.sy_reference' => $sem, 'payment_details.student_campus' => $campus, 'payment_details.student_number' => $user['slug'], 'payment_details.status' => 'Paid', 'payment_details.updated_at <=' => $report_date . ' 23:59:59'))
-                    //     ->order_by('payment_details.created_at', 'asc')
-                    //     ->group_by('payment_details.id')
-                    //     ->get()
-                    //     ->result_array();
-
-                    if($user['intID'] == 37){
-                    // if($user['intID'] == 72){
-                    // if($user['intID'] == 213){
-                    //     print_r($user);
-                        print_r($tuition);
-                    //     print(' assessment_discount_rate_scholar : ' . $assessment_discount_rate_scholar . ' = ' . $tuition['scholarship_total_assessment_rate_installment']  . ' @@ ' );
-                    //     print(' assessment_discount_rate_referrer : ' . $assessment_discount_rate_referrer);
-                    //     print(' scholar_type_late_tagged : ' . $tuition['scholar_type_late_tagged']);
-                    //     print(' late_tagged_referrer : ' . $late_tagged_referrer);
-                    //     die();
-                    }
 
                     // Add some data
                     $objPHPExcel->setActiveSheetIndex(0)
@@ -7722,7 +7700,7 @@ class Excel extends CI_Controller {
             $sem = $s['intID'];
         }
 
-        $gradeLevel = 'All Grade Level';
+        $gradeLevel = 'All Year Level';
         $students = $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramCode, tb_mas_registration.intYearLevel')
                     ->from('tb_mas_users')
                     ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
@@ -8619,11 +8597,9 @@ class Excel extends CI_Controller {
         exit;
     }
 
-    // public function finance_invoice_report($sem = 0, $campus, $report_date)
     public function finance_invoice_report($campus, $report_date_start, $report_date_end = null)
     {
-        $asOfDate = $report_date_start == $report_date_end ? date("M d, Y", strtotime($report_date_start)) :  date("M d, Y", strtotime($report_date_start)) . '-' . date("M d, Y", strtotime($report_date_end));
-        
+        $as_of_date = $report_date_start == $report_date_end ? date("M d, Y", strtotime($report_date_start)) :  date("M d, Y", strtotime($report_date_start)) . '-' . date("M d, Y", strtotime($report_date_end));
         $report_date_start = ($report_date_start) ? date("Y-m-d 00:00:00", strtotime($report_date_start)) : date("Y-m-d 00:00:00");
         $report_date_end = ($report_date_end) ? date("Y-m-d 23:59:59", strtotime($report_date_end)) : date("Y-m-d 23:59:59");
         $payment_details = $this->db
@@ -8646,11 +8622,77 @@ class Excel extends CI_Controller {
 
         $i = 8;
 
-        
         foreach($payment_details as $index => $payment_detail){
             $payment_for = $particular = '';
+            $tuition_fee = $tuition_discount = $total_discount = $assessment_discount_rate = $assessment_discount_fixed = $tuition_discount_rate = 0;
 
             $student = $this->db->get_where('tb_mas_users', array('slug' => $payment_detail['student_number']))->first_row('array');
+            $tuition = $student ? $this->data_fetcher->getTuition($student['intID'], $payment_detail['sy_reference']) : '';
+            
+            if($student){
+                $reg = $this->db->select('tb_mas_registration.*, tb_mas_tuition_year.installmentDP, tb_mas_scholarships.deduction_type')
+                            ->from('tb_mas_registration')
+                            ->where(array('intStudentID' => $student['intID']))
+                            ->join('tb_mas_tuition_year', 'tb_mas_tuition_year.intID = tb_mas_registration.tuition_year')
+                            ->join('tb_mas_scholarships', 'tb_mas_scholarships.intID = tb_mas_registration.enumScholarship', 'left')
+                            ->get()
+                            ->first_row('array');
+                
+                if($reg && $tuition){
+                    if($reg['paymentType'] == 'full'){
+                        $tuition_fee = $tuition['tuition'] + $tuition['lab_before_discount'] + $tuition['misc_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
+                    }else{
+                        $tuition_fee = $tuition['tuition_installment_before_discount'] + $tuition['lab_installment_before_discount'] + $tuition['misc_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
+                        if($reg['installmentDP'] == 30)
+                            $tuition_fee = $tuition['tuition_installment_before_discount30'] + $tuition['lab_installment_before_discount30'] + $tuition['misc_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
+                        if($reg['installmentDP'] == 50)
+                            $tuition_fee = $tuition['tuition_installment_before_discount50'] + $tuition['lab_installment_before_discount50'] + $tuition['misc_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
+                    }
+
+                    $deduction_type = $reg['deduction_type'];
+                    if(!$deduction_type){
+                        if(isset($tuition['scholarship'][0])){
+                            $deduction_type = 'scholarship';
+                        }else if(isset($tuition['discount'][0])){
+                            $deduction_type = 'discount';
+                        }
+                    }
+                    
+                    if($reg['paymentType'] == 'full'){
+                        if($tuition['scholarship_total_assessment_rate'] > 0){
+                            $assessment_discount_rate = $tuition['scholarship_total_assessment_rate'];
+                        }
+                        if($tuition['scholarship_total_assessment_fixed'] > 0){
+                            $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed'];
+                        }
+                        if($tuition['scholarship_tuition_fee_rate'] > 0){
+                            $tuition_discount_rate = $tuition['scholarship_tuition_fee_rate'];
+                        }
+                    }else{ 
+                        if($tuition['scholarship_total_assessment_rate_installment'] > 0){
+                            $assessment_discount_rate = $tuition['scholarship_total_assessment_rate_installment'];
+                        }
+                        if($tuition['scholarship_total_assessment_fixed_installment'] > 0){
+                            $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed_installment'];
+                        }
+                        if($tuition['scholarship_tuition_fee_installment_rate'] > 0){
+                            $tuition_discount_rate = $tuition['scholarship_tuition_fee_installment_rate'];
+                        }
+                    }
+                    
+                    if($reg['deduction_type'] == 'scholarship'){
+                        if($reg['paymentType'] == 'full' && $tuition['scholarship_tuition_fee_rate'] > 0)
+                        $total_discount = $tuition['scholarship_tuition_fee_rate'];
+                        if($reg['paymentType'] == 'partial' && $tuition['scholarship_tuition_fee_installment_rate'] > 0)
+                        $total_discount = $tuition['scholarship_tuition_fee_installment_rate'];
+                    }else{
+                        $total_discount = $tuition_discount_rate + $tuition['scholarship_tuition_fee_fixed'] + $tuition['scholarship_lab_fee_rate'] + $tuition['scholarship_lab_fee_fixed'] + $tuition['scholarship_misc_fee_rate'] + 
+                                            $tuition['scholarship_misc_fee_fixed'] + $tuition['nsf'] + $tuition['scholarship_misc_fee_fixed'] + $assessment_discount_rate + $assessment_discount_fixed;
+                    }
+
+                }
+
+            }
 
             if(strpos($payment_detail['description'], 'Tuition') !== false || strpos($payment_detail['description'], 'Reservation') !== false || strpos($payment_detail['description'], 'Application') !== false){
                 $payment_for = $payment_detail['description'];
@@ -8659,6 +8701,7 @@ class Excel extends CI_Controller {
                 $payment_for = 'Others';
                 $particular = $payment_detail['description'];
             }
+
 
             // Add some data
             $objPHPExcel->setActiveSheetIndex(0)
@@ -8671,12 +8714,12 @@ class Excel extends CI_Controller {
                 ->setCellValue('G'.$i, $payment_detail['is_cash'] ? 'Cash Sales' : 'Charge Sales')
                 ->setCellValue('H'.$i, $payment_detail['invoice_date'] ? date("d-M-Y", strtotime($payment_detail['invoice_date'])) : date("d-M-Y", strtotime($payment_detail['created_at'])))
                 ->setCellValue('I'.$i, $payment_detail['invoice_number'])
-                ->setCellValue('J'.$i, $payment_detail['invoice_amount'])
-                ->setCellValue('K'.$i, $payment_detail['invoice_amount'] == 0 && $payment_detail['invoice_amount_ves'] == 0 ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount_ves'])
+                ->setCellValue('J'.$i, $tuition_fee == 0 && $payment_detail['invoice_amount_ves'] == 0 ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount_ves'])
+                ->setCellValue('K'.$i, $tuition_fee - $total_discount)
                 ->setCellValue('L'.$i, $payment_detail['invoice_amount_vzrs'])
                 ->setCellValue('M'.$i, '=SUM(J' . $i . ':L' . $i . ')')
-                ->setCellValue('N'.$i, $payment_detail['invoice_amount'] > 0 ? '=PRODUCT(J' . $i . ',.12)' : '')
-                ->setCellValue('O'.$i, $payment_detail['withholding_tax_percentage'] > 0 ? $payment_detail['withholding_tax_percentage'] / 100 : '')
+                ->setCellValue('N'.$i, $tuition_fee > 0 ? '=PRODUCT(J' . $i . ',.12)' : 0)
+                ->setCellValue('O'.$i, $payment_detail['withholding_tax_percentage'] > 0 ? $payment_detail['withholding_tax_percentage'] / 100 : 0)
                 ->setCellValue('P'.$i, '=PRODUCT(J' . $i . ',O' . $i . ')')
                 ->setCellValue('Q'.$i, '=SUM(M' . $i . '+N' . $i . '+P' . $i . ')')
                 ->setCellValue('R'.$i, $payment_detail['subtotal_order'])
@@ -8684,12 +8727,12 @@ class Excel extends CI_Controller {
 
             $i++;
         }
-
+        
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'iACADEMY, Inc.')
                     ->setCellValue('A2', $campus == 'Makati' ? 'iACADEMY Nexus 7434 Yakal Street Brgy. San Antonio, Makati City' : '5th Floor Filinvest Cyberzone Tower 2 Salinas Drive Cor. W. Geonzon St., Cebu IT Park, Apas, Cebu City')
                     ->setCellValue('A3', 'Invoice Report')
-                    ->setCellValue('A4', 'As of ' . $asOfDate)
+                    ->setCellValue('A4', 'As of ' . $as_of_date)
                     ->setCellValue('A7', 'No.')
                     ->setCellValue('B7', 'Student Number')
                     ->setCellValue('C7', 'Student Name')
@@ -8791,7 +8834,7 @@ class Excel extends CI_Controller {
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
-        header('Content-Disposition: attachment;filename="Invoice Report (' . $asOfDate . ').xls"');
+        header('Content-Disposition: attachment;filename="Invoice Report (' . $as_of_date . ').xls"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
@@ -9035,7 +9078,6 @@ class Excel extends CI_Controller {
 
         foreach($students as $index => $student){
             
-
             $tuition = $this->data_fetcher->getTuition($student['intID'], $sem);
             $total_discount = 0;
 
