@@ -3209,7 +3209,9 @@ class Data_fetcher extends CI_Model {
                         $tuition_fee_installment_rate = $tuition_scholarship_installment_current * ($scholar->tuition_fee_rate/100);
                         if($scholar->deduction_type == 'discount' && date("Y-m-d", strtotime($scholar->date_applied)) > $sem['ar_report_date_generation']){
                             $ar_late_tagged_discounts_full = $tuition * ($scholar->tuition_fee_rate/100);
-                            $ar_late_tagged_discounts_installment += $tuition_scholarship_installment_current + $tuition_scholarship_installment_current30 + $tuition_scholarship_installment_current50;
+                            $ar_late_tagged_discounts_installment += $tuition_scholarship_installment_current;
+                            $ar_late_tagged_discounts_installment30 += $tuition_scholarship_installment_current30;
+                            $ar_late_tagged_discounts_installment50 += $tuition_scholarship_installment_current50;
                         }else{
                             $ar_discounts_full = $tuition * ($scholar->tuition_fee_rate/100);
                             $ar_discounts_installment += $tuition_scholarship_installment_current + $tuition_scholarship_installment_current30 + $tuition_scholarship_installment_current50;
@@ -3426,6 +3428,8 @@ class Data_fetcher extends CI_Model {
         $data['ar_discounts_installment'] = $ar_discounts_installment;
         $data['ar_late_tagged_discounts_full'] = $ar_late_tagged_discounts_full;
         $data['ar_late_tagged_discounts_installment'] = $ar_late_tagged_discounts_installment;
+        $data['ar_late_tagged_discounts_installment30'] = $ar_late_tagged_discounts_installment30;
+        $data['ar_late_tagged_discounts_installment50'] = $ar_late_tagged_discounts_installment50;
         $data['scholarship_total_assessment_fixed'] = $total_assessment_fixed;
         $data['scholarship_total_assessment_fixed_installment'] = $total_assessment_fixed_installment;
         $data['scholar_type'] = $scholar_type;
