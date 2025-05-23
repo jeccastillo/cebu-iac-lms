@@ -5310,7 +5310,6 @@ class Excel extends CI_Controller {
                         // ->setCellValue('B'.$i, str_replace(str_split('T-'), "",$user['strStudentNumber']))
                         ->setCellValue('B'.$i, str_replace("-", "",$user['strStudentNumber']))
                         ->setCellValue('C'.$i, strtoupper($user['strLastname']) . ', ' . strtoupper($user['strFirstname']) . ' ' . strtoupper($user['strMiddlename']))
-                        // ->setCellValue('D'.$i, isset($date_enrolled_array[$user['slug']]) ? date("M d,Y",strtotime($date_enrolled_array[$user['slug']])) : date("M d, Y",strtotime($reg['date_enlisted'])))
                         ->setCellValue('D'.$i, date("M d,Y",strtotime($date_enrolled)))
                         ->setCellValue('E'.$i, $reg['paymentType'] == 'full' ? 'FULL PAYMENT' : 'INSTALLMENT')
                         ->setCellValue('F'.$i, $course['strProgramCode'])
@@ -5321,7 +5320,6 @@ class Excel extends CI_Controller {
                         ->setCellValue('K'.$i, $reg['paymentType'] == 'full' && $tuition['new_student'] > 0 ? (float)$tuition['new_student'] : '')
                         ->setCellValue('L'.$i, $reg['paymentType'] == 'full' && $tuition['late_enrollment_fee'] > 0 ? (float)$tuition['late_enrollment_fee'] : '')
                         ->setCellValue('M'.$i, '=SUM(G' . $i . ':L' . $i . ')')
-    
                         ->setCellValue('N'.$i, ($reg['paymentType'] == 'partial' && $reg['installmentDP'] == 50) && $tuition['tuition_installment_before_discount'] > 0 ? (float)$tuition['tuition_installment_before_discount'] : '')
                         ->setCellValue('O'.$i, ($reg['paymentType'] == 'partial' && $reg['installmentDP'] == 50) && $tuition['lab_installment_before_discount'] > 0 ? (float)$tuition['lab_installment_before_discount'] : '')
                         ->setCellValue('P'.$i, ($reg['paymentType'] == 'partial' && $reg['installmentDP'] == 50) && $tuition['misc_before_discount'] > 0 ? (float)$tuition['misc_before_discount'] : '')
