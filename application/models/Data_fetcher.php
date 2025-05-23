@@ -3165,7 +3165,7 @@ class Data_fetcher extends CI_Model {
                         $total_scholarship_installment_temp += $total_assessment_installment * ($scholar->total_assessment_rate/100);
                         $total_assessment_rate = $total_assessment * ($scholar->total_assessment_rate/100);
                         $total_assessment_rate_discount = $total_assessment_installment * ($scholar->total_assessment_rate/100);
-                        if($scholar->deduction_type == 'discount' && $scholar->date_applied > $sem['ar_report_date_generation']){
+                        if($scholar->deduction_type == 'discount' && date("Y-m-d", strtotime($scholar->date_applied)) > $sem['ar_report_date_generation']){
                             $ar_late_tagged_discounts_full = $total_assessment * ($scholar->total_assessment_rate/100);
                             $ar_late_tagged_discounts_installment = $total_assessment_installment * ($scholar->total_assessment_rate/100);
                         }else{
@@ -3207,7 +3207,7 @@ class Data_fetcher extends CI_Model {
                         $total_assessment_rate_discount_installment30 += $tuition_scholarship_installment_current30;
                         $total_assessment_rate_discount_installment50 += $tuition_scholarship_installment_current50;
                         $tuition_fee_installment_rate = $tuition_scholarship_installment_current * ($scholar->tuition_fee_rate/100);
-                        if($scholar->deduction_type == 'discount' && $scholar->date_applied > $sem['ar_report_date_generation']){
+                        if($scholar->deduction_type == 'discount' && date("Y-m-d", strtotime($scholar->date_applied)) > $sem['ar_report_date_generation']){
                             $ar_late_tagged_discounts_full = $tuition * ($scholar->tuition_fee_rate/100);
                             $ar_late_tagged_discounts_installment += $tuition_scholarship_installment_current + $tuition_scholarship_installment_current30 + $tuition_scholarship_installment_current50;
                         }else{
