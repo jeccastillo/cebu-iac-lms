@@ -2949,7 +2949,7 @@ class Data_fetcher extends CI_Model {
                 $total_scholarship_installment_temp = 0;
                 $total_scholarship_installment_temp30 = 0;
                 $total_scholarship_installment_temp50 = 0;
-                $scholar_type .= $scholar->name . ' ';
+                $scholar_type .= $scholar->name . '(' . date("M d, Y", strtotime($scholar->date_applied)) .') ';
 
                 if($scholar->total_assessment_rate > 0 || $scholar->total_assessment_fixed > 0){                
                     
@@ -3152,7 +3152,7 @@ class Data_fetcher extends CI_Model {
                     $scholar_type_late_tagged .= $scholar->name . ' ';
                     $scholar_type_late_tagged_date .= date("M d, Y", strtotime($scholar->date_applied)) . ' ';
                 }else{
-                    $scholar_type .= $scholar->name . ' ';
+                    $scholar_type .= $scholar->name . '(' . date("M d, Y", strtotime($scholar->date_applied)) .') ';
                 }
 
                 if($scholar->total_assessment_rate > 0 || $scholar->total_assessment_fixed > 0){                                    
