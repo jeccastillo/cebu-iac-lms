@@ -2915,7 +2915,7 @@ class Data_fetcher extends CI_Model {
         $other_scholarship = 0;
         $ctr = 0;        
         $scholarships_for_ledger = [];
-        $scholar_type = $scholar_type_late_tagged = '';
+        $scholar_type = $scholar_type_late_tagged = $scholar_type_late_tagged_date = '';
 
         $tuition_fee_rate = $tuition_fee_installment_rate = $tuition_fee_fixed = $lab_fee_rate = $lab_fee_fixed = $misc_fee_rate = $misc_fee_fixed = 0;
         $total_assessment_rate = $total_assessment_fixed = $total_assessment_rate_installment = $total_assessment_rate_installment30 = $total_assessment_rate_installment50 = $total_assessment_fixed_installment = 0;
@@ -3150,6 +3150,7 @@ class Data_fetcher extends CI_Model {
                 $total_scholarship_installment_temp50 = 0;
                 if($scholar->date_applied > $sem['ar_report_date_generation']){
                     $scholar_type_late_tagged .= $scholar->name . ' ';
+                    $scholar_type_late_tagged_date .= $scholar->date_applied . ' ';
                 }else{
                     $scholar_type .= $scholar->name . ' ';
                 }
@@ -3429,6 +3430,7 @@ class Data_fetcher extends CI_Model {
         $data['scholarship_total_assessment_fixed_installment'] = $total_assessment_fixed_installment;
         $data['scholar_type'] = $scholar_type;
         $data['scholar_type_late_tagged'] = $scholar_type_late_tagged;
+        $data['scholar_type_late_tagged_date'] = $scholar_type_late_tagged_date;
         $data['down_payment30'] = 0;
         $data['down_payment50'] = 0;
         $data['total_installment'] = $data['ti_before_deductions']  - $scholarship_installment_grand_total  - $discount_installment_grand_total;
