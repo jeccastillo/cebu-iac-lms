@@ -3148,11 +3148,7 @@ class Data_fetcher extends CI_Model {
                 $total_scholarship_installment_temp = 0;
                 $total_scholarship_installment_temp30 = 0;
                 $total_scholarship_installment_temp50 = 0;
-                print(date("Y-m-d", strtotime($scholar->date_applied)));
-                print($sem['ar_report_date_generation']);
-                print(date("Y-m-d", strtotime($scholar->date_applied)) > $sem['ar_report_date_generation']);
-                die();
-                if($scholar->date_applied > $sem['ar_report_date_generation']){
+                if(date("Y-m-d", strtotime($scholar->date_applied)) > $sem['ar_report_date_generation']){
                     $scholar_type_late_tagged .= $scholar->name . ' ';
                     $scholar_type_late_tagged_date .= date("M d, Y", strtotime($scholar->date_applied)) . ' ';
                 }else{
