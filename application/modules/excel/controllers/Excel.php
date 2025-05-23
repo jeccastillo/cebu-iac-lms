@@ -5262,12 +5262,15 @@ class Excel extends CI_Controller {
                             if($reg['installmentDP'] == 50){
                                 // $assessment_discount_rate_referrer = $tuition['scholarship_total_assessment_rate_discount_installment50'];
                                 $assessment_discount_rate_scholar = $tuition['scholarship_total_assessment_rate_installment50'];
+                                $late_tagged_referrer = $tuition['ar_late_tagged_discounts_installment'];
                             }else if($reg['installmentDP'] == 30){
                                 // $assessment_discount_rate_referrer = $tuition['scholarship_total_assessment_rate_discount_installment30'];
                                 $assessment_discount_rate_scholar = $tuition['scholarship_total_assessment_rate_installment30'];
+                                $late_tagged_referrer = $tuition['ar_late_tagged_discounts_installment30'];
                             }else{
                                 // $assessment_discount_rate_referrer = $tuition['scholarship_total_assessment_rate_discount_installment'];
                                 $assessment_discount_rate_scholar = $tuition['scholarship_total_assessment_rate_installment'];
+                                $late_tagged_referrer = $tuition['ar_late_tagged_discounts_installment50'];
                             }
                         // }
                         if($tuition['scholarship_total_assessment_fixed_installment'] > 0){
@@ -5276,7 +5279,6 @@ class Excel extends CI_Controller {
                         if($tuition['scholarship_tuition_fee_installment_rate'] > 0){
                             $tuition_discount_rate = $tuition['scholarship_tuition_fee_installment_rate'];
                         }
-                        $late_tagged_referrer = $tuition['ar_late_tagged_discounts_installment'];
                     }
 
                     $date_enrolled = date("Y-m-d",strtotime($reg['date_enlisted']));
