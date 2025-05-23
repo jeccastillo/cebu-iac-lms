@@ -3328,7 +3328,9 @@ class Data_fetcher extends CI_Model {
         if(($intROG == 3 && $w_status == "before") || $intROG == 4  || $intROG == 5){
             $total_misc = 0;
             $tuition = 0;
+            $total_lab = 0;
             $misc_list = [];
+            $lab_list = [];
             $late_enrollment_fee = 0;
         }
         $data['lab_discount'] = $lab_scholarship;
