@@ -5615,6 +5615,7 @@ class Excel extends CI_Controller {
                         ->setCellValue('S'.$i, '=SUM(S4:S' . ($i-1) . ')')
                         ->setCellValue('T'.$i, '=SUM(T4:T' . ($i-1) . ')')
                         ->setCellValue('U'.$i, '=SUM(U4:U' . ($i-1) . ')')
+                        ->setCellValue('V'.$i, '=SUM(V4:V' . ($i-1) . ')')
                         ->setCellValue('W'.$i, '=SUM(W4:W' . ($i-1) . ')')
                         ->setCellValue('X'.$i, '=SUM(X4:X' . ($i-1) . ')')
                         ->setCellValue('Y'.$i, '=SUM(Y4:Y' . ($i-1) . ')')
