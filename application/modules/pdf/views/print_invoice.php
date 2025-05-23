@@ -105,17 +105,15 @@ table tr td {
                 style="position:absolute; top: 270px; left:10px; width: 500px; height: 20px;">
                 RESERVATION FEE FOR SENIOR HIGHSCHOOL
                 <?php echo " for  ".$term['enumSem']." ".$term['term_label']." ".$term['strYearStart']."-".$term['strYearEnd']; ?>
-            </div> <?php endif; ?> <?php if ($request['description'] == 'Reservation Payment'  ): ?> <div
-                style="position:absolute; top: 290px; left:10px; width: 500px; height: 20px;"> "NON
-                REFUNDABLE", "NON TRANSFERABLE" </div> 
-                <div style="position:absolute; top: 330px; left:10px; width: 300px; height: 20px;border-top:1px solid #333;text-align:center;">
-                    SIGNATURE</div>
-                <?php endif; ?> 
-                <div
+            </div> <?php endif; ?> <?php if ($request['description'] == 'Reservation Payment'  ): ?>
+            <div style="position:absolute; top: 290px; left:10px; width: 500px; height: 20px;"> "NON
+                REFUNDABLE", "NON TRANSFERABLE" </div>
+            <div
+                style="position:absolute; top: 330px; left:10px; width: 300px; height: 20px;border-top:1px solid #333;text-align:center;">
+                SIGNATURE</div> <?php endif; ?> <div
                 style="position:absolute; top: 270px; left: 10px; width: 500px; height: 20px;">
                 <?php echo $reservation_amount != 0 ? "Reservation Payment" : ""; ?> </div>
-                <div
-                style="position:absolute; top: 270px; left: 500px; width: 500px; height: 20px;">
+            <div style="position:absolute; top: 270px; left: 500px; width: 500px; height: 20px;">
                 <?php echo $reservation_amount != 0 ? 1 : ""; ?> </div>
             <input type="hidden" name="user_id" value="<?php echo $reservation_amount;?>">
             <div style="position:absolute; top: 270px; left: 550px; width: 200px; height: 20px;">
@@ -137,7 +135,8 @@ table tr td {
                 <?php echo $less_ewt != 0 ? $less_ewt : "" ; ?> </div>
             <!---Payment Left Amount-->
             <div style="position:absolute; top:  380px; left: 100px; width: 200px; height: 20px;">
-                <?php  echo $total_amount_due == 0 ? "" : $total_amount_due; ?> </div>
+                <?php  echo $full_assessment//echo $total_amount_due == 0 ? "" : $total_amount_due; ?>
+            </div>
             <div style="position:absolute; top:  405px; left: 650px; width: 200px; height: 20px;">
                 <?php  echo $total_assessment; ?> </div>
             <!-- <div style="position:absolute; top:  370px; left: 50px; width: 200px; height: 20px;">
