@@ -5336,7 +5336,7 @@ class Excel extends CI_Controller {
                         ->setCellValue('Y'.$i, ($reg['paymentType'] == 'partial' && $reg['installmentDP'] != 50) && $tuition['late_enrollment_fee'] > 0 ? (float)$tuition['late_enrollment_fee'] : '')
                         ->setCellValue('Z'.$i, '=SUM(N' . $i . ':Y' . $i . ')')
                         ->setCellValue('AA'.$i, '=M' . $i . '+Z' . $i . ')')
-                        ->setCellValue('AB'.$i, ($deduction_type == 'scholarship' || ($deduction_type == 'discount' && $date_enrolled <= $sy->ar_report_date_generation)) && $tuition['scholar_type'] ? $tuition['scholar_type'] : '')
+                        ->setCellValue('AB'.$i, ($deduction_type == 'scholarship' || ($deduction_type == 'discount' && $date_enrolled <= $sy->ar_report_date_generation)) && $tuition['scholar_type'] ? $tuition['scholar_type'] .  : '')
                         // ->setCellValue('AC'.$i, $deduction_type == 'scholarship' && $tuition_discount > 0 ? $tuition['scholarship_total_assessment_rate_scholar'] : ($tuition['scholarship_total_assessment_rate_scholar'] > 0 ? $tuition['scholarship_total_assessment_rate_scholar'] : '') )
                         ->setCellValue('AC'.$i, $deduction_type == 'scholarship' && $tuition_discount > 0 ? $assessment_discount_rate_scholar : ($assessment_discount_rate_scholar > 0 ? $assessment_discount_rate_scholar : '') )
                         ->setCellValue('AD'.$i, $deduction_type == 'scholarship' && $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : ($assessment_discount_fixed > 0 ? $assessment_discount_fixed : ''))
@@ -5448,7 +5448,7 @@ class Excel extends CI_Controller {
     
                     //late tagging
                     // if($date_enrolled > $sy->ar_report_date_generation){
-                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 8, $i)->setValue($late_tagged_referrer > 0 ? date("M d,Y",strtotime($date_enrolled)) : '');
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 8, $i)->setValue($late_tagged_referrer > 0 ? ($tuition['scholar_type_late_tagged_date'] ? $tuition['scholar_type_late_tagged_date'] : date("M d,Y  ",strtotime($date_enrolled))) : '');
                         $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 9, $i)->setValue($late_tagged_referrer > 0 ? $tuition['scholar_type_late_tagged'] : '');
                         // $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 10, $i)->setValue($tuition['scholarship_total_assessment_rate_discount'] > 0 ? $tuition['scholarship_total_assessment_rate_discount'] : '');
                         $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 10, $i)->setValue($late_tagged_referrer > 0 ? $late_tagged_referrer : '');
@@ -5769,7 +5769,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('W')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('X')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('Y')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('Z')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('Z')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('AA')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('AB')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('AC')->setWidth(10);
