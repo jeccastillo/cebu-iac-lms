@@ -2622,7 +2622,7 @@ class Data_fetcher extends CI_Model {
         $scholarship_array = [];
         $late_enrollment_fee = 0;
         $ar_late_tagged_discounts_full = 0;
-        $ar_late_tagged_discounts_installment = 0;
+        $ar_late_tagged_discounts_installment = $ar_late_tagged_discounts_installment30 = $ar_late_tagged_discounts_installment50 = 0;
         $ar_discounts_full = 0;
         $ar_discounts_installment = $ar_discounts_installment30 = $ar_discounts_installment50 = 0;
         if(!isset($dr))
