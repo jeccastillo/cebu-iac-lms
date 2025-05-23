@@ -5062,7 +5062,7 @@ class Excel extends CI_Controller {
         $users = $this->db->select('tb_mas_users.*')
                     ->from('tb_mas_users')
                     // ->where_not_in('slug', $notEnrolledSlugs)
-                    ->order_by('strStudentNumber', 'ASC')
+                    ->order_by('strLastname', 'ASC')
                     ->get()
                     ->result_array();
 
