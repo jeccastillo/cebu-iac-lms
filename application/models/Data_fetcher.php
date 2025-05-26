@@ -3215,7 +3215,9 @@ class Data_fetcher extends CI_Model {
                             $ar_late_tagged_discounts_installment50 += $tuition_scholarship_installment_current50;
                         }else{
                             $ar_discounts_full = $tuition * ($scholar->tuition_fee_rate/100);
-                            $ar_discounts_installment += $tuition_scholarship_installment_current + $tuition_scholarship_installment_current30 + $tuition_scholarship_installment_current50;
+                            $ar_discounts_installment += $tuition_scholarship_installment_current;
+                            $ar_discounts_installment30 += $tuition_scholarship_installment_current30;
+                            $ar_discounts_installment50 += $tuition_scholarship_installment_current50;
                         }
                     }
                     elseif($scholar->tuition_fee_fixed > 0){
@@ -3427,6 +3429,8 @@ class Data_fetcher extends CI_Model {
         $data['scholarship_total_assessment_rate_discount_installment50'] = $total_assessment_rate_discount_installment50;
         $data['ar_discounts_full'] = $ar_discounts_full;
         $data['ar_discounts_installment'] = $ar_discounts_installment;
+        $data['ar_discounts_installment30'] = $ar_discounts_installment30;
+        $data['ar_discounts_installment50'] = $ar_discounts_installment50;
         $data['ar_late_tagged_discounts_full'] = $ar_late_tagged_discounts_full;
         $data['ar_late_tagged_discounts_installment'] = $ar_late_tagged_discounts_installment;
         $data['ar_late_tagged_discounts_installment30'] = $ar_late_tagged_discounts_installment30;
