@@ -1249,7 +1249,7 @@ class Data_fetcher extends CI_Model {
                 break;
                 case 5:
                     $this->db->where('tb_mas_registration.enumStudentType',"continuing");
-                    $this->db->where('tb_mas_registration.intROG, "3"')->where('tb_mas_registration.withdrawal_period !=',"before");
+                    $this->db->where('tb_mas_registration.intROG', "3")->where('tb_mas_registration.withdrawal_period !=',"before");
                 break; 
                 case 6:
                     $this->db->where('tb_mas_registration.enumStudentType',"shiftee");
