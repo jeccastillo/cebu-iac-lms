@@ -5281,11 +5281,6 @@ class Excel extends CI_Controller {
                             $tuition_discount_rate = $tuition['scholarship_tuition_fee_installment_rate'];
                         }
                     }
-                    
-                    if($user['intID'] == 271){
-                        print_r($tuition);
-                        die();
-                    }
 
                     $date_enrolled = date("Y-m-d",strtotime($reg['date_enlisted']));
                     if(isset($date_enrolled_array[$user['slug']])){
