@@ -5197,317 +5197,311 @@ class Excel extends CI_Controller {
             $w_status = false;
 
             if($reg && substr($user['strStudentNumber'], 0, 1) != 'T'){
-                if(in_array($reg_status, ['Enrolled', 'Officially Withdrawn', 'LOA'])){
-                    if($reg_status == 'LOA' && $reg['withdrawal_period'] == 'before'){
-                        $w_status = true;
+                if(in_array($reg_status, ['Enrolled', 'Officially Withdrawn']) || ($reg_status =='LOA' && $reg['withdrawal_period'] == 'after')){
+
+                    $ledger_data = $this->db->get_where('tb_mas_student_ledger', array('syid' => $sem, 'student_id' => $user['intID'], 'date <=' => $report_date . ' 23:59:59'))->result_array();
+    
+                    if($ledger_data){
+                        foreach($ledger_data as $ledger){
+                            
+                            if($ledger['type'] == 'other'){
+                                if(!$other){
+                                    $other[0] = date("M d,Y",strtotime($ledger['date']));
+                                    $other[1] = $ledger['name'];
+                                    $other[2] = $ledger['amount'];
+                                }else{
+                                    $other[0] = ', ' . date("M d,Y",strtotime($ledger['date']));
+                                    $other[1] = ', ' . $ledger['name'];
+                                    $other[2] += $ledger['amount'];
+                                }
+                            }else if(strpos($ledger['remarks'], 'APPLIED FROM') !== false){
+                                if(!$applied_from){
+                                    $applied_from[0] = date("M d,Y",strtotime($ledger['date']));
+                                    $applied_from[1] = $ledger['remarks'];
+                                    $applied_from[2] = $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
+                                }else{
+                                    $applied_from[0] .= ', ' . date("M d,Y",strtotime($ledger['date']));
+                                    $applied_from[1] .= ', ' . $ledger['remarks'];
+                                    $applied_from[2] += $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
+                                }
+                            }else if(strpos($ledger['remarks'], 'APPLIED TO') !== false){
+                                if(!$applied_from){
+                                    $applied_to[0] = date("M d,Y",strtotime($ledger['date']));
+                                    $applied_to[1] = $ledger['remarks'];
+                                    $applied_to[2] = $ledger['amount'] < 0 ? $ledger['amount'] : -1 * abs($ledger['amount']);
+                                }else{
+                                    $applied_to[0] = date("M d,Y",strtotime($ledger['date']));
+                                    $applied_to[1] = $ledger['remarks'];
+                                    $applied_to[2] = $ledger['amount'] < 0 ? $ledger['amount'] : -1 * abs($ledger['amount']);
+                                }
+                            }
+                        }
+                    }
+    
+                    $studentsEnrolled = true;
+                    $course = $this->data_fetcher->getProgramDetails($user['intProgramID']);
+                    $assessment_discount_rate = $assessment_discount_rate_scholar = $assessment_discount_rate_referrer = $assessment_discount_fixed = $tuition_discount_rate = 0;
+                    $late_tagged_referrer = 0;
+
+                    if($reg['paymentType'] == 'full'){
+                        if($tuition['scholarship_tuition_fee_rate'] > 0 || $tuition['scholarship_total_assessment_rate'] > 0){
+                            $assessment_discount_rate = $tuition['scholarship_total_assessment_rate'];
+                            $assessment_discount_rate_referrer = $tuition['ar_discounts_full'];
+                            $assessment_discount_rate_scholar = $tuition['scholarship_total_assessment_rate_scholar'];
+                        }
+                        if($tuition['scholarship_total_assessment_fixed'] > 0){
+                            $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed'];
+                        }
+                        if($tuition['scholarship_tuition_fee_rate'] > 0){
+                            $tuition_discount_rate = $tuition['scholarship_tuition_fee_rate'];
+                        }
+                        $late_tagged_referrer = $tuition['ar_late_tagged_discounts_full'];
+                    }else{ 
+                        // if($tuition['scholarship_total_assessment_rate_installment'] > 0){
+                            $assessment_discount_rate = $tuition['scholarship_total_assessment_rate_installment'];
+                            $assessment_discount_rate_referrer = $tuition['ar_discounts_installment'];
+                            if($reg['installmentDP'] == 50){
+                                // $assessment_discount_rate_referrer = $tuition['scholarship_total_assessment_rate_discount_installment50'];
+                                $assessment_discount_rate_scholar = $tuition['scholarship_total_assessment_rate_installment50'];
+                                $late_tagged_referrer = $tuition['ar_late_tagged_discounts_installment'];
+                            }else if($reg['installmentDP'] == 30){
+                                // $assessment_discount_rate_referrer = $tuition['scholarship_total_assessment_rate_discount_installment30'];
+                                $assessment_discount_rate_scholar = $tuition['scholarship_total_assessment_rate_installment30'];
+                                $late_tagged_referrer = $tuition['ar_late_tagged_discounts_installment30'];
+                            }else{
+                                // $assessment_discount_rate_referrer = $tuition['scholarship_total_assessment_rate_discount_installment'];
+                                $assessment_discount_rate_scholar = $tuition['scholarship_total_assessment_rate_installment'];
+                                $late_tagged_referrer = $tuition['ar_late_tagged_discounts_installment50'];
+                            }
+                        // }
+                        if($tuition['scholarship_total_assessment_fixed_installment'] > 0){
+                            $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed_installment'];
+                        }
+                        if($tuition['scholarship_tuition_fee_installment_rate'] > 0){
+                            $tuition_discount_rate = $tuition['scholarship_tuition_fee_installment_rate'];
+                        }
                     }
 
-                    if(!$w_status){
+                    $date_enrolled = date("Y-m-d",strtotime($reg['date_enlisted']));
+                    if(isset($date_enrolled_array[$user['slug']])){
+                        $date_enrolled = date("Y-m-d",strtotime($date_enrolled_array[$user['slug']]));
+                    }
+                    $tuition_discount = $total_discount = 0;
+                    $deduction_type = $reg['deduction_type'];
+                    if(!$deduction_type){
+                        if(isset($tuition['scholarship'][0])){
+                            $deduction_type = 'scholarship';
+                        }else if(isset($tuition['discount'][0])){
+                            $deduction_type = 'discount';
+                        }
+                        // $deduction_type = isset($tuition['scholarship'][0]) ? $tuition['scholarship'][0]->deduction_type : $tuition['discount']->deduction_type;
+                    }
+                    
+                    if($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'scholarship'){
+                        if($reg['paymentType'] == 'full' && $tuition['scholarship_tuition_fee_rate'] > 0)
+                        $tuition_discount = $tuition['scholarship_tuition_fee_rate'];
+                        if($reg['paymentType'] == 'partial' && $tuition['scholarship_tuition_fee_installment_rate'] > 0)
+                        $tuition_discount = $tuition['scholarship_tuition_fee_installment_rate'];
+                    }else{
+                        $total_discount = $tuition_discount_rate + $tuition['scholarship_tuition_fee_fixed'] + $tuition['scholarship_lab_fee_rate'] + $tuition['scholarship_lab_fee_fixed'] + $tuition['scholarship_misc_fee_rate'] + 
+                                            $tuition['scholarship_misc_fee_fixed'] + $tuition['nsf'] + $tuition['scholarship_misc_fee_fixed'] + $assessment_discount_rate + $assessment_discount_fixed + $assessment_discount_rate_referrer + $assessment_discount_rate_scholar;
+                    }
 
-                        $ledger_data = $this->db->get_where('tb_mas_student_ledger', array('syid' => $sem, 'student_id' => $user['intID'], 'date <=' => $report_date . ' 23:59:59'))->result_array();
-        
-                        if($ledger_data){
-                            foreach($ledger_data as $ledger){
-                                
-                                if($ledger['type'] == 'other'){
-                                    if(!$other){
-                                        $other[0] = date("M d,Y",strtotime($ledger['date']));
-                                        $other[1] = $ledger['name'];
-                                        $other[2] = $ledger['amount'];
-                                    }else{
-                                        $other[0] = ', ' . date("M d,Y",strtotime($ledger['date']));
-                                        $other[1] = ', ' . $ledger['name'];
-                                        $other[2] += $ledger['amount'];
-                                    }
-                                }else if(strpos($ledger['remarks'], 'APPLIED FROM') !== false){
-                                    if(!$applied_from){
-                                        $applied_from[0] = date("M d,Y",strtotime($ledger['date']));
-                                        $applied_from[1] = $ledger['remarks'];
-                                        $applied_from[2] = $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
-                                    }else{
-                                        $applied_from[0] .= ', ' . date("M d,Y",strtotime($ledger['date']));
-                                        $applied_from[1] .= ', ' . $ledger['remarks'];
-                                        $applied_from[2] += $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
-                                    }
-                                }else if(strpos($ledger['remarks'], 'APPLIED TO') !== false){
-                                    if(!$applied_from){
-                                        $applied_to[0] = date("M d,Y",strtotime($ledger['date']));
-                                        $applied_to[1] = $ledger['remarks'];
-                                        $applied_to[2] = $ledger['amount'] < 0 ? $ledger['amount'] : -1 * abs($ledger['amount']);
-                                    }else{
-                                        $applied_to[0] = date("M d,Y",strtotime($ledger['date']));
-                                        $applied_to[1] = $ledger['remarks'];
-                                        $applied_to[2] = $ledger['amount'] < 0 ? $ledger['amount'] : -1 * abs($ledger['amount']);
-                                    }
-                                }
-                            }
-                        }
-        
-                        $studentsEnrolled = true;
-                        $course = $this->data_fetcher->getProgramDetails($user['intProgramID']);
-                        $assessment_discount_rate = $assessment_discount_rate_scholar = $assessment_discount_rate_referrer = $assessment_discount_fixed = $tuition_discount_rate = 0;
-                        $late_tagged_referrer = 0;
+                    // Add some data
+                    $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue('A'.$i, $count)
+                        // ->setCellValue('B'.$i, str_replace(str_split('T-'), "",$user['strStudentNumber']))
+                        ->setCellValue('B'.$i, str_replace("-", "",$user['strStudentNumber']))
+                        ->setCellValue('C'.$i, strtoupper($user['strLastname']) . ', ' . strtoupper($user['strFirstname']) . ' ' . strtoupper($user['strMiddlename']))
+                        // ->setCellValue('D'.$i, isset($date_enrolled_array[$user['slug']]) ? date("M d,Y",strtotime($date_enrolled_array[$user['slug']])) : date("M d, Y",strtotime($reg['date_enlisted'])))
+                        ->setCellValue('D'.$i, date("M d,Y",strtotime($date_enrolled)))
+                        ->setCellValue('E'.$i, $reg['paymentType'] == 'full' ? 'FULL PAYMENT' : 'INSTALLMENT')
+                        ->setCellValue('F'.$i, $course['strProgramCode'])
+                        ->setCellValue('G'.$i, $reg['paymentType'] == 'full' && $tuition['tuition_before_discount'] > 0 ? (float)$tuition['tuition_before_discount'] : '')
+                        ->setCellValue('H'.$i, $reg['paymentType'] == 'full' && $tuition['lab_before_discount'] > 0 ? (float)$tuition['lab_before_discount'] : '')
+                        ->setCellValue('I'.$i, $reg['paymentType'] == 'full' && $tuition['misc_before_discount'] > 0 ? (float)$tuition['misc_before_discount'] : '')
+                        ->setCellValue('J'.$i, $reg['paymentType'] == 'full' && $tuition['thesis_fee'] > 0 ? (float)$tuition['thesis_fee'] : '')
+                        ->setCellValue('K'.$i, $reg['paymentType'] == 'full' && $tuition['new_student'] > 0 ? (float)$tuition['new_student'] : '')
+                        ->setCellValue('L'.$i, $reg['paymentType'] == 'full' && $tuition['late_enrollment_fee'] > 0 ? (float)$tuition['late_enrollment_fee'] : '')
+                        ->setCellValue('M'.$i, '=SUM(G' . $i . ':L' . $i . ')')
     
-                        if($reg['paymentType'] == 'full'){
-                            if($tuition['scholarship_tuition_fee_rate'] > 0 || $tuition['scholarship_total_assessment_rate'] > 0){
-                                $assessment_discount_rate = $tuition['scholarship_total_assessment_rate'];
-                                $assessment_discount_rate_referrer = $tuition['ar_discounts_full'];
-                                $assessment_discount_rate_scholar = $tuition['scholarship_total_assessment_rate_scholar'];
-                            }
-                            if($tuition['scholarship_total_assessment_fixed'] > 0){
-                                $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed'];
-                            }
-                            if($tuition['scholarship_tuition_fee_rate'] > 0){
-                                $tuition_discount_rate = $tuition['scholarship_tuition_fee_rate'];
-                            }
-                            $late_tagged_referrer = $tuition['ar_late_tagged_discounts_full'];
-                        }else{ 
-                            // if($tuition['scholarship_total_assessment_rate_installment'] > 0){
-                                $assessment_discount_rate = $tuition['scholarship_total_assessment_rate_installment'];
-                                $assessment_discount_rate_referrer = $tuition['ar_discounts_installment'];
-                                if($reg['installmentDP'] == 50){
-                                    // $assessment_discount_rate_referrer = $tuition['scholarship_total_assessment_rate_discount_installment50'];
-                                    $assessment_discount_rate_scholar = $tuition['scholarship_total_assessment_rate_installment50'];
-                                    $late_tagged_referrer = $tuition['ar_late_tagged_discounts_installment'];
-                                }else if($reg['installmentDP'] == 30){
-                                    // $assessment_discount_rate_referrer = $tuition['scholarship_total_assessment_rate_discount_installment30'];
-                                    $assessment_discount_rate_scholar = $tuition['scholarship_total_assessment_rate_installment30'];
-                                    $late_tagged_referrer = $tuition['ar_late_tagged_discounts_installment30'];
-                                }else{
-                                    // $assessment_discount_rate_referrer = $tuition['scholarship_total_assessment_rate_discount_installment'];
-                                    $assessment_discount_rate_scholar = $tuition['scholarship_total_assessment_rate_installment'];
-                                    $late_tagged_referrer = $tuition['ar_late_tagged_discounts_installment50'];
-                                }
-                            // }
-                            if($tuition['scholarship_total_assessment_fixed_installment'] > 0){
-                                $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed_installment'];
-                            }
-                            if($tuition['scholarship_tuition_fee_installment_rate'] > 0){
-                                $tuition_discount_rate = $tuition['scholarship_tuition_fee_installment_rate'];
-                            }
-                        }
+                        ->setCellValue('N'.$i, ($reg['paymentType'] == 'partial' && $reg['installmentDP'] == 50) && $tuition['tuition_installment_before_discount'] > 0 ? (float)$tuition['tuition_installment_before_discount'] : '')
+                        ->setCellValue('O'.$i, ($reg['paymentType'] == 'partial' && $reg['installmentDP'] == 50) && $tuition['lab_installment_before_discount'] > 0 ? (float)$tuition['lab_installment_before_discount'] : '')
+                        ->setCellValue('P'.$i, ($reg['paymentType'] == 'partial' && $reg['installmentDP'] == 50) && $tuition['misc_before_discount'] > 0 ? (float)$tuition['misc_before_discount'] : '')
+                        ->setCellValue('Q'.$i, ($reg['paymentType'] == 'partial' && $reg['installmentDP'] == 50) && $tuition['thesis_fee'] > 0 ? (float)$tuition['thesis_fee'] : '')
+                        ->setCellValue('R'.$i, ($reg['paymentType'] == 'partial' && $reg['installmentDP'] == 50) && $tuition['new_student'] > 0 ? (float)$tuition['new_student'] : '')
+                        ->setCellValue('S'.$i, ($reg['paymentType'] == 'partial' && $reg['installmentDP'] == 50) && $tuition['late_enrollment_fee'] > 0 ? (float)$tuition['late_enrollment_fee'] : '')
+                        ->setCellValue('T'.$i, ($reg['paymentType'] == 'partial' && $reg['installmentDP'] != 50) && $tuition['tuition_installment_before_discount'] > 0 ? (float)$tuition['tuition_installment_before_discount'] : '')
+                        ->setCellValue('U'.$i, ($reg['paymentType'] == 'partial' && $reg['installmentDP'] != 50) && $tuition['lab_installment_before_discount'] > 0 ? (float)$tuition['lab_installment_before_discount'] : '')
+                        ->setCellValue('V'.$i, ($reg['paymentType'] == 'partial' && $reg['installmentDP'] != 50) && $tuition['misc_before_discount'] > 0 ? (float)$tuition['misc_before_discount'] : '')
+                        ->setCellValue('W'.$i, ($reg['paymentType'] == 'partial' && $reg['installmentDP'] != 50) && $tuition['thesis_fee'] > 0 ? (float)$tuition['thesis_fee'] : '')
+                        ->setCellValue('X'.$i, ($reg['paymentType'] == 'partial' && $reg['installmentDP'] != 50) && $tuition['new_student'] > 0 ? (float)$tuition['new_student'] : '')
+                        ->setCellValue('Y'.$i, ($reg['paymentType'] == 'partial' && $reg['installmentDP'] != 50) && $tuition['late_enrollment_fee'] > 0 ? (float)$tuition['late_enrollment_fee'] : '')
+                        ->setCellValue('Z'.$i, '=SUM(N' . $i . ':Y' . $i . ')')
+                        ->setCellValue('AA'.$i, '=M' . $i . '+Z' . $i . ')')
+                        ->setCellValue('AB'.$i, ($deduction_type == 'scholarship' || ($deduction_type == 'discount' && $date_enrolled <= $sy->ar_report_date_generation)) && $tuition['scholar_type'] ? $tuition['scholar_type'] : '')
+                        // ->setCellValue('AC'.$i, $deduction_type == 'scholarship' && $tuition_discount > 0 ? $tuition['scholarship_total_assessment_rate_scholar'] : ($tuition['scholarship_total_assessment_rate_scholar'] > 0 ? $tuition['scholarship_total_assessment_rate_scholar'] : '') )
+                        ->setCellValue('AC'.$i, $deduction_type == 'scholarship' && $tuition_discount > 0 ? $assessment_discount_rate_scholar : ($assessment_discount_rate_scholar > 0 ? $assessment_discount_rate_scholar : '') )
+                        ->setCellValue('AD'.$i, $deduction_type == 'scholarship' && $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : ($assessment_discount_fixed > 0 ? $assessment_discount_fixed : ''))
+                        ->setCellValue('AE'.$i, $deduction_type == 'scholarship' && $tuition['scholarship_lab_fee_rate'] > 0 ? $tuition['scholarship_lab_fee_rate'] : '')
+                        ->setCellValue('AF'.$i, $deduction_type == 'scholarship' && $tuition['scholarship_lab_fee_fixed'] > 0 ? $tuition['scholarship_lab_fee_fixed'] : '')
+                        ->setCellValue('AG'.$i, $deduction_type == 'scholarship' && $tuition['scholarship_misc_fee_rate'] > 0 ? $tuition['scholarship_misc_fee_rate'] : '')
+                        ->setCellValue('AH'.$i, $deduction_type == 'scholarship' && $tuition['scholarship_misc_fee_fixed'] > 0 ? $tuition['scholarship_misc_fee_fixed'] : '')
+                        ->setCellValue('AI'.$i, $deduction_type == 'scholarship' && $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
+                        ->setCellValue('AJ'.$i, $deduction_type == 'scholarship' && $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
+                        // ->setCellValue('AK'.$i, ($date_enrolled <= $sy->ar_report_date_generation && $deduction_type == 'discount') && $tuition_discount > 0 ? $tuition_discount : '')
+                        // ->setCellValue('AK'.$i, ($date_enrolled <= $sy->ar_report_date_generation) && $tuition['scholarship_total_assessment_rate_discount'] > 0 ? $tuition['scholarship_total_assessment_rate_discount'] : '')
+                        ->setCellValue('AK'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $assessment_discount_rate_scholar > 0) && $assessment_discount_rate_referrer > 0 ? $assessment_discount_rate_referrer : '')
+                        // ->setCellValue('AK'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $assessment_discount_rate_scholar > 0) && $assessment_discount_rate_referrer > 0 ? $assessment_discount_rate_referrer : '')
+                        ->setCellValue('AL'.$i, ($date_enrolled <= $sy->ar_report_date_generation && $deduction_type == 'discount') && $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : '')
+                        // ->setCellValue('AE'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'scholarship') && $assessment_discount_rate > 0 ? $assessment_discount_rate : '')
+                        // ->setCellValue('AF'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'scholarship') && $assessment_discount_fixed > 0 ? $assessment_discount_fixed : '')
+                        ->setCellValue('AM'.$i, '=SUM(AC' . $i . ':AL' . $i . ')')
+                        ->setCellValue('AN'.$i, '=AA' . $i . '-AM' . $i . ')');
     
-                        $date_enrolled = date("Y-m-d",strtotime($reg['date_enlisted']));
-                        if(isset($date_enrolled_array[$user['slug']])){
-                            $date_enrolled = date("Y-m-d",strtotime($date_enrolled_array[$user['slug']]));
-                        }
-                        $tuition_discount = $total_discount = 0;
-                        $deduction_type = $reg['deduction_type'];
-                        if(!$deduction_type){
-                            if(isset($tuition['scholarship'][0])){
-                                $deduction_type = 'scholarship';
-                            }else if(isset($tuition['discount'][0])){
-                                $deduction_type = 'discount';
-                            }
-                            // $deduction_type = isset($tuition['scholarship'][0]) ? $tuition['scholarship'][0]->deduction_type : $tuition['discount']->deduction_type;
-                        }
-                        
-                        if($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'scholarship'){
-                            if($reg['paymentType'] == 'full' && $tuition['scholarship_tuition_fee_rate'] > 0)
-                            $tuition_discount = $tuition['scholarship_tuition_fee_rate'];
-                            if($reg['paymentType'] == 'partial' && $tuition['scholarship_tuition_fee_installment_rate'] > 0)
-                            $tuition_discount = $tuition['scholarship_tuition_fee_installment_rate'];
-                        }else{
-                            $total_discount = $tuition_discount_rate + $tuition['scholarship_tuition_fee_fixed'] + $tuition['scholarship_lab_fee_rate'] + $tuition['scholarship_lab_fee_fixed'] + $tuition['scholarship_misc_fee_rate'] + 
-                                                $tuition['scholarship_misc_fee_fixed'] + $tuition['nsf'] + $tuition['scholarship_misc_fee_fixed'] + $assessment_discount_rate + $assessment_discount_fixed + $assessment_discount_rate_referrer + $assessment_discount_rate_scholar;
-                        }
+                    $total_amount = '=' . $this->columnIndexToLetter(42) . '' . $i;
+                    $total_payment = 0;
     
-                        // Add some data
-                        $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A'.$i, $count)
-                            // ->setCellValue('B'.$i, str_replace(str_split('T-'), "",$user['strStudentNumber']))
-                            ->setCellValue('B'.$i, str_replace("-", "",$user['strStudentNumber']))
-                            ->setCellValue('C'.$i, strtoupper($user['strLastname']) . ', ' . strtoupper($user['strFirstname']) . ' ' . strtoupper($user['strMiddlename']))
-                            // ->setCellValue('D'.$i, isset($date_enrolled_array[$user['slug']]) ? date("M d,Y",strtotime($date_enrolled_array[$user['slug']])) : date("M d, Y",strtotime($reg['date_enlisted'])))
-                            ->setCellValue('D'.$i, date("M d,Y",strtotime($date_enrolled)))
-                            ->setCellValue('E'.$i, $reg['paymentType'] == 'full' ? 'FULL PAYMENT' : 'INSTALLMENT')
-                            ->setCellValue('F'.$i, $course['strProgramCode'])
-                            ->setCellValue('G'.$i, $reg['paymentType'] == 'full' && $tuition['tuition_before_discount'] > 0 ? (float)$tuition['tuition_before_discount'] : '')
-                            ->setCellValue('H'.$i, $reg['paymentType'] == 'full' && $tuition['lab_before_discount'] > 0 ? (float)$tuition['lab_before_discount'] : '')
-                            ->setCellValue('I'.$i, $reg['paymentType'] == 'full' && $tuition['misc_before_discount'] > 0 ? (float)$tuition['misc_before_discount'] : '')
-                            ->setCellValue('J'.$i, $reg['paymentType'] == 'full' && $tuition['thesis_fee'] > 0 ? (float)$tuition['thesis_fee'] : '')
-                            ->setCellValue('K'.$i, $reg['paymentType'] == 'full' && $tuition['new_student'] > 0 ? (float)$tuition['new_student'] : '')
-                            ->setCellValue('L'.$i, $reg['paymentType'] == 'full' && $tuition['late_enrollment_fee'] > 0 ? (float)$tuition['late_enrollment_fee'] : '')
-                            ->setCellValue('M'.$i, '=SUM(G' . $i . ':L' . $i . ')')
+                    if(count($payments) > 0){
+                        foreach($payments as $index_payment => $payment){
+                            $total_payment += isset($payment['data'][$user['intID']]) ? $payment['data'][$user['intID']]['amount'] : 0;
+    
+                            $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(40 + ($index_payment * 3), 1)
+                                ->setValue($payment['month_name'] . ' ' . $payment['year']);
         
-                            ->setCellValue('N'.$i, ($reg['paymentType'] == 'partial' && $reg['installmentDP'] == 50) && $tuition['tuition_installment_before_discount'] > 0 ? (float)$tuition['tuition_installment_before_discount'] : '')
-                            ->setCellValue('O'.$i, ($reg['paymentType'] == 'partial' && $reg['installmentDP'] == 50) && $tuition['lab_installment_before_discount'] > 0 ? (float)$tuition['lab_installment_before_discount'] : '')
-                            ->setCellValue('P'.$i, ($reg['paymentType'] == 'partial' && $reg['installmentDP'] == 50) && $tuition['misc_before_discount'] > 0 ? (float)$tuition['misc_before_discount'] : '')
-                            ->setCellValue('Q'.$i, ($reg['paymentType'] == 'partial' && $reg['installmentDP'] == 50) && $tuition['thesis_fee'] > 0 ? (float)$tuition['thesis_fee'] : '')
-                            ->setCellValue('R'.$i, ($reg['paymentType'] == 'partial' && $reg['installmentDP'] == 50) && $tuition['new_student'] > 0 ? (float)$tuition['new_student'] : '')
-                            ->setCellValue('S'.$i, ($reg['paymentType'] == 'partial' && $reg['installmentDP'] == 50) && $tuition['late_enrollment_fee'] > 0 ? (float)$tuition['late_enrollment_fee'] : '')
-                            ->setCellValue('T'.$i, ($reg['paymentType'] == 'partial' && $reg['installmentDP'] != 50) && $tuition['tuition_installment_before_discount'] > 0 ? (float)$tuition['tuition_installment_before_discount'] : '')
-                            ->setCellValue('U'.$i, ($reg['paymentType'] == 'partial' && $reg['installmentDP'] != 50) && $tuition['lab_installment_before_discount'] > 0 ? (float)$tuition['lab_installment_before_discount'] : '')
-                            ->setCellValue('V'.$i, ($reg['paymentType'] == 'partial' && $reg['installmentDP'] != 50) && $tuition['misc_before_discount'] > 0 ? (float)$tuition['misc_before_discount'] : '')
-                            ->setCellValue('W'.$i, ($reg['paymentType'] == 'partial' && $reg['installmentDP'] != 50) && $tuition['thesis_fee'] > 0 ? (float)$tuition['thesis_fee'] : '')
-                            ->setCellValue('X'.$i, ($reg['paymentType'] == 'partial' && $reg['installmentDP'] != 50) && $tuition['new_student'] > 0 ? (float)$tuition['new_student'] : '')
-                            ->setCellValue('Y'.$i, ($reg['paymentType'] == 'partial' && $reg['installmentDP'] != 50) && $tuition['late_enrollment_fee'] > 0 ? (float)$tuition['late_enrollment_fee'] : '')
-                            ->setCellValue('Z'.$i, '=SUM(N' . $i . ':Y' . $i . ')')
-                            ->setCellValue('AA'.$i, '=M' . $i . '+Z' . $i . ')')
-                            ->setCellValue('AB'.$i, ($deduction_type == 'scholarship' || ($deduction_type == 'discount' && $date_enrolled <= $sy->ar_report_date_generation)) && $tuition['scholar_type'] ? $tuition['scholar_type'] : '')
-                            // ->setCellValue('AC'.$i, $deduction_type == 'scholarship' && $tuition_discount > 0 ? $tuition['scholarship_total_assessment_rate_scholar'] : ($tuition['scholarship_total_assessment_rate_scholar'] > 0 ? $tuition['scholarship_total_assessment_rate_scholar'] : '') )
-                            ->setCellValue('AC'.$i, $deduction_type == 'scholarship' && $tuition_discount > 0 ? $assessment_discount_rate_scholar : ($assessment_discount_rate_scholar > 0 ? $assessment_discount_rate_scholar : '') )
-                            ->setCellValue('AD'.$i, $deduction_type == 'scholarship' && $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : ($assessment_discount_fixed > 0 ? $assessment_discount_fixed : ''))
-                            ->setCellValue('AE'.$i, $deduction_type == 'scholarship' && $tuition['scholarship_lab_fee_rate'] > 0 ? $tuition['scholarship_lab_fee_rate'] : '')
-                            ->setCellValue('AF'.$i, $deduction_type == 'scholarship' && $tuition['scholarship_lab_fee_fixed'] > 0 ? $tuition['scholarship_lab_fee_fixed'] : '')
-                            ->setCellValue('AG'.$i, $deduction_type == 'scholarship' && $tuition['scholarship_misc_fee_rate'] > 0 ? $tuition['scholarship_misc_fee_rate'] : '')
-                            ->setCellValue('AH'.$i, $deduction_type == 'scholarship' && $tuition['scholarship_misc_fee_fixed'] > 0 ? $tuition['scholarship_misc_fee_fixed'] : '')
-                            ->setCellValue('AI'.$i, $deduction_type == 'scholarship' && $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
-                            ->setCellValue('AJ'.$i, $deduction_type == 'scholarship' && $tuition['nsf'] > 0 ? $tuition['nsf'] : '')
-                            // ->setCellValue('AK'.$i, ($date_enrolled <= $sy->ar_report_date_generation && $deduction_type == 'discount') && $tuition_discount > 0 ? $tuition_discount : '')
-                            // ->setCellValue('AK'.$i, ($date_enrolled <= $sy->ar_report_date_generation) && $tuition['scholarship_total_assessment_rate_discount'] > 0 ? $tuition['scholarship_total_assessment_rate_discount'] : '')
-                            ->setCellValue('AK'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $assessment_discount_rate_scholar > 0) && $assessment_discount_rate_referrer > 0 ? $assessment_discount_rate_referrer : '')
-                            // ->setCellValue('AK'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $assessment_discount_rate_scholar > 0) && $assessment_discount_rate_referrer > 0 ? $assessment_discount_rate_referrer : '')
-                            ->setCellValue('AL'.$i, ($date_enrolled <= $sy->ar_report_date_generation && $deduction_type == 'discount') && $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : '')
-                            // ->setCellValue('AE'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'scholarship') && $assessment_discount_rate > 0 ? $assessment_discount_rate : '')
-                            // ->setCellValue('AF'.$i, ($date_enrolled <= $sy->ar_report_date_generation || $deduction_type == 'scholarship') && $assessment_discount_fixed > 0 ? $assessment_discount_fixed : '')
-                            ->setCellValue('AM'.$i, '=SUM(AC' . $i . ':AL' . $i . ')')
-                            ->setCellValue('AN'.$i, '=AA' . $i . '-AM' . $i . ')');
-        
-                        $total_amount = '=' . $this->columnIndexToLetter(42) . '' . $i;
-                        $total_payment = 0;
-        
-                        if(count($payments) > 0){
-                            foreach($payments as $index_payment => $payment){
-                                $total_payment += isset($payment['data'][$user['intID']]) ? $payment['data'][$user['intID']]['amount'] : 0;
-        
-                                $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(40 + ($index_payment * 3), 1)
-                                    ->setValue($payment['month_name'] . ' ' . $payment['year']);
-            
-                                $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(40 + ($index_payment * 3), $i)
-                                    ->setValue(isset($payment['data'][$user['intID']]) ? $payment['data'][$user['intID']]['date'] . ', ' . $payment['year'] : '');
+                            $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(40 + ($index_payment * 3), $i)
+                                ->setValue(isset($payment['data'][$user['intID']]) ? $payment['data'][$user['intID']]['date'] . ', ' . $payment['year'] : '');
+                            
+                            $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(41 + ($index_payment * 3), $i)
+                                ->setValue(isset($payment['data'][$user['intID']]) ? $payment['data'][$user['intID']]['or_number'] : '');
+                            
+                            $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(42 + ($index_payment * 3), $i)
+                                ->setValue(isset($payment['data'][$user['intID']]) ? $payment['data'][$user['intID']]['amount'] : '');  
                                 
-                                $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(41 + ($index_payment * 3), $i)
-                                    ->setValue(isset($payment['data'][$user['intID']]) ? $payment['data'][$user['intID']]['or_number'] : '');
-                                
-                                $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow(42 + ($index_payment * 3), $i)
-                                    ->setValue(isset($payment['data'][$user['intID']]) ? $payment['data'][$user['intID']]['amount'] : '');  
-                                    
-                                $column_letter = $this->columnIndexToLetter(42 + ($index_payment * 3));
-                                
-                                $objPHPExcel->setActiveSheetIndex(0)
-                                    ->setCellValue($this->columnIndexToLetter(40 + ($index_payment * 3)) . '2', 'DATE')
-                                    ->setCellValue($this->columnIndexToLetter(41 + ($index_payment * 3)) . '2', 'OR/INVOICE NUMBER')
-                                    ->setCellValue($this->columnIndexToLetter(42 + ($index_payment * 3)) . '2', 'AMOUNT');
-                                
-                                $objPHPExcel->getActiveSheet()->getStyle($column_letter . '4:' . $column_letter . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-                                
-                                if($index_payment > 0){
-                                    $total_amount .= '+' . $column_letter . '' . $i;
-                                }
-        
-                                $sheet = $objPHPExcel->getActiveSheet();
-                                $sheet->mergeCells($this->columnIndexToLetter(40 + ($index_payment * 3)) . '1:' . $this->columnIndexToLetter(42 + ($index_payment * 3)) . '1');
-                                $sheet->mergeCells($this->columnIndexToLetter(40 + ($index_payment * 3)) . '2:' . $this->columnIndexToLetter(40 + ($index_payment * 3)) . '3');
-                                $sheet->mergeCells($this->columnIndexToLetter(41 + ($index_payment * 3)) . '2:' . $this->columnIndexToLetter(41 + ($index_payment * 3)) . '3');
-                                $sheet->mergeCells($this->columnIndexToLetter(42 + ($index_payment * 3)) . '2:' . $this->columnIndexToLetter(42 + ($index_payment * 3)) . '3');
-            
-                                $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter(40 + ($index_payment * 3)) . '4:' . $this->columnIndexToLetter(41 + ($index_payment * 3)) . '' . $i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-                                
-                                $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(40 + ($index_payment * 3)))->setWidth(20);
-                                $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(41 + ($index_payment * 3)))->setWidth(25);
-                                $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(42 + ($index_payment * 3)))->setWidth(15);
-                            }
-                        }else{
-                            $column_letter = $this->columnIndexToLetter(42);
-                                
+                            $column_letter = $this->columnIndexToLetter(42 + ($index_payment * 3));
+                            
                             $objPHPExcel->setActiveSheetIndex(0)
-                                ->setCellValue($this->columnIndexToLetter(40) . '2', 'DATE')
-                                ->setCellValue($this->columnIndexToLetter(41) . '2', 'OR/INVOICE NUMBER')
-                                ->setCellValue($this->columnIndexToLetter(42) . '2', 'AMOUNT');
+                                ->setCellValue($this->columnIndexToLetter(40 + ($index_payment * 3)) . '2', 'DATE')
+                                ->setCellValue($this->columnIndexToLetter(41 + ($index_payment * 3)) . '2', 'OR/INVOICE NUMBER')
+                                ->setCellValue($this->columnIndexToLetter(42 + ($index_payment * 3)) . '2', 'AMOUNT');
                             
                             $objPHPExcel->getActiveSheet()->getStyle($column_letter . '4:' . $column_letter . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
                             
-                            $sheet = $objPHPExcel->getActiveSheet();
-                            $sheet->mergeCells($this->columnIndexToLetter(40) . '1:' . $this->columnIndexToLetter(42) . '1');
-                            $sheet->mergeCells($this->columnIndexToLetter(40) . '2:' . $this->columnIndexToLetter(40) . '3');
-                            $sheet->mergeCells($this->columnIndexToLetter(41) . '2:' . $this->columnIndexToLetter(41) . '3');
-                            $sheet->mergeCells($this->columnIndexToLetter(42) . '2:' . $this->columnIndexToLetter(42) . '3');
-                            $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter(40) . '4:' . $this->columnIndexToLetter(41) . '' . $i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-                            
-                            $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(40))->setWidth(20);
-                            $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(41))->setWidth(15);
-                            $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(42))->setWidth(15);
-                        }
-        
-                        if(count($payments) > 0){
-                            $last_index = 40 + (count($payments) * 3);
-                        }
-        
-                        $balance_after_payment = '=AN' . $i . '-' . $this->columnIndexToLetter($last_index) . '' . $i;
-                        $total_adjustment = '=' . $this->columnIndexToLetter($last_index + 4) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 7) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 10) . '' . $i . 
-                                            '+' . $this->columnIndexToLetter($last_index + 13) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 16) . '' . $i;
-                                            
-                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index, $i)->setValue($total_amount);
-                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 1, $i)->setValue($balance_after_payment);
-                        
-                        //applied to
-                        if($applied_from){
-                            $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 2, $i)->setValue($applied_from[0]);
-                            $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 3, $i)->setValue($applied_from[1]);
-                            $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 4, $i)->setValue($applied_from[2]);
-                        }
-                        //applied from
-                        if($applied_to){
-                            $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 5, $i)->setValue($applied_to[0]);
-                            $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 6, $i)->setValue($applied_to[1]);
-                            $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 7, $i)->setValue($applied_to[2]);
-                        }
-        
-                        //late tagging
-                        // if($date_enrolled > $sy->ar_report_date_generation){
-                            $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 8, $i)->setValue($late_tagged_referrer > 0 ? ($tuition['scholar_type_late_tagged_date'] ? $tuition['scholar_type_late_tagged_date'] : date("M d,Y  ",strtotime($date_enrolled))) : '');
-                            $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 9, $i)->setValue($late_tagged_referrer > 0 ? $tuition['scholar_type_late_tagged'] : '');
-                            // $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 10, $i)->setValue($tuition['scholarship_total_assessment_rate_discount'] > 0 ? $tuition['scholarship_total_assessment_rate_discount'] : '');
-                            $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 10, $i)->setValue($late_tagged_referrer > 0 ? $late_tagged_referrer : '');
-                            // $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 10, $i)->setValue($total_discount > 0 ? $total_discount : '');
-                        // }
-        
-                        // if($date_enrolled >= $sy->reconf_start){
-                        //     $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 14, $i)->setValue($total_discount > 0 ? $date_enrolled : '');
-                        //     $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 15, $i)->setValue($total_discount > 0 ? $tuition['scholar_type'] : '');
-                        //     $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 16, $i)->setValue($total_discount > 0 ? $total_discount : '');
-                        // }
-        
-                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 17, $i)->setValue($total_adjustment);
-                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 18, $i)->setValue('=' . $this->columnIndexToLetter($last_index + 1) . '' . $i . '-' . $this->columnIndexToLetter($last_index + 17) . '' . $i);
-                        
-                        $installment_balance = 0;
-                        if($reg['paymentType'] == 'partial'){
-                            $installment_balance = $tuition['tuition_installment_before_discount'] + $tuition['lab_installment_before_discount'] + $tuition['misc_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
-                            
-                            if($date_enrolled <= $sy->ar_report_date_generation  || $deduction_type == 'scholarship'){
-                                $installment_balance -= $tuition_discount;
-                                $installment_balance -= $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : 0;
-                                $installment_balance -= $tuition['scholarship_lab_fee_rate'] > 0 ? $tuition['scholarship_lab_fee_rate'] : 0;
-                                $installment_balance -= $tuition['scholarship_lab_fee_fixed'] > 0 ? $tuition['scholarship_lab_fee_fixed'] : 0;
-                                $installment_balance -= $tuition['scholarship_misc_fee_rate'] > 0 ? $tuition['scholarship_misc_fee_rate'] : 0;
-                                $installment_balance -= $tuition['scholarship_misc_fee_rate'] > 0 ? $tuition['scholarship_misc_fee_rate'] : 0;
-                                $installment_balance -= $tuition['nsf'] > 0 ? $tuition['nsf'] : 0;
-                                $installment_balance -= $assessment_discount_rate > 0 ? $assessment_discount_rate : 0;
-                                $installment_balance -= $assessment_discount_fixed > 0 ? $assessment_discount_fixed : 0;
-                                $installment_balance -= $applied_from ? $applied_from[2] : 0;
-                                $installment_balance -= $applied_to ? $applied_to[2] : 0;
-                            }else{
-                                $installment_balance -= $applied_from ? $applied_from[2] : 0;
-                                $installment_balance -= $applied_to ? $applied_to[2] : 0;
-                                $installment_balance -= $total_discount;
+                            if($index_payment > 0){
+                                $total_amount .= '+' . $column_letter . '' . $i;
                             }
+    
+                            $sheet = $objPHPExcel->getActiveSheet();
+                            $sheet->mergeCells($this->columnIndexToLetter(40 + ($index_payment * 3)) . '1:' . $this->columnIndexToLetter(42 + ($index_payment * 3)) . '1');
+                            $sheet->mergeCells($this->columnIndexToLetter(40 + ($index_payment * 3)) . '2:' . $this->columnIndexToLetter(40 + ($index_payment * 3)) . '3');
+                            $sheet->mergeCells($this->columnIndexToLetter(41 + ($index_payment * 3)) . '2:' . $this->columnIndexToLetter(41 + ($index_payment * 3)) . '3');
+                            $sheet->mergeCells($this->columnIndexToLetter(42 + ($index_payment * 3)) . '2:' . $this->columnIndexToLetter(42 + ($index_payment * 3)) . '3');
         
-                            $installment_balance -= $total_payment;
+                            $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter(40 + ($index_payment * 3)) . '4:' . $this->columnIndexToLetter(41 + ($index_payment * 3)) . '' . $i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                             
-                            //Aging
-                            $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 20, $i)->setValue($installment_balance > 0 ? $installment_balance - ($tuition['installment_fee'] * 5) >= 0 ? $tuition['installment_fee'] : (($tuition['installment_fee'] * 5) > $installment_balance && ($tuition['installment_fee'] * 5) - $installment_balance < $tuition['installment_fee'] ? $installment_balance - ($tuition['installment_fee'] * 4) : 0) : 0);
-                            $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 21, $i)->setValue($installment_balance > 0 ? $installment_balance - ($tuition['installment_fee'] * 4) >= 0 ? $tuition['installment_fee'] : (($tuition['installment_fee'] * 4) > $installment_balance && ($tuition['installment_fee'] * 4) - $installment_balance < $tuition['installment_fee'] ? $installment_balance - ($tuition['installment_fee'] * 3) : 0) : 0);
-                            $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 22, $i)->setValue($installment_balance > 0 ? $installment_balance - ($tuition['installment_fee'] * 3) >= 0 ? $tuition['installment_fee'] : (($tuition['installment_fee'] * 3) > $installment_balance && ($tuition['installment_fee'] * 3) - $installment_balance < $tuition['installment_fee'] ? $installment_balance - ($tuition['installment_fee'] * 2) : 0) : 0);
-                            $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 23, $i)->setValue($installment_balance > 0 ? $installment_balance - ($tuition['installment_fee'] * 2) >= 0 ? $tuition['installment_fee'] : (($tuition['installment_fee'] * 2) > $installment_balance && ($tuition['installment_fee'] * 2) - $installment_balance < $tuition['installment_fee'] ? $installment_balance - ($tuition['installment_fee']) : 0) : 0);
-                            $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 24, $i)->setValue($installment_balance > 0 ? $installment_balance - $tuition['installment_fee'] >= 0 ? $tuition['installment_fee'] : $installment_balance : 0);
-                            $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 25, $i)->setValue('=SUM(' . $this->columnIndexToLetter($last_index + 20) . '' . $i . ':' . $this->columnIndexToLetter($last_index + 24) . '' . $i . ')');
+                            $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(40 + ($index_payment * 3)))->setWidth(20);
+                            $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(41 + ($index_payment * 3)))->setWidth(25);
+                            $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(42 + ($index_payment * 3)))->setWidth(15);
                         }
-        
-                        $i++;
-                        $count++;
+                    }else{
+                        $column_letter = $this->columnIndexToLetter(42);
+                            
+                        $objPHPExcel->setActiveSheetIndex(0)
+                            ->setCellValue($this->columnIndexToLetter(40) . '2', 'DATE')
+                            ->setCellValue($this->columnIndexToLetter(41) . '2', 'OR/INVOICE NUMBER')
+                            ->setCellValue($this->columnIndexToLetter(42) . '2', 'AMOUNT');
+                        
+                        $objPHPExcel->getActiveSheet()->getStyle($column_letter . '4:' . $column_letter . '' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+                        
+                        $sheet = $objPHPExcel->getActiveSheet();
+                        $sheet->mergeCells($this->columnIndexToLetter(40) . '1:' . $this->columnIndexToLetter(42) . '1');
+                        $sheet->mergeCells($this->columnIndexToLetter(40) . '2:' . $this->columnIndexToLetter(40) . '3');
+                        $sheet->mergeCells($this->columnIndexToLetter(41) . '2:' . $this->columnIndexToLetter(41) . '3');
+                        $sheet->mergeCells($this->columnIndexToLetter(42) . '2:' . $this->columnIndexToLetter(42) . '3');
+                        $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter(40) . '4:' . $this->columnIndexToLetter(41) . '' . $i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                        
+                        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(40))->setWidth(20);
+                        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(41))->setWidth(15);
+                        $objPHPExcel->getActiveSheet()->getColumnDimension($this->columnIndexToLetter(42))->setWidth(15);
                     }
+    
+                    if(count($payments) > 0){
+                        $last_index = 40 + (count($payments) * 3);
+                    }
+    
+                    $balance_after_payment = '=AN' . $i . '-' . $this->columnIndexToLetter($last_index) . '' . $i;
+                    $total_adjustment = '=' . $this->columnIndexToLetter($last_index + 4) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 7) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 10) . '' . $i . 
+                                        '+' . $this->columnIndexToLetter($last_index + 13) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 16) . '' . $i;
+                                        
+                    $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index, $i)->setValue($total_amount);
+                    $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 1, $i)->setValue($balance_after_payment);
+                    
+                    //applied to
+                    if($applied_from){
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 2, $i)->setValue($applied_from[0]);
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 3, $i)->setValue($applied_from[1]);
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 4, $i)->setValue($applied_from[2]);
+                    }
+                    //applied from
+                    if($applied_to){
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 5, $i)->setValue($applied_to[0]);
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 6, $i)->setValue($applied_to[1]);
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 7, $i)->setValue($applied_to[2]);
+                    }
+    
+                    //late tagging
+                    // if($date_enrolled > $sy->ar_report_date_generation){
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 8, $i)->setValue($late_tagged_referrer > 0 ? ($tuition['scholar_type_late_tagged_date'] ? $tuition['scholar_type_late_tagged_date'] : date("M d,Y  ",strtotime($date_enrolled))) : '');
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 9, $i)->setValue($late_tagged_referrer > 0 ? $tuition['scholar_type_late_tagged'] : '');
+                        // $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 10, $i)->setValue($tuition['scholarship_total_assessment_rate_discount'] > 0 ? $tuition['scholarship_total_assessment_rate_discount'] : '');
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 10, $i)->setValue($late_tagged_referrer > 0 ? $late_tagged_referrer : '');
+                        // $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 10, $i)->setValue($total_discount > 0 ? $total_discount : '');
+                    // }
+    
+                    // if($date_enrolled >= $sy->reconf_start){
+                    //     $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 14, $i)->setValue($total_discount > 0 ? $date_enrolled : '');
+                    //     $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 15, $i)->setValue($total_discount > 0 ? $tuition['scholar_type'] : '');
+                    //     $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 16, $i)->setValue($total_discount > 0 ? $total_discount : '');
+                    // }
+    
+                    $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 17, $i)->setValue($total_adjustment);
+                    $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 18, $i)->setValue('=' . $this->columnIndexToLetter($last_index + 1) . '' . $i . '-' . $this->columnIndexToLetter($last_index + 17) . '' . $i);
+                    
+                    $installment_balance = 0;
+                    if($reg['paymentType'] == 'partial'){
+                        $installment_balance = $tuition['tuition_installment_before_discount'] + $tuition['lab_installment_before_discount'] + $tuition['misc_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
+                        
+                        if($date_enrolled <= $sy->ar_report_date_generation  || $deduction_type == 'scholarship'){
+                            $installment_balance -= $tuition_discount;
+                            $installment_balance -= $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : 0;
+                            $installment_balance -= $tuition['scholarship_lab_fee_rate'] > 0 ? $tuition['scholarship_lab_fee_rate'] : 0;
+                            $installment_balance -= $tuition['scholarship_lab_fee_fixed'] > 0 ? $tuition['scholarship_lab_fee_fixed'] : 0;
+                            $installment_balance -= $tuition['scholarship_misc_fee_rate'] > 0 ? $tuition['scholarship_misc_fee_rate'] : 0;
+                            $installment_balance -= $tuition['scholarship_misc_fee_rate'] > 0 ? $tuition['scholarship_misc_fee_rate'] : 0;
+                            $installment_balance -= $tuition['nsf'] > 0 ? $tuition['nsf'] : 0;
+                            $installment_balance -= $assessment_discount_rate > 0 ? $assessment_discount_rate : 0;
+                            $installment_balance -= $assessment_discount_fixed > 0 ? $assessment_discount_fixed : 0;
+                            $installment_balance -= $applied_from ? $applied_from[2] : 0;
+                            $installment_balance -= $applied_to ? $applied_to[2] : 0;
+                        }else{
+                            $installment_balance -= $applied_from ? $applied_from[2] : 0;
+                            $installment_balance -= $applied_to ? $applied_to[2] : 0;
+                            $installment_balance -= $total_discount;
+                        }
+    
+                        $installment_balance -= $total_payment;
+                        
+                        //Aging
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 20, $i)->setValue($installment_balance > 0 ? $installment_balance - ($tuition['installment_fee'] * 5) >= 0 ? $tuition['installment_fee'] : (($tuition['installment_fee'] * 5) > $installment_balance && ($tuition['installment_fee'] * 5) - $installment_balance < $tuition['installment_fee'] ? $installment_balance - ($tuition['installment_fee'] * 4) : 0) : 0);
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 21, $i)->setValue($installment_balance > 0 ? $installment_balance - ($tuition['installment_fee'] * 4) >= 0 ? $tuition['installment_fee'] : (($tuition['installment_fee'] * 4) > $installment_balance && ($tuition['installment_fee'] * 4) - $installment_balance < $tuition['installment_fee'] ? $installment_balance - ($tuition['installment_fee'] * 3) : 0) : 0);
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 22, $i)->setValue($installment_balance > 0 ? $installment_balance - ($tuition['installment_fee'] * 3) >= 0 ? $tuition['installment_fee'] : (($tuition['installment_fee'] * 3) > $installment_balance && ($tuition['installment_fee'] * 3) - $installment_balance < $tuition['installment_fee'] ? $installment_balance - ($tuition['installment_fee'] * 2) : 0) : 0);
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 23, $i)->setValue($installment_balance > 0 ? $installment_balance - ($tuition['installment_fee'] * 2) >= 0 ? $tuition['installment_fee'] : (($tuition['installment_fee'] * 2) > $installment_balance && ($tuition['installment_fee'] * 2) - $installment_balance < $tuition['installment_fee'] ? $installment_balance - ($tuition['installment_fee']) : 0) : 0);
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 24, $i)->setValue($installment_balance > 0 ? $installment_balance - $tuition['installment_fee'] >= 0 ? $tuition['installment_fee'] : $installment_balance : 0);
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 25, $i)->setValue('=SUM(' . $this->columnIndexToLetter($last_index + 20) . '' . $i . ':' . $this->columnIndexToLetter($last_index + 24) . '' . $i . ')');
+                    }
+    
+                    $i++;
+                    $count++;
                 }
             }
         }
