@@ -165,5 +165,11 @@ table tr td {
 </body>
 <script>
 const request = <?php echo json_encode($request); ?>;
+const type = "<?php echo $type; ?>";
+const payment_type = "<?php echo $payment_type; ?>";
+const level = "<?php echo $level; ?>";
 console.log(request);
+console.log(type);
+console.log(payment_type);
+console.log(level);
 </script>
