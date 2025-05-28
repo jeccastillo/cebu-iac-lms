@@ -164,8 +164,6 @@ table tr td {
     </div>
 </body>
 <script>
-const request = "<?php echo $request; ?>";
-const $type = "<?php echo $type; ?>";
-console.log(request);
-console.log($type);
+const cashier = "<?php echo $cashier_name; ?>";
+console.log(cashier);
 </script>
