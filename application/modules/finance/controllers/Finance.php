@@ -515,8 +515,7 @@ class Finance extends CI_Controller {
         
         $this->data['module'] = "finance";        
         $this->data['page'] = "scholarship_view_students";
-        $this->data['opentree'] = "cashier_admin";
-                                                                
+        $this->data['opentree'] = "cashier_admin";    
 
         $this->load->view("common/header",$this->data);
         $this->load->view("scholarship_view_students",$this->data);
@@ -2038,7 +2037,32 @@ class Finance extends CI_Controller {
         $this->load->view("common/footer",$this->data);            
     }
     
-    
+    public function get_payments_without_OR_date()
+    {
+        $payments =  $this->db->select('payment_details.*')
+                                    ->where(array('or_number !=' => null, 'or_date' => null))
+                                    ->get('payment_details')
+                                    ->result_array();
+
+        echo json_encode($payments);
+    }
+
+    public function sync_payment_details_or_date(){
+
+        $response = $this->input->post();
+        $response = json_decode($response['data']);
+
+        foreach($response as $data){
+            $item = $this->db->get_where('payment_details',array('id'=>$data->id))->first_row();
+            if(isset($item))
+                $this->data_poster->post_data('payment_details',$data,$data->id,'id');
+            
+        }
+        
+        $ret['success'] = true;
+           
+        echo json_encode($ret);
+    }
     
     public function is_admin()
     {
