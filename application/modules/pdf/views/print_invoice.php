@@ -112,9 +112,10 @@ table tr td {
                 style="position:absolute; top: 330px; left:10px; width: 300px; height: 20px;border-top:1px solid #333;text-align:center;">
                 SIGNATURE</div> <?php endif; ?> <div
                 style="position:absolute; top: 270px; left: 10px; width: 500px; height: 20px;">
-                <?php echo $reservation_amount != 0 ? "Reservation Payment" : ""; ?> </div>
+                <?php echo $reservation_amount != 0 ? "Reservation Payment" : $reservation_amount; ?>
+            </div>
             <div style="position:absolute; top: 270px; left: 500px; width: 500px; height: 20px;">
-                <?php echo $reservation_amount != 0 ? 1 : ""; ?> </div>
+                <?php echo $reservation_amount != 0 ? 1 : $reservation_amount; ?> </div>
             <input type="hidden" name="user_id" value="<?php echo $reservation_amount;?>">
             <div style="position:absolute; top: 270px; left: 550px; width: 200px; height: 20px;">
                 <?php echo $reservation_amount != 0 ? "-".$reservation_amount : ""; ?> </div>
@@ -162,3 +163,9 @@ table tr td {
         </section>
     </div>
 </body>
+<script>
+const request = "<?php echo $request; ?>";
+const $type = "<?php echo $type; ?>";
+console.log(request);
+console.log($type);
+</script>
