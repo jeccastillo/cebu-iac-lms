@@ -401,6 +401,35 @@ new Vue({
         })
         Swal.showLoading();
         
+            //update payment details that has OR and no OR date
+            // axios
+            //     .get(base_url + 'finance/get_payments_without_OR_date', {
+            //         headers: {
+            //             Authorization: `Bearer ${window.token}`
+            //         },
+            //     })
+            //     .then((data) => {
+            //         var formdata = new FormData();                    
+            //         formdata.append('data',JSON.stringify(data.data));
+
+            //         axios.post(api_url + 'finance/get_or_date', formdata,{
+            //             headers: {
+            //                 Authorization: `Bearer ${window.token}`
+            //             },
+            //         })
+
+            //         .then((data) => {
+            //             var formdata = new FormData();                    
+            //             formdata.append('data',JSON.stringify(data.data.data));
+
+            //             axios.post(base_url + 'finance/sync_payment_details_or_date', formdata,{
+            //                 headers: {
+            //                     Authorization: `Bearer ${window.token}`
+            //                 },
+            //             })
+            //         });
+            //     });
+
         axios
             .post(api_url + 'finance/sync_payments', this.sync_data,{
                 headers: {
@@ -445,11 +474,6 @@ new Vue({
                     });
             });
         });
-        
-
-   
-
-
     },
 
     methods: { 
