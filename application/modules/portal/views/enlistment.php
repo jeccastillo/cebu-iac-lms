@@ -26,7 +26,7 @@
                         </div>
                     </div>
                 </div>      
-                <div class="box-body" v-if="!reg">
+                <div class="box-body" v-if="!reg && deficiencies == 0">
                     <div v-if="!enlistment">              
                         <h4>Add Subject for Enlistment</h4>
                         <div class="row">
@@ -153,13 +153,14 @@
                         </div>
                     </div>
                 </div> 
+                <div class="box-body text-center" v-else-if="deficiencies > 0">
+                    <h3>You have {{ deficiencies }} deficiencies</h3>
+                </div>          
                 <div class="box-body text-center" v-else>
                     <h3>You are Already Enlisted</h3>
                     <p>Please ask the registrar to reset status for advising</p>
                 </div>          
-            </div>         
-                                                       
-            
+            </div>                                                                            
         </section>
     </div>
 </aside>
@@ -187,6 +188,7 @@ new Vue({
         id: '<?php echo $id; ?>',
         sem: '<?php echo $sem; ?>',         
         sy: [],
+        deficiencies: 0;
         available_subjects: [],
         selected_subject: undefined,
         selected_subjects: [],
@@ -245,6 +247,7 @@ new Vue({
                 this.dept_head = data.data.dept_head;                    
                 this.enlistment = data.data.enlistment;
                 this.reg = data.data.registration;
+                this.deficiencies = data.data.deficiencies_count;
                 if(this.enlistment)
                     switch(this.enlistment.status){
                         case 'pending':
