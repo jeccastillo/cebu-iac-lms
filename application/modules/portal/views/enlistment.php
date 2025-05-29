@@ -154,7 +154,7 @@
                     </div>
                 </div> 
                 <div class="box-body text-center" v-else-if="deficiencies > 0">
-                    <h3>You have {{ deficiencies }} deficiencies</h3>                    
+                    <h3>You have {{ deficiencies }} deficiencies</h3>
                 </div>          
                 <div class="box-body text-center" v-else>
                     <h3>You are Already Enlisted</h3>
