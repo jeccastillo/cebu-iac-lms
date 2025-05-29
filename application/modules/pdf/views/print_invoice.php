@@ -112,10 +112,16 @@ table tr td {
                 style="position:absolute; top: 330px; left:10px; width: 300px; height: 20px;border-top:1px solid #333;text-align:center;">
                 SIGNATURE</div> <?php endif; ?> <div
                 style="position:absolute; top: 270px; left: 10px; width: 500px; height: 20px;">
-                <?php echo $reservation_amount != 0 ? "Reservation Payment" : ""; ?> </div>
+                <?php if ($type == "UG Tuition Fee" && $payment_type == 'partial'): ?>
+                <?php echo $reservation_amount != 0 ? "Reservation Payment" : $reservation_amount; ?>
+                <?php else: ?> <?php echo $reservation_amount != 0 ? "Reservation Payment" : ''; ?>
+                <?php endif; ?> </div>
             <div style="position:absolute; top: 270px; left: 500px; width: 500px; height: 20px;">
-                <?php echo $reservation_amount != 0 ? 1 : ""; ?> </div>
+                <?php if ($type == "UG Tuition Fee" && $payment_type == 'partial'): ?>
+                <?php echo $reservation_amount != 0 ? 1 : $reservation_amount; ?> <?php else: ?>
+                <?php echo $reservation_amount != 0 ? 1 : ''; ?> <?php endif; ?> </div>
             <input type="hidden" name="user_id" value="<?php echo $reservation_amount;?>">
+            <input type="hidden" name="id" value="<?php echo $level;?>">
             <div style="position:absolute; top: 270px; left: 550px; width: 200px; height: 20px;">
                 <?php echo $reservation_amount != 0 ? "-".$reservation_amount : ""; ?> </div>
             <div style="position:absolute; top:  270px; left: 650px; width: 200px; height: 20px;">
@@ -162,3 +168,13 @@ table tr td {
         </section>
     </div>
 </body>
+<script>
+const request = <?php echo json_encode($request); ?>;
+const type = "<?php echo $type; ?>";
+const payment_type = "<?php echo $payment_type; ?>";
+const level = "<?php echo $level; ?>";
+console.log(request);
+console.log(type);
+console.log(payment_type);
+console.log(level);
+</script>

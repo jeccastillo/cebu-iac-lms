@@ -5194,9 +5194,10 @@ class Excel extends CI_Controller {
                     ->first_row('array');
             $reg_status = $this->data_fetcher->getRegistrationStatus($user['intID'],$sem);
             $tuition = $this->data_fetcher->getTuition($user['intID'], $sem);
+            $w_status = false;
 
             if($reg && substr($user['strStudentNumber'], 0, 1) != 'T'){
-                if(in_array($reg_status, ['Enrolled', 'Officially Withdrawn', 'LOA'])){
+                if(in_array($reg_status, ['Enrolled', 'Officially Withdrawn']) || ($reg_status =='LOA' && $reg['withdrawal_period'] == 'after')){
 
                     $ledger_data = $this->db->get_where('tb_mas_student_ledger', array('syid' => $sem, 'student_id' => $user['intID'], 'date <=' => $report_date . ' 23:59:59'))->result_array();
     
@@ -5262,12 +5263,15 @@ class Excel extends CI_Controller {
                             if($reg['installmentDP'] == 50){
                                 // $assessment_discount_rate_referrer = $tuition['scholarship_total_assessment_rate_discount_installment50'];
                                 $assessment_discount_rate_scholar = $tuition['scholarship_total_assessment_rate_installment50'];
+                                $late_tagged_referrer = $tuition['ar_late_tagged_discounts_installment'];
                             }else if($reg['installmentDP'] == 30){
                                 // $assessment_discount_rate_referrer = $tuition['scholarship_total_assessment_rate_discount_installment30'];
                                 $assessment_discount_rate_scholar = $tuition['scholarship_total_assessment_rate_installment30'];
+                                $late_tagged_referrer = $tuition['ar_late_tagged_discounts_installment30'];
                             }else{
                                 // $assessment_discount_rate_referrer = $tuition['scholarship_total_assessment_rate_discount_installment'];
                                 $assessment_discount_rate_scholar = $tuition['scholarship_total_assessment_rate_installment'];
+                                $late_tagged_referrer = $tuition['ar_late_tagged_discounts_installment50'];
                             }
                         // }
                         if($tuition['scholarship_total_assessment_fixed_installment'] > 0){
@@ -5276,7 +5280,6 @@ class Excel extends CI_Controller {
                         if($tuition['scholarship_tuition_fee_installment_rate'] > 0){
                             $tuition_discount_rate = $tuition['scholarship_tuition_fee_installment_rate'];
                         }
-                        $late_tagged_referrer = $tuition['ar_late_tagged_discounts_installment'];
                     }
 
                     $date_enrolled = date("Y-m-d",strtotime($reg['date_enlisted']));
@@ -8715,8 +8718,8 @@ class Excel extends CI_Controller {
                 ->setCellValue('G'.$i, $payment_detail['is_cash'] ? 'Cash Sales' : 'Charge Sales')
                 ->setCellValue('H'.$i, $payment_detail['invoice_date'] ? date("d-M-Y", strtotime($payment_detail['invoice_date'])) : date("d-M-Y", strtotime($payment_detail['created_at'])))
                 ->setCellValue('I'.$i, $payment_detail['invoice_number'])
-                ->setCellValue('J'.$i, $tuition_fee == 0 && $payment_detail['invoice_amount_ves'] > 0 ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount_ves'])
-                ->setCellValue('K'.$i, $payment_detail['description'] == 'Tuition Fee' ? $tuition_fee - $total_discount : ($payment_detail['invoice_amount_ves'] == 0 ? $payment_detail['subtotal_order'] : 0))
+                ->setCellValue('J'.$i, $tuition_fee == 0 && $payment_detail['invoice_amount_ves'] == 0 ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount_ves'])
+                ->setCellValue('K'.$i, $tuition_fee - $total_discount)
                 ->setCellValue('L'.$i, $payment_detail['invoice_amount_vzrs'])
                 ->setCellValue('M'.$i, '=SUM(J' . $i . ':L' . $i . ')')
                 ->setCellValue('N'.$i, $tuition_fee > 0 ? '=PRODUCT(J' . $i . ',.12)' : 0)
