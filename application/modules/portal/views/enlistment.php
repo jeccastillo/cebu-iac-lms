@@ -26,7 +26,7 @@
                         </div>
                     </div>
                 </div>      
-                <div class="box-body" v-if="!reg">
+                <div class="box-body" v-if="!reg && deficiencies == 0">
                     <div v-if="!enlistment">              
                         <h4>Add Subject for Enlistment</h4>
                         <div class="row">
@@ -153,6 +153,9 @@
                         </div>
                     </div>
                 </div> 
+                <div class="box-body text-center" v-else-if="deficiencies > 0">
+                    <h3>You have {{ deficiencies }} deficiencies</h3>                    
+                </div>          
                 <div class="box-body text-center" v-else>
                     <h3>You are Already Enlisted</h3>
                     <p>Please ask the registrar to reset status for advising</p>
