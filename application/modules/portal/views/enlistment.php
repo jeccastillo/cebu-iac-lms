@@ -188,7 +188,7 @@ new Vue({
         id: '<?php echo $id; ?>',
         sem: '<?php echo $sem; ?>',         
         sy: [],
-        deficiencies: 0;
+        deficiencies: 0,
         available_subjects: [],
         selected_subject: undefined,
         selected_subjects: [],
