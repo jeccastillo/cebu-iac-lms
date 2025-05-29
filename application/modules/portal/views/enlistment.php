@@ -187,6 +187,7 @@ new Vue({
         id: '<?php echo $id; ?>',
         sem: '<?php echo $sem; ?>',         
         sy: [],
+        deficiencies: 0;
         available_subjects: [],
         selected_subject: undefined,
         selected_subjects: [],
@@ -245,6 +246,7 @@ new Vue({
                 this.dept_head = data.data.dept_head;                    
                 this.enlistment = data.data.enlistment;
                 this.reg = data.data.registration;
+                this.deficiencies = data.data.deficiencies_count;
                 if(this.enlistment)
                     switch(this.enlistment.status){
                         case 'pending':
