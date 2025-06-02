@@ -2692,7 +2692,7 @@ class Data_fetcher extends CI_Model {
                          ->get('tb_mas_tuition_year_misc')->result_array();  
         
                          
-        if($stype == 'new' || $stype == 'freshman' || $stype == 'transferee'){
+        if($stype == 'new' || $stype == 'freshman' || $stype == 'transferee' || $stype == '2nd Degree iAC' || $stype == '2nd Degree'){
             $new_student_data = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'new_student'))
                          ->get('tb_mas_tuition_year_misc')->result_array();
 
@@ -2850,7 +2850,7 @@ class Data_fetcher extends CI_Model {
 
         foreach($misc as $m){         
             if($level == "college"){
-                if(($stype != 'new' && $stype != 'freshman') || strtoupper(trim($m['name'])) != 'ID VALIDATION' ){                
+                if(($stype != 'new' && $stype != 'freshman' && $stype != '2nd Degree' && $stype != '2nd Degree iAC') || strtoupper(trim($m['name'])) != 'ID VALIDATION' ){                
                     $misc_list[$m['name']] = getExtraFee($m, $class_type, 'misc');
                     $total_misc += $misc_list[$m['name']];
                 }
@@ -2858,7 +2858,7 @@ class Data_fetcher extends CI_Model {
 
             }
             else
-                if(($stype != 'new' && $stype != 'freshman') || strtoupper(trim($m['name'])) != 'ID VALIDATION' ){   
+                if(($stype != 'new' && $stype != 'freshman' && $stype != '2nd Degree' && $stype != '2nd Degree iAC') || strtoupper(trim($m['name'])) != 'ID VALIDATION' ){   
                     switch($year_level){
                         case 1:
                             $ctype = 'regular';
