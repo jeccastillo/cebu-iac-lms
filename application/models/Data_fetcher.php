@@ -2692,7 +2692,7 @@ class Data_fetcher extends CI_Model {
                          ->get('tb_mas_tuition_year_misc')->result_array();  
         
                          
-        if($stype == 'new' || $stype == 'freshman' || $stype == 'transferee'){
+        if($stype == 'new' || $stype == 'freshman' || $stype == 'transferee' || $stype == '2nd Degree iAC' || $stype == '2nd Degree'){
             $new_student_data = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'new_student'))
                          ->get('tb_mas_tuition_year_misc')->result_array();
 
@@ -2850,7 +2850,7 @@ class Data_fetcher extends CI_Model {
 
         foreach($misc as $m){         
             if($level == "college"){
-                if(($stype != 'new' && $stype != 'freshman') || strtoupper(trim($m['name'])) != 'ID VALIDATION' ){                
+                if(($stype != 'new' && $stype != 'freshman' && $stype != 'transferee' && $stype != '2nd Degree' && $stype != '2nd Degree iAC') || strtoupper(trim($m['name'])) != 'ID VALIDATION' ){                
                     $misc_list[$m['name']] = getExtraFee($m, $class_type, 'misc');
                     $total_misc += $misc_list[$m['name']];
                 }
@@ -2858,7 +2858,7 @@ class Data_fetcher extends CI_Model {
 
             }
             else
-                if(($stype != 'new' && $stype != 'freshman') || strtoupper(trim($m['name'])) != 'ID VALIDATION' ){   
+                if(($stype != 'new' && $stype != 'freshman' && $stype != 'transferee' && $stype != '2nd Degree' && $stype != '2nd Degree iAC') || strtoupper(trim($m['name'])) != 'ID VALIDATION' ){   
                     switch($year_level){
                         case 1:
                             $ctype = 'regular';
@@ -2921,7 +2921,7 @@ class Data_fetcher extends CI_Model {
         $tuition_fee_rate = $tuition_fee_installment_rate = $tuition_fee_fixed = $lab_fee_rate = $lab_fee_fixed = $misc_fee_rate = $misc_fee_fixed = 0;
         $total_assessment_rate = $total_assessment_fixed = $total_assessment_rate_installment = $total_assessment_rate_installment30 = $total_assessment_rate_installment50 = $total_assessment_fixed_installment = 0;
         $total_assessment_rate_scholarship = $total_assessment_rate_discount = $total_assessment_rate_discount_installment = $total_assessment_rate_discount_installment30 = $total_assessment_rate_discount_installment50 = 0;
-        $total_assessment += $tuition + $total_lab + $total_misc + $total_new_student + $nsf + $total_internship_fee + $total_foreign + $late_enrollment_fee;
+        $total_assessment += $tuition + $total_lab + $total_misc + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
         $total_assessment_installment += ($tuition  + ($tuition * ($tuition_year['installmentIncrease']/100)))   
                                                 + ($total_lab + ($total_lab * ($tuition_year['installmentIncrease']/100)))
                                                 + $total_misc + $total_new_student + $nsf + $total_internship_fee + $total_foreign;
@@ -2954,6 +2954,7 @@ class Data_fetcher extends CI_Model {
 
                 if($scholar->total_assessment_rate > 0 || $scholar->total_assessment_fixed > 0){                
                     
+
                     $scholar->total_assessment_rate = intval($scholar->total_assessment_rate);
                     $scholar->total_assessment_fixed = intval($scholar->total_assessment_fixed);
 
