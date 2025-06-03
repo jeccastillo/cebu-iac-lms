@@ -5585,16 +5585,17 @@ class Excel extends CI_Controller {
                     ->setCellValue($this->columnIndexToLetter($last_index + 15) . '3', 'REMARKS')
                     ->setCellValue($this->columnIndexToLetter($last_index + 16) . '3', 'AMOUNT')
                     ->setCellValue($this->columnIndexToLetter($last_index + 17) . '1', 'TOTAL ADJUSTMENT')
-                    ->setCellValue($this->columnIndexToLetter($last_index + 18) . '1', 'BALANCE AS OF (' . date("M d, Y", strtotime($report_date)) . ')')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 18) . '1', 'BALANCE AFTER ADJUSTMENT')
                     ->setCellValue($this->columnIndexToLetter($last_index + 19) . '1', 'EXTERNAL SCHOLARSHIPS/DISCOUNTS')
                     ->setCellValue($this->columnIndexToLetter($last_index + 19) . '2', 'TYPE')
                     ->setCellValue($this->columnIndexToLetter($last_index + 20) . '2', 'TUITION')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 22) . '2', 'REFERRAL DISCOUNT')
                     ->setCellValue($this->columnIndexToLetter($last_index + 20) . '3', 'RATE')
                     ->setCellValue($this->columnIndexToLetter($last_index + 21) . '3', 'FIX')
                     ->setCellValue($this->columnIndexToLetter($last_index + 22) . '3', 'RATE')
                     ->setCellValue($this->columnIndexToLetter($last_index + 23) . '3', 'FIX')
                     ->setCellValue($this->columnIndexToLetter($last_index + 24) . '1', 'TOTAL EXTERNAL SCHOLARSHIP/DISCOUNT')
-                    ->setCellValue($this->columnIndexToLetter($last_index + 25) . '1', 'TOTAL BALANCE AS OF (' . date("M d, Y", strtotime($report_date)) . ')')
+                    ->setCellValue($this->columnIndexToLetter($last_index + 25) . '1', 'BALANCE AS OF (' . date("M d, Y", strtotime($report_date)) . ')')
                     ->setCellValue($this->columnIndexToLetter($last_index + 27) . '1', '1ST')
                     ->setCellValue($this->columnIndexToLetter($last_index + 28) . '1', '2ND')
                     ->setCellValue($this->columnIndexToLetter($last_index + 29) . '1', '3RD')
@@ -5703,7 +5704,7 @@ class Excel extends CI_Controller {
         }
 
 
-        $objPHPExcel->getActiveSheet()->getStyle('A1:' . $this->columnIndexToLetter($last_index + 18) . '3')->applyFromArray(
+        $objPHPExcel->getActiveSheet()->getStyle('A1:' . $this->columnIndexToLetter($last_index + 25) . '3')->applyFromArray(
             array(
                 'font'  => array(
                     'bold'  => true,
@@ -5768,8 +5769,10 @@ class Excel extends CI_Controller {
                 'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
             )
         );
-        $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 27) . '1:' . $this->columnIndexToLetter($last_index + 32) . '3')->applyFromArray($style);
-        $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 32) . '1')->getAlignment()->setWrapText(true);
+        // $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 27) . '1:' . $this->columnIndexToLetter($last_index + 32) . '3')->applyFromArray($style);
+        // $objPHPExcel->getActiveSheet()->getStyle($this->columnIndexToLetter($last_index + 32) . '1')->getAlignment()->setWrapText(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:' . $this->columnIndexToLetter($last_index + 32) . '3')->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:' . $this->columnIndexToLetter($last_index + 32) . '3')->getAlignment()->setWrapText(true);
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(40);
