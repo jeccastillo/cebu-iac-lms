@@ -243,7 +243,6 @@ new Vue({
         },
         type_options: [],
         status_options:[],
-             
     },
 
     mounted() {
