@@ -3212,7 +3212,7 @@ class Data_fetcher extends CI_Model {
                             $ar_late_tagged_discounts_installment30 += $tuition_scholarship_installment_current30;
                             $ar_late_tagged_discounts_installment50 += $tuition_scholarship_installment_current50;
                         }else{
-                            $ar_discounts_full += $tuition * ($scholar->tuition_fee_rate/100);
+                            $ar_discounts_full += ($tuition - $scholarship_grand_total) * ($scholar->tuition_fee_rate/100);
                             $ar_discounts_installment += $tuition_scholarship_installment_current;
                             $ar_discounts_installment30 += $tuition_scholarship_installment_current30;
                             $ar_discounts_installment50 += $tuition_scholarship_installment_current50;
