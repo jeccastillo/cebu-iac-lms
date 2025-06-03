@@ -44,6 +44,13 @@
                                     <option value="discount">discount</option>                        
                                 </select>
                             </div>
+                            <div class="col-md-6">
+                                <label>Deduction From:</label>
+                                <select required type="text" v-model="scholarship.deduction_from" class="form-control">    
+                                    <option value="in-house">in-house</option>                        
+                                    <option value="external">external</option>                        
+                                </select>
+                            </div>
                         </div>   
                         <hr />
                         <div>
@@ -218,6 +225,7 @@ new Vue({
             description: undefined,
             status: undefined,
             deduction_type: undefined,
+            deduction_from: undefined,
             type: undefined,
             created_by_id: undefined,
             tuition_fee_rate: undefined,
@@ -235,7 +243,6 @@ new Vue({
         },
         type_options: [],
         status_options:[],
-             
     },
 
     mounted() {
