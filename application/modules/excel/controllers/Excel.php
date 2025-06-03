@@ -5195,7 +5195,7 @@ class Excel extends CI_Controller {
             $reg_status = $this->data_fetcher->getRegistrationStatus($user['intID'],$sem);
             $tuition = $this->data_fetcher->getTuition($user['intID'], $sem);
             $w_status = false;
-            if($user['intID'] == 271){
+            if($user['intID'] == 37){
                 print_r($tuition);
                 print_r($user);
                 die();
