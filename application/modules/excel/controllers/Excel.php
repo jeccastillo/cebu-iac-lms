@@ -8653,7 +8653,7 @@ class Excel extends CI_Controller {
 
         foreach($payment_details as $index => $payment_detail){
             $payment_for = $particular = '';
-            $tuition_fee = $tuition_discount = $total_discount = $assessment_discount_rate = $assessment_discount_fixed = $tuition_discount_rate = 0;
+            $tuition_fee = $tuition_discount = $total_discount = $assessment_discount_rate = $assessment_discount_fixed = $tuition_discount_rate = $vatable_exempt = $vatable_amount = 0;
 
             $student = $this->db->get_where('tb_mas_users', array('slug' => $payment_detail['student_number']))->first_row('array');
             $tuition = $student ? $this->data_fetcher->getTuition($student['intID'], $payment_detail['sy_reference']) : '';
@@ -8718,17 +8718,31 @@ class Excel extends CI_Controller {
                         $total_discount = $tuition_discount_rate + $tuition['scholarship_tuition_fee_fixed'] + $tuition['scholarship_lab_fee_rate'] + $tuition['scholarship_lab_fee_fixed'] + $tuition['scholarship_misc_fee_rate'] + 
                                             $tuition['scholarship_misc_fee_fixed'] + $tuition['nsf'] + $tuition['scholarship_misc_fee_fixed'] + $assessment_discount_rate + $assessment_discount_fixed;
                     }
-
                 }
-
             }
 
             if(strpos($payment_detail['description'], 'Tuition') !== false || strpos($payment_detail['description'], 'Reservation') !== false || strpos($payment_detail['description'], 'Application') !== false){
                 $payment_for = $payment_detail['description'];
                 $particular = '';
+                if(strpos($payment_detail['description'], 'Tuition') !== false){
+                    $vatable_exempt = $tuition_fee - $total_discount;
+                }else{
+                    $vatable_exempt = $payment_detail['subtotal_order'];
+                }
             }else{
                 $payment_for = 'Others';
                 $particular = $payment_detail['description'];
+                $vatable_particulars = ['Merchandise', 'Shirt', 'Jacket'];
+
+                foreach ($vatable_particulars as $key => $value) {
+                    if(strpos($payment_detail['description'], $value) !== false){
+                        $vatable_amount = $payment_detail['subtotal_order'];
+                        $vatable_exempt = 0;
+                        break;
+                    }else{
+                        $vatable_exempt = $payment_detail['subtotal_order'];
+                    }
+                }
             }
 
 
@@ -8737,12 +8751,13 @@ class Excel extends CI_Controller {
                 ->setCellValue('A'.$i, $index + 1)
                 ->setCellValue('B'.$i, $student ? str_replace("-", "", $student['strStudentNumber']) : '')
                 ->setCellValue('C'.$i, ucfirst($payment_detail['last_name']) . ', ' . ucfirst($payment_detail['first_name']))
-                ->setCellValue('D'.$i, $payment_detail['description'])
+                ->setCellValue('D'.$i, $payment_for)
                 ->setCellValue('E'.$i, $particular)
                 ->setCellValue('F'.$i, $payment_detail['invoice_date'] ? date("d-M-Y", strtotime($payment_detail['invoice_date'])) : date("d-M-Y", strtotime($payment_detail['created_at'])))
                 ->setCellValue('G'.$i, $payment_detail['invoice_number'])
-                ->setCellValue('H'.$i, $tuition_fee == 0 && $payment_detail['invoice_amount_ves'] == 0 ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount_ves'])
-                ->setCellValue('I'.$i, $tuition_fee - $total_discount)
+                // ->setCellValue('H'.$i, $tuition_fee == 0 && $payment_detail['invoice_amount_ves'] == 0 && $payment_for == 'Others' ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount_ves'])
+                ->setCellValue('H'.$i, $vatable_amount)
+                ->setCellValue('I'.$i, $vatable_exempt)
                 ->setCellValue('J'.$i, $payment_detail['invoice_amount_vzrs'])
                 ->setCellValue('K'.$i, '=SUM(H' . $i . ':J' . $i . ')')
                 ->setCellValue('L'.$i, '=PRODUCT(H' . $i . ',.12)')
