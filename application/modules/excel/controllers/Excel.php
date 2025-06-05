@@ -8739,20 +8739,17 @@ class Excel extends CI_Controller {
                 ->setCellValue('C'.$i, ucfirst($payment_detail['last_name']) . ', ' . ucfirst($payment_detail['first_name']))
                 ->setCellValue('D'.$i, $payment_detail['description'])
                 ->setCellValue('E'.$i, $particular)
-                ->setCellValue('F'.$i, $payment_detail['remarks'])
-                ->setCellValue('G'.$i, $payment_detail['is_cash'] ? 'Cash Sales' : 'Charge Sales')
-                ->setCellValue('H'.$i, $payment_detail['invoice_date'] ? date("d-M-Y", strtotime($payment_detail['invoice_date'])) : date("d-M-Y", strtotime($payment_detail['created_at'])))
-                ->setCellValue('I'.$i, $payment_detail['invoice_number'])
-                ->setCellValue('J'.$i, $tuition_fee == 0 && $payment_detail['invoice_amount_ves'] == 0 ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount_ves'])
-                ->setCellValue('K'.$i, $tuition_fee - $total_discount)
-                ->setCellValue('L'.$i, $payment_detail['invoice_amount_vzrs'])
-                ->setCellValue('M'.$i, '=SUM(J' . $i . ':L' . $i . ')')
-                ->setCellValue('N'.$i, $tuition_fee > 0 ? '=PRODUCT(J' . $i . ',.12)' : 0)
-                ->setCellValue('O'.$i, $payment_detail['withholding_tax_percentage'] > 0 ? $payment_detail['withholding_tax_percentage'] / 100 : 0)
-                ->setCellValue('P'.$i, '=PRODUCT(J' . $i . ',O' . $i . ')')
-                ->setCellValue('Q'.$i, '=SUM(M' . $i . '+N' . $i . '+P' . $i . ')')
-                ->setCellValue('R'.$i, $payment_detail['subtotal_order'])
-                ->setCellValue('S'.$i, '=SUM(Q' . $i . '-R' . $i . ')');
+                ->setCellValue('F'.$i, $payment_detail['invoice_date'] ? date("d-M-Y", strtotime($payment_detail['invoice_date'])) : date("d-M-Y", strtotime($payment_detail['created_at'])))
+                ->setCellValue('G'.$i, $payment_detail['invoice_number'])
+                ->setCellValue('H'.$i, $tuition_fee == 0 && $payment_detail['invoice_amount_ves'] == 0 ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount_ves'])
+                ->setCellValue('I'.$i, $tuition_fee - $total_discount)
+                ->setCellValue('J'.$i, $payment_detail['invoice_amount_vzrs'])
+                ->setCellValue('K'.$i, '=SUM(J' . $i . ':L' . $i . ')')
+                ->setCellValue('L'.$i, $tuition_fee > 0 ? '=PRODUCT(J' . $i . ',.12)' : 0)
+                ->setCellValue('M'.$i, $payment_detail['withholding_tax_percentage'] > 0 ? $payment_detail['withholding_tax_percentage'] / 100 : 0)
+                ->setCellValue('N'.$i, '=PRODUCT(J' . $i . ',O' . $i . ')')
+                ->setCellValue('O'.$i, '=SUM(M' . $i . '+N' . $i . '+P' . $i . ')')
+                ->setCellValue('P'.$i, $payment_detail['subtotal_order']);
 
             $i++;
         }
@@ -8767,20 +8764,17 @@ class Excel extends CI_Controller {
                     ->setCellValue('C7', 'Student Name')
                     ->setCellValue('D7', 'Payment For')
                     ->setCellValue('E7', 'Particulars')
-                    ->setCellValue('F7', 'Payment Type')
-                    ->setCellValue('G7', 'MOP')
-                    ->setCellValue('H7', 'Invoice Date')
-                    ->setCellValue('I7', 'Invoice Number')
-                    ->setCellValue('J7', 'Vatable Amount')
-                    ->setCellValue('K7', 'VAT Exempt')
-                    ->setCellValue('L7', 'Zero Rated')
-                    ->setCellValue('M7', 'Total Sales')
-                    ->setCellValue('N7', 'VAT')
-                    ->setCellValue('O7', 'EWT Rate')
-                    ->setCellValue('P7', 'EWT Amount')
-                    ->setCellValue('Q7', 'Net Amount Due')
-                    ->setCellValue('R7', 'Payment Received')
-                    ->setCellValue('S7', 'Balance as of ' .  date("M d, Y", strtotime($report_date_start)) . '-' . date("M d, Y", strtotime($report_date_end)));
+                    ->setCellValue('F7', 'Invoice Date')
+                    ->setCellValue('G7', 'Invoice Number')
+                    ->setCellValue('H7', 'Vatable Amount')
+                    ->setCellValue('I7', 'VAT Exempt')
+                    ->setCellValue('J7', 'Zero Rated')
+                    ->setCellValue('K7', 'Total Sales')
+                    ->setCellValue('L7', 'VAT')
+                    ->setCellValue('M7', 'EWT Rate')
+                    ->setCellValue('N7', 'EWT Amount')
+                    ->setCellValue('O7', 'Net Amount Due')
+                    ->setCellValue('P7', 'Payment Received');
 
         $objPHPExcel->getActiveSheet()->getStyle('J8:S' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
         // $objPHPExcel->getActiveSheet()->getStyle('P8:S' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
