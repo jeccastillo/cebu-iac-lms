@@ -8744,11 +8744,11 @@ class Excel extends CI_Controller {
                 ->setCellValue('H'.$i, $tuition_fee == 0 && $payment_detail['invoice_amount_ves'] == 0 ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount_ves'])
                 ->setCellValue('I'.$i, $tuition_fee - $total_discount)
                 ->setCellValue('J'.$i, $payment_detail['invoice_amount_vzrs'])
-                ->setCellValue('K'.$i, '=SUM(J' . $i . ':L' . $i . ')')
-                ->setCellValue('L'.$i, $tuition_fee > 0 ? '=PRODUCT(J' . $i . ',.12)' : 0)
+                ->setCellValue('K'.$i, '=SUM(H' . $i . ':J' . $i . ')')
+                ->setCellValue('L'.$i, '=PRODUCT(H' . $i . ',.12)')
                 ->setCellValue('M'.$i, $payment_detail['withholding_tax_percentage'] > 0 ? $payment_detail['withholding_tax_percentage'] / 100 : 0)
                 ->setCellValue('N'.$i, '=PRODUCT(J' . $i . ',O' . $i . ')')
-                ->setCellValue('O'.$i, '=SUM(M' . $i . '+N' . $i . '+P' . $i . ')')
+                ->setCellValue('O'.$i, '=SUM(K' . $i . '+L' . $i . '-N' . $i . ')')
                 ->setCellValue('P'.$i, $payment_detail['subtotal_order']);
 
             $i++;
@@ -8758,7 +8758,8 @@ class Excel extends CI_Controller {
                     ->setCellValue('A1', 'iACADEMY, Inc.')
                     ->setCellValue('A2', $campus == 'Makati' ? 'iACADEMY Nexus 7434 Yakal Street Brgy. San Antonio, Makati City' : '5th Floor Filinvest Cyberzone Tower 2 Salinas Drive Cor. W. Geonzon St., Cebu IT Park, Apas, Cebu City')
                     ->setCellValue('A3', 'Invoice Report')
-                    ->setCellValue('A4', 'As of ' . $as_of_date)
+                    ->setCellValue('A4', $campus == 'Makati' ? '' : 'VAT REG TIN: 214-749-003-00003')
+                    ->setCellValue('A5', 'As of ' . $as_of_date)
                     ->setCellValue('A7', 'No.')
                     ->setCellValue('B7', 'Student Number')
                     ->setCellValue('C7', 'Student Name')
@@ -8776,9 +8777,9 @@ class Excel extends CI_Controller {
                     ->setCellValue('O7', 'Net Amount Due')
                     ->setCellValue('P7', 'Payment Received');
 
-        $objPHPExcel->getActiveSheet()->getStyle('J8:S' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        // $objPHPExcel->getActiveSheet()->getStyle('P8:S' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle('A1:S7')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('H8:L' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle('N8:P' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle('A1:P7')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
         $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray(
             array(
@@ -8790,7 +8791,7 @@ class Excel extends CI_Controller {
             )
         );
 
-        $objPHPExcel->getActiveSheet()->getStyle('A2:S7')->applyFromArray(
+        $objPHPExcel->getActiveSheet()->getStyle('A2:P7')->applyFromArray(
             array(
                 'font'  => array(
                     'bold'  => true,
@@ -8800,7 +8801,7 @@ class Excel extends CI_Controller {
             )
         );
 
-        $objPHPExcel->getActiveSheet()->getStyle('A7:S' . ($i-1))->applyFromArray(
+        $objPHPExcel->getActiveSheet()->getStyle('A7:P' . ($i-1))->applyFromArray(
             array(
                 'borders' => array(
                     'allborders' => array(
@@ -8817,8 +8818,8 @@ class Excel extends CI_Controller {
                 'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
             )
         );
-        $objPHPExcel->getActiveSheet()->getStyle('A7:S'.$i)->applyFromArray($style);
-        $objPHPExcel->getActiveSheet()->getStyle('A7:S'.$i)->getAlignment()->setWrapText(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A7:P'.$i)->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('A7:P'.$i)->getAlignment()->setWrapText(true);
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
@@ -8834,17 +8835,15 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setWidth(20);
         
         $sheet = $objPHPExcel->getActiveSheet();
-        $sheet->mergeCells('A1:S1');
-        $sheet->mergeCells('A2:S2');
-        $sheet->mergeCells('A3:S3');
-        $sheet->mergeCells('A4:S4');
+        $sheet->mergeCells('A1:P1');
+        $sheet->mergeCells('A2:P2');
+        $sheet->mergeCells('A3:P3');
+        $sheet->mergeCells('A4:P4');
+        $sheet->mergeCells('A5:P5');
 
         $objPHPExcel->getActiveSheet()->setTitle('Invoice Report');
 
