@@ -258,7 +258,7 @@ foreach($records as $record){
             if($item['include_gwa']){
                 $units = number_format($item['strUnits'],1);
 
-                if(is_numeric($grade)){
+                if(is_numeric($item['v3'])){
                     $term_units += $item['strUnits'];
                 }
                 $total_units += $item['strUnits'];
