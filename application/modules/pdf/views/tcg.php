@@ -257,7 +257,10 @@ foreach($records as $record){
             $units_earned = ($item['strRemarks'] == "Passed")?number_format($item['strUnits'],1):0;
             if($item['include_gwa']){
                 $units = number_format($item['strUnits'],1);
-                $term_units += $item['strUnits'];
+
+                if(is_numeric($grade)){
+                    $term_units += $item['strUnits'];
+                }
                 $total_units += $item['strUnits'];
 
                 // switch($item['v3']){
