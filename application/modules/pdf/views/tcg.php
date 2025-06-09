@@ -263,16 +263,6 @@ foreach($records as $record){
                 }
                 $total_units += $item['strUnits'];
 
-                // switch($item['v3']){
-                //     case 'FA':
-                //         $grade = 5;
-                //     break;
-                //     case 'UD':
-                //         $grade = 5;                    
-                //     break;
-                //     default:
-                //         $grade = $item['v3'];                    
-                // }
                 $grade = $item['v3'];
                 
                 if($student['level'] == 'shs'){
