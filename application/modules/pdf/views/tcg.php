@@ -260,16 +260,16 @@ foreach($records as $record){
                 $term_units += $item['strUnits'];
                 $total_units += $item['strUnits'];
 
-                switch($item['v3']){
-                    case 'FA':
-                        $grade = 5;
-                    break;
-                    case 'UD':
-                        $grade = 5;                    
-                    break;
-                    default:
-                        $grade = $item['v3'];                    
-                }
+                // switch($item['v3']){
+                //     case 'FA':
+                //         $grade = 5;
+                //     break;
+                //     case 'UD':
+                //         $grade = 5;                    
+                //     break;
+                //     default:
+                //         $grade = $item['v3'];                    
+                // }
                 
                 if($student['level'] == 'shs'){
                     switch($item['semFinalGrade']){
