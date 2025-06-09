@@ -270,6 +270,7 @@ foreach($records as $record){
                 //     default:
                 //         $grade = $item['v3'];                    
                 // }
+                $grade = $item['v3'];
                 
                 if($student['level'] == 'shs'){
                     switch($item['semFinalGrade']){
