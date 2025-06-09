@@ -285,8 +285,10 @@ foreach($records as $record){
                     }
                 }
                         
-                $grades_sum += $grade * $item['strUnits'];
-                $total_grades_sum += $grade * $item['strUnits'];
+                if(is_numeric($grade)){
+                    $grades_sum += $grade * $item['strUnits'];
+                    $total_grades_sum += $grade * $item['strUnits'];
+                }
             }
             else{
                 $units = "(".number_format($item['strUnits'],1).")";
