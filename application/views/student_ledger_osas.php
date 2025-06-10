@@ -433,6 +433,7 @@ new Vue({
             });
 
             var payments = tuition.payments_tuition;                
+            var balance = tuition.balance;       
             
             for(i in payments){                       
                 var paid = payments[i].subtotal_order * -1;
