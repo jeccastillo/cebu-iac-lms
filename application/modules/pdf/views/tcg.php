@@ -257,19 +257,13 @@ foreach($records as $record){
             $units_earned = ($item['strRemarks'] == "Passed")?number_format($item['strUnits'],1):0;
             if($item['include_gwa']){
                 $units = number_format($item['strUnits'],1);
-                $term_units += $item['strUnits'];
+
+                if(is_numeric($item['v3'])){
+                    $term_units += $item['strUnits'];
+                }
                 $total_units += $item['strUnits'];
 
-                switch($item['v3']){
-                    case 'FA':
-                        $grade = 5;
-                    break;
-                    case 'UD':
-                        $grade = 5;                    
-                    break;
-                    default:
-                        $grade = $item['v3'];                    
-                }
+                $grade = $item['v3'];
                 
                 if($student['level'] == 'shs'){
                     switch($item['semFinalGrade']){
@@ -284,8 +278,10 @@ foreach($records as $record){
                     }
                 }
                         
-                $grades_sum += $grade * $item['strUnits'];
-                $total_grades_sum += $grade * $item['strUnits'];
+                if(is_numeric($grade)){
+                    $grades_sum += $grade * $item['strUnits'];
+                    $total_grades_sum += $grade * $item['strUnits'];
+                }
             }
             else{
                 $units = "(".number_format($item['strUnits'],1).")";
