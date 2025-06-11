@@ -119,7 +119,7 @@
                             </tr>
                         </thead>
                         <tbody>                                                         
-                            <tr v-for="(item,j) in sortedItems(term.ledger_items)">                                
+                            <tr v-for="(item,j) in term.ledger_items">                                
                                 <td :class="item.muted">{{ item.strYearStart + " - " + item.strYearEnd }}</td>
                                 <td :class="item.muted">{{ item.enumSem +" "+ item.term_label }}</td>
                                 <td :class="item.muted">{{ item.scholarship_name }}</td>
@@ -370,11 +370,6 @@ new Vue({
             amount: undefined, 
             type: 'tuition',   
             remarks: "",        
-        }
-    },
-    computed: {
-        sortedItems: function(items) {
-            return items.sort((a, b) => new Date(a.date) - new Date(b.date))
         }
     },
     mounted() {        
@@ -703,7 +698,7 @@ new Vue({
                 });
                 
             }
-
+            this.ledger_term.sort((a, b) => new Date(a.date) - new Date(b.date))
             this.ledger.push({
                 'ledger_items': this.ledger_term,
                 'balance': this.term_balance.toFixed(2)
