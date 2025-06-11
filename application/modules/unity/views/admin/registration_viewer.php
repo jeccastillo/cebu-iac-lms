@@ -1029,6 +1029,7 @@ new Vue({
                             for(i in this.ledger_items){                                
                                 this.remaining_amount += parseFloat(this.ledger_items[i].amount);                                
                                 this.amount_paid += (this.ledger_items[i].amount *-1);
+                                console.log(this.ledger_items[i].amount *-1);
                                 if(this.ledger_items[i].amount < 0){
                                     this.ledger_items[i].type = "payment";
                                     this.ledger_items[i].amount = this.ledger_items[i].amount * -1;
