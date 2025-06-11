@@ -1498,7 +1498,7 @@ new Vue({
                                             .installment_fee * 5
                                             ) - parseFloat(this
                                             .remaining_amount);
-                                            console.log(temp);
+                                            console.log(temp+" "+this.remaining_amount);
                                         for (i = 0; i < 5; i++) {
                                             if (this.tuition_data
                                                 .installment_fee >
