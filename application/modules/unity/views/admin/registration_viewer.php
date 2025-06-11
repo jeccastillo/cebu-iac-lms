@@ -1025,10 +1025,10 @@ new Vue({
                                     this.amount_paid = this.amount_paid + this.payments[i].subtotal_order;
                                 }                                
                             }         
-                            console.log(this.ledger_items);
                             for(i in this.ledger_items){                                                                
-                                this.remaining_amount += parseFloat(this.ledger_items[i].amount);                                                                
-                                if(this.ledger_items[i].amount < 0){
+                                this.remaining_amount += parseFloat(this.ledger_items[i].amount);                                
+                                this.amount_paid += (this.ledger_items[i].amount *-1);                                
+                                if(this.ledger_items[i].amount < 0){ x d x
                                     this.ledger_items[i].type = "payment";
                                     this.ledger_items[i].amount = this.ledger_items[i].amount * -1;
                                     this.ledger_items[i].amount = this.ledger_items[i].amount.toFixed(2);
