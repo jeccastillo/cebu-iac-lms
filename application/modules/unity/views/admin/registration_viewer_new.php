@@ -1425,7 +1425,7 @@ new Vue({
                                     .toFixed(2)
                             }
 
-                            this.remaining_amount += this.ledger_items[i].amount;
+                            this.amount_paid += this.ledger_items[i].amount;
                         }
                         if (this.registration && this.tuition_data) {
                             if (this.registration.enumStudentType ==
