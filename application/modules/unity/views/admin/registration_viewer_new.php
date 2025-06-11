@@ -1493,24 +1493,13 @@ new Vue({
                                     if (this.registration && this
                                         .registration.downpayment ==
                                         1) {
-                                        var temp = (this
-                                            .tuition_data
-                                            .installment_fee * 5
-                                            ) - parseFloat(this
-                                            .remaining_amount);
-                                            console.log(temp+" "+this.remaining_amount);
+                                        var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);
+                                        console.log(this.tuition_data.installment_fee);
                                         for (i = 0; i < 5; i++) {
-                                            if (this.tuition_data
-                                                .installment_fee >
-                                                temp) {
-                                                val = this
-                                                    .tuition_data
-                                                    .installment_fee -
-                                                    temp;
-                                                val = val.toFixed(
-                                                2);
-                                                this.installments
-                                                    .push(val);
+                                            if (this.tuition_data.installment_fee > temp) {
+                                                val = this.tuition_data.installment_fee - temp;
+                                                val = val.toFixed(2);
+                                                this.installments.push(val);
                                                 temp = 0;
                                             } else {
                                                 this.installments
