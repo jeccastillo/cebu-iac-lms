@@ -1411,8 +1411,8 @@ new Vue({
                             }
                         }
                         for (i in this.ledger_items) {
-                            this.remaining_amount += parseFloat(this
-                                .ledger_items[i].amount);
+                            this.remaining_amount += parseFloat(this.ledger_items[i].amount);
+                            
                             if (this.ledger_items[i].amount < 0) {
                                 this.ledger_items[i].type = "payment";
                                 this.ledger_items[i].amount = this
@@ -1424,6 +1424,8 @@ new Vue({
                                         this.ledger_items[i].amount)
                                     .toFixed(2)
                             }
+
+                            this.remaining_amount += this.ledger_items[i].amount;
                         }
                         if (this.registration && this.tuition_data) {
                             if (this.registration.enumStudentType ==
