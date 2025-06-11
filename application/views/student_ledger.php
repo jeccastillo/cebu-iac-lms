@@ -372,6 +372,11 @@ new Vue({
             remarks: "",        
         }
     },
+    computed: {
+        sortedItems: function() {
+            return this.ledger_term.sort((a, b) => new Date(a.date) - new Date(b.date))
+        }
+    },
     mounted() {        
         var now = new Date();
         var year = now.getFullYear();
