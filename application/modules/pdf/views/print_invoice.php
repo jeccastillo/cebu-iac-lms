@@ -153,7 +153,7 @@ table tr td {
                 <?php  echo $amount_less_vat != 0 ? $amount_less_vat : ""; ?> </div>
             <!--Vat Exempt Sale--> <?php if($vat_exempt != 0 && $less_vat != 0): ?> <div
                 style="position:absolute; top:  487px; left: 305px; width: 200px; height: 20px;">
-                <?php echo $full_assessment; ?> </div>
+                <?php echo $level == 'ns_payment' ? $vat_exempt : $full_assessment; ?> </div>
             <?php elseif($vat_exempt == 0 && $less_vat != 0): ?> <div
                 style="position:absolute; top:  487px; left: 305px; width: 200px; height: 20px;">
                 <?php  echo ""; ?> </div> <?php else: ?> <div
