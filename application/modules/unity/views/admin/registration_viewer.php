@@ -1027,6 +1027,7 @@ new Vue({
                             }         
                             for(i in this.ledger_items){                                
                                 this.remaining_amount += parseFloat(this.ledger_items[i].amount);                                
+                                this.amount_paid = this.amount_paid + this.ledger_items[i].amount;
                                 if(this.ledger_items[i].amount < 0){
                                     this.ledger_items[i].type = "payment";
                                     this.ledger_items[i].amount = this.ledger_items[i].amount * -1;
@@ -1034,8 +1035,7 @@ new Vue({
                                 }                
                                 else{
                                     this.ledger_items[i].amount = parseFloat(this.ledger_items[i].amount).toFixed(2)
-                                }                       
-                                this.amount_paid = this.amount_paid + this.ledger_items[i].amount;         
+                                }                                                                
                             }                          
                             if(this.registration.enumStudentType == "new"){
                                 axios.get(api_url + 'finance/reservation/' + this.slug + '/' + this.sem)
