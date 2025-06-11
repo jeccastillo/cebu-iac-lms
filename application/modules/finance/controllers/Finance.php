@@ -365,7 +365,7 @@ class Finance extends CI_Controller {
             $temp['term'] = $reg;     
             
             //TUITION PAYMENTS
-            $sql = "SELECT * FROM payment_details WHERE student_number = '".$data['student']['slug']."' AND sy_reference = ".$reg['intID']." AND (description LIKE 'Tuition%' || description LIKE 'Reservation%') AND (status = 'Paid' || status = 'Void' ) ORDER BY or_date ASC";
+            $sql = "SELECT * FROM payment_details WHERE student_number = '".$data['student']['slug']."' AND sy_reference = ".$reg['intID']." AND (description LIKE 'Tuition%' || description LIKE 'Reservation%') AND (status = 'Paid' || status = 'Void' ) ORDER BY or_date DESC";
             $tuition_payments =  $this->db->query($sql)
                                           ->result_array();                  
 
