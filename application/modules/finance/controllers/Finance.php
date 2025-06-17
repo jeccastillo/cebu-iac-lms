@@ -1433,8 +1433,7 @@ class Finance extends CI_Controller {
     public function finance_invoice_report_data($report_date_start, $report_date_end = null)
     {
         $report_date_start = ($report_date_start) ? date("Y-m-d 00:00:00", strtotime($report_date_start)) : date("Y-m-d 00:00:00");
-        $report_date_end = ($report_date_end) ? date("Y-m-d 23:59:59", strtotime($report_date_end)) : date("Y-m-d 11:59:59");
-        // $report_date = ($report_date) ? $report_date : date("Y-m-d");
+        $report_date_end = ($report_date_end) ? date("Y-m-d 23:59:59", strtotime($report_date_end)) : date("Y-m-d 11:59:59");;
         $response_array = array();
 
         $results = $this->db
@@ -1477,6 +1476,71 @@ class Finance extends CI_Controller {
             $response_data['invoiceDate'] =  $result['invoice_date'] ? date("d-M-Y", strtotime($result['invoice_date'])) : date("d-M-Y", strtotime($result['created_at']));
             $response_data['invoiceNumber'] = $result['invoice_number'];
             $response_data['invoiceAmount'] = $result['invoice_amount'];
+            $response_data['vatExempt'] = $vat_exempt;
+            $response_data['zeroRated'] = $result['invoice_amount_vzrs'];
+            $response_data['totalSales'] = $total_sales;
+            $response_data['vat'] = $vat;
+            $response_data['ewtRate'] = $ewt_rate;
+            $response_data['ewtAmount'] = $ewt_amount;
+            $response_data['netAmount'] = $net_amount;
+            $response_data['paymentReceived'] = $result['subtotal_order'];
+            $response_data['status'] = $result['status'];
+            $reponse_data['balance'] = $net_amount - $result['subtotal_order'];
+
+            $response_array[] = $response_data;
+        }
+        
+        $data['data'] = $response_array;
+
+        echo json_encode($data);
+    }
+
+    public function finance_or_report_data($report_date_start, $report_date_end = null)
+    {
+        $report_date_start = ($report_date_start) ? date("Y-m-d 00:00:00", strtotime($report_date_start)) : date("Y-m-d 00:00:00");
+        $report_date_end = ($report_date_end) ? date("Y-m-d 23:59:59", strtotime($report_date_end)) : date("Y-m-d 11:59:59");;
+        $response_array = array();
+
+        $results = $this->db
+                    ->from('payment_details')
+                    ->where(array('status !=' => 'expired','status !=' => 'Transaction Failed','status !=' => 'cancel','status !=' => 'declined','status !=' => 'error', 'updated_at >=' => $report_date_start, 'updated_at <=' => $report_date_end, 'invoice_number !=' => null))
+                    ->order_by('or_number', 'ASC')
+                    ->get()
+                    ->result_array();
+
+        foreach($results as $index => $result){
+            $payment_for = $particular = '';
+
+            $student = $this->db->get_where('tb_mas_users', array('slug' => $result['student_number']))->first_row('array');
+
+            if(strpos($result['description'], 'Tuition') !== false || strpos($result['description'], 'Reservation') !== false || strpos($result['description'], 'Application') !== false){
+                $payment_for = $result['description'];
+                $particular = '';
+            }else{
+                $payment_for = 'Others';
+                $particular = $result['description'];
+            }
+            
+            $vat_exempt = $result['or_amount'] == 0 && $result['invoice_amount_ves'] == 0 ? $result['subtotal_order'] : $result['invoice_amount_ves'];
+            $ewt_rate = $result['withholding_tax_percentage'] > 0 ? $result['withholding_tax_percentage'] / 100 : 0;
+            $total_sales = $result['or_amount'] + $vat_exempt + $result['invoice_amount_vzrs'];
+            $vat = $result['or_amount'] > 0 ? $result['or_amount'] * .12 : '';
+            $ewt_amount = $ewt_rate > 0 ? $result['or_amount'] * $ewt_rate : '';
+
+            $net_amount = 0;
+            $net_amount += $total_sales > 0 ? $total_sales : 0;
+            $net_amount += $vat > 0 ? $vat : 0;
+            $net_amount += $ewt_amount > 0 ? $ewt_amount : 0;            
+            $response_data['index'] = $index + 1;
+            $response_data['studentNumber'] = $student ? str_replace("-", "", $student['strStudentNumber']) : '';
+            $response_data['studentName'] = ucfirst($result['last_name']) . ', ' . ucfirst($result['first_name']);
+            $response_data['paymentFor'] = $result['description'];
+            $response_data['particular]'] = $particular;
+            $response_data['remarks'] = $result['remarks'];
+            $response_data['isCash'] = $result['is_cash'] ? 'Cash Sales' : 'Charge Sales';
+            $response_data['orDate'] =  $result['or_date'] ? date("d-M-Y", strtotime($result['or_date'])) : date("d-M-Y", strtotime($result['created_at']));
+            $response_data['orNumber'] = $result['or_number'];
+            $response_data['orAmount'] = $result['or_amount'];
             $response_data['vatExempt'] = $vat_exempt;
             $response_data['zeroRated'] = $result['invoice_amount_vzrs'];
             $response_data['totalSales'] = $total_sales;
