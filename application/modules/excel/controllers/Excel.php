@@ -8756,7 +8756,7 @@ class Excel extends CI_Controller {
                 ->setCellValue('C'.$i, ucfirst($payment_detail['last_name']) . ', ' . ucfirst($payment_detail['first_name']))
                 ->setCellValue('D'.$i, $payment_for)
                 ->setCellValue('E'.$i, $particular)
-                ->setCellValue('F'.$i, $payment_detail['invoice_date'] ? date("d-M-Y", strtotime($payment_detail['invoice_date'])) : date("d-M-Y", strtotime($payment_detail['created_at'])))
+                ->setCellValue('F'.$i, $payment_detail['invoice_date'] ? date("d-M-Y", strtotime($payment_detail['invoice_date'])) : date("d-M-Y", strtotime($payment_detail['or_date'])))
                 ->setCellValue('G'.$i, $payment_detail['invoice_number'])
                 // ->setCellValue('H'.$i, $tuition_fee == 0 && $payment_detail['invoice_amount_ves'] == 0 && $payment_for == 'Others' ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount_ves'])
                 ->setCellValue('H'.$i, $vatable_amount)
