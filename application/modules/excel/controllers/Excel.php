@@ -8765,7 +8765,7 @@ class Excel extends CI_Controller {
                 ->setCellValue('K'.$i, '=SUM(H' . $i . ':J' . $i . ')')
                 ->setCellValue('L'.$i, '=PRODUCT(H' . $i . ',.12)')
                 ->setCellValue('M'.$i, $payment_detail['withholding_tax_percentage'] > 0 ? $payment_detail['withholding_tax_percentage'] / 100 : 0)
-                ->setCellValue('N'.$i, '=PRODUCT(J' . $i . ',O' . $i . ')')
+                ->setCellValue('N'.$i, '=PRODUCT(=SUM(K' . $i . '-L' . $i . ')' . ',M' . $i . ')')
                 ->setCellValue('O'.$i, '=SUM(K' . $i . '+L' . $i . '-N' . $i . ')')
                 ->setCellValue('P'.$i, $payment_detail['subtotal_order']);
 
