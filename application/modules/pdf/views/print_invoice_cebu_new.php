@@ -260,11 +260,16 @@ hr {
                             <td></td>
                             <td></td>
                         </tr> <?php else: ?> <tr>
-                            <td style="padding: 8px"><?php echo $reservation_description; ?></td>
-                            <td><?php echo $reservation_amount != 0 ? 1 : ""; ?> </td>
-                            <td><?php echo $reservation_amount != 0 ? "-".$reservation_amount : ""; ?>
+                            <td
+                                style="<?php echo $reservation_description == '' ? 'padding: 8px' : '' ; ?>;padding-left:28px">
+                                <?php echo $reservation_description; ?></td>
+                            <td class="text-center"><?php echo $reservation_amount != 0 ? 1 : ""; ?>
                             </td>
-                            <td><?php echo $reservation_amount != 0 ? "-".$reservation_amount : ""; ?>
+                            <td class="text-center">
+                                <?php echo $reservation_amount != 0 ? "-".$reservation_amount : ""; ?>
+                            </td>
+                            <td class="text-center">
+                                <?php echo $reservation_amount != 0 ? "-".$reservation_amount : ""; ?>
                             </td>
                         </tr> <?php endif; ?> <tr>
                             <?php if ($request['description'] == 'Reservation Payment' ): ?> <td
@@ -275,8 +280,7 @@ hr {
                         </tr>
                         <tr> <?php if ($request['description'] == 'Reservation Payment' ): ?> <td
                                 style="padding-left:28px"> SIGNATURE: </td> <?php else: ?> <td
-                                style="padding: 8px"> <?php echo $reservation_description; ?></td>
-                            <?php endif; ?> <td>
+                                style="padding: 8px"> </td> <?php endif; ?> <td>
                             </td>
                             <td></td>
                             <td></td>
@@ -312,7 +316,8 @@ hr {
                         </tr>
                         <tr>
                             <td class="td-payment" style="width:40%">Check No.</td>
-                            <td class="td-payment" style="max-width:71px;overflow-x:auto">
+                            <td class="td-payment"
+                                style="max-width:71px;overflow-x:auto;text-wrap:nowrap">
                                 <?php  echo $is_cash == 0 &&  $request['type'] != 'ns_payment'? $remarks : ''; ?>
                             </td>
                             <td style="width:20%"></td>
@@ -431,9 +436,9 @@ hr {
                             <hr style="position: absolute;width: 100%;left: 51;top: 8;">
                         </li>
                         <!-- TOTAL PAYMENT  -->
-                        <li style="position: relative;overflow-x: clip;">Total Payment <span
+                        <li style="position: relative;overflow-x: clip;">Total Amount Due <span
                                 style="font-size: 12px;margin-left: 10px;"><?php  echo $total_assessment; ?></span>
-                            <hr style="position: absolute;width: 100%;left: 70;top: 8;">
+                            <hr style="position: absolute;width: 100%;left: 85;top: 8;">
                         </li>
                         <li class="italic-bold" style="position: relative;overflow-x: clip;">OSCA /
                             PWD ID NO.
