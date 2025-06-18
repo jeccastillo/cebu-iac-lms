@@ -1442,7 +1442,9 @@ class Finance extends CI_Controller {
 
         $results = $this->db
                     ->from('payment_details')
-                    ->where(array('status !=' => 'expired','status !=' => 'Transaction Failed','status !=' => 'cancel','status !=' => 'declined','status !=' => 'error', 'STR_TO_DATE(or_date, "%M %d, %Y") >=' => $report_date_start, 'STR_TO_DATE(or_date, "%M %d, %Y") >=' => $report_date_end, 'invoice_number !=' => null, 'deleted_at =' => null))
+                    // ->where(array('status !=' => 'expired','status !=' => 'Transaction Failed','status !=' => 'cancel','status !=' => 'declined','status !=' => 'error', 'STR_TO_DATE(or_date, "%M %d, %Y") >=' => $report_date_start, 'STR_TO_DATE(or_date, "%M %d, %Y") >=' => $report_date_end, 'invoice_number !=' => null, 'deleted_at =' => null))
+                    ->where(array('status !=' => 'expired','status !=' => 'Transaction Failed','status !=' => 'cancel','status !=' => 'declined','status !=' => 'error', 'invoice_number !=' => null, 'deleted_at =' => null))
+                    ->where("STR_TO_DATE(or_date, '%M %d, %Y') BETWEEN '{$report_date_start}' AND '{$report_date_end}'", null, false)
                     ->order_by('invoice_number', 'ASC')
                     ->get()
                     ->result_array();
