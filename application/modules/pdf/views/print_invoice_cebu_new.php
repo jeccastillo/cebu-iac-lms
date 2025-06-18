@@ -435,13 +435,17 @@ hr {
                                 style="font-size: 12px;margin-left: 10px;"><?php echo $less_ewt != 0 ? $less_ewt : "" ; ?></span>
                             <hr style="position: absolute;width: 100%;left: 51;top: 8;">
                         </li>
-                        <!-- TOTAL PAYMENT  -->
-                        <li style="position: relative;overflow-x: clip;">Total Amount Due <span
+                        <!-- TOTAL AMOUNT DUE  -->
+                        <?php if ($request['description'] == 'Reservation Payment' || $request['description'] == 'Tuition Fee' ): ?>
+                        <li style="position: relative;overflow-x: clip;">Net Sales <span
+                                style="font-size: 12px;margin-left: 10px;"><?php  echo $total_assessment; ?></span>
+                            <hr style="position: absolute;width: 100%;left: 50;top: 8;">
+                        </li> <?php else: ?> <li style="position: relative;overflow-x: clip;">Total
+                            Amount Due <span
                                 style="font-size: 12px;margin-left: 10px;"><?php  echo $total_assessment; ?></span>
                             <hr style="position: absolute;width: 100%;left: 85;top: 8;">
-                        </li>
-                        <li class="italic-bold" style="position: relative;overflow-x: clip;">OSCA /
-                            PWD ID NO.
+                        </li> <?php endif; ?> <li class="italic-bold"
+                            style="position: relative;overflow-x: clip;">OSCA / PWD ID NO.
                             <hr style="position: absolute;width: 100%;left: 100;top: 8;">
                         </li>
                         <li class="italic-bold" style="position: relative;overflow-x: clip;">SC /
@@ -466,14 +470,16 @@ hr {
                     </div>
                 </div>
             </div>
-            <!-- <div style="position:absolute; top: 537px; left: 608px;font-weight: bold;">iACADEMY,
-                Inc.</div> -->
-            <!-- <div
-                style="position:absolute; top: 565px; left: 600px; width: 200px; height: 20px;font-size:15px">
-                <span><?php echo $cashier_name; ?> </span>
-            </div>
-            <hr style="position:absolute; top: 575px; left: 514px; width: 252px;">
-            <i style="position:absolute; top: 585px; left: 594px;">Authorized Signature</i> -->
         </section>
     </div>
 </body>
+<script>
+const request = <?php echo json_encode($request); ?>;
+const type = "<?php echo $type; ?>";
+const payment_type = "<?php echo $payment_type; ?>";
+const level = "<?php echo $level; ?>";
+console.log('request-', request);
+console.log('type-', type);
+console.log('payment type-', payment_type);
+console.log('level-', level);
+</script>
