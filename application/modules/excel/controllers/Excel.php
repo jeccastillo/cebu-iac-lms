@@ -8636,7 +8636,7 @@ class Excel extends CI_Controller {
                     // ->where(array('status' => 'Paid', 'or_date >=' => $report_date_start, 'or_date <=' => $report_date_end, 'invoice_number !=' => null, 'deleted_at !=' => null, 'student_campus' => $campus))
                     ->where(array('status !=' => 'expired','status !=' => 'Transaction Failed','status !=' => 'cancel','status !=' => 'declined','status !=' => 'error', 'invoice_number !=' => null, 'deleted_at =' => null))
                     ->where("STR_TO_DATE(or_date, '%M %d, %Y') BETWEEN '{$report_date_start}' AND '{$report_date_end}'", null, false)
-                    ->order_by('invoice_number', 'ASC')
+                    ->order_by('invoice_number + 0', 'ASC')
                     ->get()
                     ->result_array();
                     
