@@ -1479,7 +1479,7 @@ class Finance extends CI_Controller {
             $response_data['particular]'] = $particular;
             $response_data['remarks'] = $result['remarks'];
             $response_data['isCash'] = $result['is_cash'] ? 'Cash Sales' : 'Charge Sales';
-            $response_data['invoiceDate'] =  $result['invoice_date'] ? date("d-M-Y", strtotime($result['invoice_date'])) : date("d-M-Y", strtotime($result['created_at']));
+            $response_data['invoiceDate'] =  $result['invoice_date'] ? date("d-M-Y", strtotime($result['invoice_date'])) : date("d-M-Y", strtotime($result['or_date']));
             $response_data['invoiceNumber'] = $result['invoice_number'];
             $response_data['invoiceAmount'] = $result['invoice_amount'];
             $response_data['vatExempt'] = $vat_exempt;
