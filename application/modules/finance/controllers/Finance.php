@@ -1434,15 +1434,15 @@ class Finance extends CI_Controller {
 
     public function finance_invoice_report_data($report_date_start, $report_date_end = null)
     {
-        // $report_date_start = ($report_date_start) ? date("Y-m-d 00:00:00", strtotime($report_date_start)) : date("Y-m-d 00:00:00");
-        // $report_date_end = ($report_date_end) ? date("Y-m-d 23:59:59", strtotime($report_date_end)) : date("Y-m-d 23:59:59");;
-        $report_date_start = ($report_date_start) ? date("Y-m-d", strtotime($report_date_start)) : date("Y-m-d");
-        $report_date_end = ($report_date_end) ? date("Y-m-d", strtotime($report_date_end)) : date("Y-m-d");;
+        $report_date_start = ($report_date_start) ? date("Y-m-d 00:00:00", strtotime($report_date_start)) : date("Y-m-d 00:00:00");
+        $report_date_end = ($report_date_end) ? date("Y-m-d 23:59:59", strtotime($report_date_end)) : date("Y-m-d 23:59:59");;
+        // $report_date_start = ($report_date_start) ? date("Y-m-d", strtotime($report_date_start)) : date("Y-m-d");
+        // $report_date_end = ($report_date_end) ? date("Y-m-d", strtotime($report_date_end)) : date("Y-m-d");;
         $response_array = array();
 
         $results = $this->db
                     ->from('payment_details')
-                    ->where(array('status !=' => 'expired','status !=' => 'Transaction Failed','status !=' => 'cancel','status !=' => 'declined','status !=' => 'error', "STR_TO_DATE(or_date, '%M %d, %Y') >=" => $report_date_start, "STR_TO_DATE(or_date, '%M %d, %Y') >=" => $report_date_end, 'invoice_number !=' => null, 'deleted_at =' => null))
+                    ->where(array('status !=' => 'expired','status !=' => 'Transaction Failed','status !=' => 'cancel','status !=' => 'declined','status !=' => 'error', 'STR_TO_DATE(or_date, "%M %d, %Y") >=' => $report_date_start, 'STR_TO_DATE(or_date, "%M %d, %Y") >=' => $report_date_end, 'invoice_number !=' => null, 'deleted_at =' => null))
                     ->order_by('invoice_number', 'ASC')
                     ->get()
                     ->result_array();
