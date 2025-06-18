@@ -993,6 +993,7 @@ new Vue({
                             this.cashier_end = this.cashier.or_current?this.cashier.or_current:this.cashier.or_end;
                             this.request.or_number = this.cashier.or_current;
                             this.or_update.or_number = this.cashier.or_current;
+                            this.invoice_update.invoice_number = this.cashier.invoice_current;
                             this.request.cashier_id = this.cashier.user_id;
                             this.or_update.cashier_id = this.cashier.user_id;
                             this.or_update.student_campus = this.request.student_campus;
@@ -1025,7 +1026,7 @@ new Vue({
                                     this.amount_paid = this.amount_paid + this.payments[i].subtotal_order;
                                 }                                
                             }         
-                            for(i in this.ledger_items){                                                                
+                            for(i in this.ledger_items){                                
                                 this.remaining_amount += parseFloat(this.ledger_items[i].amount);                                
                                 this.amount_paid += (this.ledger_items[i].amount *-1);                                
                                 if(this.ledger_items[i].amount < 0){
@@ -1035,7 +1036,7 @@ new Vue({
                                 }                
                                 else{
                                     this.ledger_items[i].amount = parseFloat(this.ledger_items[i].amount).toFixed(2)
-                                }                                                                
+                                }                                                                        
                             }                          
                             if(this.registration.enumStudentType == "new"){
                                 axios.get(api_url + 'finance/reservation/' + this.slug + '/' + this.sem)
@@ -1673,6 +1674,7 @@ new Vue({
                                         Swal.showLoading();
 
                                         var formdata = new FormData();
+                                        formdata.append('payment_id',payment_id);
                                         formdata.append('description',data.data.description);                                        
                                         formdata.append('total_amount_due',data.data.total_amount_due);
                                         formdata.append('sy_reference',data.data.sy_reference);
