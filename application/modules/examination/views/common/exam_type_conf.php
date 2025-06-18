@@ -40,7 +40,7 @@ $(document).ready(function() {
                         'code': code
                     };
                     $.ajax({
-                        'url': '<?php echo base_url(); ?>index.php/program/delete_program',
+                        'url': '<?php echo base_url(); ?>index.php/examination/delete_exam_type',
                         'method': 'post',
                         'data': data,
                         'dataType': 'json',
