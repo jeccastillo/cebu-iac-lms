@@ -925,6 +925,8 @@ class Finance extends CI_Controller {
 
         $this->data_poster->log_action('Cashier','Retracted OR number '.$post['or_number']." for ".$post['description']." with the amount of ".$amount,'red');
 
+        $this->data_poster->post_data('payment_detail', array('updated_at' => date('Y-m-d H:i:s')),$post['payment_id']);
+
         $ret['message'] = "Successfully updated";
         $ret['test'] =  $test;
         $ret['success'] =  true;
@@ -1438,7 +1440,7 @@ class Finance extends CI_Controller {
 
         $results = $this->db
                     ->from('payment_details')
-                    ->where(array('status !=' => 'expired','status !=' => 'Transaction Failed','status !=' => 'cancel','status !=' => 'declined','status !=' => 'error', 'updated_at >=' => $report_date_start, 'updated_at <=' => $report_date_end, 'invoice_number !=' => null))
+                    ->where(array('status !=' => 'expired','status !=' => 'Transaction Failed','status !=' => 'cancel','status !=' => 'declined','status !=' => 'error', 'updated_at >=' => $report_date_start, 'updated_at <=' => $report_date_end, 'invoice_number !=' => null, 'deleted_at !=' => null))
                     ->order_by('invoice_number', 'ASC')
                     ->get()
                     ->result_array();
