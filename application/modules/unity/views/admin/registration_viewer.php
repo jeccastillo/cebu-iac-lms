@@ -1680,7 +1680,6 @@ new Vue({
                                         formdata.append('sy_reference',data.data.sy_reference);
                                         formdata.append('student_id',this.student.intID);
                                         formdata.append('or_number',data.data.or_number);
-                                        console.log(formData);
                                         axios.post(base_url + 'finance/remove_from_ledger', formdata, {
                                         headers: {
                                             Authorization: `Bearer ${window.token}`
