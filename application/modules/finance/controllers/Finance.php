@@ -925,10 +925,9 @@ class Finance extends CI_Controller {
 
         $this->data_poster->log_action('Cashier','Retracted OR number '.$post['or_number']." for ".$post['description']." with the amount of ".$amount,'red');
 
-        $this->data_poster->post_data('payment_detail', array('updated_at' => date('Y-m-d H:i:s')),$post['payment_id']);
+        $this->data_poster->post_data('payment_detail', array('deleted_at' => date('Y-m-d H:i:s')),$post['payment_id']);
 
         $ret['message'] = "Successfully updated";
-        $ret['test'] =  $test;
         $ret['success'] =  true;
         echo json_encode($ret);
     }
@@ -1434,14 +1433,19 @@ class Finance extends CI_Controller {
 
     public function finance_invoice_report_data($report_date_start, $report_date_end = null)
     {
-        $report_date_start = ($report_date_start) ? date("Y-m-d 00:00:00", strtotime($report_date_start)) : date("Y-m-d 00:00:00");
-        $report_date_end = ($report_date_end) ? date("Y-m-d 23:59:59", strtotime($report_date_end)) : date("Y-m-d 11:59:59");;
+        // $report_date_start = ($report_date_start) ? date("Y-m-d 00:00:00", strtotime($report_date_start)) : date("Y-m-d 00:00:00");
+        // $report_date_end = ($report_date_end) ? date("Y-m-d 23:59:59", strtotime($report_date_end)) : date("Y-m-d 23:59:59");;
+        $report_date_start = ($report_date_start) ? date("Y-m-d", strtotime($report_date_start)) : date("Y-m-d");
+        $report_date_end = ($report_date_end) ? date("Y-m-d", strtotime($report_date_end)) : date("Y-m-d");;
         $response_array = array();
 
         $results = $this->db
                     ->from('payment_details')
-                    ->where(array('status !=' => 'expired','status !=' => 'Transaction Failed','status !=' => 'cancel','status !=' => 'declined','status !=' => 'error', 'updated_at >=' => $report_date_start, 'updated_at <=' => $report_date_end, 'invoice_number !=' => null, 'deleted_at !=' => null))
-                    ->order_by('invoice_number', 'ASC')
+                    // ->where(array('status !=' => 'expired','status !=' => 'Transaction Failed','status !=' => 'cancel','status !=' => 'declined','status !=' => 'error', 'STR_TO_DATE(or_date, "%M %d, %Y") >=' => $report_date_start, 'STR_TO_DATE(or_date, "%M %d, %Y") >=' => $report_date_end, 'invoice_number !=' => null, 'deleted_at =' => null))
+                    ->where(array('status !=' => 'expired','status !=' => 'Transaction Failed','status !=' => 'cancel','status !=' => 'declined','status !=' => 'error', 'invoice_number !=' => null, 'deleted_at =' => null))
+                    ->where("STR_TO_DATE(or_date, '%M %d, %Y') BETWEEN '{$report_date_start}' AND '{$report_date_end}'", null, false)
+                    ->order_by("STR_TO_DATE(or_date, '%M %d, %Y')", 'ASC', false)
+                    ->order_by('invoice_number + 0', 'ASC', false)
                     ->get()
                     ->result_array();
 
@@ -1475,7 +1479,7 @@ class Finance extends CI_Controller {
             $response_data['particular]'] = $particular;
             $response_data['remarks'] = $result['remarks'];
             $response_data['isCash'] = $result['is_cash'] ? 'Cash Sales' : 'Charge Sales';
-            $response_data['invoiceDate'] =  $result['invoice_date'] ? date("d-M-Y", strtotime($result['invoice_date'])) : date("d-M-Y", strtotime($result['created_at']));
+            $response_data['invoiceDate'] =  $result['invoice_date'] ? date("d-M-Y", strtotime($result['invoice_date'])) : date("d-M-Y", strtotime($result['or_date']));
             $response_data['invoiceNumber'] = $result['invoice_number'];
             $response_data['invoiceAmount'] = $result['invoice_amount'];
             $response_data['vatExempt'] = $vat_exempt;
