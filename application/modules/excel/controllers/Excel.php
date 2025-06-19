@@ -4514,12 +4514,9 @@ class Excel extends CI_Controller {
     public function daily_collection_report()
     {
         
-
         $data = $this->input->post();
         $date = $data['date'];
         $data = json_decode($data['data']);
-        
-        
         
         error_reporting(E_ALL);
         ini_set('display_errors', TRUE);
@@ -4540,9 +4537,6 @@ class Excel extends CI_Controller {
                                      ->setDescription("Daily Collection Report Download.")
                                      ->setKeywords("office 2007 openxml php")
                                      ->setCategory("Daily Collection Report");
-
-        
-      
         
             
         $objPHPExcel->setActiveSheetIndex(0)
@@ -4687,8 +4681,6 @@ class Excel extends CI_Controller {
         $objPHPExcel->setActiveSheetIndex(0)->getStyle("I".$i.":N".$i)->getFont()->setBold( true );
         $objPHPExcel->setActiveSheetIndex(0)->getStyle("N2:N".($i-1))->getFont()->setBold( true );
 
-
-
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(25);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
@@ -4696,7 +4688,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(45);
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(25);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(35);
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
@@ -8776,27 +8768,29 @@ class Excel extends CI_Controller {
             if(strpos($payment_detail['description'], 'Tuition') !== false || strpos($payment_detail['description'], 'Reservation') !== false || strpos($payment_detail['description'], 'Application') !== false){
                 $payment_for = $payment_detail['description'];
                 $particular = '';
-                if(strpos($payment_detail['description'], 'Tuition') !== false){
-                    $vatable_exempt = $tuition_fee - $total_discount;
-                }else{
-                    $vatable_exempt = $payment_detail['subtotal_order'];
-                }
+                // if(strpos($payment_detail['description'], 'Tuition') !== false){
+                //     $vatable_exempt = $tuition_fee - $total_discount;
+                // }else{
+                //     $vatable_exempt = $payment_detail['subtotal_order'];
+                // }
             }else{
                 $payment_for = 'Others';
                 $particular = $payment_detail['description'];
-                $vatable_particulars = ['Merchandise', 'Shirt', 'Jacket'];
+                // $vatable_particulars = ['Merchandise', 'Shirt', 'Jacket'];
 
-                foreach ($vatable_particulars as $key => $value) {
-                    if(strpos($payment_detail['description'], $value) !== false){
-                        $vatable_amount = $payment_detail['subtotal_order'];
-                        $vatable_exempt = 0;
-                        break;
-                    }else{
-                        $vatable_exempt = $payment_detail['subtotal_order'];
-                    }
-                }
+                // foreach ($vatable_particulars as $key => $value) {
+                //     if(strpos($payment_detail['description'], $value) !== false){
+                //         $vatable_amount = $payment_detail['subtotal_order'] > 0 ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount'];
+                //         $vatable_exempt = 0;
+                //         break;
+                //     }else{
+                //         $vatable_exempt = $payment_detail['subtotal_order'];
+                //     }
+                // }
             }
 
+            $vatable_amount = $payment_detail['subtotal_order'] > 0 ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount'];
+            $lessVat = number_format($vatable_amount * .12,2,'.',',');
 
             // Add some data
             $objPHPExcel->setActiveSheetIndex(0)
@@ -8806,16 +8800,15 @@ class Excel extends CI_Controller {
                 ->setCellValue('D'.$i, $student ? str_replace("-", "", $student['strStudentNumber']) : '')
                 ->setCellValue('E'.$i, ucfirst($payment_detail['last_name']) . ', ' . ucfirst($payment_detail['first_name']))
                 ->setCellValue('F'.$i, $payment_for)
-                ->setCellValue('G'.$i, $particular)
-                // ->setCellValue('H'.$i, $tuition_fee == 0 && $payment_detail['invoice_amount_ves'] == 0 && $payment_for == 'Others' ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount_ves'])
+                ->setCellValue('G'.$i, $payment_detail['remarks'])
                 ->setCellValue('H'.$i, $vatable_amount)
-                ->setCellValue('I'.$i, $vatable_exempt)
+                ->setCellValue('I'.$i, $payment_detail['invoice_amount_ves'])
                 ->setCellValue('J'.$i, $payment_detail['invoice_amount_vzrs'])
-                ->setCellValue('K'.$i, '=SUM(H' . $i . ':J' . $i . ')')
-                ->setCellValue('L'.$i, '=PRODUCT(H' . $i . ',.12)')
-                ->setCellValue('M'.$i, $payment_detail['withholding_tax_percentage'] > 0 ? $payment_detail['withholding_tax_percentage'] / 100 : 0)
-                ->setCellValue('N'.$i, '=PRODUCT(J' . $i . ',O' . $i . ')')
-                ->setCellValue('O'.$i, '=SUM(K' . $i . '+L' . $i . '-N' . $i . ')');;
+                ->setCellValue('K'.$i, $lessVat)
+                ->setCellValue('L'.$i, '=SUM(H' . $i . ':J' . $i . ')')
+                ->setCellValue('M'.$i, $payment_detail['withholding_tax_percentage'] > 0 ? $payment_detail['withholding_tax_percentage'] . '%' : 0)
+                ->setCellValue('N'.$i, $payment_detail['withholding_tax_percentage'] > 0 ? ($vatable_amount + $payment_detail['invoice_amount_ves'] + $payment_detail['invoice_amount_vzrs']) * $payment_detail['withholding_tax_percentage'] : 0)
+                ->setCellValue('O'.$i, '=SUM(K' . $i . '+L' . $i . '-N' . $i . ')');
 
             $i++;
         }
@@ -8830,14 +8823,14 @@ class Excel extends CI_Controller {
                     ->setCellValue('B7', 'Invoice Date')
                     ->setCellValue('C7', 'Invoice Number')
                     ->setCellValue('D7', 'Student Number')
-                    ->setCellValue('E7', 'Student Name')
+                    ->setCellValue('E7', 'Payee Name')
                     ->setCellValue('F7', 'Payment For')
                     ->setCellValue('G7', 'Particulars')
                     ->setCellValue('H7', 'Vatable Amount')
                     ->setCellValue('I7', 'VAT Exempt')
                     ->setCellValue('J7', 'Zero Rated')
-                    ->setCellValue('K7', 'Total Sales')
-                    ->setCellValue('L7', 'VAT')
+                    ->setCellValue('K7', 'VAT')
+                    ->setCellValue('L7', 'Total Sales')
                     ->setCellValue('M7', 'EWT Rate')
                     ->setCellValue('N7', 'EWT Amount')
                     ->setCellValue('O7', 'Net Amount Due');
