@@ -1660,6 +1660,7 @@ new Vue({
                                     }
                                 })
                                 .then(data => {
+                                    alert(data.data);
                                     this.loader_spinner = false;                                    
                                     if(data.data.success){
                                         
@@ -1672,7 +1673,6 @@ new Vue({
                                             icon: 'info',
                                         })
                                         Swal.showLoading();
-                                        console.log(data.data);
                                         var formdata = new FormData();
                                         formdata.append('payment_id',data.data.id);
                                         formdata.append('description',data.data.description);                                        
