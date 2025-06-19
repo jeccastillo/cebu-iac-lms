@@ -1672,9 +1672,9 @@ new Vue({
                                             icon: 'info',
                                         })
                                         Swal.showLoading();
-                                        
+                                        console.log(data.data);
                                         var formdata = new FormData();
-                                        formdata.append('payment_id',payment_id);
+                                        formdata.append('payment_id',data.data.id);
                                         formdata.append('description',data.data.description);                                        
                                         formdata.append('total_amount_due',data.data.total_amount_due);
                                         formdata.append('sy_reference',data.data.sy_reference);
