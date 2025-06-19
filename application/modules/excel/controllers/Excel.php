@@ -8768,28 +8768,33 @@ class Excel extends CI_Controller {
             if(strpos($payment_detail['description'], 'Tuition') !== false || strpos($payment_detail['description'], 'Reservation') !== false || strpos($payment_detail['description'], 'Application') !== false){
                 $payment_for = $payment_detail['description'];
                 $particular = '';
-                // if(strpos($payment_detail['description'], 'Tuition') !== false){
-                //     $vatable_exempt = $tuition_fee - $total_discount;
-                // }else{
-                //     $vatable_exempt = $payment_detail['subtotal_order'];
-                // }
+                if(strpos($payment_detail['description'], 'Tuition') !== false){
+                    $vatable_exempt = $tuition_fee - $total_discount;
+                }else{
+                    $vatable_exempt = $payment_detail['subtotal_order'];
+                }
             }else{
                 $payment_for = 'Others';
                 $particular = $payment_detail['description'];
-                // $vatable_particulars = ['Merchandise', 'Shirt', 'Jacket'];
 
-                // foreach ($vatable_particulars as $key => $value) {
-                //     if(strpos($payment_detail['description'], $value) !== false){
-                //         $vatable_amount = $payment_detail['subtotal_order'] > 0 ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount'];
-                //         $vatable_exempt = 0;
-                //         break;
-                //     }else{
-                //         $vatable_exempt = $payment_detail['subtotal_order'];
-                //     }
-                // }
+                if($payment_detail['student_information_id'] == 0){
+                    $vatable_amount = $payment_detail['subtotal_order'] > 0 ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount'];
+                }else{
+                    $vatable_particulars = ['Merchandise', 'Shirt', 'Jacket'];
+    
+                    foreach ($vatable_particulars as $key => $value) {
+                        if(strpos($payment_detail['description'], $value) !== false){
+                            $vatable_amount = $payment_detail['subtotal_order'] > 0 ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount'];
+                            $vatable_exempt = 0;
+                            break;
+                        }else{
+                            $vatable_exempt = $payment_detail['subtotal_order'];
+                        }
+                    }
+
+                }
             }
 
-            $vatable_amount = $payment_detail['subtotal_order'] > 0 ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount'];
             $lessVat = number_format($vatable_amount * .12,2,'.',',');
 
             // Add some data
