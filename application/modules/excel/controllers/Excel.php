@@ -8796,7 +8796,8 @@ class Excel extends CI_Controller {
                 }
             }
 
-            $lessVat = number_format(($vatable_amount / 1.12) * .12,2,'.',',');
+            $vatable_amount = $vatable_amount / 1.12;
+            $lessVat = number_format($vatable_amount * .12,2,'.',',');
 
             // Add some data
             $objPHPExcel->setActiveSheetIndex(0)
