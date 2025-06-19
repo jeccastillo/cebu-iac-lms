@@ -4581,6 +4581,26 @@ class Excel extends CI_Controller {
             )
         );
 
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 14,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('A2:N6')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 11,
+                )
+            )
+        );
+
 
         $style = array(
             'alignment' => array(
@@ -4588,8 +4608,8 @@ class Excel extends CI_Controller {
                 'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
             )
         );
-        $objPHPExcel->getActiveSheet()->getStyle('A6:N6')->applyFromArray($style);
-        $objPHPExcel->getActiveSheet()->getStyle('A6:N6')->getAlignment()->setWrapText(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:N6')->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:N6')->getAlignment()->setWrapText(true);
         
         $i = 7;
         
