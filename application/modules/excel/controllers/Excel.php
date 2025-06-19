@@ -4549,7 +4549,6 @@ class Excel extends CI_Controller {
         ->setCellValue('A1', 'iACADEMY, Inc.')
         ->setCellValue('A2', $this->data['campus'] == 'Makati' ? 'iACADEMY Nexus 7434 Yakal Street Brgy. San Antonio, Makati City' : '5th Floor Filinvest Cyberzone Tower 2 Salinas Drive Cor. W. Geonzon St., Cebu IT Park, Apas, Cebu City')
         ->setCellValue('A3', 'Collection Report')
-        ->setCellValue('A4', 'As of ' . $date)
         ->setCellValue('A6', 'Date')
         ->setCellValue('B6', 'OR Number')
         ->setCellValue('C6', 'Invoice Number')
