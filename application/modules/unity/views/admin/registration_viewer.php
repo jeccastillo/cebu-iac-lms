@@ -1639,77 +1639,77 @@ new Vue({
             let url = api_url + 'finance/delete_payment';
 
             this.loader_spinner = true;
-            
-            Swal.fire({
-                title: 'Continue with deleting Payment',
-                text: "Are you sure you want to delete payment?",
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                imageWidth: 100,
-                icon: "question",
-                cancelButtonText: "No, cancel!",
-                showCloseButton: true,
-                showLoaderOnConfirm: true,
-                    preConfirm: (login) => {
+            alert('test');
+            // Swal.fire({
+            //     title: 'Continue with deleting Payment',
+            //     text: "Are you sure you want to delete payment?",
+            //     showCancelButton: true,
+            //     confirmButtonText: "Yes",
+            //     imageWidth: 100,
+            //     icon: "question",
+            //     cancelButtonText: "No, cancel!",
+            //     showCloseButton: true,
+            //     showLoaderOnConfirm: true,
+            //         preConfirm: (login) => {
                         
-                        let payload = {'id':payment_id}
+            //             let payload = {'id':payment_id}
 
-                        return axios.post(url, payload, {
-                                    headers: {
-                                        Authorization: `Bearer ${window.token}`
-                                    }
-                                })
-                                .then(data => {
-                                    alert(data.data);
-                                    this.loader_spinner = false;                                    
-                                    if(data.data.success){
+            //             return axios.post(url, payload, {
+            //                         headers: {
+            //                             Authorization: `Bearer ${window.token}`
+            //                         }
+            //                     })
+            //                     .then(data => {
+            //                         alert(data.data);
+            //                         this.loader_spinner = false;                                    
+            //                         if(data.data.success){
                                         
-                                        Swal.fire({
-                                            showCancelButton: false,
-                                            showCloseButton: false,
-                                            allowEscapeKey: false,
-                                            title: 'Loading',
-                                            text: 'Updating Data do not leave page',
-                                            icon: 'info',
-                                        })
-                                        Swal.showLoading();
-                                        var formdata = new FormData();
-                                        // formdata.append('payment_id',data.data.id);
-                                        // formdata.append('description',data.data.description);                                        
-                                        // formdata.append('total_amount_due',data.data.total_amount_due);
-                                        // formdata.append('sy_reference',data.data.sy_reference);
-                                        // formdata.append('student_id',this.student.intID);
-                                        // formdata.append('or_number',data.data.or_number);
-                                        console.log(formdata);
-                                        axios.post(base_url + 'finance/remove_from_ledger', formdata, {
-                                        headers: {
-                                            Authorization: `Bearer ${window.token}`
-                                        }
-                                        })
-                                        .then(function(data){                                              
-                                            Swal.fire({
-                                                title: "Success",
-                                                text: data.data.message,
-                                                icon: "success"
-                                            }).then(function() {
-                                                location.reload();
-                                            }); 
-                                        })
-                                    }
-                                    else
-                                        Swal.fire({
-                                            title: "Failed",
-                                            text: data.data.message,
-                                            icon: "error"
-                                        }).then(function() {
-                                            //location.reload();
-                                        });
-                                });
-                    },
-                    allowOutsideClick: () => !Swal.isLoading()
-                }).then((result) => {
+            //                             Swal.fire({
+            //                                 showCancelButton: false,
+            //                                 showCloseButton: false,
+            //                                 allowEscapeKey: false,
+            //                                 title: 'Loading',
+            //                                 text: 'Updating Data do not leave page',
+            //                                 icon: 'info',
+            //                             })
+            //                             Swal.showLoading();
+            //                             var formdata = new FormData();
+            //                             // formdata.append('payment_id',data.data.id);
+            //                             // formdata.append('description',data.data.description);                                        
+            //                             // formdata.append('total_amount_due',data.data.total_amount_due);
+            //                             // formdata.append('sy_reference',data.data.sy_reference);
+            //                             // formdata.append('student_id',this.student.intID);
+            //                             // formdata.append('or_number',data.data.or_number);
+            //                             console.log(formdata);
+            //                             axios.post(base_url + 'finance/remove_from_ledger', formdata, {
+            //                             headers: {
+            //                                 Authorization: `Bearer ${window.token}`
+            //                             }
+            //                             })
+            //                             .then(function(data){                                              
+            //                                 Swal.fire({
+            //                                     title: "Success",
+            //                                     text: data.data.message,
+            //                                     icon: "success"
+            //                                 }).then(function() {
+            //                                     location.reload();
+            //                                 }); 
+            //                             })
+            //                         }
+            //                         else
+            //                             Swal.fire({
+            //                                 title: "Failed",
+            //                                 text: data.data.message,
+            //                                 icon: "error"
+            //                             }).then(function() {
+            //                                 //location.reload();
+            //                             });
+            //                     });
+            //         },
+            //         allowOutsideClick: () => !Swal.isLoading()
+            //     }).then((result) => {
                 
-                })
+            //     })
 
         },
         setToVoid: function(payment_id){    
