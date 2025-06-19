@@ -4545,24 +4545,44 @@ class Excel extends CI_Controller {
       
         
             
-        $objPHPExcel->setActiveSheetIndex(0)                    
-                    ->setCellValue('A1', 'Date')
-                    ->setCellValue('B1', 'OR Number')
-                    ->setCellValue('C1', 'Invoice Number')
-                    ->setCellValue('D1', 'Applicant Number')
-                    ->setCellValue('E1', 'Name')
-                    ->setCellValue('F1', 'Payment Particulars')
-                    ->setCellValue('G1', 'Term/Sem')                                                            
-                    ->setCellValue('H1', 'Remarks')
-                    ->setCellValue('I1', 'Cash')
-                    ->setCellValue('J1', 'Check')
-                    ->setCellValue('K1', 'Credit')
-                    ->setCellValue('L1', 'Debit')
-                    ->setCellValue('M1', 'Online')
-                    ->setCellValue('N1', 'Total');
+                    $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'iACADEMY, Inc.')
+                    ->setCellValue('A2', $campus == 'Makati' ? 'iACADEMY Nexus 7434 Yakal Street Brgy. San Antonio, Makati City' : '5th Floor Filinvest Cyberzone Tower 2 Salinas Drive Cor. W. Geonzon St., Cebu IT Park, Apas, Cebu City')
+                    ->setCellValue('A3', 'Collection Report')
+                    ->setCellValue('A4', 'As of ' . $date)
+                    ->setCellValue('A6', 'Date')
+                    ->setCellValue('B6', 'OR Number')
+                    ->setCellValue('C6', 'Invoice Number')
+                    ->setCellValue('D6', 'Applicant Number')
+                    ->setCellValue('E6', 'Name')
+                    ->setCellValue('F6', 'Payment Particulars')
+                    ->setCellValue('G6', 'Term/Sem')                                                            
+                    ->setCellValue('H6', 'Remarks')
+                    ->setCellValue('I6', 'Cash')
+                    ->setCellValue('J6', 'Check')
+                    ->setCellValue('K6', 'Credit')
+                    ->setCellValue('L6', 'Debit')
+                    ->setCellValue('M6', 'Online')
+                    ->setCellValue('N6', 'Total');
                     
+                    $sheet = $objPHPExcel->getActiveSheet();
+                    $sheet->mergeCells('A1:N1');
+                    $sheet->mergeCells('A2:N2');
+                    $sheet->mergeCells('A3:N3');
+                    $sheet->mergeCells('A4:N4');
+
+                    $objPHPExcel->getActiveSheet()->getStyle('A6:N6')->applyFromArray(
+                        array(
+                            'borders' => array(
+                                'allborders' => array(
+                                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                    'color' => array('rgb' => '000000'),
+                                ),
+                            ),
+                        )
+                    );
         
-        $i = 2;
+        $i = 7;
         
         foreach($data as $d){             
             $or_number = str_pad($d->or_number, 5, '0', STR_PAD_LEFT);
