@@ -925,10 +925,9 @@ class Finance extends CI_Controller {
 
         $this->data_poster->log_action('Cashier','Retracted OR number '.$post['or_number']." for ".$post['description']." with the amount of ".$amount,'red');
 
-        $this->data_poster->post_data('payment_detail', array('updated_at' => date('Y-m-d H:i:s')),$post['payment_id']);
+        $this->data_poster->post_data('payment_detail', array('deleted_at' => date('Y-m-d H:i:s')),$post['payment_id']);
 
         $ret['message'] = "Successfully updated";
-        $ret['test'] =  $test;
         $ret['success'] =  true;
         echo json_encode($ret);
     }
