@@ -1674,12 +1674,12 @@ new Vue({
                                         })
                                         Swal.showLoading();
                                         var formdata = new FormData();
-                                        formdata.append('payment_id',data.data.id);
-                                        formdata.append('description',data.data.description);                                        
-                                        formdata.append('total_amount_due',data.data.total_amount_due);
-                                        formdata.append('sy_reference',data.data.sy_reference);
-                                        formdata.append('student_id',this.student.intID);
-                                        formdata.append('or_number',data.data.or_number);
+                                        // formdata.append('payment_id',data.data.id);
+                                        // formdata.append('description',data.data.description);                                        
+                                        // formdata.append('total_amount_due',data.data.total_amount_due);
+                                        // formdata.append('sy_reference',data.data.sy_reference);
+                                        // formdata.append('student_id',this.student.intID);
+                                        // formdata.append('or_number',data.data.or_number);
                                         console.log(formdata);
                                         axios.post(base_url + 'finance/remove_from_ledger', formdata, {
                                         headers: {
