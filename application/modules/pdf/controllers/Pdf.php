@@ -1103,7 +1103,7 @@ class Pdf extends CI_Controller {
             $this->load->view("print_view_student_reg2",$this->data);
         }
         else{
-            if($this->data['student']['level'] == 'next')
+            if($this->data['student']['level'] == 'next' || $this->data['active_sem']['enumSem'] == "Summer")
                 $this->load->view("print_view_student_reg2_makati_next",$this->data);
             else
                 $this->load->view("print_view_student_reg2_makati",$this->data);
