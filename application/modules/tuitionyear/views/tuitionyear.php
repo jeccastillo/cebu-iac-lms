@@ -138,10 +138,10 @@
                         <thead>
                             <tr>
                                 <th>Track</th>
-                                <th>Regular</th>
-                                <th>Online</th>
-                                <th>Hyflex</th>
-                                <th>Hybrid</th>
+                                <th>Regular (G11 1st Sem)</th>
+                                <th>Online (G12 1st Sem)</th>
+                                <th>Hyflex (G11 2nd Sem)</th>
+                                <th>Hybrid (G12 2nd Sem)</th>
                                 <th>Type</th>
                                 <th>Actions</th>
                             </tr>
@@ -171,19 +171,19 @@
                                     </select>
                                 </div>   
                                 <div class="form-group col-sm-3">
-                                    <label for="year">Regular Fee</label>
+                                    <label for="year">Regular Fee (G11 1st Sem)</label>
                                     <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='program.tuition_amount'>
                                 </div>
                                 <div class="form-group col-sm-3">
-                                    <label for="year">Online Fee</label>
+                                    <label for="year">Online Fee (G12 1st Sem)</label>
                                     <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='program.tuition_amount_online'>
                                 </div>
                                 <div class="form-group col-sm-3">
-                                    <label for="year">Hyflex Fee</label>
+                                    <label for="year">Hyflex Fee (G11 2nd Sem)</label>
                                     <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='program.tuition_amount_hyflex'>
                                 </div>
                                 <div class="form-group col-sm-3">
-                                    <label for="year">Hybrid Fee</label>
+                                    <label for="year">Hybrid Fee (G12 2nd Sem)</label>
                                     <input step="any" type="number" required class="form-control" placeholder="Enter Fee Amount" v-model='program.tuition_amount_hybrid'>
                                 </div>                                                                                                
                             </div>
