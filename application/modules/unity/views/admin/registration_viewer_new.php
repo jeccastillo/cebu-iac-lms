@@ -1424,6 +1424,8 @@ new Vue({
                                         this.ledger_items[i].amount)
                                     .toFixed(2)
                             }
+
+                            
                         }
                         if (this.registration && this.tuition_data) {
                             if (this.registration.enumStudentType ==
@@ -1491,23 +1493,12 @@ new Vue({
                                     if (this.registration && this
                                         .registration.downpayment ==
                                         1) {
-                                        var temp = (this
-                                            .tuition_data
-                                            .installment_fee * 5
-                                            ) - parseFloat(this
-                                            .remaining_amount);
+                                        var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);                                        
                                         for (i = 0; i < 5; i++) {
-                                            if (this.tuition_data
-                                                .installment_fee >
-                                                temp) {
-                                                val = this
-                                                    .tuition_data
-                                                    .installment_fee -
-                                                    temp;
-                                                val = val.toFixed(
-                                                2);
-                                                this.installments
-                                                    .push(val);
+                                            if (this.tuition_data.installment_fee > temp) {
+                                                val = this.tuition_data.installment_fee - temp;
+                                                val = val.toFixed(2);
+                                                this.installments.push(val);
                                                 temp = 0;
                                             } else {
                                                 this.installments
@@ -1558,7 +1549,7 @@ new Vue({
                                     .downpayment == 1) {
                                     var temp = (this.tuition_data
                                             .installment_fee * 5) -
-                                        parseFloat(this.remaining_amount);
+                                        parseFloat(this.remaining_amount);                                        
                                     for (i = 0; i < 5; i++) {
                                         if (this.tuition_data
                                             .installment_fee > temp) {
@@ -2205,6 +2196,7 @@ new Vue({
                             })
                             Swal.showLoading();
                             var formdata = new FormData();
+                            formdata.append('payment_id', this.retract_id);
                             formdata.append('description', data.data
                                 .description);
                             formdata.append('total_amount_due', data

@@ -157,7 +157,7 @@
                                     </div>
                                     <div v-if="windowPayment == 'invoice'"
                                         class="form-group col-sm-6">
-                                        <label>Vatable Amount :</label>    
+                                        <label>Build Amount :</label>    
                                         <input @change="computeVat" step=".01" type="number"
                                                 class="form-control"
                                                 v-model="request.invoice_amount">                                                
@@ -192,7 +192,7 @@
                                     </div>
                                     <div
                                         class="form-group col-sm-6">
-                                        <label>Total Sales:</label>    
+                                        <label>Vatable Amount:</label>    
                                         {{ total_sales_formatted }}                                               
                                     </div>                                               
                                     <div
