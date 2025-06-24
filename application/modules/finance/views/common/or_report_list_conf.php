@@ -14,53 +14,26 @@ $(document).ready(function() {
             data: 'index',
             title: 'No'
         }, {
-            data: 'studentNumber',
-            title: 'Student Number'
-        }, {
-            data: 'studentName',
-            title: 'Student Name'
-        }, {
-            data: 'paymentFor',
-            title: 'Payment For'
-        }, {
-            data: 'particular]',
-            title: 'Particulars'
-        }, {
-            data: 'remarks',
-            title: 'Payment Type'
-        }, {
-            data: 'isCash',
-            title: 'MOP'
-        }, {
-            data: 'invoiceDate',
-            title: 'Invoice Date'
+            data: 'orNumber',
+            title: 'OR Number'
+        }, , {
+            data: 'orDate',
+            title: 'OR Date'
         }, {
             data: 'invoiceNumber',
             title: 'Invoice Number'
         }, {
-            data: 'invoiceAmount',
-            title: 'Variable Amount'
+            data: 'studentNumber',
+            title: 'Student Number'
         }, {
-            data: 'vatExempt',
-            title: 'Vat Exempt'
+            data: 'studentName',
+            title: 'Payee Name'
         }, {
-            data: 'zeroRated',
-            title: 'Zero Rated'
+            data: 'paymentFor',
+            title: 'Payment For'
         }, {
-            data: 'totalSales',
-            title: 'Total Sales'
-        }, {
-            data: 'vat',
-            title: 'VAT'
-        }, {
-            data: 'ewtRate',
-            title: 'EWT Rate'
-        }, {
-            data: 'ewtAmount',
-            title: 'EWT Amount'
-        }, {
-            data: 'netAmount',
-            title: 'Net Amount Due'
+            data: 'particular',
+            title: 'Particulars'
         }, {
             data: 'paymentReceived',
             title: 'Payment Received'
