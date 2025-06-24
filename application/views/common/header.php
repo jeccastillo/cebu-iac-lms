@@ -227,7 +227,7 @@
                         href="<?php echo base_url() ?>admissionsV1/schools/"><i
                             class="fa fa-list"></i>
                         <span>Schools</span> </a>
-                </li>                                       
+                </li>
                 <li
                     class="<?php echo (isset($page) && $page=="enrollment_summary")?'active':''; ?>">
                     <a href="<?php echo base_url() ?>admissionsV1/enrollment_summary/"><i
@@ -630,6 +630,11 @@
                                 style="margin-left: 10px;"><i class="ion ion-android-list"></i>
                                 Invoice Report</a>
                         </li>
+                        <li class="<?php echo (isset($page))?'active':''; ?>"><a
+                                href="<?php echo base_url(); ?>finance/or_report"
+                                style="margin-left: 10px;"><i class="ion ion-android-list"></i> OR
+                                Report</a>
+                        </li>
                         <!-- <li class="<?php echo (isset($page) && $page=="other_payments_report")?'active':''; ?>"><a
                                 href="<?php echo base_url() ?>finance/payments/0/1"><i class="ion ion-cash"></i>
                                 <span>Non Student Payment Report</span> </a></li> -->
@@ -787,8 +792,8 @@
                     </ul>
                 </li> <?php endif; ?>
                 <!----------------------------------GUIDANCE-------------------------->
-                <?php if($user['intUserLevel'] == 12 || $user['intUserLevel'] == 2): ?> 
-                    <li class="treeview <?php echo (isset($opentree) && $opentree=="guidance")?'active':''; ?>">
+                <?php if($user['intUserLevel'] == 12 || $user['intUserLevel'] == 2): ?> <li
+                    class="treeview <?php echo (isset($opentree) && $opentree=="guidance")?'active':''; ?>">
                     <a href="#">
                         <i class="fa fa-circle text-green"></i> <span>Guidance</span>
                         <i class="fa pull-right fa-angle-left"></i>
@@ -814,8 +819,7 @@
                                 <span>Employee Records</span> </a>
                         </li>
                     </ul>
-                </li> 
-                <?php endif; ?>
+                </li> <?php endif; ?>
                 <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 3 ): ?> <li
                     class="<?php echo (isset($page) && $page=="classlist_archive")?'active':''; ?>">
                     <a href="<?php echo base_url(); ?>unity/view_classlist_archive_admin"><i
@@ -937,7 +941,8 @@
                         </li>
                     </ul>
                 </li> <?php endif; ?>
-                <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 6 || $user['intUserLevel'] == 7): ?> <li
+                <?php if($user['intUserLevel'] == 2 || $user['intUserLevel'] == 6 || $user['intUserLevel'] == 7): ?>
+                <li
                     class="treeview <?php echo (isset($opentree) && $opentree=="scholarship")?'active':''; ?>">
                     <a href="#">
                         <i class="fa fa-circle text-green"></i> <span>Scholarship/Discount</span>

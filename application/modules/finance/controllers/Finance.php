@@ -2096,6 +2096,33 @@ class Finance extends CI_Controller {
             $this->load->view("common/invoice_report_list_conf",$this->data);
         }
     }
+    public function or_report($date_start = 0,$date_end = 0)    
+    {
+        if($this->faculty_logged_in())
+        {
+            // if($term == 0)
+            //     $term = $this->data_fetcher->get_processing_sem();        
+            // else
+            //     $term = $this->data_fetcher->get_sem_by_id($term); 
+
+            if (empty($date_start)) {
+                $date_start = date('Y-m-d');
+            }
+            if (empty($date_end)) {
+                $date_end = date('Y-m-d');
+            }
+                 
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            // $this->data['current_sem'] = $term['intID'];            
+            $this->data['date_start'] = $date_start;
+            $this->data['date_end'] = $date_end;
+
+            $this->load->view("common/header",$this->data);
+            $this->load->view("or_report_list",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/or_report_list_conf",$this->data);
+        }
+    }
 
     function tuition_other_fees(){
         $this->data['page'] = "reports";
