@@ -11,7 +11,7 @@
         <hr />
         <div class="content">                        
                 <div class="col-sm-12">                    
-                    <label>Search by OR Number</label>
+                    <label>Enter OR or Invoice Number</label>
                     <div class="input-group mb-3">
                         <input type="text" v-model="or_number" class="form-control" placeholder="OR Number" aria-label="OR Number" aria-describedby="basic-addon2">
                         <div class="input-group-append">
