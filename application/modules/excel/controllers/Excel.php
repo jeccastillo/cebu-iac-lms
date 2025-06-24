@@ -1943,7 +1943,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A2', 'iACADEMY');
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A3', 'Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City');
+                    ->setCellValue('A3', $this->data['campus'] == 'Makati' ? 'iACADEMY Nexus 7434 Yakal Street Brgy. San Antonio, Makati City' : 'Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City');
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A4', date("M j, Y h:i a"));
         $objPHPExcel->setActiveSheetIndex(0)
