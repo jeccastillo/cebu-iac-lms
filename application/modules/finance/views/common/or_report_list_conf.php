@@ -16,7 +16,7 @@ $(document).ready(function() {
         }, {
             data: 'orNumber',
             title: 'OR Number'
-        }, , {
+        }, {
             data: 'orDate',
             title: 'OR Date'
         }, {
