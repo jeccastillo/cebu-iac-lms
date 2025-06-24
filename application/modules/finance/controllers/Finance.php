@@ -1535,6 +1535,7 @@ class Finance extends CI_Controller {
             
             $response_data['orDate'] =  date("d-M-Y", strtotime($result['or_date']));
             $response_data['orNumber'] = $result['or_number'];
+            $response_data['invoiceNumber'] = $result['invoice_number'];
             $response_data['paymentReceived'] = $result['subtotal_order'] > 0 ? $result['subtotal_order'] : $result['invoice_amount'];
 
             $response_array[] = $response_data;
