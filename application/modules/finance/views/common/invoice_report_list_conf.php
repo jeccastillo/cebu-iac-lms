@@ -14,11 +14,17 @@ $(document).ready(function() {
             data: 'index',
             title: 'No'
         }, {
+            data: 'invoiceDate',
+            title: 'Invoice Date'
+        }, {
+            data: 'invoiceNumber',
+            title: 'Invoice Number'
+        }, {
             data: 'studentNumber',
             title: 'Student Number'
         }, {
             data: 'studentName',
-            title: 'Student Name'
+            title: 'Payee Name'
         }, {
             data: 'paymentFor',
             title: 'Payment For'
@@ -31,12 +37,6 @@ $(document).ready(function() {
         }, {
             data: 'isCash',
             title: 'MOP'
-        }, {
-            data: 'invoiceDate',
-            title: 'Invoice Date'
-        }, {
-            data: 'invoiceNumber',
-            title: 'Invoice Number'
         }, {
             data: 'invoiceAmount',
             title: 'Variable Amount'
@@ -61,9 +61,6 @@ $(document).ready(function() {
         }, {
             data: 'netAmount',
             title: 'Net Amount Due'
-        }, {
-            data: 'paymentReceived',
-            title: 'Payment Received'
         }]
     });
 });
