@@ -239,8 +239,7 @@
                                                             <option v-if="registration"
                                                                 value="Tuition Fee">Tuition Fee
                                                             </option>
-                                                            <option value="Other">
-                                                                Other</option>
+                                                            <option value="Other"> Other</option>
                                                         </select>
                                                     </div>
                                                     <div v-if="description == 'Tuition Fee'"
@@ -258,7 +257,7 @@
                                                     </div>
                                                     <div v-else class="form-group">
                                                         <label>Particulars:</label>
-                                                        <select class="form-control"
+                                                        <select required class="form-control"
                                                             v-model="description_other">
                                                             <option v-for="p in particulars"
                                                                 :value="p.name">{{p.name}}</option>
@@ -520,10 +519,14 @@
                                             </thead>
                                             <tbody>
                                                 <tr v-for="record in records">
-                                                    <td>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td>
-                                                    <td>{{ record.strCode }} <span v-if="record.elective_classlist_id">&nbsp;( {{ record.elective_subject.strCode }} )</span></td>
+                                                    <td>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}
+                                                    </td>
+                                                    <td>{{ record.strCode }} <span
+                                                            v-if="record.elective_classlist_id">&nbsp;(
+                                                            {{ record.elective_subject.strCode }}
+                                                            )</span></td>
                                                     <td>{{ record.strUnits }}</td>
-                                                    <td>{{ record.intLab }}</td>                                                    
+                                                    <td>{{ record.intLab }}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -640,9 +643,7 @@
                                                     </button>
                                                     <button v-if="payment.or_number && cashier"
                                                         @click="printOR(payment)"
-                                                        class="btn btn-primary">
-                                                        Print OR
-                                                    </button>
+                                                        class="btn btn-primary"> Print OR </button>
                                                     <button v-if="payment.invoice_number && cashier"
                                                         @click="printInvoice(payment)"
                                                         class="btn btn-primary"> Print Invoice
@@ -997,8 +998,7 @@
                         </div>
                         <div class="form-group">
                             <label>Update Issued Date</label>
-                            <input type="checkbox" 
-                                v-model="invoice_update.change_or_date" />
+                            <input type="checkbox" v-model="invoice_update.change_or_date" />
                         </div>
                         <!-- <template v-if="invoiceNumbers.length !== 0">
                                  <select class="form-control" v-model="invoice_update.invoice_number" required>
@@ -1091,7 +1091,8 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Remarks</label>
-                        <textarea class="form-control" v-model="retract_remarks" required></textarea>
+                        <textarea class="form-control" v-model="retract_remarks"
+                            required></textarea>
                     </div>
                 </div>
                 <div class=" modal-footer">
@@ -1411,8 +1412,10 @@ new Vue({
                             }
                         }
                         for (i in this.ledger_items) {
-                            this.remaining_amount += parseFloat(this.ledger_items[i].amount);
-                            this.amount_paid += (this.ledger_items[i].amount * -1);
+                            this.remaining_amount += parseFloat(this
+                                .ledger_items[i].amount);
+                            this.amount_paid += (this.ledger_items[i]
+                                .amount * -1);
                             if (this.ledger_items[i].amount < 0) {
                                 this.ledger_items[i].type = "payment";
                                 this.ledger_items[i].amount = this
@@ -1424,13 +1427,12 @@ new Vue({
                                         this.ledger_items[i].amount)
                                     .toFixed(2)
                             }
-
-                            
                         }
                         if (this.registration && this.tuition_data) {
                             if (this.registration.enumStudentType ==
-                                "new" || this.registration.enumStudentType ==
-                                "freshman" || "transferee") {
+                                "new" || this.registration
+                                .enumStudentType == "freshman" ||
+                                "transferee") {
                                 axios.get(api_url + 'finance/reservation/' +
                                     this.slug + '/' + this.sem).then((
                                     data) => {
@@ -1493,12 +1495,23 @@ new Vue({
                                     if (this.registration && this
                                         .registration.downpayment ==
                                         1) {
-                                        var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this.remaining_amount);                                        
+                                        var temp = (this
+                                            .tuition_data
+                                            .installment_fee * 5
+                                            ) - parseFloat(this
+                                            .remaining_amount);
                                         for (i = 0; i < 5; i++) {
-                                            if (this.tuition_data.installment_fee > temp) {
-                                                val = this.tuition_data.installment_fee - temp;
-                                                val = val.toFixed(2);
-                                                this.installments.push(val);
+                                            if (this.tuition_data
+                                                .installment_fee >
+                                                temp) {
+                                                val = this
+                                                    .tuition_data
+                                                    .installment_fee -
+                                                    temp;
+                                                val = val.toFixed(
+                                                2);
+                                                this.installments
+                                                    .push(val);
                                                 temp = 0;
                                             } else {
                                                 this.installments
@@ -1549,7 +1562,7 @@ new Vue({
                                     .downpayment == 1) {
                                     var temp = (this.tuition_data
                                             .installment_fee * 5) -
-                                        parseFloat(this.remaining_amount);                                        
+                                        parseFloat(this.remaining_amount);
                                     for (i = 0; i < 5; i++) {
                                         if (this.tuition_data
                                             .installment_fee > temp) {
@@ -2177,7 +2190,8 @@ new Vue({
                     let payload = {
                         'id': this.retract_id,
                         'remarks': this.retract_remarks,
-                        'deleted_by': this.user.strLastname + ", " + this.user.strFirstname
+                        'deleted_by': this.user.strLastname + ", " +
+                            this.user.strFirstname
                     }
                     return axios.post(url, payload, {
                         headers: {
@@ -2196,7 +2210,8 @@ new Vue({
                             })
                             Swal.showLoading();
                             var formdata = new FormData();
-                            formdata.append('payment_id', this.retract_id);
+                            formdata.append('payment_id', this
+                                .retract_id);
                             formdata.append('description', data.data
                                 .description);
                             formdata.append('total_amount_due', data
