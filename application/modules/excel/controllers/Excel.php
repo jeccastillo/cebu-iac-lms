@@ -8947,7 +8947,8 @@ class Excel extends CI_Controller {
                     ->from('payment_details')
                     ->where(array('status !=' => 'expired','status !=' => 'Transaction Failed','status !=' => 'cancel','status !=' => 'declined','status !=' => 'error', 'or_number !=' => null, 'deleted_at =' => null))
                     ->where("STR_TO_DATE(or_date, '%M %d, %Y') BETWEEN '{$report_date_start}' AND '{$report_date_end}'", null, false)
-                    ->order_by('or_number', 'ASC')
+                    ->order_by("STR_TO_DATE(or_date, '%M %d, %Y')", 'ASC', false)
+                    ->order_by('or_number + 0', 'ASC', false)
                     ->get()
                     ->result_array();
                     
@@ -8961,160 +8962,55 @@ class Excel extends CI_Controller {
 
         // Create new PHPExcel object
         $objPHPExcel = new PHPExcel();
-        $title = 'Invoice Report';
+        $title = 'OR Report';
+
+        
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'iACADEMY, Inc.')
+                    ->setCellValue('A2', $campus == 'Makati' ? 'iACADEMY Nexus 7434 Yakal Street Brgy. San Antonio, Makati City' : '5th Floor Filinvest Cyberzone Tower 2 Salinas Drive Cor. W. Geonzon St., Cebu IT Park, Apas, Cebu City')
+                    ->setCellValue('A3', 'OR Report')
+                    ->setCellValue('A4', 'As of ' . $as_of_date)
+                    ->setCellValue('A7', 'No.')
+                    ->setCellValue('B7', 'OR Number')
+                    ->setCellValue('C7', 'OR Date')
+                    ->setCellValue('D7', 'Invoice Number')
+                    ->setCellValue('E7', 'Student Number')
+                    ->setCellValue('F7', 'Payee Name')
+                    ->setCellValue('G7', 'Payment For')
+                    ->setCellValue('H7', 'Particulars')
+                    ->setCellValue('I7', 'Payment Received');
 
         $i = 8;
 
         foreach($payment_details as $index => $payment_detail){
             $payment_for = $particular = '';
-            $tuition_fee = $tuition_discount = $total_discount = $assessment_discount_rate = $assessment_discount_fixed = $tuition_discount_rate = $vatable_exempt = $vatable_amount = 0;
-
             $student = $this->db->get_where('tb_mas_users', array('slug' => $payment_detail['student_number']))->first_row('array');
-            $tuition = $student ? $this->data_fetcher->getTuition($student['intID'], $payment_detail['sy_reference']) : '';
-            
-            if($student){
-                $reg = $this->db->select('tb_mas_registration.*, tb_mas_tuition_year.installmentDP, tb_mas_scholarships.deduction_type')
-                            ->from('tb_mas_registration')
-                            ->where(array('intStudentID' => $student['intID']))
-                            ->join('tb_mas_tuition_year', 'tb_mas_tuition_year.intID = tb_mas_registration.tuition_year')
-                            ->join('tb_mas_scholarships', 'tb_mas_scholarships.intID = tb_mas_registration.enumScholarship', 'left')
-                            ->get()
-                            ->first_row('array');
-                
-                if($reg && $tuition){
-                    if($reg['paymentType'] == 'full'){
-                        $tuition_fee = $tuition['tuition'] + $tuition['lab_before_discount'] + $tuition['misc_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
-                    }else{
-                        $tuition_fee = $tuition['tuition_installment_before_discount'] + $tuition['lab_installment_before_discount'] + $tuition['misc_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
-                        if($reg['installmentDP'] == 30)
-                            $tuition_fee = $tuition['tuition_installment_before_discount30'] + $tuition['lab_installment_before_discount30'] + $tuition['misc_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
-                        if($reg['installmentDP'] == 50)
-                            $tuition_fee = $tuition['tuition_installment_before_discount50'] + $tuition['lab_installment_before_discount50'] + $tuition['misc_before_discount'] + $tuition['thesis_fee'] + $tuition['new_student'] + $tuition['late_enrollment_fee'];
-                    }
-
-                    $deduction_type = $reg['deduction_type'];
-                    if(!$deduction_type){
-                        if(isset($tuition['scholarship'][0])){
-                            $deduction_type = 'scholarship';
-                        }else if(isset($tuition['discount'][0])){
-                            $deduction_type = 'discount';
-                        }
-                    }
-                    
-                    if($reg['paymentType'] == 'full'){
-                        if($tuition['scholarship_total_assessment_rate'] > 0){
-                            $assessment_discount_rate = $tuition['scholarship_total_assessment_rate'];
-                        }
-                        if($tuition['scholarship_total_assessment_fixed'] > 0){
-                            $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed'];
-                        }
-                        if($tuition['scholarship_tuition_fee_rate'] > 0){
-                            $tuition_discount_rate = $tuition['scholarship_tuition_fee_rate'];
-                        }
-                    }else{ 
-                        if($tuition['scholarship_total_assessment_rate_installment'] > 0){
-                            $assessment_discount_rate = $tuition['scholarship_total_assessment_rate_installment'];
-                        }
-                        if($tuition['scholarship_total_assessment_fixed_installment'] > 0){
-                            $assessment_discount_fixed = $tuition['scholarship_total_assessment_fixed_installment'];
-                        }
-                        if($tuition['scholarship_tuition_fee_installment_rate'] > 0){
-                            $tuition_discount_rate = $tuition['scholarship_tuition_fee_installment_rate'];
-                        }
-                    }
-                    
-                    if($reg['deduction_type'] == 'scholarship'){
-                        if($reg['paymentType'] == 'full' && $tuition['scholarship_tuition_fee_rate'] > 0)
-                        $total_discount = $tuition['scholarship_tuition_fee_rate'];
-                        if($reg['paymentType'] == 'partial' && $tuition['scholarship_tuition_fee_installment_rate'] > 0)
-                        $total_discount = $tuition['scholarship_tuition_fee_installment_rate'];
-                    }else{
-                        $total_discount = $tuition_discount_rate + $tuition['scholarship_tuition_fee_fixed'] + $tuition['scholarship_lab_fee_rate'] + $tuition['scholarship_lab_fee_fixed'] + $tuition['scholarship_misc_fee_rate'] + 
-                                            $tuition['scholarship_misc_fee_fixed'] + $tuition['nsf'] + $tuition['scholarship_misc_fee_fixed'] + $assessment_discount_rate + $assessment_discount_fixed;
-                    }
-                }
-            }
 
             if(strpos($payment_detail['description'], 'Tuition') !== false || strpos($payment_detail['description'], 'Reservation') !== false || strpos($payment_detail['description'], 'Application') !== false){
                 $payment_for = $payment_detail['description'];
                 $particular = '';
-                if(strpos($payment_detail['description'], 'Tuition') !== false){
-                    $vatable_exempt = $tuition_fee - $total_discount;
-                }else{
-                    $vatable_exempt = $payment_detail['subtotal_order'];
-                }
             }else{
                 $payment_for = 'Others';
                 $particular = $payment_detail['description'];
-
-                if($payment_detail['student_information_id'] == 0){
-                    $vatable_amount = $payment_detail['subtotal_order'] > 0 ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount'];
-                    $vatable_exempt = $payment_detail['invoice_amount_ves'];
-                }else{
-                    $vatable_particulars = ['Merchandise', 'Shirt', 'Jacket'];
-    
-                    foreach ($vatable_particulars as $key => $value) {
-                        if(strpos($payment_detail['description'], $value) !== false){
-                            $vatable_amount = $payment_detail['subtotal_order'] > 0 ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount'];
-                            $vatable_exempt = 0;
-                            break;
-                        }else{
-                            $vatable_exempt = $payment_detail['subtotal_order'];
-                        }
-                    }
-
-                }
             }
-
-            $vatable_amount = $vatable_amount / 1.12;
-            $lessVat = number_format($vatable_amount * .12,2,'.',',');
-
+            
             // Add some data
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A'.$i, $index + 1)
-                ->setCellValue('B'.$i, $payment_detail['invoice_date'] ? date("d-M-Y", strtotime($payment_detail['invoice_date'])) : date("d-M-Y", strtotime($payment_detail['or_date'])))
-                ->setCellValue('C'.$i, $payment_detail['invoice_number'])
-                ->setCellValue('D'.$i, $student ? str_replace("-", "", $student['strStudentNumber']) : '')
-                ->setCellValue('E'.$i, ucfirst($payment_detail['last_name']) . ', ' . ucfirst($payment_detail['first_name']))
-                ->setCellValue('F'.$i, $payment_for)
-                ->setCellValue('G'.$i, $payment_detail['remarks'])
-                ->setCellValue('H'.$i, $vatable_amount)
-                ->setCellValue('I'.$i, $vatable_exempt)
-                ->setCellValue('J'.$i, $payment_detail['invoice_amount_vzrs'])
-                ->setCellValue('K'.$i, $lessVat)
-                ->setCellValue('L'.$i, '=SUM(H' . $i . ':J' . $i . ')')
-                ->setCellValue('M'.$i, $payment_detail['withholding_tax_percentage'] > 0 ? $payment_detail['withholding_tax_percentage'] . '%' : 0)
-                ->setCellValue('N'.$i, $payment_detail['withholding_tax_percentage'] > 0 ? ($vatable_amount + $vatable_exempt + $payment_detail['invoice_amount_vzrs']) * ($payment_detail['withholding_tax_percentage'] / 100) : 0)
-                ->setCellValue('O'.$i, '=SUM(K' . $i . '+L' . $i . '-N' . $i . ')');
+                ->setCellValue('B'.$i, $payment_detail['or_number'])
+                ->setCellValue('C'.$i, date("d-M-Y", strtotime($payment_detail['or_date'])))
+                ->setCellValue('D'.$i, $payment_detail['invoice_number'])
+                ->setCellValue('E'.$i, $student ? str_replace("-", "", $student['strStudentNumber']) : '')
+                ->setCellValue('F'.$i, ucfirst($payment_detail['last_name']) . ', ' . ucfirst($payment_detail['first_name']))
+                ->setCellValue('G'.$i, $payment_for)
+                ->setCellValue('H'.$i, $payment_detail['remarks'])
+                ->setCellValue('I'.$i, $payment_detail['subtotal_order'] > 0 ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount']);
 
             $i++;
         }
-        
-        $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'iACADEMY, Inc.')
-                    ->setCellValue('A2', $campus == 'Makati' ? 'iACADEMY Nexus 7434 Yakal Street Brgy. San Antonio, Makati City' : '5th Floor Filinvest Cyberzone Tower 2 Salinas Drive Cor. W. Geonzon St., Cebu IT Park, Apas, Cebu City')
-                    ->setCellValue('A3', 'Invoice Report')
-                    ->setCellValue('A4', $campus == 'Makati' ? '' : 'VAT REG TIN: 214-749-003-00003')
-                    ->setCellValue('A5', 'As of ' . $as_of_date)
-                    ->setCellValue('A7', 'No.')
-                    ->setCellValue('B7', 'Invoice Date')
-                    ->setCellValue('C7', 'Invoice Number')
-                    ->setCellValue('D7', 'Student Number')
-                    ->setCellValue('E7', 'Payee Name')
-                    ->setCellValue('F7', 'Payment For')
-                    ->setCellValue('G7', 'Particulars')
-                    ->setCellValue('H7', 'Vatable Amount')
-                    ->setCellValue('I7', 'VAT Exempt')
-                    ->setCellValue('J7', 'Zero Rated')
-                    ->setCellValue('K7', 'VAT')
-                    ->setCellValue('L7', 'Total Sales')
-                    ->setCellValue('M7', 'EWT Rate')
-                    ->setCellValue('N7', 'EWT Amount')
-                    ->setCellValue('O7', 'Net Amount Due');
 
-        $objPHPExcel->getActiveSheet()->getStyle('H8:L' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle('N8:O' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle('A1:O7')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('I8:I' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle('A1:I7')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
         $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray(
             array(
@@ -9126,7 +9022,7 @@ class Excel extends CI_Controller {
             )
         );
 
-        $objPHPExcel->getActiveSheet()->getStyle('A2:O7')->applyFromArray(
+        $objPHPExcel->getActiveSheet()->getStyle('A2:I7')->applyFromArray(
             array(
                 'font'  => array(
                     'bold'  => true,
@@ -9136,7 +9032,7 @@ class Excel extends CI_Controller {
             )
         );
 
-        $objPHPExcel->getActiveSheet()->getStyle('A7:O' . ($i-1))->applyFromArray(
+        $objPHPExcel->getActiveSheet()->getStyle('A7:I' . ($i-1))->applyFromArray(
             array(
                 'borders' => array(
                     'allborders' => array(
@@ -9153,8 +9049,8 @@ class Excel extends CI_Controller {
                 'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
             )
         );
-        $objPHPExcel->getActiveSheet()->getStyle('A7:O'.$i)->applyFromArray($style);
-        $objPHPExcel->getActiveSheet()->getStyle('A7:O'.$i)->getAlignment()->setWrapText(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A7:I'.$i)->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('A7:I'.$i)->getAlignment()->setWrapText(true);
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
@@ -9165,19 +9061,13 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(20);
         
         $sheet = $objPHPExcel->getActiveSheet();
-        $sheet->mergeCells('A1:O1');
-        $sheet->mergeCells('A2:O2');
-        $sheet->mergeCells('A3:O3');
-        $sheet->mergeCells('A4:O4');
-        $sheet->mergeCells('A5:O5');
+        $sheet->mergeCells('A1:I1');
+        $sheet->mergeCells('A2:I2');
+        $sheet->mergeCells('A3:I3');
+        $sheet->mergeCells('A4:I4');
+        $sheet->mergeCells('A5:I5');
 
         $objPHPExcel->getActiveSheet()->setTitle('Invoice Report');
 
@@ -9190,7 +9080,7 @@ class Excel extends CI_Controller {
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
-        header('Content-Disposition: attachment;filename="Invoice Report (' . $as_of_date . ').xls"');
+        header('Content-Disposition: attachment;filename="OR Report (' . $as_of_date . ').xls"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
