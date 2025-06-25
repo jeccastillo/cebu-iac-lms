@@ -114,7 +114,7 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label>Check/Credit/Debit Number:</label>
+                                            <label>Reference No.:</label>
                                             <input type="text"
                                                 :disabled="request.is_cash == 1 || request.is_cash == 4"
                                                 required class="form-control"
