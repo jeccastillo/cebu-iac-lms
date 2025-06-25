@@ -1455,7 +1455,7 @@ class Finance extends CI_Controller {
             if(strpos($result['description'], 'Tuition') !== false || strpos($result['description'], 'Reservation') !== false || strpos($result['description'], 'Application') !== false){
                 $payment_for = $result['description'];
                 $sy = $this->db->get_where('tb_mas_sy', array('intID' => $result['sy_reference']))->first_row();
-                $particular = $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd;
+                $particular = $sy->enumSem . ' ' . $this->data["term_type"] . ' ' . $sy->strYearStart . '-' . $sy->strYearEnd;
             }else{
                 $payment_for = 'Others';
                 $particular = $result['remarks'];
