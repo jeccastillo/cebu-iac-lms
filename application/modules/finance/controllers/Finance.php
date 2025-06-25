@@ -1454,10 +1454,11 @@ class Finance extends CI_Controller {
 
             if(strpos($result['description'], 'Tuition') !== false || strpos($result['description'], 'Reservation') !== false || strpos($result['description'], 'Application') !== false){
                 $payment_for = $result['description'];
-                $particular = '';
+                $sy = $this->db->get_where('tb_mas_sy', array('intID' => $payment_detail['sy_reference']))->first_row();
+                $particular = $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd;
             }else{
                 $payment_for = 'Others';
-                $particular = $result['description'];
+                $particular = $result['remarks'];
             }
             
             $vat_exempt = $result['invoice_amount'] == 0 && $result['invoice_amount_ves'] == 0 ? $result['subtotal_order'] : $result['invoice_amount_ves'];
@@ -1475,7 +1476,6 @@ class Finance extends CI_Controller {
             $response_data['studentName'] = ucfirst($result['last_name']) . ', ' . ucfirst($result['first_name']);
             $response_data['paymentFor'] = $result['description'];
             $response_data['particular'] = $particular;
-            $response_data['remarks'] = $result['remarks'];
             $response_data['isCash'] = $result['is_cash'] ? 'Cash Sales' : 'Charge Sales';
             $response_data['invoiceDate'] =  $result['invoice_date'] ? date("d-M-Y", strtotime($result['invoice_date'])) : date("d-M-Y", strtotime($result['or_date']));
             $response_data['invoiceNumber'] = $result['invoice_number'];
