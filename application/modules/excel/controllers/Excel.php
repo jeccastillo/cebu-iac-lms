@@ -8980,13 +8980,12 @@ class Excel extends CI_Controller {
                     ->setCellValue('A3', 'OR Report')
                     ->setCellValue('A4', 'As of ' . $as_of_date)
                     ->setCellValue('A7', 'No.')
-                    ->setCellValue('B7', 'OR Number')
-                    ->setCellValue('C7', 'OR Date')
-                    ->setCellValue('D7', 'Invoice Number')
-                    ->setCellValue('E7', 'Student Number')
-                    ->setCellValue('F7', 'Payee Name')
-                    ->setCellValue('G7', 'Particulars')
-                    ->setCellValue('H7', 'Payment Received');
+                    ->setCellValue('B7', 'OR Date')
+                    ->setCellValue('C7', 'OR Number')
+                    ->setCellValue('D7', 'Student Number')
+                    ->setCellValue('E7', 'Payee Name')
+                    ->setCellValue('F7', 'Particulars')
+                    ->setCellValue('G7', 'Payment Received');
 
         $i = 8;
 
@@ -8995,6 +8994,7 @@ class Excel extends CI_Controller {
             $student = $this->db->get_where('tb_mas_users', array('slug' => $payment_detail['student_number']))->first_row('array');
 
             if(strpos($payment_detail['description'], 'Tuition') !== false || strpos($payment_detail['description'], 'Reservation') !== false || strpos($payment_detail['description'], 'Application') !== false){
+                $sy = $this->db->get_where('tb_mas_sy', array('intID' => $payment_detail['sy_reference']))->first_row();
                 $particular = $payment_detail['description'] . ' - ' . $sy->enumSem . ' ' . $this->data["term_type"] . ' ' . $sy->strYearStart . '-' . $sy->strYearEnd;;
             }else{
                 $particular = $payment_detail['student_information_id'] != 0 ? $payment_detail['description'] . ' - ' . $payment_detail['remarks'] : $payment_detail['remarks'];
@@ -9003,19 +9003,18 @@ class Excel extends CI_Controller {
             // Add some data
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A'.$i, $index + 1)
-                ->setCellValue('B'.$i, $payment_detail['or_number'])
-                ->setCellValue('C'.$i, date("d-M-Y", strtotime($payment_detail['or_date'])))
-                ->setCellValue('D'.$i, $payment_detail['invoice_number'])
-                ->setCellValue('E'.$i, $student ? str_replace("-", "", $student['strStudentNumber']) : '')
-                ->setCellValue('F'.$i, ucfirst($payment_detail['last_name']) . ', ' . ucfirst($payment_detail['first_name']))
-                ->setCellValue('G'.$i, $particular)
-                ->setCellValue('H'.$i, $payment_detail['subtotal_order'] > 0 ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount']);
+                ->setCellValue('B'.$i, date("d-M-Y", strtotime($payment_detail['or_date'])))
+                ->setCellValue('C'.$i, $payment_detail['or_number'])
+                ->setCellValue('D'.$i, $student ? str_replace("-", "", $student['strStudentNumber']) : '')
+                ->setCellValue('E'.$i, ucfirst($payment_detail['last_name']) . ', ' . ucfirst($payment_detail['first_name']))
+                ->setCellValue('F'.$i, $particular)
+                ->setCellValue('G'.$i, $payment_detail['subtotal_order'] > 0 ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount']);
 
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->getStyle('H8:H' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
-        $objPHPExcel->getActiveSheet()->getStyle('A1:H7')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('G8:G' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
+        $objPHPExcel->getActiveSheet()->getStyle('A1:G7')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
         $objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray(
             array(
@@ -9027,7 +9026,7 @@ class Excel extends CI_Controller {
             )
         );
 
-        $objPHPExcel->getActiveSheet()->getStyle('A2:H7')->applyFromArray(
+        $objPHPExcel->getActiveSheet()->getStyle('A2:G7')->applyFromArray(
             array(
                 'font'  => array(
                     'bold'  => true,
@@ -9037,7 +9036,7 @@ class Excel extends CI_Controller {
             )
         );
 
-        $objPHPExcel->getActiveSheet()->getStyle('A7:H' . ($i-1))->applyFromArray(
+        $objPHPExcel->getActiveSheet()->getStyle('A7:G' . ($i-1))->applyFromArray(
             array(
                 'borders' => array(
                     'allborders' => array(
@@ -9054,24 +9053,23 @@ class Excel extends CI_Controller {
                 'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
             )
         );
-        $objPHPExcel->getActiveSheet()->getStyle('A7:H'.$i)->applyFromArray($style);
-        $objPHPExcel->getActiveSheet()->getStyle('A7:H'.$i)->getAlignment()->setWrapText(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A7:G'.$i)->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('A7:G'.$i)->getAlignment()->setWrapText(true);
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(35);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(35);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
         
         $sheet = $objPHPExcel->getActiveSheet();
-        $sheet->mergeCells('A1:H1');
-        $sheet->mergeCells('A2:H2');
-        $sheet->mergeCells('A3:H3');
-        $sheet->mergeCells('A4:H4');
-        $sheet->mergeCells('A5:H5');
+        $sheet->mergeCells('A1:G1');
+        $sheet->mergeCells('A2:G2');
+        $sheet->mergeCells('A3:G3');
+        $sheet->mergeCells('A4:G4');
+        $sheet->mergeCells('A5:G5');
 
         $objPHPExcel->getActiveSheet()->setTitle('Invoice Report');
 
