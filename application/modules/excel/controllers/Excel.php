@@ -8788,7 +8788,7 @@ class Excel extends CI_Controller {
                     $vatable_exempt = $payment_detail['subtotal_order'];
                 }
             }else{
-                $particular = $payment['student_information_id'] != 0 ? $payment_detail['description'] . ' - ' . $payment_detail['remarks'] : $payment_detail['remarks'];
+                $particular = $payment_detail['student_information_id'] != 0 ? $payment_detail['description'] . ' - ' . $payment_detail['remarks'] : $payment_detail['remarks'];
 
                 if($payment_detail['student_information_id'] == 0){
                     $vatable_amount = $payment_detail['subtotal_order'] > 0 ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount'];
@@ -8997,7 +8997,7 @@ class Excel extends CI_Controller {
             if(strpos($payment_detail['description'], 'Tuition') !== false || strpos($payment_detail['description'], 'Reservation') !== false || strpos($payment_detail['description'], 'Application') !== false){
                 $particular = $payment_detail['description'] . ' - ' . $sy->enumSem . ' ' . $this->data["term_type"] . ' ' . $sy->strYearStart . '-' . $sy->strYearEnd;;
             }else{
-                $particular = $payment['student_information_id'] != 0 ? $payment_detail['description'] . ' - ' . $payment_detail['remarks'] : $payment_detail['remarks'];
+                $particular = $payment_detail['student_information_id'] != 0 ? $payment_detail['description'] . ' - ' . $payment_detail['remarks'] : $payment_detail['remarks'];
             }
             
             // Add some data
