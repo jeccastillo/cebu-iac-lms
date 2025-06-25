@@ -1455,10 +1455,10 @@ class Finance extends CI_Controller {
             if(strpos($result['description'], 'Tuition') !== false || strpos($result['description'], 'Reservation') !== false || strpos($result['description'], 'Application') !== false){
                 $payment_for = $result['description'];
                 $sy = $this->db->get_where('tb_mas_sy', array('intID' => $result['sy_reference']))->first_row();
-                $particular = $sy->enumSem . ' ' . $this->data["term_type"] . ' ' . $sy->strYearStart . '-' . $sy->strYearEnd;
+                $particular = $payment_detail['description'] . ' - ' . $sy->enumSem . ' ' . $this->data["term_type"] . ' ' . $sy->strYearStart . '-' . $sy->strYearEnd;
             }else{
                 $payment_for = 'Others';
-                $particular = $result['remarks'];
+                $particular = $payment_detail['student_information_id'] != 0 ? $payment_detail['description'] . ' - ' . $payment_detail['remarks'] : $payment_detail['remarks'];
             }
             
             $vat_exempt = $result['invoice_amount'] == 0 && $result['invoice_amount_ves'] == 0 ? $result['subtotal_order'] : $result['invoice_amount_ves'];
@@ -1522,10 +1522,11 @@ class Finance extends CI_Controller {
 
             if(strpos($result['description'], 'Tuition') !== false || strpos($result['description'], 'Reservation') !== false || strpos($result['description'], 'Application') !== false){
                 $payment_for = $result['description'];
-                $particular = '';
+                $sy = $this->db->get_where('tb_mas_sy', array('intID' => $payment_detail['sy_reference']))->first_row();
+                $particular = $payment_detail['description'] . ' - ' . $sy->enumSem . ' ' . $this->data["term_type"] . ' ' . $sy->strYearStart . '-' . $sy->strYearEnd;
             }else{
                 $payment_for = 'Others';
-                $particular = $result['description'];
+                $particular = $payment_detail['student_information_id'] != 0 ? $payment_detail['description'] . ' - ' . $payment_detail['remarks'] : $payment_detail['remarks'];
             }
 
             $response_data['index'] = $index + 1;
