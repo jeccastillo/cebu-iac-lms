@@ -400,8 +400,21 @@ class Pdf extends CI_Controller {
         $active_sem = $this->data_fetcher->get_sem_by_id($sem);
         $type = $active_sem['term_student_type'];
         $programs = $this->db->get_where('tb_mas_programs',array('type'=>$type))->result_array();
+        if($type == "shs")
+            $programs = $this->db->get_where('tb_mas_programs',array('type'=>$type))->result_array();
+        elseif($type == "college")
+            $programs = $this->db->where('type','college')
+                                 ->or_where('type','other')
+                                 ->get('tb_mas_programs')
+                                 ->result_array();
+        elseif($type == "next")
+            $programs = $this->db->where('type','next')
+            ->or_where('type','other')
+            ->get('tb_mas_programs')
+            ->result_array();
+                                 
         $data['programs'] = $programs;
-        $ret = [];        
+        $ret = [];
 
         foreach($programs as $program){
             $st = [];
