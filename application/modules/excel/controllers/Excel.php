@@ -8779,9 +8779,9 @@ class Excel extends CI_Controller {
                 }
             }
 
-            $sy = $this->db->get_where('tb_mas_sy', array('intID' => $payment_detail['sy_reference']))->first_row();
             if(strpos($payment_detail['description'], 'Tuition') !== false || strpos($payment_detail['description'], 'Reservation') !== false || strpos($payment_detail['description'], 'Application') !== false){
                 $payment_for = $payment_detail['description'];
+                $sy = $this->db->get_where('tb_mas_sy', array('intID' => $payment_detail['sy_reference']))->first_row();
                 $particular = $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd;
                 if(strpos($payment_detail['description'], 'Tuition') !== false){
                     $vatable_exempt = $tuition_fee - $total_discount;
