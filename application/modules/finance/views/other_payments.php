@@ -172,7 +172,7 @@
                                     </div>
                                     <div v-if="windowPayment == 'invoice'"
                                         class="form-group col-sm-6">
-                                        <label>Build Amount :</label>
+                                        <label>Billed Amount :</label>
                                         <input @change="computeVat" step=".01" type="number"
                                             class="form-control" v-model="request.invoice_amount">
                                     </div>
