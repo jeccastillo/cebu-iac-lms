@@ -8779,9 +8779,10 @@ class Excel extends CI_Controller {
                 }
             }
 
+            $sy = $this->db->get_where('tb_mas_sy', array('intID' => $payment_detail['sy_reference']))->first_row();
             if(strpos($payment_detail['description'], 'Tuition') !== false || strpos($payment_detail['description'], 'Reservation') !== false || strpos($payment_detail['description'], 'Application') !== false){
                 $payment_for = $payment_detail['description'];
-                $particular = '';
+                $particular = $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd;
                 if(strpos($payment_detail['description'], 'Tuition') !== false){
                     $vatable_exempt = $tuition_fee - $total_discount;
                 }else{
@@ -8789,7 +8790,7 @@ class Excel extends CI_Controller {
                 }
             }else{
                 $payment_for = 'Others';
-                $particular = $payment_detail['description'];
+                $particular = $payment_detail['remarks'];
 
                 if($payment_detail['student_information_id'] == 0){
                     $vatable_amount = $payment_detail['subtotal_order'] > 0 ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount'];
@@ -8821,7 +8822,7 @@ class Excel extends CI_Controller {
                 ->setCellValue('D'.$i, $student ? str_replace("-", "", $student['strStudentNumber']) : '')
                 ->setCellValue('E'.$i, ucfirst($payment_detail['last_name']) . ', ' . ucfirst($payment_detail['first_name']))
                 ->setCellValue('F'.$i, $payment_for)
-                ->setCellValue('G'.$i, $payment_detail['remarks'])
+                ->setCellValue('G'.$i, $particular)
                 ->setCellValue('H'.$i, $vatable_amount)
                 ->setCellValue('I'.$i, $vatable_exempt)
                 ->setCellValue('J'.$i, $payment_detail['invoice_amount_vzrs'])
