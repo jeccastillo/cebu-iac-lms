@@ -8827,7 +8827,7 @@ class Excel extends CI_Controller {
                 ->setCellValue('K'.$i, '=SUM(G' . $i . ':J' . $i . ')')
                 ->setCellValue('L'.$i, $payment_detail['withholding_tax_percentage'] > 0 ? $payment_detail['withholding_tax_percentage'] . '%' : 0)
                 ->setCellValue('M'.$i, $payment_detail['withholding_tax_percentage'] > 0 ? ($vatable_amount + $vatable_exempt + $payment_detail['invoice_amount_vzrs']) * ($payment_detail['withholding_tax_percentage'] / 100) : 0)
-                ->setCellValue('N'.$i, '=SUM(K' . $i . '+L' . $i . '-N' . $i . ')');
+                ->setCellValue('N'.$i, '=SUM(K' . $i . '+K' . $i . '-M' . $i . ')');
 
             $i++;
         }
