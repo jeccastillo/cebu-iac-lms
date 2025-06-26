@@ -23,7 +23,7 @@
                         
                         <?php if(in_array($user['intUserLevel'],array(2,3)) ): ?>
                             <label for="intSubjectID">Faculty Assigned:</label>    
-                            <select class="form-control select2" id="facultyID" name="intFacultyID" >
+                            <select class="form-control select2" value="999" id="facultyID" name="intFacultyID" >
                                 <?php foreach($faculty as $f): ?>
                                     <option value="<?php echo $f['intID'] ?>"><?php echo $f['strLastname']." ".$f['strFirstname']; ?></option> 
                                 <?php endforeach; ?>
