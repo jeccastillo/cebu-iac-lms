@@ -25,7 +25,7 @@
                             <label for="intSubjectID">Faculty Assigned:</label>    
                             <select class="form-control select2" id="facultyID" name="intFacultyID" >
                                 <?php foreach($faculty as $f): ?>
-                                    <option value="<?php echo $f['intID'] ?>"><?php echo $f['strLastname']." ".$f['strFirstname']; ?></option> 
+                                    <option <?php echo $f['intID'] == "999"?"selected":""; ?> value="<?php echo $f['intID'] ?>"><?php echo $f['strLastname']." ".$f['strFirstname']; ?></option> 
                                 <?php endforeach; ?>
                             </select>
                             
