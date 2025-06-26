@@ -397,7 +397,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <h4>Classlists</h4>
-                            <select style="height:300px" class="select2" id="classlist-selector" multiple>
+                            <select style="height:300px;width:500px;" class="select2" id="classlist-selector" multiple>
                                 <?php foreach($all_classlist as $sn):                                         
                                     $section = $sn['strClassName'].$sn['year'].$sn['strSection']." ".$sn['sub_section'];
                                     ?>
