@@ -890,6 +890,12 @@
                                 style="margin-left: 10px;"><i class="ion ion-ios-plus-empty"></i>
                                 Import Credit Subject</a>
                         </li>
+                        <li
+                            class="<?php echo (isset($page) && $page=="enrollment_statistics")?'active':''; ?>">
+                            <a href="<?php echo base_url(); ?>registrar/enrollment_statistics"
+                                style="margin-left: 10px;"><i class="ion ion-android-list"></i>
+                                Enrollment Statistics</a>
+                        </li>
                     </ul>
                 </li>
                 <li

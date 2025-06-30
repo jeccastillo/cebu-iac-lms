@@ -2865,6 +2865,16 @@ class Registrar extends CI_Controller {
         else
             redirect(base_url()."unity");  
     }
+
+    function enrollment_statistics(){
+        $this->data['page'] = "reports";
+        $this->data['opentree'] = "registrar";
+        $sem = $this->data_fetcher->get_active_sem();
+        $this->data['sem'] = $sem['intID'];
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/enrollment_statistics",$this->data);
+        $this->load->view("common/footer",$this->data);            
+    }
     
     public function faculty_logged_in()
     {
