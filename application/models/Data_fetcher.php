@@ -3202,11 +3202,11 @@ class Data_fetcher extends CI_Model {
                             $ar_external_discounts_installment = $total_assessment_installment * ($scholar->total_assessment_rate/100);
                         }else{
                             if($scholar->deduction_type == 'discount' && date("Y-m-d", strtotime($scholar->date_applied)) > $sem['ar_report_date_generation']){
-                                $ar_late_tagged_discounts_full = $total_assessment * ($scholar->total_assessment_rate/100);
-                                $ar_late_tagged_discounts_installment = $total_assessment_installment * ($scholar->total_assessment_rate/100);
+                                $ar_late_tagged_discounts_full += $total_assessment * ($scholar->total_assessment_rate/100);
+                                $ar_late_tagged_discounts_installment += $total_assessment_installment * ($scholar->total_assessment_rate/100);
                             }else{
-                                $ar_discounts_full = $total_assessment * ($scholar->total_assessment_rate/100);
-                                $ar_discounts_installment = $total_assessment_installment * ($scholar->total_assessment_rate/100);
+                                $ar_discounts_full += $total_assessment * ($scholar->total_assessment_rate/100);
+                                $ar_discounts_installment += $total_assessment_installment * ($scholar->total_assessment_rate/100);
                             }
                         }
                     }
