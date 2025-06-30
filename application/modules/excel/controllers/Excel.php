@@ -5257,17 +5257,7 @@ class Excel extends CI_Controller {
                     
                     if($ledger_data){
                         foreach($ledger_data as $ledger){
-                            if($ledger['type'] == 'other'){
-                                if(!$other){
-                                    $other[0] = date("M d,Y",strtotime($ledger['date']));
-                                    $other[1] = $ledger['name'];
-                                    $other[2] = $ledger['amount'];
-                                }else{
-                                    $other[0] = ', ' . date("M d,Y",strtotime($ledger['date']));
-                                    $other[1] = ', ' . $ledger['name'];
-                                    $other[2] += $ledger['amount'];
-                                }
-                            }else if(strpos($ledger['remarks'], 'APPLIED FROM') !== false){
+                            if(strpos($ledger['remarks'], 'APPLIED FROM') !== false){
                                 if(!$applied_from){
                                     $applied_from[0] = date("M d,Y",strtotime($ledger['date']));
                                     $applied_from[1] = $ledger['remarks'];
@@ -5296,6 +5286,16 @@ class Excel extends CI_Controller {
                                     $refund[0] .= ', ' . date("M d,Y",strtotime($ledger['date']));
                                     $refund[1] .= ', ' . $ledger['remarks'];
                                     $refund[2] += $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
+                                }
+                            }else{
+                                if(!$other){
+                                    $other[0] = date("M d,Y",strtotime($ledger['date']));
+                                    $other[1] = $ledger['name'];
+                                    $other[2] = $ledger['amount'];
+                                }else{
+                                    $other[0] = ', ' . date("M d,Y",strtotime($ledger['date']));
+                                    $other[1] = ', ' . $ledger['name'];
+                                    $other[2] += $ledger['amount'];
                                 }
                             }
                         }
