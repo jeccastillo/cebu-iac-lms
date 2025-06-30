@@ -2915,6 +2915,7 @@ class Data_fetcher extends CI_Model {
         $lab_scholarship_installment = 0;
         $lab_scholarship_installment30 = 0;
         $lab_scholarship_installment50 = 0;
+        $in_house_grand_total = 0;
         $other_scholarship = 0;
         $ctr = 0;        
         $scholarships_for_ledger = [];
