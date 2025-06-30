@@ -5291,11 +5291,11 @@ class Excel extends CI_Controller {
                                 if(!$other){
                                     $other[0] = date("M d,Y",strtotime($ledger['date']));
                                     $other[1] = $ledger['name'];
-                                    $other[2] = $ledger['amount'];
+                                    $other[2] = $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
                                 }else{
                                     $other[0] = ', ' . date("M d,Y",strtotime($ledger['date']));
                                     $other[1] = ', ' . $ledger['name'];
-                                    $other[2] += $ledger['amount'];
+                                    $other[2] += $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
                                 }
                             }
                         }
