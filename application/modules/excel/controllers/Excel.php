@@ -5527,16 +5527,16 @@ class Excel extends CI_Controller {
 
                     //refund
                     if($refund){
-                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 5, $i)->setValue($refund[0]);
-                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 6, $i)->setValue($refund[1]);
-                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 7, $i)->setValue($refund[2]);
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 11, $i)->setValue($refund[0]);
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 12, $i)->setValue($refund[1]);
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 13, $i)->setValue($refund[2]);
                     }
 
                     //others
                     if($other){
-                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 5, $i)->setValue($other[0]);
-                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 6, $i)->setValue($other[1]);
-                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 7, $i)->setValue($other[2]);
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 14, $i)->setValue($other[0]);
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 15, $i)->setValue($other[1]);
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 16, $i)->setValue($other[2]);
                     }
     
                     $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 17, $i)->setValue($total_adjustment);
