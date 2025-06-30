@@ -69,7 +69,7 @@
                             v-for="college,index of collegeList.slice(2,4)"
                             class="block indent-5 color-primary mb-1 ml-1.5">
                             <input type="radio" :id="index" :value="secondDegreeValue[index]" name="college"
-                                v-model="request.student_type" @click="filterCourses()" required class="mr-1">
+                                v-model="request.student_type" @click="filterCourses('college')" required class="mr-1">
                             {{college}}
                         </label>
                         <h6 class="color-primary font-bold">Other</h6>
