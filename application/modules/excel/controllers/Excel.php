@@ -5258,8 +5258,10 @@ class Excel extends CI_Controller {
                     if($ledger_data){
                         foreach($ledger_data as $ledger){
                             if($user['intID'] == 875){
+                                print($ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount']);
                                 if($ledger['amount'] < 0){
                                     print('negative');
+                                    print(-1 * $ledger['amount']);
                                 }else{
                                     print('positive');
                                 }
