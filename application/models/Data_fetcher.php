@@ -3033,12 +3033,12 @@ class Data_fetcher extends CI_Model {
                         if($scholar->tuition_fee_fixed > $tuition){
                             $tuition_scholarship_current = $tuition;
                             $tuition_scholarship += $tuition;
-                            $tuition_fee_fixed = $scholar->tuition;
+                            $tuition_fee_fixed += $scholar->tuition;
                         }
                         else{
                             $tuition_scholarship_current = $scholar->tuition_fee_fixed;
                             $tuition_scholarship += $scholar->tuition_fee_fixed;   
-                            $tuition_fee_fixed = $scholar->tuition_fee_fixed;                                    
+                            $tuition_fee_fixed += $scholar->tuition_fee_fixed;                                    
                         }
 
                         $tuition_scholarship_installment_current = $tuition_scholarship;
@@ -3214,14 +3214,14 @@ class Data_fetcher extends CI_Model {
                         if($scholar->total_assessment_fixed > $total_assessment){
                             $total_scholarship_temp += $total_assessment;
                             $total_scholarship_installment_temp += $total_assessment_installment;
-                            $total_assessment_fixed = $total_assessment;
-                            $total_assessment_fixed_installment = $total_assessment_installment;
+                            $total_assessment_fixed += $total_assessment;
+                            $total_assessment_fixed_installment += $total_assessment_installment;
                         }
                         else{
                             $total_scholarship_temp += $scholar->total_assessment_fixed;
                             $total_scholarship_installment_temp += $scholar->total_assessment_fixed;
-                            $total_assessment_fixed = $scholar->total_assessment_fixed;
-                            $total_assessment_fixed_installment = $scholar->total_assessment_fixed;
+                            $total_assessment_fixed += $scholar->total_assessment_fixed;
+                            $total_assessment_fixed_installment += $scholar->total_assessment_fixed;
                         }
                     }
                 }
@@ -3266,12 +3266,12 @@ class Data_fetcher extends CI_Model {
                         if($scholar->tuition_fee_fixed > $tuition){
                             $tuition_scholarship_current = $tuition;
                             $tuition_discount += $tuition;
-                            $tuition_fee_fixed = $scholar->tuition;
+                            $tuition_fee_fixed += $scholar->tuition;
                         }
                         else{
                             $tuition_scholarship_current = $scholar->tuition_fee_fixed;
                             $tuition_discount += $scholar->tuition_fee_fixed;   
-                            $tuition_fee_fixed = $scholar->tuition_fee_fixed;                                         
+                            $tuition_fee_fixed += $scholar->tuition_fee_fixed;                                         
                         }
 
                         $tuition_scholarship_installment_current = $tuition_scholarship;
