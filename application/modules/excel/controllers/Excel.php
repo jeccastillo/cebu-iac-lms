@@ -5257,18 +5257,6 @@ class Excel extends CI_Controller {
                     
                     if($ledger_data){
                         foreach($ledger_data as $ledger){
-                            if($user['intID'] == 875){
-                                print($ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount']);
-                                if($ledger['amount'] < 0){
-                                    print('negative');
-                                    print(-1 * $ledger['amount']);
-                                }else{
-                                    print('positive');
-                                }
-                                print_r($ledger_data);
-                                print_r($user);
-                                die();
-                            }
                             if($ledger['type'] == 'other'){
                                 if(!$other){
                                     $other[0] = date("M d,Y",strtotime($ledger['date']));
@@ -5303,14 +5291,27 @@ class Excel extends CI_Controller {
                                 if(!$refund){
                                     $refund[0] = date("M d,Y",strtotime($ledger['date']));
                                     $refund[1] = $ledger['remarks'];
-                                    $refund[2] = -1 * abs($ledger['amount']);
+                                    $refund[2] = $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
                                 }else{
                                     $refund[0] .= date("M d,Y",strtotime($ledger['date']));
                                     $refund[1] .= $ledger['remarks'];
-                                    $refund[2] += -1 * abs($ledger['amount']);
+                                    $refund[2] += $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
                                 }
                             }
                         }
+                    }
+                    if($user['intID'] == 875){
+                        print($ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount']);
+                        if($ledger['amount'] < 0){
+                            print('negative');
+                            print(-1 * $ledger['amount']);
+                        }else{
+                            print('positive');
+                        }
+                        print_r($refund);
+                        print_r($ledger_data);
+                        print_r($user);
+                        die();
                     }
     
                     $studentsEnrolled = true;
