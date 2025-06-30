@@ -5254,14 +5254,19 @@ class Excel extends CI_Controller {
                 if(in_array($reg_status, ['Enrolled', 'Officially Withdrawn']) || ($reg_status =='LOA' && $reg['withdrawal_period'] == 'after')){
 
                     $ledger_data = $this->db->get_where('tb_mas_student_ledger', array('syid' => $sem, 'student_id' => $user['intID'], 'date <=' => $report_date . ' 23:59:59'))->result_array();
-                    if($user['intID'] == 875){
-                        print_r($ledger_data);
-                        print_r($user);
-                        die();
-                    }
+                    
                     if($ledger_data){
                         foreach($ledger_data as $ledger){
-                            
+                            if($user['intID'] == 875){
+                                if($ledger['amount'] < 0){
+                                    print('negative');
+                                }else{
+                                    print('positive');
+                                }
+                                print_r($ledger_data);
+                                print_r($user);
+                                die();
+                            }
                             if($ledger['type'] == 'other'){
                                 if(!$other){
                                     $other[0] = date("M d,Y",strtotime($ledger['date']));
