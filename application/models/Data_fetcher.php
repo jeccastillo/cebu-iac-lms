@@ -3131,6 +3131,10 @@ class Data_fetcher extends CI_Model {
                 $scholarship_installment_grand_total += $total_scholarship_installment_temp;
                 $scholarship_installment_grand_total30 += $total_scholarship_installment_temp30;
                 $scholarship_installment_grand_total50 += $total_scholarship_installment_temp50;
+
+                if($scholar->deduction_from == 'in-house')
+                    $in_house_grand_total += $total_scholarship_temp;
+                
                 $scholarship_grand_total += $total_scholarship_temp;
 
                 $ctr++;
