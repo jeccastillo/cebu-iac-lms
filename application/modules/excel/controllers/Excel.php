@@ -5237,7 +5237,7 @@ class Excel extends CI_Controller {
 
         foreach($users as $index => $user)
         {
-            $applied_from = $applied_to = $other = array();
+            $applied_from = $applied_to = $other = $refund = array();
 
             $reg = $this->db->select('tb_mas_registration.*, tb_mas_scholarships.deduction_type, tb_mas_tuition_year.installmentDP')
                     ->from('tb_mas_registration')
@@ -5287,6 +5287,16 @@ class Excel extends CI_Controller {
                                     $applied_to[0] = date("M d,Y",strtotime($ledger['date']));
                                     $applied_to[1] = $ledger['remarks'];
                                     $applied_to[2] = $ledger['amount'] < 0 ? $ledger['amount'] : -1 * abs($ledger['amount']);
+                                }
+                            }else{
+                                if(!$refund){
+                                    $refund[0] = date("M d,Y",strtotime($ledger['date']));
+                                    $refund[1] = $ledger['remarks'];
+                                    $refund[2] = $ledger['amount'] < 0 ? $ledger['amount'] : -1 * abs($ledger['amount']);
+                                }else{
+                                    $refund[0] = date("M d,Y",strtotime($ledger['date']));
+                                    $refund[1] = $ledger['remarks'];
+                                    $refund[2] = $ledger['amount'] < 0 ? $ledger['amount'] : -1 * abs($ledger['amount']);
                                 }
                             }
                         }
@@ -5514,6 +5524,20 @@ class Excel extends CI_Controller {
                         $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 10, $i)->setValue($late_tagged_referrer > 0 ? $late_tagged_referrer : '');
                         // $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 10, $i)->setValue($total_discount > 0 ? $total_discount : '');
                     // }
+
+                    //refund
+                    if($refund){
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 5, $i)->setValue($refund[0]);
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 6, $i)->setValue($refund[1]);
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 7, $i)->setValue($refund[2]);
+                    }
+
+                    //others
+                    if($other){
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 5, $i)->setValue($other[0]);
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 6, $i)->setValue($other[1]);
+                        $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 7, $i)->setValue($other[2]);
+                    }
     
                     $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 17, $i)->setValue($total_adjustment);
                     $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index + 18, $i)->setValue('=' . $this->columnIndexToLetter($last_index + 1) . '' . $i . '-' . $this->columnIndexToLetter($last_index + 17) . '' . $i);
