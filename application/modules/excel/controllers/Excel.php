@@ -5288,7 +5288,7 @@ class Excel extends CI_Controller {
                                     $applied_to[1] = $ledger['remarks'];
                                     $applied_to[2] = $ledger['amount'] < 0 ? $ledger['amount'] : -1 * abs($ledger['amount']);
                                 }
-                            }else{
+                            }else if(strpos($ledger['remarks'], 'Refund') !== false){
                                 if(!$refund){
                                     $refund[0] = date("M d,Y",strtotime($ledger['date']));
                                     $refund[1] = $ledger['remarks'];
