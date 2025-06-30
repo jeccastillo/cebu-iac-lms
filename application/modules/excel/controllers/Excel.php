@@ -5248,6 +5248,12 @@ class Excel extends CI_Controller {
                     ->first_row('array');
             $reg_status = $this->data_fetcher->getRegistrationStatus($user['intID'],$sem);
             $tuition = $this->data_fetcher->getTuition($user['intID'], $sem);
+
+            if($user['intID'] == 881){
+                print_r($tuition);
+                print_r($user);
+                die();
+            }
             $w_status = false;
             if($reg && substr($user['strStudentNumber'], 0, 1) != 'T'){
                 if(in_array($reg_status, ['Enrolled', 'Officially Withdrawn']) || ($reg_status =='LOA' && $reg['withdrawal_period'] == 'after')){
@@ -8899,7 +8905,7 @@ class Excel extends CI_Controller {
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(35);
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(30);
