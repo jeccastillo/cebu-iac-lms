@@ -29,7 +29,7 @@ $(document).ready(function() {
             data: 'paymentFor',
             title: 'Payment For'
         }, {
-            data: 'particular]',
+            data: 'particular',
             title: 'Particulars'
         }, {
             data: 'remarks',
