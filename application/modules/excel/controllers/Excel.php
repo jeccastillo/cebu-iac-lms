@@ -8862,7 +8862,7 @@ class Excel extends CI_Controller {
                 ->setCellValue('H'.$i, number_format($vatable_exempt ,2,'.',','))
                 ->setCellValue('I'.$i, number_format($payment_detail['invoice_amount_vzrs'] ,2,'.',','))
                 ->setCellValue('J'.$i, $lessVat)
-                ->setCellValue('K'.$i, '=SUM(G' . $i . ':J' . $i . ')')
+                ->setCellValue('K'.$i, '=ROUND(SUM(G' . $i . ':J' . $i . '),2)')
                 ->setCellValue('L'.$i, $payment_detail['withholding_tax_percentage'] > 0 ? $payment_detail['withholding_tax_percentage'] . '%' : 0)
                 ->setCellValue('M'.$i, number_format($ewtAmount ,2,'.',','))
                 ->setCellValue('N'.$i, '=SUM(K' . $i . '+K' . $i . '-M' . $i . ')');
