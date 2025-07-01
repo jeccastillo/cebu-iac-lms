@@ -14,11 +14,11 @@ $(document).ready(function() {
             data: 'index',
             title: 'No'
         }, {
-            data: 'orNumber',
-            title: 'OR Number'
-        }, {
             data: 'orDate',
             title: 'OR Date'
+        }, {
+            data: 'orNumber',
+            title: 'OR Number'
         }, {
             data: 'invoiceNumber',
             title: 'Invoice Number'
