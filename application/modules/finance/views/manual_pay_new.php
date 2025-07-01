@@ -32,7 +32,7 @@
                                             <label>Select payment for</label>
                                             <select required @change="selectDescription"
                                                 class="form-control" v-model="request.description">
-                                                <option value="Reservation Payment">Reservation
+                                                <option v-if="student.status == 'For Reservation'" value="Reservation Payment">Reservation
                                                 </option>
                                                 <option v-if="!student.waive_app_fee"
                                                     value="Application Payment">Application</option>
