@@ -8849,8 +8849,7 @@ class Excel extends CI_Controller {
             $vatable_amount = $vatable_amount / 1.12;
             $lessVat = number_format($vatable_amount * .12,2,'.',',');
             $ewtAmount = $payment_detail['withholding_tax_percentage'] > 0 ? ($vatable_amount + $vatable_exempt + $payment_detail['invoice_amount_vzrs']) * ($payment_detail['withholding_tax_percentage'] / 100) : 0;
-            $zeroRated = $payment_detail['invoice_amount_vzrs'];
-
+            
             // Add some data
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A'.$i, $index + 1)
@@ -8859,15 +8858,9 @@ class Excel extends CI_Controller {
                 ->setCellValue('D'.$i, $student ? str_replace("-", "", $student['strStudentNumber']) : '')
                 ->setCellValue('E'.$i, ucfirst($payment_detail['last_name']) . ', ' . ucfirst($payment_detail['first_name']))
                 ->setCellValue('F'.$i, $particular)
-                // ->setCellValue('G'.$i, number_format($vatable_amount ,2,'.',','))
-                // ->setCellValue('H'.$i, number_format($vatable_exempt ,2,'.',','))
-                // ->setCellValue('I'.$i, number_format($payment_detail['invoice_amount_vzrs'] ,2,'.',','))
                 ->setCellValue('G'.$i, $vatable_amount)
                 ->setCellValue('H'.$i, $vatable_exempt)
                 ->setCellValue('I'.$i, $payment_detail['invoice_amount_vzrs'] )
-                // ->setCellValue('G'.$i, "=ROUND(' . $vatable_amount ' . ',2)")
-                // ->setCellValue('H'.$i, "=ROUND(' . $vatable_exempt ' . ',2)")
-                // ->setCellValue('I'.$i, "=ROUND(' . $zeroRated ' . ',2)")
                 ->setCellValue('J'.$i, $lessVat)
                 ->setCellValue('K'.$i, '=ROUND(SUM(G' . $i . ':J' . $i . '),2)')
                 ->setCellValue('L'.$i, $payment_detail['withholding_tax_percentage'] > 0 ? $payment_detail['withholding_tax_percentage'] . '%' : 0)
