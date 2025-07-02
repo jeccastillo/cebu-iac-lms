@@ -8847,7 +8847,7 @@ class Excel extends CI_Controller {
             }
 
             $vatable_amount = $vatable_amount / 1.12;
-            $lessVat = number_format($vatable_amount * .12,2,'.',',');
+            $lessVat = $vatable_amount * .12;
             $ewtAmount = $payment_detail['withholding_tax_percentage'] > 0 ? ($vatable_amount + $vatable_exempt + $payment_detail['invoice_amount_vzrs']) * ($payment_detail['withholding_tax_percentage'] / 100) : 0;
             
             // Add some data
