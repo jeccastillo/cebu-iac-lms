@@ -8838,7 +8838,7 @@ class Excel extends CI_Controller {
 
                 if($payment_detail['student_information_id'] == 0){
                     $vatable_amount = $payment_detail['invoice_amount'];
-                    $vatable_exempt = $result['invoice_amount'] == 0 && $result['invoice_amount_ves'] == 0 ? $result['subtotal_order'] : $result['invoice_amount_ves'];
+                    $vatable_exempt = $payment_detail['invoice_amount'] == 0 && $payment_detail['invoice_amount_ves'] == 0 ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount_ves'];
                 }else{
                     $vatable_particulars = ['Merchandise', 'Shirt', 'Jacket'];
     
