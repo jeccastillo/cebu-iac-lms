@@ -8717,11 +8717,26 @@ class Excel extends CI_Controller {
         exit;
     }
 
+    private function isEndOfMonth($dateString) {
+        $date = new DateTime($dateString);
+        $lastDayOfMonth = (clone $date)->modify('last day of this month');
+        return $date->format('Y-m-d') === $lastDayOfMonth->format('Y-m-d');
+    }
+
     public function finance_invoice_report($campus, $report_date_start, $report_date_end = null)
     {
         $as_of_date = $report_date_start == $report_date_end ? date("M d, Y", strtotime($report_date_start)) :  date("M d, Y", strtotime($report_date_start)) . '-' . date("M d, Y", strtotime($report_date_end));
         $report_date_start = ($report_date_start) ? date("Y-m-d 00:00:00", strtotime($report_date_start)) : date("Y-m-d 00:00:00");
         $report_date_end = ($report_date_end) ? date("Y-m-d 23:59:59", strtotime($report_date_end)) : date("Y-m-d 23:59:59");
+
+        //check if date end is last day of the month
+        $isEndOfMonth = false;
+        $date = new DateTime($report_date_end);
+        $lastDayOfMonth = (clone $date)->modify('last day of this month');
+        if($date->format('Y-m-d') === $lastDayOfMonth->format('Y-m-d')){
+            $isEndOfMonth = true;
+        }
+        
         $payment_details = $this->db
                     ->from('payment_details')
                     // ->where(array('status' => 'Paid', 'or_date >=' => $report_date_start, 'or_date <=' => $report_date_end, 'invoice_number !=' => null, 'deleted_at !=' => null, 'student_campus' => $campus))
@@ -8825,7 +8840,7 @@ class Excel extends CI_Controller {
                     $vatable_exempt = $payment_detail['subtotal_order'];
                 }
             }else{
-                $particular = $payment_detail['student_information_id'] != 0 ? $payment_detail['description'] . ' - ' . $payment_detail['remarks'] : $payment_detail['remarks'];
+                $particular = $payment_detail['student_information_id'] != 0 ? $payment_detail['description'] : $payment_detail['remarks'];
 
                 if($payment_detail['student_information_id'] == 0){
                     $vatable_amount = $payment_detail['subtotal_order'] > 0 ? $payment_detail['subtotal_order'] : $payment_detail['invoice_amount'];
@@ -8842,13 +8857,13 @@ class Excel extends CI_Controller {
                             $vatable_exempt = $payment_detail['subtotal_order'];
                         }
                     }
-
                 }
             }
 
             $vatable_amount = $vatable_amount / 1.12;
-            $lessVat = number_format($vatable_amount * .12,2,'.',',');
-
+            $lessVat = $vatable_amount * .12;
+            $ewtAmount = $payment_detail['withholding_tax_percentage'] > 0 ? ($vatable_amount + $vatable_exempt + $payment_detail['invoice_amount_vzrs']) * ($payment_detail['withholding_tax_percentage'] / 100) : 0;
+            
             // Add some data
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A'.$i, $index + 1)
@@ -8859,11 +8874,11 @@ class Excel extends CI_Controller {
                 ->setCellValue('F'.$i, $particular)
                 ->setCellValue('G'.$i, $vatable_amount)
                 ->setCellValue('H'.$i, $vatable_exempt)
-                ->setCellValue('I'.$i, $payment_detail['invoice_amount_vzrs'])
+                ->setCellValue('I'.$i, $payment_detail['invoice_amount_vzrs'] )
                 ->setCellValue('J'.$i, $lessVat)
-                ->setCellValue('K'.$i, '=SUM(G' . $i . ':J' . $i . ')')
+                ->setCellValue('K'.$i, '=ROUND(SUM(G' . $i . ':J' . $i . '),2)')
                 ->setCellValue('L'.$i, $payment_detail['withholding_tax_percentage'] > 0 ? $payment_detail['withholding_tax_percentage'] . '%' : 0)
-                ->setCellValue('M'.$i, $payment_detail['withholding_tax_percentage'] > 0 ? ($vatable_amount + $vatable_exempt + $payment_detail['invoice_amount_vzrs']) * ($payment_detail['withholding_tax_percentage'] / 100) : 0)
+                ->setCellValue('M'.$i, number_format($ewtAmount ,2,'.',','))
                 ->setCellValue('N'.$i, '=SUM(K' . $i . '+K' . $i . '-M' . $i . ')');
 
             $i++;
@@ -8874,7 +8889,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('A2', $campus == 'Makati' ? 'iACADEMY Nexus 7434 Yakal Street Brgy. San Antonio, Makati City' : '5th Floor Filinvest Cyberzone Tower 2 Salinas Drive Cor. W. Geonzon St., Cebu IT Park, Apas, Cebu City')
                     ->setCellValue('A3', 'Invoice Report')
                     ->setCellValue('A4', $campus == 'Makati' ? '' : 'VAT REG TIN: 214-749-003-00003')
-                    ->setCellValue('A5', 'As of ' . $as_of_date)
+                    ->setCellValue('A5', date("d", strtotime($report_date_start)) == 01 && $isEndOfMonth == true ? 'For the month of ' . date("F Y", strtotime($report_date_start)) : 'As of ' . $as_of_date)
                     ->setCellValue('A7', 'No.')
                     ->setCellValue('B7', 'Invoice Date')
                     ->setCellValue('C7', 'Invoice Number')
@@ -8889,7 +8904,9 @@ class Excel extends CI_Controller {
                     ->setCellValue('L7', 'EWT Rate')
                     ->setCellValue('M7', 'EWT Amount')
                     ->setCellValue('N7', 'Net Amount Due');
-
+                    
+        // $objPHPExcel->getActiveSheet()->getStyle('G8:K' . $i)->getNumberFormat()->setFormatCode('0.00');
+        // $objPHPExcel->getActiveSheet()->getStyle('M8:N' . $i)->getNumberFormat()->setFormatCode('0.00');
         $objPHPExcel->getActiveSheet()->getStyle('G8:K' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
         $objPHPExcel->getActiveSheet()->getStyle('M8:N' . $i)->getNumberFormat()->setFormatCode('#,##0.00');
         $objPHPExcel->getActiveSheet()->getStyle('A1:N7')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
