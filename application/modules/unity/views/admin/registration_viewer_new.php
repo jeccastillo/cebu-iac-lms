@@ -556,9 +556,9 @@
                                                 <td>{{ application_payment.or_number }}</td>
                                                 <td>{{ application_payment.description }}</td>
                                                 <td>{{ application_payment.check_number }}</td>
-                                                <td>{{ application_payment.subtotal_order }}</td>
+                                                <td>{{ numberWithCommas(application_payment.subtotal_order) }}</td>
                                                 <td>{{ application_payment.charges }}</td>
-                                                <td>{{ application_payment.total_amount_due }}</td>
+                                                <td>{{ numberWithCommas(application_payment.total_amount_due) }}</td>
                                                 <td>{{ application_payment.status }}</td>
                                                 <td>{{ application_payment.or_date }}</td>
                                                 <td>{{ application_payment.remarks }}</td>
@@ -613,9 +613,9 @@
                                                 <td>{{ payment.or_number }}</td>
                                                 <td>{{ payment.description }}</td>
                                                 <td>{{ payment.check_number }}</td>
-                                                <td>{{ payment.subtotal_order }}</td>
+                                                <td>{{ numberWithCommas(payment.subtotal_order) }}</td>
                                                 <td>{{ payment.charges }}</td>
-                                                <td>{{ payment.total_amount_due }}</td>
+                                                <td>{{ numberWithCommas(payment.total_amount_due) }}</td>
                                                 <td>{{ payment.status }}</td>
                                                 <td>{{ payment.or_date }}</td>
                                                 <td>{{ payment.remarks }}</td>
@@ -676,9 +676,9 @@
                                                 <td>{{ reservation_payment.or_number }}</td>
                                                 <td>{{ reservation_payment.description }}</td>
                                                 <td>{{ reservation_payment.check_number }}</td>
-                                                <td>{{ reservation_payment.subtotal_order }}</td>
+                                                <td>{{ numberWithCommas(reservation_payment.subtotal_order) }}</td>
                                                 <td>{{ reservation_payment.charges }}</td>
-                                                <td>{{ reservation_payment.total_amount_due }}</td>
+                                                <td>{{ numberWithCommas(reservation_payment.total_amount_due) }}</td>
                                                 <td>{{ reservation_payment.status }}</td>
                                                 <td>{{ reservation_payment.or_date }}</td>
                                                 <td>{{ reservation_payment.remarks }}</td>
@@ -733,9 +733,9 @@
                                                 <td>{{ payment.or_number }}</td>
                                                 <td>{{ payment.description }}</td>
                                                 <td>{{ payment.check_number }}</td>
-                                                <td>{{ payment.subtotal_order }}</td>
+                                                <td>{{ numberWithCommas(payment.subtotal_order) }}</td>
                                                 <td>{{ payment.charges }}</td>
-                                                <td>{{ payment.total_amount_due }}</td>
+                                                <td>{{ numberWithCommas(payment.total_amount_due) }}</td>
                                                 <td>{{ payment.status }}</td>
                                                 <td>{{ payment.or_date }}</td>
                                                 <td>{{ payment.remarks }}</td>
