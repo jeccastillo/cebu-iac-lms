@@ -8721,8 +8721,8 @@ class Excel extends CI_Controller {
     {
         $as_of_date = $report_date_start == $report_date_end ? date("M d, Y", strtotime($report_date_start)) :  date("M d, Y", strtotime($report_date_start)) . '-' . date("M d, Y", strtotime($report_date_end));
         $report_date_start = ($report_date_start) ? date("Y-m-d 00:00:00", strtotime($report_date_start)) : date("Y-m-d 00:00:00");
-        $report_date_end = ($report_date_end) ? date("Y-m-d 23:59:59", strtotime($report_date_end)) : date("Y-m-d 23:59:59");
         $isEndOfMonth = isEndOfMonth($report_date_end);
+        $report_date_end = ($report_date_end) ? date("Y-m-d 23:59:59", strtotime($report_date_end)) : date("Y-m-d 23:59:59");
         
         $payment_details = $this->db
                     ->from('payment_details')
