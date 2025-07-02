@@ -8842,7 +8842,6 @@ class Excel extends CI_Controller {
                             $vatable_exempt = $payment_detail['subtotal_order'];
                         }
                     }
-
                 }
             }
 
