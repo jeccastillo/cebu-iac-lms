@@ -8728,7 +8728,8 @@ class Excel extends CI_Controller {
         $as_of_date = $report_date_start == $report_date_end ? date("M d, Y", strtotime($report_date_start)) :  date("M d, Y", strtotime($report_date_start)) . '-' . date("M d, Y", strtotime($report_date_end));
         $report_date_start = ($report_date_start) ? date("Y-m-d 00:00:00", strtotime($report_date_start)) : date("Y-m-d 00:00:00");
         $report_date_end = ($report_date_end) ? date("Y-m-d 23:59:59", strtotime($report_date_end)) : date("Y-m-d 23:59:59");
-        // $isEndOfMonth = isEndOfMonth($report_date_end);
+
+        //check if date end is last day of the month
         $isEndOfMonth = false;
         $date = new DateTime($report_date_end);
         $lastDayOfMonth = (clone $date)->modify('last day of this month');
@@ -8888,7 +8889,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('A2', $campus == 'Makati' ? 'iACADEMY Nexus 7434 Yakal Street Brgy. San Antonio, Makati City' : '5th Floor Filinvest Cyberzone Tower 2 Salinas Drive Cor. W. Geonzon St., Cebu IT Park, Apas, Cebu City')
                     ->setCellValue('A3', 'Invoice Report')
                     ->setCellValue('A4', $campus == 'Makati' ? '' : 'VAT REG TIN: 214-749-003-00003')
-                    ->setCellValue('A5', date("d", strtotime($report_date_start)) == 01 && $isEndOfMonth == true ? 'for the month of ' . date("F Y", strtotime($report_date_start)) : 'As of ' . $as_of_date)
+                    ->setCellValue('A5', date("d", strtotime($report_date_start)) == 01 && $isEndOfMonth == true ? 'For the month of ' . date("F Y", strtotime($report_date_start)) : 'As of ' . $as_of_date)
                     ->setCellValue('A7', 'No.')
                     ->setCellValue('B7', 'Invoice Date')
                     ->setCellValue('C7', 'Invoice Number')
