@@ -556,9 +556,9 @@
                                                 <td>{{ application_payment.or_number }}</td>
                                                 <td>{{ application_payment.description }}</td>
                                                 <td>{{ application_payment.check_number }}</td>
-                                                <td>{{ application_payment.subtotal_order }}</td>
+                                                <td>{{ numberWithCommas(application_payment.subtotal_order) }}</td>
                                                 <td>{{ application_payment.charges }}</td>
-                                                <td>{{ application_payment.total_amount_due }}</td>
+                                                <td>{{ numberWithCommas(application_payment.total_amount_due) }}</td>
                                                 <td>{{ application_payment.status }}</td>
                                                 <td>{{ application_payment.or_date }}</td>
                                                 <td>{{ application_payment.remarks }}</td>
