@@ -8879,7 +8879,7 @@ class Excel extends CI_Controller {
                 ->setCellValue('K'.$i, '=ROUND(SUM(G' . $i . ':J' . $i . '),2)')
                 ->setCellValue('L'.$i, $payment_detail['withholding_tax_percentage'] > 0 ? $payment_detail['withholding_tax_percentage'] . '%' : 0)
                 ->setCellValue('M'.$i, number_format($ewtAmount ,2,'.',','))
-                ->setCellValue('N'.$i, '=SUM(K' . $i . '+K' . $i . '-M' . $i . ')');
+                ->setCellValue('N'.$i, '=SUM(K' . $i . '-M' . $i . ')');
 
             $i++;
         }
