@@ -8717,12 +8717,18 @@ class Excel extends CI_Controller {
         exit;
     }
 
+    private function isEndOfMonth($dateString) {
+        $date = new DateTime($dateString);
+        $lastDayOfMonth = (clone $date)->modify('last day of this month');
+        return $date->format('Y-m-d') === $lastDayOfMonth->format('Y-m-d');
+    }
+
     public function finance_invoice_report($campus, $report_date_start, $report_date_end = null)
     {
         $as_of_date = $report_date_start == $report_date_end ? date("M d, Y", strtotime($report_date_start)) :  date("M d, Y", strtotime($report_date_start)) . '-' . date("M d, Y", strtotime($report_date_end));
         $report_date_start = ($report_date_start) ? date("Y-m-d 00:00:00", strtotime($report_date_start)) : date("Y-m-d 00:00:00");
-        $isEndOfMonth = isEndOfMonth($report_date_end);
         $report_date_end = ($report_date_end) ? date("Y-m-d 23:59:59", strtotime($report_date_end)) : date("Y-m-d 23:59:59");
+        $isEndOfMonth = isEndOfMonth($report_date_end);
         
         $payment_details = $this->db
                     ->from('payment_details')
@@ -10530,12 +10536,6 @@ class Excel extends CI_Controller {
         // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save('php://output');
         exit;
-    }
-
-    private function isEndOfMonth($dateString) {
-        $date = new DateTime($dateString);
-        $lastDayOfMonth = (clone $date)->modify('last day of this month');
-        return $date->format('Y-m-d') === $lastDayOfMonth->format('Y-m-d');
     }
 
     private function generateRandomString($length) {
