@@ -613,9 +613,9 @@
                                                 <td>{{ payment.or_number }}</td>
                                                 <td>{{ payment.description }}</td>
                                                 <td>{{ payment.check_number }}</td>
-                                                <td>{{ payment.subtotal_order }}</td>
+                                                <td>{{ numberWithCommas(payment.subtotal_order) }}</td>
                                                 <td>{{ payment.charges }}</td>
-                                                <td>{{ payment.total_amount_due }}</td>
+                                                <td>{{ numberWithCommas(payment.total_amount_due) }}</td>
                                                 <td>{{ payment.status }}</td>
                                                 <td>{{ payment.or_date }}</td>
                                                 <td>{{ payment.remarks }}</td>
