@@ -8874,7 +8874,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('A2', $campus == 'Makati' ? 'iACADEMY Nexus 7434 Yakal Street Brgy. San Antonio, Makati City' : '5th Floor Filinvest Cyberzone Tower 2 Salinas Drive Cor. W. Geonzon St., Cebu IT Park, Apas, Cebu City')
                     ->setCellValue('A3', 'Invoice Report')
                     ->setCellValue('A4', $campus == 'Makati' ? '' : 'VAT REG TIN: 214-749-003-00003')
-                    ->setCellValue('A5', date("d", strtotime($startDate)) == 01 && isEndOfMonth($report_date_end) ? 'for the month of ' . date("F Y", strtotime($startDate)) : 'As of ' . $as_of_date)
+                    ->setCellValue('A5', date("d", strtotime($report_date_start)) == 01 && isEndOfMonth($report_date_end) == true ? 'for the month of ' . date("F Y", strtotime($report_date_start)) : 'As of ' . $as_of_date)
                     ->setCellValue('A7', 'No.')
                     ->setCellValue('B7', 'Invoice Date')
                     ->setCellValue('C7', 'Invoice Number')
