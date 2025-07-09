@@ -2859,7 +2859,7 @@ class Data_fetcher extends CI_Model {
             
             if(count($elective) > 0){
                 foreach($elective as $elec_subj){
-                    $tuitionElective = $this->db->where(array('tuitionyear_id'=>$tuition_year['intID'], 'subject_id' => $elec_subj['intID']))
+                    $tuitionElective = $this->db->where(array('tuitionyear_id'=>$tuition_year['intID'], 'subject_id' => $elec_subj['subjectID']))
                     ->get('tb_mas_tuition_year_elective')->first_row('array'); 
                     $tuition += $tuitionElective['tuition_amount'];
                 }
