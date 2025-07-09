@@ -2512,6 +2512,15 @@ class Data_fetcher extends CI_Model {
                         ->result_array();
     }
 
+    function getTuitionElective($id,$label){
+        return $this->db->select('tb_mas_subjects.*,tb_mas_tuition_year_'.$label.'.id,tuition_amount,tuition_amount_online,tuition_amount_hybrid,tuition_amount_hyflex')
+                        ->from('tb_mas_tuition_year_'.$label)
+                        ->join('tb_mas_subjects', 'tb_mas_subjects.intID = tb_mas_tuition_year_'.$label.'.subject_id')
+                        ->where(array('tuitionyear_id'=>$id))
+                        ->get()
+                        ->result_array();
+    }
+
     function getLabTypesForDropdown(){
         $ret = [];
         $data = $this->db
