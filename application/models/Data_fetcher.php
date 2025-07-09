@@ -2543,7 +2543,7 @@ class Data_fetcher extends CI_Model {
         
         $registration =  $this->db->where(array('intStudentID'=>$id, 'intAYID' => $sem))->get('tb_mas_registration')->first_row('array');                                          
         $subjects =  $this->db
-                            ->select("tb_mas_subjects.intID as subjectID,tb_mas_classlist.is_modular,tb_mas_classlist.payment_amount")
+                            ->select("tb_mas_subjects.intID as subjectID,tb_mas_classlist.is_modular,tb_mas_classlist.payment_amount,tb_mas_subjects.isSelectableElective")
                             ->from("tb_mas_classlist_student")
                             ->where(array("intStudentID"=>$id,"strAcademicYear"=>$sem,"tb_mas_classlist.intWithPayment"=>"0"))
                             ->join('tb_mas_classlist', 'tb_mas_classlist.intID = tb_mas_classlist_student.intClasslistID')
@@ -2817,11 +2817,14 @@ class Data_fetcher extends CI_Model {
         else{
             //$tuition = $unit_fee;
             $regular = [];
-            $modular = [];            
+            $modular = [];          
+            $elective = [];  
             foreach($subjects as $subj){
                 $subj = (array) $subj;
                 if($subj['is_modular'])
                     $modular[] = $subj;
+                else if($subj['isSelectableElective'])
+                    $elective[] = $subj;
                 else
                     $regular[] = $subj;
             }
@@ -2852,7 +2855,15 @@ class Data_fetcher extends CI_Model {
             
             foreach($modular as $mod_subj){
                 $tuition += $mod_subj['payment_amount'];
-            }                
+            }
+            
+            if(count($elective) > 0){
+                foreach($elective as $elec_subj){
+                    $tuitionElective = $this->db->where(array('tuitionyear_id'=>$tuition_year['intID'], 'subject_id' => $elec_subj['intID']))
+                    ->get('tb_mas_tuition_year_elective')->first_row('array'); 
+                    $tuition += $tuitionElective['tuition_amount'];
+                }
+            }
                 
                     
         }
