@@ -2818,13 +2818,18 @@ class Data_fetcher extends CI_Model {
             //$tuition = $unit_fee;
             $regular = [];
             $modular = [];          
-            $elective = [];  
+            $elective = [];
+            $count_free_elective = $tuition_year['FreeElectiveCount'] ? $tuition_year['FreeElectiveCount'] : 0;
+            
             foreach($subjects as $subj){
                 $subj = (array) $subj;
                 if($subj['is_modular'])
                     $modular[] = $subj;
                 else if($subj['isSelectableElective'])
-                    $elective[] = $subj;
+                    if($count_free_elective > 0)
+                        $count_free_elective--;
+                    else
+                        $elective[] = $subj;
                 else
                     $regular[] = $subj;
             }
