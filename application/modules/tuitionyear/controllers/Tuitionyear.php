@@ -97,6 +97,7 @@ class Tuitionyear extends CI_Controller {
             $data['data']['lab_fees'] = $this->data_fetcher->getTuitionExtra('lab_fee',$id);
             $data['data']['track'] = $this->data_fetcher->getTuitionTrack($id,'track');
             $data['data']['program'] = $this->data_fetcher->getTuitionTrack($id,'program');
+            $data['data']['elective'] = $this->data_fetcher->getTuitionElective($id,'elective');
         }
         else{
             $data['data'] = [];
@@ -119,6 +120,10 @@ class Tuitionyear extends CI_Controller {
                                              ->order_by('strProgramCode','asc')
                                              ->get('tb_mas_programs')
                                              ->result_array();
+        $data['selectable_elective_subjects'] = $this->db->where('isSelectableElective',1)
+                                            ->order_by('strCode','asc')
+                                            ->get('tb_mas_subjects')
+                                            ->result_array();
         $data['success'] = true;        
         $data['message'] ="Successfully Added";
         $data['shs_programs'] = array_merge($data['shs_programs'],$data['next_programs']);
