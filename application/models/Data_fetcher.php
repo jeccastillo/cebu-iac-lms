@@ -2854,7 +2854,7 @@ class Data_fetcher extends CI_Model {
                     default:
                         $tuition = $shs_rate['tuition_amount'];
                     
-                } 
+                }
             else
                 $tuition = 0;
             
@@ -2866,7 +2866,26 @@ class Data_fetcher extends CI_Model {
                 foreach($elective as $elec_subj){
                     $tuitionElective = $this->db->where(array('tuitionyear_id'=>$tuition_year['intID'], 'subject_id' => $elec_subj['subjectID']))
                     ->get('tb_mas_tuition_year_elective')->first_row('array'); 
-                    $tuition += $tuitionElective['tuition_amount'];
+                    if(isset($shs_rate))
+                        switch($year_level){
+                            case 1:
+                                $tuition += $tuitionElective['tuition_amount'];
+                            break;
+                            case 2:
+                                $tuition += $tuitionElective['tuition_amount_online'];
+                            break;
+                            case 3:
+                                $tuition += $tuitionElective['tuition_amount_hyflex'];
+                            break;
+                            case 4:
+                                $tuition += $tuitionElective['tuition_amount_hybrid'];
+                            break;
+                            default:
+                                $tuition += $tuitionElective['tuition_amount'];
+                            
+                        }
+                    else
+                        $tuition += $tuitionElective['tuition_amount'];
                 }
             }
                 
