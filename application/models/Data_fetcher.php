@@ -2819,7 +2819,7 @@ class Data_fetcher extends CI_Model {
             $regular = [];
             $modular = [];          
             $elective = [];
-            $count_free_elective = $tuition_year['FreeElectiveCount'] ? $tuition_year['FreeElectiveCount'] : 0;
+            $count_free_elective = $tuition_year['freeElectiveCount'] ? $tuition_year['freeElectiveCount'] : 0;
             
             foreach($subjects as $subj){
                 $subj = (array) $subj;
