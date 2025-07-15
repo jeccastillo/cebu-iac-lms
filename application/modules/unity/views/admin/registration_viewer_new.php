@@ -51,7 +51,7 @@
                         </div>
                         <div class="pull-right" v-if="description == 'Tuition Fee' && registration"
                             class="col-sm-4" v-if="cashier"> Select Type <select
-                                v-if="(registration.downpayment != 1 && registration.fullpayment != 1) || user.special_role > 0"
+                                v-if="(registration.downpayment != 1 && registration.fullpayment != 1)"
                                 @change="description_other = ''; amount_to_pay = 0 "
                                 v-model="payment_type" class="form-control">
                                 <option value="full">Full Payment</option>
