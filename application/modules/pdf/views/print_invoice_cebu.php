@@ -146,7 +146,8 @@ table tr td {
             <div style="position:absolute; top:  465px; left: 40px; width: 200px; height: 20px;">
                 <?php  echo $is_cash != 0 ? $remarks : ''; ?> </div>
             <div style="position:absolute; top: 465px; left: 30px; width: 200px; height: 20px;">
-                <?php  echo $request['type'] == 'ns_payment'? $remarks : ''; ?> </div>
+                <?php  echo $is_cash == 0 && $request['type'] == 'ns_payment'? $remarks : ''; ?>
+            </div>
             <!--Vatable-->
             <div style="position:absolute; top:  462px; left: 305px; width: 200px; height: 20px;">
                 <?php  echo $amount_less_vat != 0 ? $amount_less_vat : ""; ?> </div>
@@ -167,3 +168,11 @@ table tr td {
         </section>
     </div>
 </body>
+<script>
+const request = <?php echo json_encode($request); ?>;
+const is_cash = "<?php echo $is_cash; ?>";
+const remarks = "<?php echo $remarks; ?>";
+console.log(request);
+console.log(is_cash);
+console.log(remarks);
+</script>
