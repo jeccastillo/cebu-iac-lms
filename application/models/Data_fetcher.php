@@ -2825,14 +2825,15 @@ class Data_fetcher extends CI_Model {
                 $subj = (array) $subj;
                 if($subj['is_modular'])
                     $modular[] = $subj;
-                else if(isset($subj['isSelectableElective']))
+                else
+                    $regular[] = $subj;
+
+                if(isset($subj['isSelectableElective']))
                     if($subj['isSelectableElective'])
                         if($count_free_elective > 0)
                             $count_free_elective--;
                         else
                             $elective[] = $subj;
-                else
-                    $regular[] = $subj;
             }
             if(count($regular) > 0)
                 $shs_rate = $this->db->where(array('tuitionyear_id'=>$tuition_year['intID'], 'track_id' => $student['intProgramID']))
