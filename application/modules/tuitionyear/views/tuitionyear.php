@@ -741,6 +741,8 @@ new Vue({
                         .installmentDP);
                     formdata.append("installmentFixed", this.request
                         .installmentFixed);
+                    formdata.append("freeElectiveCount", this.request
+                        .freeElectiveCount);
                     return axios.post(
                         '<?php echo base_url(); ?>tuitionyear/submit_form/' +
                         this.id, formdata, {
