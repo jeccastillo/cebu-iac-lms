@@ -2825,7 +2825,7 @@ class Data_fetcher extends CI_Model {
                 $subj = (array) $subj;
                 if($subj['is_modular'])
                     $modular[] = $subj;
-                else if(issset($subj['isSelectableElective']))
+                else if(isset($subj['isSelectableElective']))
                     if($subj['isSelectableElective'])
                         if($count_free_elective > 0)
                             $count_free_elective--;
