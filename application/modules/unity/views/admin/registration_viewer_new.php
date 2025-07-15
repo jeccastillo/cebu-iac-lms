@@ -62,14 +62,14 @@
                             </div>
                         </div>
                         <!-- /.widget-user-image -->
-                        <div v-if="registration && user.special_role >= 0"
+                        <!-- <div v-if="registration && user.special_role >= 0"
                             style="margin-right:1rem;" class="pull-right"> Payment Type <select
                                 v-model="change_payment_type" @change="changeType($event)"
                                 class="form-control">
                                 <option value="full">Full Payment</option>
                                 <option value="partial">Installment</option>
                             </select>
-                        </div>
+                        </div> -->
                         <div v-if="registration && user.special_role >= 1"
                             style="margin-right:1rem;" class="pull-right"> Enrollment Status <select
                                 v-if="registration_status!=1" v-model="registration_status"
@@ -1319,8 +1319,7 @@ new Vue({
                         .installment5_formatted);
                     this.registration = data.data.registration;
                     this.tuition_data = data.data.tuition_data;
-                    if (data.data.registration) {
-                        console.log(this.registration);
+                    if (data.data.registration) {                        
                         this.tuition = data.data.tuition;                        
                         this.downpayment_status = this.registration.downpayment;
                         this.registration_status = data.data.registration.intROG;
