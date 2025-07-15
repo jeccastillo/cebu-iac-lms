@@ -1320,6 +1320,7 @@ new Vue({
                     this.registration = data.data.registration;
                     this.tuition_data = data.data.tuition_data;
                     if (data.data.registration) {
+                        console.log(this.registration);
                         this.tuition = data.data.tuition;                        
                         this.downpayment_status = this.registration.downpayment;
                         this.registration_status = data.data.registration.intROG;
