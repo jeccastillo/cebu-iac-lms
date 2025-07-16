@@ -120,7 +120,7 @@ class Tuitionyear extends CI_Controller {
                                              ->order_by('strProgramCode','asc')
                                              ->get('tb_mas_programs')
                                              ->result_array();
-        $data['selectable_elective_subjects'] = $this->db->where('isSelectableElective',1)
+        $data['selectable_elective_subjects'] = $this->db->where(array('intMajor' => 1, 'isElective' => 1))
                                             ->order_by('strCode','asc')
                                             ->get('tb_mas_subjects')
                                             ->result_array();
