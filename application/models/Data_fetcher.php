@@ -2543,7 +2543,7 @@ class Data_fetcher extends CI_Model {
         
         $registration =  $this->db->where(array('intStudentID'=>$id, 'intAYID' => $sem))->get('tb_mas_registration')->first_row('array');                                          
         $subjects =  $this->db
-                            ->select("tb_mas_subjects.intID as subjectID,tb_mas_classlist.is_modular,tb_mas_classlist.payment_amount,tb_mas_subjects.isSelectableElective")
+                            ->select("tb_mas_subjects.intID as subjectID,tb_mas_classlist.is_modular,tb_mas_classlist.payment_amount,tb_mas_subjects.intMajor,tb_mas_subjects.isElective")
                             ->from("tb_mas_classlist_student")
                             ->where(array("intStudentID"=>$id,"strAcademicYear"=>$sem,"tb_mas_classlist.intWithPayment"=>"0"))
                             ->join('tb_mas_classlist', 'tb_mas_classlist.intID = tb_mas_classlist_student.intClasslistID')
@@ -2819,7 +2819,6 @@ class Data_fetcher extends CI_Model {
             $regular = [];
             $modular = [];          
             $elective = [];
-            $count_free_elective = $tuition_year['freeElectiveCount'] ? $tuition_year['freeElectiveCount'] : 0;
             
             foreach($subjects as $subj){
                 $subj = (array) $subj;
@@ -2828,12 +2827,9 @@ class Data_fetcher extends CI_Model {
                 else
                     $regular[] = $subj;
 
-                if(isset($subj['isSelectableElective']))
-                    if($subj['isSelectableElective'])
-                        if($count_free_elective > 0)
-                            $count_free_elective--;
-                        else
-                            $elective[] = $subj;
+                if(isset($subj['intMajor']) && isset($subj['isElective']))
+                    if($subj['intMajor'] == 1 && $subj['isElective'] == 1)
+                        $elective[] = $subj;
             }
             if(count($regular) > 0)
                 $shs_rate = $this->db->where(array('tuitionyear_id'=>$tuition_year['intID'], 'track_id' => $student['intProgramID']))
@@ -2867,27 +2863,29 @@ class Data_fetcher extends CI_Model {
             if(count($elective) > 0){
                 foreach($elective as $elec_subj){
                     $tuitionElective = $this->db->where(array('tuitionyear_id'=>$tuition_year['intID'], 'subject_id' => $elec_subj['subjectID']))
-                    ->get('tb_mas_tuition_year_elective')->first_row('array'); 
-                    if(isset($shs_rate))
-                        switch($year_level){
-                            case 1:
-                                $tuition += $tuitionElective['tuition_amount'];
-                            break;
-                            case 2:
-                                $tuition += $tuitionElective['tuition_amount_online'];
-                            break;
-                            case 3:
-                                $tuition += $tuitionElective['tuition_amount_hyflex'];
-                            break;
-                            case 4:
-                                $tuition += $tuitionElective['tuition_amount_hybrid'];
-                            break;
-                            default:
-                                $tuition += $tuitionElective['tuition_amount'];
-                            
-                        }
-                    else
-                        $tuition += $tuitionElective['tuition_amount'];
+                    ->get('tb_mas_tuition_year_elective')->first_row('array');
+                    if($tuitionElective){
+                        if(isset($shs_rate))
+                            switch($year_level){
+                                case 1:
+                                    $tuition += $tuitionElective['tuition_amount'];
+                                break;
+                                case 2:
+                                    $tuition += $tuitionElective['tuition_amount_online'];
+                                break;
+                                case 3:
+                                    $tuition += $tuitionElective['tuition_amount_hyflex'];
+                                break;
+                                case 4:
+                                    $tuition += $tuitionElective['tuition_amount_hybrid'];
+                                break;
+                                default:
+                                    $tuition += $tuitionElective['tuition_amount'];
+                                
+                            }
+                        else
+                            $tuition += $tuitionElective['tuition_amount'];
+                    }
                 }
             }
                 
