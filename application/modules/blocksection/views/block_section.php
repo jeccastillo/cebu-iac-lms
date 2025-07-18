@@ -42,8 +42,8 @@
                                     </select>
                                 </div>
                                 <div class="form-group col-xs-6">
-                                    <label for="intSYID">Choose Term</label>
-                                    <select class="form-control" @change="selected_term_type = $event.target.getAttribute('data-stype')" name="intSYID" v-model="request.intSYID">                                        
+                                    <label for="intSYID">Choose Term</label>   
+                                    <select class="form-control" @change="selected_term_type = $event.target.options[$event.target.selectedIndex].getAttribute('data-stype')" name="intSYID" v-model="request.intSYID">
                                         <option v-for="s in sy" :data-stype="s.term_student_type" :value="s.intID">{{ s.term_student_type}} {{ s.enumSem }} {{ s.term_label }} {{s.strYearStart }} - {{ s.strYearEnd }}</option>                                        
                                     </select>
                                 </div>                                
