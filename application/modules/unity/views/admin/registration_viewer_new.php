@@ -556,7 +556,7 @@
                                                 <td>{{ application_payment.or_number }}</td>
                                                 <td>{{ application_payment.description }}</td>
                                                 <td>{{ application_payment.check_number }}</td>
-                                                <td>{{ number_format(numberWithCommas(application_payment.subtotal_order), 2) }}</td>
+                                                <td>{{ numberWithCommas(application_payment.subtotal_order) }}</td>
                                                 <td>{{ application_payment.charges }}</td>
                                                 <td>{{ numberWithCommas(application_payment.total_amount_due) }}</td>
                                                 <td>{{ application_payment.status }}</td>
@@ -676,7 +676,7 @@
                                                 <td>{{ reservation_payment.or_number }}</td>
                                                 <td>{{ reservation_payment.description }}</td>
                                                 <td>{{ reservation_payment.check_number }}</td>
-                                                <td>{{ number_format(numberWithCommas(reservation_payment.subtotal_order), 2) }}</td>
+                                                <td>{{ numberWithCommas(reservation_payment.subtotal_order) }}</td>
                                                 <td>{{ reservation_payment.charges }}</td>
                                                 <td>{{ numberWithCommas(reservation_payment.total_amount_due) }}</td>
                                                 <td>{{ reservation_payment.status }}</td>
