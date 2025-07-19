@@ -1398,7 +1398,7 @@ new Vue({
                                 this.tuition_data.total_installment;
                         }
                         for (i in this.payments) {
-                            this.payments[i].subtotal_order = parseFloat(this.payments[i].subtotal_order);
+                            this.payments[i].subtotal_order = parseFloat(this.payments[i].subtotal_order.replaceAll(",", ""));
                             if (this.payments[i].status == "Paid" || this
                                 .payments[i].status == "Void") {
                                 if (!this.payments[i].mode) this.payments[i]
