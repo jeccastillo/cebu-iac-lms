@@ -305,7 +305,8 @@ new Vue({
                                 + "<i class='fa fa-minus'></i></a></div></div><hr /></div>";
                             
                             if(data.data.subjects[i].isTickable == 1)
-                            containerText += "<div><input type='checkbox' name='additional_elective'></div>"
+                            containerText += "<div><input type='checkbox' name='additional_elective'></div>";
+                            
                                 this.total_units = parseInt(this.total_units) + parseInt(data.data.subjects[i]
                                 .strUnits);
 
