@@ -453,7 +453,7 @@ $(document).ready(function() {
                         if(ret.subjects[i].isTickable){
                             container.append("<div class='col-xs-2><input type='checkbox' name='additional_elective'></div>");
                         }
-
+                        
                         container.append("</div><hr /></div>");
 
                         if (ret.subjects[i].classlists.length > 0) {
@@ -620,11 +620,18 @@ $(document).ready(function() {
                         ret.subject.strCode +
                         "</div><div class='col-xs-3 subject-description'>" + ret.subject
                         .strDescription + "</div><div class='col-xs-3 subject-units'>" +
-                        ret.subject.strUnits;
-                        // "</div><div class='col-xs-3'><a class='btn remove-subject-loaded2 btn-default  btn-flat'><i class='fa fa-minus'></i></a></div></div><hr /></div>"
+                        ret.subject.strUnits +
+                        "</div>"
+                        // <div class='col-xs-3'><a class='btn remove-subject-loaded2 btn-default  btn-flat'><i class='fa fa-minus'></i></a></div></div><hr /></div>"
                     );
 
 
+                    if(ret.subjects[i].isTickable){
+                            container.append("<div class='col-xs-2><input type='checkbox' name='additional_elective'></div>");
+                    }
+
+                    container.append("</div><hr /></div>");
+                        
                     $("#subject-to-add option[value='" + subjectID + "']").remove();
                     reset_sections($("#strAcademicYear").val());
                     if ($("#enumScholarship").val() == "paying")
