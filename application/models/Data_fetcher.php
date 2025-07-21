@@ -2543,7 +2543,7 @@ class Data_fetcher extends CI_Model {
         
         $registration =  $this->db->where(array('intStudentID'=>$id, 'intAYID' => $sem))->get('tb_mas_registration')->first_row('array');                                          
         $subjects =  $this->db
-                            ->select("tb_mas_subjects.intID as subjectID,tb_mas_classlist.is_modular,tb_mas_classlist.payment_amount,tb_mas_subjects.intMajor,tb_mas_subjects.isElective")
+                            ->select("tb_mas_subjects.intID as subjectID,tb_mas_classlist.is_modular,tb_mas_classlist.payment_amount,tb_mas_subjects.intMajor,tb_mas_subjects.isElective, tb_mas_classlist_student.additional_elective")
                             ->from("tb_mas_classlist_student")
                             ->where(array("intStudentID"=>$id,"strAcademicYear"=>$sem,"tb_mas_classlist.intWithPayment"=>"0"))
                             ->join('tb_mas_classlist', 'tb_mas_classlist.intID = tb_mas_classlist_student.intClasslistID')
@@ -2827,8 +2827,8 @@ class Data_fetcher extends CI_Model {
                 else
                     $regular[] = $subj;
 
-                if(isset($subj['intMajor']) && isset($subj['isElective']))
-                    if($subj['intMajor'] == 1 && $subj['isElective'] == 1)
+                if(isset($subj['intMajor']) && isset($subj['isElective']) && isset($subj['additional_elective']))
+                    if($subj['intMajor'] == 1 && $subj['isElective'] == 1 && $subj['additional_elective'] == 1)
                         $elective[] = $subj;
             }
             if(count($regular) > 0)
