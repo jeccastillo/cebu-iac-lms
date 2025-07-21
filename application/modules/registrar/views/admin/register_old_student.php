@@ -302,8 +302,10 @@ new Vue({
                                 "</div><div class='col-xs-3 subject-description'>" + data.data.subjects[i].strDescription +
                                 "</div><div class='col-xs-3 subject-units'>" + data.data.subjects[i].strUnits +
                                 "</div><div class='col-xs-3'><a class='btn remove-subject-loaded btn-default  btn-flat'>"
-                                + "<i class='fa fa-minus'></i></a></div></div><hr /></div>" +
-                                "<div><input type='checkbox' name='additional_elective'></div>" ;
+                                + "<i class='fa fa-minus'></i></a></div></div><hr /></div>";
+                            
+                            if(data.data.subjects[i].isTickable == 1)
+                            containerText += "<div><input type='checkbox' name='additional_elective'></div>"
                                 this.total_units = parseInt(this.total_units) + parseInt(data.data.subjects[i]
                                 .strUnits);
 
