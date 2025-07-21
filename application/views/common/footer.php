@@ -445,17 +445,11 @@ $(document).ready(function() {
                             ret.subjects[i].strCode +
                             "</div><div class='col-xs-3 subject-description'>" + ret
                             .subjects[i].strDescription +
-                            "</div><div class='col-xs-2 subject-units'>" + ret.subjects[
+                            "</div><div class='col-xs-3 subject-units'>" + ret.subjects[
                                 i].strUnits +
-                            "</div><div class='col-xs-2'><a class='btn remove-subject-loaded btn-default  btn-flat'><i class='fa fa-minus'></i></a></div>"
+                            "</div><div class='col-xs-3'><a class='btn remove-subject-loaded btn-default  btn-flat'><i class='fa fa-minus'></i></a></div></div><hr /></div>"
                         );
-
-                        if(ret.subjects[i].isTickable){
-                            container.append("<div class='col-xs-2><input type='checkbox' name='additional_elective'></div>");
-                        }
                         
-                        container.append("</div><hr /></div>");
-
                         if (ret.subjects[i].classlists.length > 0) {
                             var str = "<div><select class='form-control' name='section-" +
                                 ret.subjects[i].intID +
@@ -621,17 +615,10 @@ $(document).ready(function() {
                         "</div><div class='col-xs-3 subject-description'>" + ret.subject
                         .strDescription + "</div><div class='col-xs-3 subject-units'>" +
                         ret.subject.strUnits +
-                        "</div>"
-                        // <div class='col-xs-3'><a class='btn remove-subject-loaded2 btn-default  btn-flat'><i class='fa fa-minus'></i></a></div></div><hr /></div>"
+                        "</div><div class='col-xs-3'><a class='btn remove-subject-loaded2 btn-default  btn-flat'><i class='fa fa-minus'></i></a></div></div><hr /></div>"
                     );
 
 
-                    if(ret.subjects[i].isTickable){
-                            container.append("<div class='col-xs-2><input type='checkbox' name='additional_elective'></div>");
-                    }
-
-                    container.append("</div><hr /></div>");
-                        
                     $("#subject-to-add option[value='" + subjectID + "']").remove();
                     reset_sections($("#strAcademicYear").val());
                     if ($("#enumScholarship").val() == "paying")
