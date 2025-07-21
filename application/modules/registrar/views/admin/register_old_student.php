@@ -295,7 +295,7 @@ new Vue({
                                                     additional_elective: data.data.subjects[i].additional_elective,
                                                 });
                             containerText +=
-                                "<div><input type='hidden' class='subject-id' name='subjects-loaded2[]' value='" +
+                                "<div><input type='hidden' class='subject-id' name='subjects-loaded[]' value='" +
                                 data.data.subjects[i].subjectID +
                                 "'><br> <div class='row'><div class='col-xs-3 subject-code'>" +
                                 data.data.subjects[i].strCode +
