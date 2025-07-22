@@ -291,7 +291,7 @@ new Vue({
                                                     is_modular: data.data.subjects[i].is_modular,
                                                     payment_amount: data.data.subjects[i].payment_amount,
                                                     intMajor: data.data.subjects[i].intMajor,
-                                                    is_elective: data.data.subjects[i].isElective,
+                                                    isElective: data.data.subjects[i].isElective,
                                                     additional_elective: data.data.subjects[i].additional_elective,
                                                 });
                             containerText +=
