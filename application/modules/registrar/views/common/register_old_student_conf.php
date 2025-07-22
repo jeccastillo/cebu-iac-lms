@@ -5,7 +5,7 @@
        var data_sub = {};
        var additional_elective = []
        data_sub['subjects-loaded'] = [];
-       data_sub['additional_elective'] = 0;
+       data_sub['additional_elective'] = [];
 
        $("#submit-button").click(function(e){
             e.preventDefault();            
@@ -19,8 +19,8 @@
                     data_sub['subjects-loaded'][index] = $(this).val();
                     index++;
                 }
-                else if($(this).attr('name') == "additional_elective[]"){                   
-                    additional_elective[index] = $(this).val();
+                else if($(this).attr('name') == "additional_elective[]"){  
+                    data_sub['subjects-loaded'][index] = $(this).val();
                     index++;
                 }
                 else if($(this).attr('name') != undefined){                    
@@ -34,9 +34,9 @@
 
                 console.log(data_sub);
 
-                if (additional_elective.includes('1')) {                               
-                    data_sub['additional_elective'] = 1
-                }            
+                // if (additional_elective.includes('1')) {                               
+                //     data_sub['additional_elective'] = 1
+                // }            
                 
                 $.ajax({
                     'url':'<?php echo base_url(); ?>registrar/submit_registration_old',
