@@ -32,17 +32,7 @@
                     data_sub[$(this).attr('name')] = $(this).val();
                 }
 
-             
-                
-
             }).promise().done( function(){ 
-
-                console.log(data_sub);
-
-                // if (additional_elective.includes('1')) {                               
-                //     data_sub['additional_elective'] = 1
-                // }            
-                
                 $.ajax({
                     'url':'<?php echo base_url(); ?>registrar/submit_registration_old',
                     'method':'post',
