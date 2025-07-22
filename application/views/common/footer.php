@@ -442,7 +442,7 @@ $(document).ready(function() {
                         let checkboxHTML = '';
                         if (ret.subjects[i].isTickable == 1) {
                             checkboxHTML = "<div class='col-xs-1'><div class='checkbox'>" +
-                                        "<input type='checkbox' name='additional_elective[] value='" + ret.subjects[i].intID + "' class='tickable-checkbox' data-index='" + i + "' >" +
+                                        "<input type='checkbox' name='additional_elective[]' value='" + ret.subjects[i].intID + "' class='tickable-checkbox' data-index='" + i + "' >" +
                                         "</div></div>";
                         }
                         
