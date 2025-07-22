@@ -477,8 +477,6 @@ class Registrar extends CI_Controller {
     public function submit_registration_old()
     {
         $post = $this->input->post();
-        print_r($post);
-        die();
         if(isset($post['subjects-loaded']))
         {
             
@@ -501,6 +499,7 @@ class Registrar extends CI_Controller {
 
                         $cl_data['intStudentID'] = $post['studentID'];
                         $cl_data['intClassListID'] = $cl_get['intID'];
+                        $cl_data['additional_elective'] = in_array($subject, $post['additional_elective']) ? 1 : 0;
                         $this->data_poster->addStudentClasslist($cl_data,$this->data["user"]["intID"]);
                         $this->data['col2'][] = "Student Registered to Section ".$cl_get['strClassName'].$cl_get['year'].$cl_get['strSection']." ".$cl_get['sub_section'];
                         $this->data['col3'][] = "<a href='".base_url()."unity/classlist_viewer/".$cl_get['intID']."'>View Classlist</a>";
