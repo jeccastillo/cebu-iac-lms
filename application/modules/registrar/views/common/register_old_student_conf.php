@@ -22,18 +22,11 @@
                     data_sub['subjects-loaded'][index] = $(this).val();
                     index++;
                 }
-                else if($(this).attr('name') == "additional_elective[]"){                   
-                    // additional_elective[indexElective] = $(this).val();
-                    // if ($(this).is(':checked')) {
-                    //     alert('check' + $(this).val());
-                    // }
+                else if($(this).attr('name') == "additional_elective[]"){
                     if ($(this).prop('checked')) {
-                        alert('check2' + $(this).val());
                         data_sub['additional_elective'].push($(this).val());
                     }
                     
-                        // data_sub['additional_elective'][indexElective] = $(this).val();
-                    // indexElective++;
                 }
                 else if($(this).attr('name') != undefined){                    
                     data_sub[$(this).attr('name')] = $(this).val();
