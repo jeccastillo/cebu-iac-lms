@@ -24,15 +24,16 @@
                 }
                 else if($(this).attr('name') == "additional_elective[]"){                   
                     // additional_elective[indexElective] = $(this).val();
-                    if ($(this).is(':checked')) {
-                        alert('check' + $(this).val());
-                    }
+                    // if ($(this).is(':checked')) {
+                    //     alert('check' + $(this).val());
+                    // }
                     if ($(this).prop('checked')) {
                         alert('check2' + $(this).val());
+                        data_sub['additional_elective'].push($(this).val());
                     }
                     
-                        data_sub['additional_elective'][indexElective] = $(this).val();
-                    indexElective++;
+                        // data_sub['additional_elective'][indexElective] = $(this).val();
+                    // indexElective++;
                 }
                 else if($(this).attr('name') != undefined){                    
                     data_sub[$(this).attr('name')] = $(this).val();
