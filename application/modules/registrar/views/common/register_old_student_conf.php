@@ -3,9 +3,10 @@
         
     load_subjects(); 
        var data_sub = {};
-       var additional_elective = []
+    //    var additional_elective = [];
        data_sub['subjects-loaded'] = [];
        data_sub['additional_elective'] = [];
+    //    data_sub['additional_elective'] = 0;
 
        $("#submit-button").click(function(e){
             e.preventDefault();            
@@ -13,15 +14,18 @@
             $(this).attr('disabled','disabled');
            
             index = 0;
+            indexElective = 0;
+
             $("#validate-student :input").each(function(){
                 
                 if($(this).attr('name') == "subjects-loaded[]"){
                     data_sub['subjects-loaded'][index] = $(this).val();
                     index++;
                 }
-                else if($(this).attr('name') == "additional_elective[]"){  
-                    data_sub['subjects-loaded'][index] = $(this).val();
-                    index++;
+                else if($(this).attr('name') == "additional_elective[]"){                   
+                    // additional_elective[indexElective] = $(this).val();
+                    data_sub['additional_elective'][indexElective] = $(this).val();
+                    indexElective++;
                 }
                 else if($(this).attr('name') != undefined){                    
                     data_sub[$(this).attr('name')] = $(this).val();
