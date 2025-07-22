@@ -477,7 +477,8 @@ class Registrar extends CI_Controller {
     public function submit_registration_old()
     {
         $post = $this->input->post();
-      
+        print_r($post);
+        die();
         if(isset($post['subjects-loaded']))
         {
             
