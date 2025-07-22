@@ -321,6 +321,29 @@ class Site extends CI_Controller {
 		$this->load->view('common/footer_new',$this->data);
     }
 
+	public function shs_application_new($term = 0,$type = 0) {		
+
+		if($term == 0){
+			if($type == 0)
+            	$term = $this->data_fetcher->get_processing_sem_shs();         			
+			else
+				$term = $this->data_fetcher->get_processing_sem_shs();        						
+		}
+		else
+			$term = $this->data_fetcher->get_sem_by_id($term);
+
+
+		$this->data['term'] = $term;
+
+		$this->data['current_term'] = $term['intID'];		
+        
+		$this->load->view('common/header_new',$this->data);  
+		
+		$this->load->view('shs_application_new',$this->data);
+
+		$this->load->view('common/footer_new',$this->data);
+    }
+
 	public function is_super_admin()
     {
          $admin = $this->session->userdata('intUserLevel');

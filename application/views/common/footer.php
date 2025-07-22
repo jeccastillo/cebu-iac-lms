@@ -438,16 +438,28 @@ $(document).ready(function() {
                     for (i in ret.subjects) {
                         selected = '';
                         done = false;
+
+                        let checkboxHTML = '';
+                        if (ret.subjects[i].isTickable == 0) {
+                            checkboxHTML = "<div class='col-xs-1'><div class='checkbox'>" +
+                                        "<input type='checkbox' class='tickable-checkbox' data-index='" + i + "' >" +
+                                        "</div></div>";
+                        }
+                        
                         container.append(
                             "<div><input type='hidden' class='subject-id' name='subjects-loaded[]' value='" +
-                            ret.subjects[i].intID +
+                            ret.subjects[i].intID + 
+                            "'> <input type='hidden' class='electives' name='additional_elective[]' data-index='" + i + "' value='" +
+                            ret.subjects[i].isTickable + 
                             "'><br> <div class='row'><div class='col-xs-3 subject-code'>" +
                             ret.subjects[i].strCode +
                             "</div><div class='col-xs-3 subject-description'>" + ret
                             .subjects[i].strDescription +
                             "</div><div class='col-xs-3 subject-units'>" + ret.subjects[
                                 i].strUnits +
-                            "</div><div class='col-xs-3'><a class='btn remove-subject-loaded btn-default  btn-flat'><i class='fa fa-minus'></i></a></div></div><hr /></div>"
+                            "</div><div class='col-xs-1'><a class='btn remove-subject-loaded btn-default  btn-flat'><i class='fa fa-minus'></i></a></div>" +
+                            checkboxHTML + 
+                             "</div><hr />"
                         );
                         
                         if (ret.subjects[i].classlists.length > 0) {
@@ -489,6 +501,15 @@ $(document).ready(function() {
 
                         total_units = parseInt(total_units) + parseInt(ret.subjects[i]
                             .strUnits);
+
+
+                        $('.tickable-checkbox').off('change').on('change', function() {
+                            
+                            var index = $(this).data('index');
+                            var isChecked = $(this).is(':checked') ? 1 : 0;
+                            ret.subjects[index].isTickable = isChecked;
+                            $("input.electives[data-index='" + index + "']").val(isChecked);
+                        });
 
                     }
 
