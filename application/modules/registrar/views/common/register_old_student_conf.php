@@ -25,9 +25,9 @@
                 else if($(this).attr('name') == "additional_elective[]"){                   
                     // additional_elective[indexElective] = $(this).val();
                     // if ($(this).is(':checked')) {
-                        // data_sub['additional_elective'][indexElective] = $(this).val();
+                        data_sub['additional_elective'][indexElective] = $(this).val();
                     // }
-                    // indexElective++;
+                    indexElective++;
                 }
                 else if($(this).attr('name') != undefined){                    
                     data_sub[$(this).attr('name')] = $(this).val();
