@@ -24,7 +24,7 @@
                 }
                 else if($(this).attr('name') == "additional_elective[]"){                   
                     // additional_elective[indexElective] = $(this).val();
-                    if ($(this).prop('checked')) {
+                    if ($(this).is(':checked')) {
                         data_sub['additional_elective'][indexElective] = $(this).val();
                     }
                     indexElective++;
