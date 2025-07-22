@@ -450,7 +450,7 @@ $(document).ready(function() {
                             "<div><input type='hidden' class='subject-id' name='subjects-loaded[]' value='" +
                             ret.subjects[i].intID + 
                             "'> <input type='hidden' class='electives' name='additional_elective[]' data-index='" + i + "' value='" +
-                            ret.subjects[i].isTickable + 
+                            ret.subjects[i].intID + 
                             "'><br> <div class='row'><div class='col-xs-3 subject-code'>" +
                             ret.subjects[i].strCode +
                             "</div><div class='col-xs-3 subject-description'>" + ret
