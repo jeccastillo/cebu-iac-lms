@@ -292,7 +292,7 @@ new Vue({
                                                     payment_amount: data.data.subjects[i].payment_amount,
                                                     student_type: data.data.subjects[i].intMajor,
                                                     is_elective: data.data.subjects[i].isElective,
-                                                    additional_elective: data.data.subjects[i].additional_elective,
+                                                    intMajor: data.data.subjects[i].additional_elective,
                                                 });
                             containerText +=
                                 "<div><input type='hidden' class='subject-id' name='subjects-loaded[]' value='" +
