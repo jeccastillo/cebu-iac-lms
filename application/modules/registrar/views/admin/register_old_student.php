@@ -290,9 +290,9 @@ new Vue({
                                                     subjectID: data.data.subjects[i].subjectID,
                                                     is_modular: data.data.subjects[i].is_modular,
                                                     payment_amount: data.data.subjects[i].payment_amount,
-                                                    student_type: data.data.subjects[i].intMajor,
+                                                    intMajor: data.data.subjects[i].intMajor,
                                                     is_elective: data.data.subjects[i].isElective,
-                                                    intMajor: data.data.subjects[i].additional_elective,
+                                                    additional_elective: data.data.subjects[i].additional_elective,
                                                 });
                             containerText +=
                                 "<div><input type='hidden' class='subject-id' name='subjects-loaded[]' value='" +
