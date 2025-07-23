@@ -401,35 +401,6 @@ new Vue({
         })
         Swal.showLoading();
         
-            //update payment details that has OR and no OR date
-            axios
-                .get(base_url + 'finance/get_payments_without_OR_date', {
-                    headers: {
-                        Authorization: `Bearer ${window.token}`
-                    },
-                })
-                .then((data) => {
-                    var formdata = new FormData();                    
-                    formdata.append('data',JSON.stringify(data.data));
-
-                    axios.post(api_url + 'finance/get_or_date', formdata,{
-                        headers: {
-                            Authorization: `Bearer ${window.token}`
-                        },
-                    })
-
-                    .then((data) => {
-                        var formdata = new FormData();                    
-                        formdata.append('data',JSON.stringify(data.data.data));
-
-                        axios.post(base_url + 'finance/sync_payment_details_or_date', formdata,{
-                            headers: {
-                                Authorization: `Bearer ${window.token}`
-                            },
-                        })
-                    });
-                });
-
         axios
             .post(api_url + 'finance/sync_payments', this.sync_data,{
                 headers: {
@@ -474,6 +445,11 @@ new Vue({
                     });
             });
         });
+        
+
+   
+
+
     },
 
     methods: { 
@@ -519,7 +495,9 @@ new Vue({
                 'balance': this.term_balance.toFixed(2),
             });
 
-            var payments = tuition.payments_tuition;    
+            var payments = tuition.payments_tuition;  
+            payments.sort((a, b) => new Date(a.date) - new Date(b.date))
+            
             var balance = tuition.balance;            
             
             for(i in payments){                       
@@ -698,7 +676,7 @@ new Vue({
                 });
                 
             }
-            this.ledger_term.sort((a, b) => new Date(a.date) - new Date(b.date))
+            // this.ledger_term.sort((a, b) => new Date(a.date) - new Date(b.date))
             this.ledger.push({
                 'ledger_items': this.ledger_term,
                 'balance': this.term_balance.toFixed(2)
