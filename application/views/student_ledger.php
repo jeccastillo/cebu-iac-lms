@@ -496,7 +496,7 @@ new Vue({
             });
 
             var payments = tuition.payments_tuition;  
-            payments.sort((a, b) => new Date(a.date) - new Date(b.date))
+            payments.sort((a, b) => new Date(a.or_date) - new Date(b.or_date))
             
             var balance = tuition.balance;            
             
