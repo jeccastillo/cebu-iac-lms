@@ -495,7 +495,9 @@ new Vue({
                 'balance': this.term_balance.toFixed(2),
             });
 
-            var payments = tuition.payments_tuition;    
+            var payments = tuition.payments_tuition;  
+            payments.sort((a, b) => new Date(a.date) - new Date(b.date))
+            
             var balance = tuition.balance;            
             
             for(i in payments){                       
@@ -674,7 +676,7 @@ new Vue({
                 });
                 
             }
-            this.ledger_term.sort((a, b) => new Date(a.date) - new Date(b.date))
+            // this.ledger_term.sort((a, b) => new Date(a.date) - new Date(b.date))
             this.ledger.push({
                 'ledger_items': this.ledger_term,
                 'balance': this.term_balance.toFixed(2)
