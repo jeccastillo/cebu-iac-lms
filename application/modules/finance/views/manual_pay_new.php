@@ -32,7 +32,7 @@
                                             <label>Select payment for</label>
                                             <select required @change="selectDescription"
                                                 class="form-control" v-model="request.description">
-                                                <option v-if="student.status == 'For Reservation'" value="Reservation Payment">Reservation
+                                                <option v-if="paid_application" value="Reservation Payment">Reservation
                                                 </option>
                                                 <option v-if="!student.waive_app_fee"
                                                     value="Application Payment">Application</option>
@@ -578,6 +578,7 @@ new Vue({
         particulars: [],
         description_other: '',
         cashier: undefined,
+        paid_application: false,
         request: {
             first_name: '',
             slug: '',
@@ -708,6 +709,8 @@ new Vue({
                 else if (this.payments[i].status == "Paid") {
                     if (this.payments[i].description == "Application Payment") {
                         this.application_payment = this.payments[i];
+                        if(this.payments[i].status == "Paid")
+                            this.paid_application = true;
                     }
                     if (this.payments[i].description == "Reservation Payment") {
                         this.reservation_payment = this.payments[i];
