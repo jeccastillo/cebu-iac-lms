@@ -290,6 +290,9 @@ new Vue({
                                                     subjectID: data.data.subjects[i].subjectID,
                                                     is_modular: data.data.subjects[i].is_modular,
                                                     payment_amount: data.data.subjects[i].payment_amount,
+                                                    intMajor: data.data.subjects[i].intMajor,
+                                                    isElective: data.data.subjects[i].isElective,
+                                                    additional_elective: data.data.subjects[i].additional_elective,
                                                 });
                             containerText +=
                                 "<div><input type='hidden' class='subject-id' name='subjects-loaded[]' value='" +
@@ -316,7 +319,7 @@ new Vue({
                         formdata.append("sem",this.sem);
                         formdata.append("year",this.request.intYearLevel);
                         formdata.append("tuition_year",this.request.tuition_year);
-                        formdata.append("internship",this.request.internship);                        
+                        formdata.append("internship",this.request.internship);                     
                         
 
                         axios.post('<?php echo base_url(); ?>unity/get_tuition_ajax', formdata, {
