@@ -1345,11 +1345,9 @@ new Vue({
             this.request.school_country = value.country
         },
         submitForm: function() {
-            //console.log(this.request);
         },
         unmaskedValue: function() {
             var val = this.$refs.input.clean
-            console.log(val);
         },
 
         filterProgram: function(type, title) {
