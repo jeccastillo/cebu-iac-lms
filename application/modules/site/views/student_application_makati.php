@@ -1437,7 +1437,6 @@ new Vue({
         },
         unmaskedValue: function() {
             var val = this.$refs.input.clean
-            console.log(val);
         },
 
         filterProgram: function(type, title) {
