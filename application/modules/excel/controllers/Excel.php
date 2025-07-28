@@ -5275,7 +5275,7 @@ class Excel extends CI_Controller {
                                 }else{
                                     $applied_to[0] .= ', ' . date("M d,Y",strtotime($ledger['date']));
                                     $applied_to[1] .= ', ' . $ledger['remarks'];
-                                    $applied_to[2] .= $ledger['amount'] < 0 ? $ledger['amount'] : -1 * abs($ledger['amount']);
+                                    $applied_to[2] += $ledger['amount'] < 0 ? $ledger['amount'] : -1 * abs($ledger['amount']);
                                 }
                             }else if(strpos($ledger['remarks'], 'Refund') !== false || strpos($ledger['name'], 'Refund') !== false){
                                 if(!$refund){
