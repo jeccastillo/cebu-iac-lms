@@ -438,6 +438,14 @@ class Pdf extends CI_Controller {
     function grading_sheet($id){
         
         $sem = $this->data_fetcher->get_active_sem();
+        
+        $this->data['submitted_by'] = $post['submitted_by'];
+        $this->data['submitted_by_date'] = $post['submitted_by_date'];
+        $this->data['checked_by'] = $post['checked_by'];
+        $this->data['checked_by_date'] = $post['checked_by_date'];
+        $this->data['approved_by'] = $post['approved_by'];
+        $this->data['approved_by_date'] = $post['approved_by_date'];
+        
         $this->data['classlist'] = $this->data_fetcher->getClasslistById($id);
         $this->data['faculty'] = $this->db->get_where('tb_mas_faculty',array('intID'=>$id))->first_row('array');
         $this->data['user'] =  $this->session->all_userdata();
