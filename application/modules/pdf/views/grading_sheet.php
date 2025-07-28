@@ -118,13 +118,13 @@ foreach($students as $student):
         <td width="45%">Approved by:</td>   
     </tr>
     <tr style="line-height:20px; text-align:center;">
-        <td><?php echo $approved_by_by; ?></td>              
+        <td><?php echo $approved_by; ?></td>              
     </tr>  
     <tr style="text-align:center;">
         <td style="border-top:1px solid #333"><strong>Principal</strong></td>
     </tr>
     <tr style="line-height:20px; text-align:center;">
-        <td><?php echo $approved_by_by_date; ?></td> 
+        <td><?php echo $approved_by_date; ?></td> 
     </tr>  
     <tr style="text-align:center;">
         <td style="border-top:1px solid #333">Date</td>
