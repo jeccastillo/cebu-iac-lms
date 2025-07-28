@@ -3255,7 +3255,7 @@ class Data_fetcher extends CI_Model {
                             $ar_external_discounts_installment50 += $tuition_scholarship_installment_current50;
                         }else{
                             if($scholar->deduction_type == 'discount' && date("Y-m-d", strtotime($scholar->date_applied)) > $sem['ar_report_date_generation']){
-                                $ar_late_tagged_discounts_full = $tuition * ($scholar->tuition_fee_rate/100);
+                                $ar_late_tagged_discounts_full += $tuition * ($scholar->tuition_fee_rate/100);
                                 $ar_late_tagged_discounts_installment += $tuition_scholarship_installment_current;
                                 $ar_late_tagged_discounts_installment30 += $tuition_scholarship_installment_current30;
                                 $ar_late_tagged_discounts_installment50 += $tuition_scholarship_installment_current50;
