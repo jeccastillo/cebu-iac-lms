@@ -5259,10 +5259,10 @@ class Excel extends CI_Controller {
                     if($ledger_data){
                         foreach($ledger_data as $ledger){
                             $amount = (float)$ledger['amount'];
-                            print(var_dump($amount));
-                            print((float)(-1 * $amount));
-                            print(is_numeric($amount));
-                            die();
+                            // print(var_dump($amount));
+                            // print((float)(-1 * $amount));
+                            // print(is_numeric($amount));
+                            // die();
                             if(strpos($ledger['remarks'], 'APPLIED FROM') !== false){
                                 if(!isset($applied_from[0])){
                                     $applied_from[0] = date("M d,Y",strtotime($ledger['date']));
@@ -5271,7 +5271,13 @@ class Excel extends CI_Controller {
                                 }else{
                                     $applied_from[0] .= ', ' . date("M d,Y",strtotime($ledger['date']));
                                     $applied_from[1] .= ', ' . $ledger['remarks'];
-                                    $applied_from[2] += $amount > 0 ? $amount : (float)(-1 * $amount);
+                                    if($amount > 0){
+                                        $applied_from[2] += $amount;
+                                    }else{
+                                        $amount = -1 * $amount;
+                                        $applied_from[2] = (float)$amount;
+                                    }
+                                    // $applied_from[2] += $amount > 0 ? $amount : (float)(-1 * $amount);
                                 }
                             }else if(strpos($ledger['remarks'], 'APPLIED TO') !== false){
                                 if(!isset($applied_from[0])){
