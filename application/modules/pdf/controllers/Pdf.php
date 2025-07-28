@@ -436,7 +436,7 @@ class Pdf extends CI_Controller {
     }
 
     function grading_sheet($id){
-        
+        $post = $this->input->post();
         $sem = $this->data_fetcher->get_active_sem();
         
         $this->data['submitted_by'] = $post['submitted_by'];
