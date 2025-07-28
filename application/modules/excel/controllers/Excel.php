@@ -5258,7 +5258,7 @@ class Excel extends CI_Controller {
                     if($ledger_data){
                         foreach($ledger_data as $ledger){
                             if(strpos($ledger['remarks'], 'APPLIED FROM') !== false){
-                                if(!$applied_from){
+                                if(!isset($applied_from[0])){
                                     $applied_from[0] = date("M d,Y",strtotime($ledger['date']));
                                     $applied_from[1] = $ledger['remarks'];
                                     $applied_from[2] = $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
@@ -5268,7 +5268,7 @@ class Excel extends CI_Controller {
                                     $applied_from[2] += $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
                                 }
                             }else if(strpos($ledger['remarks'], 'APPLIED TO') !== false){
-                                if(!$applied_from){
+                                if(!isset($applied_from[0])){
                                     $applied_to[0] = date("M d,Y",strtotime($ledger['date']));
                                     $applied_to[1] = $ledger['remarks'];
                                     $applied_to[2] = $ledger['amount'] < 0 ? $ledger['amount'] : -1 * abs($ledger['amount']);
@@ -5278,7 +5278,7 @@ class Excel extends CI_Controller {
                                     $applied_to[2] += $ledger['amount'] < 0 ? $ledger['amount'] : -1 * abs($ledger['amount']);
                                 }
                             }else if(strpos($ledger['remarks'], 'Refund') !== false || strpos($ledger['name'], 'Refund') !== false){
-                                if(!$refund){
+                                if(!isset($refund[0])){
                                     $refund[0] = date("M d,Y",strtotime($ledger['date']));
                                     $refund[1] = $ledger['remarks'];
                                     $refund[2] = $ledger['amount'] < 0 ? $ledger['amount'] : -1 * $ledger['amount'];
@@ -5288,7 +5288,7 @@ class Excel extends CI_Controller {
                                     $refund[2] += $ledger['amount'] < 0 ? $ledger['amount'] : -1 * $ledger['amount'];
                                 }
                             }else{
-                                if(!$other){
+                                if(!isset($other[0])){
                                     $other[0] = date("M d,Y",strtotime($ledger['date']));
                                     $other[1] = $ledger['name'];
                                     $other[2] = $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
