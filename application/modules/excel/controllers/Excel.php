@@ -5272,7 +5272,7 @@ class Excel extends CI_Controller {
                                         $applied_from[2] += $amount;
                                     }else{
                                         $amount = -1 * $amount;
-                                        $applied_from[2] = (float)$amount;
+                                        $applied_from[2] += (float)$amount;
                                     }
                                 }
                             }else if(strpos($ledger['remarks'], 'APPLIED TO') !== false){
@@ -5288,7 +5288,7 @@ class Excel extends CI_Controller {
                                         $applied_to[2] += $amount;
                                     }else{
                                         $amount = -1 * $amount;
-                                        $applied_to[2] = (float)$amount;
+                                        $applied_to[2] += (float)$amount;
                                     }
                                 }
                             }else if(strpos($ledger['remarks'], 'Refund') !== false || strpos($ledger['name'], 'Refund') !== false){
@@ -5304,7 +5304,7 @@ class Excel extends CI_Controller {
                                         $refund[2] += $amount;
                                     }else{
                                         $amount = -1 * $amount;
-                                        $refund[2] = (float)$amount;
+                                        $refund[2] += (float)$amount;
                                     }
                                 }
                             }else{
@@ -5320,7 +5320,7 @@ class Excel extends CI_Controller {
                                         $other[2] += $amount;
                                     }else{
                                         $amount = -1 * $amount;
-                                        $other[2] = (float)$amount;
+                                        $other[2] += (float)$amount;
                                     }
                                 }
                             }
