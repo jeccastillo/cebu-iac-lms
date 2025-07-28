@@ -10,8 +10,8 @@
                     <a class="btn btn-app" v-if="is_super_admin || is_registrar" :href="base_url + 'unity/edit_classlist/'+ classlist.intID"><i class="fa fa-gear"></i> Edit</a>                    
                     <a class="btn btn-app" v-if="is_super_admin || is_registrar" :href="base_url + 'excel/download_classlist/'+ classlist.intID + '/' + show_all"><i class="fa fa-table"></i> Download Spreadsheet</a>                
                     <a target="_blank" class="btn btn-app" :href="base_url + 'pdf/print_classlist_registrar/' + classlist.intID +'/front'"><i class="fa fa-print"></i>Print Classlist</a>
-                    <a class="btn btn-app" v-if="classlist.intFinalized > 0" target="_blank" :href="base_url + 'pdf/grading_sheet/' + classlist.intID"><i class="fa fa-print"></i> Print Grading Sheet</a>
-                    <!-- <a class="btn btn-app" v-if="classlist.intFinalized > 0" :href="#" data-toggle="modal" data-target="#gradingSheetModal"><i class="fa fa-print"></i> Print Grading Sheet</a> -->
+                    <!-- <a class="btn btn-app" v-if="classlist.intFinalized > 0" target="_blank" :href="base_url + 'pdf/grading_sheet/' + classlist.intID"><i class="fa fa-print"></i> Print Grading Sheet</a> -->
+                    <a class="btn btn-app" v-if="classlist.intFinalized > 0" href="#" data-toggle="modal" data-target="#gradingSheetModal"><i class="fa fa-print"></i> Print Grading Sheet</a>
                 </small>
             </h1>            
         </section>
