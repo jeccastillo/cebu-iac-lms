@@ -10,6 +10,7 @@
                         <img src= "https://i.ibb.co/9hgbYNB/seal.png"  width="90" />
                     <?php else: ?>
                         <img src= "https://i.ibb.co/kcYVsS7/i-ACADEMY-Seal-Makati.png"  width="90" />
+                    <?php endif; ?>
                 </td>        
             </tr>            
 <table border="0">    
