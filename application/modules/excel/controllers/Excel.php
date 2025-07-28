@@ -5270,7 +5270,7 @@ class Excel extends CI_Controller {
                                 }else{
                                     $applied_from[0] .= ', ' . date("M d,Y",strtotime($ledger['date']));
                                     $applied_from[1] .= ', ' . $ledger['remarks'];
-                                    $applied_from[2] += $amount > 0 ? $amount : -1 * $amount;
+                                    $applied_from[2] += $amount > 0 ? $amount : (float)(-1 * $amount);
                                 }
                             }else if(strpos($ledger['remarks'], 'APPLIED TO') !== false){
                                 if(!isset($applied_from[0])){
