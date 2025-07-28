@@ -5249,10 +5249,6 @@ class Excel extends CI_Controller {
             $reg_status = $this->data_fetcher->getRegistrationStatus($user['intID'],$sem);
             $tuition = $this->data_fetcher->getTuition($user['intID'], $sem);
 
-            if($user['intID'] == 37){
-                print_r($tuition);
-                die();
-            }
             $w_status = false;
             if($reg && substr($user['strStudentNumber'], 0, 1) != 'T'){
                 if(in_array($reg_status, ['Enrolled', 'Officially Withdrawn']) || ($reg_status =='LOA' && $reg['withdrawal_period'] == 'after')){
@@ -5304,19 +5300,6 @@ class Excel extends CI_Controller {
                             }
                         }
                     }
-                    // if($user['intID'] == 875){
-                    //     print($ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount']);
-                    //     if($ledger['amount'] < 0){
-                    //         print('negative');
-                    //         print(-1 * $ledger['amount']);
-                    //     }else{
-                    //         print('positive');
-                    //     }
-                    //     print_r($refund);
-                    //     print_r($ledger_data);
-                    //     print_r($user);
-                    //     die();
-                    // }
     
                     $studentsEnrolled = true;
                     $course = $this->data_fetcher->getProgramDetails($user['intProgramID']);
