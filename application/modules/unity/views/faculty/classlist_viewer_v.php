@@ -10,7 +10,60 @@
                     <a class="btn btn-app" v-if="is_super_admin || is_registrar" :href="base_url + 'unity/edit_classlist/'+ classlist.intID"><i class="fa fa-gear"></i> Edit</a>                    
                     <a class="btn btn-app" v-if="is_super_admin || is_registrar" :href="base_url + 'excel/download_classlist/'+ classlist.intID + '/' + show_all"><i class="fa fa-table"></i> Download Spreadsheet</a>                
                     <a target="_blank" class="btn btn-app" :href="base_url + 'pdf/print_classlist_registrar/' + classlist.intID +'/front'"><i class="fa fa-print"></i>Print Classlist</a>
-                    <a class="btn btn-app" v-if="classlist.intFinalized > 0" target="_blank" :href="base_url + 'pdf/grading_sheet/' + classlist.intID"><i class="fa fa-print"></i> Print Grading Sheet</a>                                            
+                    <!-- <a class="btn btn-app" v-if="classlist.intFinalized > 0" target="_blank" :href="base_url + 'pdf/grading_sheet/' + classlist.intID"><i class="fa fa-print"></i> Print Grading Sheet</a> -->
+                    <a class="btn btn-app" v-if="classlist.intFinalized > 0" :href="#" data-toggle="modal" data-target="#gradingSheetModal"><i class="fa fa-print"></i> Print Grading Sheet</a>
+
+                    <div class="modal fade" id="gradingSheetModal" role="dialog">
+                        <form ref="print_grading_sheet" @submit.prevent="printGradingSheet" method="post" target="_blank" :action="base_url + 'pdf/grading_sheet/' + classlist.intID" class="modal-dialog modal-lg">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <!-- modal header  -->
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Grading Shee</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="form-group col-sm-6" class="form-control">
+                                            <label>Submitted By</label>
+                                            <input type="text" class="form-control" name="submitted_by">
+                                        </div>
+                                        <div class="form-group col-sm-6" class="form-control">
+                                            <label>Date</label>
+                                            <input type="text" class="form-control" name="submitted_by_date">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-sm-6" class="form-control">
+                                            <label>Checked By</label>
+                                            <input type="text" class="form-control" name="checked_by">
+                                        </div>
+                                        <div class="form-group col-sm-6" class="form-control">
+                                            <label>Date</label>
+                                            <input type="text" class="form-control" name="checked_by_date">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-sm-6" class="form-control">
+                                            <label>Approved By</label>
+                                            <input type="text" class="form-control" name="approved_by">
+                                        </div>
+                                        <div class="form-group col-sm-6" class="form-control">
+                                            <label>Date</label>
+                                            <input type="text" class="form-control" name="approved_by_date">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class=" modal-footer">
+                                    <!-- modal footer  -->
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
                 </small>
             </h1>            
         </section>
@@ -615,7 +668,9 @@ new Vue({
                     });
             }
         },
-
+        printGradingSheet: function(){
+            this.$refs.print_grading_sheet.submit();
+        },
     }
 
 })
