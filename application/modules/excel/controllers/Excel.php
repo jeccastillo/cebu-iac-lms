@@ -5258,6 +5258,8 @@ class Excel extends CI_Controller {
                     $applied_from[0] = $applied_from[1] = $applied_from[2] = $applied_to[0] = $applied_to[1] = $applied_to[2] = $refund[0] = $refund[1] = $refund[2] = $others[0] = $others[1] = $others[2] = '';
                     if($ledger_data){
                         foreach($ledger_data as $ledger){
+                            print(var_dump($ledger['amount']));
+                            die();
                             $amount = (float)$ledger['amount'];
                             if(strpos($ledger['remarks'], 'APPLIED FROM') !== false){
                                 if(!isset($applied_from[0])){
