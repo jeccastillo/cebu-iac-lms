@@ -5281,11 +5281,11 @@ class Excel extends CI_Controller {
                                 if(!$refund){
                                     $refund[0] = date("M d,Y",strtotime($ledger['date']));
                                     $refund[1] = $ledger['remarks'];
-                                    $refund[2] = $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
+                                    $refund[2] = $ledger['amount'] < 0 ? $ledger['amount'] : -1 * $ledger['amount'];
                                 }else{
                                     $refund[0] .= ', ' . date("M d,Y",strtotime($ledger['date']));
                                     $refund[1] .= ', ' . $ledger['remarks'];
-                                    $refund[2] += $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
+                                    $refund[2] += $ledger['amount'] < 0 ? $ledger['amount'] : -1 * $ledger['amount'];
                                 }
                             }else{
                                 if(!$other){
