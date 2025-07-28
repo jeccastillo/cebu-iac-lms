@@ -5575,11 +5575,11 @@ class Excel extends CI_Controller {
                             $installment_balance -= $tuition['nsf'] > 0 ? $tuition['nsf'] : 0;
                             $installment_balance -= $assessment_discount_rate > 0 ? $assessment_discount_rate : 0;
                             $installment_balance -= $assessment_discount_fixed > 0 ? $assessment_discount_fixed : 0;
-                            $installment_balance -= $applied_from ? $applied_from[2] : 0;
-                            $installment_balance -= $applied_to ? $applied_to[2] : 0;
+                            $installment_balance -= $applied_from[2] ? $applied_from[2] : 0;
+                            $installment_balance -= $applied_to[2] ? $applied_to[2] : 0;
                         }else{
-                            $installment_balance -= $applied_from ? $applied_from[2] : 0;
-                            $installment_balance -= $applied_to ? $applied_to[2] : 0;
+                            $installment_balance -= $applied_from[2] ? $applied_from[2] : 0;
+                            $installment_balance -= $applied_to[2] ? $applied_to[2] : 0;
                             $installment_balance -= $total_discount;
                         }
     
