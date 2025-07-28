@@ -5,7 +5,12 @@
                 </td>
             </tr>            
             <tr>
-                <td colspan="3" align="center" style="text-align:center;vertical-align: bottom"><img src= "<?php if($campus == 'Cebu') echo 'https://i.ibb.co/9hgbYNB/seal.png'; else echo 'https://i.ibb.co/kcYVsS7/i-ACADEMY-Seal-Makati.png'; ?>"  width="90" /></td>        
+                <td colspan="3" align="center" style="text-align:center;vertical-align: bottom">
+                    <?php if($campus == 'Cebu'): ?>
+                        <img src= "https://i.ibb.co/9hgbYNB/seal.png"  width="90" />
+                    <?php else: ?>
+                        <img src= "https://i.ibb.co/kcYVsS7/i-ACADEMY-Seal-Makati.png"  width="90" />
+                </td>        
             </tr>            
 <table border="0">    
     <tr style="line-height:12px;">
