@@ -5259,45 +5259,46 @@ class Excel extends CI_Controller {
                     if($ledger_data){
                         foreach($ledger_data as $ledger){
                             if(is_numeric($ledger['amount'])){
+                                $amount = (float)$ledger['amount'];
                                 if(strpos($ledger['remarks'], 'APPLIED FROM') !== false){
                                     if(!isset($applied_from[0])){
                                         $applied_from[0] = date("M d,Y",strtotime($ledger['date']));
                                         $applied_from[1] = $ledger['remarks'];
-                                        $applied_from[2] = $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
+                                        $applied_from[2] = $amount > 0 ? $amount : -1 * $amount;
                                     }else{
                                         $applied_from[0] .= ', ' . date("M d,Y",strtotime($ledger['date']));
                                         $applied_from[1] .= ', ' . $ledger['remarks'];
-                                        $applied_from[2] += $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
+                                        $applied_from[2] += $amount > 0 ? $amount : -1 * $amount;
                                     }
                                 }else if(strpos($ledger['remarks'], 'APPLIED TO') !== false){
                                     if(!isset($applied_from[0])){
                                         $applied_to[0] = date("M d,Y",strtotime($ledger['date']));
                                         $applied_to[1] = $ledger['remarks'];
-                                        $applied_to[2] = $ledger['amount'] < 0 ? $ledger['amount'] : -1 * abs($ledger['amount']);
+                                        $applied_to[2] = $amount < 0 ? $amount : -1 * abs($amount);
                                     }else{
                                         $applied_to[0] .= ', ' . date("M d,Y",strtotime($ledger['date']));
                                         $applied_to[1] .= ', ' . $ledger['remarks'];
-                                        $applied_to[2] += $ledger['amount'] < 0 ? $ledger['amount'] : -1 * abs($ledger['amount']);
+                                        $applied_to[2] += $amount < 0 ? $amount : -1 * abs($amount);
                                     }
                                 }else if(strpos($ledger['remarks'], 'Refund') !== false || strpos($ledger['name'], 'Refund') !== false){
                                     if(!isset($refund[0])){
                                         $refund[0] = date("M d,Y",strtotime($ledger['date']));
                                         $refund[1] = $ledger['remarks'];
-                                        $refund[2] = $ledger['amount'] < 0 ? $ledger['amount'] : -1 * $ledger['amount'];
+                                        $refund[2] = $amount < 0 ? $amount : -1 * $amount;
                                     }else{
                                         $refund[0] .= ', ' . date("M d,Y",strtotime($ledger['date']));
                                         $refund[1] .= ', ' . $ledger['remarks'];
-                                        $refund[2] += $ledger['amount'] < 0 ? $ledger['amount'] : -1 * $ledger['amount'];
+                                        $refund[2] += $amount < 0 ? $amount : -1 * $amount;
                                     }
                                 }else{
                                     if(!isset($other[0])){
                                         $other[0] = date("M d,Y",strtotime($ledger['date']));
                                         $other[1] = $ledger['name'];
-                                        $other[2] = $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
+                                        $other[2] = $amount > 0 ? $amount : -1 * $amount;
                                     }else{
                                         $other[0] = ', ' . date("M d,Y",strtotime($ledger['date']));
                                         $other[1] = ', ' . $ledger['name'];
-                                        $other[2] += $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
+                                        $other[2] += $amount > 0 ? $amount : -1 * $amount;
                                     }
                                 }
                             }
