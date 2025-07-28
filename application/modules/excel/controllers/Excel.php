@@ -5255,6 +5255,7 @@ class Excel extends CI_Controller {
 
                     $ledger_data = $this->db->get_where('tb_mas_student_ledger', array('syid' => $sem, 'student_id' => $user['intID'], 'date <=' => $report_date . ' 23:59:59'))->result_array();
                     
+                    $applied_from[0] = $applied_from[1] = $applied_from[2] = $applied_to[0] = $applied_to[1] = $applied_to[2] = $refund[0] = $refund[1] = $refund[2] = $others[0] = $others[1] = $others[2] = '';
                     if($ledger_data){
                         foreach($ledger_data as $ledger){
                             if(strpos($ledger['remarks'], 'APPLIED FROM') !== false){
