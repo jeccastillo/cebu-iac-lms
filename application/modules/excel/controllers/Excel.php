@@ -5249,6 +5249,10 @@ class Excel extends CI_Controller {
             $reg_status = $this->data_fetcher->getRegistrationStatus($user['intID'],$sem);
             $tuition = $this->data_fetcher->getTuition($user['intID'], $sem);
 
+            if($user['intID'] == 37){
+                print_r($tuition);
+                die();
+            }
             $w_status = false;
             if($reg && substr($user['strStudentNumber'], 0, 1) != 'T'){
                 if(in_array($reg_status, ['Enrolled', 'Officially Withdrawn']) || ($reg_status =='LOA' && $reg['withdrawal_period'] == 'after')){
