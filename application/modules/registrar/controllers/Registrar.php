@@ -782,13 +782,17 @@ class Registrar extends CI_Controller {
                             $totals['transferee'] += 1;
                             break;
                         case 'second degree':
+                            print_r($st);
                             if(in_array($st['slug'], $second_degree_iac)){
                                 $data[$date]['secondiAC'] += 1;
                                 $totals['secondiAC'] += 1;
+                                print("@@");
                             }else{
                                 $data[$date]['second'] += 1;
                                 $totals['second'] += 1;
+                                print("!!");
                             }
+                            die();
                             break;                     
                         default:
                             $data[$date]['freshman'] += 1;
