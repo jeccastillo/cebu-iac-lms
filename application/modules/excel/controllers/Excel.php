@@ -5185,8 +5185,7 @@ class Excel extends CI_Controller {
                                 $data = $date = array();
                                 for($index = count($payments) - 1; $index >= 0; $index--){
                                     if($payments[$index]['year'] == date("Y", strtotime($payment_detail['created_at'])) && $payments[$index]['month'] == date("m", strtotime($payment_detail['created_at']))){
-                                        
-                                    
+
                                         $same_month_year = true;
                                         $current_index = $index;
                                     }else if($payments[$index]['year'] == date("Y", strtotime($payment_detail['created_at']))){
@@ -5255,64 +5254,55 @@ class Excel extends CI_Controller {
 
                     $ledger_data = $this->db->get_where('tb_mas_student_ledger', array('syid' => $sem, 'student_id' => $user['intID'], 'date <=' => $report_date . ' 23:59:59'))->result_array();
                     
+                    $applied_from[0] = $applied_from[1] = $applied_to[0] = $applied_to[1] = $refund[0] = $refund[1] = $others[0] = $others[1] = '';
+                    $applied_from[2] = $applied_to[2] = $refund[2] = $others[2] = 0;
+
                     if($ledger_data){
                         foreach($ledger_data as $ledger){
+                            $amount = (float)$ledger['amount'];
                             if(strpos($ledger['remarks'], 'APPLIED FROM') !== false){
-                                if(!$applied_from){
+                                if($applied_from[0] == ''){
                                     $applied_from[0] = date("M d,Y",strtotime($ledger['date']));
                                     $applied_from[1] = $ledger['remarks'];
-                                    $applied_from[2] = $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
+                                    $applied_from[2] = $amount > 0 ? $amount : -1 * $amount;
                                 }else{
                                     $applied_from[0] .= ', ' . date("M d,Y",strtotime($ledger['date']));
                                     $applied_from[1] .= ', ' . $ledger['remarks'];
-                                    $applied_from[2] += $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
+                                    $applied_from[2] += $amount > 0 ? $amount : -1 * $amount;
                                 }
                             }else if(strpos($ledger['remarks'], 'APPLIED TO') !== false){
-                                if(!$applied_from){
+                                if($applied_to[0] == ''){
                                     $applied_to[0] = date("M d,Y",strtotime($ledger['date']));
                                     $applied_to[1] = $ledger['remarks'];
-                                    $applied_to[2] = $ledger['amount'] < 0 ? $ledger['amount'] : -1 * abs($ledger['amount']);
+                                    $applied_to[2] = $amount < 0 ? $amount : abs($amount);
                                 }else{
                                     $applied_to[0] .= ', ' . date("M d,Y",strtotime($ledger['date']));
                                     $applied_to[1] .= ', ' . $ledger['remarks'];
-                                    $applied_to[2] += $ledger['amount'] < 0 ? $ledger['amount'] : -1 * abs($ledger['amount']);
+                                    $applied_to[2] += $amount < 0 ? (float)$amount : abs($amount);
                                 }
                             }else if(strpos($ledger['remarks'], 'Refund') !== false || strpos($ledger['name'], 'Refund') !== false){
-                                if(!$refund){
+                                if($refund[0] == ''){
                                     $refund[0] = date("M d,Y",strtotime($ledger['date']));
                                     $refund[1] = $ledger['remarks'];
-                                    $refund[2] = $ledger['amount'] < 0 ? $ledger['amount'] : -1 * $ledger['amount'];
+                                    $refund[2] = -1 * $amount;
                                 }else{
                                     $refund[0] .= ', ' . date("M d,Y",strtotime($ledger['date']));
                                     $refund[1] .= ', ' . $ledger['remarks'];
-                                    $refund[2] += $ledger['amount'] < 0 ? $ledger['amount'] : -1 * $ledger['amount'];
+                                    $refund[2] += -1 * $amount;
                                 }
                             }else{
-                                if(!$other){
+                                if($other[0] == ''){
                                     $other[0] = date("M d,Y",strtotime($ledger['date']));
                                     $other[1] = $ledger['name'];
-                                    $other[2] = $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
+                                    $other[2] = $amount > 0 ? $amount : -1 * $amount;
                                 }else{
                                     $other[0] = ', ' . date("M d,Y",strtotime($ledger['date']));
                                     $other[1] = ', ' . $ledger['name'];
-                                    $other[2] += $ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount'];
+                                    $other[2] += $amount > 0 ? $amount : -1 * $amount;
                                 }
                             }
                         }
                     }
-                    // if($user['intID'] == 875){
-                    //     print($ledger['amount'] > 0 ? $ledger['amount'] : -1 * $ledger['amount']);
-                    //     if($ledger['amount'] < 0){
-                    //         print('negative');
-                    //         print(-1 * $ledger['amount']);
-                    //     }else{
-                    //         print('positive');
-                    //     }
-                    //     print_r($refund);
-                    //     print_r($ledger_data);
-                    //     print_r($user);
-                    //     die();
-                    // }
     
                     $studentsEnrolled = true;
                     $course = $this->data_fetcher->getProgramDetails($user['intProgramID']);
@@ -5574,11 +5564,11 @@ class Excel extends CI_Controller {
                             $installment_balance -= $tuition['nsf'] > 0 ? $tuition['nsf'] : 0;
                             $installment_balance -= $assessment_discount_rate > 0 ? $assessment_discount_rate : 0;
                             $installment_balance -= $assessment_discount_fixed > 0 ? $assessment_discount_fixed : 0;
-                            $installment_balance -= $applied_from ? $applied_from[2] : 0;
-                            $installment_balance -= $applied_to ? $applied_to[2] : 0;
+                            $installment_balance -= $applied_from[2] ? $applied_from[2] : 0;
+                            $installment_balance -= $applied_to[2] ? $applied_to[2] : 0;
                         }else{
-                            $installment_balance -= $applied_from ? $applied_from[2] : 0;
-                            $installment_balance -= $applied_to ? $applied_to[2] : 0;
+                            $installment_balance -= $applied_from[2] ? $applied_from[2] : 0;
+                            $installment_balance -= $applied_to[2] ? $applied_to[2] : 0;
                             $installment_balance -= $total_discount;
                         }
     
