@@ -134,18 +134,17 @@
 
                     <div class="modal fade" id="gradingSheetModal" role="dialog">
                         <form ref="print_grading_sheet" @submit.prevent="printGradingSheet" method="post" target="_blank" :action="base_url + 'pdf/grading_sheet/' + classlist.intID" class="modal-dialog modal-lg">
-
                             <!-- Modal content-->
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <!-- modal header  -->
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="modal-title">Grading Shee</h4>
+                                    <h4 class="modal-title">Grading Sheet</h4>
                                 </div>
                                 <div class="modal-body">
                                     <div class="row">
                                         <div class="form-group col-sm-6" class="form-control">
-                                            <label>Submitted By</label>
+                                            <label>Faculty Name</label>
                                             <input type="text" class="form-control" name="submitted_by">
                                         </div>
                                         <div class="form-group col-sm-6" class="form-control">
@@ -153,9 +152,9 @@
                                             <input type="text" class="form-control" name="submitted_by_date">
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="row" v-if="classlist.term_student_type == shs">
                                         <div class="form-group col-sm-6" class="form-control">
-                                            <label>Checked By</label>
+                                            <label>Academic Coordinator</label>
                                             <input type="text" class="form-control" name="checked_by">
                                         </div>
                                         <div class="form-group col-sm-6" class="form-control">
@@ -163,9 +162,9 @@
                                             <input type="text" class="form-control" name="checked_by_date">
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="row" v-if="classlist.term_student_type == shs">
                                         <div class="form-group col-sm-6" class="form-control">
-                                            <label>Approved By</label>
+                                            <label>Principal</label>
                                             <input type="text" class="form-control" name="approved_by">
                                         </div>
                                         <div class="form-group col-sm-6" class="form-control">
@@ -173,6 +172,7 @@
                                             <input type="text" class="form-control" name="approved_by_date">
                                         </div>
                                     </div>
+                                    <input type="hidden" name="student_type" value="classlist.term_student_type">
                                 </div>
                                 <div class=" modal-footer">
                                     <!-- modal footer  -->
