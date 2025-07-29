@@ -784,7 +784,7 @@ class Registrar extends CI_Controller {
                             $totals['transferee'] += 1;
                             break;
                         case 'second degree':
-                            if(in_array($enrollment['slug'], $second_degree_iac)){
+                            if(in_array($st['slug'], $second_degree_iac)){
                                 $data[$date]['secondiAC'] += 1;
                                 $totals['secondiAC'] += 1;
                             }else{
