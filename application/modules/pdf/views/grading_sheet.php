@@ -7,9 +7,9 @@
             <tr>
                 <td colspan="3" align="center" style="text-align:center;vertical-align: bottom">
                     <?php if($campus == 'Cebu'): ?>
-                        <img src= "https://i.ibb.co/9hgbYNB/seal.png"  width="90" />
+                        <img src= "https://i.ibb.co/9hgbYNB/seal.png"  width="70" />
                     <?php else: ?>
-                        <img src= "https://i.ibb.co/kcYVsS7/i-ACADEMY-Seal-Makati.png"  width="90" />
+                        <img src= "https://i.ibb.co/kcYVsS7/i-ACADEMY-Seal-Makati.png"  width="70" />
                     <?php endif; ?>
                 </td>        
             </tr>            
