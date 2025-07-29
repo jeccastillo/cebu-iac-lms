@@ -5272,11 +5272,6 @@ class Excel extends CI_Controller {
                                         $applied_from[2] += (float)$amount;
                                     }else{
                                         $amount = -1 * $amount;
-                                        print(var_dump($amount) . ' @ ');
-                                        print(var_dump($applied_from[2]) . ' @ ');
-                                        print($amount . ' = ');
-                                        print(is_numeric($amount));
-                                        die();
                                         $applied_from[2] += (float)$amount;
                                     }
                                 }
