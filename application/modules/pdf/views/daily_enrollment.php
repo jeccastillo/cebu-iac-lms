@@ -52,6 +52,7 @@ $html .= '
          <th style="width:10%;font-size:9px;">Shiftee</th>  
          <th style="width:10%;font-size:9px;">Continuing</th>
          <th style="width:10%;font-size:9px;">Second Degree</th>
+         <th style="width:10%;font-size:9px;">Second Degree - iAC</th>
          <th style="width:10%;font-size:9px;">Total Enrollment</th>
      </tr>
      <tr style="line-height:10px;">
@@ -84,6 +85,9 @@ $html .= '
                     '.$item->second.'
                 </td>
                 <td style="font-size:8px;">
+                    '.$item->secondIAC.'
+                </td>
+                <td style="font-size:8px;">
                     '.$item->total.'
                 </td>
             </tr>
@@ -94,7 +98,7 @@ $html .= '
     }
 $html .= ' 
     <tr style="line-height:10px;">
-        <th style="border-top:1px solid #333;" colspan="7"></th>
+        <th style="border-top:1px solid #333;" colspan="8"></th>
     </tr>
      <tr>
          <td>Total</td>
@@ -103,6 +107,7 @@ $html .= '
          <td>'.$totals->returning.'</td>
          <td>'.$totals->shiftee.'</td>
          <td>'.$totals->second.'</td>
+         <td>'.$totals->secondIAC.'</td>
          <td>'.$totals->continuing.'</td>
          <td><strong>'.$full_total.'</strong></td>
      </tr>
@@ -159,7 +164,7 @@ else{
     }
 $html .= ' 
     <tr style="line-height:10px;">
-        <th style="border-top:1px solid #333;" colspan="7"></th>
+        <th style="border-top:1px solid #333;" colspan="8"></th>
     </tr>
      <tr>
          <td>Total</td>
