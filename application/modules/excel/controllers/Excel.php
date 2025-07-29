@@ -5274,7 +5274,7 @@ class Excel extends CI_Controller {
                                         $amount = -1 * $amount;
                                         print(var_dump($amount) . ' @ ');
                                         print(var_dump($applied_from[2]) . ' @ ');
-                                        print($amount);
+                                        print($amount . ' = ');
                                         print(is_numeric($amount));
                                         die();
                                         $applied_from[2] += (float)$amount;
