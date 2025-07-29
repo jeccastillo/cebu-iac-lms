@@ -54,10 +54,11 @@
                     <th>Date</th>
                     <th>Freshman</th>
                     <th>Transferee</th>
-                    <th>Second Degree</th>                    
-                    <th>Continuing</th>
+                    <th>Returnee</th>
                     <th>Shiftee</th>
-                    <th>Returning</th>
+                    <th>Continuing</th>
+                    <th>Second Degree</th>  
+                    <th>Second Degree - iAC</th>                    
                     <th>Total Enrollment</th>
                 </tr>                
             </thead>
@@ -66,20 +67,22 @@
                     <td v-if="date.total > 0">{{ date.date }}</td>
                     <td v-if="date.total > 0"><b>{{ date.freshman }}</b></td>                    
                     <td v-if="date.total > 0"><b>{{ date.transferee }}</b></td>                    
-                    <td v-if="date.total > 0"><b>{{ date.second }}</b></td>                    
-                    <td v-if="date.total > 0"><b>{{ date.continuing }}</b></td>
-                    <td v-if="date.total > 0"><b>{{ date.shiftee }}</b></td>                    
                     <td v-if="date.total > 0"><b>{{ date.returning }}</b></td>                    
+                    <td v-if="date.total > 0"><b>{{ date.shiftee }}</b></td>                    
+                    <td v-if="date.total > 0"><b>{{ date.continuing }}</b></td>
+                    <td v-if="date.total > 0"><b>{{ date.second }}</b></td>     
+                    <td v-if="date.total > 0"><b>{{ date.secondIAC }}</b></td>                   
                     <td v-if="date.total > 0"><b>{{ date.total }}</b></td>                    
                 </tr>
                 <tr v-if="totals">
                     <td>Total:</td>
                     <td><strong>{{ totals.freshman }}</strong></td>
                     <td><strong>{{ totals.transferee }}</strong></td>                    
-                    <td><strong>{{ totals.second }}</strong></td>
-                    <td><strong>{{ totals.continuing }}</strong></td>
-                    <td><strong>{{ totals.shiftee }}</strong></td>
                     <td><strong>{{ totals.returning }}</strong></td>
+                    <td><strong>{{ totals.shiftee }}</strong></td>
+                    <td><strong>{{ totals.continuing }}</strong></td>
+                    <td><strong>{{ totals.second }}</strong></td>
+                    <td><strong>{{ totals.secondIAC }}</strong></td>
                     <td><strong>{{ full_total }}</strong></td>
                 </tr>                               
             </tbody>
@@ -150,8 +153,6 @@ new Vue({
         formdata.append('end','<?php echo ($end!=0)?$end:date("Y-m-d", strtotime('tomorrow')); ?>');
         axios.get(api_url + 'admissions/applications/get-applicants-by-field/' + this.current_sem + '/student_type/2nd - Degree iACADEMY')
         .then((applicants_data) => {
-            console.log(typeof(applicants_data.data.data));
-            console.log(applicants_data.data.data);
             formdata.append('second_degree_iac', JSON.stringify(applicants_data.data.data));
             axios.post(this.base_url + 'registrar/daily_enrollment_report_data/',formdata, {
                 headers: {
