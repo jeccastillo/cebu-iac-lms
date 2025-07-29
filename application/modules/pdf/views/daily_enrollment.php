@@ -47,11 +47,11 @@ $html .= '
      <tr>
          <th style="width:30%;font-size:9px;">Date</th>
          <th style="width:10%;font-size:9px;">Freshman</th>
-         <th style="width:10%;font-size:9px;">Transferee</th>         
-         <th style="width:10%;font-size:9px;">Second Degree</th>
+         <th style="width:10%;font-size:9px;">Transferee</th>  
+         <th style="width:10%;font-size:9px;">Returnee</th>     
+         <th style="width:10%;font-size:9px;">Shiftee</th>  
          <th style="width:10%;font-size:9px;">Continuing</th>
-         <th style="width:10%;font-size:9px;">Shiftee</th>
-         <th style="width:10%;font-size:9px;">Returning</th>
+         <th style="width:10%;font-size:9px;">Second Degree</th>
          <th style="width:10%;font-size:9px;">Total Enrollment</th>
      </tr>
      <tr style="line-height:10px;">
@@ -72,16 +72,16 @@ $html .= '
                     '.$item->transferee.'
                 </td>
                 <td style="font-size:8px;">
-                    '.$item->second.'
-                </td>
-                <td style="font-size:8px;">
-                    '.$item->continuing.'
+                    '.$item->returning.'
                 </td>
                 <td style="font-size:8px;">
                     '.$item->shiftee.'
                 </td>
                 <td style="font-size:8px;">
-                    '.$item->returning.'
+                    '.$item->continuing.'
+                </td>
+                <td style="font-size:8px;">
+                    '.$item->second.'
                 </td>
                 <td style="font-size:8px;">
                     '.$item->total.'
@@ -100,10 +100,10 @@ $html .= '
          <td>Total</td>
          <td>'.$totals->freshman.'</td>
          <td>'.$totals->transferee.'</td>
+         <td>'.$totals->returning.'</td>
+         <td>'.$totals->shiftee.'</td>
          <td>'.$totals->second.'</td>
          <td>'.$totals->continuing.'</td>
-         <td>'.$totals->shiftee.'</td>
-         <td>'.$totals->returning.'</td>
          <td><strong>'.$full_total.'</strong></td>
      </tr>
      <tr style="line-height:30px;">
