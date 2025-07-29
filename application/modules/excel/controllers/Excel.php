@@ -5269,7 +5269,7 @@ class Excel extends CI_Controller {
                                     $applied_from[1] .= ', ' . $ledger['remarks'];
                                     // $applied_from[2] += $amount > 0 ? $amount : (float)(-1 * $amount);
                                     if($amount > 0){
-                                        $applied_from[2] += $amount;
+                                        $applied_from[2] += (float)$amount;
                                     }else{
                                         $amount = -1 * $amount;
                                         $applied_from[2] += (float)$amount;
@@ -5285,7 +5285,7 @@ class Excel extends CI_Controller {
                                     $applied_to[1] .= ', ' . $ledger['remarks'];
                                     // $applied_to[2] += $amount < 0 ? (float)$amount : -1 * abs($amount);
                                     if($amount < 0){
-                                        $applied_to[2] += $amount;
+                                        $applied_to[2] += (float)$amount;
                                     }else{
                                         $amount = -1 * $amount;
                                         $applied_to[2] += (float)$amount;
@@ -5301,7 +5301,7 @@ class Excel extends CI_Controller {
                                     $refund[1] .= ', ' . $ledger['remarks'];
                                     // $refund[2] += $amount < 0 ? (float)$amount : -1 * $amount;
                                     if($amount < 0){
-                                        $refund[2] += $amount;
+                                        $refund[2] += (float)$amount;
                                     }else{
                                         $amount = -1 * $amount;
                                         $refund[2] += (float)$amount;
@@ -5317,7 +5317,7 @@ class Excel extends CI_Controller {
                                     $other[1] = ', ' . $ledger['name'];
                                     // $other[2] += $amount > 0 ? $amount : (float)(-1 * $amount);
                                     if($amount > 0){
-                                        $other[2] += $amount;
+                                        $other[2] += (float)$amount;
                                     }else{
                                         $amount = -1 * $amount;
                                         $other[2] += (float)$amount;
