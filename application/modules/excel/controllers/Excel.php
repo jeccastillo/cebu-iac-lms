@@ -5262,7 +5262,7 @@ class Excel extends CI_Controller {
                         foreach($ledger_data as $ledger){
                             $amount = (float)$ledger['amount'];
                             if(strpos($ledger['remarks'], 'APPLIED FROM') !== false){
-                                if(!isset($applied_from[0])){
+                                if($applied_from[0]){
                                     $applied_from[0] = date("M d,Y",strtotime($ledger['date']));
                                     $applied_from[1] = $ledger['remarks'];
                                     $applied_from[2] = $amount > 0 ? $amount : -1 * $amount;
@@ -5278,7 +5278,7 @@ class Excel extends CI_Controller {
                                     // }
                                 }
                             }else if(strpos($ledger['remarks'], 'APPLIED TO') !== false){
-                                if(!isset($applied_from[0])){
+                                if($applied_to[0]){
                                     $applied_to[0] = date("M d,Y",strtotime($ledger['date']));
                                     $applied_to[1] = $ledger['remarks'];
                                     $applied_to[2] = $amount < 0 ? $amount : abs($amount);
@@ -5295,7 +5295,7 @@ class Excel extends CI_Controller {
                                     // }
                                 }
                             }else if(strpos($ledger['remarks'], 'Refund') !== false || strpos($ledger['name'], 'Refund') !== false){
-                                if(!isset($refund[0])){
+                                if($refund[0]){
                                     $refund[0] = date("M d,Y",strtotime($ledger['date']));
                                     $refund[1] = $ledger['remarks'];
                                     $refund[2] = $amount < 0 ? (float)$amount : abs($amount);
@@ -5311,7 +5311,7 @@ class Excel extends CI_Controller {
                                     // }
                                 }
                             }else{
-                                if(!isset($other[0])){
+                                if($other[0]){
                                     $other[0] = date("M d,Y",strtotime($ledger['date']));
                                     $other[1] = $ledger['name'];
                                     $other[2] = $amount > 0 ? $amount : -1 * $amount;
