@@ -444,7 +444,7 @@ class Pdf extends CI_Controller {
         $this->data['checked_by'] = $post['checked_by'];
         $this->data['checked_by_date'] = $post['checked_by_date'];
         $this->data['approved_by'] = isset($post['approved_by']) ? $post['approved_by'] : '';
-        $this->data['approved_by_date'] = issset($post['approved_by_date']) ? $post['approved_by_date'] : '';
+        $this->data['approved_by_date'] = isset($post['approved_by_date']) ? $post['approved_by_date'] : '';
         $this->data['student_type'] = $post['student_type'];
         
         $this->data['classlist'] = $this->data_fetcher->getClasslistById($id);
