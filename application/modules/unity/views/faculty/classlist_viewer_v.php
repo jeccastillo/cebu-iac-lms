@@ -152,7 +152,7 @@
                                             <input type="text" class="form-control" name="submitted_by_date">
                                         </div>
                                     </div>
-                                    <div class="row" v-if="classlist.term_student_type == shs">
+                                    <div class="row" v-if="classlist.term_student_type == 'shs'">
                                         <div class="form-group col-sm-6" class="form-control">
                                             <label>Academic Coordinator</label>
                                             <input type="text" class="form-control" name="checked_by">
@@ -162,7 +162,7 @@
                                             <input type="text" class="form-control" name="checked_by_date">
                                         </div>
                                     </div>
-                                    <div class="row" v-if="classlist.term_student_type == shs">
+                                    <div class="row" v-if="classlist.term_student_type == 'shs'">
                                         <div class="form-group col-sm-6" class="form-control">
                                             <label>Principal</label>
                                             <input type="text" class="form-control" name="approved_by">
