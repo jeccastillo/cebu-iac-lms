@@ -172,7 +172,7 @@
                                             <input type="text" class="form-control" name="approved_by_date">
                                         </div>
                                     </div>
-                                    <input type="hidden" name="student_type" value="classlist.term_student_type">
+                                    <input type="text" name="student_type" value="classlist.term_student_type">
                                 </div>
                                 <div class=" modal-footer">
                                     <!-- modal footer  -->
