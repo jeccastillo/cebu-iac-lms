@@ -704,8 +704,6 @@ class Registrar extends CI_Controller {
                 $second_degree_iac[] = $applicant['slug'];
             }
         }
-        print_r($second_degree_iac);
-        die();
 
         $begin = new DateTime($post['start']);
         $end = new DateTime($post['end']);
@@ -750,6 +748,8 @@ class Registrar extends CI_Controller {
                                     ->group_by('intStudentID')
                                     ->get()
                                     ->result_array();
+            print_r($enrollment);
+            die();
                                             
             foreach($enrollment as $st){
                 $data[$date]['total'] += 1;                
