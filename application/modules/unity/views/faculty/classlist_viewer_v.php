@@ -180,7 +180,6 @@
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                 </div>
                             </div>
-
                         </form>
                     </div>
         <div class="modal fade" id="myModal" role="dialog">
