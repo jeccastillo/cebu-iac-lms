@@ -783,8 +783,8 @@ class Registrar extends CI_Controller {
                             break;
                         case 'second degree':
                             if(in_array($st['slug'], $second_degree_iac)){
-                                $data[$date]['secondiAC'] += 1;
-                                $totals['secondiAC'] += 1;
+                                $data[$date]['secondIAC'] += 1;
+                                $totals['secondIAC'] += 1;
                             }else{
                                 $data[$date]['second'] += 1;
                                 $totals['second'] += 1;
