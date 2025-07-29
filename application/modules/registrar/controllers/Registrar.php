@@ -698,8 +698,8 @@ class Registrar extends CI_Controller {
         $active_sem = $this->data_fetcher->get_sem_by_id($post['sy']);        
         $enrolled = $second_degree_iac = [];
         
-        $second_degree_iac_applicants = $post['second_degree_iac'];
-        print_r($second_degree_iac_applicants[0]);
+        $second_degree_iac_applicants = json_decode($post['second_degree_iac']);
+        print_r(json_decode($second_degree_iac_applicants));
         die();
         if($second_degree_iac_applicants){
             foreach($second_degree_iac_applicants as $applicant){
