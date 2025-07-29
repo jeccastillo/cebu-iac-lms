@@ -148,7 +148,7 @@ new Vue({
         formdata.append('sy',this.current_sem)        
         formdata.append('start','<?php echo ($start!=0)?$start:date("Y-m-d"); ?>');                       
         formdata.append('end','<?php echo ($end!=0)?$end:date("Y-m-d", strtotime('tomorrow')); ?>');
-        axios.get(api_url + 'admissions/applications/get-applicants-by-field/' + this.current_sem + '/<?php echo ($start!=0)?$start:date("Y-m-d"); ?>/<?php echo ($end!=0)?$end:date("Y-m-d", strtotime('tomorrow')); ?>')
+        axios.get(api_url + 'admissions/applications/get-applicants-by-field/' + this.current_sem + '/student_type/2nd - Degree iACADEMY')
         .then((data) => {
             console.log(data);
             axios.post(this.base_url + 'registrar/daily_enrollment_report_data/',formdata, {
