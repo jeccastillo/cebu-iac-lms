@@ -697,6 +697,7 @@ class Registrar extends CI_Controller {
         $post = $this->input->post();
         $active_sem = $this->data_fetcher->get_sem_by_id($post['sy']);        
         $enrolled = [];
+        $second_degree_students = [];
         
         $begin = new DateTime($post['start']);
         $end = new DateTime($post['end']);
@@ -727,7 +728,7 @@ class Registrar extends CI_Controller {
                 'date' => date("M j, Y", strtotime($date))
             ]; 
         
-            $enrollment = $this->db->select('tb_mas_registration.*,tb_mas_users.student_type')
+            $enrollment = $this->db->select('tb_mas_registration.*,tb_mas_users.student_type, tb_mas_users.slug')
                                     ->from('tb_mas_registration')
                                     ->join('tb_mas_users','tb_mas_users.intID = tb_mas_registration.intStudentID')
                                     ->where('intAYID',$active_sem['intID'])
@@ -775,6 +776,7 @@ class Registrar extends CI_Controller {
                         case 'second degree':
                             $data[$date]['second'] += 1;
                             $totals['second'] += 1;
+                            $second_degree_students[] = $enrollment['slug'];
                             break;                        
                         default:
                             $data[$date]['freshman'] += 1;
@@ -790,6 +792,7 @@ class Registrar extends CI_Controller {
         // $program['hyflex'] = count($this->data_fetcher->getStudentsByTypeOfClass('hyflex'));
                             
         $ret['totals'] = $totals;
+        $ret['second_degree_students'] = $second_degree_students;
         $ret['data'] = $data;
         $ret['sem_type'] = $active_sem['term_student_type'];
         $ret['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
