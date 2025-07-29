@@ -5185,8 +5185,7 @@ class Excel extends CI_Controller {
                                 $data = $date = array();
                                 for($index = count($payments) - 1; $index >= 0; $index--){
                                     if($payments[$index]['year'] == date("Y", strtotime($payment_detail['created_at'])) && $payments[$index]['month'] == date("m", strtotime($payment_detail['created_at']))){
-                                        
-                                    
+
                                         $same_month_year = true;
                                         $current_index = $index;
                                     }else if($payments[$index]['year'] == date("Y", strtotime($payment_detail['created_at']))){
@@ -5298,11 +5297,12 @@ class Excel extends CI_Controller {
                                 if($refund[0] == ''){
                                     $refund[0] = date("M d,Y",strtotime($ledger['date']));
                                     $refund[1] = $ledger['remarks'];
-                                    $refund[2] = $amount < 0 ? (float)$amount : abs($amount);
+                                    $refund[2] = -1 * $amount;
                                 }else{
                                     $refund[0] .= ', ' . date("M d,Y",strtotime($ledger['date']));
                                     $refund[1] .= ', ' . $ledger['remarks'];
-                                    $refund[2] += $amount < 0 ? (float)$amount : abs($amount);
+                                    $refund[2] += -1 * $amount;
+                                    // $refund[2] += $amount < 0 ? (float)$amount : abs($amount);
                                     // if($amount < 0){
                                     //     $refund[2] += (float)$amount;
                                     // }else{
