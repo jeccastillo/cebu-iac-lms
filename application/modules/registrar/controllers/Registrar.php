@@ -748,8 +748,6 @@ class Registrar extends CI_Controller {
                                     ->group_by('intStudentID')
                                     ->get()
                                     ->result_array();
-            print_r($enrollment);
-            die();
                                             
             foreach($enrollment as $st){
                 $data[$date]['total'] += 1;                
@@ -784,6 +782,8 @@ class Registrar extends CI_Controller {
                             $totals['transferee'] += 1;
                             break;
                         case 'second degree':
+                            print_r($st);
+                            die();
                             if(in_array($st['slug'], $second_degree_iac)){
                                 $data[$date]['secondiAC'] += 1;
                                 $totals['secondiAC'] += 1;
