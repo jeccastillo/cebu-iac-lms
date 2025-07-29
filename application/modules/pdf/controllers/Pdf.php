@@ -453,6 +453,9 @@ class Pdf extends CI_Controller {
         $this->data['sem'] = $sem;
         $this->data['students'] = $this->data_fetcher->getClassListStudents($id);
 
+        print_r($this->data);
+        die();
+        
         tcpdf();        
         // create new PDF document
         $pdf = new TCPDF("P", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
