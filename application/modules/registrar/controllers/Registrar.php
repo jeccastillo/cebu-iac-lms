@@ -699,13 +699,13 @@ class Registrar extends CI_Controller {
         $enrolled = $second_degree_iac = [];
         
         $second_degree_iac_applicants = json_decode($post['second_degree_iac'], true);
-        // print_r($second_degree_iac_applicants);
-        // die();
         if($second_degree_iac_applicants){
             foreach($second_degree_iac_applicants as $applicant){
                 $second_degree_iac[] = $applicant['slug'];
             }
         }
+        print_r($second_degree_iac);
+        die();
 
         $begin = new DateTime($post['start']);
         $end = new DateTime($post['end']);
