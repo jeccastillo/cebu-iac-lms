@@ -98,7 +98,7 @@
                 <div>
                     <h3>Select Mode of Payment</h3>
                     <hr />
-                    <!-- <div>
+                    <div>
                         <h5 class="my-3">BDO installment</h5>
                         <hr />
                         <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
@@ -110,8 +110,8 @@
                                     alt="">
                             </div>
                         </div>
-                    </div> -->
-                    <!-- <div>
+                    </div>
+                    <div>
                         <h5 class="my-3">BDO PAY (Straight Payment)</h5>
                         <hr />
                         <div class="d-flex flex-wrap" style="display:flex; flex:wrap;">
@@ -123,7 +123,7 @@
                                     alt="">
                             </div>
                         </div>
-                    </div> -->
+                    </div>
                     <hr />
                     <h5 class="my-3">Maya</h5>
                     <hr />
