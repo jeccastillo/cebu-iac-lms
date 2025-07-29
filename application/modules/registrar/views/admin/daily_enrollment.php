@@ -150,7 +150,8 @@ new Vue({
         formdata.append('end','<?php echo ($end!=0)?$end:date("Y-m-d", strtotime('tomorrow')); ?>');
         axios.get(api_url + 'admissions/applications/get-applicants-by-field/' + this.current_sem + '/student_type/2nd - Degree iACADEMY')
         .then((applicants_data) => {
-            console.log(applicants_data);
+            console.log(applicants_data.data.data);
+            formdata.append('second_degree_iac', applicants_data.data.data);
             axios.post(this.base_url + 'registrar/daily_enrollment_report_data/',formdata, {
                 headers: {
                     Authorization: `Bearer ${window.token}`
