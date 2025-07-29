@@ -699,6 +699,8 @@ class Registrar extends CI_Controller {
         $enrolled = $second_degree_iac = [];
         
         $second_degree_iac_applicants = $post['second_degree_iac'];
+        print_r($second_degree_iac_applicants);
+        die();
         if($second_degree_iac_applicants){
             foreach($second_degree_iac_applicants as $applicant){
                 $second_degree_iac[] = $applicant['slug'];
