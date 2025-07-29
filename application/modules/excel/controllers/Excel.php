@@ -5257,6 +5257,7 @@ class Excel extends CI_Controller {
                     
                     $applied_from[0] = $applied_from[1] = $applied_to[0] = $applied_to[1] = $refund[0] = $refund[1] = $others[0] = $others[1] = '';
                     $applied_from[2] = $applied_to[2] = $refund[2] = $others[2] = 0;
+
                     if($ledger_data){
                         foreach($ledger_data as $ledger){
                             $amount = (float)$ledger['amount'];
@@ -5264,66 +5265,66 @@ class Excel extends CI_Controller {
                                 if(!isset($applied_from[0])){
                                     $applied_from[0] = date("M d,Y",strtotime($ledger['date']));
                                     $applied_from[1] = $ledger['remarks'];
-                                    $applied_from[2] = $amount > 0 ? $amount : (float)(-1 * $amount);
+                                    $applied_from[2] = $amount > 0 ? $amount : -1 * $amount;
                                 }else{
                                     $applied_from[0] .= ', ' . date("M d,Y",strtotime($ledger['date']));
                                     $applied_from[1] .= ', ' . $ledger['remarks'];
-                                    // $applied_from[2] += $amount > 0 ? $amount : (float)(-1 * $amount);
-                                    if($amount > 0){
-                                        $applied_from[2] += (float)$amount;
-                                    }else{
-                                        $amount = -1 * $amount;
-                                        $applied_from[2] += (float)$amount;
-                                    }
+                                    $applied_from[2] += $amount > 0 ? $amount : -1 * $amount;
+                                    // if($amount > 0){
+                                    //     $applied_from[2] += (float)$amount;
+                                    // }else{
+                                    //     $amount = -1 * $amount;
+                                    //     $applied_from[2] += (float)$amount;
+                                    // }
                                 }
                             }else if(strpos($ledger['remarks'], 'APPLIED TO') !== false){
                                 if(!isset($applied_from[0])){
                                     $applied_to[0] = date("M d,Y",strtotime($ledger['date']));
                                     $applied_to[1] = $ledger['remarks'];
-                                    $applied_to[2] = $amount < 0 ? (float)($amount) : -1 * abs($amount);
+                                    $applied_to[2] = $amount < 0 ? $amount : abs($amount);
                                 }else{
                                     $applied_to[0] .= ', ' . date("M d,Y",strtotime($ledger['date']));
                                     $applied_to[1] .= ', ' . $ledger['remarks'];
-                                    // $applied_to[2] += $amount < 0 ? (float)$amount : -1 * abs($amount);
-                                    if($amount < 0){
-                                        $applied_to[2] += (float)$amount;
-                                    }else{
-                                        $amount = -1 * $amount;
+                                    $applied_to[2] += $amount < 0 ? (float)$amount : abs($amount);
+                                    // if($amount < 0){
+                                    //     $applied_to[2] += (float)$amount;
+                                    // }else{
+                                    //     $amount = -1 * $amount;
                                         
-                                        $applied_to[2] += (float)$amount;
-                                    }
+                                    //     $applied_to[2] += (float)$amount;
+                                    // }
                                 }
                             }else if(strpos($ledger['remarks'], 'Refund') !== false || strpos($ledger['name'], 'Refund') !== false){
                                 if(!isset($refund[0])){
                                     $refund[0] = date("M d,Y",strtotime($ledger['date']));
                                     $refund[1] = $ledger['remarks'];
-                                    $refund[2] = $amount < 0 ? (float)$amount : -1 * $amount;
+                                    $refund[2] = $amount < 0 ? (float)$amount : abs($amount);
                                 }else{
                                     $refund[0] .= ', ' . date("M d,Y",strtotime($ledger['date']));
                                     $refund[1] .= ', ' . $ledger['remarks'];
-                                    // $refund[2] += $amount < 0 ? (float)$amount : -1 * $amount;
-                                    if($amount < 0){
-                                        $refund[2] += (float)$amount;
-                                    }else{
-                                        $amount = -1 * $amount;
-                                        $refund[2] += (float)$amount;
-                                    }
+                                    $refund[2] += $amount < 0 ? (float)$amount : abs($amount);
+                                    // if($amount < 0){
+                                    //     $refund[2] += (float)$amount;
+                                    // }else{
+                                    //     $amount = -1 * $amount;
+                                    //     $refund[2] += (float)$amount;
+                                    // }
                                 }
                             }else{
                                 if(!isset($other[0])){
                                     $other[0] = date("M d,Y",strtotime($ledger['date']));
                                     $other[1] = $ledger['name'];
-                                    $other[2] = $amount > 0 ? $amount : (float)(-1 * $amount);
+                                    $other[2] = $amount > 0 ? $amount : -1 * $amount;
                                 }else{
                                     $other[0] = ', ' . date("M d,Y",strtotime($ledger['date']));
                                     $other[1] = ', ' . $ledger['name'];
-                                    // $other[2] += $amount > 0 ? $amount : (float)(-1 * $amount);
-                                    if($amount > 0){
-                                        $other[2] += (float)$amount;
-                                    }else{
-                                        $amount = -1 * $amount;
-                                        $other[2] += (float)$amount;
-                                    }
+                                    $other[2] += $amount > 0 ? $amount : -1 * $amount;
+                                    // if($amount > 0){
+                                    //     $other[2] += (float)$amount;
+                                    // }else{
+                                    //     $amount = -1 * $amount;
+                                    //     $other[2] += (float)$amount;
+                                    // }
                                 }
                             }
                         }
