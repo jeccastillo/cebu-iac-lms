@@ -696,9 +696,15 @@ class Registrar extends CI_Controller {
     public function daily_enrollment_report_data(){
         $post = $this->input->post();
         $active_sem = $this->data_fetcher->get_sem_by_id($post['sy']);        
-        $enrolled = [];
-        $second_degree_students = [];
+        $enrolled = $second_degree_iac = [];
         
+        $second_degree_iac_applicants = $post['second_degree_iac'];
+        if($second_degree_iac_applicants){
+            foreach($second_degree_iac_applicants as $applicant){
+                $second_degree_iac[] = $applicant['slug'];
+            }
+        }
+
         $begin = new DateTime($post['start']);
         $end = new DateTime($post['end']);
 
@@ -709,6 +715,7 @@ class Registrar extends CI_Controller {
             'freshman' => 0,
             'transferee' => 0,
             'second' => 0,
+            'secondIAC' => 0,
             'continuing' => 0,
             'shiftee' => 0,
             'returning' => 0,
@@ -721,6 +728,7 @@ class Registrar extends CI_Controller {
                 'freshman' => 0,
                 'transferee' => 0,
                 'second' => 0, 
+                'secondIAC' => 0, 
                 'continuing' => 0,    
                 'shiftee' => 0,      
                 'returning' => 0,     
@@ -739,7 +747,7 @@ class Registrar extends CI_Controller {
                                     ->order_by('intRegistrationID','desc')
                                     ->group_by('intStudentID')
                                     ->get()
-                                    ->result_array();  
+                                    ->result_array();
                                             
             foreach($enrollment as $st){
                 $data[$date]['total'] += 1;                
@@ -774,10 +782,14 @@ class Registrar extends CI_Controller {
                             $totals['transferee'] += 1;
                             break;
                         case 'second degree':
-                            $data[$date]['second'] += 1;
-                            $totals['second'] += 1;
-                            $second_degree_students[] = $enrollment['slug'];
-                            break;                        
+                            if(in_array($enrollment['slug'], $second_degree_iac)){
+                                $data[$date]['secondiAC'] += 1;
+                                $totals['secondiAC'] += 1;
+                            }else{
+                                $data[$date]['second'] += 1;
+                                $totals['second'] += 1;
+                            }
+                            break;                     
                         default:
                             $data[$date]['freshman'] += 1;
                             $totals['freshman'] += 1;
@@ -792,7 +804,6 @@ class Registrar extends CI_Controller {
         // $program['hyflex'] = count($this->data_fetcher->getStudentsByTypeOfClass('hyflex'));
                             
         $ret['totals'] = $totals;
-        $ret['second_degree_students'] = $second_degree_students;
         $ret['data'] = $data;
         $ret['sem_type'] = $active_sem['term_student_type'];
         $ret['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
