@@ -52,7 +52,7 @@ $html .= '
          <th style="width:10%;font-size:9px;">Shiftee</th>  
          <th style="width:10%;font-size:9px;">Continuing</th>
          <th style="width:10%;font-size:9px;">Second Degree</th>
-         <th style="width:10%;font-size:9px;">Second Degree - iAC</th>
+         <th style="width:10%;font-size:9px;">Second Degree-iAC</th>
          <th style="width:10%;font-size:9px;">Total Enrollment</th>
      </tr>
      <tr style="line-height:10px;">
