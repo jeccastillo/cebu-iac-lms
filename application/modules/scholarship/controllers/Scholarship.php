@@ -260,7 +260,7 @@ class Scholarship extends CI_Controller {
         $has_external = false; 
 
         $ret['student_discounts'] = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.deduction_type,tb_mas_scholarships.name,tb_mas_scholarships.description')
-                                     ->where(array('syid'=>$sem,'student_id'=>$student,'deduction_type'=>'discount','name NOT LIKE'=>'Referral%'))
+                                     ->where(array('syid'=>$sem,'student_id'=>$student,'deduction_type'=>'discount','name NOT LIKE'=>'%Referral%'))
                                      ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
                                      ->get('tb_mas_student_discount')
                                       ->result_array();                                     
@@ -280,7 +280,7 @@ class Scholarship extends CI_Controller {
             $discounts = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'discount','deduction_from !='=>'external'))->result_array();                                      
         
                                               
-        $ref_discounts = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'discount','name LIKE'=>'Referral%'))->result_array();
+        $ref_discounts = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'discount','name LIKE'=>'%Referral%'))->result_array();
         $ret['discounts'] = $discounts; //array_merge($discounts,$ref_discounts);
 
         echo json_encode($ret);
