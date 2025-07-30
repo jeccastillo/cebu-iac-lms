@@ -39,8 +39,8 @@
                     <div class="tab-content">            
                         <div class="tab-pane active" id="tab_1">                            
                             <hr />                
-                            <div class="row">                                        
-                                <div v-if="student_scholarships.length == 0" class="col-md-6">                            
+                            <div v-if="remaining_amount > 0" class="row">                                        
+                                <div v-if="scholarships.length > 0" class="col-md-6">                            
                                     <h4>Assign Scholarship</h4>
                                     <form method="post" action="#" @submit.prevent.stop="submitDeduction('scholarship')">
                                         <label>Select Scholarship</label>
@@ -52,7 +52,7 @@
                                         <input class="btn btn-primary" type="submit" value="Add">
                                     </form> 
                                 </div>                                                                               
-                                <div v-if="student_discounts.length == 0" class="col-md-6">
+                                <div v-if="discounts.length > 0" class="col-md-6">
                                     <h4>Assign Discount</h4>
                                     <form method="post" action="#" @submit.prevent.stop="submitDeduction('discount')">        
                                         <label>Select Discount</label>
