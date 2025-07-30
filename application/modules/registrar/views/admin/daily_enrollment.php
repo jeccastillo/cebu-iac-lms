@@ -79,7 +79,7 @@
                     <td v-if="date.total > 0"><b>{{ date.total }}</b></td>                    
                 </tr>
                 <tr v-if="totals">
-                    <td><b>TOTAL</b>:</td>
+                    <td><b>{{ sem_type.toUpperCase() }}</b>:</td>
                     <td><strong>{{ totals.freshman }}</strong></td>
                     <td><strong>{{ totals.transferee }}</strong></td>                    
                     <td><strong>{{ totals.returning }}</strong></td>
@@ -108,6 +108,7 @@
                     <td><strong>{{ totals.continuing - withdrawnTotals.continuingWithdrawn }}</strong></td>
                     <td><strong>{{ totals.second - withdrawnTotals.secondWithdrawn }}</strong></td>
                     <td><strong>{{ totals.secondIAC - withdrawnTotals.secondIACWithdrawn }}</strong></td>
+                    <td><strong>{{ full_total_after_withdrawn_post }}</strong></td>
                 </tr>                          
             </tbody>
         </table>
