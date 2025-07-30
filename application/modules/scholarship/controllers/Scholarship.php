@@ -217,9 +217,7 @@ class Scholarship extends CI_Controller {
     }
 
     public function assign_scholarship_data($student,$sem){
-
-        
-        $ret['discounts'] = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'discount'))->result_array();
+                
         $ret['terms'] = $this->db->get('tb_mas_sy')->result_array();
         $ret['student'] = $this->db->get_where('tb_mas_users',array('intID'=>$student))->first_row('array');
         $ret['students'] = $this->data_fetcher->getStudentsNotInReferral($sem);
@@ -257,10 +255,12 @@ class Scholarship extends CI_Controller {
             $ret['scholarships'] = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'scholarship','deduction_from !='=>'external'))->result_array();
 
         $ret['student_discounts'] = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.deduction_type,tb_mas_scholarships.name,tb_mas_scholarships.description')
-                                     ->where(array('syid'=>$sem,'student_id'=>$student,'deduction_type'=>'discount'))
+                                     ->where(array('syid'=>$sem,'student_id'=>$student,'deduction_type'=>'discount','name NOT LIKE'=>'Referral%'))
                                      ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
                                      ->get('tb_mas_student_discount')
                                       ->result_array();                                     
+                                      
+        $ret['discounts'] = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'discount'))->result_array();                                      
 
         echo json_encode($ret);
 
