@@ -108,7 +108,7 @@
                     <td><strong>{{ totals.continuing - withdrawnTotals.continuingWithdrawn }}</strong></td>
                     <td><strong>{{ totals.second - withdrawnTotals.secondWithdrawn }}</strong></td>
                     <td><strong>{{ totals.secondIAC - withdrawnTotals.secondIACWithdrawn }}</strong></td>
-                    <td><strong>{{ full_total_after_withdrawn_post }}</strong></td>
+                    <td><strong>{{ full_total_after_withdrawn }}</strong></td>
                 </tr>                          
             </tbody>
         </table>
@@ -201,7 +201,7 @@ new Vue({
                             this.data_post.push(this.dates[i]);
                     }
                     for(i in this.withdrawnTotals){
-                        this.full_total -= this.withdrawnTotals[i];
+                        this.full_total_after_withdrawn -= this.withdrawnTotals[i];
                     }
 
                     this.data_post = JSON.stringify(this.data_post);
