@@ -36,7 +36,7 @@
                 </td>
             </tr>        
             <tr>
-                <td width="100%" style="text-align: right; border-bottom:1px solid #333">
+                <td width="100%" style="text-align: right;">
                     ' . date('M d, Y h:i A') . '
                 </td>
             </tr>
