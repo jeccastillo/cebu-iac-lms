@@ -91,23 +91,23 @@
                 </tr>   
                 <tr v-if="withdrawnTotals">
                     <td><b>Withdrawn</b>:</td>
-                    <td><strong>{{ withdrawnTotals.freshman }}</strong></td>
-                    <td><strong>{{ withdrawnTotals.transferee }}</strong></td>                    
-                    <td><strong>{{ withdrawnTotals.returning }}</strong></td>
-                    <td><strong>{{ withdrawnTotals.shiftee }}</strong></td>
-                    <td><strong>{{ withdrawnTotals.continuing }}</strong></td>
-                    <td><strong>{{ withdrawnTotals.second }}</strong></td>
-                    <td><strong>{{ withdrawnTotals.secondIAC }}</strong></td>
+                    <td><strong>{{ withdrawnTotals.freshmanWithdrawn }}</strong></td>
+                    <td><strong>{{ withdrawnTotals.transfereeWithdrawn }}</strong></td>                    
+                    <td><strong>{{ withdrawnTotals.returningWithdrawn }}</strong></td>
+                    <td><strong>{{ withdrawnTotals.shifteeWithdrawn }}</strong></td>
+                    <td><strong>{{ withdrawnTotals.continuingWithdrawn }}</strong></td>
+                    <td><strong>{{ withdrawnTotals.secondWithdrawn }}</strong></td>
+                    <td><strong>{{ withdrawnTotals.secondIACWithdrawn }}</strong></td>
                 </tr>                          
                 <tr v-if="withdrawnTotals">
                     <td><b>TOTAL</b>:</td>
-                    <td><strong>{{ totals.freshman - withdrawnTotals.freshman }}</strong></td>
-                    <td><strong>{{ totals.transferee - withdrawnTotals.transferee }}</strong></td>                    
-                    <td><strong>{{ totals.returning - withdrawnTotals.returning }}</strong></td>
-                    <td><strong>{{ totals.shiftee - withdrawnTotals.shiftee }}</strong></td>
-                    <td><strong>{{ totals.continuing - withdrawnTotals.continuing }}</strong></td>
-                    <td><strong>{{ totals.second - withdrawnTotals.second }}</strong></td>
-                    <td><strong>{{ totals.secondIAC - withdrawnTotals.secondIAC }}</strong></td>
+                    <td><strong>{{ totals.freshman - withdrawnTotals.freshmanWithdrawn }}</strong></td>
+                    <td><strong>{{ totals.transferee - withdrawnTotals.transfereeWithdrawn }}</strong></td>                    
+                    <td><strong>{{ totals.returning - withdrawnTotals.returningWithdrawn }}</strong></td>
+                    <td><strong>{{ totals.shiftee - withdrawnTotals.shifteeWithdrawn }}</strong></td>
+                    <td><strong>{{ totals.continuing - withdrawnTotals.continuingWithdrawn }}</strong></td>
+                    <td><strong>{{ totals.second - withdrawnTotals.secondWithdrawn }}</strong></td>
+                    <td><strong>{{ totals.secondIAC - withdrawnTotals.secondIACWithdrawn }}</strong></td>
                 </tr>                          
             </tbody>
         </table>
