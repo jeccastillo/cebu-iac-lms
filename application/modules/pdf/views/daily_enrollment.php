@@ -137,7 +137,7 @@ $html .= '
             <td>' . ($totals->second - $withdrawn_totals->secondWithdrawn) . '</td>
             <td>' . ($totals->secondIAC - $withdrawn_totals->secondIACWithdrawn) . '</td>
             <td>' . ($totals->continuing - $withdrawn_totals->continuingWithdrawn) . '</td>
-            <td><strong>'.$full_total_after_withdrawn.'</strong></td>
+            <td>'. $full_total_after_withdrawn . '</td>
         </tr>
         <tr style="line-height:30px;">
         <th colspan="6"></th>
