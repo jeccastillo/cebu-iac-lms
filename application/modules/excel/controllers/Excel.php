@@ -3942,6 +3942,7 @@ class Excel extends CI_Controller {
                         ->setCellValue('F'.($i+1), $withdrawn_totals->continuingWithdrawn)
                         ->setCellValue('G'.($i+1), $withdrawn_totals->secondWithdrawn)
                         ->setCellValue('H'.($i+1), $withdrawn_totals->secondIACWithdrawn)
+                        ->setCellValue('I'.($i+1), '=SUM(B'.($i+1).':H'.($i+1).')')
                         ->setCellValue('A'.($i+2), 'TOTAL')
                         ->setCellValue('B'.($i+2), '=B'. $i . '-' . 'B' . ($i+1) )
                         ->setCellValue('C'.($i+2), '=C'. $i . '-' . 'C' . ($i+1) )
@@ -3949,7 +3950,8 @@ class Excel extends CI_Controller {
                         ->setCellValue('E'.($i+2), '=E'. $i . '-' . 'E' . ($i+1) )
                         ->setCellValue('F'.($i+2), '=F'. $i . '-' . 'F' . ($i+1) )
                         ->setCellValue('G'.($i+2), '=G'. $i . '-' . 'G' . ($i+1) )
-                        ->setCellValue('H'.($i+2), '=H'. $i . '-' . 'H' . ($i+1) );
+                        ->setCellValue('H'.($i+2), '=H'. $i . '-' . 'H' . ($i+1) )
+                        ->setCellValue('I'.($i+2), '=I'. $i . '-' . 'I' . ($i+1) );
             
             $objPHPExcel->setActiveSheetIndex(0)->getStyle('I'.$i)->getFont()->setBold( true );                    
             $objPHPExcel->setActiveSheetIndex(0)->getStyle('A3:I3')->getFont()->setBold( true );
