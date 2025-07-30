@@ -259,13 +259,21 @@ class Scholarship extends CI_Controller {
         $has_inhouse = false;
         $has_external = false; 
 
-        $ret['student_discounts'] = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.deduction_type,tb_mas_scholarships.name,tb_mas_scholarships.description')
-                                     ->where(array('syid'=>$sem,'student_id'=>$student,'deduction_type'=>'discount'))
+        $student_discounts = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.deduction_type,tb_mas_scholarships.name,tb_mas_scholarships.description')
+                                     ->where(array('syid'=>$sem,'student_id'=>$student,'deduction_type'=>'discount','name NOT LIKE'=>'%Referral%'))
                                      ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
                                      ->get('tb_mas_student_discount')
-                                      ->result_array();                                     
+                                      ->result_array();   
                                       
-        foreach($ret['student_discounts'] as $scho){
+        $referral_discounts = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.deduction_type,tb_mas_scholarships.name,tb_mas_scholarships.description')
+                                     ->where(array('syid'=>$sem,'student_id'=>$student,'deduction_type'=>'discount','name LIKE'=>'%Referral%'))
+                                     ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
+                                     ->get('tb_mas_student_discount')
+                                      ->result_array();   
+        
+        $num_ref_disc = count($referral_discounts);                                                                              
+                                      
+        foreach($student_discounts as $scho){
             if($scho['deduction_from'] == "in-house")
                 $has_inhouse = true;
             if($scho['deduction_from'] == "external")
@@ -279,9 +287,14 @@ class Scholarship extends CI_Controller {
         else
             $discounts = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'discount','deduction_from !='=>'external','name NOT LIKE'=>'%Referral%'))->result_array();                                      
         
-                                              
-        $ref_discounts = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'discount','name LIKE'=>'%Referral%'))->result_array();
+                             
+        if($num_ref_disc < 10)
+            $ref_discounts = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'discount','name LIKE'=>'%Referral%'))->result_array();
+        else
+            $ref_discounts = [];
+        
         $ret['discounts'] = array_merge($discounts,$ref_discounts);
+        $ret['student_discounts'] = $student_discounts;
 
         echo json_encode($ret);
 
