@@ -127,13 +127,13 @@ $html .= '
      </tr>
      <tr>
          <td>Total</td>
-         <td>'. $totals->freshman - $withdrawn_totals->freshmanWithdrawn.'</td>
-         <td>'. $totals->transferee - $withdrawn_totals->transfereeWithdrawn.'</td>
-         <td>'. $totals->returning - $withdrawn_totals->returningWithdrawn.'</td>
-         <td>'. $totals->shiftee - $withdrawn_totals->shifteeWithdrawn.'</td>
-         <td>'. $totals->second - $withdrawn_totals->secondWithdrawn.'</td>
-         <td>'. $totals->secondIAC - $withdrawn_totals->secondIACWithdrawn.'</td>
-         <td>'. $totals->continuing - $withdrawn_totals->continuingWithdrawn.'</td>
+         <td>' . ($totals->freshman - $withdrawn_totals->freshmanWithdrawn) . '</td>
+         <td>' . ($totals->transferee - $withdrawn_totals->transfereeWithdrawn) . '</td>
+         <td>' . ($totals->returning - $withdrawn_totals->returningWithdrawn) . '</td>
+         <td>' . ($totals->shiftee - $withdrawn_totals->shifteeWithdrawn) . '</td>
+         <td>' . ($totals->second - $withdrawn_totals->secondWithdrawn) . '</td>
+         <td>' . ($totals->secondIAC - $withdrawn_totals->secondIACWithdrawn) . '</td>
+         <td>' . ($totals->continuing - $withdrawn_totals->continuingWithdrawn) . '</td>
          <td><strong>'.$full_total_aftern_withdrawn.'</strong></td>
      </tr>
      <tr style="line-height:30px;">
