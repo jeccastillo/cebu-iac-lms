@@ -545,8 +545,7 @@ class Pdf extends CI_Controller {
         $this->data['full_total'] = json_decode($post['full_total']);
         $this->data['full_total_after_withdrawn'] = json_decode($post['full_total_after_withdrawn']);
         $this->data['sem_type'] = $post['sem_type'];        
-        print_r($this->data);
-        die();
+        
         $this->data['sem'] = $this->data_fetcher->get_sem_by_id($sem);
         $html = $this->load->view("daily_enrollment",$this->data);        
     }
