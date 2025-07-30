@@ -45,9 +45,9 @@
                     <font style="font-family:Calibri Light; font-size: 9;">Office of the Registrar</font>
                 </td>
             </tr>    
-            <tr>                            
+            <tr style="line-height:20px">
                 <td width="100%" style="text-align: center;">             
-                    <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">Daily Enrollment Report for '.$sem['enumSem'].' Term SY'.$sem['strYearStart'].'-'.$sem['strYearEnd'].'</font>
+                    <font style="font-family:Calibri Light; font-size: 10;font-weight: bold;">Daily Enrollment Report for '.$sem['enumSem'].' Term SY'.$sem['strYearStart'].'-'.$sem['strYearEnd'].'</font>
                 </td>
             </tr>        
             <tr>
