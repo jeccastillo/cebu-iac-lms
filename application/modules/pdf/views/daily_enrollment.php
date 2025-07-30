@@ -101,7 +101,7 @@ $html .= '
         <th style="border-top:1px solid #333;" colspan="8"></th>
     </tr>
      <tr>
-         <td>Total</td>
+         <td>' . strtoupper($sem_type) . '</td>
          <td>'.$totals->freshman.'</td>
          <td>'.$totals->transferee.'</td>
          <td>'.$totals->returning.'</td>
@@ -112,7 +112,7 @@ $html .= '
          <td><strong>'.$full_total.'</strong></td>
      </tr>
      <tr>
-         <td>Total</td>
+         <td>Withdrawn</td>
          <td>'.$withdrawn_totals->freshmanWithdrawn.'</td>
          <td>'.$withdrawn_totals->transfereeWithdrawn.'</td>
          <td>'.$withdrawn_totals->returningWithdrawn.'</td>
@@ -120,6 +120,20 @@ $html .= '
          <td>'.$withdrawn_totals->secondWithdrawn.'</td>
          <td>'.$withdrawn_totals->secondIACWithdrawn.'</td>
          <td>'.$withdrawn_totals->continuingWithdrawn.'</td>
+         <td></td>
+     </tr>
+     <tr style="line-height:10px;">
+         <th style="border-top:1px solid #333;" colspan="8"></th>
+     </tr>
+     <tr>
+         <td>Total</td>
+         <td>'. $totals->freshman - $withdrawn_totals->freshmanWithdrawn.'</td>
+         <td>'. $totals->transferee - $withdrawn_totals->transfereeWithdrawn.'</td>
+         <td>'. $totals->returning - $withdrawn_totals->returningWithdrawn.'</td>
+         <td>'. $totals->shiftee - $withdrawn_totals->shifteeWithdrawn.'</td>
+         <td>'. $totals->second - $withdrawn_totals->secondWithdrawn.'</td>
+         <td>'. $totals->secondIAC - $withdrawn_totals->secondIACWithdrawn.'</td>
+         <td>'. $totals->continuing - $withdrawn_totals->continuingWithdrawn.'</td>
          <td><strong>'.$full_total_aftern_withdrawn.'</strong></td>
      </tr>
      <tr style="line-height:30px;">
