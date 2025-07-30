@@ -272,14 +272,16 @@ class Scholarship extends CI_Controller {
                 $has_external = true;
         }
         if($has_inhouse && $has_external){
-            $ret['discounts'] = [];
+            $discounts = [];
         }
         elseif($has_inhouse)
-            $ret['discounts'] = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'discount','deduction_from !='=>'in-house'))->result_array();
+            $discounts = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'discount','deduction_from !='=>'in-house'))->result_array();
         else
-            $ret['discounts'] = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'discount','deduction_from !='=>'external'))->result_array();                                      
+            $discounts = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'discount','deduction_from !='=>'external'))->result_array();                                      
         
                                               
+        $ref_discounts = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'discount','name LIKE'=>'Referral%'))->result_array();
+        $ret['discounts'] = array_merge($discounts,$ref_discounts);
 
         echo json_encode($ret);
 
