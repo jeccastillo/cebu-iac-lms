@@ -2968,7 +2968,7 @@ class Data_fetcher extends CI_Model {
         $ctr = 0;        
         $scholarships_for_ledger = [];
         $scholar_type = $scholar_type_external = $scholar_type_late_tagged = $scholar_type_late_tagged_date = '';
-
+        $full_scholarship = false;
         $tuition_fee_rate = $tuition_fee_installment_rate = $tuition_fee_fixed = $lab_fee_rate = $lab_fee_fixed = $misc_fee_rate = $misc_fee_fixed = 0;
         $total_assessment_rate = $total_assessment_fixed = $total_assessment_rate_installment = $total_assessment_rate_installment30 = $total_assessment_rate_installment50 = $total_assessment_fixed_installment = 0;
         $total_assessment_rate_scholarship = $total_assessment_rate_discount = $total_assessment_rate_discount_installment = $total_assessment_rate_discount_installment30 = $total_assessment_rate_discount_installment50 = 0;
@@ -3211,7 +3211,7 @@ class Data_fetcher extends CI_Model {
         $lab_discount_installment50 = 0;
         $other_discount = 0;
         $discount = null;
-        $full_scholarship = false;
+        
 
         if(!empty($discounts)){
             foreach($discounts as $scholar){
