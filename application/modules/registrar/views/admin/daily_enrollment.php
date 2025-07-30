@@ -10,14 +10,18 @@
                 <form style="display: inline;" ref="pdfform" target="_blank" method="post" action="<?php echo $pdf_link; ?>">
                     <input type="hidden" name="dates" v-model="data_post" />
                     <input type="hidden" name="totals" v-model="totals_post" />
+                    <input type="hidden" name="withdrawn_totals" v-model="withdrawn_totals_post" />
                     <input type="hidden" name="full_total" v-model="full_total_post" />
+                    <input type="hidden" name="full_total_after_withdrawn" v-model="full_total_after_withdrawn_post" />
                     <input type="hidden" name="sem_type" v-model="sem_type" />
                     <a class="btn btn-app" target="_blank" href="#" @click.prevent.stop="submitForm('pdf')" ><i class="fa fa-book"></i>Generate PDF</a> 
                 </form>
                 <form style="display: inline;" ref="excelform" target="_blank" method="post" action="<?php echo $excel_link; ?>">                     
                     <input type="hidden" name="dates" v-model="data_post" />
                     <input type="hidden" name="totals" v-model="totals_post" />
+                    <input type="hidden" name="withdrawn_totals" v-model="withdrawn_totals_post" />
                     <input type="hidden" name="full_total" v-model="full_total_post" />
+                    <input type="hidden" name="full_total_after_withdrawn" v-model="full_total_after_withdrawn_post" />
                     <input type="hidden" name="sem_type" v-model="sem_type" />
                     <a class="btn btn-app" target="_blank" href="#" @click.prevent.stop="submitForm('excel')" ><i class="fa fa-book"></i>Generate Excel</a> 
                 </form>
@@ -75,7 +79,7 @@
                     <td v-if="date.total > 0"><b>{{ date.total }}</b></td>                    
                 </tr>
                 <tr v-if="totals">
-                    <td>Total:</td>
+                    <td><b>TOTAL</b>:</td>
                     <td><strong>{{ totals.freshman }}</strong></td>
                     <td><strong>{{ totals.transferee }}</strong></td>                    
                     <td><strong>{{ totals.returning }}</strong></td>
@@ -84,7 +88,27 @@
                     <td><strong>{{ totals.second }}</strong></td>
                     <td><strong>{{ totals.secondIAC }}</strong></td>
                     <td><strong>{{ full_total }}</strong></td>
-                </tr>                               
+                </tr>   
+                <tr v-if="withdrawnTotals">
+                    <td><b>Withdrawn</b>:</td>
+                    <td><strong>{{ withdrawnTotals.freshman }}</strong></td>
+                    <td><strong>{{ withdrawnTotals.transferee }}</strong></td>                    
+                    <td><strong>{{ withdrawnTotals.returning }}</strong></td>
+                    <td><strong>{{ withdrawnTotals.shiftee }}</strong></td>
+                    <td><strong>{{ withdrawnTotals.continuing }}</strong></td>
+                    <td><strong>{{ withdrawnTotals.second }}</strong></td>
+                    <td><strong>{{ withdrawnTotals.secondIAC }}</strong></td>
+                </tr>                          
+                <tr v-if="withdrawnTotals">
+                    <td><b>TOTAL</b>:</td>
+                    <td><strong>{{ totals.freshman - withdrawnTotals.freshman }}</strong></td>
+                    <td><strong>{{ totals.transferee - withdrawnTotals.transferee }}</strong></td>                    
+                    <td><strong>{{ totals.returning - withdrawnTotals.returning }}</strong></td>
+                    <td><strong>{{ totals.shiftee - withdrawnTotals.shiftee }}</strong></td>
+                    <td><strong>{{ totals.continuing - withdrawnTotals.continuing }}</strong></td>
+                    <td><strong>{{ totals.second - withdrawnTotals.second }}</strong></td>
+                    <td><strong>{{ totals.secondIAC - withdrawnTotals.secondIAC }}</strong></td>
+                </tr>                          
             </tbody>
         </table>
         <table v-else class="table table-bordered table-striped">
@@ -105,7 +129,7 @@
                     <td>Total:</td>
                     <td><strong>{{ totals.freshman }}</strong></td>                    
                     <td><strong>{{ full_total }}</strong></td>
-                </tr>                               
+                </tr>                    
             </tbody>
         </table>             
       
@@ -136,9 +160,13 @@ new Vue({
         dates: undefined,
         data_post: [],
         full_total_post: 0,
+        full_total_after_withdrawn_post: 0,
         totals_post: undefined,
+        withdrawn_totals_post: undefined,
         full_total: 0,
+        full_total_after_withdrawn: 0,
         totals: undefined,
+        withdrawnTotals: undefined,
         sy: [],
         sem_type: undefined,
                       
@@ -163,6 +191,7 @@ new Vue({
 
                     this.dates = data.data.data;
                     this.totals = data.data.totals;
+                    this.withdrawnTotals = data.data.withdrawnTotals;
                     this.sem_type = data.data.sem_type;
                     this.sy = data.data.sy;
                     for(i in this.dates){
@@ -170,9 +199,15 @@ new Vue({
                         if(this.dates[i].total > 0)
                             this.data_post.push(this.dates[i]);
                     }
+                    foreach(i in this.withdrawnTotals){
+                        this.full_total -= this.withdrawnTotals[i];
+                    }
+
                     this.data_post = JSON.stringify(this.data_post);
                     this.full_total_post = JSON.stringify(this.full_total);
+                    this.full_total_after_withdrawn_post = JSON.stringify(this.full_total_after_withdrawn);
                     this.totals_post = JSON.stringify(this.totals);
+                    this.withdrawn_totals_post = JSON.stringify(this.withdrawnTotals);
                 
                 })
             .catch((error) => {
