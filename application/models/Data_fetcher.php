@@ -2897,7 +2897,6 @@ class Data_fetcher extends CI_Model {
         // }
         
         
-        
         $scholarship_grand_total = 0;
         $scholarship_installment_grand_total = 0;
         $scholarship_installment_grand_total30 = 0;
@@ -2913,14 +2912,14 @@ class Data_fetcher extends CI_Model {
         $misc_scholarship = 0;        
         $lab_scholarship = 0;
         $lab_scholarship_installment = 0;
+        $in_house_grand_total = 0;
         $lab_scholarship_installment30 = 0;
         $lab_scholarship_installment50 = 0;
-        $in_house_grand_total = 0;
         $other_scholarship = 0;
         $ctr = 0;        
         $scholarships_for_ledger = [];
         $scholar_type = $scholar_type_external = $scholar_type_late_tagged = $scholar_type_late_tagged_date = '';
-
+        $full_scholarship = false;
         $tuition_fee_rate = $tuition_fee_installment_rate = $tuition_fee_fixed = $lab_fee_rate = $lab_fee_fixed = $misc_fee_rate = $misc_fee_fixed = 0;
         $total_assessment_rate = $total_assessment_fixed = $total_assessment_rate_installment = $total_assessment_rate_installment30 = $total_assessment_rate_installment50 = $total_assessment_fixed_installment = 0;
         $total_assessment_rate_scholarship = $total_assessment_rate_discount = $total_assessment_rate_discount_installment = $total_assessment_rate_discount_installment30 = $total_assessment_rate_discount_installment50 = 0;
@@ -2988,6 +2987,9 @@ class Data_fetcher extends CI_Model {
                             $ar_external_scholarship_installment50 = $total_assessment_installment50 * ($scholar->total_assessment_rate/100);
                         }
                         $data['sc_rate'] = $total_scholarship_temp * ($scholar->total_assessment_rate/100);
+                        
+                        if($scholar->total_assessment_rate == 100)
+                            $full_scholarship = true;
                     }
                     elseif($scholar->total_assessment_fixed > 0){
                         if($scholar->total_assessment_fixed > $total_assessment){
@@ -3020,7 +3022,7 @@ class Data_fetcher extends CI_Model {
                             $total_assessment_rate_scholarship += $tuition * ($scholar->tuition_fee_rate/100);
                             $total_assessment_rate_installment += $tuition_scholarship_installment_current;
                             $total_assessment_rate_installment30 += $tuition_scholarship_installment_current30;
-                            $total_assessment_rate_installment50 += $tuition_scholarship_installment_current50;
+                            $total_assessment_rate_installment50 += $tuition_scholarship_installment_current50;                            
                         }else if($scholar->deduction_from == 'external'){
                             //external scholarships
                             $ar_external_scholarship_full += $tuition * ($scholar->tuition_fee_rate/100);
@@ -3131,7 +3133,7 @@ class Data_fetcher extends CI_Model {
                 $scholarship_installment_grand_total += $total_scholarship_installment_temp;
                 $scholarship_installment_grand_total30 += $total_scholarship_installment_temp30;
                 $scholarship_installment_grand_total50 += $total_scholarship_installment_temp50;
-
+                
                 if($scholar->deduction_from == 'in-house')
                     $in_house_grand_total += $total_scholarship_temp;
                 
@@ -3160,6 +3162,7 @@ class Data_fetcher extends CI_Model {
         $lab_discount_installment50 = 0;
         $other_discount = 0;
         $discount = null;
+        
 
         if(!empty($discounts)){
             foreach($discounts as $scholar){
@@ -3214,6 +3217,9 @@ class Data_fetcher extends CI_Model {
                                 $ar_discounts_installment = $total_assessment_installment * ($scholar->total_assessment_rate/100);
                             }
                         }
+
+                        if($scholar->total_assessment_rate == 100)
+                            $full_scholarship = true;
                     }
                     elseif($scholar->total_assessment_fixed > 0){
                         if($scholar->total_assessment_fixed > $total_assessment){
@@ -3378,14 +3384,18 @@ class Data_fetcher extends CI_Model {
                 $ctr++;
             }
         }
-        if(($intROG == 3 && $w_status == "before") || ($intROG == 4 && $w_status == "before")  || $intROG == 5){
+        if(($intROG == 3 && $w_status == "before") || ($intROG == 4 && $w_status == "before") || $intROG == 5){
             $total_misc = 0;
             $tuition = 0;
             $total_lab = 0;
             $misc_list = [];
             $lab_list = [];
             $late_enrollment_fee = 0;
-        }
+        }        
+        
+        if($full_scholarship)
+            $late_enrollment_fee = 0;
+
         $data['lab_discount'] = $lab_scholarship;
         $data['lab_discount_dc'] = $lab_discount;
         $data['total_discount'] = $scholarship_grand_total;
