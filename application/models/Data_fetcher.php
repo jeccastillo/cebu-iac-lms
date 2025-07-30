@@ -3208,7 +3208,7 @@ class Data_fetcher extends CI_Model {
         $lab_discount_installment50 = 0;
         $other_discount = 0;
         $discount = null;
-        $full_schoalrship = false;
+        $full_scholarship = false;
 
         if(!empty($discounts)){
             foreach($discounts as $scholar){
@@ -3265,7 +3265,7 @@ class Data_fetcher extends CI_Model {
                         }
 
                         if($scholar->total_assessment_rate == 100)
-                            $full_schoalrship = true;
+                            $full_scholarship = true;
                     }
                     elseif($scholar->total_assessment_fixed > 0){
                         if($scholar->total_assessment_fixed > $total_assessment){
@@ -3439,9 +3439,10 @@ class Data_fetcher extends CI_Model {
             $late_enrollment_fee = 0;
         }        
         
-        if($full_schoalrship)
+        if($full_scholarship)
             $late_enrollment_fee = 0;
 
+        $data['full_scholarship'] = $full_scholarship;
         $data['lab_discount'] = $lab_scholarship;
         $data['lab_discount_dc'] = $lab_discount;
         $data['total_discount'] = $scholarship_grand_total;
