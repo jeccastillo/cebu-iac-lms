@@ -100,8 +100,8 @@ $html .= '
     <tr style="line-height:10px;">
         <th style="border-top:1px solid #333;" colspan="8"></th>
     </tr>
-    <tr>
-        <td><b>' . ucfirst($sem_type) . '</td>
+    <tr style="font-weight:bold;">
+        <td>' . ucfirst($sem_type) . '</td>
         <td>'.$totals->freshman.'</td>
         <td>'.$totals->transferee.'</td>
         <td>'.$totals->returning.'</td>
@@ -114,7 +114,7 @@ $html .= '
     <tr style="line-height:10px;">
         <th colspan="6"></th>
     </tr>
-        <tr>
+        <tr style="font-weight:bold;">
             <td>Withdrawn</td>
             <td>'.$withdrawn_totals->freshmanWithdrawn.'</td>
             <td>'.$withdrawn_totals->transfereeWithdrawn.'</td>
@@ -122,13 +122,13 @@ $html .= '
             <td>'.$withdrawn_totals->shifteeWithdrawn.'</td>
             <td>'.$withdrawn_totals->secondWithdrawn.'</td>
             <td>'.$withdrawn_totals->secondIACWithdrawn.'</td>
-            <td>'.$withdrawn_totals->continuingWithdrawn.'</b></td>
+            <td>'.$withdrawn_totals->continuingWithdrawn.'</td>
             <td></td>
         </tr>
         <tr style="line-height:10px;">
             <th style="border-top:1px solid #333;" colspan="8"></th>
         </tr>
-        <tr>
+        <tr style="font-weight:bold;">
             <td>Total</td>
             <td>' . ($totals->freshman - $withdrawn_totals->freshmanWithdrawn) . '</td>
             <td>' . ($totals->transferee - $withdrawn_totals->transfereeWithdrawn) . '</td>
