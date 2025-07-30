@@ -30,13 +30,28 @@
     
     // Set some content to print
     $html = '<table border="0" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">
+            <tr>
+                <td width="100%" style="text-align: center;">             
+                    <font style="font-family:Calibri Light; font-size: 12;font-weight: bold;">iACADEMY</font>
+                </td>
+            </tr>    
+            <tr>
+                <td width="100%" style="text-align: center;">             
+                    <font style="font-family:Calibri Light; font-size: 9;">' . $this->data['campus'] . ' City</font>
+                </td>
+            </tr>    
+            <tr>
+                <td width="100%" style="text-align: center;">             
+                    <font style="font-family:Calibri Light; font-size: 9;">Office of the Registrar</font>
+                </td>
+            </tr>    
             <tr>                            
-                <td width="100%" style="text-align: center; border-bottom:1px solid #333">             
+                <td width="100%" style="text-align: center;">             
                     <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">Daily Enrollment Report for '.$sem['enumSem'].' Term SY'.$sem['strYearStart'].'-'.$sem['strYearEnd'].'</font>
                 </td>
             </tr>        
             <tr>
-                <td width="100%" style="text-align: right;">
+                <td width="100%" style="text-align: right; border-bottom:1px solid #333">
                     ' . date('M d, Y h:i A') . '
                 </td>
             </tr>
