@@ -111,6 +111,17 @@ $html .= '
          <td>'.$totals->continuing.'</td>
          <td><strong>'.$full_total.'</strong></td>
      </tr>
+     <tr>
+         <td>Total</td>
+         <td>'.$withdrawn_totals->freshmanWithdrawn.'</td>
+         <td>'.$withdrawn_totals->transfereeWithdrawn.'</td>
+         <td>'.$withdrawn_totals->returningWithdrawn.'</td>
+         <td>'.$withdrawn_totals->shifteeWithdrawn.'</td>
+         <td>'.$withdrawn_totals->secondWithdrawn.'</td>
+         <td>'.$withdrawn_totals->secondIACWithdrawn.'</td>
+         <td>'.$withdrawn_totals->continuingWithdrawn.'</td>
+         <td><strong>'.$full_total_aftern_withdrawn.'</strong></td>
+     </tr>
      <tr style="line-height:30px;">
         <th colspan="6"></th>
     </tr>
