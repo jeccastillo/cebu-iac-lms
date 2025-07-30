@@ -200,6 +200,7 @@ new Vue({
                         if(this.dates[i].total > 0)
                             this.data_post.push(this.dates[i]);
                     }
+                    this.full_total_after_withdrawn = this.full_total;
                     for(i in this.withdrawnTotals){
                         this.full_total_after_withdrawn -= this.withdrawnTotals[i];
                     }
