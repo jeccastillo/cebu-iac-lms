@@ -199,7 +199,7 @@ new Vue({
                         if(this.dates[i].total > 0)
                             this.data_post.push(this.dates[i]);
                     }
-                    foreach(i in this.withdrawnTotals){
+                    for(i in this.withdrawnTotals){
                         this.full_total -= this.withdrawnTotals[i];
                     }
 
