@@ -720,6 +720,16 @@ class Registrar extends CI_Controller {
             'shiftee' => 0,
             'returning' => 0,
         ];
+        
+        $withdrawnTotals = [
+            'freshmanWithdrawn' => 0,
+            'transfereeWithdrawn' => 0,
+            'secondWithdrawn' => 0,
+            'secondIACWithdrawn' => 0,
+            'continuingWithdrawn' => 0,
+            'shifteeWithdrawn' => 0,
+            'returningWithdrawn' => 0,
+        ];
 
         foreach ($period as $dt) {
             //echo $dt->format("l Y-m-d H:i:s\n");
@@ -750,49 +760,59 @@ class Registrar extends CI_Controller {
                                     ->result_array();
                                             
             foreach($enrollment as $st){
-                $data[$date]['total'] += 1;                
+                $data[$date]['total'] += 1;
+                $addWithdrawn = $st['intROG'] == 3 ? 1 : 0;                
                 
                 if($st['enumStudentType'] == "continuing")
                 {
                     $data[$date]['continuing'] += 1;
                     $totals['continuing'] += 1;
+                    $withdrawnTotals['continuingWithdrawn'] += $addWithdrawn;
                 }
                 elseif($st['enumStudentType'] == "shiftee")
                 {
                     $data[$date]['shiftee'] += 1;
                     $totals['shiftee'] += 1;
+                    $withdrawnTotals['shifteeWithdrawn'] += $addWithdrawn;
                 }
                 elseif($st['enumStudentType'] == "returning")
                 {
                     $data[$date]['returning'] += 1;
                     $totals['returning'] += 1;
+                    $withdrawnTotals['returningWithdrawn'] += $addWithdrawn;
                 }
                 else
                     switch($st['student_type']){
                         case 'freshman':
                             $data[$date]['freshman'] += 1;
                             $totals['freshman'] += 1;
+                            $withdrawnTotals['freshmanWithdrawn'] += $addWithdrawn;
                             break;
                         case 'new':
                                 $data[$date]['freshman'] += 1;
                                 $totals['freshman'] += 1;
+                                $withdrawnTotals['freshmanWithdrawn'] += $addWithdrawn;
                                 break;
                         case 'transferee':
                             $data[$date]['transferee'] += 1;
                             $totals['transferee'] += 1;
+                            $withdrawnTotals['freshmanWithdrawn'] += $addWithdrawn;
                             break;
                         case 'second degree':
                             if(in_array($st['slug'], $second_degree_iac)){
                                 $data[$date]['secondIAC'] += 1;
                                 $totals['secondIAC'] += 1;
+                                $withdrawnTotals['secondIACWithdrawn'] += $addWithdrawn;
                             }else{
                                 $data[$date]['second'] += 1;
                                 $totals['second'] += 1;
+                                $withdrawnTotals['secondWithdrawn'] += $addWithdrawn;
                             }
                             break;                     
                         default:
                             $data[$date]['freshman'] += 1;
                             $totals['freshman'] += 1;
+                            $withdrawnTotals['freshmanWithdrawn'] += $addWithdrawn;
                             
                     }                                
             }
@@ -804,6 +824,7 @@ class Registrar extends CI_Controller {
         // $program['hyflex'] = count($this->data_fetcher->getStudentsByTypeOfClass('hyflex'));
                             
         $ret['totals'] = $totals;
+        $ret['withdrawnTotals'] = $withdrawnTotals;
         $ret['data'] = $data;
         $ret['sem_type'] = $active_sem['term_student_type'];
         $ret['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
