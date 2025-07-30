@@ -440,9 +440,9 @@ $(document).ready(function() {
                         done = false;
 
                         let checkboxHTML = '';
-                        if (ret.subjects[i].isTickable == 1) {
-                            checkboxHTML = "<div class='col-xs-1'><div class='checkbox'>" +
-                                        "<input type='checkbox' name='additional_elective[]' value='" + ret.subjects[i].intID + "' class='tickable-checkbox' data-index='" + i + "' >" +
+                        if (ret.subjects[i].isTickable == 0) {
+                            checkboxHTML = "<div class='col-xs-1'><div class='checkbox' style='margin:0;'>" +
+                                        "<label><input type='checkbox' name='additional_elective[]' value='" + ret.subjects[i].intID + "' class='tickable-checkbox' data-index='" + i + "' >Additional Elective</label>" +
                                         "</div></div>";
                         }
                         
