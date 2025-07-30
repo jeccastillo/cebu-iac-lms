@@ -37,17 +37,17 @@
             </tr>    
             <tr>
                 <td width="100%" style="text-align: center;">             
-                    <font style="font-family:Calibri Light; font-size: 9;">' . $this->data['campus'] . ' City</font>
+                    <font style="font-family:Calibri Light; font-size: 8;">' . $this->data['campus'] . ' City</font>
                 </td>
             </tr>    
             <tr>
                 <td width="100%" style="text-align: center;">             
-                    <font style="font-family:Calibri Light; font-size: 9;">Office of the Registrar</font>
+                    <font style="font-family:Calibri Light; font-size: 8;">Office of the Registrar</font>
                 </td>
             </tr>    
             <tr style="line-height:20px">
                 <td width="100%" style="text-align: center;">             
-                    <font style="font-family:Calibri Light; font-size: 10;font-weight: bold;">Daily Enrollment Report for '.$sem['enumSem'].' Term SY'.$sem['strYearStart'].'-'.$sem['strYearEnd'].'</font>
+                    <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">Daily Enrollment Report for '.$sem['enumSem'].' Term SY'.$sem['strYearStart'].'-'.$sem['strYearEnd'].'</font>
                 </td>
             </tr>        
             <tr>
