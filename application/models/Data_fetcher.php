@@ -3208,6 +3208,7 @@ class Data_fetcher extends CI_Model {
         $lab_discount_installment50 = 0;
         $other_discount = 0;
         $discount = null;
+        $full_schoalrship = false;
 
         if(!empty($discounts)){
             foreach($discounts as $scholar){
@@ -3262,6 +3263,9 @@ class Data_fetcher extends CI_Model {
                                 $ar_discounts_installment = $total_assessment_installment * ($scholar->total_assessment_rate/100);
                             }
                         }
+
+                        if($scholar->total_assessment_rate == 100)
+                            $full_schoalrship = true;
                     }
                     elseif($scholar->total_assessment_fixed > 0){
                         if($scholar->total_assessment_fixed > $total_assessment){
@@ -3426,14 +3430,18 @@ class Data_fetcher extends CI_Model {
                 $ctr++;
             }
         }
-        if(($intROG == 3 && $w_status == "before") || ($intROG == 4 && $w_status == "before")  || $intROG == 5){
+        if(($intROG == 3 && $w_status == "before") || ($intROG == 4 && $w_status == "before") || $intROG == 5){
             $total_misc = 0;
             $tuition = 0;
             $total_lab = 0;
             $misc_list = [];
             $lab_list = [];
             $late_enrollment_fee = 0;
-        }
+        }        
+        
+        if($full_schoalrship)
+            $late_enrollment_fee = 0;
+
         $data['lab_discount'] = $lab_scholarship;
         $data['lab_discount_dc'] = $lab_discount;
         $data['total_discount'] = $scholarship_grand_total;
