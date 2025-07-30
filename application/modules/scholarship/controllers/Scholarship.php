@@ -223,7 +223,8 @@ class Scholarship extends CI_Controller {
         $ret['students'] = $this->data_fetcher->getStudentsNotInReferral($sem);
         $ret['registration'] = $this->data_fetcher->getRegistrationInfo($student,$sem);
         $has_inhouse = false;
-        $has_external = false;        
+        $has_external = false; 
+
         
         if($ret['registration']){
             $data['tuition'] = $this->data_fetcher->getTuition($student,$sem);
@@ -254,13 +255,31 @@ class Scholarship extends CI_Controller {
         else
             $ret['scholarships'] = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'scholarship','deduction_from !='=>'external'))->result_array();
 
+        //RESET VARS
+        $has_inhouse = false;
+        $has_external = false; 
+
         $ret['student_discounts'] = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.deduction_type,tb_mas_scholarships.name,tb_mas_scholarships.description')
                                      ->where(array('syid'=>$sem,'student_id'=>$student,'deduction_type'=>'discount','name NOT LIKE'=>'Referral%'))
                                      ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
                                      ->get('tb_mas_student_discount')
                                       ->result_array();                                     
                                       
-        $ret['discounts'] = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'discount'))->result_array();                                      
+        foreach($ret['student_discounts'] as $scho){
+            if($scho['deduction_from'] == "in-house")
+                $has_inhouse = true;
+            if($scho['deduction_from'] == "external")
+                $has_external = true;
+        }
+        if($has_inhouse && $has_external){
+            $ret['discounts'] = [];
+        }
+        elseif($has_inhouse)
+            $ret['discounts'] = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'discount','deduction_from !='=>'in-house'))->result_array();
+        else
+            $ret['discounts'] = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'discount','deduction_from !='=>'external'))->result_array();                                      
+        
+                                              
 
         echo json_encode($ret);
 
