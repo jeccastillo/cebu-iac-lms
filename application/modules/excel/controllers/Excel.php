@@ -3858,8 +3858,9 @@ class Excel extends CI_Controller {
         $post = $this->input->post();
         $dates = json_decode($post['dates']);
         $totals = json_decode($post['totals']);
+        $withdrawn_totals = json_decode($post['withdrawn_totals']);
         $full_total = json_decode($post['full_total']);
-        $sem_type = $post['sem_type'];
+        $sem_type = $post['sem_type'];  
         
         $active_sem = $this->data_fetcher->get_sem_by_id($sem);
 
@@ -3896,11 +3897,12 @@ class Excel extends CI_Controller {
                         ->setCellValue('A3', 'Date')
                         ->setCellValue('B3', 'Freshman')
                         ->setCellValue('C3', 'Transferee')
-                        ->setCellValue('D3', 'Second Degree')                    
-                        ->setCellValue('E3', 'Continuing')
-                        ->setCellValue('F3', 'Shiftee')
-                        ->setCellValue('G3', 'Returning')
-                        ->setCellValue('H3', 'Total Enrollment');
+                        ->setCellValue('D3', 'Returning')
+                        ->setCellValue('E3', 'Shiftee')
+                        ->setCellValue('F3', 'Continuing')
+                        ->setCellValue('G3', 'Second Degree')
+                        ->setCellValue('H3', 'Second Degree - iAC')
+                        ->setCellValue('I3', 'Total Enrollment');
                                 
             $i = 4;
             
@@ -3912,28 +3914,45 @@ class Excel extends CI_Controller {
                         ->setCellValue('A'.$i, $item->date)
                         ->setCellValue('B'.$i, $item->freshman)
                         ->setCellValue('C'.$i, $item->transferee)                    
-                        ->setCellValue('D'.$i, $item->second)
-                        ->setCellValue('E'.$i, $item->continuing)
-                        ->setCellValue('F'.$i, $item->shiftee)
-                        ->setCellValue('G'.$i, $item->returning)
-                        ->setCellValue('H'.$i, '=SUM(B'.$i.':G'.$i.')');                                                
-                                
-            
+                        ->setCellValue('D'.$i, $item->returning)
+                        ->setCellValue('E'.$i, $item->shiftee)
+                        ->setCellValue('F'.$i, $item->continuing)
+                        ->setCellValue('G'.$i, $item->second)
+                        ->setCellValue('H'.$i, $item->secondIAC)
+                        ->setCellValue('I'.$i, '=SUM(B'.$i.':H'.$i.')');
                 $i++;
             
             }
 
-            $objPHPExcel->setActiveSheetIndex(0)                    
+            $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue('A'.$i, ucfirst($sem_type))         
                         ->setCellValue('B'.$i, '=SUM(B4:B'.($i-1).')')
                         ->setCellValue('C'.$i, '=SUM(C4:C'.($i-1).')')                    
                         ->setCellValue('D'.$i, '=SUM(D4:D'.($i-1).')')
                         ->setCellValue('E'.$i, '=SUM(E4:E'.($i-1).')')                    
                         ->setCellValue('F'.$i, '=SUM(F4:F'.($i-1).')')
                         ->setCellValue('G'.$i, '=SUM(G4:G'.($i-1).')')
-                        ->setCellValue('H'.$i, '=SUM(H4:H'.($i-1).')');
+                        ->setCellValue('H'.$i, '=SUM(H4:H'.($i-1).')')
+                        ->setCellValue('I'.$i, '=SUM(I4:I'.($i-1).')')
+                        ->setCellValue('A'.$i+1, 'WITHDRAWN')
+                        ->setCellValue('B'.$i+1, $withdrawn_totals->freshmanWithdrawn)
+                        ->setCellValue('C'.$i+1, $withdrawn_totals->transfereeWithdrawn)                    
+                        ->setCellValue('D'.$i+1, $withdrawn_totals->returningWithdrawn)
+                        ->setCellValue('E'.$i+1, $withdrawn_totals->shifteeWithdrawn)
+                        ->setCellValue('F'.$i+1, $withdrawn_totals->continuingWithdrawn)
+                        ->setCellValue('G'.$i+1, $withdrawn_totals->secondWithdrawn)
+                        ->setCellValue('H'.$i+1, $withdrawn_totals->secondIACWithdrawn)
+                        ->setCellValue('A'.$i+1, 'TOTAL')
+                        ->setCellValue('B'.$i+1, '=B'. $i . '-' . 'B' . ($i+1) )
+                        ->setCellValue('C'.$i+1, '=C'. $i . '-' . 'C' . ($i+1) )
+                        ->setCellValue('D'.$i+1, '=D'. $i . '-' . 'D' . ($i+1) )
+                        ->setCellValue('E'.$i+1, '=E'. $i . '-' . 'E' . ($i+1) )
+                        ->setCellValue('F'.$i+1, '=F'. $i . '-' . 'F' . ($i+1) )
+                        ->setCellValue('G'.$i+1, '=G'. $i . '-' . 'G' . ($i+1) )
+                        ->setCellValue('H'.$i+1, '=H'. $i . '-' . 'H' . ($i+1) );
             
-            $objPHPExcel->setActiveSheetIndex(0)->getStyle('H'.$i)->getFont()->setBold( true );                    
-            $objPHPExcel->setActiveSheetIndex(0)->getStyle('A3:H3')->getFont()->setBold( true );
+            $objPHPExcel->setActiveSheetIndex(0)->getStyle('I'.$i)->getFont()->setBold( true );                    
+            $objPHPExcel->setActiveSheetIndex(0)->getStyle('A3:I3')->getFont()->setBold( true );
 
             $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(50);
             $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
@@ -3943,6 +3962,7 @@ class Excel extends CI_Controller {
             $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
             $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
             $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
         }
         else{
             $objPHPExcel->setActiveSheetIndex(0)                    
@@ -3959,8 +3979,7 @@ class Excel extends CI_Controller {
                 $objPHPExcel->setActiveSheetIndex(0)
                         ->setCellValue('A'.$i, $item->date)
                         ->setCellValue('B'.$i, $item->freshman)                        
-                        ->setCellValue('C'.$i, '=SUM(B'.$i.':G'.$i.')');                                                
-                                
+                        ->setCellValue('C'.$i, '=SUM(B'.$i.':G'.$i.')');
             
                 $i++;
             
