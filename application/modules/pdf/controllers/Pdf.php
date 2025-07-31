@@ -469,7 +469,7 @@ class Pdf extends CI_Controller {
         $pdf->SetMargins(5, .25, 5);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);        
-        //$pdf->SetAutoPageBreak(TRUE, 6);
+        $pdf->SetAutoPageBreak(TRUE, 6);
 
     //font setting
         //$pdf->SetFont('calibril_0', '', 15, '', 'false');
@@ -479,10 +479,8 @@ class Pdf extends CI_Controller {
         // print standard ASCII chars, you can use core fonts like
         // helvetica or times to reduce file size.
         
-        $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
+        // $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
         // Fit to one page wide (horizontally)
-        $pdf->getPageSetup()->setFitToWidth(1);
-        $pdf->getPageSetup()->setFitToHeight(0);
         $pdf->setPrintHeader(false);
         $pdf->setPrintFooter(false);         
          
