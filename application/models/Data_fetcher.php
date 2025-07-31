@@ -1186,7 +1186,7 @@ class Data_fetcher extends CI_Model {
     {
         
         
-        $select = "tb_mas_users.*,strProgramCode, strMajor, short_name, name as blockName, strProgramDescription,tb_mas_registration.intYearLevel,tb_mas_registration.block_section,dteRegistered, tb_mas_curriculum.strName as curriculumName, type_of_class";
+        $select = "tb_mas_users.*,strProgramCode, strMajor, short_name, tb_mas_block_sections.name as blockName, strProgramDescription,tb_mas_registration.intYearLevel,tb_mas_registration.enumStudentType,dteRegistered, tb_mas_curriculum.strName as curriculumName, type_of_class";
 
         $this->db
             ->select($select)
