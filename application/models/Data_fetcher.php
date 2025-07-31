@@ -1192,7 +1192,7 @@ class Data_fetcher extends CI_Model {
             ->select($select)
             ->from('tb_mas_users')
             ->join('tb_mas_programs','tb_mas_users.intProgramID = tb_mas_programs.intProgramID')
-            ->join('tb_mas_block_sections','tb_mas_users.block_section = tb_mas_block_sections.intID','left')
+            ->join('tb_mas_block_sections','tb_mas_registration.block_section = tb_mas_block_sections.intID','left')
             ->join('tb_mas_curriculum','tb_mas_users.intCurriculumID = tb_mas_curriculum.intID','left')
             ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID','left')
             ->group_by('tb_mas_users.intID')
