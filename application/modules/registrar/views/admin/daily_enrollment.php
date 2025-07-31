@@ -10,13 +10,19 @@
                 <form style="display: inline;" ref="pdfform" target="_blank" method="post" action="<?php echo $pdf_link; ?>">
                     <input type="hidden" name="dates" v-model="data_post" />
                     <input type="hidden" name="totals" v-model="totals_post" />
+                    <input type="hidden" name="withdrawn_totals" v-model="withdrawn_totals_post" />
                     <input type="hidden" name="full_total" v-model="full_total_post" />
+                    <input type="hidden" name="full_total_after_withdrawn" v-model="full_total_after_withdrawn_post" />
+                    <input type="hidden" name="sem_type" v-model="sem_type" />
                     <a class="btn btn-app" target="_blank" href="#" @click.prevent.stop="submitForm('pdf')" ><i class="fa fa-book"></i>Generate PDF</a> 
                 </form>
                 <form style="display: inline;" ref="excelform" target="_blank" method="post" action="<?php echo $excel_link; ?>">                     
                     <input type="hidden" name="dates" v-model="data_post" />
                     <input type="hidden" name="totals" v-model="totals_post" />
+                    <input type="hidden" name="withdrawn_totals" v-model="withdrawn_totals_post" />
                     <input type="hidden" name="full_total" v-model="full_total_post" />
+                    <input type="hidden" name="full_total_after_withdrawn" v-model="full_total_after_withdrawn_post" />
+                    <input type="hidden" name="sem_type" v-model="sem_type" />
                     <a class="btn btn-app" target="_blank" href="#" @click.prevent.stop="submitForm('excel')" ><i class="fa fa-book"></i>Generate Excel</a> 
                 </form>
             </small>
@@ -46,50 +52,87 @@
                     <option v-for="s in sy" :value="s.intID">{{s.term_student_type + ' ' + s.enumSem + ' ' + s.term_label + ' ' + s.strYearStart + '-' + s.strYearEnd}}</option>                      
                 </select>   
         </div>
-        <table class="table table-bordered table-striped">
+        <table v-if="sem_type != 'next'" class="table table-bordered table-striped">
             <thead style="position: sticky;top: 0" class="thead-dark">
                 <tr>
                     <th>Date</th>
                     <th>Freshman</th>
                     <th>Transferee</th>
-                    <th>Second Degree</th>                    
-                    <th>Continuing</th>
+                    <th>Returnee</th>
                     <th>Shiftee</th>
-                    <th>Returning</th>
+                    <th>Continuing</th>
+                    <th>Second Degree</th>  
+                    <th>Second Degree - iAC</th>                    
                     <th>Total Enrollment</th>
                 </tr>                
             </thead>
             <tbody>
                 <tr v-if="dates" v-for="date in dates">
-                    <td>{{ date.date }}</td>
-                    <td v-if="date.freshman > 0"><b>{{ date.freshman }}</b></td>
-                    <td v-else>{{ date.freshman }}</td>
-                    <td v-if="date.transferee > 0"><b>{{ date.transferee }}</b></td>
-                    <td v-else>{{ date.transferee }}</td>
-                    <td v-if="date.second > 0"><b>{{ date.second }}</b></td>
-                    <td v-else>{{ date.second }}</td> 
-                    <td v-if="date.second > 0"><b>{{ date.continuing }}</b></td>
-                    <td v-else>{{ date.continuing }}</td>     
-                    <td v-if="date.second > 0"><b>{{ date.shiftee }}</b></td>
-                    <td v-else>{{ date.shiftee }}</td>      
-                    <td v-if="date.second > 0"><b>{{ date.returning }}</b></td>
-                    <td v-else>{{ date.returning }}</td>           
-                    <td v-if="date.total > 0"><b>{{ date.total }}</b></td>
-                    <td v-else>{{ date.total }}</td>                    
+                    <td v-if="date.total > 0">{{ date.date }}</td>
+                    <td v-if="date.total > 0"><b>{{ date.freshman }}</b></td>                    
+                    <td v-if="date.total > 0"><b>{{ date.transferee }}</b></td>                    
+                    <td v-if="date.total > 0"><b>{{ date.returning }}</b></td>                    
+                    <td v-if="date.total > 0"><b>{{ date.shiftee }}</b></td>                    
+                    <td v-if="date.total > 0"><b>{{ date.continuing }}</b></td>
+                    <td v-if="date.total > 0"><b>{{ date.second }}</b></td>     
+                    <td v-if="date.total > 0"><b>{{ date.secondIAC }}</b></td>                   
+                    <td v-if="date.total > 0"><b>{{ date.total }}</b></td>                    
+                </tr>
+                <tr v-if="totals">
+                    <td><b>{{ sem_type.toUpperCase() }}</b>:</td>
+                    <td><strong>{{ totals.freshman }}</strong></td>
+                    <td><strong>{{ totals.transferee }}</strong></td>                    
+                    <td><strong>{{ totals.returning }}</strong></td>
+                    <td><strong>{{ totals.shiftee }}</strong></td>
+                    <td><strong>{{ totals.continuing }}</strong></td>
+                    <td><strong>{{ totals.second }}</strong></td>
+                    <td><strong>{{ totals.secondIAC }}</strong></td>
+                    <td><strong>{{ full_total }}</strong></td>
+                </tr>   
+                <tr v-if="withdrawnTotals">
+                    <td><b>Withdrawn</b>:</td>
+                    <td><strong>{{ withdrawnTotals.freshmanWithdrawn }}</strong></td>
+                    <td><strong>{{ withdrawnTotals.transfereeWithdrawn }}</strong></td>                    
+                    <td><strong>{{ withdrawnTotals.returningWithdrawn }}</strong></td>
+                    <td><strong>{{ withdrawnTotals.shifteeWithdrawn }}</strong></td>
+                    <td><strong>{{ withdrawnTotals.continuingWithdrawn }}</strong></td>
+                    <td><strong>{{ withdrawnTotals.secondWithdrawn }}</strong></td>
+                    <td><strong>{{ withdrawnTotals.secondIACWithdrawn }}</strong></td>
+                </tr>                          
+                <tr v-if="withdrawnTotals">
+                    <td><b>TOTAL</b>:</td>
+                    <td><strong>{{ totals.freshman - withdrawnTotals.freshmanWithdrawn }}</strong></td>
+                    <td><strong>{{ totals.transferee - withdrawnTotals.transfereeWithdrawn }}</strong></td>                    
+                    <td><strong>{{ totals.returning - withdrawnTotals.returningWithdrawn }}</strong></td>
+                    <td><strong>{{ totals.shiftee - withdrawnTotals.shifteeWithdrawn }}</strong></td>
+                    <td><strong>{{ totals.continuing - withdrawnTotals.continuingWithdrawn }}</strong></td>
+                    <td><strong>{{ totals.second - withdrawnTotals.secondWithdrawn }}</strong></td>
+                    <td><strong>{{ totals.secondIAC - withdrawnTotals.secondIACWithdrawn }}</strong></td>
+                    <td><strong>{{ full_total_after_withdrawn }}</strong></td>
+                </tr>                          
+            </tbody>
+        </table>
+        <table v-else class="table table-bordered table-striped">
+            <thead style="position: sticky;top: 0" class="thead-dark">
+                <tr>
+                    <th>Date</th>
+                    <th>Short Course</th>                    
+                    <th>Total Enrollment</th>
+                </tr>                
+            </thead>
+            <tbody>
+                <tr v-if="dates" v-for="date in dates">
+                    <td v-if="date.total > 0">{{ date.date }}</td>
+                    <td v-if="date.total > 0"><b>{{ date.freshman }}</b></td>                                        
+                    <td v-if="date.total > 0"><b>{{ date.total }}</b></td>                    
                 </tr>
                 <tr v-if="totals">
                     <td>Total:</td>
-                    <td><strong>{{ totals.freshman }}</strong></td>
-                    <td><strong>{{ totals.transferee }}</strong></td>                    
-                    <td><strong>{{ totals.second }}</strong></td>
-                    <td><strong>{{ totals.continuing }}</strong></td>
-                    <td><strong>{{ totals.shiftee }}</strong></td>
-                    <td><strong>{{ totals.returning }}</strong></td>
+                    <td><strong>{{ totals.freshman }}</strong></td>                    
                     <td><strong>{{ full_total }}</strong></td>
-                </tr>                               
+                </tr>                    
             </tbody>
-        </table>
-                         
+        </table>             
       
     </div>
   
@@ -118,10 +161,15 @@ new Vue({
         dates: undefined,
         data_post: [],
         full_total_post: 0,
+        full_total_after_withdrawn_post: 0,
         totals_post: undefined,
+        withdrawn_totals_post: undefined,
         full_total: 0,
+        full_total_after_withdrawn: 0,
         totals: undefined,
+        withdrawnTotals: undefined,
         sy: [],
+        sem_type: undefined,
                       
     },
 
@@ -132,30 +180,45 @@ new Vue({
         formdata.append('sy',this.current_sem)        
         formdata.append('start','<?php echo ($start!=0)?$start:date("Y-m-d"); ?>');                       
         formdata.append('end','<?php echo ($end!=0)?$end:date("Y-m-d", strtotime('tomorrow')); ?>');
-        axios.post(this.base_url + 'registrar/daily_enrollment_report_data/',formdata, {
-            headers: {
-                Authorization: `Bearer ${window.token}`
-            }
-            })
-            .then((data) => {  
-
-                this.dates = data.data.data;
-                this.totals = data.data.totals;
-                this.sy = data.data.sy;
-                for(i in this.dates){
-                    this.full_total += this.dates[i].total;
-                    this.data_post.push(this.dates[i]);
+        axios.get(api_url + 'admissions/applications/get-applicants-by-field/' + this.current_sem + '/student_type/2nd - Degree iACADEMY')
+        .then((applicants_data) => {
+            formdata.append('second_degree_iac', JSON.stringify(applicants_data.data.data));
+            axios.post(this.base_url + 'registrar/daily_enrollment_report_data/',formdata, {
+                headers: {
+                    Authorization: `Bearer ${window.token}`
                 }
-                this.data_post = JSON.stringify(this.data_post);
-                this.full_total_post = JSON.stringify(this.full_total);
-                this.totals_post = JSON.stringify(this.totals);
-            
-            })
+                })
+                .then((data) => {  
+
+                    this.dates = data.data.data;
+                    this.totals = data.data.totals;
+                    this.withdrawnTotals = data.data.withdrawnTotals;
+                    this.sem_type = data.data.sem_type;
+                    this.sy = data.data.sy;
+                    for(i in this.dates){
+                        this.full_total += this.dates[i].total;
+                        if(this.dates[i].total > 0)
+                            this.data_post.push(this.dates[i]);
+                    }
+                    this.full_total_after_withdrawn = this.full_total;
+                    for(i in this.withdrawnTotals){
+                        this.full_total_after_withdrawn -= this.withdrawnTotals[i];
+                    }
+
+                    this.data_post = JSON.stringify(this.data_post);
+                    this.full_total_post = JSON.stringify(this.full_total);
+                    this.full_total_after_withdrawn_post = JSON.stringify(this.full_total_after_withdrawn);
+                    this.totals_post = JSON.stringify(this.totals);
+                    this.withdrawn_totals_post = JSON.stringify(this.withdrawnTotals);
+                
+                })
+            .catch((error) => {
+                console.log(error);
+            });
+        })
         .catch((error) => {
             console.log(error);
-            
-        });
-            
+        })
 
     },
 
