@@ -305,6 +305,9 @@ class Registrar extends CI_Controller {
             case 'other':
                 $stype = 'college';
             break;
+            case 'next':
+                $stype = 'next';
+            break;
             default: 
                 $stype = 'college';
         }
@@ -313,6 +316,8 @@ class Registrar extends CI_Controller {
             $ret['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
         elseif($stype == 'shs')
             $ret['active_sem'] = $this->data_fetcher->get_active_sem_shs();
+        elseif($stype == 'next')
+            $ret['active_sem'] = $this->db->get_where('tb_mas_sy',array('term_student_type'=>'next'))->first_row();
         else
             $ret['active_sem'] = $this->data_fetcher->get_active_sem();
 
@@ -472,7 +477,6 @@ class Registrar extends CI_Controller {
     public function submit_registration_old()
     {
         $post = $this->input->post();
-      
         if(isset($post['subjects-loaded']))
         {
             
@@ -495,6 +499,7 @@ class Registrar extends CI_Controller {
 
                         $cl_data['intStudentID'] = $post['studentID'];
                         $cl_data['intClassListID'] = $cl_get['intID'];
+                        $cl_data['additional_elective'] = isset($post['additional_elective']) ? (in_array($subject, $post['additional_elective']) ? 1 : 0) : 0;
                         $this->data_poster->addStudentClasslist($cl_data,$this->data["user"]["intID"]);
                         $this->data['col2'][] = "Student Registered to Section ".$cl_get['strClassName'].$cl_get['year'].$cl_get['strSection']." ".$cl_get['sub_section'];
                         $this->data['col3'][] = "<a href='".base_url()."unity/classlist_viewer/".$cl_get['intID']."'>View Classlist</a>";
@@ -508,6 +513,7 @@ class Registrar extends CI_Controller {
                        
                         $cl_data['intStudentID'] = $post['studentID'];
                         $cl_data['intClassListID'] = $cl_get['intID'];
+                        $cl_data['additional_elective'] = isset($post['additional_elective']) ? (in_array($subject, $post['additional_elective']) ? 1 : 0) : 0;
                         $this->data_poster->addStudentClasslist($cl_data,$this->data["user"]["intID"]);
                         $this->data['col2'][] = "Student Registered to Section ".$cl_get['strSection'];
                         $this->data['col3'][] = "<a href='".base_url()."unity/classlist_viewer/".$cl_get['intID']."'>View Classlist</a>";
@@ -691,8 +697,15 @@ class Registrar extends CI_Controller {
     public function daily_enrollment_report_data(){
         $post = $this->input->post();
         $active_sem = $this->data_fetcher->get_sem_by_id($post['sy']);        
-        $enrolled = [];
+        $enrolled = $second_degree_iac = [];
         
+        $second_degree_iac_applicants = json_decode($post['second_degree_iac'], true);
+        if($second_degree_iac_applicants){
+            foreach($second_degree_iac_applicants as $applicant){
+                $second_degree_iac[] = $applicant['slug'];
+            }
+        }
+
         $begin = new DateTime($post['start']);
         $end = new DateTime($post['end']);
 
@@ -703,9 +716,20 @@ class Registrar extends CI_Controller {
             'freshman' => 0,
             'transferee' => 0,
             'second' => 0,
+            'secondIAC' => 0,
             'continuing' => 0,
             'shiftee' => 0,
             'returning' => 0,
+        ];
+        
+        $withdrawnTotals = [
+            'freshmanWithdrawn' => 0,
+            'transfereeWithdrawn' => 0,
+            'secondWithdrawn' => 0,
+            'secondIACWithdrawn' => 0,
+            'continuingWithdrawn' => 0,
+            'shifteeWithdrawn' => 0,
+            'returningWithdrawn' => 0,
         ];
 
         foreach ($period as $dt) {
@@ -715,6 +739,7 @@ class Registrar extends CI_Controller {
                 'freshman' => 0,
                 'transferee' => 0,
                 'second' => 0, 
+                'secondIAC' => 0, 
                 'continuing' => 0,    
                 'shiftee' => 0,      
                 'returning' => 0,     
@@ -722,58 +747,73 @@ class Registrar extends CI_Controller {
                 'date' => date("M j, Y", strtotime($date))
             ]; 
         
-            $enrollment = $this->db->select('tb_mas_registration.*,tb_mas_users.student_type')
+            $enrollment = $this->db->select('tb_mas_registration.*,tb_mas_users.student_type, tb_mas_users.slug')
                                     ->from('tb_mas_registration')
                                     ->join('tb_mas_users','tb_mas_users.intID = tb_mas_registration.intStudentID')
                                     ->where('intAYID',$active_sem['intID'])
                                     ->where('intROG >=',1)
-                                    ->where('intROG !=',5)
-                                    ->where('withdrawal_period !=','before')
+                                    ->where('intROG !=',5)                                    
                                     ->where('dteRegistered LIKE', $date."%")                     
+                                    ->where('withdrawal_period !=','before')                                    
                                     ->order_by('intRegistrationID','desc')
                                     ->group_by('intStudentID')
                                     ->get()
-                                    ->result_array();  
+                                    ->result_array();
                                             
             foreach($enrollment as $st){
-                $data[$date]['total'] += 1;                
+                $data[$date]['total'] += 1;
+                $addWithdrawn = $st['intROG'] == 3 ? 1 : 0;                
                 
                 if($st['enumStudentType'] == "continuing")
                 {
                     $data[$date]['continuing'] += 1;
                     $totals['continuing'] += 1;
+                    $withdrawnTotals['continuingWithdrawn'] += $addWithdrawn;
                 }
                 elseif($st['enumStudentType'] == "shiftee")
                 {
                     $data[$date]['shiftee'] += 1;
                     $totals['shiftee'] += 1;
+                    $withdrawnTotals['shifteeWithdrawn'] += $addWithdrawn;
                 }
                 elseif($st['enumStudentType'] == "returning")
                 {
                     $data[$date]['returning'] += 1;
                     $totals['returning'] += 1;
+                    $withdrawnTotals['returningWithdrawn'] += $addWithdrawn;
                 }
                 else
                     switch($st['student_type']){
                         case 'freshman':
                             $data[$date]['freshman'] += 1;
                             $totals['freshman'] += 1;
+                            $withdrawnTotals['freshmanWithdrawn'] += $addWithdrawn;
                             break;
                         case 'new':
                                 $data[$date]['freshman'] += 1;
                                 $totals['freshman'] += 1;
+                                $withdrawnTotals['freshmanWithdrawn'] += $addWithdrawn;
                                 break;
                         case 'transferee':
                             $data[$date]['transferee'] += 1;
                             $totals['transferee'] += 1;
+                            $withdrawnTotals['freshmanWithdrawn'] += $addWithdrawn;
                             break;
                         case 'second degree':
-                            $data[$date]['second'] += 1;
-                            $totals['second'] += 1;
-                            break;                        
+                            if(in_array($st['slug'], $second_degree_iac)){
+                                $data[$date]['secondIAC'] += 1;
+                                $totals['secondIAC'] += 1;
+                                $withdrawnTotals['secondIACWithdrawn'] += $addWithdrawn;
+                            }else{
+                                $data[$date]['second'] += 1;
+                                $totals['second'] += 1;
+                                $withdrawnTotals['secondWithdrawn'] += $addWithdrawn;
+                            }
+                            break;                     
                         default:
                             $data[$date]['freshman'] += 1;
                             $totals['freshman'] += 1;
+                            $withdrawnTotals['freshmanWithdrawn'] += $addWithdrawn;
                             
                     }                                
             }
@@ -785,6 +825,7 @@ class Registrar extends CI_Controller {
         // $program['hyflex'] = count($this->data_fetcher->getStudentsByTypeOfClass('hyflex'));
                             
         $ret['totals'] = $totals;
+        $ret['withdrawnTotals'] = $withdrawnTotals;
         $ret['data'] = $data;
         $ret['sem_type'] = $active_sem['term_student_type'];
         $ret['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
@@ -2859,6 +2900,16 @@ class Registrar extends CI_Controller {
         }
         else
             redirect(base_url()."unity");  
+    }
+
+    function enrollment_statistics(){
+        $this->data['page'] = "reports";
+        $this->data['opentree'] = "registrar";
+        $sem = $this->data_fetcher->get_active_sem();
+        $this->data['sem'] = $sem['intID'];
+        $this->load->view("common/header",$this->data);
+        $this->load->view("admin/enrollment_statistics",$this->data);
+        $this->load->view("common/footer",$this->data);            
     }
     
     public function faculty_logged_in()
