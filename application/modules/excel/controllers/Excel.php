@@ -2498,10 +2498,7 @@ class Excel extends CI_Controller {
                     $enrollmentStatus = 'Transferee';
                 else
                     $enrollmentStatus = 'New';
-                    
-                print_r($student);
-                print($enrollmentStatus);
-                die();
+
                 $objPHPExcel->setActiveSheetIndex(0)
                         ->setCellValue('A'.$i, preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']))
                         ->setCellValue('B'.$i, strtoupper($student['strLastname']))
