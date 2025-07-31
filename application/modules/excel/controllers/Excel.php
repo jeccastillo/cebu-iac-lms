@@ -8844,7 +8844,7 @@ class Excel extends CI_Controller {
                 }
             }
 
-            if($payment_details['status'] == 'Void'){
+            if($payment_detail['status'] == 'Void'){
                 $particular .= ' (Voided)';
             }
 
@@ -8859,13 +8859,13 @@ class Excel extends CI_Controller {
                 ->setCellValue('C'.$i, $student ? str_replace("-", "", $student['strStudentNumber']) : '')
                 ->setCellValue('D'.$i, ucfirst($payment_detail['last_name']) . ', ' . ucfirst($payment_detail['first_name']))
                 ->setCellValue('E'.$i, $particular)
-                ->setCellValue('F'.$i, $payment_details['status'] != 'Void' ? $vatable_amount : 0)
-                ->setCellValue('G'.$i, $payment_details['status'] != 'Void' ? $vatable_exempt : 0)
-                ->setCellValue('H'.$i, $payment_details['status'] != 'Void' ? $payment_detail['invoice_amount_vzrs'] : 0)
-                ->setCellValue('I'.$i, $payment_details['status'] != 'Void' ? $lessVat : 0)
+                ->setCellValue('F'.$i, $payment_detail['status'] != 'Void' ? $vatable_amount : 0)
+                ->setCellValue('G'.$i, $payment_detail['status'] != 'Void' ? $vatable_exempt : 0)
+                ->setCellValue('H'.$i, $payment_detail['status'] != 'Void' ? $payment_detail['invoice_amount_vzrs'] : 0)
+                ->setCellValue('I'.$i, $payment_detail['status'] != 'Void' ? $lessVat : 0)
                 ->setCellValue('J'.$i, '=ROUND(SUM(F' . $i . ':I' . $i . '),2)')
-                ->setCellValue('K'.$i, $payment_detail['withholding_tax_percentage'] > 0 && $payment_details['status'] != 'Void' ? $payment_detail['withholding_tax_percentage'] . '%' : 0)
-                ->setCellValue('L'.$i, $payment_details['status'] != 'Void' ? number_format($ewtAmount ,2,'.',',') : 0)
+                ->setCellValue('K'.$i, $payment_detail['withholding_tax_percentage'] > 0 && $payment_detail['status'] != 'Void' ? $payment_detail['withholding_tax_percentage'] . '%' : 0)
+                ->setCellValue('L'.$i, $payment_detail['status'] != 'Void' ? number_format($ewtAmount ,2,'.',',') : 0)
                 ->setCellValue('M'.$i, '=SUM(J' . $i . '-L' . $i . ')');
 
             $i++;
