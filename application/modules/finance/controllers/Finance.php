@@ -1462,15 +1462,18 @@ class Finance extends CI_Controller {
             }
             
             $vat_exempt = $result['invoice_amount'] == 0 && $result['invoice_amount_ves'] == 0 ? $result['subtotal_order'] : $result['invoice_amount_ves'];
-            $ewt_rate = $result['withholding_tax_percentage'] > 0 ? $result['withholding_tax_percentage'] / 100 : 0;
+            $ewt_rate = $result['withholding_tax_percentage'] > 0 && $payment_details['status'] != 'Void' ? $result['withholding_tax_percentage'] / 100 : 0;
             $total_sales = $result['invoice_amount'] + $vat_exempt + $result['invoice_amount_vzrs'];
             $vat = $result['invoice_amount'] > 0 ? $result['invoice_amount'] * .12 : '';
-            $ewt_amount = $ewt_rate > 0 ? $result['invoice_amount'] * $ewt_rate : '';
+            $ewt_amount = $ewt_rate > 0 && $payment_details['status'] != 'Void' ? $result['invoice_amount'] * $ewt_rate : '';
 
             $net_amount = 0;
-            $net_amount += $total_sales > 0 ? $total_sales : 0;
-            $net_amount += $vat > 0 ? $vat : 0;
-            $net_amount += $ewt_amount > 0 ? $ewt_amount : 0;            
+            if($payment_details['status'] != 'Void'){
+                $net_amount += $total_sales > 0 ? $total_sales : 0;
+                $net_amount += $vat > 0 ? $vat : 0;
+                $net_amount += $ewt_amount > 0 ? $ewt_amount : 0;  
+            }
+
             $response_data['index'] = $index + 1;
             $response_data['studentNumber'] = $student ? str_replace("-", "", $student['strStudentNumber']) : '';
             $response_data['studentName'] = ucfirst($result['last_name']) . ', ' . ucfirst($result['first_name']);
@@ -1480,15 +1483,14 @@ class Finance extends CI_Controller {
             $response_data['isCash'] = $result['is_cash'] ? 'Cash Sales' : 'Charge Sales';
             $response_data['invoiceDate'] =  $result['invoice_date'] ? date("d-M-Y", strtotime($result['invoice_date'])) : date("d-M-Y", strtotime($result['or_date']));
             $response_data['invoiceNumber'] = $result['invoice_number'];
-            $response_data['invoiceAmount'] = $result['invoice_amount'];
-            $response_data['vatExempt'] = $vat_exempt;
-            $response_data['zeroRated'] = $result['invoice_amount_vzrs'];
-            $response_data['totalSales'] = $total_sales;
-            $response_data['vat'] = $vat;
+            $response_data['invoiceAmount'] = $payment_details['status'] != 'Void' ? $result['invoice_amount'] : 0;
+            $response_data['vatExempt'] = $payment_details['status'] != 'Void' ? $vat_exempt : 0;
+            $response_data['zeroRated'] = $payment_details['status'] != 'Void' ? $result['invoice_amount_vzrs'] : 0;
+            $response_data['totalSales'] = $payment_details['status'] != 'Void' ? $total_sales : 0;
+            $response_data['vat'] = $payment_details['status'] != 'Void' ? $vat : 0;
             $response_data['ewtRate'] = $ewt_rate;
             $response_data['ewtAmount'] = $ewt_amount;
             $response_data['netAmount'] = $net_amount;
-            $response_data['paymentReceived'] = $result['subtotal_order'];
             $response_data['status'] = $result['status'];
             $reponse_data['balance'] = $net_amount - $result['subtotal_order'];
 
