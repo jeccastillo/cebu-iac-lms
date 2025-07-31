@@ -121,7 +121,7 @@
                                     <tbody>
                                         <tr v-for="item in student_discounts">
                                             <td>{{ item.name }}</td>
-                                            <td>{{ item.referrer==undefined?'not applicable':item.referrer }}</td>
+                                            <td>{{ item.referrer=='undefined'?'not applicable':item.referrer }}</td>
                                             <td>
                                                 <select class="form-control" @change="updateScStatus($event,item.id)">
                                                     <option :selected="item.status == 'applied'" value="applied">applied</option>
