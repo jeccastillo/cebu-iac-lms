@@ -8844,7 +8844,7 @@ class Excel extends CI_Controller {
                 }
             }
 
-            if($payment_details['status'] != 'Void'){
+            if($payment_details['status'] == 'Void'){
                 $particular .= ' (Voided)';
             }
 
