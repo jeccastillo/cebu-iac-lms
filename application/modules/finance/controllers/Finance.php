@@ -1472,6 +1472,8 @@ class Finance extends CI_Controller {
                 $net_amount += $total_sales > 0 ? $total_sales : 0;
                 $net_amount += $vat > 0 ? $vat : 0;
                 $net_amount += $ewt_amount > 0 ? $ewt_amount : 0;  
+            }else{
+                $particular .= ' (Voided)';
             }
 
             $response_data['index'] = $index + 1;
