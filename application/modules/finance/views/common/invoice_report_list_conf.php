@@ -39,7 +39,7 @@ $(document).ready(function() {
             title: 'MOP'
         }, {
             data: 'invoiceAmount',
-            title: 'Variable Amount'
+            title: 'Vatable Amount'
         }, {
             data: 'vatExempt',
             title: 'Vat Exempt'
