@@ -1,4 +1,4 @@
-<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:9;">            
+<table border="0" cellspacing="0" cellpadding="0" style="color:#333; font-size:7;">            
             <tr>            
                 <td colspan = "3" width="100%" style="text-align: center;">             
                     
