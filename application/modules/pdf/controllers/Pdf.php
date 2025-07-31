@@ -481,8 +481,8 @@ class Pdf extends CI_Controller {
         
         $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
         // Fit to one page wide (horizontally)
-        $sheet->getPageSetup()->setFitToWidth(1);
-        $sheet->getPageSetup()->setFitToHeight(0);
+        $pdf->getPageSetup()->setFitToWidth(1);
+        $pdf->getPageSetup()->setFitToHeight(0);
         $pdf->setPrintHeader(false);
         $pdf->setPrintFooter(false);         
          
