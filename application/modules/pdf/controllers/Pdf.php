@@ -400,8 +400,21 @@ class Pdf extends CI_Controller {
         $active_sem = $this->data_fetcher->get_sem_by_id($sem);
         $type = $active_sem['term_student_type'];
         $programs = $this->db->get_where('tb_mas_programs',array('type'=>$type))->result_array();
+        if($type == "shs")
+            $programs = $this->db->get_where('tb_mas_programs',array('type'=>$type))->result_array();
+        elseif($type == "college")
+            $programs = $this->db->where('type','college')
+                                 ->or_where('type','other')
+                                 ->get('tb_mas_programs')
+                                 ->result_array();
+        elseif($type == "next")
+            $programs = $this->db->where('type','next')
+            ->or_where('type','other')
+            ->get('tb_mas_programs')
+            ->result_array();
+                                 
         $data['programs'] = $programs;
-        $ret = [];        
+        $ret = [];
 
         foreach($programs as $program){
             $st = [];
@@ -412,7 +425,7 @@ class Pdf extends CI_Controller {
             $program['enrolled_continuing'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,5));
             $program['enrolled_shiftee'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,6));
             $program['enrolled_returnee'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,7));
-            $ret[] = $program; 
+            $ret[] = $program;
         }
 
         $this->data['enrollment'] = $ret;
@@ -423,8 +436,17 @@ class Pdf extends CI_Controller {
     }
 
     function grading_sheet($id){
-        
+        $post = $this->input->post();
         $sem = $this->data_fetcher->get_active_sem();
+        
+        $this->data['submitted_by'] = $post['submitted_by'];
+        $this->data['submitted_by_date'] = $post['submitted_by_date'];
+        $this->data['checked_by'] = $post['checked_by'];
+        $this->data['checked_by_date'] = $post['checked_by_date'];
+        $this->data['approved_by'] = isset($post['approved_by']) ? $post['approved_by'] : '';
+        $this->data['approved_by_date'] = isset($post['approved_by_date']) ? $post['approved_by_date'] : '';
+        $this->data['student_type'] = $post['student_type'];
+        
         $this->data['classlist'] = $this->data_fetcher->getClasslistById($id);
         $this->data['faculty'] = $this->db->get_where('tb_mas_faculty',array('intID'=>$id))->first_row('array');
         $this->data['user'] =  $this->session->all_userdata();
@@ -446,8 +468,8 @@ class Pdf extends CI_Controller {
         //$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
         $pdf->SetMargins(5, .25, 5);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);        
-        //$pdf->SetAutoPageBreak(TRUE, 6);
+        $pdf->SetFooterMargin(0.1);        
+        // $pdf->SetAutoPageBreak(TRUE, 3);
 
     //font setting
         //$pdf->SetFont('calibril_0', '', 15, '', 'false');
@@ -458,7 +480,7 @@ class Pdf extends CI_Controller {
         // helvetica or times to reduce file size.
         
         $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
-                
+        // Fit to one page wide (horizontally)
         $pdf->setPrintHeader(false);
         $pdf->setPrintFooter(false);         
          
@@ -519,7 +541,10 @@ class Pdf extends CI_Controller {
         $post = $this->input->post();
         $this->data['dates'] = json_decode($post['dates']);
         $this->data['totals'] = json_decode($post['totals']);
+        $this->data['withdrawn_totals'] = json_decode($post['withdrawn_totals']);
         $this->data['full_total'] = json_decode($post['full_total']);
+        $this->data['full_total_after_withdrawn'] = json_decode($post['full_total_after_withdrawn']);
+        $this->data['sem_type'] = $post['sem_type'];        
         
         $this->data['sem'] = $this->data_fetcher->get_sem_by_id($sem);
         $html = $this->load->view("daily_enrollment",$this->data);        
@@ -1104,6 +1129,8 @@ class Pdf extends CI_Controller {
         else{
             if($this->data['student']['level'] == 'next')
                 $this->load->view("print_view_student_reg2_makati_next",$this->data);
+            elseif($this->data['active_sem']['enumSem'] == "Summer")
+                $this->load->view("print_view_student_reg2_makati_summer",$this->data);
             else
                 $this->load->view("print_view_student_reg2_makati",$this->data);
         }
@@ -2304,7 +2331,7 @@ class Pdf extends CI_Controller {
                         $type = "UG ".$request['description'];
                         break;                    
                 case 'shs':
-                    $type = "SHS ".$request['description'];
+                    $type = "SHS " . $request['description'];
                     break;
                 case 'ns_payment':
                         $type = $request['description'];
@@ -2423,12 +2450,8 @@ class Pdf extends CI_Controller {
         $this->data['full_assessment'] = number_format($fullAssessment,2,'.',',');
         $this->data['total_assessment'] = number_format($totalAssessment,2,'.',',');
 
-        if($this->data['campus'] == "Cebu"){            
-            if ($_SERVER['HTTP_HOST'] == 'cebustaging.iacademy.edu.ph') {                
-                $this->load->view("print_invoice_cebu_new",$this->data);                          
-            } else {
-                $this->load->view("print_invoice_cebu",$this->data);
-            }
+        if($this->data['campus'] == "Cebu"){
+            $this->load->view("print_invoice_cebu",$this->data);
         }else {
             $this->load->view("print_invoice",$this->data);
         }
@@ -2470,7 +2493,7 @@ class Pdf extends CI_Controller {
                         $type = "UG ".$request['description'];
                         break;                    
                 case 'shs':
-                    $type = "SHS ".$request['description'];
+                    $type = $request['description'];
                     break;
                 case 'ns_payment':
                         $type = $request['description'];
@@ -2516,11 +2539,7 @@ class Pdf extends CI_Controller {
         $this->data['total_amount_due'] = number_format($request['total_amount_due'],2,'.',',');
         
         if ($this->data['campus'] == "Cebu") {
-            if ($_SERVER['HTTP_HOST'] == 'cebustaging.iacademy.edu.ph') {
-                $this->load->view("print_or_latest_cebu_new",$this->data);
-            }else {
-                $this->load->view("print_or_latest_cebu",$this->data);
-            }
+            $this->load->view("print_or_latest_cebu",$this->data);
         }else {
             // $this->load->view("print_or_latest_test",$this->data);
             $this->load->view("print_or_latest",$this->data);
@@ -3494,6 +3513,105 @@ class Pdf extends CI_Controller {
                         ->get()
                         ->result_array();
         }
+        
+        $gwa_ranks = array();
+        foreach($students as $student){
+            $totalGrades = 0;
+            $subjects = $this->db->select('tb_mas_classlist_student.floatPrelimGrade, tb_mas_classlist_student.floatMidtermGrade, tb_mas_classlist_student.floatFinalsGrade')
+            ->from('tb_mas_classlist_student')
+            ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
+            ->where(array('tb_mas_classlist_student.intStudentID'=>$student['intID'],'tb_mas_classlist.strAcademicYear'=>$sem,'tb_mas_classlist_student.floatPrelimGrade !='=>null, 'tb_mas_classlist_student.floatMidtermGrade !='=>null, 'tb_mas_classlist_student.floatFinalsGrade !='=>null))
+            ->get()
+            ->result_array();
+
+            foreach($subjects as $subject){
+                $average = getAve($subject['floatPrelimGrade'], $subject['floatMidtermGrade'], $subject['floatFinalsGrade']);
+                $totalGrades += $average;
+            }
+
+            if(count($subjects) > 0){
+                $gwa = $totalGrades / count($subjects);
+                
+                $student_data = array();
+                $student_data['student_number'] = $student['strStudentNumber'];
+                $student_data['last_name'] = strtoupper($student['strLastname']);
+                $student_data['first_name'] = strtoupper($student['strFirstname']);
+                $student_data['middle_name'] = strtoupper($student['strMiddlename']);
+                $student_data['track'] = $student['strProgramCode'];
+                $student_data['gwa'] = $gwa;
+                $student_data['year_level'] = $student['intYearLevel'];
+                $gwa_ranks[] = $student_data;
+            }
+        }
+
+        //sort by GWA
+        usort($gwa_ranks, function($a, $b) {
+            return $a['gwa'] < $b['gwa'];
+        });
+
+        $this->data['students'] = $gwa_ranks;
+        $this->data['year_level'] = $gradeLevel;
+        $this->data['sy'] = $sy;
+
+        tcpdf();
+        // create new PDF document
+        $pdf = new TCPDF("L", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);        
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetTitle("SHS GWA Rank " . $gradeLevel);
+        
+        // set margins
+        $pdf->SetMargins(0.5, .25, 0.5);
+
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        
+        $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
+        
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);    
+             
+        $pdf->AddPage();
+          
+        $html = $this->load->view("shs_gwa_rank",$this->data,true);
+        $pdf->writeHTML($html, true, false, true, false, '');
+          
+        $pdf->Output('SHS GWA Rank - ' . $gradeLevel . ' ' . $year_level . ' ' .  $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . ".pdf", 'I');
+    }
+
+    public function college_gwa_rank($sem = 0, $year_level = 0, $program)
+    {
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $sy = $this->data_fetcher->get_active_sem();
+            $sem = $s['intID'];
+        }
+
+        $gradeLevel = 'All Year Level';
+        $students = $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramCode, tb_mas_registration.intYearLevel')
+                    ->from('tb_mas_users')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
+                    ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_programs.type'=>'college', 'tb_mas_programs.intProgramID'=>$program))
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->get()
+                    ->result_array();
+
+        if($year_level != 0){
+            $gradeLevel = 'Year_' . $year_level;
+            $students = $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramCode, tb_mas_registration.intYearLevel')
+                        ->from('tb_mas_users')
+                        ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                        ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
+                        ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_programs.type'=>'college', 'tb_mas_registration.intYearLevel'=>$year_level, 'tb_mas_programs.intProgramID'=>$program))
+                        ->order_by('tb_mas_users.strLastname', 'ASC')
+                        ->get()
+                        ->result_array();
+        }
+
+        print_r($students);
+        die();
         
         $gwa_ranks = array();
         foreach($students as $student){
