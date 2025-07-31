@@ -2484,20 +2484,8 @@ class Excel extends CI_Controller {
             foreach($students as $student)
             {
                 // Add some datat
-                $enrollmentStatus = '';
                 $oldPass_unhash = pw_unhash($student['strPass']);
                 //$newPass = password_hash($oldPass_unhash, PASSWORD_DEFAULT);
-                
-                if($student['enumStudentType'] == 'continuing')
-                    $enrollmentStatus = 'Continuing';
-                else if($student['enumStudentType'] == 'shiftee')
-                    $enrollmentStatus = 'Shiftee';
-                else if($student['enumStudentType'] == 'returning')
-                    $enrollmentStatus = 'Returnee';
-                else if($student['student_type'] == 'transferee')
-                    $enrollmentStatus = 'Transferee';
-                else
-                    $enrollmentStatus = 'New';
 
                 $objPHPExcel->setActiveSheetIndex(0)
                         ->setCellValue('A'.$i, preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']))
@@ -2506,12 +2494,12 @@ class Excel extends CI_Controller {
                         ->setCellValue('D'.$i, strtoupper($student['strMiddlename']))
                         ->setCellValue('E'.$i, $student['strProgramCode'])
                         ->setCellValue('F'.$i, $student['strProgramDescription'])
-                        ->setCellValue('G'.$i, $student['intStudentYear'] == 1 || $student['intStudentYear'] == 3 ? '11' : '12')
+                        ->setCellValue('G'.$i, $student['intStudentYear'])
                         ->setCellValue('H'.$i, strtoupper($student['blockName']))
                         ->setCellValue('I'.$i, date("M j, Y", strtotime($student['dteBirthDate'])))
                         ->setCellValue('J'.$i, strtoupper($student['enumGender']))
                         ->setCellValue('K'.$i, $student['strAddress'])                    
-                        ->setCellValue('L'.$i, $student['strCitizenship'] == 'Philippines' ? 'Filipino ': strtoupper($student['strCitizenship']))
+                        ->setCellValue('L'.$i, strtoupper($student['strCitizenship']))
                         ->setCellValue('M'.$i, strtoupper($student['strAddress']))
                         ->setCellValue('N'.$i, strtoupper($student['strMobileNumber']))
                         ->setCellValue('O'.$i, $student['strEmail'])
@@ -2539,7 +2527,7 @@ class Excel extends CI_Controller {
                         ->setCellValue('AK'.$i, strtoupper($student['curriculumName']))
                         ->setCellValue('AL'.$i, "")
                         ->setCellValue('AM'.$i, "")
-                        ->setCellValue('AN'.$i, $enrollmentStatus)
+                        ->setCellValue('AN'.$i, strtoupper($student['student_type']))
                         ->setCellValue('AO'.$i, "");
                         // ->setCellValue('AP'.$i, strtoupper($student['student_type']));
                         
@@ -3870,9 +3858,8 @@ class Excel extends CI_Controller {
         $post = $this->input->post();
         $dates = json_decode($post['dates']);
         $totals = json_decode($post['totals']);
-        $withdrawn_totals = json_decode($post['withdrawn_totals']);
         $full_total = json_decode($post['full_total']);
-        $sem_type = $post['sem_type'];  
+        $sem_type = $post['sem_type'];
         
         $active_sem = $this->data_fetcher->get_sem_by_id($sem);
 
@@ -3909,12 +3896,11 @@ class Excel extends CI_Controller {
                         ->setCellValue('A3', 'Date')
                         ->setCellValue('B3', 'Freshman')
                         ->setCellValue('C3', 'Transferee')
-                        ->setCellValue('D3', 'Returning')
-                        ->setCellValue('E3', 'Shiftee')
-                        ->setCellValue('F3', 'Continuing')
-                        ->setCellValue('G3', 'Second Degree')
-                        ->setCellValue('H3', 'Second Degree - iAC')
-                        ->setCellValue('I3', 'Total Enrollment');
+                        ->setCellValue('D3', 'Second Degree')                    
+                        ->setCellValue('E3', 'Continuing')
+                        ->setCellValue('F3', 'Shiftee')
+                        ->setCellValue('G3', 'Returning')
+                        ->setCellValue('H3', 'Total Enrollment');
                                 
             $i = 4;
             
@@ -3926,47 +3912,28 @@ class Excel extends CI_Controller {
                         ->setCellValue('A'.$i, $item->date)
                         ->setCellValue('B'.$i, $item->freshman)
                         ->setCellValue('C'.$i, $item->transferee)                    
-                        ->setCellValue('D'.$i, $item->returning)
-                        ->setCellValue('E'.$i, $item->shiftee)
-                        ->setCellValue('F'.$i, $item->continuing)
-                        ->setCellValue('G'.$i, $item->second)
-                        ->setCellValue('H'.$i, $item->secondIAC)
-                        ->setCellValue('I'.$i, '=SUM(B'.$i.':H'.$i.')');
+                        ->setCellValue('D'.$i, $item->second)
+                        ->setCellValue('E'.$i, $item->continuing)
+                        ->setCellValue('F'.$i, $item->shiftee)
+                        ->setCellValue('G'.$i, $item->returning)
+                        ->setCellValue('H'.$i, '=SUM(B'.$i.':G'.$i.')');                                                
+                                
+            
                 $i++;
             
             }
 
-            $objPHPExcel->setActiveSheetIndex(0)
-                        ->setCellValue('A'.$i, ucfirst($sem_type))         
+            $objPHPExcel->setActiveSheetIndex(0)                    
                         ->setCellValue('B'.$i, '=SUM(B4:B'.($i-1).')')
                         ->setCellValue('C'.$i, '=SUM(C4:C'.($i-1).')')                    
                         ->setCellValue('D'.$i, '=SUM(D4:D'.($i-1).')')
                         ->setCellValue('E'.$i, '=SUM(E4:E'.($i-1).')')                    
                         ->setCellValue('F'.$i, '=SUM(F4:F'.($i-1).')')
                         ->setCellValue('G'.$i, '=SUM(G4:G'.($i-1).')')
-                        ->setCellValue('H'.$i, '=SUM(H4:H'.($i-1).')')
-                        ->setCellValue('I'.$i, '=SUM(I4:I'.($i-1).')')
-                        ->setCellValue('A'.($i+1), 'WITHDRAWN')
-                        ->setCellValue('B'.($i+1), $withdrawn_totals->freshmanWithdrawn)
-                        ->setCellValue('C'.($i+1), $withdrawn_totals->transfereeWithdrawn)                    
-                        ->setCellValue('D'.($i+1), $withdrawn_totals->returningWithdrawn)
-                        ->setCellValue('E'.($i+1), $withdrawn_totals->shifteeWithdrawn)
-                        ->setCellValue('F'.($i+1), $withdrawn_totals->continuingWithdrawn)
-                        ->setCellValue('G'.($i+1), $withdrawn_totals->secondWithdrawn)
-                        ->setCellValue('H'.($i+1), $withdrawn_totals->secondIACWithdrawn)
-                        ->setCellValue('I'.($i+1), '=SUM(B'.($i+1).':H'.($i+1).')')
-                        ->setCellValue('A'.($i+2), 'TOTAL')
-                        ->setCellValue('B'.($i+2), '=B'. $i . '-' . 'B' . ($i+1) )
-                        ->setCellValue('C'.($i+2), '=C'. $i . '-' . 'C' . ($i+1) )
-                        ->setCellValue('D'.($i+2), '=D'. $i . '-' . 'D' . ($i+1) )
-                        ->setCellValue('E'.($i+2), '=E'. $i . '-' . 'E' . ($i+1) )
-                        ->setCellValue('F'.($i+2), '=F'. $i . '-' . 'F' . ($i+1) )
-                        ->setCellValue('G'.($i+2), '=G'. $i . '-' . 'G' . ($i+1) )
-                        ->setCellValue('H'.($i+2), '=H'. $i . '-' . 'H' . ($i+1) )
-                        ->setCellValue('I'.($i+2), '=I'. $i . '-' . 'I' . ($i+1) );
+                        ->setCellValue('H'.$i, '=SUM(H4:H'.($i-1).')');
             
-            $objPHPExcel->setActiveSheetIndex(0)->getStyle('I'.$i)->getFont()->setBold( true );                    
-            $objPHPExcel->setActiveSheetIndex(0)->getStyle('A3:I3')->getFont()->setBold( true );
+            $objPHPExcel->setActiveSheetIndex(0)->getStyle('H'.$i)->getFont()->setBold( true );                    
+            $objPHPExcel->setActiveSheetIndex(0)->getStyle('A3:H3')->getFont()->setBold( true );
 
             $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(50);
             $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
@@ -3976,7 +3943,6 @@ class Excel extends CI_Controller {
             $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
             $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
             $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
         }
         else{
             $objPHPExcel->setActiveSheetIndex(0)                    
@@ -3993,7 +3959,8 @@ class Excel extends CI_Controller {
                 $objPHPExcel->setActiveSheetIndex(0)
                         ->setCellValue('A'.$i, $item->date)
                         ->setCellValue('B'.$i, $item->freshman)                        
-                        ->setCellValue('C'.$i, '=SUM(B'.$i.':G'.$i.')');
+                        ->setCellValue('C'.$i, '=SUM(B'.$i.':G'.$i.')');                                                
+                                
             
                 $i++;
             
@@ -8877,6 +8844,10 @@ class Excel extends CI_Controller {
                 }
             }
 
+            if($payment_detail['status'] == 'Void'){
+                $particular .= ' (Voided)';
+            }
+
             $vatable_amount = $vatable_amount / 1.12;
             $lessVat = $vatable_amount * .12;
             $ewtAmount = $payment_detail['withholding_tax_percentage'] > 0 ? ($vatable_amount + $vatable_exempt + $payment_detail['invoice_amount_vzrs']) * ($payment_detail['withholding_tax_percentage'] / 100) : 0;
@@ -8888,13 +8859,13 @@ class Excel extends CI_Controller {
                 ->setCellValue('C'.$i, $student ? str_replace("-", "", $student['strStudentNumber']) : '')
                 ->setCellValue('D'.$i, ucfirst($payment_detail['last_name']) . ', ' . ucfirst($payment_detail['first_name']))
                 ->setCellValue('E'.$i, $particular)
-                ->setCellValue('F'.$i, $vatable_amount)
-                ->setCellValue('G'.$i, $vatable_exempt)
-                ->setCellValue('H'.$i, $payment_detail['invoice_amount_vzrs'] )
-                ->setCellValue('I'.$i, $lessVat)
+                ->setCellValue('F'.$i, $payment_detail['status'] != 'Void' ? $vatable_amount : 0)
+                ->setCellValue('G'.$i, $payment_detail['status'] != 'Void' ? $vatable_exempt : 0)
+                ->setCellValue('H'.$i, $payment_detail['status'] != 'Void' ? $payment_detail['invoice_amount_vzrs'] : 0)
+                ->setCellValue('I'.$i, $payment_detail['status'] != 'Void' ? $lessVat : 0)
                 ->setCellValue('J'.$i, '=ROUND(SUM(F' . $i . ':I' . $i . '),2)')
-                ->setCellValue('K'.$i, $payment_detail['withholding_tax_percentage'] > 0 ? $payment_detail['withholding_tax_percentage'] . '%' : 0)
-                ->setCellValue('L'.$i, number_format($ewtAmount ,2,'.',','))
+                ->setCellValue('K'.$i, $payment_detail['withholding_tax_percentage'] > 0 && $payment_detail['status'] != 'Void' ? $payment_detail['withholding_tax_percentage'] . '%' : 0)
+                ->setCellValue('L'.$i, $payment_detail['status'] != 'Void' ? number_format($ewtAmount ,2,'.',',') : 0)
                 ->setCellValue('M'.$i, '=SUM(J' . $i . '-L' . $i . ')');
 
             $i++;
