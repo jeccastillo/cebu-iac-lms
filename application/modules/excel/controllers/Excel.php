@@ -2484,9 +2484,21 @@ class Excel extends CI_Controller {
             foreach($students as $student)
             {
                 // Add some datat
+                $enrollmentStatus = '';
                 $oldPass_unhash = pw_unhash($student['strPass']);
                 //$newPass = password_hash($oldPass_unhash, PASSWORD_DEFAULT);
-
+                
+                if($student['enumStudentType'] == 'continuing')
+                    $enrollmentStatus = 'Continuing';
+                else if($student['enumStudentType'] == 'shiftee')
+                    $enrollmentStatus = 'Shiftee';
+                else if($student['enumStudentType'] == 'returning')
+                    $enrollmentStatus = 'Returnee';
+                else if($student['student_type'] == 'transferee')
+                    $enrollmentStatus = 'Transferee';
+                else
+                    $enrollmentStatus = 'New';
+                    
                 $objPHPExcel->setActiveSheetIndex(0)
                         ->setCellValue('A'.$i, preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']))
                         ->setCellValue('B'.$i, strtoupper($student['strLastname']))
@@ -2495,7 +2507,7 @@ class Excel extends CI_Controller {
                         ->setCellValue('E'.$i, $student['strProgramCode'])
                         ->setCellValue('F'.$i, $student['strProgramDescription'])
                         ->setCellValue('G'.$i, $student['intStudentYear'] == 1 || $student['intStudentYear'] == 3 ? '11' : '12')
-                        ->setCellValue('H'.$i, strtoupper($student['block_section']))
+                        ->setCellValue('H'.$i, strtoupper($student['blockName']))
                         ->setCellValue('I'.$i, date("M j, Y", strtotime($student['dteBirthDate'])))
                         ->setCellValue('J'.$i, strtoupper($student['enumGender']))
                         ->setCellValue('K'.$i, $student['strAddress'])                    
