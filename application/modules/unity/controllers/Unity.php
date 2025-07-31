@@ -607,6 +607,7 @@ class Unity extends CI_Controller {
             else
                 $data['tuition'] = "";
 
+
             
             
 
@@ -3926,6 +3927,7 @@ class Unity extends CI_Controller {
                     $cst[] = $classlist_temp;
             }
             $subj['classlists'] = $cst;
+            $subj['isTickable'] = $subj['intMajor'] == 1 && $subj['isElective'] == 1 ? 1 : 0;
             $ret[] = $subj;
         }
         
