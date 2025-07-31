@@ -2499,6 +2499,9 @@ class Excel extends CI_Controller {
                 else
                     $enrollmentStatus = 'New';
                     
+                print_r($student);
+                print($enrollmentStatus);
+                die();
                 $objPHPExcel->setActiveSheetIndex(0)
                         ->setCellValue('A'.$i, preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']))
                         ->setCellValue('B'.$i, strtoupper($student['strLastname']))
@@ -2539,7 +2542,7 @@ class Excel extends CI_Controller {
                         ->setCellValue('AK'.$i, strtoupper($student['curriculumName']))
                         ->setCellValue('AL'.$i, "")
                         ->setCellValue('AM'.$i, "")
-                        ->setCellValue('AN'.$i, strtoupper($student['student_type']))
+                        ->setCellValue('AN'.$i, $enrollmentStatus)
                         ->setCellValue('AO'.$i, "");
                         // ->setCellValue('AP'.$i, strtoupper($student['student_type']));
                         
