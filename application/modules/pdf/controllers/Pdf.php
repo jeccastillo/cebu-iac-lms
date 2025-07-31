@@ -480,7 +480,9 @@ class Pdf extends CI_Controller {
         // helvetica or times to reduce file size.
         
         $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
-                
+        // Fit to one page wide (horizontally)
+        $sheet->getPageSetup()->setFitToWidth(1);
+        $sheet->getPageSetup()->setFitToHeight(0);
         $pdf->setPrintHeader(false);
         $pdf->setPrintFooter(false);         
          
