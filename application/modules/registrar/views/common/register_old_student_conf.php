@@ -1,7 +1,7 @@
 <script type="text/javascript">
     $(document).ready(function(){
         
-    load_subjects(); 
+    load_subjects();
        var data_sub = {};
        data_sub['subjects-loaded'] = [];
        data_sub['additional_elective'] = [];
