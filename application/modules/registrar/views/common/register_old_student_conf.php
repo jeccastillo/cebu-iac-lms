@@ -3,10 +3,8 @@
         
     load_subjects(); 
        var data_sub = {};
-    //    var additional_elective = [];
        data_sub['subjects-loaded'] = [];
        data_sub['additional_elective'] = [];
-    //    data_sub['additional_elective'] = 0;
 
        $("#submit-button").click(function(e){
             e.preventDefault();            
