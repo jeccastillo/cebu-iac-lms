@@ -2831,10 +2831,7 @@ class Data_fetcher extends CI_Model {
                     if($subj['intMajor'] == 1 && $subj['isElective'] == 1 && $subj['additional_elective'] == 1)
                         $elective[] = $subj;
             }
-            // print_r($elective);
-            // print(' @@ SUBJECTS @@ ' );
-            // print_r($subjects);
-            // die();
+
             if(count($regular) > 0)
                 $shs_rate = $this->db->where(array('tuitionyear_id'=>$tuition_year['intID'], 'track_id' => $student['intProgramID']))
                 ->get('tb_mas_tuition_year_track')->first_row('array');                                    
@@ -2944,8 +2941,7 @@ class Data_fetcher extends CI_Model {
         //     }                  
         // }
         
-        
-        
+
         $scholarship_grand_total = 0;
         $scholarship_installment_grand_total = 0;
         $scholarship_installment_grand_total30 = 0;
