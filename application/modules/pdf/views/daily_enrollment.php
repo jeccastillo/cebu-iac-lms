@@ -213,6 +213,10 @@ $html .= '
             
 $pdf->writeHTML($html, true, false, true, false, '');
 
+// Fit to one page wide (horizontally)
+$sheet->getPageSetup()->setFitToWidth(1);
+$sheet->getPageSetup()->setFitToHeight(0);
+
 //$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 
 // ---------------------------------------------------------
