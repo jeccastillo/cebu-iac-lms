@@ -30,28 +30,49 @@
     
     // Set some content to print
     $html = '<table border="0" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">
-            <tr>                            
-                <td width="100%" style="text-align: center; border-bottom:1px solid #333">             
-                    <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">Daily Enrollment Report for '.$sem['enumSem'].' Term SY'.$sem['strYearStart'].'-'.$sem['strYearEnd'].'</font>
+            <tr>
+                <td width="100%" style="text-align: center;">             
+                    <font style="font-family:Calibri Light; font-size: 12;font-weight: bold;">iACADEMY</font>
+                </td>
+            </tr>    
+            <tr>
+                <td width="100%" style="text-align: center;">             
+                    <font style="font-family:Calibri Light; font-size: 8;">' . $this->data['campus'] . ' City</font>
+                </td>
+            </tr>    
+            <tr>
+                <td width="100%" style="text-align: center;">             
+                    <font style="font-family:Calibri Light; font-size: 8;">Office of the Registrar</font>
+                </td>
+            </tr>    
+            <tr style="line-height:20px">
+                <td width="100%" style="text-align: center;">             
+                    <font style="font-family:Calibri Light; font-size: 9;font-weight: bold;">Daily Enrollment Report for '.$sem['enumSem'].' Term SY'.$sem['strYearStart'].'-'.$sem['strYearEnd'].'</font>
                 </td>
             </tr>        
+            <tr>
+                <td width="100%" style="text-align: right; border-bottom:1px solid #333">
+                    ' . date('M d, Y h:i A') . '
+                </td>
+            </tr>
             </table>
            ';
     
 
-
+if($sem_type != 'next'){
 
 $html .= '       
      <br />
      <table v-if="enrolled" class="table table-bordered table-striped">
      <tr>
-         <th style="width:30%;font-size:9px;">Date</th>
+         <th style="width:20%;font-size:9px;">Date</th>
          <th style="width:10%;font-size:9px;">Freshman</th>
-         <th style="width:10%;font-size:9px;">Transferee</th>         
-         <th style="width:10%;font-size:9px;">Second Degree</th>
+         <th style="width:10%;font-size:9px;">Transferee</th>  
+         <th style="width:10%;font-size:9px;">Returnee</th>     
+         <th style="width:10%;font-size:9px;">Shiftee</th>  
          <th style="width:10%;font-size:9px;">Continuing</th>
-         <th style="width:10%;font-size:9px;">Shiftee</th>
-         <th style="width:10%;font-size:9px;">Returning</th>
+         <th style="width:10%;font-size:9px;">Second Degree</th>
+         <th style="width:10%;font-size:9px;">Second Degree-iAC</th>
          <th style="width:10%;font-size:9px;">Total Enrollment</th>
      </tr>
      <tr style="line-height:10px;">
@@ -72,16 +93,19 @@ $html .= '
                     '.$item->transferee.'
                 </td>
                 <td style="font-size:8px;">
-                    '.$item->second.'
-                </td>
-                <td style="font-size:8px;">
-                    '.$item->continuing.'
+                    '.$item->returning.'
                 </td>
                 <td style="font-size:8px;">
                     '.$item->shiftee.'
                 </td>
                 <td style="font-size:8px;">
-                    '.$item->returning.'
+                    '.$item->continuing.'
+                </td>
+                <td style="font-size:8px;">
+                    '.$item->second.'
+                </td>
+                <td style="font-size:8px;">
+                    '.$item->secondIAC.'
                 </td>
                 <td style="font-size:8px;">
                     '.$item->total.'
@@ -94,37 +118,98 @@ $html .= '
     }
 $html .= ' 
     <tr style="line-height:10px;">
-        <th style="border-top:1px solid #333;" colspan="7"></th>
+        <th style="border-top:1px solid #333;" colspan="8"></th>
+    </tr>
+    <tr style="font-weight:bold;">
+        <td>' . ucfirst($sem_type) . '</td>
+        <td>'.$totals->freshman.'</td>
+        <td>'.$totals->transferee.'</td>
+        <td>'.$totals->returning.'</td>
+        <td>'.$totals->shiftee.'</td>
+        <td>'.$totals->second.'</td>
+        <td>'.$totals->secondIAC.'</td>
+        <td>'.$totals->continuing.'</td>
+        <td><strong>'.$full_total.'</strong></td>
+    </tr>
+    <tr style="line-height:5px;">
+        <th colspan="6"></th>
+    </tr>
+        <tr style="font-weight:bold;">
+            <td>Withdrawn</td>
+            <td>'.$withdrawn_totals->freshmanWithdrawn.'</td>
+            <td>'.$withdrawn_totals->transfereeWithdrawn.'</td>
+            <td>'.$withdrawn_totals->returningWithdrawn.'</td>
+            <td>'.$withdrawn_totals->shifteeWithdrawn.'</td>
+            <td>'.$withdrawn_totals->secondWithdrawn.'</td>
+            <td>'.$withdrawn_totals->secondIACWithdrawn.'</td>
+            <td>'.$withdrawn_totals->continuingWithdrawn.'</td>
+            <td></td>
+        </tr>
+        <tr style="line-height:10px;">
+            <th style="border-top:1px solid #333;" colspan="8"></th>
+        </tr>
+        <tr style="font-weight:bold;">
+            <td>Total</td>
+            <td>' . ($totals->freshman - $withdrawn_totals->freshmanWithdrawn) . '</td>
+            <td>' . ($totals->transferee - $withdrawn_totals->transfereeWithdrawn) . '</td>
+            <td>' . ($totals->returning - $withdrawn_totals->returningWithdrawn) . '</td>
+            <td>' . ($totals->shiftee - $withdrawn_totals->shifteeWithdrawn) . '</td>
+            <td>' . ($totals->second - $withdrawn_totals->secondWithdrawn) . '</td>
+            <td>' . ($totals->secondIAC - $withdrawn_totals->secondIACWithdrawn) . '</td>
+            <td>' . ($totals->continuing - $withdrawn_totals->continuingWithdrawn) . '</td>
+            <td>'. $full_total_after_withdrawn . '</td>
+        </tr>
+        <tr style="line-height:30px;">
+        <th colspan="6"></th>
+    </tr>
+ </table>'; 
+}
+else{
+    $html .= '       
+     <br />
+     <table v-if="enrolled" class="table table-bordered table-striped">
+     <tr>
+         <th style="width:25%;font-size:9px;">Date</th>
+         <th style="width:50%;font-size:9px;text-align:center;">Short Course</th>        
+         <th style="width:25%;font-size:9px;text-align:center;">Total Enrollment</th>
+     </tr>
+     <tr style="line-height:10px;">
+        <th colspan="3"></th>
+     </tr>
+     ';
+     
+     $all_enrolled = 0;
+    foreach($dates as $item){                
+        
+        $html .= '            
+            <tr>
+                <td style="font-size:9px;">'.$item->date.'</td>
+                <td style="font-size:9px;text-align:center;">
+                    '.$item->freshman.'
+                </td>                
+                <td style="font-size:9px;text-align:center;">
+                    '.$item->total.'
+                </td>
+            </tr>
+            <tr style="line-height:5px;">
+                <th colspan="3"></th>
+            </tr>
+            ';
+    }
+$html .= ' 
+    <tr style="line-height:10px;">
+        <th style="border-top:1px solid #333;" colspan="8"></th>
     </tr>
      <tr>
          <td>Total</td>
-         <td>'.$totals->freshman.'</td>
-         <td>'.$totals->transferee.'</td>
-         <td>'.$totals->second.'</td>
-         <td>'.$totals->continuing.'</td>
-         <td>'.$totals->shiftee.'</td>
-         <td>'.$totals->returning.'</td>
-         <td><strong>'.$full_total.'</strong></td>
+         <td style="text-align:center;">'.$totals->freshman.'</td>         
+         <td style="text-align:center;"><strong>'.$full_total.'</strong></td>
      </tr>
      <tr style="line-height:30px;">
-        <th colspan="6"></th>
-    </tr>
-    <tr style="text-align:center;">
-        <td>GENERATED BY: '.$user['strFirstname']." ".$user['strLastname'].'</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr style="text-align:center;">
-        <td>RUNDATE&TIME:'.date('Y-m-d h:i a').'</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <th colspan="3"></th>
     </tr>
  </table>'; 
-  
+}
             
 $pdf->writeHTML($html, true, false, true, false, '');
 
