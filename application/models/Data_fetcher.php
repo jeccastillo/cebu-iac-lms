@@ -2233,7 +2233,7 @@ class Data_fetcher extends CI_Model {
     {
             $courses =
                $this->db
-                    ->select( 'tb_mas_subjects.intID,strCode,strDescription,strUnits,intLab,tb_mas_advised_subjects.classlist_id')
+                    ->select( 'tb_mas_subjects.intID,strCode,strDescription,strUnits,intLab,tb_mas_advised_subjects.classlist_id, tb_mas_subjects.intMajor, tb_mas_subjects.isElective')
                     ->from('tb_mas_advised')
                     ->join('tb_mas_advised_subjects','tb_mas_advised.intAdvisedID = tb_mas_advised_subjects.intAdvisedID')
                     ->join('tb_mas_subjects','tb_mas_advised_subjects.intSubjectID = tb_mas_subjects.intID')
@@ -2512,6 +2512,15 @@ class Data_fetcher extends CI_Model {
                         ->result_array();
     }
 
+    function getTuitionElective($id,$label){
+        return $this->db->select('tb_mas_subjects.*,tb_mas_tuition_year_'.$label.'.id,tuition_amount,tuition_amount_online,tuition_amount_hybrid,tuition_amount_hyflex')
+                        ->from('tb_mas_tuition_year_'.$label)
+                        ->join('tb_mas_subjects', 'tb_mas_subjects.intID = tb_mas_tuition_year_'.$label.'.subject_id')
+                        ->where(array('tuitionyear_id'=>$id))
+                        ->get()
+                        ->result_array();
+    }
+
     function getLabTypesForDropdown(){
         $ret = [];
         $data = $this->db
@@ -2534,7 +2543,7 @@ class Data_fetcher extends CI_Model {
         
         $registration =  $this->db->where(array('intStudentID'=>$id, 'intAYID' => $sem))->get('tb_mas_registration')->first_row('array');                                          
         $subjects =  $this->db
-                            ->select("tb_mas_subjects.intID as subjectID,tb_mas_classlist.is_modular,tb_mas_classlist.payment_amount")
+                            ->select("tb_mas_subjects.intID as subjectID,tb_mas_classlist.is_modular,tb_mas_classlist.payment_amount,tb_mas_subjects.intMajor,tb_mas_subjects.isElective, tb_mas_classlist_student.additional_elective")
                             ->from("tb_mas_classlist_student")
                             ->where(array("intStudentID"=>$id,"strAcademicYear"=>$sem,"tb_mas_classlist.intWithPayment"=>"0"))
                             ->join('tb_mas_classlist', 'tb_mas_classlist.intID = tb_mas_classlist_student.intClasslistID')
@@ -2808,14 +2817,21 @@ class Data_fetcher extends CI_Model {
         else{
             //$tuition = $unit_fee;
             $regular = [];
-            $modular = [];            
+            $modular = [];          
+            $elective = [];
+            
             foreach($subjects as $subj){
                 $subj = (array) $subj;
                 if($subj['is_modular'])
                     $modular[] = $subj;
                 else
                     $regular[] = $subj;
+
+                if(isset($subj['intMajor']) && isset($subj['isElective']) && isset($subj['additional_elective']))
+                    if($subj['intMajor'] == 1 && $subj['isElective'] == 1 && $subj['additional_elective'] == 1)
+                        $elective[] = $subj;
             }
+
             if(count($regular) > 0)
                 $shs_rate = $this->db->where(array('tuitionyear_id'=>$tuition_year['intID'], 'track_id' => $student['intProgramID']))
                 ->get('tb_mas_tuition_year_track')->first_row('array');                                    
@@ -2837,13 +2853,42 @@ class Data_fetcher extends CI_Model {
                     default:
                         $tuition = $shs_rate['tuition_amount'];
                     
-                } 
+                }
             else
                 $tuition = 0;
             
             foreach($modular as $mod_subj){
                 $tuition += $mod_subj['payment_amount'];
-            }                
+            }
+            
+            if(count($elective) > 0){
+                foreach($elective as $elec_subj){
+                    $tuitionElective = $this->db->where(array('tuitionyear_id'=>$tuition_year['intID'], 'subject_id' => $elec_subj['subjectID']))
+                    ->get('tb_mas_tuition_year_elective')->first_row('array');
+                    if($tuitionElective){
+                        if(isset($shs_rate))
+                            switch($year_level){
+                                case 1:
+                                    $tuition += $tuitionElective['tuition_amount'];
+                                break;
+                                case 2:
+                                    $tuition += $tuitionElective['tuition_amount_online'];
+                                break;
+                                case 3:
+                                    $tuition += $tuitionElective['tuition_amount_hyflex'];
+                                break;
+                                case 4:
+                                    $tuition += $tuitionElective['tuition_amount_hybrid'];
+                                break;
+                                default:
+                                    $tuition += $tuitionElective['tuition_amount'];
+                                
+                            }
+                        else
+                            $tuition += $tuitionElective['tuition_amount'];
+                    }
+                }
+            }
                 
                     
         }
@@ -2896,7 +2941,7 @@ class Data_fetcher extends CI_Model {
         //     }                  
         // }
         
-        
+
         $scholarship_grand_total = 0;
         $scholarship_installment_grand_total = 0;
         $scholarship_installment_grand_total30 = 0;
@@ -3395,7 +3440,7 @@ class Data_fetcher extends CI_Model {
         
         if($full_scholarship)
             $late_enrollment_fee = 0;
-
+        
         $data['lab_discount'] = $lab_scholarship;
         $data['lab_discount_dc'] = $lab_discount;
         $data['total_discount'] = $scholarship_grand_total;
@@ -3983,7 +4028,7 @@ class Data_fetcher extends CI_Model {
         // print_r($cl);
 
         $cl =  $this->db
-                    ->select("tb_mas_classlist_student.intCSID,intClassListID,strCode,strSection,intSubjectID,year,sub_section, strClassName, intLab, intLectHours, tb_mas_subjects.strDescription,floatFinalGrade as v3,floatMidtermGrade as v2, floatFinalsGrade as semFinalGrade, intFinalized,enumStatus,strRemarks,tb_mas_faculty.intID as facID, tb_mas_faculty.strFirstname,tb_mas_faculty.strLastname, tb_mas_subjects.strUnits, tb_mas_subjects.intBridging, tb_mas_classlist.intID as classlistID, tb_mas_subjects.intID as subjectID,include_gwa,elective_classlist_id,payment_amount,is_modular,enlisted_user")                                        
+                    ->select("tb_mas_classlist_student.intCSID,intClassListID,strCode,strSection,intSubjectID,year,sub_section, strClassName, intLab, intLectHours, tb_mas_subjects.strDescription,floatFinalGrade as v3,floatMidtermGrade as v2, floatFinalsGrade as semFinalGrade, intFinalized,enumStatus,strRemarks,tb_mas_faculty.intID as facID, tb_mas_faculty.strFirstname,tb_mas_faculty.strLastname, tb_mas_subjects.strUnits, tb_mas_subjects.intBridging, tb_mas_classlist.intID as classlistID, tb_mas_subjects.intID as subjectID,include_gwa,elective_classlist_id,payment_amount,is_modular,enlisted_user, tb_mas_subjects.intMajor, tb_mas_subjects.isElective, tb_mas_classlist_student.additional_elective")                                        
                     ->from("tb_mas_classlist_student")            
                     ->where(array("intStudentID"=>$id,"strAcademicYear"=>$classlist,'isDissolved'=>0))                                            
                     ->join('tb_mas_classlist', 'tb_mas_classlist.intID = tb_mas_classlist_student.intClasslistID')
