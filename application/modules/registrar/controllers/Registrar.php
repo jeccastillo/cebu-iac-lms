@@ -513,6 +513,7 @@ class Registrar extends CI_Controller {
                        
                         $cl_data['intStudentID'] = $post['studentID'];
                         $cl_data['intClassListID'] = $cl_get['intID'];
+                        $cl_data['additional_elective'] = isset($post['additional_elective']) ? (in_array($subject, $post['additional_elective']) ? 1 : 0) : 0;
                         $this->data_poster->addStudentClasslist($cl_data,$this->data["user"]["intID"]);
                         $this->data['col2'][] = "Student Registered to Section ".$cl_get['strSection'];
                         $this->data['col3'][] = "<a href='".base_url()."unity/classlist_viewer/".$cl_get['intID']."'>View Classlist</a>";
