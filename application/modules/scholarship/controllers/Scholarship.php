@@ -247,6 +247,9 @@ class Scholarship extends CI_Controller {
             if($scho['deduction_from'] == "external")
                 $has_external = true;
         }
+        $ret['has_inhouse_discount'] = $has_inhouse;
+        $ret['has_external_discount'] = $has_external;
+        
         if($has_inhouse && $has_external){
             $ret['scholarships'] = [];
         }
@@ -295,6 +298,8 @@ class Scholarship extends CI_Controller {
         
         $ret['discounts'] = array_merge($discounts,$ref_discounts);
         $ret['student_discounts'] = $student_discounts;
+        $ret['has_inhouse_discount'] = $has_inhouse;
+        $ret['has_external_discount'] = $has_external;
 
         echo json_encode($ret);
 
