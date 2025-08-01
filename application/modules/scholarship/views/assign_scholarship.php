@@ -34,7 +34,7 @@
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">                       
                         <li class="active"><a href="#tab_1" data-toggle="tab">Scholarship</a></li>
-                        <li><a href="#tab_2" data-toggle="tab">Payments</a></li>                        
+                        <li v-if="registration"><a href="#tab_2" data-toggle="tab">Payments</a></li>                        
                     </ul>           
                     <div class="tab-content">            
                         <div class="tab-pane active" id="tab_1">                            
@@ -135,7 +135,7 @@
                                 </table>
                             </div>
                         </div>  
-                        <div class="tab-pane" id="tab_2">  
+                        <div v-if="registration" class="tab-pane" id="tab_2">  
                             <h4>Details</h4>                                   
                             <table class="table table-bordered table-striped">
                                 <tr>
@@ -302,6 +302,7 @@ new Vue({
                 }
 
                 this.request_scholarship.syid = this.current_sem;
+                if(this.registration){      
                     axios.get(api_url + 'finance/transactions/' + this.student.slug + '/' + this.current_sem)
                     .then((data) => {
                         this.payments = data.data.data;
@@ -320,7 +321,7 @@ new Vue({
                                 this.remaining_amount = this.remaining_amount - this.payments[i].subtotal_order;
                                 this.amount_paid = this.amount_paid + this.payments[i].subtotal_order;
                             }                                
-                        }                        
+                        }                                          
                         if(this.registration.enumStudentType == "new"){
                             axios.get(api_url + 'finance/reservation/' + this.student.slug + '/' + this.current_sem)
                             .then((data) => {
@@ -411,10 +412,12 @@ new Vue({
                                     if(this.remaining_amount <= 0)
                                         this.description = "Other";
                         }
+                        
                     })
                     .catch((error) => {
                         console.log(error);
                     })  
+                }
             
         })
         .catch((error) => {
