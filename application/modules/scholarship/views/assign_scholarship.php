@@ -320,7 +320,8 @@ new Vue({
                                 this.remaining_amount = this.remaining_amount - this.payments[i].subtotal_order;
                                 this.amount_paid = this.amount_paid + this.payments[i].subtotal_order;
                             }                                
-                        }                        
+                        }     
+                        if(this.registration){                   
                         if(this.registration.enumStudentType == "new"){
                             axios.get(api_url + 'finance/reservation/' + this.student.slug + '/' + this.current_sem)
                             .then((data) => {
@@ -410,6 +411,7 @@ new Vue({
                                     this.loader_spinner = false;
                                     if(this.remaining_amount <= 0)
                                         this.description = "Other";
+                            }
                         }
                     })
                     .catch((error) => {
