@@ -154,7 +154,8 @@
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-sm-6" class="form-control">
-                                            <label>Academic Coordinator</label>
+                                            <label v-if="classlist.term_student_type == 'shs'">Academic Coordinator</label>
+                                            <label v-else>Chairperson</label>
                                             <input type="text" class="form-control" name="checked_by">
                                         </div>
                                         <div class="form-group col-sm-6" class="form-control">
