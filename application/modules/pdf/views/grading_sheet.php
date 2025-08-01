@@ -110,7 +110,12 @@ foreach($students as $student):
     </tr>  
     <tr style="text-align:center;">
         <td style="border-top:1px solid #333"><strong>Faculty Name</strong></td>
-        <td style="border-top:1px solid #333"><strong>Academic Coordinator</strong></td>
+
+        <?php if($student_type == 'shs'): ?>
+            <td style="border-top:1px solid #333"><strong>Academic Coordinator</strong></td>
+        <?php else: ?>
+            <td style="border-top:1px solid #333"><strong>Chairperson</strong></td>
+        <?php endif; ?>
     </tr>
     <tr style="line-height:20px; text-align:center;">
         <td><?php echo $submitted_by_date; ?></td>
