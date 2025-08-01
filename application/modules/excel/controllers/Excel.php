@@ -2474,11 +2474,12 @@ class Excel extends CI_Controller {
                         ->setCellValue('AH1', 'School Year From')
                         ->setCellValue('AI1', 'School Year To')
                         ->setCellValue('AJ1', 'Date Enrolled')
-                        ->setCellValue('AK1', 'Curriculum')
-                        ->setCellValue('AL1', 'Active GWA')
-                        ->setCellValue('AM1', 'Total Units Earned')
-                        ->setCellValue('AN1', 'Enrollment Status')
-                        ->setCellValue('AO1', 'Mode of Payment');
+                        ->setCellValue('AK1', 'Date Enlisted')
+                        ->setCellValue('AL1', 'Curriculum')
+                        ->setCellValue('AM1', 'Active GWA')
+                        ->setCellValue('AN1', 'Total Units Earned')
+                        ->setCellValue('AO1', 'Enrollment Status')
+                        ->setCellValue('AP1', 'Mode of Payment');
                         // ->setCellValue('AP1', 'Student Type');
             $i = 2;
             foreach($students as $student)
@@ -2524,11 +2525,12 @@ class Excel extends CI_Controller {
                         ->setCellValue('AH'.$i, strtoupper($student['college_attended_from']))
                         ->setCellValue('AI'.$i, strtoupper($student['college_attended_to']))
                         ->setCellValue('AJ'.$i, strtoupper($student['dteRegistered']))
-                        ->setCellValue('AK'.$i, strtoupper($student['curriculumName']))
-                        ->setCellValue('AL'.$i, "")
+                        ->setCellValue('AK'.$i, strtoupper($student['date_enlisted']))
+                        ->setCellValue('AL'.$i, strtoupper($student['curriculumName']))
                         ->setCellValue('AM'.$i, "")
-                        ->setCellValue('AN'.$i, strtoupper($student['student_type']))
-                        ->setCellValue('AO'.$i, "");
+                        ->setCellValue('AN'.$i, "")
+                        ->setCellValue('AO'.$i, strtoupper($student['student_type']))
+                        ->setCellValue('AP'.$i, "");
                         // ->setCellValue('AP'.$i, strtoupper($student['student_type']));
                         
                 
@@ -2582,7 +2584,7 @@ class Excel extends CI_Controller {
             $objPHPExcel->getActiveSheet()->getColumnDimension('AM')->setWidth(30);
             $objPHPExcel->getActiveSheet()->getColumnDimension('AN')->setWidth(30);
             $objPHPExcel->getActiveSheet()->getColumnDimension('AO')->setWidth(30);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('AP')->setWidth(30);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('AP')->setWidth(30);            
 
         }
         // Rename worksheet
