@@ -255,8 +255,10 @@ class Scholarship extends CI_Controller {
         }
         elseif($has_inhouse)
             $ret['scholarships'] = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'scholarship','deduction_from !='=>'in-house'))->result_array();
-        else
+        elseif($has_external)
             $ret['scholarships'] = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'scholarship','deduction_from !='=>'external'))->result_array();
+        else
+            $ret['scholarships'] = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'scholarship'))->result_array();
 
         //RESET VARS
         $has_inhouse = false;
@@ -287,8 +289,10 @@ class Scholarship extends CI_Controller {
         }
         elseif($has_inhouse)
             $discounts = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'discount','deduction_from !='=>'in-house','name NOT LIKE'=>'%Referral%'))->result_array();
-        else
+        elseif($has_external)
             $discounts = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'discount','deduction_from !='=>'external','name NOT LIKE'=>'%Referral%'))->result_array();                                      
+        else
+            $discounts = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'discount','name NOT LIKE'=>'%Referral%'))->result_array();                                      
         
                              
         if($num_ref_disc < 10)
