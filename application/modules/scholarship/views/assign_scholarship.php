@@ -20,7 +20,7 @@
             <div class="box-header">
                 <h3>Scholarship</h3>
             </div>
-            <div class="box-body"> 
+            <div v-if="registration" class="box-body"> 
                 <div class="row">
                     <div v-if="student" class="col-md-6">
                         Name: {{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}                        
@@ -216,6 +216,9 @@
                         </div>  
                     </div>
                 </div>
+            </div>
+            <div v-else class="box-body"> 
+                <h3>No Assessment data please see Registrar for Enlistment</h3>
             </div>
         </div>
     </div>
