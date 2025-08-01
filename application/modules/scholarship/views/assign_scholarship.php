@@ -20,7 +20,7 @@
             <div class="box-header">
                 <h3>Scholarship</h3>
             </div>
-            <div class="box-body"> 
+            <div v-if="registration" class="box-body"> 
                 <div class="row">
                     <div v-if="student" class="col-md-6">
                         Name: {{ student.strLastname }}, {{ student.strFirstname }} {{ student.strMiddlename }}                        
@@ -217,6 +217,9 @@
                     </div>
                 </div>
             </div>
+            <div v-else class="box-body"> 
+                <h3>No Assessment data please see Registrar for Enlistment</h3>
+            </div>
         </div>
     </div>
         
@@ -320,8 +323,7 @@ new Vue({
                                 this.remaining_amount = this.remaining_amount - this.payments[i].subtotal_order;
                                 this.amount_paid = this.amount_paid + this.payments[i].subtotal_order;
                             }                                
-                        }     
-                        if(this.registration){                   
+                        }                        
                         if(this.registration.enumStudentType == "new"){
                             axios.get(api_url + 'finance/reservation/' + this.student.slug + '/' + this.current_sem)
                             .then((data) => {
@@ -411,7 +413,6 @@ new Vue({
                                     this.loader_spinner = false;
                                     if(this.remaining_amount <= 0)
                                         this.description = "Other";
-                            }
                         }
                     })
                     .catch((error) => {
