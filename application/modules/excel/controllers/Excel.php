@@ -4665,7 +4665,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('A'.$i, $d->or_date)
                     ->setCellValue('B'.$i, $or_number)
                     ->setCellValue('C'.$i, $invoice_number)
-                    ->setCellValue('D'.$i, $d->student_number)
+                    ->setCellValue('D'.$i, isset($d->student_number) ? $d->student_number : '')
                     ->setCellValue('E'.$i, strtoupper($d->student_name))
                     ->setCellValue('F'.$i, $d->description);
             
