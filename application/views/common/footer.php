@@ -756,12 +756,12 @@ function return_tuition() {
         sj.push($(this).val());
     });
 
-
+    var stype = $("#transcrossSelect").val()?$("#transcrossSelect").val():0;
     var data = {
         'studentID': $("#studentID").val(),
         'subjects_loaded': sj,
         'scholarship': $("#enumScholarship").val(),
-        'stype': $("#transcrossSelect").val()
+        'stype': stype,
     };
     $.ajax({
         'url': '<?php echo base_url(); ?>unity/get_tuition_ajax',
