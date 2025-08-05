@@ -38,7 +38,7 @@
                     'dataType':'json',
                     'success':function(ret){
                         btn.removeAttr('disabled');                        
-                        document.location = '<?php echo base_url(); ?>registrar/advising_done';
+                        //document.location = '<?php echo base_url(); ?>registrar/advising_done';
                     }
                 
                 });
