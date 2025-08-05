@@ -31,19 +31,17 @@
                 }
 
             }).promise().done( function(){ 
-                console.log($("#tuitionContainer").html());
-                // $.ajax({
-                //     'url':'<?php echo base_url(); ?>registrar/submit_registration_old',
-                //     'method':'post',
-                //     'data':data_sub,
-                //     'dataType':'json',
-                //     'success':function(ret){
-                //         btn.removeAttr('disabled');                        
-                //         //Add API to send email with the amount                        
-                //         document.location = '<?php echo base_url(); ?>registrar/advising_done';
-                //     }
+                $.ajax({
+                    'url':'<?php echo base_url(); ?>registrar/submit_registration_old',
+                    'method':'post',
+                    'data':data_sub,
+                    'dataType':'json',
+                    'success':function(ret){
+                        btn.removeAttr('disabled');                        
+                        document.location = '<?php echo base_url(); ?>registrar/advising_done';
+                    }
                 
-                // });
+                });
                 
             });                       
            
