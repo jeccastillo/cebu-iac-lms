@@ -369,7 +369,21 @@ new Vue({
                                     Authorization: `Bearer ${window.token}`
                                 }
                             })
-                        .then(data => {                                                                                                                              
+                        .then(data => {                 
+                            var assessment_data = {
+                                'assessment': this.tuition_text,
+                                'student_name': this.student_data.strLastname + ', ' + this.student_data.strFirstname
+                            }          
+                            var email_api = "URL HERE";                  
+                            //SENDING OF EMAIL GOES HERE
+                            // axios.post(email_api, assessment_data, {
+                            //     headers: {
+                            //         Authorization: `Bearer ${window.token}`
+                            //     }
+                            // })
+                            // .then(data => {                                            
+                            //     document.location = data.data.student_link;                                        
+                            // });
                             document.location = data.data.student_link;                                        
                         });
                 },
