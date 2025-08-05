@@ -3435,9 +3435,9 @@ class Data_fetcher extends CI_Model {
                 $total_scholarship_installment_temp30 = 0;
                 $total_scholarship_installment_temp50 = 0;
                 $total_assessment_temp = $total_assessment - $scholarship_grand_total - $discount_grand_total;
-                $total_installment_assessment_temp = $total_assessment_installment - $scholarship_installment_grand_total - $discount_installment_grand_total;
-                $total_assessment_temp30 = $total_assessment_installment30 - $scholarship_installment_grand_total30 - $discount_installment_grand_total30;
-                $total_assessment_temp50 = $total_assessment_installment50 - $scholarship_installment_grand_total50 - $discount_installment_grand_total50;
+                $total_installment_assessment_temp = $total_assessment_installment - $scholarship_installment_grand_total;
+                $total_assessment_temp30 = $total_assessment_installment30 - $scholarship_installment_grand_total30;
+                $total_assessment_temp50 = $total_assessment_installment50 - $scholarship_installment_grand_total50;
 
                 //list of all scholarships and date tagged
                 $scholar_type_external .= $scholar->name . '(' . date("M d, Y", strtotime($scholar->date_applied)) .') ';
