@@ -1193,6 +1193,7 @@ class Unity extends CI_Controller {
     function get_tuition_ajax(){
         
         $post = $this->input->post();           
+        print_r($post);
         //$post['subjects_loaded'] = json_decode($post['subjects_loaded']);           
        $student = $this->db->get_where('tb_mas_users',array("intID"=>$post['studentID']))->first_row('array');
         
