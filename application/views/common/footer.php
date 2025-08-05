@@ -753,23 +753,15 @@ function return_tuition() {
     sj = new Array();
 
     $(".subject-id").each(function() {
-        sj.push(
-            {
-                'subjectID':$(this).val()
-            }
-        );
+        sj.push($(this).val());
     });
 
-    var stype = $("#transcrossSelect").val()?$("#transcrossSelect").val():0;
+
     var data = {
         'studentID': $("#studentID").val(),
         'subjects_loaded': sj,
         'scholarship': $("#enumScholarship").val(),
-        'stype': stype,
-        'type_of_class':'regular',
-        'sem': $("#activeSem").val(),
-        'year': 1,
-        'internship':0,
+        'stype': $("#transcrossSelect").val()
     };
     $.ajax({
         'url': '<?php echo base_url(); ?>unity/get_tuition_ajax',
