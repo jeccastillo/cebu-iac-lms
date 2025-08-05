@@ -762,6 +762,8 @@ function return_tuition() {
         'subjects_loaded': sj,
         'scholarship': $("#enumScholarship").val(),
         'stype': stype,
+        'type_of_class':'regular',
+        'sem': $("#activeSem").val(),
     };
     $.ajax({
         'url': '<?php echo base_url(); ?>unity/get_tuition_ajax',
