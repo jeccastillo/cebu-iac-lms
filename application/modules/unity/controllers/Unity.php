@@ -1192,9 +1192,8 @@ class Unity extends CI_Controller {
     }
     function get_tuition_ajax(){
         
-        $post = $this->input->post();   
-        print_r($post);           
-        $post['subjects_loaded'] = json_decode($post['subjects_loaded']);           
+        $post = $this->input->post();           
+        //$post['subjects_loaded'] = json_decode($post['subjects_loaded']);           
         
         if(!isset($post['tuition_year']))
             $ty = $student['intTuitionYear'];
