@@ -57,6 +57,7 @@
                         //     }
                         
                         // });
+                        console.log(api_url);
                         document.location = '<?php echo base_url(); ?>registrar/advising_done';
                     }
                 
