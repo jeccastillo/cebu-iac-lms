@@ -64,7 +64,7 @@ class Finance extends CI_Controller {
         $data['sem_year'] = $sem['strYearStart'];
         $data['particulars'] = $this->db->get_where('tb_mas_particulars',array('type'=>'particular'))
                                         ->result_array();
-        $data['payees'] = $this->db->from('tb_mas_tuition_year_lab_fee')
+        $data['payees'] = $this->db->from('tb_mas_ns_payee')
                             ->order_by('lastname', 'ASC')
                             ->get()
                             ->result_array();
