@@ -38,26 +38,6 @@
                     'dataType':'json',
                     'success':function(ret){
                         btn.removeAttr('disabled');                        
-                        //Send Email to Finance with this Assessment
-                        var assessment_data = 
-                        {
-                            'assessment':$("#tuitionContainer").html(),
-                            'student_name': "<?php echo $student['strLastname'].", ".$student['strFirstname'] ?>"
-
-                        }
-                        // $.ajax({
-                        //     'url': 'api_url_goes_here',
-                        //     'method':'post',
-                        //     'data':assessment_data,
-                        //     'dataType':'json',
-                        //     'success':function(ret){
-                        //         btn.removeAttr('disabled');                                                        
-                                
-                        //         document.location = '<?php echo base_url(); ?>registrar/advising_done';
-                        //     }
-                        
-                        // });
-                        // console.log(api_url);
                         document.location = '<?php echo base_url(); ?>registrar/advising_done';
                     }
                 
