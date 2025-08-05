@@ -753,7 +753,11 @@ function return_tuition() {
     sj = new Array();
 
     $(".subject-id").each(function() {
-        sj.push($(this).val());
+        sj.push(
+            {
+                'subjectID':$(this).val()
+            }
+        );
     });
 
     var stype = $("#transcrossSelect").val()?$("#transcrossSelect").val():0;
