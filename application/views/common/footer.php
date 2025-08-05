@@ -447,7 +447,7 @@ $(document).ready(function() {
                         }
                         
                         container.append(
-                            "<div><input type='hidden' class='subject-id' name='subjects-loaded' value='" +
+                            "<div><input type='hidden' class='subject-id' name='subjects-loaded[]' value='" +
                             ret.subjects[i].intID + 
                             "'><br> <div class='row'><div class='col-xs-3 subject-code'>" +
                             ret.subjects[i].strCode +
