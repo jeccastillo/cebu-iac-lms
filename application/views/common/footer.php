@@ -764,6 +764,8 @@ function return_tuition() {
         'stype': stype,
         'type_of_class':'regular',
         'sem': $("#activeSem").val(),
+        'year': 1,
+        'internship':0,
     };
     $.ajax({
         'url': '<?php echo base_url(); ?>unity/get_tuition_ajax',
