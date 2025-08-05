@@ -38,7 +38,9 @@
                     'dataType':'json',
                     'success':function(ret){
                         btn.removeAttr('disabled');                        
-                        document.location = '<?php echo base_url(); ?>registrar/advising_done';
+                        //Add API to send email with the amount
+                        console.log($("#tuitionContainer").html());
+                        //document.location = '<?php echo base_url(); ?>registrar/advising_done';
                     }
                 
                 });
