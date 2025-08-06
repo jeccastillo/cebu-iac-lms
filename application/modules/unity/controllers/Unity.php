@@ -1203,6 +1203,7 @@ class Unity extends CI_Controller {
         $student = $this->db->get_where('tb_mas_users',array("intID"=>$post['studentID']))->first_row('array');
         $data['tuition'] = $this->data_fetcher->getTuitionSubjects($post['stype'],0,0,$post['subjects_loaded'],$post['studentID'],$post['type_of_class'],$post['sem'],$ty,"1970-01-01",$post['year'],$post['internship']);
         $ret['tuition'] = $this->load->view('tuition/tuition_view', $data, true);                
+        $ret['tuition_table'] = $this->load->view('tuition/tuition_view_table', $data, true);
         $ret['full_data'] = $data['tuition'];
         
         echo json_encode($ret);
