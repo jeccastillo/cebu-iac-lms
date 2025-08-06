@@ -298,6 +298,12 @@
                               <option value=1>Yes</option>
                             </select>
                           </p>
+                          <p><strong>Current Program: </strong>
+                            <select class="form-control" @change="updateCurrentProgram($event)"
+                              v-model="registration.current_program">
+                              <option v-for="prog in programs" :value="prog.intPogramID">{{ prog.strProgramCode }}</option>                              
+                            </select>
+                          </p>
                           <p><strong>Date Enrolled: </strong>
                             <input class="form-control" type="datetime-local" @blur="updateDateEnrolled($event)"
                               v-model="registration.dteRegistered">                                                          
@@ -775,6 +781,7 @@ new Vue({
     user_level: undefined,
     registration: undefined,
     applicant_data: {},
+    programs: [],
     tuition_years: [],
     enlistment: undefined,
     enlisted_subjects: [],
@@ -873,6 +880,7 @@ new Vue({
                     this.student = data.data.student;
                     this.tuition_years = data.data.tuition_years;
                     this.term_balances = data.data.term_balances;
+                    this.programs = data.data.programs;
                     this.electives = data.data.electives;
                     for (i in this.term_balances)
                       if (this.term_balances[i].balance > 0)
@@ -1396,6 +1404,29 @@ new Vue({
           });
         });
 
+    },
+    updateCurrentProgram: function(event){
+      var formdata = new FormData();
+      formdata.append('intRegistrationID', this.registration.intRegistrationID);
+      formdata.append('current_program', event.target.value);
+
+
+      this.loader_spinner = true;
+      axios.post(base_url + 'unity/update_academic_status', formdata, {
+          headers: {
+            Authorization: `Bearer ${window.token}`
+          }
+        })
+        .then(data => {
+          this.loader_spinner = false;
+          Swal.fire({
+            title: "Success",
+            text: data.data.message,
+            icon: "success"
+          }).then(function() {
+
+          });
+        });
     },
     updateStudentType: function(event) {
 
