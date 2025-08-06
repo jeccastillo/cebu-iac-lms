@@ -301,7 +301,7 @@
                           <p><strong>Current Program: </strong>
                             <select class="form-control" @change="updateCurrentProgram($event)"
                               v-model="registration.current_program">
-                              <option v-for="prog in programs" :value="prog.intPogramID">{{ prog.strProgramCode }}</option>                              
+                              <option v-for="prog in programs" :value="prog.intProgramID">{{ prog.strProgramCode }}</option>                              
                             </select>
                           </p>
                           <p><strong>Date Enrolled: </strong>
