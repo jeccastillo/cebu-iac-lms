@@ -375,13 +375,23 @@ new Vue({
                             }          
                             var email_api = api_url + "registrar/send_notif_finance/" + this.student_data.slug;                  
                             //SENDING OF EMAIL GOES HERE
-                             axios.post(email_api, assessment_data, {
+                            Swal.fire({
+                                showCancelButton: false,
+                                showCloseButton: false,
+                                allowEscapeKey: false,
+                                title: 'Loading',
+                                text: 'Processing Data do not leave page',
+                                icon: 'info',
+                            })
+                            Swal.showLoading();                            
+                            axios.post(email_api, assessment_data, {
                                  headers: {
                                      Authorization: `Bearer ${window.token}`
                                  }
                              })
-                             .then(data => {                                            
-                                 document.location = data.data.student_link;                                        
+                             .then(data => {           
+                                Swal.hideLoading();                                 
+                                document.location = data.data.student_link;                                        
                             });                                                                  
                         });
                 },
