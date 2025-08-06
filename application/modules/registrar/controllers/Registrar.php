@@ -2182,6 +2182,7 @@ class Registrar extends CI_Controller {
                 $add['enlisted_user'] = $this->data["user"]["intID"];
                 $add['intStudentID'] = $post['student'];
                 $add['intClassListID'] = $post['section_to_add'];
+                $add['additional_elective'] = $post['additional_elective'];
                 $add['enumStatus'] = "act";   
                 $add['intsyID'] = $post['sem'];         
                 $this->db->insert('tb_mas_classlist_student',$add);  

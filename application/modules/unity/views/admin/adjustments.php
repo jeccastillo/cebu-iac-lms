@@ -232,8 +232,15 @@
                     <div v-if="subjects_available" class="input-group">
                         <select required @change="getSections($event)" class="form-control" v-model="subject_to_add">
                             <option v-for="s in subjects_available" v-if="!hide_subjects || !inArray(s.strCode,subjects_loaded)" :value="s.intSubjectID">{{ s.strCode + ' ' + s.strDescription }}</option>                                                                          
-                        </select>                        
-                    </div>    
+                        </select>                                                                        
+                    </div>
+                    <div v-if="subjects_available">
+                        <label>Additional Elective (For SHS Strengthening Curriculum)</label>
+                        <select  class="form-control" v-model="additional_elective">
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>    
+                    </div>
                     <div v-if="sections">
                     <hr />
                     <label>Select Section</label>
@@ -298,6 +305,7 @@ new Vue({
         loader_spinner: true,      
         advanced_privilages: false,
         subject_to_add: undefined,
+        additional_elective: 0,
         subjects_loaded: [],
         subject_to_replace: 0,
         subjects_available: undefined,   
@@ -625,6 +633,7 @@ new Vue({
                 var formdata= new FormData();
                 formdata.append('section_to_add',this.section_to_add);
                 formdata.append('subject_to_add',this.subject_to_add);
+                fordata.append('additional_elective',this.additional_elective);
                 formdata.append('subject_to_replace',this.subject_to_replace);                        
                 formdata.append('student',this.id);
                 formdata.append('sem',this.sem);
