@@ -1532,9 +1532,7 @@ class Registrar extends CI_Controller {
 
     public function advising_done(){
 
-        $data = $this->session->userdata('from_advising');  
-        print_r($data);
-        die();      
+        $data = $this->session->userdata('from_advising');        
         if(isset($data)){
             $this->load->view("common/header",$data);
             $this->load->view("admin/reg_student_result",$data);
