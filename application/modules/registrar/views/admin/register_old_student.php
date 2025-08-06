@@ -373,7 +373,7 @@ new Vue({
                             var assessment_data = {
                                 'assessment': this.tuition_text,                                
                             }          
-                            var email_api = api_url + "send_notif_finance/" + this.student_data.slug;                  
+                            var email_api = api_url + "registrar/send_notif_finance/" + this.student_data.slug;                  
                             //SENDING OF EMAIL GOES HERE
                              axios.post(email_api, assessment_data, {
                                  headers: {
