@@ -633,7 +633,7 @@ new Vue({
                 var formdata= new FormData();
                 formdata.append('section_to_add',this.section_to_add);
                 formdata.append('subject_to_add',this.subject_to_add);
-                fordata.append('additional_elective',this.additional_elective);
+                formdata.append('additional_elective',this.additional_elective);
                 formdata.append('subject_to_replace',this.subject_to_replace);                        
                 formdata.append('student',this.id);
                 formdata.append('sem',this.sem);
