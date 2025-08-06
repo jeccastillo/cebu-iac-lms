@@ -371,20 +371,18 @@ new Vue({
                             })
                         .then(data => {                 
                             var assessment_data = {
-                                'assessment': this.tuition_text,
-                                'student_name': this.student_data.strLastname + ', ' + this.student_data.strFirstname
+                                'assessment': this.tuition_text,                                
                             }          
-                            var email_api = "URL HERE";                  
+                            var email_api = api_url + "send_notif_finance/" + this.student_data.slug;                  
                             //SENDING OF EMAIL GOES HERE
-                            // axios.post(email_api, assessment_data, {
-                            //     headers: {
-                            //         Authorization: `Bearer ${window.token}`
-                            //     }
-                            // })
-                            // .then(data => {                                            
-                            //     document.location = data.data.student_link;                                        
-                            // });
-                            document.location = data.data.student_link;                                        
+                             axios.post(email_api, assessment_data, {
+                                 headers: {
+                                     Authorization: `Bearer ${window.token}`
+                                 }
+                             })
+                             .then(data => {                                            
+                                 document.location = data.data.student_link;                                        
+                            });                                                                  
                         });
                 },
                 allowOutsideClick: () => !Swal.isLoading()
