@@ -145,11 +145,11 @@
                                     <div class="row">
                                         <div class="form-group col-sm-6" class="form-control">
                                             <label>Faculty Name</label>
-                                            <input type="text" class="form-control" name="submitted_by">
+                                            <input type="text" class="form-control" name="submitted_by" :value="classlist.strFirstname.toUpperCase()+' '+classlist.strLastname.toUpperCase()">
                                         </div>
                                         <div class="form-group col-sm-6" class="form-control">
                                             <label>Date</label>
-                                            <input type="text" class="form-control" name="submitted_by_date">
+                                            <input type="text" class="form-control" name="submitted_by_date" :value="cdate">
                                         </div>
                                     </div>
                                     <div class="row">
