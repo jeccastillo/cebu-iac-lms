@@ -37,30 +37,32 @@
             </tr>        
             </table>';
     
-$html .= '<table class="table table-bordered table-striped">
+$html .= '<br /><table class="table table-bordered table-striped">
      <tr>
         <th style="width:35%;font-size:9px;">Program</th>';
                 foreach($student_years as $year){
                     $html .= '<th style="font-size:9px;">' . $year . '</th>';
                 }
 
-$html .='</tr>
+$html .='<th><strong>Total</strong></th></tr>
      <tr style="line-height:10px;">
         <th colspan="9"></th>
      </tr>
      ';
     
-    foreach($enrollment as $item){        
+    foreach($enrollment as $item){    
+        $total_per_program = 0;    
         $major = ($item['strMajor'] != "None" && $item['strMajor'] != "")?'Major in '.$item['strMajor']:''; 
         $html .= '            
             <tr>
                 <td style="font-size:8px;">'.trim($item['strProgramDescription']).' '.$major.'</td>';
         
         foreach($student_years as $year){
+            $total_per_program += $item['years'][$year];
             $html .= '<td style="font-size:8px;">'.$item['years'][$year].'</td>';
         }
                 
-        $html .= '</tr>
+        $html .= '<td style="font-size:8px;">' . $total_per_program . '</td></tr>
             <tr style="line-height:5px;">
                 <th colspan="7"></th>
             </tr>
