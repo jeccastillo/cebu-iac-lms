@@ -484,7 +484,7 @@ class Pdf extends CI_Controller {
                 $program['years'][$year] = 0;
 
                 foreach($registrations as $registration){
-                    $student_year = $this->get_student_number_year($student_number);
+                    $student_year = $this->get_student_number_year($registration['strStudentNumber']);
 
                     if($registration['intProgramID'] == $program['intProgramID'] && $year == $student_year){
                         $program['years'][$year] += 1;
