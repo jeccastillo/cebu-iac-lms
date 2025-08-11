@@ -458,28 +458,34 @@ class Pdf extends CI_Controller {
         $data['programs'] = $programs;
         $ret = [];
 
+        $registrations = $this->db->select('tb_mas_users.strStudentNumber, tb_mas_users.intProgramID')
+        ->from('tb_mas_registration')  
+        ->join('tb_mas_users', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
+        ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_registration.intROG' => '1'))
+        ->order_by('tb_mas_users.strStudentNumber desc')
+        ->get()
+        ->result_array();
         
+        $student_years = array();
+        foreach($registrations as $registration){
+            $student_number = $registration['strStudentNumber'];
+            $student_number = $this->get_student_number_year($student_number);
+            
+            if(!(in_array($student_number, $student_years))){
+                $student_years[] = $student_number;
+            }
+        }
         
         foreach($programs as $program){
             $st = [];
-            $registrations = $this->db->select('tb_mas_users.strStudentNumber')
-                                        ->from('tb_mas_registration')  
-                                        ->join('tb_mas_users', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
-                                        ->where(array('tb_mas_users.intProgramID' => $program['intProgramID'], 'tb_mas_registration.intAYID'=>$sem, 'tb_mas_registration.intROG' => '1'))
-                                        ->get()
-                                        ->result_array();
-            
-            foreach($registrations as $registration){
-                $student_number = $registration['strStudentNumber'];
-                if (preg_match('/^[a-zA-Z]/', $student_number)) {
-                    // Remove the first character
-                    $student_number = substr($student_number, 1);
-                }
-                $getYear = substr($student_number, 0, 4);
-                if(isset($program[$getYear])){
-                    $program[$getYear] += 1;
-                }else{
-                    $program[$getYear] = 1;
+            foreach($student_years as $year){
+                $program[$year] = 0;
+                foreach($registrations as $registration){
+                    $student_year = $this->get_student_number_year($student_number);
+
+                    if($registration['intProgramID'] == $program['intProgramID'] && $year == $student_year){
+                        $program[$year] += 1;
+                    }
                 }
             }
             $ret[] = $program;
@@ -493,6 +499,16 @@ class Pdf extends CI_Controller {
 
         $this->load->view("enrollment_summary_by_student_number",$this->data);
 
+    }
+    
+    function get_student_number_year($student_number){
+        
+        if (preg_match('/^[a-zA-Z]/', $student_number)) {
+            // Remove the first character
+            $student_number = substr($student_number, 1);
+        }
+
+        return substr($student_number, 0, 4);;
     }
 
     function grading_sheet($id){
