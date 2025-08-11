@@ -38,15 +38,14 @@
             </table>
            ';
     
-$html .= '<br />
-     <table class="table table-bordered table-striped">
+$html .= '<table class="table table-bordered table-striped">
      <tr>
         <th style="width:35%;font-size:9px;">Program</th';
-        foreach($student_years as $year){
-            $html .= '<th style="font-size:9px;">' . $year . '</th>';
-        }
+        // foreach($student_years as $year){
+        //     $html .= '<th style="font-size:9px;">' . $year . '</th>';
+        // }
 
-$html .= '</tr>
+$html .='</tr>
      <tr style="line-height:10px;">
         <th colspan="9"></th>
      </tr>
