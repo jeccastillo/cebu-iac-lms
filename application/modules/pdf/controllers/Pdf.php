@@ -435,6 +435,66 @@ class Pdf extends CI_Controller {
 
     }
 
+    function enrollment_summary_by_student_number($sem)
+    {
+        $active_sem = $this->data_fetcher->get_sem_by_id($sem);
+        $type = $active_sem['term_student_type'];
+        
+        $registration = $this->db->get_where('tb_mas_registration',array('intROG' => '1' ,'intAYID' => $sem))->result_array();
+        $programs = $this->db->get_where('tb_mas_programs',array('type'=>$type))->result_array();
+        if($type == "shs")
+            $programs = $this->db->get_where('tb_mas_programs',array('type'=>$type))->result_array();
+        elseif($type == "college")
+            $programs = $this->db->where('type','college')
+                                 ->or_where('type','other')
+                                 ->get('tb_mas_programs')
+                                 ->result_array();
+        elseif($type == "next")
+            $programs = $this->db->where('type','next')
+            ->or_where('type','other')
+            ->get('tb_mas_programs')
+            ->result_array();
+                                 
+        $data['programs'] = $programs;
+        $ret = [];
+
+        
+        
+        foreach($programs as $program){
+            $st = [];
+            $registrations = $this->db->select('tb_mas_users.strStudentNumber')
+                                        ->from('tb_mas_registration')  
+                                        ->join('tb_mas_users', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
+                                        ->where(array('tb_mas_users.intProgramID' => $program['intProgramID'], 'tb_mas_registration.intAYID'=>$sem, 'tb_mas_registration.intROG' => '1'))
+                                        ->get()
+                                        ->result_array();
+            
+            foreach($registrations as $registration){
+                $student_number = $registration['strStudentNumber'];
+                if (preg_match('/^[a-zA-Z]/', $student_number)) {
+                    // Remove the first character
+                    $student_number = substr($student_number, 1);
+                }
+                $getYear = substr($student_number, 0, 4);
+                if(isset($program[$getYear])){
+                    $program[$getYear] += 1;
+                }else{
+                    $program[$getYear] = 1;
+                }
+            }
+            $ret[] = $program;
+        }
+
+        print_r($ret);
+        die();
+
+        $this->data['enrollment'] = $ret;
+        $this->data['sem'] = $this->data_fetcher->get_sem_by_id($sem);
+
+        $this->load->view("enrollment_summary_by_student_number",$this->data);
+
+    }
+
     function grading_sheet($id){
         $post = $this->input->post();
         $sem = $this->data_fetcher->get_active_sem();
