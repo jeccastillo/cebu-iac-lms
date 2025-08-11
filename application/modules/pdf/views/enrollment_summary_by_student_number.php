@@ -38,9 +38,6 @@
             </table>
            ';
     
-
-
-
 $html .= '       
      <br />
      <table v-if="enrolled" class="table table-bordered table-striped">
