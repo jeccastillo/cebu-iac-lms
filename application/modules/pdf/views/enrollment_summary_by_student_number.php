@@ -29,21 +29,24 @@
     
     
     // Set some content to print
-    $html = '<table border="0" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">
-            <tr>';     
-            foreach($student_years as $year){
-                $html .= '<th style="font-size:9px;">' . $year . '</th>';
-            }     
-                $html .='<td width="100%" style="text-align: center; border-bottom:1px solid #333">             
-                    <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">Enrollment Summary for '.$sem['enumSem'].' Term SY'.$sem['strYearStart'].'-'.$sem['strYearEnd'].'</font>
-                </td>
-            </tr>        
-            </table>
-           ';
+    // $html = '<table border="0" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">
+    //         <tr>';     
+    //         foreach($student_years as $year){
+    //             $html .= '<th style="font-size:9px;">' . $year . '</th>';
+    //         }     
+    //             $html .='<td width="100%" style="text-align: center; border-bottom:1px solid #333">             
+    //                 <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">Enrollment Summary for '.$sem['enumSem'].' Term SY'.$sem['strYearStart'].'-'.$sem['strYearEnd'].'</font>
+    //             </td>
+    //         </tr>        
+    //         </table>
+    //        ';
     
-$html .= '<table class="table table-bordered table-striped">
+$html = '<table class="table table-bordered table-striped">
      <tr>
         <th style="width:35%;font-size:9px;">Program</th';
+                foreach($student_years as $year){
+                    $html .= '<th style="font-size:9px;">' . $year . '</th>';
+                }     
 
 $html .='</tr>
      <tr style="line-height:10px;">
