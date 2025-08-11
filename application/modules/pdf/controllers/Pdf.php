@@ -474,6 +474,7 @@ class Pdf extends CI_Controller {
             
             if(!(in_array($student_number, $student_years))){
                 $student_years[] = $student_number;
+                $enrolled_per_year[$student_number] = 0;
             }
         }
 
@@ -501,7 +502,7 @@ class Pdf extends CI_Controller {
         $this->data['total_enrolled'] = $total_enrolled;
         $this->data['sem'] = $this->data_fetcher->get_sem_by_id($sem);
 
-        print($this->data);
+        print_r($this->data);
         die();
         $this->load->view("enrollment_summary_by_student_number",$this->data);
 
