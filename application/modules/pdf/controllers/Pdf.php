@@ -502,8 +502,6 @@ class Pdf extends CI_Controller {
         $this->data['total_enrolled'] = $total_enrolled;
         $this->data['sem'] = $this->data_fetcher->get_sem_by_id($sem);
 
-        print_r($this->data);
-        die();
         $this->load->view("enrollment_summary_by_student_number",$this->data);
 
     }
