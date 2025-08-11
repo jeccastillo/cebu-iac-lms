@@ -46,7 +46,7 @@ $html .= '<table class="table table-bordered table-striped">
 
 $html .='</tr>
      <tr style="line-height:10px;">
-        <th colspan="9">q</th>
+        <th colspan="9"></th>
      </tr>
      ';
     
@@ -70,7 +70,7 @@ $html .= '
     <tr style="line-height:10px;">
         <th style="border-top:1px solid #333;" colspan="9"></th>
     </tr>
-    <tr>';
+    <tr><td></td>';
 
     foreach($enrolled_per_year as $yearly){
         $html .= '<td>' . $yearly . '</td>';
