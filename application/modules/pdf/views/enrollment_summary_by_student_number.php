@@ -39,10 +39,10 @@
     
 $html .= '<table class="table table-bordered table-striped">
      <tr>
-        <th style="width:35%;font-size:9px;">Program</th';
-                // foreach($student_years as $year){
-                //     $html .= '<th style="font-size:9px;">' . $year . '</th>';
-                // }
+        <th style="width:35%;font-size:9px;">Program</th>';
+                foreach($student_years as $year){
+                    $html .= '<th style="font-size:9px;">' . $year . '</th>';
+                }
 
 $html .='</tr>
      <tr style="line-height:10px;">
@@ -50,31 +50,31 @@ $html .='</tr>
      </tr>
      ';
     
-    // foreach($enrollment as $item){        
-    //     $major = ($item['strMajor'] != "None" && $item['strMajor'] != "")?'Major in '.$item['strMajor']:''; 
-    //     $html .= '            
-    //         <tr>
-    //             <td style="font-size:8px;">'.trim($item['strProgramDescription']).' '.$major.'</td>';
+    foreach($enrollment as $item){        
+        $major = ($item['strMajor'] != "None" && $item['strMajor'] != "")?'Major in '.$item['strMajor']:''; 
+        $html .= '            
+            <tr>
+                <td style="font-size:8px;">'.trim($item['strProgramDescription']).' '.$major.'</td>';
         
-    //     foreach($student_years as $year){
-    //         $html .= '<td style="font-size:8px;">'.$item['years'][$year].'</td>';
-    //     }
+        foreach($student_years as $year){
+            $html .= '<td style="font-size:8px;">'.$item['years'][$year].'</td>';
+        }
                 
-    //     $html .= '</tr>
-    //         <tr style="line-height:5px;">
-    //             <th colspan="7"></th>
-    //         </tr>
-    //         ';
-    // }
+        $html .= '</tr>
+            <tr style="line-height:5px;">
+                <th colspan="7"></th>
+            </tr>
+            ';
+    }
 $html .= ' 
     <tr style="line-height:10px;">
         <th style="border-top:1px solid #333;" colspan="9"></th>
     </tr>
     <tr>';
 
-    // foreach($enrolled_per_year as $yearly){
-    //     $html .= '<td>' . $yearly . '</td>';
-    // }
+    foreach($enrolled_per_year as $yearly){
+        $html .= '<td>' . $yearly . '</td>';
+    }
 
 $html .= '<td><strong>&nbsp;'. $total_enrolled . '</strong></td></tr>
     <tr style="line-height:30px;">
