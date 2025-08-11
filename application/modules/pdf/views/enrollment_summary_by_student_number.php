@@ -29,56 +29,52 @@
     
     
     // Set some content to print
-    // $html = '<table border="0" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">
-    //         <tr>';     
-    //         foreach($student_years as $year){
-    //             $html .= '<th style="font-size:9px;">' . $year . '</th>';
-    //         }     
-    //             $html .='<td width="100%" style="text-align: center; border-bottom:1px solid #333">             
-    //                 <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">Enrollment Summary for '.$sem['enumSem'].' Term SY'.$sem['strYearStart'].'-'.$sem['strYearEnd'].'</font>
-    //             </td>
-    //         </tr>        
-    //         </table>
-    //        ';
+    $html = '<table border="0" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">
+            <tr>';     
+                $html .='<td width="100%" style="text-align: center; border-bottom:1px solid #333">             
+                    <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">Enrollment Summary for '.$sem['enumSem'].' Term SY'.$sem['strYearStart'].'-'.$sem['strYearEnd'].'</font>
+                </td>
+            </tr>        
+            </table>';
     
-$html = '<table class="table table-bordered table-striped">
+$html .= '<table class="table table-bordered table-striped">
      <tr>
         <th style="width:35%;font-size:9px;">Program</th';
-                foreach($student_years as $year){
-                    $html .= '<th style="font-size:9px;">' . $year . '</th>';
-                }     
+                // foreach($student_years as $year){
+                //     $html .= '<th style="font-size:9px;">' . $year . '</th>';
+                // }
 
 $html .='</tr>
      <tr style="line-height:10px;">
-        <th colspan="9"></th>
+        <th colspan="9">q</th>
      </tr>
      ';
     
-    foreach($enrollment as $item){        
-        $major = ($item['strMajor'] != "None" && $item['strMajor'] != "")?'Major in '.$item['strMajor']:''; 
-        $html .= '            
-            <tr>
-                <td style="font-size:8px;">'.trim($item['strProgramDescription']).' '.$major.'</td>';
+    // foreach($enrollment as $item){        
+    //     $major = ($item['strMajor'] != "None" && $item['strMajor'] != "")?'Major in '.$item['strMajor']:''; 
+    //     $html .= '            
+    //         <tr>
+    //             <td style="font-size:8px;">'.trim($item['strProgramDescription']).' '.$major.'</td>';
         
-        foreach($student_years as $year){
-            $html .= '<td style="font-size:8px;">'.$item['years'][$year].'</td>';
-        }
+    //     foreach($student_years as $year){
+    //         $html .= '<td style="font-size:8px;">'.$item['years'][$year].'</td>';
+    //     }
                 
-        $html .= '</tr>
-            <tr style="line-height:5px;">
-                <th colspan="7"></th>
-            </tr>
-            ';
-    }
+    //     $html .= '</tr>
+    //         <tr style="line-height:5px;">
+    //             <th colspan="7"></th>
+    //         </tr>
+    //         ';
+    // }
 $html .= ' 
     <tr style="line-height:10px;">
         <th style="border-top:1px solid #333;" colspan="9"></th>
     </tr>
     <tr>';
 
-    foreach($enrolled_per_year as $yearly){
-        $html .= '<td>' . $yearly . '</td>';
-    }
+    // foreach($enrolled_per_year as $yearly){
+    //     $html .= '<td>' . $yearly . '</td>';
+    // }
 
 $html .= '<td><strong>&nbsp;'. $total_enrolled . '</strong></td></tr>
     <tr style="line-height:30px;">
