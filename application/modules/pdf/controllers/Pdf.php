@@ -466,7 +466,8 @@ class Pdf extends CI_Controller {
         ->get()
         ->result_array();
         
-        $student_years = array();
+        $student_years = $enrolled_per_year = array();
+        $total_enrolled = 0;
         foreach($registrations as $registration){
             $student_number = $registration['strStudentNumber'];
             $student_number = $this->get_student_number_year($student_number);
@@ -475,26 +476,30 @@ class Pdf extends CI_Controller {
                 $student_years[] = $student_number;
             }
         }
-        
+
         foreach($programs as $program){
             $st = [];
             foreach($student_years as $year){
-                $program[$year] = 0;
+                $program['years'][$year] = 0;
+                $enrolled_per_year[$year] = 0;
+
                 foreach($registrations as $registration){
                     $student_year = $this->get_student_number_year($student_number);
 
                     if($registration['intProgramID'] == $program['intProgramID'] && $year == $student_year){
-                        $program[$year] += 1;
+                        $program['years'][$year] += 1;
+                        $enrolled_per_year[$year] += 1;
+                        $total_enrolled += 1;
                     }
                 }
             }
             $ret[] = $program;
         }
 
-        print_r($ret);
-        die();
-
         $this->data['enrollment'] = $ret;
+        $this->data['student_years'] = $student_years;
+        $this->data['enrolled_per_year'] = $enrolled_per_year;
+        $this->data['total_enrolled'] = $total_enrolled;
         $this->data['sem'] = $this->data_fetcher->get_sem_by_id($sem);
 
         $this->load->view("enrollment_summary_by_student_number",$this->data);
