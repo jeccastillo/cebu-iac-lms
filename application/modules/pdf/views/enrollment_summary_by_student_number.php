@@ -43,17 +43,16 @@ $html .= '
      <table v-if="enrolled" class="table table-bordered table-striped">
      <tr>
         <th style="width:35%;font-size:9px;">Program</th';
-        foreach($student_years as $year){
-            $html .= '<th style="font-size:9px;">' . $year . '</th>';
-        }
+        // foreach($student_years as $year){
+        //     $html .= '<th style="font-size:9px;">' . $year . '</th>';
+        // }
 
 $html .= '</tr>
      <tr style="line-height:10px;">
         <th colspan="9"></th>
      </tr>
      ';
-     
-     $all_enrolled = 0;
+    
     foreach($enrollment as $item){        
         $major = ($item['strMajor'] != "None" && $item['strMajor'] != "")?'Major in '.$item['strMajor']:''; 
         $html .= '            
