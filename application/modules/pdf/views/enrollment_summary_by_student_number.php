@@ -79,7 +79,7 @@ $html .= '
     </tr>
     <tr>';
 
-    foreach($enrolled_per_year as $yerly){
+    foreach($enrolled_per_year as $yearly){
         $html .= '<td>' . $yearly . '</td>';
     }
 
