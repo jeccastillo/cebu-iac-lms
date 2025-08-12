@@ -1220,7 +1220,7 @@ class Data_fetcher extends CI_Model {
         }
         
         if($course!=0)
-            $this->db->where('tb_mas_users.intProgramID',$course);
+            $this->db->where('tb_mas_registration.current_program',$course);
         if($type!=0){
             switch($type){
                 case 1:
