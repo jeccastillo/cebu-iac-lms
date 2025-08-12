@@ -182,6 +182,7 @@ new Vue({
         total_tuition: 0,
         tuition_text: '',
         tuition_table: '',
+        tuition_email: '',
         subject_ids:[],
         misc: {
             name: undefined,
@@ -328,6 +329,7 @@ new Vue({
                         .then(data => {                            
                             this.tuition_text = data.data.tuition; 
                             this.tuition_table = data.data.tuition_table; 
+                            this.tuition_email = data.data.tuition_for_email;
                             this.tuition_data = data.data.full_data;                            
                             this.subjects_loaded =  true;                          
                             
@@ -373,7 +375,7 @@ new Vue({
                             })
                         .then(data => {                 
                             var assessment_data = {
-                                'assessment': this.tuition_table,                                
+                                'assessment': this.tuition_email,                                
                             }          
                             var email_api = api_url + "registrar/send_notif_finance/" + this.student_data.slug;                  
                             //SENDING OF EMAIL GOES HERE
