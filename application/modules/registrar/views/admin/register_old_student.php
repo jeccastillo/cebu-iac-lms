@@ -395,8 +395,9 @@ new Vue({
                              })
                              .then(data2 => {           
                                 Swal.hideLoading();                                 
+                                 document.location = data.data.student_link;                                        
                             });                                                                  
-                            document.location = data.data.student_link;                                        
+                           
                         });
                 },
                 allowOutsideClick: () => !Swal.isLoading()
