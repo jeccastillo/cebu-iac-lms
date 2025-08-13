@@ -127,8 +127,7 @@ $html ='
                             <td style="text-align:right;">'.number_format($tuition['installment_fee30'], 2, '.' ,',').'</td>
                         </tr>
                         <tr>
-                            <td style="font-weight:bold;"></td>                                                        
-                            <td></td>
+                            <td style="font-weight:bold;"></td>                                                                                    
                             <td style="text-align:right; font-weight:bold; text-decoration: underline;">'.number_format($tuition['total_installment50'], 2, '.' ,',').'</td>
                             <td style="text-align:right; font-weight:bold; text-decoration: underline;">'.number_format($tuition['total_installment30'], 2, '.' ,',').'</td>                                                                      
                         </tr>                            
