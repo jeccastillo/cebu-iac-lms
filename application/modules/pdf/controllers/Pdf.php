@@ -27,7 +27,7 @@ class Pdf extends CI_Controller {
         $this->config->load('courses');
         
         $this->data['campus'] = $this->config->item('campus');
-        $this->data['campus_address'] = $this->data['campus'] == 'Makati' ? '7434 Yakal Street Brgy. San Antonio, Makati City' : ($this->data['campus'] == 'Cebu' ? 'Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City' : '');
+        $this->data['campus_address'] = $this->data['campus'] == 'Makati' ? 'iACADEMY Nexus 7434 Yakal Street Brgy. San Antonio, Makati City' : ($this->data['campus'] == 'Cebu' ? 'Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City' : '');
         $this->data["user"] = $this->session->all_userdata();
         $this->data['terms'] = $this->config->item('terms');
         $this->data['term_type'] = $this->config->item('term_type');
@@ -433,6 +433,86 @@ class Pdf extends CI_Controller {
 
         $this->load->view("enrollment_summary",$this->data);
 
+    }
+
+    function enrollment_summary_by_student_number($sem)
+    {
+        $active_sem = $this->data_fetcher->get_sem_by_id($sem);
+        $type = $active_sem['term_student_type'];
+        
+        $programs = $this->db->get_where('tb_mas_programs',array('type'=>$type))->result_array();
+        if($type == "shs")
+            $programs = $this->db->get_where('tb_mas_programs',array('type'=>$type))->result_array();
+        elseif($type == "college")
+            $programs = $this->db->where('type','college')
+                                 ->or_where('type','other')
+                                 ->get('tb_mas_programs')
+                                 ->result_array();
+        elseif($type == "next")
+            $programs = $this->db->where('type','next')
+            ->or_where('type','other')
+            ->get('tb_mas_programs')
+            ->result_array();
+                                 
+        $data['programs'] = $programs;
+        $ret = [];
+
+        $registrations = $this->db->select('tb_mas_users.strStudentNumber, tb_mas_users.intProgramID')
+        ->from('tb_mas_registration')  
+        ->join('tb_mas_users', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
+        ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_registration.intROG' => '1'))
+        ->order_by('tb_mas_users.strStudentNumber desc')
+        ->get()
+        ->result_array();
+        
+        $student_years = $enrolled_per_year = array();
+        $total_enrolled = 0;
+        foreach($registrations as $registration){
+            $student_number = $registration['strStudentNumber'];
+            $student_number = $this->get_student_number_year($student_number);
+            
+            if(!(in_array($student_number, $student_years))){
+                $student_years[] = $student_number;
+                $enrolled_per_year[$student_number] = 0;
+            }
+        }
+
+        foreach($programs as $program){
+            $st = [];
+            foreach($student_years as $year){
+                $program['years'][$year] = 0;
+
+                foreach($registrations as $registration){
+                    $student_year = $this->get_student_number_year($registration['strStudentNumber']);
+
+                    if($registration['intProgramID'] == $program['intProgramID'] && $year == $student_year){
+                        $program['years'][$year] += 1;
+                        $enrolled_per_year[$year] += 1;
+                        $total_enrolled += 1;
+                    }
+                }
+            }
+            $ret[] = $program;
+        }
+
+        $this->data['enrollment'] = $ret;
+        $this->data['student_years'] = $student_years;
+        $this->data['enrolled_per_year'] = $enrolled_per_year;
+        $this->data['total_enrolled'] = $total_enrolled;
+        $this->data['sem'] = $this->data_fetcher->get_sem_by_id($sem);
+
+        $this->load->view("enrollment_summary_by_student_number",$this->data);
+
+    }
+    
+    function get_student_number_year($student_number){
+        
+        if (preg_match('/^[a-zA-Z]/', $student_number)) {
+            // Remove the first character
+            $student_number = substr($student_number, 1);
+        }
+
+        return substr($student_number, 0, 4);;
     }
 
     function grading_sheet($id){
@@ -4666,6 +4746,117 @@ class Pdf extends CI_Controller {
         $pdf->writeHTML($html, true, false, true, false, '');
           
         $pdf->Output('Certificate of GWA.pdf', 'I');
+    }
+
+    public function registrar_shs_enrolled_by_grade_level($sem)
+    {
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $sy = $this->data_fetcher->get_active_sem();
+            $sem = $sy['intID'];
+        }
+        $type = $sy->term_student_type;
+        
+        $programs = $this->db->get_where('tb_mas_programs',array('type'=>$type))->result_array();
+        if($type == "shs")
+            $programs = $this->db->get_where('tb_mas_programs',array('type'=>$type))->result_array();
+                                 
+        $data['programs'] = $programs;
+        $ret = [];
+
+        $registrations = $this->db->select('tb_mas_users.strStudentNumber, tb_mas_users.intProgramID')
+            ->from('tb_mas_registration')  
+            ->join('tb_mas_users', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
+            ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_registration.intROG' => '1'))
+            ->order_by('tb_mas_users.strStudentNumber desc')
+            ->get()
+            ->result_array();
+        
+        $student_years = $enrolled_per_year = array();
+        $grade11_total = $grade12_total = $total_enrolled = 0;
+
+        foreach($programs as $program){
+            $st = [];
+            
+            $grade11 = $this->db->from('tb_mas_registration')
+                        ->join('tb_mas_users', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
+                        ->where(
+                            array(
+                                'intROG' => 1,
+                                'intAYID'=> $sem,
+                                'intProgramID' => $program['intProgramID']
+                            ))
+                        ->where_in('intYearLevel', [1,3])
+                        ->get()
+                        ->result_array();
+
+            $grade12 = $this->db->from('tb_mas_registration')
+                        ->join('tb_mas_users', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
+                        ->where(
+                            array(
+                                'intROG' => 1,
+                                'intAYID'=> $sem,
+                                'intProgramID' => $program['intProgramID']
+                            ))
+                        ->where_in('intYearLevel', [2,4])
+                        ->get()
+                        ->result_array();
+
+
+            $program['grade11'] = count($grade11);
+            $program['grade12'] = count($grade12);
+            $grade11_total += count($grade11);
+            $grade12_total += count($grade12);
+
+            $ret[] = $program;
+        }
+        $total_enrolled += $grade11_total + $grade12_total;
+        $no_grade_level = $this->db->from('tb_mas_registration')
+                    ->join('tb_mas_users', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->where(
+                        array(
+                            'tb_mas_registration.intROG' => 1,
+                            'tb_mas_registration.intAYID'=> $sem,
+                        ))
+                    ->where_not_in('intYearLevel', [1,2,3,4])
+                    ->get()
+                    ->result_array();
+
+        $this->data['sem'] = $sy;
+        $this->data['enrollment'] = $ret;
+        $this->data['no_grade_level'] = count($no_grade_level);
+        $this->data['total_enrolled'] = $total_enrolled;
+        $this->data['grade11_total'] = $grade11_total;
+        $this->data['grade12_total'] = $grade12_total;
+        $this->data['total_enrolled'] = $total_enrolled;
+        $this->data['sem'] = $this->data_fetcher->get_sem_by_id($sem);
+        
+        tcpdf();
+        // create new PDF document
+        $pdf = new TCPDF("L", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);        
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetTitle("SHS Enrolled by Grade Level");
+        
+        // set margins
+        $pdf->SetMargins(0.5, .25, 0.5);
+
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        
+        $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
+        
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);    
+             
+        $pdf->AddPage();
+          
+        $html = $this->load->view("shs_enrolled_by_grade_level",$this->data,true);
+        $pdf->writeHTML($html, true, false, true, false, '');
+          
+        $pdf->Output('SHS Enrolled by Grade Level  ' .  $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . ".pdf", 'I');
+
     }
 
     private function stringifyNumber($n) {
