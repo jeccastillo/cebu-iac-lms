@@ -42,6 +42,7 @@ class Excel extends CI_Controller {
         $this->data["students"] = $this->data_fetcher->fetch_table('tb_mas_users',array('strLastname','asc'));
         $this->data["user"] = $this->session->all_userdata();
         $this->data['campus'] = $this->config->item('campus');
+        $this->data['campus_address'] = $this->data['campus'] == 'Makati' ? 'iACADEMY Nexus 7434 Yakal Street Brgy. San Antonio, Makati City' : ($this->data['campus'] == 'Cebu' ? 'Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City' : '');
         $this->data['unread_messages'] = $this->data_fetcher->count_table_contents('tb_mas_message_user',null,array('intRead'=>'0','intTrash'=>0,'intFacultyID'=>$this->session->userdata('intID')));
         
         $this->data['all_messages'] = $this->data_fetcher->count_table_contents('tb_mas_message_user',null,array('intTrash'=>0,'intFacultyID'=>$this->session->userdata('intID')));
@@ -5256,8 +5257,8 @@ class Excel extends CI_Controller {
 
                     $ledger_data = $this->db->get_where('tb_mas_student_ledger', array('syid' => $sem, 'student_id' => $user['intID'], 'date <=' => $report_date . ' 23:59:59'))->result_array();
                     
-                    $applied_from[0] = $applied_from[1] = $applied_to[0] = $applied_to[1] = $refund[0] = $refund[1] = $others[0] = $others[1] = '';
-                    $applied_from[2] = $applied_to[2] = $refund[2] = $others[2] = 0;
+                    $applied_from[0] = $applied_from[1] = $applied_to[0] = $applied_to[1] = $refund[0] = $refund[1] = $other[0] = $other[1] = '';
+                    $applied_from[2] = $applied_to[2] = $refund[2] = $other[2] = 0;
 
                     if($ledger_data){
                         foreach($ledger_data as $ledger){
@@ -8057,7 +8058,7 @@ class Excel extends CI_Controller {
         // Create new PHPExcel object
         $objPHPExcel = new PHPExcel();
         
-        $title = 'SHS GWA Rank';
+        $title = 'Student Track and Course';
 
         $i = 9;
         $count = 1;
@@ -10535,6 +10536,448 @@ class Excel extends CI_Controller {
         // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save('php://output');
         exit;
+    }
+
+
+    public function enrollment_summary_by_student_number($sem)
+    {
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        $type = $sy->term_student_type;
+        
+        $programs = $this->db->get_where('tb_mas_programs',array('type'=>$type))->result_array();
+        if($type == "shs")
+            $programs = $this->db->get_where('tb_mas_programs',array('type'=>$type))->result_array();
+        elseif($type == "college")
+            $programs = $this->db->where('type','college')
+                                 ->or_where('type','other')
+                                 ->get('tb_mas_programs')
+                                 ->result_array();
+        elseif($type == "next")
+            $programs = $this->db->where('type','next')
+            ->or_where('type','other')
+            ->get('tb_mas_programs')
+            ->result_array();
+                                 
+        $data['programs'] = $programs;
+        $ret = [];
+
+        $registrations = $this->db->select('tb_mas_users.strStudentNumber, tb_mas_users.intProgramID')
+        ->from('tb_mas_registration')  
+        ->join('tb_mas_users', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
+        ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_registration.intROG' => '1'))
+        ->order_by('tb_mas_users.strStudentNumber desc')
+        ->get()
+        ->result_array();
+        
+        $student_years = array();
+        foreach($registrations as $registration){
+            $student_number = $registration['strStudentNumber'];
+            $student_number = $this->get_student_number_year($student_number);
+            
+            if(!(in_array($student_number, $student_years))){
+                $student_years[] = $student_number;
+            }
+        }
+
+        foreach($programs as $program){
+            $st = [];
+
+            foreach($student_years as $year){
+                $program['years'][$year] = 0;
+
+                foreach($registrations as $registration){
+                    $student_year = $this->get_student_number_year($registration['strStudentNumber']);
+
+                    if($registration['intProgramID'] == $program['intProgramID'] && $year == $student_year){
+                        $program['years'][$year] += 1;
+                    }
+                }
+            }
+            $ret[] = $program;
+        }
+
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
+
+        if (PHP_SAPI == 'cli')
+            die('This example should only be run from a Web Browser');
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+        
+        $title = 'Summary Enrollment Report';
+
+        $i = 10;
+        $count = 1;
+        
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A2', 'iACADEMY')
+                    ->setCellValue('A3', 'Enrollment Statistics')
+                    ->setCellValue('A5', 'Address:' . $this->data['campus_address'])
+                    ->setCellValue('A6', 'Institutional Identifier No.: 13315')
+                    ->setCellValue('A7', 'Term/SY: ' . $sy->enumSem . ' ' . $this->data["term_type"] . ', AY ' . $sy->strYearStart . '-' . $sy->strYearEnd)
+                    ->setCellValue('A9', 'PROGRAM NAME');
+
+        //header
+        foreach ($student_years as $key => $value) {
+            $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue($this->columnIndexToLetter(1 + ($key)) . '9', 'ID' . $value);
+        }
+
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue($this->columnIndexToLetter(1 + ($key + 1)) . '9', 'TOTAL');
+        //end of header
+
+        foreach($ret as $item){
+            $major = ($item['strMajor'] != "None" && $item['strMajor'] != "")?'Major in '.$item['strMajor']:'';
+            // Add some data
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A'.$i, $item['strProgramDescription'] . ' ' . $major);
+                
+            foreach ($student_years as $key => $value) {
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue($this->columnIndexToLetter(1 + ($key)) . $i, $item['years'][$value]);
+            }
+
+            //total of every program
+            $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue($this->columnIndexToLetter(1 + ($key + 1)) . $i, '=SUM('. $this->columnIndexToLetter(1 + (0)) . $i .':' . $this->columnIndexToLetter(1 + ($key)) . $i . ')');
+
+            $i++;
+        }
+
+        //Totals of every column per year
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'. $i, 'TOTAL');
+        
+        for($index = 0; $index <= count($student_years); $index++){
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue($this->columnIndexToLetter(1 + $index) . $i, '=SUM(' . $this->columnIndexToLetter(1 + $index) . '10:' . $this->columnIndexToLetter(1 + $index) . $i . ')');
+            }
+        //end of totals
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A' . ($i + 6), 'Date and Time Printed: '. date('F d, Y h:i A'));
+        
+
+        $objPHPExcel->getActiveSheet()->getStyle('A2:A3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A2')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 16,
+                )
+            )
+        );
+
+        $style = array(
+            'font'  => array(
+                'color' => array('rgb' => '000000'),
+                'size'  => 10,
+            )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A5')->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . ($i + 6))->applyFromArray($style);
+
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $i . ':' . $this->columnIndexToLetter(1 + ($key + 1)) . $i)->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                )
+            )
+        );
+        
+        $objPHPExcel->getActiveSheet()->getStyle('A9:' . $this->columnIndexToLetter(1 + ($key + 1)) . '9')->applyFromArray(
+            array(
+                'borders' => array(
+                    'allborders' => array(
+                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        'color' => array('rgb' => '000000'),
+                    ),
+                ),
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 12,
+                )
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('A10:' . $this->columnIndexToLetter(1 + ($key + 1)) . $i)->applyFromArray(
+            array(
+                'borders' => array(
+                    'allborders' => array(
+                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        'color' => array('rgb' => '000000'),
+                    ),
+                ),
+            )
+        );
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(80);
+        
+        $sheet = $objPHPExcel->getActiveSheet();
+        $sheet->mergeCells('A2:' . $this->columnIndexToLetter(1 + ($key)) . '2');
+        $sheet->mergeCells('A3:' . $this->columnIndexToLetter(1 + ($key)) . '3');
+        $sheet->mergeCells('A5:' . $this->columnIndexToLetter(1 + ($key)) . '5');
+        $sheet->mergeCells('A6:' . $this->columnIndexToLetter(1 + ($key)) . '6');
+        $sheet->mergeCells('A7:' . $this->columnIndexToLetter(1 + ($key)) . '7');
+
+        $objPHPExcel->getActiveSheet()->setTitle('Summary Enrollment Report');
+
+        $date = date("ymdhis");
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+        header('Content-Disposition: attachment;filename="Summary Enrollment Report ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '.xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        
+        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
+        exit;
+    }
+
+    public function shs_enrolled_by_grade_level($sem)
+    {
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $sy = $this->data_fetcher->get_active_sem();
+            $sem = $sy['intID'];
+        }
+        $type = $sy->term_student_type;
+        
+        $programs = $this->db->get_where('tb_mas_programs',array('type'=>$type))->result_array();
+        if($type == "shs")
+            $programs = $this->db->get_where('tb_mas_programs',array('type'=>$type))->result_array();
+                                 
+        $data['programs'] = $programs;
+        $ret = [];
+
+        $registrations = $this->db->select('tb_mas_users.strStudentNumber, tb_mas_users.intProgramID')
+            ->from('tb_mas_registration')  
+            ->join('tb_mas_users', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
+            ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_registration.intROG' => '1'))
+            ->order_by('tb_mas_users.strStudentNumber desc')
+            ->get()
+            ->result_array();
+        
+        $student_years = array();
+
+        foreach($programs as $program){
+            $st = [];
+            
+            $grade11 = $this->db->from('tb_mas_registration')
+                        ->join('tb_mas_users', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
+                        ->where(
+                            array(
+                                'intROG' => 1,
+                                'intAYID'=> $sem,
+                                'intProgramID' => $program['intProgramID']
+                            ))
+                        ->where_in('intYearLevel', [1,3])
+                        ->get()
+                        ->result_array();
+
+            $grade12 = $this->db->from('tb_mas_registration')
+                        ->join('tb_mas_users', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
+                        ->where(
+                            array(
+                                'intROG' => 1,
+                                'intAYID'=> $sem,
+                                'intProgramID' => $program['intProgramID']
+                            ))
+                        ->where_in('intYearLevel', [2,4])
+                        ->get()
+                        ->result_array();
+
+
+            $program['grade11'] = count($grade11);
+            $program['grade12'] = count($grade12);
+
+            $ret[] = $program;
+        }
+
+        $no_grade_level = $this->db->from('tb_mas_registration')
+                    ->join('tb_mas_users', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->where(
+                        array(
+                            'tb_mas_registration.intROG' => 1,
+                            'tb_mas_registration.intAYID'=> $sem,
+                        ))
+                    ->where_not_in('intYearLevel', [1,2,3,4])
+                    ->get()
+                    ->result_array();
+
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
+
+        if (PHP_SAPI == 'cli')
+            die('This example should only be run from a Web Browser');
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+        
+        $title = 'SHS - Students Enrolled by Grade Level';
+
+        $i = 10;
+        $count = 1;
+        
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A2', 'iACADEMY')
+                    ->setCellValue('A3', $this->data['campus_address'])
+                    ->setCellValue('A5', 'NUMBER OF STUDENTS ENROLLED (By Grade Level)')
+                    ->setCellValue('A6', $sy->enumSem . ' ' . $this->data["term_type"] . ', AY ' . $sy->strYearStart . '-' . $sy->strYearEnd)
+                    ->setCellValue('A8', 'Course')
+                    ->setCellValue('B8', 'Grade 11')
+                    ->setCellValue('C8', 'Grade 12')
+                    ->setCellValue('D8', 'Total')
+                    ->setCellValue('A9', 'Senior High School');
+
+        foreach($ret as $item){
+            $major = ($item['strMajor'] != "None" && $item['strMajor'] != "")?'Major in '.$item['strMajor']:'';
+            // Add some data
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A'.$i, $item['strProgramDescription'] . ' ' . $major)
+                ->setCellValue('B'.$i, $item['grade11'])
+                ->setCellValue('C'.$i, $item['grade12'])
+                ->setCellValue('D'.$i, '=SUM(B' . $i . ':' . 'C' . $i . ')');
+
+            $i++;
+        }
+
+        //Totals of every column per year
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A'. $i, 'TOTAL')
+            ->setCellValue('B'. $i, '=SUM(B10:B' . $i . ')')
+            ->setCellValue('C'. $i, '=SUM(C10:C' . $i . ')')
+            ->setCellValue('D'. $i, '=SUM(D10:D' . $i . ')')
+            ->setCellValue('A'. ($i + 1), 'No Grade Level:')
+            ->setCellValue('B'. ($i + 1), count($no_grade_level))
+            ->setCellValue('A'. ($i + 2), 'GRAND TOTAL:')
+            ->setCellValue('B'. ($i + 2), '=SUM(D'. $i .'-B' . ($i+1) . ')');
+        
+        //end of totals
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A' . ($i + 8), 'Date and Time Printed: '. date('F d, Y h:i A'));
+        
+
+        $objPHPExcel->getActiveSheet()->getStyle('A2:A6')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('B8:D8')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A'. ($i+1) .':A' . ($i+2))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        $objPHPExcel->getActiveSheet()->getStyle('A2')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 16,
+                )
+            )
+        );
+
+        $style = array(
+            'font'  => array(
+                'bold'  => true,
+                'color' => array('rgb' => '000000'),
+                'size'  => 12,
+            )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A5')->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('D10' . ':D' . $i)->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('A' . $i . ':D' . ($i+2))->applyFromArray($style);
+        
+        $style = array(
+                'borders' => array(
+                    'allborders' => array(
+                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        'color' => array('rgb' => '000000'),
+                    ),
+                ),
+                'font'  => array(
+                    'bold'  => true,
+                    'color' => array('rgb' => '000000'),
+                    'size'  => 12,
+                )
+        );
+
+        $objPHPExcel->getActiveSheet()->getStyle('A8:D8')->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('A9')->applyFromArray($style);
+
+        $objPHPExcel->getActiveSheet()->getStyle('A10:D' . ($i+2))->applyFromArray(
+            array(
+                'borders' => array(
+                    'allborders' => array(
+                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        'color' => array('rgb' => '000000'),
+                    ),
+                ),
+            )
+        );  
+        
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(90);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(30);
+        
+        $sheet = $objPHPExcel->getActiveSheet();
+        $sheet->mergeCells('A2:D2');
+        $sheet->mergeCells('A3:D3');
+        $sheet->mergeCells('A5:D5');
+        $sheet->mergeCells('A6:D6');
+        $sheet->mergeCells('A9:D9');
+        $sheet->mergeCells('B' . ($i+1) . ':D' . ($i+1));
+        $sheet->mergeCells('B' . ($i+2) . ':D' . ($i+2));
+
+        $objPHPExcel->getActiveSheet()->setTitle('SHS Enrolled by Grade Level');
+
+        $date = date("ymdhis");
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+        header('Content-Disposition: attachment;filename="SHS - Students Enrolled by Grade Level ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '.xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        
+        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
+        exit;
+    }
+    
+    private function get_student_number_year($student_number){
+        
+        if (preg_match('/^[a-zA-Z]/', $student_number)) {
+            // Remove the first character
+            $student_number = substr($student_number, 1);
+        }
+
+        return substr($student_number, 0, 4);;
     }
 
     private function generateRandomString($length) {
