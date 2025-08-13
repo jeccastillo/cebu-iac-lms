@@ -1,6 +1,6 @@
 <?php
 
-$html .='
+$html ='
     <table cellpadding="0" style="color:#333; text-align:left; font-size:8;" width="570px">                                
         <tr>
             <td width="320px">
