@@ -2553,7 +2553,7 @@ class Data_fetcher extends CI_Model {
                  
         
         if(isset($registration))
-            return $this->getTuitionSubjects($registration['enumStudentType'],$sch,$discount,$subjects,$id,$registration['type_of_class'],$sem,$registration['tuition_year'],$registration['dteRegistered'],$registration['intYearLevel'],$registration['internship'], $registration['intROG'],$registration['withdrawal_period']);
+            return $this->getTuitionSubjects($registration['enumStudentType'],$sch,$discount,$subjects,$id,$registration['type_of_class'],$sem,$registration['tuition_year'],$registration['dteRegistered'],$registration['intYearLevel'],$registration['internship'], $registration['intROG'],$registration['withdrawal_period'],$registration['current_program']);
         else                              
             return null;
         
@@ -2599,7 +2599,7 @@ class Data_fetcher extends CI_Model {
         
     }   
 
-    function getTuitionSubjects($stype,$sch,$discount,$subjects,$id,$class_type="regular",$syid,$tuition_year_id,$dr=null,$year_level = 1,$internship = 0, $intROG = 0,$w_status="")
+    function getTuitionSubjects($stype,$sch,$discount,$subjects,$id,$class_type="regular",$syid,$tuition_year_id,$dr=null,$year_level = 1,$internship = 0, $intROG = 0,$w_status="",$current_program=null)
     {
         $tuition = 0;
         $total_lab = 0;
@@ -2645,6 +2645,8 @@ class Data_fetcher extends CI_Model {
         }
 
         $student = $this->db->where('intID',$id)->get('tb_mas_users')->first_row('array'); 
+        if(!$current_program)
+            $current_program = $student['intProgramID'];
         $level = get_stype($student['level']);
 
         $tuition_year = $this->db->where('intID',$tuition_year_id)->get('tb_mas_tuition_year')->first_row('array');
@@ -2751,7 +2753,7 @@ class Data_fetcher extends CI_Model {
             }
         }
 
-        $unit_rate = $this->db->where(array('tuitionyear_id'=>$tuition_year['intID'], 'track_id' => $student['intProgramID']))
+        $unit_rate = $this->db->where(array('tuitionyear_id'=>$tuition_year['intID'], 'track_id' => $current_program))
             ->get('tb_mas_tuition_year_program')->first_row('array');
         
         if(!$unit_rate)
@@ -2842,7 +2844,7 @@ class Data_fetcher extends CI_Model {
             }
 
             if(count($regular) > 0)
-                $shs_rate = $this->db->where(array('tuitionyear_id'=>$tuition_year['intID'], 'track_id' => $student['intProgramID']))
+                $shs_rate = $this->db->where(array('tuitionyear_id'=>$tuition_year['intID'], 'track_id' => $current_program))
                 ->get('tb_mas_tuition_year_track')->first_row('array');                                    
 
             if(isset($shs_rate))
