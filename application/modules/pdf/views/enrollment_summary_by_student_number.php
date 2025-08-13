@@ -30,11 +30,23 @@
     
     // Set some content to print
     $html = '<table border="0" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">
-            <tr>';     
-                $html .='<td width="100%" style="text-align: center; border-bottom:1px solid #333">             
+            <tr>
+                <td width="100%" style="text-align: center; border-bottom:1px solid #333">             
                     <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">Enrollment Summary for '.$sem['enumSem'].' Term SY'.$sem['strYearStart'].'-'.$sem['strYearEnd'].'</font>
                 </td>
-            </tr>        
+            </tr>
+            <tr>
+                <td width="100%" style="text-align: center; border-bottom:1px solid #333">Enrollment Statistics</td>
+            </tr>
+            <tr>
+                <td>Address: ' . $campus_address .  ' </td>
+            </tr>
+            <tr>
+                <td>Institutional Identifier No.: 13315</td>
+            </tr>
+            <tr>
+                <td>Term/SY: ' . $sem['enumSem'] . ' Term SY' . $sem['strYearStart'] . '-' . $sem['strYearEnd'] . '</td>
+            </tr>
             </table>';
     
 $html .= '<br /><table class="table table-bordered table-striped">
@@ -51,15 +63,11 @@ $html .='<th><strong>Total</strong></th></tr>
      ';
     
     foreach($enrollment as $item){    
-        $total_per_program = 0;    
-        $major = ($item['strMajor'] != "None" && $item['strMajor'] != "")?'Major in '.$item['strMajor']:''; 
-        $html .= '            
-            <tr>
-                <td style="font-size:8px;">'.trim($item['strProgramDescription']).' '.$major.'</td>';
+        $total_per_program = 0; 
         
-        foreach($student_years as $year){
+        foreach($student_years as $year){   
             $total_per_program += $item['years'][$year];
-            $html .= '<td style="font-size:8px;">'.$item['years'][$year].'</td>';
+            $html .= '<td style="font-size:8px;">ID'.$item['years'][$year].'</td>';
         }
                 
         $html .= '<td style="font-size:8px;">' . $total_per_program . '</td></tr>
@@ -89,7 +97,7 @@ $html .= '<td><strong>&nbsp;'. $total_enrolled . '</strong></td></tr>
         <td></td>
     </tr>
     <tr style="text-align:center;">
-        <td>RUNDATE&TIME:'.date('Y-m-d h:i a').'</td>
+        <td>Date and Time Printed: '. date('F d, Y h:i A').'</td>
         <td></td>
         <td></td>
         <td></td>
