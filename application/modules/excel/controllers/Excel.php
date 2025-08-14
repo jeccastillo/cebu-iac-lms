@@ -2274,6 +2274,8 @@ class Excel extends CI_Controller {
             $active_sem = $this->data_fetcher->get_active_sem();
 
         }
+
+        $type = $active_sem['term_student_type'];
         // Create new PHPExcel object
         $objPHPExcel = new PHPExcel();
 
@@ -2485,10 +2487,30 @@ class Excel extends CI_Controller {
             $i = 2;
             foreach($students as $student)
             {
-                // Add some datat
-                $oldPass_unhash = pw_unhash($student['strPass']);
-                //$newPass = password_hash($oldPass_unhash, PASSWORD_DEFAULT);
+                $enrollmentStatus = $student['student_type'];
+                $yearLevel = $student['intYearLevel'];
+                // Add some data
 
+                if($type == 'shs'){
+                    if($student['enumStudentType'] == 'continuing')
+                        $enrollmentStatus = 'Continuing';
+                    else if($student['enumStudentType'] == 'shiftee')
+                        $enrollmentStatus = 'Shiftee';
+                    else if($student['enumStudentType'] == 'returning')
+                        $enrollmentStatus = 'Returnee';
+                    else if($student['student_type'] == 'transferee')
+                        $enrollmentStatus = 'Transferee';
+                    else
+                        $enrollmentStatus = 'New';
+
+                    if($student['intYearLevel'] == 1 || $student['intYearLevel'] == 3){
+                        $yearLevel = '11';
+                    }else{
+                        $yearLevel = '12';
+                    }
+                }
+
+                $citizenship = $student['strCitizenship'] == 'Philippines' ? 'Filipino' : strtoupper($student['strCitizenship']);
                 $objPHPExcel->setActiveSheetIndex(0)
                         ->setCellValue('A'.$i, preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']))
                         ->setCellValue('B'.$i, strtoupper($student['strLastname']))
@@ -2496,12 +2518,12 @@ class Excel extends CI_Controller {
                         ->setCellValue('D'.$i, strtoupper($student['strMiddlename']))
                         ->setCellValue('E'.$i, $student['strProgramCode'])
                         ->setCellValue('F'.$i, $student['strProgramDescription'])
-                        ->setCellValue('G'.$i, $student['intStudentYear'])
+                        ->setCellValue('G'.$i, $yearLevel)
                         ->setCellValue('H'.$i, strtoupper($student['blockName']))
                         ->setCellValue('I'.$i, date("M j, Y", strtotime($student['dteBirthDate'])))
                         ->setCellValue('J'.$i, strtoupper($student['enumGender']))
                         ->setCellValue('K'.$i, $student['strAddress'])                    
-                        ->setCellValue('L'.$i, strtoupper($student['strCitizenship']))
+                        ->setCellValue('L'.$i, $citizenship)
                         ->setCellValue('M'.$i, strtoupper($student['strAddress']))
                         ->setCellValue('N'.$i, strtoupper($student['strMobileNumber']))
                         ->setCellValue('O'.$i, $student['strEmail'])
@@ -2530,7 +2552,7 @@ class Excel extends CI_Controller {
                         ->setCellValue('AL'.$i, strtoupper($student['curriculumName']))
                         ->setCellValue('AM'.$i, "")
                         ->setCellValue('AN'.$i, "")
-                        ->setCellValue('AO'.$i, strtoupper($student['student_type']))
+                        ->setCellValue('AO'.$i, strtoupper($enrollmentStatus))
                         ->setCellValue('AP'.$i, "");
                         // ->setCellValue('AP'.$i, strtoupper($student['student_type']));
                         
