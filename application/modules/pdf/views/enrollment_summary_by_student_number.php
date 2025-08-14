@@ -31,12 +31,12 @@
     // Set some content to print
     $html = '<table border="0" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">
             <tr>
-                <td width="100%" style="text-align:>             
+                <td width="100%" style="text-align:center">             
                     <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">Enrollment Summary for '.$sem['enumSem'].' Term SY'.$sem['strYearStart'].'-'.$sem['strYearEnd'].'</font>
                 </td>
             </tr>
             <tr>
-                <td width="100%" style="text-align:>Enrollment Statistics</td>
+                <td width="100%" style="text-align:center">Enrollment Statistics</td>
             </tr>
             <tr>
                 <td>Address: ' . $campus_address .  ' </td>
