@@ -174,504 +174,500 @@
     }
   }
 </style>
-<div class="container-fluid py-4" id="student-viewer-container">
-    <!-- Header Section -->
-    <div class="header-bar d-flex justify-content-between align-items-center">
-      <h2>
-        <i class="fas fa-user-graduate me-2"></i>Student Profile
-      </h2>
-      <select v-model="sem_student" @change="changeTermSelected" class="form-control w-auto">
-        <option v-for="s in sy" :value="s.intID">
-          {{s.term_student_type + ' ' + s.enumSem + ' ' + s.term_label + ' ' + s.strYearStart + '-' + s.strYearEnd}}
-        </option>
-      </select>
-    </div>
-
-    <!-- Action Buttons -->
-    <div class="action-buttons">
-      <a class="btn btn-action" :href="base_url + 'student/view_all_students'">
-        <i class="fas fa-arrow-left"></i>All Students
-      </a>
-      <a class="btn btn-action" target="_blank" :href="base_url + 'admissionsV1/view_lead_new/' + student.slug">
-        <i class="fas fa-list"></i>Applicant Data
-      </a>
-      <template v-if="user_level == 2 || user_level == 3">
-        <a class="btn btn-action" :href="base_url + 'student/edit_student/' + student.intID">
-          <i class="fas fa-edit"></i>Edit
-        </a>
-        <a class="btn btn-action" :href="base_url + 'unity/student_records/' + student.intID">
-          <i class="fas fa-file-alt"></i>Records
-        </a>
-      </template>
-    </div>
-
-    <!-- Alert Box for Balances -->
-    <div class="alert alert-warning mb-4" v-if="show_alert" role="alert">
-      <div class="d-flex justify-content-between align-items-center">
-        <div>
-          <h5 class="alert-heading mb-1"><i class="fas fa-exclamation-circle me-2"></i>Outstanding Balances</h5>
-          <p class="mb-0">This student has unpaid balances from previous terms.</p>
-        </div>
-        <a :href="base_url + 'deficiencies/student_deficiencies/' + student.intID" class="btn btn-sm btn-outline-danger">
-          View Details
-        </a>
+<div id="student-viewer-container">
+  <div class="container-fluid py-4" id="student-viewer-container">
+      <!-- Header Section -->
+      <div class="header-bar d-flex justify-content-between align-items-center">
+        <h2>
+          <i class="fas fa-user-graduate me-2"></i>Student Profile
+        </h2>
+        <select v-model="sem_student" @change="changeTermSelected" class="form-control w-auto">
+          <option v-for="s in sy" :value="s.intID">
+            {{s.term_student_type + ' ' + s.enumSem + ' ' + s.term_label + ' ' + s.strYearStart + '-' + s.strYearEnd}}
+          </option>
+        </select>
       </div>
-    </div>
 
-    <!-- Student Profile Section -->
-    <div class="student-profile">
-      <div class="profile-header">
-        <div class="row align-items-center">
-          <div class="col-md-2 text-center">
-            <img v-if="!picture" src="https://placehold.co/200x200/4361ee/FFFFFF/?text=Photo" class="student-photo" alt="Student profile photo placeholder" />
-            <img v-else :src="picture" class="student-photo" :alt="'Photo of ' + student.strFirstname + ' ' + student.strLastname" />
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <a class="btn btn-action" :href="base_url + 'student/view_all_students'">
+          <i class="fas fa-arrow-left"></i>All Students
+        </a>
+        <a class="btn btn-action" target="_blank" :href="base_url + 'admissionsV1/view_lead_new/' + student.slug">
+          <i class="fas fa-list"></i>Applicant Data
+        </a>
+        <template v-if="user_level == 2 || user_level == 3">
+          <a class="btn btn-action" :href="base_url + 'student/edit_student/' + student.intID">
+            <i class="fas fa-edit"></i>Edit
+          </a>
+          <a class="btn btn-action" :href="base_url + 'unity/student_records/' + student.intID">
+            <i class="fas fa-file-alt"></i>Records
+          </a>
+        </template>
+      </div>
+
+      <!-- Alert Box for Balances -->
+      <div class="alert alert-warning mb-4" v-if="show_alert" role="alert">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h5 class="alert-heading mb-1"><i class="fas fa-exclamation-circle me-2"></i>Outstanding Balances</h5>
+            <p class="mb-0">This student has unpaid balances from previous terms.</p>
           </div>
-          <div class="col-md-10">
-            <h3 class="mb-1" style="text-transform: capitalize;">
-              {{ student.strLastname.toUpperCase() }}, {{ student.strFirstname.toUpperCase() }}
-              {{ student.strMiddlename ? student.strMiddlename.toUpperCase() : '' }}
-            </h3>
-            <h5 class="mb-3">{{ student.strProgramDescription }}
-              {{ (student.strMajor != 'None') ? 'Major in '+student.strMajor : '' }}
-            </h5>
-            <div class="d-flex flex-wrap gap-3">
-              <div>
-                <small class="text-light">Student No.</small>
-                <div class="fw-bold">{{ student.strStudentNumber.replace(/-/g, '') }}</div>
-              </div>
-              <div>
-                <small class="text-light">Status</small>
-                <div class="fw-bold">{{ student.student_status ? student.student_status.toUpperCase() : '' }}</div>
-              </div>
-              <div>
-                <small class="text-light">Curriculum</small>
-                <div class="fw-bold">{{ student.strName }}</div>
-              </div>
-              <div>
-                <small class="text-light">Registration Status</small>
-                <div :class="{
-                  'text-warning': reg_status === 'For Registration',
-                  'text-success': reg_status === 'Enrolled',
-                  'text-danger': reg_status === 'Withdrawn' || reg_status === 'LOA' || reg_status === 'AWOL'
-                }" class="fw-bold">
-                  {{ reg_status }}
+          <a :href="base_url + 'deficiencies/student_deficiencies/' + student.intID" class="btn btn-sm btn-outline-danger">
+            View Details
+          </a>
+        </div>
+      </div>
+
+      <!-- Student Profile Section -->
+      <div class="student-profile">
+        <div class="profile-header">
+          <div class="row align-items-center">
+            <div class="col-md-2 text-center">
+              <img v-if="!picture" src="https://placehold.co/200x200/4361ee/FFFFFF/?text=Photo" class="student-photo" alt="Student profile photo placeholder" />
+              <img v-else :src="picture" class="student-photo" :alt="'Photo of ' + student.strFirstname + ' ' + student.strLastname" />
+            </div>
+            <div class="col-md-10">
+              <h3 class="mb-1" style="text-transform: capitalize;">
+                {{ student.strLastname.toUpperCase() }}, {{ student.strFirstname.toUpperCase() }}
+                {{ student.strMiddlename ? student.strMiddlename.toUpperCase() : '' }}
+              </h3>
+              <h5 class="mb-3">{{ student.strProgramDescription }}
+                {{ (student.strMajor != 'None') ? 'Major in '+student.strMajor : '' }}
+              </h5>
+              <div class="d-flex flex-wrap gap-3">
+                <div>
+                  <small class="text-light">Student No.</small>
+                  <div class="fw-bold">{{ student.strStudentNumber.replace(/-/g, '') }}</div>
+                </div>
+                <div>
+                  <small class="text-light">Status</small>
+                  <div class="fw-bold">{{ student.student_status ? student.student_status.toUpperCase() : '' }}</div>
+                </div>
+                <div>
+                  <small class="text-light">Curriculum</small>
+                  <div class="fw-bold">{{ student.strName }}</div>
+                </div>
+                <div>
+                  <small class="text-light">Registration Status</small>
+                  <div :class="{
+                    'text-warning': reg_status === 'For Registration',
+                    'text-success': reg_status === 'Enrolled',
+                    'text-danger': reg_status === 'Withdrawn' || reg_status === 'LOA' || reg_status === 'AWOL'
+                  }" class="fw-bold">
+                    {{ reg_status }}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="row mt-4">
-        <!-- Personal Information -->
-        <div class="col-md-6">
-          <div class="info-card">
-            <h5 class="mb-4"><i class="fas fa-id-card me-2"></i>Personal Information</h5>
-            
-            <div class="info-item">
-              <div class="info-label">Gender</div>
-              <div class="info-value">{{ student.enumGender }}</div>
+        <div class="row mt-4">
+          <!-- Personal Information -->
+          <div class="col-md-6">
+            <div class="info-card">
+              <h5 class="mb-4"><i class="fas fa-id-card me-2"></i>Personal Information</h5>
+              
+              <div class="info-item">
+                <div class="info-label">Gender</div>
+                <div class="info-value">{{ student.enumGender }}</div>
+              </div>
+              
+              <div class="info-item">
+                <div class="info-label">Address</div>
+                <div class="info-value">{{ student.strAddress }}</div>
+              </div>
+              
+              <div class="info-item">
+                <div class="info-label">Contact Number</div>
+                <div class="info-value">{{ student.strMobileNumber }}</div>
+              </div>
+              
+              <div class="info-item">
+                <div class="info-label">Personal Email</div>
+                <div class="info-value">{{ student.strEmail }}</div>
+              </div>
+              
+              <div class="info-item">
+                <div class="info-label">Birthdate</div>
+                <div class="info-value">{{ student.dteBirthDate }}</div>
+              </div>
+              
+              <div class="info-item">
+                <div class="info-label">Date Created</div>
+                <div class="info-value">{{ student.dteCreated }}</div>
+              </div>
             </div>
-            
-            <div class="info-item">
-              <div class="info-label">Address</div>
-              <div class="info-value">{{ student.strAddress }}</div>
-            </div>
-            
-            <div class="info-item">
-              <div class="info-label">Contact Number</div>
-              <div class="info-value">{{ student.strMobileNumber }}</div>
-            </div>
-            
-            <div class="info-item">
-              <div class="info-label">Personal Email</div>
-              <div class="info-value">{{ student.strEmail }}</div>
-            </div>
-            
-            <div class="info-item">
-              <div class="info-label">Birthdate</div>
-              <div class="info-value">{{ student.dteBirthDate }}</div>
-            </div>
-            
-            <div class="info-item">
-              <div class="info-label">Date Created</div>
-              <div class="info-value">{{ student.dteCreated }}</div>
+          </div>
+
+          <!-- Academic Information -->
+          <div class="col-md-6">
+            <div class="info-card">
+              <h5 class="mb-4"><i class="fas fa-graduation-cap me-2"></i>Academic Information</h5>
+              
+              <div v-if="registration">
+                <div class="info-item">
+                  <div class="info-label">Enrollment Type</div>
+                  <select class="form-control form-control-sm" @change="updateStudentType($event)"
+                    v-model="registration.enumStudentType">
+                    <option value="new">New</option>
+                    <option value="freshman">Freshman</option>
+                    <option value="continuing">Continuing</option>
+                    <option value="shiftee">Shiftee</option>
+                    <option value="2nd Degree">2nd Degree</option>
+                    <option value="2nd Degree iAC">2nd Degree iAC</option>
+                    <option value="returning">Returnee</option>
+                    <option value="transferee">Transferee</option>
+                  </select>
+                </div>
+                
+                <div class="info-item">
+                  <div class="info-label">Year Level</div>
+                  <select class="form-control form-control-sm" @change="updateStudentYearLevel($event)"
+                    v-model="registration.intYearLevel">
+                    <option value=1>1</option>
+                    <option value=2>2</option>
+                    <option value=3>3</option>
+                    <option value=4>4</option>
+                  </select>
+                </div>
+                
+                <div class="info-item">
+                  <div class="info-label">Academic Status</div>
+                  <select class="form-control form-control-sm" @change="updateAcademicStatus($event)"
+                    v-model="registration.enumRegistrationStatus">
+                    <option value="regular">Regular</option>
+                    <option value="irregular">Irregular</option>
+                  </select>
+                </div>
+                
+                <div class="info-item">
+                  <div class="info-label">Date Enrolled</div>
+                  <input class="form-control form-control-sm" type="datetime-local" @blur="updateDateEnrolled($event)"
+                    v-model="registration.dteRegistered">
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Academic Information -->
-        <div class="col-md-6">
-          <div class="info-card">
-            <h5 class="mb-4"><i class="fas fa-graduation-cap me-2"></i>Academic Information</h5>
-            
-            <div v-if="registration">
-              <div class="info-item">
-                <div class="info-label">Enrollment Type</div>
-                <select class="form-control form-control-sm" @change="updateStudentType($event)"
-                  v-model="registration.enumStudentType">
-                  <option value="new">New</option>
-                  <option value="freshman">Freshman</option>
-                  <option value="continuing">Continuing</option>
-                  <option value="shiftee">Shiftee</option>
-                  <option value="2nd Degree">2nd Degree</option>
-                  <option value="2nd Degree iAC">2nd Degree iAC</option>
-                  <option value="returning">Returnee</option>
-                  <option value="transferee">Transferee</option>
-                </select>
+        <!-- Tabs Navigation -->
+        <ul class="nav nav-tabs mt-4" id="studentTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="personal-tab" data-bs-toggle="tab" data-bs-target="#personal" type="button" role="tab" aria-controls="personal" aria-selected="true">
+              <i class="fas fa-user me-1"></i> Personal
+            </button>
+          </li>
+          <li v-if="advanced_privilages1" class="nav-item" role="presentation">
+            <button class="nav-link" id="subjects-tab" data-bs-toggle="tab" data-bs-target="#subjects" type="button" role="tab" aria-controls="subjects" aria-selected="false">
+              <i class="fas fa-book me-1"></i> Subjects
+            </button>
+          </li>
+          <li v-if="reg_status == 'Enrolled'" class="nav-item" role="presentation">
+            <button class="nav-link" id="grades-tab" data-bs-toggle="tab" data-bs-target="#grades" type="button" role="tab" aria-controls="grades" aria-selected="false">
+              <i class="fas fa-chart-line me-1"></i> Grades
+            </button>
+          </li>
+          <li v-if="enlistment" class="nav-item" role="presentation">
+            <button class="nav-link" id="advising-tab" data-bs-toggle="tab" data-bs-target="#advising" type="button" role="tab" aria-controls="advising" aria-selected="false">
+              <i class="fas fa-clipboard-check me-1"></i> Advising
+            </button>
+          </li>
+          <li v-if="registration && advanced_privilages2" class="nav-item" role="presentation">
+            <button class="nav-link" id="schedule-tab" data-bs-toggle="tab" data-bs-target="#schedule" type="button" role="tab" aria-controls="schedule" aria-selected="false">
+              <i class="fas fa-calendar-alt me-1"></i> Schedule
+            </button>
+          </li>
+        </ul>
+
+        <!-- Tabs Content -->
+        <div class="tab-content p-3 bg-white rounded-bottom" id="studentTabsContent">
+          <!-- Personal Info Tab -->
+          <div class="tab-pane fade show active" id="personal" role="tabpanel" aria-labelledby="personal-tab">
+            <div class="row">
+              <div class="col-md-6">
+                <h6 class="mb-3"><i class="fas fa-users me-2"></i>Family Information</h6>
+                <table class="table table-sm">
+                  <thead>
+                    <tr>
+                      <th>Relation</th>
+                      <th>Name</th>
+                      <th>Contact</th>
+                      <th>Email</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Mother</td>
+                      <td>{{ student.mother || 'N/A' }}</td>
+                      <td>{{ student.mother_contact || 'N/A' }}</td>
+                      <td>{{ student.mother_email || 'N/A' }}</td>
+                    </tr>
+                    <tr>
+                      <td>Father</td>
+                      <td>{{ student.father || 'N/A' }}</td>
+                      <td>{{ student.father_contact || 'N/A' }}</td>
+                      <td>{{ student.father_email || 'N/A' }}</td>
+                    </tr>
+                    <tr>
+                      <td>Guardian</td>
+                      <td>{{ student.guardian || 'N/A' }}</td>
+                      <td>{{ student.guardian_contact || 'N/A' }}</td>
+                      <td>{{ student.guardian_email || 'N/A' }}</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
-              
-              <div class="info-item">
-                <div class="info-label">Year Level</div>
-                <select class="form-control form-control-sm" @change="updateStudentYearLevel($event)"
-                  v-model="registration.intYearLevel">
-                  <option value=1>1</option>
-                  <option value=2>2</option>
-                  <option value=3>3</option>
-                  <option value=4>4</option>
-                </select>
-              </div>
-              
-              <div class="info-item">
-                <div class="info-label">Academic Status</div>
-                <select class="form-control form-control-sm" @change="updateAcademicStatus($event)"
-                  v-model="registration.enumRegistrationStatus">
-                  <option value="regular">Regular</option>
-                  <option value="irregular">Irregular</option>
-                </select>
-              </div>
-              
-              <div class="info-item">
-                <div class="info-label">Date Enrolled</div>
-                <input class="form-control form-control-sm" type="datetime-local" @blur="updateDateEnrolled($event)"
-                  v-model="registration.dteRegistered">
+              <div class="col-md-6">
+                <h6 class="mb-3"><i class="fas fa-school me-2"></i>Educational Background</h6>
+                <table class="table table-sm">
+                  <thead>
+                    <tr>
+                      <th>Level</th>
+                      <th>School</th>
+                      <th>Year(s)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>High School</td>
+                      <td>{{ student.high_school || 'N/A' }}</td>
+                      <td>{{ student.high_school_attended || 'N/A' }}</td>
+                    </tr>
+                    <tr>
+                      <td>Senior High</td>
+                      <td>{{ student.senior_high || 'N/A' }}</td>
+                      <td>{{ student.senior_high_attended || 'N/A' }}</td>
+                    </tr>
+                    <tr>
+                      <td>College</td>
+                      <td>{{ student.college || 'N/A' }}</td>
+                      <td>{{ student.college_attended_from || 'N/A' }} - {{ student.college_attended_to || 'N/A' }}</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <!-- Tabs Navigation -->
-      <ul class="nav nav-tabs mt-4" id="studentTabs" role="tablist">
-        <li class="nav-item" role="presentation">
-          <button class="nav-link active" id="personal-tab" data-bs-toggle="tab" data-bs-target="#personal" type="button" role="tab" aria-controls="personal" aria-selected="true">
-            <i class="fas fa-user me-1"></i> Personal
-          </button>
-        </li>
-        <li v-if="advanced_privilages1" class="nav-item" role="presentation">
-          <button class="nav-link" id="subjects-tab" data-bs-toggle="tab" data-bs-target="#subjects" type="button" role="tab" aria-controls="subjects" aria-selected="false">
-            <i class="fas fa-book me-1"></i> Subjects
-          </button>
-        </li>
-        <li v-if="reg_status == 'Enrolled'" class="nav-item" role="presentation">
-          <button class="nav-link" id="grades-tab" data-bs-toggle="tab" data-bs-target="#grades" type="button" role="tab" aria-controls="grades" aria-selected="false">
-            <i class="fas fa-chart-line me-1"></i> Grades
-          </button>
-        </li>
-        <li v-if="enlistment" class="nav-item" role="presentation">
-          <button class="nav-link" id="advising-tab" data-bs-toggle="tab" data-bs-target="#advising" type="button" role="tab" aria-controls="advising" aria-selected="false">
-            <i class="fas fa-clipboard-check me-1"></i> Advising
-          </button>
-        </li>
-        <li v-if="registration && advanced_privilages2" class="nav-item" role="presentation">
-          <button class="nav-link" id="schedule-tab" data-bs-toggle="tab" data-bs-target="#schedule" type="button" role="tab" aria-controls="schedule" aria-selected="false">
-            <i class="fas fa-calendar-alt me-1"></i> Schedule
-          </button>
-        </li>
-      </ul>
-
-      <!-- Tabs Content -->
-      <div class="tab-content p-3 bg-white rounded-bottom" id="studentTabsContent">
-        <!-- Personal Info Tab -->
-        <div class="tab-pane fade show active" id="personal" role="tabpanel" aria-labelledby="personal-tab">
-          <div class="row">
-            <div class="col-md-6">
-              <h6 class="mb-3"><i class="fas fa-users me-2"></i>Family Information</h6>
-              <table class="table table-sm">
+          <!-- Subjects Tab -->
+          <div v-if="advanced_privilages1" class="tab-pane fade" id="subjects" role="tabpanel" aria-labelledby="subjects-tab">
+            <div v-if="registration" class="table-responsive">
+              <table class="table table-sm table-hover">
                 <thead>
                   <tr>
-                    <th>Relation</th>
-                    <th>Name</th>
-                    <th>Contact</th>
-                    <th>Email</th>
+                    <th>Section</th>
+                    <th>Course</th>
+                    <th>Units</th>
+                    <th>Midterm</th>
+                    <th>Final</th>
+                    <th>Remarks</th>
+                    <th>Faculty</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>Mother</td>
-                    <td>{{ student.mother || 'N/A' }}</td>
-                    <td>{{ student.mother_contact || 'N/A' }}</td>
-                    <td>{{ student.mother_email || 'N/A' }}</td>
+                  <tr v-for="record in records" :class="{'table-secondary': record.intFinalized == 2}">
+                    <td>
+                      {{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}
+                    </td>
+                    <td>
+                      <a :href="base_url + 'unity/classlist_viewer/' + record.classlistID + '/0/' + id">{{ record.strCode }}</a>
+                      <span v-if="record.elective_classlist_id">&nbsp;( {{ record.elective_subject.strCode }} )</span>
+                    </td>
+                    <td>{{ record.strUnits }}</td>
+                    <td :class="{'fw-bold': record.intFinalized >=1}">
+                      {{ record.v2 != 'OW' ? (record.intFinalized >=1 ? record.v2 : 'NGS') : 'OW' }}
+                    </td>
+                    <td :class="{'fw-bold': record.intFinalized >=2, 'text-danger': record.strRemarks == 'Failed'}">
+                      {{ record.v3 != 'OW' ? (record.intFinalized >=2 ? record.v3 : 'NGS') : 'OW' }}
+                    </td>
+                    <td :class="{'text-danger': record.strRemarks == 'Failed'}">
+                      {{ record.intFinalized >=1 ? record.strRemarks : '---' }}
+                    </td>
+                    <td>{{ record.facultyName }}</td>
                   </tr>
+                </tbody>
+                <tfoot v-if="electives.length > 0">
                   <tr>
-                    <td>Father</td>
-                    <td>{{ student.father || 'N/A' }}</td>
-                    <td>{{ student.father_contact || 'N/A' }}</td>
-                    <td>{{ student.father_email || 'N/A' }}</td>
+                    <td colspan="7">
+                      <h6 class="mt-3">Assign/Unassign Elective Subjects</h6>
+                      <form @submit.prevent='assignElective' class="row g-3">
+                        <div class="col-md-5">
+                          <select v-model="elective_classlist" required class="form-control form-control-sm">
+                            <option value="" disabled>Select Subject</option>
+                            <option v-for="record in records" :value='record.classlistID'>{{ record.strCode }}</option>
+                          </select>
+                        </div>
+                        <div class="col-md-5">
+                          <select v-model="elective_subj" required class="form-control form-control-sm">
+                            <option value="" disabled>Select Elective</option>
+                            <option v-for="elective in electives" :value='elective.intSubjectID'>{{ elective.strCode }}</option>
+                          </select>
+                        </div>
+                        <div class="col-md-2">
+                          <button type="submit" class="btn btn-primary btn-sm w-100">Update</button>
+                        </div>
+                      </form>
+                    </td>
                   </tr>
+                </tfoot>
+              </table>
+            </div>
+            
+            <div class="mt-4">
+              <button type="button" class="btn btn-outline-secondary me-2">
+                <i class="fas fa-print me-1"></i> Print ROG
+              </button>
+              <button type="button" class="btn btn-outline-secondary">
+                <i class="fas fa-print me-1"></i> Print Data
+              </button>
+            </div>
+          </div>
+
+          <!-- Grades Tab -->
+          <div v-if="reg_status == 'Enrolled'" class="tab-pane fade" id="grades" role="tabpanel" aria-labelledby="grades-tab">
+            <div class="table-responsive">
+              <table class="table table-sm table-hover">
+                <thead>
                   <tr>
-                    <td>Guardian</td>
-                    <td>{{ student.guardian || 'N/A' }}</td>
-                    <td>{{ student.guardian_contact || 'N/A' }}</td>
-                    <td>{{ student.guardian_email || 'N/A' }}</td>
+                    <th>Subject</th>
+                    <th>Section</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Date Changed</th>
+                    <th>Changed By</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="record in change_grade">
+                    <td>{{ record.strCode }}</td>
+                    <td>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td>
+                    <td>{{ record.from_grade }}</td>
+                    <td>{{ record.to_grade }}</td>
+                    <td>{{ record.date }}</td>
+                    <td>{{ record.changed_by }}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <div class="col-md-6">
-              <h6 class="mb-3"><i class="fas fa-school me-2"></i>Educational Background</h6>
-              <table class="table table-sm">
+          </div>
+
+          <!-- Advising Tab -->
+          <div v-if="enlistment" class="tab-pane fade" id="advising" role="tabpanel" aria-labelledby="advising-tab">
+            <h6 class="mb-3">Approved Subjects for Enlistment</h6>
+            <div class="table-responsive">
+              <table class="table table-sm table-hover">
                 <thead>
                   <tr>
-                    <th>Level</th>
-                    <th>School</th>
-                    <th>Year(s)</th>
+                    <th>Subject</th>
+                    <th>Section</th>
+                    <th>Schedule</th>
+                    <th>Units</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>High School</td>
-                    <td>{{ student.high_school || 'N/A' }}</td>
-                    <td>{{ student.high_school_attended || 'N/A' }}</td>
+                  <tr v-for="subject in enlisted_subjects">
+                    <td>{{ subject.strCode }}</td>
+                    <td>
+                      <a target="_blank" :href="base_url + 'unity/classlist_viewer/'+subject.intID">
+                        {{ subject.strClassName + subject.year + subject.strSection + subject.sub_section }}
+                      </a>
+                    </td>
+                    <td>{{ subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}</td>
+                    <td>{{ subject.strUnits }}</td>
                   </tr>
+                </tbody>
+                <tfoot>
                   <tr>
-                    <td>Senior High</td>
-                    <td>{{ student.senior_high || 'N/A' }}</td>
-                    <td>{{ student.senior_high_attended || 'N/A' }}</td>
+                    <td colspan="4" class="text-end">
+                      <button @click="enlistStudent" class="btn btn-primary">
+                        <i class="fas fa-save me-1"></i> Enlist Advised Subjects
+                      </button>
+                    </td>
                   </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+
+          <!-- Schedule Tab -->
+          <div v-if="registration && advanced_privilages2" class="tab-pane fade" id="schedule" role="tabpanel" aria-labelledby="schedule-tab">
+            <div class="table-responsive">
+              <table class="table table-sm table-hover">
+                <thead>
                   <tr>
-                    <td>College</td>
-                    <td>{{ student.college || 'N/A' }}</td>
-                    <td>{{ student.college_attended_from || 'N/A' }} - {{ student.college_attended_to || 'N/A' }}</td>
+                    <th>Section</th>
+                    <th>Sub Section</th>
+                    <th>Course Code</th>
+                    <th>Description</th>
+                    <th>Units</th>
+                    <th>Schedule</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="record in records">
+                    <td>{{ record.strClassName + ' ' + record.year + record.strSection }}</td>
+                    <td>{{ record.sub_section!=null?record.sub_section:'' }}</td>
+                    <td>{{ record.strCode }}</td>
+                    <td>{{ record.strDescription }}</td>
+                    <td>
+                      {{ record.strUnits == 0 ? '(' + record.intLectHours + ')' : record.strUnits }}
+                    </td>
+                    <td>{{ record.schedule.schedString || 'Not scheduled' }}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
-          </div>
-        </div>
-
-        <!-- Subjects Tab -->
-        <div v-if="advanced_privilages1" class="tab-pane fade" id="subjects" role="tabpanel" aria-labelledby="subjects-tab">
-          <div v-if="registration" class="table-responsive">
-            <table class="table table-sm table-hover">
-              <thead>
-                <tr>
-                  <th>Section</th>
-                  <th>Course</th>
-                  <th>Units</th>
-                  <th>Midterm</th>
-                  <th>Final</th>
-                  <th>Remarks</th>
-                  <th>Faculty</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="record in records" :class="{'table-secondary': record.intFinalized == 2}">
-                  <td>
-                    {{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}
-                  </td>
-                  <td>
-                    <a :href="base_url + 'unity/classlist_viewer/' + record.classlistID + '/0/' + id">{{ record.strCode }}</a>
-                    <span v-if="record.elective_classlist_id">&nbsp;( {{ record.elective_subject.strCode }} )</span>
-                  </td>
-                  <td>{{ record.strUnits }}</td>
-                  <td :class="{'fw-bold': record.intFinalized >=1}">
-                    {{ record.v2 != 'OW' ? (record.intFinalized >=1 ? record.v2 : 'NGS') : 'OW' }}
-                  </td>
-                  <td :class="{'fw-bold': record.intFinalized >=2, 'text-danger': record.strRemarks == 'Failed'}">
-                    {{ record.v3 != 'OW' ? (record.intFinalized >=2 ? record.v3 : 'NGS') : 'OW' }}
-                  </td>
-                  <td :class="{'text-danger': record.strRemarks == 'Failed'}">
-                    {{ record.intFinalized >=1 ? record.strRemarks : '---' }}
-                  </td>
-                  <td>{{ record.facultyName }}</td>
-                </tr>
-              </tbody>
-              <tfoot v-if="electives.length > 0">
-                <tr>
-                  <td colspan="7">
-                    <h6 class="mt-3">Assign/Unassign Elective Subjects</h6>
-                    <form @submit.prevent='assignElective' class="row g-3">
-                      <div class="col-md-5">
-                        <select v-model="elective_classlist" required class="form-control form-control-sm">
-                          <option value="" disabled>Select Subject</option>
-                          <option v-for="record in records" :value='record.classlistID'>{{ record.strCode }}</option>
-                        </select>
-                      </div>
-                      <div class="col-md-5">
-                        <select v-model="elective_subj" required class="form-control form-control-sm">
-                          <option value="" disabled>Select Elective</option>
-                          <option v-for="elective in electives" :value='elective.intSubjectID'>{{ elective.strCode }}</option>
-                        </select>
-                      </div>
-                      <div class="col-md-2">
-                        <button type="submit" class="btn btn-primary btn-sm w-100">Update</button>
-                      </div>
-                    </form>
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
-          
-          <div class="mt-4">
-            <button type="button" class="btn btn-outline-secondary me-2">
-              <i class="fas fa-print me-1"></i> Print ROG
-            </button>
-            <button type="button" class="btn btn-outline-secondary">
-              <i class="fas fa-print me-1"></i> Print Data
-            </button>
-          </div>
-        </div>
-
-        <!-- Grades Tab -->
-        <div v-if="reg_status == 'Enrolled'" class="tab-pane fade" id="grades" role="tabpanel" aria-labelledby="grades-tab">
-          <div class="table-responsive">
-            <table class="table table-sm table-hover">
-              <thead>
-                <tr>
-                  <th>Subject</th>
-                  <th>Section</th>
-                  <th>From</th>
-                  <th>To</th>
-                  <th>Date Changed</th>
-                  <th>Changed By</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="record in change_grade">
-                  <td>{{ record.strCode }}</td>
-                  <td>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td>
-                  <td>{{ record.from_grade }}</td>
-                  <td>{{ record.to_grade }}</td>
-                  <td>{{ record.date }}</td>
-                  <td>{{ record.changed_by }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Advising Tab -->
-        <div v-if="enlistment" class="tab-pane fade" id="advising" role="tabpanel" aria-labelledby="advising-tab">
-          <h6 class="mb-3">Approved Subjects for Enlistment</h6>
-          <div class="table-responsive">
-            <table class="table table-sm table-hover">
-              <thead>
-                <tr>
-                  <th>Subject</th>
-                  <th>Section</th>
-                  <th>Schedule</th>
-                  <th>Units</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="subject in enlisted_subjects">
-                  <td>{{ subject.strCode }}</td>
-                  <td>
-                    <a target="_blank" :href="base_url + 'unity/classlist_viewer/'+subject.intID">
-                      {{ subject.strClassName + subject.year + subject.strSection + subject.sub_section }}
-                    </a>
-                  </td>
-                  <td>{{ subject.sched_room + " " + subject.sched_day + " " + subject.sched_time }}</td>
-                  <td>{{ subject.strUnits }}</td>
-                </tr>
-              </tbody>
-              <tfoot>
-                <tr>
-                  <td colspan="4" class="text-end">
-                    <button @click="enlistStudent" class="btn btn-primary">
-                      <i class="fas fa-save me-1"></i> Enlist Advised Subjects
-                    </button>
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
-        </div>
-
-        <!-- Schedule Tab -->
-        <div v-if="registration && advanced_privilages2" class="tab-pane fade" id="schedule" role="tabpanel" aria-labelledby="schedule-tab">
-          <div class="table-responsive">
-            <table class="table table-sm table-hover">
-              <thead>
-                <tr>
-                  <th>Section</th>
-                  <th>Sub Section</th>
-                  <th>Course Code</th>
-                  <th>Description</th>
-                  <th>Units</th>
-                  <th>Schedule</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="record in records">
-                  <td>{{ record.strClassName + ' ' + record.year + record.strSection }}</td>
-                  <td>{{ record.sub_section!=null?record.sub_section:'' }}</td>
-                  <td>{{ record.strCode }}</td>
-                  <td>{{ record.strDescription }}</td>
-                  <td>
-                    {{ record.strUnits == 0 ? '(' + record.intLectHours + ')' : record.strUnits }}
-                  </td>
-                  <td>{{ record.schedule.schedString || 'Not scheduled' }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="mt-3">
-            <button type="button" class="btn btn-outline-primary me-2">
-              <i class="fas fa-print me-1"></i> Print Schedule
-            </button>
+            <div class="mt-3">
+              <button type="button" class="btn btn-outline-primary me-2">
+                <i class="fas fa-print me-1"></i> Print Schedule
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- LOA Modal -->
-  <div class="modal fade" id="loa-modal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Tag Student for Leave of Absence</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form @submit.prevent="submitLoa()">
-            <div class="mb-3">
-              <label class="form-label">Tag for AWOL?</label>
-              <select v-model="awol" class="form-select">
-                <option value="4">No</option>
-                <option value="5">Yes</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Reason for leave of absence</label>
-              <textarea v-model.trim="loaDetails.loa_remarks" class="form-control" rows="3" required></textarea>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Date</label>
-              <input type="date" v-model="loaDetails.loa_date" class="form-control" required>
-            </div>
-            <div class="d-flex justify-content-end">
-              <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
-          </form>
+    <!-- LOA Modal -->
+    <div class="modal fade" id="loa-modal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Tag Student for Leave of Absence</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form @submit.prevent="submitLoa()">
+              <div class="mb-3">
+                <label class="form-label">Tag for AWOL?</label>
+                <select v-model="awol" class="form-select">
+                  <option value="4">No</option>
+                  <option value="5">Yes</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Reason for leave of absence</label>
+                <textarea v-model.trim="loaDetails.loa_remarks" class="form-control" rows="3" required></textarea>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Date</label>
+                <input type="date" v-model="loaDetails.loa_date" class="form-control" required>
+              </div>
+              <div class="d-flex justify-content-end">
+                <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </div>                  
   
   <script>
-    const { createApp, ref } = Vue;
-    
-createApp({
+  new Vue({
+  el: '#student-viewer-container',
   data() {
     return {
       test: 'dasd',
