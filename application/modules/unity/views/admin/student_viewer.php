@@ -761,12 +761,6 @@ createApp({
     // Initialize base URL and other variables        
     let url_string = window.location.href;
     if (this.id != 0) {
-      this.loadStudentData();
-    }
-  },
-  
-  methods: {
-    loadStudentData() {
       Swal.fire({
         title: 'Loading',
         html: 'Syncing data...',
@@ -804,7 +798,10 @@ createApp({
         console.error("Error syncing payments:", error);
         Swal.fire('Error', 'Failed to sync payment data', 'error');
       });
-    },
+    }
+  },
+  
+  methods: {    
 
     processStudentData(data) {
       this.student = data.student;
