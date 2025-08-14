@@ -29,7 +29,7 @@
         }
     </style>
     <div class="content-wrapper">
-        <div class="min-h-screen">
+        <div>
             <!-- Header -->
             <header class="bg-white shadow-sm">
                 <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
@@ -140,21 +140,24 @@
                         </div>
                     </div>
                     <div class="overflow-x-auto">
-                        <table id="subjects-table" class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
+                        <table id="subjects-table" class="table table-hover table-bordered">
+                            <thead>
                                 <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Applied</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Interview Date</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reserved Date</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Enrolled Date</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Program</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    <th>slug</th>
+                                    <th>Date</th>
+                                    <th>Date Interviewed</th>
+                                    <th>Date Reserved</th>
+                                    <th>Date Enrolled</th>
+                                    <th>Last Name</th>
+                                    <th>First Name</th> 
+                                    <th>ST</th>                           
+                                    <th>Program</th>                            
+                                    <th>Status</th>
+                                    <th>Actions</th>
+
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">                           
+                            <tbody>
                             </tbody>
                         </table>
                     </div>                                
