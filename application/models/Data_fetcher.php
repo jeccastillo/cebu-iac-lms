@@ -4350,7 +4350,7 @@ class Data_fetcher extends CI_Model {
             foreach($schedule as $sched) {
                 if(isset($sched['strDay']))
                     $sched_day.= $sched['strDayAbvr'];             
-                    $sched_time .= date('g:ia',strtotime($schedule[0]['dteStart'])).' - '.date('g:ia',strtotime($schedule[0]['dteEnd']))." ";         
+                    $sched_time .= date('g:ia',strtotime($sched['dteStart'])).' - '.date('g:ia',strtotime($sched['dteEnd']))." ";         
                     //$html.= date('g:ia',strtotime($sched['dteStart'])).'  '.date('g:ia',strtotime($sched['dteEnd']))." ".$sched['strDay']." ".$sched['strRoomCode'] . " ";                    
             }
                                                                 
