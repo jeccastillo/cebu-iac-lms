@@ -15,8 +15,8 @@ const LeadsApp = new Vue({
         successMessage: '',
         loading: false,
         exporting: false,
-        sortField: 'date',
-        sortDirection: 'desc',
+        sortField: 'created_at',
+        sortDirection: 'asc',
         currentPage: 1,
         itemsPerPage: 20,
         searchTimeout: null
