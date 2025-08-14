@@ -1681,15 +1681,15 @@ class Excel extends CI_Controller {
                     $objPHPExcel->setActiveSheetIndex(0)                            
                     ->setCellValue('F'.$i, $sched['strDayAbvr'])
                     ->setCellValue('G'.$i, date('g:ia',strtotime($sched['dteStart'])).' - '.date('g:ia',strtotime($sched['dteEnd'])))
-                    ->setCellValue('H'.$i, $sched['strRoomCode']);                    
-                    if($ctr != count($classlist['schedule']))
-                        $i++;                    
+                    ->setCellValue('H'.$i, $sched['strRoomCode']);                                    
+                    $i++;                    
+                    $ctr++;    
                 }
-                $ctr++;
+                
             }
             
-
-            $i++;
+            if(count($classlist['schedule']) == 0)
+                $i++;
         }
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(50);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
