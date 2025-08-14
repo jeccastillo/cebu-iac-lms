@@ -4345,12 +4345,17 @@ class Data_fetcher extends CI_Model {
             $schedule = $this->getScheduleByCode($classlist['intID']);        
             $sched_day = '';
             $sched_time = '';
-            $sched_room = '';                
+            $sched_room = '';     
+            $prev_sched_time = '';           
             
             foreach($schedule as $sched) {
                 if(isset($sched['strDay']))
-                    $sched_day.= $sched['strDayAbvr'];             
-                    $sched_time .= date('g:ia',strtotime($sched['dteStart'])).' - '.date('g:ia',strtotime($sched['dteEnd']))." ";         
+                    $sched_day.= $sched['strDayAbvr'];                                 
+                    $st = date('g:ia',strtotime($sched['dteStart'])).' - '.date('g:ia',strtotime($sched['dteEnd']));
+                    if($st != $prev_sched_time)
+                        $sched_time .= $st." ";         
+                    
+                    $prev_sched_time = $st;
                     //$html.= date('g:ia',strtotime($sched['dteStart'])).'  '.date('g:ia',strtotime($sched['dteEnd']))." ".$sched['strDay']." ".$sched['strRoomCode'] . " ";                    
             }
                                                                 
