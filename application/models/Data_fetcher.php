@@ -4351,13 +4351,13 @@ class Data_fetcher extends CI_Model {
             
             foreach($schedule as $sched) {
                 if(isset($sched['strDay'])){
-                    $sched_day.= $sched['strDayAbvr'];                                                 
+                    $sched_day.= $sched['strDayAbvr']."<br />";                                                 
                     $st = date('g:ia',strtotime($sched['dteStart'])).' - '.date('g:ia',strtotime($sched['dteEnd']));
                     $room = $sched['strRoomCode'];
                     if($st != $prev_sched_time)
-                        $sched_time .= $st." ";         
+                        $sched_time .= $st."<br />";         
                     if($room != $prev_room)
-                        $sched_room.= $room." ";
+                        $sched_room.= $room."<br />";
                     $prev_sched_time = $st;
                     $prev_room = $room;
                  }   
@@ -4634,9 +4634,9 @@ class Data_fetcher extends CI_Model {
             $s['dteStartF'] = date('gia',strtotime($s['dteStart']));
             
             if(!empty($s)){
-                $schedString.= $s['strDayAbvr']."<br />";
-                $timeString = date('g:ia',strtotime($s['dteStart'])).'  '.date('g:ia',strtotime($s['dteEnd']))."<br />";
-                $timeString.= $s['strRoomCode']."<br />";
+                $schedString.= $s['strDayAbvr'];
+                $timeString = date('g:ia',strtotime($s['dteStart'])).'  '.date('g:ia',strtotime($s['dteEnd']))." ";
+                $timeString.= $s['strRoomCode'];
             }            
             $ret[] = $s;
         }
