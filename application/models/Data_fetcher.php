@@ -4351,13 +4351,13 @@ class Data_fetcher extends CI_Model {
             
             foreach($schedule as $sched) {
                 if(isset($sched['strDay'])){
-                    $sched_day.= $sched['strDayAbvr']."<br />";                                                 
+                    $sched_day.= $sched['strDayAbvr']."\n";                                                 
                     $st = date('g:ia',strtotime($sched['dteStart'])).' - '.date('g:ia',strtotime($sched['dteEnd']));
                     $room = $sched['strRoomCode'];
                     if($st != $prev_sched_time)
-                        $sched_time .= $st."<br />";         
+                        $sched_time .= $st."\n";         
                     if($room != $prev_room)
-                        $sched_room.= $room."<br />";
+                        $sched_room.= $room."\n";
                     $prev_sched_time = $st;
                     $prev_room = $room;
                  }   
