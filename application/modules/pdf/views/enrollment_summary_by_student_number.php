@@ -15,7 +15,7 @@
     $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
     $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
     $pdf->SetFont('helvetica','',10);
-    //$pdf->SetAutoPageBreak(TRUE, 6);
+    $pdf->SetAutoPageBreak(TRUE, 6);
     
    //font setting
     //$pdf->SetFont('calibril_0', '', 10, '', 'false');
@@ -52,18 +52,18 @@
             </tr>
             </table>';
     
-$html .= '<br /><table class="table table-bordered table-striped">
+$html .= '<br />
+    <table class="table table-bordered table-striped">
      <tr>
         <th style="width:35%;font-size:9px;">Program</th>';
-                foreach($student_years as $year){
-                    $html .= '<th style="font-size:9px;">ID' . $year . '</th>';
-                }
+        foreach($student_years as $year){
+            $html .= '<th style="font-size:9px;">ID' . $year . '</th>';
+        }
 
 $html .='<th><strong>Total</strong></th></tr>
      <tr style="line-height:10px;">
         <th colspan="9"></th>
-     </tr>
-     ';
+     </tr>';
     
     foreach($enrollment as $item){
         $total_per_program = 0; 
@@ -77,8 +77,7 @@ $html .='<th><strong>Total</strong></th></tr>
         $html .= '<td style="font-size:8px;">' . $total_per_program . '</td></tr>
             <tr style="line-height:5px;">
                 <th colspan="7"></th>
-            </tr>
-            ';
+            </tr>';
     }
 $html .= ' 
     <tr style="line-height:10px;">
