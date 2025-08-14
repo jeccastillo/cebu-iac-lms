@@ -77,6 +77,8 @@ const LeadsApp = new Vue({
                 campus: window.campus || '',
                 limit: 2000, // Get more records for client-side filtering
                 page: 1,
+                count_content: 10,
+                search_data:'',
                 search_field: 'first_name',
                 sort_field: this.sortField,
                 order_by: this.sortDirection
