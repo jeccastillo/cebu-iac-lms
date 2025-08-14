@@ -64,7 +64,7 @@ $html .='<th><strong>Total</strong></th></tr>
     
     foreach($enrollment as $item){    
         $total_per_program = 0; 
-        
+        $html .= "<tr>";
         foreach($student_years as $year){   
             $total_per_program += $item['years'][$year];
             $html .= '<td style="font-size:8px;">ID'.$item['years'][$year].'</td>';
