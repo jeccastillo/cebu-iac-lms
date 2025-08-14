@@ -22,7 +22,7 @@
 <div id="leads-app" class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 content-wrapper">
     <!-- Header -->
     <header class="bg-white shadow-lg border-b border-gray-200">
-        <div class="mx-auto px-6 py-6 sm:px-8 lg:px-10">
+        <div class="max-w-7xl mx-auto px-6 py-6 sm:px-8 lg:px-10">
             <div class="flex justify-between items-center">
                 <div class="space-y-3">
                     <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Student Applicants Management</h1>
