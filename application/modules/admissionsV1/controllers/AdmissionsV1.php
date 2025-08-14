@@ -135,7 +135,7 @@ class AdmissionsV1 extends CI_Controller {
             $this->data['opentree'] = "leads";
             //$this->data['subjects'] = $this->data_fetcher->fetch_table('tb_mas_subjects',array('strCode','asc'));
             $this->load->view("common/header",$this->data);
-            $this->load->view("admin/leads_view",$this->data);
+            $this->load->view("admin/leads_view_new",$this->data);
             $this->load->view("common/footer",$this->data); 
             $this->load->view("common/subjects_conf",$this->data); 
             //print_r($this->data['classlist']);
