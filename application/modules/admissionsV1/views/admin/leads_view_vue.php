@@ -41,7 +41,7 @@
                     </button>
                     <button @click="exportToExcel" :disabled="loading || exporting" class="inline-flex items-center px-6 py-2 border border-transparent rounded-lg shadow-sm  font-medium text-white bg-primary hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200">
                         <span v-if="exporting">Exporting...</span>
-                        <span v-else>📊 Export to Excel</span>
+                        <span v-else">📊 Export to Excel</span>
                     </button>
                 </div>
             </div>
@@ -170,7 +170,7 @@
                     <h3 class="text-xl font-semibold text-gray-900">
                         Student Applicants 
                     </h3>
-                    <p v-if="!loading && leads.length > 0" class=" text-gray-600 mt-1">{{ leads.length }} total records found</p>
+                    <p v-if="!loading && totalRecords > 0" class=" text-gray-600 mt-1">{{ totalRecords }} total records found</p>
                 </div>
                 <div class="relative">
                     <input 
@@ -247,7 +247,7 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr v-if="!loading && filteredLeads.length === 0">
+                        <tr v-if="!loading && totalRecords === 0">
                             <td class="px-6 py-4 text-center text-gray-500" colspan="10">
                                 <div class="py-12">
                                     <div class="text-6xl text-gray-300 mb-4">🔍</div>
@@ -260,20 +260,83 @@
                 </table>
             </div>
 
-            <!-- Pagination -->
-            <div v-if="!loading && filteredLeads.length > itemsPerPage" class="px-8 py-4 border-t border-gray-200 flex items-center justify-between bg-gray-50">
-                <div class="flex items-center">
-                    <span class=" text-gray-700 font-medium">
-                        Showing {{ ((currentPage - 1) * itemsPerPage) + 1 }} to {{ Math.min(currentPage * itemsPerPage, filteredLeads.length) }} of {{ filteredLeads.length }} results
-                    </span>
+            <!-- Enhanced Pagination Controls -->
+            <div v-if="!loading && totalRecords > 0" class="px-8 py-6 border-t border-gray-200 bg-gray-50">
+                <div class="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
+                    <!-- Records Info and Items Per Page -->
+                    <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                        <span class="text-sm text-gray-700 font-medium">
+                            Showing {{ startRecord }} to {{ endRecord }} of {{ totalRecords }} results
+                        </span>
+                        <div class="flex items-center space-x-2">
+                            <label for="itemsPerPage" class="text-sm text-gray-600">Show:</label>
+                            <select id="itemsPerPage" v-model="itemsPerPage" @change="changeItemsPerPage(itemsPerPage)" class="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary">
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            <span class="text-sm text-gray-600">per page</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Pagination Controls -->
+                    <div class="flex items-center space-x-2">
+                        <!-- First Page -->
+                        <button @click="goToPage(1)" :disabled="currentPage === 1" class="px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200">
+                            ⏮️ First
+                        </button>
+                        
+                        <!-- Previous Page -->
+                        <button @click="previousPage()" :disabled="currentPage === 1" class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200">
+                            ← Previous
+                        </button>
+                        
+                        <!-- Page Numbers -->
+                        <div class="flex items-center space-x-1">
+                            <template v-for="page in Math.min(5, totalPages)" :key="page">
+                                <button 
+                                    v-if="page <= totalPages && (page === 1 || page === totalPages || Math.abs(page - currentPage) <= 2)"
+                                    @click="goToPage(page)" 
+                                    :class="[
+                                        'px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200',
+                                        page === currentPage 
+                                            ? 'bg-primary text-white border border-primary' 
+                                            : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                                    ]"
+                                >
+                                    {{ page }}
+                                </button>
+                                <span v-else-if="page === currentPage - 3 || page === currentPage + 3" class="px-2 text-gray-500">...</span>
+                            </template>
+                        </div>
+                        
+                        <!-- Next Page -->
+                        <button @click="nextPage()" :disabled="currentPage === totalPages" class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200">
+                            Next →
+                        </button>
+                        
+                        <!-- Last Page -->
+                        <button @click="goToPage(totalPages)" :disabled="currentPage === totalPages" class="px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200">
+                            Last ⏭️
+                        </button>
+                    </div>
                 </div>
-                <div class="flex items-center space-x-3">
-                    <button @click="currentPage = Math.max(1, currentPage - 1)" :disabled="currentPage === 1" class="px-4 py-2 border border-gray-300 rounded-lg  font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200">
-                        ← Previous
-                    </button>
-                    <span class="px-4 py-2  font-medium text-gray-700">Page {{ currentPage }} of {{ totalPages }}</span>
-                    <button @click="currentPage = Math.min(totalPages, currentPage + 1)" :disabled="currentPage === totalPages" class="px-4 py-2 border border-gray-300 rounded-lg  font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200">
-                        Next →
+                
+                <!-- Page Jump -->
+                <div class="mt-4 flex items-center justify-center space-x-2">
+                    <span class="text-sm text-gray-600">Go to page:</span>
+                    <input 
+                        type="number" 
+                        :min="1" 
+                        :max="totalPages" 
+                        v-model.number="jumpToPage" 
+                        @keyup.enter="goToPage(jumpToPage)"
+                        class="w-16 px-2 py-1 border border-gray-300 rounded-md text-sm text-center focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                        placeholder="1"
+                    >
+                    <button @click="goToPage(jumpToPage)" class="px-3 py-1 bg-primary text-white rounded-md text-sm hover:bg-blue-700 transition-colors duration-200">
+                        Go
                     </button>
                 </div>
             </div>

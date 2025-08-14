@@ -19,79 +19,52 @@ const LeadsApp = new Vue({
         sortDirection: 'asc',
         currentPage: 1,
         itemsPerPage: 20,
+        totalRecords: 0,
+        totalPages: 0,
+        jumpToPage: 1,
         searchTimeout: null
     },
     computed: {
-        filteredLeads() {
-            let filtered = this.leads;
-            
-            // Client-side search filtering
-            if (this.searchQuery) {
-                const query = this.searchQuery.toLowerCase();
-                filtered = filtered.filter(lead =>
-                    (lead.first_name && lead.first_name.toLowerCase().includes(query)) ||
-                    (lead.last_name && lead.last_name.toLowerCase().includes(query)) ||
-                    (lead.program && lead.program.toLowerCase().includes(query)) ||
-                    (lead.status && lead.status.toLowerCase().includes(query)) ||
-                    (lead.slug && lead.slug.toLowerCase().includes(query))
-                );
-            }
-            
-            // Client-side sorting
-            filtered.sort((a, b) => {
-                let aVal = a[this.sortField] || '';
-                let bVal = b[this.sortField] || '';
-                
-                // Handle date sorting
-                if (this.sortField.includes('date')) {
-                    aVal = new Date(aVal || '1900-01-01');
-                    bVal = new Date(bVal || '1900-01-01');
-                }
-                
-                if (this.sortDirection === 'asc') {
-                    return aVal > bVal ? 1 : -1;
-                } else {
-                    return aVal < bVal ? 1 : -1;
-                }
-            });
-            
-            return filtered;
-        },
+        // Server-side pagination - leads are already paginated from API
         paginatedLeads() {
-            const start = (this.currentPage - 1) * this.itemsPerPage;
-            const end = start + this.itemsPerPage;
-            return this.filteredLeads.slice(start, end);
+            return this.leads;
         },
-        totalPages() {
-            return Math.ceil(this.filteredLeads.length / this.itemsPerPage);
+        
+        // Calculate pagination info
+        startRecord() {
+            return ((this.currentPage - 1) * this.itemsPerPage) + 1;
+        },
+        
+        endRecord() {
+            return Math.min(this.currentPage * this.itemsPerPage, this.totalRecords);
         }
     },
     methods: {
-        fetchLeads() {
+        fetchLeads(resetPage = false) {
             this.loading = true;
             this.errorMessage = '';
             
-            // Prepare parameters for API call
+            // Reset to first page if requested (e.g., when filters change)
+            if (resetPage) {
+                this.currentPage = 1;
+            }
+            
+            // Prepare parameters for API call with server-side pagination
             let params = {
                 current_sem: this.selectedTerm,
                 campus: window.campus || '',
-                limit: 2000, // Get more records for client-side filtering
-                page: 1,
-                count_content: 10,
-                search_data:'',
-                filter: this.statusFilter,
+                limit: this.itemsPerPage,
+                page: this.currentPage,
+                count_content: this.itemsPerPage,
+                search_data: this.searchQuery || '',
+                filter: this.statusFilter !== 'none' ? this.statusFilter : '',
                 search_field: 'first_name',
                 sort_field: this.sortField,
                 order_by: this.sortDirection
             };
             
-            // Add filters if they're not default values
-            if (this.statusFilter !== 'none') {
-                params.filter = this.statusFilter;
-            }
-            
+            // Add date range filters if specified
             if (this.dateRange) {
-                // Parse date range and add to params
                 const dates = this.dateRange.split(' to ');
                 if (dates.length === 2) {
                     const startDate = dates[0].trim();
@@ -120,17 +93,31 @@ const LeadsApp = new Vue({
                 .then(response => {
                     if (response.data && response.data.data) {
                         this.leads = response.data.data;
-                        this.currentPage = 1; // Reset to first page
-                        this.successMessage = `Loaded ${this.leads.length} applicant records`;
+                        
+                        // Handle pagination metadata
+                        if (response.data.pagination) {
+                            this.totalRecords = response.data.pagination.total || response.data.data.length;
+                            this.totalPages = response.data.pagination.total_pages || Math.ceil(this.totalRecords / this.itemsPerPage);
+                            this.currentPage = response.data.pagination.current_page || this.currentPage;
+                        } else {
+                            // Fallback if no pagination metadata
+                            this.totalRecords = response.data.total || response.data.data.length;
+                            this.totalPages = Math.ceil(this.totalRecords / this.itemsPerPage);
+                        }
+                        
+                        this.successMessage = `Loaded ${this.leads.length} of ${this.totalRecords} applicant records`;
                         setTimeout(() => { this.successMessage = ''; }, 3000);
                     } else if (response.data && Array.isArray(response.data)) {
                         // Handle case where data is directly an array
                         this.leads = response.data;
-                        this.currentPage = 1;
+                        this.totalRecords = response.data.length;
+                        this.totalPages = Math.ceil(this.totalRecords / this.itemsPerPage);
                         this.successMessage = `Loaded ${this.leads.length} applicant records`;
                         setTimeout(() => { this.successMessage = ''; }, 3000);
                     } else {
                         this.leads = [];
+                        this.totalRecords = 0;
+                        this.totalPages = 0;
                         this.errorMessage = "No data received from server";
                     }
                     this.loading = false;
@@ -143,6 +130,9 @@ const LeadsApp = new Vue({
                         errorMsg += "Request timed out. Please try again.";
                     } else if (error.response) {
                         errorMsg += `Server error: ${error.response.status}`;
+                        if (error.response.data && error.response.data.message) {
+                            errorMsg += ` - ${error.response.data.message}`;
+                        }
                     } else if (error.request) {
                         errorMsg += "Network error. Please check your connection.";
                     } else {
@@ -152,6 +142,8 @@ const LeadsApp = new Vue({
                     this.errorMessage = errorMsg;
                     this.loading = false;
                     this.leads = [];
+                    this.totalRecords = 0;
+                    this.totalPages = 0;
                 });
         },
         
@@ -162,17 +154,45 @@ const LeadsApp = new Vue({
         },
         
         exportToExcel() {
-            if (this.leads.length === 0) {
+            if (this.totalRecords === 0) {
                 this.errorMessage = "No data to export";
                 return;
             }
             
             this.exporting = true;
             
-            // First get fresh data from API for export
-            axios.get('https://smsapi.iacademy.edu.ph/api/v1/sms/admissions/student-info/view-applicants/' + this.selectedTerm + '/' + (window.campus || ''))
+            // First get fresh data from API for export (all records)
+            let exportParams = {
+                current_sem: this.selectedTerm,
+                campus: window.campus || '',
+                limit: 10000, // Get all records for export
+                page: 1,
+                search_data: this.searchQuery || '',
+                filter: this.statusFilter !== 'none' ? this.statusFilter : '',
+                search_field: 'first_name',
+                sort_field: this.sortField,
+                order_by: this.sortDirection
+            };
+            
+            // Add date range filters if specified
+            if (this.dateRange) {
+                const dates = this.dateRange.split(' to ');
+                if (dates.length === 2) {
+                    const startDate = dates[0].trim();
+                    const endDate = dates[1].trim();
+                    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+                    if (dateRegex.test(startDate) && dateRegex.test(endDate)) {
+                        exportParams.start = startDate;
+                        exportParams.end = endDate;
+                        exportParams.range_field = this.dateType;
+                    }
+                }
+            }
+            
+            const apiUrl = window.api_url || 'https://smsapi.iacademy.edu.ph/api/v1/sms/';
+            axios.get(apiUrl + "admissions/applications", { params: exportParams })
                 .then(response => {
-                    const exportData = response.data.data || this.filteredLeads;
+                    const exportData = response.data.data || response.data || [];
                     
                     // Create form for export
                     const baseUrl = window.base_url || '';
@@ -211,6 +231,8 @@ const LeadsApp = new Vue({
                 this.sortField = field;
                 this.sortDirection = 'asc';
             }
+            // Fetch data with new sorting
+            this.fetchLeads(true);
         },
         
         getSortIcon(field) {
@@ -258,8 +280,8 @@ const LeadsApp = new Vue({
         debouncedSearch() {
             clearTimeout(this.searchTimeout);
             this.searchTimeout = setTimeout(() => {
-                this.currentPage = 1; // Reset to first page when searching
-            }, 300);
+                this.fetchLeads(true); // Reset to first page and fetch with search
+            }, 500);
         },
         
         clearFilters() {
@@ -270,7 +292,39 @@ const LeadsApp = new Vue({
             this.currentPage = 1;
             this.successMessage = 'Filters cleared successfully';
             setTimeout(() => { this.successMessage = ''; }, 2000);
-            this.fetchLeads();
+            this.fetchLeads(true);
+        },
+        
+        // Pagination methods
+        goToPage(page) {
+            if (page >= 1 && page <= this.totalPages && page !== this.currentPage) {
+                this.currentPage = page;
+                this.jumpToPage = page; // Update jump input
+                this.fetchLeads();
+            }
+        },
+        
+        previousPage() {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+                this.jumpToPage = this.currentPage;
+                this.fetchLeads();
+            }
+        },
+        
+        nextPage() {
+            if (this.currentPage < this.totalPages) {
+                this.currentPage++;
+                this.jumpToPage = this.currentPage;
+                this.fetchLeads();
+            }
+        },
+        
+        changeItemsPerPage(newSize) {
+            this.itemsPerPage = parseInt(newSize);
+            this.currentPage = 1;
+            this.jumpToPage = 1;
+            this.fetchLeads(true);
         },
         
         refreshData() {
@@ -281,12 +335,16 @@ const LeadsApp = new Vue({
     watch: {
         // Watch for changes in filters and refetch data
         statusFilter() {
-            this.currentPage = 1;
+            this.fetchLeads(true);
         },
         dateType() {
             if (this.dateRange) {
-                this.fetchLeads();
+                this.fetchLeads(true);
             }
+        },
+        // Update jumpToPage when currentPage changes
+        currentPage(newPage) {
+            this.jumpToPage = newPage;
         }
     },
     
