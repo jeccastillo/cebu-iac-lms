@@ -758,9 +758,7 @@ createApp({
   },
   
   mounted() {
-    // Initialize base URL and other variables
-    this.base_url = window.location.origin + '/';
-    
+    // Initialize base URL and other variables        
     let url_string = window.location.href;
     if (this.id != 0) {
       this.loadStudentData();
