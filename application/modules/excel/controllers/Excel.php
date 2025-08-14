@@ -1675,7 +1675,7 @@ class Excel extends CI_Controller {
             ->setCellValue('D'.$i, $classlist['subjectDescription'])            
             ->setCellValue('E'.$i, $classlist['strUnits'])            
             ->setCellValue('I'.$i, $classlist['slots_taken_enrolled']);
-            $ctr = 2;
+            $ctr = 1;
             foreach($classlist['schedule'] as $sched){
                 if(isset($sched['strDay'])){
                     $objPHPExcel->setActiveSheetIndex(0)                            
@@ -1683,10 +1683,9 @@ class Excel extends CI_Controller {
                     ->setCellValue('G'.$i, date('g:ia',strtotime($sched['dteStart'])).' - '.date('g:ia',strtotime($sched['dteEnd'])))
                     ->setCellValue('H'.$i, $sched['strRoomCode']);                    
                     if($ctr < count($classlist['schedule']))
-                        $i++;
-
-                    $ctr++;
+                        $i++;                    
                 }
+                $ctr++;
             }
             
 
