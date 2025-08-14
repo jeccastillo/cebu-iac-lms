@@ -4362,6 +4362,7 @@ class Data_fetcher extends CI_Model {
             $classlist['sched_day'] = $sched_day;
             $classlist['sched_time'] = $sched_time;
             $classlist['sched_room'] = $sched_room;
+            $classlist['schedule'] = $schedule;
 
             $ret[] = $classlist;
         }
