@@ -287,7 +287,7 @@
 
 <script>
 // Global variables for Vue.js application
-window.api_url = "<?php echo isset($api_url) ? $api_url : 'https://smsapi.iacademy.edu.ph/api/v1/sms/'; ?>";
+window.api_url = 'https://cebuapi.iacademy.edu.ph/api/v1/sms/';
 window.base_url = "<?php echo base_url(); ?>";
 window.campus = "<?php echo isset($campus) ? $campus : ''; ?>";
 window.current_sem = "<?php echo $current_sem; ?>";

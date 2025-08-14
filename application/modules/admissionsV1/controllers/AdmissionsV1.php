@@ -129,10 +129,7 @@ class AdmissionsV1 extends CI_Controller {
                 
             
             $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
-            $this->data['current_sem'] = $term['intID'];
-            
-            // Add API URL and campus data for Vue.js
-            $this->data['api_url'] = 'https://smsapi.iacademy.edu.ph/api/v1/sms/';
+            $this->data['current_sem'] = $term['intID'];                        
             
             $this->data['page'] = "view_leads";
             $this->data['opentree'] = "leads";
