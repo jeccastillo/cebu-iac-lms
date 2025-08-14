@@ -1668,19 +1668,30 @@ class Excel extends CI_Controller {
         $i = 9;
         foreach($classlists as $classlist)
         {
-            $objPHPExcel->setActiveSheetIndex(0)            
-            ->setCellValue('A'.$i, strtoupper($classlist['strLastname'].", ".$classlist['strFirstname']." ".$classlist['strMiddlename']))
-            ->setCellValue('B'.$i, $classlist['strClassName'].$classlist['year'].$classlist['strSection']." ".$classlist['sub_section'])
-            ->setCellValue('C'.$i, $classlist['strCode'])
-            ->setCellValue('D'.$i, $classlist['subjectDescription'])
-            ->setCellValue('E'.$i, $classlist['strUnits'])
-            ->setCellValue('F'.$i, $classlist['sched_day'])
-            ->setCellValue('G'.$i, $classlist['sched_time'])
-            ->setCellValue('H'.$i, $classlist['sched_room'])
-            ->setCellValue('I'.$i, $classlist['slots_taken_enrolled']);
+            $ctr = 0;
+            foreach($classlist['schedule'] as $sched){
+                $objPHPExcel->setActiveSheetIndex(0)            
+                ->setCellValue('A'.$i, strtoupper($classlist['strLastname'].", ".$classlist['strFirstname']." ".$classlist['strMiddlename']))
+                ->setCellValue('B'.$i, $classlist['strClassName'].$classlist['year'].$classlist['strSection']." ".$classlist['sub_section'])
+                ->setCellValue('C'.$i, $classlist['strCode'])
+                ->setCellValue('D'.$i, $classlist['subjectDescription'])            
+                ->setCellValue('E'.$i, $classlist['strUnits'])            
+                ->setCellValue('I'.$i, $classlist['slots_taken_enrolled']);
             
-
-            $i++;
+            
+                if(isset($sched['strDay'])){
+                    $objPHPExcel->setActiveSheetIndex(0)                            
+                    ->setCellValue('F'.$i, $sched['strDayAbvr'])
+                    ->setCellValue('G'.$i, date('g:ia',strtotime($sched['dteStart'])).' - '.date('g:ia',strtotime($sched['dteEnd'])))
+                    ->setCellValue('H'.$i, $sched['strRoomCode']);                                    
+                    $i++;                    
+                    $ctr++;    
+                }
+                
+            }
+            
+            if($ctr == 0)
+                $i++;
         }
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(50);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
