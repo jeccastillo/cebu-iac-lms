@@ -47,7 +47,10 @@
             <tr>
                 <td>Term/SY: ' . $sem['enumSem'] . ' Term SY' . $sem['strYearStart'] . '-' . $sem['strYearEnd'] . '</td>
             </tr>
-            </table>';
+            </table>
+            <tr style="line-height:10px;">
+                <th style="border-top:1px solid #333;" colspan="9"></th>
+            </tr>';
     
 $html .= '<br /><table class="table table-bordered table-striped">
      <tr>
