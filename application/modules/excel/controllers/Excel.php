@@ -1682,9 +1682,9 @@ class Excel extends CI_Controller {
                     ->setCellValue('F'.$i, $sched['strDayAbvr'])
                     ->setCellValue('G'.$i, date('g:ia',strtotime($sched['dteStart'])).' - '.date('g:ia',strtotime($sched['dteEnd'])))
                     ->setCellValue('H'.$i, $sched['strRoomCode']);                    
-                    if(count($classlist['schedule']) > $ctr)
+                    if($ctr < count($classlist['schedule']))
                         $i++;
-                    
+
                     $ctr++;
                 }
             }
