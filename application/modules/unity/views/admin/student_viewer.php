@@ -664,11 +664,9 @@
       </div>
     </div>
   </div>                
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  
+  <script src="<?php echo base_url(); ?>assets/themes/default/js/vue.min.js"></script>
+  <script type="text/javascript"
+    src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>     
   <script>
   new Vue({
   el: '#student-viewer-container',
