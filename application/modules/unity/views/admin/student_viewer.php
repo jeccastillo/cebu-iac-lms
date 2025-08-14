@@ -672,9 +672,8 @@
 <script src="<?php echo base_url(); ?>assets/themes/default/js/axios.min.js"></script>
   <script>
   new Vue({
-  el: '#student-viewer-container',
-  data() {
-    return {
+    el: '#registration-container',
+    data: {
       test: 'dasd',
       campus: '',
       id: '',
@@ -755,9 +754,7 @@
         loa_remarks: '',
         loa_date: ''
       }
-    };
-  },
-  
+    },    
   mounted() {
     // Initialize base URL and other variables        
     let url_string = window.location.href;
