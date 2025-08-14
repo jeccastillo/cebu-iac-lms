@@ -1675,11 +1675,11 @@ class Excel extends CI_Controller {
             ->setCellValue('D'.$i, $classlist['subjectDescription'])            
             ->setCellValue('E'.$i, $classlist['strUnits'])            
             ->setCellValue('I'.$i, $classlist['slots_taken_enrolled']);
-            $ctr = 0;
+            $ctr = 2;
             foreach($classlist['schedule'] as $sched){
                 if(isset($sched['strDay'])){
                     $objPHPExcel->setActiveSheetIndex(0)                            
-                    ->setCellValue('F'.$i, $sched['strDayAbvr']." ".count($classlist['schedule']))
+                    ->setCellValue('F'.$i, $sched['strDayAbvr'])
                     ->setCellValue('G'.$i, date('g:ia',strtotime($sched['dteStart'])).' - '.date('g:ia',strtotime($sched['dteEnd'])))
                     ->setCellValue('H'.$i, $sched['strRoomCode']);                    
                     if($ctr < count($classlist['schedule']))
