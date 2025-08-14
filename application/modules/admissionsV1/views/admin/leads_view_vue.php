@@ -19,7 +19,7 @@
     }
 </script>
 
-<div id="leads-app" class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+<div id="leads-app" class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 content-wrapper">
     <!-- Header -->
     <header class="bg-white shadow-lg border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-6 py-6 sm:px-8 lg:px-10">
