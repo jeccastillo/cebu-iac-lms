@@ -48,21 +48,21 @@
                 <td>Term/SY: ' . $sem['enumSem'] . ' Term SY' . $sem['strYearStart'] . '-' . $sem['strYearEnd'] . '</td>
             </tr>
             <tr style="line-height:10px;">
-                <th style="border-top:1px solid #333;" colspan="9"></th>
+                <td style="border-top:1px solid #333;" colspan="9"></td>
             </tr>
             </table>';
     
 $html .= '<br />
     <table class="table table-bordered table-striped">
      <tr>
-        <th style="width:35%;font-size:9px;">Program</th>';
+        <td style="width:35%;font-size:9px;">Program</td>';
         foreach($student_years as $year){
-            $html .= '<th style="font-size:9px;">ID' . $year . '</th>';
+            $html .= '<td style="font-size:9px;">ID' . $year . '</td>';
         }
 
-$html .='<th><strong>Total</strong></th></tr>
+$html .='<td><strong>Total</strong></td></tr>
      <tr style="line-height:10px;">
-        <th colspan="9"></th>
+        <td colspan="9"></td>
      </tr>';
     
     foreach($enrollment as $item){
