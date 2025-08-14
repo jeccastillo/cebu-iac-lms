@@ -49,7 +49,7 @@
     </header>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 py-8">
+    <main class="mx-auto px-6 sm:px-8 lg:px-10 py-8">
         <!-- Filters Section -->
         <div class="bg-white shadow-lg rounded-xl p-8 mb-8 border border-gray-200">
             <div class="space-y-6">
