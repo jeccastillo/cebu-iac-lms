@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Applicants Management - Vue.js Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#64748b',
+                        success: '#22c55e',
+                        warning: '#f59e0b',
+                        danger: '#ef4444',
+                        info: '#0ea5e9',
+                        dark: '#1e293b',
+                        light: '#f8fafc'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <div id="leads-app" class="min-h-screen bg-gray-50">
+        <!-- Header -->
+        <header class="bg-white shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900">Student Applicants Management</h1>
+                        <nav class="flex space-x-2 mt-2 text-sm">
+                            <a href="#" class="text-gray-500 hover:text-gray-700">Dashboard</a>
+                            <span class="text-gray-300">/</span>
+                            <a href="#" class="text-gray-500 hover:text-gray-700">Student Applicants</a>
+                            <span class="text-gray-300">/</span>
+                            <span class="text-gray-800 font-medium">View All Leads</span>
+                        </nav>
+                    </div>
+                    <button @click="exportToExcel" :disabled="loading" class="flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="fas fa-file-excel mr-2"></i> 
+                        <span v-if="exporting">Exporting...</span>
+                        <span v-else>Export to Excel</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <!-- Filters Section -->
+            <div class="bg-white shadow rounded-lg p-6 mb-6">
+                <div class="space-y-4">
+                    <!-- Academic Term Selector -->
+                    <div>
+                        <label for="select-term-leads" class="block text-sm font-medium text-gray-700 mb-1">Academic Term</label>
+                        <select id="select-term-leads" v-model="selectedTerm" @change="fetchLeads" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md border">
+                            <option value="1">First Semester 2024-2025</option>
+                            <option value="2">Second Semester 2024-2025</option>
+                            <option value="3">Summer 2024-2025</option>
+                        </select>
+                    </div>
+
+                    <!-- Status and Date Range Filters -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Status Filter -->
+                        <div>
+                            <label for="status_filter" class="block text-sm font-medium text-gray-700 mb-1">Filter by Status</label>
+                            <select id="status_filter" v-model="statusFilter" @change="filterLeads" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md border">
+                                <option value="none">All Statuses</option>
+                                <option value="New">New Applicant</option>
+                                <option value="Waiting for Interview">Waiting for Interview</option>
+                                <option value="For Interview">For Interview</option>
+                                <option value="For Reservation">For Reservation</option>
+                                <option value="Reserved">Reserved</option>
+                                <option value="Floating">Floating</option>
+                                <option value="For Enrollment">For Enrollment</option>
+                                <option value="Enrolled">Enrolled</option>
+                                <option value="Cancelled">Cancelled</option>
+                                <option value="Will Not Proceed">Will Not Proceed</option>
+                                <option value="Rejected">Rejected</option>
+                                <option value="Disqualified">Disqualified</option>
+                                <option value="Not Answering">Not Answering</option>
+                            </select>
+                        </div>
+
+                        <!-- Date Type Selector -->
+                        <div>
+                            <label for="range-to-select" class="block text-sm font-medium text-gray-700 mb-1">Date Type</label>
+                            <select id="range-to-select" v-model="dateType" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md border">
+                                <option value="created_at">Date Applied</option>
+                                <option value="date_interviewed">Date Interviewed</option>
+                                <option value="date_reserved">Date Reserved</option>
+                                <option value="date_enrolled">Date Enrolled</option>
+                            </select>
+                        </div>
+
+                        <!-- Date Range Input -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Date Range</label>
+                            <input 
+                                type="text" 
+                                placeholder="YYYY-MM-DD to YYYY-MM-DD" 
+                                v-model="dateRange" 
+                                @change="filterLeads" 
+                                class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md border"
+                            >
+                            <p class="text-xs text-gray-500 mt-1">Format: 2024-01-01 to 2024-12-31</p>
+                        </div>
+                    </div>
+
+                    <!-- Quick Stats Button -->
+                    <div class="pt-2">
+                        <button @click="showStats" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-success hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-success">
+                            <i class="fas fa-chart-bar mr-2"></i>
+                            Quick Stats
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alert/Error Message -->
+            <div v-if="errorMessage" class="mb-4 p-4 bg-red-50 border-l-4 border-red-400 rounded">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-exclamation-triangle text-red-400"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-red-700">{{ errorMessage }}</p>
+                    </div>
+                    <div class="ml-auto pl-3">
+                        <button @click="errorMessage = ''" class="text-red-400 hover:text-red-600">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success Message -->

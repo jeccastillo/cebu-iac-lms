@@ -131,13 +131,43 @@ class AdmissionsV1 extends CI_Controller {
             $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
             $this->data['current_sem'] = $term['intID'];
             
+            // Add API URL and campus data for Vue.js
+            $this->data['api_url'] = 'https://smsapi.iacademy.edu.ph/api/v1/sms/';
+            
             $this->data['page'] = "view_leads";
             $this->data['opentree'] = "leads";
             //$this->data['subjects'] = $this->data_fetcher->fetch_table('tb_mas_subjects',array('strCode','asc'));
             $this->load->view("common/header",$this->data);
-            $this->load->view("admin/leads_view",$this->data);
+            $this->load->view("admin/leads_view_vue",$this->data);  // Changed to use Vue version
             $this->load->view("common/footer",$this->data); 
-            $this->load->view("common/subjects_conf",$this->data); 
+            // Removed subjects_conf as it's now handled by Vue.js
+            //print_r($this->data['classlist']);
+        }
+        else
+            redirect(base_url()."unity");  
+    }
+
+    // Legacy view method (backup of original functionality)
+    public function view_all_leads_legacy($term = 0)
+    {
+        if($this->faculty_logged_in())
+        {
+            if($term == 0)
+                $term = $this->data_fetcher->get_processing_sem();        
+            else
+                $term = $this->data_fetcher->get_sem_by_id($term);  
+                
+            
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['current_sem'] = $term['intID'];
+            
+            $this->data['page'] = "view_leads";
+            $this->data['opentree'] = "leads";
+            //$this->data['subjects'] = $this->data_fetcher->fetch_table('tb_mas_subjects',array('strCode','asc'));
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/leads_view",$this->data);  // Original view
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/subjects_conf",$this->data);  // Original JS config
             //print_r($this->data['classlist']);
         }
         else
