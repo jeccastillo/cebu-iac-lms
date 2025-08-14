@@ -4345,28 +4345,24 @@ class Data_fetcher extends CI_Model {
             $schedule = $this->getScheduleByCode($classlist['intID']);        
             $sched_day = '';
             $sched_time = '';
-            $sched_room = '';     
-            $prev_sched_time = '';  
-            $prev_room = '';         
+            $sched_room = '';                
             
+            if(isset($schedule[0]['strDay']))                                                
+                $sched_time = date('g:ia',strtotime($schedule[0]['dteStart'])).' - '.date('g:ia',strtotime($schedule[0]['dteEnd']));  
+                    
             foreach($schedule as $sched) {
-                if(isset($sched['strDay'])){
-                    $sched_day.= $sched['strDayAbvr']."\n";                                                 
-                    $st = date('g:ia',strtotime($sched['dteStart'])).' - '.date('g:ia',strtotime($sched['dteEnd']));
-                    $room = $sched['strRoomCode'];
-                    if($st != $prev_sched_time)
-                        $sched_time .= $st."\n";         
-                    if($room != $prev_room)
-                        $sched_room.= $room."\n";
-                    $prev_sched_time = $st;
-                    $prev_room = $room;
-                 }   
+                if(isset($sched['strDay']))
+                    $sched_day.= $sched['strDayAbvr'];                    
                     //$html.= date('g:ia',strtotime($sched['dteStart'])).'  '.date('g:ia',strtotime($sched['dteEnd']))." ".$sched['strDay']." ".$sched['strRoomCode'] . " ";                    
-            }                                                                                            
+            }
+                                                                
+            if(isset($schedule[0]['strDay']))
+                $sched_room = $schedule[0]['strRoomCode'];
 
             $classlist['sched_day'] = $sched_day;
             $classlist['sched_time'] = $sched_time;
             $classlist['sched_room'] = $sched_room;
+            $classlist['schedule'] = $schedule;
 
             $ret[] = $classlist;
         }

@@ -1672,12 +1672,16 @@ class Excel extends CI_Controller {
             ->setCellValue('A'.$i, strtoupper($classlist['strLastname'].", ".$classlist['strFirstname']." ".$classlist['strMiddlename']))
             ->setCellValue('B'.$i, $classlist['strClassName'].$classlist['year'].$classlist['strSection']." ".$classlist['sub_section'])
             ->setCellValue('C'.$i, $classlist['strCode'])
-            ->setCellValue('D'.$i, $classlist['subjectDescription'])
-            ->setCellValue('E'.$i, $classlist['strUnits'])
-            ->setCellValue('F'.$i, $classlist['sched_day'])
-            ->setCellValue('G'.$i, $classlist['sched_time'])
-            ->setCellValue('H'.$i, $classlist['sched_room'])
+            ->setCellValue('D'.$i, $classlist['subjectDescription'])            
+            ->setCellValue('E'.$i, $classlist['strUnits'])            
             ->setCellValue('I'.$i, $classlist['slots_taken_enrolled']);
+            foreach($classlist['schedule'] as $sched){
+                $objPHPExcel->setActiveSheetIndex(0)                            
+                ->setCellValue('F'.$i, $sched['strDayAbvr'])
+                ->setCellValue('G'.$i, date('g:ia',strtotime($sched['dteStart'])).' - '.date('g:ia',strtotime($sched['dteEnd'])))
+                ->setCellValue('H'.$i, $sched['strRoomCode']);
+                $i++;
+            }
             
 
             $i++;
