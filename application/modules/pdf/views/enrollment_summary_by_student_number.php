@@ -110,9 +110,9 @@ $html .= '<td><strong>&nbsp;'. $total_enrolled . '</strong></td></tr>
  '; 
   
             
-$pdf->writeHTML($html, true, false, true, false, '');
+// $pdf->writeHTML($html, true, false, true, false, '');
 
-//$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
+$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 
 // ---------------------------------------------------------
 
