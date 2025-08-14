@@ -79,6 +79,7 @@ const LeadsApp = new Vue({
                 page: 1,
                 count_content: 10,
                 search_data:'',
+                filter: this.statusFilter,
                 search_field: 'first_name',
                 sort_field: this.sortField,
                 order_by: this.sortDirection
