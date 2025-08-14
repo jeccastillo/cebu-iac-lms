@@ -1668,15 +1668,17 @@ class Excel extends CI_Controller {
         $i = 9;
         foreach($classlists as $classlist)
         {
-            $objPHPExcel->setActiveSheetIndex(0)            
-            ->setCellValue('A'.$i, strtoupper($classlist['strLastname'].", ".$classlist['strFirstname']." ".$classlist['strMiddlename']))
-            ->setCellValue('B'.$i, $classlist['strClassName'].$classlist['year'].$classlist['strSection']." ".$classlist['sub_section'])
-            ->setCellValue('C'.$i, $classlist['strCode'])
-            ->setCellValue('D'.$i, $classlist['subjectDescription'])            
-            ->setCellValue('E'.$i, $classlist['strUnits'])            
-            ->setCellValue('I'.$i, $classlist['slots_taken_enrolled']);
             $ctr = 0;
             foreach($classlist['schedule'] as $sched){
+                $objPHPExcel->setActiveSheetIndex(0)            
+                ->setCellValue('A'.$i, strtoupper($classlist['strLastname'].", ".$classlist['strFirstname']." ".$classlist['strMiddlename']))
+                ->setCellValue('B'.$i, $classlist['strClassName'].$classlist['year'].$classlist['strSection']." ".$classlist['sub_section'])
+                ->setCellValue('C'.$i, $classlist['strCode'])
+                ->setCellValue('D'.$i, $classlist['subjectDescription'])            
+                ->setCellValue('E'.$i, $classlist['strUnits'])            
+                ->setCellValue('I'.$i, $classlist['slots_taken_enrolled']);
+            
+            
                 if(isset($sched['strDay'])){
                     $objPHPExcel->setActiveSheetIndex(0)                            
                     ->setCellValue('F'.$i, $sched['strDayAbvr'])
