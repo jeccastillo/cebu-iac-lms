@@ -1109,7 +1109,9 @@ class Pdf extends CI_Controller {
         $html = $this->load->view("reservation_summary",$this->data);
         
     }
-    
+    function permanent_record_pdf(){
+        $this->load->view("permanent_record_printed",$this->data);
+    }
     function student_viewer_registration_print($id, $app_id, $sem = null, $mt = 6)
     {        
         $this->data['mt'] = $mt;        
