@@ -211,8 +211,8 @@ const LeadsApp = new Vue({
         },
         
         getSortIcon(field) {
-            if (this.sortField !== field) return 'text-gray-400';
-            return this.sortDirection === 'asc' ? 'fa-sort-up text-primary' : 'fa-sort-down text-primary';
+            if (this.sortField !== field) return '';
+            return this.sortDirection === 'asc' ? '▲' : '▼';
         },
         
         getStatusClass(status) {
@@ -259,16 +259,18 @@ const LeadsApp = new Vue({
             }, 300);
         },
         
-        refreshData() {
-            this.fetchLeads();
-        },
-        
         clearFilters() {
             this.statusFilter = 'none';
             this.dateRange = '';
             this.searchQuery = '';
             this.dateType = 'created_at';
             this.currentPage = 1;
+            this.successMessage = 'Filters cleared successfully';
+            setTimeout(() => { this.successMessage = ''; }, 2000);
+            this.fetchLeads();
+        },
+        
+        refreshData() {
             this.fetchLeads();
         }
     },
