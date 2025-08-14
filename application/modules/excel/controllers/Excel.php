@@ -2492,7 +2492,7 @@ class Excel extends CI_Controller {
             foreach($students as $student)
             {
                 $enrollmentStatus = $student['student_type'];
-                $yearLevel = $student['intStudentYear'];
+                $yearLevel = $student['intYearLevel'];
                 // Add some data
 
                 if($type == 'shs'){
@@ -2507,7 +2507,7 @@ class Excel extends CI_Controller {
                     else
                         $enrollmentStatus = 'New';
 
-                    if($student['intStudentYear'] == 1 || $student['intStudentYear'] == 3){
+                    if($student['intYearLevel'] == 1 || $student['intYearLevel'] == 3){
                         $yearLevel = '11';
                     }else{
                         $yearLevel = '12';
