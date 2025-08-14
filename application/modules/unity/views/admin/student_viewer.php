@@ -1223,6 +1223,6 @@
       return Swal.fire('Error', message, 'error');
     }
   }
-}).mount('#student-viewer-container');
+})
 
 </script>
