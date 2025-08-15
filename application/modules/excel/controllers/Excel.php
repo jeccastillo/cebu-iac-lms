@@ -10930,7 +10930,7 @@ class Excel extends CI_Controller {
             )
         );
         $objPHPExcel->getActiveSheet()->getStyle('A5')->applyFromArray($style);
-        $objPHPExcel->getActiveSheet()->getStyle('D10' . ':D' . $i)->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('D10' . ':D' . ($i-1))->applyFromArray($style);
         $objPHPExcel->getActiveSheet()->getStyle('A' . $i . ':D' . ($i+2))->applyFromArray($style);
         
         $style = array(
