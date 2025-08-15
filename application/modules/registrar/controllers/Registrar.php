@@ -3067,6 +3067,16 @@ class Registrar extends CI_Controller {
 
         echo json_encode($data);
     }
+
+    private function get_student_number_year($student_number){
+        
+        if (preg_match('/^[a-zA-Z]/', $student_number)) {
+            // Remove the first character
+            $student_number = substr($student_number, 1);
+        }
+
+        return substr($student_number, 0, 4);;
+    }
     
     public function faculty_logged_in()
     {
