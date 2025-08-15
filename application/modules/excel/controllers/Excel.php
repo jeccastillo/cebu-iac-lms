@@ -10743,7 +10743,7 @@ class Excel extends CI_Controller {
             )
         );
 
-        $objPHPExcel->getActiveSheet()->getStyle('A10:' . $this->columnIndexToLetter(1 + ($key + 1)) . $i - 1)->applyFromArray(
+        $objPHPExcel->getActiveSheet()->getStyle('A10:' . $this->columnIndexToLetter(1 + ($key + 1)) . ($i - 1))->applyFromArray(
             array(
                 'borders' => array(
                     'allborders' => array(
