@@ -2935,8 +2935,10 @@ class Data_fetcher extends CI_Model {
                         
                     }             
                     
-                    if(strtoupper(trim($m['name'])) == 'ID VALIDATION' && $stype == 'returnee')
+                    if(strtoupper(trim($m['name'])) == 'ID VALIDATION' && $stype == 'returnee'){
                         $ctype = 'online';
+                        die($ctype);
+                    }
                     
                     $misc_list[$m['name']] = getExtraFee($m, $ctype, 'misc');
                     $total_misc += $misc_list[$m['name']];
