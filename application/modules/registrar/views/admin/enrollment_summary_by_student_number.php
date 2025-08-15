@@ -43,16 +43,6 @@
                         <tr>
                         </tr>
                     </thead>
-                    <tfoot>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                    </tfoot>
                 </table>
             </div><!-- /.box-body -->
         </div><!-- /.box -->

@@ -4,6 +4,7 @@ $(document).ready(function() {
     $.getJSON(
         "<?php echo base_url(); ?>registrar/enrollment_summary_by_student_number_data/<?php echo $current_sem; ?>",
         function(json) {
+            console.log(json);
             let columns = [{
                 data: 'strProgramDescription',
                 title: 'Program Name'
@@ -35,48 +36,46 @@ $(document).ready(function() {
                 "info": false,
                 "data": json.enrollment,
                 "columns": columns,
-                footerCallback: function(row, data, start, end, display) {
+                "drawCallback": function(settings) {
                     let api = this.api();
+                    $('#enrollment-summary-table tbody tr.total-row')
+                        .remove();
+                    let totals = [];
                     columns.forEach((col, index) => {
                         if (index === 0) {
-                            // First cell: label
-                            $(api.column(index).footer()).html(
-                                '<strong>Total</strong>');
+                            totals.push('<strong>Total</strong>');
                         } else if (index < columns.length - 1) {
-                            // Year columns: sum per column
-                            let total = api.column(index).data()
-                                .reduce((a, b) => {
-                                    return (parseInt(a) || 0) +
-                                        (parseInt(b) || 0);
-                                }, 0);
-                            $(api.column(index).footer()).html(
-                                '<strong>' + total + '</strong>'
-                                );
+                            let total = api.column(index, {
+                                page: 'current'
+                            }).data().reduce((a, b) => (
+                                parseInt(a) || 0) + (
+                                parseInt(b) || 0), 0);
+                            totals.push('<strong>' + total +
+                                '</strong>');
                         } else {
-                            // Last column (Total): sum of all year columns combined
                             let grandTotal = 0;
                             json.student_years.forEach(year => {
+                                let colIndex = columns
+                                    .findIndex(c => c
+                                        .title == year);
                                 let yearTotal = api.column(
-                                        columns.findIndex(
-                                            c => c.title ==
-                                            year)).data()
-                                    .reduce((a, b) => {
-                                        return (parseInt(
-                                                a
-                                                ) ||
-                                            0) + (
-                                            parseInt(
-                                                b
-                                                ) ||
-                                            0);
-                                    }, 0);
+                                    colIndex, {
+                                        page: 'current'
+                                    }).data().reduce((a,
+                                    b) => (parseInt(
+                                    a) || 0) + (
+                                    parseInt(b) || 0
+                                    ), 0);
                                 grandTotal += yearTotal;
                             });
-                            $(api.column(index).footer()).html(
-                                '<strong>' + grandTotal +
+                            totals.push('<strong>' + grandTotal +
                                 '</strong>');
                         }
                     });
+                    $('#enrollment-summary-table tbody').append(
+                        '<tr class="total-row bg-gray-100">' + totals
+                        .map(val => `<td>${val}</td>`).join('') +
+                        '</tr>');
                 }
             });
         });
