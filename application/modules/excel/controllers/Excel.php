@@ -10712,11 +10712,18 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getStyle('A5')->applyFromArray($style);
         $objPHPExcel->getActiveSheet()->getStyle('A' . ($i + 6))->applyFromArray($style);
 
+        //TOTAL Style
         $objPHPExcel->getActiveSheet()->getStyle('A' . $i . ':' . $this->columnIndexToLetter(1 + ($key + 1)) . $i)->applyFromArray(
             array(
+                'borders' => array(
+                    'allborders' => array(
+                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        'color' => array('rgb' => '000000'),
+                    ),
+                ),
                 'font'  => array(
                     'bold'  => true,
-                )
+                ),
             )
         );
         
@@ -10736,7 +10743,7 @@ class Excel extends CI_Controller {
             )
         );
 
-        $objPHPExcel->getActiveSheet()->getStyle('A10:' . $this->columnIndexToLetter(1 + ($key + 1)) . $i)->applyFromArray(
+        $objPHPExcel->getActiveSheet()->getStyle('A10:' . $this->columnIndexToLetter(1 + ($key + 1)) . ($i - 1))->applyFromArray(
             array(
                 'borders' => array(
                     'allborders' => array(
@@ -10749,11 +10756,11 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(80);
         
         $sheet = $objPHPExcel->getActiveSheet();
-        $sheet->mergeCells('A2:' . $this->columnIndexToLetter(1 + ($key)) . '2');
-        $sheet->mergeCells('A3:' . $this->columnIndexToLetter(1 + ($key)) . '3');
-        $sheet->mergeCells('A5:' . $this->columnIndexToLetter(1 + ($key)) . '5');
-        $sheet->mergeCells('A6:' . $this->columnIndexToLetter(1 + ($key)) . '6');
-        $sheet->mergeCells('A7:' . $this->columnIndexToLetter(1 + ($key)) . '7');
+        $sheet->mergeCells('A2:' . $this->columnIndexToLetter(1 + ($key + 1)) . '2');
+        $sheet->mergeCells('A3:' . $this->columnIndexToLetter(1 + ($key + 1)) . '3');
+        $sheet->mergeCells('A5:' . $this->columnIndexToLetter(1 + ($key + 1)) . '5');
+        $sheet->mergeCells('A6:' . $this->columnIndexToLetter(1 + ($key + 1)) . '6');
+        $sheet->mergeCells('A7:' . $this->columnIndexToLetter(1 + ($key + 1)) . '7');
 
         $objPHPExcel->getActiveSheet()->setTitle('Summary Enrollment Report');
 
@@ -10766,7 +10773,7 @@ class Excel extends CI_Controller {
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
-        header('Content-Disposition: attachment;filename="Summary Enrollment Report ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '.xls"');
+        header('Content-Disposition: attachment;filename="Summary Enrollment Report by Student Number' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '.xls"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
@@ -10930,7 +10937,7 @@ class Excel extends CI_Controller {
             )
         );
         $objPHPExcel->getActiveSheet()->getStyle('A5')->applyFromArray($style);
-        $objPHPExcel->getActiveSheet()->getStyle('D10' . ':D' . $i)->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('D10' . ':D' . ($i-1))->applyFromArray($style);
         $objPHPExcel->getActiveSheet()->getStyle('A' . $i . ':D' . ($i+2))->applyFromArray($style);
         
         $style = array(
