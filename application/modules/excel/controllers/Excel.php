@@ -10726,7 +10726,7 @@ class Excel extends CI_Controller {
                 ),
             )
         );
-        //A9 : D9
+        
         $objPHPExcel->getActiveSheet()->getStyle('A9:' . $this->columnIndexToLetter(1 + ($key + 1)) . '9')->applyFromArray(
             array(
                 'borders' => array(
