@@ -2980,6 +2980,24 @@ class Registrar extends CI_Controller {
         
         echo json_encode($data);
     }
+    public function enrollment_summary_by_student_number($term = 0)    
+    {
+        if($this->faculty_logged_in())
+        {
+            if($term == 0)
+                $term = $this->data_fetcher->get_processing_sem();        
+            else
+                $term = $this->data_fetcher->get_sem_by_id($term); 
+                 
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['current_sem'] = $term['intID'];
+
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/enrollment_summary_by_student_number",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/enrollment_summary_conf",$this->data);
+        }
+    }
 
     public function shs_enrolled_by_grade_level_data($sem)
     {
@@ -3066,6 +3084,25 @@ class Registrar extends CI_Controller {
         $data['total_enrolled'] = $total_enrolled;
 
         echo json_encode($data);
+    }
+
+     public function shs_enrolled_by_grade_level($term = 0)    
+    {
+        if($this->faculty_logged_in())
+        {
+            if($term == 0)
+                $term = $this->data_fetcher->get_processing_sem();        
+            else
+                $term = $this->data_fetcher->get_sem_by_id($term); 
+                 
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['current_sem'] = $term['intID'];
+
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/shs_enrolled_by_grade_level",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/shs_enrolled_by_grade_level_conf",$this->data);
+        }
     }
 
     private function get_student_number_year($student_number){
