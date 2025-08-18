@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Sharing Plugin Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .share-btn-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+        
+        .share-btn-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.3);
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(102, 126, 234, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0); }
+        }
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 0;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow: hidden;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+        
+        .platform-btn {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .platform-btn:hover {
+            transform: translateY(-3px);
+            border-color: currentColor;
+        }
+        
+        .facebook-btn { background: linear-gradient(135deg, #1877f2, #42a5f5); }
+        .instagram-btn { background: linear-gradient(135deg, #E1306C, #fd5949, #fccc63); }
+        .threads-btn { background: linear-gradient(135deg, #000000, #333333); }
+        .tiktok-btn { background: linear-gradient(135deg, #ff0050, #000000); }
+        
+        .content-preview {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        
+        .image-preview {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .copy-feedback {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            z-index: 1002;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+        }
+        
+        .copy-feedback.show {
+            transform: translateX(0);
+        }
+        
+        .extraction-loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .demo-content {
+            line-height: 1.8;
+        }
+        
+        @media (max-width: 640px) {
+            .modal-content {
+                margin: 20px;
+                width: calc(100% - 40px);
+            }
+            
+            .share-btn-float {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Demo Website Content -->
+    <div class="container mx-auto px-4 py-8">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">Social Media Sharing Plugin Demo</h1>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">Experience seamless content sharing across Facebook, Instagram, Threads, and TikTok with our intelligent content extraction system.</p>
+        </header>
+        
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
+                <div class="image-preview">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/24caf28a-47f6-40f1-b3f3-9191f709d3d8.png" alt="Modern social media marketing workspace with multiple devices displaying various social platforms, colorful analytics charts, and creative content layouts" class="w-full h-64 object-cover">
+                </div>
+                <div class="p-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Revolutionary Social Media Integration</h2>
+                    <div class="demo-content text-gray-600 space-y-4">
+                        <p>Transform your content sharing strategy with our cutting-edge social media plugin. Designed for modern websites, this tool automatically extracts your page content, including titles, descriptions, and images, then formats them perfectly for each social media platform.</p>
+                        
+                        <p>Our intelligent system recognizes the unique requirements of each platform - from Facebook's link previews to Instagram's visual focus, from Threads' text-centric approach to TikTok's creative format. No more manual copying and pasting or formatting headaches.</p>
+                        
+                        <p>Simply click the floating share button, and watch as your content is intelligently prepared for distribution across all major social platforms. The plugin respects each platform's sharing limitations and provides appropriate fallbacks where direct sharing isn't available.</p>
+                    </div>
+                    
+                    <div class="mt-6 flex flex-wrap gap-3">
+                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">Social Media</span>
+                        <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Content Sharing</span>
+                        <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">Automation</span>
+                        <span class="px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm">Marketing Tools</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Key Features</h3>
+                    <ul class="space-y-3 text-gray-600">
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i>Automatic content extraction</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i>Multi-platform optimization</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i>Intelligent image selection</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i>One-click sharing workflow</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i>Mobile-responsive design</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Supported Platforms</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center">
+                            <i class="fab fa-facebook text-blue-600 mr-3 text-xl"></i>
+                            <span class="text-gray-600">Facebook - Direct sharing with link previews</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fab fa-instagram text-pink-600 mr-3 text-xl"></i>
+                            <span class="text-gray-600">Instagram - Content preparation and copy</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fab fa-threads text-gray-800 mr-3 text-xl"></i>
+                            <span class="text-gray-600">Threads - Text-optimized sharing</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fab fa-tiktok text-black mr-3 text-xl"></i>
+                            <span class="text-gray-600">TikTok - Creative content suggestions</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Floating Share Button -->
+    <div class="share-btn-float" onclick="openShareModal()">
+        <i class="fas fa-share-alt text-white text-xl"></i>
+    </div>
+    
+    <!-- Share Modal -->
+    <div class="modal-overlay" id="shareModal" onclick="closeShareModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <!-- Modal Header -->
+            <div class="bg-gradient-to-r from-indigo-500 to-purple-600 p-6 text-white">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-bold">Share Content</h2>
+                    <button onclick="closeShareModal()" class="text-white hover:text-gray-300 transition-colors">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <p class="mt-2 opacity-90">Choose your platform and share instantly</p>
+            </div>
+            
+            <!-- Content Preview -->
+            <div class="content-preview p-6">
+                <div class="flex items-center mb-4">
+                    <div class="extraction-loader mr-3" id="loadingIndicator" style="display: none;"></div>
+                    <h3 class="font-semibold text-gray-800">Content Preview</h3>
+                    <button onclick="extractContent()" class="ml-auto bg-indigo-500 text-white px-3 py-1 rounded text-sm hover:bg-indigo-600 transition-colors">
+                        <i class="fas fa-sync-alt mr-1"></i>Refresh
+                    </button>
+                </div>
+                
+                <div class="bg-white rounded-lg p-4 border">
+                    <div class="flex items-start space-x-4">
+                        <div class="image-preview w-20 h-20 flex-shrink-0">
+                            <img id="previewImage" src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/24705830-bdef-4001-b6e9-c8ad09100aa4.png" alt="Content preview image showing the main visual element from the current page" class="w-full h-full object-cover rounded">
+                        </div>
+                        <div class="flex-grow min-w-0">
+                            <h4 id="previewTitle" class="font-semibold text-gray-800 truncate">Page Title</h4>
+                            <p id="previewDescription" class="text-gray-600 text-sm mt-1 line-clamp-3">Page description will appear here...</p>
+                            <p id="previewUrl" class="text-indigo-600 text-xs mt-2 truncate">Current URL</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Platform Buttons -->
+            <div class="p-6 pt-0">
+                <div class="grid grid-cols-2 gap-4">
+                    <button onclick="shareToFacebook()" class="platform-btn facebook-btn text-white p-4 rounded-lg font-semibold flex items-center justify-center space-x-2 hover:shadow-lg">
+                        <i class="fab fa-facebook-f text-xl"></i>
+                        <span>Facebook</span>
+                    </button>
+                    
+                    <button onclick="shareToInstagram()" class="platform-btn instagram-btn text-white p-4 rounded-lg font-semibold flex items-center justify-center space-x-2 hover:shadow-lg">
+                        <i class="fab fa-instagram text-xl"></i>
+                        <span>Instagram</span>
+                    </button>
+                    
+                    <button onclick="shareToThreads()" class="platform-btn threads-btn text-white p-4 rounded-lg font-semibold flex items-center justify-center space-x-2 hover:shadow-lg">
+                        <i class="fab fa-threads text-xl"></i>
+                        <span>Threads</span>
+                    </button>
+                    
+                    <button onclick="shareToTikTok()" class="platform-btn tiktok-btn text-white p-4 rounded-lg font-semibold flex items-center justify-center space-x-2 hover:shadow-lg">
+                        <i class="fab fa-tiktok text-xl"></i>
+                        <span>TikTok</span>
+                    </button>
+                </div>
+                
+                <div class="mt-6 text-center">
+                    <button onclick="copyAllContent()" class="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-copy mr-2"></i>Copy All Content
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Copy Feedback -->
+    <div class="copy-feedback" id="copyFeedback">
+        <i class="fas fa-check mr-2"></i>Content copied to clipboard!
+    </div>
+    
+    <script>
+        // Global variables to store extracted content
+        let extractedContent = {
+            title: '',
+            description: '',
+            image: '',
+            url: window.location.href
+        };
+        
+        // Initialize content extraction when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            extractContent();
+        });
+        
+        function openShareModal() {
+            document.getElementById('shareModal').classList.add('active');
+            extractContent(); // Refresh content when opening
+        }
+        
+        function closeShareModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('shareModal').classList.remove('active');
+        }
+        
+        function extractContent() {
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            loadingIndicator.style.display = 'inline-block';
+            
+            // Simulate extraction process
+            setTimeout(() => {
+                // Extract title
+                const titleElement = document.querySelector('h1, title');
+                extractedContent.title = titleElement ? titleElement.textContent.trim() : document.title;
+                
+                // Extract description
+                const metaDescription = document.querySelector('meta[name="description"]');
+                const firstParagraph = document.querySelector('p');
+                extractedContent.description = metaDescription ? 
+                    metaDescription.getAttribute('content') : 
+                    (firstParagraph ? firstParagraph.textContent.trim().substring(0, 160) + '...' : 'Check out this amazing content!');
+                
+                // Extract image
+                const featuredImage = document.querySelector('img[src*="placehold.co"], img');
+                extractedContent.image = featuredImage ? featuredImage.src : 'https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/9963ed9f-8138-4c90-9cb4-de47f984ee17.png';
+                
+                // Update preview
+                updatePreview();
+                loadingIndicator.style.display = 'none';
+            }, 800);
+        }
+        
+        function updatePreview() {
+            document.getElementById('previewTitle').textContent = extractedContent.title;
+            document.getElementById('previewDescription').textContent = extractedContent.description;
+            document.getElementById('previewUrl').textContent = extractedContent.url;
+            document.getElementById('previewImage').src = extractedContent.image;
+        }
+        
+        function shareToFacebook() {
+            const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(extractedContent.url)}&quote=${encodeURIComponent(extractedContent.title + ' - ' + extractedContent.description)}`;
+            window.open(shareUrl, 'facebook-share', 'width=600,height=400');
+            showCopyFeedback('Shared to Facebook!');
+        }
+        
+        function shareToInstagram() {
+            // Instagram doesn't support direct web sharing, so we'll copy content for manual posting
+            const instagramContent = `${extractedContent.title}\n\n${extractedContent.description}\n\n🔗 ${extractedContent.url}\n\n#socialmedia #content #sharing`;
+            copyToClipboard(instagramContent);
+            showCopyFeedback('Instagram content copied! Paste it in the Instagram app.');
+        }
+        
+        function shareToThreads() {
+            // Threads sharing (Meta's Twitter alternative)
+            const threadsContent = `${extractedContent.title}\n\n${extractedContent.description}\n\n${extractedContent.url}`;
+            
+            // Try direct sharing if available, otherwise copy content
+            try {
+                const shareUrl = `https://threads.net/intent/post?text=${encodeURIComponent(threadsContent)}`;
+                window.open(shareUrl, 'threads-share', 'width=600,height=400');
+                showCopyFeedback('Shared to Threads!');
+            } catch (error) {
+                copyToClipboard(threadsContent);
+                showCopyFeedback('Threads content copied! Paste it in the Threads app.');
+            }
+        }
+        
+        function shareToTikTok() {
+            // TikTok doesn't support direct web sharing, so we'll provide content suggestions
+            const tiktokContent = `🎬 Video Idea: ${extractedContent.title}\n\n📝 Caption: ${extractedContent.description}\n\n🔗 Link in bio: ${extractedContent.url}\n\n#viral #content #trending`;
+            copyToClipboard(tiktokContent);
+            showCopyFeedback('TikTok content suggestions copied! Create your video and use this caption.');
+        }
+        
+        function copyAllContent() {
+            const allContent = `📱 SOCIAL MEDIA CONTENT PACK\n\n📋 Title: ${extractedContent.title}\n\n📝 Description: ${extractedContent.description}\n\n🖼️ Image: ${extractedContent.image}\n\n🔗 URL: ${extractedContent.url}\n\n---\n\n✅ FACEBOOK: Ready for direct sharing\n✅ INSTAGRAM: Use title + description + relevant hashtags\n✅ THREADS: Text-focused, perfect for engagement\n✅ TIKTOK: Create video content based on this theme`;
+            copyToClipboard(allContent);
+            showCopyFeedback('Complete content pack copied!');
+        }
+        
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                console.log('Content copied to clipboard');
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+            });
+        }
+        
+        function showCopyFeedback(message) {
+            const feedback = document.getElementById('copyFeedback');
+            feedback.innerHTML = `<i class="fas fa-check mr-2"></i>${message}`;
+            feedback.classList.add('show');
+            
+            setTimeout(() => {
+                feedback.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeShareModal();
+            }
+        });
+        
+        // Prevent modal close when clicking inside modal content
+        document.querySelector('.modal-content').addEventListener('click', function(event) {
+            event.stopPropagation();
+        });
+    </script>
+</body>
+</html>
+
