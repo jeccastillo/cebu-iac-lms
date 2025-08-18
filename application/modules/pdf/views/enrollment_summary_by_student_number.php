@@ -38,6 +38,7 @@
             <tr>
                 <td width="100%" style="text-align:center">Enrollment Statistics</td>
             </tr>
+            <tr><td></td></tr>
             <tr>
                 <td>Address: ' . $campus_address .  ' </td>
             </tr>
