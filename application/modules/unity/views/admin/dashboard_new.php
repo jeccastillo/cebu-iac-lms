@@ -92,7 +92,7 @@
                             <i class="fas fa-graduation-cap text-white text-lg"></i>
                         </div>
                         <div>
-                            <h1 class="text-xl font-bold text-gray-800">EduAdmin</h1>
+                            <h1 class="text-xl font-bold text-gray-800">iACADEMY</h1>
                             <p class="text-xs text-gray-500">School Management</p>
                         </div>
                     </div>
