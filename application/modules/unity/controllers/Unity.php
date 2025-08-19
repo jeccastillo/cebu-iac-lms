@@ -120,6 +120,59 @@ class Unity extends CI_Controller {
         else
             redirect(base_url()."unity");
     }
+
+    public function sms_dashboard()
+    {
+        if($this->faculty_logged_in())
+        {
+            $this->data['page'] = "dashboard";
+            $this->data['title'] ="Dashboard";
+            $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
+            $this->data['app_sem'] = $this->data_fetcher->get_processing_sem();
+            $this->data["subjects"] = $this->data_fetcher->fetch_table('tb_mas_subjects');
+            $this->data['pwd'] = $this->session->userdata('strPass');
+            $this->data["faculty_data"] = $this->session->all_userdata();
+            $students = $this->data_fetcher->count_table_contents('tb_mas_users',null,array('isGraduate'=>0));
+            $resident_scholars = $this->data_fetcher->count_table_contents('tb_mas_users',null,array('enumScholarship'=>'resident scholar','isGraduate'=>0));
+            $seventh_district = $this->data_fetcher->count_table_contents('tb_mas_users',null,array('enumScholarship'=>'7th district scholar','isGraduate'=>0));
+            $registered_students = $this->data_fetcher->count_table_contents('tb_mas_registration',null,array('intAYID'=>$this->data['active_sem']['intID']));
+           
+            $this->data['registration_data_all'] = $this->data_fetcher->getRegistrationData($this->data['active_sem']['intID']);
+            
+            
+            $this->data['submitted_classlists'] = $this->data_fetcher->count_classlist(1);
+            $this->data['un_submitted_classlists'] = $this->data_fetcher->count_classlist(0);
+            $myclasses = $this->data_fetcher->count_table_contents('tb_mas_classlist',null,array('intFacultyID'=>$this->session->userdata('intID'),'strAcademicYear'=>$this->data['active_sem']['intID']));
+            $allclasses = $this->data_fetcher->count_table_contents('tb_mas_classlist');
+            $this->data['myclasses'] = $myclasses;
+            $this->data['allclasses']= $allclasses;
+            $this->data['students'] = $students;
+            $this->data['registered'] = $registered_students;
+            $this->data['student_course'] = array();
+            $this->data['scholar1'] = $seventh_district;
+            $this->data['scholar2'] = $resident_scholars;
+            
+            $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
+            $ret_prog = array();
+            
+            foreach($programs as $prog)
+            {
+                $prog['numStudents'] = $this->data_fetcher->countStudentsByCourse($prog['intProgramID']);
+                $ret_prog[] = $prog;    
+            }
+            
+            $this->data['student_course'] = $ret_prog;
+            
+            $this->data['num_subjects'] = count($this->data["subjects"]);
+            $this->data['faculty_logged_in'] = $this->faculty_logged_in();
+            //$this->load->view("common/header",$this->data);
+            $this->load->view("admin/dashboard_new",$this->data);
+            //$this->load->view("common/footer",$this->data);
+            //$this->load->view("dashboard_js",$this->data);
+        }
+        else
+            redirect(base_url()."unity");
+    }
     
     public function logs($start=null,$end=null, $cat=null)
     {
