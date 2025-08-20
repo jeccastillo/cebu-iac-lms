@@ -5900,6 +5900,30 @@ class Data_fetcher extends CI_Model {
         return $stats;
     }
     
+    /**
+     * Get reservations by date range
+     */
+    public function getReservationsByDateRange($startDate, $endDate, $roomId = null)
+    {
+        $this->db->select('r.*, c.strRoomCode, c.description as roomDescription, f.strFirstname, f.strLastname')
+                 ->from('tb_mas_room_reservations r')
+                 ->join('tb_mas_classrooms c', 'r.intRoomID = c.intID')
+                 ->join('tb_mas_faculty f', 'r.intFacultyID = f.intID')
+                 ->where('r.dteReservationDate >=', $startDate)
+                 ->where('r.dteReservationDate <=', $endDate)
+                 ->where('r.enumStatus !=', 'cancelled');
+
+        if ($roomId) {
+            $this->db->where('r.intRoomID', $roomId);
+        }
+
+        return $this->db->order_by('r.dteReservationDate', 'asc')
+                        ->order_by('r.dteStartTime', 'asc')
+                        ->get()
+                        ->result_array();
+    }
+
     // End of enhanced reservation methods
 
 }
+=======

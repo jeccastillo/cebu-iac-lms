@@ -370,6 +370,19 @@ class Reservation extends CI_Controller {
         echo json_encode($schedule_data);
     }
     
+    public function get_calendar_data()
+    {
+        $post = $this->input->post();
+        $start_date = $post['start_date'] ?? date('Y-m-d');
+        $end_date = $post['end_date'] ?? date('Y-m-d', strtotime('+7 days'));
+        $room_id = $post['room_id'] ?? null;
+        $faculty_id = $post['faculty_id'] ?? null;
+        
+        $calendar_data = $this->data_fetcher->getCalendarData($start_date, $end_date, $room_id, $faculty_id);
+        
+        echo json_encode($calendar_data);
+    }
+    
     // Helper methods
     private function can_edit_reservation($reservation)
     {
