@@ -262,6 +262,114 @@ class Reservation extends CI_Controller {
         echo json_encode($available_rooms);
     }
     
+    public function get_schedule_data()
+    {
+        $post = $this->input->post();
+        $start_date = $post['start_date'] ?? date('Y-m-d');
+        $end_date = $post['end_date'] ?? date('Y-m-d', strtotime('+7 days'));
+        $room_id = $post['room_id'] ?? null;
+        
+        $schedule_data = array();
+        
+        // Get existing reservations
+        $reservations = $this->data_fetcher->getReservationsByDateRange($start_date, $end_date, $room_id);
+        foreach($reservations as $reservation) {
+            $schedule_data[] = array(
+                'id' => 'reservation_' . $reservation['intReservationID'],
+                'title' => 'Reserved: ' . $reservation['strPurpose'],
+                'start' => $reservation['dteReservationDate'] . 'T' . $reservation['dteStartTime'],
+                'end' => $reservation['dteReservationDate'] . 'T' . $reservation['dteEndTime'],
+                'backgroundColor' => '#f39c12',
+                'borderColor' => '#e67e22',
+                'type' => 'reservation',
+                'room' => $reservation['strRoomCode'],
+                'faculty' => $reservation['strFirstname'] . ' ' . $reservation['strLastname'],
+                'status' => $reservation['enumStatus']
+            );
+        }
+        
+        // Get scheduled classes
+        $active_sem = $this->data_fetcher->get_active_sem();
+        if($active_sem) {
+            $current_date = new DateTime($start_date);
+            $end_date_obj = new DateTime($end_date);
+            
+            while($current_date <= $end_date_obj) {
+                $day_of_week = $current_date->format('N'); // 1=Monday, 7=Sunday
+                $date_str = $current_date->format('Y-m-d');
+                
+                // Get room schedules for this day
+                $schedules = $this->data_fetcher->getScheduleByDay($day_of_week, $active_sem['intID'], $room_id);
+                
+                foreach($schedules as $schedule) {
+                    $schedule_data[] = array(
+                        'id' => 'class_' . $schedule['intRoomSchedID'] . '_' . $date_str,
+                        'title' => $schedule['strCode'] . ' - ' . $schedule['strSection'],
+                        'start' => $date_str . 'T' . $schedule['dteStart'],
+                        'end' => $date_str . 'T' . $schedule['dteEnd'],
+                        'backgroundColor' => '#3c8dbc',
+                        'borderColor' => '#2c689c',
+                        'type' => 'class',
+                        'room' => $schedule['strRoomCode'],
+                        'faculty' => $schedule['strFirstname'] . ' ' . $schedule['strLastname'],
+                        'subject' => $schedule['strDescription']
+                    );
+                }
+                
+                $current_date->add(new DateInterval('P1D'));
+            }
+        }
+        
+        echo json_encode($schedule_data);
+    }
+    
+    public function get_room_schedule()
+    {
+        $post = $this->input->post();
+        $room_id = $post['room_id'];
+        $date = $post['date'] ?? date('Y-m-d');
+        
+        $schedule_data = array();
+        
+        // Get reservations for this room and date
+        $reservations = $this->data_fetcher->getReservationsByDateRange($date, $date, $room_id);
+        foreach($reservations as $reservation) {
+            $schedule_data[] = array(
+                'type' => 'reservation',
+                'start_time' => $reservation['dteStartTime'],
+                'end_time' => $reservation['dteEndTime'],
+                'title' => 'Reserved: ' . $reservation['strPurpose'],
+                'faculty' => $reservation['strFirstname'] . ' ' . $reservation['strLastname'],
+                'status' => $reservation['enumStatus']
+            );
+        }
+        
+        // Get scheduled classes for this room and day
+        $active_sem = $this->data_fetcher->get_active_sem();
+        if($active_sem) {
+            $day_of_week = date('N', strtotime($date)); // 1=Monday, 7=Sunday
+            $schedules = $this->data_fetcher->getScheduleByDay($day_of_week, $active_sem['intID'], $room_id);
+            
+            foreach($schedules as $schedule) {
+                $schedule_data[] = array(
+                    'type' => 'class',
+                    'start_time' => $schedule['dteStart'],
+                    'end_time' => $schedule['dteEnd'],
+                    'title' => $schedule['strCode'] . ' - ' . $schedule['strSection'],
+                    'faculty' => $schedule['strFirstname'] . ' ' . $schedule['strLastname'],
+                    'subject' => $schedule['strDescription']
+                );
+            }
+        }
+        
+        // Sort by start time
+        usort($schedule_data, function($a, $b) {
+            return strcmp($a['start_time'], $b['start_time']);
+        });
+        
+        echo json_encode($schedule_data);
+    }
+    
     // Helper methods
     private function can_edit_reservation($reservation)
     {
