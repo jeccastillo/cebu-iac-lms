@@ -14,12 +14,12 @@ class Admissions_Data_Processor {
     /**
      * Collect comprehensive admissions data for AI analysis
      */
-    public function collect_admissions_data($term_id, $start_date = null, $end_date = null)
+    public function collect_admissions_data($term_id, $start_date = null, $end_date = null, $api_data = null)
     {
         $term_data = $this->CI->data_fetcher->get_sem_by_id($term_id);
         
         // Get admissions statistics from external API (similar to admissions_report)
-        $api_stats = $this->get_api_admissions_stats($term_id, $start_date, $end_date);
+        $api_stats = $this->get_api_admissions_stats($term_id, $start_date, $end_date, $api_data);
         
         // Get registration data
         $registrations = $this->get_registration_data($term_id, $start_date, $end_date);
@@ -50,107 +50,17 @@ class Admissions_Data_Processor {
     }
     
     /**
-     * Get admissions statistics from API (using the real admissions API)
+     * Get admissions statistics - now accepts data from frontend
      */
-    private function get_api_admissions_stats($term_id, $start_date = null, $end_date = null)
+    private function get_api_admissions_stats($term_id, $start_date = null, $end_date = null, $api_data = null)
     {
-        // Use the existing admissions API endpoint like in admissions_report.php
-        $api_base_url = $this->CI->config->item('api_url');
-        if (empty($api_base_url)) {
-            // Fallback to default API URL structure
-            $api_base_url = base_url() . 'api/';
+        // If API data is provided from frontend, use it
+        if ($api_data && is_array($api_data)) {
+            log_message('info', 'AI Analytics: Using API data provided from frontend for term ' . $term_id);
+            return $api_data;
         }
         
-        // Get campus info (assuming default campus or from session)
-        $campus = isset($_SESSION['campus']) ? $_SESSION['campus'] : 1;
-        
-        // Build the query string like in the admissions_report.php
-        if ($start_date && $end_date) {
-            $query_str = 'admissions/applications/adstats?current_sem=' . $term_id . '&campus=' . $campus . '&start=' . $start_date . '&end=' . $end_date;
-        } else {
-            $query_str = 'admissions/applications/adstats?current_sem=' . $term_id . '&campus=' . $campus;
-        }
-        
-        $api_url = $api_base_url . $query_str;
-        
-        try {
-            // Check if cURL is available, otherwise use file_get_contents
-            if (function_exists('curl_init')) {
-                // Make API call using cURL
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, $api_url);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-                
-                // Add headers if needed
-                $headers = array(
-                    'Content-Type: application/json',
-                    'Accept: application/json'
-                );
-                
-                // Add authorization header if token is available
-                if (isset($_SESSION['token']) && !empty($_SESSION['token'])) {
-                    $headers[] = 'Authorization: Bearer ' . $_SESSION['token'];
-                }
-                
-                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-                
-                $response = curl_exec($ch);
-                $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                $curl_error = curl_error($ch);
-                curl_close($ch);
-                
-                if ($http_code === 200 && $response !== false && empty($curl_error)) {
-                    $data = json_decode($response, true);
-                    if ($data && is_array($data)) {
-                        // Log successful API call
-                        log_message('info', 'AI Analytics: Successfully fetched admissions stats from API for term ' . $term_id);
-                        return $data;
-                    }
-                }
-                
-                // Log the error for debugging
-                log_message('error', 'AI Analytics: Failed to fetch admissions stats from API. HTTP Code: ' . $http_code . ', URL: ' . $api_url . ', cURL Error: ' . $curl_error);
-                
-            } else {
-                // Fallback to file_get_contents if cURL is not available
-                $context_options = array(
-                    'http' => array(
-                        'method' => 'GET',
-                        'timeout' => 30,
-                        'header' => "Content-Type: application/json\r\n" .
-                                   "Accept: application/json\r\n"
-                    )
-                );
-                
-                // Add authorization header if token is available
-                if (isset($_SESSION['token']) && !empty($_SESSION['token'])) {
-                    $context_options['http']['header'] .= "Authorization: Bearer " . $_SESSION['token'] . "\r\n";
-                }
-                
-                $context = stream_context_create($context_options);
-                $response = file_get_contents($api_url, false, $context);
-                
-                if ($response !== false) {
-                    $data = json_decode($response, true);
-                    if ($data && is_array($data)) {
-                        // Log successful API call
-                        log_message('info', 'AI Analytics: Successfully fetched admissions stats from API for term ' . $term_id . ' (using file_get_contents)');
-                        return $data;
-                    }
-                }
-                
-                // Log the error for debugging
-                log_message('error', 'AI Analytics: Failed to fetch admissions stats from API using file_get_contents. URL: ' . $api_url);
-            }
-            
-        } catch (Exception $e) {
-            log_message('error', 'AI Analytics: Exception when calling admissions API: ' . $e->getMessage());
-        }
-        
-        // Fallback to mock data if API call fails
+        // Fallback to mock data if no API data provided
         log_message('info', 'AI Analytics: Using fallback mock data for term ' . $term_id);
         return array(
             'paid' => 150,

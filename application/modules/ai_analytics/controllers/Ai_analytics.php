@@ -73,7 +73,7 @@ class AI_Analytics extends CI_Controller {
         $this->data['active_sem'] = $this->data_fetcher->get_processing_sem();
         
         $this->load->view("common/header",$this->data);
-        $this->load->view("admin/ai_analysis_debug",$this->data);
+        $this->load->view("admin/ai_analysis_frontend",$this->data);
         $this->load->view("common/footer",$this->data);
     }
     
@@ -86,10 +86,11 @@ class AI_Analytics extends CI_Controller {
         $start_date = $this->input->post('start_date');
         $end_date = $this->input->post('end_date');
         $analysis_type = $this->input->post('analysis_type') ?: 'comprehensive';
+        $api_data = $this->input->post('api_data'); // API data from frontend
         
         try {
-            // Collect and process admissions data
-            $admissions_data = $this->admissions_data_processor->collect_admissions_data($term, $start_date, $end_date);
+            // Collect and process admissions data (now with API data from frontend)
+            $admissions_data = $this->admissions_data_processor->collect_admissions_data($term, $start_date, $end_date, $api_data);
             
             // Generate AI analysis
             $ai_analysis = $this->ai_analyzer->analyze_admissions_data($admissions_data, $analysis_type);
