@@ -147,23 +147,7 @@
                     </div>
                 </div>
             </div>
-        </div>        
-        <!-- Grade Distribution Chart -->
-        <div class="col-md-6">
-            <div class="box box-warning">
-                <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-bar-chart"></i> Grade Distribution</h3>
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse">
-                            <i class="fa fa-minus"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="box-body">
-                    <canvas id="gradeChart" height="200"></canvas>
-                </div>
-            </div>
-        </div>
+        </div>                
     </div>
 
         <!-- Recent Activity -->
