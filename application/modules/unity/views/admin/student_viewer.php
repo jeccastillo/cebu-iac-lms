@@ -1,211 +1,248 @@
 <aside class="right-side">
-  <div id="student-viewer-container">
-    <section class="content-header">
-      <h1>
-        <small>
-          <a class="btn btn-app"
-            :href="base_url + 'student/view_all_students'"><i class="ion ion-arrow-left-a"></i>All
-          </a>
-          <a target="_blank" class="btn btn-app"
-            :href="base_url + 'admissionsV1/view_lead_new/' + student.slug"><i class="fa fa-list"></i>
-            Applicant Data</a>
-          <a v-if="user_level == 2 || user_level == 3"
-            class="btn btn-app"
-            :href="base_url + 'student/edit_student/' + student.intID"><i class="ion ion-edit"></i>
-            Edit</a>
-          <a v-if="user_level == 2 || user_level == 3"
-            class="btn btn-app"
-            :href="base_url + 'unity/student_records/' + student.intID"><i
-              class="fa fa-user"></i>Records</a>
-          <a v-if="registration && (user_level == 2 || user_level == 3)" :disabled="show_alert && registration.allow_enroll == 0" target="_blank" v-if="registration" class="btn btn-app" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id +'/'+ active_sem.intID">
-              <i class="ion ion-printer"></i>RF Print
-          </a>                     
-          <a target="_blank" 
-            v-if="registration && (user_level == 2 || user_level == 3)"
-            class="btn btn-app"
-            href="#"
-            @click.prevent="printRF">
-            <i class="ion ion-printer"></i>RF No Header
-          </a>
-          <a v-if="reg_status == 'Enrolled' && (user_level == 2 || user_level == 3)"
-            class="btn btn-app"
-            :href="base_url + 'registrar/shifting/' + student.intID + '/' + active_sem.intID">
-            <i class="fa fa-arrows-h"></i>Shifting
-          </a>
-          <a class="btn btn-app"
-            :href="base_url + 'deficiencies/student_deficiencies/' + student.intID">
-            <i class="fa fa-user"></i>Deficiencies
-          </a>
-
-          <a v-if="user_level == 2 || user_level == 3"
-            class="btn btn-app"
-            :href="base_url + 'academics/enlistment/' + student.intID + '/' + active_sem.intID">
-            <i class="fa fa-book"></i>Advising Form</a>
-          </a>
-          <a v-if="reg_status != 'For Subject Enlistment' && reg_status != 'For Sectioning' && (user_level == 2 || user_level == 3)"
-            target="_blank"
-            class="btn btn-app"
-            :href="base_url + 'pdf/student_viewer_advising_print/' + student.intID + '/' + active_sem.intID">
-            <i class="ion ion-printer"></i>Print Subjects
-          </a>
-          <a v-else-if="user_level == 2 || user_level == 3"
-            class="btn btn-app"
-            :href="base_url + 'department/load_subjects/' + student.intID + '/' + active_sem.intID">
-            <i class="fa fa-book"></i>Subject Enlistment</a>
-          </a>
-          
-          <!-- <a v-if="reg_status == 'For Registration' && (user_level == 2 || user_level == 3)"  class="btn btn-app" :href="base_url + 'unity/edit_sections/' + student.intID + '/' + active_sem.intID">
-                        <i class="fa fa-book"></i> Update Sections
-                    </a>                         -->
-          <a v-if="reg_status =='For Registration' && (user_level == 2 || user_level == 3)"
-            class="btn btn-app"
-            :href="base_url + 'registrar/register_old_student2/' + student.intID +  '/' + active_sem.intID">
-            <i class="fa fa-book"></i>Student Fee Assessment
-          </a>
-          <a v-if="user_level == 2 || user_level == 3"
-            class="btn btn-app"
-            :href="base_url + 'registrar/student_grade_slip/' + student.intID">
-            <i class="fa fa-book"></i>Grade Slip
-          </a>
-          <a v-if="user_level == 2 || user_level == 7"
-            class="btn btn-app"
-            :href="base_url + 'scholarship/assign_scholarship/'+sem_student+'/'+ student.intID">
-            <i class="fa fa-book"></i>Scholarship/Discount
-          </a>
-          <a v-if="user_level == 2 || user_level == 3"
-            class="btn btn-app"
-            data-toggle="modal"
-            data-target="#loa-modal">
-            <i class="fa fa-book"></i>LOA
-          </a>
-          <a v-if="(user_level == 2 || user_level == 3) && registration"
-            class="btn btn-app" @click="sendEnlistedNotification">
-            <i class="fa fa-book"></i>Send Enlistment Notification
-          </a>          
-        </small>
-
-        <div class="box-tools pull-right">
+  <div id="student-viewer-container" class="student-viewer-container">
+    <!-- Modern Header Section -->
+    <div class="student-header">
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <h1 class="profile-name" v-if="student">
+            {{ student.strLastname.toUpperCase() }}, {{ student.strFirstname.toUpperCase() }}
+            {{ student.strMiddlename ? student.strMiddlename.toUpperCase() : '' }}
+          </h1>
+          <p class="subtitle" v-if="student">
+            {{ student.strProgramDescription }}
+            {{ (student.strMajor != 'None') ? 'Major in ' + student.strMajor : '' }}
+          </p>
+        </div>
+        <div class="col-md-4 text-right">
           <select v-model="sem_student"
             @change="changeTermSelected"
-            class="form-control">
-            <option v-for="s in sy"
-              :value="s.intID">
+            class="form-control form-control-modern"
+            style="background: rgba(255,255,255,0.2); color: white; border-color: rgba(255,255,255,0.3);">
+            <option v-for="s in sy" :value="s.intID" style="color: #333;">
               {{s.term_student_type + ' ' + s.enumSem + ' ' + s.term_label + ' ' + s.strYearStart + '-' + s.strYearEnd}}
             </option>
           </select>
         </div>
-        <div style="clear:both"></div>
-      </h1>
-    </section>
-    <hr />
-    <div class="content">
-      <div class=""
-        v-if="show_alert">
-        <div class="alert alert-danger col-sm-6"
-          role="alert">
-          <h4 class="alert-heading">Alert!</h4>
-          <p>This Student still has remaining balances:</p>
-        </div>
-        <div class="col-sm-6">
-          <table class="table table-bordered thead-dark table-striped">
-            <thead>
-              <tr>
-                <th>Term</th>
-                <th>Payment Type</th>
-                <th>Balance</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in term_balances"
-                v-if="item.balance > 0">
-                <td>{{ item.term }}</td>
-                <td>{{ item.payment_type }}</td>
-                <td><strong>P{{ item.formatted_balance }}</strong></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </div>
-      <div class="row">
-        <div class="col-sm-12">
-          <div v-if="student"
-            class="box box-widget widget-user-2">
-            <!-- Add the bg color to the header using any of the bg-* classes -->
-            <div class="widget-user-header bg-red">
-              <!-- /.widget-user-image -->
-              <h3 class="widget-user-username"
-                style="text-transform:capitalize;margin-left:0;font-size:1.3em;">
-                {{ student.strLastname.toUpperCase() }}, {{ student.strFirstname.toUpperCase() }}
-                {{ student.strMiddlename?student.strMiddlename.toUpperCase():'' }}
-              </h3>
-              <h5 class="widget-user-desc"
-                style="margin-left:0;">{{ student.strProgramDescription }}
-                {{ (student.strMajor != 'None')?'Major in '+student.strMajor:'' }}
-              </h5>
-            </div>
-            <div class="box-footer no-padding">
-              <ul class="nav nav-stacked">
-                <li><a href="#"
-                    style="font-size:13px;">Student Number <span
-                      class="pull-right text-blue">{{ student.strStudentNumber.replace(/-/g, '') }}</span></a>
-                </li>
-                <li><a href="#"
-                    style="font-size:13px;">Status <span
-                      class="pull-right text-blue">{{ student.student_status ? student.student_status.toUpperCase() : '' }}</span></a>
-                </li>
-                <li><a href="#"
-                    style="font-size:13px;">Curriculum <span
-                      class="pull-right text-blue">{{ student.strName }}</span></a></li>
-                <li><a style="font-size:13px;"
-                    href="#">Registration Status <span
-                      class="pull-right">{{ reg_status }}</span></a></li>
-                <li><a @click.prevent="resetStatus()"
-                    href="#"><i class="ion ion-android-close"></i> Reset Status</a> </li>
-                <li>
-                  <a style="font-size:13px;"
-                    href="#">Date Registered <span class="pull-right">
-                      <span style="color:#009000"
-                        v-if="registration">{{ registration.date_enlisted }}</span>
-                      <span style="color:#900000;"
-                        v-else>N/A</span>
-                  </a>
-                </li>                
-                <li v-if="registration"><a style="font-size:13px;"
-                    href="#">Scholarship <span class="pull-right">{{ scholarship.name }}</span></a>
-                </li>
-                <li v-if="registration"><a style="font-size:13px;"
-                    href="#">Discount <span class="pull-right">{{ discount.name }}</span></a></li>
+    </div>
 
-              </ul>
-            </div>
+    <!-- Alert Section -->
+    <div class="alert alert-modern alert-danger" v-if="show_alert" role="alert">
+      <div class="row">
+        <div class="col-md-6">
+          <h4 class="alert-heading">
+            <i class="fas fa-exclamation-triangle"></i>
+            Outstanding Balance Alert
+          </h4>
+          <p>This student has remaining balances that need attention:</p>
+        </div>
+        <div class="col-md-6">
+          <div class="table-responsive">
+            <table class="table table-sm text-white">
+              <thead>
+                <tr>
+                  <th>Term</th>
+                  <th>Payment Type</th>
+                  <th>Balance</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in term_balances" v-if="item.balance > 0">
+                  <td>{{ item.term }}</td>
+                  <td>{{ item.payment_type }}</td>
+                  <td><strong>₱{{ item.formatted_balance }}</strong></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
-        <div class="col-sm-12">
-          <div class="nav-tabs-custom">
-            <ul class="nav nav-tabs">
-              <li :class="[(tab == 'tab_1') ? 'active' : '']"><a href="#tab_1"
-                  data-toggle="tab">Personal Information</a></li>
-              <li v-if="advanced_privilages1"
-                :class="[(tab == 'tab_2') ? 'active' : '']"><a href="#tab_2"
-                  data-toggle="tab">Subjects</a></li>
-              <li v-if="reg_status == 'Enrolled'"
-                :class="[(tab == 'tab_3') ? 'active' : '']"><a href="#tab_3"
-                  data-toggle="tab">Changes of Grades</a></li>
-              <li v-if="enlistment"
-                :class="[(tab == 'tab_4') ? 'active' : '']"><a href="#tab_4"
-                  data-toggle="tab">Advising</a></li>
-              <!-- <li v-if="advanced_privilages2" :class="[(tab == 'tab_3') ? 'active' : '']"><a href="#tab_3" data-toggle="tab">Assessment</a></li>                                         -->
-              <li v-if="registration && advanced_privilages2"
-                :class="[(tab == 'tab_5') ? 'active' : '']"><a href="#tab_5"
-                  data-toggle="tab">Schedule</a></li>
-              <li v-if="advanced_privilages2"><a
-                  :href="base_url + 'unity/adjustments/' + student.intID + '/' + selected_ay">Adjustments</a>
-              </li>
+      </div>
+    </div>
 
-              <!-- <li v-if="registration && advanced_privilages2"><a :href="base_url + 'unity/edit_registration/' + student.intID + '/' + selected_ay">Edit Registration</a></li> -->
-              <!-- <li><a :href="base_url + 'unity/accounting/' + student.intID">Accounting Summary</a></li>                     -->
-            </ul>
-            <div class="tab-content">
+    <!-- Action Buttons Section -->
+    <div class="action-buttons-container">
+      <div class="action-buttons-grid">
+        <!-- Navigation Actions -->
+        <div class="action-btn-group">
+          <h6><i class="fas fa-navigation"></i> Navigation</h6>
+          <a class="btn-modern btn-secondary-modern" :href="base_url + 'student/view_all_students'">
+            <i class="ion ion-arrow-left-a"></i>Back to Students
+          </a>
+          <a class="btn-modern btn-info-modern" target="_blank" :href="base_url + 'admissionsV1/view_lead_new/' + student.slug">
+            <i class="fa fa-list"></i>Applicant Data
+          </a>
+        </div>
+
+        <!-- Student Management -->
+        <div class="action-btn-group" v-if="user_level == 2 || user_level == 3">
+          <h6><i class="fas fa-user-edit"></i> Student Management</h6>
+          <a class="btn-modern btn-primary-modern" :href="base_url + 'student/edit_student/' + student.intID">
+            <i class="ion ion-edit"></i>Edit Student
+          </a>
+          <a class="btn-modern btn-info-modern" :href="base_url + 'unity/student_records/' + student.intID">
+            <i class="fa fa-user"></i>Academic Records
+          </a>
+          <a class="btn-modern btn-warning-modern" :href="base_url + 'deficiencies/student_deficiencies/' + student.intID">
+            <i class="fa fa-exclamation-triangle"></i>Deficiencies
+          </a>
+        </div>
+
+        <!-- Academic Actions -->
+        <div class="action-btn-group" v-if="user_level == 2 || user_level == 3">
+          <h6><i class="fas fa-graduation-cap"></i> Academic Actions</h6>
+          <a class="btn-modern btn-success-modern" :href="base_url + 'academics/enlistment/' + student.intID + '/' + active_sem.intID">
+            <i class="fa fa-book"></i>Advising Form
+          </a>
+          <a class="btn-modern btn-primary-modern" v-if="reg_status != 'For Subject Enlistment' && reg_status != 'For Sectioning'" 
+             target="_blank" :href="base_url + 'pdf/student_viewer_advising_print/' + student.intID + '/' + active_sem.intID">
+            <i class="ion ion-printer"></i>Print Subjects
+          </a>
+          <a class="btn-modern btn-primary-modern" v-else :href="base_url + 'department/load_subjects/' + student.intID + '/' + active_sem.intID">
+            <i class="fa fa-book"></i>Subject Enlistment
+          </a>
+        </div>
+
+        <!-- Registration & Financial -->
+        <div class="action-btn-group" v-if="user_level == 2 || user_level == 3">
+          <h6><i class="fas fa-file-invoice-dollar"></i> Registration & Financial</h6>
+          <a class="btn-modern btn-success-modern" v-if="reg_status =='For Registration'" 
+             :href="base_url + 'registrar/register_old_student2/' + student.intID +  '/' + active_sem.intID">
+            <i class="fa fa-calculator"></i>Fee Assessment
+          </a>
+          <a class="btn-modern btn-info-modern" :href="base_url + 'registrar/student_grade_slip/' + student.intID">
+            <i class="fa fa-file-alt"></i>Grade Slip
+          </a>
+          <a class="btn-modern btn-warning-modern" v-if="user_level == 2 || user_level == 7" 
+             :href="base_url + 'scholarship/assign_scholarship/'+sem_student+'/'+ student.intID">
+            <i class="fa fa-award"></i>Scholarship/Discount
+          </a>
+        </div>
+
+        <!-- Print & Reports -->
+        <div class="action-btn-group" v-if="registration && (user_level == 2 || user_level == 3)">
+          <h6><i class="fas fa-print"></i> Print & Reports</h6>
+          <a class="btn-modern btn-secondary-modern" target="_blank" 
+             :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id +'/'+ active_sem.intID">
+            <i class="ion ion-printer"></i>Registration Form
+          </a>
+          <a class="btn-modern btn-secondary-modern" href="#" @click.prevent="printRF">
+            <i class="ion ion-printer"></i>RF No Header
+          </a>
+        </div>
+
+        <!-- Special Actions -->
+        <div class="action-btn-group" v-if="user_level == 2 || user_level == 3">
+          <h6><i class="fas fa-cogs"></i> Special Actions</h6>
+          <a class="btn-modern btn-warning-modern" v-if="reg_status == 'Enrolled'" 
+             :href="base_url + 'registrar/shifting/' + student.intID + '/' + active_sem.intID">
+            <i class="fa fa-arrows-h"></i>Program Shifting
+          </a>
+          <a class="btn-modern btn-danger-modern" data-toggle="modal" data-target="#loa-modal">
+            <i class="fa fa-pause"></i>Leave of Absence
+          </a>
+          <a class="btn-modern btn-info-modern" v-if="registration" @click="sendEnlistedNotification">
+            <i class="fa fa-bell"></i>Send Notification
+          </a>
+          <a class="btn-modern btn-danger-modern" @click="resetStatus()">
+            <i class="ion ion-android-close"></i>Reset Status
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Stats Section -->
+    <div class="quick-stats-grid" v-if="student">
+      <div class="stat-card">
+        <div class="stat-icon primary">
+          <i class="fas fa-id-card"></i>
+        </div>
+        <div class="stat-value">{{ student.strStudentNumber.replace(/-/g, '') }}</div>
+        <div class="stat-label">Student Number</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon success">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="stat-value">{{ reg_status }}</div>
+        <div class="stat-label">Registration Status</div>
+      </div>
+      <div class="stat-card" v-if="registration">
+        <div class="stat-icon info">
+          <i class="fas fa-calendar"></i>
+        </div>
+        <div class="stat-value">{{ registration.date_enlisted ? new Date(registration.date_enlisted).toLocaleDateString() : 'N/A' }}</div>
+        <div class="stat-label">Date Registered</div>
+      </div>
+      <div class="stat-card" v-if="total_units">
+        <div class="stat-icon warning">
+          <i class="fas fa-book"></i>
+        </div>
+        <div class="stat-value">{{ total_units }}</div>
+        <div class="stat-label">Total Units</div>
+      </div>
+    </div>
+
+    <!-- Student Profile and Information Section -->
+    <div class="student-info-grid" v-if="student">
+      <!-- Student Profile Card -->
+      <div class="student-profile-card">
+        <div class="profile-header">
+          <img v-if="picture" :src="picture" alt="Student Photo" class="profile-image">
+          <img v-else :src="img_dir + 'default_image2.png'" alt="Default Photo" class="profile-image">
+          <h3 class="profile-name">
+            {{ student.strLastname.toUpperCase() }}, {{ student.strFirstname.toUpperCase() }}
+            {{ student.strMiddlename ? student.strMiddlename.toUpperCase() : '' }}
+          </h3>
+          <p class="profile-program">
+            {{ student.strProgramDescription }}
+            {{ (student.strMajor != 'None') ? 'Major in ' + student.strMajor : '' }}
+          </p>
+        </div>
+        <div class="profile-details">
+          <div class="detail-item">
+            <span class="detail-label">Student Status</span>
+            <span class="detail-value status-badge" :class="'status-' + (student.student_status ? student.student_status.toLowerCase() : 'inactive')">
+              {{ student.student_status ? student.student_status.toUpperCase() : 'N/A' }}
+            </span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Curriculum</span>
+            <span class="detail-value">{{ student.strName }}</span>
+          </div>
+          <div class="detail-item" v-if="registration">
+            <span class="detail-label">Scholarship</span>
+            <span class="detail-value">{{ scholarship.name }}</span>
+          </div>
+          <div class="detail-item" v-if="registration">
+            <span class="detail-label">Discount</span>
+            <span class="detail-value">{{ discount.name }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content Area -->
+      <div class="modern-tabs">
+        <div class="modern-tab-nav">
+          <a href="#tab_1" :class="[(tab == 'tab_1') ? 'active' : '']" data-toggle="tab">
+            <i class="fas fa-user"></i>Personal Information
+          </a>
+          <a href="#tab_2" v-if="advanced_privilages1" :class="[(tab == 'tab_2') ? 'active' : '']" data-toggle="tab">
+            <i class="fas fa-book"></i>Subjects
+          </a>
+          <a href="#tab_3" v-if="reg_status == 'Enrolled'" :class="[(tab == 'tab_3') ? 'active' : '']" data-toggle="tab">
+            <i class="fas fa-edit"></i>Grade Changes
+          </a>
+          <a href="#tab_4" v-if="enlistment" :class="[(tab == 'tab_4') ? 'active' : '']" data-toggle="tab">
+            <i class="fas fa-clipboard-list"></i>Advising
+          </a>
+          <a href="#tab_5" v-if="registration && advanced_privilages2" :class="[(tab == 'tab_5') ? 'active' : '']" data-toggle="tab">
+            <i class="fas fa-calendar"></i>Schedule
+          </a>
+          <a v-if="advanced_privilages2" :href="base_url + 'unity/adjustments/' + student.intID + '/' + selected_ay">
+            <i class="fas fa-cogs"></i>Adjustments
+          </a>
+        </div>
+        <div class="modern-tab-content">
               <div :class="[(tab == 'tab_1') ? 'active' : '']"
                 class="tab-pane"
                 id="tab_1">
@@ -740,6 +777,9 @@
 </aside>
 
 
+
+<!-- Include our modern student viewer CSS -->
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/student-viewer.css">
 
 <style>
 .green-bg {
