@@ -206,7 +206,7 @@ new Vue({
         fetchingData: false,
         analyzing: false,
         baseUrl: '<?php echo base_url(); ?>',
-        apiUrl: '<?php echo $this->config->item('api_url') ?: base_url() . 'api/sms/'; ?>',
+        apiUrl: '<?php echo $this->config->item('api_url') ?: base_url() . 'api/'; ?>',
         selectedTerm: <?php echo isset($current_sem) ? $current_sem : 'null'; ?>,
         campus: '<?php echo isset($campus) ? $campus : '1'; ?>',
         token: '<?php echo isset($_SESSION['token']) ? $_SESSION['token'] : ''; ?>',
@@ -236,7 +236,7 @@ new Vue({
                 campus: this.campus
             });
             
-            const apiEndpoint = this.apiUrl + 'admissions/applications/adstats?' + queryParams.toString();
+            const apiEndpoint = this.apiUrl + 'sms/admissions/applications/adstats?' + queryParams.toString();
             
             console.log('Fetching from:', apiEndpoint);
             
