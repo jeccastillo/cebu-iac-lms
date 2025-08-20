@@ -164,28 +164,40 @@
                         </div>
                     </div>
                     <div class="box-body">
-                        <div class="row">
-                            <div class="col-xs-6">
-                                <a href="<?php echo base_url(); ?>unity/view_classlist" class="btn btn-app">
-                                    <i class="fa fa-list"></i> My Classes
+                        <ul class="list-group list-group-unbordered">
+                            <li class="list-group-item">
+                                <a href="<?php echo base_url(); ?>unity/view_classlist" class="quick-action-link">
+                                    <i class="fa fa-list text-aqua"></i> My Classes
+                                    <span class="pull-right text-muted">
+                                        <i class="fa fa-angle-right"></i>
+                                    </span>
                                 </a>
-                            </div>
-                            <div class="col-xs-6">
-                                <a href="<?php echo base_url(); ?>faculty/my_profile" class="btn btn-app">
-                                    <i class="fa fa-user"></i> My Profile
+                            </li>
+                            <li class="list-group-item">
+                                <a href="<?php echo base_url(); ?>faculty/my_profile" class="quick-action-link">
+                                    <i class="fa fa-user text-green"></i> My Profile
+                                    <span class="pull-right text-muted">
+                                        <i class="fa fa-angle-right"></i>
+                                    </span>
                                 </a>
-                            </div>
-                            <div class="col-xs-6">
-                                <a href="<?php echo base_url(); ?>unity/faculty_classlists" class="btn btn-app">
-                                    <i class="fa fa-plus"></i> Add Class
+                            </li>
+                            <li class="list-group-item">
+                                <a href="<?php echo base_url(); ?>unity/faculty_classlists" class="quick-action-link">
+                                    <i class="fa fa-plus text-yellow"></i> Add Class
+                                    <span class="pull-right text-muted">
+                                        <i class="fa fa-angle-right"></i>
+                                    </span>
                                 </a>
-                            </div>
-                            <div class="col-xs-6">
-                                <a href="<?php echo base_url(); ?>faculty/edit_profile" class="btn btn-app">
-                                    <i class="fa fa-cog"></i> Settings
+                            </li>
+                            <li class="list-group-item">
+                                <a href="<?php echo base_url(); ?>faculty/edit_profile" class="quick-action-link">
+                                    <i class="fa fa-cog text-red"></i> Settings
+                                    <span class="pull-right text-muted">
+                                        <i class="fa fa-angle-right"></i>
+                                    </span>
                                 </a>
-                            </div>
-                        </div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
