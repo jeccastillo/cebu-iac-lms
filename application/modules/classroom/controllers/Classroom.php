@@ -44,7 +44,7 @@ class Classroom extends CI_Controller {
         $this->data['all_messages'] = $this->data_fetcher->count_table_contents('tb_mas_message_user',null,array('intTrash'=>0,'intFacultyID'=>$this->session->userdata('intID')));
         
         $this->data['trashed_messages'] = $this->data_fetcher->count_table_contents('tb_mas_message_user',null,array('intTrash'=>1,'intFacultyID'=>$this->session->userdata('intID')));
-        
+        $this->data['campus'] = $this->config->item('campus');
         $this->data['sent_messages'] = $this->data_fetcher->count_sent_items($this->session->userdata('intID'));
         $this->data['page'] = "classroom";
     }
