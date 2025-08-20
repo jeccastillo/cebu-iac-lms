@@ -762,7 +762,7 @@
                                                         class="btn btn-primary"> Update Details
                                                     </button>
                                                     <button
-                                                        v-if="payment.or_number && payment.invoice_number && cashier"
+                                                        v-if="payment.or_number && cashier"
                                                         @click="printOR(payment)"
                                                         class="btn btn-primary"> Print OR </button>
                                                     <button v-if="payment.invoice_number && cashier"
