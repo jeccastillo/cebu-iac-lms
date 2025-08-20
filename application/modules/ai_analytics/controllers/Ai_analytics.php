@@ -1,10 +1,14 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Ai_analytics extends CI_Controller {
+class AI_Analytics extends CI_Controller {
 
     public function __construct()
     {
         parent::__construct();
+        
+        // Load required models first
+        $this->load->model('data_fetcher');
+        $this->load->model('data_poster');
         
         // User Level Validation - same as AdmissionsV1 controller
         $userlevel = $this->session->userdata('intUserLevel');   
@@ -17,10 +21,14 @@ class Ai_analytics extends CI_Controller {
         if($theme == "" || !isset($theme))
             $theme = $this->config->item('global_theme');
         
+        // Initialize settings array
+        $this->settings = array();
         $settings = $this->data_fetcher->fetch_table('su-tb_sys_settings');
-        foreach($settings as $setting)
-        {
-            $this->settings[$setting['strSettingName']] = $setting['strSettingValue'];
+        if($settings) {
+            foreach($settings as $setting)
+            {
+                $this->settings[$setting['strSettingName']] = $setting['strSettingValue'];
+            }
         }
         
         $this->data['img_dir'] = base_url()."assets/themes/".$theme."/images/";	
@@ -65,7 +73,7 @@ class Ai_analytics extends CI_Controller {
         $this->data['active_sem'] = $this->data_fetcher->get_processing_sem();
         
         $this->load->view("common/header",$this->data);
-        $this->load->view("admin/ai_analysis",$this->data);
+        $this->load->view("admin/ai_analysis_debug",$this->data);
         $this->load->view("common/footer",$this->data);
     }
     
