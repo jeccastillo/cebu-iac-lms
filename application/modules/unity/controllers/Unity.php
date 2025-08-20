@@ -169,19 +169,6 @@ class Unity extends CI_Controller {
                                           ->get('tb_mas_classlist')
                                           ->result_array();
             
-            // Today's schedule - Get current day abbreviation
-            $today = date('l'); // Get day name (Monday, Tuesday, etc.)
-            $day_abbrev = substr($today, 0, 3); // Get first 3 letters (Mon, Tue, etc.)
-            
-            $today_schedule = $this->db->select('tb_mas_classlist.*, tb_mas_subjects.strCode, tb_mas_subjects.strDescription, tb_mas_room_schedule.strTimeStart, tb_mas_room_schedule.strTimeEnd, tb_mas_room_schedule.strRoom')
-                                      ->from('tb_mas_classlist')
-                                      ->join('tb_mas_subjects', 'tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
-                                      ->join('tb_mas_room_schedule', 'tb_mas_classlist.intID = tb_mas_room_schedule.intClassListID', 'left')
-                                      ->where('tb_mas_classlist.intFacultyID', $faculty_id)
-                                      ->where('tb_mas_classlist.strAcademicYear', $active_sem_id)
-                                      ->get()
-                                      ->result_array();
-            
             // Program distribution for faculty's classes
             $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
             $faculty_program_stats = array();
@@ -226,7 +213,6 @@ class Unity extends CI_Controller {
             $this->data['submitted_grades'] = $submitted_grades;
             $this->data['total_students_taught'] = $total_students_taught;
             $this->data['recent_submissions'] = $recent_submissions;
-            $this->data['today_schedule'] = $today_schedule;
             $this->data['faculty_program_stats'] = $faculty_program_stats;
             $this->data['grade_distribution'] = $grade_distribution;
             $this->data['num_subjects'] = count($this->data["subjects"]);
