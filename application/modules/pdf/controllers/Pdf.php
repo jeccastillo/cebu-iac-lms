@@ -2605,7 +2605,7 @@ class Pdf extends CI_Controller {
         $this->data['remarks'] = $request['remarks'];
         $this->data['or_number'] = (string)$request['or_number'];
         $this->data['or_number'] = str_pad($this->data['or_number'],5,'0', STR_PAD_LEFT);
-        $this->data['invoice_number'] = strtoupper($request['invoice_number']);
+        $this->data['invoice_number'] = $request['invoice_number'] ? strtoupper($request['invoice_number']) : '';
         $this->data['invoice_number'] = str_pad($this->data['invoice_number'],5,'0', STR_PAD_LEFT);
         // $this->data['description'] = $request['description'];
         // $this->data['total_amount_due'] = $request['total_amount_due'];
