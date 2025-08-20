@@ -68,7 +68,7 @@ class Unity extends CI_Controller {
 	}
 
     
-    public function faculty_dashboard()
+    public function faculty_dashboard_old()
     {
         if($this->faculty_logged_in())
         {
@@ -121,7 +121,7 @@ class Unity extends CI_Controller {
             redirect(base_url()."unity");
     }
 
-    public function enhanced_faculty_dashboard()
+    public function faculty_dashboard()
     {
         if($this->faculty_logged_in())
         {
