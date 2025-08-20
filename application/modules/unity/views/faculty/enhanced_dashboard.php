@@ -147,9 +147,7 @@
                     </div>
                 </div>
             </div>
-        </div>                
-    </div>
-
+        </div>                        
         <!-- Recent Activity -->
         <div class="row">
             <div class="col-md-12">
