@@ -121,6 +121,126 @@ class Unity extends CI_Controller {
             redirect(base_url()."unity");
     }
 
+    public function enhanced_faculty_dashboard()
+    {
+        if($this->faculty_logged_in())
+        {
+            $this->data['page'] = "enhanced_dashboard";
+            $this->data['title'] = "Enhanced Dashboard";
+            $this->data['active_sem'] = $this->data_fetcher->get_active_sem();
+            $this->data['app_sem'] = $this->data_fetcher->get_processing_sem();
+            $this->data["subjects"] = $this->data_fetcher->fetch_table('tb_mas_subjects');
+            $this->data['pwd'] = $this->session->userdata('strPass');
+            $this->data["faculty_data"] = $this->session->all_userdata();
+            
+            // Enhanced data collection
+            $faculty_id = $this->session->userdata('intID');
+            $active_sem_id = $this->data['active_sem']['intID'];
+            
+            // Basic statistics
+            $students = $this->data_fetcher->count_table_contents('tb_mas_users',null,array('isGraduate'=>0));
+            $resident_scholars = $this->data_fetcher->count_table_contents('tb_mas_users',null,array('enumScholarship'=>'resident scholar','isGraduate'=>0));
+            $seventh_district = $this->data_fetcher->count_table_contents('tb_mas_users',null,array('enumScholarship'=>'7th district scholar','isGraduate'=>0));
+            $registered_students = $this->data_fetcher->count_table_contents('tb_mas_registration',null,array('intAYID'=>$active_sem_id));
+            
+            // Faculty-specific data
+            $my_classes = $this->data_fetcher->fetch_table('tb_mas_classlist',null,null,array('intFacultyID'=>$faculty_id,'strAcademicYear'=>$active_sem_id));
+            $my_classes_count = count($my_classes);
+            
+            // Enhanced class statistics
+            $pending_grades = 0;
+            $submitted_grades = 0;
+            $total_students_taught = 0;
+            
+            foreach($my_classes as $class) {
+                $student_count = $this->data_fetcher->count_table_contents('tb_mas_classlist_student',null,array('intClassListID'=>$class['intID']));
+                $total_students_taught += $student_count;
+                
+                if($class['intFinalized'] < 2) {
+                    $pending_grades++;
+                } else {
+                    $submitted_grades++;
+                }
+            }
+            
+            // Recent activity - last 7 days
+            $recent_submissions = $this->db->where('intFacultyID', $faculty_id)
+                                          ->where('date_final_submitted >=', date('Y-m-d', strtotime('-7 days')))
+                                          ->get('tb_mas_classlist')
+                                          ->result_array();
+            
+            // Today's schedule
+            $today = date('l'); // Get day name
+            $today_schedule = $this->db->select('tb_mas_classlist.*, tb_mas_subjects.strCode, tb_mas_subjects.strDescription, tb_mas_room_schedule.*')
+                                      ->from('tb_mas_classlist')
+                                      ->join('tb_mas_subjects', 'tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
+                                      ->join('tb_mas_room_schedule', 'tb_mas_classlist.intID = tb_mas_room_schedule.intClassListID', 'left')
+                                      ->where('tb_mas_classlist.intFacultyID', $faculty_id)
+                                      ->where('tb_mas_classlist.strAcademicYear', $active_sem_id)
+                                      ->like('tb_mas_room_schedule.strDays', $today)
+                                      ->get()
+                                      ->result_array();
+            
+            // Program distribution for faculty's classes
+            $programs = $this->data_fetcher->fetch_table('tb_mas_programs');
+            $faculty_program_stats = array();
+            
+            foreach($programs as $prog) {
+                $prog_students = $this->db->select('COUNT(*) as count')
+                                         ->from('tb_mas_classlist_student')
+                                         ->join('tb_mas_classlist', 'tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
+                                         ->join('tb_mas_users', 'tb_mas_classlist_student.intStudentID = tb_mas_users.intID')
+                                         ->where('tb_mas_classlist.intFacultyID', $faculty_id)
+                                         ->where('tb_mas_classlist.strAcademicYear', $active_sem_id)
+                                         ->where('tb_mas_users.intProgramID', $prog['intProgramID'])
+                                         ->get()
+                                         ->row_array();
+                
+                if($prog_students['count'] > 0) {
+                    $prog['studentCount'] = $prog_students['count'];
+                    $faculty_program_stats[] = $prog;
+                }
+            }
+            
+            // Grade distribution for faculty's classes
+            $grade_distribution = $this->db->select('floatFinalGrade, COUNT(*) as count')
+                                          ->from('tb_mas_classlist_student')
+                                          ->join('tb_mas_classlist', 'tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
+                                          ->where('tb_mas_classlist.intFacultyID', $faculty_id)
+                                          ->where('tb_mas_classlist.strAcademicYear', $active_sem_id)
+                                          ->where('tb_mas_classlist_student.floatFinalGrade !=', '')
+                                          ->where('tb_mas_classlist_student.floatFinalGrade !=', '0')
+                                          ->group_by('floatFinalGrade')
+                                          ->get()
+                                          ->result_array();
+            
+            // Assign enhanced data to view
+            $this->data['students'] = $students;
+            $this->data['registered'] = $registered_students;
+            $this->data['scholar1'] = $seventh_district;
+            $this->data['scholar2'] = $resident_scholars;
+            $this->data['my_classes_count'] = $my_classes_count;
+            $this->data['my_classes'] = $my_classes;
+            $this->data['pending_grades'] = $pending_grades;
+            $this->data['submitted_grades'] = $submitted_grades;
+            $this->data['total_students_taught'] = $total_students_taught;
+            $this->data['recent_submissions'] = $recent_submissions;
+            $this->data['today_schedule'] = $today_schedule;
+            $this->data['faculty_program_stats'] = $faculty_program_stats;
+            $this->data['grade_distribution'] = $grade_distribution;
+            $this->data['num_subjects'] = count($this->data["subjects"]);
+            $this->data['faculty_logged_in'] = $this->faculty_logged_in();
+            
+            // Load enhanced views
+            $this->load->view("common/header",$this->data);
+            $this->load->view("faculty/enhanced_dashboard",$this->data);
+            $this->load->view("common/footer",$this->data);
+            $this->load->view("enhanced_dashboard_js",$this->data);
+        }
+        else
+            redirect(base_url()."unity");
+    }
+
     public function sms_dashboard()
     {
         if($this->faculty_logged_in())
