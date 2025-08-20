@@ -118,30 +118,51 @@ class AdmissionsV1 extends CI_Controller {
         $this->load->view("common/edit_sy_conf",$this->data); 
     }
     
+    /**
+     * View all leads/applicants with pagination and filtering
+     * @param int $term - Term ID (0 = current processing term)
+     */
     public function view_all_leads($term = 0)
     {
-        if($this->faculty_logged_in())
+        // Check if user has proper access
+        if(!$this->faculty_logged_in())
         {
-            if($term == 0)
-                $term = $this->data_fetcher->get_processing_sem();        
-            else
-                $term = $this->data_fetcher->get_sem_by_id($term);  
-                
+            redirect(base_url()."unity");
+            return;
+        }
+        
+        // Validate and sanitize term parameter
+        $term = intval($term);
+        
+        try {
+            // Get term data - either current processing term or specific term by ID
+            if($term == 0) {
+                $term_data = $this->data_fetcher->get_processing_sem();        
+            } else {
+                $term_data = $this->data_fetcher->get_sem_by_id($term);
+                // If invalid term ID provided, fallback to current processing term
+                if(!$term_data) {
+                    $term_data = $this->data_fetcher->get_processing_sem();
+                }
+            }
             
+            // Load required data for the view
             $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
-            $this->data['current_sem'] = $term['intID'];
-            
+            $this->data['current_sem'] = $term_data['intID'];
             $this->data['page'] = "view_leads";
             $this->data['opentree'] = "leads";
-            //$this->data['subjects'] = $this->data_fetcher->fetch_table('tb_mas_subjects',array('strCode','asc'));
-            $this->load->view("common/header",$this->data);
-            $this->load->view("admin/leads_view",$this->data);
-            $this->load->view("common/footer",$this->data); 
-            $this->load->view("common/subjects_conf",$this->data); 
-            //print_r($this->data['classlist']);
+            
+            // Load views
+            $this->load->view("common/header", $this->data);
+            $this->load->view("admin/leads_view", $this->data);
+            $this->load->view("common/footer", $this->data); 
+            $this->load->view("common/subjects_conf", $this->data);
+            
+        } catch (Exception $e) {
+            // Log error and redirect to safe page
+            log_message('error', 'Error in view_all_leads: ' . $e->getMessage());
+            redirect(base_url()."unity");
         }
-        else
-            redirect(base_url()."unity");  
     }
 
     public function view_reserved_leads($term = 0)
