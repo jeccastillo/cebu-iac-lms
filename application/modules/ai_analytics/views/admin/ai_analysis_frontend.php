@@ -206,7 +206,7 @@ new Vue({
         fetchingData: false,
         analyzing: false,
         baseUrl: '<?php echo base_url(); ?>',
-        apiUrl: '<?php echo $this->config->item('api_url') ?: base_url() . 'api/'; ?>',
+        apiUrl: '<?php echo $this->config->item('api_url') ?: base_url() . 'api/sms/'; ?>',
         selectedTerm: <?php echo isset($current_sem) ? $current_sem : 'null'; ?>,
         campus: '<?php echo isset($campus) ? $campus : '1'; ?>',
         token: '<?php echo isset($_SESSION['token']) ? $_SESSION['token'] : ''; ?>',
