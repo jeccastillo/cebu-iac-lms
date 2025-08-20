@@ -184,25 +184,48 @@ class AI_Analyzer {
             'temperature' => isset($this->ai_config['openai']['temperature']) ? $this->ai_config['openai']['temperature'] : 0.7
         );
         
-        $headers = array(
-            'Content-Type: application/json',
-            'Authorization: Bearer ' . $api_key
-        );
+        $json_data = json_encode($data);
         
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-        
-        $response = curl_exec($ch);
-        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-        
-        if ($http_code !== 200) {
-            throw new Exception('OpenAI API request failed with code: ' . $http_code);
+        // Check if cURL is available, otherwise use file_get_contents
+        if (function_exists('curl_init')) {
+            $headers = array(
+                'Content-Type: application/json',
+                'Authorization: Bearer ' . $api_key
+            );
+            
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+            
+            $response = curl_exec($ch);
+            $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            
+            if ($http_code !== 200) {
+                throw new Exception('OpenAI API request failed with code: ' . $http_code);
+            }
+        } else {
+            // Fallback to file_get_contents if cURL is not available
+            $context_options = array(
+                'http' => array(
+                    'method' => 'POST',
+                    'header' => "Content-Type: application/json\r\n" .
+                               "Authorization: Bearer " . $api_key . "\r\n",
+                    'content' => $json_data,
+                    'timeout' => 30
+                )
+            );
+            
+            $context = stream_context_create($context_options);
+            $response = file_get_contents($url, false, $context);
+            
+            if ($response === false) {
+                throw new Exception('OpenAI API request failed using file_get_contents');
+            }
         }
         
         $decoded_response = json_decode($response, true);

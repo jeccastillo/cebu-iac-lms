@@ -74,43 +74,77 @@ class Admissions_Data_Processor {
         $api_url = $api_base_url . $query_str;
         
         try {
-            // Make API call using cURL
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $api_url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            
-            // Add headers if needed
-            $headers = array(
-                'Content-Type: application/json',
-                'Accept: application/json'
-            );
-            
-            // Add authorization header if token is available
-            if (isset($_SESSION['token']) && !empty($_SESSION['token'])) {
-                $headers[] = 'Authorization: Bearer ' . $_SESSION['token'];
-            }
-            
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-            
-            $response = curl_exec($ch);
-            $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            $curl_error = curl_error($ch);
-            curl_close($ch);
-            
-            if ($http_code === 200 && $response !== false && empty($curl_error)) {
-                $data = json_decode($response, true);
-                if ($data && is_array($data)) {
-                    // Log successful API call
-                    log_message('info', 'AI Analytics: Successfully fetched admissions stats from API for term ' . $term_id);
-                    return $data;
+            // Check if cURL is available, otherwise use file_get_contents
+            if (function_exists('curl_init')) {
+                // Make API call using cURL
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $api_url);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                
+                // Add headers if needed
+                $headers = array(
+                    'Content-Type: application/json',
+                    'Accept: application/json'
+                );
+                
+                // Add authorization header if token is available
+                if (isset($_SESSION['token']) && !empty($_SESSION['token'])) {
+                    $headers[] = 'Authorization: Bearer ' . $_SESSION['token'];
                 }
+                
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                
+                $response = curl_exec($ch);
+                $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                $curl_error = curl_error($ch);
+                curl_close($ch);
+                
+                if ($http_code === 200 && $response !== false && empty($curl_error)) {
+                    $data = json_decode($response, true);
+                    if ($data && is_array($data)) {
+                        // Log successful API call
+                        log_message('info', 'AI Analytics: Successfully fetched admissions stats from API for term ' . $term_id);
+                        return $data;
+                    }
+                }
+                
+                // Log the error for debugging
+                log_message('error', 'AI Analytics: Failed to fetch admissions stats from API. HTTP Code: ' . $http_code . ', URL: ' . $api_url . ', cURL Error: ' . $curl_error);
+                
+            } else {
+                // Fallback to file_get_contents if cURL is not available
+                $context_options = array(
+                    'http' => array(
+                        'method' => 'GET',
+                        'timeout' => 30,
+                        'header' => "Content-Type: application/json\r\n" .
+                                   "Accept: application/json\r\n"
+                    )
+                );
+                
+                // Add authorization header if token is available
+                if (isset($_SESSION['token']) && !empty($_SESSION['token'])) {
+                    $context_options['http']['header'] .= "Authorization: Bearer " . $_SESSION['token'] . "\r\n";
+                }
+                
+                $context = stream_context_create($context_options);
+                $response = file_get_contents($api_url, false, $context);
+                
+                if ($response !== false) {
+                    $data = json_decode($response, true);
+                    if ($data && is_array($data)) {
+                        // Log successful API call
+                        log_message('info', 'AI Analytics: Successfully fetched admissions stats from API for term ' . $term_id . ' (using file_get_contents)');
+                        return $data;
+                    }
+                }
+                
+                // Log the error for debugging
+                log_message('error', 'AI Analytics: Failed to fetch admissions stats from API using file_get_contents. URL: ' . $api_url);
             }
-            
-            // Log the error for debugging
-            log_message('error', 'AI Analytics: Failed to fetch admissions stats from API. HTTP Code: ' . $http_code . ', URL: ' . $api_url . ', cURL Error: ' . $curl_error);
             
         } catch (Exception $e) {
             log_message('error', 'AI Analytics: Exception when calling admissions API: ' . $e->getMessage());
