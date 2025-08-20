@@ -2605,7 +2605,7 @@ class Pdf extends CI_Controller {
         $this->data['remarks'] = $request['remarks'];
         $this->data['or_number'] = (string)$request['or_number'];
         $this->data['or_number'] = str_pad($this->data['or_number'],5,'0', STR_PAD_LEFT);
-        $this->data['invoice_number'] = strtoupper($request['invoice_number']);
+        $this->data['invoice_number'] = isset($request['invoice_number']) ? strtoupper($request['invoice_number']) : '';
         $this->data['invoice_number'] = str_pad($this->data['invoice_number'],5,'0', STR_PAD_LEFT);
         // $this->data['description'] = $request['description'];
         // $this->data['total_amount_due'] = $request['total_amount_due'];
@@ -4836,13 +4836,13 @@ class Pdf extends CI_Controller {
         
         tcpdf();
         // create new PDF document
-        $pdf = new TCPDF("L", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);        
+        $pdf = new TCPDF("P", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);        
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetTitle("SHS Enrolled by Grade Level");
         
         // set margins
-        $pdf->SetMargins(0.5, .25, 0.5);
+        $pdf->SetMargins(10, 15, 10);
 
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
