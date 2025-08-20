@@ -5140,85 +5140,93 @@ class Data_fetcher extends CI_Model {
     }
 
     // Room Reservation Methods
-    function getAllReservations($limit = null, $offset = null)
+    function getAllReservations($filters = array())
     {
-        $this->db->select('r.*, c.strRoomCode, c.description as roomDescription, 
-                          f.strFirstname, f.strLastname, 
-                          a.strFirstname as approverFirstname, a.strLastname as approverLastname')
+        $this->db->select('r.*, c.strRoomCode, c.description as roomDescription, f.strFirstname, f.strLastname, a.strFirstname as approverFirstname, a.strLastname as approverLastname')
                  ->from('tb_mas_room_reservations r')
                  ->join('tb_mas_classrooms c', 'r.intRoomID = c.intID')
                  ->join('tb_mas_faculty f', 'r.intFacultyID = f.intID')
-                 ->join('tb_mas_faculty a', 'r.intApprovedBy = a.intID', 'left')
-                 ->order_by('r.dteReservationDate', 'desc')
-                 ->order_by('r.dteStartTime', 'asc');
+                 ->join('tb_mas_faculty a', 'r.intApprovedBy = a.intID', 'left');
+
+        // Apply filters
+        if (isset($filters['status']) && $filters['status'] != '') {
+            $this->db->where('r.enumStatus', $filters['status']);
+        }
         
-        if($limit != null)
-            $this->db->limit($limit, $offset);
-            
-        return $this->db->get()->result_array();
+        if (isset($filters['date_from']) && $filters['date_from'] != '') {
+            $this->db->where('r.dteReservationDate >=', $filters['date_from']);
+        }
+        
+        if (isset($filters['date_to']) && $filters['date_to'] != '') {
+            $this->db->where('r.dteReservationDate <=', $filters['date_to']);
+        }
+        
+        if (isset($filters['room_id']) && $filters['room_id'] != '') {
+            $this->db->where('r.intRoomID', $filters['room_id']);
+        }
+
+        return $this->db->order_by('r.dteReservationDate', 'desc')
+                        ->order_by('r.dteStartTime', 'asc')
+                        ->get()
+                        ->result_array();
     }
-    
+
     function getReservationById($id)
     {
-        return $this->db->select('r.*, c.strRoomCode, c.description as roomDescription, 
-                                 f.strFirstname, f.strLastname')
+        return $this->db->select('r.*, c.strRoomCode, c.description as roomDescription, f.strFirstname, f.strLastname, a.strFirstname as approverFirstname, a.strLastname as approverLastname')
                         ->from('tb_mas_room_reservations r')
                         ->join('tb_mas_classrooms c', 'r.intRoomID = c.intID')
                         ->join('tb_mas_faculty f', 'r.intFacultyID = f.intID')
+                        ->join('tb_mas_faculty a', 'r.intApprovedBy = a.intID', 'left')
                         ->where('r.intReservationID', $id)
                         ->get()
                         ->first_row('array');
     }
-    
-    function getReservationsByFaculty($facultyId, $limit = null)
+
+    function getReservationsByFaculty($facultyId)
     {
-        $this->db->select('r.*, c.strRoomCode, c.description as roomDescription')
-                 ->from('tb_mas_room_reservations r')
-                 ->join('tb_mas_classrooms c', 'r.intRoomID = c.intID')
-                 ->where('r.intFacultyID', $facultyId)
-                 ->order_by('r.dteReservationDate', 'desc')
-                 ->order_by('r.dteStartTime', 'asc');
-        
-        if($limit != null)
-            $this->db->limit($limit);
-            
-        return $this->db->get()->result_array();
+        return $this->db->select('r.*, c.strRoomCode, c.description as roomDescription, a.strFirstname as approverFirstname, a.strLastname as approverLastname')
+                        ->from('tb_mas_room_reservations r')
+                        ->join('tb_mas_classrooms c', 'r.intRoomID = c.intID')
+                        ->join('tb_mas_faculty a', 'r.intApprovedBy = a.intID', 'left')
+                        ->where('r.intFacultyID', $facultyId)
+                        ->order_by('r.dteReservationDate', 'desc')
+                        ->order_by('r.dteStartTime', 'asc')
+                        ->get()
+                        ->result_array();
     }
-    
+
     function getTodaysReservations()
     {
-        return $this->db->select('r.*, c.strRoomCode, f.strFirstname, f.strLastname')
+        $today = date('Y-m-d');
+        return $this->db->select('r.*, c.strRoomCode, c.description as roomDescription, f.strFirstname, f.strLastname')
                         ->from('tb_mas_room_reservations r')
                         ->join('tb_mas_classrooms c', 'r.intRoomID = c.intID')
                         ->join('tb_mas_faculty f', 'r.intFacultyID = f.intID')
-                        ->where('r.dteReservationDate', date('Y-m-d'))
+                        ->where('r.dteReservationDate', $today)
                         ->where('r.enumStatus', 'approved')
                         ->order_by('r.dteStartTime', 'asc')
                         ->get()
                         ->result_array();
     }
-    
-    function getPendingReservations($limit = null)
+
+    function getPendingReservations()
     {
-        $this->db->select('r.*, c.strRoomCode, c.description as roomDescription, 
-                          f.strFirstname, f.strLastname')
-                 ->from('tb_mas_room_reservations r')
-                 ->join('tb_mas_classrooms c', 'r.intRoomID = c.intID')
-                 ->join('tb_mas_faculty f', 'r.intFacultyID = f.intID')
-                 ->where('r.enumStatus', 'pending')
-                 ->order_by('r.dteCreated', 'asc');
-        
-        if($limit != null)
-            $this->db->limit($limit);
-            
-        return $this->db->get()->result_array();
+        return $this->db->select('r.*, c.strRoomCode, c.description as roomDescription, f.strFirstname, f.strLastname')
+                        ->from('tb_mas_room_reservations r')
+                        ->join('tb_mas_classrooms c', 'r.intRoomID = c.intID')
+                        ->join('tb_mas_faculty f', 'r.intFacultyID = f.intID')
+                        ->where('r.enumStatus', 'pending')
+                        ->order_by('r.dteCreated', 'asc')
+                        ->get()
+                        ->result_array();
     }
-    
+
     function checkReservationConflicts($data, $excludeId = null)
     {
         $conflicts = array();
         
-        // Check against existing reservations
+        // Check for existing reservations
         $this->db->select('r.*, c.strRoomCode, f.strFirstname, f.strLastname')
                  ->from('tb_mas_room_reservations r')
                  ->join('tb_mas_classrooms c', 'r.intRoomID = c.intID')
@@ -5227,103 +5235,169 @@ class Data_fetcher extends CI_Model {
                  ->where('r.dteReservationDate', $data['dteReservationDate'])
                  ->where('r.enumStatus !=', 'cancelled')
                  ->where('r.enumStatus !=', 'rejected')
-                 ->where("((r.dteStartTime >= '{$data['dteStartTime']}' AND r.dteStartTime < '{$data['dteEndTime']}') OR 
-                         (r.dteEndTime > '{$data['dteStartTime']}' AND r.dteEndTime <= '{$data['dteEndTime']}') OR 
-                         (r.dteStartTime <= '{$data['dteStartTime']}' AND r.dteEndTime >= '{$data['dteEndTime']}'))");
-        
-        if($excludeId != null)
+                 ->where("((r.dteStartTime < '{$data['dteEndTime']}' AND r.dteEndTime > '{$data['dteStartTime']}')", null, false);
+
+        if ($excludeId) {
             $this->db->where('r.intReservationID !=', $excludeId);
-            
-        $reservation_conflicts = $this->db->get()->result_array();
-        
-        if(!empty($reservation_conflicts))
-        {
-            foreach($reservation_conflicts as $conflict)
-            {
-                $conflicts[] = array(
-                    'type' => 'reservation',
-                    'details' => $conflict,
-                    'message' => 'Conflict with existing reservation by ' . $conflict['strFirstname'] . ' ' . $conflict['strLastname']
-                );
-            }
         }
+
+        $reservationConflicts = $this->db->get()->result_array();
         
-        // Check against scheduled classes
-        $schedule_date = date('w', strtotime($data['dteReservationDate'])); // 0 = Sunday, 1 = Monday, etc.
-        
-        $this->db->select('rs.*, c.strRoomCode, cl.strSection, s.strCode, f.strFirstname, f.strLastname')
-                 ->from('tb_mas_room_schedule rs')
-                 ->join('tb_mas_classrooms c', 'rs.intRoomID = c.intID')
-                 ->join('tb_mas_classlist cl', 'rs.strScheduleCode = cl.intID')
-                 ->join('tb_mas_subjects s', 'cl.intSubjectID = s.intID')
-                 ->join('tb_mas_faculty f', 'cl.intFacultyID = f.intID')
-                 ->where('rs.intRoomID', $data['intRoomID'])
-                 ->where('rs.strDay', $schedule_date)
-                 ->where("((rs.dteStart >= '{$data['dteStartTime']}' AND rs.dteStart < '{$data['dteEndTime']}') OR 
-                         (rs.dteEnd > '{$data['dteStartTime']}' AND rs.dteEnd <= '{$data['dteEndTime']}') OR 
-                         (rs.dteStart <= '{$data['dteStartTime']}' AND rs.dteEnd >= '{$data['dteEndTime']}'))");
-        
-        $schedule_conflicts = $this->db->get()->result_array();
-        
-        if(!empty($schedule_conflicts))
-        {
-            foreach($schedule_conflicts as $conflict)
-            {
+        foreach ($reservationConflicts as $conflict) {
+            $conflicts[] = array(
+                'type' => 'reservation',
+                'message' => 'Conflicts with existing reservation by ' . $conflict['strFirstname'] . ' ' . $conflict['strLastname'] . 
+                           ' from ' . date('g:i A', strtotime($conflict['dteStartTime'])) . 
+                           ' to ' . date('g:i A', strtotime($conflict['dteEndTime'])),
+                'details' => $conflict
+            );
+        }
+
+        // Check for scheduled classes
+        $active_sem = $this->get_active_sem();
+        if ($active_sem) {
+            // Get day of week (1=Monday, 7=Sunday)
+            $dayOfWeek = date('N', strtotime($data['dteReservationDate']));
+            
+            $this->db->select('rs.*, c.strRoomCode, cl.strClassName, s.strCode, f.strFirstname, f.strLastname')
+                     ->from('tb_mas_room_schedule rs')
+                     ->join('tb_mas_classrooms c', 'rs.intRoomID = c.intID')
+                     ->join('tb_mas_classlist cl', 'rs.strScheduleCode = cl.intID')
+                     ->join('tb_mas_subjects s', 'cl.intSubjectID = s.intID')
+                     ->join('tb_mas_faculty f', 'cl.intFacultyID = f.intID')
+                     ->where('rs.intRoomID', $data['intRoomID'])
+                     ->where('rs.strDay', $dayOfWeek)
+                     ->where('rs.intSem', $active_sem['intID'])
+                     ->where("((rs.dteStart < '{$data['dteEndTime']}' AND rs.dteEnd > '{$data['dteStartTime']}')", null, false);
+
+            $scheduleConflicts = $this->db->get()->result_array();
+            
+            foreach ($scheduleConflicts as $conflict) {
                 $conflicts[] = array(
                     'type' => 'schedule',
-                    'details' => $conflict,
-                    'message' => 'Conflict with scheduled class: ' . $conflict['strCode'] . ' - ' . $conflict['strSection']
+                    'message' => 'Conflicts with scheduled class ' . $conflict['strCode'] . ' (' . $conflict['strClassName'] . ') ' .
+                               'from ' . date('g:i A', strtotime($conflict['dteStart'])) . 
+                               ' to ' . date('g:i A', strtotime($conflict['dteEnd'])),
+                    'details' => $conflict
                 );
             }
         }
-        
+
         return $conflicts;
     }
-    
+
     function getAvailableRooms($date, $startTime, $endTime)
     {
-        // Get all rooms
-        $all_rooms = $this->db->select('intID, strRoomCode, strDescription, enumType')
-                              ->from('tb_mas_classrooms')
-                              ->get()
-                              ->result_array();
-        
-        $available_rooms = array();
-        
-        foreach($all_rooms as $room)
-        {
+        // Get all classrooms
+        $allRooms = $this->db->select('intID, strRoomCode, description, enumType')
+                            ->from('tb_mas_classrooms')
+                            ->order_by('strRoomCode')
+                            ->get()
+                            ->result_array();
+
+        $availableRooms = array();
+
+        foreach ($allRooms as $room) {
+            // Check if room has conflicts
             $conflicts = $this->checkReservationConflicts(array(
                 'intRoomID' => $room['intID'],
                 'dteReservationDate' => $date,
                 'dteStartTime' => $startTime,
                 'dteEndTime' => $endTime
             ));
-            
-            if(empty($conflicts))
-            {
-                $available_rooms[] = $room;
+
+            if (empty($conflicts)) {
+                $availableRooms[] = $room;
             }
         }
-        
-        return $available_rooms;
+
+        return $availableRooms;
     }
-    
-    function getReservationsByDateRange($startDate, $endDate, $roomId = null)
+
+    function getReservationStats($facultyId = null)
     {
-        $this->db->select('r.*, c.strRoomCode, f.strFirstname, f.strLastname')
+        $stats = array();
+        
+        // Total reservations
+        $this->db->from('tb_mas_room_reservations');
+        if ($facultyId) {
+            $this->db->where('intFacultyID', $facultyId);
+        }
+        $stats['total'] = $this->db->count_all_results();
+
+        // Pending reservations
+        $this->db->from('tb_mas_room_reservations');
+        $this->db->where('enumStatus', 'pending');
+        if ($facultyId) {
+            $this->db->where('intFacultyID', $facultyId);
+        }
+        $stats['pending'] = $this->db->count_all_results();
+
+        // Approved reservations
+        $this->db->from('tb_mas_room_reservations');
+        $this->db->where('enumStatus', 'approved');
+        if ($facultyId) {
+            $this->db->where('intFacultyID', $facultyId);
+        }
+        $stats['approved'] = $this->db->count_all_results();
+
+        // Today's reservations
+        $today = date('Y-m-d');
+        $this->db->from('tb_mas_room_reservations');
+        $this->db->where('dteReservationDate', $today);
+        $this->db->where('enumStatus', 'approved');
+        if ($facultyId) {
+            $this->db->where('intFacultyID', $facultyId);
+        }
+        $stats['today'] = $this->db->count_all_results();
+
+        return $stats;
+    }
+
+    function getUpcomingReservations($facultyId = null, $limit = 5)
+    {
+        $this->db->select('r.*, c.strRoomCode, c.description as roomDescription, f.strFirstname, f.strLastname')
                  ->from('tb_mas_room_reservations r')
                  ->join('tb_mas_classrooms c', 'r.intRoomID = c.intID')
                  ->join('tb_mas_faculty f', 'r.intFacultyID = f.intID')
-                 ->where('r.dteReservationDate >=', $startDate)
-                 ->where('r.dteReservationDate <=', $endDate)
+                 ->where('r.dteReservationDate >=', date('Y-m-d'))
                  ->where('r.enumStatus', 'approved');
-        
-        if($roomId != null)
-            $this->db->where('r.intRoomID', $roomId);
-            
+
+        if ($facultyId) {
+            $this->db->where('r.intFacultyID', $facultyId);
+        }
+
         return $this->db->order_by('r.dteReservationDate', 'asc')
                         ->order_by('r.dteStartTime', 'asc')
+                        ->limit($limit)
                         ->get()
                         ->result_array();
     }
+
+    function getRoomUtilization($roomId = null, $dateFrom = null, $dateTo = null)
+    {
+        $this->db->select('r.intRoomID, c.strRoomCode, COUNT(*) as reservation_count, 
+                          SUM(TIME_TO_SEC(TIMEDIFF(r.dteEndTime, r.dteStartTime))/3600) as total_hours')
+                 ->from('tb_mas_room_reservations r')
+                 ->join('tb_mas_classrooms c', 'r.intRoomID = c.intID')
+                 ->where('r.enumStatus', 'approved');
+
+        if ($roomId) {
+            $this->db->where('r.intRoomID', $roomId);
+        }
+
+        if ($dateFrom) {
+            $this->db->where('r.dteReservationDate >=', $dateFrom);
+        }
+
+        if ($dateTo) {
+            $this->db->where('r.dteReservationDate <=', $dateTo);
+        }
+
+        return $this->db->group_by('r.intRoomID')
+                        ->order_by('reservation_count', 'desc')
+                        ->get()
+                        ->result_array();
+    }
+
 }
