@@ -43,7 +43,7 @@ class Ai_analytics extends CI_Controller {
         $this->data["subjects"] = $this->data_fetcher->fetch_table('tb_mas_subjects');
         $this->data["students"] = $this->data_fetcher->fetch_table('tb_mas_users',array('strLastname','asc'));
         $this->data["user"] = $this->session->all_userdata();
-        
+        $this->data['campus'] = $this->config->item('campus');
         $sem = $this->data_fetcher->get_processing_sem();        
         $this->data['current_sem'] = $sem['intID'];
         $this->data['page'] = "ai_analytics";
