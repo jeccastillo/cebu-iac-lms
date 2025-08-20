@@ -4842,7 +4842,7 @@ class Pdf extends CI_Controller {
         $pdf->SetTitle("SHS Enrolled by Grade Level");
         
         // set margins
-        $pdf->SetMargins(1, .5, 1);
+        $pdf->SetMargins(5, 2.5, 5);
 
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
