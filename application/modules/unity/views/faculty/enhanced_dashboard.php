@@ -1,12 +1,12 @@
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
-            Enhanced Faculty Dashboard
-            <small>Welcome to your enhanced workspace</small>
+            Dashboard
+            <small></small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active">Enhanced Dashboard</li>
+            <li class="active">User Dashboard</li>
         </ol>
     </section>
     
