@@ -7,6 +7,10 @@
                     <i class="ion ion-arrow-left-a"></i>
                     View Leads
                 </a> 
+                <a class="btn btn-app btn-success" href="<?php echo base_url(); ?>ai_analytics" >
+                    <i class="fa fa-robot"></i>
+                    AI Analysis
+                </a>
                 <!-- <a href="#" @click="syncEnrollmentDates" class="btn btn-app">
                     Sync Enrollment Dates
                 </a> -->
