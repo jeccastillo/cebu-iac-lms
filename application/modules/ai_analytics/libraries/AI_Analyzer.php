@@ -140,7 +140,7 @@ class AI_Analyzer {
      */
     private function call_ai_service($prompt)
     {
-        $ai_service = $this->ai_config['service'] ?? 'openai';
+        $ai_service = isset($this->ai_config['service']) ? $this->ai_config['service'] : 'mock';
         
         switch ($ai_service) {
             case 'openai':
@@ -160,7 +160,7 @@ class AI_Analyzer {
      */
     private function call_openai($prompt)
     {
-        $api_key = $this->ai_config['openai']['api_key'] ?? '';
+        $api_key = isset($this->ai_config['openai']['api_key']) ? $this->ai_config['openai']['api_key'] : '';
         
         if (empty($api_key)) {
             throw new Exception('OpenAI API key not configured');
@@ -169,7 +169,7 @@ class AI_Analyzer {
         $url = 'https://api.openai.com/v1/chat/completions';
         
         $data = array(
-            'model' => $this->ai_config['openai']['model'] ?? 'gpt-4',
+            'model' => isset($this->ai_config['openai']['model']) ? $this->ai_config['openai']['model'] : 'gpt-4',
             'messages' => array(
                 array(
                     'role' => 'system',
@@ -180,8 +180,8 @@ class AI_Analyzer {
                     'content' => $prompt
                 )
             ),
-            'max_tokens' => $this->ai_config['openai']['max_tokens'] ?? 2000,
-            'temperature' => $this->ai_config['openai']['temperature'] ?? 0.7
+            'max_tokens' => isset($this->ai_config['openai']['max_tokens']) ? $this->ai_config['openai']['max_tokens'] : 2000,
+            'temperature' => isset($this->ai_config['openai']['temperature']) ? $this->ai_config['openai']['temperature'] : 0.7
         );
         
         $headers = array(
@@ -335,12 +335,12 @@ Based on the admissions data analysis, three critical areas need immediate atten
         $sections = $this->parse_response_sections($ai_response);
         
         return array(
-            'executive_summary' => $sections['executive_summary'] ?? '',
-            'detailed_analysis' => $sections['detailed_analysis'] ?? '',
-            'key_insights' => $this->parse_bullet_points($sections['key_insights'] ?? ''),
-            'recommendations' => $this->parse_recommendations($sections['recommendations'] ?? ''),
-            'metrics_to_track' => $this->parse_bullet_points($sections['metrics_to_track'] ?? ''),
-            'implementation_timeline' => $sections['implementation_timeline'] ?? '',
+            'executive_summary' => isset($sections['executive_summary']) ? $sections['executive_summary'] : '',
+            'detailed_analysis' => isset($sections['detailed_analysis']) ? $sections['detailed_analysis'] : '',
+            'key_insights' => $this->parse_bullet_points(isset($sections['key_insights']) ? $sections['key_insights'] : ''),
+            'recommendations' => $this->parse_recommendations(isset($sections['recommendations']) ? $sections['recommendations'] : ''),
+            'metrics_to_track' => $this->parse_bullet_points(isset($sections['metrics_to_track']) ? $sections['metrics_to_track'] : ''),
+            'implementation_timeline' => isset($sections['implementation_timeline']) ? $sections['implementation_timeline'] : '',
             'analysis_type' => $analysis_type
         );
     }
@@ -442,7 +442,7 @@ Based on the admissions data analysis, three critical areas need immediate atten
      */
     private function extract_recommendations($structured_analysis)
     {
-        $recommendations = $structured_analysis['recommendations'] ?? array();
+        $recommendations = isset($structured_analysis['recommendations']) ? $structured_analysis['recommendations'] : array();
         
         // Sort by priority
         usort($recommendations, function($a, $b) {
