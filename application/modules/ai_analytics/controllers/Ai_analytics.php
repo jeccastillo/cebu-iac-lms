@@ -82,10 +82,21 @@ class AI_Analytics extends CI_Controller {
      */
     public function generate_analysis()
     {
-        $term = $this->input->post('term') ?: $this->data_fetcher->get_processing_sem()['intID'];
+        // Get parameters with proper fallbacks for older PHP versions
+        $term = $this->input->post('term');
+        if (!$term) {
+            $sem_data = $this->data_fetcher->get_processing_sem();
+            $term = $sem_data['intID'];
+        }
+        
         $start_date = $this->input->post('start_date');
         $end_date = $this->input->post('end_date');
-        $analysis_type = $this->input->post('analysis_type') ?: 'comprehensive';
+        
+        $analysis_type = $this->input->post('analysis_type');
+        if (!$analysis_type) {
+            $analysis_type = 'comprehensive';
+        }
+        
         $api_data = $this->input->post('api_data'); // API data from frontend
         
         try {
@@ -105,7 +116,14 @@ class AI_Analytics extends CI_Controller {
         } catch (Exception $e) {
             $response = array(
                 'success' => false,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
+                'debug_info' => array(
+                    'term' => $term,
+                    'analysis_type' => $analysis_type,
+                    'has_api_data' => !empty($api_data),
+                    'line' => $e->getLine(),
+                    'file' => $e->getFile()
+                )
             );
         }
         
@@ -118,8 +136,16 @@ class AI_Analytics extends CI_Controller {
      */
     public function get_historical_trends()
     {
-        $terms_back = $this->input->post('terms_back') ?: 6; // Default 6 terms back
-        $current_term = $this->input->post('current_term') ?: $this->data_fetcher->get_processing_sem()['intID'];
+        $terms_back = $this->input->post('terms_back');
+        if (!$terms_back) {
+            $terms_back = 6; // Default 6 terms back
+        }
+        
+        $current_term = $this->input->post('current_term');
+        if (!$current_term) {
+            $sem_data = $this->data_fetcher->get_processing_sem();
+            $current_term = $sem_data['intID'];
+        }
         
         try {
             $trends_data = $this->admissions_data_processor->get_historical_trends($current_term, $terms_back);
@@ -146,7 +172,10 @@ class AI_Analytics extends CI_Controller {
     public function export_analysis()
     {
         $analysis_data = $this->input->post('analysis_data');
-        $format = $this->input->post('format') ?: 'pdf'; // pdf, excel, csv
+        $format = $this->input->post('format');
+        if (!$format) {
+            $format = 'pdf'; // pdf, excel, csv
+        }
         
         try {
             $export_result = $this->ai_analyzer->export_analysis($analysis_data, $format);
@@ -240,7 +269,11 @@ class AI_Analytics extends CI_Controller {
      */
     public function get_realtime_metrics()
     {
-        $term = $this->input->post('term') ?: $this->data_fetcher->get_processing_sem()['intID'];
+        $term = $this->input->post('term');
+        if (!$term) {
+            $sem_data = $this->data_fetcher->get_processing_sem();
+            $term = $sem_data['intID'];
+        }
         
         try {
             $metrics = $this->admissions_data_processor->get_realtime_metrics($term);
