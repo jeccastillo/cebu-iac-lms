@@ -105,53 +105,7 @@
         </div>
 
         <!-- Main Content Row -->
-        <div class="row">
-            <!-- Today's Schedule -->
-            <div class="col-md-6">
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fa fa-clock-o"></i> Today's Schedule</h3>
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
-                                <i class="fa fa-minus"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="box-body">
-                        <?php if(!empty($today_schedule)): ?>
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Subject</th>
-                                            <th>Time</th>
-                                            <th>Room</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach($today_schedule as $schedule): ?>
-                                        <tr>
-                                            <td>
-                                                <strong><?php echo $schedule['strCode']; ?></strong><br>
-                                                <small><?php echo $schedule['strDescription']; ?></small>
-                                            </td>
-                                            <td><?php echo isset($schedule['strTimeStart']) ? $schedule['strTimeStart'] . ' - ' . $schedule['strTimeEnd'] : 'TBA'; ?></td>
-                                            <td><?php echo isset($schedule['strRoom']) ? $schedule['strRoom'] : 'TBA'; ?></td>
-                                        </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        <?php else: ?>
-                            <div class="text-center text-muted">
-                                <i class="fa fa-calendar-o fa-3x"></i>
-                                <p>No classes scheduled for today</p>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-
+        <div class="row">           
             <!-- Quick Actions -->
             <div class="col-md-6">
                 <div class="box box-success">
@@ -180,15 +134,7 @@
                                         <i class="fa fa-angle-right"></i>
                                     </span>
                                 </a>
-                            </li>
-                            <li class="list-group-item">
-                                <a href="<?php echo base_url(); ?>unity/faculty_classlists" class="quick-action-link">
-                                    <i class="fa fa-plus text-yellow"></i> Add Class
-                                    <span class="pull-right text-muted">
-                                        <i class="fa fa-angle-right"></i>
-                                    </span>
-                                </a>
-                            </li>
+                            </li>                            
                             <li class="list-group-item">
                                 <a href="<?php echo base_url(); ?>faculty/edit_profile" class="quick-action-link">
                                     <i class="fa fa-cog text-red"></i> Settings
@@ -345,10 +291,7 @@
                         <?php else: ?>
                             <div class="text-center text-muted">
                                 <i class="fa fa-graduation-cap fa-3x"></i>
-                                <p>No classes assigned for this term</p>
-                                <a href="<?php echo base_url(); ?>unity/faculty_classlists" class="btn btn-primary">
-                                    <i class="fa fa-plus"></i> Add New Class
-                                </a>
+                                <p>No classes assigned for this term</p>                                
                             </div>
                         <?php endif; ?>
                     </div>
