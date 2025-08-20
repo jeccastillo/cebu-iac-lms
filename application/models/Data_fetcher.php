@@ -5142,7 +5142,7 @@ class Data_fetcher extends CI_Model {
     // Room Reservation Methods
     function getAllReservations($limit = null, $offset = null)
     {
-        $this->db->select('r.*, c.strRoomCode, c.strDescription as roomDescription, 
+        $this->db->select('r.*, c.strRoomCode, c.description as roomDescription, 
                           f.strFirstname, f.strLastname, 
                           a.strFirstname as approverFirstname, a.strLastname as approverLastname')
                  ->from('tb_mas_room_reservations r')
@@ -5160,7 +5160,7 @@ class Data_fetcher extends CI_Model {
     
     function getReservationById($id)
     {
-        return $this->db->select('r.*, c.strRoomCode, c.strDescription as roomDescription, 
+        return $this->db->select('r.*, c.strRoomCode, c.description as roomDescription, 
                                  f.strFirstname, f.strLastname')
                         ->from('tb_mas_room_reservations r')
                         ->join('tb_mas_classrooms c', 'r.intRoomID = c.intID')
@@ -5172,7 +5172,7 @@ class Data_fetcher extends CI_Model {
     
     function getReservationsByFaculty($facultyId, $limit = null)
     {
-        $this->db->select('r.*, c.strRoomCode, c.strDescription as roomDescription')
+        $this->db->select('r.*, c.strRoomCode, c.description as roomDescription')
                  ->from('tb_mas_room_reservations r')
                  ->join('tb_mas_classrooms c', 'r.intRoomID = c.intID')
                  ->where('r.intFacultyID', $facultyId)
@@ -5200,7 +5200,7 @@ class Data_fetcher extends CI_Model {
     
     function getPendingReservations($limit = null)
     {
-        $this->db->select('r.*, c.strRoomCode, c.strDescription as roomDescription, 
+        $this->db->select('r.*, c.strRoomCode, c.description as roomDescription, 
                           f.strFirstname, f.strLastname')
                  ->from('tb_mas_room_reservations r')
                  ->join('tb_mas_classrooms c', 'r.intRoomID = c.intID')
