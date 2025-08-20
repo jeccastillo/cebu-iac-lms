@@ -13,25 +13,41 @@
     <hr />
     
     <div class="content" v-if="!loading"> 
-        <!-- System Status -->
+        <!-- Term Selection & System Status -->
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Term Selection</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label for="term-select">Select Academic Term:</label>
+                            <select id="term-select" v-model="selectedTerm" @change="onTermChange" class="form-control">
+                                <option v-for="term in availableTerms" :key="term.intID" :value="term.intID">
+                                    {{ term.term_student_type }} {{ term.enumSem }} {{ term.term_label }} {{ term.strYearStart }}-{{ term.strYearEnd }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="text-muted">
+                            <small><i class="fa fa-info-circle"></i> Analysis will be performed for the selected term</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
                 <div class="box box-info">
                     <div class="box-header with-border">
                         <h3 class="box-title">System Status</h3>
                     </div>
                     <div class="box-body">
                         <div class="row">
-                            <div class="col-md-3">
-                                <strong>API URL:</strong> {{ apiUrl }}
+                            <div class="col-md-6">
+                                <strong>API URL:</strong><br>
+                                <small>{{ apiUrl }}</small>
                             </div>
-                            <div class="col-md-3">
-                                <strong>Current Term:</strong> {{ selectedTerm }}
-                            </div>
-                            <div class="col-md-3">
-                                <strong>Campus:</strong> {{ campus }}
-                            </div>
-                            <div class="col-md-3">
+                            <div class="col-md-6">
+                                <strong>Campus:</strong> {{ campus }}<br>
                                 <strong>Token:</strong> {{ token ? 'Available' : 'Not Available' }}
                             </div>
                         </div>
@@ -214,7 +230,8 @@ new Vue({
         admissionsApiData: null,
         analysisResult: null,
         apiError: null,
-        analysisError: null
+        analysisError: null,
+        availableTerms: <?php echo json_encode(isset($sy) ? $sy : []); ?>
     },
 
     mounted() {
@@ -222,6 +239,7 @@ new Vue({
         console.log('API URL:', this.apiUrl);
         console.log('Current Term:', this.selectedTerm);
         console.log('Campus:', this.campus);
+        console.log('Available Terms:', this.availableTerms);
     },
 
     methods: {
@@ -323,6 +341,23 @@ new Vue({
                 case 'medium': return 'callout-warning';
                 case 'low': return 'callout-info';
                 default: return 'callout-default';
+            }
+        },
+
+        onTermChange() {
+            console.log('Term changed to:', this.selectedTerm);
+            // Clear previous data when term changes
+            this.admissionsApiData = null;
+            this.analysisResult = null;
+            this.apiError = null;
+            this.analysisError = null;
+            
+            // Show notification
+            if (this.selectedTerm) {
+                const selectedTermData = this.availableTerms.find(term => term.intID == this.selectedTerm);
+                if (selectedTermData) {
+                    console.log('Selected term:', selectedTermData.term_student_type + ' ' + selectedTermData.enumSem + ' ' + selectedTermData.strYearStart + '-' + selectedTermData.strYearEnd);
+                }
             }
         }
     }
