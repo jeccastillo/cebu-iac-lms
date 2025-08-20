@@ -201,7 +201,7 @@ class Portal extends CI_Controller {
             $id = $this->db->insert_id();
         }
         else
-            $id = $enlistment['id'];
+            $id = $enlistment->id;
 
         foreach($sections_to_add as $cl){
             $insert = [
