@@ -1,4 +1,3 @@
-<div class="content-wrapper">
     <section class="content-header">
         <h1>
             Enhanced Faculty Dashboard
@@ -412,6 +411,40 @@
     margin-bottom: 15px;
 }
 
+/* Quick Actions List Styling */
+.quick-action-link {
+    display: block;
+    color: #333;
+    text-decoration: none;
+    padding: 8px 0;
+    transition: all 0.2s ease;
+}
+
+.quick-action-link:hover {
+    color: #337ab7;
+    text-decoration: none;
+    background-color: rgba(0,0,0,0.02);
+    margin: 0 -15px;
+    padding: 8px 15px;
+    border-radius: 4px;
+}
+
+.quick-action-link i {
+    margin-right: 10px;
+    width: 16px;
+    text-align: center;
+}
+
+.list-group-unbordered .list-group-item {
+    border: none;
+    border-bottom: 1px solid #f0f0f0;
+    padding: 10px 15px;
+}
+
+.list-group-unbordered .list-group-item:last-child {
+    border-bottom: none;
+}
+
 @media (max-width: 768px) {
     .small-box .inner h3 {
         font-size: 24px;
@@ -420,6 +453,11 @@
     .btn-app {
         width: 100%;
         margin: 2px 0;
+    }
+    
+    .quick-action-link {
+        font-size: 16px;
+        padding: 12px 0;
     }
 }
 </style>
