@@ -2498,7 +2498,7 @@ class Excel extends CI_Controller {
             $i = 2;
             foreach($students as $student)
             {
-                $enrollmentStatus = $student['student_type'];
+                //$enrollmentStatus = $student['student_type'];
                 $yearLevel = $student['intYearLevel'];
                 // Add some data
 
