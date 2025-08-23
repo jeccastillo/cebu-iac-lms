@@ -2519,6 +2519,17 @@ class Excel extends CI_Controller {
                     }else{
                         $yearLevel = '12';
                     }
+                }else{
+                    if($student['enumStudentType'] == 'continuing')
+                        $enrollmentStatus = 'Continuing';
+                    else if($student['enumStudentType'] == 'shiftee')
+                        $enrollmentStatus = 'Shiftee';
+                    else if($student['enumStudentType'] == 'returning')
+                        $enrollmentStatus = 'Returnee';
+                    else if($student['student_type'] == 'transferee')
+                        $enrollmentStatus = 'Transferee';
+                    else
+                        $enrollmentStatus = 'Freshman';
                 }
 
                 $citizenship = $student['strCitizenship'] == 'Philippines' ? 'Filipino' : strtoupper($student['strCitizenship']);
