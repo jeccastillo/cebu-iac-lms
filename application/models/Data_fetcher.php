@@ -5926,4 +5926,3 @@ class Data_fetcher extends CI_Model {
     // End of enhanced reservation methods
 
 }
-=======
