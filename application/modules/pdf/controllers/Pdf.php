@@ -501,7 +501,32 @@ class Pdf extends CI_Controller {
         $this->data['total_enrolled'] = $total_enrolled;
         $this->data['sem'] = $this->data_fetcher->get_sem_by_id($sem);
 
-        $this->load->view("enrollment_summary_by_student_number",$this->data);
+        // $this->load->view("enrollment_summary_by_student_number",$this->data);
+        
+        tcpdf();
+        // create new PDF document
+        $pdf = new TCPDF("P", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);        
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetTitle("Enrollment Summary");
+        
+        // set margins
+        $pdf->SetMargins(10, 15, 10);
+
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        
+        $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
+        
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);    
+             
+        $pdf->AddPage();
+          
+        $html = $this->load->view("enrollment_summary_by_student_number",$this->data,true);
+        $pdf->writeHTML($html, true, false, true, false, '');
+          
+        $pdf->Output('enrollmentSummary' . date("Ymdhis") . '.pdf', 'I');
 
     }
     
