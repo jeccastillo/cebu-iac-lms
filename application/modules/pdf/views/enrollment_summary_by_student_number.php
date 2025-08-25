@@ -1,7 +1,7 @@
 <table border="0" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">
             <tr>
                 <td width="100%" style="text-align:center">             
-                    <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">Enrollment Summary for '.$sem['enumSem'].' Term SY'.$sem['strYearStart'].'-'.$sem['strYearEnd'].'</font>
+                    <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">Enrollment Summary for <?php echo $sem['enumSem'].' Term SY'.$sem['strYearStart'].'-'.$sem['strYearEnd']; ?></font>
                 </td>
             </tr>
             <tr>
@@ -24,9 +24,9 @@
             <br />
     <table class="table table-bordered table-striped">
      <tr>
-        <td style="width:35%;font-size:9px;">Program</td>';
+        <td style="font-size:9px;">Program</td>';
         <?php foreach($student_years as $year): ?>
-            <td style="font-size:9px;">ID <?php echo $year; ?></td>
+            <td style="font-size:9px;">ID<?php echo $year; ?></td>
         <?php endforeach; ?>
             <td><strong>Total</strong></td></tr>
      <tr style="line-height:10px;">
