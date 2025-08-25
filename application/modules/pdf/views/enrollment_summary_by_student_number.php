@@ -24,7 +24,7 @@
             <br />
     <table class="table table-bordered table-striped">
      <tr>
-        <td style="font-size:9px;">Program</td>';
+        <td style="font-size:7px;">Program</td>';
         <?php foreach($student_years as $year): ?>
             <td style="font-size:9px;">ID<?php echo $year; ?></td>
         <?php endforeach; ?>
