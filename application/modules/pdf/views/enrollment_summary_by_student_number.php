@@ -26,9 +26,9 @@
      <tr>
         <td style="font-size:9px;">Program</td>';
         <?php foreach($student_years as $year): ?>
-            <td style="font-size:9px;">ID<?php echo $year; ?></td>
+            <td style="font-size:9px; text-align:center">ID<?php echo $year; ?></td>
         <?php endforeach; ?>
-            <td><strong>Total</strong></td></tr>
+            <td style="text-align:center"><strong>Total</strong></td></tr>
      <tr style="line-height:10px;">
         <td colspan="9"></td>
      </tr>
