@@ -53,13 +53,13 @@
     <tr style="line-height:10px;">
         <th style="border-top:1px solid #333;" colspan="9"></th>
     </tr>
-    <tr><td></td>
-
-    <?php foreach($enrolled_per_year as $yearly): ?>
-        <td><?php echo $yearly; ?></td>
-    <?php endforeach; ?>
-
-    <td><strong>&nbsp;<?php echo $total_enrolled; ?></strong></td></tr>
+    <tr>
+        <td><strong>TOTAL</strong></td>
+        <?php foreach($enrolled_per_year as $yearly): ?>
+            <td><?php echo $yearly; ?></td>
+        <?php endforeach; ?>
+        <td><strong>&nbsp;<?php echo $total_enrolled; ?></strong></td>
+    </tr>
     <tr style="line-height:30px;">
         <th colspan="8"></th>
     </tr><br><br>
