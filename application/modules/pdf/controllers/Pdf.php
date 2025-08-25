@@ -496,6 +496,7 @@ class Pdf extends CI_Controller {
         // }
         for($index = 0; $index < count($programs); $index++){
             $st = [];
+            $total_per_program = 0;
             foreach($student_years as $year){
                 $programs[$index]['years'][$year] = 0;
 
@@ -504,15 +505,13 @@ class Pdf extends CI_Controller {
 
                     if($registration['intProgramID'] == $programs[$index]['intProgramID'] && $year == $student_year){
                         $programs[$index]['years'][$year] += 1;
+                        $total_per_program += 1;
                         $enrolled_per_year[$year] += 1;
                         $total_enrolled += 1;
                     }
                 }
             }
-            if($programs[$index]['years'][$year] == 0){
-                // unset($programs[$index]);
-                // $index--;
-            }else{
+            if($total_per_program != 0){
                 $ret[] = $programs[$index];
             }
         }
