@@ -477,22 +477,26 @@ class Pdf extends CI_Controller {
             }
         }
 
-        foreach($programs as $program){
+        for($index = 0; $index < count($programs); $index++){
             $st = [];
+            $total_per_program = 0;
             foreach($student_years as $year){
-                $program['years'][$year] = 0;
+                $programs[$index]['years'][$year] = 0;
 
                 foreach($registrations as $registration){
                     $student_year = $this->get_student_number_year($registration['strStudentNumber']);
 
-                    if($registration['intProgramID'] == $program['intProgramID'] && $year == $student_year){
-                        $program['years'][$year] += 1;
+                    if($registration['intProgramID'] == $programs[$index]['intProgramID'] && $year == $student_year){
+                        $programs[$index]['years'][$year] += 1;
+                        $total_per_program += 1;
                         $enrolled_per_year[$year] += 1;
                         $total_enrolled += 1;
                     }
                 }
             }
-            $ret[] = $program;
+            if($total_per_program != 0){
+                $ret[] = $programs[$index];
+            }
         }
 
         $this->data['enrollment'] = $ret;
@@ -501,7 +505,32 @@ class Pdf extends CI_Controller {
         $this->data['total_enrolled'] = $total_enrolled;
         $this->data['sem'] = $this->data_fetcher->get_sem_by_id($sem);
 
-        $this->load->view("enrollment_summary_by_student_number",$this->data);
+        // $this->load->view("enrollment_summary_by_student_number",$this->data);
+        
+        tcpdf();
+        // create new PDF document
+        $pdf = new TCPDF("P", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);        
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetTitle("Enrollment Summary");
+        
+        // set margins
+        $pdf->SetMargins(10, 15, 10);
+
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        
+        $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
+        
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);    
+             
+        $pdf->AddPage();
+          
+        $html = $this->load->view("enrollment_summary_by_student_number",$this->data,true);
+        $pdf->writeHTML($html, true, false, true, false, '');
+          
+        $pdf->Output('enrollmentSummary' . date("Ymdhis") . '.pdf', 'I');
 
     }
     
@@ -4842,7 +4871,7 @@ class Pdf extends CI_Controller {
         $pdf->SetTitle("SHS Enrolled by Grade Level");
         
         // set margins
-        $pdf->SetMargins(1, .5, 1);
+        $pdf->SetMargins(10, 15, 10);
 
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);

@@ -1,38 +1,7 @@
-<?php
-
-    tcpdf();
-    // create new PDF document
-    //$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-    //$pdf = new TCPDF("P", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-    $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
-    // set document information
-    $pdf->SetCreator(PDF_CREATOR);
-    $pdf->SetTitle("Enrollment Summary");
-    
-    // set margins
-    $pdf->SetMargins(10, 20 , 10);
-    $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-    $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-    $pdf->SetFont('helvetica','',10);
-    $pdf->SetAutoPageBreak(TRUE, 6);
-    
-   //font setting
-    //$pdf->SetFont('calibril_0', '', 10, '', 'false');
-    
-    $pdf->setPrintHeader(false);
-    $pdf->setPrintFooter(false);
-    // Add a page
-    // This method has several options, check the source code documentation for more information.
-    $pdf->AddPage('P', 'LEGAL');            
-
-    
-    
-    // Set some content to print
-    $html = '<table border="0" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">
+<table border="0" cellspacing="0" cellpadding="1" style="color:#333; font-size:9;">
             <tr>
                 <td width="100%" style="text-align:center">             
-                    <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">Enrollment Summary for '.$sem['enumSem'].' Term SY'.$sem['strYearStart'].'-'.$sem['strYearEnd'].'</font>
+                    <font style="font-family:Calibri Light; font-size: 11;font-weight: bold;">Enrollment Summary for <?php echo $sem['enumSem'].' Term SY'.$sem['strYearStart'].'-'.$sem['strYearEnd']; ?></font>
                 </td>
             </tr>
             <tr>
@@ -40,86 +9,64 @@
             </tr>
             <tr><td></td></tr>
             <tr>
-                <td>Address: ' . $campus_address .  ' </td>
+                <td>Address: <?php echo $campus_address; ?> </td>
             </tr>
             <tr>
                 <td>Institutional Identifier No.: 13315</td>
             </tr>
             <tr>
-                <td>Term/SY: ' . $sem['enumSem'] . ' Term SY' . $sem['strYearStart'] . '-' . $sem['strYearEnd'] . '</td>
+                <td>Term/SY: <?php echo $sem['enumSem'] . ' Term SY' . $sem['strYearStart'] . '-' . $sem['strYearEnd']; ?></td>
             </tr>
             <tr style="line-height:10px;">
                 <td style="border-top:1px solid #333;" colspan="9"></td>
             </tr>
-            </table>';
-    
-$html .= '<br />
+            </table>
+            <br />
     <table class="table table-bordered table-striped">
      <tr>
-        <td style="width:35%;font-size:9px;">Program</td>';
-        foreach($student_years as $year){
-            $html .= '<td style="font-size:9px;">ID' . $year . '</td>';
-        }
-
-$html .='<td><strong>Total</strong></td></tr>
+        <td style="font-size:9px;">Program</td>';
+        <?php foreach($student_years as $year): ?>
+            <td style="font-size:9px; text-align:center">ID<?php echo $year; ?></td>
+        <?php endforeach; ?>
+            <td style="text-align:center"><strong>Total</strong></td></tr>
      <tr style="line-height:10px;">
         <td colspan="9"></td>
-     </tr>';
+     </tr>
     
-    foreach($enrollment as $item){
+    <?php foreach($enrollment as $item):
         $total_per_program = 0; 
-        $major = ($item['strMajor'] != "None" && $item['strMajor'] != "")?'Major in '.$item['strMajor']:'';
-        $html .= '<tr><td>' . $item['strProgramDescription'] . ' ' . $major . '</td>';
-        foreach($student_years as $year){   
+        $major = ($item['strMajor'] != "None" && $item['strMajor'] != "")?'Major in '.$item['strMajor']:''
+    ?>
+        <tr><td style="font-size:8px;"><?php echo $item['strProgramDescription'] . ' ' . $major; ?></td>
+        <?php foreach($student_years as $year):  
             $total_per_program += $item['years'][$year];
-            $html .= '<td style="font-size:8px;">'.$item['years'][$year].'</td>';
-        }
+        ?>
+            <td style="font-size:8px; text-align:center"><?php echo $item['years'][$year]; ?></td>
+        <?php endforeach; ?>
                 
-        $html .= '<td style="font-size:8px;">' . $total_per_program . '</td></tr>
+        <td style="font-size:8px; text-align:center"><?php echo $total_per_program; ?></td></tr>
             <tr style="line-height:5px;">
                 <th colspan="7"></th>
-            </tr>';
-    }
-$html .= ' 
+            </tr>
+    <?php endforeach; ?>
+
     <tr style="line-height:10px;">
         <th style="border-top:1px solid #333;" colspan="9"></th>
     </tr>
-    <tr><td></td>';
-
-    foreach($enrolled_per_year as $yearly){
-        $html .= '<td>' . $yearly . '</td>';
-    }
-
-$html .= '<td><strong>&nbsp;'. $total_enrolled . '</strong></td></tr>
+    <tr>
+        <td><strong>TOTAL</strong></td>
+        <?php foreach($enrolled_per_year as $yearly): ?>
+            <td style="text-align:center;"><?php echo $yearly; ?></td>
+        <?php endforeach; ?>
+        <td style="text-align:center;"><strong>&nbsp;<?php echo $total_enrolled; ?></strong></td>
+    </tr>
     <tr style="line-height:30px;">
         <th colspan="8"></th>
+    </tr><br><br>
+    <tr style="text-align:center;">
+        <td colspan="4">GENERATED BY: <?php echo $user['strFirstname'] . ' ' . $user['strLastname']; ?></td>
     </tr>
     <tr style="text-align:center;">
-        <td>GENERATED BY: '.$user['strFirstname']." ".$user['strLastname'].'</td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr style="text-align:center;">
-        <td>Date and Time Printed: '. date('F d, Y h:i A').'</td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td colspan="4">Date and Time Printed: <?php echo date('F d, Y h:i A'); ?></td>
     </tr>
  </table>
- 
- '; 
-  
-            
-// $pdf->writeHTML($html, true, false, true, false, '');
-
-$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
-
-// ---------------------------------------------------------
-
-// Close and output PDF document
-// This method has several options, check the source code documentation for more information.
-$pdf->Output("enrollmentSummary".date("Ymdhis").".pdf", 'I');
-
-
-?>
