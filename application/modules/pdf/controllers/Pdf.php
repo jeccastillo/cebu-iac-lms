@@ -477,23 +477,6 @@ class Pdf extends CI_Controller {
             }
         }
 
-        // foreach($programs as $program){
-        //     $st = [];
-        //     foreach($student_years as $year){
-        //         $program['years'][$year] = 0;
-
-        //         foreach($registrations as $registration){
-        //             $student_year = $this->get_student_number_year($registration['strStudentNumber']);
-
-        //             if($registration['intProgramID'] == $program['intProgramID'] && $year == $student_year){
-        //                 $program['years'][$year] += 1;
-        //                 $enrolled_per_year[$year] += 1;
-        //                 $total_enrolled += 1;
-        //             }
-        //         }
-        //     }
-        //     $ret[] = $program;
-        // }
         for($index = 0; $index < count($programs); $index++){
             $st = [];
             $total_per_program = 0;
@@ -515,7 +498,6 @@ class Pdf extends CI_Controller {
                 $ret[] = $programs[$index];
             }
         }
-
 
         $this->data['enrollment'] = $ret;
         $this->data['student_years'] = $student_years;
