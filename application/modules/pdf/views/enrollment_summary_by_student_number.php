@@ -37,7 +37,7 @@
         $total_per_program = 0; 
         $major = ($item['strMajor'] != "None" && $item['strMajor'] != "")?'Major in '.$item['strMajor']:''
     ?>
-        <tr><td style="font-size:9px;"><?php echo $item['strProgramDescription'] . ' ' . $major; ?></td>
+        <tr><td style="font-size:8px;"><?php echo $item['strProgramDescription'] . ' ' . $major; ?></td>
         <?php foreach($student_years as $year):  
             $total_per_program += $item['years'][$year];
         ?>
@@ -56,9 +56,9 @@
     <tr>
         <td><strong>TOTAL</strong></td>
         <?php foreach($enrolled_per_year as $yearly): ?>
-            <td><?php echo $yearly; ?></td>
+            <td style="text-align:center;"><?php echo $yearly; ?></td>
         <?php endforeach; ?>
-        <td><strong>&nbsp;<?php echo $total_enrolled; ?></strong></td>
+        <td style="text-align:center;"><strong>&nbsp;<?php echo $total_enrolled; ?></strong></td>
     </tr>
     <tr style="line-height:30px;">
         <th colspan="8"></th>
