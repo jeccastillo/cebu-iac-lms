@@ -477,23 +477,46 @@ class Pdf extends CI_Controller {
             }
         }
 
-        foreach($programs as $program){
+        // foreach($programs as $program){
+        //     $st = [];
+        //     foreach($student_years as $year){
+        //         $program['years'][$year] = 0;
+
+        //         foreach($registrations as $registration){
+        //             $student_year = $this->get_student_number_year($registration['strStudentNumber']);
+
+        //             if($registration['intProgramID'] == $program['intProgramID'] && $year == $student_year){
+        //                 $program['years'][$year] += 1;
+        //                 $enrolled_per_year[$year] += 1;
+        //                 $total_enrolled += 1;
+        //             }
+        //         }
+        //     }
+        //     $ret[] = $program;
+        // }
+        for($index = 0; $index < count($programs); $index++){
             $st = [];
             foreach($student_years as $year){
-                $program['years'][$year] = 0;
+                $programs[$index]['years'][$year] = 0;
 
                 foreach($registrations as $registration){
                     $student_year = $this->get_student_number_year($registration['strStudentNumber']);
 
-                    if($registration['intProgramID'] == $program['intProgramID'] && $year == $student_year){
-                        $program['years'][$year] += 1;
+                    if($registration['intProgramID'] == $programs[$index]['intProgramID'] && $year == $student_year){
+                        $programs[$index]['years'][$year] += 1;
                         $enrolled_per_year[$year] += 1;
                         $total_enrolled += 1;
                     }
                 }
             }
-            $ret[] = $program;
+            if($programs[$index]['years'][$year] == 0){
+                // unset($programs[$index]);
+                // $index--;
+            }else{
+                $ret[] = $programs[$index];
+            }
         }
+
 
         $this->data['enrollment'] = $ret;
         $this->data['student_years'] = $student_years;
@@ -501,6 +524,8 @@ class Pdf extends CI_Controller {
         $this->data['total_enrolled'] = $total_enrolled;
         $this->data['sem'] = $this->data_fetcher->get_sem_by_id($sem);
 
+        print_r($this->data);
+        die();
         // $this->load->view("enrollment_summary_by_student_number",$this->data);
         
         tcpdf();
