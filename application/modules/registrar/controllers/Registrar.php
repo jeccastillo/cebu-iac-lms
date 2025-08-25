@@ -2954,23 +2954,27 @@ class Registrar extends CI_Controller {
                 $enrolled_per_year[$student_number] = 0;
             }
         }
-
-        foreach($programs as $program){
+        
+        for($index = 0; $index < count($programs); $index++){
             $st = [];
+            $total_per_program = 0;
             foreach($student_years as $year){
-                $program['years'][$year] = 0;
+                $programs[$index]['years'][$year] = 0;
 
                 foreach($registrations as $registration){
                     $student_year = $this->get_student_number_year($registration['strStudentNumber']);
 
-                    if($registration['intProgramID'] == $program['intProgramID'] && $year == $student_year){
-                        $program['years'][$year] += 1;
+                    if($registration['intProgramID'] == $programs[$index]['intProgramID'] && $year == $student_year){
+                        $programs[$index]['years'][$year] += 1;
+                        $total_per_program += 1;
                         $enrolled_per_year[$year] += 1;
                         $total_enrolled += 1;
                     }
                 }
             }
-            $ret[] = $program;
+            if($total_per_program != 0){
+                $ret[] = $programs[$index];
+            }
         }
 
         $data['enrollment'] = $ret;
