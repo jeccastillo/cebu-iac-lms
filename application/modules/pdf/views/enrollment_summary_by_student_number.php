@@ -24,7 +24,7 @@
             <br />
     <table class="table table-bordered table-striped">
      <tr>
-        <td style="font-size:7px;">Program</td>';
+        <td style="font-size:9px;">Program</td>';
         <?php foreach($student_years as $year): ?>
             <td style="font-size:9px;">ID<?php echo $year; ?></td>
         <?php endforeach; ?>
@@ -37,7 +37,7 @@
         $total_per_program = 0; 
         $major = ($item['strMajor'] != "None" && $item['strMajor'] != "")?'Major in '.$item['strMajor']:''
     ?>
-        <tr><td><?php echo $item['strProgramDescription'] . ' ' . $major; ?></td>
+        <tr><td style="font-size:9px;><?php echo $item['strProgramDescription'] . ' ' . $major; ?></td>
         <?php foreach($student_years as $year):  
             $total_per_program += $item['years'][$year];
         ?>
