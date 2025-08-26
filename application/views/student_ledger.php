@@ -512,7 +512,7 @@ new Vue({
                     'term_label':tuition.term.term_label,
                     'syid':tuition.term.intID,
                     'scholarship_name':'',
-                    'date': payments[i].or_date ? payments[i].or_date : '',
+                    'date': payments[i].or_date != null ? payments[i].or_date : '',
                     'name': payments[i].description,
                     'or_number':payments[i].or_number,
                     'invoice_number':payments[i].invoice_number,
