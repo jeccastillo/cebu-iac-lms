@@ -131,7 +131,7 @@
                                     </select>
                                 </td>
                                 <td :class="item.muted" v-else>{{ item.name }}</td>
-                                <td :class="item.muted">{{  item.date }}</td>
+                                <td :class="item.muted">{{  item.date ? item.date : '' }}</td>
                                 <td :class="item.muted">{{  item.or_number }}</td>
                                 <td :class="item.muted">{{  item.invoice_number }}</td>
                                 <td :class="item.muted">{{  item.remarks }}</td>
