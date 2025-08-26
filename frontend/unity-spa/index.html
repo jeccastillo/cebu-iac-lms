@@ -9,6 +9,12 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Font Awesome for icons used in templates -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-jLKHWMZtY8QxB8T0ZVvQbFJ6rVhUxGJPD7WvVManIeZDV4mQdlqzTeWY5Avzkdx6" crossorigin="anonymous">
+  <!-- Fallback Font Awesome (jsDelivr) and safety weight fix -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css">
+  <style>
+    /* Ensure solid icons render even if other CSS overrides font-weight */
+    .fas { font-weight: 900 !important; }
+  </style>
 
   <!-- AngularJS 1.x and ngRoute -->
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
@@ -112,6 +118,10 @@
   <!-- Programs feature -->
   <script src="features/programs/programs.service.js"></script>
   <script src="features/programs/programs.controller.js"></script>
+
+  <!-- Curricula feature -->
+  <script src="features/curricula/curricula.service.js"></script>
+  <script src="features/curricula/curricula.controller.js"></script>
 
   <!-- Roles admin feature -->
   <script src="features/roles/roles.service.js"></script>

@@ -17,8 +17,10 @@ class CurriculumResource extends JsonResource
             'intID'        => isset($r['intID']) ? (int) $r['intID'] : null,
             'strName'      => $r['strName']      ?? null,
             'intProgramID' => isset($r['intProgramID']) ? (int) $r['intProgramID'] : null,
+            'program_code' => $r['program_code'] ?? null,
             'active'       => isset($r['active']) ? (int) $r['active'] : null,
             'isEnhanced'   => isset($r['isEnhanced']) ? (int) $r['isEnhanced'] : null,
+            'campus_id'    => isset($r['campus_id']) ? (int) $r['campus_id'] : null,
         ];
     }
 }

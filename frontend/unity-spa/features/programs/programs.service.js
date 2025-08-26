@@ -50,6 +50,16 @@
       },
       disable: function (id) {
         return $http.delete(BASE + '/programs/' + encodeURIComponent(id), _adminHeaders()).then(_unwrap);
+      },
+      getCurricula: function (opts) {
+        var params = {};
+        if (opts && opts.campus_id !== null && opts.campus_id !== undefined && opts.campus_id !== '') {
+          params.campus_id = opts.campus_id;
+        }
+        if (opts && opts.program_id) params.program_id = opts.program_id;
+        if (opts && opts.search) params.search = opts.search;
+        if (opts && opts.limit) params.limit = opts.limit;
+        return $http.get(BASE + '/curriculum', { params: params }).then(_unwrap);
       }
     };
   }

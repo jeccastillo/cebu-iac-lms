@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\Api\V1\CurriculumUpsertRequest;
 use App\Http\Resources\CurriculumResource;
 use App\Http\Resources\CurriculumSubjectResource;
+use App\Services\SystemLogService;
 
 class CurriculumController extends Controller
 {
@@ -17,37 +18,46 @@ class CurriculumController extends Controller
      * Query params:
      *  - search: filters by strCurriculum (LIKE %term%)
      *  - program_id: optional filter by intProgramID
+     *  - campus_id: optional filter by campus_id
      *  - limit, page: simple pagination (default 25 per page)
      */
     public function index(Request $request)
     {
         $search = trim((string) $request->query('search', ''));
         $programId = $request->query('program_id');
+        $campusId = $request->query('campus_id');
         $limit = (int) ($request->query('limit', 25));
         $page = max(1, (int) ($request->query('page', 1)));
         $offset = ($page - 1) * $limit;
 
-        $q = DB::table('tb_mas_curriculum');
+        $q = DB::table('tb_mas_curriculum')
+            ->leftJoin('tb_mas_programs', 'tb_mas_programs.intProgramID', '=', 'tb_mas_curriculum.intProgramID');
 
         if ($programId) {
-            $q->where('intProgramID', $programId);
+            $q->where('tb_mas_curriculum.intProgramID', $programId);
+        }
+
+        if ($campusId !== null && $campusId !== '') {
+            $q->where('tb_mas_curriculum.campus_id', (int) $campusId);
         }
 
         if ($search !== '') {
-            $q->where('strName', 'LIKE', "%{$search}%");
+            $q->where('tb_mas_curriculum.strName', 'LIKE', "%{$search}%");
         }
 
         $total = $q->count();
 
-        $items = $q->orderBy('strName', 'asc')
+        $items = $q->orderBy('tb_mas_curriculum.strName', 'asc')
             ->offset($offset)
             ->limit($limit)
             ->select([
-                'intID',
-                'strName',
-                'intProgramID',
-                'active',
-                'isEnhanced'
+                'tb_mas_curriculum.intID',
+                'tb_mas_curriculum.strName',
+                'tb_mas_curriculum.intProgramID',
+                'tb_mas_curriculum.active',
+                'tb_mas_curriculum.isEnhanced',
+                'tb_mas_curriculum.campus_id',
+                'tb_mas_programs.strProgramCode as program_code'
             ])
             ->get();
 
@@ -69,7 +79,17 @@ class CurriculumController extends Controller
     public function show($id)
     {
         $curriculum = DB::table('tb_mas_curriculum')
-            ->where('intID', $id)
+            ->leftJoin('tb_mas_programs', 'tb_mas_programs.intProgramID', '=', 'tb_mas_curriculum.intProgramID')
+            ->where('tb_mas_curriculum.intID', $id)
+            ->select([
+                'tb_mas_curriculum.intID',
+                'tb_mas_curriculum.strName',
+                'tb_mas_curriculum.intProgramID',
+                'tb_mas_curriculum.active',
+                'tb_mas_curriculum.isEnhanced',
+                'tb_mas_curriculum.campus_id',
+                'tb_mas_programs.strProgramCode as program_code'
+            ])
             ->first();
 
         if (!$curriculum) {
@@ -126,6 +146,9 @@ class CurriculumController extends Controller
         $newId = DB::table('tb_mas_curriculum')->insertGetId($data);
         $created = DB::table('tb_mas_curriculum')->where('intID', $newId)->first();
 
+        // System log: create
+        SystemLogService::log('create', 'Curriculum', (int) $newId, null, $created, $request);
+
         return response()->json([
             'success' => true,
             'message' => 'Curriculum created successfully',
@@ -151,6 +174,9 @@ class CurriculumController extends Controller
 
         $data = $request->validated();
 
+        // Capture old values for logging
+        $old = $curriculum;
+
         if (empty($data)) {
             return response()->json([
                 'success' => false,
@@ -161,6 +187,9 @@ class CurriculumController extends Controller
         DB::table('tb_mas_curriculum')->where('intID', $id)->update($data);
 
         $updated = DB::table('tb_mas_curriculum')->where('intID', $id)->first();
+
+        // System log: update
+        SystemLogService::log('update', 'Curriculum', (int) $id, $old, $updated, $request);
 
         return response()->json([
             'success' => true,
@@ -197,6 +226,9 @@ class CurriculumController extends Controller
         }
 
         DB::table('tb_mas_curriculum')->where('intID', $id)->delete();
+
+        // System log: delete
+        SystemLogService::log('delete', 'Curriculum', (int) $id, $curriculum, null, request());
 
         return response()->json([
             'success' => true,
@@ -250,6 +282,14 @@ class CurriculumController extends Controller
         $data['intCurriculumID'] = $id;
         $newId = DB::table('tb_mas_curriculum_subject')->insertGetId($data);
 
+        // System log: subject add
+        SystemLogService::log('update', 'Curriculum', (int) $id, null, [
+            'intSubjectID' => (int) $data['intSubjectID'],
+            'intYearLevel' => (int) $data['intYearLevel'],
+            'intSem'       => (int) $data['intSem'],
+            'curriculum_subject_id' => (int) $newId,
+        ], $request);
+
         return response()->json([
             'success' => true,
             'message' => 'Subject added to curriculum successfully',
@@ -274,6 +314,11 @@ class CurriculumController extends Controller
                 'message' => 'Subject not found in curriculum'
             ], 404);
         }
+
+        // System log: subject remove
+        SystemLogService::log('update', 'Curriculum', (int) $id, [
+            'intSubjectID' => (int) $subjectId
+        ], null, request());
 
         return response()->json([
             'success' => true,

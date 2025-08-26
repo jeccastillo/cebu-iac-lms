@@ -68,6 +68,9 @@
         <button type="button" class="px-3 py-2 bg-gray-100 text-gray-800 rounded hover:bg-gray-200" ng-click="vm.reset()" ng-disabled="vm.loading">
           Reset
         </button>
+        <button type="button" class="px-3 py-2 bg-green-600 text-white rounded hover:bg-green-700" ng-click="vm.export()" ng-disabled="vm.loading">
+          Export XLSX
+        </button>
         <div class="text-sm text-gray-500" ng-if="vm.loading">Loading...</div>
         <div class="text-sm text-red-600" ng-if="vm.error">{{ vm.error }}</div>
       </div>

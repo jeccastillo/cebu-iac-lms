@@ -10,7 +10,8 @@
     var BASE = APP_CONFIG.API_BASE; // e.g. /laravel-api/public/api/v1
 
     var svc = {
-      list: list
+      list: list,
+      export: exportLogs
     };
 
     return svc;
@@ -51,6 +52,15 @@
     function list(params) {
       var cfg = Object.assign({ params: params || {} }, _adminHeaders());
       return $http.get(BASE + '/system-logs', cfg).then(_unwrap);
+    }
+
+    /**
+     * Export system logs as XLSX using same filters.
+     * Returns full $http response to access headers and binary data.
+     */
+    function exportLogs(params) {
+      var cfg = Object.assign({ params: params || {}, responseType: 'arraybuffer' }, _adminHeaders());
+      return $http.get(BASE + '/system-logs/export', cfg);
     }
   }
 

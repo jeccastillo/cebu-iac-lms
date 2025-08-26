@@ -103,8 +103,8 @@
     vm.search();
   }
 
-  ProgramEditController.$inject = ['$routeParams', '$location', 'StorageService', 'ProgramsService'];
-  function ProgramEditController($routeParams, $location, StorageService, ProgramsService) {
+  ProgramEditController.$inject = ['$routeParams', '$location', 'StorageService', 'ProgramsService', 'CampusService', '$scope'];
+  function ProgramEditController($routeParams, $location, StorageService, ProgramsService, CampusService, $scope) {
     var vm = this;
 
     vm.state = StorageService.getJSON('loginState');
@@ -135,10 +135,109 @@
       enumEnabled: 1,
       campus_id: null
     };
+    vm.selectedCampus = null;
 
+    vm.curricula = [];
+    vm.curriculaLoading = false;
     vm.loading = false;
     vm.error = null;
     vm.success = null;
+
+    vm.loadCurricula = function () {
+      if (!vm.model.campus_id) {
+        vm.curricula = [];
+        return;
+      }
+      
+      vm.curriculaLoading = true;
+      ProgramsService.getCurricula({ campus_id: vm.model.campus_id })
+        .then(function (data) {
+          if (data && data.success !== false && angular.isArray(data.data)) {
+            vm.curricula = data.data;
+          } else if (angular.isArray(data)) {
+            vm.curricula = data;
+          } else {
+            vm.curricula = [];
+          }
+        })
+        .catch(function () {
+          vm.curricula = [];
+        })
+        .finally(function () {
+          vm.curriculaLoading = false;
+        });
+    };
+
+    vm.onCampusChange = function () {
+      // Reset curriculum selection when campus changes
+      vm.model.default_curriculum = null;
+      vm.loadCurricula();
+    };
+
+    // In Edit mode, sync selectedCampus for read-only display
+    vm.syncSelectedCampusForEdit = function () {
+      if (!vm.isEdit) return;
+      var assign = function () {
+        try {
+          var list = (CampusService && CampusService.availableCampuses) || [];
+          var id = (vm.model && vm.model.campus_id !== undefined && vm.model.campus_id !== null)
+            ? parseInt(vm.model.campus_id, 10) : null;
+          var found = null;
+          for (var i = 0; i < list.length; i++) {
+            var c = list[i];
+            var cid = (c && c.id !== undefined && c.id !== null) ? parseInt(c.id, 10) : null;
+            if (cid !== null && id !== null && cid === id) { found = c; break; }
+          }
+          vm.selectedCampus = found;
+        } catch (e) {
+          // no-op
+        }
+      };
+      var p = (CampusService && CampusService.init) ? CampusService.init() : null;
+      if (p && p.then) { p.then(assign); } else { assign(); }
+    };
+
+    // In Add mode, bind campus_id to CampusService selected campus and react to changes
+    vm.initCampusBinding = function () {
+      if (vm.isEdit) return;
+
+      function setFromSelectedCampus() {
+        try {
+          var campus = CampusService && CampusService.getSelectedCampus ? CampusService.getSelectedCampus() : null;
+          vm.selectedCampus = campus;
+          var id = (campus && campus.id !== undefined && campus.id !== null) ? parseInt(campus.id, 10) : null;
+          var changed = id !== vm.model.campus_id;
+          vm.model.campus_id = id;
+          if (changed) {
+            vm.onCampusChange();
+          }
+        } catch (e) {
+          // ignore
+        }
+      }
+
+      var initPromise = (CampusService && CampusService.init) ? CampusService.init() : null;
+      if (initPromise && initPromise.then) {
+        initPromise.then(function () {
+          setFromSelectedCampus();
+        });
+      } else {
+        setFromSelectedCampus();
+      }
+
+      // Listen to global campus changes to keep Add form in sync
+      var unbind = $scope.$on('campusChanged', function (event, data) {
+        if (vm.isEdit) return;
+        var campus = data && data.selectedCampus ? data.selectedCampus : null;
+        vm.selectedCampus = campus;
+        var id = (campus && campus.id !== undefined && campus.id !== null) ? parseInt(campus.id, 10) : null;
+        if (id !== vm.model.campus_id) {
+          vm.model.campus_id = id;
+          vm.onCampusChange();
+        }
+      });
+      $scope.$on('$destroy', unbind);
+    };
 
     vm.load = function () {
       if (!vm.isEdit) return;
@@ -164,6 +263,11 @@
             ? parseInt(row.enumEnabled, 10) : 1;
           vm.model.campus_id = (typeof row.campus_id !== 'undefined' && row.campus_id !== null)
             ? parseInt(row.campus_id, 10) : null;
+          
+          // Load curricula after setting campus_id
+          vm.loadCurricula();
+          // Sync selectedCampus for read-only display in Edit mode
+          vm.syncSelectedCampusForEdit();
         })
         .catch(function () {
           vm.error = 'Failed to load program.';
@@ -223,6 +327,10 @@
     vm.cancel = function () {
       $location.path('/programs');
     };
+
+    if (!vm.isEdit) {
+      vm.initCampusBinding();
+    }
 
     vm.load();
   }

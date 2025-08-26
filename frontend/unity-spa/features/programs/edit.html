@@ -74,24 +74,49 @@
                ng-model="vm.model.short_name"
                placeholder="e.g., CS">
       </div>
-      <div>
-        <label class="block text-xs font-medium text-gray-600 mb-1">Default Curriculum ID</label>
-        <input type="number"
-               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
-               ng-model="vm.model.default_curriculum"
-               min="0"
-               placeholder="e.g., 12">
+      <div ng-if="vm.isEdit">
+        <label class="block text-xs font-medium text-gray-600 mb-1">Campus</label>
+        <div class="w-full px-3 py-2 border border-gray-200 rounded-md bg-gray-50 text-sm">
+          <span ng-if="vm.selectedCampus">
+            {{ vm.selectedCampus.campus_name }} (ID: {{ vm.selectedCampus.id }})
+          </span>
+          <span ng-if="!vm.selectedCampus && vm.model.campus_id !== null">
+            Campus ID: {{ vm.model.campus_id }}
+          </span>
+          <span ng-if="vm.model.campus_id === null" class="text-gray-500">No campus set</span>
+        </div>
+        <p class="text-xs text-gray-500 mt-1">Campus cannot be changed when editing a program.</p>
+      </div>
+      <div ng-if="!vm.isEdit">
+        <label class="block text-xs font-medium text-gray-600 mb-1">Campus</label>
+        <div class="w-full px-3 py-2 border border-gray-200 rounded-md bg-gray-50 text-sm">
+          <span ng-if="vm.selectedCampus">
+            {{ vm.selectedCampus.campus_name }} (ID: {{ vm.selectedCampus.id }})
+          </span>
+          <span ng-if="!vm.selectedCampus" class="text-gray-500">No campus selected</span>
+        </div>
+        <p class="text-xs text-gray-500 mt-1">Campus is set by the global campus selector.</p>
       </div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
-        <label class="block text-xs font-medium text-gray-600 mb-1">Campus ID</label>
-        <input type="number"
-               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
-               ng-model="vm.model.campus_id"
-               min="0"
-               placeholder="e.g., 1 (optional)">
+        <label class="block text-xs font-medium text-gray-600 mb-1">Default Curriculum</label>
+        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+                ng-model="vm.model.default_curriculum"
+                ng-disabled="!vm.model.campus_id || vm.curriculaLoading">
+          <option value="">{{ vm.curriculaLoading ? 'Loading curricula...' : (vm.model.campus_id ? 'Select a curriculum' : 'Select campus first') }}</option>
+          <option ng-repeat="curriculum in vm.curricula" 
+                  ng-value="curriculum.intID">
+            {{ curriculum.strName }}
+          </option>
+        </select>
+        <div ng-if="vm.curriculaLoading" class="text-xs text-gray-500 mt-1">
+          <i class="fas fa-spinner fa-spin mr-1"></i> Loading curricula...
+        </div>
+        <div ng-if="!vm.curriculaLoading && vm.model.campus_id && vm.curricula.length === 0" class="text-xs text-gray-500 mt-1">
+          No curricula found for selected campus.
+        </div>
       </div>
       <div class="flex items-end">
         <label class="inline-flex items-center space-x-2">
@@ -112,7 +137,7 @@
       </button>
       <button type="submit"
               class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              ng-disabled="vm.loading">
+              ng-disabled="vm.loading || (!vm.isEdit && !vm.model.campus_id)">
         <i class="fas fa-save mr-2"></i>{{ vm.isEdit ? 'Update' : 'Create' }}
       </button>
     </div>

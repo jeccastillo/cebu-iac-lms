@@ -28,6 +28,7 @@ class CurriculumUpsertRequest extends FormRequest
         $rules = [
             'strName'      => ['string', 'max:255'],
             'intProgramID' => ['integer'],
+            'campus_id'    => ['integer'],
             'active'       => ['boolean'],
             'isEnhanced'   => ['boolean'],
         ];
@@ -36,10 +37,12 @@ class CurriculumUpsertRequest extends FormRequest
             // Create
             $rules['strName'][] = 'required';
             $rules['intProgramID'][] = 'required';
+            $rules['campus_id'][] = 'required';
         } else {
             // Update (PUT/PATCH): all fields optional when present
             $rules['strName'][] = 'sometimes';
             $rules['intProgramID'][] = 'sometimes';
+            $rules['campus_id'][] = 'sometimes';
             $rules['active'][] = 'sometimes';
             $rules['isEnhanced'][] = 'sometimes';
         }

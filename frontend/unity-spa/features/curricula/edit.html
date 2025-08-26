@@ -1,0 +1,114 @@
+<div class="bg-white shadow rounded-lg p-6" ng-class="{'opacity-50': vm.loading || vm.saving}">
+  <div class="flex items-center justify-between mb-4">
+    <h1 class="text-xl font-semibold text-gray-800">
+      {{ vm.isEdit ? 'Edit Curriculum' : 'Add Curriculum' }}
+    </h1>
+    <div class="space-x-2">
+      <button class="px-3 py-2 border border-gray-300 rounded bg-white text-sm hover:bg-gray-50"
+              ng-click="vm.cancel()"
+              ng-disabled="vm.saving">
+        Cancel
+      </button>
+      <button class="px-3 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 disabled:opacity-50"
+              ng-click="vm.save()"
+              ng-disabled="vm.saving">
+        <i class="fas fa-save mr-1"></i>
+        {{ vm.saving ? 'Saving...' : (vm.isEdit ? 'Save Changes' : 'Create') }}
+      </button>
+    </div>
+  </div>
+
+  <div class="text-sm text-red-600 mb-3" ng-if="vm.error">
+    <i class="fas fa-exclamation-triangle mr-1"></i>{{ vm.error }}
+  </div>
+  <div class="text-sm text-green-600 mb-3" ng-if="vm.success">
+    <i class="fas fa-check mr-1"></i>{{ vm.success }}
+  </div>
+
+  <form name="curriculumForm" novalidate ng-submit="vm.save()">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Name -->
+      <div>
+        <label class="block text-xs font-medium text-gray-600 mb-1">Name</label>
+        <input type="text"
+               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+               ng-model="vm.model.strName"
+               required
+               placeholder="e.g. BSIT 2021 Curriculum">
+        <div class="text-xs text-red-600 mt-1" ng-if="curriculumForm.$submitted && !vm.model.strName">
+          Name is required.
+        </div>
+      </div>
+
+      <!-- Program -->
+      <div>
+        <label class="block text-xs font-medium text-gray-600 mb-1">Program</label>
+        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+                ng-model="vm.model.intProgramID"
+                ng-options="p.id as (p.title + (p.strMajor ? (' (' + p.strMajor + ')') : '')) for p in vm.programs"
+                required>
+          <option value="">Select a program</option>
+        </select>
+        <div class="text-xs text-red-600 mt-1" ng-if="curriculumForm.$submitted && !vm.model.intProgramID">
+          Program is required.
+        </div>
+      </div>
+
+      <!-- Campus -->
+      <div>
+        <label class="block text-xs font-medium text-gray-600 mb-1">Campus</label>
+        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+                ng-model="vm.model.campus_id"
+                ng-options="c.id as c.campus_name for c in vm.campuses"
+                required
+                ng-change="vm.onCampusChange()">
+          <option value="">Select a campus</option>
+        </select>
+        <div class="text-xs text-gray-500 mt-1" ng-if="!vm.isEdit">
+          Defaults to the globally selected campus if available.
+        </div>
+        <div class="text-xs text-red-600 mt-1" ng-if="curriculumForm.$submitted && !vm.model.campus_id">
+          Campus is required.
+        </div>
+      </div>
+
+      <!-- Active -->
+      <div class="flex items-center">
+        <label class="mr-3 text-xs font-medium text-gray-600">Active</label>
+        <input type="checkbox"
+               class="h-4 w-4 text-blue-600 border-gray-300 rounded"
+               ng-model="vm.model.active"
+               ng-true-value="1"
+               ng-false-value="0">
+      </div>
+
+      <!-- Enhanced -->
+      <div class="flex items-center">
+        <label class="mr-3 text-xs font-medium text-gray-600">Enhanced</label>
+        <input type="checkbox"
+               class="h-4 w-4 text-blue-600 border-gray-300 rounded"
+               ng-model="vm.model.isEnhanced"
+               ng-true-value="1"
+               ng-false-value="0">
+      </div>
+    </div>
+
+    <div class="mt-6">
+      <button type="submit"
+              class="px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 disabled:opacity-50"
+              ng-disabled="vm.saving">
+        {{ vm.saving ? 'Saving...' : (vm.isEdit ? 'Save Changes' : 'Create Curriculum') }}
+      </button>
+      <button type="button"
+              class="ml-2 px-4 py-2 border border-gray-300 rounded bg-white text-sm hover:bg-gray-50"
+              ng-click="vm.cancel()"
+              ng-disabled="vm.saving">
+        Cancel
+      </button>
+    </div>
+  </form>
+
+  <div class="flex items-center text-sm text-gray-500 mt-4" ng-if="vm.loading">
+    <i class="fas fa-spinner fa-spin mr-2"></i> Loading...
+  </div>
+</div>

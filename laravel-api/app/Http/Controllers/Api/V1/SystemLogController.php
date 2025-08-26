@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\SystemLog;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Exports\SystemLogsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SystemLogController extends Controller
 {
@@ -106,5 +108,38 @@ class SystemLogController extends Controller
                 'last_page'    => $paginator->lastPage(),
             ],
         ]);
+    }
+
+    /**
+     * GET /api/v1/system-logs/export
+     *
+     * Returns an XLSX file with the same filtering semantics as the listing.
+     * Restricted via routes to registrar and admin roles.
+     */
+    public function export(Request $request)
+    {
+        $payload = $request->validate([
+            'entity'     => 'sometimes|string',
+            'action'     => 'sometimes|string',
+            'user_id'    => 'sometimes|integer',
+            'entity_id'  => 'sometimes|integer',
+            'method'     => 'sometimes|string',
+            'path'       => 'sometimes|string',
+            'q'          => 'sometimes|string',
+            'date_from'  => 'sometimes|date',
+            'date_to'    => 'sometimes|date',
+        ]);
+
+        // Keep only provided keys as filters
+        $filters = [];
+        foreach (['entity', 'action', 'user_id', 'entity_id', 'method', 'path', 'q', 'date_from', 'date_to'] as $key) {
+            if (array_key_exists($key, $payload)) {
+                $filters[$key] = $payload[$key];
+            }
+        }
+
+        $filename = 'system-logs-' . now()->format('Ymd-His') . '.xlsx';
+
+        return Excel::download(new SystemLogsExport($filters), $filename);
     }
 }

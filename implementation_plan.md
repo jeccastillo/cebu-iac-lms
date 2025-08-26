@@ -1,195 +1,169 @@
 # Implementation Plan
 
 [Overview]
-Add full CRUD for tb_mas_programs in the Laravel API and provide corresponding AngularJS (1.x) admin UI for listing, creating, editing, and soft-disabling programs, including server-side system logging for all write operations.
+Make the Campus field uneditable on the Program Edit page while keeping the Add page behavior unchanged. The edit form should display a read-only Campus (name and ID) instead of an editable numeric input, and the backend payload should remain unchanged.
 
-This change will allow administrators and registrars to manage academic programs directly via the new Laravel API endpoints, with access restrictions and logging aligned to existing patterns (Subjects, Campus, Roles). The AngularJS frontend will expose a simple management interface under the unity SPA for convenient operations. The system logging service will capture create/update/delete actions, including before/after snapshots and request metadata, for auditability.
+This change improves data integrity by preventing accidental campus reassignment for existing programs. The UI will show campus context clearly without allowing modifications. The Add form will continue to bind to the global campus selector via CampusService; the Edit form will simply display the program&#39;s current campus.
 
 [Types]  
-Add/clarify program DTO shapes in API responses; no external package-level type system changes.
+No new TypeScript or external type system is introduced; we will maintain plain JavaScript object shapes used in the AngularJS controllers and services.
 
-Detailed data structures:
-- Database table: tb_mas_programs (existing legacy table)
-  - Primary key: intProgramID (int, auto-increment)
-  - Fields in scope:
-    - strProgramCode (string, required, unique among enabled programs)
-    - strProgramDescription (string, required)
-    - strMajor (string, optional)
-    - type (enum/string, values used in legacy: college | shs | drive | other; required)
-    - school (string, optional; e.g., Computing, Business, Design)
-    - short_name (string, optional)
-    - default_curriculum (int/bool, optional; treat as integer flag)
-    - enumEnabled (tinyint, required; 1 enabled, 0 disabled)
-    - campus_id (int, nullable; optional relationship added via migration 2025_08_25_000003_add_campus_id_to_legacy_tables.php)
-- Eloquent Model: App\Models\Program
-  - $primaryKey = intProgramID
-  - $fillable: include all fields above
-  - $casts:
-    - enumEnabled => integer
-    - default_curriculum => integer
-    - campus_id => integer
-- API response DTOs
-  - List/Index (existing mapping for Portal parity):
-    - { id: intProgramID, title: strProgramDescription, type: type, strMajor: strMajor }
-  - Show (detailed):
-    - {
-        intProgramID,
-        strProgramCode,
-        strProgramDescription,
-        strMajor,
-        type,
-        school,
-        short_name,
-        default_curriculum,
-        enumEnabled,
-        campus_id
-      }
-- AngularJS client-side shapes (JSDoc for clarity)
-  - Program:
-    - id (number)
-    - code (string)
-    - description (string)
-    - major (string)
-    - type (string)
-    - school (string)
-    - short_name (string)
-    - default_curriculum (number)
-    - enumEnabled (number)
-    - campus_id (number|null)
+Data shapes involved:
+- Program model (view-model in ProgramEditController):
+  - strProgramCode: string (required)
+  - strProgramDescription: string (required)
+  - strMajor: string | null
+  - type: &#39;college&#39; | &#39;shs&#39; | &#39;drive&#39; | &#39;other&#39;
+  - school: string | null
+  - short_name: string | null
+  - default_curriculum: number | null
+  - enumEnabled: 0 | 1
+  - campus_id: number | null (set from API; uneditable on Edit)
+- Campus (from CampusService.availableCampuses):
+  - id: number
+  - campus_name: string
+  - [other fields may exist but are not required for this change]
 
 [Files]
-Create and modify Laravel API files and add new AngularJS feature files.
+Only frontend files in the Unity SPA Programs feature will be modified.
 
-Detailed breakdown:
-- New files to be created (Laravel)
-  - laravel-api/app/Http/Requests/ProgramStoreRequest.php
-    - Purpose: Validate create requests for programs.
-  - laravel-api/app/Http/Requests/ProgramUpdateRequest.php
-    - Purpose: Validate update requests with partial fields.
-- Existing files to be modified (Laravel)
-  - laravel-api/app/Models/Program.php
-    - Add missing fillable fields: school, campus_id
-    - Add $casts for enumEnabled, default_curriculum, campus_id
-  - laravel-api/app/Http/Controllers/Api/V1/ProgramController.php
-    - Add methods: show, store, update, destroy
-    - Enhance index with filter/sorting query params: enabledOnly (existing), type?, school?, search?
-    - Integrate SystemLogService::log calls for store/update/destroy
-  - laravel-api/routes/api.php
-    - Add routes:
-      - GET /api/v1/programs/{id} (show)
-      - POST /api/v1/programs (store) [middleware role:registrar,admin]
-      - PUT /api/v1/programs/{id} (update) [middleware role:registrar,admin]
-      - DELETE /api/v1/programs/{id} (destroy soft-disable) [middleware role:registrar,admin]
-- New files to be created (AngularJS)
-  - frontend/unity-spa/features/programs/list.html
-    - Purpose: List with filters (enabled/type), actions (add, edit, disable).
-  - frontend/unity-spa/features/programs/edit.html
-    - Purpose: Form for create/edit program.
-  - frontend/unity-spa/features/programs/programs.service.js
-    - Purpose: $http wrapper for API endpoints.
-  - frontend/unity-spa/features/programs/programs.controller.js
-    - Purpose: Controllers for list and edit views.
-  - frontend/unity-spa/features/programs/programs.routes.js
-    - Purpose: ngRoute routes for /admin/programs and /admin/programs/:id.
-- Existing files to be modified (AngularJS)
-  - frontend/unity-spa/core/app.module.js
-    - Ensure module unityApp includes ngRoute (present) and register new features.
-  - If present, frontend/unity-spa/core/app.routes.js
-    - Import/ensure routes; if missing, programs.routes.js will self-register with angular.module('unityApp').
+- New files to be created
+  - None.
+
+- Existing files to be modified
+  1) frontend/unity-spa/features/programs/edit.html
+     - Replace the editable Campus ID numeric input (shown when vm.isEdit) with a read-only display showing campus name and ID.
+     - Keep the existing Add-mode campus display (vm.selectedCampus sourced from CampusService) unchanged.
+     - Ensure no ng-change triggers for campus on Edit mode.
+  2) frontend/unity-spa/features/programs/programs.controller.js
+     - Add a helper function vm.syncSelectedCampusForEdit() that, in Edit mode, initializes CampusService (if needed) and sets vm.selectedCampus by matching vm.model.campus_id against CampusService.availableCampuses.
+     - Call vm.syncSelectedCampusForEdit() after vm.load() populates vm.model and after vm.loadCurricula() in Edit mode.
+
+- Files to be deleted or moved
+  - None.
+
+- Configuration file updates
+  - None.
 
 [Functions]
-Add CRUD controller methods and AngularJS service functions.
+We will add one function and adjust one existing function call sequence. No backend service changes are required.
 
-Detailed breakdown:
-- New functions (Laravel)
-  - ProgramController@show(Request $request, int $id): JsonResponse
-    - Return one program with full details; 404 if not found.
-  - ProgramController@store(ProgramStoreRequest $request): JsonResponse (201)
-    - Create program with enumEnabled default 1; SystemLogService::log('create', 'Program', id, null, newValues, $request).
-  - ProgramController@update(ProgramUpdateRequest $request, int $id): JsonResponse
-    - Update allowed fields; SystemLogService::log('update', 'Program', id, old, new, $request).
-  - ProgramController@destroy(int $id): JsonResponse
-    - Soft-disable by setting enumEnabled=0; SystemLogService::log('update', 'Program', id, old, new, request()).
-- Modified functions (Laravel)
-  - ProgramController@index(Request $request): add optional filters (type, school, search on code/description) while preserving enabledOnly default semantics.
-- New functions (AngularJS service)
-  - ProgramsService.list(params)
-  - ProgramsService.get(id)
-  - ProgramsService.create(payload)
-  - ProgramsService.update(id, payload)
-  - ProgramsService.disable(id)
-- New functions (AngularJS controllers)
-  - ProgramsListController: load filters, fetch list, navigate to edit, disable program.
-  - ProgramsEditController: load by id or initialize, save (create/update), navigate back to list.
+- New functions
+  - Name: vm.syncSelectedCampusForEdit
+  - Signature: function () : void
+  - File path: frontend/unity-spa/features/programs/programs.controller.js
+  - Purpose: In Edit mode, ensure vm.selectedCampus is set for read-only display by finding the campus object that matches vm.model.campus_id. It initializes CampusService (if necessary) and then derives vm.selectedCampus. If the campus is not found, fall back to showing the numeric campus_id in the template.
+
+  Pseudocode/spec:
+  ```
+  vm.syncSelectedCampusForEdit = function () {
+    if (!vm.isEdit) return;
+    var assign = function () {
+      try {
+        var list = (CampusService && CampusService.availableCampuses) || [];
+        var id = vm.model.campus_id;
+        var found = null;
+        for (var i = 0; i < list.length; i++) {
+          var c = list[i];
+          var cid = (c &amp;&amp; c.id !== undefined &amp;&amp; c.id !== null) ? parseInt(c.id, 10) : null;
+          if (cid === id) { found = c; break; }
+        }
+        vm.selectedCampus = found;
+      } catch (e) { /* no-op */ }
+    };
+    var p = (CampusService &amp;&amp; CampusService.init) ? CampusService.init() : null;
+    if (p &amp;&amp; p.then) { p.then(assign); } else { assign(); }
+  };
+  ```
+
+- Modified functions
+  - Name: vm.load
+  - File path: frontend/unity-spa/features/programs/programs.controller.js
+  - Required changes:
+    - After populating vm.model from API and calling vm.loadCurricula(), call vm.syncSelectedCampusForEdit() to set up vm.selectedCampus for the edit view&#39;s read-only campus display.
+
+- Removed functions
+  - None. (vm.onCampusChange remains for Add mode where campus binding still exists.)
 
 [Classes]
-Introduce Request classes; keep using existing middleware-based access control.
+No classes are used or modified (AngularJS controllers are functions).
 
-Detailed breakdown:
 - New classes
-  - App\Http\Requests\ProgramStoreRequest
-    - Rules:
-      - strProgramCode: required|string|max:50
-      - strProgramDescription: required|string|max:255
-      - strMajor: nullable|string|max:100
-      - type: required|in:college,shs,drive,other
-      - school: nullable|string|max:100
-      - short_name: nullable|string|max:100
-      - default_curriculum: nullable|integer
-      - enumEnabled: nullable|integer|in:0,1
-      - campus_id: nullable|integer|exists:tb_mas_campuses,id (if campuses table alias differs, validate nullable|integer)
-  - App\Http\Requests\ProgramUpdateRequest
-    - Same fields as above but all nullable; include uniqueness check for strProgramCode against other programs.
+  - None.
+
 - Modified classes
-  - App\Models\Program: expand $fillable and $casts as listed in [Types].
-  - App\Http\Controllers\Api\V1\ProgramController: add methods and logging as listed in [Functions].
+  - None.
+
+- Removed classes
+  - None.
 
 [Dependencies]
-No new Composer or NPM dependencies required.
+No dependency modifications.
 
-Integration details:
-- Reuse existing role middleware: role:registrar,admin for write routes.
-- Reuse existing SystemLogService for logging.
-- Continue using default JSON responses aligned with other controllers.
+- No new packages.
+- No version changes.
+- Integration continues to rely on existing CampusService and ProgramsService.
 
 [Testing]
-Add feature tests for API and smoke-check frontend integration.
+Manual UI validation with focused checks on both Add and Edit flows.
 
-Test requirements:
-- Laravel Feature Tests (PHPUnit):
-  - tests/Feature/ProgramApiTest.php
-    - test_index_default_enabled_only
-    - test_filter_by_type_and_search
-    - test_show_404_on_missing
-    - test_store_validates_and_creates_and_logs
-    - test_update_validates_and_logs
-    - test_destroy_soft_disables_and_logs
-- Manual/E2E checklist:
-  - With role=registrar/admin token/session, create program then update fields; verify system-logs endpoint shows entries with old/new values.
-  - From AngularJS UI, list programs, filter by type, create/edit/disable, and verify changes via API.
-- Optional: stubbed HTTP tests if DB unavailable (skip or mark as integration).
+- Test files
+  - No automated test files exist in scope; manual verification steps outlined below.
+
+- Manual validation steps
+  1) Navigate to Add Program (/programs/add):
+     - Verify campus display remains driven by global campus selector (unchanged).
+     - Verify curriculum dropdown enables only after a campus is present.
+     - Verify saving still includes campus_id from global selector.
+  2) Navigate to Edit Program (/programs/:id/edit) for an existing program with campus_id set:
+     - Confirm the Campus section renders as read-only (no input).
+     - Confirm it shows "CampusName (ID: 123)" when campus list is available.
+     - If campus not found in list, confirm it shows "Campus ID: 123" fallback.
+     - Confirm curriculum list loads (using vm.model.campus_id) and can be changed.
+     - Confirm Save works and payload still includes campus_id unchanged.
+  3) Navigate to Edit Program for a program with campus_id null:
+     - Confirm read-only section shows "No campus set".
+     - Confirm curriculum dropdown remains disabled due to missing campus_id.
+  4) Regressions:
+     - Program list page still loads and filters correctly.
+     - Add Program still blocks Save until a campus is selected (unchanged rule: Save disabled when !vm.isEdit &amp;&amp; !vm.model.campus_id).
 
 [Implementation Order]
-Implement Laravel API first, then AngularJS UI, then tests and verification.
+Make template changes first, then controller enhancements, and validate behavior.
 
-Numbered steps:
-1) Laravel model hardening:
-   - Update App\Models\Program: add missing fillable fields and casts.
-2) Requests:
-   - Create ProgramStoreRequest and ProgramUpdateRequest with validation rules.
-3) Controller:
-   - Extend ProgramController: add show/store/update/destroy; enhance index filters; integrate SystemLogService calls.
-4) Routes:
-   - Register GET /programs/{id}, POST /programs, PUT /programs/{id}, DELETE /programs/{id} with role:registrar,admin for write routes.
-5) AngularJS service and routes:
-   - Create programs.service.js and programs.routes.js; wire into unityApp.
-6) AngularJS views and controllers:
-   - Implement list.html + ProgramsListController; implement edit.html + ProgramsEditController.
-7) System logging verification:
-   - Exercise create/update/destroy and confirm entries via GET /api/v1/system-logs (admin).
-8) Tests:
-   - Add Laravel feature tests; run locally with configured DB.
-9) Documentation:
-   - Update README/TODO to note new endpoints and UI path.
-10) Deployment/config sanity:
-   - Ensure .env has DB set; verify role middleware active; ensure CORS permits frontend calls.
+1) Edit template (frontend/unity-spa/features/programs/edit.html):
+   - Replace the Edit-mode campus input with a read-only display:
+     - Remove:
+       - The <input type="number" ... ng-model="vm.model.campus_id" ng-change="vm.onCampusChange()"> block inside <div ng-if="vm.isEdit">.
+     - Add:
+       ```
+       <div ng-if="vm.isEdit">
+         <label class="block text-xs font-medium text-gray-600 mb-1">Campus</label>
+         <div class="w-full px-3 py-2 border border-gray-200 rounded-md bg-gray-50 text-sm">
+           <span ng-if="vm.selectedCampus">
+             {{ vm.selectedCampus.campus_name }} (ID: {{ vm.selectedCampus.id }})
+           </span>
+           <span ng-if="!vm.selectedCampus &amp;&amp; vm.model.campus_id !== null">
+             Campus ID: {{ vm.model.campus_id }}
+           </span>
+           <span ng-if="vm.model.campus_id === null" class="text-gray-500">No campus set</span>
+         </div>
+         <p class="text-xs text-gray-500 mt-1">Campus cannot be changed when editing a program.</p>
+       </div>
+       ```
+   - Keep the Add-mode campus info block (ng-if="!vm.isEdit") unchanged.
+
+2) Controller changes (frontend/unity-spa/features/programs/programs.controller.js):
+   - Add vm.syncSelectedCampusForEdit function as defined above.
+   - In vm.load(), after:
+     - Setting vm.model.campus_id from the loaded row, and
+     - Calling vm.loadCurricula();
+     - Then call vm.syncSelectedCampusForEdit(); to populate vm.selectedCampus for display.
+   - Do not alter payload or save logic; campus_id remains included and unchanged in Edit mode.
+
+3) Validate in browser:
+   - Confirm read-only campus display on Edit and unchanged Add behavior.
+   - Confirm curriculum loading behavior remains correct.
+
+4) Code cleanup (optional, non-functional):
+   - None required; keep onCampusChange for Add path.

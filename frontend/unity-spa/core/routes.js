@@ -115,6 +115,26 @@
         requiredRoles: ['registrar', 'admin']
       })
 
+      /* Curricula CRUD */
+      .when('/curricula', {
+        templateUrl: 'features/curricula/list.html',
+        controller: 'CurriculaListController',
+        controllerAs: 'vm',
+        requiredRoles: ['registrar', 'admin']
+      })
+      .when('/curricula/add', {
+        templateUrl: 'features/curricula/edit.html',
+        controller: 'CurriculumEditController',
+        controllerAs: 'vm',
+        requiredRoles: ['registrar', 'admin']
+      })
+      .when('/curricula/:id/edit', {
+        templateUrl: 'features/curricula/edit.html',
+        controller: 'CurriculumEditController',
+        controllerAs: 'vm',
+        requiredRoles: ['registrar', 'admin']
+      })
+
       .when('/roles', {
         templateUrl: 'features/roles/roles.html',
         controller: 'RolesController',

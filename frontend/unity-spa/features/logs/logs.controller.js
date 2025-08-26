@@ -38,6 +38,7 @@
     vm.toggleExpand = toggleExpand;
     vm.truncate = truncate;
     vm.pretty = pretty;
+    vm.export = exportXlsx;
 
     activate();
 
@@ -112,6 +113,58 @@
       } catch (e) {
         return '' + obj;
       }
+    }
+
+    function exportXlsx() {
+      vm.loading = true;
+      vm.error = null;
+
+      var params = _buildParams();
+      // Remove pagination-only params for export
+      if ('page' in params) delete params.page;
+      if ('per_page' in params) delete params.per_page;
+
+      SystemLogsService.export(params)
+        .then(function (resp) {
+          // Determine filename from Content-Disposition if present
+          var disposition = resp.headers ? resp.headers('content-disposition') : null;
+          var filename = null;
+          if (disposition && typeof disposition === 'string') {
+            var match = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/i.exec(disposition);
+            if (match && match[1]) {
+              filename = match[1].replace(/['"]/g, '');
+            }
+          }
+          if (!filename) {
+            var dt = new Date();
+            var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+            var stamp = dt.getFullYear().toString()
+              + pad(dt.getMonth() + 1)
+              + pad(dt.getDate())
+              + '-' + pad(dt.getHours())
+              + pad(dt.getMinutes())
+              + pad(dt.getSeconds());
+            filename = 'system-logs-' + stamp + '.xlsx';
+          }
+
+          var blob = new Blob([resp.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          var url = window.URL.createObjectURL(blob);
+          var a = document.createElement('a');
+          a.href = url;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(function () {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+          }, 0);
+        })
+        .catch(function (err) {
+          vm.error = (err && err.data && err.data.message) ? err.data.message : 'Export failed';
+        })
+        .finally(function () {
+          vm.loading = false;
+        });
     }
 
     function _buildParams() {

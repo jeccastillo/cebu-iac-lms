@@ -166,5 +166,6 @@ Route::prefix('v1')->group(function () {
     Route::get('/generic/active-term', [GenericApiController::class, 'activeTerm']);
 
     // System logs (admin)
+    Route::get('/system-logs/export', [SystemLogController::class, 'export'])->middleware('role:registrar,admin');
     Route::get('/system-logs', [SystemLogController::class, 'index'])->middleware('role:admin');
 });
