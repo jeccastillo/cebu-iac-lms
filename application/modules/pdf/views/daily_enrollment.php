@@ -126,9 +126,9 @@ $html .= '
         <td>'.$totals->transferee.'</td>
         <td>'.$totals->returning.'</td>
         <td>'.$totals->shiftee.'</td>
+        <td>'.$totals->continuing.'</td>
         <td>'.$totals->second.'</td>
         <td>'.$totals->secondIAC.'</td>
-        <td>'.$totals->continuing.'</td>
         <td><strong>'.$full_total.'</strong></td>
     </tr>
     <tr style="line-height:5px;">
