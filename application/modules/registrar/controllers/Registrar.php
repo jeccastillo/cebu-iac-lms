@@ -2938,8 +2938,7 @@ class Registrar extends CI_Controller {
         $registrations = $this->db->select('tb_mas_users.strStudentNumber, tb_mas_users.intProgramID')
         ->from('tb_mas_registration')  
         ->join('tb_mas_users', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
-        ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_registration.intROG >=' => '1', 'tb_mas_registration.intROG !=' => '5', 'withdrawal_period !=' => 'before'))
-        // ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_registration.intROG' => '1'))
+        ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_registration.intROG' => '1'))
         ->order_by('tb_mas_users.strStudentNumber desc')
         ->get()
         ->result_array();
