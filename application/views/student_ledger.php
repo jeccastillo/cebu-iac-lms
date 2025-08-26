@@ -131,7 +131,7 @@
                                     </select>
                                 </td>
                                 <td :class="item.muted" v-else>{{ item.name }}</td>
-                                <td :class="item.muted">{{  item.date ? item.date : '' }}</td>
+                                <td :class="item.muted">{{  item.date }}</td>
                                 <td :class="item.muted">{{  item.or_number }}</td>
                                 <td :class="item.muted">{{  item.invoice_number }}</td>
                                 <td :class="item.muted">{{  item.remarks }}</td>
@@ -512,7 +512,7 @@ new Vue({
                     'term_label':tuition.term.term_label,
                     'syid':tuition.term.intID,
                     'scholarship_name':'',
-                    'date': payments[i].or_date != null ? payments[i].or_date : '',
+                    'date': '1',
                     'name': payments[i].description,
                     'or_number':payments[i].or_number,
                     'invoice_number':payments[i].invoice_number,
