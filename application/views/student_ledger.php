@@ -500,6 +500,7 @@ new Vue({
             
             var balance = tuition.balance;            
             
+            console.log(payments);
             for(i in payments){                       
                 var paid = payments[i].subtotal_order * -1;
                 this.term_balance += paid;
