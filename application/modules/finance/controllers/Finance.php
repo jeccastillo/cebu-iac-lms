@@ -377,7 +377,7 @@ class Finance extends CI_Controller {
 
             $temp['payments_tuition']  = [];                                  
             foreach($tuition_payments as $tuition_payment){
-                $tuition_payment['or_date'] = $tuition_payment['or_date'] ? date('M j, Y',strtotime($tuition_payment['or_date'])) : '';
+                $tuition_payment['or_date'] = $tuition_payment['or_date'] ? date('M j, Y',strtotime($tuition_payment['or_date'])) : date('M j, Y',strtotime($tuition_payment['created_at'])) ;
                 $temp['payments_tuition'][] = $tuition_payment;
             }   
             
