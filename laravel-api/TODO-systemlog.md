@@ -1,0 +1,25 @@
+# System Log for Campus CRUD - TODO
+
+- [ ] Create migration: database/migrations/2025_08_25_000010_create_tb_mas_system_log.php
+  - Table: tb_mas_system_log
+  - Columns: id, user_id, entity, entity_id, action, old_values (json), new_values (json), ip_address, user_agent, method, path, timestamps
+  - Indexes: (entity, entity_id), user_id, created_at
+- [ ] Create model: app/Models/SystemLog.php
+  - $table = 'tb_mas_system_log'
+  - $fillable: user_id, entity, entity_id, action, old_values, new_values, ip_address, user_agent, method, path
+  - $casts: old_values => 'array', new_values => 'array'
+- [ ] Create service: app/Services/SystemLogService.php
+  - static function log(string $action, string $entity, ?int $entityId, $oldValues, $newValues, ?\Illuminate\Http\Request $request = null): void
+  - Capture auth user id (if available), ip, user agent, method, path
+  - Wrap in try/catch and log errors to Laravel log
+- [ ] Integrate into CampusController (app/Http/Controllers/Api/V1/CampusController.php)
+  - store(): log create
+  - update(): snapshot old, save, snapshot new, log update
+  - destroy(): snapshot old, delete, log delete
+- [ ] Composer autoload refresh
+  - Run: cd laravel-api &amp;&amp; composer dump-autoload
+- [ ] Run migration
+  - Run: cd laravel-api &amp;&amp; php artisan migrate
+- [ ] Verify
+  - Use existing campus CRUD (routes/api.php) to perform create/update/delete
+  - Query tb_mas_system_log and check entries

@@ -1,0 +1,30 @@
+<div class="max-w-6xl mx-auto px-4 py-8">
+  <div class="flex items-start justify-between mb-6">
+    <div>
+      <h2 class="text-2xl font-semibold text-gray-800">{{ vm.title }}</h2>
+      <p class="text-gray-600">
+        This section is being migrated from the legacy system. Use the shortcuts below to open the current Registrar pages.
+      </p>
+    </div>
+    <a class="inline-flex items-center px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+       ng-href="{{ vm.nav && vm.nav.dashboard || '#!/dashboard' }}">
+      <span class="fas fa-home mr-2"></span> Back to Dashboard
+    </a>
+  </div>
+
+  <div class="bg-white rounded shadow divide-y">
+    <div class="p-6">
+      <h3 class="text-lg font-semibold text-gray-800 mb-2">Reports</h3>
+      <p class="text-gray-600 mb-4">Open the Registrar reports in the legacy CI app.</p>
+      <a class="inline-flex items-center px-3 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700"
+         ng-href="{{ vm.links.registrarReports }}" target="_blank" rel="noopener">
+        <span class="fas fa-external-link-alt mr-2"></span> Open CI Registrar Reports
+      </a>
+    </div>
+
+    <div class="p-6">
+      <h3 class="text-lg font-semibold text-gray-800 mb-2">Other Registrar Tools</h3>
+      <p class="text-gray-600">Additional tools will appear here as they are migrated.</p>
+    </div>
+  </div>
+</div>

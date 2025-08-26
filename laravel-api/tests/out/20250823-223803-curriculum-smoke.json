@@ -1,0 +1,47 @@
+﻿{
+    "base":  "http://localhost/iacademy/cebu-iac-lms/laravel-api/public/api/v1",
+    "time":  "2025-08-23T22:38:06",
+    "results":  [
+                    {
+                        "name":  "Programs GET",
+                        "passed":  true,
+                        "details":  "ProgramID=19"
+                    },
+                    {
+                        "name":  "Curriculum index",
+                        "passed":  true,
+                        "details":  "OK"
+                    },
+                    {
+                        "name":  "Curriculum create",
+                        "passed":  true,
+                        "details":  "newid=8"
+                    },
+                    {
+                        "name":  "Curriculum show",
+                        "passed":  true,
+                        "details":  "OK"
+                    },
+                    {
+                        "name":  "Curriculum update",
+                        "passed":  true,
+                        "details":  "OK"
+                    },
+                    {
+                        "name":  "Curriculum subjects",
+                        "passed":  true,
+                        "details":  "count=0"
+                    },
+                    {
+                        "name":  "Curriculum delete",
+                        "passed":  true,
+                        "details":  "OK"
+                    },
+                    {
+                        "name":  "Curriculum show after delete (404)",
+                        "passed":  true,
+                        "details":  "OK"
+                    }
+                ],
+    "passed":  true
+}

@@ -1,0 +1,52 @@
+﻿{
+    "runWrites":  true,
+    "startedAt":  "2025-08-22T23:53:45.8007685+08:00",
+    "items":  [
+                  {
+                      "error":  null,
+                      "name":  "smoke",
+                      "exitCode":  0,
+                      "step":  "read-only",
+                      "warning":  null,
+                      "stderr":  "C:\\xampp8\\htdocs\\iacademy\\cebu-iac-lms\\laravel-api\\tests\\out\\20250822-235343-smoke-stderr.txt",
+                      "stdout":  "C:\\xampp8\\htdocs\\iacademy\\cebu-iac-lms\\laravel-api\\tests\\out\\20250822-235343-smoke-stdout.txt"
+                  },
+                  {
+                      "error":  null,
+                      "name":  "subjects-test_subject_write.php",
+                      "exitCode":  255,
+                      "step":  "write",
+                      "warning":  null,
+                      "stderr":  "C:\\xampp8\\htdocs\\iacademy\\cebu-iac-lms\\laravel-api\\tests\\out\\20250822-235345-php-test_subject_write.php-stderr.txt",
+                      "stdout":  "C:\\xampp8\\htdocs\\iacademy\\cebu-iac-lms\\laravel-api\\tests\\out\\20250822-235345-php-test_subject_write.php-stdout.txt"
+                  },
+                  {
+                      "error":  null,
+                      "name":  "subjects-verify_subject_writes.php",
+                      "exitCode":  255,
+                      "step":  "write",
+                      "warning":  null,
+                      "stderr":  "C:\\xampp8\\htdocs\\iacademy\\cebu-iac-lms\\laravel-api\\tests\\out\\20250822-235345-php-verify_subject_writes.php-stderr.txt",
+                      "stdout":  "C:\\xampp8\\htdocs\\iacademy\\cebu-iac-lms\\laravel-api\\tests\\out\\20250822-235345-php-verify_subject_writes.php-stdout.txt"
+                  },
+                  {
+                      "error":  null,
+                      "name":  "tuitionYear-test_tuition_year_write.php",
+                      "exitCode":  255,
+                      "step":  "write",
+                      "warning":  null,
+                      "stderr":  "C:\\xampp8\\htdocs\\iacademy\\cebu-iac-lms\\laravel-api\\tests\\out\\20250822-235345-php-test_tuition_year_write.php-stderr.txt",
+                      "stdout":  "C:\\xampp8\\htdocs\\iacademy\\cebu-iac-lms\\laravel-api\\tests\\out\\20250822-235345-php-test_tuition_year_write.php-stdout.txt"
+                  },
+                  {
+                      "error":  null,
+                      "name":  "tuitionYear-test_tuition_year_extra.php",
+                      "exitCode":  255,
+                      "step":  "write",
+                      "warning":  null,
+                      "stderr":  "C:\\xampp8\\htdocs\\iacademy\\cebu-iac-lms\\laravel-api\\tests\\out\\20250822-235345-php-test_tuition_year_extra.php-stderr.txt",
+                      "stdout":  "C:\\xampp8\\htdocs\\iacademy\\cebu-iac-lms\\laravel-api\\tests\\out\\20250822-235345-php-test_tuition_year_extra.php-stdout.txt"
+                  }
+              ],
+    "base":  "http://localhost/iacademy/cebu-iac-lms/laravel-api/public/api/v1"
+}

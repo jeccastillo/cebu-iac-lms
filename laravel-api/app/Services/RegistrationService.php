@@ -1,0 +1,189 @@
+<?php
+
+namespace App\Services;
+
+use Illuminate\Support\Facades\DB;
+
+class RegistrationService
+{
+    /**
+     * Aggregate daily enrollment tallies for a given term (syid) within a date window.
+     * Mirrors RegistrarController::dailyEnrollment behavior but returns plain arrays.
+     *
+     * @param int $syid
+     * @param string $start Y-m-d
+     * @param string $end Y-m-d
+     * @param array $secondDegreeIac list of student slugs to be counted under "secondIAC"
+     * @return array{
+     *   success: bool,
+     *   data: array<string, array{
+     *     freshman:int, transferee:int, second:int, secondIAC:int, continuing:int, shiftee:int, returning:int, total:int, date:string
+     *   }>,
+     *   totals: array{freshman:int, transferee:int, second:int, secondIAC:int, continuing:int, shiftee:int, returning:int},
+     *   withdrawnTotals: array{
+     *     freshmanWithdrawn:int, transfereeWithdrawn:int, secondWithdrawn:int, secondIACWithdrawn:int, continuingWithdrawn:int, shifteeWithdrawn:int, returningWithdrawn:int
+     *   },
+     *   sem_type: string|null,
+     *   sy: \Illuminate\Support\Collection
+     * }
+     */
+    public function getDailyEnrollment(int $syid, string $start, string $end, array $secondDegreeIac = []): array
+    {
+        $activeSem = DB::table('tb_mas_sy')->where('intID', $syid)->first();
+        if (!$activeSem) {
+            return [
+                'success' => false,
+                'data' => [],
+                'totals' => [],
+                'withdrawnTotals' => [],
+                'sem_type' => null,
+                'sy' => collect(),
+            ];
+        }
+
+        // Build skeleton per day inclusive of end
+        $period = new \DatePeriod(new \DateTime($start), new \DateInterval('P1D'), (new \DateTime($end))->modify('+1 day'));
+        $perDay = [];
+        foreach ($period as $dt) {
+            $date = $dt->format('Y-m-d');
+            $perDay[$date] = [
+                'freshman' => 0,
+                'transferee' => 0,
+                'second' => 0,
+                'secondIAC' => 0,
+                'continuing' => 0,
+                'shiftee' => 0,
+                'returning' => 0,
+                'total' => 0,
+                'date' => date('M j, Y', strtotime($date)),
+            ];
+        }
+
+        $totals = [
+            'freshman' => 0,
+            'transferee' => 0,
+            'second' => 0,
+            'secondIAC' => 0,
+            'continuing' => 0,
+            'shiftee' => 0,
+            'returning' => 0,
+        ];
+        $withdrawnTotals = [
+            'freshmanWithdrawn' => 0,
+            'transfereeWithdrawn' => 0,
+            'secondWithdrawn' => 0,
+            'secondIACWithdrawn' => 0,
+            'continuingWithdrawn' => 0,
+            'shifteeWithdrawn' => 0,
+            'returningWithdrawn' => 0,
+        ];
+
+        $begin = (new \DateTime($start))->format('Y-m-d') . ' 00:00:00';
+        $endDate = (new \DateTime($end))->format('Y-m-d') . ' 23:59:59';
+
+        // Pull all registrations in the window for that term
+        $enrollments = DB::table('tb_mas_registration as r')
+            ->join('tb_mas_users as u', 'u.intID', '=', 'r.intStudentID')
+            ->where('r.intAYID', $syid)
+            ->where('r.intROG', '>=', 1) // enrolled/withdrawn etc.
+            ->where('r.intROG', '!=', 5) // exclude some terminal state (parity with CI)
+            ->whereNotNull('r.dteRegistered')
+            ->whereBetween('r.dteRegistered', [$begin, $endDate])
+            ->orderBy('r.intRegistrationID', 'desc')
+            ->select('r.*', 'u.student_type', 'u.slug', 'u.enumStudentType')
+            ->get();
+
+        foreach ($enrollments as $st) {
+            $date = substr((string)$st->dteRegistered, 0, 10);
+            if (!isset($perDay[$date])) {
+                $perDay[$date] = [
+                    'freshman' => 0,
+                    'transferee' => 0,
+                    'second' => 0,
+                    'secondIAC' => 0,
+                    'continuing' => 0,
+                    'shiftee' => 0,
+                    'returning' => 0,
+                    'total' => 0,
+                    'date' => date('M j, Y', strtotime($date)),
+                ];
+            }
+
+            $addWithdrawn = ((int)$st->intROG === 3) ? 1 : 0;
+
+            if ($st->enumStudentType === 'continuing') {
+                $perDay[$date]['continuing'] += 1;
+                $perDay[$date]['total'] += 1;
+                $totals['continuing'] += 1;
+                $withdrawnTotals['continuingWithdrawn'] += $addWithdrawn;
+            } elseif ($st->enumStudentType === 'shiftee') {
+                $perDay[$date]['shiftee'] += 1;
+                $perDay[$date]['total'] += 1;
+                $totals['shiftee'] += 1;
+                $withdrawnTotals['shifteeWithdrawn'] += $addWithdrawn;
+            } elseif ($st->enumStudentType === 'returning') {
+                $perDay[$date]['returning'] += 1;
+                $perDay[$date]['total'] += 1;
+                $totals['returning'] += 1;
+                $withdrawnTotals['returningWithdrawn'] += $addWithdrawn;
+            } else {
+                // Use student_type classification similar to CI
+                $stype = $st->student_type ?? 'freshman';
+                switch ($stype) {
+                    case 'freshman':
+                    case 'new':
+                        $perDay[$date]['freshman'] += 1;
+                        $totals['freshman'] += 1;
+                        $withdrawnTotals['freshmanWithdrawn'] += $addWithdrawn;
+                        break;
+                    case 'transferee':
+                        $perDay[$date]['transferee'] += 1;
+                        $totals['transferee'] += 1;
+                        // parity with CI increments freshmanWithdrawn here
+                        $withdrawnTotals['freshmanWithdrawn'] += $addWithdrawn;
+                        break;
+                    case 'second degree':
+                        if (!empty($secondDegreeIac) && in_array((string)$st->slug, $secondDegreeIac, true)) {
+                            $perDay[$date]['secondIAC'] += 1;
+                            $totals['secondIAC'] += 1;
+                            $withdrawnTotals['secondIACWithdrawn'] += $addWithdrawn;
+                        } else {
+                            $perDay[$date]['second'] += 1;
+                            $totals['second'] += 1;
+                            $withdrawnTotals['secondWithdrawn'] += $addWithdrawn;
+                        }
+                        break;
+                    default:
+                        $perDay[$date]['freshman'] += 1;
+                        $totals['freshman'] += 1;
+                        $withdrawnTotals['freshmanWithdrawn'] += $addWithdrawn;
+                        break;
+                }
+                $perDay[$date]['total'] += 1;
+            }
+        }
+
+        $syList = DB::table('tb_mas_sy')->get();
+
+        return [
+            'success' => true,
+            'data' => $perDay,
+            'totals' => $totals,
+            'withdrawnTotals' => $withdrawnTotals,
+            'sem_type' => $activeSem->term_student_type ?? null,
+            'sy' => $syList,
+        ];
+    }
+
+    /**
+     * Registration state transition handler (stub for now).
+     * @return array{success:bool, message:string}
+     */
+    public function transition(int $registrationId, string $action, array $context = []): array
+    {
+        return [
+            'success' => false,
+            'message' => 'Not Implemented',
+        ];
+    }
+}

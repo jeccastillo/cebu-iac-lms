@@ -1,0 +1,8 @@
+﻿PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.6. in C:\xampp8\htdocs\iacademy\cebu-iac-lms\laravel-api\vendor\composer\platform_check.php:22
+Stack trace:
+#0 C:\xampp8\htdocs\iacademy\cebu-iac-lms\laravel-api\vendor\composer\autoload_real.php(25): require()
+#1 C:\xampp8\htdocs\iacademy\cebu-iac-lms\laravel-api\vendor\autoload.php(22): ComposerAutoloaderInitbfe12996eeecb6fdc8713a9fd9d431f8::getLoader()
+#2 C:\xampp8\htdocs\iacademy\cebu-iac-lms\laravel-api\scripts\verify_subject_writes.php(3): require('C:\\xampp8\\htdoc...')
+#3 {main}
+  thrown in C:\xampp8\htdocs\iacademy\cebu-iac-lms\laravel-api\vendor\composer\platform_check.php on line 22
+

@@ -1,0 +1,116 @@
+<div class="max-w-3xl mx-auto bg-white shadow rounded p-6" ng-cloak>
+  <h1 class="text-2xl font-bold text-gray-800 mb-4">iACADEMY Makati Application Form</h1>
+  <p class="text-sm text-gray-600 mb-6">Fill out the form below. On submit, your application will be saved and a confirmation email will be sent.</p>
+
+  <form name="applyForm" novalidate ng-submit="vm.submit()">
+    <fieldset class="mb-6">
+      <legend class="text-lg font-semibold text-gray-700 mb-3">Basic Information</legend>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">First Name <span class="text-red-500">*</span></label>
+          <input type="text" class="w-full border rounded px-3 py-2" ng-model="vm.form.first_name" required />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Middle Name</label>
+          <input type="text" class="w-full border rounded px-3 py-2" ng-model="vm.form.middle_name" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Last Name <span class="text-red-500">*</span></label>
+          <input type="text" class="w-full border rounded px-3 py-2" ng-model="vm.form.last_name" required />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Gender</label>
+          <select class="w-full border rounded px-3 py-2" ng-model="vm.form.gender" ng-options="g for g in vm.genders">
+            <option value="">-- Select --</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
+          <input type="date" class="w-full border rounded px-3 py-2" ng-model="vm.form.date_of_birth" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Campus</label>
+          <input type="text" class="w-full border rounded px-3 py-2" ng-model="vm.form.campus" />
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="mb-6">
+      <legend class="text-lg font-semibold text-gray-700 mb-3">Contact Information</legend>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Email Address <span class="text-red-500">*</span></label>
+          <input type="email" class="w-full border rounded px-3 py-2" ng-model="vm.form.email" required />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Confirm Email Address <span class="text-red-500">*</span></label>
+          <input type="email" class="w-full border rounded px-3 py-2" ng-model="vm.form.email_confirmation" required />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Mobile Number <span class="text-red-500">*</span></label>
+          <input type="text" class="w-full border rounded px-3 py-2" ng-model="vm.form.mobile_number" required />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Confirm Mobile Number <span class="text-red-500">*</span></label>
+          <input type="text" class="w-full border rounded px-3 py-2" ng-model="vm.form.mobile_number_confirmation" required />
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="mb-6">
+      <legend class="text-lg font-semibold text-gray-700 mb-3">Address</legend>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Home Number/Street/Subdivision</label>
+          <input type="text" class="w-full border rounded px-3 py-2" ng-model="vm.form.address" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">City</label>
+          <input type="text" class="w-full border rounded px-3 py-2" ng-model="vm.form.city" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">State/Province</label>
+          <input type="text" class="w-full border rounded px-3 py-2" ng-model="vm.form.province" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Country</label>
+          <input type="text" class="w-full border rounded px-3 py-2" ng-model="vm.form.country" />
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="mb-6">
+      <legend class="text-lg font-semibold text-gray-700 mb-3">Program</legend>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Student Type <span class="text-red-500">*</span></label>
+          <select class="w-full border rounded px-3 py-2" ng-model="vm.form.student_type" ng-options="t for t in vm.studentTypes" required>
+            <option value="">-- Select --</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Program (First Choice) <span class="text-red-500">*</span></label>
+          <select class="w-full border rounded px-3 py-2" ng-model="vm.form.type_id" ng-options="p.id as p.title for p in vm.programs" required>
+            <option value="">-- Select --</option>
+          </select>
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="mb-4" ng-if="vm.error">
+      <div class="bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded">
+        {{ vm.error }}
+      </div>
+    </div>
+
+    <div class="flex items-center justify-end">
+      <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" ng-disabled="vm.loading">
+        <span ng-if="!vm.loading">Submit Application</span>
+        <span ng-if="vm.loading">Submitting...</span>
+      </button>
+    </div>
+  </form>
+</div>

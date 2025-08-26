@@ -1,0 +1,14 @@
+﻿{
+    "runWrites":  false,
+    "startedAt":  "2025-08-22T22:38:04.4675677+08:00",
+    "items":  {
+                  "error":  null,
+                  "name":  "smoke",
+                  "exitCode":  0,
+                  "step":  "read-only",
+                  "warning":  null,
+                  "stderr":  "C:\\xampp8\\htdocs\\iacademy\\cebu-iac-lms\\laravel-api\\tests\\out\\20250822-223801-smoke-stderr.txt",
+                  "stdout":  "C:\\xampp8\\htdocs\\iacademy\\cebu-iac-lms\\laravel-api\\tests\\out\\20250822-223801-smoke-stdout.txt"
+              },
+    "base":  "http://localhost/iacademy/cebu-iac-lms/laravel-api/public/api/v1"
+}

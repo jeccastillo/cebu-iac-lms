@@ -1,0 +1,14 @@
+﻿
+==== Health ====
+
+==== Programs ====
+
+==== Subjects (read) ====
+
+==== Tuition Year (read) ====
+
+==== Portal ====
+
+==== Summary ====
+Results: 6/6 passed. Summary saved: C:\xampp8\htdocs\iacademy\cebu-iac-lms\laravel-api\tests\out\20250822-235345-summary.json
+

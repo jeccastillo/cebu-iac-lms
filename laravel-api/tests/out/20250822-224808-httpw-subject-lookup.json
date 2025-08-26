@@ -1,0 +1,5 @@
+﻿{
+    "status":  200,
+    "body":  "{\r\n    \"success\":  true,\r\n    \"data\":  [\r\n\r\n             ],\r\n    \"meta\":  {\r\n                 \"total\":  0,\r\n                 \"page\":  1,\r\n                 \"limit\":  25\r\n             }\r\n}",
+    "ts":  "2025-08-22T22:48:08.0574310+08:00"
+}

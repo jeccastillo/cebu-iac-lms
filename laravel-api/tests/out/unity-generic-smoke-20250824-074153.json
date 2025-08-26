@@ -1,0 +1,90 @@
+﻿[
+    {
+        "endpoint":  "/unity/advising",
+        "case":  "valid",
+        "result":  {
+                       "body":  "Exception calling \".ctor\" with \"1\" argument(s): \"Stream was not readable.\"",
+                       "status":  -1
+                   }
+    },
+    {
+        "endpoint":  "/unity/advising",
+        "case":  "missing-student_number",
+        "result":  {
+                       "body":  "Exception calling \".ctor\" with \"1\" argument(s): \"Stream was not readable.\"",
+                       "status":  -1
+                   }
+    },
+    {
+        "endpoint":  "/unity/tuition-preview",
+        "case":  "valid",
+        "result":  {
+                       "body":  "Exception calling \".ctor\" with \"1\" argument(s): \"Stream was not readable.\"",
+                       "status":  -1
+                   }
+    },
+    {
+        "endpoint":  "/unity/enlist",
+        "case":  "placeholder",
+        "result":  {
+                       "body":  "{\"success\":false,\"message\":\"Enlist not implemented\"}",
+                       "status":  501
+                   }
+    },
+    {
+        "endpoint":  "/unity/tag-status",
+        "case":  "placeholder",
+        "result":  {
+                       "body":  "{\"success\":false,\"message\":\"Tag status not implemented\"}",
+                       "status":  501
+                   }
+    },
+    {
+        "endpoint":  "/generic/faculty",
+        "case":  "no-filter",
+        "result":  {
+                       "body":  "Exception calling \".ctor\" with \"1\" argument(s): \"Stream was not readable.\"",
+                       "status":  -1
+                   }
+    },
+    {
+        "endpoint":  "/generic/faculty",
+        "case":  "q=John",
+        "result":  {
+                       "body":  "Exception calling \".ctor\" with \"1\" argument(s): \"Stream was not readable.\"",
+                       "status":  -1
+                   }
+    },
+    {
+        "endpoint":  "/student/viewer",
+        "case":  "token",
+        "result":  {
+                       "body":  "Exception calling \".ctor\" with \"1\" argument(s): \"Stream was not readable.\"",
+                       "status":  -1
+                   }
+    },
+    {
+        "endpoint":  "/student/balances",
+        "case":  "basic",
+        "result":  {
+                       "body":  "Exception calling \".ctor\" with \"1\" argument(s): \"Stream was not readable.\"",
+                       "status":  -1
+                   }
+    },
+    {
+        "endpoint":  "/registrar/grading/meta",
+        "case":  "college",
+        "result":  {
+                       "body":  "Exception calling \".ctor\" with \"1\" argument(s): \"Stream was not readable.\"",
+                       "status":  -1
+                   }
+    },
+    {
+        "endpoint":  "/finance/transactions",
+        "case":  "student_number=S-0001",
+        "result":  {
+                       "body":  "Exception calling \".ctor\" with \"1\" argument(s): \"Stream was not readable.\"",
+                       "status":  -1
+                   }
+    }
+]

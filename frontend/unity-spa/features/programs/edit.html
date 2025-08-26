@@ -1,0 +1,125 @@
+<div class="max-w-3xl mx-auto space-y-6">
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-semibold text-gray-900">{{ vm.title }}</h1>
+    <div>
+      <button type="button"
+              class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md text-sm bg-white hover:bg-gray-50"
+              ng-click="vm.cancel()">
+        <i class="fas fa-arrow-left mr-2"></i>Back
+      </button>
+    </div>
+  </div>
+
+  <!-- Alerts -->
+  <div ng-if="vm.error" class="p-3 rounded-md bg-red-50 border border-red-200 text-red-700 text-sm">
+    <i class="fas fa-exclamation-triangle mr-2"></i>{{ vm.error }}
+  </div>
+  <div ng-if="vm.success" class="p-3 rounded-md bg-green-50 border border-green-200 text-green-700 text-sm">
+    <i class="fas fa-check-circle mr-2"></i>{{ vm.success }}
+  </div>
+
+  <!-- Form -->
+  <form class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 space-y-5" ng-submit="vm.save()">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-xs font-medium text-gray-600 mb-1">Program Code <span class="text-red-500">*</span></label>
+        <input type="text"
+               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+               ng-model="vm.model.strProgramCode"
+               placeholder="e.g., BSCS"
+               required>
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-gray-600 mb-1">Type <span class="text-red-500">*</span></label>
+        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+                ng-model="vm.model.type"
+                ng-options="t.value as t.label for t in vm.types"
+                required>
+        </select>
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-xs font-medium text-gray-600 mb-1">Program Description <span class="text-red-500">*</span></label>
+      <input type="text"
+             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+             ng-model="vm.model.strProgramDescription"
+             placeholder="e.g., Bachelor of Science in Computer Science"
+             required>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-xs font-medium text-gray-600 mb-1">Major</label>
+        <input type="text"
+               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+               ng-model="vm.model.strMajor"
+               placeholder="e.g., Data Science">
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-gray-600 mb-1">School</label>
+        <input type="text"
+               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+               ng-model="vm.model.school"
+               placeholder="e.g., Computing">
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-xs font-medium text-gray-600 mb-1">Short Name</label>
+        <input type="text"
+               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+               ng-model="vm.model.short_name"
+               placeholder="e.g., CS">
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-gray-600 mb-1">Default Curriculum ID</label>
+        <input type="number"
+               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+               ng-model="vm.model.default_curriculum"
+               min="0"
+               placeholder="e.g., 12">
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-xs font-medium text-gray-600 mb-1">Campus ID</label>
+        <input type="number"
+               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+               ng-model="vm.model.campus_id"
+               min="0"
+               placeholder="e.g., 1 (optional)">
+      </div>
+      <div class="flex items-end">
+        <label class="inline-flex items-center space-x-2">
+          <input type="checkbox"
+                 class="form-checkbox h-4 w-4 text-blue-600"
+                 ng-model="vm.model.enumEnabled">
+          <span class="text-sm text-gray-700">Enabled</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex items-center justify-end space-x-3 pt-2">
+      <button type="button"
+              class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md text-sm bg-white hover:bg-gray-50"
+              ng-click="vm.cancel()">
+        Cancel
+      </button>
+      <button type="submit"
+              class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              ng-disabled="vm.loading">
+        <i class="fas fa-save mr-2"></i>{{ vm.isEdit ? 'Update' : 'Create' }}
+      </button>
+    </div>
+
+    <!-- Loading indicator -->
+    <div ng-if="vm.loading" class="text-sm text-gray-500">
+      <i class="fas fa-spinner fa-spin mr-1"></i> Saving...
+    </div>
+  </form>
+</div>

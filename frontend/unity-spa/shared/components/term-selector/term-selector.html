@@ -1,0 +1,119 @@
+<div class="term-selector relative" ng-class="{'compact': vm.compact}">
+  <!-- Label (optional) -->
+  <div ng-if="vm.showLabel && !vm.compact" class="text-sm font-medium text-gray-700 mb-2">
+    Academic Term
+  </div>
+
+  <!-- Loading State -->
+  <div ng-if="vm.loading" class="flex items-center space-x-2 p-2 text-sm text-gray-500">
+    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+    <span>Loading terms...</span>
+  </div>
+
+  <!-- Error State -->
+  <div ng-if="vm.error && !vm.loading" class="p-2 text-sm text-red-600 bg-red-50 rounded border border-red-200">
+    <div class="flex items-center justify-between">
+      <span>{{ vm.error }}</span>
+      <button ng-click="vm.refresh()" class="text-red-700 hover:text-red-800 underline text-xs">
+        Retry
+      </button>
+    </div>
+  </div>
+
+  <!-- Term Selector -->
+  <div ng-if="!vm.loading && !vm.error" class="relative">
+    <!-- Selected Term Display / Dropdown Trigger -->
+    <button 
+      ng-click="vm.toggleDropdown()" 
+      class="w-full flex items-center justify-between px-3 py-2 text-left bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+      ng-class="{
+        'text-sm': vm.compact,
+        'text-base': !vm.compact,
+        'ring-2 ring-blue-500 border-blue-500': vm.dropdownOpen
+      }"
+    >
+      <div class="flex-1 min-w-0">
+        <div ng-if="vm.selectedTerm" class="truncate">
+          <span class="font-medium">{{ vm.selectedTerm.label }}</span>
+          <span ng-if="!vm.compact" class="text-gray-500 text-xs block">
+            {{ vm.selectedTerm.enumSem }} {{ vm.selectedTerm.term_label }} {{ vm.selectedTerm.strYearStart }}-{{ vm.selectedTerm.strYearEnd }}
+          </span>
+        </div>
+        <div ng-if="!vm.selectedTerm" class="text-gray-400">
+          Select a term...
+        </div>
+      </div>
+      <div class="ml-2 flex-shrink-0">
+        <svg class="h-4 w-4 text-gray-400 transition-transform duration-200" 
+             ng-class="{'rotate-180': vm.dropdownOpen}"
+             fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </div>
+    </button>
+
+    <!-- Dropdown Menu -->
+    <div ng-if="vm.dropdownOpen" 
+         class="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
+      
+      <!-- No terms available -->
+      <div ng-if="!vm.availableTerms.length" class="px-3 py-2 text-sm text-gray-500">
+        No terms available
+      </div>
+
+      <!-- Term Options -->
+      <div ng-if="vm.availableTerms.length" class="py-1">
+        <button
+          ng-repeat="term in vm.availableTerms track by term.intID"
+          ng-click="vm.selectTerm(term)"
+          class="w-full text-left px-3 py-2 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none transition-colors duration-150"
+          ng-class="{
+            'bg-blue-50 text-blue-700': vm.selectedTerm && term.intID === vm.selectedTerm.intID,
+            'text-gray-900': !vm.selectedTerm || term.intID !== vm.selectedTerm.intID
+          }"
+        >
+          <div class="font-medium">{{ term.label }}</div>
+          <div ng-if="!vm.compact" class="text-xs text-gray-500">
+            {{ term.enumSem }} {{ term.term_label }} {{ term.strYearStart }}-{{ term.strYearEnd }}
+            <span ng-if="term.term_student_type" class="ml-1">({{ term.term_student_type }})</span>
+          </div>
+        </button>
+      </div>
+
+      <!-- Refresh Option -->
+      <div class="border-t border-gray-200 py-1">
+        <button
+          ng-click="vm.refresh()"
+          class="w-full text-left px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none transition-colors duration-150"
+        >
+          <div class="flex items-center space-x-2">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            </svg>
+            <span>Refresh terms</span>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Compact mode styles -->
+<style>
+.term-selector.compact .truncate {
+  max-width: 150px;
+}
+
+.term-selector .animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.term-selector .rotate-180 {
+  transform: rotate(180deg);
+}
+</style>

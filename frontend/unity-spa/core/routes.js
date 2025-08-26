@@ -1,0 +1,136 @@
+(function () {
+  'use strict';
+
+  angular
+    .module('unityApp')
+    .config(configure);
+
+  configure.$inject = ['$routeProvider', '$locationProvider'];
+  function configure($routeProvider, $locationProvider) {
+    $routeProvider
+      .when('/login', {
+        templateUrl: 'features/auth/login.html',
+        controller: 'LoginController',
+        controllerAs: 'vm'
+      })
+      .when('/dashboard', {
+        templateUrl: 'features/dashboard/dashboard.html',
+        controller: 'DashboardController',
+        controllerAs: 'vm'
+      })
+      .when('/faculty/profile', {
+        templateUrl: 'features/faculty/profile.html',
+        controller: 'FacultyProfileController',
+        controllerAs: 'vm',
+        requiredRoles: ['faculty', 'admin']
+      })
+      .when('/faculty/settings', {
+        templateUrl: 'features/faculty/settings.html',
+        controller: 'FacultySettingsController',
+        controllerAs: 'vm',
+        requiredRoles: ['faculty', 'admin']
+      })
+      .when('/faculty/classes', {
+        templateUrl: 'features/faculty/classes.html',
+        controller: 'FacultyClassesController',
+        controllerAs: 'vm',
+        requiredRoles: ['faculty', 'admin']
+      })
+      .when('/registrar/reports', {
+        templateUrl: 'features/registrar/reports.html',
+        controller: 'ReportsController',
+        controllerAs: 'vm',
+        requiredRoles: ['registrar', 'admin']
+      })
+      .when('/finance/ledger', {
+        templateUrl: 'features/finance/ledger.html',
+        controller: 'FinanceLedgerController',
+        controllerAs: 'vm',
+        requiredRoles: ['finance', 'admin']
+      })
+      .when('/scholarship/students', {
+        templateUrl: 'features/scholarship/students.html',
+        controller: 'ScholarshipStudentsController',
+        controllerAs: 'vm',
+        requiredRoles: ['scholarship', 'admin']
+      })
+      .when('/students', {
+        templateUrl: 'features/students/students.html',
+        controller: 'StudentsController',
+        controllerAs: 'vm',
+        requiredRoles: ['registrar', 'scholarship', 'finance', 'admin']
+      })
+      .when('/students/:id', {
+        templateUrl: 'features/students/viewer.html',
+        controller: 'StudentViewerController',
+        controllerAs: 'vm',
+        requiredRoles: ['registrar', 'scholarship', 'finance', 'admin']
+      })
+      .when('/admissions/apply', {
+        templateUrl: 'features/admissions/apply.html',
+        controller: 'AdmissionsApplyController',
+        controllerAs: 'vm'
+      })
+      .when('/admissions/success', {
+        templateUrl: 'features/admissions/success.html'
+      })
+
+      /* Campuses CRUD */
+      .when('/campuses', {
+        templateUrl: 'features/campuses/campuses.html',
+        controller: 'CampusesController',
+        controllerAs: 'vm',
+        requiredRoles: ['campus_admin', 'admin']
+      })
+      .when('/campuses/add', {
+        templateUrl: 'features/campuses/campus-edit.html',
+        controller: 'CampusEditController',
+        controllerAs: 'vm',
+        requiredRoles: ['campus_admin', 'admin']
+      })
+      .when('/campuses/:id/edit', {
+        templateUrl: 'features/campuses/campus-edit.html',
+        controller: 'CampusEditController',
+        controllerAs: 'vm',
+        requiredRoles: ['campus_admin', 'admin']
+      })
+
+      /* Programs CRUD */
+      .when('/programs', {
+        templateUrl: 'features/programs/list.html',
+        controller: 'ProgramsListController',
+        controllerAs: 'vm',
+        requiredRoles: ['registrar', 'admin']
+      })
+      .when('/programs/add', {
+        templateUrl: 'features/programs/edit.html',
+        controller: 'ProgramEditController',
+        controllerAs: 'vm',
+        requiredRoles: ['registrar', 'admin']
+      })
+      .when('/programs/:id/edit', {
+        templateUrl: 'features/programs/edit.html',
+        controller: 'ProgramEditController',
+        controllerAs: 'vm',
+        requiredRoles: ['registrar', 'admin']
+      })
+
+      .when('/roles', {
+        templateUrl: 'features/roles/roles.html',
+        controller: 'RolesController',
+        controllerAs: 'vm',
+        requiredRoles: ['admin']
+      })
+      .when('/logs', {
+        templateUrl: 'features/logs/logs.html',
+        controller: 'SystemLogsController',
+        controllerAs: 'vm',
+        requiredRoles: ['admin']
+      })
+      .otherwise({ redirectTo: '/login' });
+
+    // Keep hashbang routing for simple static hosting
+    $locationProvider.hashPrefix('');
+  }
+
+})();

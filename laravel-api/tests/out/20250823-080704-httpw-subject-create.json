@@ -1,0 +1,5 @@
+﻿{
+    "status":  200,
+    "body":  "{\r\n    \"success\":  true,\r\n    \"message\":  \"Success\",\r\n    \"newid\":  227\r\n}",
+    "ts":  "2025-08-23T08:07:04.4875343+08:00"
+}

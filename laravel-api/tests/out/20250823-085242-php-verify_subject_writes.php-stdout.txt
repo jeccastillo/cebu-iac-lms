@@ -1,0 +1,6 @@
+﻿subject_code=ZZTEST101
+status=missing_new_subject
+subject_first=1
+room_first=99999
+status=missing_new_subject
+

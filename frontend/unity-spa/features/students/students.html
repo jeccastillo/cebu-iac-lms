@@ -1,0 +1,264 @@
+<div class="space-y-6" ng-cloak>
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-semibold text-gray-800">
+      <i class="fas fa-user-graduate mr-2 text-blue-600"></i>
+      {{ vm.title }}
+    </h1>
+    <div class="text-sm text-gray-500">
+      <span class="mr-2">Total:</span>
+      <span class="font-semibold">{{ vm.total | number }}</span>
+    </div>
+  </div>
+
+  <!-- Advanced Search -->
+  <div class="bg-white shadow rounded">
+    <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+      <h2 class="text-lg font-medium text-gray-700">
+        <i class="fas fa-search mr-2"></i> Advanced Search
+      </h2>
+    </div>
+    <div class="p-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+
+        <!-- Program -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">By Program</label>
+          <select class="w-full border rounded px-3 py-2"
+                  ng-model="vm.filters.program"
+                  ng-options="p.id as p.title for p in vm.programs">
+            <option value="0">-----------------SELECT---------------</option>
+          </select>
+        </div>
+
+        <!-- Academic Status (placeholder not wired to API yet) -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">By Academic Status</label>
+          <select class="w-full border rounded px-3 py-2" ng-model="vm.filters.academicStatus">            
+            <option value="1">regular</option>
+            <option value="2">irregular</option>
+            <option value="3">new student</option>
+          </select>
+          <p class="text-xs text-gray-400 mt-1">Note: not yet applied in API.</p>
+        </div>
+
+        <!-- Year Level -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">By Year Level</label>
+          <select class="w-full border rounded px-3 py-2" ng-model="vm.filters.year_level">            
+            <option value="1">1st</option>
+            <option value="2">2nd</option>
+            <option value="3">3rd</option>
+            <option value="4">4th</option>
+            <option value="5">5th</option>
+          </select>
+        </div>
+
+        <!-- Gender -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">By Gender</label>
+          <select class="w-full border rounded px-3 py-2" ng-model="vm.filters.gender">            
+            <option value="1">male</option>
+            <option value="2">female</option>
+          </select>
+        </div>
+
+        <!-- Graduated -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Graduated</label>
+          <select class="w-full border rounded px-3 py-2" ng-model="vm.filters.graduated">            
+            <option value="1">yes</option>
+            <option value="2">no</option>
+          </select>
+        </div>
+
+        <!-- Enrollment Status -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Enrollment Status</label>
+          <select class="w-full border rounded px-3 py-2" ng-model="vm.filters.registered">            
+            <option value="1">enlisted</option>
+            <option value="2">enrolled</option>
+          </select>
+        </div>
+
+        <!-- Active Student -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Active Student</label>
+          <select class="w-full border rounded px-3 py-2" ng-model="vm.filters.inactive">
+            <option value="active">active</option>
+            <option value="inactive">inactive</option>
+            <option value="loa">loa</option>
+            <option value="awol">awol</option>
+          </select>
+        </div>
+
+        <!-- Student Type (placeholder not wired to API yet) -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Student Type</label>
+          <select class="w-full border rounded px-3 py-2" ng-model="vm.filters.level">            
+            <option value="1">shs</option>
+            <option value="2">college</option>
+            <option value="3">other</option>
+            <option value="4">drive</option>
+          </select>
+          <p class="text-xs text-gray-400 mt-1">Note: not yet applied in API.</p>
+        </div>
+
+        <!-- Sem for Registered filter -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Sem (SY ID) for Enrollment Filter</label>
+          <select class="w-full border rounded px-3 py-2"
+                  ng-model="vm.filters.sem"
+                  ng-options="t.intID as t.label for t in vm.terms">            
+          </select>
+          <p class="text-xs text-gray-400 mt-1">Required when Enrollment Status is set.</p>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <button class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded"
+                ng-click="vm.page = 1; vm.search()">
+          <i class="fas fa-search mr-2"></i> Search
+        </button>
+        <span class="ml-3 text-sm text-gray-500" ng-if="vm.loading">
+          <i class="fas fa-spinner fa-spin mr-1"></i> Loading...
+        </span>
+        <span class="ml-3 text-sm text-red-600" ng-if="vm.error">{{ vm.error }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="bg-white shadow rounded">
+    <div class="px-4 py-3 border-b border-gray-200">
+      <h2 class="text-lg font-medium text-gray-700">
+        <i class="fas fa-list mr-2"></i> List of Students
+      </h2>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student Number</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Name</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">First Name</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Middle Name</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Program</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year Level</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student Level</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+          </tr>
+          <tr>
+            <th class="px-3 py-1">
+              <input type="text" class="w-full border rounded px-2 py-1 text-xs" placeholder="Search SN"
+                     ng-model="vm.cf.student_number" />
+            </th>
+            <th class="px-3 py-1">
+              <input type="text" class="w-full border rounded px-2 py-1 text-xs" placeholder="Search Last Name"
+                     ng-model="vm.cf.last_name" />
+            </th>
+            <th class="px-3 py-1">
+              <input type="text" class="w-full border rounded px-2 py-1 text-xs" placeholder="Search First Name"
+                     ng-model="vm.cf.first_name" />
+            </th>
+            <th class="px-3 py-1">
+              <input type="text" class="w-full border rounded px-2 py-1 text-xs" placeholder="Search Middle Name"
+                     ng-model="vm.cf.middle_name" />
+            </th>
+            <th class="px-3 py-1">
+              <input type="text" class="w-full border rounded px-2 py-1 text-xs" placeholder="Search Program"
+                     ng-model="vm.cf.program" />
+            </th>
+            <th class="px-3 py-1">
+              <input type="text" class="w-full border rounded px-2 py-1 text-xs" placeholder="Search Year Level"
+                     ng-model="vm.cf.year_level" />
+            </th>
+            <th class="px-3 py-1">
+              <input type="text" class="w-full border rounded px-2 py-1 text-xs" placeholder="Search Status"
+                     ng-model="vm.cf.status" />
+            </th>
+            <th class="px-3 py-1">
+              <input type="text" class="w-full border rounded px-2 py-1 text-xs" placeholder="Search Student Level"
+                     ng-model="vm.cf.student_level" />
+            </th>
+            <th class="px-3 py-1"></th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200" ng-if="vm.filteredRows().length">
+          <tr ng-repeat="r in vm.filteredRows() track by r.id">
+            <td class="px-3 py-2 text-sm text-gray-900">{{ r.student_number }}</td>
+            <td class="px-3 py-2 text-sm text-blue-700">
+              <a class="hover:underline" ng-href="{{ vm.viewerUrl(r) }}">{{ r.last_name }}</a>
+            </td>
+            <td class="px-3 py-2 text-sm text-gray-900">{{ r.first_name }}</td>
+            <td class="px-3 py-2 text-sm text-gray-900">{{ r.middle_name }}</td>
+            <td class="px-3 py-2 text-sm text-gray-900">{{ r.program }}</td>
+            <td class="px-3 py-2 text-sm text-gray-900">{{ r.year_level || '-' }}</td>
+            <td class="px-3 py-2 text-sm text-gray-900">{{ r.status || '-' }}</td>
+            <td class="px-3 py-2 text-sm text-gray-900">{{ r.student_level || '-' }}</td>
+            <td class="px-3 py-2 text-sm">
+              <div class="relative inline-block text-left">
+                <button type="button"
+                        class="px-2 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded inline-flex items-center"
+                        ng-click="vm.toggleMenu(r.id)">
+                  <i class="fas fa-ellipsis-h mr-1"></i>
+                  <span>Actions</span>
+                  <span class="ml-1 inline-block transition-transform" style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid currentColor;" ng-class="{'transform rotate-180': vm.isMenuOpen(r.id)}"></span>
+                </button>
+                <div ng-if="vm.isMenuOpen(r.id)"
+                     class="origin-top-right absolute right-0 mt-1 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
+                  <div class="py-1">
+                    <a class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                       ng-click="vm.closeMenu()"
+                       ng-href="{{ vm.editUrl(r.id) }}">Edit</a>
+                    <a class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                       ng-click="vm.closeMenu()"
+                       ng-href="{{ vm.viewerUrl(r) }}">Viewer</a>
+                    <a class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                       ng-click="vm.closeMenu()"
+                       ng-href="{{ vm.financesUrl(r.id) }}">Finances</a>
+                    <a class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                       ng-click="vm.closeMenu()"
+                       ng-href="{{ vm.applicantTxUrl(r.student_number) }}">Applicant Tx</a>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+        <tbody ng-if="!vm.filteredRows().length && !vm.loading">
+          <tr>
+            <td colspan="9" class="px-3 py-6 text-center text-sm text-gray-500">
+              No results
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="px-4 py-3 border-t border-gray-200 flex items-center justify-between">
+      <div class="text-sm text-gray-600">
+        Page {{ vm.page }} of {{ (vm.total / vm.perPage) | ceil }}
+      </div>
+      <div class="space-x-2">
+        <button class="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded disabled:opacity-50"
+                ng-disabled="vm.page <= 1"
+                ng-click="vm.prevPage()">
+          Prev
+        </button>
+        <button class="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded disabled:opacity-50"
+                ng-disabled="vm.page >= Math.max(1, Math.ceil(vm.total / vm.perPage))"
+                ng-click="vm.nextPage()">
+          Next
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick link back to legacy page (optional) -->
+  <div class="text-right">
+    <a class="text-sm text-blue-600 hover:underline" ng-href="{{ vm.links.unity }}">Go to legacy Unity</a>
+  </div>
+</div>
+

@@ -1,0 +1,28 @@
+﻿subject_first=1
+room_first=99999
+program_id_first=2
+subject_code=ZZTEST250823004022
+create.status=302
+create.error=
+create.body=<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="refresh" content="0;url='http://127.0.0.1:8000'" />
+
+        <title>Redirecting to http://127.0.0.1:8000</title>
+    </head>
+    <body>
+        Redirecting to <a href="http://127.0.0.1:8000">http://127.0.0.1:8000</a>.
+    </body>
+</html>
+new_subject_id=0
+submit_days.status=200
+submit_days.error=
+submit_days.body={"success":true,"message":"Success"}
+submit_room.status=200
+submit_room.error=
+submit_room.body={"success":true,"message":"Success"}
+checks={"edit_desc_ok":0,"equivalents":0,"days_total":2,"days_has_1_3":1,"days_has_2_4":1,"room_linked":1,"prereq":0}
+status=ok
+

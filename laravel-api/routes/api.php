@@ -1,0 +1,170 @@
+<?php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\ProgramController;
+use App\Http\Controllers\Api\V1\PortalController;
+use App\Http\Controllers\Api\V1\UsersController;
+use App\Http\Controllers\Api\V1\SubjectController;
+use App\Http\Controllers\Api\V1\TuitionYearController;
+use App\Http\Controllers\Api\V1\CurriculumController;
+use App\Http\Controllers\Api\V1\StudentController;
+use App\Http\Controllers\Api\V1\RegistrarController;
+use App\Http\Controllers\Api\V1\FinanceController;
+use App\Http\Controllers\Api\V1\ScholarshipController;
+use App\Http\Controllers\Api\V1\UnityController;
+use App\Http\Controllers\Api\V1\GenericApiController;
+use App\Http\Controllers\Api\V1\AdmissionsController;
+use App\Http\Controllers\Api\V1\CampusController;
+use App\Http\Controllers\Api\V1\RoleController;
+use App\Http\Controllers\Api\V1\SystemLogController;
+
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "api" middleware group. Make something great!
+|
+*/
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+Route::prefix('v1')->group(function () {
+    Route::get('/health', function () {
+        return response()->json([
+            'success' => true,
+            'service' => 'laravel-api',
+            'version' => 'v1'
+        ]);
+    });
+
+    Route::get('/programs', [ProgramController::class, 'index']);
+    Route::get('/programs/{id}', [ProgramController::class, 'show']);
+    Route::post('/programs', [ProgramController::class, 'store'])->middleware('role:registrar,admin');
+    Route::put('/programs/{id}', [ProgramController::class, 'update'])->middleware('role:registrar,admin');
+    Route::delete('/programs/{id}', [ProgramController::class, 'destroy'])->middleware('role:registrar,admin');
+
+    // Campus CRUD
+    Route::get('/campuses', [CampusController::class, 'index']);
+    Route::get('/campuses/{id}', [CampusController::class, 'show']);
+    Route::post('/campuses', [CampusController::class, 'store'])->middleware('role:admin');
+    Route::put('/campuses/{id}', [CampusController::class, 'update'])->middleware('role:admin');
+    Route::delete('/campuses/{id}', [CampusController::class, 'destroy'])->middleware('role:admin');
+
+    // Roles management
+    Route::get('/roles', [RoleController::class, 'index'])->middleware('role:admin');
+    Route::post('/roles', [RoleController::class, 'store'])->middleware('role:admin');
+    Route::put('/roles/{id}', [RoleController::class, 'update'])->middleware('role:admin');
+    Route::delete('/roles/{id}', [RoleController::class, 'destroy'])->middleware('role:admin');
+
+    // Faculty role assignment
+    Route::get('/faculty/{id}/roles', [RoleController::class, 'facultyRoles'])->middleware('role:admin');
+    Route::post('/faculty/{id}/roles', [RoleController::class, 'assignFacultyRoles'])->middleware('role:admin');
+    Route::delete('/faculty/{id}/roles/{roleId}', [RoleController::class, 'removeFacultyRole'])->middleware('role:admin');
+
+    // Admissions - application submission
+    Route::post('/admissions/student-info', [AdmissionsController::class, 'store']);
+
+    // Portal endpoints (CI parity)
+    Route::post('/portal/save-token', [PortalController::class, 'saveToken']);
+    Route::get('/portal/active-programs', [PortalController::class, 'activePrograms']);
+    Route::post('/portal/student-data', [PortalController::class, 'studentData']);
+
+    // Users endpoints (CI parity)
+    Route::post('/users/auth', [UsersController::class, 'auth']);
+    Route::post('/users/auth-student', [UsersController::class, 'authStudent']);
+    Route::post('/users/register', [UsersController::class, 'register']);
+    Route::post('/users/forgot', [UsersController::class, 'forgot']);
+    Route::post('/users/password-reset', [UsersController::class, 'passwordReset']);
+    Route::post('/users/logout', [UsersController::class, 'logout']);
+    // Diagnostics helper (non-production): verify existence and password format
+    Route::get('/users/debug-auth', [UsersController::class, 'debugAuth']);
+
+    // Subject endpoints (read + write parity)
+    Route::get('/subjects', [SubjectController::class, 'index']);
+    Route::get('/subjects/by-curriculum', [SubjectController::class, 'byCurriculum']);
+    Route::get('/subjects/{id}', [SubjectController::class, 'show']);
+
+    // write operations (CI parity)
+    Route::post('/subjects/submit', [SubjectController::class, 'submit'])->middleware('role:registrar,admin');
+    Route::post('/subjects/edit', [SubjectController::class, 'edit'])->middleware('role:registrar,admin');
+    Route::post('/subjects/submit-eq', [SubjectController::class, 'submitEq'])->middleware('role:registrar,admin');
+    Route::post('/subjects/submit-days', [SubjectController::class, 'submitDays'])->middleware('role:registrar,admin');
+    Route::post('/subjects/submit-room', [SubjectController::class, 'submitRoom'])->middleware('role:registrar,admin');
+    Route::post('/subjects/submit-prereq', [SubjectController::class, 'submitPrereq'])->middleware('role:registrar,admin');
+    Route::post('/subjects/delete-prereq', [SubjectController::class, 'deletePrereq'])->middleware('role:registrar,admin');
+    Route::post('/subjects/delete', [SubjectController::class, 'delete'])->middleware('role:registrar,admin');
+
+    // Tuition Year endpoints (read + write parity)
+    Route::get('/tuition-years', [TuitionYearController::class, 'index']);
+    Route::get('/tuition-years/{id}', [TuitionYearController::class, 'show']);
+    Route::get('/tuition-years/{id}/misc', [TuitionYearController::class, 'misc']);
+    Route::get('/tuition-years/{id}/lab-fees', [TuitionYearController::class, 'labFees']);
+    Route::get('/tuition-years/{id}/tracks', [TuitionYearController::class, 'tracks']);
+    Route::get('/tuition-years/{id}/programs', [TuitionYearController::class, 'programs']);
+    Route::get('/tuition-years/{id}/electives', [TuitionYearController::class, 'electives']);
+
+    // write operations
+    Route::post('/tuition-years/add', [TuitionYearController::class, 'add'])->middleware('role:registrar,admin');
+    Route::post('/tuition-years/finalize', [TuitionYearController::class, 'finalize'])->middleware('role:registrar,admin');
+    Route::post('/tuition-years/submit-extra', [TuitionYearController::class, 'submitExtra'])->middleware('role:registrar,admin');
+    Route::post('/tuition-years/delete-type', [TuitionYearController::class, 'deleteType'])->middleware('role:registrar,admin');
+    Route::post('/tuition-years/delete', [TuitionYearController::class, 'delete'])->middleware('role:registrar,admin');
+    Route::post('/tuition-years/duplicate', [TuitionYearController::class, 'duplicate'])->middleware('role:registrar,admin');
+
+    // Curriculum endpoints (read + write)
+    Route::get('/curriculum', [CurriculumController::class, 'index']);
+    Route::get('/curriculum/{id}', [CurriculumController::class, 'show']);
+    Route::get('/curriculum/{id}/subjects', [CurriculumController::class, 'subjects']);
+    Route::post('/curriculum', [CurriculumController::class, 'store'])->middleware('role:registrar,admin');
+    Route::put('/curriculum/{id}', [CurriculumController::class, 'update'])->middleware('role:registrar,admin');
+    Route::delete('/curriculum/{id}', [CurriculumController::class, 'destroy'])->middleware('role:registrar,admin');
+    Route::post('/curriculum/{id}/subjects', [CurriculumController::class, 'addSubject'])->middleware('role:registrar,admin');
+    Route::delete('/curriculum/{id}/subjects/{subjectId}', [CurriculumController::class, 'removeSubject'])->middleware('role:registrar,admin');
+
+    // Student endpoints (baseline)
+    Route::get('/students', [StudentController::class, 'index']);
+    Route::post('/student/viewer', [StudentController::class, 'viewer']);
+    Route::post('/student/balances', [StudentController::class, 'balances']);
+    Route::post('/student/records', [StudentController::class, 'records']);
+    Route::post('/student/records-by-term', [StudentController::class, 'recordsByTerm']);
+    Route::post('/student/ledger', [StudentController::class, 'ledger']);
+
+    // Registrar endpoints (baseline)
+    Route::post('/registrar/daily-enrollment', [RegistrarController::class, 'dailyEnrollment']);
+    Route::get('/registrar/grading/meta', [RegistrarController::class, 'gradingMeta']);
+    Route::get('/registrar/grading/sections', [RegistrarController::class, 'gradingSections']);
+    Route::post('/registrar/grading/results', [RegistrarController::class, 'gradingResults']);
+    Route::get('/registrar/classlist/{id}/submitted', [RegistrarController::class, 'classlistSubmitted']);
+
+    // Finance endpoints (baseline)
+    Route::get('/finance/transactions', [FinanceController::class, 'transactions']);
+    Route::get('/finance/or-lookup', [FinanceController::class, 'orLookup']);
+
+    // Scholarship endpoints (read-only baseline)
+    Route::get('/scholarships', [ScholarshipController::class, 'index']);
+    Route::get('/scholarships/assigned', [ScholarshipController::class, 'assigned']);
+    Route::get('/scholarships/enrolled', [ScholarshipController::class, 'enrolled']);
+    // write stubs for parity (return 501 Not Implemented)
+    Route::post('/scholarships/upsert', [ScholarshipController::class, 'upsert'])->middleware('role:scholarship,admin');
+    Route::delete('/scholarships/{id}', [ScholarshipController::class, 'delete'])->middleware('role:scholarship,admin');
+
+    // Unity endpoints (baseline scaffold)
+    Route::post('/unity/advising', [UnityController::class, 'advising']);
+    Route::post('/unity/enlist', [UnityController::class, 'enlist']);
+    Route::post('/unity/tag-status', [UnityController::class, 'tagStatus']);
+    Route::post('/unity/tuition-preview', [UnityController::class, 'tuitionPreview']);
+
+    // Generic API endpoints
+    Route::get('/generic/faculty', [GenericApiController::class, 'faculty']);
+    Route::get('/generic/terms', [GenericApiController::class, 'terms']);
+    Route::get('/generic/active-term', [GenericApiController::class, 'activeTerm']);
+
+    // System logs (admin)
+    Route::get('/system-logs', [SystemLogController::class, 'index'])->middleware('role:admin');
+});

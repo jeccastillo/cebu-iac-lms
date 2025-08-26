@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="unityApp">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>iACADEMY SMS - Unity SPA</title>
+
+  <!-- Tailwind CSS via CDN (ok for dev; replace for production) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome for icons used in templates -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-jLKHWMZtY8QxB8T0ZVvQbFJ6rVhUxGJPD7WvVManIeZDV4mQdlqzTeWY5Avzkdx6" crossorigin="anonymous">
+
+  <!-- AngularJS 1.x and ngRoute -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular-route.min.js"></script>
+
+  <!-- Runtime base/config bootstrap -->
+  <script>
+    (function () {
+      // Compute base root of this project when served from XAMPP or any subfolder.
+      // If this file is served from /iacademy/cebu-iac-lms/frontend/unity-spa/index.html
+      // then baseRoot => /iacademy/cebu-iac-lms
+      var path = window.location.pathname || '/';
+      var parts = path.split('/');
+      // remove last 3 segments: 'frontend', 'unity-spa', and file/empty
+      var trimmed = parts;
+      if (trimmed.length >= 3) {
+        trimmed = parts.slice(0, parts.length - 3);
+      }
+      var baseRoot = trimmed.join('/') || '/';
+      if (baseRoot.length > 1) {
+        baseRoot = baseRoot.replace(/\/+$/, '');
+      }
+
+      var defaultApi = (baseRoot === '/' ? '' : baseRoot) + '/laravel-api/public/api/v1';
+
+      // Base URL of the Laravel API v1. Can be overridden by setting window.API_BASE before this script.
+      window.API_BASE = window.API_BASE || defaultApi;
+
+      // Optional: redirects after successful login (if served under same host)
+      window.AFTER_LOGIN_REDIRECTS = window.AFTER_LOGIN_REDIRECTS || {
+        faculty: (baseRoot === '/' ? '' : baseRoot) + '/unity',
+        student: (baseRoot === '/' ? '' : baseRoot) + '/portal'
+      };
+
+      // Control whether to use redirects above or show a local dashboard
+      window.LOGIN_APP_CONFIG = Object.assign(
+        { useRedirects: false },
+        window.LOGIN_APP_CONFIG || {}
+      );
+    })();
+  </script>
+
+  <!-- RBAC role overrides -->
+  <script>
+    // Frontend-only role mapping for specific users. This augments (not replaces) any existing map.
+    window.USER_ROLE_MAP = Object.assign({}, window.USER_ROLE_MAP || {}, {
+      'smssuperadmin': ['admin']
+    });
+  </script>
+
+  <!-- Core app files -->
+  <script src="core/app.module.js"></script>
+  <script src="core/filters.js"></script>
+  <script src="core/constants.js"></script>
+  <script src="core/roles.constants.js"></script>
+  <script src="core/role.service.js"></script>
+  <script src="core/link.service.js"></script>
+  <script src="core/storage.service.js"></script>
+  <script src="core/campus.service.js"></script>
+  <script src="core/term.service.js"></script>
+  <script src="core/routes.js"></script>
+  <script src="core/run.js"></script>
+
+  <!-- Shared components -->
+  <script src="shared/components/header/header.controller.js"></script>
+  <script src="shared/components/header/header.directive.js"></script>
+  <!-- Campus selector (used inside sidebar) -->
+  <script src="shared/components/campus-selector/campus-selector.controller.js"></script>
+  <script src="shared/components/campus-selector/campus-selector.directive.js"></script>
+  <!-- Term selector (used inside sidebar) -->
+  <script src="shared/components/term-selector/term-selector.controller.js"></script>
+  <script src="shared/components/term-selector/term-selector.directive.js"></script>
+  <!-- Sidebar component -->
+  <script src="shared/components/sidebar/sidebar.controller.js"></script>
+  <script src="shared/components/sidebar/sidebar.directive.js"></script>
+
+  <!-- Features -->
+  <script src="features/auth/auth.service.js"></script>
+  <script src="features/auth/login.controller.js"></script>
+
+  <script src="features/dashboard/dashboard.controller.js"></script>
+
+  <script src="features/faculty/profile.controller.js"></script>
+  <script src="features/faculty/settings.controller.js"></script>
+  <script src="features/faculty/classes.controller.js"></script>
+
+  <!-- Registrar/Finance/Scholarship placeholders -->
+  <script src="features/registrar/reports.controller.js"></script>
+  <script src="features/finance/ledger.controller.js"></script>
+  <script src="features/scholarship/students.controller.js"></script>
+  <script src="features/students/students.controller.js"></script>
+  <script src="features/students/viewer.controller.js"></script>
+  <!-- Admissions application feature -->
+  <script src="features/admissions/apply.controller.js"></script>
+
+  <!-- Campuses feature -->
+  <script src="features/campuses/campuses.service.js"></script>
+  <script src="features/campuses/campuses.controller.js"></script>
+  <script src="features/campuses/campus-edit.controller.js"></script>
+
+  <!-- Programs feature -->
+  <script src="features/programs/programs.service.js"></script>
+  <script src="features/programs/programs.controller.js"></script>
+
+  <!-- Roles admin feature -->
+  <script src="features/roles/roles.service.js"></script>
+  <script src="features/roles/roles.controller.js"></script>
+
+  <!-- System Logs feature -->
+  <script src="features/logs/logs.service.js"></script>
+  <script src="features/logs/logs.controller.js"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <!-- Global header -->
+  <app-header></app-header>
+
+  <!-- Sidebar -->
+  <app-sidebar></app-sidebar>
+
+  <!-- Route outlet -->
+  <div class="main-content container mx-auto px-4 py-10">
+    <div ng-view></div>
+  </div>
+</body>
+</html>

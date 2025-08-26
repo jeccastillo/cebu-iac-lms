@@ -1,0 +1,5 @@
+﻿{
+    "status":  200,
+    "body":  "{\r\n    \"success\":  true,\r\n    \"service\":  \"laravel-api\",\r\n    \"version\":  \"v1\"\r\n}",
+    "ts":  "2025-08-22T23:52:43.4509508+08:00"
+}

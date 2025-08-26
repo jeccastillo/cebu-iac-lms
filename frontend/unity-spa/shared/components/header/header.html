@@ -1,0 +1,35 @@
+<!-- Top Nav Header (modeled after CI views/common/header.php) -->
+<div class="bg-white border-b border-gray-200">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-6">
+    <div></div>
+    <div class="flex items-center gap-4">
+      <button type="button"
+              class="text-sm text-blue-600 hover:text-blue-700"
+              ng-click="vm.goToEmployeePortal()">
+        Employee Portal
+      </button>
+      <div class="relative" 
+           ng-mouseleave="vm.scheduleCloseUserMenu()" 
+           ng-mouseenter="vm.cancelCloseUserMenu()">
+        <button type="button" 
+                class="flex items-center gap-2 text-sm text-gray-700 hover:text-gray-900" 
+                ng-click="vm.toggleUserMenu()">
+          <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 text-gray-600">
+            <span class="fas fa-user"></span>
+          </span>
+          <span ng-if="vm.state && vm.state.username">{{ vm.state.username }}</span>
+          <span ng-if="!vm.state">Guest</span>
+          <span class="fas fa-caret-down"></span>
+        </button>
+        <div class="absolute right-0 mt-2 w-48 bg-white border rounded shadow z-10" 
+             ng-show="vm.userMenuOpen"
+             ng-mouseenter="vm.cancelCloseUserMenu()"
+             ng-mouseleave="vm.scheduleCloseUserMenu()">
+          <a class="block px-4 py-2 text-sm hover:bg-gray-50" href="#!/faculty/profile">My Profile</a>
+          <a class="block px-4 py-2 text-sm hover:bg-gray-50" href="#!/faculty/settings">Edit Profile</a>
+          <button class="w-full text-left px-4 py-2 text-sm hover:bg-gray-50" ng-click="vm.logout()">Sign out</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

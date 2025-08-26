@@ -1,54 +1,41 @@
-# Enhanced Faculty Dashboard Implementation
+# Fix vm.toggleUserMenu() Issue
 
-## Progress Tracker
+## Problem
+The user dropdown menu appears but disappears immediately when trying to click menu items due to `ng-mouseleave` triggering when mouse moves from button to dropdown.
 
-### ✅ Completed Steps:
-1. ✅ Analyzed existing faculty_dashboard function in Unity.php
-2. ✅ Reviewed current dashboard view and structure
-3. ✅ Created implementation plan
-4. ✅ Got user approval to proceed
-5. ✅ Added enhanced_faculty_dashboard() function to Unity.php controller
-6. ✅ Created enhanced dashboard view file
-7. ✅ Created enhanced dashboard JavaScript file with interactive charts
+## Plan
+- [x] Identify the issue (mouseleave behavior)
+- [x] Update header.controller.js with better event handling
+- [x] Update header.html to fix mouseleave behavior
+- [ ] Test the dropdown functionality
 
-### 🔄 Current Step:
-- Adding navigation link to access enhanced dashboard
+## Files to Edit
+- frontend/unity-spa/shared/components/header/header.controller.js
+- frontend/unity-spa/shared/components/header/header.html
 
-### 📋 Remaining Steps:
-1. ✅ Add enhanced_faculty_dashboard() function to Unity.php controller
-2. ✅ Create enhanced dashboard view file
-3. ✅ Create enhanced dashboard JavaScript file
-4. ✅ Add custom CSS for enhanced UI components
-5. ⏳ Update routing/navigation to access new dashboard
+## Progress
+- [x] Analysis complete
+- [x] Controller updates - Added $timeout service and delay mechanism
+- [x] Template updates - Replaced immediate mouseleave with scheduled close
+- [ ] Testing
 
-### 📝 Implementation Details:
-- **Base Function**: `faculty_dashboard()` in Unity.php (lines 54-95)
-- **New Function**: `enhanced_faculty_dashboard()` (lines 118-235)
-- **New View**: `application/modules/unity/views/faculty/enhanced_dashboard.php` ✅
-- **New JS**: `application/modules/unity/views/enhanced_dashboard_js.php` ✅
-- **Enhanced Features**: 
-  - ✅ Modern card-based layout with hover effects
-  - ✅ Interactive Chart.js charts for program distribution and grade analytics
-  - ✅ Quick action buttons for common faculty tasks
-  - ✅ Today's schedule widget
-  - ✅ Recent activity feed
-  - ✅ Faculty-specific performance metrics
-  - ✅ Responsive design for mobile devices
-  - ✅ Real-time notifications and alerts
-  - ✅ Enhanced table features with sorting
-  - ✅ Print and export functionality
-  - ✅ Keyboard shortcuts for power users
+## Changes Made
 
-### 🎯 Enhanced Dashboard Features:
-- **Statistics Cards**: My classes, total students, pending/submitted grades
-- **Charts**: Program distribution (doughnut), Grade distribution (bar chart)
-- **Today's Schedule**: Real-time class schedule for current day
-- **Quick Actions**: Direct links to common faculty functions
-- **Recent Activity**: Last 7 days of grade submissions
-- **Class Overview**: Complete list of assigned classes with status
-- **Responsive Design**: Mobile-friendly interface
-- **Interactive Elements**: Hover effects, animations, collapsible sections
+### Controller (header.controller.js)
+- Added `$timeout` dependency injection
+- Added `closeMenuTimeout` variable to track pending timeouts
+- Enhanced `toggleUserMenu()` to cancel pending timeouts
+- Enhanced `closeUserMenu()` to properly clean up timeouts
+- Added `scheduleCloseUserMenu()` with 300ms delay
+- Added `cancelCloseUserMenu()` to prevent premature closing
 
-### 🔗 Access URL:
-- Enhanced Dashboard: `/unity/enhanced_faculty_dashboard`
-- Original Dashboard: `/unity/faculty_dashboard`
+### Template (header.html)
+- Replaced `ng-mouseleave="vm.closeUserMenu()"` with `ng-mouseleave="vm.scheduleCloseUserMenu()"`
+- Added `ng-mouseenter="vm.cancelCloseUserMenu()"` to both container and dropdown
+- Added same mouse events to dropdown menu itself to prevent closing when hovering over menu items
+
+## How It Works
+1. When mouse leaves the button/container area, it schedules a close after 300ms
+2. If mouse enters the dropdown menu within that time, the close is cancelled
+3. This allows smooth movement from button to menu items without closing
+4. Menu still closes when mouse leaves the entire dropdown area
