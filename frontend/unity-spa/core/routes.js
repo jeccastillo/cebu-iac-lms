@@ -42,6 +42,18 @@
         controllerAs: 'vm',
         requiredRoles: ['registrar', 'admin']
       })
+      .when('/registrar/daily-enrollment', {
+        templateUrl: 'features/registrar/daily-enrollment.html',
+        controller: 'DailyEnrollmentController',
+        controllerAs: 'vm',
+        requiredRoles: ['registrar', 'admin']
+      })
+      .when('/registrar/enlistment', {
+        templateUrl: 'features/registrar/enlistment/enlistment.html',
+        controller: 'EnlistmentController',
+        controllerAs: 'vm',
+        requiredRoles: ['registrar', 'admin']
+      })
       .when('/finance/ledger', {
         templateUrl: 'features/finance/ledger.html',
         controller: 'FinanceLedgerController',
@@ -65,6 +77,12 @@
         controller: 'StudentViewerController',
         controllerAs: 'vm',
         requiredRoles: ['registrar', 'scholarship', 'finance', 'admin']
+      })
+      .when('/students/:id/records', {
+        templateUrl: 'features/students/records.html',
+        controller: 'StudentRecordsController',
+        controllerAs: 'vm',
+        requiredRoles: ['registrar', 'admin']
       })
       .when('/admissions/apply', {
         templateUrl: 'features/admissions/apply.html',
@@ -131,6 +149,26 @@
       .when('/curricula/:id/edit', {
         templateUrl: 'features/curricula/edit.html',
         controller: 'CurriculumEditController',
+        controllerAs: 'vm',
+        requiredRoles: ['registrar', 'admin']
+      })
+
+      /* Classlists CRUD */
+      .when('/classlists', {
+        templateUrl: 'features/classlists/list.html',
+        controller: 'ClasslistsController',
+        controllerAs: 'vm',
+        requiredRoles: ['registrar', 'admin']
+      })
+      .when('/classlists/add', {
+        templateUrl: 'features/classlists/edit.html',
+        controller: 'ClasslistEditController',
+        controllerAs: 'vm',
+        requiredRoles: ['registrar', 'admin']
+      })
+      .when('/classlists/:id/edit', {
+        templateUrl: 'features/classlists/edit.html',
+        controller: 'ClasslistEditController',
         controllerAs: 'vm',
         requiredRoles: ['registrar', 'admin']
       })

@@ -35,9 +35,10 @@ class ClasslistService
      */
     public function getGradingSections(string $term): array
     {
-        $sections = DB::table('tb_mas_classlist')
-            ->where('strAcademicYear', $term)
-            ->select('intID', 'strClassName', 'year', 'strSection', 'sub_section')
+        $sections = DB::table('tb_mas_classlist as cl')
+            ->join('tb_mas_subjects as s', 's.intID', '=', 'cl.intSubjectID')    
+            ->where('strAcademicYear', $term)            
+            ->select('cl.intID', 'cl.strClassName', 'cl.year', 'cl.strSection', 'cl.sub_section','cl.sectionCode','s.strCode')
             ->orderBy('strClassName')
             ->orderBy('year')
             ->orderBy('strSection')

@@ -18,6 +18,9 @@ use App\Http\Controllers\Api\V1\AdmissionsController;
 use App\Http\Controllers\Api\V1\CampusController;
 use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\SystemLogController;
+use App\Http\Controllers\Api\V1\ClasslistController;
+use App\Http\Controllers\Api\V1\ReportsController;
+use App\Http\Controllers\Api\V1\StudentChecklistController;
 
 /*
 |--------------------------------------------------------------------------
@@ -129,11 +132,20 @@ Route::prefix('v1')->group(function () {
 
     // Student endpoints (baseline)
     Route::get('/students', [StudentController::class, 'index']);
+    Route::get('/students/{id}', [StudentController::class, 'show']);
     Route::post('/student/viewer', [StudentController::class, 'viewer']);
     Route::post('/student/balances', [StudentController::class, 'balances']);
     Route::post('/student/records', [StudentController::class, 'records']);
     Route::post('/student/records-by-term', [StudentController::class, 'recordsByTerm']);
     Route::post('/student/ledger', [StudentController::class, 'ledger']);
+
+    // Student Checklist endpoints
+    Route::get('/students/{student}/checklist', [StudentChecklistController::class, 'index']);
+    Route::post('/students/{student}/checklist/generate', [StudentChecklistController::class, 'generate'])->middleware('role:registrar,admin');
+    Route::post('/students/{student}/checklist/items', [StudentChecklistController::class, 'addItem'])->middleware('role:registrar,admin');
+    Route::put('/students/{student}/checklist/items/{item}', [StudentChecklistController::class, 'updateItem'])->middleware('role:registrar,admin');
+    Route::delete('/students/{student}/checklist/items/{item}', [StudentChecklistController::class, 'deleteItem'])->middleware('role:registrar,admin');
+    Route::get('/students/{student}/checklist/summary', [StudentChecklistController::class, 'summary']);
 
     // Registrar endpoints (baseline)
     Route::post('/registrar/daily-enrollment', [RegistrarController::class, 'dailyEnrollment']);
@@ -156,7 +168,8 @@ Route::prefix('v1')->group(function () {
 
     // Unity endpoints (baseline scaffold)
     Route::post('/unity/advising', [UnityController::class, 'advising']);
-    Route::post('/unity/enlist', [UnityController::class, 'enlist']);
+    Route::post('/unity/enlist', [UnityController::class, 'enlist'])->middleware('role:registrar,admin');
+    Route::post('/unity/reset-registration', [UnityController::class, 'resetRegistration'])->middleware('role:registrar,admin');
     Route::post('/unity/tag-status', [UnityController::class, 'tagStatus']);
     Route::post('/unity/tuition-preview', [UnityController::class, 'tuitionPreview']);
 
@@ -168,4 +181,15 @@ Route::prefix('v1')->group(function () {
     // System logs (admin)
     Route::get('/system-logs/export', [SystemLogController::class, 'export'])->middleware('role:registrar,admin');
     Route::get('/system-logs', [SystemLogController::class, 'index'])->middleware('role:admin');
+    // Registrar reports - Enrolled Students export
+    Route::get('/reports/enrolled-students/export', [ReportsController::class, 'enrolledStudentsExport'])->middleware('role:registrar,admin');
+    // Registrar reports - Daily Enrollment JSON
+    Route::get('/reports/daily-enrollment', [ReportsController::class, 'dailyEnrollmentSummary'])->middleware('role:registrar,admin');
+
+    // Classlists CRUD
+    Route::get('/classlists', [ClasslistController::class, 'index']);
+    Route::get('/classlists/{id}', [ClasslistController::class, 'show']);
+    Route::post('/classlists', [ClasslistController::class, 'store'])->middleware('role:registrar,admin');
+    Route::put('/classlists/{id}', [ClasslistController::class, 'update'])->middleware('role:registrar,admin');
+    Route::delete('/classlists/{id}', [ClasslistController::class, 'destroy'])->middleware('role:registrar,admin');
 });

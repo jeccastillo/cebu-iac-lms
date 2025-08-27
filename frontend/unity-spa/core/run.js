@@ -14,6 +14,17 @@
       options: APP_CONFIG.LOGIN_APP_CONFIG
     };
 
+    // Normalize malformed hash paths like '#//registrar/...'
+    try {
+      var currentPath = $location.path() || '';
+      var normalizedPath = currentPath.replace(/\/{2,}/g, '/');
+      if (normalizedPath !== currentPath) {
+        $location.path(normalizedPath);
+      }
+    } catch (e) {
+      // ignore normalization errors
+    }
+
     // Basic route guard + role-based gate
     $rootScope.$on('$routeChangeStart', function (event, next) {
       var state = getLoginState();

@@ -1,169 +1,150 @@
 # Implementation Plan
 
 [Overview]
-Make the Campus field uneditable on the Program Edit page while keeping the Add page behavior unchanged. The edit form should display a read-only Campus (name and ID) instead of an editable numeric input, and the backend payload should remain unchanged.
+Add a new Laravel API CRUD for tb_mas_classlist (Eloquent: App\Models\Classlist), with system logs recorded on create/update/dissolve, and a guarded dissolve that prevents setting dissolved when related tb_mas_classlist_student records exist. The delete operation follows the legacy behavior: instead of hard-deleting, we set isDissolved=1. The API must also force strClassName, year, strSection, and sub_section to be saved as blank strings (""), never taken from client input.
 
-This change improves data integrity by preventing accidental campus reassignment for existing programs. The UI will show campus context clearly without allowing modifications. The Add form will continue to bind to the global campus selector via CampusService; the Edit form will simply display the program&#39;s current campus.
+This CRUD will follow existing API architectural patterns (Program/Campus controllers) and reuse the existing SystemLogService for audit trails. The delete operation will validate referential usage against App\Models\ClasslistStudent. Request validation will explicitly disallow the four restricted fields and the controller will forcibly set them to "" before persistence to guarantee the invariant regardless of client behavior. No database schema changes are required.
 
 [Types]  
-No new TypeScript or external type system is introduced; we will maintain plain JavaScript object shapes used in the AngularJS controllers and services.
+No new global type system constructs; new request validation classes and a resource may be added for response shaping.
 
-Data shapes involved:
-- Program model (view-model in ProgramEditController):
-  - strProgramCode: string (required)
-  - strProgramDescription: string (required)
-  - strMajor: string | null
-  - type: &#39;college&#39; | &#39;shs&#39; | &#39;drive&#39; | &#39;other&#39;
-  - school: string | null
-  - short_name: string | null
-  - default_curriculum: number | null
-  - enumEnabled: 0 | 1
-  - campus_id: number | null (set from API; uneditable on Edit)
-- Campus (from CampusService.availableCampuses):
-  - id: number
-  - campus_name: string
-  - [other fields may exist but are not required for this change]
+Detailed structures/specs:
+- App\Models\Classlist (exists)
+  - Table: tb_mas_classlist, PK: intID
+  - Relevant fields that may be accepted/managed by this CRUD (based on legacy schema and usage across services):
+    - intSubjectID: int, required; FK to tb_mas_subjects.intID
+    - intFacultyID: int, required; FK to tb_mas_faculty.intID
+    - strAcademicYear: string, required (term/syid), e.g. numeric or code; max 50
+    - strUnits: string|null, optional; max 20
+    - intFinalized: int|null, optional; default 0 (if omitted)
+    - campus_id: int|null, optional; if provided, integer
+    - Restricted fields (must be saved as blank string by backend): strClassName, year, strSection, sub_section
+- App\Models\ClasslistStudent (exists)
+  - Table: tb_mas_classlist_student, PK: intCSID
+  - Relation: intClassListID → tb_mas_classlist.intID
+
+New validation request classes:
+- App\Http\Requests\Api\V1\ClasslistStoreRequest
+  - Validates payload for create
+  - Explicitly forbids strClassName, year, strSection, sub_section as input; they are ignored and overwritten as ""
+- App\Http\Requests\Api\V1\ClasslistUpdateRequest
+  - Validates payload for update (all fields optional)
+  - Same forbidden-field handling as store
 
 [Files]
-Only frontend files in the Unity SPA Programs feature will be modified.
+Add one controller and two request classes, update routes. Optionally add a resource for responses.
 
-- New files to be created
+Detailed breakdown:
+- New files to be created:
+  - laravel-api/app/Http/Controllers/Api/V1/ClasslistController.php
+    - Purpose: RESTful CRUD for classlists (index, show, store, update, destroy) with logging and delete safety.
+  - laravel-api/app/Http/Requests/Api/V1/ClasslistStoreRequest.php
+    - Purpose: Validate payload for creating a classlist; restrict forbidden fields.
+  - laravel-api/app/Http/Requests/Api/V1/ClasslistUpdateRequest.php
+    - Purpose: Validate payload for updating a classlist; restrict forbidden fields.
+  - Optional (nice-to-have): laravel-api/app/Http/Resources/ClasslistResource.php
+    - Purpose: Normalize output fields and alignment with RegistrarClasslistResource if needed. For MVP, controller may return Eloquent arrays directly to reduce scope.
+
+- Existing files to be modified:
+  - laravel-api/routes/api.php
+    - Add API v1 endpoints for classlists:
+      - GET /api/v1/classlists
+      - GET /api/v1/classlists/{id}
+      - POST /api/v1/classlists (role: registrar,admin)
+      - PUT /api/v1/classlists/{id} (role: registrar,admin)
+      - DELETE /api/v1/classlists/{id} (role: registrar,admin)
+
+- Files to be deleted or moved:
   - None.
 
-- Existing files to be modified
-  1) frontend/unity-spa/features/programs/edit.html
-     - Replace the editable Campus ID numeric input (shown when vm.isEdit) with a read-only display showing campus name and ID.
-     - Keep the existing Add-mode campus display (vm.selectedCampus sourced from CampusService) unchanged.
-     - Ensure no ng-change triggers for campus on Edit mode.
-  2) frontend/unity-spa/features/programs/programs.controller.js
-     - Add a helper function vm.syncSelectedCampusForEdit() that, in Edit mode, initializes CampusService (if needed) and sets vm.selectedCampus by matching vm.model.campus_id against CampusService.availableCampuses.
-     - Call vm.syncSelectedCampusForEdit() after vm.load() populates vm.model and after vm.loadCurricula() in Edit mode.
-
-- Files to be deleted or moved
-  - None.
-
-- Configuration file updates
+- Configuration file updates:
   - None.
 
 [Functions]
-We will add one function and adjust one existing function call sequence. No backend service changes are required.
+Add a new controller with five methods; no modifications to core services.
 
-- New functions
-  - Name: vm.syncSelectedCampusForEdit
-  - Signature: function () : void
-  - File path: frontend/unity-spa/features/programs/programs.controller.js
-  - Purpose: In Edit mode, ensure vm.selectedCampus is set for read-only display by finding the campus object that matches vm.model.campus_id. It initializes CampusService (if necessary) and then derives vm.selectedCampus. If the campus is not found, fall back to showing the numeric campus_id in the template.
+Detailed breakdown:
+- New functions:
+  - App\Http\Controllers\Api\V1\ClasslistController::index(Request $request)
+    - Purpose: List classlists with optional filters (e.g., strAcademicYear, intSubjectID, intFacultyID, finalized). Return JSON list.
+  - App\Http\Controllers\Api\V1\ClasslistController::show(int $id)
+    - Purpose: Return a single classlist by intID or 404.
+  - App\Http\Controllers\Api\V1\ClasslistController::store(ClasslistStoreRequest $request)
+    - Purpose: Create classlist; force strClassName/year/strSection/sub_section to ""; set intFinalized default 0 if missing; log via SystemLogService.
+  - App\Http\Controllers\Api\V1\ClasslistController::update(ClasslistUpdateRequest $request, int $id)
+    - Purpose: Update classlist; forcibly overwrite the four restricted fields to "" regardless of input; log via SystemLogService.
+  - App\Http\Controllers\Api\V1\ClasslistController::destroy(int $id)
+    - Purpose: Follow legacy dissolve: if no ClasslistStudent rows exist, set isDissolved=1 (soft delete) and log via SystemLogService as an update; if students exist, return 422 and do not modify.
 
-  Pseudocode/spec:
-  ```
-  vm.syncSelectedCampusForEdit = function () {
-    if (!vm.isEdit) return;
-    var assign = function () {
-      try {
-        var list = (CampusService && CampusService.availableCampuses) || [];
-        var id = vm.model.campus_id;
-        var found = null;
-        for (var i = 0; i < list.length; i++) {
-          var c = list[i];
-          var cid = (c &amp;&amp; c.id !== undefined &amp;&amp; c.id !== null) ? parseInt(c.id, 10) : null;
-          if (cid === id) { found = c; break; }
-        }
-        vm.selectedCampus = found;
-      } catch (e) { /* no-op */ }
-    };
-    var p = (CampusService &amp;&amp; CampusService.init) ? CampusService.init() : null;
-    if (p &amp;&amp; p.then) { p.then(assign); } else { assign(); }
-  };
-  ```
+- Modified functions:
+  - None in existing controllers/services.
 
-- Modified functions
-  - Name: vm.load
-  - File path: frontend/unity-spa/features/programs/programs.controller.js
-  - Required changes:
-    - After populating vm.model from API and calling vm.loadCurricula(), call vm.syncSelectedCampusForEdit() to set up vm.selectedCampus for the edit view&#39;s read-only campus display.
-
-- Removed functions
-  - None. (vm.onCampusChange remains for Add mode where campus binding still exists.)
+- Removed functions:
+  - None.
 
 [Classes]
-No classes are used or modified (AngularJS controllers are functions).
+Add one controller class and two FormRequest classes.
 
-- New classes
-  - None.
+Detailed breakdown:
+- New classes:
+  - ClasslistController (laravel-api/app/Http/Controllers/Api/V1/ClasslistController.php)
+    - Key methods: index, show, store, update, destroy
+    - Dependencies: App\Models\Classlist, App\Models\ClasslistStudent, App\Services\SystemLogService, Illuminate\Http\Request
+  - ClasslistStoreRequest (laravel-api/app/Http/Requests/Api/V1/ClasslistStoreRequest.php)
+    - Extends: Illuminate\Foundation\Http\FormRequest
+    - Validates required fields; prohibits restricted fields from being used.
+  - ClasslistUpdateRequest (laravel-api/app/Http/Requests/Api/V1/ClasslistUpdateRequest.php)
+    - Extends: FormRequest
+    - Validates optional fields; prohibits restricted fields from being used.
 
-- Modified classes
-  - None.
+- Modified classes:
+  - None required. App\Models\Classlist and App\Models\ClasslistStudent are sufficient as-is (guarded = [] covers mass assignment).
 
-- Removed classes
+- Removed classes:
   - None.
 
 [Dependencies]
-No dependency modifications.
+No new composer dependencies required.
 
-- No new packages.
-- No version changes.
-- Integration continues to rely on existing CampusService and ProgramsService.
+Details:
+- Reuse existing App\Services\SystemLogService for action logs.
+- Use Illuminate components already included in the Laravel app.
 
 [Testing]
-Manual UI validation with focused checks on both Add and Edit flows.
+Add feature tests for basic CRUD and guard checks.
 
-- Test files
-  - No automated test files exist in scope; manual verification steps outlined below.
-
-- Manual validation steps
-  1) Navigate to Add Program (/programs/add):
-     - Verify campus display remains driven by global campus selector (unchanged).
-     - Verify curriculum dropdown enables only after a campus is present.
-     - Verify saving still includes campus_id from global selector.
-  2) Navigate to Edit Program (/programs/:id/edit) for an existing program with campus_id set:
-     - Confirm the Campus section renders as read-only (no input).
-     - Confirm it shows "CampusName (ID: 123)" when campus list is available.
-     - If campus not found in list, confirm it shows "Campus ID: 123" fallback.
-     - Confirm curriculum list loads (using vm.model.campus_id) and can be changed.
-     - Confirm Save works and payload still includes campus_id unchanged.
-  3) Navigate to Edit Program for a program with campus_id null:
-     - Confirm read-only section shows "No campus set".
-     - Confirm curriculum dropdown remains disabled due to missing campus_id.
-  4) Regressions:
-     - Program list page still loads and filters correctly.
-     - Add Program still blocks Save until a campus is selected (unchanged rule: Save disabled when !vm.isEdit &amp;&amp; !vm.model.campus_id).
+Test plan:
+- Create (201): POST /api/v1/classlists with required fields only; verify response payload has the four restricted fields as "", intFinalized default 0 when omitted; verify system log row recorded.
+- Update (200): PUT /api/v1/classlists/{id} attempting to set restricted fields to non-empty values; ensure they remain "" in DB and system log captured the change of other fields only.
+- Read (200/404): GET /api/v1/classlists and GET /api/v1/classlists/{id}; 404 for unknown id.
+- Dissolve guard (422): Seed a ClasslistStudent record referencing a classlist; attempt DELETE and expect 422 with message about connected records; verify no change to isDissolved and no success log entry.
+- Dissolve success (200): DELETE an unreferenced classlist; verify isDissolved changed from 0 to 1 and system log recorded as update with old_values and new_values reflecting the change.
 
 [Implementation Order]
-Make template changes first, then controller enhancements, and validate behavior.
+Implement controller and requests, wire routes, then validate with minimal manual tests or automated tests.
 
-1) Edit template (frontend/unity-spa/features/programs/edit.html):
-   - Replace the Edit-mode campus input with a read-only display:
-     - Remove:
-       - The <input type="number" ... ng-model="vm.model.campus_id" ng-change="vm.onCampusChange()"> block inside <div ng-if="vm.isEdit">.
-     - Add:
-       ```
-       <div ng-if="vm.isEdit">
-         <label class="block text-xs font-medium text-gray-600 mb-1">Campus</label>
-         <div class="w-full px-3 py-2 border border-gray-200 rounded-md bg-gray-50 text-sm">
-           <span ng-if="vm.selectedCampus">
-             {{ vm.selectedCampus.campus_name }} (ID: {{ vm.selectedCampus.id }})
-           </span>
-           <span ng-if="!vm.selectedCampus &amp;&amp; vm.model.campus_id !== null">
-             Campus ID: {{ vm.model.campus_id }}
-           </span>
-           <span ng-if="vm.model.campus_id === null" class="text-gray-500">No campus set</span>
-         </div>
-         <p class="text-xs text-gray-500 mt-1">Campus cannot be changed when editing a program.</p>
-       </div>
-       ```
-   - Keep the Add-mode campus info block (ng-if="!vm.isEdit") unchanged.
-
-2) Controller changes (frontend/unity-spa/features/programs/programs.controller.js):
-   - Add vm.syncSelectedCampusForEdit function as defined above.
-   - In vm.load(), after:
-     - Setting vm.model.campus_id from the loaded row, and
-     - Calling vm.loadCurricula();
-     - Then call vm.syncSelectedCampusForEdit(); to populate vm.selectedCampus for display.
-   - Do not alter payload or save logic; campus_id remains included and unchanged in Edit mode.
-
-3) Validate in browser:
-   - Confirm read-only campus display on Edit and unchanged Add behavior.
-   - Confirm curriculum loading behavior remains correct.
-
-4) Code cleanup (optional, non-functional):
-   - None required; keep onCampusChange for Add path.
+Numbered steps:
+1. Create App\Http\Requests\Api\V1\ClasslistStoreRequest with rules:
+   - intSubjectID: required|integer|exists:tb_mas_subjects,intID
+   - intFacultyID: required|integer|exists:tb_mas_faculty,intID
+   - strAcademicYear: required|string|max:50
+   - strUnits: sometimes|nullable|string|max:20
+   - intFinalized: sometimes|nullable|integer
+   - campus_id: sometimes|nullable|integer
+   - Explicitly do not require/prohibit strClassName/year/strSection/sub_section; they will be ignored and overwritten as "" in controller.
+2. Create App\Http\Requests\Api\V1\ClasslistUpdateRequest with same fields optional (sometimes), and same prohibited/restricted-field note.
+3. Create App\Http\Controllers\Api\V1\ClasslistController:
+   - index(): allow optional filters like strAcademicYear (term), intSubjectID, intFacultyID, intFinalized; return ordered list.
+   - show(): find by intID or return 404.
+   - store(): $data = $request->validated(); unset restricted fields if present; force set restricted fields to ""; set intFinalized default 0 if absent; create; SystemLogService::log('create','Classlist',$id,null,$new,$request).
+   - update(): load model; $old = toArray(); $data = $request->validated(); always override restricted fields to "" in $data; update; $new = fresh()->toArray(); log update.
+   - destroy(): check ClasslistStudent::where('intClassListID',$id)->exists(); if true return 422 JSON {success:false,message:'Cannot dissolve classlist; students exist.'}; else $old = toArray(); update(['isDissolved' => 1]); $new = fresh()->toArray(); log update with old/new.
+4. Update laravel-api/routes/api.php to add:
+   - GET /api/v1/classlists
+   - GET /api/v1/classlists/{id}
+   - POST /api/v1/classlists (middleware role:registrar,admin)
+   - PUT /api/v1/classlists/{id} (middleware role:registrar,admin)
+   - DELETE /api/v1/classlists/{id} (middleware role:registrar,admin)
+5. Optional: Create App\Http\Resources\ClasslistResource for consistent responses; initially, return Eloquent arrays for speed.
+6. Manual verification using Postman/curl; later add PHPUnit Feature tests covering success/guard cases.
+7. Documentation: note that the backend will always blank strClassName/year/strSection/sub_section, so forms should omit them entirely.

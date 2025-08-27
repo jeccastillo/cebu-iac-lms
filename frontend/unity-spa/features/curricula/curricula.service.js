@@ -58,6 +58,11 @@
         return $http.delete(BASE + '/curriculum/' + encodeURIComponent(id), _adminHeaders()).then(_unwrap);
       },
 
+      // Subjects
+      subjects: function (id) {
+        return $http.get(BASE + '/curriculum/' + encodeURIComponent(id) + '/subjects').then(_unwrap);
+      },
+
       // Helpers for dropdowns
       getPrograms: function () {
         // include disabled as well to show full list in admin

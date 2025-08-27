@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Throwable;
+use App\Services\UserContextResolver;
 
 class SystemLogService
 {
@@ -30,6 +31,27 @@ class SystemLogService
             } catch (Throwable $e) {
                 // auth might not be configured in some contexts
                 $userId = null;
+            }
+
+            // Fallback to CI session resolver if Laravel Auth is not set
+            if (!$userId && $request instanceof Request) {
+                try {
+                    $resolver = app(UserContextResolver::class);
+                    $resolved = $resolver->resolveUserId($request);
+                    if ($resolved !== null) {
+                        $userId = $resolved;
+                    }
+                } catch (Throwable $e) {
+                    // ignore resolver errors
+                }
+            }
+
+            // Additional fallback: use X-Faculty-ID (or request faculty_id) when present
+            if (!$userId && $request instanceof Request) {
+                $fid = $request->header('X-Faculty-ID', $request->input('faculty_id'));
+                if ($fid !== null && is_numeric($fid)) {
+                    $userId = (int) $fid;
+                }
             }
 
             $ip = null;

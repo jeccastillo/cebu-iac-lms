@@ -1,0 +1,169 @@
+<div class="space-y-6" ng-controller="ClasslistsController as vm">
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-semibold text-gray-800">Classlists</h1>
+    <div class="flex items-center space-x-2">
+      <button class="inline-flex items-center px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+              ng-click="vm.goAdd()">
+        <span class="fas fa-plus mr-2"></span> Add Classlist
+      </button>
+      <label class="inline-flex items-center text-sm text-gray-700">
+        <input type="checkbox" class="mr-2" ng-model="vm.includeDissolved" ng-change="vm.reload()">
+        Include dissolved
+      </label>
+    </div>
+  </div>
+
+  <!-- Alerts -->
+  <div ng-if="vm.error" class="rounded border border-red-200 bg-red-50 text-red-800 px-4 py-3">
+    <span class="fas fa-exclamation-triangle mr-2"></span> {{ vm.error }}
+  </div>
+  <div ng-if="vm.success" class="rounded border border-green-200 bg-green-50 text-green-800 px-4 py-3">
+    <span class="fas fa-check mr-2"></span> {{ vm.success }}
+  </div>
+
+  <!-- Filters -->
+  <div class="bg-white p-4 rounded shadow border border-gray-200">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <!-- Term (readonly from TermService, displayed) -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Term</label>
+        <div class="w-full border rounded px-3 py-2 bg-gray-50 text-gray-700">
+          {{ vm.termLabel || '-' }}
+        </div>
+        <small class="text-gray-500">Display only. Format: "1st Term 2024-2025". Managed via the Term selector.</small>
+      </div>
+      <!-- Subject -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+        <select class="w-full border rounded px-3 py-2" ng-model="vm.filters.intSubjectID"
+                ng-options="s.subject_id as (s.strCode + ' - ' + s.strDescription) for s in vm.subjects">
+          <option value="">All</option>
+        </select>
+      </div>
+      <!-- Faculty -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Faculty</label>
+        <select class="w-full border rounded px-3 py-2" ng-model="vm.filters.intFacultyID"
+                ng-options="f.intID as (f.full_name || (f.strLastname + ', ' + f.strFirstname)) for f in vm.faculty">
+          <option value="">All</option>
+        </select>
+      </div>
+      <!-- Section Code -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Section Code</label>
+        <input type="text" class="w-full border rounded px-3 py-2" ng-model="vm.filters.sectionCode" placeholder="e.g. CS202-BSCS2A-1-A or partial">
+        <small class="text-gray-500">Supports partial match.</small>
+      </div>
+      <!-- Finalized -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Submission Status</label>
+        <select class="w-full border rounded px-3 py-2" ng-model="vm.filters.intFinalized"
+                ng-options="o.value as o.label for o in vm.finalizedOptions">
+        </select>
+      </div>
+    </div>
+    <div class="mt-4 flex items-center space-x-2">
+      <button class="inline-flex items-center px-3 py-2 rounded bg-gray-100 text-gray-800 hover:bg-gray-200"
+              ng-click="vm.resetFilters()">
+        <span class="fas fa-undo mr-2"></span> Reset
+      </button>
+      <button class="inline-flex items-center px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+              ng-click="vm.reload()">
+        <span class="fas fa-sync mr-2"></span> Apply
+      </button>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="bg-white rounded shadow border border-gray-200 overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr class="text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+          <th class="px-4 py-3">ID</th>
+          <th class="px-4 py-3">Section Code</th>
+          <th class="px-4 py-3">Subject</th>
+          <th class="px-4 py-3">Faculty</th>
+          <th class="px-4 py-3">Units</th>
+          <th class="px-4 py-3">Finalized</th>
+          <th class="px-4 py-3">Dissolved</th>
+          <th class="px-4 py-3 text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-100" ng-class="{ 'opacity-50': vm.loading }">
+        <tr ng-repeat="row in vm.records">
+          <td class="px-4 py-2 text-sm text-gray-800">{{ row.intID }}</td>
+          <td class="px-4 py-2 text-sm text-gray-800">{{ row.sectionCode || '-' }}</td>
+          <td class="px-4 py-2 text-sm text-gray-800">{{ (row.subjectCode || '-') + (row.subjectDescription ? (' - ' + row.subjectDescription) : '') }}</td>
+          <td class="px-4 py-2 text-sm text-gray-800">{{ (row.facultyLastname || '') + (row.facultyFirstname ? (row.facultyLastname ? ', ' : '') + row.facultyFirstname : 'unassigned') }}</td>
+          <td class="px-4 py-2 text-sm text-gray-800">{{ row.strUnits || '-' }}</td>
+          <td class="px-4 py-2 text-sm">
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs"
+                  ng-class="{
+                    'bg-gray-100 text-gray-800': row.intFinalized == 0,
+                    'bg-yellow-100 text-yellow-800': row.intFinalized == 1,
+                    'bg-green-100 text-green-800': row.intFinalized == 2
+                  }">
+              {{ row.intFinalized }}
+            </span>
+          </td>
+          <td class="px-4 py-2 text-sm">
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs"
+                  ng-class="{
+                    'bg-red-100 text-red-800': row.isDissolved == 1,
+                    'bg-gray-100 text-gray-800': !row.isDissolved || row.isDissolved == 0
+                  }">
+              {{ row.isDissolved == 1 ? 'Yes' : 'No' }}
+            </span>
+          </td>
+          <td class="px-4 py-2 text-sm text-right space-x-2">
+            <button class="px-2 py-1 rounded bg-gray-100 text-gray-800 hover:bg-gray-200"
+                    ng-click="vm.goEdit(row.intID)">
+              <span class="fas fa-edit"></span> Edit
+            </button>
+            <button class="px-2 py-1 rounded bg-red-600 text-white hover:bg-red-700"
+                    ng-disabled="row.isDissolved == 1"
+                    ng-click="vm.dissolve(row)">
+              <span class="fas fa-ban"></span> Dissolve
+            </button>
+          </td>
+        </tr>
+        <tr ng-if="!vm.loading && (!vm.records || vm.records.length === 0)">
+          <td colspan="8" class="px-4 py-6 text-center text-sm text-gray-500">
+            No classlists found for the selected filters.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Pagination controls -->
+    <div class="flex items-center justify-between px-4 py-3 border-t border-gray-200 bg-gray-50">
+      <div class="text-sm text-gray-700">
+        Page {{ vm.meta.current_page || vm.page }} of {{ vm.meta.last_page || vm.lastPage }}
+        <span ng-if="vm.total"> • Total {{ vm.total }} records</span>
+      </div>
+      <div class="flex items-center space-x-2">
+        <label class="text-sm text-gray-700">Per page</label>
+        <select class="border rounded px-2 py-1 text-sm" ng-model="vm.perPage"
+                ng-options="n for n in vm.perPageOptions"
+                ng-change="vm.onPerPageChange()">
+        </select>
+
+        <button class="px-3 py-1 rounded border text-sm"
+                ng-class="{'bg-white text-gray-700 hover:bg-gray-100 border-gray-300': vm.page > 1, 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed': vm.page <= 1}"
+                ng-disabled="vm.page <= 1"
+                ng-click="vm.prevPage()">
+          Prev
+        </button>
+        <input type="number" min="1" class="w-16 border rounded px-2 py-1 text-sm"
+               ng-model="vm._goToPage" ng-change="vm.goToPage(vm._goToPage)" placeholder="{{ vm.page }}">
+        <button class="px-3 py-1 rounded border text-sm"
+                ng-class="{'bg-white text-gray-700 hover:bg-gray-100 border-gray-300': vm.page < vm.lastPage, 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed': vm.page >= vm.lastPage}"
+                ng-disabled="vm.page >= vm.lastPage"
+                ng-click="vm.nextPage()">
+          Next
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

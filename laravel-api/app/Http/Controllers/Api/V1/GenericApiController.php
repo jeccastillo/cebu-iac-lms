@@ -22,6 +22,7 @@ class GenericApiController extends Controller
         $payload = $request->validate([
             'q'  => 'sometimes|string',
             'id' => 'sometimes|integer',
+            'teaching' => 'sometimes|integer|in:0,1',
         ]);
 
         $q = DB::table('tb_mas_faculty');
@@ -35,6 +36,15 @@ class GenericApiController extends Controller
                     ->orWhere('strLastname', 'like', $term)
                     ->orWhere('strMiddlename', 'like', $term);
             });
+        }
+
+        // Apply teaching filter:
+        // - If explicit ?teaching=0/1 is provided, honor it.
+        // - Otherwise, default to teaching=1 when neither id nor q is provided (dropdown use-case).
+        if (array_key_exists('teaching', $payload)) {
+            $q->where('teaching', (int) $payload['teaching']);
+        } elseif (empty($payload['id']) && empty($payload['q'])) {
+            $q->where('teaching', 1);
         }
 
         $rows = $q->orderBy('strLastname')

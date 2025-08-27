@@ -257,29 +257,32 @@ class DataFetcherService
                 ->join('tb_mas_classlist as cl', 'cl.intID', '=', 'cls.intClassListID')
                 ->join('tb_mas_subjects as s', 's.intID', '=', 'cl.intSubjectID')
                 ->leftJoin('tb_mas_sy as sy', 'sy.intID', '=', 'cl.strAcademicYear')
-                ->where('cls.intStudentID', $user->intID);
-
-            if (!empty($term)) {
-                // term is expected to be the sy.intID; accept string/numeric
-                $q->where('cl.strAcademicYear', $term);
-            }
+                ->leftJoin('tb_mas_faculty as f', 'f.intID', '=', 'cl.intFacultyID')
+                ->leftJoin('tb_mas_faculty as e', 'e.intID', '=', 'cls.enlisted_user')
+                ->where('cls.intStudentID', $user->intID);               
 
             $rows = $q->select(
+                'cl.SectionCode as sectionCode',
                 's.strCode as code',
                 's.strDescription as description',
                 's.strUnits as units',
+                'cl.intID as classlist_id',
                 'cl.strAcademicYear as syid',
                 'sy.enumSem',
                 'sy.strYearStart',
                 'sy.strYearEnd',
+                'f.strFirstname as faculty_firstname',
+                'f.strLastname as faculty_lastname',
+                'e.strFirstname as reg_firstname',
+                'e.strLastname as reg_lastname',
+                'cls.strRemarks as remarks',
                 'cls.floatPrelimGrade as prelim',
                 'cls.floatMidtermGrade as midterm',
                 'cls.floatFinalsGrade as finals',
                 'cls.floatFinalGrade as final'
             )
             ->orderBy('sy.strYearStart', 'asc')
-            ->orderBy('sy.enumSem', 'asc')
-            ->orderBy('s.strCode', 'asc')
+            ->orderBy('sy.enumSem', 'asc')            
             ->get();
 
             foreach ($rows as $r) {
@@ -287,12 +290,18 @@ class DataFetcherService
                 if (isset($r->enumSem, $r->strYearStart, $r->strYearEnd)) {
                     $termLabel = sprintf('%s Term %s-%s', $r->enumSem, $r->strYearStart, $r->strYearEnd);
                 }
-                $item = [
+                $item = [         
+                    'faculty_first'=>$r->faculty_firstname,
+                    'faculty_last'=>$r->faculty_lastname,      
+                    'enlisted_first'=>$r->reg_firstname,
+                    'enlisted_last'=>$r->reg_lastname,           
+                    'section_code'=> $r->sectionCode,
+                    'classlist_id'=> $r->classlist_id,
                     'code'        => $r->code,
                     'description' => $r->description,
-                    'units'       => isset($r->units) ? (int)$r->units : null,
-                    'term'        => $termLabel,
+                    'units'       => isset($r->units) ? (int)$r->units : null,                    
                     'syid'        => $r->syid,
+                    'remarks'     => $r->remarks,                    
                 ];
                 if ($includeGrades) {
                     $item['grades'] = [
@@ -339,6 +348,7 @@ class DataFetcherService
                 's.strCode as code',
                 's.strDescription as description',
                 's.strUnits as units',
+                'cl.intID as classlist_id',
                 'cl.strAcademicYear as syid',
                 'sy.enumSem',
                 'sy.strYearStart',
@@ -366,6 +376,7 @@ class DataFetcherService
                     'enlisted_first'=>$r->reg_firstname,
                     'enlisted_last'=>$r->reg_lastname,           
                     'section_code'=> $r->sectionCode,
+                    'classlist_id'=> $r->classlist_id,
                     'code'        => $r->code,
                     'description' => $r->description,
                     'units'       => isset($r->units) ? (int)$r->units : null,
@@ -393,6 +404,7 @@ class DataFetcherService
         }
 
         return [
+            'student_id' =>$user->intID,
             'student_number' => $studentNumber,
             'term'           => $term,
             'include_grades' => $includeGrades,

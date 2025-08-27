@@ -5,8 +5,8 @@
     .module('unityApp')
     .controller('SidebarController', SidebarController);
 
-  SidebarController.$inject = ['$scope', '$location', 'StorageService', 'TermService', 'CampusService', 'RoleService'];
-  function SidebarController($scope, $location, StorageService, TermService, CampusService, RoleService) {
+  SidebarController.$inject = ['$scope', '$location', 'StorageService', 'TermService', 'CampusService', 'RoleService', 'LinkService'];
+  function SidebarController($scope, $location, StorageService, TermService, CampusService, RoleService, LinkService) {
     var vm = this;
 
     // Sidebar state
@@ -24,6 +24,8 @@
     vm.canAccess = RoleService.canAccess;
     vm.hasRole = RoleService.hasRole;
     vm.roles = [];
+    // External system links (e.g., CI endpoints)
+    vm.links = LinkService.buildLinks();
 
     // Initialize
     activate();

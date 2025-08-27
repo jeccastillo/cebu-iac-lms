@@ -5,8 +5,8 @@
     .module('unityApp')
     .controller('StudentViewerController', StudentViewerController);
 
-  StudentViewerController.$inject = ['$routeParams', '$location', '$http', '$scope', 'APP_CONFIG', 'StorageService', 'LinkService', 'TermService'];
-  function StudentViewerController($routeParams, $location, $http, $scope, APP_CONFIG, StorageService, LinkService, TermService) {
+  StudentViewerController.$inject = ['$routeParams', '$location', '$http', '$scope', 'APP_CONFIG', 'StorageService', 'LinkService', 'TermService', 'ChecklistService'];
+  function StudentViewerController($routeParams, $location, $http, $scope, APP_CONFIG, StorageService, LinkService, TermService, ChecklistService) {
     var vm = this;
 
     vm.title = 'Student Viewer';
@@ -36,11 +36,18 @@
     };
 
     // state
-    vm.loading = { balances: false, records: false, ledger: false };
-    vm.error = { balances: null, records: null, ledger: null };
+    vm.loading = { balances: false, records: false, ledger: false, checklist: false, checklistAction: false };
+    vm.error = { balances: null, records: null, ledger: null, checklist: null, checklistAction: null };
     vm.balances = null;
     vm.records = null;
     vm.ledger = null;
+
+    // Checklist state
+    vm.checklist = null;
+    vm.checklistSummary = null;
+    vm.genYearLevel = 1;
+    vm.genSem = '1st';
+    vm.addSubjectId = null;
     vm.terms = [];
     vm.selectedTermId = null;
 
@@ -51,6 +58,26 @@
       var n = parseInt(id, 10);
       if (!isNaN(n) && ('' + n) === ('' + id).replace(/^0+/, '')) return n;
       return ('' + id).trim();
+    }
+
+    // Dates: helpers for input[type=date] binding compatibility
+    function parseDateYMD(s) {
+      if (!s) return null;
+      if (s instanceof Date) return s;
+      try {
+        var d = new Date(s);
+        return isNaN(d.getTime()) ? null : d;
+      } catch (e) {
+        return null;
+      }
+    }
+    function toYMD(d) {
+      if (!d) return null;
+      var dt = d instanceof Date ? d : new Date(d);
+      if (isNaN(dt.getTime())) return null;
+      var mm = ('0' + (dt.getMonth() + 1)).slice(-2);
+      var dd = ('0' + dt.getDate()).slice(-2);
+      return dt.getFullYear() + '-' + mm + '-' + dd;
     }
 
     // When term changes via the dropdown or broadcast, refetch records
@@ -120,6 +147,122 @@
         }
         return false;
       });
+    };
+
+    // Checklist actions
+    vm.fetchChecklist = function () {
+      vm.loading.checklist = true;
+      vm.error.checklist = null;
+      return ChecklistService.get(vm.id, {})
+        .then(function (resp) {
+          // API returns { success, data }
+          var data = resp && resp.data ? resp.data : (resp || null);
+          vm.checklist = data;
+
+          // Normalize date fields for date input binding
+          try {
+            if (vm.checklist && vm.checklist.items && angular.isArray(vm.checklist.items)) {
+              vm.checklist.items.forEach(function (it) {
+                if (it && it.dteCompleted) {
+                  it.dteCompleted = parseDateYMD(it.dteCompleted);
+                }
+              });
+            }
+          } catch (e) {}
+
+          return ChecklistService.summary(vm.id, {});
+        })
+        .then(function (resp) {
+          var data = resp && resp.data ? resp.data : (resp || null);
+          vm.checklistSummary = data;
+        })
+        .catch(function () {
+          vm.error.checklist = 'Failed to load checklist.';
+        })
+        .finally(function () {
+          vm.loading.checklist = false;
+        });
+    };
+
+    vm.generateChecklist = function () {
+      vm.loading.checklistAction = true;
+      vm.error.checklistAction = null;
+      var payload = {
+        // intCurriculumID is optional; backend falls back to tb_mas_users.intCurriculumID
+      };
+      return ChecklistService.generate(vm.id, payload)
+        .then(function () {
+          return vm.fetchChecklist();
+        })
+        .catch(function () {
+          vm.error.checklistAction = 'Failed to generate checklist.';
+        })
+        .finally(function () {
+          vm.loading.checklistAction = false;
+        });
+    };
+
+    vm.updateChecklistItem = function (item) {
+      if (!item || !item.id) return;
+      var payload = {
+        strStatus: item.strStatus,
+        isRequired: item.isRequired ? 1 : 0,
+        dteCompleted: toYMD(item.dteCompleted),
+        intYearLevel: item.intYearLevel != null ? parseInt(item.intYearLevel, 10) : null,
+        intSem: item.intSem != null ? parseInt(item.intSem, 10) : null
+      };
+      vm.loading.checklistAction = true;
+      vm.error.checklistAction = null;
+      ChecklistService.updateItem(vm.id, item.id, payload)
+        .then(function () {
+          return vm.fetchChecklist();
+        })
+        .catch(function () {
+          vm.error.checklistAction = 'Failed to update item.';
+        })
+        .finally(function () {
+          vm.loading.checklistAction = false;
+        });
+    };
+
+    vm.removeChecklistItem = function (item) {
+      if (!item || !item.id) return;
+      vm.loading.checklistAction = true;
+      vm.error.checklistAction = null;
+      ChecklistService.deleteItem(vm.id, item.id)
+        .then(function () {
+          return vm.fetchChecklist();
+        })
+        .catch(function () {
+          vm.error.checklistAction = 'Failed to remove item.';
+        })
+        .finally(function () {
+          vm.loading.checklistAction = false;
+        });
+    };
+
+    vm.addChecklistItem = function () {
+      var sid = parseInt(vm.addSubjectId, 10);
+      if (isNaN(sid) || !vm.checklist || !vm.checklist.id) return;
+      vm.loading.checklistAction = true;
+      vm.error.checklistAction = null;
+      var payload = {
+        intChecklistID: vm.checklist.id,
+        intSubjectID: sid,
+        strStatus: 'planned',
+        isRequired: 1
+      };
+      ChecklistService.addItem(vm.id, payload)
+        .then(function () {
+          vm.addSubjectId = null;
+          return vm.fetchChecklist();
+        })
+        .catch(function () {
+          vm.error.checklistAction = 'Failed to add subject.';
+        })
+        .finally(function () {
+          vm.loading.checklistAction = false;
+        });
     };
 
     // actions
@@ -286,8 +429,11 @@
 
     // init
     vm.init = function () {
+      // Checklist operates by student id; fetch regardless of student number
+      vm.fetchChecklist();
+
       if (!vm.sn) {
-        return; // wait for a valid student number in query string
+        return; // wait for a valid student number in query string for balances/records/ledger
       }
       // Load balances and ledger right away
       vm.fetchBalances();

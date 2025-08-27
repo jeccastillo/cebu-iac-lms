@@ -1,0 +1,1 @@
+Disable generate button when checklist is already generated

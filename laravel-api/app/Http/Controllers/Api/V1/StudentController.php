@@ -101,6 +101,42 @@ class StudentController extends Controller
     }
 
     /**
+     * GET /api/v1/students/{id}
+     * Returns minimal student info including student_number.
+     */
+    public function show(int $id): JsonResponse
+    {
+        $row = DB::table('tb_mas_users as u')
+            ->leftJoin('tb_mas_programs as p', 'u.intProgramID', '=', 'p.intProgramID')
+            ->where('u.intID', $id)
+            ->select(
+                'u.intID as id',
+                'u.strStudentNumber as student_number',
+                'u.strFirstname as first_name',
+                'u.strMiddlename as middle_name',
+                'u.strLastname as last_name',
+                DB::raw('(SELECT r.intYearLevel FROM tb_mas_registration r WHERE r.intStudentID = u.intID ORDER BY r.dteRegistered DESC, r.intRegistrationID DESC LIMIT 1) as year_level'),
+                'u.student_status as status',
+                'u.student_type as type',
+                'u.level as student_level',
+                'p.strProgramCode as program'
+            )
+            ->first();
+
+        if (!$row) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Student not found.'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $row
+        ]);
+    }
+
+    /**
      * GET /api/v1/students
      * Query params (all optional):
      *  - page: number (default 1)
