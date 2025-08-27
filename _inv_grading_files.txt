@@ -1,0 +1,15 @@
+
+C:\xampp8\htdocs\iacademy\cebu-iac-lms\application\modules\grading\controllers\Grading.php             
+C:\xampp8\htdocs\iacademy\cebu-iac-lms\application\modules\grading\views\admin\add_grading.php         
+C:\xampp8\htdocs\iacademy\cebu-iac-lms\application\modules\grading\views\admin\edit_grading.php        
+C:\xampp8\htdocs\iacademy\cebu-iac-lms\application\modules\grading\views\admin\grading_view.php        
+C:\xampp8\htdocs\iacademy\cebu-iac-lms\application\modules\grading\views\admin\subject_viewer.php      
+C:\xampp8\htdocs\iacademy\cebu-iac-lms\application\modules\grading\views\admin\term_override.php       
+C:\xampp8\htdocs\iacademy\cebu-iac-lms\application\modules\grading\views\common\edit_grading_conf.php  
+C:\xampp8\htdocs\iacademy\cebu-iac-lms\application\modules\grading\views\common\grading_conf.php       
+C:\xampp8\htdocs\iacademy\cebu-iac-lms\application\modules\grading\views\common\subject_viewer_conf.php
+C:\xampp8\htdocs\iacademy\cebu-iac-lms\application\modules\grading\views\subject_data_js.php           
+C:\xampp8\htdocs\iacademy\cebu-iac-lms\application\modules\grading\views\subject_validation_js.php     
+
+
+

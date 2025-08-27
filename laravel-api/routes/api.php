@@ -21,6 +21,7 @@ use App\Http\Controllers\Api\V1\SystemLogController;
 use App\Http\Controllers\Api\V1\ClasslistController;
 use App\Http\Controllers\Api\V1\ReportsController;
 use App\Http\Controllers\Api\V1\StudentChecklistController;
+use App\Http\Controllers\Api\V1\GradingSystemController;
 
 /*
 |--------------------------------------------------------------------------
@@ -92,6 +93,12 @@ Route::prefix('v1')->group(function () {
     Route::get('/subjects', [SubjectController::class, 'index']);
     Route::get('/subjects/by-curriculum', [SubjectController::class, 'byCurriculum']);
     Route::get('/subjects/{id}', [SubjectController::class, 'show']);
+    Route::get('/subjects/{id}/prerequisites', [SubjectController::class, 'prerequisites']);
+    Route::get('/subjects/{id}/corequisites', [SubjectController::class, 'corequisites']);
+    Route::post('/subjects/{id}/check-prerequisites', [SubjectController::class, 'checkPrerequisites']);
+    Route::post('/subjects/check-prerequisites-batch', [SubjectController::class, 'checkPrerequisitesBatch']);
+    Route::post('/subjects/{id}/check-corequisites', [SubjectController::class, 'checkCorequisites']);
+    Route::post('/subjects/check-corequisites-batch', [SubjectController::class, 'checkCorequisitesBatch']);
 
     // write operations (CI parity)
     Route::post('/subjects/submit', [SubjectController::class, 'submit'])->middleware('role:registrar,admin');
@@ -100,8 +107,21 @@ Route::prefix('v1')->group(function () {
     Route::post('/subjects/submit-days', [SubjectController::class, 'submitDays'])->middleware('role:registrar,admin');
     Route::post('/subjects/submit-room', [SubjectController::class, 'submitRoom'])->middleware('role:registrar,admin');
     Route::post('/subjects/submit-prereq', [SubjectController::class, 'submitPrereq'])->middleware('role:registrar,admin');
+    Route::post('/subjects/submit-coreq', [SubjectController::class, 'submitCoreq'])->middleware('role:registrar,admin');
     Route::post('/subjects/delete-prereq', [SubjectController::class, 'deletePrereq'])->middleware('role:registrar,admin');
+    Route::post('/subjects/delete-coreq', [SubjectController::class, 'deleteCoreq'])->middleware('role:registrar,admin');
     Route::post('/subjects/delete', [SubjectController::class, 'delete'])->middleware('role:registrar,admin');
+
+    // RESTful facade routes mapping to parity handlers
+    Route::post('/subjects', [SubjectController::class, 'submit'])->middleware('role:registrar,admin');
+    Route::put('/subjects/{id}', function (Request $request, $id) {
+        $request->merge(['intID' => (int) $id]);
+        return app(\App\Http\Controllers\Api\V1\SubjectController::class)->edit($request);
+    })->middleware('role:registrar,admin');
+    Route::delete('/subjects/{id}', function (Request $request, $id) {
+        $request->merge(['id' => (int) $id]);
+        return app(\App\Http\Controllers\Api\V1\SubjectController::class)->delete($request);
+    })->middleware('role:registrar,admin');
 
     // Tuition Year endpoints (read + write parity)
     Route::get('/tuition-years', [TuitionYearController::class, 'index']);
@@ -192,4 +212,16 @@ Route::prefix('v1')->group(function () {
     Route::post('/classlists', [ClasslistController::class, 'store'])->middleware('role:registrar,admin');
     Route::put('/classlists/{id}', [ClasslistController::class, 'update'])->middleware('role:registrar,admin');
     Route::delete('/classlists/{id}', [ClasslistController::class, 'destroy'])->middleware('role:registrar,admin');
+
+    // Grading Systems CRUD
+    Route::get('/grading-systems', [GradingSystemController::class, 'index']);
+    Route::get('/grading-systems/{id}', [GradingSystemController::class, 'show']);
+    Route::post('/grading-systems', [GradingSystemController::class, 'store'])->middleware('role:admin,faculty_admin');
+    Route::put('/grading-systems/{id}', [GradingSystemController::class, 'update'])->middleware('role:admin,faculty_admin');
+    Route::delete('/grading-systems/{id}', [GradingSystemController::class, 'destroy'])->middleware('role:admin,faculty_admin');
+
+    // Grading Items
+    Route::post('/grading-systems/{id}/items/bulk', [GradingSystemController::class, 'addItemsBulk'])->middleware('role:admin,faculty_admin');
+    Route::post('/grading-systems/{id}/items', [GradingSystemController::class, 'addItem'])->middleware('role:admin,faculty_admin');
+    Route::delete('/grading-systems/items/{itemId}', [GradingSystemController::class, 'deleteItem'])->middleware('role:admin,faculty_admin');
 });

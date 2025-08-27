@@ -1,150 +1,164 @@
 # Implementation Plan
 
 [Overview]
-Add a new Laravel API CRUD for tb_mas_classlist (Eloquent: App\Models\Classlist), with system logs recorded on create/update/dissolve, and a guarded dissolve that prevents setting dissolved when related tb_mas_classlist_student records exist. The delete operation follows the legacy behavior: instead of hard-deleting, we set isDissolved=1. The API must also force strClassName, year, strSection, and sub_section to be saved as blank strings (""), never taken from client input.
+Add a new faculty_admin role and deliver a complete Grading Systems management feature that spans Laravel API (CRUD for tb_mas_grading and tb_mas_grading_item) and AngularJS (Unity SPA) UI, gated so only admin and faculty_admin can create, edit, and delete grading systems and items, while reads are publicly available.
 
-This CRUD will follow existing API architectural patterns (Program/Campus controllers) and reuse the existing SystemLogService for audit trails. The delete operation will validate referential usage against App\Models\ClasslistStudent. Request validation will explicitly disallow the four restricted fields and the controller will forcibly set them to "" before persistence to guarantee the invariant regardless of client behavior. No database schema changes are required.
+This feature centralizes grading configuration so Registrar/Admin and Faculty Admin can maintain institutional grading scales. The Laravel API exposes well-validated endpoints, logs all actions, and enforces usage constraints (e.g., prevent deleting systems in use). The AngularJS UI provides listing, creation, editing, and item management views with role-based visibility in the sidebar, using the same access rules. The work integrates with legacy CodeIgniter components non-invasively: existing CI views/routes remain, but the new SPA pages become the primary admin interface for grading configuration.
 
-[Types]  
-No new global type system constructs; new request validation classes and a resource may be added for response shaping.
+[Types]
+Eloquent model-backed types represent the underlying tb_mas_grading and tb_mas_grading_item records.
 
-Detailed structures/specs:
-- App\Models\Classlist (exists)
-  - Table: tb_mas_classlist, PK: intID
-  - Relevant fields that may be accepted/managed by this CRUD (based on legacy schema and usage across services):
-    - intSubjectID: int, required; FK to tb_mas_subjects.intID
-    - intFacultyID: int, required; FK to tb_mas_faculty.intID
-    - strAcademicYear: string, required (term/syid), e.g. numeric or code; max 50
-    - strUnits: string|null, optional; max 20
-    - intFinalized: int|null, optional; default 0 (if omitted)
-    - campus_id: int|null, optional; if provided, integer
-    - Restricted fields (must be saved as blank string by backend): strClassName, year, strSection, sub_section
-- App\Models\ClasslistStudent (exists)
-  - Table: tb_mas_classlist_student, PK: intCSID
-  - Relation: intClassListID → tb_mas_classlist.intID
+- GradingSystem (maps to tb_mas_grading)
+  - id: int, primary key, auto-increment
+  - name: string, required, unique (case-insensitive if supported)
+  - items(): hasMany GradingItem by grading_id
 
-New validation request classes:
-- App\Http\Requests\Api\V1\ClasslistStoreRequest
-  - Validates payload for create
-  - Explicitly forbids strClassName, year, strSection, sub_section as input; they are ignored and overwritten as ""
-- App\Http\Requests\Api\V1\ClasslistUpdateRequest
-  - Validates payload for update (all fields optional)
-  - Same forbidden-field handling as store
+- GradingItem (maps to tb_mas_grading_item)
+  - id: int, primary key, auto-increment
+  - grading_id: int, required, foreign key to tb_mas_grading.id, on delete cascade (enforced in app-level transactions)
+  - value: string, required, unique per grading_id (app-level uniqueness)
+  - remarks: string, required
+
+Validation rules:
+- GradingSystemStoreRequest: { name: required|string|min:1|max:255|unique:tb_mas_grading,name }
+- GradingSystemUpdateRequest: { name: required|string|min:1|max:255|unique:tb_mas_grading,name,{id} }
+- GradingItemStoreRequest: { value: required|string|min:1|max:20, remarks: required|string|min:1|max:255 }
+- GradingItemsBulkStoreRequest: { items: required|array|min:1, items.*.value: string|required, items.*.remarks: string|required }; reject duplicate values within the same payload and skip already-existing values to be idempotent.
 
 [Files]
-Add one controller and two request classes, update routes. Optionally add a resource for responses.
+Implement new Laravel API files, update Auth gate, add AngularJS SPA routes/components, and expose UI in sidebar.
 
-Detailed breakdown:
-- New files to be created:
-  - laravel-api/app/Http/Controllers/Api/V1/ClasslistController.php
-    - Purpose: RESTful CRUD for classlists (index, show, store, update, destroy) with logging and delete safety.
-  - laravel-api/app/Http/Requests/Api/V1/ClasslistStoreRequest.php
-    - Purpose: Validate payload for creating a classlist; restrict forbidden fields.
-  - laravel-api/app/Http/Requests/Api/V1/ClasslistUpdateRequest.php
-    - Purpose: Validate payload for updating a classlist; restrict forbidden fields.
-  - Optional (nice-to-have): laravel-api/app/Http/Resources/ClasslistResource.php
-    - Purpose: Normalize output fields and alignment with RegistrarClasslistResource if needed. For MVP, controller may return Eloquent arrays directly to reduce scope.
-
-- Existing files to be modified:
-  - laravel-api/routes/api.php
-    - Add API v1 endpoints for classlists:
-      - GET /api/v1/classlists
-      - GET /api/v1/classlists/{id}
-      - POST /api/v1/classlists (role: registrar,admin)
-      - PUT /api/v1/classlists/{id} (role: registrar,admin)
-      - DELETE /api/v1/classlists/{id} (role: registrar,admin)
-
-- Files to be deleted or moved:
-  - None.
-
-- Configuration file updates:
-  - None.
+- New (Laravel API)
+  - laravel-api/app/Models/GradingSystem.php: Eloquent model: protected $table='tb_mas_grading'; fillable ['name']; relation items()
+  - laravel-api/app/Models/GradingItem.php: Eloquent model: protected $table='tb_mas_grading_item'; fillable ['grading_id','value','remarks']; relation gradingSystem()
+  - laravel-api/app/Http/Controllers/Api/V1/GradingSystemController.php: REST controller with CRUD and items endpoints; uses SystemLogService and DB transactions
+  - laravel-api/app/Http/Requests/Api/V1/GradingSystemStoreRequest.php: validation for POST create
+  - laravel-api/app/Http/Requests/Api/V1/GradingSystemUpdateRequest.php: validation for PUT update
+  - laravel-api/app/Http/Requests/Api/V1/GradingItemStoreRequest.php: validation for single item add
+  - laravel-api/app/Http/Requests/Api/V1/GradingItemsBulkStoreRequest.php: validation for bulk add
+- Modified (Laravel API)
+  - laravel-api/app/Providers/AuthServiceProvider.php: define Gate::define('grading.manage', ...) to allow admin or faculty_admin
+  - laravel-api/routes/api.php: register routes under /api/v1:
+    - GET /grading-systems
+    - GET /grading-systems/{id}
+    - POST /grading-systems (authorize grading.manage)
+    - PUT /grading-systems/{id} (authorize grading.manage)
+    - DELETE /grading-systems/{id} (authorize grading.manage)
+    - POST /grading-systems/{id}/items (authorize grading.manage)
+    - POST /grading-systems/{id}/items/bulk (authorize grading.manage)
+    - DELETE /grading-systems/items/{itemId} (authorize grading.manage)
+- New (AngularJS Unity SPA)
+  - frontend/unity-spa/features/grading/grading.service.js: wraps API endpoints; uses APP_CONFIG.API_BASE
+  - frontend/unity-spa/features/grading/grading.controller.js: GradingListController and GradingEditController
+  - frontend/unity-spa/features/grading/list.html: list view with create/edit/delete actions and counts
+  - frontend/unity-spa/features/grading/edit.html: create/edit form and item management (add, add bulk, remove)
+- Modified (AngularJS Unity SPA)
+  - frontend/unity-spa/core/routes.js: add routes
+    - /grading-systems -> GradingListController (requiredRoles: ['faculty_admin','admin'])
+    - /grading-systems/new -> GradingEditController (requiredRoles: ['faculty_admin','admin'])
+    - /grading-systems/:id/edit -> GradingEditController (requiredRoles: ['faculty_admin','admin'])
+  - frontend/unity-spa/shared/components/sidebar/sidebar.html: add "Grading Systems" menu visible to faculty_admin and admin
+  - frontend/unity-spa/index.html: ensure new grading feature scripts are included in correct order so pages render (scripts loaded after core, before run)
+  - frontend/unity-spa/core/roles.constants.js and frontend/unity-spa/core/run.js: used to enforce requiredRoles metadata at route-level (no code changes required for this feature, but noted as dependencies)
 
 [Functions]
-Add a new controller with five methods; no modifications to core services.
+API controller functions implement CRUD and item operations; Angular service/controller functions orchestrate UI flow.
 
-Detailed breakdown:
-- New functions:
-  - App\Http\Controllers\Api\V1\ClasslistController::index(Request $request)
-    - Purpose: List classlists with optional filters (e.g., strAcademicYear, intSubjectID, intFacultyID, finalized). Return JSON list.
-  - App\Http\Controllers\Api\V1\ClasslistController::show(int $id)
-    - Purpose: Return a single classlist by intID or 404.
-  - App\Http\Controllers\Api\V1\ClasslistController::store(ClasslistStoreRequest $request)
-    - Purpose: Create classlist; force strClassName/year/strSection/sub_section to ""; set intFinalized default 0 if missing; log via SystemLogService.
-  - App\Http\Controllers\Api\V1\ClasslistController::update(ClasslistUpdateRequest $request, int $id)
-    - Purpose: Update classlist; forcibly overwrite the four restricted fields to "" regardless of input; log via SystemLogService.
-  - App\Http\Controllers\Api\V1\ClasslistController::destroy(int $id)
-    - Purpose: Follow legacy dissolve: if no ClasslistStudent rows exist, set isDissolved=1 (soft delete) and log via SystemLogService as an update; if students exist, return 422 and do not modify.
-
-- Modified functions:
-  - None in existing controllers/services.
-
-- Removed functions:
-  - None.
+- New (Laravel API)
+  - GradingSystemController@index(Request): JsonResponse
+  - GradingSystemController@show(int $id): JsonResponse
+  - GradingSystemController@store(GradingSystemStoreRequest): JsonResponse
+  - GradingSystemController@update(GradingSystemUpdateRequest, int $id): JsonResponse
+  - GradingSystemController@destroy(Request, int $id): JsonResponse
+  - GradingSystemController@addItemsBulk(GradingItemsBulkStoreRequest, int $id): JsonResponse
+  - GradingSystemController@addItem(GradingItemStoreRequest, int $id): JsonResponse
+  - GradingSystemController@deleteItem(Request, int $itemId): JsonResponse
+- Modified (Laravel API)
+  - AuthServiceProvider@boot(): Gate::define('grading.manage', fn($user) => $user->isAdmin() || $user->hasRole('faculty_admin'))
+  - routes/api.php: register routes and middleware for authorization
+- New (AngularJS)
+  - grading.service.js:
+    - list(): GET /grading-systems
+    - get(id): GET /grading-systems/{id}
+    - create(payload): POST /grading-systems
+    - update(id, payload): PUT /grading-systems/{id}
+    - remove(id): DELETE /grading-systems/{id}
+    - addItem(id, payload): POST /grading-systems/{id}/items
+    - addItemsBulk(id, payload): POST /grading-systems/{id}/items/bulk
+    - deleteItem(itemId): DELETE /grading-systems/items/{itemId}
+  - grading.controller.js:
+    - GradingListController: loads list, navigates to create/edit, deletes system with confirm, guards roles
+    - GradingEditController: handles create/update of system, loads items, add/remove single and bulk operations
 
 [Classes]
-Add one controller class and two FormRequest classes.
+Eloquent models express relationship mapping; request classes enforce validation; Angular controllers define UI logic.
 
-Detailed breakdown:
-- New classes:
-  - ClasslistController (laravel-api/app/Http/Controllers/Api/V1/ClasslistController.php)
-    - Key methods: index, show, store, update, destroy
-    - Dependencies: App\Models\Classlist, App\Models\ClasslistStudent, App\Services\SystemLogService, Illuminate\Http\Request
-  - ClasslistStoreRequest (laravel-api/app/Http/Requests/Api/V1/ClasslistStoreRequest.php)
-    - Extends: Illuminate\Foundation\Http\FormRequest
-    - Validates required fields; prohibits restricted fields from being used.
-  - ClasslistUpdateRequest (laravel-api/app/Http/Requests/Api/V1/ClasslistUpdateRequest.php)
-    - Extends: FormRequest
-    - Validates optional fields; prohibits restricted fields from being used.
-
-- Modified classes:
-  - None required. App\Models\Classlist and App\Models\ClasslistStudent are sufficient as-is (guarded = [] covers mass assignment).
-
-- Removed classes:
-  - None.
+- New (Laravel API)
+  - App\Models\GradingSystem
+    - $table='tb_mas_grading'
+    - $fillable=['name']
+    - items(): hasMany(App\Models\GradingItem, 'grading_id')
+  - App\Models\GradingItem
+    - $table='tb_mas_grading_item'
+    - $fillable=['grading_id','value','remarks']
+    - gradingSystem(): belongsTo(App\Models\GradingSystem, 'grading_id')
+  - App\Http\Requests\Api\V1\GradingSystemStoreRequest
+  - App\Http\Requests\Api\V1\GradingSystemUpdateRequest
+  - App\Http\Requests\Api\V1\GradingItemStoreRequest
+  - App\Http\Requests\Api\V1\GradingItemsBulkStoreRequest
+- Modified (Laravel API)
+  - App\Providers\AuthServiceProvider: adds Gate grading.manage
+- New (AngularJS)
+  - GradingListController
+  - GradingEditController
 
 [Dependencies]
-No new composer dependencies required.
-
-Details:
-- Reuse existing App\Services\SystemLogService for action logs.
-- Use Illuminate components already included in the Laravel app.
+No third-party packages. Depends on:
+- Laravel: Eloquent, Request validation, Gate authorization, DB transactions, SystemLogService
+- AngularJS: existing unityApp module, APP_CONFIG.API_BASE, StorageService, RoleService, ngRoute, and templates include pipeline in index.html
+- Backend DB tables: tb_mas_grading and tb_mas_grading_item (existing RDBMS schema)
 
 [Testing]
-Add feature tests for basic CRUD and guard checks.
+Critical-path API tests via curl/Postman:
+- GET /grading-systems ⇒ 200, JSON array with items_count
+- GET /grading-systems/{id} ⇒ 200, contains system and ordered items
+- POST /grading-systems (authorized) ⇒ 201, creates system
+- PUT /grading-systems/{id} (authorized) ⇒ 200, updates name
+- DELETE /grading-systems/{id} (authorized) ⇒ 200; 409 if in use by tb_mas_subjects.grading_system_id or grading_system_id_midterm
+- POST /grading-systems/{id}/items (authorized) ⇒ 201; 409 on duplicate value in same system
+- POST /grading-systems/{id}/items/bulk (authorized) ⇒ 201; skips existing values; 422 if duplicate values in the same payload
+- DELETE /grading-systems/items/{itemId} (authorized) ⇒ 200
+- Verify SystemLogService entries created for create/update/delete operations
+UI smoke tests:
+- Sidebar shows “Grading Systems” for admin and faculty_admin
+- List page loads; create opens and persists; edit loads items; add/remove single & bulk works; route guards prevent access for other roles
 
-Test plan:
-- Create (201): POST /api/v1/classlists with required fields only; verify response payload has the four restricted fields as "", intFinalized default 0 when omitted; verify system log row recorded.
-- Update (200): PUT /api/v1/classlists/{id} attempting to set restricted fields to non-empty values; ensure they remain "" in DB and system log captured the change of other fields only.
-- Read (200/404): GET /api/v1/classlists and GET /api/v1/classlists/{id}; 404 for unknown id.
-- Dissolve guard (422): Seed a ClasslistStudent record referencing a classlist; attempt DELETE and expect 422 with message about connected records; verify no change to isDissolved and no success log entry.
-- Dissolve success (200): DELETE an unreferenced classlist; verify isDissolved changed from 0 to 1 and system log recorded as update with old_values and new_values reflecting the change.
+Note: If API responses show malformed JSON in some environments (e.g., commas missing in console), capture raw responses to a file and verify content; investigate output buffering or encoding if needed; controller returns proper JSON via response()->json.
 
 [Implementation Order]
-Implement controller and requests, wire routes, then validate with minimal manual tests or automated tests.
+Complete backend first, then frontend, then tests; protect destructive actions with guards and logging.
 
-Numbered steps:
-1. Create App\Http\Requests\Api\V1\ClasslistStoreRequest with rules:
-   - intSubjectID: required|integer|exists:tb_mas_subjects,intID
-   - intFacultyID: required|integer|exists:tb_mas_faculty,intID
-   - strAcademicYear: required|string|max:50
-   - strUnits: sometimes|nullable|string|max:20
-   - intFinalized: sometimes|nullable|integer
-   - campus_id: sometimes|nullable|integer
-   - Explicitly do not require/prohibit strClassName/year/strSection/sub_section; they will be ignored and overwritten as "" in controller.
-2. Create App\Http\Requests\Api\V1\ClasslistUpdateRequest with same fields optional (sometimes), and same prohibited/restricted-field note.
-3. Create App\Http\Controllers\Api\V1\ClasslistController:
-   - index(): allow optional filters like strAcademicYear (term), intSubjectID, intFacultyID, intFinalized; return ordered list.
-   - show(): find by intID or return 404.
-   - store(): $data = $request->validated(); unset restricted fields if present; force set restricted fields to ""; set intFinalized default 0 if absent; create; SystemLogService::log('create','Classlist',$id,null,$new,$request).
-   - update(): load model; $old = toArray(); $data = $request->validated(); always override restricted fields to "" in $data; update; $new = fresh()->toArray(); log update.
-   - destroy(): check ClasslistStudent::where('intClassListID',$id)->exists(); if true return 422 JSON {success:false,message:'Cannot dissolve classlist; students exist.'}; else $old = toArray(); update(['isDissolved' => 1]); $new = fresh()->toArray(); log update with old/new.
-4. Update laravel-api/routes/api.php to add:
-   - GET /api/v1/classlists
-   - GET /api/v1/classlists/{id}
-   - POST /api/v1/classlists (middleware role:registrar,admin)
-   - PUT /api/v1/classlists/{id} (middleware role:registrar,admin)
-   - DELETE /api/v1/classlists/{id} (middleware role:registrar,admin)
-5. Optional: Create App\Http\Resources\ClasslistResource for consistent responses; initially, return Eloquent arrays for speed.
-6. Manual verification using Postman/curl; later add PHPUnit Feature tests covering success/guard cases.
-7. Documentation: note that the backend will always blank strClassName/year/strSection/sub_section, so forms should omit them entirely.
+1) Authorization and Roles
+   - Add/confirm faculty_admin role mapping in user context and Gate grading.manage in AuthServiceProvider.
+2) Data Models
+   - Implement GradingSystem and GradingItem Eloquent models and relations.
+3) Validation
+   - Implement GradingSystemStore/Update and GradingItemStore/ItemsBulk requests with rules.
+4) Controller
+   - Implement CRUD + item add/bulk-delete endpoints with transactions, constraints, logging.
+5) Routes
+   - Register API v1 routes; make GETs public; protect mutations with gate.
+6) Angular Service
+   - Implement grading.service.js calling API endpoints using APP_CONFIG.API_BASE.
+7) Angular Controllers/Views
+   - Implement GradingListController and GradingEditController; add list.html and edit.html.
+8) Routing/Sidebar
+   - Wire routes in core/routes.js with requiredRoles ['faculty_admin','admin']; add menu to sidebar.html.
+9) Index Includes
+   - Ensure new grading feature scripts are included in index.html in the correct order.
+10) API Tests
+   - Execute critical-path tests (GET/POST/PUT/DELETE, including conflict cases).
+11) UI Smoke Tests
+   - Verify role gating, CRUD from UI, and no console errors; fix CORS only for local file:// testing by running via http://localhost/... rather than file://.
+12) Logging Verification
+   - Confirm SystemLogService captured create/update/delete entries and metadata.

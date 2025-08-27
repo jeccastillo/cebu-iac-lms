@@ -174,8 +174,9 @@
       ChecklistService.get(student.id, {}).then(function (res) {
         var data = res && res.data ? res.data : res;
         var items = (data && data.items) ? data.items : [];
-        var adds = 0;
+        var candidateItems = [];
 
+        // First pass: collect all candidate items
         items.forEach(function (it) {
           if (!it || !it.subject || !it.subject.code) return;          
           // Only planned/required items matching the UI year level, if provided
@@ -221,9 +222,9 @@
           if (sidKey) {
             options = classlistsBySubjectId[sidKey] || [];            
           }
-          console.log(options);
+          
           if (!options.length) return;
-          console.log("Options Passed");
+          
           // Choose the first available section (could be improved with section preferences)
           var chosen = options[0];
           var cid = chosen && chosen.intID ? parseInt(chosen.intID, 10) : 0;
@@ -235,25 +236,144 @@
           });
           if (exists) return;
 
-          vm.ops.push({
-            type: 'add',
-            classlist_id: cid,
-            subjectCode: chosen.subjectCode || chosen.strCode || it.subject.code,
-            sectionCode: chosen.sectionCode || ''
+          candidateItems.push({
+            item: it,
+            chosen: chosen,
+            cid: cid,
+            subjId: subjId,
+            subjCode: subjCode
           });
-          adds += 1;
         });
 
+        // Second pass: check prerequisites for all candidates
+        if (candidateItems.length === 0) {
+          if (window.Swal) {
+            Swal.fire({
+              icon: 'info',
+              title: 'No subjects queued',
+              text: 'No planned checklist items matched available sections.'
+            });
+          }
+          vm.loading = false;
+          return;
+        }
+
+        // Collect all subject IDs for batch prerequisite checking
+        var subjectIds = candidateItems.map(function(candidate) {
+          return candidate.subjId;
+        }).filter(function(id) {
+          return id !== null && !isNaN(id);
+        });
+
+        if (subjectIds.length === 0) {
+          // No valid subject IDs, add all without prerequisite checking
+          candidateItems.forEach(function(candidate) {
+            vm.ops.push({
+              type: 'add',
+              classlist_id: candidate.cid,
+              subjectCode: candidate.chosen.subjectCode || candidate.chosen.strCode || candidate.item.subject.code,
+              sectionCode: candidate.chosen.sectionCode || ''
+            });
+          });
+          
+          if (window.Swal) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Queued from Checklist',
+              text: 'Added ' + candidateItems.length + ' subject(s) to the queue.'
+            });
+          }
+          vm.loading = false;
+          return;
+        }
+
+        // Batch check prerequisites
+        $http.post(APP_CONFIG.API_BASE + '/subjects/check-prerequisites-batch', {
+          student_number: vm.studentNumber,
+          subject_ids: subjectIds
+        }).then(function(resp) {
+          var prerequisiteResults = (resp && resp.data && resp.data.data) ? resp.data.data : {};
+          var adds = 0;
+          var skipped = 0;
+          var skippedSubjects = [];
+
+          candidateItems.forEach(function(candidate) {
+            var prerequisiteCheck = prerequisiteResults[candidate.subjId] || { passed: true, missing_prerequisites: [] };
+            
+            if (prerequisiteCheck.passed) {
+              // Prerequisites satisfied, add to queue
+              vm.ops.push({
+                type: 'add',
+                classlist_id: candidate.cid,
+                subjectCode: candidate.chosen.subjectCode || candidate.chosen.strCode || candidate.item.subject.code,
+                sectionCode: candidate.chosen.sectionCode || '',
+                prerequisite_check: prerequisiteCheck
+              });
+              adds += 1;
+            } else {
+              // Prerequisites not satisfied, skip this subject
+              skipped += 1;
+              var missingCodes = prerequisiteCheck.missing_prerequisites.map(function(p) { return p.code; });
+              skippedSubjects.push({
+                code: candidate.item.subject.code,
+                missing: missingCodes
+              });
+            }
+          });
+
+          // Show results
+          if (window.Swal) {
+            var message = '';
+            if (adds > 0) {
+              message += 'Added ' + adds + ' subject(s) to the queue.';
+            }
+            if (skipped > 0) {
+              message += (adds > 0 ? '\n\n' : '') + 'Skipped ' + skipped + ' subject(s) due to missing prerequisites:\n';
+              skippedSubjects.forEach(function(subj) {
+                message += '• ' + subj.code + ' (missing: ' + subj.missing.join(', ') + ')\n';
+              });
+            }
+            
+            Swal.fire({
+              icon: adds > 0 ? (skipped > 0 ? 'warning' : 'success') : 'info',
+              title: adds > 0 ? 'Queued from Checklist' : 'No subjects queued',
+              text: message || 'No subjects could be queued.',
+              showConfirmButton: true
+            });
+          }
+        }).catch(function(err) {
+          console.error('Error checking prerequisites for auto-queue:', err);
+          // On error, add all subjects without prerequisite checking
+          candidateItems.forEach(function(candidate) {
+            vm.ops.push({
+              type: 'add',
+              classlist_id: candidate.cid,
+              subjectCode: candidate.chosen.subjectCode || candidate.chosen.strCode || candidate.item.subject.code,
+              sectionCode: candidate.chosen.sectionCode || ''
+            });
+          });
+          
+          if (window.Swal) {
+            Swal.fire({
+              icon: 'warning',
+              title: 'Queued from Checklist',
+              text: 'Added ' + candidateItems.length + ' subject(s) to the queue. (Prerequisite checking failed)'
+            });
+          }
+        }).finally(function() {
+          vm.loading = false;
+          if ($scope && $scope.$applyAsync) { $scope.$applyAsync(); }
+        });
+      }).catch(function(err) {
+        console.error('Error loading checklist:', err);
+        vm.loading = false;
         if (window.Swal) {
           Swal.fire({
-            icon: adds > 0 ? 'success' : 'info',
-            title: adds > 0 ? 'Queued from Checklist' : 'No subjects queued',
-            text: adds > 0 ? ('Added ' + adds + ' subject(s) to the queue.') : 'No planned checklist items matched available sections.'
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to load checklist data.'
           });
         }
-      }).finally(function () {
-        vm.loading = false;
-        if ($scope && $scope.$applyAsync) { $scope.$applyAsync(); }
       });
     }
  
@@ -532,14 +652,83 @@
     function queueAdd() {
       var cid = parseInt(vm.selectedAddClasslistId, 10);
       if (!cid) return;
+      
       // prevent duplicate add of the same classlist
       var exists = (vm.ops || []).some(function (op) { return op.type === 'add' && parseInt(op.classlist_id, 10) === cid; });
       if (exists) return;
+      
       var sel = (vm.sections || []).find(function (s) { return parseInt(s.intID, 10) === cid; });
       var subjCode = sel ? (sel.subjectCode || sel.strCode || '') : '';
       var sectCode = sel ? (sel.sectionCode || '') : '';
-      vm.ops.push({ type: 'add', classlist_id: cid, subjectCode: subjCode, sectionCode: sectCode });
+      
+      // Check prerequisites before adding to queue
+      if (vm.studentNumber && sel && sel.subject_id) {
+        vm.loading = true;
+        checkPrerequisites(sel.subject_id, function(prerequisiteCheck) {
+          vm.loading = false;
+          
+          if (!prerequisiteCheck.passed) {
+            // Show prerequisite warning
+            var missingCodes = prerequisiteCheck.missing_prerequisites.map(function(p) { return p.code; });
+            var message = 'Prerequisites not satisfied for ' + subjCode + '.\n\nMissing: ' + missingCodes.join(', ');
+            
+            if (window.Swal) {
+              Swal.fire({
+                icon: 'warning',
+                title: 'Prerequisites Required',
+                html: 'Prerequisites not satisfied for <strong>' + subjCode + '</strong>.<br><br>' +
+                      'Missing: <strong>' + missingCodes.join(', ') + '</strong><br><br>' +
+                      'Do you want to add it anyway?',
+                showCancelButton: true,
+                confirmButtonText: 'Add Anyway',
+                cancelButtonText: 'Cancel'
+              }).then(function(result) {
+                if (result.isConfirmed) {
+                  addToQueue(cid, subjCode, sectCode, prerequisiteCheck);
+                }
+              });
+            } else {
+              if (confirm(message + '\n\nDo you want to add it anyway?')) {
+                addToQueue(cid, subjCode, sectCode, prerequisiteCheck);
+              }
+            }
+          } else {
+            // Prerequisites satisfied, add directly
+            addToQueue(cid, subjCode, sectCode, prerequisiteCheck);
+          }
+        });
+      } else {
+        // No student selected or no subject ID, add without checking
+        addToQueue(cid, subjCode, sectCode, null);
+      }
+    }
+    
+    function addToQueue(cid, subjCode, sectCode, prerequisiteCheck) {
+      vm.ops.push({ 
+        type: 'add', 
+        classlist_id: cid, 
+        subjectCode: subjCode, 
+        sectionCode: sectCode,
+        prerequisite_check: prerequisiteCheck
+      });
       vm.selectedAddClasslistId = '';
+    }
+    
+    function checkPrerequisites(subjectId, callback) {
+      if (!vm.studentNumber || !subjectId) {
+        callback({ passed: true, missing_prerequisites: [] });
+        return;
+      }
+      
+      $http.post(APP_CONFIG.API_BASE + '/subjects/' + subjectId + '/check-prerequisites', {
+        student_number: vm.studentNumber
+      }).then(function(resp) {
+        var data = (resp && resp.data && resp.data.data) ? resp.data.data : { passed: true, missing_prerequisites: [] };
+        callback(data);
+      }).catch(function(err) {
+        console.error('Error checking prerequisites:', err);
+        callback({ passed: true, missing_prerequisites: [] }); // Allow on error
+      });
     }
 
     function queueDrop() {

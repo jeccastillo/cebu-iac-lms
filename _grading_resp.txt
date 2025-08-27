@@ -1,0 +1,1 @@
+﻿{"success":true,"data":[{"id":3,"name":"Internship","items_count":13},{"id":2,"name":"PassedFailed","items_count":2},{"id":1,"name":"Standard","items_count":12}]}

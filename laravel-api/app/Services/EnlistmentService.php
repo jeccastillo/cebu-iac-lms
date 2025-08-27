@@ -10,10 +10,14 @@ use Throwable;
 class EnlistmentService
 {
     protected UserContextResolver $ctx;
+    protected PrerequisiteService $prerequisiteService;
+    protected CorequisiteService $corequisiteService;
 
-    public function __construct(UserContextResolver $ctx)
+    public function __construct(UserContextResolver $ctx, PrerequisiteService $prerequisiteService, CorequisiteService $corequisiteService)
     {
         $this->ctx = $ctx;
+        $this->prerequisiteService = $prerequisiteService;
+        $this->corequisiteService = $corequisiteService;
     }
 
     /**
@@ -54,6 +58,23 @@ class EnlistmentService
             }
         }
 
+        $plannedAddClasslistIds = [];
+        foreach ($operations as $op) {
+            $typePl = $op['type'] ?? null;
+            if ($typePl === 'add') {
+                $cid = (int) ($op['classlist_id'] ?? 0);
+                if ($cid > 0) {
+                    $plannedAddClasslistIds[] = $cid;
+                }
+            } elseif ($typePl === 'change_section') {
+                $toCid = (int) ($op['to_classlist_id'] ?? 0);
+                if ($toCid > 0) {
+                    $plannedAddClasslistIds[] = $toCid;
+                }
+            }
+        }
+        $plannedAddClasslistIds = array_values(array_unique($plannedAddClasslistIds));
+
         $results = [];
         $okAll   = true;
 
@@ -73,7 +94,7 @@ class EnlistmentService
 
                 if ($type === 'add') {
                     $classlistId = (int) ($op['classlist_id'] ?? 0);
-                    $res = $this->opAdd($studentId, $term, $classlistId, $actorId, $request);
+                    $res = $this->opAdd($studentId, $term, $classlistId, $actorId, $request, $plannedAddClasslistIds);
                     $okAll = $okAll && ($res['ok'] ?? false);
                     $results[] = array_merge(['type' => 'add'], $res);
                 } elseif ($type === 'drop') {
@@ -84,7 +105,7 @@ class EnlistmentService
                 } elseif ($type === 'change_section') {
                     $fromId = (int) ($op['from_classlist_id'] ?? 0);
                     $toId   = (int) ($op['to_classlist_id'] ?? 0);
-                    $res = $this->opChangeSection($studentId, $term, $fromId, $toId, $actorId, $request);
+                    $res = $this->opChangeSection($studentId, $term, $fromId, $toId, $actorId, $request, $plannedAddClasslistIds);
                     $okAll = $okAll && ($res['ok'] ?? false);
                     $results[] = array_merge(['type' => 'change_section'], $res);
                 } else {
@@ -176,7 +197,7 @@ class EnlistmentService
     /**
      * Add operation: insert tb_mas_classlist_student with defaults.
      */
-    protected function opAdd(int $studentId, int $term, int $classlistId, ?int $actorId, Request $request): array
+    protected function opAdd(int $studentId, int $term, int $classlistId, ?int $actorId, Request $request, array $plannedAddClasslistIds = []): array
     {
         if ($classlistId <= 0) {
             return ['ok' => false, 'message' => 'Invalid classlist id'];
@@ -203,6 +224,31 @@ class EnlistmentService
             return ['ok' => false, 'message' => 'Student already enlisted in this classlist'];
         }
 
+        // Check prerequisites
+        $prerequisiteCheck = $this->prerequisiteService->checkPrerequisitesForClasslist($studentId, $classlistId);
+        if (!$prerequisiteCheck['passed']) {
+            $missingCount = count($prerequisiteCheck['missing_prerequisites']);
+            $missingCodes = array_column($prerequisiteCheck['missing_prerequisites'], 'code');
+            
+            return [
+                'ok' => false, 
+                'message' => "Prerequisites not satisfied. Missing: " . implode(', ', $missingCodes),
+                'prerequisite_check' => $prerequisiteCheck
+            ];
+        }
+
+        // Check corequisites (already passed OR concurrently planned)
+        $corequisiteCheck = $this->corequisiteService->checkCorequisitesForClasslist($studentId, $classlistId, $plannedAddClasslistIds);
+        if (!$corequisiteCheck['passed']) {
+            $missingCodes = array_column($corequisiteCheck['missing_corequisites'], 'code');
+            return [
+                'ok' => false,
+                'message' => "Corequisites not satisfied. Missing: " . implode(', ', $missingCodes),
+                'corequisite_check' => $corequisiteCheck,
+                'prerequisite_check' => $prerequisiteCheck
+            ];
+        }
+
         $units = $this->getSubjectUnitsByClasslist($classlistId);
 
         $row = [
@@ -224,7 +270,11 @@ class EnlistmentService
             // ignore logging failures
         }
 
-        return ['ok' => true, 'details' => ['intCSID' => $id, 'classlist_id' => $classlistId]];
+        return [
+            'ok' => true, 
+            'details' => ['intCSID' => $id, 'classlist_id' => $classlistId],
+            'prerequisite_check' => $prerequisiteCheck
+        ];
     }
 
     /**
@@ -261,7 +311,7 @@ class EnlistmentService
     /**
      * Change section: drop from_classlist_id, add to_classlist_id (same term), atomically.
      */
-    protected function opChangeSection(int $studentId, int $term, int $fromId, int $toId, ?int $actorId, Request $request): array
+    protected function opChangeSection(int $studentId, int $term, int $fromId, int $toId, ?int $actorId, Request $request, array $plannedAddClasslistIds = []): array
     {
         if ($fromId <= 0 || $toId <= 0) {
             return ['ok' => false, 'message' => 'Invalid classlist ids'];
@@ -298,6 +348,17 @@ class EnlistmentService
 
         if ($existsTo) {
             return ['ok' => false, 'message' => 'Student already enlisted in the target section'];
+        }
+
+        // Validate corequisites for target (consider planned concurrent adds)
+        $corequisiteCheck = $this->corequisiteService->checkCorequisitesForClasslist($studentId, $toId, $plannedAddClasslistIds);
+        if (!$corequisiteCheck['passed']) {
+            $missingCodes = array_column($corequisiteCheck['missing_corequisites'], 'code');
+            return [
+                'ok' => false,
+                'message' => "Corequisites not satisfied. Missing: " . implode(', ', $missingCodes),
+                'corequisite_check' => $corequisiteCheck
+            ];
         }
 
         // Perform change atomically

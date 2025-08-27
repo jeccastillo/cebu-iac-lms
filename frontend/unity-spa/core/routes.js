@@ -133,6 +133,26 @@
         requiredRoles: ['registrar', 'admin']
       })
 
+      /* Subjects CRUD */
+      .when('/subjects', {
+        templateUrl: 'features/subjects/list.html',
+        controller: 'SubjectsListController',
+        controllerAs: 'vm',
+        requiredRoles: ['registrar', 'admin']
+      })
+      .when('/subjects/add', {
+        templateUrl: 'features/subjects/edit.html',
+        controller: 'SubjectEditController',
+        controllerAs: 'vm',
+        requiredRoles: ['registrar', 'admin']
+      })
+      .when('/subjects/:id/edit', {
+        templateUrl: 'features/subjects/edit.html',
+        controller: 'SubjectEditController',
+        controllerAs: 'vm',
+        requiredRoles: ['registrar', 'admin']
+      })
+
       /* Curricula CRUD */
       .when('/curricula', {
         templateUrl: 'features/curricula/list.html',
@@ -171,6 +191,26 @@
         controller: 'ClasslistEditController',
         controllerAs: 'vm',
         requiredRoles: ['registrar', 'admin']
+      })
+
+      /* Grading Systems CRUD */
+      .when('/grading-systems', {
+        templateUrl: 'features/grading/list.html',
+        controller: 'GradingListController',
+        controllerAs: 'vm',
+        requiredRoles: ['faculty_admin', 'admin']
+      })
+      .when('/grading-systems/new', {
+        templateUrl: 'features/grading/edit.html',
+        controller: 'GradingEditController',
+        controllerAs: 'vm',
+        requiredRoles: ['faculty_admin', 'admin']
+      })
+      .when('/grading-systems/:id/edit', {
+        templateUrl: 'features/grading/edit.html',
+        controller: 'GradingEditController',
+        controllerAs: 'vm',
+        requiredRoles: ['faculty_admin', 'admin']
       })
 
       .when('/roles', {

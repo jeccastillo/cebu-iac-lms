@@ -1,0 +1,170 @@
+<div class="space-y-6" ng-cloak>
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-semibold text-gray-800" ng-if="vm.mode === 'create'">New Grading System</h1>
+    <h1 class="text-2xl font-semibold text-gray-800" ng-if="vm.mode === 'edit'">Edit Grading System</h1>
+  </div>
+
+  <div class="text-gray-600" ng-if="vm.loading">
+    <span class="fas fa-spinner fa-spin mr-2"></span> Loading...
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6" ng-if="!vm.loading">
+    <div class="md:col-span-2 space-y-6">
+
+      <!-- Details -->
+      <div class="bg-white rounded shadow border border-gray-200">
+        <div class="px-4 py-3 border-b border-gray-200">
+          <strong class="text-gray-800">Details</strong>
+        </div>
+        <div class="p-4">
+          <form name="gradingForm" novalidate class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Name <span class="text-red-600">*</span></label>
+              <input type="text"
+                     class="w-full border rounded px-3 py-2"
+                     ng-model="vm.form.name"
+                     placeholder="Enter grading system name"
+                     required />
+            </div>
+          </form>
+        </div>
+        <div class="px-4 py-3 border-t border-gray-200 text-right">
+          <button class="inline-flex items-center px-3 py-2 rounded bg-gray-100 text-gray-800 hover:bg-gray-200 mr-2" ng-click="vm.cancel()">Cancel</button>
+          <button class="inline-flex items-center px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+                  ng-click="vm.save()"
+                  ng-disabled="vm.saving">
+            <span class="fa mr-2" ng-class="{'fa-save': !vm.saving, 'fa-spinner fa-spin': vm.saving}"></span>
+            <span ng-if="!vm.saving">Save</span>
+            <span ng-if="vm.saving">Saving...</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Create mode: stage multiple items -->
+      <div class="bg-blue-50 border border-blue-200 rounded" ng-if="vm.mode === 'create'">
+        <div class="px-4 py-3 border-b border-blue-200">
+          <strong class="text-blue-800">Items (optional)</strong>
+        </div>
+        <div class="p-4 space-y-3">
+          <p class="text-sm text-blue-800">You may define item scale rows now. You can always add more after saving the system.</p>
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-3" ng-repeat="it in vm.items track by $index">
+            <div class="md:col-span-3">
+              <input type="number" step="1" class="w-full border rounded px-3 py-2" ng-model="it.value" placeholder="Value e.g. 100" />
+            </div>
+            <div class="md:col-span-7">
+              <input type="text" class="w-full border rounded px-3 py-2" ng-model="it.remarks" placeholder="Remarks e.g. Excellent" />
+            </div>
+            <div class="md:col-span-2 text-right">
+              <button type="button" class="px-2 py-2 rounded bg-gray-100 text-gray-800 hover:bg-gray-200 w-full md:w-auto" ng-click="vm.removeLine($index)">
+                <span class="fas fa-minus"></span>
+              </button>
+            </div>
+          </div>
+          <div class="text-right">
+            <button class="inline-flex items-center px-3 py-2 rounded bg-gray-100 text-gray-800 hover:bg-gray-200" type="button" ng-click="vm.addLine()">
+              <span class="fas fa-plus mr-2"></span> Add Line
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit mode: manage existing items -->
+      <div class="bg-white rounded shadow border border-gray-200" ng-if="vm.mode === 'edit'">
+        <div class="px-4 py-3 border-b border-gray-200">
+          <strong class="text-gray-800">Existing Items</strong>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr class="text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                <th class="px-4 py-3">Value</th>
+                <th class="px-4 py-3">Remarks</th>
+                <th class="px-4 py-3 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-100">
+              <tr ng-if="!vm.existingItems || vm.existingItems.length === 0">
+                <td colspan="3" class="px-4 py-6 text-center text-sm text-gray-500">No grading items defined yet.</td>
+              </tr>
+              <tr ng-repeat="row in vm.existingItems" class="hover:bg-gray-50">
+                <td class="px-4 py-2 text-sm text-gray-800">{{ row.value }}</td>
+                <td class="px-4 py-2 text-sm text-gray-800">{{ row.remarks }}</td>
+                <td class="px-4 py-2 text-sm text-right">
+                  <button class="px-2 py-1 rounded bg-red-600 text-white hover:bg-red-700" ng-click="vm.deleteItem(row)">
+                    <span class="fas fa-trash"></span> Remove
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Edit mode: add a single item -->
+      <div class="bg-blue-50 border border-blue-200 rounded" ng-if="vm.mode === 'edit'">
+        <div class="px-4 py-3 border-b border-blue-200">
+          <strong class="text-blue-800">Add Item</strong>
+        </div>
+        <div class="p-4">
+          <form class="flex flex-col md:flex-row md:items-center md:space-x-3 space-y-3 md:space-y-0" ng-submit="vm.addSingleItem()">
+            <input type="number" step="1" class="border rounded px-3 py-2 md:w-48" ng-model="vm.singleItem.value" placeholder="Value" />
+            <input type="text" class="border rounded px-3 py-2 flex-1" ng-model="vm.singleItem.remarks" placeholder="Remarks" />
+            <button type="submit" class="inline-flex items-center px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">
+              <span class="fas fa-plus mr-2"></span> Add
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Edit mode: stage multiple new lines (optional) -->
+      <div class="bg-white rounded shadow border border-gray-200" ng-if="vm.mode === 'edit'">
+        <div class="px-4 py-3 border-b border-gray-200">
+          <strong class="text-gray-800">Stage Multiple Items (optional)</strong>
+        </div>
+        <div class="p-4 space-y-3">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-3" ng-repeat="it in vm.items track by $index">
+            <div class="md:col-span-3">
+              <input type="number" step="1" class="w-full border rounded px-3 py-2" ng-model="it.value" placeholder="Value e.g. 75" />
+            </div>
+            <div class="md:col-span-7">
+              <input type="text" class="w-full border rounded px-3 py-2" ng-model="it.remarks" placeholder="Remarks e.g. Passed" />
+            </div>
+            <div class="md:col-span-2 text-right">
+              <button type="button" class="px-2 py-2 rounded bg-gray-100 text-gray-800 hover:bg-gray-200 w-full md:w-auto" ng-click="vm.removeLine($index)">
+                <span class="fas fa-minus"></span>
+              </button>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <button class="inline-flex items-center px-3 py-2 rounded bg-gray-100 text-gray-800 hover:bg-gray-200" type="button" ng-click="vm.addLine()">
+              <span class="fas fa-plus mr-2"></span> Add Line
+            </button>
+            <button class="inline-flex items-center px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+                    type="button" ng-click="vm.save()" ng-disabled="vm.saving">
+              <span class="fa mr-2" ng-class="{'fa-save': !vm.saving, 'fa-spinner fa-spin': vm.saving}"></span>
+              <span ng-if="!vm.saving">Add Staged Items</span>
+              <span ng-if="vm.saving">Saving...</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="space-y-6">
+      <div class="bg-white rounded shadow border border-gray-200">
+        <div class="px-4 py-3 border-b border-gray-200">
+          <strong class="text-gray-800">Help</strong>
+        </div>
+        <div class="p-4 text-sm text-gray-700">
+          <ul class="list-disc pl-5 space-y-1">
+            <li>Create: set a name, optionally add items, then Save.</li>
+            <li>Edit: change the name, remove existing items, add a single item or stage multiple items.</li>
+            <li>Values are numeric. Remarks are short text (e.g., Excellent, Pass).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

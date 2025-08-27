@@ -1,0 +1,63 @@
+<div class="space-y-6" ng-cloak>
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-semibold text-gray-800">Grading Systems</h1>
+    <div class="flex items-center space-x-2">
+      <button class="inline-flex items-center px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+              ng-click="vm.addNew()">
+        <span class="fas fa-plus mr-2"></span> New Grading System
+      </button>
+      <button class="inline-flex items-center px-3 py-2 rounded bg-gray-100 text-gray-800 hover:bg-gray-200"
+              ng-click="vm.refresh()" ng-disabled="vm.loading">
+        <span class="fas" ng-class="{'fa-sync mr-2': !vm.loading, 'fa-spinner fa-spin mr-2': vm.loading}"></span>
+        Refresh
+      </button>
+    </div>
+  </div>
+
+  <!-- Table card -->
+  <div class="bg-white rounded shadow border border-gray-200">
+    <div class="px-4 py-3 border-b border-gray-200">
+      <strong class="text-gray-800">All Grading Systems</strong>
+    </div>
+
+    <div class="px-4 py-4 text-gray-600" ng-if="vm.loading">
+      <span class="fas fa-spinner fa-spin mr-2"></span> Loading...
+    </div>
+
+    <div class="overflow-x-auto" ng-if="!vm.loading">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr class="text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+            <th class="px-4 py-3">ID</th>
+            <th class="px-4 py-3">Name</th>
+            <th class="px-4 py-3 text-right">Items</th>
+            <th class="px-4 py-3 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-100" ng-class="{ 'opacity-60': vm.loading }">
+          <tr ng-if="!vm.items || vm.items.length === 0">
+            <td colspan="4" class="px-4 py-6 text-center text-sm text-gray-500">
+              No grading systems found.
+            </td>
+          </tr>
+          <tr ng-repeat="row in vm.items" class="hover:bg-gray-50">
+            <td class="px-4 py-2 text-sm text-gray-800">{{ row.id }}</td>
+            <td class="px-4 py-2 text-sm text-gray-800">{{ row.name }}</td>
+            <td class="px-4 py-2 text-sm text-right text-gray-800">{{ row.items_count || 0 }}</td>
+            <td class="px-4 py-2 text-sm text-right space-x-2">
+              <button class="px-2 py-1 rounded bg-gray-100 text-gray-800 hover:bg-gray-200"
+                      ng-click="vm.edit(row)">
+                <span class="fas fa-edit"></span> Edit
+              </button>
+              <button class="px-2 py-1 rounded bg-red-600 text-white hover:bg-red-700"
+                      ng-click="vm.remove(row)">
+                <span class="fas fa-trash"></span> Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

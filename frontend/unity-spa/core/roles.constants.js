@@ -10,6 +10,7 @@
       finance: 'finance',
       scholarship: 'scholarship',
       campus_admin: 'campus_admin',
+      faculty_admin: 'faculty_admin',
       student_view: 'student_view',
       admin: 'admin'
     })
@@ -35,6 +36,7 @@
       { test: '^/finance/.*$', roles: ['finance', 'admin'] },
       { test: '^/scholarship/.*$', roles: ['scholarship', 'admin'] },
       { test: '^/campuses(?:/.*)?$', roles: ['campus_admin', 'admin'] },
+      { test: '^/grading-systems(?:/.*)?$', roles: ['faculty_admin', 'admin'] },
       { test: '^/roles(?:/.*)?$', roles: ['admin'] },
       { test: '^/students$', roles: ['registrar', 'scholarship', 'finance', 'admin'] },
       { test: '^/students/[^/]+$', roles: ['registrar', 'scholarship', 'finance', 'admin'] }

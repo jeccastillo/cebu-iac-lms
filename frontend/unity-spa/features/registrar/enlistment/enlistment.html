@@ -52,8 +52,14 @@
 
   <!-- Current enlisted -->
   <div class="bg-white border rounded p-4">
-    <div ng-if="vm.selectedStudentName" class="text-sm text-gray-700 mb-1">
-      Student: <span class="font-semibold">{{vm.selectedStudentName}}</span>
+    <div ng-if="vm.selectedStudentName" class="text-sm text-gray-700 mb-1 flex items-center justify-between">
+      <span>Student: <span class="font-semibold">{{vm.selectedStudentName}}</span></span>
+      <a ng-if="vm.studentNumber" 
+         href="#!/students/{{vm.studentNumber}}/records" 
+         target="_blank" 
+         class="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700">
+        <i class="fas fa-external-link-alt"></i> View Records
+      </a>
     </div>
     <h2 class="text-lg font-semibold mb-3">Current Enlisted (Selected Term)</h2>
     <div ng-if="!vm.current.length" class="text-gray-500">No enlisted classes loaded.</div>
@@ -156,21 +162,45 @@
       <h3 class="font-semibold mb-2">Pending Operations</h3>
       <div ng-if="!vm.ops.length" class="text-gray-500">No operations queued.</div>
       <ul class="space-y-2" ng-if="vm.ops.length">
-        <li class="flex items-center justify-between border rounded px-3 py-2" ng-repeat="op in vm.ops track by $index">
-          <div class="font-mono text-sm">
-            <span class="uppercase text-gray-600">{{op.type}}</span>
-            <span ng-if="op.classlist_id"> — classlist_id={{op.classlist_id}}</span>
-            <span ng-if="op.subjectCode"> — {{op.subjectCode}} <span ng-if="op.sectionCode">({{op.sectionCode}})</span></span>
-            <span ng-if="op.from_classlist_id"> — from={{op.from_classlist_id}}</span>
-            <span ng-if="op.to_classlist_id"> — to={{op.to_classlist_id}}</span>
-            <span ng-if="op.fromSubjectCode || op.toSubjectCode">
-              — from: {{op.fromSubjectCode}} <span ng-if="op.fromSectionCode">({{op.fromSectionCode}})</span>
-              → to: {{op.toSubjectCode}} <span ng-if="op.toSectionCode">({{op.toSectionCode}})</span>
-            </span>
+        <li class="border rounded px-3 py-2" ng-repeat="op in vm.ops track by $index">
+          <div class="flex items-center justify-between">
+            <div class="font-mono text-sm">
+              <span class="uppercase text-gray-600">{{op.type}}</span>
+              <span ng-if="op.classlist_id"> — classlist_id={{op.classlist_id}}</span>
+              <span ng-if="op.subjectCode"> — {{op.subjectCode}} <span ng-if="op.sectionCode">({{op.sectionCode}})</span></span>
+              <span ng-if="op.from_classlist_id"> — from={{op.from_classlist_id}}</span>
+              <span ng-if="op.to_classlist_id"> — to={{op.to_classlist_id}}</span>
+              <span ng-if="op.fromSubjectCode || op.toSubjectCode">
+                — from: {{op.fromSubjectCode}} <span ng-if="op.fromSectionCode">({{op.fromSectionCode}})</span>
+                → to: {{op.toSubjectCode}} <span ng-if="op.toSectionCode">({{op.toSectionCode}})</span>
+              </span>
+            </div>
+            <button class="px-2 py-1 text-xs bg-gray-200 rounded hover:bg-gray-300" ng-click="vm.removeOpAt($index)">
+              Remove
+            </button>
           </div>
-          <button class="px-2 py-1 text-xs bg-gray-200 rounded hover:bg-gray-300" ng-click="vm.removeOpAt($index)">
-            Remove
-          </button>
+          
+          <!-- Prerequisite information for add operations -->
+          <div ng-if="op.type === 'add' && op.prerequisite_check" class="mt-2 text-xs">
+            <div ng-if="op.prerequisite_check.passed" class="text-green-600">
+              <i class="fas fa-check-circle"></i> Prerequisites satisfied
+            </div>
+            <div ng-if="!op.prerequisite_check.passed" class="text-orange-600">
+              <i class="fas fa-exclamation-triangle"></i> Prerequisites not satisfied
+              <div class="mt-1">
+                <span class="font-semibold">Missing:</span>
+                <span ng-repeat="prereq in op.prerequisite_check.missing_prerequisites">
+                  {{prereq.code}}<span ng-if="!$last">, </span>
+                </span>
+              </div>
+            </div>
+            <div ng-if="op.prerequisite_check.all_prerequisites.length > 0" class="mt-1 text-gray-500">
+              <span class="font-semibold">All Prerequisites:</span>
+              <span ng-repeat="prereq in op.prerequisite_check.all_prerequisites">
+                {{prereq.code}}<span ng-if="!$last">, </span>
+              </span>
+            </div>
+          </div>
         </li>
       </ul>
       <div class="mt-3 flex gap-2" ng-if="vm.ops.length">
