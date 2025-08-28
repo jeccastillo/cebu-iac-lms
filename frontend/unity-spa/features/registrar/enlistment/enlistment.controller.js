@@ -15,6 +15,10 @@
     vm.subjects = [];
     vm.sections = [];
     vm.results = null;
+    // Tuition preview state
+    vm.tuition = null;
+    vm.tuitionLoading = false;
+    vm._tuitionKey = null;
 
     // Global term (read-only, from TermService)
     vm.selectedTerm = null;
@@ -86,6 +90,70 @@
     vm.loadCurricula = loadCurricula;
     vm.loadTuitionYears = loadTuitionYears;
     vm.programLabel = programLabel;
+
+    // Tuition preview
+    vm.loadTuition = loadTuition;
+
+    // Tuition loader: builds payload from current enlisted and registration
+    function loadTuition(force) {
+      try {
+        if (!vm.studentNumber || !vm.term) return;
+        // Derive program id
+        var programId = null;
+        if (vm.regForm && vm.regForm.current_program) {
+          var p1 = parseInt(vm.regForm.current_program, 10);
+          if (!isNaN(p1)) programId = p1;
+        } else if (vm.registration && vm.registration.current_program !== undefined && vm.registration.current_program !== null) {
+          var p2 = parseInt(vm.registration.current_program, 10);
+          if (!isNaN(p2)) programId = p2;
+        }
+        if (!programId || isNaN(programId)) {
+          // Without program id, tuition preview cannot compute a rate
+          return;
+        }
+
+        // Build subject list from current enlisted
+        var subjects = [];
+        (vm.current || []).forEach(function (c) {
+          if (c && c.subject_id) {
+            subjects.push({ subject_id: parseInt(c.subject_id, 10), section: c.section_code || '' });
+          }
+        });
+        // If no subjects yet, skip
+        if (!subjects.length) {
+          return;
+        }
+
+        // Avoid duplicate loads by keying inputs
+        var key = [vm.studentNumber, ('' + vm.term), programId, subjects.map(function (s) { return s.subject_id; }).join('-')].join('|');
+        if (!force && vm._tuitionKey === key && vm.tuition !== null) {
+          return;
+        }
+        vm._tuitionKey = key;
+
+        vm.tuitionLoading = true;
+        var payload = {
+          student_number: vm.studentNumber,
+          program_id: programId,
+          term: ('' + vm.term),
+          subjects: subjects
+        };
+        UnityService.tuitionPreview(payload).then(function (res) {
+          // Unwrap TuitionBreakdownResource from response
+          var data = (res && res.data) ? res.data : res;
+          vm.tuition = data || null;
+        }).catch(function (err) {
+          console.error('tuitionPreview failed', err);
+          vm.tuition = null;
+        }).finally(function () {
+          vm.tuitionLoading = false;
+          if ($scope && $scope.$applyAsync) { $scope.$applyAsync(); }
+        });
+      } catch (e) {
+        // swallow
+      }
+    }
+
     // Helpers for read-only display and lookups
     vm.findProgramById = function(id) {
       try {
@@ -202,6 +270,9 @@
     function onStudentSelected() {
       if (vm.studentNumber) {
         setSelectedStudentName();
+        // Reset tuition on change of student
+        vm.tuition = null;
+        vm._tuitionKey = null;
         loadCurrent();
         loadRegistration();
       } else {
@@ -540,11 +611,19 @@
             code: r.code,
             description: r.description,
             units: r.units,
-            section_code: r.section_code || r.sectionCode || ''
+            section_code: r.section_code || r.sectionCode || '',
+            subject_id: (function () {
+              var sid = r.subject_id || r.subjectId || r.subjectID || null;
+              if (sid === null || sid === undefined || ('' + sid).trim() === '') return null;
+              var n = parseInt(sid, 10);
+              return isNaN(n) ? null : n;
+            })()
           };
         }).filter(function (x) { return x.classlist_id !== null; });
       }).finally(function () {
         vm.loading = false;
+        // Auto-load tuition after current is loaded (if possible)
+        try { vm.loadTuition(); } catch (e) {}
       });
 
       // Refresh classlists for term for "Add" and "Change To" selections
@@ -1083,6 +1162,8 @@
         vm.regForm = {};
       }).finally(function () {
         vm.regLoading = false;
+        // Auto-load tuition when registration changed (if possible)
+        try { vm.loadTuition(); } catch (e) {}
         if ($scope && $scope.$applyAsync) { $scope.$applyAsync(); }
       });
     }
@@ -1154,6 +1235,8 @@
         if (reg) {
           vm.registration = reg;
           resetRegForm();
+          // Refresh tuition after saving registration (program may have changed)
+          try { vm.loadTuition(true); } catch (e) {}
         }
         if (window.Swal) {
           Swal.fire({ icon: 'success', title: 'Saved', text: 'Registration updated.' });

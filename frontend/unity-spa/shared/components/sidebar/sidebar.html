@@ -336,6 +336,21 @@
         <span ng-if="!vm.isCollapsed" class="ml-3">Finance</span>
       </a>
 
+      <!-- Tuition Years -->
+      <a href="#/finance/tuition-years"
+         ng-if="vm.canAccess('/finance/tuition-years')"
+         class="flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200"
+         ng-class="{
+           'bg-blue-100 text-blue-700': vm.isCurrentPath('/finance/tuition-years'),
+           'text-gray-700 hover:bg-gray-100': !vm.isCurrentPath('/finance/tuition-years')
+         }"
+         title="Tuition Years">
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h12M4 18h8"></path>
+        </svg>
+        <span ng-if="!vm.isCollapsed" class="ml-3">Tuition Years</span>
+      </a>
+
       <!-- Scholarships -->
       <a href="#/scholarship/students" 
          ng-if="vm.canAccess('/scholarship/students')"

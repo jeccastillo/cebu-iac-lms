@@ -25,6 +25,7 @@ use App\Http\Controllers\Api\V1\GradingSystemController;
 use App\Http\Controllers\Api\V1\ClasslistGradesController;
 use App\Http\Controllers\Api\V1\SchoolYearController;
 use App\Http\Controllers\Api\V1\FacultyController;
+use App\Http\Controllers\Api\V1\TuitionController;
 use App\Http\Controllers\Api\V1\ClassroomController;
 
 /*
@@ -127,11 +128,11 @@ Route::prefix('v1')->group(function () {
     Route::post('/subjects', [SubjectController::class, 'submit'])->middleware('role:registrar,admin');
     Route::put('/subjects/{id}', function (Request $request, $id) {
         $request->merge(['intID' => (int) $id]);
-        return app(\App\Http\Controllers\Api\V1\SubjectController::class)->edit($request);
+        return app(SubjectController::class)->edit($request);
     })->middleware('role:registrar,admin');
     Route::delete('/subjects/{id}', function (Request $request, $id) {
         $request->merge(['id' => (int) $id]);
-        return app(\App\Http\Controllers\Api\V1\SubjectController::class)->delete($request);
+        return app(SubjectController::class)->delete($request);
     })->middleware('role:registrar,admin');
 
     // Tuition Year endpoints (read + write parity)
@@ -147,9 +148,11 @@ Route::prefix('v1')->group(function () {
     Route::post('/tuition-years/add', [TuitionYearController::class, 'add'])->middleware('role:registrar,admin');
     Route::post('/tuition-years/finalize', [TuitionYearController::class, 'finalize'])->middleware('role:registrar,admin');
     Route::post('/tuition-years/submit-extra', [TuitionYearController::class, 'submitExtra'])->middleware('role:registrar,admin');
+    Route::post('/tuition-years/edit-type', [TuitionYearController::class, 'editType'])->middleware('role:registrar,admin');
     Route::post('/tuition-years/delete-type', [TuitionYearController::class, 'deleteType'])->middleware('role:registrar,admin');
     Route::post('/tuition-years/delete', [TuitionYearController::class, 'delete'])->middleware('role:registrar,admin');
     Route::post('/tuition-years/duplicate', [TuitionYearController::class, 'duplicate'])->middleware('role:registrar,admin');
+    Route::post('/tuition-years/{id}/set-default', [TuitionYearController::class, 'setDefault'])->middleware('role:registrar,admin');
 
     // Curriculum endpoints (read + write)
     Route::get('/curriculum', [CurriculumController::class, 'index']);
@@ -164,9 +167,9 @@ Route::prefix('v1')->group(function () {
     // Classroom endpoints (read + write)
     Route::get('/classroom', [ClassroomController::class, 'index']);
     Route::get('/classroom/{id}', [ClassroomController::class, 'show']);
-    Route::post('/classroom', [ClassroomController::class, 'store'])->middleware('role:registrar,admin');
-    Route::put('/classroom/{id}', [ClassroomController::class, 'update'])->middleware('role:registrar,admin');
-    Route::delete('/classroom/{id}', [ClassroomController::class, 'destroy'])->middleware('role:registrar,admin');
+    Route::post('/classroom', [ClassroomController::class, 'store'])->middleware('role:building_admin,admin');
+    Route::put('/classroom/{id}', [ClassroomController::class, 'update'])->middleware('role:building_admin,admin');
+    Route::delete('/classroom/{id}', [ClassroomController::class, 'destroy'])->middleware('role:building_admin,admin');
 
     // Student endpoints (baseline)
     Route::get('/students', [StudentController::class, 'index']);
@@ -258,4 +261,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/school-years', [SchoolYearController::class, 'store'])->middleware('role:registrar,admin');
     Route::put('/school-years/{id}', [SchoolYearController::class, 'update'])->middleware('role:registrar,admin');
     Route::delete('/school-years/{id}', [SchoolYearController::class, 'destroy'])->middleware('role:registrar,admin');
+
+    // Tuition computation (parity with CI Data_fetcher::getTuition/getTuitionSubjects)
+    // Route::get('/tuition/compute', [TuitionController::class, 'compute']);
 });

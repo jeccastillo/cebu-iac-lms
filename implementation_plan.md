@@ -1,224 +1,237 @@
 # Implementation Plan
 
 [Overview]
-Create full CRUD for tb_mas_sy (School Years/Terms) using the existing Laravel API and integrate a new management UI into the existing AngularJS Unity SPA styled with Tailwind. The API will expose REST endpoints for read and write operations with role-based access, and the SPA will provide list, create, update, and delete screens for registrar/admin while allowing read to authenticated users.
+Implement a Laravel tuition computation service and API endpoint that reproduces the legacy CodeIgniter tuition logic, using the student's selected tuition_year on tb_mas_registration to compute a full tuition breakdown (tuition, labs, misc, scholarships, discounts, installment variants, late fees, foreign/new-student fees), with a dedicated endpoint to retrieve the result.
 
-This implementation standardizes term management used across enrollment, grading windows, reports, and CI parity endpoints. It introduces a dedicated REST resource (/api/v1/school-years) alongside the existing generic list endpoints (/api/v1/generic/terms, /api/v1/generic/active-term). The UI will be added into the Unity SPA under a new feature module and will use Tailwind (via CDN) for styling to minimize build pipeline impact.
+The existing CodeIgniter implementation (Data_fetcher::getTuition/getTuitionSubjects) computes tuition based on the student's registration record, enrolled subjects for a term, and fee schedules in the tuition year tables. This plan ports that logic to Laravel so the SPA and other consumers can obtain a consistent, canonical breakdown from the new API. The Laravel service will:
+- Read the student registration row for the requested term to determine tuition_year, student status/type, class type, year level, internship tag, withdrawal periods, and program overrides.
+- Gather the student's classes for the term (and their properties such as units, lab classification, electives, modular payments).
+- Resolve fee schedules from the tuition year tables (unit rates by program or default; lab/misc fees by type and delivery mode; track/elective fees for SHS).
+- Apply special rules (NSTP, thesis, internship, foreign fees, late enrollment).
+- Compute discounts and scholarships (in-house, external, late-tagged) across tuition, lab, misc, and other fee buckets with both percentage and fixed schemes.
+- Generate installment variants with configured increases, down payment strategies (percentage or fixed), and installment fee schedules.
+- Return a structured breakdown compatible with both detailed UI display and AR/ledger reporting fields exposed by the legacy computation.
 
 [Types]  
-Define the TB_MAS_SY entity and related structures used by the API and SPA.
+Define request/response types to formalize the API contract.
 
-Data model: tb_mas_sy
-- intID: int (PK, auto-increment)
-- enumSem: string (e.g., "1st", "2nd", "Summer"); non-empty
-- strYearStart: string (YYYY)
-- strYearEnd: string (YYYY)
-- term_label: string (e.g., "Semester", "Trimester", "Quarter", "Term"); optional, defaults to "Semester"
-- term_student_type: string (e.g., "college", "shs", "next"); optional
-- campus_id: int|null (FK to tb_mas_campuses.id, nullable, indexed)
-- midterm_start: datetime|null (YYYY-MM-DD HH:MM:SS)
-- midterm_end: datetime|null (YYYY-MM-DD HH:MM:SS)
-- final_start: datetime|null (YYYY-MM-DD HH:MM:SS)
-- final_end: datetime|null (YYYY-MM-DD HH:MM:SS)
-- end_of_submission: datetime|null (must not be '0000-00-00 00:00:00')
-- intProcessing: int|null (0/1; used historically to indicate current/processing term)
-- enumStatus: string|null (e.g., "active", "inactive")
-- enumFinalized: string|null (e.g., "yes", "no")
-- created_at/updated_at: not used (timestamps disabled in model)
+- Request (query params):
+  - student_number: string (required) — tb_mas_users.strStudentNumber
+  - term: int (required) — tb_mas_sy.intID (syid)
+  - override_discount_id: int|null (optional) — tb_mas_student_discount.intID to compute a specific discount only (parity feature)
+  - override_scholarship_id: int|null (optional) — tb_mas_student_discount.intID to compute a specific scholarship only (parity feature)
 
-Laravel validation (Store/Update):
-- enumSem: required|string|max:16
-- strYearStart: required|digits:4
-- strYearEnd: required|digits:4|gte:strYearStart
-- term_label: sometimes|string|max:32
-- term_student_type: sometimes|string|max:32
-- campus_id: sometimes|nullable|integer
-- midterm_start/midterm_end/final_start/final_end/end_of_submission: sometimes|nullable|date
-- intProcessing: sometimes|integer|in:0,1
-- enumStatus: sometimes|string|max:16
-- enumFinalized: sometimes|string|max:8
+- Enums/constraints:
+  - class_type: enum {regular, online, hybrid, hyflex} — derived from registration.type_of_class or SHS year-level mapping
+  - student_type: strings consistent with CI logic: new, freshman, transferee, continuing, shiftee, returning, 2nd Degree, 2nd Degree iAC, foreign, etc.
+  - level: enum {college, shs, other, drive} — normalized from tb_mas_users.level
+  - withdrawal_period: enum {'before','during','after'} or null
 
-Response DTO (API):
-- For collections: { success: true, data: SchoolYear[] }
-- For single: { success: true, data: SchoolYear }
-- On mutations, additionally include message when appropriate
+- Response (TuitionBreakdown):
+  - summary:
+    - tuition: float
+    - lab_total: float
+    - misc_total: float
+    - additional_total: float (new_student + foreign + internship + late_enrollment + thesis/nsf if applicable)
+    - discounts_total: float (in-house)
+    - scholarships_total: float (external + in-house distinguished in fields)
+    - total_before_deductions: float
+    - total_due: float
+    - total_installment: float
+    - total_installment30: float
+    - total_installment50: float
+    - down_payment: float
+    - down_payment30: float
+    - down_payment50: float
+    - installment_fee: float (per schedule)
+    - installment_fee30: float
+    - installment_fee50: float
+  - items:
+    - tuition: array of { code: string, subject_id: int, units: int, rate: float, amount: float, section?: string }
+    - lab: array of { code: string, lab_type: string, rate: float, hours: int, amount: float }
+    - misc: array of { name: string, amount: float }
+    - additional: array of { name: string, amount: float } (new_student, late_enrollment, foreign items, internship, thesis)
+    - discounts: array of { name: string, deduction_from: 'in-house'|'external', scope: 'tuition'|'lab'|'misc'|'other'|'total', type: 'rate'|'fixed', value: float, amount: float, date_applied?: datetime }
+    - scholarships: same structure as discounts when deduction_type = scholarship
+  - ar_reporting:
+    - ar_discounts_full, ar_discounts_installment, ar_discounts_installment30, ar_discounts_installment50: float
+    - ar_external_scholarship_full, ar_external_scholarship_installment, ar_external_scholarship_installment30, ar_external_scholarship_installment50: float
+    - ar_late_tagged_discounts_full, ar_late_tagged_discounts_installment, ar_late_tagged_discounts_installment30, ar_late_tagged_discounts_installment50: float
+    - ar_external_discounts_full, ar_external_discounts_installment, ar_external_discounts_installment30, ar_external_discounts_installment50: float
+  - meta:
+    - class_type: string
+    - tuition_year_id: int
+    - year_level: int|null
+    - program_id_used: int
+    - currency: string ('PHP')
+    - computed_at: datetime
 
 [Files]
-Introduce new Laravel controller and requests, add routes, optionally adjust model casts, and create SPA feature files with Tailwind integration.
+Introduce a new controller and enrich the TuitionService; add helpers for parity computations; add a resource for clean output; and wire the route.
 
-Laravel API
 - New files:
-  - laravel-api/app/Http/Controllers/Api/V1/SchoolYearController.php
-    - Purpose: RESTful CRUD for tb_mas_sy with SystemLogService auditing.
-  - laravel-api/app/Http/Requests/Api/V1/SchoolYearStoreRequest.php
-    - Purpose: Validate create payload.
-  - laravel-api/app/Http/Requests/Api/V1/SchoolYearUpdateRequest.php
-    - Purpose: Validate update payload (all fields optional).
-  - laravel-api/app/Http/Resources/SchoolYearResource.php (optional)
-    - Purpose: Normalize output if needed; can be skipped to keep parity style with existing controllers.
+  - laravel-api/app/Http/Controllers/Api/V1/TuitionController.php
+    - Purpose: Validate request, orchestrate computation via TuitionService, return JSON.
+  - laravel-api/app/Http/Requests/Api/V1/TuitionComputeRequest.php
+    - Purpose: Input validation (student_number, term, optional overrides).
+  - laravel-api/app/Http/Resources/TuitionBreakdownResource.php
+    - Purpose: Shape output consistently, including AR reporting fields.
+  - laravel-api/app/Services/TuitionCalculator.php
+    - Purpose: Extracted helper methods ported from CI: getUnitPrice, getExtraFee, resolveClassType, computeSHSTrackRate, elective/track lookup, lab type resolution, late enrollment, foreign fees, installment math.
+  - laravel-api/tests/Feature/TuitionComputeTest.php
+    - Purpose: API tests for common scenarios (college with labs/misc; SHS with track/elective; with in-house/external scholarships; late enrollment; foreign).
 
 - Existing files to modify:
   - laravel-api/routes/api.php
-    - Add REST routes under /api/v1/school-years:
-      - GET /school-years (open read)
-      - GET /school-years/{id} (open read)
-      - POST /school-years (role: registrar,admin)
-      - PUT /school-years/{id} (role: registrar,admin)
-      - DELETE /school-years/{id} (role: registrar,admin)
-  - laravel-api/app/Models/SchoolYear.php
-    - Add attribute casts for datetime fields for consistency:
-      - protected $casts = [ 'midterm_start' => 'datetime', 'midterm_end' => 'datetime', 'final_start' => 'datetime', 'final_end' => 'datetime', 'end_of_submission' => 'datetime' ];
-    - Keep timestamps = false.
+    - Add route: GET /api/v1/tuition/compute -> TuitionController@compute
+  - laravel-api/app/Services/TuitionService.php
+    - Replace placeholder preview with full parity logic:
+      - public function compute(string $studentNumber, int $syid, ?int $discountId = null, ?int $scholarshipId = null): array
+      - Internal queries to tb_mas_registration, tb_mas_classlist_student, tb_mas_classlist, tb_mas_subjects, tb_mas_tuition_year_* tables, tb_mas_student_discount + tb_mas_scholarships, tb_mas_sy, tb_mas_users.
+      - Build breakdown arrays and AR fields.
 
-- Database/Migrations:
-  - Verify presence of expected columns. If missing in the environment, add new migration:
-    - laravel-api/database/migrations/2025_08_28_000200_update_tb_mas_sy_columns.php
-      - Adds any absent columns: term_label, term_student_type, midterm_start, midterm_end, final_start, final_end, end_of_submission, enumStatus, enumFinalized, intProcessing (nullable).
-      - Adds indexes where appropriate (campus_id).
-      - Note: campus_id handled by existing migration 2025_08_25_000009_add_campus_id_to_tb_mas_sy.php (data dependency: end_of_submission must not be '0000-00-00 00:00:00').
-  - Data fix (precondition): laravel-api/scripts/fix_invalid_sy_end_of_submission.php exists; ensure it is run prior to FK addition to avoid 'Invalid datetime value'.
+- No files to delete or move.
 
-Unity SPA (AngularJS)
-- New directory:
-  - frontend/unity-spa/features/school-years/
-    - school-years.service.js: Wraps API calls.
-    - school-years.controller.js: List view controller.
-    - school-year-edit.controller.js: Create/Edit controller.
-    - list.html: Tailwind-styled table with filters and actions.
-    - edit.html: Tailwind-styled form (create/update).
-
-- Existing files to modify:
-  - frontend/unity-spa/index.html
-    - Add Tailwind via CDN: <script src="https://cdn.tailwindcss.com"></script>
-    - Add a minimal tailwind.config inline (safelisting utility classes used if needed).
-  - frontend/unity-spa/core/routes.js
-    - Register routes:
-      - /school-years (list)
-      - /school-years/new (create)
-      - /school-years/:id/edit (edit)
-  - frontend/unity-spa/shared/components/sidebar/sidebar.html
-    - Add "School Years" nav link (visible for registrar/admin).
-  - frontend/unity-spa/core/role.service.js (no code change; used to hide/show UI controls based on roles)
+- Configuration:
+  - None required beyond route registration. Existing migration 2025_08_28_000400_add_missing_columns_to_tb_mas_tuition_year.php already adds needed columns (installmentFixed, freeElectiveCount, final).
 
 [Functions]
-Add new controller methods and SPA service methods; no removals.
+Add new functions and ported helpers; modify TuitionService methods to compute full parity outputs.
 
-Laravel: new functions (SchoolYearController)
-- index(Request $request): JsonResponse
-  - Query params: campus_id?, term_student_type?, search?, limit?, page?
-  - Returns list ordered by strYearStart desc, enumSem asc.
-- show(int $id): JsonResponse
-  - Returns a single record or 404.
-- store(SchoolYearStoreRequest $request): JsonResponse
-  - Create record; defaults: term_label=Semester if missing.
-  - SystemLogService::log('create', 'SchoolYear', id, null, new, $request)
-- update(SchoolYearUpdateRequest $request, int $id): JsonResponse
-  - Update record (partial). Log 'update' with old/new.
-- destroy(int $id): JsonResponse
-  - Soft strategy: if enumStatus exists, set to 'inactive'; else perform delete (configurable). Log 'update' or 'delete'.
+- New functions (TuitionService):
+  - compute(studentNumber: string, syid: int, discountId?: int|null, scholarshipId?: int|null): array
+    - Purpose: Orchestrate full computation and return the breakdown array.
 
-Model changes
-- App\Models\SchoolYear::$casts: add datetime casts.
+- New functions (TuitionCalculator):
+  - resolveRegistrationContext(studentId: int, syid: int): array
+    - Returns registration-derived parameters: tuition_year_id, stype, class_type, year_level, internship, intROG, withdrawal_period, current_program, dteRegistered.
+  - gatherSubjectsForTerm(studentId: int, syid: int): array
+    - Return selected subjects for the term with major/elective/modular flags and payment_amount from classlist.
+  - getUnitPrice(tuitionYear: array, classType: string, programId?: int|null): float
+    - Resolve program-specific unit rate from tb_mas_tuition_year_program or fallback tuition year defaults by classType.
+  - getExtraFee(row: array, classType: string, bucket: 'misc'|'lab'): float
+    - Read correct column per class type (tuition_amount[_online|_hybrid|_hyflex]).
+  - resolveLabClassification(subjectId: int, syid: int, default: string): string
+    - Use tb_mas_subjects_labtype override else default subject classification.
+  - computeCollegeTuition(unitFee: float, subjects: array, tuitionYear: array, classType: string, syid: int): array
+    - Returns tuple [tuition: float, lab_total: float, thesis_fee: float, detailed lab list].
+  - computeSHSTuition(subjects: array, tuitionYear: array, classType: string, yearLevel: int, programId: int): array
+    - Returns [tuition: float from track, modular add-ons, elective add-ons, lab_total (usually none), line items].
+  - computeMiscFees(miscRows: array, classType: string, stype: string, yearLevel: int, wStatus: string|null, semRow: array, dteRegistered: date|null): array
+    - Builds misc_list with ID Validation omission for new students; late enrollment fee logic when dteRegistered >= sem.reconf_start; internship misc pack if needed.
+  - computeForeignFees(studentCitizenship: string, semRow: array, tuitionYear: array, classType: string): array
+    - Adds SVF/ISF as applicable and returns list + total.
+  - computeDiscountsAndScholarships(args…): array
+    - Aggregates in-house and external; computes rate/fixed per fee bucket and total assessment; builds AR fields and late-tagging segregation per sy.ar_report_date_generation; returns totals and line items; exposes installment variants (regular/installmentIncrease, 30%, 50%).
+  - computeInstallments(totals…): array
+    - Applies installmentIncrease, DP percentage or installmentFixed behavior; produces down_payment, installment_fee, 30/50 variants.
 
-Unity SPA: new functions
-- school-years.service.js
-  - list(params): Promise<response> GET /api/v1/school-years
-  - get(id): Promise<response> GET /api/v1/school-years/{id}
-  - create(payload): Promise<response> POST /api/v1/school-years
-  - update(id, payload): Promise<response> PUT /api/v1/school-years/{id}
-  - remove(id): Promise<response> DELETE /api/v1/school-years/{id}
+- Modified functions:
+  - TuitionService::preview(array $input): array
+    - Keep for backward compatibility, but update to call compute(...) in a preview mode when student_number and term are present; otherwise return placeholder as today.
 
-- school-years.controller.js
-  - init(): load terms, filters, handle role gating of actions
-  - onFilterChange(): refetch
-  - onCreate(), onEdit(id), onDelete(id): UI actions (with confirmations)
-
-- school-year-edit.controller.js
-  - init(id?): load existing when editing
-  - submit(): create/update via service with toasts and redirects
-  - form normalization for date fields (YYYY-MM-DD HH:mm:ss)
+- Removed functions:
+  - None.
 
 [Classes]
-Introduce one new Laravel controller class; adjust one model class.
+Add a controller, request validator, resource, and helper service. Modify TuitionService to orchestrate parity logic.
 
 - New classes:
-  - App\Http\Controllers\Api\V1\SchoolYearController
-    - Methods: index, show, store, update, destroy
-    - Uses: Illuminate\Support\Facades\DB (optional), App\Models\SchoolYear, SystemLogService, Store/Update requests
+  - App\Http\Controllers\Api\V1\TuitionController
+    - Methods: compute(TuitionComputeRequest $request)
+    - Dependencies: TuitionService
+  - App\Http\Requests\Api\V1\TuitionComputeRequest
+    - Rules: student_number required, term required integer, optional overrides numeric
+  - App\Http\Resources\TuitionBreakdownResource
+    - Transforms TuitionService result into API response
+  - App\Services\TuitionCalculator
+    - Stateless helper, injected into TuitionService
+
 - Modified classes:
-  - App\Models\SchoolYear
-    - Add $casts for datetime fields as noted above
+  - App\Services\TuitionService
+    - Add compute() and integrate TuitionCalculator; retain preview() with compatibility behavior.
+
 - Removed classes:
-  - None
+  - None.
 
 [Dependencies]
-No new Composer dependencies. Tailwind integrated via CDN in SPA.
+No new external composer packages are required.
 
-- Laravel:
-  - Use existing SystemLogService for audit logs.
-  - Continue route middleware 'role:registrar,admin' for mutations.
-
-- Frontend:
-  - Tailwind via CDN: https://cdn.tailwindcss.com with minimal runtime config.
-  - No change to build tooling.
+Rationale: All logic is DB-driven and can be implemented with Laravel DB/Query Builder or Eloquent. No extra libs beyond standard PHP/Carbon for dates.
 
 [Testing]
-Adopt a layered approach for API and UI behaviors.
+Adopt API feature tests and limited unit tests for calculators.
 
-API
-- Unit/Feature tests (optional, if test suite is in use):
-  - tests/Feature/SchoolYearControllerTest.php
-    - index_returns_list_with_filters
-    - show_returns_404_for_missing
-    - store_creates_and_logs
-    - update_patches_and_logs
-    - destroy_soft_disables_and_logs (or deletes)
-- Manual test checklist:
-  - Ensure GET /api/v1/school-years matches GenericApiController ordering and fields superset.
-  - Validate date field acceptance and persistence.
-  - Verify SystemLogService produces proper entries.
-  - Verify role middleware blocks mutations for non-registrar/admin.
+- Feature tests (laravel-api/tests/Feature/TuitionComputeTest.php):
+  - test_college_basic_with_labs_and_misc: seeds a student, registration with tuition_year, 2 subjects with units/lab, misc fees; asserts totals match CI parity calculation.
+  - test_shs_track_with_modular_and_elective: seeds track rates and elective fees; asserts tuition and add-ons.
+  - test_discounts_inhouse_rate_and_fixed: attaches in-house discounts; validates AR in-house buckets and net totals.
+  - test_scholarships_external_and_late_tagged_discounts: attaches external scholarships and late-tagged in-house discounts; validates external/lated-tagged AR fields.
+  - test_late_enrollment_fee_and_foreign_fees: sets dteRegistered after reconf_start and foreign citizenship; asserts additions.
+  - test_withdrawal_status_zero_out_on_before: sets intROG to OW/LOA/AWOL cases and w_status 'before' to zero tuition/lab/misc; asserts behavior.
 
-SPA
-- Manual test checklist:
-  - Sidebar shows "School Years" only for registrar/admin.
-  - List loads and filters (campus, student type, search).
-  - Create/edit forms validate required fields (enumSem, strYearStart, strYearEnd).
-  - Midterm/Final date windows saved and reflected.
-  - Delete flow confirmation and outcome messaging.
+- Manual validation:
+  - Compare outputs against CI endpoints or database-known cases.
+  - cURL example:
+    - GET http://localhost:8000/api/v1/tuition/compute?student_number=C2024-1-1234&amp;term=123
 
 [Implementation Order]
-Implement backend first, then frontend, then data fixes, then integration tests.
+Build from read-only endpoint outward, minimizing churn and enabling incremental validation.
 
-1) Backend model and requests
-- Add $casts to SchoolYear model (datetime fields).
-- Create SchoolYearStoreRequest and SchoolYearUpdateRequest with rules.
+1. Routes and Controller scaffolding
+   - Add GET /api/v1/tuition/compute in routes/api.php mapped to TuitionController@compute.
+   - Create TuitionComputeRequest with validation.
+   - Create TuitionBreakdownResource returning the pre-existing TuitionService::preview to keep the endpoint working during development.
 
-2) Backend controller and routes
-- Implement SchoolYearController (index, show, store, update, destroy).
-- Wire routes in routes/api.php under prefix v1 (/school-years).
-- Add role middleware for POST/PUT/DELETE; keep GET open (parity with other reads).
+2. Data gathering primitives
+   - In TuitionService, add methods to look up student, registration (with tuition_year, stype, class_type, year_level, internship, intROG, withdrawal_period, current_program, dteRegistered), sy row, and subjects for the term (classlist_student/classlist/subjects join mirroring CI).
 
-3) Database/migrations
-- Verify columns; create 2025_08_28_000200_update_tb_mas_sy_columns.php to add any missing.
-- Pre-run data fix script (fix_invalid_sy_end_of_submission.php) to replace '0000-00-00 00:00:00' with NULL or valid timestamps.
-- Run migration for campus_id if pending, then new columns migration.
+3. TuitionCalculator helper
+   - Implement helpers: getUnitPrice(), getExtraFee(), resolveLabClassification(), resolveClassType(), and the SHS/elective/track lookup routines against:
+     - tb_mas_tuition_year_program (program-based unit rates)
+     - tb_mas_tuition_year_lab_fee (per lab classification)
+     - tb_mas_tuition_year_misc (types: regular|internship|new_student|thesis|late_enrollment|svf|isf|nstp)
+     - tb_mas_tuition_year_track (SHS track fees)
+     - tb_mas_tuition_year_elective (SHS elective fees)
+     - tb_mas_subjects_labtype (per-term lab override)
+   - Port special rules: NSTP rate, thesis fee, internship pack, foreign fees (only when sem.pay_student_visa != 0 and/or isf), late enrollment windows (sem.reconf_start).
 
-4) SPA Tailwind integration
-- Update frontend/unity-spa/index.html to include Tailwind CDN.
-- Add minimal tailwind.config inline (safelist frequently used utilities if necessary).
+4. Compute college and SHS tuition
+   - For college: loop subjects and sum int(strTuitionUnits)*unit_rate, NSTP override, lab classification fee * intLab hours, thesis if flagged.
+   - For SHS: base track amount by year_level, add modular subject payment_amount, add elective subject amount via tuition_year_elective by year_level; consider delivery mapping for year level where applicable.
 
-5) SPA feature files
-- Create frontend/unity-spa/features/school-years/service/controller/templates.
-- Update core/routes.js to register new routes.
-- Update shared/components/sidebar/sidebar.html to add menu link.
+5. Compute misc and additional fees
+   - Build misc_list from misc pack (regular vs internship), omit ID VALIDATION for brand-new students (same condition set as CI), add late_enrollment fee when applicable, prepare new_student fees for stype ∈ {new,freshman,transferee, 2nd Degree, 2nd Degree iAC}, foreign fee pack, internship fee pack, thesis fee when applicable.
 
-6) Role/UX gating
-- Use role.service.js to hide create/edit/delete buttons for non-registrar/admin.
-- Keep read (list/show) accessible as per app norms.
+6. Discounts and scholarships
+   - Gather applied tb_mas_student_discount for syid and student (deduction_type ∈ {discount,scholarship}, status = 'applied'), split in-house vs external and late-tagged by date_applied vs sy.ar_report_date_generation.
+   - Compute rate/fixed reductions over tuition, lab, misc, and other buckets; also allow 'total assessment' discounts where defined; detect full scholarship when total_assessment_rate=100.
+   - Produce AR reporting fields:
+     - ar_discounts_full/installment(,30,50)
+     - ar_external_scholarship_full/installment(,30,50)
+     - ar_late_tagged_discounts_full/installment(,30,50)
+     - ar_external_discounts_full/installment(,30,50)
+   - Store per-award lines with scope/type/amount metadata in items.discounts/scholarships.
 
-7) Validation and logging verification
-- Exercise CRUD from SPA; inspect laravel logs and tb_mas_system_log for entries.
+7. Installment math
+   - Calculate installment totals with tuition_year.installmentIncrease for regular installment, and 30%/50% variants with 0.15 and 0.09 multipliers per parity logic.
+   - Determine down_payment:
+     - If tuition_year.installmentFixed is set and non-zero, use fixed DP (for SHS year_level 2 or 4, DP=total_installment/2 per parity) else DP = total_installment*(installmentDP/100).
+   - Compute installment_fee = (total_installment - down_payment)/5, and similarly for 30%/50%.
 
-8) Documentation
-- Update or append to README/TODO as needed regarding term management and grading windows alignment.
+8. Withdrawal and special-case adjustments
+   - If intROG ∈ {3(OW),4(LOA),5(AWOL)} and withdrawal_period == 'before', force tuition/lab/misc to 0 and clear per-item lists; drop late fee.
+
+9. Resource shaping and response
+   - Populate TuitionBreakdownResource from computed arrays, including summary, items, and AR reporting.
+
+10. Replace TuitionService::preview with compute
+   - Update preview() to call compute() when given valid inputs for backwards compatibility; otherwise return placeholder.
+
+11. Tests
+   - Write feature tests for major scenarios with seeded rows resembling CI data.
+   - Validate edge cases: foreign, late enrollment, full scholarship, withdrawal 'before'.
+
+12. Performance and correctness
+   - Use minimal selects, indexes (where possible), and avoid N+1 by joining once per list.
+   - Cross-validate with known CI runs and sample registrations.
