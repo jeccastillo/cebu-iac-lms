@@ -25,6 +25,7 @@ use App\Http\Controllers\Api\V1\GradingSystemController;
 use App\Http\Controllers\Api\V1\ClasslistGradesController;
 use App\Http\Controllers\Api\V1\SchoolYearController;
 use App\Http\Controllers\Api\V1\FacultyController;
+use App\Http\Controllers\Api\V1\ClassroomController;
 
 /*
 |--------------------------------------------------------------------------
@@ -159,6 +160,13 @@ Route::prefix('v1')->group(function () {
     Route::delete('/curriculum/{id}', [CurriculumController::class, 'destroy'])->middleware('role:registrar,admin');
     Route::post('/curriculum/{id}/subjects', [CurriculumController::class, 'addSubject'])->middleware('role:registrar,admin');
     Route::delete('/curriculum/{id}/subjects/{subjectId}', [CurriculumController::class, 'removeSubject'])->middleware('role:registrar,admin');
+
+    // Classroom endpoints (read + write)
+    Route::get('/classroom', [ClassroomController::class, 'index']);
+    Route::get('/classroom/{id}', [ClassroomController::class, 'show']);
+    Route::post('/classroom', [ClassroomController::class, 'store'])->middleware('role:registrar,admin');
+    Route::put('/classroom/{id}', [ClassroomController::class, 'update'])->middleware('role:registrar,admin');
+    Route::delete('/classroom/{id}', [ClassroomController::class, 'destroy'])->middleware('role:registrar,admin');
 
     // Student endpoints (baseline)
     Route::get('/students', [StudentController::class, 'index']);

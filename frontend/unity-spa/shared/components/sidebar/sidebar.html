@@ -152,6 +152,20 @@
         <span ng-if="!vm.isCollapsed" class="ml-3">Curricula</span>
       </a>
 
+      <!-- Classrooms -->
+      <a href="#/classrooms" ng-if="vm.canAccess('/classrooms')"
+        class="flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200" ng-class="{
+                 'bg-blue-100 text-blue-700': vm.isCurrentPath('/classrooms'),
+                 'text-gray-700 hover:bg-gray-100': !vm.isCurrentPath('/classrooms')
+               }" title="Classrooms">
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+          </path>
+        </svg>
+        <span ng-if="!vm.isCollapsed" class="ml-3">Classrooms</span>
+      </a>
+
       <!-- Subjects -->
       <a href="#/subjects"
          ng-if="vm.canAccess('/subjects')"

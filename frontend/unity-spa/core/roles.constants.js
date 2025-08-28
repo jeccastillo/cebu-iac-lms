@@ -45,6 +45,7 @@
       { test: '^/subjects(?:/.*)?$', roles: ['registrar', 'admin'] },
       { test: '^/curricula(?:/.*)?$', roles: ['registrar', 'admin'] },
       { test: '^/classlists(?:/.*)?$', roles: ['registrar', 'admin'] },
+      { test: '^/classrooms(?:/.*)?$', roles: ['faculty', 'registrar', 'admin'] },
       { test: '^/logs(?:/.*)?$', roles: ['admin'] }
       // '/dashboard' => any authenticated (intentionally omitted)
     ]);
