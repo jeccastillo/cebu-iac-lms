@@ -5,8 +5,8 @@
     .module('unityApp')
     .controller('EnlistmentController', EnlistmentController);
 
-  EnlistmentController.$inject = ['$http', 'APP_CONFIG', 'UnityService', 'ClasslistsService', 'TermService', 'ChecklistService', '$scope'];
-  function EnlistmentController($http, APP_CONFIG, UnityService, ClasslistsService, TermService, ChecklistService, $scope) {
+  EnlistmentController.$inject = ['$http', 'APP_CONFIG', 'UnityService', 'ClasslistsService', 'TermService', 'ChecklistService', 'ProgramsService', 'CurriculaService', '$scope'];
+  function EnlistmentController($http, APP_CONFIG, UnityService, ClasslistsService, TermService, ChecklistService, ProgramsService, CurriculaService, $scope) {
     var vm = this;
     var BASE = APP_CONFIG.API_BASE; // e.g. /laravel-api/public/api/v1
 
@@ -47,6 +47,14 @@
     vm.current = []; // current enlisted (for selected term)
     vm.ops = [];     // pending operations
 
+    // Registration edit state
+    vm.registration = null;
+    vm.regForm = {};
+    vm.programs = [];
+    vm.curricula = [];
+    vm.tuitionYears = [];
+    vm.regSaving = false;
+
     // UI selections
     vm.selectedAddClasslistId = '';
     vm.selectedDropClasslistId = '';
@@ -69,6 +77,84 @@
     vm.onStudentSelected = onStudentSelected;
     vm.autoQueueFromChecklist = autoQueueFromChecklist;
 
+    // Registration details panel
+    vm.loadRegistration = loadRegistration;
+    vm.saveRegistration = saveRegistration;
+    vm.resetRegForm = resetRegForm;
+    vm.isRegDirty = isRegDirty;
+    vm.loadPrograms = loadPrograms;
+    vm.loadCurricula = loadCurricula;
+    vm.loadTuitionYears = loadTuitionYears;
+    vm.programLabel = programLabel;
+    // Helpers for read-only display and lookups
+    vm.findProgramById = function(id) {
+      try {
+        if (id === null || id === undefined || ('' + id).trim() === '') return null;
+        var n = parseInt(id, 10);
+        if (isNaN(n)) return null;
+        var arr = vm.programs || [];
+        for (var i = 0; i < arr.length; i++) {
+          var pid = arr[i].intProgramID !== undefined && arr[i].intProgramID !== null ? arr[i].intProgramID : arr[i].id;
+          var pn = parseInt(pid, 10);
+          if (!isNaN(pn) && pn === n) return arr[i];
+        }
+        return null;
+      } catch (e) { return null; }
+    };
+    vm.findCurriculumById = function(id) {
+      try {
+        if (id === null || id === undefined || ('' + id).trim() === '') return null;
+        var n = parseInt(id, 10);
+        if (isNaN(n)) return null;
+        var arr = vm.curricula || [];
+        for (var i = 0; i < arr.length; i++) {
+          var cid = arr[i].intID !== undefined && arr[i].intID !== null ? arr[i].intID : arr[i].id;
+          var cn = parseInt(cid, 10);
+          if (!isNaN(cn) && cn === n) return arr[i];
+        }
+        return null;
+      } catch (e) { return null; }
+    };
+    vm.findTuitionYearById = function(id) {
+      try {
+        if (id === null || id === undefined || ('' + id).trim() === '') return null;
+        var n = parseInt(id, 10);
+        if (isNaN(n)) return null;
+        var arr = vm.tuitionYears || [];
+        for (var i = 0; i < arr.length; i++) {
+          var tid = arr[i].intID !== undefined && arr[i].intID !== null ? arr[i].intID : arr[i].id;
+          var tn = parseInt(tid, 10);
+          if (!isNaN(tn) && tn === n) return arr[i];
+        }
+        return null;
+      } catch (e) { return null; }
+    };
+    vm.readableWithdrawalPeriod = function(v) {
+      try {
+        if (v === null || v === undefined || v === '') return '';
+        if (typeof v === 'number') {
+          if (v === 0) return 'Before';
+          if (v === 1) return 'Start';
+          if (v === 2) return 'End';
+          return '' + v;
+        }
+        var s = ('' + v).toLowerCase().trim();
+        if (s === 'before' || s === '0') return 'Before';
+        if (s === 'start' || s === '1') return 'Start';
+        if (s === 'end' || s === '2') return 'End';
+        return ('' + v);
+      } catch (e) { return ''; }
+    };
+    vm.curriculumLabel = function(c) {
+      if (!c) return '';
+      return c.strName || c.name || ('Curriculum #' + (c.intID || c.id || ''));
+    };
+    vm.tuitionYearLabel = function(id) {
+      var ty = vm.findTuitionYearById(id);
+      if (!ty) return '';
+      return ty.label || ty.year || ('Tuition Year #' + (ty.intID || ty.id || ''));
+    };
+
     activate();
 
     function activate() {
@@ -85,9 +171,13 @@
           }
         }).finally(function () {
           loadStudents();
+          loadPrograms();
+          loadTuitionYears();
         });
       } else {
         loadStudents();
+        loadPrograms();
+        loadTuitionYears();
       }
 
       // React to global term changes
@@ -100,7 +190,10 @@
             if (vm.studentNumber) {
               loadCurrent();
               loadClasslistsForTerm();
+              // Always try reloading registration panel on term changes
+              loadRegistration();
             }
+            
           }
         });
       }
@@ -110,8 +203,11 @@
       if (vm.studentNumber) {
         setSelectedStudentName();
         loadCurrent();
+        loadRegistration();
       } else {
         vm.selectedStudentName = '';
+        vm.registration = null;
+        vm.regForm = {};
       }
     }
     
@@ -903,6 +999,176 @@
           vm.loading = false;
         });
       }
+    }
+    // Registration Details: helpers (moved inside controller to capture vm and injected services)
+    function loadPrograms() {
+      try {
+        ProgramsService.list({ enabledOnly: false }).then(function (res) {
+          var rows = (res && res.data) ? res.data : (Array.isArray(res) ? res : []);
+          // Normalize to a consistent shape so labels render properly
+          vm.programs = (rows || []).map(function (p) {
+            var id = p.intProgramID || p.id || null;
+            var code = p.strProgramCode || p.code || '';
+            var desc = p.strProgramDescription || p.title || p.description || '';
+            return Object.assign({}, p, {
+              intProgramID: id,
+              strProgramCode: code,
+              strProgramDescription: desc
+            });
+          }).filter(function (p) { return p.intProgramID !== null; });
+        });
+      } catch (e) { /* ignore */ }
+    }
+
+    function loadCurricula(programId) {
+      var opts = {};
+      if (programId !== undefined && programId !== null && ('' + programId) !== '') {
+        opts.program_id = programId;
+      }
+      CurriculaService.list(opts).then(function (res) {
+        vm.curricula = (res && res.data) ? res.data : (Array.isArray(res) ? res : []);
+      });
+    }
+
+    // Build a display label for Programs regardless of backend shape
+    function programLabel(p) {
+      if (!p) return '';
+      var id = p.intProgramID || p.id || '';
+      var code = p.strProgramCode || p.code || '';
+      var desc = p.strProgramDescription || p.title || '';
+      if (code && desc) return code + ' — ' + desc;
+      if (desc) return desc;
+      if (code) return code;
+      return id ? ('Program #' + id) : 'Program';
+    }
+
+    // Load tuition years for dropdown (read-only list)
+    function loadTuitionYears() {
+      try {
+        $http.get(APP_CONFIG.API_BASE + '/tuition-years').then(function (resp) {
+          var data = (resp && resp.data) ? resp.data : resp;
+          var rows = (data && data.data) ? data.data : (Array.isArray(data) ? data : []);
+          vm.tuitionYears = rows.map(function (r) {
+            return {
+              intID: r.intID || r.id,
+              year: r.year || r.sy || (r.strLabel || ''),
+              label: (r.year || r.sy || (r.strLabel || '')) + ''
+            };
+          });
+        });
+      } catch (e) { /* ignore */ }
+    }
+
+    function loadRegistration() {
+      if (!vm.studentNumber || !vm.term) {
+        vm.registration = null;
+        vm.regForm = {};
+        return;
+      }
+      vm.regLoading = true;
+      UnityService.getRegistration(vm.studentNumber, parseInt(vm.term, 10)).then(function (res) {
+        // UnityService returns unwrapped payload: { success, data: { exists, registration } }
+        var exists = res && res.data && res.data.exists;
+        var row = res && res.data ? res.data.registration : null;
+        vm.registration = exists ? row : null;
+        resetRegForm();
+        if (vm.regForm.current_program) {
+          vm.loadCurricula(vm.regForm.current_program);
+        } else {
+          vm.curricula = [];
+        }
+      }).catch(function (err) {
+        console.error('loadRegistration failed', err);
+        vm.registration = null;
+        vm.regForm = {};
+      }).finally(function () {
+        vm.regLoading = false;
+        if ($scope && $scope.$applyAsync) { $scope.$applyAsync(); }
+      });
+    }
+
+    function resetRegForm() {
+      if (!vm.registration) {
+        vm.regForm = {};
+        vm._regBaseline = {};
+        return;
+      }
+      vm.regForm = {
+        intYearLevel: vm.registration.intYearLevel ? parseInt(vm.registration.intYearLevel, 10) : (vm.yearLevel ? parseInt(vm.yearLevel, 10) : 1),
+        enumStudentType: vm.registration.enumStudentType || (vm.studentType || 'continuing'),
+        current_program: (vm.registration.current_program !== undefined) ? vm.registration.current_program : null,
+        current_curriculum: (vm.registration.current_curriculum !== undefined) ? vm.registration.current_curriculum : null,
+        tuition_year: (vm.registration.tuition_year !== undefined) ? vm.registration.tuition_year : null,
+        paymentType: vm.registration.paymentType || '',
+        loa_remarks: vm.registration.loa_remarks || '',
+        withdrawal_period: (function(w){
+          if (w === null || w === undefined || w === '') return '';
+          if (typeof w === 'string') return ('' + w).toLowerCase();
+          var n = parseInt(w, 10);
+          if (n === 0) return 'before';
+          if (n === 1) return 'start';
+          if (n === 2) return 'end';
+          return '';
+        })(vm.registration.withdrawal_period)
+      };
+      vm._regBaseline = angular.copy(vm.regForm);
+    }
+
+    function isRegDirty() {
+      try {
+        return JSON.stringify(vm.regForm) !== JSON.stringify(vm._regBaseline);
+      } catch (e) { return true; }
+    }
+
+    function saveRegistration() {
+      if (!vm.registration || !vm.studentNumber || !vm.term) return;
+      vm.regSaving = true;
+
+      // Build fields, omitting empty-string values to avoid validation errors
+      var fields = {};
+      function setIfPresent(key, value) {
+        if (value === undefined || value === null) return;
+        if (typeof value === 'string' && value.trim() === '') return;
+        fields[key] = value;
+      }
+      setIfPresent('intYearLevel', vm.regForm.intYearLevel);
+      setIfPresent('enumStudentType', vm.regForm.enumStudentType);
+      setIfPresent('current_program', vm.regForm.current_program);
+      setIfPresent('current_curriculum', vm.regForm.current_curriculum);
+      setIfPresent('tuition_year', vm.regForm.tuition_year);
+      setIfPresent('paymentType', vm.regForm.paymentType);
+      setIfPresent('loa_remarks', vm.regForm.loa_remarks);
+      // Normalize empty string to null for withdrawal_period; backend allows nullable|string|in:before,start,end
+      var wp = vm.regForm.withdrawal_period;
+      if (wp === '') { wp = null; }
+      // Explicitly include withdrawal_period even when null to allow clearing it
+      fields['withdrawal_period'] = wp;
+
+      UnityService.updateRegistration({
+        student_number: vm.studentNumber,
+        term: parseInt(vm.term, 10),
+        fields: fields
+      }).then(function (res) {
+        // UnityService returns unwrapped payload: { success, message, data: { updated, registration } }
+        var reg = res && res.data ? res.data.registration : null;
+        if (reg) {
+          vm.registration = reg;
+          resetRegForm();
+        }
+        if (window.Swal) {
+          Swal.fire({ icon: 'success', title: 'Saved', text: 'Registration updated.' });
+        }
+      }).catch(function (err) {
+        var m = (err && err.data && err.data.message) || 'Save failed';
+        if (window.Swal) {
+          Swal.fire({ icon: 'error', title: 'Error', text: m });
+        } else {
+          try { alert(m); } catch (e) {}
+        }
+      }).finally(function () {
+        vm.regSaving = false;
+        if ($scope && $scope.$applyAsync) { $scope.$applyAsync(); }
+      });
     }
   }
 

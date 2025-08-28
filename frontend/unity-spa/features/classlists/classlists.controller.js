@@ -32,6 +32,7 @@
     vm.reload = reload;
     vm.goAdd = goAdd;
     vm.goEdit = goEdit;
+    vm.goView = goView;
     vm.onTermChange = onTermChange;
     vm.dissolve = dissolve;
     vm.resetFilters = resetFilters;
@@ -200,6 +201,10 @@
 
     function goEdit(id) {
       $location.path('/classlists/' + encodeURIComponent(id) + '/edit');
+    }
+
+    function goView(id) {
+      $location.path('/classlists/' + encodeURIComponent(id) + '/viewer');
     }
 
     function onTermChange() {

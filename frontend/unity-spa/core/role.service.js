@@ -14,6 +14,7 @@
       getRoles: getRoles,
       deriveRoles: deriveRoles,
       hasRole: hasRole,
+      hasAny: hasAny,
       canAccess: canAccess,
       normalizeState: normalizeState,
       // for testing
@@ -66,6 +67,20 @@
       role = (role || '').toLowerCase();
       if (!role) return false;
       return getRoles().indexOf(role) !== -1;
+    }
+
+    function hasAny(roles) {
+      try {
+        if (!roles || !roles.length) return false;
+        var mine = getRoles();
+        for (var i = 0; i < roles.length; i++) {
+          var r = (roles[i] + '').toLowerCase();
+          if (mine.indexOf(r) !== -1) return true;
+        }
+        return false;
+      } catch (e) {
+        return false;
+      }
     }
 
     // pathOrRoute: string path ('/registrar/reports') or $route definition (with originalPath, requiredRoles)

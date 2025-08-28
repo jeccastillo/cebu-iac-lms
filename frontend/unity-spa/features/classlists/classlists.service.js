@@ -23,6 +23,18 @@
       if (state && state.faculty_id) {
         headers['X-Faculty-ID'] = state.faculty_id;
       }
+      // Propagate roles to API for permission fallback when Gate/Auth user is missing
+      try {
+        var roles = null;
+        if (state && Array.isArray(state.roles)) roles = state.roles;
+        else if (state && Array.isArray(state.role_codes)) roles = state.role_codes;
+        else if (state && typeof state.roles === 'string') roles = [state.roles];
+        if (roles && roles.length) {
+          headers['X-User-Roles'] = roles.join(',');
+        }
+      } catch (e) {
+        // no-op
+      }
       return { headers: headers };
     }
 
@@ -147,6 +159,20 @@
             var subjects = (data && data.data && data.data.subjects) ? data.data.subjects : [];
             return { success: true, data: subjects };
           });
+      },
+      // Grading Viewer + Ops
+      getViewer: function (id) {
+        // Include admin/faculty context headers so backend can derive permissions when Gate user is missing
+        return $http.get(BASE + '/classlists/' + encodeURIComponent(id) + '/viewer', _adminHeaders()).then(_unwrap);
+      },
+      saveGrades: function (id, payload) {
+        return $http.post(BASE + '/classlists/' + encodeURIComponent(id) + '/grades', payload, _adminHeaders()).then(_unwrap);
+      },
+      finalize: function (id, payload) {
+        return $http.post(BASE + '/classlists/' + encodeURIComponent(id) + '/finalize', payload || {}, _adminHeaders()).then(_unwrap);
+      },
+      unfinalize: function (id) {
+        return $http.post(BASE + '/classlists/' + encodeURIComponent(id) + '/unfinalize', {}, _adminHeaders()).then(_unwrap);
       }
     };
   }

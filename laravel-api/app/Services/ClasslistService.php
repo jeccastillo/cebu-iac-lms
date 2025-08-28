@@ -142,6 +142,34 @@ class ClasslistService
      * Placeholder for classlist operations (add/drop/shift/revert).
      * Will be implemented in a later pass.
      */
+    /**
+     * Retrieve classlist row with subject grading configuration and term info
+     * for grading viewer and operations.
+     *
+     * @param int $classlistId
+     * @return object|null
+     */
+    public function getClasslistForGrading(int $classlistId): ?object
+    {
+        return DB::table('tb_mas_classlist as cl')
+            ->join('tb_mas_subjects as s', 's.intID', '=', 'cl.intSubjectID')
+            ->leftJoin('tb_mas_sy as sy', 'sy.intID', '=', 'cl.strAcademicYear')
+            ->where('cl.intID', $classlistId)
+            ->select(
+                'cl.*',
+                's.strCode as subject_code',
+                's.strDescription as subject_description',
+                's.grading_system_id',
+                's.grading_system_id_midterm',
+                'sy.intID as syid',
+                'sy.midterm_start',
+                'sy.midterm_end',
+                'sy.final_start',
+                'sy.final_end'
+            )
+            ->first();
+    }
+
     public function classlistOp(array $payload): array
     {
         return [

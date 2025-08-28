@@ -3,6 +3,9 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
+use Throwable;
+use App\Services\SystemLogService;
 
 class RegistrationService
 {
@@ -184,6 +187,116 @@ class RegistrationService
         return [
             'success' => false,
             'message' => 'Not Implemented',
+        ];
+    }
+
+    /**
+     * Find an existing registration row by student number and term, with optional program/curriculum display fields.
+     */
+    public function findByStudentNumberAndTerm(string $studentNumber, int $term): ?object
+    {
+        $user = DB::table('tb_mas_users')->where('strStudentNumber', $studentNumber)->first();
+        if (!$user) {
+            return null;
+        }
+
+        $row = DB::table('tb_mas_registration as r')
+            ->leftJoin('tb_mas_programs as p', 'p.intProgramID', '=', 'r.current_program')
+            ->leftJoin('tb_mas_curriculum as c', 'c.intID', '=', 'r.current_curriculum')
+            ->where('r.intStudentID', $user->intID)
+            ->where('r.intAYID', $term)
+            ->select(
+                'r.*',
+                'p.strProgramCode as program_code',
+                'p.strProgramDescription as program_description',
+                'c.strName as curriculum_name'
+            )
+            ->orderByDesc('r.intRegistrationID')
+            ->first();
+
+        return $row ?: null;
+    }
+
+    /**
+     * Update allowed registration fields for an existing row (no create). Returns status and fresh row.
+     */
+    public function updateByStudentNumberAndTerm(string $studentNumber, int $term, array $fields, Request $request): array
+    {
+        $user = DB::table('tb_mas_users')->where('strStudentNumber', $studentNumber)->first();
+        if (!$user) {
+            return ['success' => false, 'message' => 'Student not found', 'status' => 404];
+        }
+
+        $existing = DB::table('tb_mas_registration')
+            ->where('intStudentID', $user->intID)
+            ->where('intAYID', $term)
+            ->orderByDesc('intRegistrationID')
+            ->first();
+
+        if (!$existing) {
+            return ['success' => false, 'message' => 'Registration not found', 'status' => 404];
+        }
+
+        // Whitelist updatable fields
+        $whitelist = [
+            'intYearLevel',
+            'enumStudentType',
+            'current_program',
+            'current_curriculum',
+            'tuition_year',
+            'paymentType',
+            'loa_remarks',
+            'withdrawal_period',
+        ];
+
+        $update = [];
+        foreach ($whitelist as $k) {
+            if (array_key_exists($k, $fields)) {
+                $update[$k] = $fields[$k];
+            }
+        }
+
+        if (empty($update)) {
+            // Nothing to update
+            $fresh = $this->findByStudentNumberAndTerm($studentNumber, $term);
+            return [
+                'success' => true,
+                'message' => 'No changes',
+                'data' => [
+                    'updated' => 0,
+                    'registration' => $fresh,
+                ],
+            ];
+        }
+
+        $old = (array) $existing;
+        $affected = DB::table('tb_mas_registration')
+            ->where('intRegistrationID', $existing->intRegistrationID)
+            ->update($update);
+
+        $fresh = $this->findByStudentNumberAndTerm($studentNumber, $term);
+
+        // Audit log
+        try {
+            SystemLogService::log(
+                'update',
+                'Registration',
+                (int) $existing->intRegistrationID,
+                $old,
+                $fresh ? (array) $fresh : null,
+                $request
+            );
+        } catch (Throwable $e) {
+            // ignore logging failure
+        }
+
+        return [
+            'success' => true,
+            'message' => 'Updated',
+            'data' => [
+                'updated' => $affected,
+                'registration' => $fresh,
+            ],
         ];
     }
 }

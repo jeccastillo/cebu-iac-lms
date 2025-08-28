@@ -45,6 +45,16 @@
         // payload: { student_number, term?, password? }
         return $http.post(BASE + '/unity/reset-registration', payload, _adminHeaders()).then(_unwrap);
       },
+      // Registration: fetch existing row for student+term (no create)
+      getRegistration: function (student_number, term) {
+        var params = { student_number: student_number, term: term };
+        return $http.get(BASE + '/unity/registration', Object.assign({ params: params }, _adminHeaders())).then(_unwrap);
+      },
+      // Registration: update editable fields for existing row
+      updateRegistration: function (payload) {
+        // payload: { student_number, term, fields: { ... } }
+        return $http.put(BASE + '/unity/registration', payload, _adminHeaders()).then(_unwrap);
+      },
       // Tag status placeholder
       tagStatus: function (payload) {
         return $http.post(BASE + '/unity/tag-status', payload, _adminHeaders()).then(_unwrap);

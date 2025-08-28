@@ -55,7 +55,7 @@
     <div ng-if="vm.selectedStudentName" class="text-sm text-gray-700 mb-1 flex items-center justify-between">
       <span>Student: <span class="font-semibold">{{vm.selectedStudentName}}</span></span>
       <a ng-if="vm.studentNumber" 
-         href="#!/students/{{vm.studentNumber}}/records" 
+         href="#/students/{{vm.studentNumber}}/records" 
          target="_blank" 
          class="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700">
         <i class="fas fa-external-link-alt"></i> View Records
@@ -83,6 +83,160 @@
           </tr>
       </tbody>
     </table>
+  </div>
+
+  <!-- Registration Details -->
+  <div class="bg-white border rounded p-4 space-y-4">
+    <div class="flex items-center justify-between">
+      <h2 class="text-lg font-semibold">Registration Details</h2>
+      <span ng-if="vm.regLoading" class="text-gray-600 text-sm">
+        <i class="fas fa-spinner fa-spin"></i> Loading registration...
+      </span>
+    </div>
+
+    <!-- Notice when no reg exists -->
+    <div ng-if="!vm.registration" class="text-gray-600 bg-gray-50 border rounded p-3">
+      No registration for this term. This form allows editing only when a registration already exists.
+    </div>
+
+    <!-- Editable form when reg exists -->
+    <div ng-if="vm.registration" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Left: Current Registration (read-only) -->
+      <div class="bg-gray-50 border rounded p-4">
+        <h3 class="font-semibold text-gray-700 mb-3">Current Values</h3>
+        <div class="space-y-2 text-sm">
+          <div>
+            <div class="text-gray-500 uppercase text-xs">Year Level</div>
+            <div class="font-medium">{{ (vm.registration.intYearLevel || vm.registration.int_year_level || vm.regForm.intYearLevel) || '—' }}</div>
+          </div>
+          <div>
+            <div class="text-gray-500 uppercase text-xs">Student Type</div>
+            <div class="font-medium">{{ vm.registration.enumStudentType || vm.registration.student_type || '—' }}</div>
+          </div>
+          <div>
+            <div class="text-gray-500 uppercase text-xs">Payment Type</div>
+            <div class="font-medium">{{ vm.registration.paymentType || '—' }}</div>
+          </div>
+          <div>
+            <div class="text-gray-500 uppercase text-xs">Program</div>
+            <div class="font-medium">
+              {{ vm.programLabel(vm.findProgramById(vm.registration.current_program)) || '—' }}
+            </div>
+          </div>
+          <div>
+            <div class="text-gray-500 uppercase text-xs">Curriculum</div>
+            <div class="font-medium">
+              {{ vm.curriculumLabel(vm.findCurriculumById(vm.registration.current_curriculum)) || '—' }}
+            </div>
+          </div>
+          <div>
+            <div class="text-gray-500 uppercase text-xs">Tuition Year</div>
+            <div class="font-medium">
+              {{ vm.tuitionYearLabel(vm.registration.tuition_year) || '—' }}
+            </div>
+          </div>
+          <div>
+            <div class="text-gray-500 uppercase text-xs">Withdrawal Period</div>
+            <div class="font-medium">
+              {{ vm.readableWithdrawalPeriod(vm.registration.withdrawal_period) || '—' }}
+            </div>
+          </div>
+          <div>
+            <div class="text-gray-500 uppercase text-xs">LOA Remarks</div>
+            <div class="font-medium whitespace-pre-line">{{ vm.registration.loa_remarks || '—' }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Editable Form -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Year Level -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Year Level</label>
+          <input type="number" min="1" ng-model="vm.regForm.intYearLevel" class="mt-1 block w-full border rounded px-3 py-2" />
+        </div>
+
+        <!-- Student Type -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Student Type</label>
+          <select ng-model="vm.regForm.enumStudentType" class="mt-1 block w-full border rounded px-3 py-2">
+            <option value="continuing">Continuing</option>
+            <option value="new">New</option>
+            <option value="returnee">Returnee</option>
+            <option value="transfer">Transfer</option>
+          </select>
+        </div>
+
+        <!-- Payment Type -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Payment Type</label>
+          <input type="text" maxlength="50" ng-model="vm.regForm.paymentType" class="mt-1 block w-full border rounded px-3 py-2" placeholder="e.g., full, installment" />
+        </div>
+
+        <!-- Program -->
+        <div class="md:col-span-1">
+          <label class="block text-sm font-medium text-gray-700">Program</label>
+          <select ng-model="vm.regForm.current_program"
+                  ng-change="vm.loadCurricula(vm.regForm.current_program)"
+                  class="mt-1 block w-full border rounded px-3 py-2"
+                  ng-options="(p.intProgramID || p.id) as vm.programLabel(p) for p in vm.programs track by (p.intProgramID || p.id)">
+            <option value="">-- Select Program --</option>
+          </select>
+        </div>
+
+        <!-- Curriculum -->
+        <div class="md:col-span-1">
+          <label class="block text-sm font-medium text-gray-700">Curriculum</label>
+          <select ng-model="vm.regForm.current_curriculum"
+                  class="mt-1 block w-full border rounded px-3 py-2"
+                  ng-options="(c.intID || c.id) as (c.strName || c.name) for c in vm.curricula track by (c.intID || c.id)">
+            <option value="">-- Select Curriculum --</option>
+          </select>
+        </div>
+
+        <!-- Tuition Year -->
+        <div class="md:col-span-1">
+          <label class="block text-sm font-medium text-gray-700">Tuition Year</label>
+          <select ng-model="vm.regForm.tuition_year"
+                  ng-options="ty.intID as (ty.year || ty.label) for ty in vm.tuitionYears track by ty.intID"
+                  class="mt-1 block w-full border rounded px-3 py-2">
+            <option value="">-- Select Tuition Year --</option>
+          </select>
+        </div>
+
+        <!-- Withdrawal Period -->
+        <div class="md:col-span-1">
+          <label class="block text-sm font-medium text-gray-700">Withdrawal Period</label>
+          <select ng-model="vm.regForm.withdrawal_period" class="mt-1 block w-full border rounded px-3 py-2">
+            <option value="">-- Select Withdrawal Period --</option>
+            <option value="before">Before</option>
+            <option value="start">Start</option>
+            <option value="end">End</option>
+          </select>
+        </div>
+
+        <!-- LOA Remarks -->
+        <div class="md:col-span-3">
+          <label class="block text-sm font-medium text-gray-700">LOA Remarks</label>
+          <textarea ng-model="vm.regForm.loa_remarks" rows="3" maxlength="1000" class="mt-1 block w-full border rounded px-3 py-2" placeholder="Leave-of-absence remarks"></textarea>
+        </div>
+
+        <!-- Actions -->
+        <div class="md:col-span-3 flex items-center gap-3">
+          <button class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
+                  ng-disabled="!vm.isRegDirty() || vm.regSaving"
+                  ng-click="vm.saveRegistration()">
+            <span ng-if="!vm.regSaving">Save Registration</span>
+            <span ng-if="vm.regSaving"><i class="fas fa-spinner fa-spin"></i> Saving...</span>
+          </button>
+          <button class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+                  ng-click="vm.resetRegForm()"
+                  ng-disabled="vm.regSaving || !vm.registration">
+            Reset
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Queue operations -->

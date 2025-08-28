@@ -117,6 +117,10 @@
             </span>
           </td>
           <td class="px-4 py-2 text-sm text-right space-x-2">
+            <button class="px-2 py-1 rounded bg-blue-600 text-white hover:bg-blue-700"
+                    ng-click="vm.goView(row.intID)">
+              <span class="fas fa-eye"></span> View Grades
+            </button>
             <button class="px-2 py-1 rounded bg-gray-100 text-gray-800 hover:bg-gray-200"
                     ng-click="vm.goEdit(row.intID)">
               <span class="fas fa-edit"></span> Edit

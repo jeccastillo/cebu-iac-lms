@@ -6,10 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\UnityAdvisingRequest;
 use App\Http\Requests\Api\V1\UnityEnlistRequest;
 use App\Http\Requests\Api\V1\UnityResetRegistrationRequest;
+use App\Http\Requests\Api\V1\UnityRegistrationUpdateRequest;
 use App\Http\Resources\TuitionBreakdownResource;
 use App\Services\TuitionService;
 use App\Services\EnlistmentService;
 use App\Services\UserContextResolver;
+use App\Services\RegistrationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,12 +21,14 @@ class UnityController extends Controller
     protected TuitionService $tuition;
     protected EnlistmentService $enlistment;
     protected UserContextResolver $ctx;
+    protected RegistrationService $registration;
 
-    public function __construct(TuitionService $tuition, EnlistmentService $enlistment, UserContextResolver $ctx)
+    public function __construct(TuitionService $tuition, EnlistmentService $enlistment, UserContextResolver $ctx, RegistrationService $registration)
     {
         $this->tuition = $tuition;
         $this->enlistment = $enlistment;
         $this->ctx = $ctx;
+        $this->registration = $registration;
     }
 
     /**
@@ -171,6 +175,55 @@ class UnityController extends Controller
             }
         }
         return strrev($get);
+    }
+
+    /**
+     * GET /api/v1/unity/registration
+     * Query: student_number, term
+     * Returns the existing registration for a student/term, or exists=false when absent.
+     */
+    public function registration(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'student_number' => 'required|string',
+            'term' => 'required|integer',
+        ]);
+
+        $studentNumber = (string) $validated['student_number'];
+        $term = (int) $validated['term'];
+
+        $row = $this->registration->findByStudentNumberAndTerm($studentNumber, $term);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'exists' => $row !== null,
+                'registration' => $row,
+            ],
+        ]);
+    }
+
+    /**
+     * PUT /api/v1/unity/registration
+     * Body: UnityRegistrationUpdateRequest
+     * Strictly edits only when a registration exists for the student/term. No creation.
+     * Audit-logs via SystemLogService.
+     */
+    public function updateRegistration(UnityRegistrationUpdateRequest $request): JsonResponse
+    {
+        $payload = $request->validated();
+
+        $result = $this->registration->updateByStudentNumberAndTerm(
+            (string) $payload['student_number'],
+            (int) $payload['term'],
+            (array) ($payload['fields'] ?? []),
+            $request
+        );
+
+        $status = $result['status'] ?? (($result['success'] ?? false) ? 200 : 400);
+        unset($result['status']);
+
+        return response()->json($result, $status);
     }
 
     /**

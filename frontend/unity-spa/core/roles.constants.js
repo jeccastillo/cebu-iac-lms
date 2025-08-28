@@ -37,9 +37,15 @@
       { test: '^/scholarship/.*$', roles: ['scholarship', 'admin'] },
       { test: '^/campuses(?:/.*)?$', roles: ['campus_admin', 'admin'] },
       { test: '^/grading-systems(?:/.*)?$', roles: ['faculty_admin', 'admin'] },
+      { test: '^/school-years(?:/.*)?$', roles: ['registrar', 'admin'] },
       { test: '^/roles(?:/.*)?$', roles: ['admin'] },
       { test: '^/students$', roles: ['registrar', 'scholarship', 'finance', 'admin'] },
-      { test: '^/students/[^/]+$', roles: ['registrar', 'scholarship', 'finance', 'admin'] }
+      { test: '^/students/[^/]+$', roles: ['registrar', 'scholarship', 'finance', 'admin'] },
+      { test: '^/programs(?:/.*)?$', roles: ['registrar', 'admin'] },
+      { test: '^/subjects(?:/.*)?$', roles: ['registrar', 'admin'] },
+      { test: '^/curricula(?:/.*)?$', roles: ['registrar', 'admin'] },
+      { test: '^/classlists(?:/.*)?$', roles: ['registrar', 'admin'] },
+      { test: '^/logs(?:/.*)?$', roles: ['admin'] }
       // '/dashboard' => any authenticated (intentionally omitted)
     ]);
 

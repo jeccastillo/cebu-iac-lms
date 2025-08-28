@@ -22,6 +22,9 @@ use App\Http\Controllers\Api\V1\ClasslistController;
 use App\Http\Controllers\Api\V1\ReportsController;
 use App\Http\Controllers\Api\V1\StudentChecklistController;
 use App\Http\Controllers\Api\V1\GradingSystemController;
+use App\Http\Controllers\Api\V1\ClasslistGradesController;
+use App\Http\Controllers\Api\V1\SchoolYearController;
+use App\Http\Controllers\Api\V1\FacultyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,6 +73,13 @@ Route::prefix('v1')->group(function () {
     Route::get('/faculty/{id}/roles', [RoleController::class, 'facultyRoles'])->middleware('role:admin');
     Route::post('/faculty/{id}/roles', [RoleController::class, 'assignFacultyRoles'])->middleware('role:admin');
     Route::delete('/faculty/{id}/roles/{roleId}', [RoleController::class, 'removeFacultyRole'])->middleware('role:admin');
+
+    // Faculty CRUD (admin-only)
+    Route::get('/faculty', [FacultyController::class, 'index'])->middleware('role:admin');
+    Route::get('/faculty/{id}', [FacultyController::class, 'show'])->middleware('role:admin');
+    Route::post('/faculty', [FacultyController::class, 'store'])->middleware('role:admin');
+    Route::put('/faculty/{id}', [FacultyController::class, 'update'])->middleware('role:admin');
+    Route::delete('/faculty/{id}', [FacultyController::class, 'destroy'])->middleware('role:admin');
 
     // Admissions - application submission
     Route::post('/admissions/student-info', [AdmissionsController::class, 'store']);
@@ -190,6 +200,9 @@ Route::prefix('v1')->group(function () {
     Route::post('/unity/advising', [UnityController::class, 'advising']);
     Route::post('/unity/enlist', [UnityController::class, 'enlist'])->middleware('role:registrar,admin');
     Route::post('/unity/reset-registration', [UnityController::class, 'resetRegistration'])->middleware('role:registrar,admin');
+    // Registration read/update for existing rows only
+    Route::get('/unity/registration', [UnityController::class, 'registration'])->middleware('role:registrar,admin');
+    Route::put('/unity/registration', [UnityController::class, 'updateRegistration'])->middleware('role:registrar,admin');
     Route::post('/unity/tag-status', [UnityController::class, 'tagStatus']);
     Route::post('/unity/tuition-preview', [UnityController::class, 'tuitionPreview']);
 
@@ -213,6 +226,12 @@ Route::prefix('v1')->group(function () {
     Route::put('/classlists/{id}', [ClasslistController::class, 'update'])->middleware('role:registrar,admin');
     Route::delete('/classlists/{id}', [ClasslistController::class, 'destroy'])->middleware('role:registrar,admin');
 
+    // Classlist Grading Viewer + Operations
+    Route::get('/classlists/{id}/viewer', [ClasslistGradesController::class, 'viewerData']);
+    Route::post('/classlists/{id}/grades', [ClasslistGradesController::class, 'saveGrades']);
+    Route::post('/classlists/{id}/finalize', [ClasslistGradesController::class, 'finalize']);
+    Route::post('/classlists/{id}/unfinalize', [ClasslistGradesController::class, 'unfinalize'])->middleware('role:registrar,admin');
+
     // Grading Systems CRUD
     Route::get('/grading-systems', [GradingSystemController::class, 'index']);
     Route::get('/grading-systems/{id}', [GradingSystemController::class, 'show']);
@@ -224,4 +243,11 @@ Route::prefix('v1')->group(function () {
     Route::post('/grading-systems/{id}/items/bulk', [GradingSystemController::class, 'addItemsBulk'])->middleware('role:admin,faculty_admin');
     Route::post('/grading-systems/{id}/items', [GradingSystemController::class, 'addItem'])->middleware('role:admin,faculty_admin');
     Route::delete('/grading-systems/items/{itemId}', [GradingSystemController::class, 'deleteItem'])->middleware('role:admin,faculty_admin');
+
+    // School Years CRUD
+    Route::get('/school-years', [SchoolYearController::class, 'index']);
+    Route::get('/school-years/{id}', [SchoolYearController::class, 'show']);
+    Route::post('/school-years', [SchoolYearController::class, 'store'])->middleware('role:registrar,admin');
+    Route::put('/school-years/{id}', [SchoolYearController::class, 'update'])->middleware('role:registrar,admin');
+    Route::delete('/school-years/{id}', [SchoolYearController::class, 'destroy'])->middleware('role:registrar,admin');
 });

@@ -173,6 +173,46 @@
         requiredRoles: ['registrar', 'admin']
       })
 
+      /* School Years CRUD */
+      .when('/school-years', {
+        templateUrl: 'features/school-years/list.html',
+        controller: 'SchoolYearsListController',
+        controllerAs: 'vm',
+        requiredRoles: ['registrar', 'admin']
+      })
+      .when('/school-years/new', {
+        templateUrl: 'features/school-years/edit.html',
+        controller: 'SchoolYearEditController',
+        controllerAs: 'vm',
+        requiredRoles: ['registrar', 'admin']
+      })
+      .when('/school-years/:id/edit', {
+        templateUrl: 'features/school-years/edit.html',
+        controller: 'SchoolYearEditController',
+        controllerAs: 'vm',
+        requiredRoles: ['registrar', 'admin']
+      })
+
+      /* Faculty CRUD */
+      .when('/faculty', {
+        templateUrl: 'features/faculty/list.html',
+        controller: 'FacultyController',
+        controllerAs: 'vm',
+        requiredRoles: ['admin']
+      })
+      .when('/faculty/add', {
+        templateUrl: 'features/faculty/edit.html',
+        controller: 'FacultyEditController',
+        controllerAs: 'vm',
+        requiredRoles: ['admin']
+      })
+      .when('/faculty/:id/edit', {
+        templateUrl: 'features/faculty/edit.html',
+        controller: 'FacultyEditController',
+        controllerAs: 'vm',
+        requiredRoles: ['admin']
+      })
+
       /* Classlists CRUD */
       .when('/classlists', {
         templateUrl: 'features/classlists/list.html',
@@ -191,6 +231,12 @@
         controller: 'ClasslistEditController',
         controllerAs: 'vm',
         requiredRoles: ['registrar', 'admin']
+      })
+      .when('/classlists/:id/viewer', {
+        templateUrl: 'features/classlists/viewer.html',
+        controller: 'ClasslistViewerController',
+        controllerAs: 'vm',
+        requiredRoles: ['faculty', 'registrar', 'admin']
       })
 
       /* Grading Systems CRUD */

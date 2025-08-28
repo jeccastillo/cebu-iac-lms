@@ -122,6 +122,21 @@
         <span ng-if="!vm.isCollapsed" class="ml-3">Programs</span>
       </a>
 
+      <!-- Faculty (Admin CRUD) -->
+      <a href="#/faculty"
+         ng-if="vm.hasRole('admin')"
+         class="flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200"
+         ng-class="{
+           'bg-blue-100 text-blue-700': vm.isCurrentPath('/faculty'),
+           'text-gray-700 hover:bg-gray-100': !vm.isCurrentPath('/faculty')
+         }"
+         title="Faculty">
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M9 20H4v-2a3 3 0 015.356-1.857M15 11a3 3 0 10-6 0 3 3 0 006 0zm6 4a3 3 0 11-6 0 3 3 0 016 0zM9 15a3 3 0 11-6 0 3 3 0 016 0z"></path>
+        </svg>
+        <span ng-if="!vm.isCollapsed" class="ml-3">Faculty</span>
+      </a>
+
       <!-- Curricula -->
       <a href="#/curricula"
          ng-if="vm.canAccess('/curricula')"
@@ -151,6 +166,21 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h10a2 2 0 012 2v12a1 1 0 01-1 1H7a3 3 0 00-3 3V6z"></path>
         </svg>
         <span ng-if="!vm.isCollapsed" class="ml-3">Subjects</span>
+      </a>
+
+      <!-- School Years -->
+      <a href="#/school-years"
+         ng-if="vm.canAccess('/school-years')"
+         class="flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200"
+         ng-class="{
+           'bg-blue-100 text-blue-700': vm.isCurrentPath('/school-years'),
+           'text-gray-700 hover:bg-gray-100': !vm.isCurrentPath('/school-years')
+         }"
+         title="School Years">
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h10"></path>
+        </svg>
+        <span ng-if="!vm.isCollapsed" class="ml-3">School Terms</span>
       </a>
 
       <!-- Classlists -->

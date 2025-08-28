@@ -1,164 +1,224 @@
 # Implementation Plan
 
 [Overview]
-Add a new faculty_admin role and deliver a complete Grading Systems management feature that spans Laravel API (CRUD for tb_mas_grading and tb_mas_grading_item) and AngularJS (Unity SPA) UI, gated so only admin and faculty_admin can create, edit, and delete grading systems and items, while reads are publicly available.
+Create full CRUD for tb_mas_sy (School Years/Terms) using the existing Laravel API and integrate a new management UI into the existing AngularJS Unity SPA styled with Tailwind. The API will expose REST endpoints for read and write operations with role-based access, and the SPA will provide list, create, update, and delete screens for registrar/admin while allowing read to authenticated users.
 
-This feature centralizes grading configuration so Registrar/Admin and Faculty Admin can maintain institutional grading scales. The Laravel API exposes well-validated endpoints, logs all actions, and enforces usage constraints (e.g., prevent deleting systems in use). The AngularJS UI provides listing, creation, editing, and item management views with role-based visibility in the sidebar, using the same access rules. The work integrates with legacy CodeIgniter components non-invasively: existing CI views/routes remain, but the new SPA pages become the primary admin interface for grading configuration.
+This implementation standardizes term management used across enrollment, grading windows, reports, and CI parity endpoints. It introduces a dedicated REST resource (/api/v1/school-years) alongside the existing generic list endpoints (/api/v1/generic/terms, /api/v1/generic/active-term). The UI will be added into the Unity SPA under a new feature module and will use Tailwind (via CDN) for styling to minimize build pipeline impact.
 
-[Types]
-Eloquent model-backed types represent the underlying tb_mas_grading and tb_mas_grading_item records.
+[Types]  
+Define the TB_MAS_SY entity and related structures used by the API and SPA.
 
-- GradingSystem (maps to tb_mas_grading)
-  - id: int, primary key, auto-increment
-  - name: string, required, unique (case-insensitive if supported)
-  - items(): hasMany GradingItem by grading_id
+Data model: tb_mas_sy
+- intID: int (PK, auto-increment)
+- enumSem: string (e.g., "1st", "2nd", "Summer"); non-empty
+- strYearStart: string (YYYY)
+- strYearEnd: string (YYYY)
+- term_label: string (e.g., "Semester", "Trimester", "Quarter", "Term"); optional, defaults to "Semester"
+- term_student_type: string (e.g., "college", "shs", "next"); optional
+- campus_id: int|null (FK to tb_mas_campuses.id, nullable, indexed)
+- midterm_start: datetime|null (YYYY-MM-DD HH:MM:SS)
+- midterm_end: datetime|null (YYYY-MM-DD HH:MM:SS)
+- final_start: datetime|null (YYYY-MM-DD HH:MM:SS)
+- final_end: datetime|null (YYYY-MM-DD HH:MM:SS)
+- end_of_submission: datetime|null (must not be '0000-00-00 00:00:00')
+- intProcessing: int|null (0/1; used historically to indicate current/processing term)
+- enumStatus: string|null (e.g., "active", "inactive")
+- enumFinalized: string|null (e.g., "yes", "no")
+- created_at/updated_at: not used (timestamps disabled in model)
 
-- GradingItem (maps to tb_mas_grading_item)
-  - id: int, primary key, auto-increment
-  - grading_id: int, required, foreign key to tb_mas_grading.id, on delete cascade (enforced in app-level transactions)
-  - value: string, required, unique per grading_id (app-level uniqueness)
-  - remarks: string, required
+Laravel validation (Store/Update):
+- enumSem: required|string|max:16
+- strYearStart: required|digits:4
+- strYearEnd: required|digits:4|gte:strYearStart
+- term_label: sometimes|string|max:32
+- term_student_type: sometimes|string|max:32
+- campus_id: sometimes|nullable|integer
+- midterm_start/midterm_end/final_start/final_end/end_of_submission: sometimes|nullable|date
+- intProcessing: sometimes|integer|in:0,1
+- enumStatus: sometimes|string|max:16
+- enumFinalized: sometimes|string|max:8
 
-Validation rules:
-- GradingSystemStoreRequest: { name: required|string|min:1|max:255|unique:tb_mas_grading,name }
-- GradingSystemUpdateRequest: { name: required|string|min:1|max:255|unique:tb_mas_grading,name,{id} }
-- GradingItemStoreRequest: { value: required|string|min:1|max:20, remarks: required|string|min:1|max:255 }
-- GradingItemsBulkStoreRequest: { items: required|array|min:1, items.*.value: string|required, items.*.remarks: string|required }; reject duplicate values within the same payload and skip already-existing values to be idempotent.
+Response DTO (API):
+- For collections: { success: true, data: SchoolYear[] }
+- For single: { success: true, data: SchoolYear }
+- On mutations, additionally include message when appropriate
 
 [Files]
-Implement new Laravel API files, update Auth gate, add AngularJS SPA routes/components, and expose UI in sidebar.
+Introduce new Laravel controller and requests, add routes, optionally adjust model casts, and create SPA feature files with Tailwind integration.
 
-- New (Laravel API)
-  - laravel-api/app/Models/GradingSystem.php: Eloquent model: protected $table='tb_mas_grading'; fillable ['name']; relation items()
-  - laravel-api/app/Models/GradingItem.php: Eloquent model: protected $table='tb_mas_grading_item'; fillable ['grading_id','value','remarks']; relation gradingSystem()
-  - laravel-api/app/Http/Controllers/Api/V1/GradingSystemController.php: REST controller with CRUD and items endpoints; uses SystemLogService and DB transactions
-  - laravel-api/app/Http/Requests/Api/V1/GradingSystemStoreRequest.php: validation for POST create
-  - laravel-api/app/Http/Requests/Api/V1/GradingSystemUpdateRequest.php: validation for PUT update
-  - laravel-api/app/Http/Requests/Api/V1/GradingItemStoreRequest.php: validation for single item add
-  - laravel-api/app/Http/Requests/Api/V1/GradingItemsBulkStoreRequest.php: validation for bulk add
-- Modified (Laravel API)
-  - laravel-api/app/Providers/AuthServiceProvider.php: define Gate::define('grading.manage', ...) to allow admin or faculty_admin
-  - laravel-api/routes/api.php: register routes under /api/v1:
-    - GET /grading-systems
-    - GET /grading-systems/{id}
-    - POST /grading-systems (authorize grading.manage)
-    - PUT /grading-systems/{id} (authorize grading.manage)
-    - DELETE /grading-systems/{id} (authorize grading.manage)
-    - POST /grading-systems/{id}/items (authorize grading.manage)
-    - POST /grading-systems/{id}/items/bulk (authorize grading.manage)
-    - DELETE /grading-systems/items/{itemId} (authorize grading.manage)
-- New (AngularJS Unity SPA)
-  - frontend/unity-spa/features/grading/grading.service.js: wraps API endpoints; uses APP_CONFIG.API_BASE
-  - frontend/unity-spa/features/grading/grading.controller.js: GradingListController and GradingEditController
-  - frontend/unity-spa/features/grading/list.html: list view with create/edit/delete actions and counts
-  - frontend/unity-spa/features/grading/edit.html: create/edit form and item management (add, add bulk, remove)
-- Modified (AngularJS Unity SPA)
-  - frontend/unity-spa/core/routes.js: add routes
-    - /grading-systems -> GradingListController (requiredRoles: ['faculty_admin','admin'])
-    - /grading-systems/new -> GradingEditController (requiredRoles: ['faculty_admin','admin'])
-    - /grading-systems/:id/edit -> GradingEditController (requiredRoles: ['faculty_admin','admin'])
-  - frontend/unity-spa/shared/components/sidebar/sidebar.html: add "Grading Systems" menu visible to faculty_admin and admin
-  - frontend/unity-spa/index.html: ensure new grading feature scripts are included in correct order so pages render (scripts loaded after core, before run)
-  - frontend/unity-spa/core/roles.constants.js and frontend/unity-spa/core/run.js: used to enforce requiredRoles metadata at route-level (no code changes required for this feature, but noted as dependencies)
+Laravel API
+- New files:
+  - laravel-api/app/Http/Controllers/Api/V1/SchoolYearController.php
+    - Purpose: RESTful CRUD for tb_mas_sy with SystemLogService auditing.
+  - laravel-api/app/Http/Requests/Api/V1/SchoolYearStoreRequest.php
+    - Purpose: Validate create payload.
+  - laravel-api/app/Http/Requests/Api/V1/SchoolYearUpdateRequest.php
+    - Purpose: Validate update payload (all fields optional).
+  - laravel-api/app/Http/Resources/SchoolYearResource.php (optional)
+    - Purpose: Normalize output if needed; can be skipped to keep parity style with existing controllers.
+
+- Existing files to modify:
+  - laravel-api/routes/api.php
+    - Add REST routes under /api/v1/school-years:
+      - GET /school-years (open read)
+      - GET /school-years/{id} (open read)
+      - POST /school-years (role: registrar,admin)
+      - PUT /school-years/{id} (role: registrar,admin)
+      - DELETE /school-years/{id} (role: registrar,admin)
+  - laravel-api/app/Models/SchoolYear.php
+    - Add attribute casts for datetime fields for consistency:
+      - protected $casts = [ 'midterm_start' => 'datetime', 'midterm_end' => 'datetime', 'final_start' => 'datetime', 'final_end' => 'datetime', 'end_of_submission' => 'datetime' ];
+    - Keep timestamps = false.
+
+- Database/Migrations:
+  - Verify presence of expected columns. If missing in the environment, add new migration:
+    - laravel-api/database/migrations/2025_08_28_000200_update_tb_mas_sy_columns.php
+      - Adds any absent columns: term_label, term_student_type, midterm_start, midterm_end, final_start, final_end, end_of_submission, enumStatus, enumFinalized, intProcessing (nullable).
+      - Adds indexes where appropriate (campus_id).
+      - Note: campus_id handled by existing migration 2025_08_25_000009_add_campus_id_to_tb_mas_sy.php (data dependency: end_of_submission must not be '0000-00-00 00:00:00').
+  - Data fix (precondition): laravel-api/scripts/fix_invalid_sy_end_of_submission.php exists; ensure it is run prior to FK addition to avoid 'Invalid datetime value'.
+
+Unity SPA (AngularJS)
+- New directory:
+  - frontend/unity-spa/features/school-years/
+    - school-years.service.js: Wraps API calls.
+    - school-years.controller.js: List view controller.
+    - school-year-edit.controller.js: Create/Edit controller.
+    - list.html: Tailwind-styled table with filters and actions.
+    - edit.html: Tailwind-styled form (create/update).
+
+- Existing files to modify:
+  - frontend/unity-spa/index.html
+    - Add Tailwind via CDN: <script src="https://cdn.tailwindcss.com"></script>
+    - Add a minimal tailwind.config inline (safelisting utility classes used if needed).
+  - frontend/unity-spa/core/routes.js
+    - Register routes:
+      - /school-years (list)
+      - /school-years/new (create)
+      - /school-years/:id/edit (edit)
+  - frontend/unity-spa/shared/components/sidebar/sidebar.html
+    - Add "School Years" nav link (visible for registrar/admin).
+  - frontend/unity-spa/core/role.service.js (no code change; used to hide/show UI controls based on roles)
 
 [Functions]
-API controller functions implement CRUD and item operations; Angular service/controller functions orchestrate UI flow.
+Add new controller methods and SPA service methods; no removals.
 
-- New (Laravel API)
-  - GradingSystemController@index(Request): JsonResponse
-  - GradingSystemController@show(int $id): JsonResponse
-  - GradingSystemController@store(GradingSystemStoreRequest): JsonResponse
-  - GradingSystemController@update(GradingSystemUpdateRequest, int $id): JsonResponse
-  - GradingSystemController@destroy(Request, int $id): JsonResponse
-  - GradingSystemController@addItemsBulk(GradingItemsBulkStoreRequest, int $id): JsonResponse
-  - GradingSystemController@addItem(GradingItemStoreRequest, int $id): JsonResponse
-  - GradingSystemController@deleteItem(Request, int $itemId): JsonResponse
-- Modified (Laravel API)
-  - AuthServiceProvider@boot(): Gate::define('grading.manage', fn($user) => $user->isAdmin() || $user->hasRole('faculty_admin'))
-  - routes/api.php: register routes and middleware for authorization
-- New (AngularJS)
-  - grading.service.js:
-    - list(): GET /grading-systems
-    - get(id): GET /grading-systems/{id}
-    - create(payload): POST /grading-systems
-    - update(id, payload): PUT /grading-systems/{id}
-    - remove(id): DELETE /grading-systems/{id}
-    - addItem(id, payload): POST /grading-systems/{id}/items
-    - addItemsBulk(id, payload): POST /grading-systems/{id}/items/bulk
-    - deleteItem(itemId): DELETE /grading-systems/items/{itemId}
-  - grading.controller.js:
-    - GradingListController: loads list, navigates to create/edit, deletes system with confirm, guards roles
-    - GradingEditController: handles create/update of system, loads items, add/remove single and bulk operations
+Laravel: new functions (SchoolYearController)
+- index(Request $request): JsonResponse
+  - Query params: campus_id?, term_student_type?, search?, limit?, page?
+  - Returns list ordered by strYearStart desc, enumSem asc.
+- show(int $id): JsonResponse
+  - Returns a single record or 404.
+- store(SchoolYearStoreRequest $request): JsonResponse
+  - Create record; defaults: term_label=Semester if missing.
+  - SystemLogService::log('create', 'SchoolYear', id, null, new, $request)
+- update(SchoolYearUpdateRequest $request, int $id): JsonResponse
+  - Update record (partial). Log 'update' with old/new.
+- destroy(int $id): JsonResponse
+  - Soft strategy: if enumStatus exists, set to 'inactive'; else perform delete (configurable). Log 'update' or 'delete'.
+
+Model changes
+- App\Models\SchoolYear::$casts: add datetime casts.
+
+Unity SPA: new functions
+- school-years.service.js
+  - list(params): Promise<response> GET /api/v1/school-years
+  - get(id): Promise<response> GET /api/v1/school-years/{id}
+  - create(payload): Promise<response> POST /api/v1/school-years
+  - update(id, payload): Promise<response> PUT /api/v1/school-years/{id}
+  - remove(id): Promise<response> DELETE /api/v1/school-years/{id}
+
+- school-years.controller.js
+  - init(): load terms, filters, handle role gating of actions
+  - onFilterChange(): refetch
+  - onCreate(), onEdit(id), onDelete(id): UI actions (with confirmations)
+
+- school-year-edit.controller.js
+  - init(id?): load existing when editing
+  - submit(): create/update via service with toasts and redirects
+  - form normalization for date fields (YYYY-MM-DD HH:mm:ss)
 
 [Classes]
-Eloquent models express relationship mapping; request classes enforce validation; Angular controllers define UI logic.
+Introduce one new Laravel controller class; adjust one model class.
 
-- New (Laravel API)
-  - App\Models\GradingSystem
-    - $table='tb_mas_grading'
-    - $fillable=['name']
-    - items(): hasMany(App\Models\GradingItem, 'grading_id')
-  - App\Models\GradingItem
-    - $table='tb_mas_grading_item'
-    - $fillable=['grading_id','value','remarks']
-    - gradingSystem(): belongsTo(App\Models\GradingSystem, 'grading_id')
-  - App\Http\Requests\Api\V1\GradingSystemStoreRequest
-  - App\Http\Requests\Api\V1\GradingSystemUpdateRequest
-  - App\Http\Requests\Api\V1\GradingItemStoreRequest
-  - App\Http\Requests\Api\V1\GradingItemsBulkStoreRequest
-- Modified (Laravel API)
-  - App\Providers\AuthServiceProvider: adds Gate grading.manage
-- New (AngularJS)
-  - GradingListController
-  - GradingEditController
+- New classes:
+  - App\Http\Controllers\Api\V1\SchoolYearController
+    - Methods: index, show, store, update, destroy
+    - Uses: Illuminate\Support\Facades\DB (optional), App\Models\SchoolYear, SystemLogService, Store/Update requests
+- Modified classes:
+  - App\Models\SchoolYear
+    - Add $casts for datetime fields as noted above
+- Removed classes:
+  - None
 
 [Dependencies]
-No third-party packages. Depends on:
-- Laravel: Eloquent, Request validation, Gate authorization, DB transactions, SystemLogService
-- AngularJS: existing unityApp module, APP_CONFIG.API_BASE, StorageService, RoleService, ngRoute, and templates include pipeline in index.html
-- Backend DB tables: tb_mas_grading and tb_mas_grading_item (existing RDBMS schema)
+No new Composer dependencies. Tailwind integrated via CDN in SPA.
+
+- Laravel:
+  - Use existing SystemLogService for audit logs.
+  - Continue route middleware 'role:registrar,admin' for mutations.
+
+- Frontend:
+  - Tailwind via CDN: https://cdn.tailwindcss.com with minimal runtime config.
+  - No change to build tooling.
 
 [Testing]
-Critical-path API tests via curl/Postman:
-- GET /grading-systems ⇒ 200, JSON array with items_count
-- GET /grading-systems/{id} ⇒ 200, contains system and ordered items
-- POST /grading-systems (authorized) ⇒ 201, creates system
-- PUT /grading-systems/{id} (authorized) ⇒ 200, updates name
-- DELETE /grading-systems/{id} (authorized) ⇒ 200; 409 if in use by tb_mas_subjects.grading_system_id or grading_system_id_midterm
-- POST /grading-systems/{id}/items (authorized) ⇒ 201; 409 on duplicate value in same system
-- POST /grading-systems/{id}/items/bulk (authorized) ⇒ 201; skips existing values; 422 if duplicate values in the same payload
-- DELETE /grading-systems/items/{itemId} (authorized) ⇒ 200
-- Verify SystemLogService entries created for create/update/delete operations
-UI smoke tests:
-- Sidebar shows “Grading Systems” for admin and faculty_admin
-- List page loads; create opens and persists; edit loads items; add/remove single & bulk works; route guards prevent access for other roles
+Adopt a layered approach for API and UI behaviors.
 
-Note: If API responses show malformed JSON in some environments (e.g., commas missing in console), capture raw responses to a file and verify content; investigate output buffering or encoding if needed; controller returns proper JSON via response()->json.
+API
+- Unit/Feature tests (optional, if test suite is in use):
+  - tests/Feature/SchoolYearControllerTest.php
+    - index_returns_list_with_filters
+    - show_returns_404_for_missing
+    - store_creates_and_logs
+    - update_patches_and_logs
+    - destroy_soft_disables_and_logs (or deletes)
+- Manual test checklist:
+  - Ensure GET /api/v1/school-years matches GenericApiController ordering and fields superset.
+  - Validate date field acceptance and persistence.
+  - Verify SystemLogService produces proper entries.
+  - Verify role middleware blocks mutations for non-registrar/admin.
+
+SPA
+- Manual test checklist:
+  - Sidebar shows "School Years" only for registrar/admin.
+  - List loads and filters (campus, student type, search).
+  - Create/edit forms validate required fields (enumSem, strYearStart, strYearEnd).
+  - Midterm/Final date windows saved and reflected.
+  - Delete flow confirmation and outcome messaging.
 
 [Implementation Order]
-Complete backend first, then frontend, then tests; protect destructive actions with guards and logging.
+Implement backend first, then frontend, then data fixes, then integration tests.
 
-1) Authorization and Roles
-   - Add/confirm faculty_admin role mapping in user context and Gate grading.manage in AuthServiceProvider.
-2) Data Models
-   - Implement GradingSystem and GradingItem Eloquent models and relations.
-3) Validation
-   - Implement GradingSystemStore/Update and GradingItemStore/ItemsBulk requests with rules.
-4) Controller
-   - Implement CRUD + item add/bulk-delete endpoints with transactions, constraints, logging.
-5) Routes
-   - Register API v1 routes; make GETs public; protect mutations with gate.
-6) Angular Service
-   - Implement grading.service.js calling API endpoints using APP_CONFIG.API_BASE.
-7) Angular Controllers/Views
-   - Implement GradingListController and GradingEditController; add list.html and edit.html.
-8) Routing/Sidebar
-   - Wire routes in core/routes.js with requiredRoles ['faculty_admin','admin']; add menu to sidebar.html.
-9) Index Includes
-   - Ensure new grading feature scripts are included in index.html in the correct order.
-10) API Tests
-   - Execute critical-path tests (GET/POST/PUT/DELETE, including conflict cases).
-11) UI Smoke Tests
-   - Verify role gating, CRUD from UI, and no console errors; fix CORS only for local file:// testing by running via http://localhost/... rather than file://.
-12) Logging Verification
-   - Confirm SystemLogService captured create/update/delete entries and metadata.
+1) Backend model and requests
+- Add $casts to SchoolYear model (datetime fields).
+- Create SchoolYearStoreRequest and SchoolYearUpdateRequest with rules.
+
+2) Backend controller and routes
+- Implement SchoolYearController (index, show, store, update, destroy).
+- Wire routes in routes/api.php under prefix v1 (/school-years).
+- Add role middleware for POST/PUT/DELETE; keep GET open (parity with other reads).
+
+3) Database/migrations
+- Verify columns; create 2025_08_28_000200_update_tb_mas_sy_columns.php to add any missing.
+- Pre-run data fix script (fix_invalid_sy_end_of_submission.php) to replace '0000-00-00 00:00:00' with NULL or valid timestamps.
+- Run migration for campus_id if pending, then new columns migration.
+
+4) SPA Tailwind integration
+- Update frontend/unity-spa/index.html to include Tailwind CDN.
+- Add minimal tailwind.config inline (safelist frequently used utilities if necessary).
+
+5) SPA feature files
+- Create frontend/unity-spa/features/school-years/service/controller/templates.
+- Update core/routes.js to register new routes.
+- Update shared/components/sidebar/sidebar.html to add menu link.
+
+6) Role/UX gating
+- Use role.service.js to hide create/edit/delete buttons for non-registrar/admin.
+- Keep read (list/show) accessible as per app norms.
+
+7) Validation and logging verification
+- Exercise CRUD from SPA; inspect laravel logs and tb_mas_system_log for entries.
+
+8) Documentation
+- Update or append to README/TODO as needed regarding term management and grading windows alignment.
