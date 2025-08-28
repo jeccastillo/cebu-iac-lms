@@ -378,4 +378,94 @@ class TuitionYearController extends Controller
             ]);
         });
     }
+
+    /**
+     * POST /api/v1/tuition-years/{id}/set-default?scope=college|shs
+     * Resets defaults and sets default for the given id based on scope.
+     */
+    public function setDefault(Request $request, $id)
+    {
+        $id = (int) $id;
+        if ($id <= 0) {
+            return response()->json(['success' => false, 'message' => 'id required'], 422);
+        }
+
+        $scope = strtolower((string) $request->query('scope', ''));
+        if (!in_array($scope, ['college','shs'])) {
+            return response()->json(['success' => false, 'message' => 'Invalid scope'], 422);
+        }
+
+        $exists = DB::table('tb_mas_tuition_year')->where('intID', $id)->exists();
+        if (!$exists) {
+            return response()->json(['success' => false, 'message' => 'Tuition year not found'], 404);
+        }
+
+        DB::transaction(function () use ($scope, $id) {
+            if ($scope === 'college') {
+                DB::table('tb_mas_tuition_year')->update(['isDefault' => 0]);
+                DB::table('tb_mas_tuition_year')->where('intID', $id)->update(['isDefault' => 1]);
+            } else { // shs
+                DB::table('tb_mas_tuition_year')->update(['isDefaultShs' => 0]);
+                DB::table('tb_mas_tuition_year')->where('intID', $id)->update(['isDefaultShs' => 1]);
+            }
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Updated'
+        ]);
+    }
+
+    /**
+     * POST /api/v1/tuition-years/edit-type
+     * Updates an extra row (misc, lab_fee, track, program, elective)
+     * Body: { type, id, ...fields }
+     * For track/program/elective PK is 'id', for others PK is 'intID'
+     */
+    public function editType(Request $request)
+    {
+        // Use 'xtype' (preferred) to denote which table to update, fallback to 'type' for backward-compat
+        $tableType = $request->input('xtype', $request->input('type'));
+        $id        = $request->input('id');
+
+        if (!in_array($tableType, ['misc','lab_fee','track','program','elective'])) {
+            return response()->json(['success' => false, 'message' => 'Invalid type'], 422);
+        }
+        if (!$id) {
+            return response()->json(['success' => false, 'message' => 'id required'], 422);
+        }
+
+        $table = 'tb_mas_tuition_year_' . $tableType;
+        $pk    = in_array($tableType, ['track','program','elective']) ? 'id' : 'intID';
+
+        // Determine allowed fields per type (prevent FK/PK tampering)
+        $allowed = [];
+        if ($tableType === 'misc') {
+            // For misc rows, allow updating the row's 'type' column (category) safely
+            $allowed = ['name','miscRegular','miscOnline','miscHyflex','miscHybrid','type'];
+        } elseif ($tableType === 'lab_fee') {
+            $allowed = ['name','labRegular','labOnline','labHyflex','labHybrid'];
+        } elseif (in_array($tableType, ['track','program'])) {
+            $allowed = ['track_id','tuition_amount','tuition_amount_online','tuition_amount_hyflex','tuition_amount_hybrid'];
+        } elseif ($tableType === 'elective') {
+            $allowed = ['subject_id','tuition_amount','tuition_amount_online','tuition_amount_hyflex','tuition_amount_hybrid'];
+        }
+
+        $payload = $request->only($allowed);
+        if (empty($payload)) {
+            return response()->json(['success' => false, 'message' => 'No fields to update'], 422);
+        }
+
+        $exists = DB::table($table)->where($pk, $id)->exists();
+        if (!$exists) {
+            return response()->json(['success' => false, 'message' => 'Record not found'], 404);
+        }
+
+        DB::table($table)->where($pk, $id)->update($payload);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Successfully Updated'
+        ]);
+    }
 }

@@ -239,6 +239,184 @@
     </div>
   </div>
 
+  <!-- Tuition Details -->
+  <div class="bg-white border rounded p-4 space-y-4">
+    <div class="flex items-center justify-between">
+      <h2 class="text-lg font-semibold">Tuition Details</h2>
+      <div class="flex items-center gap-2">
+        <button class="px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+                ng-click="vm.loadTuition(true)"
+                ng-disabled="vm.tuitionLoading || !vm.studentNumber || !vm.term || !vm.current.length">
+          <span ng-if="!vm.tuitionLoading">Load Tuition</span>
+          <span ng-if="vm.tuitionLoading"><i class="fas fa-spinner fa-spin"></i> Loading...</span>
+        </button>
+      </div>
+    </div>
+
+    <div ng-if="vm.tuitionLoading" class="text-gray-600 text-sm">
+      <i class="fas fa-spinner fa-spin"></i> Computing tuition preview...
+    </div>
+
+    <div ng-if="!vm.tuitionLoading && !vm.tuition" class="text-gray-500">
+      No tuition loaded yet. Select a student and term with enlisted subjects, then click “Load Tuition”.
+    </div>
+
+    <div ng-if="!vm.tuitionLoading && vm.tuition" class="space-y-4">
+      <!-- Summary -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+        <div class="bg-gray-50 border rounded p-3">
+          <div class="text-gray-500 uppercase text-xs">Tuition</div>
+          <div class="font-semibold">₱ {{ (vm.tuition.summary.tuition || 0) | number:2 }}</div>
+        </div>
+        <div class="bg-gray-50 border rounded p-3">
+          <div class="text-gray-500 uppercase text-xs">Misc</div>
+          <div class="font-semibold">₱ {{ (vm.tuition.summary.misc_total || 0) | number:2 }}</div>
+        </div>
+        <div class="bg-gray-50 border rounded p-3">
+          <div class="text-gray-500 uppercase text-xs">Lab</div>
+          <div class="font-semibold">₱ {{ (vm.tuition.summary.lab_total || 0) | number:2 }}</div>
+        </div>
+        <div class="bg-gray-50 border rounded p-3">
+          <div class="text-gray-500 uppercase text-xs">Additional</div>
+          <div class="font-semibold">₱ {{ (vm.tuition.summary.additional_total || 0) | number:2 }}</div>
+        </div>
+        <div class="bg-gray-50 border rounded p-3">
+          <div class="text-gray-500 uppercase text-xs">Scholarships</div>
+          <div class="font-semibold text-green-700">₱ {{ (vm.tuition.summary.scholarships_total || 0) | number:2 }}</div>
+        </div>
+        <div class="bg-gray-50 border rounded p-3">
+          <div class="text-gray-500 uppercase text-xs">Discounts</div>
+          <div class="font-semibold text-green-700">₱ {{ (vm.tuition.summary.discounts_total || 0) | number:2 }}</div>
+        </div>
+        <div class="bg-gray-100 border rounded p-3 md:col-span-2">
+          <div class="text-gray-500 uppercase text-xs">Total Due</div>
+          <div class="font-semibold text-indigo-700 text-lg">₱ {{ (vm.tuition.summary.total_due || 0) | number:2 }}</div>
+        </div>
+      </div>
+
+      <!-- Tuition Items -->
+      <div ng-if="vm.tuition.items && vm.tuition.items.tuition && vm.tuition.items.tuition.length">
+        <h3 class="font-semibold">Tuition Items</h3>
+        <table class="min-w-full text-sm">
+          <thead>
+            <tr class="text-left border-b">
+              <th class="py-2 pr-4">Code</th>
+              <th class="py-2 pr-4">Units</th>
+              <th class="py-2 pr-4">Rate</th>
+              <th class="py-2 pr-4">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="t in vm.tuition.items.tuition" class="border-b">
+              <td class="py-2 pr-4 font-mono">{{t.code || '—'}}</td>
+              <td class="py-2 pr-4">{{t.units || 0}}</td>
+              <td class="py-2 pr-4">₱ {{ (t.rate || 0) | number:2 }}</td>
+              <td class="py-2 pr-4">₱ {{ (t.amount || 0) | number:2 }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Misc Items -->
+      <div ng-if="vm.tuition.items && vm.tuition.items.misc && vm.tuition.items.misc.length">
+        <h3 class="font-semibold">Misc Fees</h3>
+        <table class="min-w-full text-sm">
+          <thead>
+            <tr class="text-left border-b">
+              <th class="py-2 pr-4">Name</th>
+              <th class="py-2 pr-4">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="m in vm.tuition.items.misc" class="border-b">
+              <td class="py-2 pr-4">{{m.name || '—'}}</td>
+              <td class="py-2 pr-4">₱ {{ (m.amount || 0) | number:2 }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Lab Items -->
+      <div ng-if="vm.tuition.items && vm.tuition.items.lab && vm.tuition.items.lab.length">
+        <h3 class="font-semibold">Lab Fees</h3>
+        <table class="min-w-full text-sm">
+          <thead>
+            <tr class="text-left border-b">
+              <th class="py-2 pr-4">Name</th>
+              <th class="py-2 pr-4">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="l in vm.tuition.items.lab" class="border-b">
+              <td class="py-2 pr-4">{{l.name || '—'}}</td>
+              <td class="py-2 pr-4">₱ {{ (l.amount || 0) | number:2 }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Scholarships and Discounts -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div ng-if="vm.tuition.items && vm.tuition.items.scholarships && vm.tuition.items.scholarships.length">
+          <h3 class="font-semibold">Scholarships</h3>
+          <table class="min-w-full text-sm">
+            <thead>
+              <tr class="text-left border-b">
+                <th class="py-2 pr-4">Name</th>
+                <th class="py-2 pr-4">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="s in vm.tuition.items.scholarships" class="border-b">
+                <td class="py-2 pr-4">{{s.name || '—'}}</td>
+                <td class="py-2 pr-4 text-green-700">₱ {{ (s.amount || 0) | number:2 }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div ng-if="vm.tuition.items && vm.tuition.items.discounts && vm.tuition.items.discounts.length">
+          <h3 class="font-semibold">Discounts</h3>
+          <table class="min-w-full text-sm">
+            <thead>
+              <tr class="text-left border-b">
+                <th class="py-2 pr-4">Name</th>
+                <th class="py-2 pr-4">Percent</th>
+                <th class="py-2 pr-4">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="d in vm.tuition.items.discounts" class="border-b">
+                <td class="py-2 pr-4">{{d.name || '—'}}</td>
+                <td class="py-2 pr-4">{{d.percent != null ? (d.percent + '%') : '—'}}</td>
+                <td class="py-2 pr-4 text-green-700">₱ {{ (d.amount || 0) | number:2 }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Additional Items -->
+      <div ng-if="vm.tuition.items && vm.tuition.items.additional && vm.tuition.items.additional.length">
+        <h3 class="font-semibold">Additional Charges</h3>
+        <table class="min-w-full text-sm">
+          <thead>
+            <tr class="text-left border-b">
+              <th class="py-2 pr-4">Name</th>
+              <th class="py-2 pr-4">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="a in vm.tuition.items.additional" class="border-b">
+              <td class="py-2 pr-4">{{a.name || '—'}}</td>
+              <td class="py-2 pr-4">₱ {{ (a.amount || 0) | number:2 }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
   <!-- Queue operations -->
   <div class="bg-white border rounded p-4 space-y-4">
     <div class="flex items-center justify-between">

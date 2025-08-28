@@ -259,6 +259,20 @@
         requiredRoles: ['faculty_admin', 'admin']
       })
 
+      /* Tuition Years (Finance) */
+      .when('/finance/tuition-years', {
+        templateUrl: 'features/tuition-years/list.html',
+        controller: 'TuitionYearsListController',
+        controllerAs: 'vm',
+        requiredRoles: ['finance', 'registrar', 'admin']
+      })
+      .when('/finance/tuition-years/:id', {
+        templateUrl: 'features/tuition-years/edit.html',
+        controller: 'TuitionYearEditController',
+        controllerAs: 'vm',
+        requiredRoles: ['finance', 'registrar', 'admin']
+      })
+
       .when('/roles', {
         templateUrl: 'features/roles/roles.html',
         controller: 'RolesController',
