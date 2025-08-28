@@ -248,13 +248,13 @@
       })
       .when("/classrooms/add", {
         templateUrl: "features/classrooms/classroom-edit.html",
-        controller: "ClassroomEditController",
+        controller: "ClassroomsController",
         controllerAs: "vm",
         requiredRoles: ["building_admin", "admin"],
       })
       .when("/classrooms/:id/edit", {
         templateUrl: "features/classrooms/classroom-edit.html",
-        controller: "ClassroomEditController",
+        controller: "ClassroomsController",
         controllerAs: "vm",
         requiredRoles: ["building_admin", "admin"],
       })

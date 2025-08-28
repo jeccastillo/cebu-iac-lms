@@ -2,10 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Faculty;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use App\Models\Faculty;
 
 class RequireRole
 {
@@ -20,9 +20,9 @@ class RequireRole
      * - Header: X-Faculty-ID
      * - Fallback: request input faculty_id
      */
-    public function handle(Request $request, Closure $next, string $rolesCsv): Response
+    public function handle(Request $request, Closure $next, ...$rolesCsv): Response
     {
-        $required = array_values(array_filter(array_map('trim', explode(',', $rolesCsv))));
+        $required = array_values(array_filter(array_map('trim', explode(',', implode(',', $rolesCsv)))));
         if (empty($required)) {
             return response()->json([
                 'success' => false,

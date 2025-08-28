@@ -1,32 +1,32 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\V1\ProgramController;
-use App\Http\Controllers\Api\V1\PortalController;
-use App\Http\Controllers\Api\V1\UsersController;
-use App\Http\Controllers\Api\V1\SubjectController;
-use App\Http\Controllers\Api\V1\TuitionYearController;
-use App\Http\Controllers\Api\V1\CurriculumController;
-use App\Http\Controllers\Api\V1\StudentController;
-use App\Http\Controllers\Api\V1\RegistrarController;
-use App\Http\Controllers\Api\V1\FinanceController;
-use App\Http\Controllers\Api\V1\ScholarshipController;
-use App\Http\Controllers\Api\V1\UnityController;
-use App\Http\Controllers\Api\V1\GenericApiController;
 use App\Http\Controllers\Api\V1\AdmissionsController;
 use App\Http\Controllers\Api\V1\CampusController;
-use App\Http\Controllers\Api\V1\RoleController;
-use App\Http\Controllers\Api\V1\SystemLogController;
 use App\Http\Controllers\Api\V1\ClasslistController;
-use App\Http\Controllers\Api\V1\ReportsController;
-use App\Http\Controllers\Api\V1\StudentChecklistController;
-use App\Http\Controllers\Api\V1\GradingSystemController;
 use App\Http\Controllers\Api\V1\ClasslistGradesController;
-use App\Http\Controllers\Api\V1\SchoolYearController;
-use App\Http\Controllers\Api\V1\FacultyController;
-use App\Http\Controllers\Api\V1\TuitionController;
 use App\Http\Controllers\Api\V1\ClassroomController;
+use App\Http\Controllers\Api\V1\CurriculumController;
+use App\Http\Controllers\Api\V1\FacultyController;
+use App\Http\Controllers\Api\V1\FinanceController;
+use App\Http\Controllers\Api\V1\GenericApiController;
+use App\Http\Controllers\Api\V1\GradingSystemController;
+use App\Http\Controllers\Api\V1\PortalController;
+use App\Http\Controllers\Api\V1\ProgramController;
+use App\Http\Controllers\Api\V1\RegistrarController;
+use App\Http\Controllers\Api\V1\ReportsController;
+use App\Http\Controllers\Api\V1\RoleController;
+use App\Http\Controllers\Api\V1\ScholarshipController;
+use App\Http\Controllers\Api\V1\SchoolYearController;
+use App\Http\Controllers\Api\V1\StudentChecklistController;
+use App\Http\Controllers\Api\V1\StudentController;
+use App\Http\Controllers\Api\V1\SubjectController;
+use App\Http\Controllers\Api\V1\SystemLogController;
+use App\Http\Controllers\Api\V1\TuitionController;
+use App\Http\Controllers\Api\V1\TuitionYearController;
+use App\Http\Controllers\Api\V1\UnityController;
+use App\Http\Controllers\Api\V1\UsersController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------

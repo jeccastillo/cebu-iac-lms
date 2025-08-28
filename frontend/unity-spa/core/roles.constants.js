@@ -11,6 +11,7 @@
       scholarship: 'scholarship',
       campus_admin: 'campus_admin',
       faculty_admin: 'faculty_admin',
+      building_admin: 'building_admin',
       student_view: 'student_view',
       admin: 'admin'
     })
@@ -45,7 +46,7 @@
       { test: '^/subjects(?:/.*)?$', roles: ['registrar', 'admin'] },
       { test: '^/curricula(?:/.*)?$', roles: ['registrar', 'admin'] },
       { test: '^/classlists(?:/.*)?$', roles: ['registrar', 'admin'] },
-      { test: '^/classrooms(?:/.*)?$', roles: ['faculty', 'registrar', 'admin'] },
+      { test: '^/classrooms(?:/.*)?$', roles: ['building_admin', 'admin'] },
       { test: '^/logs(?:/.*)?$', roles: ['admin'] }
       // '/dashboard' => any authenticated (intentionally omitted)
     ]);
