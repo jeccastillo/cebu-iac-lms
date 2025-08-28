@@ -1,0 +1,153 @@
+<div class="space-y-6">
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-semibold text-gray-900">{{ vm.title }}</h1>
+    <button type="button"
+            ng-if="vm.canAdd"
+            class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            ng-click="vm.add()">
+      <i class="fas fa-plus mr-2"></i>
+      Add Classroom
+    </button>
+  </div>
+
+  <!-- Alerts -->
+  <div ng-if="vm.error" class="p-3 rounded-md bg-red-50 border border-red-200 text-red-700 text-sm">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center">
+        <i class="fas fa-exclamation-triangle mr-2"></i>
+        {{ vm.error }}
+      </div>
+      <button type="button" class="text-red-500 hover:text-red-700" ng-click="vm.clearAlert()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+
+  <div ng-if="vm.success" class="p-3 rounded-md bg-green-50 border border-green-200 text-green-700 text-sm">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center">
+        <i class="fas fa-check mr-2"></i>
+        {{ vm.success }}
+      </div>
+      <button type="button" class="text-green-500 hover:text-green-700" ng-click="vm.clearAlert()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+    <div class="flex items-center space-x-3">
+      <div class="flex-1">
+        <label class="block text-xs font-medium text-gray-500 mb-1">Search</label>
+        <input type="text"
+               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+               placeholder="Search by classroom name, description, or campus..."
+               ng-model="vm.q"
+               ng-change="vm.search()">
+      </div>
+      <div class="pt-6">
+        <button type="button"
+                class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm bg-white hover:bg-gray-50"
+                ng-click="vm.search()">
+          <i class="fas fa-search mr-2"></i>Search
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading indicator -->
+  <div ng-if="vm.loading" class="flex items-center justify-center py-8">
+    <div class="flex items-center space-x-2 text-gray-600">
+      <i class="fas fa-spinner fa-spin"></i>
+      <span>Loading classrooms...</span>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div ng-if="!vm.loading" class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Room Code</th>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Campus</th>
+            <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <tr ng-if="vm.rows.length === 0">
+            <td colspan="6" class="px-4 py-6 text-center text-gray-500 text-sm">
+              <div class="flex flex-col items-center space-y-2">
+                <i class="fas fa-door-open text-gray-400 text-2xl"></i>
+                <span>No classrooms found</span>
+                <button type="button"
+                        ng-if="vm.canAdd"
+                        class="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                        ng-click="vm.add()">
+                  Add your first classroom
+                </button>
+              </div>
+            </td>
+          </tr>
+          
+          <tr ng-repeat="row in vm.rows track by row.intID" class="hover:bg-gray-50">
+            <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+              #{{ row.intID }}
+            </td>
+            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+              <div class="font-medium">{{ row.strRoomCode || 'N/A' }}</div>
+            </td>
+            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+              <span ng-if="row.enumType" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                    ng-class="{
+                      'bg-blue-100 text-blue-800': row.enumType === 'lecture',
+                      'bg-green-100 text-green-800': row.enumType === 'laboratory',
+                      'bg-purple-100 text-purple-800': row.enumType === 'hrm',
+                      'bg-yellow-100 text-yellow-800': row.enumType === 'pe',
+                      'bg-gray-100 text-gray-800': !['lecture', 'laboratory', 'hrm', 'pe'].includes(row.enumType)
+                    }">
+                {{ row.enumType | capitalize }}
+              </span>
+              <span ng-if="!row.enumType" class="text-gray-500">N/A</span>
+            </td>
+            <td class="px-4 py-3 text-sm text-gray-900">
+              <div ng-if="row.description" class="max-w-xs truncate">{{ row.description }}</div>
+              <div ng-if="!row.description" class="text-gray-500">N/A</div>
+            </td>
+            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+              {{ row.campus_name || 'N/A' }}
+            </td>
+            <td class="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
+              <div class="flex items-center justify-end space-x-2" ng-if="vm.canEdit">
+                <button type="button"
+                        class="text-blue-600 hover:text-blue-700 focus:outline-none"
+                        ng-click="vm.edit(row)"
+                        title="Edit classroom">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button type="button"
+                        ng-if="vm.canDelete"
+                        class="text-red-600 hover:text-red-700 focus:outline-none"
+                        ng-click="vm.delete(row)"
+                        title="Delete classroom">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+              <div ng-if="!vm.canEdit" class="text-gray-400 text-sm">View Only</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Footer info -->
+  <div ng-if="!vm.loading && vm.rows.length > 0" class="text-sm text-gray-500 text-center">
+    Showing {{ vm.rows.length }} classroom{{ vm.rows.length === 1 ? '' : 's' }}
+  </div>
+</div>
