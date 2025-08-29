@@ -79,12 +79,13 @@ Route::prefix('v1')->group(function () {
 
     // Faculty CRUD (admin-only)
     Route::get('/faculty', [FacultyController::class, 'index'])->middleware('role:admin');
+    // Place search route BEFORE parameterized /faculty/{id} to avoid route collision
+    // Faculty search for cashier assignment (cashier_admin and admin)
+    Route::get('/faculty/search', [FacultyController::class, 'index'])->middleware('role:cashier_admin,admin');
     Route::get('/faculty/{id}', [FacultyController::class, 'show'])->middleware('role:admin');
     Route::post('/faculty', [FacultyController::class, 'store'])->middleware('role:admin');
     Route::put('/faculty/{id}', [FacultyController::class, 'update'])->middleware('role:admin');
     Route::delete('/faculty/{id}', [FacultyController::class, 'destroy'])->middleware('role:admin');
-    // Faculty search for cashier assignment (cashier_admin and admin)
-    Route::get('/faculty/search', [FacultyController::class, 'index'])->middleware('role:cashier_admin,admin');
 
     // Admissions - application submission
     Route::post('/admissions/student-info', [AdmissionsController::class, 'store']);
@@ -279,5 +280,8 @@ Route::prefix('v1')->group(function () {
     Route::post('/cashiers/{id}/ranges', [CashierController::class, 'updateRanges'])->middleware('role:cashier_admin,admin');
     Route::get('/cashiers/{id}/stats', [CashierController::class, 'stats'])->middleware('role:cashier_admin,admin');
     Route::patch('/cashiers/{id}/assign', [CashierController::class, 'assign'])->middleware('role:cashier_admin,admin');
+    // Place stats route before the parameterized {id} routes to avoid matching "stats" as an ID
     Route::get('/cashiers/stats', [CashierController::class, 'statsAll'])->middleware('role:cashier_admin,admin');
+    Route::get('/cashiers/{id}', [CashierController::class, 'show'])->middleware('role:cashier_admin,admin');
+    Route::delete('/cashiers/{id}', [CashierController::class, 'destroy'])->middleware('role:cashier_admin,admin');
 });

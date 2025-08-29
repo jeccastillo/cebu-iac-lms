@@ -5,8 +5,8 @@
     .module('unityApp')
     .controller('FinanceLedgerController', FinanceLedgerController);
 
-  FinanceLedgerController.$inject = ['$location', 'LinkService', 'StorageService'];
-  function FinanceLedgerController($location, LinkService, StorageService) {
+  FinanceLedgerController.$inject = ['$location', 'LinkService', 'StorageService', 'RoleService'];
+  function FinanceLedgerController($location, LinkService, StorageService, RoleService) {
     var vm = this;
 
     vm.title = 'Student Ledger';
@@ -21,6 +21,8 @@
     // Legacy CI links (used during migration) and SPA nav
     vm.links = LinkService.buildLinks();
     vm.nav = LinkService.buildSpaLinks();
+    // RBAC helper
+    vm.canAccess = RoleService.canAccess;
   }
 
 })();

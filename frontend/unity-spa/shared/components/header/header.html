@@ -8,6 +8,12 @@
               ng-click="vm.goToEmployeePortal()">
         Employee Portal
       </button>
+      <!-- Quick access link to Cashier Admin (visible to cashier_admin/admin) -->
+      <a ng-if="vm.canAccess('/cashier-admin')"
+         href="#!/cashier-admin"
+         class="text-sm text-gray-700 hover:text-gray-900">
+        Cashier Admin
+      </a>
       <div class="relative" 
            ng-mouseleave="vm.scheduleCloseUserMenu()" 
            ng-mouseenter="vm.cancelCloseUserMenu()">

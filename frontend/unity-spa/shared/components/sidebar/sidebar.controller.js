@@ -27,6 +27,63 @@
     // External system links (e.g., CI endpoints)
     vm.links = LinkService.buildLinks();
 
+    // Group open state (persisted) and hierarchical menu
+    vm.groupOpen = {};
+    vm.menu = [
+      {
+        key: 'faculty',
+        label: 'Faculty',
+        children: [
+          { label: 'Profile', path: '/faculty/profile' },
+          { label: 'My Classes', path: '/faculty/classes' }
+        ]
+      },
+      {
+        key: 'registrar',
+        label: 'Registrar',
+        children: [
+          { label: 'Reports', path: '/registrar/reports' },
+          { label: 'Enlistment', path: '/registrar/enlistment' },          
+        ]
+      },
+      {
+        key: 'finance',
+        label: 'Finance',
+        children: [
+          { label: 'Ledger', path: '/finance/ledger' },
+          { label: 'Tuition Setup', path: '/finance/tuition-years' },
+          { label: 'Cashier', path: '/registrar/registration', href: '/registrar/registration/0' },
+          { label: 'Cashier Admin', path: '/cashier-admin' }          
+        ]
+      },
+      {
+        key: 'academics',
+        label: 'Academics',
+        children: [
+          { label: 'Programs', path: '/programs' },
+          { label: 'Subjects', path: '/subjects' },
+          { label: 'Curricula', path: '/curricula' },
+          { label: 'School Terms', path: '/school-years' },
+          { label: 'Classrooms', path: '/classrooms' },
+          { label: 'Grading Systems', path: '/grading-systems' }
+        ]
+      },
+      {
+        key: 'admin',
+        label: 'Admin',
+        children: [
+          { label: 'Faculty', path: '/faculty' },
+          { label: 'Roles', path: '/roles' },
+          { label: 'Logs', path: '/logs' },          
+        ]
+      }
+    ];
+
+    // Helpers for hierarchical menu
+    vm.toggleGroup = toggleGroup;
+    vm.isActivePrefix = isActivePrefix;
+    vm.canShowGroup = canShowGroup;
+
     // Initialize
     activate();
 
@@ -39,6 +96,15 @@
       // Initialize services
       TermService.init();
       CampusService.init();
+
+      // Restore group open state (default open if not yet stored)
+      try {
+        (vm.menu || []).forEach(function(g){
+          var k = 'sidebarOpen.' + g.key;
+          var v = StorageService.get(k);
+          vm.groupOpen[g.key] = (v === 'true' || v === null || typeof v === 'undefined');
+        });
+      } catch (e) {}
 
       // Watch for login state changes
       $scope.$watch(function() {
@@ -75,6 +141,47 @@
 
     function isCurrentPath(path) {
       return $location.path() === path;
+    }
+
+    function isActivePrefix(path) {
+      try {
+        var cur = $location.path() || '';
+        return cur === path || cur.indexOf(path + '/') === 0;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function toggleGroup(key) {
+      if (!key) return;
+      // Accordion behavior: when opening one group, close all others
+      var willOpen = !vm.groupOpen[key];
+
+      try {
+        // Close all groups first
+        Object.keys(vm.groupOpen).forEach(function (k) {
+          vm.groupOpen[k] = false;
+          StorageService.set('sidebarOpen.' + k, 'false');
+        });
+      } catch (e) {}
+
+      // Apply final state to the requested group (open if it was previously closed)
+      vm.groupOpen[key] = willOpen;
+      try {
+        StorageService.set('sidebarOpen.' + key, willOpen ? 'true' : 'false');
+      } catch (e) {}
+    }
+
+    function canShowGroup(group) {
+      if (!group || !group.children || !group.children.length) return false;
+      for (var i = 0; i < group.children.length; i++) {
+        var c = group.children[i];
+        var testPath = c.path || '';
+        if (testPath && vm.canAccess(testPath)) {
+          return true;
+        }
+      }
+      return false;
     }
   }
 

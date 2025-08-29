@@ -5,8 +5,8 @@
     .module('unityApp')
     .controller('DashboardController', DashboardController);
 
-  DashboardController.$inject = ['$location', '$window', 'LinkService', 'StorageService'];
-  function DashboardController($location, $window, LinkService, StorageService) {
+  DashboardController.$inject = ['$location', '$window', 'LinkService', 'StorageService', 'RoleService'];
+  function DashboardController($location, $window, LinkService, StorageService, RoleService) {
     var vm = this;
 
     // Auth state and redirect targets
@@ -29,6 +29,9 @@
 
     // Links to existing CI pages
     vm.links = LinkService.buildLinks();
+    // Internal SPA links and RBAC helper
+    vm.nav = LinkService.buildSpaLinks();
+    vm.canAccess = RoleService.canAccess;
 
     activate();
 

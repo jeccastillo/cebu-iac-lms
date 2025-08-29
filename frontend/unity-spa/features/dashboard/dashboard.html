@@ -96,6 +96,14 @@
             <span class="fas fa-angle-right text-gray-400"></span>
           </a>
         </li>
+        <li ng-if="vm.canAccess('/cashier-admin')">
+          <a class="flex items-center justify-between px-4 py-3 hover:bg-gray-50" href="#!/cashier-admin">
+            <span class="flex items-center text-gray-800">
+              <span class="fas fa-receipt text-indigo-500 w-5 mr-2"></span> Cashier Admin
+            </span>
+            <span class="fas fa-angle-right text-gray-400"></span>
+          </a>
+        </li>
       </ul>
     </div>
 

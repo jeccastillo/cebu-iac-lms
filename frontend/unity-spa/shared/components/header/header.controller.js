@@ -5,8 +5,8 @@
     .module('unityApp')
     .controller('HeaderController', HeaderController);
 
-  HeaderController.$inject = ['$rootScope', '$location', '$window', '$timeout', 'LinkService', 'StorageService'];
-  function HeaderController($rootScope, $location, $window, $timeout, LinkService, StorageService) {
+  HeaderController.$inject = ['$rootScope', '$location', '$window', '$timeout', 'LinkService', 'StorageService', 'RoleService'];
+  function HeaderController($rootScope, $location, $window, $timeout, LinkService, StorageService, RoleService) {
     var vm = this;
     var closeMenuTimeout;
 
@@ -16,6 +16,9 @@
     // External CI links and internal SPA links
     vm.links = LinkService.buildLinks();
     vm.nav = LinkService.buildSpaLinks();
+
+    // RBAC helper for conditional header links
+    vm.canAccess = RoleService.canAccess;
 
     vm.userMenuOpen = false;
     

@@ -383,4 +383,90 @@ class CashierController extends Controller
             ]
         ]);
     }
+
+    /**
+     * GET /api/v1/cashiers/{id}
+     * Optional: ?includeStats=1
+     */
+    public function show($id, Request $request)
+    {
+        $includeStats = (bool)$request->boolean('includeStats', false);
+
+        $r = Cashier::query()
+            ->leftJoin('tb_mas_faculty as f', 'f.intID', '=', 'tb_mas_cashiers.faculty_id')
+            ->where('tb_mas_cashiers.intID', (int)$id)
+            ->select(
+                'tb_mas_cashiers.*',
+                DB::raw("CONCAT(COALESCE(f.strFirstname,''),' ',COALESCE(f.strLastname,'')) as name")
+            )
+            ->first();
+
+        if (!$r) {
+            abort(404);
+        }
+
+        $data = [
+            'id'         => (int)$r->intID,
+            'user_id'    => (int)$r->user_id,
+            'faculty_id' => $r->faculty_id !== null ? (int)$r->faculty_id : null,
+            'name'       => $r->name ?? null,
+            'campus_id'  => $r->campus_id !== null ? (int)$r->campus_id : null,
+            'temporary_admin' => (int)($r->temporary_admin ?? 0),
+            'or' => [
+                'start'   => $r->or_start !== null ? (int)$r->or_start : null,
+                'end'     => $r->or_end !== null ? (int)$r->or_end : null,
+                'current' => $r->or_current !== null ? (int)$r->or_current : null,
+            ],
+            'invoice' => [
+                'start'   => $r->invoice_start !== null ? (int)$r->invoice_start : null,
+                'end'     => $r->invoice_end !== null ? (int)$r->invoice_end : null,
+                'current' => $r->invoice_current !== null ? (int)$r->invoice_current : null,
+            ],
+        ];
+
+        if ($includeStats) {
+            $stats = $this->svc->computeStats($r);
+            $data['stats'] = $stats;
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $data,
+        ]);
+    }
+
+    /**
+     * DELETE /api/v1/cashiers/{id}
+     * Deletes a cashier row. Prevent deletion if ranges include used numbers.
+     */
+    public function destroy($id)
+    {
+        $row = Cashier::findOrFail((int)$id);
+
+        // Prevent deletion if OR range overlaps any used OR number
+        if (!is_null($row->or_start) && !is_null($row->or_end)) {
+            $usage = $this->svc->validateRangeUsage('or', (int)$row->or_start, (int)$row->or_end);
+            if (!$usage['ok']) {
+                throw ValidationException::withMessages([
+                    'or' => ['Cannot delete: range includes used OR number', $usage]
+                ]);
+            }
+        }
+
+        // Prevent deletion if Invoice range overlaps any used Invoice number
+        if (!is_null($row->invoice_start) && !is_null($row->invoice_end)) {
+            $usage = $this->svc->validateRangeUsage('invoice', (int)$row->invoice_start, (int)$row->invoice_end);
+            if (!$usage['ok']) {
+                throw ValidationException::withMessages([
+                    'invoice' => ['Cannot delete: range includes used Invoice number', $usage]
+                ]);
+            }
+        }
+
+        $row->delete();
+
+        return response()->json([
+            'success' => true
+        ]);
+    }
 }

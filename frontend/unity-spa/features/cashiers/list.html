@@ -4,6 +4,21 @@
     <h1 class="text-2xl font-semibold text-gray-900">{{ vm.title }}</h1>
 
     <div class="flex items-center space-x-4">
+      <div class="hidden sm:flex items-center space-x-2">
+        <a href="#/cashier-admin"
+           class="inline-flex items-center px-3 py-2 border border-gray-300 bg-white hover:bg-gray-50 text-sm font-medium rounded-md text-gray-700">
+          <i class="fas fa-plus mr-2"></i>Create Cashier
+        </a>
+        <a href="#/faculty"
+           class="inline-flex items-center px-3 py-2 border border-gray-300 bg-white hover:bg-gray-50 text-sm font-medium rounded-md text-gray-700">
+          <i class="fas fa-search mr-2"></i>Search Faculty
+        </a>
+        <a href="#/finance/ledger"
+           class="inline-flex items-center px-3 py-2 border border-gray-300 bg-white hover:bg-gray-50 text-sm font-medium rounded-md text-gray-700">
+          <i class="fas fa-file-invoice-dollar mr-2"></i>Finance Ledger
+        </a>
+      </div>
+
       <label class="inline-flex items-center space-x-2">
         <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600" ng-model="vm.filters.includeStats" ng-change="vm.load()">
         <span class="text-sm text-gray-700">Include stats</span>
