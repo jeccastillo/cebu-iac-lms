@@ -1768,7 +1768,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A2', 'iACADEMY');
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A3', 'Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City');
+                    ->setCellValue('A3', $this->data['campus_address']);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A4', date("M j, Y h:i a"));
         $objPHPExcel->setActiveSheetIndex(0)
@@ -1844,7 +1844,7 @@ class Excel extends CI_Controller {
 
             foreach($classlists as $cl){
 
-            $objPHPExcel->setActiveSheetIndex(0)
+                $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A'.$i, $count.".")
                     ->setCellValue('B'.$i, preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']))
                     ->setCellValue('C'.$i, strtoupper($student['strLastname'].", ".$student['strFirstname']." ".$student['strMiddlename']))
@@ -1865,9 +1865,9 @@ class Excel extends CI_Controller {
                     $objPHPExcel->setActiveSheetIndex(0)->getStyle("I".$i)->applyFromArray($style);
                     $objPHPExcel->setActiveSheetIndex(0)->getStyle("J".$i)->applyFromArray($style);
                     $objPHPExcel->setActiveSheetIndex(0)->getStyle("N".$i)->applyFromArray($style);
-                    $count++;
                     $i++;
             }
+            $count++;
         }
         // $objPHPExcel->getActiveSheet()->getStyle('A2:I'.count($students))
         // ->getAlignment()->setWrapText(true);
