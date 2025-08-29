@@ -243,9 +243,11 @@ class UnityController extends Controller
      * Body:
      *  - student_number: string
      *  - program_id: int
-     *  - term: string
-     *  - subjects: array of { subject_id: int, section?: string }
-     * Returns TuitionBreakdownResource (placeholder breakdown for now).
+     *  - term: string (syid)
+     *  - subjects: array of { subject_id: int, section?: string } (not used in compute; kept for compatibility)
+     *  - discount_id?: int (optional)
+     *  - scholarship_id?: int (optional)
+     * Returns TuitionBreakdownResource using full computation.
      */
     public function tuitionPreview(Request $request): JsonResponse
     {
@@ -256,13 +258,236 @@ class UnityController extends Controller
             'subjects'              => 'required|array|min:1',
             'subjects.*.subject_id' => 'required|integer',
             'subjects.*.section'    => 'nullable|string',
+            'discount_id'           => 'sometimes|nullable|integer',
+            'scholarship_id'        => 'sometimes|nullable|integer',
         ]);
 
-        $breakdown = $this->tuition->preview($payload);
+        try {
+            // Parse term to integer SYID (frontend sends selectedTerm.intID as string)
+            $syid = (int) $payload['term'];
+
+            $discountId = $payload['discount_id'] ?? null;
+            $scholarshipId = $payload['scholarship_id'] ?? null;
+
+            // Use full compute path based on existing registration + tuition_year
+            $breakdown = $this->tuition->compute(
+                (string) $payload['student_number'],
+                $syid,
+                $discountId !== null ? (int) $discountId : null,
+                $scholarshipId !== null ? (int) $scholarshipId : null
+            );
+
+            return response()->json([
+                'success' => true,
+                'data'    => new TuitionBreakdownResource($breakdown),
+            ]);
+        } catch (\InvalidArgumentException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 422);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to compute tuition preview',
+            ], 500);
+        }
+    }
+
+    /**
+     * POST /api/v1/unity/tuition-save
+     * Body:
+     *  - student_number: string
+     *  - term: integer (syid)
+     *  - discount_id?: int (optional)
+     *  - scholarship_id?: int (optional)
+     * Behavior:
+     *  - Resolve student and registration (must exist and have tuition_year).
+     *  - Recompute tuition using TuitionService->compute.
+     *  - Upsert into tb_mas_tuition_saved keyed by (intStudentID,intRegistrationID); overwrite if exists.
+     */
+    public function tuitionSave(Request $request): JsonResponse
+    {
+        $payload = $request->validate([
+            'student_number' => 'required|string',
+            'term'           => 'required|integer',
+            'discount_id'    => 'sometimes|nullable|integer',
+            'scholarship_id' => 'sometimes|nullable|integer',
+        ]);
+
+        $studentNumber = (string) $payload['student_number'];
+        $syid = (int) $payload['term'];
+        $discountId = $payload['discount_id'] ?? null;
+        $scholarshipId = $payload['scholarship_id'] ?? null;
+
+        // Resolve student and registration
+        $user = DB::table('tb_mas_users')->where('strStudentNumber', $studentNumber)->first();
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Student not found',
+            ], 404);
+        }
+        $registration = DB::table('tb_mas_registration')
+            ->where('intStudentID', $user->intID)
+            ->where('intAYID', $syid)
+            ->first();
+
+        if (!$registration) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Registration not found for term',
+            ], 422);
+        }
+        if (!($registration->tuition_year ?? null)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Registration missing tuition_year',
+            ], 422);
+        }
+
+        // Resolve acting user (saved_by)
+        $actorId = $this->ctx->resolveUserId($request);
+        if ($actorId === null) {
+            $xfac = $request->header('X-Faculty-ID');
+            if ($xfac !== null && is_numeric($xfac)) {
+                $actorId = (int) $xfac;
+            }
+        }
+
+        try {
+            // Recompute server-side
+            $breakdown = $this->tuition->compute(
+                $studentNumber,
+                $syid,
+                $discountId !== null ? (int) $discountId : null,
+                $scholarshipId !== null ? (int) $scholarshipId : null
+            );
+
+            $now = now()->toDateTimeString();
+            $key = [
+                'intStudentID'     => (int) $user->intID,
+                'intRegistrationID'=> (int) $registration->intRegistrationID,
+            ];
+
+            $existing = DB::table('tb_mas_tuition_saved')
+                ->where($key)
+                ->first();
+
+            if ($existing) {
+                DB::table('tb_mas_tuition_saved')
+                    ->where($key)
+                    ->update([
+                        'syid'       => $syid,
+                        'payload'    => json_encode($breakdown),
+                        'saved_by'   => $actorId,
+                        'updated_at' => $now,
+                    ]);
+                $savedId = (int) $existing->intID;
+                $overwritten = true;
+            } else {
+                $savedId = DB::table('tb_mas_tuition_saved')->insertGetId([
+                    'intStudentID'      => (int) $user->intID,
+                    'intRegistrationID' => (int) $registration->intRegistrationID,
+                    'syid'              => $syid,
+                    'payload'           => json_encode($breakdown),
+                    'saved_by'          => $actorId,
+                    'created_at'        => $now,
+                    'updated_at'        => $now,
+                ]);
+                $overwritten = false;
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => $overwritten ? 'Saved tuition overwritten successfully' : 'Saved tuition created successfully',
+                'data'    => [
+                    'id'               => (int) $savedId,
+                    'intStudentID'     => (int) $user->intID,
+                    'intRegistrationID'=> (int) $registration->intRegistrationID,
+                    'syid'             => (int) $syid,
+                    'saved_by'         => $actorId,
+                    'overwritten'      => $overwritten,
+                    'saved_at'         => $now,
+                ],
+            ]);
+        } catch (\InvalidArgumentException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 422);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to save tuition snapshot',
+            ], 500);
+        }
+    }
+
+    /**
+     * GET /api/v1/unity/tuition-saved
+     * Query:
+     *  - student_number: string
+     *  - term: integer (syid)
+     * Returns the saved tuition snapshot row if exists for the student's registration in the term.
+     */
+    public function tuitionSaved(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'student_number' => 'required|string',
+            'term'           => 'required|integer',
+        ]);
+
+        $studentNumber = (string) $validated['student_number'];
+        $syid = (int) $validated['term'];
+
+        $user = DB::table('tb_mas_users')->where('strStudentNumber', $studentNumber)->first();
+        if (!$user) {
+            return response()->json([
+                'success' => true,
+                'data'    => ['exists' => false, 'saved' => null],
+            ]);
+        }
+
+        $registration = DB::table('tb_mas_registration')
+            ->where('intStudentID', $user->intID)
+            ->where('intAYID', $syid)
+            ->first();
+
+        if (!$registration) {
+            return response()->json([
+                'success' => true,
+                'data'    => ['exists' => false, 'saved' => null],
+            ]);
+        }
+
+        $row = DB::table('tb_mas_tuition_saved')
+            ->where('intStudentID', $user->intID)
+            ->where('intRegistrationID', $registration->intRegistrationID)
+            ->first();
+
+        if (!$row) {
+            return response()->json([
+                'success' => true,
+                'data'    => ['exists' => false, 'saved' => null],
+            ]);
+        }
+
+        // Decode JSON payload to array for API response
+        $saved = [
+            'intID'            => (int) $row->intID,
+            'intStudentID'     => (int) $row->intStudentID,
+            'intRegistrationID'=> (int) $row->intRegistrationID,
+            'syid'             => (int) $row->syid,
+            'saved_by'         => $row->saved_by !== null ? (int) $row->saved_by : null,
+            'created_at'       => (string) $row->created_at,
+            'updated_at'       => (string) $row->updated_at,
+            'payload'          => json_decode($row->payload, true),
+        ];
 
         return response()->json([
             'success' => true,
-            'data'    => new TuitionBreakdownResource($breakdown),
+            'data'    => ['exists' => true, 'saved' => $saved],
         ]);
     }
 }

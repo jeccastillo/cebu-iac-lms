@@ -12,6 +12,7 @@
       campus_admin: 'campus_admin',
       faculty_admin: 'faculty_admin',
       student_view: 'student_view',
+      cashier_admin: 'cashier_admin',
       admin: 'admin'
     })
     .constant('ROLE_CONFIG', {
@@ -32,6 +33,7 @@
     // Routes not listed here default to "auth-only" allowed (no role gating).
     .constant('ACCESS_MATRIX', [
       { test: '^/faculty/.*$', roles: ['faculty', 'admin'] },
+      { test: '^/registrar/registration(?:/.*)?$', roles: ['finance', 'admin'] },
       { test: '^/registrar/.*$', roles: ['registrar', 'admin'] },
       { test: '^/finance/.*$', roles: ['finance', 'admin'] },
       { test: '^/scholarship/.*$', roles: ['scholarship', 'admin'] },
@@ -46,6 +48,7 @@
       { test: '^/curricula(?:/.*)?$', roles: ['registrar', 'admin'] },
       { test: '^/classlists(?:/.*)?$', roles: ['registrar', 'admin'] },
       { test: '^/classrooms(?:/.*)?$', roles: ['faculty', 'registrar', 'admin'] },
+      { test: '^/cashier-admin(?:/.*)?$', roles: ['cashier_admin', 'admin'] },
       { test: '^/logs(?:/.*)?$', roles: ['admin'] }
       // '/dashboard' => any authenticated (intentionally omitted)
     ]);

@@ -15,6 +15,7 @@
     vm.subjects = [];
     vm.sections = [];
     vm.results = null;
+    vm.student_id = null;
     // Tuition preview state
     vm.tuition = null;
     vm.tuitionLoading = false;
@@ -94,6 +95,18 @@
     // Tuition preview
     vm.loadTuition = loadTuition;
 
+    // Installment tabs
+    vm.installmentTab = 'standard';
+    vm.selectInstallmentTab = selectInstallmentTab;
+    vm.installmentData = installmentData;
+    vm.displayedTotalDue = displayedTotalDue;
+    vm.increaseInfo = increaseInfo;
+
+    // Tuition save snapshot
+    vm.tuitionSaving = false;
+    vm.canSaveTuition = canSaveTuition;
+    vm.saveTuition = saveTuition;
+
     // Tuition loader: builds payload from current enlisted and registration
     function loadTuition(force) {
       try {
@@ -152,6 +165,174 @@
       } catch (e) {
         // swallow
       }
+    }
+
+    function canSaveTuition() {
+      try {
+        return !!(vm.tuition && !vm.tuitionLoading && vm.registration && vm.studentNumber && vm.term);
+      } catch (e) { return false; }
+    }
+
+    function saveTuition() {
+      try {
+        if (!canSaveTuition()) {
+          if (window.Swal) {
+            Swal.fire({ icon: 'warning', title: 'Cannot Save', text: 'Load tuition and ensure a registration exists first.' });
+          } else {
+            try { alert('Load tuition and ensure a registration exists first.'); } catch (e) {}
+          }
+          return;
+        }
+        var termInt = parseInt(vm.term, 10);
+        vm.tuitionSaving = true;
+
+        function doSave() {
+          UnityService.tuitionSave({
+            student_number: vm.studentNumber,
+            term: termInt
+          }).then(function (res) {
+            var ok = res && res.success;
+            var msg = (res && res.message) || (ok ? 'Tuition saved.' : 'Failed to save tuition.');
+            if (window.Swal) {
+              Swal.fire({ icon: ok ? 'success' : 'error', title: ok ? 'Saved' : 'Error', text: msg });
+            } else {
+              try { alert(msg); } catch (e) {}
+            }
+          }).catch(function (err) {
+            console.error('tuitionSave failed', err);
+            var m = (err && err.data && err.data.message) || 'Failed to save tuition.';
+            if (window.Swal) {
+              Swal.fire({ icon: 'error', title: 'Error', text: m });
+            } else {
+              try { alert(m); } catch (e) {}
+            }
+          }).finally(function () {
+            vm.tuitionSaving = false;
+            if ($scope && $scope.$applyAsync) { $scope.$applyAsync(); }
+          });
+        }
+
+        // Preflight: check if a saved snapshot already exists
+        UnityService.tuitionSaved({
+          student_number: vm.studentNumber,
+          term: termInt
+        }).then(function (res) {
+          var data = (res && res.data) ? res.data : res;
+          var exists = !!(data && data.exists);
+          if (exists) {
+            if (window.Swal) {
+              Swal.fire({
+                icon: 'warning',
+                title: 'Overwrite saved tuition?',
+                text: 'A saved tuition snapshot already exists for this registration. Do you want to overwrite it?',
+                showCancelButton: true,
+                confirmButtonText: 'Overwrite',
+                cancelButtonText: 'Cancel'
+              }).then(function (result) {
+                if (result.isConfirmed) {
+                  doSave();
+                } else {
+                  vm.tuitionSaving = false;
+                  if ($scope && $scope.$applyAsync) { $scope.$applyAsync(); }
+                }
+              });
+            } else {
+              var c = false;
+              try { c = window.confirm('A saved tuition snapshot already exists. Overwrite?'); } catch (e) { c = true; }
+              if (c) { doSave(); } else { vm.tuitionSaving = false; }
+            }
+          } else {
+            doSave();
+          }
+        }).catch(function () {
+          // On preflight error, proceed with save to avoid blocking
+          doSave();
+        });
+      } catch (e) {
+        vm.tuitionSaving = false;
+      }
+    }
+
+    // Installment helpers
+    function selectInstallmentTab(tab) {
+      try {
+        if (tab === 'standard' || tab === 'dp30' || tab === 'dp50') {
+          vm.installmentTab = tab;
+        }
+      } catch (e) {}
+    }
+
+    function _installments() {
+      try {
+        return (vm.tuition && vm.tuition.summary && vm.tuition.summary.installments) ? vm.tuition.summary.installments : null;
+      } catch (e) { return null; }
+    }
+
+    function installmentData() {
+      try {
+        var inst = _installments();
+        if (!inst) return null;
+        if (vm.installmentTab === 'dp30') {
+          return {
+            dp: inst.down_payment30 || 0,
+            fee: inst.installment_fee30 || 0,
+            total: inst.total_installment30 || 0
+          };
+        }
+        if (vm.installmentTab === 'dp50') {
+          return {
+            dp: inst.down_payment50 || 0,
+            fee: inst.installment_fee50 || 0,
+            total: inst.total_installment50 || 0
+          };
+        }
+        // standard
+        return {
+          dp: inst.down_payment || 0,
+          fee: inst.installment_fee || 0,
+          total: inst.total_installment || 0
+        };
+      } catch (e) { return null; }
+    }
+
+    function displayedTotalDue() {
+      try {
+        var totalDue = (vm.tuition && vm.tuition.summary && vm.tuition.summary.total_due) ? vm.tuition.summary.total_due : 0;
+        var inst = _installments();
+        if (!inst) return totalDue;
+
+        if (vm.installmentTab === 'dp30') {
+          return (inst.total_installment30 || totalDue);
+        }
+        if (vm.installmentTab === 'dp50') {
+          return (inst.total_installment50 || totalDue);
+        }
+        return totalDue; // standard
+      } catch (e) { return 0; }
+    }
+
+    // Cached calculation to prevent infinite digest caused by returning a new object each digest
+    var _incCacheKey = null, _incCacheVal = null;
+    function increaseInfo() {
+      try {
+        if (!vm.tuition || !vm.tuition.summary) { _incCacheKey = null; _incCacheVal = null; return null; }
+        var sum = vm.tuition.summary;
+        var perc = 0;
+        if (vm.installmentTab === 'dp30') perc = 0.15;
+        else if (vm.installmentTab === 'dp50') perc = 0.09;
+        else { _incCacheKey = null; _incCacheVal = null; return null; }
+        var tBase = (+sum.tuition || 0);
+        var lBase = (+sum.lab_total || 0);
+        var mBase = (+sum.misc_total || 0);
+        var key = [vm.installmentTab, tBase, lBase, mBase].join('|');
+        if (_incCacheKey === key && _incCacheVal) return _incCacheVal;
+        var tInc = (tBase * perc);
+        var lInc = (lBase * perc);
+        var mInc = (mBase * perc);
+        _incCacheKey = key;
+        _incCacheVal = { percent: perc, tuitionIncrease: tInc, labIncrease: lInc, miscIncrease: mInc, tuitionNew: (tBase + tInc), labNew: (lBase + lInc) };        
+        return _incCacheVal;
+      } catch (e) { return null; }
     }
 
     // Helpers for read-only display and lookups
@@ -272,6 +453,7 @@
         setSelectedStudentName();
         // Reset tuition on change of student
         vm.tuition = null;
+        vm.installmentTab = 'standard';
         vm._tuitionKey = null;
         loadCurrent();
         loadRegistration();
@@ -602,6 +784,7 @@
         var data = (resp && resp.data) ? resp.data : resp;
         var payload = data && data.data ? data.data : {};
         var terms = payload.terms || [];
+        vm.student_id = payload.student_id;
         var first = terms.length ? terms[0] : null;
         var recs = first ? (first.records || []) : [];
         // Normalize minimal fields for display and drop selection

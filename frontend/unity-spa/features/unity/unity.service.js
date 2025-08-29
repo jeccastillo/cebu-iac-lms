@@ -62,6 +62,22 @@
       // Tuition preview wrapper
       tuitionPreview: function (payload) {
         return $http.post(BASE + '/unity/tuition-preview', payload, _adminHeaders()).then(_unwrap);
+      },
+      // Tuition save snapshot (server recomputes for integrity)
+      tuitionSave: function (payload) {
+        // payload: { student_number: string, term: int, discount_id?: int, scholarship_id?: int }
+        return $http.post(BASE + '/unity/tuition-save', payload, _adminHeaders()).then(_unwrap);
+      },
+      // Fetch saved tuition snapshot existence/details
+      tuitionSaved: function (params) {
+        // params: { student_number: string, term: int }
+        return $http.get(BASE + '/unity/tuition-saved', Object.assign({ params: params }, _adminHeaders())).then(_unwrap);
+      },
+
+      // Payment Details for selected term/registration
+      paymentDetails: function (params) {
+        // params: { student_number: string, term: int }
+        return $http.get(BASE + '/finance/payment-details', Object.assign({ params: params }, _adminHeaders())).then(_unwrap);
       }
     };
   }

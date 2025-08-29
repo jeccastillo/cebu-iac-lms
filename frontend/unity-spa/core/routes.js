@@ -54,6 +54,12 @@
         controllerAs: "vm",
         requiredRoles: ["registrar", "admin"],
       })
+      .when("/registrar/registration/:id", {
+        templateUrl: "features/registrar/registration-viewer/registration-viewer.html",
+        controller: "RegistrationViewerController",
+        controllerAs: "vm",
+        requiredRoles: ["registrar", "finance", "admin"],
+      })
       .when("/finance/ledger", {
         templateUrl: "features/finance/ledger.html",
         controller: "FinanceLedgerController",
@@ -293,6 +299,12 @@
         requiredRoles: ['finance', 'registrar', 'admin']
       })
 
+      .when("/cashier-admin", {
+        templateUrl: "features/cashiers/list.html",
+        controller: "CashiersController",
+        controllerAs: "vm",
+        requiredRoles: ["cashier_admin", "admin"],
+      })
       .when("/roles", {
         templateUrl: "features/roles/roles.html",
         controller: "RolesController",

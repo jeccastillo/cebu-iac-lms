@@ -27,6 +27,7 @@ use App\Http\Controllers\Api\V1\SchoolYearController;
 use App\Http\Controllers\Api\V1\FacultyController;
 use App\Http\Controllers\Api\V1\TuitionController;
 use App\Http\Controllers\Api\V1\ClassroomController;
+use App\Http\Controllers\Api\V1\CashierController;
 
 /*
 |--------------------------------------------------------------------------
@@ -82,6 +83,8 @@ Route::prefix('v1')->group(function () {
     Route::post('/faculty', [FacultyController::class, 'store'])->middleware('role:admin');
     Route::put('/faculty/{id}', [FacultyController::class, 'update'])->middleware('role:admin');
     Route::delete('/faculty/{id}', [FacultyController::class, 'destroy'])->middleware('role:admin');
+    // Faculty search for cashier assignment (cashier_admin and admin)
+    Route::get('/faculty/search', [FacultyController::class, 'index'])->middleware('role:cashier_admin,admin');
 
     // Admissions - application submission
     Route::post('/admissions/student-info', [AdmissionsController::class, 'store']);
@@ -198,6 +201,7 @@ Route::prefix('v1')->group(function () {
     // Finance endpoints (baseline)
     Route::get('/finance/transactions', [FinanceController::class, 'transactions']);
     Route::get('/finance/or-lookup', [FinanceController::class, 'orLookup']);
+    Route::get('/finance/payment-details', [FinanceController::class, 'paymentDetails']);
 
     // Scholarship endpoints (read-only baseline)
     Route::get('/scholarships', [ScholarshipController::class, 'index']);
@@ -216,6 +220,9 @@ Route::prefix('v1')->group(function () {
     Route::put('/unity/registration', [UnityController::class, 'updateRegistration'])->middleware('role:registrar,admin');
     Route::post('/unity/tag-status', [UnityController::class, 'tagStatus']);
     Route::post('/unity/tuition-preview', [UnityController::class, 'tuitionPreview']);
+    // Tuition save/fetch
+    Route::post('/unity/tuition-save', [UnityController::class, 'tuitionSave'])->middleware('role:registrar,admin');
+    Route::get('/unity/tuition-saved', [UnityController::class, 'tuitionSaved'])->middleware('role:registrar,admin');
 
     // Generic API endpoints
     Route::get('/generic/faculty', [GenericApiController::class, 'faculty']);
@@ -263,5 +270,14 @@ Route::prefix('v1')->group(function () {
     Route::delete('/school-years/{id}', [SchoolYearController::class, 'destroy'])->middleware('role:registrar,admin');
 
     // Tuition computation (parity with CI Data_fetcher::getTuition/getTuitionSubjects)
-    // Route::get('/tuition/compute', [TuitionController::class, 'compute']);
+    Route::get('/tuition/compute', [TuitionController::class, 'compute']);
+
+    // Cashier Administration (OR/Invoice Ranges & Stats)
+    Route::get('/cashiers', [CashierController::class, 'index'])->middleware('role:cashier_admin,admin');
+    Route::post('/cashiers', [CashierController::class, 'store'])->middleware('role:cashier_admin,admin');
+    Route::patch('/cashiers/{id}', [CashierController::class, 'update'])->middleware('role:cashier_admin,admin');
+    Route::post('/cashiers/{id}/ranges', [CashierController::class, 'updateRanges'])->middleware('role:cashier_admin,admin');
+    Route::get('/cashiers/{id}/stats', [CashierController::class, 'stats'])->middleware('role:cashier_admin,admin');
+    Route::patch('/cashiers/{id}/assign', [CashierController::class, 'assign'])->middleware('role:cashier_admin,admin');
+    Route::get('/cashiers/stats', [CashierController::class, 'statsAll'])->middleware('role:cashier_admin,admin');
 });

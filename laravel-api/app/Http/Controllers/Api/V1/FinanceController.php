@@ -84,4 +84,34 @@ class FinanceController extends Controller
             'data'    => $result,
         ]);
     }
+
+    /**
+     * GET /api/v1/finance/payment-details
+     * Query params:
+     *  - student_number?: string (optional when student_id is provided)
+     *  - student_id?: int (preferred; compared to payment_details.student_information_id)
+     *  - term: int (required) - syid
+     *
+     * Returns payment_details rows for the student's registration in the selected term,
+     * including normalized items, sy_label, and meta totals.
+     */
+    public function paymentDetails(Request $request): JsonResponse
+    {
+        $payload = $request->validate([
+            'student_number' => 'sometimes|nullable|string',
+            'student_id'     => 'sometimes|nullable|integer',
+            'term'           => 'required|integer',
+        ]);
+
+        $data = $this->finance->listPaymentDetails(
+            $payload['student_number'] ?? null,
+            (int) $payload['term'],
+            isset($payload['student_id']) ? (int) $payload['student_id'] : null
+        );
+
+        return response()->json([
+            'success' => true,
+            'data'    => $data,
+        ]);
+    }
 }

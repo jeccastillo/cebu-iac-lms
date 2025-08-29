@@ -179,7 +179,7 @@
     };
 
     vm.financesUrl = function (id) {
-      return vm.links.unity.replace('/unity', '') + '/unity/registration_viewer/' + id;
+      return '#/registrar/registration/' + id;
     };
 
     vm.applicantTxUrl = function (studentNumber) {

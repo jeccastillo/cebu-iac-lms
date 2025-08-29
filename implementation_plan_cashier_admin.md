@@ -17,10 +17,10 @@ Defines the schema and DTOs to ensure consistent typing and validation across ba
   - user_id: int (FK to users)
   - or_start: bigint (or int; store numeric OR start)
   - or_end: bigint (or int; OR end)
-  - or_current: bigint (or int; current pointer; auto-reset to or_start on range change)  // auto-reset confirmed
+  - or_current: bigint (or int; current pointer; auto-reset to or_start on range change)
   - invoice_start: bigint (or int; Invoice start)
   - invoice_end: bigint (or int; Invoice end)
-  - invoice_current: bigint (or int; current pointer; auto-reset to invoice_start on range change)  // auto-reset confirmed
+  - invoice_current: bigint (or int; current pointer; auto-reset to invoice_start on range change)
   - or_used: bigint or int (optional legacy; may be computed; if present keep updated)
   - invoice_used: bigint or int (optional legacy)
   - temporary_admin: tinyint/bool
@@ -54,8 +54,8 @@ Defines the schema and DTOs to ensure consistent typing and validation across ba
 
   - CashierUpdateRequest (PATCH /cashiers/{id}):
     - temporary_admin: boolean|int (optional)
-    - or_current: number (optional; must be within range)
-    - invoice_current: number (optional; must be within range)
+    - or_current: number (optional)
+    - invoice_current: number (optional)
 
   - CashierRangeUpdateRequest (POST /cashiers/{id}/ranges or create):
     {
@@ -117,7 +117,7 @@ Summarizes new files, edits, and configurations.
     - core/routes.js
       - Register /cashier-admin to the new list view/controller
     - shared/components/sidebar/sidebar.html
-      - Add “Cashier Admin” top-level link (not under Finance group; per confirmation “No” to Finance group placement)
+      - Add “Cashier Admin” top-level link (not under Finance; per confirmation “No” to Finance group placement)
     - Optional: toast.service.js usage for success/errors
 
 [Functions]

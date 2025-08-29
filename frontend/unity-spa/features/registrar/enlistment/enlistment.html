@@ -55,7 +55,7 @@
     <div ng-if="vm.selectedStudentName" class="text-sm text-gray-700 mb-1 flex items-center justify-between">
       <span>Student: <span class="font-semibold">{{vm.selectedStudentName}}</span></span>
       <a ng-if="vm.studentNumber" 
-         href="#/students/{{vm.studentNumber}}/records" 
+         href="#/students/{{vm.student_id}}/records?sn={{vm.studentNumber}}" 
          target="_blank" 
          class="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700">
         <i class="fas fa-external-link-alt"></i> View Records
@@ -170,7 +170,11 @@
         <!-- Payment Type -->
         <div>
           <label class="block text-sm font-medium text-gray-700">Payment Type</label>
-          <input type="text" maxlength="50" ng-model="vm.regForm.paymentType" class="mt-1 block w-full border rounded px-3 py-2" placeholder="e.g., full, installment" />
+          <select ng-model="vm.regForm.paymentType" class="mt-1 block w-full border rounded px-3 py-2">
+            <option value="">-- Select Payment Type --</option>
+            <option value="full">Full</option>
+            <option value="partial">Partial</option>
+          </select>
         </div>
 
         <!-- Program -->
@@ -250,6 +254,12 @@
           <span ng-if="!vm.tuitionLoading">Load Tuition</span>
           <span ng-if="vm.tuitionLoading"><i class="fas fa-spinner fa-spin"></i> Loading...</span>
         </button>
+        <button class="px-3 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
+                ng-click="vm.saveTuition()"
+                ng-disabled="vm.tuitionSaving || !vm.canSaveTuition()">
+          <span ng-if="!vm.tuitionSaving">Save Tuition</span>
+          <span ng-if="vm.tuitionSaving"><i class="fas fa-spinner fa-spin"></i> Saving...</span>
+        </button>
       </div>
     </div>
 
@@ -262,11 +272,64 @@
     </div>
 
     <div ng-if="!vm.tuitionLoading && vm.tuition" class="space-y-4">
+      <!-- Installment Tabs -->
+      <div class="flex items-center gap-2">
+        <button class="px-3 py-1 rounded text-sm"
+                ng-class="{'bg-indigo-600 text-white': vm.installmentTab==='standard', 'bg-gray-200 text-gray-700': vm.installmentTab!=='standard'}"
+                ng-click="vm.selectInstallmentTab('standard')">Standard</button>
+        <button class="px-3 py-1 rounded text-sm"
+                ng-class="{'bg-indigo-600 text-white': vm.installmentTab==='dp30', 'bg-gray-200 text-gray-700': vm.installmentTab!=='dp30'}"
+                ng-click="vm.selectInstallmentTab('dp30')">30% DP</button>
+        <button class="px-3 py-1 rounded text-sm"
+                ng-class="{'bg-indigo-600 text-white': vm.installmentTab==='dp50', 'bg-gray-200 text-gray-700': vm.installmentTab!=='dp50'}"
+                ng-click="vm.selectInstallmentTab('dp50')">50% DP</button>
+      </div>
+
+      <!-- Installment Figures -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm" ng-if="vm.tuition.summary.installments">
+        <div class="bg-white border rounded p-3">
+          <div class="text-gray-500 uppercase text-xs">Down Payment</div>
+          <div class="font-semibold">₱ {{ (vm.installmentData() && vm.installmentData().dp || 0) | number:2 }}</div>
+        </div>
+        <div class="bg-white border rounded p-3">
+          <div class="text-gray-500 uppercase text-xs">Per-Installment (x5)</div>
+          <div class="font-semibold">₱ {{ (vm.installmentData() && vm.installmentData().fee || 0) | number:2 }}</div>
+        </div>
+        <div class="bg-white border rounded p-3">
+          <div class="text-gray-500 uppercase text-xs">Total Installment</div>
+          <div class="font-semibold">₱ {{ (vm.installmentData() && vm.installmentData().total || 0) | number:2 }}</div>
+        </div>
+      </div>
+      <div class="text-gray-500 text-xs" ng-if="!vm.tuition.summary.installments">
+        Installment details unavailable.
+      </div>
+      <!-- Installment Scheme Notes -->
+      <div class="text-xs text-gray-600" ng-if="vm.tuition.summary.installments">
+        <div ng-if="vm.installmentTab === 'standard'">
+          Note: Standard uses installment increase
+          <span class="font-semibold">{{ (vm.tuition.meta &amp;&amp; vm.tuition.meta.installment_increase_percent) || 0 }}%</span>
+          applied to Tuition and Lab. Misc and Additional are unchanged.
+        </div>
+        <div ng-if="vm.installmentTab === 'dp30'">
+          Note: 30% DP applies increases to Tuition <span class="font-semibold">+15%</span> and Misc
+          <span class="font-semibold">+15%</span>. Lab and Additional are unchanged.
+        </div>
+        <div ng-if="vm.installmentTab === 'dp50'">
+          Note: 50% DP applies increases to Tuition <span class="font-semibold">+9%</span> and Misc
+          <span class="font-semibold">+9%</span>. Lab and Additional are unchanged.
+        </div>
+      </div>
+
       <!-- Summary -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
         <div class="bg-gray-50 border rounded p-3">
           <div class="text-gray-500 uppercase text-xs">Tuition</div>
-          <div class="font-semibold">₱ {{ (vm.tuition.summary.tuition || 0) | number:2 }}</div>
+          <div ng-if="(vm.installmentTab === 'dp30' || vm.installmentTab === 'dp50') && vm.increaseInfo()" class="font-semibold">
+            ₱ {{ (vm.increaseInfo().tuitionNew || 0) | number:2 }}
+          </div>
+          <div ng-if="vm.installmentTab === 'standard'" class="font-semibold">
+            ₱ {{ (vm.tuition.summary.tuition || 0) | number:2 }}
+          </div>          
         </div>
         <div class="bg-gray-50 border rounded p-3">
           <div class="text-gray-500 uppercase text-xs">Misc</div>
@@ -274,7 +337,13 @@
         </div>
         <div class="bg-gray-50 border rounded p-3">
           <div class="text-gray-500 uppercase text-xs">Lab</div>
-          <div class="font-semibold">₱ {{ (vm.tuition.summary.lab_total || 0) | number:2 }}</div>
+          <div ng-if="(vm.installmentTab === 'dp30' || vm.installmentTab === 'dp50') && vm.increaseInfo()" class="font-semibold">
+            ₱ {{ (vm.increaseInfo().labNew || 0) | number:2 }}
+          </div>
+          <div ng-if="vm.installmentTab === 'standard'" class="font-semibold">
+            ₱ {{ (vm.tuition.summary.lab_total || 0) | number:2 }}
+          </div>
+          
         </div>
         <div class="bg-gray-50 border rounded p-3">
           <div class="text-gray-500 uppercase text-xs">Additional</div>
@@ -290,7 +359,7 @@
         </div>
         <div class="bg-gray-100 border rounded p-3 md:col-span-2">
           <div class="text-gray-500 uppercase text-xs">Total Due</div>
-          <div class="font-semibold text-indigo-700 text-lg">₱ {{ (vm.tuition.summary.total_due || 0) | number:2 }}</div>
+          <div class="font-semibold text-indigo-700 text-lg">₱ {{ (vm.displayedTotalDue() || 0) | number:2 }}</div>
         </div>
       </div>
 
@@ -342,13 +411,13 @@
         <table class="min-w-full text-sm">
           <thead>
             <tr class="text-left border-b">
-              <th class="py-2 pr-4">Name</th>
+              <th class="py-2 pr-4">Subject Code</th>
               <th class="py-2 pr-4">Amount</th>
             </tr>
           </thead>
           <tbody>
             <tr ng-repeat="l in vm.tuition.items.lab" class="border-b">
-              <td class="py-2 pr-4">{{l.name || '—'}}</td>
+              <td class="py-2 pr-4 font-mono">{{l.code || '—'}}</td>
               <td class="py-2 pr-4">₱ {{ (l.amount || 0) | number:2 }}</td>
             </tr>
           </tbody>

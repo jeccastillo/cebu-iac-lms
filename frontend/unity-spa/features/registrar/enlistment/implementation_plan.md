@@ -1,124 +1,61 @@
+
 # Implementation Plan
 
 [Overview]
-Add an editable "Registration Details" section to the Registrar Enlistment page that allows registrar/admin to edit an existing tb_mas_registration record for the selected student and selected term. If no registration exists for that student/term, display a read-only notice and do not allow creation from this UI.
+Add installment tabs to the Registrar Enlistment Tuition Details panel to display tuition payment options for Standard (configured installment), 30% DP, and 50% DP. The Total Due card should dynamically reflect the selected installment option.
 
-This feature complements the existing enlistment workflow by letting registrars adjust key registration attributes (year level, student type, current program/curriculum, tuition year, payment type, LOA remarks, withdrawal period) for a student in the selected term. The backend will expose read and update endpoints, enforcing that updates are allowed only when a registration row exists. All updates will be audit-logged via SystemLogService. The frontend will integrate this UI in the Enlistment screen under "Current Enlisted", pull dropdown data for programs and curricula, and handle state refresh on student/term changes.
+This enhancement introduces a tabbed UI within the existing Tuition Details section. Each tab shows a concise breakdown: Down Payment, Per-Installment (5 payments), and Total Installment, derived from the backend-provided summary.installments structure returned by the existing /unity/tuition-preview compute pipeline. No backend changes are required; we will consume the current payload as-is. The summary cards for tuition, misc, lab, additional, scholarships, and discounts remain unchanged; only the Total Due figure switches contextually to selected installment totals for 30% and 50% tabs, while Standard defaults to the existing total_due baseline where applicable.
+
+The implementation focuses on minimal, additive changes to the AngularJS controller and template: adding view-model state for the selected tab, computing the displayed installment values, and updating the Total Due card binding to reflect the selected option. Styling uses existing Tailwind-like utility classes present in the app to maintain visual consistency.
 
 
 [Types]  
-Define strict payload/request/response shapes and field validation to ensure safe updates without schema errors.
+Introduce lightweight UI state and typings for installment selection; no backend type changes.
 
-Types and constraints:
-- RegistrationEditableFields
-  - intYearLevel: integer, required, min 1
-  - enumStudentType: string, one of: continuing | new | returnee | transfer
-  - current_program: integer (tb_mas_programs.intProgramID), nullable allowed
-  - current_curriculum: integer (tb_mas_curriculum.intID), nullable allowed
-  - tuition_year: integer (tb_mas_tuition_year.intID), nullable allowed
-  - paymentType: string, nullable (free-form string aligned with legacy values, e.g., "full", "installment", "voucher", etc.)
-  - loa_remarks: string, nullable (default to '')
-  - withdrawal_period: integer, nullable (default to 0)
+Detailed type structures (conceptual):
+- TabKey (UI):
+  - 'standard' | 'dp30' | 'dp50'
+- Installments (from API; already present on vm.tuition.summary.installments):
+  - total_installment: number
+  - total_installment30: number
+  - total_installment50: number
+  - down_payment: number
+  - down_payment30: number
+  - down_payment50: number
+  - installment_fee: number
+  - installment_fee30: number
+  - installment_fee50: number
 
-- GET /v1/unity/registration Response
-  - success: boolean
-  - data:
-    - exists: boolean
-    - registration?: object (present if exists)
-      - intRegistrationID: int
-      - intStudentID: int
-      - intAYID: int
-      - intROG: int
-      - dteRegistered: string (Y-m-d H:i:s)
-      - intYearLevel: int
-      - enumStudentType: string
-      - current_program: int|null
-      - current_curriculum: int|null
-      - tuition_year: int|null
-      - paymentType: string|null
-      - loa_remarks: string|null
-      - withdrawal_period: int|null
-      - program?: { id:int, code:string, description?:string } (optional join for display)
-      - curriculum?: { id:int, name:string } (optional join for display)
-
-- PUT /v1/unity/registration Request
-  - student_number: string (required)
-  - term: int (required)
-  - fields: RegistrationEditableFields (at least one updatable field present)
-
-- PUT /v1/unity/registration Response
-  - success: boolean
-  - message: string
-  - data:
-    - updated: int (affected rows)
-    - registration: same shape as GET (fresh row after update)
-
-Validation rules:
-- student_number: required|string
-- term: required|integer
-- fields: required|array|min:1
-- fields.intYearLevel: sometimes|integer|min:1
-- fields.enumStudentType: sometimes|string|in:continuing,new,returnee,transfer
-- fields.current_program: sometimes|integer|exists:tb_mas_programs,intProgramID
-- fields.current_curriculum: sometimes|integer|exists:tb_mas_curriculum,intID
-- fields.tuition_year: sometimes|integer|exists:tb_mas_tuition_year,intID
-- fields.paymentType: sometimes|nullable|string|max:50
-- fields.loa_remarks: sometimes|nullable|string|max:1000
-- fields.withdrawal_period: sometimes|integer|min:0
+Validation/assumptions:
+- Guard against missing summary.installments (e.g., when tuition is not yet loaded or compute failed). The UI will render tabs but show a helpful notice or zeroed values if installments are absent.
+- Maintain numeric display using existing currency pipe formatting in the view (| number:2).
 
 
 [Files]
-Introduce two new API routes and a new FormRequest; modify the UnityController and RegistrationService; enhance Angular service/controller/template.
+Modify the existing AngularJS controller and template to add tabs and computed display logic; no backend file changes.
 
 Detailed breakdown:
-- New files to be created
-  - laravel-api/app/Http/Requests/Api/V1/UnityRegistrationUpdateRequest.php
-    - Purpose: Validate PUT /unity/registration request payload for editing registration fields ensuring constraints listed above.
-
 - Existing files to be modified
-  - laravel-api/routes/api.php
-    - Add endpoints:
-      - GET /v1/unity/registration (role: registrar,admin) to fetch existing registration for student_number+term.
-      - PUT /v1/unity/registration (role: registrar,admin) to update editable fields when a registration exists.
-
-  - laravel-api/app/Http/Controllers/Api/V1/UnityController.php
-    - Add two controller actions:
-      - registration(Request $request): fetch registration by student_number+term; returns exists=false if not found.
-      - updateRegistration(UnityRegistrationUpdateRequest $request): perform guarded update; strictly fail with 404 when not exists; audit-log via SystemLogService; return fresh row after update.
-
-  - laravel-api/app/Services/RegistrationService.php
-    - Add methods:
-      - findByStudentNumberAndTerm(string $studentNumber, int $term): ?object row with optional program/curriculum joins; no creation.
-      - updateByStudentNumberAndTerm(string $studentNumber, int $term, array $fields, Request $request): array { success, updated:int, row?:object } with audit logging. Guards: update only if row exists; whitelist fields; best-effort for legacy nullable columns.
-
-  - frontend/unity-spa/features/unity/unity.service.js
-    - Add methods:
-      - getRegistration(student_number, term): GET /unity/registration
-      - updateRegistration(payload): PUT /unity/registration
-    - Leverage _adminHeaders to tag acting faculty for auditing.
-
   - frontend/unity-spa/features/registrar/enlistment/enlistment.controller.js
-    - Add view-model state:
-      - vm.registration (raw row)
-      - vm.regForm = { intYearLevel, enumStudentType, current_program, current_curriculum, tuition_year, paymentType, loa_remarks, withdrawal_period }
-      - vm.programs = [] and vm.curricula = []
-      - vm.loadRegistration(), vm.saveRegistration(), vm.loadPrograms(), vm.loadCurricula()
-    - Wire loadRegistration on student selection and term changes (existing onStudentSelected + termChanged listener).
-    - Handle "exists=false" with UI notice; disable save if no row or no changes; deep-compare to enable Save.
-
+    - Add view-model state: vm.installmentTab with default 'standard'.
+    - Add helpers:
+      - vm.selectInstallmentTab(tabKey: 'standard'|'dp30'|'dp50')
+      - vm.installmentData(): picks the correct down payment, per-installment fee, and total based on selected tab and available summary.installments.
+      - vm.displayedTotalDue(): returns the number to display in the Total Due card:
+        - 'standard' → vm.tuition.summary.total_due (existing baseline)
+        - 'dp30' → summary.installments.total_installment30
+        - 'dp50' → summary.installments.total_installment50
+      - Ensure vm.installmentTab resets to 'standard' on student/term changes and after loading new tuition.
   - frontend/unity-spa/features/registrar/enlistment/enlistment.html
-    - Add "Registration Details" panel beneath "Current Enlisted":
-      - When vm.registration exists: render editable form with:
-        - Year Level (number)
-        - Student Type (dropdown: continuing, new, returnee, transfer)
-        - Program (dropdown from ProgramsService)
-        - Curriculum (dropdown from CurriculaService)
-        - Tuition Year (optional dropdown from TuitionYear API if readily available; if not, numeric input for now)
-        - Payment Type (text input or small dropdown if common values are present elsewhere)
-        - LOA Remarks (textarea)
-        - Withdrawal Period (number)
-      - Disabled Save button when no changes; show spinner on saving; show success/error toast.
-      - When no registration exists: show read-only notice: "No registration for this term. This form allows editing only when a registration already exists."
+    - Add a tabs control inside Tuition Details (beneath the header and action buttons) with three tabs: Standard, 30% DP, 50% DP. Highlight the active tab.
+    - Insert a small grid under the tabs that shows for the selected tab:
+      - Down Payment
+      - Per-Installment (x5)
+      - Total Installment
+    - Update the existing Total Due card binding to use vm.displayedTotalDue() to reflect the selected tab’s total where applicable.
+
+- New files to be created
+  - None
 
 - Files to be deleted or moved
   - None
@@ -128,114 +65,109 @@ Detailed breakdown:
 
 
 [Functions]
-Add minimal new backend functions and extend frontend controller/service to support fetching and updating registration.
+Add minimal controller helpers for tab state and computed installment values.
 
 Detailed breakdown:
-- New functions
-  - UnityController::registration(Request $request): JsonResponse
-    - Query params: ?student_number=...&term=...
-    - Purpose: Fetch an existing registration row for display. Returns { success:true, data:{ exists:false } } when not found.
-  - UnityController::updateRegistration(UnityRegistrationUpdateRequest $request): JsonResponse
-    - Purpose: Update editable fields if record exists; returns 404 if missing. Log via SystemLogService::log('update', 'Registration', id, old, new, $request).
-
-  - RegistrationService::findByStudentNumberAndTerm(string $studentNumber, int $term): ?object
-    - Purpose: Locate registration and include optional joins for program/curriculum names.
-
-  - RegistrationService::updateByStudentNumberAndTerm(string $studentNumber, int $term, array $fields, Request $request): array
-    - Purpose: Whitelist and update only allowed columns; 404-equivalent when not exists; return fresh row; log audit.
-
-  - UnityService (Angular):
-    - getRegistration(student_number, term)
-    - updateRegistration(payload)
+- New functions (frontend)
+  - EnlistmentController.selectInstallmentTab(tabKey: string): void
+    - File: frontend/unity-spa/features/registrar/enlistment/enlistment.controller.js
+    - Purpose: Switch the active installment tab. Valid keys: 'standard', 'dp30', 'dp50'.
+  - EnlistmentController.installmentData(): { dp: number, fee: number, total: number } | null
+    - File: frontend/unity-spa/features/registrar/enlistment/enlistment.controller.js
+    - Purpose: Resolve the correct down payment, per-installment fee, and total installment based on vm.installmentTab and vm.tuition.summary.installments.
+    - Behavior:
+      - For 'standard': use down_payment, installment_fee, total_installment
+      - For 'dp30': use down_payment30, installment_fee30, total_installment30
+      - For 'dp50': use down_payment50, installment_fee50, total_installment50
+      - Returns null when installments are missing; view handles fallback gracefully.
+  - EnlistmentController.displayedTotalDue(): number
+    - File: frontend/unity-spa/features/registrar/enlistment/enlistment.controller.js
+    - Purpose: Provide the numeric value to display in the Total Due card per selected tab.
+    - Behavior:
+      - 'standard' → vm.tuition.summary.total_due
+      - 'dp30' → installments.total_installment30 (if available; else fallback to total_due)
+      - 'dp50' → installments.total_installment50 (if available; else fallback to total_due)
 
 - Modified functions
-  - EnlistmentController (Angular):
-    - onStudentSelected(): also triggers loadRegistration()
-    - termChanged listener: also triggers loadRegistration()
-    - Add: loadRegistration(), loadPrograms(), loadCurricula(), saveRegistration()
+  - Backend: TuitionCalculator::computeInstallments(totals, tuitionYear, level, yearLevel)
+    - File: laravel-api/app/Services/TuitionCalculator.php
+    - Change: For 30% and 50% schemes, apply increase factors to lab, misc, and additional buckets in addition to tuition before computing totals, down payments, and per-installment fees. Keep Standard using tuitionYear.installmentIncrease on tuition and lab only (misc/additional unchanged) unless a future config dictates otherwise.
+    - Resulting formulas (high-level):
+      - 30%: gross30 = (tuition * 1.15) + (lab * 1.15) + (misc * 1.15) + (additional * 1.15)
+      - 50%: gross50 = (tuition * 1.09) + (lab * 1.09) + (misc * 1.09) + (additional * 1.09)
+      - Apply discounts/scholarships after these increases; compute DP and 5-installment fees as before.
+  - Frontend: EnlistmentController.loadTuition(force?: boolean)
+    - File: frontend/unity-spa/features/registrar/enlistment/enlistment.controller.js
+    - Change: After a successful load (vm.tuition is set), ensure vm.installmentTab resets to 'standard' when tuition is cleared on student/term change.
 
 - Removed functions
   - None
 
 
 [Classes]
-One new FormRequest class; no model changes required.
+No new classes or backend modifications.
 
 Detailed breakdown:
 - New classes
-  - App\Http\Requests\Api\V1\UnityRegistrationUpdateRequest
-    - Extends FormRequest; validates student_number, term, and fields.* keys per Types section.
+  - None
 
 - Modified classes
-  - App\Http\Controllers\Api\V1\UnityController
-    - Add actions registration() and updateRegistration()
-
-  - App\Services\RegistrationService
-    - Add query and update helpers as listed
+  - None
 
 - Removed classes
   - None
 
 
 [Dependencies]
-No new external dependencies. Reuse existing:
-- SystemLogService for auditing
-- UserContextResolver for actor resolution
-- Existing Program/Curriculum/ (optionally TuitionYear) controllers/services for dropdown data
+One backend computation adjustment; no new packages.
+
+Details:
+- Update TuitionCalculator::computeInstallments to apply plan-specific increases to lab, misc, and additional for 30% and 50% schemes (in addition to tuition). Keep Standard behavior using tuitionYear.installmentIncrease on tuition and lab only unless configured otherwise.
+- Preserve API shape: summary.installments keeps the same keys; only internal formulas change.
+- Reuse existing AngularJS app stack. No composer/npm changes.
 
 
 [Testing]
-Manual and API testing to validate correctness.
+UI-focused testing using existing dev data and the tuition preview action.
 
-Test plan:
-- Backend
-  - GET /v1/unity/registration with:
-    - Existing student_number+term → returns exists:true and row
-    - Non-existing student_number+term → returns exists:false
-  - PUT /v1/unity/registration:
-    - Without existing row → 404 Not Found (message: "Registration not found")
-    - With existing row, valid fields → 200, success:true, updated:1, registration reflects changes
-    - Invalid fields (e.g., enumStudentType invalid) → 422 validation errors
-    - Program/curriculum IDs invalid → 422 validation errors
-    - Audit log written (verify in SystemLog export or DB)
+Test file requirements: None (manual UI verification sufficient at this stage).
 
-- Frontend
-  - Enlistment page
-    - Select student + term with existing registration → "Registration Details" panel appears with prefilled values; Save enabled when changes made.
-    - Select student + term without registration → show notice; Save disabled
-    - Modify each field and Save → success toast; data persists on reload (switch student and back)
-    - Ensure enlistment Year Level (vm.yearLevel) still works independently of editing the registration Year Level; ensure labels clarify context.
-
-Edge cases:
-- API returns failure or network error → toast error displayed
-- Changing term triggers refresh and hides/shows panel appropriately
-- Unknown columns in some DB variants: Service whitelists to prevent SQL errors
+Validation strategies:
+- Preconditions: Pick a student and term with current enlisted subjects so that “Load Tuition” returns a full summary with installments.
+- Verify tabs render: Standard, 30% DP, 50% DP.
+- For each tab:
+  - Down Payment shows the correct field: down_payment | down_payment30 | down_payment50.
+  - Per-Installment (x5) shows the right installment_fee | installment_fee30 | installment_fee50.
+  - Total Installment shows total_installment | total_installment30 | total_installment50.
+- Verify installment increases:
+  - Under 30% tab, confirm lab, misc, and additional are increased per scheme factor (currently +15%) within installment totals (even though individual summary cards remain baseline).
+  - Under 50% tab, confirm lab, misc, and additional are increased per scheme factor (+9%) within installment totals.
+  - Confirm Standard keeps misc/additional unincreased; only tuition and lab affected by tuitionYear.installmentIncrease.
+- Total Due card updates:
+  - Standard → shows tuition.summary.total_due
+  - 30% DP → shows summary.installments.total_installment30
+  - 50% DP → shows summary.installments.total_installment50
+- Fallbacks:
+  - If summary.installments is missing, tab content displays either zeroed values or “Unavailable” notice, and Total Due card falls back to summary.total_due.
+- Regression:
+  - Other summary cards (Tuition, Misc, Lab, Additional, Scholarships, Discounts) stay unchanged across tabs.
+  - Saving tuition is unaffected.
 
 
 [Implementation Order]
-Implement backend endpoints first, then frontend integration and UI, followed by verification.
+Update controller state and helpers first, then integrate the template, and finally verify visually.
 
-1) Backend validation and service:
-   - Create UnityRegistrationUpdateRequest with rules (Types)
-   - Extend RegistrationService with findByStudentNumberAndTerm() and updateByStudentNumberAndTerm()
+1) Controller state and helpers
+   - Add vm.installmentTab = 'standard'.
+   - Add vm.selectInstallmentTab(tabKey), vm.installmentData(), vm.displayedTotalDue().
+   - Reset vm.installmentTab to 'standard' on student change or when tuition is cleared.
 
-2) Backend controller and routes:
-   - Add GET /v1/unity/registration (registrar,admin) → UnityController::registration
-   - Add PUT /v1/unity/registration (registrar,admin) → UnityController::updateRegistration
+2) Template changes
+   - Add tab buttons within Tuition Details header area (after the Load/Save Tuition buttons).
+   - Insert a small grid under the tabs for the three figures (DP, Per-Installment x5, Total Installment) for the active tab.
+   - Replace the Total Due binding to use vm.displayedTotalDue().
 
-3) Frontend service:
-   - Add UnityService.getRegistration(student_number, term)
-   - Add UnityService.updateRegistration(payload)
-
-4) Frontend controller:
-   - Add vm.registration, vm.regForm, vm.programs, vm.curricula, vm.loadRegistration(), vm.loadPrograms(), vm.loadCurricula(), vm.saveRegistration()
-   - Wire loadRegistration on onStudentSelected() and termChanged listener
-   - Handle Save button state (disabled until dirty)
-
-5) Frontend template:
-   - Add "Registration Details" panel beneath "Current Enlisted"
-   - Inputs: year level, student type, program dropdown, curriculum dropdown, tuition year (numeric or dropdown), payment type, LOA remarks, withdrawal period
-   - Show read-only notice when no registration exists
-
-6) Testing:
-   - Exercise happy and error paths; confirm audit logs; verify no creation happens from this UI
+3) Validation and polish
+   - Test with multiple students/terms.
+   - Confirm formatting (currency) and active tab styling.
+   - Confirm no backend calls or payloads need changes.

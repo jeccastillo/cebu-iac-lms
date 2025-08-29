@@ -130,8 +130,7 @@
         baseRoot = baseRoot.replace(/\/+$/, '');
       }
 
-      // var defaultApi = (baseRoot === '/' ? '' : baseRoot) + '/laravel-api/public/api/v1';
-      var defaultApi = "http://127.0.0.1:8000/api/v1";
+      var defaultApi = (baseRoot === '/' ? '' : baseRoot) + '/laravel-api/public/api/v1';
 
       // Base URL of the Laravel API v1. Can be overridden by setting window.API_BASE before this script.
       window.API_BASE = window.API_BASE || defaultApi;
@@ -206,6 +205,7 @@
   <script src="features/finance/ledger.controller.js"></script>
   <script src="features/scholarship/students.controller.js"></script>
   <script src="features/students/students.controller.js"></script>
+  <script src="features/students/students.service.js"></script>
   <script src="features/students/checklist.service.js"></script>
   <script src="features/students/viewer.controller.js"></script>
   <script src="features/students/records.controller.js"></script>
@@ -243,11 +243,6 @@
   <script src="features/classlists/classlist-edit.controller.js"></script>
   <script src="features/classlists/viewer.controller.js"></script>
 
-  <!-- Classrooms feature -->
-  <script src="features/classrooms/classrooms.service.js"></script>
-  <script src="features/classrooms/classrooms.controller.js"></script>
-  <script src="features/classrooms/classroom-edit.controller.js"></script>
-
   <!-- Grading Systems feature -->
   <script src="features/grading/grading.service.js"></script>
   <script src="features/grading/grading.controller.js"></script>
@@ -256,7 +251,11 @@
   <script src="features/tuition-years/tuition-years.service.js"></script>
   <script src="features/tuition-years/tuition-years.controller.js"></script>
 
-  <!-- Roles admin feature -->
+  <!-- Cashiers feature -->
+  <script src="features/cashiers/cashiers.service.js"></script>
+  <script src="features/cashiers/cashiers.controller.js"></script>
+
+  <!-- Roles feature -->
   <script src="features/roles/roles.service.js"></script>
   <script src="features/roles/roles.controller.js"></script>
 
@@ -266,6 +265,8 @@
 
   <!-- Unity feature -->
   <script src="features/unity/unity.service.js"></script>
+  <!-- Registrar Registration Viewer (new SPA) -->
+  <script src="features/registrar/registration-viewer/registration-viewer.controller.js"></script>
   <!-- Registrar Enlistment feature -->
   <script src="features/registrar/enlistment/enlistment.controller.js"></script>
 </head>
