@@ -31,6 +31,11 @@
     }
 
     return {
+      // GET /cashiers/me
+      me: function () {
+        return $http.get(BASE + '/cashiers/me', _adminHeaders()).then(_unwrap);
+      },
+
       // GET /cashiers?includeStats=bool&amp;campus_id=...
       list: function (opts) {
         var params = {};
@@ -89,6 +94,20 @@
         var cfg = _adminHeaders();
         cfg.params = params;
         return $http.get(BASE + '/faculty/search', cfg).then(_unwrap);
+      },
+
+      // POST /cashiers/{id}/payments
+      createPayment: function (cashierId, payload) {
+        return $http.post(
+          BASE + '/cashiers/' + encodeURIComponent(cashierId) + '/payments',
+          payload,
+          _adminHeaders()
+        ).then(_unwrap);
+      },
+
+      // DELETE /cashiers/{id}
+      delete: function (id) {
+        return $http.delete(BASE + '/cashiers/' + encodeURIComponent(id), _adminHeaders()).then(_unwrap);
       }
     };
   }

@@ -36,6 +36,8 @@
     })();
   </script>
 
+  <!-- jQuery must load before AngularJS so Angular picks full jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <!-- AngularJS 1.x and ngRoute -->
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular-route.min.js"></script>
@@ -43,7 +45,6 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- Select2 for enhanced selects (requires jQuery) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <!-- Select2 theming to match Tailwind input styles -->
   <style>
@@ -203,6 +204,9 @@
   <script src="features/registrar/daily-enrollment.service.js"></script>
   <script src="features/registrar/daily-enrollment.controller.js"></script>
   <script src="features/finance/ledger.controller.js"></script>
+  <!-- Finance: Payment Modes -->
+  <script src="features/finance/payment-modes/payment-modes.service.js"></script>
+  <script src="features/finance/payment-modes/payment-modes.controller.js"></script>
   <script src="features/scholarship/students.controller.js"></script>
   <script src="features/students/students.controller.js"></script>
   <script src="features/students/students.service.js"></script>
@@ -265,6 +269,8 @@
 
   <!-- Unity feature -->
   <script src="features/unity/unity.service.js"></script>
+  <!-- Finance Cashier Viewer -->
+  <script src="features/finance/cashier-viewer/cashier-viewer.controller.js"></script>
   <!-- Registrar Registration Viewer (new SPA) -->
   <script src="features/registrar/registration-viewer/registration-viewer.controller.js"></script>
   <!-- Registrar Enlistment feature -->

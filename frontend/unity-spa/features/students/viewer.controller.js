@@ -424,7 +424,7 @@
       return vm.links.unity.replace('/unity', '') + '/student/edit_student/' + vm.id;
     };
     vm.financesUrl = function () {
-      return '#/registrar/registration/' + vm.id;
+      return '#/finance/cashier/' + vm.id;
     };
 
     // init

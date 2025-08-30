@@ -16,6 +16,48 @@
         select2Watch: '=?'
       },
       link: function (scope, element, attrs, ngModel) {
+        // Helpers to map between Angular ngOptions option value strings and model/view values
+        function toDomValue(v) {
+          try {
+            if (v === undefined || v === null || v === '') return '';
+            var vs = '' + v;
+            var candidates = [
+              'number:' + vs,
+              'string:' + vs,
+              'boolean:' + vs,
+              'object:' + vs,
+              vs
+            ];
+            for (var i = 0; i < candidates.length; i++) {
+              var c = candidates[i];
+              // Escape quotes in selector
+              var sel = 'option[value="' + c.replace(/(["\\])/g, '\\$1') + '"]';
+              if (jQuery(element).find(sel).length) return c;
+            }
+            return vs;
+          } catch (e) {
+            return v == null ? '' : ('' + v);
+          }
+        }
+        function fromDomValue(val) {
+          try {
+            if (val === undefined || val === null || val === '') return null;
+            if (typeof val !== 'string') val = '' + val;
+            if (val.indexOf('number:') === 0) {
+              var n = parseFloat(val.slice(7));
+              return isFinite(n) ? n : null;
+            }
+            if (val.indexOf('boolean:') === 0) {
+              var b = val.slice(8);
+              return b === 'true';
+            }
+            if (val === 'null') return null;
+            if (val.indexOf('string:') === 0) return val.slice(7);
+            return val;
+          } catch (e) {
+            return val;
+          }
+        }
         function init() {
           $timeout(function () {
             try {
@@ -30,10 +72,11 @@
                 (attrs.select2Placeholder || '');
 
               // Initialize
+              var allowClear = (typeof attrs.select2AllowClear !== 'undefined');
               jQuery(element).select2({
                 width: '100%',
                 placeholder: placeholder || '',
-                allowClear: !!attrs.select2AllowClear
+                allowClear: allowClear
               });
 
               // Apply relevant tailwind layout classes (margin/width/display) from the hidden select to the visible container
@@ -51,16 +94,19 @@
                 }
               } catch (e) {}
 
-              // Sync select2 -> ngModel
+              // Sync select2 -> ngModel (guard against recursive updates)
               jQuery(element).off('change.select2').on('change.select2', function () {
                 scope.$applyAsync(function () {
-                  // For single select bound to primitive (string)
-                  ngModel.$setViewValue(element.val());
+                  var current = jQuery(element).val();
+                  if (current !== ngModel.$viewValue) {
+                    // Pass the raw DOM value so Angular's select/ngOptions pipeline converts it to model
+                    ngModel.$setViewValue(current);
+                  }
                 });
               });
 
-              // Ensure the current model is reflected in the UI
-              jQuery(element).val(ngModel.$modelValue).trigger('change.select2');
+              // Ensure the current model is reflected in the UI without re-triggering our handler
+              jQuery(element).val(ngModel.$viewValue).trigger('change.select2');
             } catch (e) {
               // swallow init errors to avoid breaking the page
             }
@@ -72,11 +118,15 @@
           init();
         }, true);
 
-        // Watch model changes and update the UI
-        scope.$watch(function () { return ngModel.$modelValue; }, function () {
+        // Watch model changes and update the UI (only when different to avoid loops)
+        scope.$watch(function () { return ngModel.$viewValue; }, function () {
           $timeout(function () {
             try {
-              jQuery(element).val(ngModel.$modelValue).trigger('change.select2');
+              var desired = ngModel.$viewValue;
+              var current = jQuery(element).val();
+              if (current !== desired) {
+                jQuery(element).val(desired).trigger('change.select2');
+              }
             } catch (e) {}
           });
         });

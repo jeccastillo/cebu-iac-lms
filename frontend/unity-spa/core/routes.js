@@ -54,11 +54,11 @@
         controllerAs: "vm",
         requiredRoles: ["registrar", "admin"],
       })
-      .when("/registrar/registration/:id", {
-        templateUrl: "features/registrar/registration-viewer/registration-viewer.html",
-        controller: "RegistrationViewerController",
+      .when("/finance/cashier/:id", {
+        templateUrl: "features/finance/cashier-viewer/cashier-viewer.html",
+        controller: "CashierViewerController",
         controllerAs: "vm",
-        requiredRoles: ["registrar", "finance", "admin"],
+        requiredRoles: ["finance", "registrar", "admin"],
       })
       .when("/finance/ledger", {
         templateUrl: "features/finance/ledger.html",
@@ -297,6 +297,26 @@
         controller: 'TuitionYearEditController',
         controllerAs: 'vm',
         requiredRoles: ['finance', 'registrar', 'admin']
+      })
+
+      // Payment Modes (Finance)
+      .when('/finance/payment-modes', {
+        templateUrl: 'features/finance/payment-modes/list.html',
+        controller: 'PaymentModesController',
+        controllerAs: 'vm',
+        requiredRoles: ['finance', 'admin'],
+      })
+      .when('/finance/payment-modes/new', {
+        templateUrl: 'features/finance/payment-modes/edit.html',
+        controller: 'PaymentModeEditController',
+        controllerAs: 'vm',
+        requiredRoles: ['finance', 'admin'],
+      })
+      .when('/finance/payment-modes/:id/edit', {
+        templateUrl: 'features/finance/payment-modes/edit.html',
+        controller: 'PaymentModeEditController',
+        controllerAs: 'vm',
+        requiredRoles: ['finance', 'admin'],
       })
 
       .when("/cashier-admin", {

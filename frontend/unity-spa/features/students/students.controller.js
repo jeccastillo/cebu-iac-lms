@@ -179,7 +179,7 @@
     };
 
     vm.financesUrl = function (id) {
-      return '#/registrar/registration/' + id;
+      return '#/finance/cashier/' + id;
     };
 
     vm.applicantTxUrl = function (studentNumber) {

@@ -52,7 +52,8 @@
         children: [
           { label: 'Ledger', path: '/finance/ledger' },
           { label: 'Tuition Setup', path: '/finance/tuition-years' },
-          { label: 'Cashier', path: '/registrar/registration', href: '/registrar/registration/0' },
+          { label: 'Payment Modes', path: '/finance/payment-modes' },
+          { label: 'Cashier', path: '/finance/cashier', href: '/finance/cashier/0' },
           { label: 'Cashier Admin', path: '/cashier-admin' }          
         ]
       },

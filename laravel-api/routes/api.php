@@ -28,6 +28,7 @@ use App\Http\Controllers\Api\V1\FacultyController;
 use App\Http\Controllers\Api\V1\TuitionController;
 use App\Http\Controllers\Api\V1\ClassroomController;
 use App\Http\Controllers\Api\V1\CashierController;
+use App\Http\Controllers\Api\V1\PaymentModeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -282,6 +283,17 @@ Route::prefix('v1')->group(function () {
     Route::patch('/cashiers/{id}/assign', [CashierController::class, 'assign'])->middleware('role:cashier_admin,admin');
     // Place stats route before the parameterized {id} routes to avoid matching "stats" as an ID
     Route::get('/cashiers/stats', [CashierController::class, 'statsAll'])->middleware('role:cashier_admin,admin');
+    // Resolve acting cashier for current faculty context (place before parameterized {id} routes)
+    Route::get('/cashiers/me', [CashierController::class, 'me'])->middleware('role:cashier_admin,finance,admin');
+    Route::post('/cashiers/{id}/payments', [CashierController::class, 'createPayment'])->middleware('role:cashier_admin,finance,admin');
     Route::get('/cashiers/{id}', [CashierController::class, 'show'])->middleware('role:cashier_admin,admin');
     Route::delete('/cashiers/{id}', [CashierController::class, 'destroy'])->middleware('role:cashier_admin,admin');
+
+    // Payment Modes CRUD (Finance/Admin)
+    Route::get('/payment-modes', [PaymentModeController::class, 'index'])->middleware('role:finance,admin');
+    Route::get('/payment-modes/{id}', [PaymentModeController::class, 'show'])->middleware('role:finance,admin');
+    Route::post('/payment-modes', [PaymentModeController::class, 'store'])->middleware('role:finance,admin');
+    Route::put('/payment-modes/{id}', [PaymentModeController::class, 'update'])->middleware('role:finance,admin');
+    Route::delete('/payment-modes/{id}', [PaymentModeController::class, 'destroy'])->middleware('role:finance,admin');
+    Route::post('/payment-modes/{id}/restore', [PaymentModeController::class, 'restore'])->middleware('role:finance,admin');
 });

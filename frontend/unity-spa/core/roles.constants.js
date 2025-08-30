@@ -35,6 +35,7 @@
       { test: '^/faculty/.*$', roles: ['faculty', 'admin'] },
       { test: '^/registrar/registration(?:/.*)?$', roles: ['finance', 'admin'] },
       { test: '^/registrar/.*$', roles: ['registrar', 'admin'] },
+      { test: '^/finance/cashier(?:/.*)?$', roles: ['finance', 'registrar', 'admin'] },
       { test: '^/finance/.*$', roles: ['finance', 'admin'] },
       { test: '^/scholarship/.*$', roles: ['scholarship', 'admin'] },
       { test: '^/campuses(?:/.*)?$', roles: ['campus_admin', 'admin'] },

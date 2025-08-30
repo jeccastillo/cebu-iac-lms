@@ -23,7 +23,9 @@ Progress
 - [x] Index wiring: Include scripts in `index.html`
 
 Next
-- [ ] Optional: Add "Create Cashier" UI (form) to POST `/cashiers` (user_id, campus_id, initial ranges)
+- [x] Create Cashier UI (modal) to POST `/cashiers` (faculty_id, campus_id, initial ranges)
+- [x] Delete action (button per row) to DELETE `/cashiers/{id}` with conflict surfacing
+- [x] Allow campus_id update in range edit payload
 - [ ] UX: Replace inline range edit with modal and better validation hints
 - [ ] QA: Manual verification
   - Login as `cashier_admin` or `admin`

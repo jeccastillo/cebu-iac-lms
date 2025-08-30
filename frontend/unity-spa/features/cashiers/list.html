@@ -5,10 +5,11 @@
 
     <div class="flex items-center space-x-4">
       <div class="hidden sm:flex items-center space-x-2">
-        <a href="#/cashier-admin"
-           class="inline-flex items-center px-3 py-2 border border-gray-300 bg-white hover:bg-gray-50 text-sm font-medium rounded-md text-gray-700">
+        <button type="button"
+                class="inline-flex items-center px-3 py-2 border border-gray-300 bg-white hover:bg-gray-50 text-sm font-medium rounded-md text-gray-700"
+                ng-click="vm.openCreate()">
           <i class="fas fa-plus mr-2"></i>Create Cashier
-        </a>
+        </button>
         <a href="#/faculty"
            class="inline-flex items-center px-3 py-2 border border-gray-300 bg-white hover:bg-gray-50 text-sm font-medium rounded-md text-gray-700">
           <i class="fas fa-search mr-2"></i>Search Faculty
@@ -40,6 +41,73 @@
   </div>
   <div ng-if="vm.success" class="p-3 rounded-md bg-green-50 border border-green-200 text-green-700 text-sm">
     <i class="fas fa-check mr-2"></i>{{ vm.success }}
+  </div>
+
+  <!-- Create Cashier Modal -->
+  <div ng-if="vm.create.open" class="fixed inset-0 z-50 flex items-center justify-center">
+    <div class="absolute inset-0 bg-black opacity-25"></div>
+    <div class="relative bg-white rounded-lg shadow-lg w-full max-w-2xl p-4 space-y-4">
+      <div class="flex items-center justify-between">
+        <h2 class="text-lg font-semibold text-gray-900">Create Cashier</h2>
+        <button type="button" class="text-gray-500 hover:text-gray-700" ng-click="vm.cancelCreate()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="hidden">
+          <label class="block text-sm text-gray-600 mb-1">Campus ID (selected)</label>
+          <input type="number" class="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                 ng-model="vm.selectedCampus.id" placeholder="campus id" disabled>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Temporary Admin</label>
+          <label class="inline-flex items-center space-x-2">
+            <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600" ng-model="vm.create.temporary_admin">
+            <span class="text-sm text-gray-700">Yes</span>
+          </label>
+        </div>
+        <div class="col-span-2">
+          <label class="block text-sm text-gray-600 mb-1">Search Faculty</label>
+          <div class="flex items-center space-x-2">
+            <input type="text" class="flex-1 px-2 py-1 border border-gray-300 rounded text-sm"
+                   ng-model="vm.create.faculty.query" placeholder="Search name or email">
+            <button type="button" class="px-2 py-1 text-xs rounded border border-gray-300 bg-white hover:bg-gray-50"
+                    ng-click="vm.searchCreateFaculty()" ng-disabled="vm.create.faculty.loading">
+              <i class="fas fa-search mr-1" ng-class="{ 'fa-spin': vm.create.faculty.loading }"></i>Search
+            </button>
+          </div>
+          <select class="mt-2 w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                  ng-model="vm.create.faculty.selected"
+                  ng-options="it as it.label for it in vm.create.faculty.results">
+            <option value="">-- Select faculty --</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">OR Start</label>
+          <input type="number" class="w-full px-2 py-1 border border-gray-300 rounded text-sm" ng-model="vm.create.or_start" placeholder="start">
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">OR End</label>
+          <input type="number" class="w-full px-2 py-1 border border-gray-300 rounded text-sm" ng-model="vm.create.or_end" placeholder="end">
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Invoice Start</label>
+          <input type="number" class="w-full px-2 py-1 border border-gray-300 rounded text-sm" ng-model="vm.create.invoice_start" placeholder="start">
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Invoice End</label>
+          <input type="number" class="w-full px-2 py-1 border border-gray-300 rounded text-sm" ng-model="vm.create.invoice_end" placeholder="end">
+        </div>
+      </div>
+      <div class="flex items-center justify-end space-x-2">
+        <button type="button" class="px-3 py-1.5 text-sm rounded-md border border-gray-300 bg-white hover:bg-gray-50" ng-click="vm.cancelCreate()">
+          Cancel
+        </button>
+        <button type="button" class="px-3 py-1.5 text-sm rounded-md border border-green-600 text-white bg-green-600 hover:bg-green-700" ng-click="vm.submitCreate()">
+          <i class="fas fa-check mr-2"></i>Create
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- Table -->
@@ -81,7 +149,10 @@
           <tr ng-repeat="row in vm.rows track by row.id">
             <td class="px-4 py-3 text-sm text-gray-700">{{ row.id }}</td>
             <td class="px-4 py-3 text-sm font-medium text-gray-900">{{ row.name || ('Faculty #' + row.faculty_id) }}</td>
-            <td class="px-4 py-3 text-sm text-gray-700">{{ row.campus_id || '-' }}</td>
+            <td class="px-4 py-3 text-sm text-gray-700">
+              <span ng-if="!vm.editing[row.id]">{{ row.campus_id || '-' }}</span>
+              <span ng-if="vm.editing[row.id]">{{ (vm.selectedCampus && vm.selectedCampus.id) || '-' }}</span>
+            </td>
 
             <!-- OR columns -->
             <td class="px-4 py-3 text-sm text-gray-700">
@@ -198,6 +269,20 @@
                         ng-click="vm.openAssign(row)">
                   <i class="fas fa-user-plus mr-2"></i>Assign
                 </button>
+
+                <!-- Add Payment -->
+                <button type="button"
+                        class="inline-flex items-center px-3 py-1.5 text-sm rounded-md border border-green-300 text-green-700 bg-white hover:bg-green-50"
+                        ng-if="!vm.payments[row.id]"
+                        ng-click="vm.openPayment(row)">
+                  <i class="fas fa-cash-register mr-2"></i>Add Payment
+                </button>
+
+                <button type="button"
+                        class="inline-flex items-center px-3 py-1.5 text-sm rounded-md border border-red-300 text-red-700 bg-white hover:bg-red-50"
+                        ng-click="vm.destroy(row)">
+                  <i class="fas fa-trash mr-2"></i>Delete
+                </button>
               </div>
 
               <div ng-if="vm.assigning[row.id]" class="mt-2 w-80 border border-gray-200 rounded p-2 bg-gray-50 space-y-2">
@@ -227,6 +312,83 @@
                   <button type="button"
                           class="px-3 py-1.5 text-sm rounded-md border border-gray-300 bg-white hover:bg-gray-50"
                           ng-click="vm.cancelAssign(row)">
+                    <i class="fas fa-times mr-2"></i>Cancel
+                  </button>
+                </div>
+              </div>
+
+              <!-- Payment Entry Panel -->
+              <div ng-if="vm.payments[row.id]" class="mt-2 w-[38rem] max-w-full border border-gray-200 rounded p-3 bg-gray-50 space-y-3">
+                <div class="grid grid-cols-2 gap-3">
+                  <div class="col-span-2">
+                    <label class="block text-xs text-gray-600 mb-1">Student</label>
+                    <select class="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                            ng-model="vm.payments[row.id].selected_student"
+                            ng-options="s as (s.student_number + ' - ' + (s.last_name + ', ' + s.first_name)) for s in vm.payments[row.id].students track by s.id">
+                      <option value="">-- Select student --</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-xs text-gray-600 mb-1">SYID (Term)</label>
+                    <input type="number" class="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                           ng-model="vm.payments[row.id].term" placeholder="e.g., 25">
+                  </div>
+                  <div>
+                    <label class="block text-xs text-gray-600 mb-1">Mode</label>
+                    <div class="flex items-center space-x-4 text-sm">
+                      <label class="inline-flex items-center space-x-1">
+                        <input type="radio" class="form-radio" ng-model="vm.payments[row.id].mode" value="or">
+                        <span>OR</span>
+                      </label>
+                      <label class="inline-flex items-center space-x-1">
+                        <input type="radio" class="form-radio" ng-model="vm.payments[row.id].mode" value="invoice">
+                        <span>Invoice</span>
+                      </label>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-xs text-gray-600 mb-1">Using Number</label>
+                    <div class="px-2 py-1 border border-gray-200 rounded bg-white text-sm">
+                      {{ vm.previewNumber(row, vm.payments[row.id].mode) }}
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-xs text-gray-600 mb-1">Amount</label>
+                    <input type="number" step="0.01" class="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                           ng-model="vm.payments[row.id].amount" placeholder="0.00">
+                  </div>
+                  <div>
+                    <label class="block text-xs text-gray-600 mb-1">Method (optional)</label>
+                    <input type="text" class="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                           ng-model="vm.payments[row.id].method" placeholder="e.g., Cash">
+                  </div>
+                  <div class="col-span-2">
+                    <label class="block text-xs text-gray-600 mb-1">Description</label>
+                    <input type="text" class="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                           ng-model="vm.payments[row.id].description" placeholder="e.g., Tuition Payment">
+                  </div>
+                  <div class="col-span-2">
+                    <label class="block text-xs text-gray-600 mb-1">Remarks (required)</label>
+                    <textarea class="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                              ng-model="vm.payments[row.id].remarks" rows="2" placeholder="Remarks"></textarea>
+                  </div>
+                  <div class="col-span-2">
+                    <label class="block text-xs text-gray-600 mb-1">Posted At (optional)</label>
+                    <input type="datetime-local" class="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                           ng-model="vm.payments[row.id].posted_at">
+                  </div>
+                </div>
+                <div class="flex items-center justify-end space-x-2">
+                  <button type="button"
+                          class="px-3 py-1.5 text-sm rounded-md border border-green-300 text-green-700 bg-white hover:bg-green-50"
+                          ng-click="vm.submitPayment(row)"
+                          ng-disabled="vm.payments[row.id].loading">
+                    <i class="fas fa-check mr-2" ng-class="{ 'fa-spin': vm.payments[row.id].loading }"></i>Submit
+                  </button>
+                  <button type="button"
+                          class="px-3 py-1.5 text-sm rounded-md border border-gray-300 bg-white hover:bg-gray-50"
+                          ng-click="vm.cancelPayment(row)"
+                          ng-disabled="vm.payments[row.id].loading">
                     <i class="fas fa-times mr-2"></i>Cancel
                   </button>
                 </div>

@@ -6,10 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\CashierStoreRequest;
 use App\Http\Requests\Api\V1\CashierUpdateRequest;
 use App\Http\Requests\Api\V1\CashierRangeUpdateRequest;
+use App\Http\Requests\Api\V1\CashierPaymentStoreRequest;
 use App\Models\Cashier;
 use App\Services\CashierService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\ValidationException;
 
 class CashierController extends Controller
@@ -385,6 +387,61 @@ class CashierController extends Controller
     }
 
     /**
+     * GET /api/v1/cashiers/me
+     * Resolve the acting cashier by header X-Faculty-ID (or request faculty_id).
+     */
+    public function me(Request $request)
+    {
+        $facultyId = (int) ($request->header('X-Faculty-ID', $request->input('faculty_id')));
+        if ($facultyId <= 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Faculty context required'
+            ], 400);
+        }
+
+        $r = Cashier::query()
+            ->leftJoin('tb_mas_faculty as f', 'f.intID', '=', 'tb_mas_cashiers.faculty_id')
+            ->where('tb_mas_cashiers.faculty_id', $facultyId)
+            ->select(
+                'tb_mas_cashiers.*',
+                DB::raw("CONCAT(COALESCE(f.strFirstname,''),' ',COALESCE(f.strLastname,'')) as name")
+            )
+            ->first();
+
+        if (!$r) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cashier not found for acting faculty'
+            ], 404);
+        }
+
+        $data = [
+            'id'         => (int)$r->intID,
+            'user_id'    => (int)$r->user_id,
+            'faculty_id' => $r->faculty_id !== null ? (int)$r->faculty_id : null,
+            'name'       => $r->name ?? null,
+            'campus_id'  => $r->campus_id !== null ? (int)$r->campus_id : null,
+            'temporary_admin' => (int)($r->temporary_admin ?? 0),
+            'or' => [
+                'start'   => $r->or_start !== null ? (int)$r->or_start : null,
+                'end'     => $r->or_end !== null ? (int)$r->or_end : null,
+                'current' => $r->or_current !== null ? (int)$r->or_current : null,
+            ],
+            'invoice' => [
+                'start'   => $r->invoice_start !== null ? (int)$r->invoice_start : null,
+                'end'     => $r->invoice_end !== null ? (int)$r->invoice_end : null,
+                'current' => $r->invoice_current !== null ? (int)$r->invoice_current : null,
+            ],
+        ];
+
+        return response()->json([
+            'success' => true,
+            'data' => $data
+        ]);
+    }
+
+    /**
      * GET /api/v1/cashiers/{id}
      * Optional: ?includeStats=1
      */
@@ -468,5 +525,194 @@ class CashierController extends Controller
         return response()->json([
             'success' => true
         ]);
+    }
+
+    /**
+     * POST /api/v1/cashiers/{id}/payments
+     * Create a payment_details row using the cashier's next OR/Invoice number and increment the pointer.
+     */
+    public function createPayment($id, CashierPaymentStoreRequest $request)
+    {
+        $row = Cashier::findOrFail((int)$id);
+        $payload = $request->validated();
+
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < 10; $i++) {
+            $randomString .= $characters[random_int(0, $charactersLength - 1)];
+        }
+
+        $studentId = (int) $payload['student_id'];
+        $requestId = isset($payload['requestId']) ? $payload['convenience_fee'] : $randomString;
+        $conFee  =   isset($payload['convenience_fee']) ? $payload['convenience_fee'] : 0;
+        $syid      = (int) $payload['term']; // sy_reference will store SYID (per instruction)
+        $mode      = ($payload['mode'] === 'invoice') ? 'invoice' : 'or';
+        $amount    = (float) $payload['amount'];
+        $desc      = (string) $payload['description'];
+        $remarks   = (string) $payload['remarks'];
+        $methodIn  = isset($payload['method']) ? (string) $payload['method'] : null;
+        $postedAt  = isset($payload['posted_at']) ? (string) $payload['posted_at'] : null;
+        $campusId  = isset($payload['campus_id']) ? (int) $payload['campus_id'] : null;
+        $modePaymentId = isset($payload['mode_of_payment_id']) ? (int) $payload['mode_of_payment_id'] : null;
+
+        // Ensure payment_details table and core columns exist
+        if (!Schema::hasTable('payment_details')) {
+            throw ValidationException::withMessages([
+                'payment_details' => ['payment_details table not found']
+            ]);
+        }
+        $core = ['student_information_id', 'sy_reference', 'description', 'subtotal_order', 'status'];
+        foreach ($core as $c) {
+            if (!Schema::hasColumn('payment_details', $c)) {
+                throw ValidationException::withMessages([
+                    'payment_details' => ["Missing required column payment_details.$c"]
+                ]);
+            }
+        }
+
+        // Determine number column based on mode
+        $numberCol = null;
+        if ($mode === 'invoice') {
+            if (Schema::hasColumn('payment_details', 'invoice_number')) {
+                $numberCol = 'invoice_number';
+            }
+        } else {
+            if (Schema::hasColumn('payment_details', 'or_no')) {
+                $numberCol = 'or_no';
+            } elseif (Schema::hasColumn('payment_details', 'or_number')) {
+                $numberCol = 'or_number';
+            }
+        }
+        if ($numberCol === null) {
+            throw ValidationException::withMessages([
+                'mode' => ['Number column not available in payment_details for selected mode']
+            ]);
+        }
+
+        // Determine pointers and range
+        $start   = $mode === 'invoice' ? (int) ($row->invoice_start ?? 0) : (int) ($row->or_start ?? 0);
+        $end     = $mode === 'invoice' ? (int) ($row->invoice_end ?? 0)   : (int) ($row->or_end ?? 0);
+        $current = $mode === 'invoice' ? (int) ($row->invoice_current ?? 0) : (int) ($row->or_current ?? 0);
+
+        if ($start <= 0 || $end <= 0 || $end < $start) {
+            throw ValidationException::withMessages([
+                'range' => ['Cashier range is not properly configured']
+            ]);
+        }
+        if ($current <= 0) {
+            throw ValidationException::withMessages([
+                'current' => ['Current pointer is not set']
+            ]);
+        }
+        if ($current < $start || $current > $end) {
+            throw ValidationException::withMessages([
+                'current' => ['Current pointer must be within configured range']
+            ]);
+        }
+
+        // Re-validate number usage for the single current number
+        $usage = $this->svc->validateRangeUsage($mode, (int) $current, (int) $current);
+        if (!$usage['ok']) {
+            throw ValidationException::withMessages([
+                'number' => ['Selected number already used', $usage]
+            ]);
+        }
+
+        // Optional columns detection
+        $methodCol   = Schema::hasColumn('payment_details', 'method') ? 'method'
+                     : (Schema::hasColumn('payment_details', 'payment_method') ? 'payment_method' : null);
+        $dateCol     = Schema::hasColumn('payment_details', 'paid_at') ? 'paid_at'
+                     : (Schema::hasColumn('payment_details', 'date') ? 'date'
+                     : (Schema::hasColumn('payment_details', 'created_at') ? 'created_at' : null));
+        $remarksCol  = Schema::hasColumn('payment_details', 'remarks') ? 'remarks' : null;
+        $studNumCol  = Schema::hasColumn('payment_details', 'student_number') ? 'student_number' : null;
+        $studCampCol = Schema::hasColumn('payment_details', 'student_campus') ? 'student_campus' : null;
+        // Some environments require name/email columns without defaults
+        $firstNameCol  = Schema::hasColumn('payment_details', 'first_name') ? 'first_name' : null;
+        $middleNameCol = Schema::hasColumn('payment_details', 'middle_name') ? 'middle_name' : null;
+        $lastNameCol   = Schema::hasColumn('payment_details', 'last_name') ? 'last_name' : null;
+        $emailCol      = Schema::hasColumn('payment_details', 'email_address') ? 'email_address' : null;
+        $contactCol      = Schema::hasColumn('payment_details', 'contact_number') ? 'contact_number' : null;
+
+        // Resolve optional student fields
+        $studentNumber = null;
+        $firstName = $middleName = $lastName = $email = $mobile = null;
+        if ($studNumCol || $firstNameCol || $middleNameCol || $lastNameCol || $emailCol) {
+            $usr = DB::table('tb_mas_users')
+                ->select('strStudentNumber', 'strFirstname', 'strMiddlename', 'strLastname', 'strEmail')
+                ->where('intID', $studentId)
+                ->first();
+            if ($usr) {
+                if (isset($usr->strStudentNumber)) $studentNumber = (string) $usr->strStudentNumber;
+                if (isset($usr->strFirstname)) $firstName = (string) $usr->strFirstname;
+                if (isset($usr->strMiddlename)) $middleName = (string) $usr->strMiddlename;
+                if (isset($usr->strLastname)) $lastName = (string) $usr->strLastname;
+                if (isset($usr->strEmail)) $email = (string) $usr->strEmail;
+                if (isset($usr->strMobileNumber)) $mobile = (string) $usr->strMobileNumber;
+            }
+        }
+                
+        // Build insert payload
+        $insert = [
+            'student_information_id' => $studentId,
+            'sy_reference'           => $syid, // SYID
+            'description'            => $desc,
+            'subtotal_order'         => $amount,
+            'total_amount_due'       => $amount + $conFee,
+            'status'                 => 'Paid',
+            'convenience_fee'        => $conFee,
+            'request_id'             => $requestId,
+            'slug'                   => '',
+            $numberCol               => (int) $current,
+        ];
+        if ($methodCol && $methodIn !== null) {
+            $insert[$methodCol] = $methodIn;
+        }
+        if ($remarksCol) {
+            $insert[$remarksCol] = $remarks;
+        }
+        if ($studNumCol) {
+            $insert[$studNumCol] = $studentNumber !== null ? $studentNumber : '';
+        }
+        if ($studCampCol && $campusId !== null) {
+            $insert[$studCampCol] = $campusId;
+        }
+        // Fill name/email columns if present (provide empty strings when unknown to satisfy NOT NULL constraints)
+        if ($firstNameCol)  $insert[$firstNameCol]  = $firstName  !== null ? $firstName  : '';
+        if ($middleNameCol) $insert[$middleNameCol] = $middleName !== null ? $middleName : '';
+        if ($lastNameCol)   $insert[$lastNameCol]   = $lastName   !== null ? $lastName   : '';
+        if ($emailCol)      $insert[$emailCol]      = $email      !== null ? $email      : '';
+        if ($contactCol)    $insert[$contactCol]    = $mobile     !== null ? $mobile      : '';
+        if ($dateCol) {
+            $insert[$dateCol] = $postedAt ?: date('Y-m-d H:i:s');
+        }
+        // Persist selected mode_of_payment_id when column exists
+        if (Schema::hasColumn('payment_details', 'mode_of_payment_id') && $modePaymentId !== null) {
+            $insert['mode_of_payment_id'] = $modePaymentId;
+        }
+
+        // Transaction: insert payment row and increment pointer
+        $idInserted = null;
+        DB::transaction(function () use (&$idInserted, $insert, $row, $mode) {
+            $idInserted = DB::table('payment_details')->insertGetId($insert);
+
+            if ($mode === 'invoice') {
+                $row->invoice_current = (int) $row->invoice_current + 1;
+            } else {
+                $row->or_current = (int) $row->or_current + 1;
+            }
+            $row->save();
+        });
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'id'          => (int) $idInserted,
+                'number_used' => (int) $current,
+                'mode'        => $mode,
+                'cashier_id'  => (int) $row->intID,
+            ],
+        ], 201);
     }
 }
