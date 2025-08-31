@@ -19,6 +19,8 @@ $app = require_once $basePath . '/bootstrap/app.php';
 
 /** @var Kernel $kernel */
 $kernel = $app->make(Kernel::class);
+/** Bootstrap facades so DB::table and other Facades work before handling any HTTP request */
+$app->make(\Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
 // Utility: send request and print response
 function call_api(Kernel $kernel, string $method, string $uri, array $headers = [], array $payload = []): void {
@@ -78,6 +80,46 @@ call_api($kernel, 'POST', "/api/v1/unity/tuition-save", $headers, [
     'student_number' => $studentNumber,
     'term'           => $syid,
 ]);
+
+/**
+ * Inspect generated tuition invoice by registration_id after saving tuition.
+ */
+try {
+    // Resolve user and registration for the same student/term we used above
+    $userRow = DB::table('tb_mas_users')->where('strStudentNumber', $studentNumber)->first();
+    if ($userRow) {
+        $regRow = DB::table('tb_mas_registration')
+            ->where('intStudentID', $userRow->intID)
+            ->where('intAYID', $syid)
+            ->first();
+
+        if ($regRow && isset($regRow->intRegistrationID)) {
+            $registrationId = (int) $regRow->intRegistrationID;
+            echo "=== Inspect tuition invoice for registration_id={$registrationId} ===\n";
+            $invoice = DB::table('tb_mas_invoices')
+                ->where('registration_id', $registrationId)
+                ->where('type', 'tuition')
+                ->orderBy('intID', 'desc')
+                ->first();
+
+            if ($invoice) {
+                $payloadStr = is_string($invoice->payload) ? $invoice->payload : json_encode($invoice->payload);
+                $campusOut = isset($invoice->campus_id) ? (int)$invoice->campus_id : 0;
+                $invNoOut  = isset($invoice->invoice_number) ? $invoice->invoice_number : 'null';
+                echo "Invoice found: id={$invoice->intID}, amount_total=" . (float)$invoice->amount_total . ", status={$invoice->status}, campus_id={$campusOut}, invoice_number={$invNoOut}\n";
+                echo "Payload: {$payloadStr}\n";
+            } else {
+                echo "No tuition invoice found for registration_id={$registrationId}\n";
+            }
+        } else {
+            echo "No registration found for student_number={$studentNumber} syid={$syid}\n";
+        }
+    } else {
+        echo "Student row not found for student_number={$studentNumber}\n";
+    }
+} catch (\Throwable $e) {
+    echo "Error inspecting tuition invoice: " . $e->getMessage() . "\n";
+}
 
 // Done
 $kernel->terminate(Request::capture(), response());

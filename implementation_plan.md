@@ -1,247 +1,213 @@
 # Implementation Plan
 
 [Overview]
-Implement a Cashier Administration feature that allows the cashier_admin role to assign, validate, and manage OR (Official Receipt) and Invoice number ranges per cashier, with current pointers, usage stats, and strict validations to prevent overlaps and reuse. The backend is delivered via Laravel (API) and the frontend via the existing AngularJS 1.x SPA.
+Add a new Admin-only Payment Details management page under the Admin menu that allows searching, viewing, and editing rows from the payment_details table, with Laravel API endpoints for search/show/update and an AngularJS SPA screen styled using Tailwind utility classes.
 
-This feature adds:
-- A secured API for managing tb_mas_cashiers (assign/update OR/Invoice ranges, toggle temporary_admin, retrieve stats).
-- A new cashier_admin role and access gating.
-- An AngularJS page to list cashiers, edit ranges (auto-reset current to start), and view usage stats (remaining/used/last-used).
-- Strong validation to block overlapping ranges across cashiers and ranges that include already-used numbers in transactions.
+This feature centralizes payment_details maintenance for system administrators. It builds on the existing Finance read endpoints but introduces an Admin-managed flow to correct or update records when necessary. The page will be accessible only to users with the admin role, routed at /admin/payment-details, grouped under Admin in the sidebar, and will use Tailwind CSS already applied across the SPA for consistent styling. The Laravel API will expose secure endpoints with admin authorization and dynamic column detection to support environments where payment_details schema varies.
 
-[Types]
-Defines the schema and DTOs to ensure consistent typing and validation across backend and frontend.
+[Types]  
+Introduce request/response DTO shapes for the admin endpoints and the SPA controller models.
 
-- Database Table: tb_mas_cashiers (existing; confirm columns on deploy)
-  - intID: int (PK, auto-increment)
-  - user_id: int (FK to users)
-  - or_start: bigint (or int; store numeric OR start)
-  - or_end: bigint (or int; OR end)
-  - or_current: bigint (or int; current pointer; auto-reset to or_start on range change)  // auto-reset confirmed
-  - invoice_start: bigint (or int; Invoice start)
-  - invoice_end: bigint (or int; Invoice end)
-  - invoice_current: bigint (or int; current pointer; auto-reset to invoice_start on range change)  // auto-reset confirmed
-  - or_used: bigint or int (optional legacy; may be computed; if present keep updated)
-  - invoice_used: bigint or int (optional legacy)
-  - temporary_admin: tinyint/bool
-  - campus_id: int|null (if multi-campus scoping is applicable)
-  - created_at/updated_at: timestamps (nullable if legacy)
+- PaymentDetailItem (API response item)
+  - id: number (payment_details.id)
+  - student_information_id?: number|null
+  - student_number?: string|null
+  - sy_reference?: number|null
+  - description?: string|null
+  - subtotal_order?: number|null
+  - total_amount_due?: number|null
+  - status?: string|null
+  - or_no?: string|number|null (present when column exists)
+  - or_number?: string|number|null (present when column exists)
+  - invoice_number?: string|number|null (present when column exists)
+  - method?: string|null (or payment_method?: string|null when present)
+  - remarks?: string|null
+  - mode_of_payment_id?: number|null
+  - posted_at?: string|null (coalesced from paid_at/date/created_at)
+  - created_at?: string|null
+  - updated_at?: string|null
+  - source: 'payment_details' (constant)
+  - sy_label?: string (optional, if resolved/joined)
 
-- Backend DTOs (JSON):
-  - CashierResource (list item):
-    {
-      id: int,
-      user_id: int,
-      name: string, // derived from users table
-      campus_id: int|null,
-      temporary_admin: boolean|int,
-      or: { start: number|null, end: number|null, current: number|null },
-      invoice: { start: number|null, end: number|null, current: number|null }
-    }
+- PaymentDetailSearchFilters (API query params)
+  - q?: string (search term against student_number, description, number columns)
+  - student_number?: string
+  - student_id?: number
+  - syid?: number (term filter, maps to sy_reference where applicable)
+  - mode?: 'or'|'invoice' (hints which number column to search)
+  - or_number?: string|number (exact or partial, matches or_no/or_number)
+  - invoice_number?: string|number
+  - status?: string
+  - date_from?: string (Y-m-d or ISO)
+  - date_to?: string (Y-m-d or ISO)
+  - page?: number (pagination)
+  - per_page?: number (default 20)
 
-  - CashierStats:
-    {
-      id: int,
-      or: {
-        start: number|null, end: number|null, current: number|null,
-        used_count: number, remaining_count: number, last_used: number|null
-      },
-      invoice: {
-        start: number|null, end: number|null, current: number|null,
-        used_count: number, remaining_count: number, last_used: number|null
-      }
-    }
+- PaymentDetailUpdatePayload (API body for PATCH)
+  - description?: string
+  - subtotal_order?: number
+  - total_amount_due?: number
+  - status?: string
+  - remarks?: string
+  - method?: string (or payment_method?: string)
+  - mode_of_payment_id?: number
+  - posted_at?: string (maps to paid_at/date/created_at depending on column)
+  - or_no?: string|number (if column exists and allowed to change)
+  - or_number?: string|number (if column exists and allowed to change)
+  - invoice_number?: string|number (if column exists and allowed to change)
 
-  - CashierUpdateRequest (PATCH /cashiers/{id}):
-    - temporary_admin: boolean|int (optional)
-    - or_current: number (optional; must be within range)
-    - invoice_current: number (optional; must be within range)
-
-  - CashierRangeUpdateRequest (POST /cashiers/{id}/ranges or create):
-    {
-      user_id?: int, // required on create
-      campus_id?: int|null,
-      or_start?: number, or_end?: number,
-      invoice_start?: number, invoice_end?: number
-    }
-    Rules:
-    - When setting/changing any start/end, auto-reset current to start (auto-reset confirmed).
-    - Enforce start <= end and non-negative integers.
-
-- Validation/Business Rules:
-  - Enforce uniqueness/no-overlap of OR ranges across cashiers (scoped by campus_id if present).
-  - Enforce uniqueness/no-overlap of Invoice ranges across cashiers (scoped by campus_id if present).
-  - Block assignment if any existing transactions already used numbers within the proposed ranges (for both OR and Invoice). Return first conflicting number (and conflict type) for clarity.
-  - Single active range per cashier for OR and for Invoice (no history table; current resets on change).
-  - Current must remain within [start, end]; when start/end updated, set current = start.
+Validation rules:
+- subtotal_order: numeric, gt:0
+- total_amount_due: numeric, gte:subtotal_order (if provided)
+- status: string in ['Paid','Void','Pending','Cancelled','Error'] (configurable)
+- posted_at: valid date/datetime
+- or_no/or_number/invoice_number: numeric or string, unique vs other rows (validated server-side)
+- mode_of_payment_id: integer, must exist in payment_modes.id when table present
 
 [Files]
-Summarizes new files, edits, and configurations.
+Create new admin SPA feature and Laravel API endpoints; update routes and sidebar.
 
-- Laravel (API)
-  - New
-    - app/Http/Controllers/Api/V1/CashierController.php
-      - index(): list cashiers (+ optional include stats flag)
-      - store(): create cashier row with ranges; validates overlaps and usage; sets current pointers to starts
-      - update($id): modify temporary_admin and optionally current pointers (with bounds checks)
-      - updateRanges($id): modify OR/Invoice ranges; auto-reset current; revalidate overlaps and usage
-      - stats($id): per-cashier stats; computes used/remaining and last_used
-      - statsAll(): stats for all cashiers (paged)
-    - app/Http/Requests/Api/V1/CashierStoreRequest.php
-    - app/Http/Requests/Api/V1/CashierUpdateRequest.php
-    - app/Http/Requests/Api/V1/CashierRangeUpdateRequest.php
-    - app/Models/Cashier.php // Eloquent model mapping tb_mas_cashiers (if not present)
-    - app/Services/CashierService.php
-      - validateRangeOverlap()
-      - validateRangeUsage()
-      - computeStats()
-      - helpers to coalesce transaction tables/columns
-    - app/Policies/CashierPolicy.php OR define Gate in AuthServiceProvider
-    - database/seeders/RolesSeederCashierAdmin.php (adds cashier_admin role)
-  - Edited
-    - routes/api.php: add cashier routes under /api/v1 with auth middleware and gate
-    - app/Providers/AuthServiceProvider.php: define Gate('cashier_admin') or role-based check
-    - Possibly add migration (only if missing fields) to alter tb_mas_cashiers (add missing columns; ensure numeric types)
-  - Optional
-    - app/Http/Resources/CashierResource.php, CashierStatsResource.php for clean API responses
+- New frontend files
+  - frontend/unity-spa/features/admin/payment-details/edit.html
+    - Tailwind-styled page:
+      - Filters: q, student_number, term selector (reuse TermService), mode, number fields, date range, status.
+      - Results table with pagination.
+      - Inline edit modal/drawer to edit selected row fields.
+      - Admin-only guards and UX feedback.
+  - frontend/unity-spa/features/admin/payment-details/payment-details.controller.js
+    - AngularJS controller for search, load, select, edit, and save updates.
+  - frontend/unity-spa/features/admin/payment-details/payment-details.service.js
+    - AngularJS service calling Laravel admin endpoints (search/show/update).
 
-- AngularJS (frontend/unity-spa)
-  - New
-    - features/cashiers/list.html
-    - features/cashiers/cashiers.controller.js
-    - features/cashiers/cashiers.service.js
-  - Edited
-    - core/roles.constants.js
-      - Add role cashier_admin to ROLES
-      - Add access matrix entry for ^/cashier-admin(?:/.*)?$ to ['cashier_admin', 'admin']
-    - core/routes.js
-      - Register /cashier-admin to the new list view/controller
-    - shared/components/sidebar/sidebar.html
-      - Add “Cashier Admin” top-level link (not under Finance group; per confirmation “No” to Finance group placement)
-    - Optional: toast.service.js usage for success/errors
+- Existing frontend to modify
+  - frontend/unity-spa/core/routes.js
+    - Add route .when('/admin/payment-details', { templateUrl: 'features/admin/payment-details/edit.html', controller: 'AdminPaymentDetailsController', controllerAs: 'vm', requiredRoles: ['admin'] })
+  - frontend/unity-spa/shared/components/sidebar/sidebar.controller.js
+    - Under group key: 'admin', add child: { label: 'Payment Details', path: '/admin/payment-details' }
+  - frontend/unity-spa/shared/components/sidebar/sidebar.html
+    - No structural change required (links rendered from controller), verify access gating via vm.canAccess.
+
+- New backend files
+  - laravel-api/app/Http/Controllers/Api/V1/PaymentDetailAdminController.php
+    - index(): search and pagination
+    - show(int $id): fetch single row with dynamic fields
+    - update(int $id, PaymentDetailUpdateRequest $request): apply updates with validation and dynamic columns
+  - laravel-api/app/Http/Requests/Api/V1/PaymentDetailUpdateRequest.php
+    - Validation and normalization of update payload
+  - laravel-api/app/Services/PaymentDetailAdminService.php
+    - Column detection (Schema::hasColumn), search builder, uniqueness checks for number columns, coalescing date fields, safe-update writer
+
+- Existing backend to modify
+  - laravel-api/routes/api.php
+    - Register:
+      - GET /api/v1/finance/payment-details/admin → PaymentDetailAdminController@index
+      - GET /api/v1/finance/payment-details/{id} → PaymentDetailAdminController@show
+      - PATCH /api/v1/finance/payment-details/{id} → PaymentDetailAdminController@update
+
+- Files to delete or move
+  - None.
+
+- Configuration updates
+  - None (reuse existing Tailwind utilities in SPA and existing auth guard/middleware in Laravel).
 
 [Functions]
-Details of new/modified functions with signatures and behavior.
+Introduce controller methods on both frontend and backend and minimally update routing.
 
-- Backend (Controller)
-  - index(Request $req): JSON
-    - Query: joins tb_mas_cashiers -> users (name), optional campus filter
-    - Query Params: includeStats=bool, page, perPage
-    - Returns: list of CashierResource; if includeStats, adds stats per item (or provide stats endpoint separately)
-  - store(CashierStoreRequest $req): JSON
-    - Validates: user_id exists; OR/Invoice ranges valid; no overlaps; no used numbers in those ranges
-    - Writes: row with or_current=or_start, invoice_current=invoice_start
-  - update($id, CashierUpdateRequest $req): JSON
-    - Allows changing temporary_admin; can adjust current pointers with bounds checks (must be within [start,end])
-  - updateRanges($id, CashierRangeUpdateRequest $req): JSON
-    - Updates any provided start/end; auto-sets current=start; revalidates overlaps and prior usage
-  - stats($id): JSON -> CashierStats
-  - statsAll(): JSON -> array of CashierStats (paged)
-  - Private/Service helpers:
-    - validateRangeOverlap($type, $start, $end, $excludeId, $campusId)
-    - validateRangeUsage($type, $start, $end): checks transaction tables
-      - OR check: payment_details.or_no or or_number, fallback to transaction tables as available
-      - Invoice check: payment_details.invoice_number, other finance tables (common columns)
-    - computeStats($cashierId):
-      - used_count: count of payments in [start,end]
-      - remaining: (end - current + 1) for simple tracking; optionally dynamic from used_count
-      - last_used: max used OR or invoice within range
+- New frontend functions
+  - AdminPaymentDetailsController (payment-details.controller.js)
+    - init(): void — bootstrap roles, load term from TermService, default filters
+    - search(resetPage: boolean): Promise — call service.search with filters, update vm.items and vm.pagination
+    - select(item: PaymentDetailItem): void — set vm.selected and open edit drawer/modal
+    - save(): Promise — validate client-side, call service.update(selected.id, payload), toast success, refresh search results
+    - resetFilters(): void — clear filters and reload
+  - AdminPaymentDetailsService (payment-details.service.js)
+    - search(params: PaymentDetailSearchFilters): Promise<Paginated<PaymentDetailItem>>
+    - get(id: number): Promise<PaymentDetailItem>
+    - update(id: number, payload: PaymentDetailUpdatePayload): Promise<PaymentDetailItem>
 
-- Frontend
-  - cashiers.service.js
-    - list({includeStats}): GET /api/v1/cashiers
-    - create(payload)
-    - update(id, payload)
-    - updateRanges(id, payload)
-    - stats(id)
-  - cashiers.controller.js
-    - Loads list, binds filters
-    - Edit modals for OR/Invoice ranges (start/end, auto-reset current)
-    - Toggle temporary_admin
-    - Displays usage stats (remaining, used_count, last_used)
-    - Error handling: show first conflicting number and rule (overlap/used)
-  - roles.constants.js (edited)
-    - ROLES: add cashier_admin
-    - ACCESS_MATRIX: add { test: '^/cashier-admin(?:/.*)?$', roles: ['cashier_admin','admin'] }
-  - sidebar.html (edited)
-    - Add link: href="#/cashier-admin", show if user has role cashier_admin or admin
-  - routes.js (edited)
-    - Register /cashier-admin => templateUrl/features/cashiers/list.html controller CashiersController
+- Modified frontend functions
+  - routes.js — add new route definition
+  - sidebar.controller.js — push new Admin child link
+
+- New backend functions (PaymentDetailAdminController.php)
+  - index(Request $request): JsonResponse
+    - Authorize admin, parse filters, delegate to service, return paginated response
+  - show(int $id): JsonResponse
+    - Authorize admin, fetch item, coalesce fields, return
+  - update(int $id, PaymentDetailUpdateRequest $request): JsonResponse
+    - Authorize admin, validate, delegate to service.update, return updated item
+
+- New backend service methods (PaymentDetailAdminService.php)
+  - detectColumns(): array — map number/payment/date/name/email/contact columns if present
+  - search(array $filters): LengthAwarePaginator|array — query builder with dynamic column support
+  - getById(int $id): array|null — normalized item
+  - update(int $id, array $payload): array — whitelist fields, apply column remapping, validate uniqueness for number columns, safe transaction, return updated
 
 [Classes]
-New and modified classes with a quick description.
+Add one Laravel controller, one form request, and one service.
 
-- Laravel
-  - app/Models/Cashier extends Model
-    - protected $table = 'tb_mas_cashiers';
-    - fillable: [user_id, campus_id, or_start, or_end, or_current, invoice_start, invoice_end, invoice_current, temporary_admin, or_used, invoice_used]
-    - relationships: user()
-  - app/Http/Requests/Api/V1/CashierStoreRequest extends FormRequest
-    - rules: user_id required|exists, start/end integers min:0, start<=end; both OR and Invoice may be set
-  - app/Http/Requests/Api/V1/CashierUpdateRequest
-    - rules: temporary_admin boolean, or_current/invoice_current between ranges
-  - app/Http/Requests/Api/V1/CashierRangeUpdateRequest
-    - rules: any of [or_start,or_end,invoice_start,invoice_end]; start<=end; resets current
-  - app/Services/CashierService
-    - methods as described under Functions
-  - Policies / Gates
-    - Configure cashier_admin gate in AuthServiceProvider or Policy to allow index/store/update/updateRanges/stats endpoints.
+- New classes
+  - App\Http\Controllers\Api\V1\PaymentDetailAdminController
+    - Methods: index, show, update
+    - Middleware: auth (CodeIgniterSessionGuard) and explicit admin check via UserContextResolver
+  - App\Http\Requests\Api\V1\PaymentDetailUpdateRequest
+    - Rules and messages; authorize() returns true but controller checks admin role
+  - App\Services\PaymentDetailAdminService
+    - No inheritance; pure service for DB operations on payment_details with Schema::hasColumn checks
 
-- AngularJS
-  - CashiersController: orchestrates data, modals, and calls service
-  - CashiersService: wraps API calls, consistent error formatting
+- Modified classes
+  - None functionally; only api.php route registrations.
 
 [Dependencies]
-- No additional composer/npm packages are required.
-- Ensure migrations/seeds register cashier_admin role (if role management is table-driven).
-- Consistency with existing role middleware and guard.
+No new external packages.
+
+- Frontend uses existing AngularJS and Tailwind utility classes (already present).
+- Backend uses Illuminate DB, Validation, Schema facade (already present).
 
 [Testing]
-- Laravel PHPUnit
-  - Authorization: endpoints forbidden for non cashier_admin/admin users
-  - Validation: rejects overlaps across different cashiers, rejects ranges with already-used numbers; accepts valid input; current auto-resets
-  - Stats: returns accurate used_count, remaining_count, last_used (seed test data for payment_details)
-- AngularJS
-  - Unit tests (where applicable) for service method payloads/parsing
-  - Manual QA:
-    - Login as cashier_admin; open /cashier-admin; assign OR/Invoice ranges; see auto-reset current; view stats; attempt overlapping ranges => error; attempt range that includes used numbers => error; toggle temporary_admin; refresh list
+Use manual test procedures and an optional smoke script; consider adding lightweight Laravel feature tests if time permits.
+
+- Manual tests
+  1) Access control:
+     - Login as non-admin → navigate to /#/admin/payment-details → expect redirect/403/hidden.
+     - Login as admin → page loads; Admin group shows Payment Details link.
+  2) Search:
+     - Search by student_number, term, mode=or, exact or_number; results render newest-first (by posted_at desc then id).
+     - Date range filters and pagination work.
+  3) Edit and save:
+     - Edit description, amount (subtotal_order), status, remarks, method/payment_method, posted_at, mode_of_payment_id.
+     - If changing or_number/invoice_number: server validates uniqueness across payment_details and applicable cross-checks (if implemented).
+     - Save → success toast → list refresh shows updated values.
+  4) Column variants:
+     - Environments missing certain columns (e.g., method vs payment_method) continue to work; fields absent from schema are hidden and not sent.
+  5) Error cases:
+     - Invalid subtotal_order (<=0) → 422.
+     - Duplicate or_number → 422 with helpful message.
+     - Server errors log to console; SPA shows toast "Update failed."
+
+- Optional scripts
+  - laravel-api/scripts/test_payment_details_admin.php
+    - Simulate GET /finance/payment-details/admin and PATCH update for a known id to smoke the flow.
 
 [Implementation Order]
-1) Backend scaffolding
-   - Add model Cashier, service CashierService, request validators, controller with endpoints.
-   - Add gates/policies to restrict to cashier_admin/admin.
-   - Wire routes in routes/api.php under /api/v1/cashiers.
-   - Add seed/migration to register cashier_admin role (if role table-based).
+Implement backend first, then frontend integration, then wiring and verification.
 
-2) Validations & stats (service)
-   - Implement overlap validator (scoped by campus_id if present).
-   - Implement usage validator scanning existing transactions (payment_details and other finance tables as available) for or_no/or_number and invoice_number in [start,end].
-   - Implement computeStats.
-
-3) Frontend routing and RBAC
-   - Update roles.constants.js: add cashier_admin in ROLES; add ACCESS_MATRIX rule for ^/cashier-admin(?:/.*)?$.
-   - Add /cashier-admin route in core/routes.js.
-   - Add menu entry “Cashier Admin” as top-level link in sidebar.html (not under Finance).
-
-4) Frontend pages
-   - Implement features/cashiers/{list.html, cashiers.controller.js, cashiers.service.js}.
-   - Table with Name, OR start/end/current, Invoice start/end/current, Temporary Admin (toggle), Actions (edit).
-   - Edit modal to update ranges with auto-reset.
-   - Show stats (used_count, remaining, last_used) per cashier.
-
-5) Tests
-   - Add Laravel feature tests for success and failure cases.
-   - QA pass on UI for end-to-end flows.
-
-6) Harden & document
-   - Add API docstrings to controllers/requests.
-   - Ensure error messages include first conflicting number and type (overlap/used) for UX clarity.
-
-Task Progress Items:
-- [ ] Step 1: Implement Laravel model, service, validators, controller, routes with role gating
-- [ ] Step 2: Implement validation logic for overlap and usage checks; stats computation
-- [ ] Step 3: Seed/register cashier_admin role and configure gate in AuthServiceProvider
-- [ ] Step 4: Update Angular ROLES and ACCESS_MATRIX, add route /cashier-admin, add sidebar link
-- [ ] Step 5: Build Angular cashiers list page, service, controller, edit modal, stats display
-- [ ] Step 6: Write Laravel feature tests; manual QA through the UI
-- [ ] Step 7: Prepare rollout notes and migration/seed instructions
+1) Backend: Service
+   - Create PaymentDetailAdminService with detectColumns, search, getById, update; add uniqueness check for number columns and coalesced date handling.
+2) Backend: Request
+   - Add PaymentDetailUpdateRequest with strict validation and conditional rules.
+3) Backend: Controller
+   - Add PaymentDetailAdminController (index, show, update) with admin authorization using UserContextResolver.
+4) Backend: Routes
+   - Register routes in routes/api.php under /api/v1/finance/payment-details/admin (index) and /api/v1/finance/payment-details/{id} (show, update).
+5) Frontend: Service
+   - Create AdminPaymentDetailsService with search/get/update methods pointing to the new endpoints.
+6) Frontend: Controller + View
+   - Create AdminPaymentDetailsController and edit.html with Tailwind UI:
+     - Filters section, results table with paging, and edit drawer/modal.
+7) Frontend: Routes
+   - Update core/routes.js to register /admin/payment-details with requiredRoles ['admin'].
+8) Frontend: Sidebar
+   - Update sidebar.controller.js to add Admin → Payment Details link (path '/admin/payment-details'); visibility via canAccess.
+9) QA Pass
+   - Verify end-to-end flows and role restrictions; validate editing across variant schemas.

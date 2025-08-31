@@ -364,8 +364,17 @@
                   </div>
                   <div class="col-span-2">
                     <label class="block text-xs text-gray-600 mb-1">Description</label>
-                    <input type="text" class="w-full px-2 py-1 border border-gray-300 rounded text-sm"
-                           ng-model="vm.payments[row.id].description" placeholder="e.g., Tuition Payment">
+                    <select
+                      class="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                      ng-model="vm.payments[row.id].description"
+                      ng-options="d for d in vm.paymentDescriptionOptions track by d"
+                      select2
+                      select2-watch="vm.paymentDescriptionOptions"
+                      select2-allow-clear
+                      data-placeholder="Select a description"
+                    >
+                      <option value=""></option>
+                    </select>
                   </div>
                   <div class="col-span-2">
                     <label class="block text-xs text-gray-600 mb-1">Remarks (required)</label>

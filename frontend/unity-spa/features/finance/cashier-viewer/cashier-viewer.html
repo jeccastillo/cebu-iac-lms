@@ -36,18 +36,17 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
       <div>
         <label class="block text-sm font-medium text-gray-700">Select Student</label>
-        <select
+        <input
+          type="text"
+          class="mt-1 block w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Search or select a student..."
+          pui-autocomplete
           ng-model="vm.selectedStudentId"
-          ng-options="s.id as (s.student_number + ' — ' + s.last_name + ', ' + s.first_name + (s.middle_name ? (' ' + s.middle_name) : '')) for s in vm.students track by s.id"
-          ng-change="vm.onStudentSelected()"
-          select2
-          select2-watch="vm.students"
-          select2-allow-clear
-          data-placeholder="Search or select a student..."
-          class="mt-1 block w-full border rounded px-3 py-2"
-        >
-          <option value=""></option>
-        </select>
+          pui-source="vm.students"
+          pui-item-key="id"
+          pui-label="(item.student_number + ' — ' + item.last_name + ', ' + item.first_name + (item.middle_name ? (' ' + item.middle_name) : ''))"
+          pui-on-select="vm.onStudentSelected()"
+        />
       </div>
       <div class="md:col-span-2 flex md:justify-end items-end">
         <a class="inline-flex items-center px-4 py-2 rounded border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 mt-2 md:mt-6"
@@ -199,6 +198,20 @@
                   Payment Type: {{ vm.edit.paymentType || (vm.registration && vm.registration.paymentType) || 'N/A' }}
                   <span class="ml-2">Source: {{ vm.meta.tuition_source === 'saved' ? 'Saved' : 'Computed' }}</span>
                 </small>
+              </div>
+
+              <!-- Generate Tuition Invoice (visible only when no tuition invoice exists for this registration) -->
+              <div class="mt-2" ng-if="vm.canShowGenerateInvoice()">
+                <div class="rounded border border-amber-200 bg-amber-50 text-amber-800 px-3 py-2 mb-2">
+                  No tuition invoice found for this registration.
+                </div>
+                <button
+                  class="inline-flex items-center px-3 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50"
+                  ng-click="vm.generateTuitionInvoice()"
+                  ng-disabled="vm.generatingInvoice">
+                  <span ng-if="!vm.generatingInvoice">Generate Invoice</span>
+                  <span ng-if="vm.generatingInvoice">Generating...</span>
+                </button>
               </div>
             </div>
           </div>
@@ -419,6 +432,57 @@
       </div>
     </div>
   
+    <!-- Invoices -->
+    <div class="mt-6">
+      <div class="border rounded-lg shadow-sm overflow-hidden">
+        <div class="bg-indigo-600 text-white px-4 py-2 flex items-center justify-between">
+          <strong>Invoices</strong>
+          <span class="text-sm opacity-90" ng-if="vm.loading.invoices"><em>loading...</em></span>
+        </div>
+        <div class="p-4 bg-white">
+          <div class="text-sm text-gray-600 mb-3">
+            <span ng-if="vm.termLabel">Term: <strong>{{ vm.termLabel }}</strong></span>
+            <span ng-if="!vm.termLabel" class="text-gray-500">Term not resolved.</span>
+          </div>
+
+          <!-- Error message -->
+          <div class="rounded border border-red-200 bg-red-50 text-red-700 px-4 py-3 mb-3" ng-if="vm.error.invoices">
+            {{ vm.error.invoices }}
+          </div>
+
+          <!-- Table -->
+          <div class="max-h-96 overflow-auto">
+            <table class="w-full text-sm border border-gray-200 rounded">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="px-3 py-2 text-left">Date</th>
+                  <th class="px-3 py-2 text-left">Invoice</th>
+                  <th class="px-3 py-2 text-left">Type</th>
+                  <th class="px-3 py-2 text-left">Status</th>
+                  <th class="px-3 py-2 text-right">Amount</th>
+                  <th class="px-3 py-2 text-left">Remarks</th>
+                </tr>
+              </thead>
+              <tbody ng-if="vm.invoices && vm.invoices.length">
+                <tr class="odd:bg-white even:bg-gray-50" ng-repeat="inv in vm.invoices">
+                  <td class="px-3 py-2">{{ inv.posted_at || inv.created_at || '' }}</td>
+                  <td class="px-3 py-2">{{ inv.invoice_number || inv.number }}</td>
+                  <td class="px-3 py-2">{{ inv.type || '-' }}</td>
+                  <td class="px-3 py-2">{{ inv.status || '-' }}</td>
+                  <td class="px-3 py-2 text-right">P{{ vm.currency(inv.amount_total || inv.amount || inv.total || 0) }}</td>
+                  <td class="px-3 py-2">{{ inv.remarks || '' }}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="mt-2 text-gray-500" ng-if="!vm.invoices || !vm.invoices.length">
+              <em>No invoices found for the selected term.</em>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Payments (from payment_details) -->
     <div class="mt-6">
       <div class="border rounded-lg shadow-sm overflow-hidden">
@@ -471,39 +535,37 @@
                       ng-model="vm.payment.amount" placeholder="0.00" />
                   </div>
                   <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Payment Mode</label>
+                    <input
+                      type="text"
+                      class="block w-full rounded border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                      placeholder="Select a payment mode"
+                      pui-autocomplete
+                      ng-model="vm.payment.mode_of_payment_id"
+                      pui-source="vm.paymentModes"
+                      pui-item-key="id"
+                      pui-label="(item.name + (item.pchannel ? ' — ' + item.pchannel : '') + (item.pmethod ? ' — ' + item.pmethod : ''))"
+                      pui-on-select="vm.onPaymentModeChange()"
+                    />
+                  </div>
+                  <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Method (optional)</label>
                     <input type="text"
                       class="block w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                       ng-model="vm.payment.method" placeholder="e.g., Cash, GCash, Bank" />
-                  </div>
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Payment Mode</label>
-                    <select
-                      ng-model="vm.payment.mode_of_payment_id"
-                      ng-options="m.id as (m.name + (m.pchannel ? ' — ' + m.pchannel : '') + (m.pmethod ? ' — ' + m.pmethod : '')) for m in vm.paymentModes track by m.id"
-                      select2
-                      select2-watch="vm.paymentModes"
-                      select2-allow-clear
-                      data-placeholder="Select a payment mode"
-                      class="block w-full rounded border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                    >
-                      <option value=""></option>
-                    </select>
-                  </div>
+                  </div>                  
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4" ng-if="vm.myCashier">
-                  <div class="md:col-span-2">
+                  <div class="md:col-span-3">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                    <input type="text"
-                      class="block w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                      ng-model="vm.payment.description" placeholder="e.g., Tuition Payment" />
-                  </div>
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Posted At (optional)</label>
-                    <input type="text"
-                      class="block w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                      ng-model="vm.payment.posted_at" placeholder="YYYY-MM-DD HH:mm:ss" />
+                    <select
+                      ng-model="vm.payment.description"
+                      ng-options="d for d in vm.paymentDescriptionOptions track by d"
+                      ng-change="vm.onPaymentDescriptionChange()"                                                             
+                      class="block w-full rounded border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                    >                                                                          
+                    </select>
                   </div>
                 </div>
 
@@ -550,22 +612,24 @@
                 <tr>
                   <th class="px-3 py-2 text-left">Date</th>
                   <th class="px-3 py-2 text-left">OR#</th>
+                  <th class="px-3 py-2 text-left">Invoice</th>
                   <th class="px-3 py-2 text-left">Description</th>
                   <th class="px-3 py-2 text-right">Subtotal</th>
                   <th class="px-3 py-2 text-left">Status</th>
                   <th class="px-3 py-2 text-left">Method</th>
-                  <th class="px-3 py-2 text-left">Registration Ref</th>
+                  <th class="px-3 py-2 text-left">School Year</th>
                 </tr>
               </thead>
               <tbody ng-if="vm.paymentDetails && vm.paymentDetails.items && vm.paymentDetails.items.length">
                 <tr class="odd:bg-white even:bg-gray-50" ng-repeat="p in vm.paymentDetails.items">
-                  <td class="px-3 py-2">{{ p.posted_at || '' }}</td>
+                  <td class="px-3 py-2">{{ p.or_date || p.posted_at || '' }}</td>
                   <td class="px-3 py-2">{{ p.or_no }}</td>
+                  <td class="px-3 py-2">{{ p.invoice_number }}</td>
                   <td class="px-3 py-2">{{ p.description }}</td>
                   <td class="px-3 py-2 text-right">P{{ vm.currency(p.subtotal_order) }}</td>
                   <td class="px-3 py-2">{{ p.status }}</td>
                   <td class="px-3 py-2">{{ p.method }}</td>
-                  <td class="px-3 py-2">{{ p.sy_reference }}</td>
+                  <td class="px-3 py-2">{{ vm.paymentDetails.sy_label || p.sy_reference }}</td>
                 </tr>
               </tbody>
             </table>

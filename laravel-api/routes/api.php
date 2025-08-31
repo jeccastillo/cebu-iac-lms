@@ -29,6 +29,10 @@ use App\Http\Controllers\Api\V1\TuitionController;
 use App\Http\Controllers\Api\V1\ClassroomController;
 use App\Http\Controllers\Api\V1\CashierController;
 use App\Http\Controllers\Api\V1\PaymentModeController;
+use App\Http\Controllers\Api\V1\PaymentDescriptionController;
+use App\Http\Controllers\Api\V1\PaymentDetailAdminController;
+use App\Http\Controllers\Api\V1\StudentBillingController;
+use App\Http\Controllers\Api\V1\InvoiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -204,6 +208,24 @@ Route::prefix('v1')->group(function () {
     Route::get('/finance/transactions', [FinanceController::class, 'transactions']);
     Route::get('/finance/or-lookup', [FinanceController::class, 'orLookup']);
     Route::get('/finance/payment-details', [FinanceController::class, 'paymentDetails']);
+    // Admin Payment Details management (admin-only)
+    // Place 'admin' literal route BEFORE the parameterized {id} to avoid collision
+    Route::get('/finance/payment-details/admin', [PaymentDetailAdminController::class, 'index'])->middleware('role:admin');
+    Route::get('/finance/payment-details/{id}', [PaymentDetailAdminController::class, 'show'])->middleware('role:admin');
+    Route::patch('/finance/payment-details/{id}', [PaymentDetailAdminController::class, 'update'])->middleware('role:admin');
+    Route::delete('/finance/payment-details/{id}', [PaymentDetailAdminController::class, 'destroy'])->middleware('role:admin');
+
+    // Student Billing (Finance/Admin)
+    Route::get('/finance/student-billing', [StudentBillingController::class, 'index'])->middleware('role:finance,admin');
+    Route::get('/finance/student-billing/{id}', [StudentBillingController::class, 'show'])->middleware('role:finance,admin');
+    Route::post('/finance/student-billing', [StudentBillingController::class, 'store'])->middleware('role:finance,admin');
+    Route::put('/finance/student-billing/{id}', [StudentBillingController::class, 'update'])->middleware('role:finance,admin');
+    Route::delete('/finance/student-billing/{id}', [StudentBillingController::class, 'destroy'])->middleware('role:finance,admin');
+
+    // Invoices (Finance/Admin)
+    Route::get('/finance/invoices', [InvoiceController::class, 'index'])->middleware('role:finance,admin');
+    Route::get('/finance/invoices/{id}', [InvoiceController::class, 'show'])->middleware('role:finance,admin');
+    Route::post('/finance/invoices/generate', [InvoiceController::class, 'generate'])->middleware('role:finance,admin');
 
     // Scholarship endpoints (read-only baseline)
     Route::get('/scholarships', [ScholarshipController::class, 'index']);
@@ -218,13 +240,13 @@ Route::prefix('v1')->group(function () {
     Route::post('/unity/enlist', [UnityController::class, 'enlist'])->middleware('role:registrar,admin');
     Route::post('/unity/reset-registration', [UnityController::class, 'resetRegistration'])->middleware('role:registrar,admin');
     // Registration read/update for existing rows only
-    Route::get('/unity/registration', [UnityController::class, 'registration'])->middleware('role:registrar,admin');
+    Route::get('/unity/registration', [UnityController::class, 'registration'])->middleware('role:registrar,finance,admin');
     Route::put('/unity/registration', [UnityController::class, 'updateRegistration'])->middleware('role:registrar,admin');
     Route::post('/unity/tag-status', [UnityController::class, 'tagStatus']);
     Route::post('/unity/tuition-preview', [UnityController::class, 'tuitionPreview']);
     // Tuition save/fetch
-    Route::post('/unity/tuition-save', [UnityController::class, 'tuitionSave'])->middleware('role:registrar,admin');
-    Route::get('/unity/tuition-saved', [UnityController::class, 'tuitionSaved'])->middleware('role:registrar,admin');
+    Route::post('/unity/tuition-save', [UnityController::class, 'tuitionSave'])->middleware('role:registrar,finance,admin');
+    Route::get('/unity/tuition-saved', [UnityController::class, 'tuitionSaved'])->middleware('role:registrar,finance,admin');
 
     // Generic API endpoints
     Route::get('/generic/faculty', [GenericApiController::class, 'faculty']);
@@ -296,4 +318,11 @@ Route::prefix('v1')->group(function () {
     Route::put('/payment-modes/{id}', [PaymentModeController::class, 'update'])->middleware('role:finance,admin');
     Route::delete('/payment-modes/{id}', [PaymentModeController::class, 'destroy'])->middleware('role:finance,admin');
     Route::post('/payment-modes/{id}/restore', [PaymentModeController::class, 'restore'])->middleware('role:finance,admin');
+
+    // Payment Descriptions CRUD (Finance/Admin)
+    Route::get('/payment-descriptions', [PaymentDescriptionController::class, 'index'])->middleware('role:finance,admin');
+    Route::get('/payment-descriptions/{id}', [PaymentDescriptionController::class, 'show'])->middleware('role:finance,admin');
+    Route::post('/payment-descriptions', [PaymentDescriptionController::class, 'store'])->middleware('role:finance,admin');
+    Route::put('/payment-descriptions/{id}', [PaymentDescriptionController::class, 'update'])->middleware('role:finance,admin');
+    Route::delete('/payment-descriptions/{id}', [PaymentDescriptionController::class, 'destroy'])->middleware('role:finance,admin');
 });

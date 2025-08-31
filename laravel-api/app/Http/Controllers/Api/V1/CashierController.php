@@ -620,7 +620,7 @@ class CashierController extends Controller
         }
 
         // Optional columns detection
-        $methodCol   = Schema::hasColumn('payment_details', 'method') ? 'method'
+        $methodCol   = Schema::hasColumn('payment_details', 'pmethod') ? 'pmethod'
                      : (Schema::hasColumn('payment_details', 'payment_method') ? 'payment_method' : null);
         $dateCol     = Schema::hasColumn('payment_details', 'paid_at') ? 'paid_at'
                      : (Schema::hasColumn('payment_details', 'date') ? 'date'
@@ -634,6 +634,8 @@ class CashierController extends Controller
         $lastNameCol   = Schema::hasColumn('payment_details', 'last_name') ? 'last_name' : null;
         $emailCol      = Schema::hasColumn('payment_details', 'email_address') ? 'email_address' : null;
         $contactCol      = Schema::hasColumn('payment_details', 'contact_number') ? 'contact_number' : null;
+        // Support legacy or_date column; always stored as Y-m-d
+        $orDateCol       = Schema::hasColumn('payment_details', 'or_date') ? 'or_date' : null;
 
         // Resolve optional student fields
         $studentNumber = null;
@@ -686,6 +688,16 @@ class CashierController extends Controller
         if ($contactCol)    $insert[$contactCol]    = $mobile     !== null ? $mobile      : '';
         if ($dateCol) {
             $insert[$dateCol] = $postedAt ?: date('Y-m-d H:i:s');
+        }
+        // Default or_date (date-only) to today when column exists
+        if ($orDateCol) {
+            $orDate = null;
+            if (isset($payload['or_date'])) {
+                $s = (string) $payload['or_date'];
+                // Normalize to date-only (Y-m-d) even if time is provided
+                $orDate = substr($s, 0, 10);
+            }
+            $insert[$orDateCol] = $orDate ?: date('Y-m-d');
         }
         // Persist selected mode_of_payment_id when column exists
         if (Schema::hasColumn('payment_details', 'mode_of_payment_id') && $modePaymentId !== null) {

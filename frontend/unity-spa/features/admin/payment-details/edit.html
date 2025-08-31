@@ -1,0 +1,267 @@
+<div class="px-4 py-6">
+  <h1 class="text-2xl font-semibold text-gray-900 mb-1">Payment Details</h1>
+  <p class="text-sm text-gray-600 mb-6">Admin-only management page to search, view, and edit payment_details rows.</p>
+
+  <!-- Access guard -->
+  <div class="mb-4" ng-if="!vm.isAdmin">
+    <div class="rounded border border-red-200 bg-red-50 px-4 py-3 text-red-700">
+      Access denied. Admin only.
+    </div>
+  </div>
+
+  <!-- Alerts -->
+  <div class="mb-4 space-y-2" ng-if="vm.isAdmin">
+    <div class="rounded border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-700" ng-if="vm.success">
+      {{ vm.success }}
+    </div>
+    <div class="rounded border border-red-200 bg-red-50 px-4 py-3 text-red-700" ng-if="vm.error">
+      {{ vm.error }}
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4" ng-if="vm.isAdmin">
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Search</label>
+        <input type="text" class="w-full border border-gray-300 rounded-md px-3 py-2" placeholder="Keyword"
+               ng-model="vm.filters.q" ng-change="vm.search(true)">
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Student Number</label>
+        <input type="text" class="w-full border border-gray-300 rounded-md px-3 py-2" placeholder="e.g. C2023-01-082"
+               ng-model="vm.filters.student_number" ng-change="vm.search(true)">
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Student ID</label>
+        <input type="number" class="w-full border border-gray-300 rounded-md px-3 py-2" placeholder="intID"
+               ng-model="vm.filters.student_id" ng-change="vm.search(true)">
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Term (SYID)</label>
+        <input type="number" class="w-full border border-gray-300 rounded-md px-3 py-2" placeholder="e.g. 31"
+               ng-model="vm.filters.syid" ng-change="vm.search(true)">
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Status</label>
+        <select class="w-full border border-gray-300 rounded-md px-3 py-2" ng-model="vm.filters.status" ng-change="vm.search(true)">
+          <option value="">Any</option>
+          <option value="Paid">Paid</option>
+          <option value="Void">Void</option>
+          <option value="Pending">Pending</option>
+          <option value="Cancelled">Cancelled</option>
+          <option value="Error">Error</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Mode</label>
+        <select class="w-full border border-gray-300 rounded-md px-3 py-2" ng-model="vm.filters.mode" ng-change="vm.search(true)">
+          <option value="">Any</option>
+          <option value="or">OR</option>
+          <option value="invoice">Invoice</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">OR Number</label>
+        <input type="text" class="w-full border border-gray-300 rounded-md px-3 py-2" placeholder="OR"
+               ng-model="vm.filters.or_number" ng-change="vm.search(true)">
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Invoice Number</label>
+        <input type="text" class="w-full border border-gray-300 rounded-md px-3 py-2" placeholder="Invoice"
+               ng-model="vm.filters.invoice_number" ng-change="vm.search(true)">
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">From</label>
+        <input type="date" class="w-full border border-gray-300 rounded-md px-3 py-2"
+               ng-model="vm.filters.date_from" ng-change="vm.search(true)">
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">To</label>
+        <input type="date" class="w-full border border-gray-300 rounded-md px-3 py-2"
+               ng-model="vm.filters.date_to" ng-change="vm.search(true)">
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Per Page</label>
+        <select class="w-full border border-gray-300 rounded-md px-3 py-2" ng-model="vm.filters.per_page" ng-change="vm.search(true)">
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+        </select>
+      </div>
+      <div class="flex items-end">
+        <button class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                ng-click="vm.resetFilters()">
+          Reset
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="mt-6" ng-if="vm.isAdmin">
+    <div class="flex items-center justify-between mb-3">
+      <div class="text-sm text-gray-600">
+        <span class="font-medium text-gray-900">{{ vm.meta.total || 0 }}</span> results
+        <span ng-if="vm.meta.total > 0"> • page {{ vm.meta.page || 1 }} of {{ Math.max(1, Math.ceil((vm.meta.total||0)/(vm.meta.per_page||20))) }}</span>
+      </div>
+      <div class="flex items-center space-x-2">
+        <button class="px-3 py-1.5 rounded border border-gray-300 text-gray-700 hover:bg-gray-50"
+                ng-click="vm.goPage(-1)" ng-disabled="(vm.meta.page||1) <= 1">Prev</button>
+        <button class="px-3 py-1.5 rounded border border-gray-300 text-gray-700 hover:bg-gray-50"
+                ng-click="vm.goPage(1)" ng-disabled="(vm.meta.page||1) >= Math.max(1, Math.ceil((vm.meta.total||0)/(vm.meta.per_page||20)))">Next</button>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto bg-white rounded-lg shadow-sm border border-gray-200">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr class="text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+            <th class="px-3 py-2">ID</th>
+            <th class="px-3 py-2">Posted</th>
+            <th class="px-3 py-2">OR Date</th>
+            <th class="px-3 py-2">OR</th>
+            <th class="px-3 py-2">Invoice</th>
+            <th class="px-3 py-2">Description</th>
+            <th class="px-3 py-2">Amount</th>
+            <th class="px-3 py-2">Total Due</th>
+            <th class="px-3 py-2">Status</th>
+            <th class="px-3 py-2">Method</th>
+            <th class="px-3 py-2">Mode</th>
+            <th class="px-3 py-2">Term</th>
+            <th class="px-3 py-2"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100" ng-if="vm.items && vm.items.length">
+          <tr class="hover:bg-gray-50" ng-repeat="p in vm.items">
+            <td class="px-3 py-2 text-sm text-gray-900">{{ p.id }}</td>
+            <td class="px-3 py-2 text-sm text-gray-700">{{ p.posted_at || '' }}</td>
+            <td class="px-3 py-2 text-sm text-gray-700">{{ vm.dateOnly(p.posted_at) || '' }}</td>
+            <td class="px-3 py-2 text-sm text-gray-700">{{ p.or_no || '' }}</td>
+            <td class="px-3 py-2 text-sm text-gray-700">{{ p.invoice_number || '' }}</td>
+            <td class="px-3 py-2 text-sm text-gray-700">{{ p.description || '' }}</td>
+            <td class="px-3 py-2 text-sm text-gray-900">{{ p.subtotal_order != null ? (p.subtotal_order | number : 2) : '' }}</td>
+            <td class="px-3 py-2 text-sm text-gray-900">{{ p.total_amount_due != null ? (p.total_amount_due | number : 2) : '' }}</td>
+            <td class="px-3 py-2 text-sm">
+              <span class="inline-flex items-center rounded px-2 py-0.5 text-xs"
+                    ng-class="{
+                      'bg-emerald-50 text-emerald-700 border border-emerald-200': p.status === 'Paid',
+                      'bg-yellow-50 text-yellow-700 border border-yellow-200': p.status === 'Pending',
+                      'bg-red-50 text-red-700 border border-red-200': p.status === 'Void' || p.status === 'Cancelled' || p.status === 'Error',
+                      'bg-gray-50 text-gray-700 border border-gray-200': !p.status
+                    }">{{ p.status || '-' }}</span>
+            </td>
+            <td class="px-3 py-2 text-sm text-gray-700">{{ p.method || '' }}</td>
+            <td class="px-3 py-2 text-sm text-gray-700">{{ vm.modeName(p.mode_of_payment_id) || '' }}</td>
+            <td class="px-3 py-2 text-sm text-gray-700">{{ p.sy_reference || '' }}</td>
+            <td class="px-3 py-2 text-right space-x-2">
+              <button class="inline-flex items-center px-3 py-1.5 rounded border border-gray-300 text-gray-700 hover:bg-gray-50"
+                      ng-click="vm.openEdit(p)">
+                Edit
+              </button>
+              <button class="inline-flex items-center px-3 py-1.5 rounded border border-red-300 text-red-700 hover:bg-red-50"
+                      ng-click="vm.remove(p)">
+                Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+        <tbody ng-if="!vm.items || !vm.items.length">
+          <tr>
+            <td class="px-3 py-6 text-center text-sm text-gray-500" colspan="13">
+              <em>No results found.</em>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Edit Drawer/Modal -->
+  <div class="fixed inset-0 bg-black bg-opacity-30 z-40" ng-if="vm.editOpen" ng-click="vm.closeEdit()"></div>
+  <div class="fixed right-0 top-0 h-full w-full max-w-lg bg-white shadow-2xl z-50 flex flex-col" ng-if="vm.editOpen">
+    <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+      <div class="font-semibold text-gray-900">Edit Payment Details</div>
+      <button class="p-2 rounded hover:bg-gray-100" ng-click="vm.closeEdit()">
+        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+    <div class="p-4 flex-1 overflow-y-auto">
+      <div class="grid grid-cols-1 gap-4">
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Description</label>
+          <input type="text" class="w-full border border-gray-300 rounded-md px-3 py-2" ng-model="vm.edit.description">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Amount</label>
+            <input type="number" step="0.01" class="w-full border border-gray-300 rounded-md px-3 py-2" ng-model="vm.edit.subtotal_order">
+          </div>
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Total Due</label>
+            <input type="number" step="0.01" class="w-full border border-gray-300 rounded-md px-3 py-2" ng-model="vm.edit.total_amount_due">
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Status</label>
+          <input type="text" class="w-full border border-gray-300 rounded-md px-3 py-2" ng-model="vm.edit.status" placeholder="Paid/Void/Pending/Cancelled/Error">
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Remarks</label>
+          <input type="text" class="w-full border border-gray-300 rounded-md px-3 py-2" ng-model="vm.edit.remarks">
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Payment Method</label>
+          <input type="text" class="w-full border border-gray-300 rounded-md px-3 py-2" ng-model="vm.edit.method" placeholder="e.g., Cash, GCash">
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Mode of Payment</label>
+          <select
+            class="w-full border border-gray-300 rounded-md px-3 py-2"
+            ng-model="vm.edit.mode_of_payment_id"
+            ng-options="m.id as (m.name + (m.pchannel ? ' — ' + m.pchannel : '') + (m.pmethod ? ' — ' + m.pmethod : '')) for m in vm.paymentModes track by m.id">
+            <option value="">Select mode</option>
+          </select>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Posted At</label>
+            <input type="datetime-local" class="w-full border border-gray-300 rounded-md px-3 py-2" ng-model="vm.edit.posted_at">
+          </div>
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">OR Date</label>
+            <input type="date" class="w-full border border-gray-300 rounded-md px-3 py-2" ng-model="vm.edit.or_date" placeholder="YYYY-MM-DD">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">OR Number</label>
+            <input type="text" class="w-full border border-gray-300 rounded-md px-3 py-2" ng-model="vm.edit.or_no">
+          </div>
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Invoice Number</label>
+            <input type="text" class="w-full border border-gray-300 rounded-md px-3 py-2" ng-model="vm.edit.invoice_number">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="p-4 border-t border-gray-200 flex items-center justify-between">
+      <div class="text-xs text-gray-500">Make necessary corrections then save.</div>
+      <div class="flex items-center space-x-2">
+        <button class="px-4 py-2 rounded border border-gray-300 text-gray-700 hover:bg-gray-50" ng-click="vm.closeEdit()">Cancel</button>
+        <button class="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700"
+                ng-click="vm.remove(vm.selected)">Delete</button>
+        <button class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+                ng-disabled="!vm.canSave()" ng-click="vm.save()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading overlay -->
+  <div class="fixed inset-0 bg-white bg-opacity-50 z-30 flex items-center justify-center" ng-if="vm.loading">
+    <div class="animate-spin h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full"></div>
+  </div>
+</div>

@@ -52,7 +52,9 @@
         children: [
           { label: 'Ledger', path: '/finance/ledger' },
           { label: 'Tuition Setup', path: '/finance/tuition-years' },
+          { label: 'Payment Descriptions', path: '/finance/payment-descriptions' },
           { label: 'Payment Modes', path: '/finance/payment-modes' },
+          { label: 'Student Billing', path: '/finance/student-billing' },
           { label: 'Cashier', path: '/finance/cashier', href: '/finance/cashier/0' },
           { label: 'Cashier Admin', path: '/cashier-admin' }          
         ]
@@ -73,6 +75,7 @@
         key: 'admin',
         label: 'Admin',
         children: [
+          { label: 'Payment Details', path: '/admin/payment-details' },
           { label: 'Faculty', path: '/faculty' },
           { label: 'Roles', path: '/roles' },
           { label: 'Logs', path: '/logs' },          

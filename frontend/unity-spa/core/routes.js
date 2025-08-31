@@ -299,7 +299,25 @@
         requiredRoles: ['finance', 'registrar', 'admin']
       })
 
-      // Payment Modes (Finance)
+      // Payment Descriptions (Finance)
+      .when('/finance/payment-descriptions', {
+        templateUrl: 'features/finance/payment-descriptions/list.html',
+        controller: 'PaymentDescriptionsController',
+        controllerAs: 'vm',
+        requiredRoles: ['finance', 'admin'],
+      })
+      .when('/finance/payment-descriptions/new', {
+        templateUrl: 'features/finance/payment-descriptions/edit.html',
+        controller: 'PaymentDescriptionEditController',
+        controllerAs: 'vm',
+        requiredRoles: ['finance', 'admin'],
+      })
+      .when('/finance/payment-descriptions/:id/edit', {
+        templateUrl: 'features/finance/payment-descriptions/edit.html',
+        controller: 'PaymentDescriptionEditController',
+        controllerAs: 'vm',
+        requiredRoles: ['finance', 'admin'],
+      })
       .when('/finance/payment-modes', {
         templateUrl: 'features/finance/payment-modes/list.html',
         controller: 'PaymentModesController',
@@ -319,11 +337,25 @@
         requiredRoles: ['finance', 'admin'],
       })
 
+      // Student Billing (Finance)
+      .when('/finance/student-billing', {
+        templateUrl: 'features/finance/student-billing/list.html',
+        controller: 'FinanceStudentBillingController',
+        controllerAs: 'vm',
+        requiredRoles: ['finance', 'admin'],
+      })
+
       .when("/cashier-admin", {
         templateUrl: "features/cashiers/list.html",
         controller: "CashiersController",
         controllerAs: "vm",
-        requiredRoles: ["cashier_admin", "admin"],
+        requiredRoles: ["cashier_admin","admin"],
+      })
+      .when("/admin/payment-details", {
+        templateUrl: "features/admin/payment-details/edit.html",
+        controller: "AdminPaymentDetailsController",
+        controllerAs: "vm",
+        requiredRoles: ["admin"],
       })
       .when("/roles", {
         templateUrl: "features/roles/roles.html",

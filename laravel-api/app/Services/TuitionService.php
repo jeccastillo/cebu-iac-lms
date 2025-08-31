@@ -236,8 +236,40 @@ class TuitionService
             ];
         }
 
-        // 8) Totals and summary
-        $additionalTotal = round($foreignTotal + $thesisFee + $lateEnrollmentFee + $newStudentTotal, 2);
+        // Student Billing (Finance-admin managed): aggregate tb_mas_student_billing by student+syid
+        $billingTotal = 0.0;
+        $billingDescriptions = [];
+        try {
+            if (Schema::hasTable('tb_mas_student_billing')) {
+                $billingRows = DB::table('tb_mas_student_billing')
+                    ->where('intStudentID', $user->intID)
+                    ->where('syid', $syid)
+                    ->orderBy('posted_at', 'desc')
+                    ->orderBy('intID', 'desc')
+                    ->get();
+                foreach ($billingRows as $br) {
+                    $desc = (string) ($br->description ?? '');
+                    $amt  = round((float) ($br->amount ?? 0), 2);
+                    if ($desc !== '' && $amt != 0.0) {
+                        // Allow negative credits; show each line as additional item
+                        $itemsAdditional[] = ['name' => $desc, 'amount' => $amt];
+                        $billingTotal += $amt;
+
+                        // Collect billing descriptions for matching payments
+                        $trimmed = trim($desc);
+                        if ($trimmed !== '') {
+                            $billingDescriptions[] = $trimmed;
+                        }
+                    }
+                }
+            }
+        } catch (\Throwable $e) {
+            // Silently ignore in environments without the table/columns
+            $billingTotal = 0.0;
+        }
+
+        // 8) Totals and summary        
+        $additionalTotal = round($foreignTotal + $thesisFee + $lateEnrollmentFee + $newStudentTotal + $billingTotal, 2);                
 
         // Discounts and scholarships aggregation (shape only; totals may remain zero until implemented)
         $ds = $calc->computeDiscountsAndScholarships([
@@ -299,16 +331,19 @@ class TuitionService
         // Compute amount paid for this registration from payment_details
         // Match on payment_details.student_information_id = tb_mas_users.intID
         // Filter by current registration sy_reference, status 'Paid', and Tuition/Reservation descriptions
-        $amountPaid = 0.0;
+        $amountPaid = 0.0;        
         try {
             if (Schema::hasTable('payment_details')) {
                 $amountPaid = (float) DB::table('payment_details')
                     ->where('student_information_id', $user->intID)
                     ->where('sy_reference', $registration->intRegistrationID)
                     ->where('status', 'Paid')
-                    ->where(function ($q) {
+                    ->where(function ($q) use ($billingDescriptions) {
                         $q->where('description', 'like', 'Tuition%')
                           ->orWhere('description', 'like', 'Reservation%');
+                        if (!empty($billingDescriptions)) {
+                            $q->orWhereIn('description', array_values(array_unique($billingDescriptions)));
+                        }
                     })
                     ->sum('subtotal_order');
             }
@@ -341,6 +376,141 @@ class TuitionService
             'summary' => $summary,
             'items'   => $items,
             'meta'    => $meta,
+        ];
+    }
+
+    /**
+     * Save tuition snapshot for a given student (by intID) and term (syid).
+     * Upserts into tb_mas_tuition_saved keyed by (intStudentID,intRegistrationID).
+     * Returns summary of the save.
+     */
+    public function saveSnapshotByStudentId(int $studentId, int $syid, ?int $actorId = null, ?int $discountId = null, ?int $scholarshipId = null): array
+    {
+        // Resolve student
+        $user = DB::table('tb_mas_users')->where('intID', $studentId)->first();
+        if (!$user) {
+            throw new \InvalidArgumentException('Student not found');
+        }
+
+        // Resolve registration for the term
+        $registration = DB::table('tb_mas_registration')
+            ->where('intStudentID', $user->intID)
+            ->where('intAYID', $syid)
+            ->first();
+
+        if (!$registration) {
+            throw new \InvalidArgumentException('Registration not found for term');
+        }
+        if (!($registration->tuition_year ?? null)) {
+            throw new \InvalidArgumentException('Registration missing tuition_year');
+        }
+
+        // Recompute server-side
+        $breakdown = $this->compute(
+            (string) $user->strStudentNumber,
+            (int) $syid,
+            $discountId !== null ? (int) $discountId : null,
+            $scholarshipId !== null ? (int) $scholarshipId : null
+        );
+
+        $now = now()->toDateTimeString();
+        $key = [
+            'intStudentID'      => (int) $user->intID,
+            'intRegistrationID' => (int) $registration->intRegistrationID,
+        ];
+
+        $existing = DB::table('tb_mas_tuition_saved')->where($key)->first();
+
+        if ($existing) {
+            DB::table('tb_mas_tuition_saved')
+                ->where($key)
+                ->update([
+                    'syid'       => (int) $syid,
+                    'payload'    => json_encode($breakdown),
+                    'saved_by'   => $actorId,
+                    'updated_at' => $now,
+                ]);
+            $savedId = (int) $existing->intID;
+            $overwritten = true;
+        } else {
+            $savedId = DB::table('tb_mas_tuition_saved')->insertGetId([
+                'intStudentID'      => (int) $user->intID,
+                'intRegistrationID' => (int) $registration->intRegistrationID,
+                'syid'              => (int) $syid,
+                'payload'           => json_encode($breakdown),
+                'saved_by'          => $actorId,
+                'created_at'        => $now,
+                'updated_at'        => $now,
+            ]);
+            $overwritten = false;
+        }
+
+        // Upon saving tuition, generate or update a tuition invoice linked to this registration.
+        // Use total_due as the amount, pass campus_id/payload, and save current cashier invoice number if available.
+        try {
+            $amount = (float) ($breakdown['summary']['total_due'] ?? 0);
+            if (is_finite($amount)) {
+                // Resolve acting cashier by faculty_id (= $actorId)
+                $cashier = null;
+                if (!empty($actorId)) {
+                    $cashier = DB::table('tb_mas_cashiers')
+                        ->where('faculty_id', (int) $actorId)
+                        ->select('intID', 'campus_id', 'invoice_current')
+                        ->first();
+                }
+
+                $payload = [
+                    'source' => 'tuition-save',
+                    'meta'   => [
+                        'registration_id' => (int) $registration->intRegistrationID,
+                        'syid'            => (int) $syid,
+                        'total_due'       => $amount,
+                    ],
+                ];
+
+                $options = ['payload' => $payload];
+
+                if ($cashier) {
+                    if (isset($cashier->campus_id)) {
+                        $options['campus_id'] = (int) $cashier->campus_id;
+                    }
+                    $options['cashier_id'] = (int) $cashier->intID;
+                    if (!empty($cashier->invoice_current)) {
+                        $options['invoice_number'] = (int) $cashier->invoice_current;
+                    }
+                }
+
+                // Only cashiers can generate/save invoices; skip when no cashier context
+                if ($cashier) {
+                    app(\App\Services\InvoiceService::class)->upsertTuitionByRegistration(
+                        (int) $registration->intRegistrationID,
+                        (int) $user->intID,
+                        (int) $syid,
+                        $amount,
+                        $options,
+                        $actorId
+                    );
+
+                    // Increment the cashier invoice_current if we consumed one
+                    if (!empty($options['invoice_number'])) {
+                        DB::table('tb_mas_cashiers')
+                            ->where('intID', (int) $cashier->intID)
+                            ->update(['invoice_current' => (int)$cashier->invoice_current + 1]);
+                    }
+                }
+            }
+        } catch (\Throwable $e) {
+            // Silently ignore invoice failures to avoid disrupting tuition save.
+        }
+
+        return [
+            'id'                => (int) $savedId,
+            'intStudentID'      => (int) $user->intID,
+            'intRegistrationID' => (int) $registration->intRegistrationID,
+            'syid'              => (int) $syid,
+            'saved_by'          => $actorId,
+            'overwritten'       => $overwritten,
+            'saved_at'          => $now,
         ];
     }
 }

@@ -42,7 +42,7 @@ class FinanceService
             $q->where('t.intAYID', $syid);
         }
 
-        return $q->orderBy('t.dtePaid', 'asc')
+        return $q->orderBy('t.or_date', 'asc')
             ->orderBy('t.intORNumber', 'asc')
             ->select(
                 't.intTransactionID',
@@ -50,7 +50,8 @@ class FinanceService
                 't.strTransactionType',
                 't.intAmountPaid',
                 't.intORNumber',
-                't.dtePaid'
+                't.or_date',
+                't.pmethod'
             )
             ->get()
             ->map(function ($t) {
@@ -58,10 +59,10 @@ class FinanceService
                     'id'             => $t->intTransactionID,
                     'student_number' => $t->strStudentNumber,
                     'type'           => $t->strTransactionType,
-                    'method'         => null,
+                    'method'         => $t->pmethod,
                     'amount'         => (float) $t->intAmountPaid,
                     'or_no'          => $t->intORNumber,
-                    'posted_at'      => $t->dtePaid,
+                    'posted_at'      => $t->or_date,
                     'remarks'        => null,
                 ];
             })
@@ -207,7 +208,33 @@ class FinanceService
         }
 
         $registrationId = (int) $registration->intRegistrationID;
-
+        
+        //get billing descriptions
+        $billingDescriptions = [];
+        try {
+            if (Schema::hasTable('tb_mas_student_billing')) {                
+                $billingRows = DB::table('tb_mas_student_billing')
+                    ->where('intStudentID', $studentId)
+                    ->where('syid', $syid)
+                    ->orderBy('posted_at', 'desc')
+                    ->orderBy('intID', 'desc')
+                    ->get();                                
+                foreach ($billingRows as $br) {
+                    $desc = (string) ($br->description ?? '');
+                    $amt  = round((float) ($br->amount ?? 0), 2);
+                    if ($desc !== '' && $amt != 0.0) {
+                        // Collect billing descriptions for matching payments
+                        $trimmed = trim($desc);
+                        if ($trimmed !== '') {
+                            $billingDescriptions[] = $trimmed;
+                        }
+                    }
+                }
+            }
+        }catch (\Throwable $e) {            
+            // Silently ignore in environments without the table/columns
+            $billingTotal = 0.0;
+        }        
         // Ensure payment_details table exists
         if (!Schema::hasTable('payment_details')) {
             return $empty($studentNumber, $registrationId, $syid, $syLabel);
@@ -225,7 +252,7 @@ class FinanceService
         // Optional columns detection
         $hasOrNo   = Schema::hasColumn('payment_details', 'or_no') ? 'or_no' :
                      (Schema::hasColumn('payment_details', 'or_number') ? 'or_number' : null);
-        $hasMethod = Schema::hasColumn('payment_details', 'method') ? 'method' :
+        $hasMethod = Schema::hasColumn('payment_details', 'pmethod') ? 'pmethod' :
                      (Schema::hasColumn('payment_details', 'payment_method') ? 'payment_method' : null);
         // Prefer 'paid_at' then 'date' then 'created_at'
         $hasDate   = Schema::hasColumn('payment_details', 'paid_at') ? 'paid_at' :
@@ -246,16 +273,19 @@ class FinanceService
 
         $totalPaidFiltered = (float) (clone $base)
             ->where('status', 'Paid')
-            ->where(function ($q) {
+            ->where(function ($q)  use ($billingDescriptions) {
                 $q->where('description', 'like', 'Tuition%')
                   ->orWhere('description', 'like', 'Reservation%');
+                  if (!empty($billingDescriptions)) {
+                    $q->orWhereIn('description', array_values(array_unique($billingDescriptions)));
+                  }
             })
             ->sum('subtotal_order');
 
         $countRows = (int) (clone $base)->count();
 
         // Build select list (with null fallbacks for optional columns)
-        $select = ['id', 'description', 'subtotal_order', 'status', 'sy_reference'];
+        $select = ['id', 'description', 'subtotal_order', 'status', 'sy_reference','or_date'];
         if ($hasOrNo) {
             $select[] = $hasOrNo . ' as or_no';
         } else {
@@ -289,7 +319,7 @@ class FinanceService
         $rows = $q->get()->map(function ($r) use ($syid, $syLabel) {
             return [
                 'id'            => (int) $r->id,
-                'posted_at'     => $r->posted_at !== null ? (string) $r->posted_at : null,
+                'posted_at'     => $r->or_date !== null ? (string) $r->or_date : null,
                 'or_no'         => $r->or_no !== null ? $r->or_no : null,
                 'description'   => $r->description !== null ? (string) $r->description : null,
                 'subtotal_order'=> isset($r->subtotal_order) ? (float) $r->subtotal_order : 0.0,

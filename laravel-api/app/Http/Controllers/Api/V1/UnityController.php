@@ -15,6 +15,7 @@ use App\Services\RegistrationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Cashier;
 
 class UnityController extends Controller
 {
@@ -396,6 +397,74 @@ class UnityController extends Controller
                     'updated_at'        => $now,
                 ]);
                 $overwritten = false;
+            }
+
+            // Generate or update tuition invoice linked to this registration.
+            // Amount is the computed total_due from tuition breakdown.
+            try {
+                $amount = (float) ($breakdown['summary']['total_due'] ?? 0);
+                if (is_finite($amount)) {
+                    // Resolve acting cashier (by faculty/actor id)
+                    $cashier = $actorId ? Cashier::query()->where('faculty_id', (int)$actorId)->first() : null;
+
+                    // Build payload and options
+                    $payload = [
+                        'source' => 'tuition-save',
+                        'meta' => [
+                            'registration_id' => (int) $registration->intRegistrationID,
+                            'syid'            => (int) $syid,
+                            'total_due'       => $amount,
+                        ],
+                    ];
+
+                    $options = [
+                        'payload' => $payload,
+                    ];
+
+                    // Default campus_id precedence: request input -> X-Campus-ID header -> cashier campus
+                    $reqCampus = $request->input('campus_id');
+                    if ($reqCampus !== null && $reqCampus !== '' && is_numeric($reqCampus)) {
+                        $options['campus_id'] = (int) $reqCampus;
+                    } else {
+                        $hdrCampus = $request->header('X-Campus-ID');
+                        if ($hdrCampus !== null && $hdrCampus !== '' && is_numeric($hdrCampus)) {
+                            $options['campus_id'] = (int) $hdrCampus;
+                        }
+                    }
+
+                    if ($cashier) {
+                        // Only use cashier campus if campus_id still not resolved
+                        if (!array_key_exists('campus_id', $options) || $options['campus_id'] === null || $options['campus_id'] === '') {
+                            if (isset($cashier->campus_id)) {
+                                $options['campus_id'] = (int) $cashier->campus_id;
+                            }
+                        }
+                        $options['cashier_id'] = (int) $cashier->intID;
+                        if (!empty($cashier->invoice_current)) {
+                            $options['invoice_number'] = (int) $cashier->invoice_current;
+                        }
+                    }
+
+                    // Only cashiers can generate/save invoices; skip when no cashier context
+                    if ($cashier) {
+                        app(\App\Services\InvoiceService::class)->upsertTuitionByRegistration(
+                            (int) $registration->intRegistrationID,
+                            (int) $user->intID,
+                            (int) $syid,
+                            $amount,
+                            $options,
+                            $actorId
+                        );
+
+                        // Increment cashier's invoice_current if we consumed one
+                        if (!empty($options['invoice_number'])) {
+                            $cashier->invoice_current = (int)$cashier->invoice_current + 1;
+                            $cashier->save();
+                        }
+                    }
+                }
+            } catch (\Throwable $e) {
+                // Do not block tuition save if invoice upsert fails
             }
 
             return response()->json([

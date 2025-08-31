@@ -5,8 +5,8 @@
     .module('unityApp')
     .controller('CashiersController', CashiersController);
 
-  CashiersController.$inject = ['$location', '$window', '$scope', 'StorageService', 'CashiersService', 'CampusService', 'StudentsService'];
-  function CashiersController($location, $window, $scope, StorageService, CashiersService, CampusService, StudentsService) {
+  CashiersController.$inject = ['$location', '$window', '$scope', 'StorageService', 'CashiersService', 'CampusService', 'StudentsService', '$injector', 'PaymentDescriptionsService'];
+  function CashiersController($location, $window, $scope, StorageService, CashiersService, CampusService, StudentsService, $injector, PaymentDescriptionsService) {
     var vm = this;
 
     vm.title = 'Cashier Administration';
@@ -32,6 +32,58 @@
     vm.editing = {}; // { [id]: { or_start, or_end, invoice_start, invoice_end, campus_id } }
     vm.assigning = {}; // { [id]: { query, results:[], selected:null, loading:false } }
     vm.payments = {}; // { [id]: { open, students:[], selected_student:null, term:null, mode:'or'|'invoice', amount:null, description:'', method:'', remarks:'', posted_at:'', loading:false } }
+
+    // Payment Descriptions (dropdown source)
+    vm.paymentDescriptionOptions = [];
+    vm.loadPaymentDescriptions = function () {
+      try {
+        var svc = null;
+        try { svc = PaymentDescriptionsService; } catch (e) {}
+        if (!svc && $injector && typeof $injector.has === 'function' && $injector.has('PaymentDescriptionsService')) {
+          svc = $injector.get('PaymentDescriptionsService');
+        }
+
+        var defaults = ['Tuition Fee', 'Reservation Payment', 'Application Payment'];
+
+        function dedup(list) {
+          var out = [];
+          var seen = {};
+          for (var i = 0; i < list.length; i++) {
+            var s = ('' + list[i]).trim();
+            if (!s) continue;
+            var key = s.toLowerCase();
+            if (!seen[key]) { seen[key] = true; out.push(s); }
+          }
+          return out;
+        }
+
+        if (!svc || !svc.list) {
+          vm.paymentDescriptionOptions = dedup(defaults.concat(vm.paymentDescriptionOptions || []));
+          return;
+        }
+
+        return svc.list({ per_page: 1000 })
+          .then(function (res) {
+            var items = (res && res.data) ? res.data : (Array.isArray(res) ? res : []);
+            var names = [];
+            if (Array.isArray(items)) {
+              for (var i = 0; i < items.length; i++) {
+                var it = items[i];
+                if (it && it.name) names.push(('' + it.name).trim());
+              }
+            }
+            vm.paymentDescriptionOptions = dedup(defaults.concat(names));
+          })
+          .catch(function () {
+            vm.paymentDescriptionOptions = dedup(defaults);
+          });
+      } catch (e) {
+        vm.paymentDescriptionOptions = ['Tuition Fee', 'Reservation Payment', 'Application Payment'];
+      }
+    };
+
+    // Preload once on controller init (non-blocking)
+    try { vm.loadPaymentDescriptions(); } catch (e) {}
 
     vm.load = function () {
       vm.loading = true;
@@ -262,6 +314,7 @@
     vm.openPayment = function (row) {
       vm.error = null;
       vm.success = null;
+      try { vm.loadPaymentDescriptions(); } catch (e) {}
       var defaultMode = (row && row.or && row.or.current) ? 'or' : 'invoice';
       vm.payments[row.id] = {
         open: true,

@@ -78,6 +78,17 @@
       paymentDetails: function (params) {
         // params: { student_number: string, term: int }
         return $http.get(BASE + '/finance/payment-details', Object.assign({ params: params }, _adminHeaders())).then(_unwrap);
+      },
+
+      // Invoices: list invoices (filter by registration_id, type, etc.)
+      invoicesList: function (params) {
+        return $http.get(BASE + '/finance/invoices', Object.assign({ params: params }, _adminHeaders())).then(_unwrap);
+      },
+
+      // Invoices: generate a new invoice
+      invoicesGenerate: function (payload) {
+        // payload: { type: 'tuition'|'billing'|'other', student_id: number, term: number, registration_id?: number, ... }
+        return $http.post(BASE + '/finance/invoices/generate', payload, _adminHeaders()).then(_unwrap);
       }
     };
   }

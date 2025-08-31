@@ -9,11 +9,18 @@
   select2Directive.$inject = ['$timeout'];
   function select2Directive($timeout) {
     return {
-      restrict: 'A',
+      restrict: 'AC',
       require: 'ngModel',
       scope: {
         // Optional: pass a watched collection/expr to re-init select2 when options change
-        select2Watch: '=?'
+        select2Watch: '=?',
+
+        // ng-select2-component-like bindings (optional)
+        select2Data: '=?',          // [{id, text}] option source when not using ng-options
+        select2Value: '=?',         // two-way value proxy
+        onValueChanged: '&?',       // callback({ value })
+        onOpened: '&?',             // callback()
+        onClosed: '&?'              // callback()
       },
       link: function (scope, element, attrs, ngModel) {
         // Helpers to map between Angular ngOptions option value strings and model/view values
@@ -58,6 +65,8 @@
             return val;
           }
         }
+        var hasNgOptions = typeof attrs.ngOptions !== 'undefined';
+
         function init() {
           $timeout(function () {
             try {
@@ -73,11 +82,35 @@
 
               // Initialize
               var allowClear = (typeof attrs.select2AllowClear !== 'undefined');
-              jQuery(element).select2({
+
+              // If external data array is provided and ng-options is NOT used, rebuild <option> list
+              if (Array.isArray(scope.select2Data) && !hasNgOptions) {
+                try {
+                  var keepVal = ngModel.$viewValue;
+                  jQuery(element).empty();
+                  // add empty option to support placeholder/allowClear
+                  if (placeholder || allowClear) {
+                    jQuery(element).append(jQuery('<option>').val('').text(''));
+                  }
+                  scope.select2Data.forEach(function (item) {
+                    if (item && (item.id !== undefined) && (item.text !== undefined)) {
+                      var $opt = jQuery('<option>').val(item.id).text(item.text);
+                      jQuery(element).append($opt);
+                    }
+                  });
+                  if (keepVal !== undefined && keepVal !== null && keepVal !== '') {
+                    jQuery(element).val(keepVal);
+                  }
+                } catch (e) {}
+              }
+
+              var select2Opts = {
                 width: '100%',
                 placeholder: placeholder || '',
                 allowClear: allowClear
-              });
+              };
+
+              jQuery(element).select2(select2Opts);
 
               // Apply relevant tailwind layout classes (margin/width/display) from the hidden select to the visible container
               try {
@@ -102,6 +135,32 @@
                     // Pass the raw DOM value so Angular's select/ngOptions pipeline converts it to model
                     ngModel.$setViewValue(current);
                   }
+                  // Mirror to select2Value if bound
+                  if (typeof scope.select2Value !== 'undefined') {
+                    scope.select2Value = current;
+                  }
+                  // Fire callback if provided
+                  if (attrs.onValueChanged && typeof scope.onValueChanged === 'function') {
+                    try {
+                      scope.onValueChanged({ value: current });
+                    } catch (e) {}
+                  }
+                });
+              });
+
+              // Open/Close callbacks
+              jQuery(element).off('select2:open.select2ext').on('select2:open.select2ext', function () {
+                scope.$applyAsync(function () {
+                  if (attrs.onOpened && typeof scope.onOpened === 'function') {
+                    try { scope.onOpened(); } catch (e) {}
+                  }
+                });
+              });
+              jQuery(element).off('select2:close.select2ext').on('select2:close.select2ext', function () {
+                scope.$applyAsync(function () {
+                  if (attrs.onClosed && typeof scope.onClosed === 'function') {
+                    try { scope.onClosed(); } catch (e) {}
+                  }
                 });
               });
 
@@ -117,6 +176,25 @@
         scope.$watch('select2Watch', function () {
           init();
         }, true);
+
+        // Reinitialize when external data array changes
+        scope.$watch('select2Data', function () {
+          init();
+        }, true);
+
+        // Keep select2 in sync when proxy value changes
+        scope.$watch('select2Value', function (nv, ov) {
+          if (nv === ov) return;
+          $timeout(function () {
+            try {
+              var current = jQuery(element).val();
+              if (nv !== undefined && current !== nv) {
+                ngModel.$setViewValue(nv);
+                jQuery(element).val(nv).trigger('change.select2');
+              }
+            } catch (e) {}
+          });
+        });
 
         // Watch model changes and update the UI (only when different to avoid loops)
         scope.$watch(function () { return ngModel.$viewValue; }, function () {
