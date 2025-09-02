@@ -2548,8 +2548,8 @@ class Unity extends CI_Controller {
         $post = $this->input->post();
         //print_r($post);
         $subject = $this->data_fetcher->getSubjectNoCurr($post['intSubjectID']);
-        $post['strUnits'] = $subject['strUnits'];                                     
-        $this->data_poster->log_action('Classlist','Added a new Classlist '.$post['strClassName'],'green');
+        $post['strUnits'] = $subject['strUnits'];                          
+        $this->data_poster->log_action('Classlist','Added a new Classlist '.$post['strClassName'] . '-' . $subject['strCode'],'green');
         $this->data_poster->post_data('tb_mas_classlist',$post);
         redirect(base_url()."unity/faculty_classlists");
             
@@ -2705,7 +2705,7 @@ class Unity extends CI_Controller {
                 foreach($st as $s)
                 {
                     $p['intStudentID'] = $s;
-                    $p['intClassLIstID'] = $post['intID'];
+                    $p['intClassListID'] = $post['intID'];
                     $p['date_added'] = $date;
                     $p['enlisted_user'] = $this->data["user"]["intID"];
                    
@@ -2726,7 +2726,7 @@ class Unity extends CI_Controller {
                 {
 
                     $p['intStudentID'] = $st['intID'];
-                    $p['intClassLIstID'] = $post['intID'];
+                    $p['intClassListID'] = $post['intID'];
                     $p['date_added'] = $date;
                     $p['enlisted_user'] = $this->data["user"]["intID"];
                     $t = $this->data_fetcher->getCS($st['intID'],$post['intID']);
@@ -2747,8 +2747,10 @@ class Unity extends CI_Controller {
         {
             $subject = $this->data_fetcher->getSubjectPlain($post['intSubjectID']);
             $post['strClassName'] = $subject['strCode'];
+            $this->data_poster->log_action('Classlist','Update a classlist '. $post['strClassName'] . '-' . $subject['strCode'] ,'green');
         }
         $this->data_poster->post_data('tb_mas_classlist',$post,$post['intID']);
+        
         //redirect(base_url()."unity/view_classlist");
         redirect(base_url()."unity/classlist_viewer/". $post['intID']);
             
