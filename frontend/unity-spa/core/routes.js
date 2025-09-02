@@ -98,6 +98,54 @@
       .when("/admissions/success", {
         templateUrl: "features/admissions/success.html",
       })
+      .when("/admissions/requirements", {
+        templateUrl: "features/admissions/requirements/list.html",
+        controller: "RequirementsController",
+        controllerAs: "vm",
+        requiredRoles: ["admissions", "admin"],
+      })
+      .when("/admissions/requirements/new", {
+        templateUrl: "features/admissions/requirements/edit.html",
+        controller: "RequirementEditController",
+        controllerAs: "vm",
+        requiredRoles: ["admissions", "admin"],
+      })
+      .when("/admissions/requirements/:id/edit", {
+        templateUrl: "features/admissions/requirements/edit.html",
+        controller: "RequirementEditController",
+        controllerAs: "vm",
+        requiredRoles: ["admissions", "admin"],
+      })
+      .when("/admissions/previous-schools", {
+        templateUrl: "features/admissions/previous-schools/list.html",
+        controller: "PreviousSchoolsController",
+        controllerAs: "vm",
+        requiredRoles: ["admissions", "admin"],
+      })
+      .when("/admissions/previous-schools/new", {
+        templateUrl: "features/admissions/previous-schools/edit.html",
+        controller: "PreviousSchoolEditController",
+        controllerAs: "vm",
+        requiredRoles: ["admissions", "admin"],
+      })
+      .when("/admissions/previous-schools/:id/edit", {
+        templateUrl: "features/admissions/previous-schools/edit.html",
+        controller: "PreviousSchoolEditController",
+        controllerAs: "vm",
+        requiredRoles: ["admissions", "admin"],
+      })
+      .when("/admissions/applicants", {
+        templateUrl: "features/admissions/applicants/list.html",
+        controller: "ApplicantsListController",
+        controllerAs: "vm",
+        requiredRoles: ["admissions", "admin"],
+      })
+      .when("/admissions/applicants/:id", {
+        templateUrl: "features/admissions/applicants/view.html",
+        controller: "ApplicantViewController",
+        controllerAs: "vm",
+        requiredRoles: ["admissions", "admin"],
+      })
 
       /* Campuses CRUD */
       .when("/campuses", {

@@ -1,0 +1,155 @@
+<div class="space-y-6">
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-semibold text-gray-800">Applicant Details</h1>
+      <p class="text-sm text-gray-500" ng-if="vm.user">ID: {{ vm.user.intID }}</p>
+    </div>
+    <div class="flex items-center space-x-2">
+      <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium border"
+            ng-class="{
+              'bg-gray-100 text-gray-800 border-gray-200': (vm.status || 'new') === 'new',
+              'bg-yellow-100 text-yellow-800 border-yellow-200': vm.status === 'reserved' || vm.status === 'interviewed',
+              'bg-green-100 text-green-800 border-green-200': vm.status === 'paid' || vm.status === 'enrolled'
+            }">
+        {{ vm.status || 'new' }}
+      </span>
+      <button class="inline-flex items-center px-3 py-2 bg-gray-100 text-gray-700 text-sm rounded-md hover:bg-gray-200"
+              ng-click="vm.backToList()">
+        Back
+      </button>
+    </div>
+  </div>
+
+  <!-- Alerts -->
+  <div class="rounded-md bg-red-50 p-4 border border-red-200" ng-if="vm.error">
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-.75-10.75a.75.75 0 011.5 0v4.5a.75.75 0 11-1.5 0v-4.5zm.75 7a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+        </svg>
+      </div>
+      <div class="ml-3">
+        <h3 class="text-sm font-medium text-red-800">Error</h3>
+        <div class="mt-2 text-sm text-red-700">{{ vm.error }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Skeleton/loading -->
+  <div ng-if="vm.loading" class="space-y-4">
+    <div class="animate-pulse h-6 bg-gray-200 rounded w-1/3"></div>
+    <div class="animate-pulse h-4 bg-gray-200 rounded w-1/2"></div>
+    <div class="animate-pulse h-64 bg-gray-100 rounded"></div>
+  </div>
+
+  <!-- Content -->
+  <div ng-if="!vm.loading && vm.user" class="space-y-6">
+    <!-- Core details -->
+    <div class="bg-white shadow-sm border border-gray-200 rounded-lg">
+      <div class="border-b border-gray-200 px-4 py-3">
+        <h2 class="text-lg font-semibold text-gray-800">Core Information</h2>
+      </div>
+      <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-medium text-gray-500">Name</label>
+          <div class="text-sm text-gray-900 font-medium">
+            {{ (vm.user.strLastname || '') | uppercase }}<span ng-if="vm.user.strLastname && vm.user.strFirstname">, </span>{{ vm.user.strFirstname || '' }}
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500">Email</label>
+          <div class="text-sm text-gray-900">{{ vm.user.strEmail || '-' }}</div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500">Mobile</label>
+          <div class="text-sm text-gray-900">{{ vm.user.strMobileNumber || vm.user.strPhoneNumber || '-' }}</div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500">Campus</label>
+          <div class="text-sm text-gray-900">{{ vm.user.campus || '-' }}</div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500">Student Type</label>
+          <div class="text-sm text-gray-900">{{ vm.user.student_type || '-' }}</div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500">Created</label>
+          <div class="text-sm text-gray-900">
+            <span ng-if="vm.created_at">{{ vm.created_at | date:'medium' }}</span>
+            <span ng-if="!vm.created_at">{{ vm.user.dteCreated || '-' }}</span>
+          </div>
+        </div>
+        <div ng-if="vm.updated_at">
+          <label class="block text-xs font-medium text-gray-500">Last Updated</label>
+          <div class="text-sm text-gray-900">{{ vm.updated_at | date:'medium' }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Known fields from applicant_data -->
+    <div class="bg-white shadow-sm border border-gray-200 rounded-lg">
+      <div class="border-b border-gray-200 px-4 py-3">
+        <h2 class="text-lg font-semibold text-gray-800">Application Data</h2>
+      </div>
+
+      <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-medium text-gray-500">Program (type_id)</label>
+          <div class="text-sm text-gray-900">{{ (vm.applicant_data && (vm.applicant_data.type || vm.applicant_data.program || vm.applicant_data.type_id)) || '-' }}</div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500">Gender</label>
+          <div class="text-sm text-gray-900">{{ (vm.applicant_data && vm.applicant_data.gender) || vm.user.enumGender || '-' }}</div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500">Date of Birth</label>
+          <div class="text-sm text-gray-900">
+            <span ng-if="vm.applicant_data && vm.applicant_data.date_of_birth">{{ vm.applicant_data.date_of_birth | date:'mediumDate' }}</span>
+            <span ng-if="!(vm.applicant_data && vm.applicant_data.date_of_birth)">{{ vm.user.dteBirthDate || '-' }}</span>
+          </div>
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-xs font-medium text-gray-500">Address</label>
+          <div class="text-sm text-gray-900">
+            <span ng-if="vm.user.strAddress">{{ vm.user.strAddress }}</span>
+            <span ng-if="!vm.user.strAddress">
+              {{ vm.applicant_data && (vm.applicant_data.address || vm.applicant_data.city || vm.applicant_data.state || vm.applicant_data.province || vm.applicant_data.country) ? '' : '-' }}
+              <span ng-if="vm.applicant_data && vm.applicant_data.address">{{ vm.applicant_data.address }}</span>
+              <span ng-if="vm.applicant_data && vm.applicant_data.city">, {{ vm.applicant_data.city }}</span>
+              <span ng-if="vm.applicant_data && (vm.applicant_data.state || vm.applicant_data.province)">, {{ vm.applicant_data.state || vm.applicant_data.province }}</span>
+              <span ng-if="vm.applicant_data && vm.applicant_data.country">, {{ vm.applicant_data.country }}</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Organized Application Data -->
+      <div class="px-4 pb-2" ng-if="vm.sections && vm.sections.length">
+        <div class="space-y-4">
+          <div class="border border-gray-200 rounded-lg" ng-repeat="section in vm.sections">
+            <div class="px-4 py-2 border-b border-gray-200 bg-gray-50">
+              <h3 class="text-sm font-semibold text-gray-800">{{ section.title }}</h3>
+            </div>
+            <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div ng-repeat="item in section.items">
+                <label class="block text-xs font-medium text-gray-500">{{ item.label }}</label>
+                <div class="text-sm text-gray-900 whitespace-pre-wrap break-words" ng-bind="item.value"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Raw JSON pretty print -->
+      <div class="px-4 pb-4">
+        <details class="rounded border border-gray-200">
+          <summary class="cursor-pointer select-none px-4 py-2 bg-gray-50 text-sm font-medium text-gray-700">
+            Raw applicant_data JSON
+          </summary>
+          <pre class="overflow-auto text-xs bg-gray-900 text-green-200 p-4"><code>{{ vm.applicant_data | json }}</code></pre>
+        </details>
+      </div>
+    </div>
+  </div>
+</div>

@@ -5,9 +5,9 @@
     .module('unityApp')
     .controller('AdmissionsApplyController', AdmissionsApplyController);
 
-  AdmissionsApplyController.$inject = ['$http', '$location', 'APP_CONFIG', '$q', 'CampusService', 'SchoolYearsService', 'ProgramsService', '$scope'];
+  AdmissionsApplyController.$inject = ['$http', '$location', 'APP_CONFIG', '$q', 'CampusService', 'SchoolYearsService', 'ProgramsService', 'TuitionYearsService', 'PreviousSchoolsService', '$scope'];
 
-  function AdmissionsApplyController($http, $location, APP_CONFIG, $q, CampusService, SchoolYearsService, ProgramsService, $scope) {
+  function AdmissionsApplyController($http, $location, APP_CONFIG, $q, CampusService, SchoolYearsService, ProgramsService, TuitionYearsService, PreviousSchoolsService, $scope) {
     var vm = this;
 
     vm.loading = false;
@@ -25,6 +25,10 @@
     vm.loadingTerms = false;
     vm.programLoading = false;
 
+    // Educational Background state
+    vm.previousSchools = [];
+    vm.educ = { notOnList: false, selected: null };
+
     vm.form = {
       // Basic Info
       first_name: '',
@@ -41,21 +45,65 @@
       address: '',
       city: '',
       province: '',
-      country: '',
+      country: 'Philippines',
+      // Educational Background
+      previous_school_id: null,
+      previous_school_name: '',
+      previous_school_city: '',
+      previous_school_province: '',
+      previous_school_country: 'Philippines',
+      grade_year_level: '',
+      program_strand_degree: '',
+      lrn_number: '',
+      // Additional Information
+      good_moral_standing: null,
+      illegal_activities_involved: null,
+      hospitalized_before: null,
+      health_conditions: { diabetes: false, allergies: false, high_blood: false, anemia: false, others: false, others_specify: '' },
+      other_health_concerns: '',
       // Program / Type
       student_type: '',  // selected term_student_type
       type_id: '',       // program (first choice)
       campus: '',        // kept for backend compatibility (filled on submit)
       term: null,        // tb_mas_sy.intID (selected term)
-      campus_id: null    // kept for backend completeness (filled on submit)
+      campus_id: null,   // kept for backend completeness (filled on submit)
+      intTuitionYear: null // resolved after selecting student level
     };
 
     vm.genders = ['Male', 'Female'];
-
+    // Countries for dropdown (sorted alphabetically by name)
+    vm.countries = [
+      'Afghanistan','Albania','Algeria','Andorra','Angola','Antigua and Barbuda','Argentina','Armenia','Australia','Austria',
+      'Azerbaijan','Bahamas','Bahrain','Bangladesh','Barbados','Belarus','Belgium','Belize','Benin','Bhutan',
+      'Bolivia','Bosnia and Herzegovina','Botswana','Brazil','Brunei','Bulgaria','Burkina Faso','Burundi','Cabo Verde','Cambodia',
+      'Cameroon','Canada','Central African Republic','Chad','Chile','China','Colombia','Comoros','Congo','Costa Rica',
+      "Cote d'Ivoire",'Croatia','Cuba','Cyprus','Czechia (Czech Republic)','Democratic Republic of the Congo','Denmark','Djibouti','Dominica','Dominican Republic',
+      'Ecuador','Egypt','El Salvador','Equatorial Guinea','Eritrea','Estonia','Eswatini','Ethiopia','Fiji','Finland',
+      'France','Gabon','Gambia','Georgia','Germany','Ghana','Greece','Grenada','Guatemala','Guinea',
+      'Guinea-Bissau','Guyana','Haiti','Holy See','Honduras','Hungary','Iceland','India','Indonesia','Iran',
+      'Iraq','Ireland','Israel','Italy','Jamaica','Japan','Jordan','Kazakhstan','Kenya','Kiribati',
+      'Kuwait','Kyrgyzstan','Laos','Latvia','Lebanon','Lesotho','Liberia','Libya','Liechtenstein','Lithuania',
+      'Luxembourg','Madagascar','Malawi','Malaysia','Maldives','Mali','Malta','Marshall Islands','Mauritania','Mauritius',
+      'Mexico','Micronesia','Moldova','Monaco','Mongolia','Montenegro','Morocco','Mozambique','Myanmar (formerly Burma)','Namibia',
+      'Nauru','Nepal','Netherlands','New Zealand','Nicaragua','Niger','Nigeria','North Korea','North Macedonia','Norway',
+      'Oman','Pakistan','Palau','Panama','Papua New Guinea','Paraguay','Peru','Philippines','Poland','Portugal',
+      'Qatar','Romania','Russia','Rwanda','Saint Kitts and Nevis','Saint Lucia','Saint Vincent and the Grenadines','Samoa','San Marino','Sao Tome and Principe',
+      'Saudi Arabia','Senegal','Serbia','Seychelles','Sierra Leone','Singapore','Slovakia','Slovenia','Solomon Islands','Somalia',
+      'South Africa','South Korea','South Sudan','Spain','Sri Lanka','Sudan','Suriname','Sweden','Switzerland','Syria',
+      'Taiwan','Tajikistan','Tanzania','Thailand','Timor-Leste','Togo','Tonga','Trinidad and Tobago','Tunisia','Turkey',
+      'Turkmenistan','Tuvalu','Uganda','Ukraine','United Arab Emirates','United Kingdom','United States','Uruguay','Uzbekistan','Vanuatu',
+      'Venezuela','Vietnam','Yemen','Zambia','Zimbabwe'
+    ];
+    if (Array.isArray(vm.countries)) {
+      vm.countries = vm.countries.slice().sort(function(a, b) { return ('' + a).localeCompare(b); });
+    }
     vm.submit = submit;
     vm.onCampusChange = onCampusChange;
     vm.onTermTypeChange = onTermTypeChange;
     vm.loadProgramsForSelection = loadProgramsForSelection;
+    vm.loadPreviousSchools = loadPreviousSchools;
+    vm.onPreviousSchoolChange = onPreviousSchoolChange;
+    vm.toggleNotOnList = toggleNotOnList;
 
     activate();
 
@@ -76,6 +124,11 @@
       // Defer program loading until a student level is selected
       var loadPrograms = $q.resolve().then(function () {
         vm.programs = [];
+      });
+
+      // Load previous schools for Educational Background section
+      var loadPrevSchools = $q.resolve().then(function () {
+        return vm.loadPreviousSchools();
       });
 
       var initCampuses = (CampusService && CampusService.init ? CampusService.init() : $q.resolve(null))
@@ -105,7 +158,7 @@
           return [];
         });
 
-      $q.all([loadPrograms, initCampuses])
+      $q.all([loadPrograms, initCampuses, loadPrevSchools])
         .finally(function () {
           vm.loading = false;
         });
@@ -146,18 +199,24 @@
       payload.campus_id = vm.selectedCampus ? vm.selectedCampus.id : null;
       payload.term = vm.form.term || null; // tb_mas_sy.intID
 
+      // Attach previously resolved tuition year id (loaded on student level selection)
+      var tyid = (vm.form.intTuitionYear !== undefined && vm.form.intTuitionYear !== null && vm.form.intTuitionYear !== '')
+        ? parseInt(vm.form.intTuitionYear, 10)
+        : null;
+      payload.intTuitionYear = isNaN(tyid) ? null : tyid;
+
       vm.loading = true;
+
       $http.post(APP_CONFIG.API_BASE + '/admissions/student-info', payload)
         .then(function (resp) {
-          if (resp.data && resp.data.success) {
-            // Redirect to success page
+          if (resp && resp.data && resp.data.success) {
             $location.path('/admissions/success');
           } else {
-            vm.error = (resp.data && resp.data.message) || 'Submission failed.';
+            vm.error = (resp && resp.data && resp.data.message) || 'Submission failed.';
           }
         })
         .catch(function (err) {
-          vm.error = (err.data && err.data.message) || 'Submission failed.';
+          vm.error = (err && err.data && err.data.message) || 'Submission failed.';
           console.error('Submission error', err);
         })
         .finally(function () {
@@ -172,12 +231,14 @@
         vm.termOptions = [];
         vm.form.student_type = '';
         vm.form.term = null;
+        vm.form.intTuitionYear = null;
         return;
       }
       // Reset selections and reload
       vm.form.student_type = '';
       vm.form.term = null;
       vm.form.type_id = '';
+      vm.form.intTuitionYear = null;
       loadCampusTerms(vm.selectedCampus.id);
       try { vm.loadProgramsForSelection(); } catch (e) {}
     }
@@ -208,6 +269,8 @@
       // Reset program and reload programs based on new selection
       vm.form.type_id = '';
       try { vm.loadProgramsForSelection(); } catch (e) {}
+      // Load default tuition year id for this student level
+      try { loadDefaultTuitionYearForSelectedStudentType(); } catch (e) { vm.form.intTuitionYear = null; }
     }
 
     // Helpers
@@ -283,6 +346,38 @@
       return null;
     }
 
+    // Resolve and store default tuition year id after selecting student level
+    function loadDefaultTuitionYearForSelectedStudentType() {
+      var stype = (vm.form.student_type || '').toLowerCase();
+      var isShs = stype.indexOf('shs') !== -1;
+      var isCollegeOrGrad = (stype.indexOf('college') !== -1) || (stype.indexOf('grad') !== -1) || (stype.indexOf('graduate') !== -1);
+
+      var listPromise;
+      if (isCollegeOrGrad) {
+        listPromise = TuitionYearsService.list({ default: true });
+      } else if (isShs) {
+        listPromise = TuitionYearsService.list({ defaultShs: true });
+      } else {
+        listPromise = $q.resolve([]);
+      }
+
+      return $q.when(listPromise)
+        .then(function (body) {
+          var rows = (body && body.data) ? body.data : (Array.isArray(body) ? body : []);
+          var def = rows && rows.length ? rows[0] : null;
+          var id = def ? (def.intID || def.id || def.tuitionYearID || def.tuitionyear_id || def.tuition_year_id) : null;
+          vm.form.intTuitionYear = (id !== null && id !== undefined && id !== '') ? (function () {
+            var n = parseInt(id, 10);
+            return isNaN(n) ? null : n;
+          })() : null;
+          return vm.form.intTuitionYear;
+        })
+        .catch(function () {
+          vm.form.intTuitionYear = null;
+          return null;
+        });
+    }
+
     function loadProgramsForSelection() {
       // Do not load programs until a student level is selected
       if (!vm.form.student_type) {
@@ -339,6 +434,60 @@
         .finally(function () {
           vm.programLoading = false;
         });
+    }
+
+    // Educational Background helpers
+    function loadPreviousSchools() {
+      return $q.when(PreviousSchoolsService && PreviousSchoolsService.publicList ? PreviousSchoolsService.publicList({ per_page: 500 }) : [])
+        .then(function (body) {
+          var rows = (body && body.data) ? body.data : (Array.isArray(body) ? body : []);
+          vm.previousSchools = rows.map(function (r) {
+            var d = r && r.data ? r.data : r;
+            return {
+              id: d.intID || d.id,
+              intID: d.intID || d.id,
+              name: d.name || '',
+              city: d.city || '',
+              province: d.province || '',
+              country: d.country || ''
+            };
+          });
+          return vm.previousSchools;
+        })
+        .catch(function () {
+          vm.previousSchools = [];
+          return [];
+        });
+    }
+
+    function onPreviousSchoolChange() {
+      var sel = vm.educ ? vm.educ.selected : null;
+      if (sel && (sel.id !== undefined && sel.id !== null)) {
+        vm.form.previous_school_id = sel.intID || sel.id;
+        vm.form.previous_school_name = sel.name || '';
+        vm.form.previous_school_city = sel.city || '';
+        vm.form.previous_school_province = sel.province || '';
+        vm.form.previous_school_country = sel.country || '';
+      } else {
+        vm.form.previous_school_id = null;
+        if (!vm.educ || !vm.educ.notOnList) {
+          vm.form.previous_school_name = '';
+        }
+        vm.form.previous_school_city = '';
+        vm.form.previous_school_province = '';
+        vm.form.previous_school_country = '';
+      }
+    }
+
+    function toggleNotOnList() {
+      if (vm.educ && vm.educ.notOnList) {
+        vm.educ.selected = null;
+        vm.form.previous_school_id = null;
+        // Allow manual entry of fields
+      } else {
+        // Return to list mode
+        vm.form.previous_school_name = '';
+      }
     }
   }
 })();

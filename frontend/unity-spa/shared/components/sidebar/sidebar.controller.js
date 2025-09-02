@@ -47,6 +47,15 @@
         ]
       },
       {
+        key: 'admissions',
+        label: 'Admissions',
+        children: [
+          { label: 'Requirements', path: '/admissions/requirements' },
+          { label: 'Previous Schools', path: '/admissions/previous-schools' },
+          { label: 'Applicants', path: '/admissions/applicants' }
+        ]
+      },
+      {
         key: 'finance',
         label: 'Finance',
         children: [

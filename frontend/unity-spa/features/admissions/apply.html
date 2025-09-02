@@ -30,8 +30,8 @@
           </select>
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
-          <input type="date" class="w-full border rounded px-3 py-2" ng-model="vm.form.date_of_birth" />
+          <label class="block text-sm font-medium text-gray-700 mb-1">Date of Birth <span class="text-red-500">*</span></label>
+          <input type="date" class="w-full border rounded px-3 py-2" ng-model="vm.form.date_of_birth" required />
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Campus <span class="text-red-500">*</span></label>
@@ -64,7 +64,7 @@
           </select>
           <div class="text-xs text-red-600 mt-1" ng-if="applyForm.student_type.$dirty &amp;&amp; applyForm.student_type.$error.required">Student level is required.</div>
         </div>
-        <div>
+        <div ng-if="vm.form.student_type">
           <label class="block text-sm font-medium text-gray-700 mb-1">Term <span class="text-red-500">*</span></label>
           <select name="term" class="w-full border rounded px-3 py-2"
                   ng-model="vm.form.term"
@@ -76,7 +76,7 @@
           </select>
           <div class="text-xs text-red-600 mt-1" ng-if="applyForm.term.$dirty &amp;&amp; applyForm.term.$error.required">Term is required.</div>
         </div>
-        <div>
+        <div ng-if="vm.form.student_type">
           <label class="block text-sm font-medium text-gray-700 mb-1">Program (First Choice) <span class="text-red-500">*</span></label>
           <select name="type_id" class="w-full border rounded px-3 py-2" ng-model="vm.form.type_id" ng-options="p.id as p.title for p in vm.programs" ng-class="{'border-red-500': applyForm.type_id.$dirty &amp;&amp; applyForm.type_id.$invalid}" required>
             <option value="">-- Select --</option>
@@ -129,24 +129,219 @@
       </div>
     </fieldset>
 
+    <!-- Educational Background -->
+    <fieldset class="mb-6">
+      <legend class="text-lg font-semibold text-gray-700 mb-3 uppercase">Educational Background</legend>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="md:col-span-1">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Last School Attended</label>
+          <select class="w-full border rounded px-3 py-2"
+                  ng-model="vm.educ.selected"
+                  ng-change="vm.onPreviousSchoolChange()"
+                  ng-disabled="vm.educ.notOnList"
+                  ng-options="s as (s.name) for s in vm.previousSchools track by s.id">
+            <option value="">-- Select --</option>
+          </select>
+
+          <div class="mt-2 flex items-center space-x-2">
+            <input id="ps-not-on-list" type="checkbox" class="form-checkbox"
+                   ng-model="vm.educ.notOnList" ng-change="vm.toggleNotOnList()" />
+            <label for="ps-not-on-list" class="text-sm text-gray-700">NOT ON THE LIST</label>
+          </div>
+
+          <div class="mt-2" ng-if="vm.educ.notOnList">
+            <input type="text" class="w-full border rounded px-3 py-2"
+                   placeholder="Enter School Name"
+                   ng-model="vm.form.previous_school_name" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">City</label>
+          <input type="text" class="w-full border rounded px-3 py-2"
+                 ng-model="vm.form.previous_school_city"
+                 ng-disabled="!vm.educ.notOnList" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">State/Province</label>
+          <input type="text" class="w-full border rounded px-3 py-2"
+                 ng-model="vm.form.previous_school_province"
+                 ng-disabled="!vm.educ.notOnList" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Country</label>
+          <input type="text" class="w-full border rounded px-3 py-2"
+                 ng-model="vm.form.previous_school_country"
+                 ng-disabled="!vm.educ.notOnList" />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Grade/Year Level</label>
+          <input type="text" class="w-full border rounded px-3 py-2" ng-model="vm.form.grade_year_level" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Program/Strand/Degree earned</label>
+          <input type="text" class="w-full border rounded px-3 py-2" ng-model="vm.form.program_strand_degree" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            LRN <span class="text-gray-500 text-xs">(For Junior High School Applicants)</span>
+          </label>
+          <input type="text" class="w-full border rounded px-3 py-2" ng-model="vm.form.lrn_number" />
+        </div>
+      </div>
+    </fieldset>
+
     <fieldset class="mb-6">
       <legend class="text-lg font-semibold text-gray-700 mb-3">Address</legend>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="md:col-span-2">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Home Number/Street/Subdivision</label>
-          <input type="text" class="w-full border rounded px-3 py-2" ng-model="vm.form.address" />
+          <label class="block text-sm font-medium text-gray-700 mb-1">Home Number/Street/Subdivision <span class="text-red-500">*</span></label>
+          <input type="text" class="w-full border rounded px-3 py-2" ng-model="vm.form.address" required />
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">City</label>
-          <input type="text" class="w-full border rounded px-3 py-2" ng-model="vm.form.city" />
+          <label class="block text-sm font-medium text-gray-700 mb-1">City <span class="text-red-500">*</span></label>
+          <input type="text" class="w-full border rounded px-3 py-2" ng-model="vm.form.city" required />
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">State/Province</label>
-          <input type="text" class="w-full border rounded px-3 py-2" ng-model="vm.form.province" />
+          <label class="block text-sm font-medium text-gray-700 mb-1">State/Province <span class="text-red-500">*</span></label>
+          <input type="text" class="w-full border rounded px-3 py-2" ng-model="vm.form.province" required />
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Country</label>
-          <input type="text" class="w-full border rounded px-3 py-2" ng-model="vm.form.country" />
+          <label class="block text-sm font-medium text-gray-700 mb-1">Country <span class="text-red-500">*</span></label>
+          <select class="w-full border rounded px-3 py-2"
+                  ng-model="vm.form.country"
+                  ng-options="c for c in vm.countries"
+                  required>
+            <option value="">-- Select --</option>
+          </select>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Additional Information -->
+    <fieldset class="mb-6">
+      <legend class="text-lg font-semibold text-gray-700 mb-3 uppercase">Additional Information</legend>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Good Moral Standing -->
+        <div class="border rounded p-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Do you hold good moral standing in your previous school? <span class="text-red-500">*</span>
+          </label>
+          <div class="space-y-1">
+            <label class="inline-flex items-center mr-4">
+              <input type="radio" name="good_moral_standing" ng-model="vm.form.good_moral_standing" ng-value="true" required />
+              <span class="ml-2">Yes</span>
+            </label>
+            <label class="inline-flex items-center">
+              <input type="radio" name="good_moral_standing" ng-model="vm.form.good_moral_standing" ng-value="false" required />
+              <span class="ml-2">No</span>
+            </label>
+          </div>
+          <div class="text-xs text-red-600 mt-1" ng-if="applyForm.good_moral_standing.$dirty &amp;&amp; applyForm.good_moral_standing.$error.required">
+            This field is required.
+          </div>
+        </div>
+
+        <!-- Illegal Activities -->
+        <div class="border rounded p-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Have you involved of any illegal activities? <span class="text-red-500">*</span>
+          </label>
+          <div class="space-y-1">
+            <label class="inline-flex items-center mr-4">
+              <input type="radio" name="illegal_activities_involved" ng-model="vm.form.illegal_activities_involved" ng-value="true" required />
+              <span class="ml-2">Yes</span>
+            </label>
+            <label class="inline-flex items-center">
+              <input type="radio" name="illegal_activities_involved" ng-model="vm.form.illegal_activities_involved" ng-value="false" required />
+              <span class="ml-2">No</span>
+            </label>
+          </div>
+          <div class="text-xs text-red-600 mt-1" ng-if="applyForm.illegal_activities_involved.$dirty &amp;&amp; applyForm.illegal_activities_involved.$error.required">
+            This field is required.
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6">
+        <h4 class="text-md font-semibold text-gray-700 mb-2">Health Conditions</h4>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Hospitalized Before -->
+          <div class="border rounded p-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Have you been hospitalized before? <span class="text-red-500">*</span>
+            </label>
+            <div class="space-y-1">
+              <label class="inline-flex items-center mr-4">
+                <input type="radio" name="hospitalized_before" ng-model="vm.form.hospitalized_before" ng-value="true" required />
+                <span class="ml-2">Yes</span>
+              </label>
+              <label class="inline-flex items-center">
+                <input type="radio" name="hospitalized_before" ng-model="vm.form.hospitalized_before" ng-value="false" required />
+                <span class="ml-2">No</span>
+              </label>
+            </div>
+            <div class="text-xs text-red-600 mt-1" ng-if="applyForm.hospitalized_before.$dirty &amp;&amp; applyForm.hospitalized_before.$error.required">
+              This field is required.
+            </div>
+          </div>
+
+          <!-- Health Conditions Checkbox Group -->
+          <div class="border rounded p-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Do you have any of the following? <span class="text-gray-500 text-xs">(check all that apply)</span>
+            </label>
+            <div class="grid grid-cols-1 gap-2">
+              <label class="inline-flex items-center">
+                <input type="checkbox" ng-model="vm.form.health_conditions.diabetes" />
+                <span class="ml-2">Diabetes</span>
+              </label>
+              <label class="inline-flex items-center">
+                <input type="checkbox" ng-model="vm.form.health_conditions.allergies" />
+                <span class="ml-2">Allergies</span>
+              </label>
+              <label class="inline-flex items-center">
+                <input type="checkbox" ng-model="vm.form.health_conditions.high_blood" />
+                <span class="ml-2">High Blood</span>
+              </label>
+              <label class="inline-flex items-center">
+                <input type="checkbox" ng-model="vm.form.health_conditions.anemia" />
+                <span class="ml-2">Anemia</span>
+              </label>
+              <div>
+                <label class="inline-flex items-center">
+                  <input type="checkbox" ng-model="vm.form.health_conditions.others" />
+                  <span class="ml-2">Others (please specify)</span>
+                </label>
+                <div class="mt-2" ng-if="vm.form.health_conditions.others">
+                  <input type="text" class="w-full border rounded px-3 py-2" placeholder="Please specify" ng-model="vm.form.health_conditions.others_specify" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Other Health Concerns -->
+        <div class="mt-4">
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            Other health concerns/conditions <span class="text-red-500">*</span>
+          </label>
+          <input type="text"
+                 name="other_health_concerns"
+                 class="w-full border rounded px-3 py-2"
+                 placeholder="Type 'none' if you do not have any"
+                 ng-model="vm.form.other_health_concerns"
+                 required />
+          <div class="text-xs text-red-600 mt-1" ng-if="applyForm.other_health_concerns.$dirty &amp;&amp; applyForm.other_health_concerns.$error.required">
+            This field is required.
+          </div>
         </div>
       </div>
     </fieldset>

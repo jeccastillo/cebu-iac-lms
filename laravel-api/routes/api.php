@@ -33,6 +33,9 @@ use App\Http\Controllers\Api\V1\PaymentDescriptionController;
 use App\Http\Controllers\Api\V1\PaymentDetailAdminController;
 use App\Http\Controllers\Api\V1\StudentBillingController;
 use App\Http\Controllers\Api\V1\InvoiceController;
+use App\Http\Controllers\Api\V1\RequirementController;
+use App\Http\Controllers\Api\V1\PreviousSchoolController;
+use App\Http\Controllers\Api\V1\ApplicantController;
 
 /*
 |--------------------------------------------------------------------------
@@ -331,4 +334,25 @@ Route::prefix('v1')->group(function () {
     Route::post('/payment-descriptions', [PaymentDescriptionController::class, 'store'])->middleware('role:finance,admin');
     Route::put('/payment-descriptions/{id}', [PaymentDescriptionController::class, 'update'])->middleware('role:finance,admin');
     Route::delete('/payment-descriptions/{id}', [PaymentDescriptionController::class, 'destroy'])->middleware('role:finance,admin');
+
+    // Requirements CRUD (Admissions/Admin)
+    Route::get('/requirements', [RequirementController::class, 'index'])->middleware('role:admissions,admin');
+    Route::get('/requirements/{id}', [RequirementController::class, 'show'])->middleware('role:admissions,admin');
+    Route::post('/requirements', [RequirementController::class, 'store'])->middleware('role:admissions,admin');
+    Route::put('/requirements/{id}', [RequirementController::class, 'update'])->middleware('role:admissions,admin');
+    Route::delete('/requirements/{id}', [RequirementController::class, 'destroy'])->middleware('role:admissions,admin');
+
+    // Previous Schools CRUD (Admissions/Admin)
+    Route::get('/previous-schools', [PreviousSchoolController::class, 'index'])->middleware('role:admissions,admin');
+    Route::get('/previous-schools/{id}', [PreviousSchoolController::class, 'show'])->middleware('role:admissions,admin');
+    Route::post('/previous-schools', [PreviousSchoolController::class, 'store'])->middleware('role:admissions,admin');
+    Route::put('/previous-schools/{id}', [PreviousSchoolController::class, 'update'])->middleware('role:admissions,admin');
+    Route::delete('/previous-schools/{id}', [PreviousSchoolController::class, 'destroy'])->middleware('role:admissions,admin');
+
+    // Applicants (Admissions/Admin)
+    Route::get('/applicants', [ApplicantController::class, 'index'])->middleware('role:admissions,admin');
+    Route::get('/applicants/{id}', [ApplicantController::class, 'show'])->middleware('role:admissions,admin');
+
+    // Public list for applicant forms (no auth)
+    Route::get('/admissions/previous-schools', [PreviousSchoolController::class, 'index']);
 });

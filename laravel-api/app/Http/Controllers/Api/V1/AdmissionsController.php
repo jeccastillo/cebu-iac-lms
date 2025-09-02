@@ -29,7 +29,8 @@ class AdmissionsController extends Controller
             'email'       => 'required|email',
             'mobile_number' => 'nullable|string|max:50',
             'gender'      => 'nullable|string|max:50',
-            'date_of_birth' => 'nullable|date',
+            'date_of_birth' => 'required|date',
+            'intTuitionYear' => 'int',
         ]);
 
         $now = Carbon::now();
@@ -70,6 +71,21 @@ class AdmissionsController extends Controller
         if (in_array('dteBirthDate', $userColumns) && $request->filled('date_of_birth')) {
             $userData['dteBirthDate'] = Carbon::parse($request->input('date_of_birth'))->format('Y-m-d');
         }
+
+        // Tuition
+        if (in_array('intTuitionYear', $userColumns) && $request->filled('intTuitionYear')) {
+            $userData['intTuitionYear'] = $request->input('intTuitionYear');
+        }
+
+        
+        $userData['high_school'] = "";
+        $userData['high_school_address'] = "";
+        $userData['high_school_attended'] = "";
+        $userData['senior_high'] = "";
+        $userData['senior_high_address'] = "";
+        $userData['senior_high_attended'] = "";
+        $userData['strand'] = "";
+        
 
         // Address (combine pieces if provided)
         $fullAddress = $request->input('address');
@@ -169,18 +185,30 @@ class AdmissionsController extends Controller
 
             DB::commit();
 
-            // Send confirmation email
+            // Send confirmation email; do not fail application if email sending fails
             $to = $request->input('email');
+            $emailSent = false;
+            $emailError = null;
             if ($to) {
-                $this->sendApplicantMail($to, $request->input('first_name'), $request->input('last_name'));
+                try {
+                    $this->sendApplicantMail($to, $request->input('first_name'), $request->input('last_name'));
+                    $emailSent = true;
+                } catch (Throwable $mailEx) {
+                    $emailSent = false;
+                    $emailError = $mailEx->getMessage();
+                }
             }
 
             return response()->json([
                 'success' => true,
-                'message' => 'Application submitted successfully.',
+                'message' => $emailSent
+                    ? 'Application submitted successfully.'
+                    : 'Application submitted successfully, but the confirmation email could not be sent.',
                 'data' => [
                     'user_id' => $userId,
                     'slug'    => $slug,
+                    'email_sent' => $emailSent,
+                    'email_error' => $emailError,
                 ]
             ]);
         } catch (Throwable $e) {
