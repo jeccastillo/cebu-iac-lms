@@ -2748,10 +2748,9 @@ class Unity extends CI_Controller {
             $subject = $this->data_fetcher->getSubjectPlain($post['intSubjectID']);
             $post['strClassName'] = $subject['strCode'];
         }
-        print_r($post);
-        die();
+        
         $this->data_poster->post_data('tb_mas_classlist',$post,$post['intID']);
-        $this->data_poster->log_action('Classlist','Update a classlist '. $post['strClassName'] . '-' . $subject['strCode'] ,'green');
+        $this->data_poster->log_action('Classlist','Update a classlist '. $post['strClassName'] ,'green');
         
         //redirect(base_url()."unity/view_classlist");
         redirect(base_url()."unity/classlist_viewer/". $post['intID']);
