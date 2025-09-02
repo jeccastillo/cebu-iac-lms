@@ -46,6 +46,36 @@
   <!-- Select2 for enhanced selects (requires jQuery) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <!-- intl-tel-input (flags + dial codes) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.7.1/build/css/intlTelInput.css">
+  <!-- CSS fallbacks in case a CDN is blocked -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css">
+  <link rel="stylesheet" href="https://unpkg.com/intl-tel-input@18.7.1/build/css/intlTelInput.css">
+  <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.7.1/build/js/intlTelInput.min.js"></script>
+  <!-- Preload utils to ensure formatting/masking availability -->
+  <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.7.1/build/js/utils.js"></script>
+  <!-- Minimal fallback CSS so the full country list doesn't render if library CSS fails to load -->
+  <style>
+    /* Fallback only — real styles are provided by the CDN CSS above */
+    .iti { position: relative; display: inline-block; width: 100%; overflow: visible; }
+    .iti__flag-container { position: absolute; top: 0; bottom: 0; left: 0; display: flex; align-items: center; padding-left: 0; }
+    .iti__selected-flag { height: 100%; cursor: pointer; }
+    .iti input[type="tel"], .iti input[type="text"] { padding-left: 3rem; }
+    .iti--separate-dial-code input[type="tel"], .iti--separate-dial-code input[type="text"] { padding-left: 5.5rem; }
+    /* Country list (supports both inline container and body container) */
+    .iti__country-list { position: absolute; z-index: 2147483647; background: #fff; border: 1px solid #d1d5db; max-height: 240px; overflow-y: auto; width: 320px; margin: 0; padding: 4px 0; list-style: none; display: none; pointer-events: auto; }
+    .iti--open .iti__country-list,
+    .iti--container .iti__country-list { display: block !important; visibility: visible; opacity: 1; }
+    /* Ensure body-level container is positioned when dropdownContainer: document.body */
+    .iti--container { position: absolute !important; top: 0; left: 0; z-index: 2147483647 !important; display: block; }
+    .iti__hide { display: none !important; }
+    .iti__country { padding: 4px 10px; }
+    .iti__country:hover { background: #f3f4f6; }
+
+    /* Additional fallback for older classnames used by some builds */
+    .country-list { position: absolute; z-index: 1000; background: #fff; border: 1px solid #d1d5db; max-height: 240px; overflow-y: auto; width: 320px; margin: 0; padding: 4px 0; list-style: none; display: none; }
+    .iti--open .country-list { display: block; }
+  </style>
   <!-- Select2 theming to match Tailwind input styles -->
   <style>
     /* Ensure Select2 fills container */
@@ -187,6 +217,7 @@
   <!-- Shared directives -->
   <script src="shared/directives/select2.directive.js"></script>
   <script src="shared/directives/pui-autocomplete.directive.js"></script>
+  <script src="shared/directives/iti-tel.directive.js"></script>
 
   <!-- Features -->
   <script src="features/auth/auth.service.js"></script>
@@ -278,6 +309,11 @@
   <!-- Admin: Payment Details -->
   <script src="features/admin/payment-details/payment-details.service.js"></script>
   <script src="features/admin/payment-details/payment-details.controller.js"></script>
+
+  <!-- Admin: Invoices CRUD -->
+  <script src="features/admin/invoices/invoices.service.js"></script>
+  <script src="features/admin/invoices/invoices.controller.js"></script>
+  <script src="features/admin/invoices/invoice-edit.controller.js"></script>
 
   <!-- Unity feature -->
   <script src="features/unity/unity.service.js"></script>

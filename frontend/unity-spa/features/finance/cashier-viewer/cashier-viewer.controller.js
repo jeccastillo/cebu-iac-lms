@@ -120,6 +120,7 @@
     // =========================
     vm.tuitionInvoice = null;     // existing tuition invoice linked to current registration (type: 'tuition')
     vm.generatingInvoice = false; // UI flag during invoice generation
+    vm.invoiceGenerateError = null; // error message shown when invoice generation fails
 
     vm.canShowGenerateInvoice = function () {
       try {
@@ -160,6 +161,7 @@
     vm.generateTuitionInvoice = function () {
       if (!vm.canShowGenerateInvoice()) return $q.when();
       vm.generatingInvoice = true;
+      vm.invoiceGenerateError = null;
       try {
         var regId = parseInt(vm.registration.intRegistrationID, 10);
 
@@ -229,8 +231,16 @@
             vm.tuitionInvoice = inv || null;
             try { if (typeof vm.loadInvoices === 'function') vm.loadInvoices(true); } catch (e) {}
           })
-          .catch(function () {
-            // keep error silent; UI will simply keep button visible for retry
+          .catch(function (err) {
+            var msg = 'Failed to generate invoice.';
+            try {
+              if (err && err.data && err.data.message) {
+                msg = err.data.message;
+              } else if (err && err.message) {
+                msg = err.message;
+              }
+            } catch (e) {}
+            vm.invoiceGenerateError = msg;
           })
           .finally(function () {
             vm.generatingInvoice = false;
@@ -258,7 +268,7 @@
     };
 
     // UI: Tuition Breakdown modal state and helpers
-    vm.ui = vm.ui || { showTuitionModal: false };
+    vm.ui = vm.ui || { showTuitionModal: false, showInvoiceModal: false };
 
     vm.openTuitionModal = function () {
       vm.ui.showTuitionModal = true;
@@ -266,6 +276,168 @@
 
     vm.closeTuitionModal = function () {
       vm.ui.showTuitionModal = false;
+    };
+
+    // Invoice Details modal state and helpers
+    vm.invoiceModal = {
+      invoice: null,
+      payments: [],
+      items: [],
+      totals: { total: 0, paid: 0, remaining: 0 }
+    };
+
+    // Track printing state per invoice id
+    vm.printing = {};
+    vm.isPrinting = function (idOrInv) {
+      try {
+        var id = null;
+        if (idOrInv && typeof idOrInv === 'object' && idOrInv.id != null) {
+          id = parseInt(idOrInv.id, 10);
+        } else if (idOrInv != null) {
+          id = parseInt(idOrInv, 10);
+        }
+        if (!isFinite(id)) return false;
+        return !!vm.printing[id];
+      } catch (e) {
+        return false;
+      }
+    };
+
+    vm.openInvoiceModal = function (inv) {
+      try {
+        vm.invoiceModal = vm.invoiceModal || {};
+        vm.invoiceModal.invoice = inv || null;
+
+        // Resolve invoice number and total
+        var invNo = (inv && (inv.invoice_number || inv.number)) ? ('' + (inv.invoice_number || inv.number)).trim() : '';
+        var total = null;
+        var cands = [inv && inv.amount_total, inv && inv.amount, inv && inv.total];
+        for (var i = 0; i < cands.length; i++) {
+          var v = parseFloat(cands[i]);
+          if (isFinite(v)) { total = v; break; }
+        }
+
+        // Collect related payments (any status) and compute paid sum for Paid status
+        var rows = (vm.paymentDetails && vm.paymentDetails.items) ? (vm.paymentDetails.items.slice() || []) : [];
+        var payments = [];
+        var paid = 0;
+        for (var j = 0; j < rows.length; j++) {
+          var p = rows[j];
+          if (!p) continue;
+          var pInv = (p.invoice_number != null) ? ('' + p.invoice_number).trim() : '';
+          if (invNo && pInv && pInv === invNo) {
+            payments.push(p);
+            if (p.status === 'Paid') {
+              var amt = parseFloat(p.subtotal_order);
+              paid += isFinite(amt) ? amt : 0;
+            }
+          }
+        }
+
+        // Sort payments by date desc
+        payments.sort(function (a, b) {
+          function toTs(x) {
+            var s = x || '';
+            return new Date(s).getTime() || 0;
+          }
+          var ad = toTs(a && (a.or_date || a.posted_at));
+          var bd = toTs(b && (b.or_date || b.posted_at));
+          return bd - ad;
+        });
+
+        // Invoice items if present on the invoice payload
+        var items = [];
+        try {
+          if (inv && Array.isArray(inv.items)) items = inv.items.slice();
+          else if (inv && Array.isArray(inv.invoice_items)) items = inv.invoice_items.slice();
+        } catch (_e) { items = []; }
+
+        var remaining = (isFinite(total) ? (total - paid) : null);
+        if (remaining != null && remaining < 0) remaining = 0;
+
+        vm.invoiceModal.payments = payments;
+        vm.invoiceModal.items = items;
+        vm.invoiceModal.totals = {
+          total: isFinite(total) ? total : 0,
+          paid: paid,
+          remaining: (remaining != null ? remaining : 0)
+        };
+
+        vm.ui.showInvoiceModal = true;
+      } catch (e) {
+        vm.ui.showInvoiceModal = true;
+      }
+    };
+
+    vm.closeInvoiceModal = function () {
+      vm.ui.showInvoiceModal = false;
+    };
+
+    // Build admin headers for PDF request (inject X-Faculty-ID when available)
+    vm._adminHeaders = function () {
+      try {
+        var state = vm.state || (StorageService && StorageService.getJSON ? StorageService.getJSON('loginState') : null);
+        var headers = {};
+        if (state && state.faculty_id != null) {
+          headers['X-Faculty-ID'] = state.faculty_id;
+        }
+        return headers;
+      } catch (e) {
+        return {};
+      }
+    };
+
+    // Trigger invoice PDF download
+    vm.printInvoice = function (inv) {
+      try {
+        inv = inv || (vm.invoiceModal && vm.invoiceModal.invoice) || null;
+        if (!inv || inv.id == null) return $q.when();
+
+        var id = parseInt(inv.id, 10);
+        if (!isFinite(id)) return $q.when();
+
+        // Prevent duplicate clicks
+        vm.printing = vm.printing || {};
+        if (vm.printing[id]) return $q.when();
+        vm.printing[id] = true;
+
+        var url = (APP_CONFIG && APP_CONFIG.API_BASE ? APP_CONFIG.API_BASE : '') + '/finance/invoices/' + id + '/pdf';
+        return $http.get(url, {
+          responseType: 'arraybuffer',
+          headers: vm._adminHeaders()
+        }).then(function (resp) {
+          try {
+            var blob = new Blob([resp.data], { type: 'application/pdf' });
+            var link = document.createElement('a');
+            var num = inv.invoice_number || inv.number || id;
+            link.href = window.URL.createObjectURL(blob);
+            link.download = 'invoice-' + num + '.pdf';
+            document.body.appendChild(link);
+            link.click();
+            setTimeout(function () {
+              try { document.body.removeChild(link); } catch (_e) {}
+              try { window.URL.revokeObjectURL(link.href); } catch (_e2) {}
+            }, 0);
+          } catch (e) {
+            // fallback open in new tab
+            try {
+              var blob2 = new Blob([resp.data], { type: 'application/pdf' });
+              var url2 = window.URL.createObjectURL(blob2);
+              window.open(url2, '_blank');
+              setTimeout(function () { try { window.URL.revokeObjectURL(url2); } catch (_e3) {} }, 1000);
+            } catch (e2) {}
+          }
+        }).catch(function () {
+          // no-op; could surface toast if available
+        }).finally(function () {
+          try { vm.printing[id] = false; } catch (_e4) {}
+        });
+      } catch (e) {
+        try {
+          if (inv && inv.id != null) vm.printing[parseInt(inv.id, 10)] = false;
+        } catch (_e5) {}
+        return $q.when();
+      }
     };
 
     // =========================
@@ -401,6 +573,8 @@
           var num = parseFloat(info.amount);
           if (isFinite(num)) {
             vm.payment.amount = num;
+            // Ensure not exceeding any active max cap (e.g., selected invoice remaining)
+            try { if (typeof vm.onAmountChange === 'function') vm.onAmountChange(); } catch (_e) {}
           }
         }
       } catch (e) {
@@ -408,6 +582,214 @@
       }
     };
  
+    // Clear invoice selection when mode changes away from 'or'
+    vm.onModeChange = function () {
+      try {
+        var mode = vm.payment && vm.payment.mode ? ('' + vm.payment.mode).toLowerCase() : 'or';
+        if (mode !== 'or') {
+          vm.payment.invoice_id = null;
+          vm.payment.invoice_number = null;
+          vm.invoiceCtx = { id: null, number: null, total: null, paid: 0, remaining: null };
+        }
+      } catch (e) {
+        vm.payment.invoice_id = null;
+        vm.payment.invoice_number = null;
+        vm.invoiceCtx = { id: null, number: null, total: null, paid: 0, remaining: null };
+      }
+    };
+
+    // Derive invoice_number from selected invoice id and compute remaining cap
+    vm.onInvoiceSelected = function () {
+      try {
+        var sel = vm.payment && vm.payment.invoice_id != null ? parseInt(vm.payment.invoice_id, 10) : null;
+        if (!isFinite(sel)) {
+          vm.payment.invoice_number = null;
+          vm.invoiceCtx = { id: null, number: null, total: null, paid: 0, remaining: null };
+          return;
+        }
+        var list = Array.isArray(vm.invoices) ? vm.invoices : [];
+        var matched = null;
+        for (var i = 0; i < list.length; i++) {
+          var inv = list[i];
+          var id = inv && inv.id != null ? parseInt(inv.id, 10) : null;
+          if (isFinite(id) && id === sel) {
+            matched = inv;
+            break;
+          }
+        }
+        if (matched) {
+          vm.payment.invoice_number = (matched.invoice_number || matched.number || null);
+          // compute remaining cap and clamp amount if needed
+          try { if (typeof vm.computeInvoiceRemaining === 'function') vm.computeInvoiceRemaining(); } catch (_e) {}
+          try { if (typeof vm.onAmountChange === 'function') vm.onAmountChange(); } catch (_e2) {}
+        } else {
+          vm.payment.invoice_number = null;
+          vm.invoiceCtx = { id: null, number: null, total: null, paid: 0, remaining: null };
+        }
+      } catch (e) {
+        vm.payment.invoice_number = null;
+        vm.invoiceCtx = { id: null, number: null, total: null, paid: 0, remaining: null };
+      }
+    };
+    // Compute remaining amount for selected invoice based on payment_details 'Paid' rows
+    vm.computeInvoiceRemaining = function () {
+      try {
+        var sel = vm.payment && vm.payment.invoice_id != null ? parseInt(vm.payment.invoice_id, 10) : null;
+        if (!isFinite(sel)) {
+          vm.invoiceCtx = { id: null, number: null, total: null, paid: 0, remaining: null };
+          return null;
+        }
+        var invoices = Array.isArray(vm.invoices) ? vm.invoices : [];
+        var invObj = null;
+        for (var i = 0; i < invoices.length; i++) {
+          var inv = invoices[i];
+          var id = inv && inv.id != null ? parseInt(inv.id, 10) : null;
+          if (isFinite(id) && id === sel) { invObj = inv; break; }
+        }
+        var invNo = null;
+        var total = 0;
+        if (invObj) {
+          invNo = invObj.invoice_number || invObj.number || null;
+          var cands = [invObj.amount_total, invObj.amount, invObj.total];
+          for (var j = 0; j < cands.length; j++) {
+            var v = parseFloat(cands[j]);
+            if (isFinite(v)) { total = v; break; }
+          }
+        }
+        if (!invNo) {
+          vm.invoiceCtx = { id: sel, number: null, total: null, paid: 0, remaining: null };
+          return null;
+        }
+        // sum of paid amounts for this invoice number from loaded payment_details
+        var items = (vm.paymentDetails && vm.paymentDetails.items) ? vm.paymentDetails.items : [];
+        var paid = 0;
+        for (var k = 0; k < items.length; k++) {
+          var p = items[k];
+          if (!p) continue;
+          var pInv = p.invoice_number != null ? ('' + p.invoice_number).trim() : '';
+          var tgt = ('' + invNo).trim();
+          if (pInv && tgt && pInv === tgt && (p.status === 'Paid')) {
+            var amt = parseFloat(p.subtotal_order);
+            paid += isFinite(amt) ? amt : 0;
+          }
+        }
+        var remaining = total - paid;
+        if (!isFinite(remaining)) remaining = null;
+        if (remaining != null && remaining < 0) remaining = 0;
+        vm.invoiceCtx = { id: sel, number: invNo, total: isFinite(total) ? total : null, paid: paid, remaining: remaining };
+        return remaining;
+      } catch (e) {
+        vm.invoiceCtx = { id: null, number: null, total: null, paid: 0, remaining: null };
+        return null;
+      }
+    };
+    // Recompute per-invoice paid and remaining from loaded payment_details
+    vm.recomputeInvoicesPayments = function () {
+      try {
+        var items = (vm.paymentDetails && vm.paymentDetails.items) ? vm.paymentDetails.items : [];
+        var paidByInv = {};
+        for (var i = 0; i < items.length; i++) {
+          var p = items[i];
+          if (!p) continue;
+          if (p.status !== 'Paid') continue;
+          var invNo = p.invoice_number != null ? ('' + p.invoice_number).trim() : '';
+          if (!invNo) continue;
+          var amt = parseFloat(p.subtotal_order);
+          if (!isFinite(amt)) amt = 0;
+          paidByInv[invNo] = (paidByInv[invNo] || 0) + amt;
+        }
+
+        var list = Array.isArray(vm.invoices) ? vm.invoices : [];
+        for (var j = 0; j < list.length; j++) {
+          var inv = list[j] || {};
+          var invNo2 = inv.invoice_number != null ? ('' + inv.invoice_number).trim()
+                      : (inv.number != null ? ('' + inv.number).trim() : '');
+          var total = null;
+          var cands = [inv.amount_total, inv.amount, inv.total];
+          for (var k = 0; k < cands.length; k++) {
+            var v = parseFloat(cands[k]);
+            if (isFinite(v)) { total = v; break; }
+          }
+          var paid = invNo2 ? (paidByInv[invNo2] || 0) : 0;
+          var remaining = (total != null && isFinite(total)) ? (total - paid) : null;
+          if (remaining != null && remaining < 0) remaining = 0;
+
+          inv._total = (total != null && isFinite(total)) ? total : null;
+          inv._paid = paid;
+          inv._remaining = remaining;
+        }
+        return true;
+      } catch (e) {
+        return false;
+      }
+    };
+    // Return current max cap for amount (when invoice is selected)
+    vm.amountMax = function () {
+      try {
+        if (vm.payment && vm.payment.invoice_id != null) {
+          var rem = vm.invoiceCtx && vm.invoiceCtx.remaining;
+          return (rem != null && isFinite(rem)) ? rem : null;
+        }
+      } catch (e) {}
+      return null;
+    };
+    // Helpers: sanitize amount to at most 2 decimals (truncate, not round)
+    vm._toTwoDecimals = function (val) {
+      try {
+        if (val === null || val === undefined || val === '') return null;
+        var n = parseFloat(val);
+        if (!isFinite(n)) return null;
+        var truncated = Math.floor(n * 100) / 100;
+        return truncated;
+      } catch (e) {
+        return null;
+      }
+    };
+
+    // Clamp and sanitize amount (enforce 2 decimals, apply max cap if any)
+    vm.onAmountChange = function () {
+      try {
+        var max = (typeof vm.amountMax === 'function') ? vm.amountMax() : null;
+        var vRaw = (vm.payment && vm.payment.amount != null) ? vm.payment.amount : null;
+        var v = vm._toTwoDecimals(vRaw);
+        if (v === null) return;
+
+        // Apply max cap if present
+        if (max != null && isFinite(max) && v > (max + 0.00001)) {
+          v = Math.floor(max * 100) / 100; // cap and truncate to 2dp
+        }
+
+        // Update model only if value changed (to reduce digest churn)
+        if (parseFloat(vm.payment.amount) !== v) {
+          vm.payment.amount = v;
+        }
+      } catch (e) {}
+    };
+
+    // Finalize sanitation on blur: enforce min and max, and two decimals
+    vm.onAmountBlur = function () {
+      try {
+        var v = vm._toTwoDecimals(vm.payment && vm.payment.amount);
+        if (v === null) { vm.payment.amount = null; return; }
+
+        // Enforce min=0.01
+        if (v < 0.01) v = 0.01;
+
+        // Apply max cap if present
+        var max = (typeof vm.amountMax === 'function') ? vm.amountMax() : null;
+        if (max != null && isFinite(max) && v > (max + 0.00001)) {
+          v = Math.floor(max * 100) / 100;
+        }
+
+        // Ensure two decimals after clamps
+        v = Math.floor(v * 100) / 100;
+
+        if (parseFloat(vm.payment.amount) !== v) {
+          vm.payment.amount = v;
+        }
+      } catch (e) {}
+    };
+
     vm.myCashier = null; // resolved cashier row of acting faculty (by faculty_id)
     vm.payment = {
       mode: 'or',              // 'or' | 'invoice'
@@ -416,8 +798,13 @@
       remarks: '',             // string (required)
       method: null,            // optional string
       posted_at: null,         // optional string (ISO or 'Y-m-d H:i:s')
-      mode_of_payment_id: null // required: selected payment mode id
+      mode_of_payment_id: null, // required: selected payment mode id
+      // Optional invoice reference (when mode='or')
+      invoice_id: null,        // selected invoice id from invoices table
+      invoice_number: null     // derived from selected invoice (display/submit hint)
     };
+    // Track selected invoice context (for remaining computation)
+    vm.invoiceCtx = { id: null, number: null, total: null, paid: 0, remaining: null };
     vm.paymentError = null;
     if (!vm.loading) vm.loading = {};
     vm.loading.createPayment = false;
@@ -494,8 +881,11 @@
         remarks: '',
         method: null,
         posted_at: null,
-        mode_of_payment_id: null
+        mode_of_payment_id: null,
+        invoice_id: null,
+        invoice_number: null
       };
+      vm.invoiceCtx = { id: null, number: null, total: null, paid: 0, remaining: null };
       vm.paymentError = null;
     };
 
@@ -509,7 +899,8 @@
         var p = vm.payment || {};
         var modeOk = (p.mode === 'or' || p.mode === 'invoice');
         var amt = parseFloat(p.amount);
-        var amtOk = isFinite(amt) && amt > 0;
+        var maxCap = (typeof vm.amountMax === 'function') ? vm.amountMax() : null;
+        var amtOk = isFinite(amt) && amt > 0 && (maxCap == null || amt <= (maxCap + 0.00001));
         var descOk = !!(p.description && ('' + p.description).trim().length > 0);
         var remarksOk = !!(p.remarks && ('' + p.remarks).trim().length > 0);
         var mopId = parseInt(p.mode_of_payment_id, 10);
@@ -540,6 +931,16 @@
       if (p.method && ('' + p.method).trim().length > 0) {
         payload.method = ('' + p.method).trim();
       }
+      // Optional invoice linking when OR mode: include selected invoice id/number (backend may ignore if not supported)
+      try {
+        var iid = p.invoice_id != null ? parseInt(p.invoice_id, 10) : null;
+        if (isFinite(iid)) payload.invoice_id = iid;
+      } catch (e) {}
+      try {
+        if (p.invoice_number && ('' + p.invoice_number).trim().length > 0) {
+          payload.invoice_number = ('' + p.invoice_number).trim();
+        }
+      } catch (e2) {}
       // Default or_date to current date (Y-m-d); posted_at defaults server-side
       try {
         function pad(n) { return n < 10 ? ('0' + n) : ('' + n); }
@@ -563,12 +964,26 @@
           vm.resetPaymentForm();
           // Clear cached 'last' to ensure reloads
           vm._last.payments = null;
-          return vm.loadPaymentDetails(true)
+
+          // Refresh cashier pointers so UI shows updated current OR/Invoice numbers
+          var p = null;
+          try {
+            p = (typeof vm.loadMyCashier === 'function') ? vm.loadMyCashier() : null;
+          } catch (e) { p = null; }
+
+          return $q.when(p)
+            .then(function () { return vm.loadPaymentDetails(true); })
             .then(function () { return vm.loadLedger(); })
             .then(function () {
               if (typeof vm.refreshTuitionSummary === 'function') {
                 vm.refreshTuitionSummary();
               }
+              // Recompute invoice remaining if a selection exists (so cap reflects updated payments)
+              try {
+                if (vm.payment && vm.payment.invoice_id != null && typeof vm.computeInvoiceRemaining === 'function') {
+                  vm.computeInvoiceRemaining();
+                }
+              } catch (_e3) {}
               return null;
             });
         })
@@ -682,7 +1097,14 @@
             if (!vm.meta) vm.meta = {};
             if (source) vm.meta.tuition_source = source;
 
-            var remain = (vm.selectedTuitionAmount || 0) - (vm.meta.amount_paid || 0);
+            // Compute remaining = (total_due + billing_total) - amount_paid
+            var payload = (typeof vm.tuitionPayload === 'function') ? vm.tuitionPayload() : (vm.tuitionSaved && vm.tuitionSaved.payload) || vm.tuition || {};
+            var sum = payload && payload.summary ? payload.summary : {};
+            function _n(x){ var v = parseFloat(x); return isFinite(v) ? v : 0; }
+            var totalDue = _n(sum.total_due || payload.total || sum.total || sum.grand_total);
+            var billingTotal = _n(payload.billing_total || sum.billing_total || (payload.meta && payload.meta.billing_total));
+            vm.meta.billing_total = billingTotal;
+            var remain = (totalDue + billingTotal) - _n(vm.meta.amount_paid);
             vm.meta.remaining_amount = isFinite(remain) ? remain : 0;
           }
         }
@@ -813,7 +1235,7 @@
           }
         })
         .catch(function () {
-          vm.error.student = 'Failed to load student.';
+          vm.error.student = 'Please select a Student.';
         })
         .finally(function () {
           vm.loading.student = false;
@@ -963,6 +1385,15 @@
             td.total = full || 0;
             td.total_installment = inst || 0;
 
+            // Extract billing_total for UI
+            try {
+              var _bt = parseFloat(td.billing_total != null ? td.billing_total : (summary && summary.billing_total != null ? summary.billing_total : (td.meta && td.meta.billing_total)));
+              vm.meta.billing_total = isFinite(_bt) ? _bt : 0;
+            } catch (_eBt) {
+              // keep previous or default to 0
+              if (vm.meta && (vm.meta.billing_total == null || !isFinite(vm.meta.billing_total))) vm.meta.billing_total = 0;
+            }
+
             // Determine registered payment type: prefer saved registration over edit snapshot
             var paymentType = (vm.registration && vm.registration.paymentType) || vm.edit.paymentType || null;
             var isPartial = paymentType === 'partial';
@@ -975,9 +1406,14 @@
             vm.selectedTuitionAmount = computedSelected || 0;
 
             // If API did not provide remaining, fallback to client computation:
-            // remaining = selected tuition - amount_paid (using ledger or API-paid if available)
+            // remaining = total_due + billing_total - amount_paid
             if (!vm.meta.remaining_amount) {
-              vm.meta.remaining_amount = (vm.selectedTuitionAmount || 0) - (vm.meta.amount_paid || 0);
+              var s2 = td.summary || {};
+              function _n2(x){ var v = parseFloat(x); return isFinite(v) ? v : 0; }
+              var totalDue2 = _n2(s2.total_due || td.total || s2.total || s2.grand_total);
+              var billingTotal2 = _n2(td.billing_total || s2.billing_total || (td.meta && td.meta.billing_total));
+              vm.meta.billing_total = billingTotal2;
+              vm.meta.remaining_amount = (totalDue2 + billingTotal2) - _n2(vm.meta.amount_paid);
               if (!isFinite(vm.meta.remaining_amount)) vm.meta.remaining_amount = 0;
             }
           } catch (e) {}
@@ -1027,6 +1463,12 @@
               sd.total = sFull || 0;
               sd.total_installment = sInst || 0;
 
+              // Extract billing_total for UI from saved payload
+              try {
+                var _btS = parseFloat(sd.billing_total != null ? sd.billing_total : (ssum && ssum.billing_total != null ? ssum.billing_total : (sd.meta && sd.meta.billing_total)));
+                vm.meta.billing_total = isFinite(_btS) ? _btS : (vm.meta.billing_total || 0);
+              } catch (_eBtS) {}
+
               var selectedSaved = isPartial
                 ? (sd.total_installment != null ? parseFloat(sd.total_installment) : 0)
                 : (sd.total != null ? parseFloat(sd.total) : 0);
@@ -1035,8 +1477,13 @@
                 vm.selectedTuitionAmount = selectedSaved;
                 vm.meta.tuition_source = 'saved';
 
-                // Recompute remaining based on saved snapshot and current amount_paid
-                vm.meta.remaining_amount = (vm.selectedTuitionAmount || 0) - (vm.meta.amount_paid || 0);
+                // Recompute remaining based on total_due + billing_total - amount_paid
+                var totalDueS = _numS(ssum.total_due || sd.total || ssum.total || ssum.grand_total);
+                var billingTotalS = _numS(sd.billing_total || ssum.billing_total || (sd.meta && sd.meta.billing_total));
+                var apaid = _numS(vm.meta.amount_paid);
+                apaid = isFinite(apaid) ? apaid : 0;
+                vm.meta.billing_total = (isFinite(billingTotalS) ? billingTotalS : 0);
+                vm.meta.remaining_amount = ((isFinite(totalDueS) ? totalDueS : 0) + (isFinite(billingTotalS) ? billingTotalS : 0)) - apaid;
                 if (!isFinite(vm.meta.remaining_amount)) vm.meta.remaining_amount = 0;
               }
             } catch (e) {}
@@ -1130,6 +1577,7 @@
             return bi - ai;
           });
           vm.invoices = list;
+          try { if (typeof vm.recomputeInvoicesPayments === 'function') vm.recomputeInvoicesPayments(); } catch (e) {}
           vm._last.invoices = { sn: vm.sn, term: vm.term };
         })
         .catch(function () {
@@ -1179,6 +1627,7 @@
                 if (typeof vm.refreshTuitionSummary === 'function') {
                 vm.refreshTuitionSummary();
                 }
+                try { if (typeof vm.recomputeInvoicesPayments === 'function') vm.recomputeInvoicesPayments(); } catch (e2) {}
             } catch (e) {}
             // Mark last
             vm._last.payments = { sn: vm.sn, term: vm.term };
@@ -1264,6 +1713,8 @@
 
           return vm.loadRegistration(true)
             .then(function () { return vm.loadTuition(true); })
+            // Auto-reload invoices after saving options to reflect updated tuition invoice totals/creation
+            .then(function () { return vm.loadInvoices(true); })
             .then(function () { return vm.loadPaymentDetails(true); })
             .then(function () {
               // Ensure summary reflects latest server state immediately after tuition reload

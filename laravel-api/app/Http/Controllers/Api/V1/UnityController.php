@@ -402,10 +402,30 @@ class UnityController extends Controller
             // Generate or update tuition invoice linked to this registration.
             // Amount is the computed total_due from tuition breakdown.
             try {
-                $amount = (float) ($breakdown['summary']['total_due'] ?? 0);
+                // Determine invoice amount based on registered payment type:
+                // - 'partial' => use installments.total_installment when available; fallback to total_due
+                // - others    => use total_due; fallback to installments.total_installment
+                $sum = is_array($breakdown['summary'] ?? null) ? $breakdown['summary'] : [];
+                $installments = is_array($sum['installments'] ?? null) ? $sum['installments'] : [];
+                $instTotal = $installments['total_installment'] ?? ($sum['total_installment'] ?? null);
+                $totalDue = $sum['total_due'] ?? null;
+                $pt = isset($registration->paymentType) ? strtolower((string) $registration->paymentType) : null;
+                $amount = null;
+                if ($pt === 'partial') {
+                    $amount = is_numeric($instTotal) ? (float) $instTotal : (is_numeric($totalDue) ? (float) $totalDue : 0.0);
+                } else {
+                    $amount = is_numeric($totalDue) ? (float) $totalDue : (is_numeric($instTotal) ? (float) $instTotal : 0.0);
+                }
                 if (is_finite($amount)) {
                     // Resolve acting cashier (by faculty/actor id)
                     $cashier = $actorId ? Cashier::query()->where('faculty_id', (int)$actorId)->first() : null;
+
+                    // Determine if a tuition invoice already exists for this registration
+                    $existingInvoice = DB::table('tb_mas_invoices')
+                        ->where('registration_id', (int) $registration->intRegistrationID)
+                        ->where('type', 'tuition')
+                        ->orderBy('intID', 'desc')
+                        ->first();
 
                     // Build payload and options
                     $payload = [
@@ -432,21 +452,33 @@ class UnityController extends Controller
                         }
                     }
 
+                    // Use cashier campus if campus_id still not resolved
                     if ($cashier) {
-                        // Only use cashier campus if campus_id still not resolved
                         if (!array_key_exists('campus_id', $options) || $options['campus_id'] === null || $options['campus_id'] === '') {
                             if (isset($cashier->campus_id)) {
                                 $options['campus_id'] = (int) $cashier->campus_id;
                             }
                         }
                         $options['cashier_id'] = (int) $cashier->intID;
-                        if (!empty($cashier->invoice_current)) {
+                    }
+
+                    // Decide whether we will assign/consume a cashier invoice number
+                    $willAssignInvoiceNo = false;
+                    if ($cashier && !empty($cashier->invoice_current)) {
+                        // For existing invoice: only assign if it has no number yet
+                        if ($existingInvoice && empty($existingInvoice->invoice_number)) {
                             $options['invoice_number'] = (int) $cashier->invoice_current;
+                            $willAssignInvoiceNo = true;
+                        }
+                        // For create: assign number when generating a new invoice
+                        if (!$existingInvoice) {
+                            $options['invoice_number'] = (int) $cashier->invoice_current;
+                            $willAssignInvoiceNo = true;
                         }
                     }
 
-                    // Only cashiers can generate/save invoices; skip when no cashier context
-                    if ($cashier) {
+                    // Update existing invoice amount regardless of cashier presence.
+                    if ($existingInvoice) {
                         app(\App\Services\InvoiceService::class)->upsertTuitionByRegistration(
                             (int) $registration->intRegistrationID,
                             (int) $user->intID,
@@ -456,10 +488,28 @@ class UnityController extends Controller
                             $actorId
                         );
 
-                        // Increment cashier's invoice_current if we consumed one
-                        if (!empty($options['invoice_number'])) {
-                            $cashier->invoice_current = (int)$cashier->invoice_current + 1;
+                        // Increment cashier's invoice_current if we assigned a number to an unnumbered invoice
+                        if ($willAssignInvoiceNo && !empty($options['invoice_number'])) {
+                            $cashier->invoice_current = (int) $cashier->invoice_current + 1;
                             $cashier->save();
+                        }
+                    } else {
+                        // No existing invoice: only create when cashier context is available
+                        if ($cashier) {
+                            app(\App\Services\InvoiceService::class)->upsertTuitionByRegistration(
+                                (int) $registration->intRegistrationID,
+                                (int) $user->intID,
+                                (int) $syid,
+                                $amount,
+                                $options,
+                                $actorId
+                            );
+
+                            // Increment cashier pointer if we consumed one
+                            if ($willAssignInvoiceNo && !empty($options['invoice_number'])) {
+                                $cashier->invoice_current = (int) $cashier->invoice_current + 1;
+                                $cashier->save();
+                            }
                         }
                     }
                 }

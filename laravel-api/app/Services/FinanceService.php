@@ -202,12 +202,14 @@ class FinanceService
             ->where('intAYID', $syid)
             ->first();
 
-        if (!$registration) {
-            // No registration for term -> empty list
-            return $empty($studentNumber, null, $syid, $syLabel);
-        }
-
-        $registrationId = (int) $registration->intRegistrationID;
+        // if (!$registration) {
+        //     // No registration for term -> empty list
+        //     return $empty($studentNumber, null, $syid, $syLabel);
+        // }
+        if($registration)
+            $registrationId = (int) $registration->intRegistrationID;
+        else
+            $registrationId = null;
         
         //get billing descriptions
         $billingDescriptions = [];
@@ -285,7 +287,7 @@ class FinanceService
         $countRows = (int) (clone $base)->count();
 
         // Build select list (with null fallbacks for optional columns)
-        $select = ['id', 'description', 'subtotal_order', 'status', 'sy_reference','or_date'];
+        $select = ['id', 'description', 'subtotal_order', 'status', 'sy_reference','or_date','invoice_number'];
         if ($hasOrNo) {
             $select[] = $hasOrNo . ' as or_no';
         } else {
@@ -321,6 +323,7 @@ class FinanceService
                 'id'            => (int) $r->id,
                 'posted_at'     => $r->or_date !== null ? (string) $r->or_date : null,
                 'or_no'         => $r->or_no !== null ? $r->or_no : null,
+                'invoice_number'=> $r->invoice_number !== null ? $r->invoice_number : null,
                 'description'   => $r->description !== null ? (string) $r->description : null,
                 'subtotal_order'=> isset($r->subtotal_order) ? (float) $r->subtotal_order : 0.0,
                 'status'        => $r->status !== null ? (string) $r->status : null,

@@ -142,6 +142,16 @@
                    class="w-full border rounded px-3 py-2"
                    ng-model="vm.current.posted_at" />
           </div>
+          <div ng-if="!vm.editing" class="flex items-center gap-2">
+            <input type="checkbox"
+                   id="sb-generate-invoice"
+                   class="h-4 w-4"
+                   ng-model="vm.current.generate_invoice" />
+            <label for="sb-generate-invoice" class="text-sm text-gray-700 select-none">Generate invoice now</label>
+          </div>
+          <p ng-if="!vm.editing" class="text-xs text-gray-500 -mt-2 mb-2">
+            Uncheck to add the billing entry without creating an invoice. You can generate one later from Cashier or Invoices.
+          </p>
           <div>
             <label class="block text-sm text-gray-600 mb-1">Remarks (optional)</label>
             <textarea class="w-full border rounded px-3 py-2"

@@ -23,7 +23,7 @@
   
     <!-- Errors summary -->
     <div ng-if="vm.error.student || vm.error.registration || vm.error.tuition || vm.error.ledger || vm.error.records" class="mb-4">
-      <div class="rounded border border-red-200 bg-red-50 text-red-700 px-4 py-3 space-y-1">
+      <div class="rounded border border-blue-200 bg-blue-50 text-blue-700 px-4 py-3 space-y-1">
         <div ng-if="vm.error.student">Student: {{ vm.error.student }}</div>
         <div ng-if="vm.error.registration">Registration: {{ vm.error.registration }}</div>
         <div ng-if="vm.error.tuition">Tuition: {{ vm.error.tuition }}</div>
@@ -188,8 +188,9 @@
                   <div>Computed Total (Installment): <strong>P{{ vm.currency(((vm.tuition && vm.tuition.total_installment) || (vm.tuitionSaved && vm.tuitionSaved.payload && vm.tuitionSaved.payload.total_installment) || 0)) }}</strong></div>
                 </div>
                 <div class="space-y-1">
-                  <div>Amount Paid: <strong class="text-green-600">P{{ vm.currency(vm.paymentDetailsTotal) }}</strong></div>
-                  <div>Remaining: <strong class="text-red-600">P{{ vm.currency((vm.selectedTuitionAmount || 0) - (vm.paymentDetailsTotal || 0)) }}</strong></div>
+                  <div>Billing Total: <strong>P{{ vm.currency(vm.meta.billing_total || 0) }}</strong></div>
+                  <div>Amount Paid: <strong class="text-green-600">P{{ vm.currency(vm.paymentDetailsTotal || 0) }}</strong></div>
+                  <div>Remaining: <strong class="text-red-600">P{{ vm.currency(vm.meta.remaining_amount || 0) }}</strong></div>
                 </div>
               </div>
   
@@ -204,6 +205,10 @@
               <div class="mt-2" ng-if="vm.canShowGenerateInvoice()">
                 <div class="rounded border border-amber-200 bg-amber-50 text-amber-800 px-3 py-2 mb-2">
                   No tuition invoice found for this registration.
+                </div>
+                <!-- Error alert when invoice generation fails -->
+                <div class="rounded border border-red-200 bg-red-50 text-red-700 px-3 py-2 mb-2" ng-if="vm.invoiceGenerateError">
+                  {{ vm.invoiceGenerateError }}
                 </div>
                 <button
                   class="inline-flex items-center px-3 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50"
@@ -296,6 +301,10 @@
             <div class="bg-gray-50 border rounded p-3">
               <div class="text-gray-500 uppercase text-xs">Discounts</div>
               <div class="font-semibold text-green-700">₱ {{ (p.summary.discounts_total || 0) | number:2 }}</div>
+            </div>
+            <div class="bg-gray-50 border rounded p-3">
+              <div class="text-gray-500 uppercase text-xs">Billing</div>
+              <div class="font-semibold">₱ {{ (p.summary.billing_total || 0) | number:2 }}</div>
             </div>
             <div class="bg-gray-100 border rounded p-3 md:col-span-2">
               <div class="text-gray-500 uppercase text-xs">Total Due</div>
@@ -428,6 +437,136 @@
               </tbody>
             </table>
           </div>
+
+          <!-- Billing Items -->
+          <div ng-if="p && p.items && p.items.billing && p.items.billing.length">
+            <h4 class="font-semibold">Billing Items</h4>
+            <table class="min-w-full text-sm">
+              <thead>
+                <tr class="text-left border-b">
+                  <th class="py-2 pr-4">Description</th>
+                  <th class="py-2 pr-4">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="b in p.items.billing" class="border-b">
+                  <td class="py-2 pr-4">{{ b.name || '—' }}</td>
+                  <td class="py-2 pr-4" ng-class="{'text-red-700': (b.amount || 0) < 0, 'text-gray-900': (b.amount || 0) >= 0}">
+                    ₱ {{ (b.amount || 0) | number:2 }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Invoice Details Modal -->
+    <div ng-if="vm.ui && vm.ui.showInvoiceModal" class="fixed inset-0 z-50 flex items-center justify-center">
+      <!-- Backdrop -->
+      <div class="absolute inset-0 bg-black bg-opacity-50" ng-click="vm.closeInvoiceModal()"></div>
+      <!-- Dialog -->
+      <div class="relative bg-white rounded-lg shadow-xl w-full max-w-4xl mx-4 max-h-[80vh] overflow-auto"
+           ng-click="$event.stopPropagation()"
+           tabindex="0"
+           ng-keydown="$event.keyCode===27 && vm.closeInvoiceModal()">
+        <div class="px-4 py-2 border-b flex items-center justify-between">
+          <h3 class="text-lg font-semibold">
+            Invoice Details — {{ (vm.invoiceModal.invoice && (vm.invoiceModal.invoice.invoice_number || vm.invoiceModal.invoice.number)) || 'N/A' }}
+          </h3>
+          <div class="flex items-center gap-2">
+            <button
+              class="inline-flex items-center px-3 py-1 rounded bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50"
+              ng-click="vm.printInvoice(vm.invoiceModal.invoice)"
+              ng-disabled="!vm.invoiceModal.invoice || vm.isPrinting(vm.invoiceModal.invoice)">
+              <span ng-if="!vm.isPrinting(vm.invoiceModal.invoice)">Print PDF</span>
+              <span ng-if="vm.isPrinting(vm.invoiceModal.invoice)">Printing...</span>
+            </button>
+            <button class="text-gray-600 hover:text-gray-800" ng-click="vm.closeInvoiceModal()">
+              <i class="fas fa-times"></i>
+              <span class="sr-only">Close</span>
+            </button>
+          </div>
+        </div>
+        <div class="p-4 space-y-4">
+          <!-- Header info -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3" ng-if="vm.invoiceModal.invoice">
+            <div class="text-sm text-gray-700">
+              <div><span class="text-gray-500">Type:</span> <strong>{{ vm.invoiceModal.invoice.type || '-' }}</strong></div>
+              <div><span class="text-gray-500">Status:</span> <strong>{{ vm.invoiceModal.invoice.status || '-' }}</strong></div>
+              <div><span class="text-gray-500">Date:</span> <strong>{{ vm.invoiceModal.invoice.posted_at || vm.invoiceModal.invoice.created_at || '' }}</strong></div>
+            </div>
+            <div class="text-sm text-gray-700">
+              <div><span class="text-gray-500">Remarks:</span> <span>{{ vm.invoiceModal.invoice.remarks || '' }}</span></div>
+            </div>
+          </div>
+          <!-- Totals -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="rounded border border-gray-200 bg-gray-50 px-4 py-3">
+              <div class="text-xs text-gray-500 uppercase">Total</div>
+              <div class="text-lg font-semibold text-gray-900">P{{ vm.currency(vm.invoiceModal.totals.total || 0) }}</div>
+            </div>
+            <div class="rounded border border-emerald-200 bg-emerald-50 px-4 py-3">
+              <div class="text-xs text-emerald-700 uppercase">Paid</div>
+              <div class="text-lg font-semibold text-emerald-900">P{{ vm.currency(vm.invoiceModal.totals.paid || 0) }}</div>
+            </div>
+            <div class="rounded border border-red-200 bg-red-50 px-4 py-3">
+              <div class="text-xs text-red-700 uppercase">Remaining</div>
+              <div class="text-lg font-semibold text-red-900">P{{ vm.currency(vm.invoiceModal.totals.remaining || 0) }}</div>
+            </div>
+          </div>
+          <!-- Invoice Items -->
+          <div ng-if="vm.invoiceModal.items && vm.invoiceModal.items.length">
+            <h4 class="font-semibold">Invoice Items</h4>
+            <table class="min-w-full text-sm">
+              <thead>
+                <tr class="text-left border-b">
+                  <th class="py-2 pr-4">Item</th>
+                  <th class="py-2 pr-4 text-right">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b" ng-repeat="it in vm.invoiceModal.items">
+                  <td class="py-2 pr-4">{{ it.description || it.name || it.code || '—' }}</td>
+                  <td class="py-2 pr-4 text-right">₱ {{ (it.amount || it.total || 0) | number:2 }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- Payments linked to this invoice -->
+          <div>
+            <h4 class="font-semibold">Payments</h4>
+            <div class="max-h-72 overflow-auto border rounded">
+              <table class="w-full text-sm">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="px-3 py-2 text-left">Date</th>
+                    <th class="px-3 py-2 text-left">OR#</th>
+                    <th class="px-3 py-2 text-left">Description</th>
+                    <th class="px-3 py-2 text-right">Subtotal</th>
+                    <th class="px-3 py-2 text-left">Status</th>
+                    <th class="px-3 py-2 text-left">Method</th>
+                    <th class="px-3 py-2 text-left">School Year</th>
+                  </tr>
+                </thead>
+                <tbody ng-if="vm.invoiceModal.payments && vm.invoiceModal.payments.length">
+                  <tr class="odd:bg-white even:bg-gray-50" ng-repeat="p in vm.invoiceModal.payments">
+                    <td class="px-3 py-2">{{ p.or_date || p.posted_at || '' }}</td>
+                    <td class="px-3 py-2">{{ p.or_no }}</td>
+                    <td class="px-3 py-2">{{ p.description }}</td>
+                    <td class="px-3 py-2 text-right">P{{ vm.currency(p.subtotal_order) }}</td>
+                    <td class="px-3 py-2">{{ p.status }}</td>
+                    <td class="px-3 py-2">{{ p.method }}</td>
+                    <td class="px-3 py-2">{{ (vm.paymentDetails && vm.paymentDetails.sy_label) || p.sy_reference }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="p-3 text-gray-500" ng-if="!vm.invoiceModal.payments || !vm.invoiceModal.payments.length">
+                <em>No payments linked to this invoice.</em>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -460,7 +599,10 @@
                   <th class="px-3 py-2 text-left">Type</th>
                   <th class="px-3 py-2 text-left">Status</th>
                   <th class="px-3 py-2 text-right">Amount</th>
+                  <th class="px-3 py-2 text-right">Paid</th>
+                  <th class="px-3 py-2 text-right">Remaining</th>
                   <th class="px-3 py-2 text-left">Remarks</th>
+                  <th class="px-3 py-2 text-left">Action</th>
                 </tr>
               </thead>
               <tbody ng-if="vm.invoices && vm.invoices.length">
@@ -470,7 +612,23 @@
                   <td class="px-3 py-2">{{ inv.type || '-' }}</td>
                   <td class="px-3 py-2">{{ inv.status || '-' }}</td>
                   <td class="px-3 py-2 text-right">P{{ vm.currency(inv.amount_total || inv.amount || inv.total || 0) }}</td>
+                  <td class="px-3 py-2 text-right">P{{ vm.currency(inv._paid || 0) }}</td>
+                  <td class="px-3 py-2 text-right" ng-class="{'text-red-700': (inv._remaining || 0) > 0, 'text-gray-500': (inv._remaining || 0) === 0}">P{{ vm.currency(inv._remaining || 0) }}</td>
                   <td class="px-3 py-2">{{ inv.remarks || '' }}</td>
+                  <td class="px-3 py-2">
+                    <button
+                      class="inline-flex items-center px-2 py-1 rounded bg-indigo-600 text-white hover:bg-indigo-700"
+                      ng-click="vm.openInvoiceModal(inv)">
+                      View
+                    </button>
+                    <button
+                      class="inline-flex items-center px-2 py-1 rounded border border-indigo-600 text-indigo-700 hover:bg-indigo-50 ml-2 disabled:opacity-50"
+                      ng-click="vm.printInvoice(inv)"
+                      ng-disabled="vm.isPrinting(inv)">
+                      <span ng-if="!vm.isPrinting(inv)">Print</span>
+                      <span ng-if="vm.isPrinting(inv)">Printing...</span>
+                    </button>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -500,6 +658,26 @@
             </span>
           </div>
 
+          <!-- Cashier Current Numbers (OR and Invoice) -->
+          <div class="mb-3" ng-if="vm.myCashier">
+            <div class="rounded border border-amber-200 bg-amber-50 text-amber-800 px-3 py-2">
+              <span>
+                Current OR#:
+                <strong>{{ (vm.myCashier.or &amp;&amp; vm.myCashier.or.current) || 'N/A' }}</strong>
+                <span class="ml-2 text-xs text-amber-900" ng-if="vm.myCashier.or &amp;&amp; (vm.myCashier.or.start || vm.myCashier.or.end)">
+                  (Range: {{ vm.myCashier.or.start || '—' }}–{{ vm.myCashier.or.end || '—' }})
+                </span>
+              </span>
+              <span class="ml-4">
+                Current Invoice#:
+                <strong>{{ (vm.myCashier.invoice &amp;&amp; vm.myCashier.invoice.current) || 'N/A' }}</strong>
+                <span class="ml-2 text-xs text-amber-900" ng-if="vm.myCashier.invoice &amp;&amp; (vm.myCashier.invoice.start || vm.myCashier.invoice.end)">
+                  (Range: {{ vm.myCashier.invoice.start || '—' }}–{{ vm.myCashier.invoice.end || '—' }})
+                </span>
+              </span>
+            </div>
+          </div>
+
           <!-- Add Payment (visible to Finance/Admin only) -->
           <div class="mb-4" ng-if="vm.canEdit">
             <div class="rounded border border-emerald-200 bg-emerald-50">
@@ -523,16 +701,41 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">Numbering Mode</label>
                     <select
                       class="block w-full rounded border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                      ng-model="vm.payment.mode">
+                      ng-model="vm.payment.mode"
+                      ng-change="vm.onModeChange()">
                       <option value="or">Official Receipt (OR)</option>
                       <option value="invoice">Invoice</option>
                     </select>
                   </div>
+                  <div ng-if="vm.payment.mode === 'or' && vm.invoices && vm.invoices.length">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Invoice (optional)</label>
+                    <select
+                      class="block w-full rounded border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                      ng-model="vm.payment.invoice_id"
+                      ng-options="inv.id as ((inv.invoice_number || inv.number) + ' — P' + vm.currency(inv.amount_total || inv.amount || inv.total || 0)) for inv in vm.invoices track by inv.id"
+                      ng-change="vm.onInvoiceSelected()">
+                      <option value="">-- select invoice --</option>
+                    </select>
+                    <div class="text-xs text-gray-600 mt-1" ng-if="vm.payment.invoice_id && vm.invoiceCtx && vm.invoiceCtx.number">
+                      <span>Invoice Total: P{{ vm.currency(vm.invoiceCtx.total || 0) }}</span>
+                      <span class="ml-2">Paid: <span class="text-green-700">P{{ vm.currency(vm.invoiceCtx.paid || 0) }}</span></span>
+                      <span class="ml-2">Remaining: <span ng-class="{'text-red-700': (vm.invoiceCtx.remaining || 0) > 0, 'text-gray-500': (vm.invoiceCtx.remaining || 0) === 0}">P{{ vm.currency(vm.invoiceCtx.remaining || 0) }}</span></span>
+                    </div>
+                  </div>
                   <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Amount</label>
-                    <input type="number" step="0.01" min="0.01"
+                    <input type="number" step="0.01" min="0.01" inputmode="decimal"
                       class="block w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                      ng-model="vm.payment.amount" placeholder="0.00" />
+                      ng-model="vm.payment.amount"
+                      ng-attr-max="{{ vm.amountMax() || undefined }}"
+                      ng-change="vm.onAmountChange()"
+                      ng-blur="vm.onAmountBlur()"
+                      ng-pattern="/^\d+(\.\d{1,2})?$/"
+                      placeholder="0.00" />
+                    <div class="text-xs mt-1" ng-if="vm.payment.invoice_id && (vm.amountMax() != null)">
+                      <span class="text-gray-600">Max: P{{ vm.currency(vm.amountMax() || 0) }}</span>
+                      <span class="ml-2 text-red-600" ng-if="vm.payment.amount && (parseFloat(vm.payment.amount) > (vm.amountMax() + 0.00001))">Amount exceeds remaining.</span>
+                    </div>
                   </div>
                   <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Payment Mode</label>

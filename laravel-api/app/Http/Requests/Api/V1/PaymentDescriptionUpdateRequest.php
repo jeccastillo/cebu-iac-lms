@@ -31,6 +31,11 @@ class PaymentDescriptionUpdateRequest extends FormRequest
                 'numeric',
                 'min:0',
             ],
+            'campus_id' => [
+                'sometimes',
+                'nullable',
+                'integer',
+            ],
         ];
     }
 

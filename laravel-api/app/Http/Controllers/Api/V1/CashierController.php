@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\ValidationException;
+use App\Services\SystemLogService;
+use App\Services\PaymentDetailAdminService;
 
 class CashierController extends Controller
 {
@@ -556,6 +558,33 @@ class CashierController extends Controller
         $campusId  = isset($payload['campus_id']) ? (int) $payload['campus_id'] : null;
         $modePaymentId = isset($payload['mode_of_payment_id']) ? (int) $payload['mode_of_payment_id'] : null;
 
+        // Resolve selected invoice number up-front if provided in payload
+        $invoiceNumberRef = null;
+        if ((isset($payload['invoice_id']) || isset($payload['invoice_number']))) {
+            try {
+                $invoiceRow = null;
+                if (isset($payload['invoice_id'])) {
+                    $iid = (int) $payload['invoice_id'];
+                    if ($iid > 0 && Schema::hasTable('tb_mas_invoices')) {
+                        $invoiceRow = DB::table('tb_mas_invoices')
+                            ->select('intID', 'invoice_number')
+                            ->where(function ($qq) use ($iid) {
+                                // support id or intID depending on schema
+                                $qq->where('intID', $iid);
+                            })
+                            ->first();
+                    }
+                }
+                if ($invoiceRow && isset($invoiceRow->invoice_number) && $invoiceRow->invoice_number !== null && $invoiceRow->invoice_number !== '') {
+                    $invoiceNumberRef = (int) $invoiceRow->invoice_number;
+                } elseif (isset($payload['invoice_number']) && $payload['invoice_number'] !== '') {
+                    $invoiceNumberRef = (int) $payload['invoice_number'];
+                }
+            } catch (\Throwable $e) {
+                // ignore resolution failures                
+            }
+        }
+        
         // Ensure payment_details table and core columns exist
         if (!Schema::hasTable('payment_details')) {
             throw ValidationException::withMessages([
@@ -590,33 +619,116 @@ class CashierController extends Controller
             ]);
         }
 
-        // Determine pointers and range
-        $start   = $mode === 'invoice' ? (int) ($row->invoice_start ?? 0) : (int) ($row->or_start ?? 0);
-        $end     = $mode === 'invoice' ? (int) ($row->invoice_end ?? 0)   : (int) ($row->or_end ?? 0);
-        $current = $mode === 'invoice' ? (int) ($row->invoice_current ?? 0) : (int) ($row->or_current ?? 0);
+        // Policy: if an invoice is selected and this is the first payment for that invoice,
+        // skip assigning/consuming an OR number and just save with the invoice number.
+        $skipOrAndUseInvoice = false;       
+        
+        if ($mode === 'or' && $invoiceNumberRef !== null && Schema::hasColumn('payment_details', 'invoice_number')) {
+            try {
+                $existingCount = (int) DB::table('payment_details')
+                    ->where('invoice_number', $invoiceNumberRef)
+                    ->count();                                    
+                if ($existingCount === 0) {                                   
+                    // First payment on this invoice: do not use OR number
+                    $skipOrAndUseInvoice = true;
+                    $numberCol = 'invoice_number'; // ensure we store the invoice number
+                }
+            } catch (\Throwable $e) {
+                // if we cannot determine, do not skip to be safe                
+            }
+        }   
+        // Determine pointers and range (skip when we're using invoice number for first payment)
+        $current = null;
+        if (!$skipOrAndUseInvoice) {
+            $start   = $mode === 'invoice' ? (int) ($row->invoice_start ?? 0) : (int) ($row->or_start ?? 0);
+            $end     = $mode === 'invoice' ? (int) ($row->invoice_end ?? 0)   : (int) ($row->or_end ?? 0);
+            $current = $mode === 'invoice' ? (int) ($row->invoice_current ?? 0) : (int) ($row->or_current ?? 0);
 
-        if ($start <= 0 || $end <= 0 || $end < $start) {
-            throw ValidationException::withMessages([
-                'range' => ['Cashier range is not properly configured']
-            ]);
-        }
-        if ($current <= 0) {
-            throw ValidationException::withMessages([
-                'current' => ['Current pointer is not set']
-            ]);
-        }
-        if ($current < $start || $current > $end) {
-            throw ValidationException::withMessages([
-                'current' => ['Current pointer must be within configured range']
-            ]);
+            if ($start <= 0 || $end <= 0 || $end < $start) {
+                throw ValidationException::withMessages([
+                    'range' => ['Cashier range is not properly configured']
+                ]);
+            }
+            if ($current <= 0) {
+                throw ValidationException::withMessages([
+                    'current' => ['Current pointer is not set']
+                ]);
+            }
+            if ($current < $start || $current > $end) {
+                throw ValidationException::withMessages([
+                    'current' => ['Current pointer must be within configured range']
+                ]);
+            }
+
+            // Re-validate number usage for the single current number
+            $usage = $this->svc->validateRangeUsage($mode, (int) $current, (int) $current);
+            if (!$usage['ok']) {
+                throw ValidationException::withMessages([
+                    'number' => ['Selected number already used', $usage]
+                ]);
+            }
         }
 
-        // Re-validate number usage for the single current number
-        $usage = $this->svc->validateRangeUsage($mode, (int) $current, (int) $current);
-        if (!$usage['ok']) {
-            throw ValidationException::withMessages([
-                'number' => ['Selected number already used', $usage]
-            ]);
+        // Backend hardening: when a specific invoice is referenced in payload (invoice_id or invoice_number),
+        // enforce that the amount does not exceed the remaining amount on that invoice.
+        // Remaining = invoice.amount_total - SUM(payment_details.subtotal_order WHERE status='Paid' AND invoice_number=...).
+        if ((isset($payload['invoice_id']) || isset($payload['invoice_number']))) {
+            try {
+                $invoiceRow = null;
+                $invoiceNumberRef = null;
+                $invoiceTotal = null;
+
+                // Resolve invoice by id when provided
+                if (isset($payload['invoice_id'])) {
+                    $iid = (int) $payload['invoice_id'];
+                    if ($iid > 0 && Schema::hasTable('tb_mas_invoices')) {
+                        $invoiceRow = DB::table('tb_mas_invoices')
+                            ->select('intID', 'invoice_number', 'amount_total','status')
+                            ->where('intID', $iid)
+                            ->first();
+                    }
+                }
+
+                // Prefer invoice_number from row; fallback to payload
+                if ($invoiceRow && isset($invoiceRow->invoice_number) && $invoiceRow->invoice_number !== null && $invoiceRow->invoice_number !== '') {
+                    $invoiceNumberRef = (int) $invoiceRow->invoice_number;
+                }
+                if ($invoiceNumberRef === null && isset($payload['invoice_number']) && $payload['invoice_number'] !== '') {
+                    $invoiceNumberRef = (int) $payload['invoice_number'];
+                }
+
+                // Determine invoice total (amount_total preferred; fallback amount/total)
+                if ($invoiceRow) {
+                    $cands = [
+                        $invoiceRow->amount_total ?? null,
+                        $invoiceRow->amount ?? null,
+                        $invoiceRow->total ?? null,
+                    ];
+                    foreach ($cands as $cand) {
+                        if ($cand !== null && is_numeric($cand)) {
+                            $invoiceTotal = (float) $cand;
+                            break;
+                        }
+                    }
+                }
+
+                // Validate only when we have both a number and a total, and when payment_details.invoice_number exists
+                if ($invoiceNumberRef !== null && $invoiceNumberRef > 0 && $invoiceTotal !== null && Schema::hasColumn('payment_details', 'invoice_number')) {
+                    $paidSum = (float) DB::table('payment_details')
+                        ->where('invoice_number', $invoiceNumberRef)
+                        ->where('status', 'Paid')
+                        ->sum('subtotal_order');
+
+                    $remaining = max($invoiceTotal - $paidSum, 0);
+                    if ($amount > $remaining + 0.00001) {
+                        throw ValidationException::withMessages([
+                            'amount' => ["Amount exceeds invoice remaining. Invoice #{$invoiceNumberRef} total={$invoiceTotal}, paid={$paidSum}, remaining={$remaining}"]
+                        ]);
+                    }
+                }
+            } catch (\Throwable $e) {
+                // Best-effort guard: skip enforcement if invoice table/columns are unavailable                
+            }
         }
 
         // Optional columns detection
@@ -666,8 +778,13 @@ class CashierController extends Controller
             'convenience_fee'        => $conFee,
             'request_id'             => $requestId,
             'slug'                   => '',
-            $numberCol               => (int) $current,
         ];
+        // number column is OR or invoice depending on rules above
+        if ($skipOrAndUseInvoice) {            
+            $insert[$numberCol] = (int) $invoiceNumberRef;
+        } else {
+            $insert[$numberCol] = (int) $current;
+        }
         if ($methodCol && $methodIn !== null) {
             $insert[$methodCol] = $methodIn;
         }
@@ -704,24 +821,71 @@ class CashierController extends Controller
             $insert['mode_of_payment_id'] = $modePaymentId;
         }
 
+        // When issuing an OR (mode='or') and an invoice is selected from the optional invoices,
+        // persist the selected invoice's number into payment_details.invoice_number alongside the OR number.
+        // Skip if we already stored invoice_number as the primary number for first payment.
+        if (!$skipOrAndUseInvoice && $mode === 'or' && Schema::hasColumn('payment_details', 'invoice_number')) {
+            try {
+                $invoiceRow = null;
+                $invoiceNumberRef = null;
+
+                // Resolve via invoice_id when provided
+                if (isset($payload['invoice_id'])) {
+                    $iid = (int) $payload['invoice_id'];
+                    if ($iid > 0 && Schema::hasTable('tb_mas_invoices')) {
+                        $invoiceRow = DB::table('tb_mas_invoices')
+                            ->select('intID', 'invoice_number')
+                            ->where('intID', $iid)
+                            ->first();
+                    }
+                }
+
+                // Prefer number from resolved row; fallback to payload
+                if ($invoiceRow && isset($invoiceRow->invoice_number) && $invoiceRow->invoice_number !== null && $invoiceRow->invoice_number !== '') {
+                    $invoiceNumberRef = (int) $invoiceRow->invoice_number;
+                }
+                if ($invoiceNumberRef === null && isset($payload['invoice_number']) && $payload['invoice_number'] !== '') {
+                    $invoiceNumberRef = (int) $payload['invoice_number'];
+                }
+
+                if ($invoiceNumberRef !== null && $invoiceNumberRef > 0) {
+                    $insert['invoice_number'] = $invoiceNumberRef;
+                }
+            } catch (\Throwable $e) {
+                // ignore linking if invoices table/column are unavailable
+                echo "An error occurred: " . $e->getMessage();
+            }
+        }
+
         // Transaction: insert payment row and increment pointer
-        $idInserted = null;
-        DB::transaction(function () use (&$idInserted, $insert, $row, $mode) {
+        $idInserted = null;        
+        DB::transaction(function () use (&$idInserted, $insert, $row, $mode, $skipOrAndUseInvoice) {
             $idInserted = DB::table('payment_details')->insertGetId($insert);
 
             if ($mode === 'invoice') {
                 $row->invoice_current = (int) $row->invoice_current + 1;
             } else {
-                $row->or_current = (int) $row->or_current + 1;
+                // Only advance OR pointer if we actually used an OR number
+                if (!$skipOrAndUseInvoice) {
+                    $row->or_current = (int) $row->or_current + 1;
+                }
             }
             $row->save();
         });
+
+        // System log: create payment detail
+        try {
+            $normalized = (new PaymentDetailAdminService())->getById((int) $idInserted);
+        } catch (\Throwable $e) {
+            $normalized = null;
+        }
+        SystemLogService::log('create', 'PaymentDetail', (int) $idInserted, null, $normalized ?? $insert, $request);
 
         return response()->json([
             'success' => true,
             'data' => [
                 'id'          => (int) $idInserted,
-                'number_used' => (int) $current,
+                'number_used' => $skipOrAndUseInvoice ? (int) $invoiceNumberRef : (int) $current,
                 'mode'        => $mode,
                 'cashier_id'  => (int) $row->intID,
             ],

@@ -1,0 +1,154 @@
+<div class="space-y-6" ng-cloak>
+  <style>
+    /* Scope thicker padding and borders to the Admin Invoice form only */
+    .admin-invoice-form input[type="text"],
+    .admin-invoice-form input[type="number"],
+    .admin-invoice-form input[type="date"],
+    .admin-invoice-form input[type="datetime-local"],
+    .admin-invoice-form select,
+    .admin-invoice-form textarea {
+      padding: 0.75rem 1rem; /* thicker: py-3 px-4 */
+      border: 2px solid #cbd5e1; /* slate-300 */
+      border-radius: 0.375rem; /* rounded-md */
+      background-color: #fff;
+    }
+    .admin-invoice-form input[type="text"]:focus,
+    .admin-invoice-form input[type="number"]:focus,
+    .admin-invoice-form input[type="date"]:focus,
+    .admin-invoice-form input[type="datetime-local"]:focus,
+    .admin-invoice-form select:focus,
+    .admin-invoice-form textarea:focus {
+      outline: none;
+      border-color: #3b82f6; /* blue-500 */
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    }
+  </style>
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-semibold text-gray-900">{{ vm.title }}</h1>
+      <p class="text-sm text-gray-600" ng-if="vm.isCreate">Use this form to create a new invoice. Fields map to the Laravel API.</p>
+      <p class="text-sm text-gray-600" ng-if="!vm.isCreate">Modify invoice fields below. Note: payload is update-only JSON.</p>
+    </div>
+    <div class="flex items-center gap-2">
+      <button type="button"
+              class="inline-flex items-center px-4 py-2 rounded bg-gray-100 text-gray-800 hover:bg-gray-200"
+              ng-click="vm.cancel()">
+        <i class="fas fa-arrow-left mr-2"></i>
+        Back
+      </button>
+      <button type="button"
+              class="inline-flex items-center px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+              ng-click="vm.save()"
+              ng-disabled="vm.loading">
+        <i class="fas fa-save mr-2"></i>
+        Save
+      </button>
+    </div>
+  </div>
+
+  <!-- Error -->
+  <div class="rounded border border-red-200 bg-red-50 text-red-700 px-4 py-3" ng-if="vm.error">
+    <i class="fas fa-exclamation-triangle mr-2"></i>{{ vm.error }}
+  </div>
+
+  <!-- Form -->
+  <div class="bg-white rounded shadow p-6 admin-invoice-form">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Required for create -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Type<span class="text-red-500" ng-if="vm.isCreate">*</span></label>
+        <select class="mt-1 block w-full rounded border-gray-300" ng-model="vm.model.type" ng-disabled="!vm.isCreate">
+          <option ng-repeat="t in vm.types" ng-value="t">{{ t }}</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Status</label>
+        <select class="mt-1 block w-full rounded border-gray-300" ng-model="vm.model.status">
+          <option ng-repeat="s in vm.statuses" ng-value="s">{{ s }}</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Student ID<span class="text-red-500" ng-if="vm.isCreate">*</span></label>
+        <input type="number" class="mt-1 block w-full rounded border-gray-300" ng-model="vm.model.student_id" placeholder="e.g. 12345" ng-disabled="!vm.isCreate">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Term (syid)<span class="text-red-500" ng-if="vm.isCreate">*</span></label>
+        <input type="number" class="mt-1 block w-full rounded border-gray-300" ng-model="vm.model.term" placeholder="e.g. 202501" ng-disabled="!vm.isCreate">
+      </div>
+
+      <!-- Optional common fields -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Invoice Number</label>
+        <input type="number" class="mt-1 block w-full rounded border-gray-300" ng-model="vm.model.invoice_number" placeholder="Explicit invoice number (optional)">
+        <p class="text-xs text-gray-500 mt-1">If omitted on create, InvoiceController may require cashier context unless explicit number is provided.</p>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Amount</label>
+        <input type="number" step="0.01" class="mt-1 block w-full rounded border-gray-300" ng-model="vm.model.amount" placeholder="Override amount_total">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Posted At</label>
+        <input type="datetime-local" class="mt-1 block w-full rounded border-gray-300" ng-model="vm.model.posted_at">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Due At</label>
+        <input type="date" class="mt-1 block w-full rounded border-gray-300" ng-model="vm.model.due_at">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Campus ID</label>
+        <input type="number" class="mt-1 block w-full rounded border-gray-300" ng-model="vm.model.campus_id" placeholder="e.g. 1">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Cashier ID</label>
+        <input type="number" class="mt-1 block w-full rounded border-gray-300" ng-model="vm.model.cashier_id" placeholder="e.g. 13">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Registration ID</label>
+        <input type="number" class="mt-1 block w-full rounded border-gray-300" ng-model="vm.model.registration_id" placeholder="optional">
+        <p class="text-xs text-gray-500 mt-1">For tuition invoices, can link to a registration.</p>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Remarks</label>
+        <input type="text" class="mt-1 block w-full rounded border-gray-300" ng-model="vm.model.remarks" placeholder="Notes">
+      </div>
+
+      <!-- Update-only JSON payload -->
+      <div class="md:col-span-2" ng-if="!vm.isCreate">
+        <label class="block text-sm font-medium text-gray-700">Payload (JSON)</label>
+        <textarea class="mt-1 block w-full rounded border-gray-300 font-mono text-sm" rows="8"
+                  ng-model="vm.model.payload"
+                  placeholder='{"items":[{"description":"Sample","amount":100.00}]}'></textarea>
+        <p class="text-xs text-gray-500 mt-1">This field replaces the payload when updating. Must be valid JSON.</p>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="mt-6 flex items-center gap-2">
+      <button type="button"
+              class="inline-flex items-center px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+              ng-click="vm.save()"
+              ng-disabled="vm.loading">
+        <i class="fas fa-save mr-2"></i>
+        Save
+      </button>
+      <button type="button"
+              class="inline-flex items-center px-4 py-2 rounded border border-gray-300 text-gray-800 hover:bg-gray-50"
+              ng-click="vm.cancel()">
+        Cancel
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading overlay -->
+  <div class="fixed inset-0 bg-black bg-opacity-10 flex items-center justify-center z-10" ng-if="vm.loading">
+    <div class="bg-white rounded shadow px-6 py-4 flex items-center gap-3">
+      <i class="fas fa-spinner animate-spin text-gray-600"></i>
+      <div class="text-gray-700">Saving...</div>
+    </div>
+  </div>
+</div>

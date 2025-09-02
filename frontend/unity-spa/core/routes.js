@@ -351,6 +351,26 @@
         controllerAs: "vm",
         requiredRoles: ["cashier_admin","admin"],
       })
+      // Admin: Invoices CRUD
+      .when("/admin/invoices", {
+        templateUrl: "features/admin/invoices/list.html",
+        controller: "AdminInvoicesController",
+        controllerAs: "vm",
+        requiredRoles: ["admin"],
+      })
+      .when("/admin/invoices/new", {
+        templateUrl: "features/admin/invoices/edit.html",
+        controller: "AdminInvoiceEditController",
+        controllerAs: "vm",
+        requiredRoles: ["admin"],
+      })
+      .when("/admin/invoices/:id/edit", {
+        templateUrl: "features/admin/invoices/edit.html",
+        controller: "AdminInvoiceEditController",
+        controllerAs: "vm",
+        requiredRoles: ["admin"],
+      })
+
       .when("/admin/payment-details", {
         templateUrl: "features/admin/payment-details/edit.html",
         controller: "AdminPaymentDetailsController",

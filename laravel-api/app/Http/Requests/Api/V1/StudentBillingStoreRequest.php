@@ -15,24 +15,26 @@ class StudentBillingStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'student_id'  => ['required', 'integer'],
-            'term'        => ['required', 'integer'], // syid
-            'description' => ['required', 'string', 'max:255'],
-            'amount'      => ['required', 'numeric', 'not_in:0'],
-            'posted_at'   => ['sometimes', 'nullable', 'date'],
-            'remarks'     => ['sometimes', 'nullable', 'string'],
+            'student_id'       => ['required', 'integer'],
+            'term'             => ['required', 'integer'], // syid
+            'description'      => ['required', 'string', 'max:255'],
+            'amount'           => ['required', 'numeric', 'not_in:0'],
+            'posted_at'        => ['sometimes', 'nullable', 'date'],
+            'remarks'          => ['sometimes', 'nullable', 'string'],
+            'generate_invoice' => ['sometimes', 'boolean'],
         ];
     }
 
     public function attributes(): array
     {
         return [
-            'student_id'  => 'student id',
-            'term'        => 'term (syid)',
-            'description' => 'description',
-            'amount'      => 'amount',
-            'posted_at'   => 'posted at',
-            'remarks'     => 'remarks',
+            'student_id'       => 'student id',
+            'term'             => 'term (syid)',
+            'description'      => 'description',
+            'amount'           => 'amount',
+            'posted_at'        => 'posted at',
+            'remarks'          => 'remarks',
+            'generate_invoice' => 'generate invoice',
         ];
     }
 
@@ -46,6 +48,11 @@ class StudentBillingStoreRequest extends FormRequest
 
         // Unset external aliases
         unset($data['student_id'], $data['term']);
+
+        // Default generate_invoice to true when not provided; cast to boolean when present
+        $data['generate_invoice'] = array_key_exists('generate_invoice', $data)
+            ? (bool) $data['generate_invoice']
+            : true;
 
         return $data;
     }

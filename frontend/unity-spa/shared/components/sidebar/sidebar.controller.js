@@ -75,6 +75,7 @@
         key: 'admin',
         label: 'Admin',
         children: [
+          { label: 'Invoices', path: '/admin/invoices' },
           { label: 'Payment Details', path: '/admin/payment-details' },
           { label: 'Faculty', path: '/faculty' },
           { label: 'Roles', path: '/roles' },

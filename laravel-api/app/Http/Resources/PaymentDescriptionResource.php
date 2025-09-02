@@ -15,9 +15,10 @@ class PaymentDescriptionResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'intID' => $this->intID,
-            'name' => $this->name,
-            'amount' => is_null($this->amount) ? null : (float) $this->amount,
+            'intID'     => $this->intID,
+            'name'      => $this->name,
+            'amount'    => is_null($this->amount) ? null : (float) $this->amount,
+            'campus_id' => isset($this->campus_id) ? (int) $this->campus_id : null,
         ];
     }
 }

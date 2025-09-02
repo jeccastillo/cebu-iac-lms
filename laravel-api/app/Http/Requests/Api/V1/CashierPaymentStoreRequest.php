@@ -34,6 +34,15 @@ class CashierPaymentStoreRequest extends FormRequest
             'posted_at'   => ['nullable', 'date'],
             // Optional campus; when present and column exists will map to payment_details.student_campus
             'campus_id'   => ['nullable', 'integer'],
+
+            // Optional fields for invoice-linking when mode='or'
+            // When provided, backend will validate remaining amount on the referenced invoice_number.
+            'invoice_id'     => ['sometimes', 'nullable', 'integer'],
+            'invoice_number' => ['sometimes', 'nullable', 'integer'],
+
+            // Optional legacy fields already consumed by controller
+            'or_date'         => ['sometimes', 'nullable', 'date'],
+            'convenience_fee' => ['sometimes', 'nullable', 'numeric', 'min:0'],
         ];
     }
 }

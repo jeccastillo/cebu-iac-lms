@@ -5,6 +5,7 @@ namespace App\Services;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Request;
 
 class PaymentDetailAdminService
 {
@@ -232,7 +233,7 @@ class PaymentDetailAdminService
      *  - posted_at (mapped to paid_at/date/created_at),
      *  - or_no/or_number and invoice_number (when columns exist).
      */
-    public function update(int $id, array $payload): array
+    public function update(int $id, array $payload, ?Request $request = null): array
     {
         $cols = $this->detectColumns();
         if (!$cols['exists']) {
@@ -244,6 +245,9 @@ class PaymentDetailAdminService
         if (!$current) {
             throw ValidationException::withMessages(['id' => ["payment_details id {$id} not found"]]);
         }
+
+        // Capture normalized current snapshot for logging
+        $old = $this->getById($id);
 
         // Build update data with safe mapping
         $update = [];
@@ -326,13 +330,17 @@ class PaymentDetailAdminService
         if (!$updated) {
             throw ValidationException::withMessages(['id' => ['Failed to fetch updated row']]);
         }
+
+        // System log: update payment detail
+        SystemLogService::log('update', 'PaymentDetail', (int) $id, $old ?? null, $updated, $request);
+
         return $updated;
     }
 
     /**
      * Delete a payment_details row by ID. Throws when not found.
      */
-    public function delete(int $id): void
+    public function delete(int $id, ?Request $request = null): void
     {
         $cols = $this->detectColumns();
         if (!$cols['exists']) {
@@ -345,8 +353,14 @@ class PaymentDetailAdminService
             throw ValidationException::withMessages(['id' => ["payment_details id {$id} not found"]]);
         }
 
+        // Capture normalized old snapshot for logging
+        $old = $this->getById($id);
+
         DB::transaction(function () use ($cols, $id) {
             DB::table($cols['table'])->where('id', $id)->delete();
         });
+
+        // System log: delete payment detail
+        SystemLogService::log('delete', 'PaymentDetail', (int) $id, $old, null, $request);
     }
 }

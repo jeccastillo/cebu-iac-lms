@@ -64,7 +64,7 @@
       },
 
       // POST /finance/student-billing
-      // payload: { student_id, term, description, amount, posted_at?, remarks? }
+      // payload: { student_id, term, description, amount, posted_at?, remarks?, generate_invoice? }
       create: function (payload) {
         var body = Object.assign({}, payload || {});
         if (body.student_id !== null && body.student_id !== undefined && body.student_id !== '') {

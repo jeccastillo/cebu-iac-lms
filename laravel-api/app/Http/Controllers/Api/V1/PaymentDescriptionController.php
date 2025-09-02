@@ -7,6 +7,7 @@ use App\Http\Requests\Api\V1\PaymentDescriptionStoreRequest;
 use App\Http\Requests\Api\V1\PaymentDescriptionUpdateRequest;
 use App\Http\Resources\PaymentDescriptionResource;
 use App\Models\PaymentDescription;
+use App\Models\Cashier;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -30,6 +31,29 @@ class PaymentDescriptionController extends Controller
         if ($search !== '') {
             $like = '%' . str_replace(['%', '_'], ['\\%', '\\_'], $search) . '%';
             $q->where('name', 'like', $like);
+        }
+
+        // Campus scope: default to globally selected campus when available
+        $resolvedCampusId = null;
+        $reqCampus = $request->query('campus_id');
+        if ($reqCampus !== null && $reqCampus !== '' && is_numeric($reqCampus)) {
+            $resolvedCampusId = (int) $reqCampus;
+        } else {
+            $hdrCampus = $request->header('X-Campus-ID');
+            if ($hdrCampus !== null && $hdrCampus !== '' && is_numeric($hdrCampus)) {
+                $resolvedCampusId = (int) $hdrCampus;
+            } else {
+                $hdrFaculty = $request->header('X-Faculty-ID');
+                if ($hdrFaculty !== null && $hdrFaculty !== '' && is_numeric($hdrFaculty)) {
+                    $cashier = Cashier::query()->where('faculty_id', (int) $hdrFaculty)->select('campus_id')->first();
+                    if ($cashier && isset($cashier->campus_id)) {
+                        $resolvedCampusId = (int) $cashier->campus_id;
+                    }
+                }
+            }
+        }
+        if ($resolvedCampusId !== null) {
+            $q->where('campus_id', $resolvedCampusId);
         }
 
         // Sorting
@@ -89,6 +113,31 @@ class PaymentDescriptionController extends Controller
     public function store(PaymentDescriptionStoreRequest $request): JsonResponse
     {
         $data = $request->validated();
+
+        // Default campus_id if not provided: request input -> X-Campus-ID header -> cashier via X-Faculty-ID
+        if (!array_key_exists('campus_id', $data) || $data['campus_id'] === null || $data['campus_id'] === '') {
+            $resolvedCampusId = null;
+            $reqCampus = $request->input('campus_id');
+            if ($reqCampus !== null && $reqCampus !== '' && is_numeric($reqCampus)) {
+                $resolvedCampusId = (int) $reqCampus;
+            } else {
+                $hdrCampus = $request->header('X-Campus-ID');
+                if ($hdrCampus !== null && $hdrCampus !== '' && is_numeric($hdrCampus)) {
+                    $resolvedCampusId = (int) $hdrCampus;
+                } else {
+                    $hdrFaculty = $request->header('X-Faculty-ID');
+                    if ($hdrFaculty !== null && $hdrFaculty !== '' && is_numeric($hdrFaculty)) {
+                        $cashier = Cashier::query()->where('faculty_id', (int) $hdrFaculty)->select('campus_id')->first();
+                        if ($cashier && isset($cashier->campus_id)) {
+                            $resolvedCampusId = (int) $cashier->campus_id;
+                        }
+                    }
+                }
+            }
+            if ($resolvedCampusId !== null) {
+                $data['campus_id'] = $resolvedCampusId;
+            }
+        }
 
         $row = PaymentDescription::create($data);
 

@@ -14,18 +14,19 @@ class PaymentDescriptionStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:128', 'unique:payment_descriptions,name'],
-            'amount' => ['nullable', 'numeric', 'min:0'],
+            'name'       => ['required', 'string', 'max:128', 'unique:payment_descriptions,name'],
+            'amount'     => ['nullable', 'numeric', 'min:0'],
+            'campus_id'  => ['sometimes', 'nullable', 'integer'],
         ];
     }
 
     public function messages(): array
     {
         return [
-            'name.required' => 'The name field is required.',
-            'name.unique' => 'The name has already been taken.',
+            'name.required'  => 'The name field is required.',
+            'name.unique'    => 'The name has already been taken.',
             'amount.numeric' => 'Amount must be a number.',
-            'amount.min' => 'Amount must be at least 0.',
+            'amount.min'     => 'Amount must be at least 0.',
         ];
     }
 }

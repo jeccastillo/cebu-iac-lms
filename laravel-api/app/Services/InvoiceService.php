@@ -31,9 +31,9 @@ class InvoiceService
     public function generate(string $type, int $studentId, int $syid, array $options = [], ?int $actorId = null): array
     {
         $type = strtolower(trim($type));
-        if (!in_array($type, ['tuition', 'billing', 'other'], true)) {
-            throw new \InvalidArgumentException("Invalid invoice type: {$type}");
-        }
+        // if (!in_array($type, ['tuition', 'billing', 'other'], true)) {
+        //     throw new \InvalidArgumentException("Invalid invoice type: {$type}");
+        // }
 
         // Resolve items and total based on type (unless overridden by options)
         $items = [];
@@ -45,14 +45,10 @@ class InvoiceService
             $items = $this->normalizeItemsArray($options['items']);
             $meta['source_note'] = 'items provided via options';
         } else {
-            if ($type === 'billing') {
-                [$items, $meta] = $this->buildFromBilling($studentId, $syid);
-            } elseif ($type === 'tuition') {
+            if ($type === 'tuition') {
                 [$items, $meta] = $this->buildFromTuition($studentId, $syid);
             } else {
-                // 'other' requires items or amount; if none, create a placeholder item of 0 amount
-                $items = [];
-                $meta['warning'] = 'no items provided for type other';
+                [$items, $meta] = $this->buildFromBilling($studentId, $syid);
             }
         }
 

@@ -42,6 +42,7 @@ class TuitionService
             'discounts_total'    => 0.0,
             'scholarships_total' => 0.0,
             'additional_total'   => 0.0,
+            'billing_total'      => 0.0,
             'total_due'          => 0.0,
         ];
 
@@ -54,6 +55,7 @@ class TuitionService
                 'discounts'    => [],
                 'scholarships' => [],
                 'additional'   => [],
+                'billing'      => [],
             ],
         ];
     }
@@ -213,6 +215,7 @@ class TuitionService
         }
 
         $itemsAdditional = [];
+        $itemsBilling = [];
         // foreign fees
         foreach ($foreignList as $name => $amt) {
             $itemsAdditional[] = [
@@ -251,8 +254,8 @@ class TuitionService
                     $desc = (string) ($br->description ?? '');
                     $amt  = round((float) ($br->amount ?? 0), 2);
                     if ($desc !== '' && $amt != 0.0) {
-                        // Allow negative credits; show each line as additional item
-                        $itemsAdditional[] = ['name' => $desc, 'amount' => $amt];
+                        // Allow negative credits; show each line as billing item (separate from 'additional')
+                        $itemsBilling[] = ['name' => $desc, 'amount' => $amt];
                         $billingTotal += $amt;
 
                         // Collect billing descriptions for matching payments
@@ -268,8 +271,9 @@ class TuitionService
             $billingTotal = 0.0;
         }
 
-        // 8) Totals and summary        
-        $additionalTotal = round($foreignTotal + $thesisFee + $lateEnrollmentFee + $newStudentTotal + $billingTotal, 2);                
+        // 8) Totals and summary
+        // Note: billing (student_billing) is separated and NOT included in additional_total
+        $additionalTotal = round($foreignTotal + $thesisFee + $lateEnrollmentFee + $newStudentTotal, 2);
 
         // Discounts and scholarships aggregation (shape only; totals may remain zero until implemented)
         $ds = $calc->computeDiscountsAndScholarships([
@@ -302,6 +306,8 @@ class TuitionService
             'discounts_total'    => round($discountTotal, 2),
             'scholarships_total' => round($scholarshipTotal, 2),
             'additional_total'   => $additionalTotal,
+            'billing_total'      => round($billingTotal, 2),
+            // total_due excludes separate billing items; billing can be invoiced separately
             'total_due'          => round($tuition + $miscTotal + $labTotal + $additionalTotal - $discountTotal - $scholarshipTotal, 2),
         ];
 
@@ -313,6 +319,7 @@ class TuitionService
             'discounts'    => $itemsDiscounts,
             'scholarships' => $itemsScholarships,
             'additional'   => $itemsAdditional,
+            'billing'      => $itemsBilling,
         ];
 
         // Installment breakdown (baseline using current partial totals and zero discounts/scholarships)
@@ -446,9 +453,19 @@ class TuitionService
         }
 
         // Upon saving tuition, generate or update a tuition invoice linked to this registration.
-        // Use total_due as the amount, pass campus_id/payload, and save current cashier invoice number if available.
+        // Determine amount based on paymentType: partial uses installments total; otherwise total_due. Fallbacks applied.
         try {
-            $amount = (float) ($breakdown['summary']['total_due'] ?? 0);
+            $sum = is_array($breakdown['summary'] ?? null) ? $breakdown['summary'] : [];
+            $installments = is_array($sum['installments'] ?? null) ? $sum['installments'] : [];
+            $instTotal = $installments['total_installment'] ?? ($sum['total_installment'] ?? null);
+            $totalDue = $sum['total_due'] ?? null;
+            $pt = isset($registration->paymentType) ? strtolower((string) $registration->paymentType) : null;
+            $amount = null;
+            if ($pt === 'partial') {
+                $amount = is_numeric($instTotal) ? (float) $instTotal : (is_numeric($totalDue) ? (float) $totalDue : 0.0);
+            } else {
+                $amount = is_numeric($totalDue) ? (float) $totalDue : (is_numeric($instTotal) ? (float) $instTotal : 0.0);
+            }
             if (is_finite($amount)) {
                 // Resolve acting cashier by faculty_id (= $actorId)
                 $cashier = null;

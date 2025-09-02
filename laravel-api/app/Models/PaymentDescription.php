@@ -13,9 +13,11 @@ class PaymentDescription extends Model
     protected $fillable = [
         'name',
         'amount',
+        'campus_id',
     ];
 
     protected $casts = [
-        'amount' => 'float',
+        'amount'    => 'float',
+        'campus_id' => 'integer',
     ];
 }

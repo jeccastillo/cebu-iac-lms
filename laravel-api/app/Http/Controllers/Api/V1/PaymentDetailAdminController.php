@@ -95,7 +95,7 @@ class PaymentDetailAdminController extends Controller
     {
         $payload = $request->validated();
 
-        $updated = $this->payments->update($id, $payload);
+        $updated = $this->payments->update($id, $payload, $request);
 
         return response()->json([
             'success' => true,
@@ -107,9 +107,9 @@ class PaymentDetailAdminController extends Controller
      * DELETE /api/v1/finance/payment-details/{id}
      * Admin-only hard delete.
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(int $id, Request $request): JsonResponse
     {
-        $this->payments->delete($id);
+        $this->payments->delete($id, $request);
 
         return response()->json([
             'success' => true,

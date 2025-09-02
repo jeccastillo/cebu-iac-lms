@@ -225,7 +225,13 @@ Route::prefix('v1')->group(function () {
     // Invoices (Finance/Admin)
     Route::get('/finance/invoices', [InvoiceController::class, 'index'])->middleware('role:finance,admin');
     Route::get('/finance/invoices/{id}', [InvoiceController::class, 'show'])->middleware('role:finance,admin');
+    Route::get('/finance/invoices/{id}/pdf', [InvoiceController::class, 'pdf'])->middleware('role:finance,admin');
     Route::post('/finance/invoices/generate', [InvoiceController::class, 'generate'])->middleware('role:finance,admin');
+
+    // Invoices Admin-only CRUD
+    Route::post('/finance/invoices', [InvoiceController::class, 'store'])->middleware('role:admin');
+    Route::put('/finance/invoices/{id}', [InvoiceController::class, 'update'])->middleware('role:admin');
+    Route::delete('/finance/invoices/{id}', [InvoiceController::class, 'destroy'])->middleware('role:admin');
 
     // Scholarship endpoints (read-only baseline)
     Route::get('/scholarships', [ScholarshipController::class, 'index']);

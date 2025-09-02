@@ -252,7 +252,8 @@
         // Default to current local datetime in input-friendly format
         posted_at: toInputDateTime(new Date()),
         remarks: '',
-        payment_description_id: null
+        payment_description_id: null,
+        generate_invoice: true
       };
       vm.modalOpen = true;
     }
@@ -331,6 +332,8 @@
         // Create requires student_id and term
         payload.student_id = vm.current.student_id;
         payload.term = vm.current.term;
+        // Pass generate_invoice flag (default true)
+        payload.generate_invoice = !!vm.current.generate_invoice;
         StudentBillingService.create(payload).then(function () {
           ToastService.success('Student billing item created.');
           vm.modalOpen = false;

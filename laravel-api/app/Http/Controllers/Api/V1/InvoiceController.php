@@ -7,6 +7,10 @@ use App\Http\Requests\Api\V1\InvoiceGenerateRequest;
 use App\Services\InvoiceService;
 use App\Models\Cashier;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
+use App\Http\Requests\Api\V1\InvoiceUpdateRequest;
+use App\Services\SystemLogService;
 
 class InvoiceController extends Controller
 {
@@ -27,14 +31,47 @@ class InvoiceController extends Controller
      */
     public function index(Request $request)
     {
+        // Backward-compat: if registration_id is provided, resolve missing student_id/syid
+        $studentId      = $request->input('student_id');
+        $syid           = $request->input('syid');
+        $registrationId = $request->input('registration_id');
+        $term           = $request->input('term');
+
+        // Accept 'term' as alias for 'syid' when not explicitly provided
+        if ((empty($syid) || $syid === '') && $term !== null && $term !== '' && is_numeric($term)) {
+            $syid = (int) $term;
+        }
+
+        if (!empty($registrationId) && (empty($studentId) || empty($syid))) {
+            try {
+                $reg = DB::table('tb_mas_registration')
+                    ->where('intRegistrationID', (int) $registrationId)
+                    ->first();
+                if ($reg) {
+                    if (empty($studentId) && isset($reg->intStudentID)) {
+                        $studentId = (int) $reg->intStudentID;
+                    }
+                    if (empty($syid)) {
+                        if (isset($reg->syid)) {
+                            $syid = (int) $reg->syid;
+                        } elseif (isset($reg->intAYID)) {
+                            // Fallback: registration table may use intAYID for term id
+                            $syid = (int) $reg->intAYID;
+                        }
+                    }
+                }
+            } catch (\Throwable $e) {
+                // ignore db errors and fall back to explicit inputs
+            }
+        }
+
         $filters = [
-            'student_id'      => $request->input('student_id'),
+            'student_id'      => $studentId,
             'student_number'  => $request->input('student_number'),
-            'syid'            => $request->input('syid'),
+            'syid'            => $syid,
             'type'            => $request->input('type'),
             'status'          => $request->input('status'),
             'campus_id'       => $request->input('campus_id'),
-            'registration_id' => $request->input('registration_id'),
         ];
 
         $items = $this->svc->list($filters);
@@ -63,6 +100,64 @@ class InvoiceController extends Controller
             'success' => true,
             'data'    => $row,
         ]);
+    }
+
+    /**
+     * GET /api/v1/finance/invoices/{id}/pdf
+     * Streams a minimal PDF of the invoice (inline).
+     */
+    public function pdf($id, Request $request)
+    {
+        $row = $this->svc->get((int) $id);
+        if (!$row) {
+            return response()->json([
+                'success' => false,
+                'message' => "Invoice id {$id} not found",
+            ], 404);
+        }
+
+        // Normalize shape for the view
+        $invoice = is_array($row) ? $row : (array) $row;
+        $items = [];
+        if (isset($invoice['items']) && is_array($invoice['items'])) {
+            $items = $invoice['items'];
+        } elseif (isset($invoice['invoice_items']) && is_array($invoice['invoice_items'])) {
+            $items = $invoice['invoice_items'];
+        }
+
+        // Resolve display fields with fallbacks
+        $invNo = $invoice['invoice_number'] ?? ($invoice['number'] ?? null);
+        $posted = $invoice['posted_at'] ?? ($invoice['created_at'] ?? null);
+        $type = $invoice['type'] ?? '-';
+        $status = $invoice['status'] ?? '-';
+        $remarks = $invoice['remarks'] ?? '';
+        // Total: first numeric among amount_total, amount, total
+        $total = null;
+        foreach (['amount_total', 'amount', 'total'] as $k) {
+            if (isset($invoice[$k]) && is_numeric($invoice[$k])) { $total = (float) $invoice[$k]; break; }
+        }
+        if ($total === null) $total = 0;
+
+        $pdf = PDF::loadView('pdf.invoice', [
+            'invoice' => $invoice,
+            'items'   => $items,
+            'meta'    => [
+                'number'   => $invNo,
+                'posted'   => $posted,
+                'type'     => $type,
+                'status'   => $status,
+                'remarks'  => $remarks,
+                'total'    => $total,
+            ],
+        ])
+        ->setPaper('a4')
+        ->setOption('margin-top', '12mm')
+        ->setOption('margin-right', '12mm')
+        ->setOption('margin-bottom', '12mm')
+        ->setOption('margin-left', '12mm');
+
+        $filename = 'invoice-' . ($invNo ?: $id) . '.pdf';
+        return $pdf->inline($filename);
     }
 
     /**
@@ -139,6 +234,24 @@ class InvoiceController extends Controller
             }
         }
 
+        // Failsafe: require cashier and valid current invoice when invoice_number not explicitly provided
+        if (!array_key_exists('invoice_number', $options) || $options['invoice_number'] === null || $options['invoice_number'] === '') {
+            if (!$actingCashier) {
+                return response()->json([
+                    'success' => false,
+                    'code'    => 'NO_CASHIER',
+                    'message' => 'Cashier account is required to generate an invoice without an explicit invoice_number.',
+                ], 422);
+            }
+            if (empty($actingCashier->invoice_current)) {
+                return response()->json([
+                    'success' => false,
+                    'code'    => 'NO_CASHIER_INVOICE_CURRENT',
+                    'message' => 'Cashier current invoice is not set.',
+                ], 422);
+            }
+        }
+
         $actorId = null;
         try {
             $actor = $request->user();
@@ -150,6 +263,9 @@ class InvoiceController extends Controller
         }
 
         $row = $this->svc->generate($type, $studentId, $syid, $options, $actorId);
+
+        // System log: create invoice
+        SystemLogService::log('create', 'Invoice', (int) ($row['id'] ?? 0), null, $row, $request);
 
         // Increment cashier invoice_current if we consumed an invoice number from a resolved cashier
         if ($usedInvoiceNumber !== null && $actingCashier && isset($actingCashier->intID)) {
@@ -166,5 +282,119 @@ class InvoiceController extends Controller
             'success' => true,
             'data'    => $row,
         ], 201);
+    }
+
+    /**
+     * POST /api/v1/finance/invoices (admin-only)
+     * Alias to generate() for admin workflows, allowing explicit invoice_number or standard generation.
+     */
+    public function store(InvoiceGenerateRequest $request)
+    {
+        return $this->generate($request);
+    }
+
+    /**
+     * PUT /api/v1/finance/invoices/{id} (admin-only)
+     * Partial update for invoice fields.
+     */
+    public function update($id, InvoiceUpdateRequest $request)
+    {
+        $id = (int) $id;
+
+        $existing = DB::table('tb_mas_invoices')->where('intID', $id)->first();
+        if (!$existing) {
+            return response()->json([
+                'success' => false,
+                'message' => "Invoice id {$id} not found",
+            ], 404);
+        }
+
+        $v = $request->validated();
+
+        // Capture old state for system log
+        $old = $this->svc->get($id);
+
+        // Enforce unique invoice_number if provided
+        if (array_key_exists('invoice_number', $v) && $v['invoice_number'] !== null && $v['invoice_number'] !== '') {
+            $dup = DB::table('tb_mas_invoices')
+                ->where('invoice_number', (int) $v['invoice_number'])
+                ->where('intID', '!=', $id)
+                ->exists();
+            if ($dup) {
+                return response()->json([
+                    'success' => false,
+                    'code'    => 'DUPLICATE_INVOICE_NUMBER',
+                    'message' => 'Invoice number already exists.',
+                ], 422);
+            }
+        }
+
+        $update = [];
+        foreach (['status','posted_at','due_at','remarks','campus_id','cashier_id'] as $f) {
+            if (array_key_exists($f, $v)) {
+                $update[$f] = $v[$f];
+            }
+        }
+        if (array_key_exists('invoice_number', $v)) {
+            $update['invoice_number'] = $v['invoice_number'];
+        }
+        if (array_key_exists('amount', $v) && is_numeric($v['amount'])) {
+            $update['amount_total'] = round((float)$v['amount'], 2);
+        }
+        if (array_key_exists('payload', $v) && is_array($v['payload'])) {
+            // DB builder update: ensure JSON encoding
+            $update['payload'] = json_encode($v['payload']);
+        }
+
+        // Track updater when available
+        try {
+            $actor = $request->user();
+            if ($actor && isset($actor->id)) {
+                $update['updated_by'] = (int) $actor->id;
+            }
+        } catch (\Throwable $e) {}
+
+        $update['updated_at'] = now()->toDateTimeString();
+
+        DB::table('tb_mas_invoices')->where('intID', $id)->update($update);
+
+        $row = $this->svc->get($id);
+
+        // System log: update invoice
+        SystemLogService::log('update', 'Invoice', (int) $id, $old, $row, $request);
+
+        return response()->json([
+            'success' => true,
+            'data'    => $row,
+        ]);
+    }
+
+    /**
+     * DELETE /api/v1/finance/invoices/{id} (admin-only)
+     * Hard delete invoice.
+     */
+    public function destroy($id, Request $request)
+    {
+        $id = (int) $id;
+
+        $existing = DB::table('tb_mas_invoices')->where('intID', $id)->first();
+        if (!$existing) {
+            return response()->json([
+                'success' => false,
+                'message' => "Invoice id {$id} not found",
+            ], 404);
+        }
+
+        $existingNormalized = $this->svc->get($id);
+
+        DB::table('tb_mas_invoices')->where('intID', $id)->delete();
+
+        // System log: delete invoice
+        SystemLogService::log('delete', 'Invoice', (int) $id, $existingNormalized, null, $request);
+
+        return response()->json([
+            'success' => true,
+            'message' => "Invoice id {$id} deleted",
+        ]);
     }
 }
