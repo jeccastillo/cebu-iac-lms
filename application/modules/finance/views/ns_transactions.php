@@ -281,7 +281,7 @@ new Vue({
                     this.or_print.or_number = payment.or_number;
                     this.or_print.description = payment.description;
                     this.or_print.total_amount_due = payment.subtotal_order;
-                    this.or_print.transaction_date = payment.or_date_formatted ? payment.or_date_formatted : payment.updated_at;
+                    this.or_print.transaction_date = payment.or_date_formatted != null ? payment.or_date_formatted : payment.updated_at;
                     this.or_print.remarks = payment.remarks;
                     this.or_print.student_name = this.payee.lastname +
                         ", " + this.payee.firstname;
