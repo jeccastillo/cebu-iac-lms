@@ -300,18 +300,24 @@ class DataFetcherService
                     $termLabel = sprintf('%s Term %s-%s', $r->enumSem, $r->strYearStart, $r->strYearEnd);
                 }
                 $item = [         
-                    'faculty_first'=>$r->faculty_firstname,
-                    'faculty_last'=>$r->faculty_lastname,      
-                    'enlisted_first'=>$r->reg_firstname,
-                    'enlisted_last'=>$r->reg_lastname,           
-                    'section_code'=> $r->sectionCode,
-                    'classlist_id'=> $r->classlist_id,
-                    'code'        => $r->code,
-                    'description' => $r->description,
-                    'units'       => isset($r->units) ? (int)$r->units : null,
-                    'subject_id'  => isset($r->subject_id) ? (int)$r->subject_id : null,
-                    'syid'        => $r->syid,
-                    'remarks'     => $r->remarks,                    
+                    'faculty_first' => $r->faculty_firstname,
+                    'faculty_last'  => $r->faculty_lastname,      
+                    'enlisted_first'=> $r->reg_firstname,
+                    'enlisted_last' => $r->reg_lastname,           
+                    'section_code'  => $r->sectionCode,
+                    'classlist_id'  => $r->classlist_id,
+                    'code'          => $r->code,
+                    'description'   => $r->description,
+                    'units'         => isset($r->units) ? (int)$r->units : null,
+                    'subject_id'    => isset($r->subject_id) ? (int)$r->subject_id : null,
+                    'syid'          => $r->syid,
+                    // Provide fields needed by the frontend to build friendly term labels
+                    'enumSem'       => $r->enumSem ?? null,
+                    'strYearStart'  => $r->strYearStart ?? null,
+                    'strYearEnd'    => $r->strYearEnd ?? null,
+                    'school_year'   => (isset($r->strYearStart, $r->strYearEnd) ? ($r->strYearStart . '-' . $r->strYearEnd) : null),
+                    'term'          => $termLabel, // e.g., "1st Term 2025-2026" (frontend further formats to "1st Sem ...")
+                    'remarks'       => $r->remarks,                    
                 ];
                 if ($includeGrades) {
                     $item['grades'] = [
