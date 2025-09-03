@@ -134,6 +134,31 @@
         controllerAs: "vm",
         requiredRoles: ["admissions", "admin"],
       })
+      .when("/admissions/applicant-types", {
+        templateUrl: "features/admissions/applicant-types/list.html",
+        controller: "ApplicantTypesController",
+        controllerAs: "vm",
+        requiredRoles: ["admissions", "admin"],
+      })
+      .when("/admissions/applicant-types/new", {
+        templateUrl: "features/admissions/applicant-types/edit.html",
+        controller: "ApplicantTypeEditController",
+        controllerAs: "vm",
+        requiredRoles: ["admissions", "admin"],
+      })
+      .when("/admissions/applicant-types/:id/edit", {
+        templateUrl: "features/admissions/applicant-types/edit.html",
+        controller: "ApplicantTypeEditController",
+        controllerAs: "vm",
+        requiredRoles: ["admissions", "admin"],
+      })
+      // Place analytics before the dynamic :id route to avoid "analytics" being treated as an id
+      .when("/admissions/applicants/analytics", {
+        templateUrl: "features/admissions/applicants/analytics.html",
+        controller: "ApplicantsAnalyticsController",
+        controllerAs: "vm",
+        requiredRoles: ["admissions", "admin"],
+      })
       .when("/admissions/applicants", {
         templateUrl: "features/admissions/applicants/list.html",
         controller: "ApplicantsListController",
@@ -436,6 +461,12 @@
         controller: "SystemLogsController",
         controllerAs: "vm",
         requiredRoles: ["admin"],
+      })
+      .when("/student/dashboard", {
+        templateUrl: "features/student-dashboard/student-dashboard.html",
+        controller: "StudentDashboardController",
+        controllerAs: "vm",
+        requiredRoles: ["student_view", "admin"],
       })
       .otherwise({ redirectTo: "/login" });
 

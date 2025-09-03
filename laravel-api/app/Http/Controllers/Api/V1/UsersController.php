@@ -111,7 +111,7 @@ class UsersController extends Controller
             ], 422);
         }
 
-        $user = DB::table('tb_mas_users')->where('strUsername', $username)->first();
+        $user = DB::table('tb_mas_users')->where('strEmail', $username)->first();        
 
         if (!$user || !isset($user->strPass)) {
             return response()->json([

@@ -14,6 +14,11 @@
             }">
         {{ vm.status || 'new' }}
       </span>
+      <button class="inline-flex items-center px-3 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700"
+              ng-if="!vm.editing"
+              ng-click="vm.startEdit()">
+        Edit
+      </button>
       <button class="inline-flex items-center px-3 py-2 bg-gray-100 text-gray-700 text-sm rounded-md hover:bg-gray-200"
               ng-click="vm.backToList()">
         Back
@@ -67,7 +72,7 @@
         </div>
         <div>
           <label class="block text-xs font-medium text-gray-500">Campus</label>
-          <div class="text-sm text-gray-900">{{ vm.user.campus || '-' }}</div>
+          <div class="text-sm text-gray-900">{{ vm.user.campus || vm.user.campus_id || '-' }}</div>
         </div>
         <div>
           <label class="block text-xs font-medium text-gray-500">Student Type</label>
@@ -87,6 +92,58 @@
       </div>
     </div>
 
+    <!-- Edit Application Data -->
+    <div ng-if="vm.editing" class="bg-white shadow-sm border border-gray-200 rounded-lg">
+      <div class="border-b border-gray-200 px-4 py-3">
+        <h2 class="text-lg font-semibold text-gray-800">Edit Application Data</h2>
+      </div>
+      <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-medium text-gray-500">First Name</label>
+          <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+                 ng-model="vm.form.first_name" ng-disabled="vm.saving" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500">Middle Name</label>
+          <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+                 ng-model="vm.form.middle_name" ng-disabled="vm.saving" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500">Last Name</label>
+          <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+                 ng-model="vm.form.last_name" ng-disabled="vm.saving" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500">Email</label>
+          <input type="email" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+                 ng-model="vm.form.email" ng-disabled="vm.saving" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500">Mobile Number</label>
+          <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+                 ng-model="vm.form.mobile_number" ng-disabled="vm.saving" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500">Date of Birth</label>
+          <input type="date" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+                 ng-model="vm.form.date_of_birth" ng-disabled="vm.saving" />
+        </div>
+      </div>
+      <div class="px-4 py-3 border-t border-gray-200 flex items-center space-x-2">
+        <button class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 disabled:opacity-50"
+                ng-disabled="vm.saving"
+                ng-click="vm.save()">
+          <span ng-if="!vm.saving">Save</span>
+          <span ng-if="vm.saving">Saving...</span>
+        </button>
+        <button class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 text-sm rounded-md hover:bg-gray-200 disabled:opacity-50"
+                ng-disabled="vm.saving"
+                ng-click="vm.cancelEdit()">
+          Cancel
+        </button>
+      </div>
+    </div>
+
     <!-- Known fields from applicant_data -->
     <div class="bg-white shadow-sm border border-gray-200 rounded-lg">
       <div class="border-b border-gray-200 px-4 py-3">
@@ -95,8 +152,81 @@
 
       <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label class="block text-xs font-medium text-gray-500">Program (type_id)</label>
-          <div class="text-sm text-gray-900">{{ (vm.applicant_data && (vm.applicant_data.type || vm.applicant_data.program || vm.applicant_data.type_id)) || '-' }}</div>
+          <label class="block text-xs font-medium text-gray-500">Applicant Type</label>
+          <div class="text-sm text-gray-900">{{ vm.applicant_type_name || (vm.applicant_data && vm.applicant_data.applicant_type) || '-' }}</div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500">Application Fee</label>
+          <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium"
+                ng-class="{'bg-green-100 text-green-800': vm.paid_application_fee, 'bg-gray-100 text-gray-700': !vm.paid_application_fee}">
+            <span class="fas" ng-class="{'fa-check-circle mr-1': vm.paid_application_fee, 'fa-times-circle mr-1': !vm.paid_application_fee}"></span>
+            {{ vm.paid_application_fee ? 'Paid' : 'Unpaid' }}
+          </span>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500">Reservation Fee</label>
+          <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium"
+                ng-class="{'bg-green-100 text-green-800': vm.paid_reservation_fee, 'bg-gray-100 text-gray-700': !vm.paid_reservation_fee}">
+            <span class="fas" ng-class="{'fa-check-circle mr-1': vm.paid_reservation_fee, 'fa-times-circle mr-1': !vm.paid_reservation_fee}"></span>
+            {{ vm.paid_reservation_fee ? 'Paid' : 'Unpaid' }}
+          </span>
+        </div>
+
+        <!-- Waive Application Fee -->
+        <div class="md:col-span-2">
+          <label class="block text-xs font-medium text-gray-500">Waive Application Fee</label>
+          <div class="mt-1">
+            <!-- Admissions/Admin can edit -->
+            <div ng-if="vm.canEditWaiver" class="flex flex-col space-y-2">
+              <label class="inline-flex items-center space-x-2">
+                <input type="checkbox"
+                       class="h-4 w-4"
+                       ng-model="vm.waiver.waive_application_fee"
+                       ng-disabled="vm.savingWaiver" />
+                <span class="text-sm text-gray-700">Waive application fee for this applicant</span>
+              </label>
+
+              <div class="flex items-center space-x-2" ng-if="vm.waiver.waive_application_fee">
+                <input type="text"
+                       class="flex-1 border border-gray-300 rounded-md px-3 py-2 text-sm"
+                       placeholder="Reason (optional)"
+                       ng-model="vm.waiver.waive_reason"
+                       ng-disabled="vm.savingWaiver" />
+              </div>
+              <div class="mt-2">
+                <button class="inline-flex items-center px-3 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 disabled:opacity-50"
+                        ng-click="vm.saveWaiver()"
+                        ng-disabled="vm.savingWaiver">
+                  <span ng-if="!vm.savingWaiver">Save</span>
+                  <span ng-if="vm.savingWaiver">Saving...</span>
+                </button>
+              </div>
+
+              <div class="text-xs text-gray-500" ng-if="vm.waived_at">
+                Waived at: {{ vm.waived_at | date:'medium' }}
+              </div>
+            </div>
+
+            <!-- Read-only for others -->
+            <div ng-if="!vm.canEditWaiver" class="text-sm">
+              <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium"
+                    ng-class="{'bg-green-100 text-green-800': vm.waive_application_fee, 'bg-gray-100 text-gray-700': !vm.waive_application_fee}">
+                <span class="fas" ng-class="{'fa-check-circle mr-1': vm.waive_application_fee, 'fa-times-circle mr-1': !vm.waive_application_fee}"></span>
+                {{ vm.waive_application_fee ? 'Waived' : 'Not Waived' }}
+              </span>
+              <div class="text-xs text-gray-500 mt-1" ng-if="vm.waive_reason">
+                Reason: {{ vm.waive_reason }}
+              </div>
+              <div class="text-xs text-gray-500" ng-if="vm.waived_at">
+                Waived at: {{ vm.waived_at | date:'medium' }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-gray-500">Program</label>
+          <div class="text-sm text-gray-900">{{ vm.program_name || (vm.applicant_data && (vm.applicant_data.program || vm.applicant_data.type)) || '-' }}</div>
         </div>
         <div>
           <label class="block text-xs font-medium text-gray-500">Gender</label>

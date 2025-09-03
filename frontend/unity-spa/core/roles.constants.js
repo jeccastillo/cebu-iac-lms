@@ -52,7 +52,10 @@
       { test: '^/classlists(?:/.*)?$', roles: ['registrar', 'admin'] },
       { test: '^/classrooms(?:/.*)?$', roles: ['faculty', 'registrar', 'admin'] },
       { test: '^/cashier-admin(?:/.*)?$', roles: ['cashier_admin', 'admin'] },
-      { test: '^/logs(?:/.*)?$', roles: ['admin'] }
+      { test: '^/logs(?:/.*)?$', roles: ['admin'] },
+      { test: '^/admin(?:/.*)?$', roles: ['admin'] },
+      { test: '^/faculty$', roles: ['admin'] },
+      { test: '^/student(?:/.*)?$', roles: ['student_view', 'admin'] }
       // '/dashboard' => any authenticated (intentionally omitted)
     ]);
 

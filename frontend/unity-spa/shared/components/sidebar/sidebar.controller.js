@@ -24,6 +24,8 @@
     vm.canAccess = RoleService.canAccess;
     vm.hasRole = RoleService.hasRole;
     vm.roles = [];
+    // Dashboard target path (student -> /student/dashboard, else /dashboard)
+    vm.dashboardPath = '/dashboard';
     // External system links (e.g., CI endpoints)
     vm.links = LinkService.buildLinks();
 
@@ -52,7 +54,9 @@
         children: [
           { label: 'Requirements', path: '/admissions/requirements' },
           { label: 'Previous Schools', path: '/admissions/previous-schools' },
-          { label: 'Applicants', path: '/admissions/applicants' }
+          { label: 'Applicant Types', path: '/admissions/applicant-types' },
+          { label: 'Applicants', path: '/admissions/applicants' },
+          { label: 'Applicants Analytics', path: '/admissions/applicants/analytics' }
         ]
       },
       {
@@ -106,6 +110,7 @@
       vm.loginState = StorageService.getJSON('loginState');
       RoleService.normalizeState(vm.loginState);
       vm.roles = RoleService.getRoles();
+      vm.dashboardPath = vm.hasRole('student_view') ? '/student/dashboard' : '/dashboard';
       
       // Initialize services
       TermService.init();
@@ -131,6 +136,8 @@
         } else {
           vm.roles = [];
         }
+        // Update dashboard target whenever roles/state change
+        vm.dashboardPath = vm.hasRole('student_view') ? '/student/dashboard' : '/dashboard';
         vm.isVisible = !!(newState && newState.loggedIn);
       }, true);
 

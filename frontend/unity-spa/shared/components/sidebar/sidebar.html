@@ -63,11 +63,11 @@
 
       <!-- Standalone Links -->
       <!-- Dashboard -->
-      <a href="#/dashboard" 
+      <a ng-href="{{ '#' + vm.dashboardPath }}" 
          class="flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200"
          ng-class="{
-           'bg-blue-100 text-blue-700': vm.isCurrentPath('/dashboard'),
-           'text-gray-700 hover:bg-gray-100': !vm.isCurrentPath('/dashboard')
+           'bg-blue-100 text-blue-700': vm.isCurrentPath(vm.dashboardPath),
+           'text-gray-700 hover:bg-gray-100': !vm.isCurrentPath(vm.dashboardPath)
          }"
          title="Dashboard">
         <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -153,11 +153,11 @@
     <nav class="flex-1 px-4 py-4 space-y-2 overflow-y-auto" ng-if="false">
       
       <!-- Dashboard -->
-      <a href="#/dashboard" 
+      <a ng-href="{{ '#' + vm.dashboardPath }}" 
          class="flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200"
          ng-class="{
-           'bg-blue-100 text-blue-700': vm.isCurrentPath('/dashboard'),
-           'text-gray-700 hover:bg-gray-100': !vm.isCurrentPath('/dashboard')
+           'bg-blue-100 text-blue-700': vm.isCurrentPath(vm.dashboardPath),
+           'text-gray-700 hover:bg-gray-100': !vm.isCurrentPath(vm.dashboardPath)
          }"
          title="Dashboard">
         <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">

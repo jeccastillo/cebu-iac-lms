@@ -77,19 +77,54 @@
       var m = ('' + txt).match(/(\d{4})/);
       return m ? parseInt(m[1], 10) : null;
     }
+    function _semText(enumSem, termLabel) {
+      var n = enumSem != null ? parseInt(enumSem, 10) : null;
+      if (n === 1) return '1st Sem';
+      if (n === 2) return '2nd Sem';
+      if (n === 3) return '3rd Sem';
+      if (n === 4) return 'Summer';
+      if (termLabel) {
+        var s = ('' + termLabel).toLowerCase();
+        if (s.indexOf('summer') !== -1) return 'Summer';
+        if (s.indexOf('1st') !== -1 || s.indexOf('first') !== -1 || s.indexOf('1') === 0) return '1st Sem';
+        if (s.indexOf('2nd') !== -1 || s.indexOf('second') !== -1 || s.indexOf('2') === 0) return '2nd Sem';
+        if (s.indexOf('3rd') !== -1 || s.indexOf('third') !== -1 || s.indexOf('3') === 0) return '3rd Sem';
+      }
+      return null;
+    }
+    function buildTermLabelFromRow(r, fallbackLabel) {
+      if (!r) return fallbackLabel || null;
+      var ys = r.strYearStart || r.year_start || r.sy_year_start || null;
+      var ye = r.strYearEnd || r.year_end || r.sy_year_end || null;
+      var syText = r.school_year || r.schoolYear || r.sy_text || r.sy || r.strSchoolYear || null;
+      var semSource = (r.enumSem != null ? r.enumSem : (r.intSem != null ? r.intSem : null));
+      var sem = _semText(semSource, r.term || r.label || r.sem || r.semester || r.strSem || fallbackLabel);
+      var yearText = null;
+      if (ys && ye) {
+        yearText = (parseInt(ys, 10) + '-' + parseInt(ye, 10));
+      } else if (syText) {
+        // Expect formats like "2025-2026" or other strings that include the range.
+        var m = ('' + syText).match(/(\d{4})\s*-\s*(\d{4})/);
+        yearText = m ? (m[1] + '-' + m[2]) : ('' + syText);
+      }
+      if (sem && yearText) return sem + ' ' + yearText;
+      if (sem) return sem;
+      if (yearText) return yearText;
+      return fallbackLabel || null;
+    }
     function _deriveTermsShapeIfFlat(data) {
       if (data && angular.isArray(data.records) && !data.terms) {
         var grouped = {};
         data.records.forEach(function (r) {
           var syText = r.school_year || r.schoolYear || r.sy_text || r.sy || r.strSchoolYear || r.syid || 'unknown';
-          var label = r.term || r.label || r.sem || r.semester || r.strSem || '';
-          var key = (syText || 'unknown') + '|' + (label || '');
+          var friendly = buildTermLabelFromRow(r, r.term || r.label || r.sem || r.semester || r.strSem || '');
+          var key = (syText || 'unknown') + '|' + (friendly || '');
           if (!grouped[key]) {
             grouped[key] = {
               syid: r.syid || r.intSYID || r.sy_id || null,
               school_year: syText || null,
-              label: label || null,
-              term: label || null,
+              label: friendly || null,
+              term: friendly || null,
               records: []
             };
           }
@@ -127,6 +162,16 @@
 
         // Stable fallback
         return 0;
+      });
+      // Decorate terms with friendly term text if possible (idempotent)
+      terms = terms.map(function (t) {
+        var r = (t.records && t.records[0]) ? t.records[0] : null;
+        var friendly = buildTermLabelFromRow(r, t.term || t.label);
+        if (friendly) {
+          t.term = friendly;
+          t.label = friendly;
+        }
+        return t;
       });
       return terms;
     };

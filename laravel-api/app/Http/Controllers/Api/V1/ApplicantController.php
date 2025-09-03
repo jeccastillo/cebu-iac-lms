@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\Api\V1\ApplicantUpdateRequest;
+use App\Services\SystemLogService;
 
 class ApplicantController extends Controller
 {
@@ -24,18 +26,19 @@ class ApplicantController extends Controller
     public function index(Request $request): JsonResponse
     {
         // Build a subquery to get latest applicant_data per user_id
-        $latestApplicantData = DB::table('tb_mas_applicant_data as ad1')
-            ->select('ad1.id')
-            ->join('tb_mas_applicant_data as ad2', function ($join) {
-                $join->on('ad1.user_id', '=', 'ad2.user_id')
-                     ->on('ad1.id', '<=', 'ad2.id');
-            })
-            ->groupBy('ad1.id', 'ad1.user_id')
-            ->havingRaw('ad1.id = MAX(ad2.id)');
-
+        // $latestApplicantData = DB::table('tb_mas_applicant_data as ad1')
+        //     ->select('ad1.id')
+        //     ->join('tb_mas_applicant_data as ad2', function ($join) {
+        //         $join->on('ad1.user_id', '=', 'ad2.user_id')
+        //              ->on('ad1.id', '<=', 'ad2.id');
+        //     })
+        //     ->groupBy('ad1.id', 'ad1.user_id')
+        //     ->havingRaw('ad1.id = MAX(ad2.id)');
+                    
         // Base query joining users to latest applicant data (correlated subquery for latest row)
         $q = DB::table('tb_mas_users as u')
             ->join('tb_mas_applicant_data as ad', 'ad.user_id', '=', 'u.intID')
+            ->leftJoin('tb_mas_campuses as c', 'c.id', '=', 'u.campus_id')
             ->whereRaw('ad.id = (SELECT MAX(adx.id) FROM tb_mas_applicant_data adx WHERE adx.user_id = u.intID)')
             ->select([
                 'u.intID as id',
@@ -43,20 +46,20 @@ class ApplicantController extends Controller
                 'u.strLastname',
                 'u.strEmail',
                 DB::raw('COALESCE(u.strMobileNumber, \'\') as strMobileNumber'),
-                DB::raw('COALESCE(u.campus_id, \'\') as campus'),
+                // Prefer campus name; fallback to legacy u.campus then campus_id then blank
+                DB::raw('COALESCE(c.campus_name,u.campus_id, \'\') as campus'),
                 DB::raw('COALESCE(u.student_type, \'\') as student_type'),
                 DB::raw('COALESCE(u.dteCreated, NULL) as dteCreated'),
                 'ad.status',
                 'ad.created_at as application_created_at',
-            ]);
-
+            ]);        
         // Filter: restrict to users tagged as applicant when schema supports it
-        $columns = $this->getUserColumns();
-        if (in_array('student_status', $columns)) {
-            $q->where('u.student_status', 'applicant');
-        } else if (in_array('enumEnrolledStatus', $columns)) {
-            $q->where('u.enumEnrolledStatus', 'applicant');
-        }
+        // $columns = $this->getUserColumns();
+        // if (in_array('student_status', $columns)) {
+        //     $q->where('u.student_status', 'applicant');
+        // } else if (in_array('enumEnrolledStatus', $columns)) {
+        //     $q->where('u.enumEnrolledStatus', 'applicant');
+        // }
 
         // Filters
         $search = trim((string) $request->query('search', ''));
@@ -77,7 +80,11 @@ class ApplicantController extends Controller
 
         $campus = trim((string) $request->query('campus', ''));
         if ($campus !== '') {
-            $q->where('u.campus', $campus);
+            // Support filtering by campus name (c.campus_name), legacy u.campus, or campus_id
+            $q->where(function ($w) use ($campus) {
+                $w->where('c.campus_name', $campus)                  
+                  ->orWhere('u.campus_id', $campus);
+            });
         }
 
         $dateFrom = trim((string) $request->query('date_from', ''));
@@ -88,6 +95,20 @@ class ApplicantController extends Controller
         $dateTo = trim((string) $request->query('date_to', ''));
         if ($dateTo !== '') {
             $q->where('ad.created_at', '<=', date('Y-m-d H:i:s', strtotime($dateTo)));
+        }
+
+        // Optional: filter by term/school year id (syid). Accept alias 'term' for parity with other endpoints.
+        $syidParam = $request->query('syid', null);
+        $termParam = $request->query('term', null);
+        $syid = null;
+        if ($syidParam !== null && $syidParam !== '') {
+            $syid = is_numeric($syidParam) ? (int) $syidParam : null;
+        }
+        if ($syid === null && $termParam !== null && $termParam !== '') {
+            $syid = is_numeric($termParam) ? (int) $termParam : null;
+        }
+        if ($syid !== null) {
+            $q->where('ad.syid', $syid);
         }
 
         // Sorting
@@ -155,6 +176,21 @@ class ApplicantController extends Controller
             ], 404);
         }
 
+        // Enrich campus name for core user (prefer campus_name, fallback to legacy campus or campus_id)
+        try {
+            $campusName = null;
+            if (property_exists($user, 'campus_id') && !is_null($user->campus_id)) {
+                $campusName = DB::table('tb_mas_campuses')->where('id', (int)$user->campus_id)->value('campus_name');
+            }
+            if (!isset($user->campus)) {
+                $user->campus = $campusName ?? (property_exists($user, 'campus') ? $user->campus : (property_exists($user, 'campus_id') ? $user->campus_id : null));
+            } elseif ($user->campus === null || $user->campus === '') {
+                $user->campus = $campusName ?? $user->campus;
+            }
+        } catch (\Throwable $e) {
+            // ignore enrichment failure
+        }
+
         // Latest applicant_data row
         $appData = DB::table('tb_mas_applicant_data')
             ->where('user_id', $id)
@@ -177,6 +213,24 @@ class ApplicantController extends Controller
             }
         }
 
+        // Surface applicant_type and payment flags from latest applicant_data row
+        $applicantTypeId = isset($appData->applicant_type) ? (int) $appData->applicant_type : null;
+        $applicantTypeName = null;
+        if ($applicantTypeId) {
+            try {
+                $applicantTypeName = DB::table('tb_mas_applicant_types')->where('intID', $applicantTypeId)->value('name');
+            } catch (\Throwable $e) {
+                $applicantTypeName = null;
+            }
+        }
+        $paidApplicationFee = isset($appData->paid_application_fee) ? (bool) $appData->paid_application_fee : null;
+        $paidReservationFee = isset($appData->paid_reservation_fee) ? (bool) $appData->paid_reservation_fee : null;
+
+        // Waiver fields
+        $waiveApplicationFee = isset($appData->waive_application_fee) ? (bool) $appData->waive_application_fee : null;
+        $waiveReason = isset($appData->waive_reason) ? (string) $appData->waive_reason : null;
+        $waivedAt = isset($appData->waived_at) ? $appData->waived_at : null;
+
         return response()->json([
             'success' => true,
             'data' => [
@@ -185,6 +239,236 @@ class ApplicantController extends Controller
                 'applicant_data' => $decoded,
                 'created_at' => $appData->created_at ?? null,
                 'updated_at' => $appData->updated_at ?? null,
+                // New surfaced fields
+                'applicant_type' => $applicantTypeId,
+                'applicant_type_name' => $applicantTypeName,
+                'paid_application_fee' => $paidApplicationFee,
+                'paid_reservation_fee' => $paidReservationFee,
+                // Waiver surfaced fields
+                'waive_application_fee' => $waiveApplicationFee,
+                'waive_reason' => $waiveReason,
+                'waived_at' => $waivedAt,
+            ],
+        ]);
+    }
+
+    /**
+     * PUT /api/v1/applicants/{id}
+     *
+     * Updates core identity/contact fields both in tb_mas_users and in the latest tb_mas_applicant_data JSON.
+     * Fields accepted: first_name, middle_name, last_name, email, mobile_number, date_of_birth
+     */
+    public function update(ApplicantUpdateRequest $request, int $id): JsonResponse
+    {
+        // Fetch core user
+        $user = DB::table('tb_mas_users')->where('intID', $id)->first();
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Applicant not found',
+            ], 404);
+        }
+
+        // Fetch latest applicant_data row (required for update-in-place)
+        $appData = DB::table('tb_mas_applicant_data')
+            ->where('user_id', $id)
+            ->orderByDesc('id')
+            ->first();
+
+        if (!$appData) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Applicant data not found for update',
+            ], 404);
+        }
+
+        // Decode current applicant_data JSON
+        $currentData = [];
+        if (isset($appData->data)) {
+            try {
+                $currentData = is_string($appData->data) ? json_decode($appData->data, true) : (array) $appData->data;
+                if (!is_array($currentData)) $currentData = [];
+            } catch (\Throwable $e) {
+                $currentData = [];
+            }
+        }
+
+        $columns = $this->getUserColumns();
+
+        // Prepare old snapshot for logging (only the fields we touch)
+        $oldUserSnapshot = [
+            'first_name'    => property_exists($user, 'strFirstname') ? $user->strFirstname : null,
+            'middle_name'   => property_exists($user, 'strMiddlename') ? $user->strMiddlename : null,
+            'last_name'     => property_exists($user, 'strLastname') ? $user->strLastname : null,
+            'email'         => property_exists($user, 'strEmail') ? $user->strEmail : null,
+            'mobile_number' => property_exists($user, 'strMobileNumber') ? $user->strMobileNumber : null,
+            'date_of_birth' => property_exists($user, 'dteBirthDate') ? $user->dteBirthDate : null,
+        ];
+        $oldAppSnapshot = [
+            'first_name'    => $currentData['first_name']    ?? null,
+            'middle_name'   => $currentData['middle_name']   ?? null,
+            'last_name'     => $currentData['last_name']     ?? null,
+            'email'         => $currentData['email']         ?? null,
+            'mobile_number' => $currentData['mobile_number'] ?? null,
+            'date_of_birth' => $currentData['date_of_birth'] ?? ($currentData['dob'] ?? null),
+        ];
+
+        // Build requested payload fields (only set keys that were sent by client)
+        $payload = [];
+        if ($request->has('first_name')) {
+            $payload['first_name'] = $request->input('first_name');
+        }
+        if ($request->has('middle_name')) {
+            $payload['middle_name'] = $request->input('middle_name');
+        }
+        if ($request->has('last_name')) {
+            $payload['last_name'] = $request->input('last_name');
+        }
+        if ($request->has('email')) {
+            $payload['email'] = $request->input('email');
+        }
+        if ($request->has('mobile_number')) {
+            $payload['mobile_number'] = $request->input('mobile_number');
+        }
+        if ($request->has('date_of_birth')) {
+            $dobIn = $request->input('date_of_birth');
+            $ts = strtotime((string) $dobIn);
+            $payload['date_of_birth'] = $ts ? date('Y-m-d', $ts) : $dobIn;
+        }
+
+        // Map to tb_mas_users columns when present in this installation
+        $userUpdates = [];
+        if (array_key_exists('first_name', $payload) && in_array('strFirstname', $columns)) {
+            $userUpdates['strFirstname'] = (string) $payload['first_name'];
+        }
+        if (array_key_exists('middle_name', $payload) && in_array('strMiddlename', $columns)) {
+            $userUpdates['strMiddlename'] = $payload['middle_name'] !== null ? (string) $payload['middle_name'] : null;
+        }
+        if (array_key_exists('last_name', $payload) && in_array('strLastname', $columns)) {
+            $userUpdates['strLastname'] = (string) $payload['last_name'];
+        }
+        if (array_key_exists('email', $payload) && in_array('strEmail', $columns)) {
+            $userUpdates['strEmail'] = (string) $payload['email'];
+        }
+        if (array_key_exists('mobile_number', $payload) && in_array('strMobileNumber', $columns)) {
+            $userUpdates['strMobileNumber'] = (string) $payload['mobile_number'];
+        }
+        if (array_key_exists('date_of_birth', $payload) && in_array('dteBirthDate', $columns)) {
+            $userUpdates['dteBirthDate'] = (string) $payload['date_of_birth'];
+        }
+
+        // Waiver updates for tb_mas_applicant_data row
+        $applicantDataUpdates = [];
+        if ($request->has('waive_application_fee')) {
+            $newFlagRaw = $request->input('waive_application_fee');
+            $newFlag = filter_var($newFlagRaw, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+            $newFlag = (bool) ($newFlag ?? $newFlagRaw);
+            $currentFlag = isset($appData->waive_application_fee) ? (bool) $appData->waive_application_fee : false;
+
+            $applicantDataUpdates['waive_application_fee'] = $newFlag;
+            if ($newFlag && !$currentFlag) {
+                $applicantDataUpdates['waived_at'] = now();
+                $fid = $request->header('X-Faculty-ID');
+                if (is_numeric($fid)) {
+                    $applicantDataUpdates['waived_by_user_id'] = (int) $fid;
+                }
+            } elseif (!$newFlag) {
+                $applicantDataUpdates['waived_at'] = null;
+                $applicantDataUpdates['waived_by_user_id'] = null;
+            }
+        }
+        if ($request->has('waive_reason')) {
+            $reason = trim((string) $request->input('waive_reason'));
+            $applicantDataUpdates['waive_reason'] = ($reason === '') ? null : $reason;
+        }
+
+        DB::beginTransaction();
+        try {
+            if (!empty($userUpdates)) {
+                DB::table('tb_mas_users')->where('intID', $id)->update($userUpdates);
+            }
+
+            // Merge payload into latest applicant_data JSON
+            $merged = $currentData;
+            foreach (['first_name','middle_name','last_name','email','mobile_number','date_of_birth'] as $k) {
+                if (array_key_exists($k, $payload)) {
+                    $merged[$k] = $payload[$k];
+                }
+            }
+
+            DB::table('tb_mas_applicant_data')->where('id', $appData->id)->update(array_merge([
+                'data' => json_encode($merged, JSON_UNESCAPED_UNICODE),
+            ], $applicantDataUpdates));
+
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update applicant: ' . $e->getMessage(),
+            ], 500);
+        }
+
+        // Fetch updated snapshots
+        $updatedUser = DB::table('tb_mas_users')->where('intID', $id)->first();
+        $updatedAppData = DB::table('tb_mas_applicant_data')->where('id', $appData->id)->first();
+
+        $updatedDecoded = null;
+        if ($updatedAppData && isset($updatedAppData->data)) {
+            try {
+                $updatedDecoded = is_string($updatedAppData->data) ? json_decode($updatedAppData->data, true) : $updatedAppData->data;
+            } catch (\Throwable $e) {
+                $updatedDecoded = null;
+            }
+        }
+
+        // Prepare new snapshot for logging
+        $newUserSnapshot = [
+            'first_name'    => property_exists($updatedUser, 'strFirstname') ? $updatedUser->strFirstname : null,
+            'middle_name'   => property_exists($updatedUser, 'strMiddlename') ? $updatedUser->strMiddlename : null,
+            'last_name'     => property_exists($updatedUser, 'strLastname') ? $updatedUser->strLastname : null,
+            'email'         => property_exists($updatedUser, 'strEmail') ? $updatedUser->strEmail : null,
+            'mobile_number' => property_exists($updatedUser, 'strMobileNumber') ? $updatedUser->strMobileNumber : null,
+            'date_of_birth' => property_exists($updatedUser, 'dteBirthDate') ? $updatedUser->dteBirthDate : null,
+        ];
+        $newAppSnapshot = [
+            'first_name'    => is_array($updatedDecoded) ? ($updatedDecoded['first_name']    ?? null) : null,
+            'middle_name'   => is_array($updatedDecoded) ? ($updatedDecoded['middle_name']   ?? null) : null,
+            'last_name'     => is_array($updatedDecoded) ? ($updatedDecoded['last_name']     ?? null) : null,
+            'email'         => is_array($updatedDecoded) ? ($updatedDecoded['email']         ?? null) : null,
+            'mobile_number' => is_array($updatedDecoded) ? ($updatedDecoded['mobile_number'] ?? null) : null,
+            'date_of_birth' => is_array($updatedDecoded) ? ($updatedDecoded['date_of_birth'] ?? ($updatedDecoded['dob'] ?? null)) : null,
+        ];
+
+        // System log
+        try {
+            SystemLogService::log(
+                'update',
+                'Applicant',
+                $id,
+                ['user' => $oldUserSnapshot, 'applicant_data' => $oldAppSnapshot],
+                ['user' => $newUserSnapshot, 'applicant_data' => $newAppSnapshot],
+                $request
+            );
+        } catch (\Throwable $e) {
+            // ignore logging failures
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'user' => $updatedUser,
+                'status' => $updatedAppData->status ?? null,
+                'applicant_data' => $updatedDecoded,
+                'created_at' => $updatedAppData->created_at ?? null,
+                'updated_at' => $updatedAppData->updated_at ?? null,
+                // Surfaced fields post-update
+                'applicant_type' => isset($updatedAppData->applicant_type) ? (int) $updatedAppData->applicant_type : null,
+                'paid_application_fee' => isset($updatedAppData->paid_application_fee) ? (bool) $updatedAppData->paid_application_fee : null,
+                'paid_reservation_fee' => isset($updatedAppData->paid_reservation_fee) ? (bool) $updatedAppData->paid_reservation_fee : null,
+                'waive_application_fee' => isset($updatedAppData->waive_application_fee) ? (bool) $updatedAppData->waive_application_fee : null,
+                'waive_reason' => $updatedAppData->waive_reason ?? null,
+                'waived_at' => $updatedAppData->waived_at ?? null,
             ],
         ]);
     }

@@ -30,6 +30,7 @@ class AdmissionsController extends Controller
             'mobile_number' => 'nullable|string|max:50',
             'gender'      => 'nullable|string|max:50',
             'date_of_birth' => 'required|date',
+            'citizenship_country' => 'required|string|max:100',
             'intTuitionYear' => 'int',
         ]);
 
@@ -57,6 +58,11 @@ class AdmissionsController extends Controller
             $userData['strEmail'] = $request->input('email');
         }
 
+        // Campus
+        if (in_array('campus_id', $userColumns)) {
+            $userData['campus_id'] = $request->input('campus_id');
+        }
+
         // Mobile
         if (in_array('strMobileNumber', $userColumns) && $request->filled('mobile_number')) {
             $userData['strMobileNumber'] = $request->input('mobile_number');
@@ -65,7 +71,7 @@ class AdmissionsController extends Controller
         // Gender
         if (in_array('enumGender', $userColumns) && $request->filled('gender')) {
             $userData['enumGender'] = $request->input('gender');
-        }
+        }        
 
         // Birthdate
         if (in_array('dteBirthDate', $userColumns) && $request->filled('date_of_birth')) {
@@ -77,6 +83,17 @@ class AdmissionsController extends Controller
             $userData['intTuitionYear'] = $request->input('intTuitionYear');
         }
 
+        // Citizenship / Nationality
+        if ($request->filled('citizenship_country')) {
+            $valCit = $request->input('citizenship_country');
+            $citCols = ['citizenship', 'nationality', 'country_of_citizenship', 'strCitizenship', 'strNationality'];
+            foreach ($citCols as $col) {
+                if (in_array($col, $userColumns)) {
+                    $userData[$col] = $valCit;
+                    break;
+                }
+            }
+        }
         
         $userData['high_school'] = "";
         $userData['high_school_address'] = "";
@@ -176,12 +193,39 @@ class AdmissionsController extends Controller
                 'ua' => substr($request->userAgent() ?? '', 0, 255)
             ];
 
-            DB::table('tb_mas_applicant_data')->insert([
+            // Normalize applicant_type (if provided)
+            $normalizedApplicantType = $request->input('applicant_type');
+            $normalizedApplicantType = is_numeric($normalizedApplicantType) ? (int) $normalizedApplicantType : null;
+
+            // Resolve syid from request (accept syid|term|current_sem)
+            $syidFromReq = null;
+            $candidates = [
+                $request->input('syid'),
+                $request->input('term'),
+                $request->input('current_sem'),
+            ];
+            foreach ($candidates as $cand) {
+                if ($cand !== null && $cand !== '' && is_numeric($cand)) {
+                    $syidFromReq = (int) $cand;
+                    break;
+                }
+            }
+
+            // Build insert payload with optional normalized applicant_type and syid
+            $insertData = [
                 'user_id' => $userId,
                 'data'    => json_encode($payload),
                 'created_at' => $now,
                 'updated_at' => $now,
-            ]);
+            ];
+            if (\Illuminate\Support\Facades\Schema::hasColumn('tb_mas_applicant_data', 'applicant_type')) {
+                $insertData['applicant_type'] = $normalizedApplicantType;
+            }
+            if (\Illuminate\Support\Facades\Schema::hasColumn('tb_mas_applicant_data', 'syid') && $request->filled('term')) {
+                $insertData['syid'] = $request->input('term');
+            }            
+
+            DB::table('tb_mas_applicant_data')->insert($insertData);
 
             DB::commit();
 

@@ -1,4 +1,4 @@
-<div class="max-w-3xl mx-auto bg-white shadow rounded p-6" ng-cloak>
+<div class="max-w-5xl mx-auto bg-white shadow rounded p-6" ng-cloak>
   <h1 class="text-2xl font-bold text-gray-800 mb-4">Application Form</h1>
   <p class="text-sm text-gray-600 mb-6">Fill out the form below. On submit, your application will be saved and a confirmation email will be sent.</p>
 
@@ -44,6 +44,22 @@
             <option value="">-- Select --</option>
           </select>
           <div class="text-xs text-red-600 mt-1" ng-if="applyForm.campus.$dirty &amp;&amp; applyForm.campus.$error.required">Campus is required.</div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Country of Citizenship <span class="text-red-500">*</span></label>
+          <select name="citizenship_country" class="w-full border rounded px-3 py-2"
+                  ng-model="vm.form.citizenship_country"
+                  ng-options="c for c in vm.countries"
+                  ng-class="{'border-red-500': applyForm.citizenship_country.$dirty &amp;&amp; applyForm.citizenship_country.$invalid}"
+                  required>
+            <option value="">-- Select --</option>
+          </select>
+          <div class="text-xs text-red-600 mt-1" ng-if="applyForm.citizenship_country.$dirty &amp;&amp; applyForm.citizenship_country.$error.required">
+            Country of citizenship is required.
+          </div>
         </div>
       </div>
     </fieldset>
@@ -94,6 +110,33 @@
       </div>
       <div class="mt-2 text-sm text-amber-600" ng-if="!vm.loadingTerms &amp;&amp; vm.form.student_type &amp;&amp; vm.termOptions.length === 0">
         No open terms for the selected student type.
+      </div>
+    </fieldset>
+
+    <!-- Applicant Types -->
+    <fieldset class="mb-6" ng-if="vm.form.student_type">
+      <legend class="text-lg font-semibold text-gray-700 mb-3">Applicant Type <span class="text-sm italic text-gray-500">(Select one)</span></legend>
+      <div class="border rounded p-4">
+        <div class="text-sm text-gray-500" ng-if="vm.loadingApplicantTypes">
+          Loading applicant types...
+        </div>
+        <div class="text-sm text-amber-600" ng-if="!vm.loadingApplicantTypes &amp;&amp; vm.totalApplicantTypeCount === 0">
+          No applicant types available for the selected student level.
+        </div>
+        <div ng-if="!vm.loadingApplicantTypes &amp;&amp; vm.totalApplicantTypeCount > 0" class="space-y-4">
+          <div ng-repeat="group in vm.applicantTypeGroupOrder" ng-if="vm.applicantTypesByGroup[group] &amp;&amp; vm.applicantTypesByGroup[group].length">
+            <div class="text-gray-700 font-semibold mb-1">{{ group }}</div>
+            <div class="grid grid-cols-1 gap-1 pl-2">
+              <label class="inline-flex items-center" ng-repeat="t in vm.applicantTypesByGroup[group] track by t.id">
+                <input type="radio" name="applicant_type_id" ng-model="vm.form.applicant_type_id" ng-value="t.id" required />
+                <span class="ml-2">{{ t.name }}</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="text-xs text-red-600 mt-1" ng-if="applyForm.applicant_type_id.$dirty &amp;&amp; applyForm.applicant_type_id.$error.required">
+          Applicant type is required.
+        </div>
       </div>
     </fieldset>
 
@@ -220,6 +263,111 @@
             <option value="">-- Select --</option>
           </select>
         </div>
+      </div>
+    </fieldset>
+
+    <!-- Parent's Information -->
+    <fieldset class="mb-6">
+      <legend class="text-lg font-semibold text-gray-700 mb-3 uppercase">Parent's Information</legend>
+
+      <!-- Mother -->
+      <div class="border rounded p-4 mb-4">
+        <div class="flex items-center justify-between mb-2">
+          <h4 class="text-md font-semibold text-gray-700">Mother</h4>
+          <label class="inline-flex items-center">
+            <input type="radio" name="primary_contact" ng-model="vm.form.primary_contact" ng-value="'mother'">
+            <span class="ml-2 text-sm text-gray-700 uppercase">Set as Primary Contact</span>
+          </label>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+            <input type="text" name="mother_name" class="w-full border rounded px-3 py-2" placeholder="write 'n/a' only if not applicable" ng-model="vm.form.mother_name" />
+            <div class="text-xs text-gray-500 mt-1">(write 'n/a' only if not applicable)</div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Occupation</label>
+            <input type="text" name="mother_occupation" class="w-full border rounded px-3 py-2" ng-model="vm.form.mother_occupation" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+            <input type="email" name="mother_email" class="w-full border rounded px-3 py-2" ng-model="vm.form.mother_email" ng-class="{'border-red-500': applyForm.mother_email.$dirty &amp;&amp; applyForm.mother_email.$invalid}" />
+            <div class="text-xs text-red-600 mt-1" ng-if="applyForm.mother_email.$dirty &amp;&amp; applyForm.mother_email.$error.email">Enter a valid email address.</div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
+            <input type="tel" name="mother_mobile" class="w-full border rounded px-3 py-2" ng-model="vm.form.mother_mobile" iti-tel ng-class="{'border-red-500': applyForm.mother_mobile.$dirty &amp;&amp; applyForm.mother_mobile.$error.tel}" />
+            <div class="text-xs text-red-600 mt-1" ng-if="applyForm.mother_mobile.$dirty &amp;&amp; applyForm.mother_mobile.$error.tel">Enter a valid mobile number.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Father -->
+      <div class="border rounded p-4 mb-4">
+        <div class="flex items-center justify-between mb-2">
+          <h4 class="text-md font-semibold text-gray-700">Father</h4>
+          <label class="inline-flex items-center">
+            <input type="radio" name="primary_contact" ng-model="vm.form.primary_contact" ng-value="'father'">
+            <span class="ml-2 text-sm text-gray-700 uppercase">Set as Primary Contact</span>
+          </label>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+            <input type="text" name="father_name" class="w-full border rounded px-3 py-2" placeholder="write 'n/a' only if not applicable" ng-model="vm.form.father_name" />
+            <div class="text-xs text-gray-500 mt-1">(write 'n/a' only if not applicable)</div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Occupation</label>
+            <input type="text" name="father_occupation" class="w-full border rounded px-3 py-2" ng-model="vm.form.father_occupation" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+            <input type="email" name="father_email" class="w-full border rounded px-3 py-2" ng-model="vm.form.father_email" ng-class="{'border-red-500': applyForm.father_email.$dirty &amp;&amp; applyForm.father_email.$invalid}" />
+            <div class="text-xs text-red-600 mt-1" ng-if="applyForm.father_email.$dirty &amp;&amp; applyForm.father_email.$error.email">Enter a valid email address.</div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
+            <input type="tel" name="father_mobile" class="w-full border rounded px-3 py-2" ng-model="vm.form.father_mobile" iti-tel ng-class="{'border-red-500': applyForm.father_mobile.$dirty &amp;&amp; applyForm.father_mobile.$error.tel}" />
+            <div class="text-xs text-red-600 mt-1" ng-if="applyForm.father_mobile.$dirty &amp;&amp; applyForm.father_mobile.$error.tel">Enter a valid mobile number.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Guardian -->
+      <div class="border rounded p-4">
+        <div class="flex items-center justify-between mb-2">
+          <h4 class="text-md font-semibold text-gray-700">Guardian</h4>
+          <label class="inline-flex items-center">
+            <input type="radio" name="primary_contact" ng-model="vm.form.primary_contact" ng-value="'guardian'">
+            <span class="ml-2 text-sm text-gray-700 uppercase">Set as Primary Contact</span>
+          </label>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+            <input type="text" name="guardian_name" class="w-full border rounded px-3 py-2" placeholder="write 'n/a' only if not applicable" ng-model="vm.form.guardian_name" />
+            <div class="text-xs text-gray-500 mt-1">(write 'n/a' only if not applicable)</div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Relationship</label>
+            <input type="text" name="guardian_relationship" class="w-full border rounded px-3 py-2" ng-model="vm.form.guardian_relationship" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+            <input type="email" name="guardian_email" class="w-full border rounded px-3 py-2" ng-model="vm.form.guardian_email" ng-class="{'border-red-500': applyForm.guardian_email.$dirty &amp;&amp; applyForm.guardian_email.$invalid}" />
+            <div class="text-xs text-red-600 mt-1" ng-if="applyForm.guardian_email.$dirty &amp;&amp; applyForm.guardian_email.$error.email">Enter a valid email address.</div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
+            <input type="tel" name="guardian_mobile" class="w-full border rounded px-3 py-2" ng-model="vm.form.guardian_mobile" iti-tel ng-class="{'border-red-500': applyForm.guardian_mobile.$dirty &amp;&amp; applyForm.guardian_mobile.$error.tel}" />
+            <div class="text-xs text-red-600 mt-1" ng-if="applyForm.guardian_mobile.$dirty &amp;&amp; applyForm.guardian_mobile.$error.tel">Enter a valid mobile number.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-xs text-red-600 mt-2" ng-if="applyForm.$submitted &amp;&amp; !vm.validateParentContacts()">
+        Please provide at least one parent or guardian with name and either email address or mobile number.
       </div>
     </fieldset>
 

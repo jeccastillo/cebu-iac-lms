@@ -64,7 +64,7 @@
 
         // Create dropdown panel
         var panel = angular.element(
-          '<ul class="pui-ac-panel absolute z-50 w-full bg-white border border-gray-200 rounded shadow max-h-60 overflow-auto hidden"></ul>'
+          '<ul class="pui-ac-panel absolute z-50 w-full bg-white border border-gray-200 rounded shadow max-h-60 overflow-auto hidden" role="listbox"></ul>'
         );
         element.after(panel);
 
@@ -73,6 +73,8 @@
         var itemsList = []; // raw list
         var isOpen = false;
         var lastQuery = '';
+        var highlightedIndex = -1; // keyboard highlight index
+        var currentList = []; // last rendered suggestions
 
         function openPanel() {
           if (!isOpen) {
@@ -89,6 +91,7 @@
         function clearPanel() {
           panel.empty();
         }
+
 
         function rebuildIndex(list) {
           itemsIndex = Object.create(null);
@@ -134,23 +137,50 @@
           clearPanel();
           if (!list || !list.length) {
             closePanel();
+            currentList = [];
+            highlightedIndex = -1;
             return;
           }
+          currentList = list.slice();
+          highlightedIndex = -1;
           for (var i = 0; i < list.length; i++) {
-            (function (item) {
-              var li = angular.element('<li class="px-3 py-2 cursor-pointer hover:bg-blue-50"></li>');
+            (function (item, idx) {
+              var li = angular.element('<li class="px-3 py-2 cursor-pointer hover:bg-blue-50" role="option" aria-selected="false"></li>');
               var labelText = '';
               try { labelText = getLabel(item) || ''; } catch (e) { labelText = ''; }
               li.text(labelText);
+              li.on('mouseenter', function () {
+                setHighlight(idx);
+              });
               li.on('mousedown', function (evt) {
                 // mousedown instead of click to avoid blur before click
                 evt.preventDefault();
                 selectItem(item);
               });
               panel.append(li);
-            })(list[i]);
+            })(list[i], i);
           }
           openPanel();
+        }
+
+        // Keyboard highlight management
+        function setHighlight(index) {
+          try {
+            var children = panel.children();
+            var len = children.length;
+            if (!len) { highlightedIndex = -1; return; }
+            if (index < 0) index = 0;
+            if (index >= len) index = len - 1;
+
+            if (highlightedIndex >= 0 && highlightedIndex < len) {
+              angular.element(children[highlightedIndex]).removeClass('bg-blue-100').attr('aria-selected', 'false');
+            }
+
+            highlightedIndex = index;
+            var el = angular.element(children[highlightedIndex]);
+            el.addClass('bg-blue-100').attr('aria-selected', 'true');
+            try { children[highlightedIndex].scrollIntoView({ block: 'nearest' }); } catch (e2) {}
+          } catch (e) {}
         }
 
         // Selection
@@ -217,17 +247,43 @@
           });
         });
 
-        // Keyboard navigation (basic: Enter selects first item if open)
+        // Keyboard navigation (enhanced: ArrowUp/ArrowDown to navigate, Enter to select highlighted)
         element.on('keydown', function (evt) {
           if (evt.key === 'Escape') {
             scope.$applyAsync(closePanel);
+          } else if (evt.key === 'ArrowDown') {
+            evt.preventDefault();
+            var qd = element.val() || '';
+            if (!isOpen) {
+              lastQuery = qd;
+              var listDown = filterItems(qd);
+              renderList(listDown, qd);
+              currentList = listDown.slice();
+              scope.$applyAsync(function () { setHighlight(0); });
+            } else {
+              var maxIdx = panel.children().length - 1;
+              var next = highlightedIndex < 0 ? 0 : Math.min(highlightedIndex + 1, maxIdx);
+              scope.$applyAsync(function () { setHighlight(next); });
+            }
+          } else if (evt.key === 'ArrowUp') {
+            if (isOpen) {
+              evt.preventDefault();
+              var prev = highlightedIndex <= 0 ? 0 : highlightedIndex - 1;
+              scope.$applyAsync(function () { setHighlight(prev); });
+            }
           } else if (evt.key === 'Enter') {
             if (isOpen) {
-              // Select first visible
-              var first = panel.children()[0];
-              if (first) {
+              if (highlightedIndex >= 0 && highlightedIndex < currentList.length) {
                 evt.preventDefault();
-                angular.element(first).triggerHandler('mousedown');
+                // Directly select highlighted item
+                selectItem(currentList[highlightedIndex]);
+              } else {
+                // Fallback: select first visible
+                var first = panel.children()[0];
+                if (first) {
+                  evt.preventDefault();
+                  angular.element(first).triggerHandler('mousedown');
+                }
               }
             }
           }

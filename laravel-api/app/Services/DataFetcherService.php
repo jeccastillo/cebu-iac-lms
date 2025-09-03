@@ -20,7 +20,15 @@ class DataFetcherService
 
         $user = DB::table('tb_mas_users')
             ->join('tb_mas_programs', 'tb_mas_users.intProgramID', '=', 'tb_mas_programs.intProgramID')
-            ->where('strGSuiteEmail', $token)
+            // Accept multiple identifiers for robustness:
+            // - strGSuiteEmail (primary portal token)
+            // - strEmail (common login for students)
+            // - strStudentNumber (some logins use student number)
+            ->where(function ($q) use ($token) {
+                $q->where('tb_mas_users.strGSuiteEmail', $token)
+                  ->orWhere('tb_mas_users.strEmail', $token)
+                  ->orWhere('tb_mas_users.strStudentNumber', $token);
+            })
             ->select('tb_mas_users.*', 'tb_mas_programs.strProgramCode')
             ->first();
 

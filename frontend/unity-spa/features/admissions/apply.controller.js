@@ -5,9 +5,9 @@
     .module('unityApp')
     .controller('AdmissionsApplyController', AdmissionsApplyController);
 
-  AdmissionsApplyController.$inject = ['$http', '$location', 'APP_CONFIG', '$q', 'CampusService', 'SchoolYearsService', 'ProgramsService', 'TuitionYearsService', 'PreviousSchoolsService', '$scope'];
+  AdmissionsApplyController.$inject = ['$http', '$location', 'APP_CONFIG', '$q', 'CampusService', 'SchoolYearsService', 'ProgramsService', 'TuitionYearsService', 'PreviousSchoolsService', 'ApplicantTypesService', '$scope'];
 
-  function AdmissionsApplyController($http, $location, APP_CONFIG, $q, CampusService, SchoolYearsService, ProgramsService, TuitionYearsService, PreviousSchoolsService, $scope) {
+  function AdmissionsApplyController($http, $location, APP_CONFIG, $q, CampusService, SchoolYearsService, ProgramsService, TuitionYearsService, PreviousSchoolsService, ApplicantTypesService, $scope) {
     var vm = this;
 
     vm.loading = false;
@@ -25,6 +25,13 @@
     vm.loadingTerms = false;
     vm.programLoading = false;
 
+    // Applicant Types selection state
+    vm.loadingApplicantTypes = false;
+    vm.applicantTypes = [];
+    vm.applicantTypesByGroup = {}; // { groupName: [ {id,name} ] }
+    vm.applicantTypeGroupOrder = ['Freshman', '2nd Degree', 'Other'];
+    vm.totalApplicantTypeCount = 0;
+
     // Educational Background state
     vm.previousSchools = [];
     vm.educ = { notOnList: false, selected: null };
@@ -36,6 +43,7 @@
       last_name: '',
       gender: '',
       date_of_birth: '',
+      citizenship_country: 'Philippines',
       // Contact
       email: '',
       email_confirmation: '',
@@ -55,6 +63,20 @@
       grade_year_level: '',
       program_strand_degree: '',
       lrn_number: '',
+      // Parents / Guardians
+      mother_name: '',
+      mother_occupation: '',
+      mother_email: '',
+      mother_mobile: '',
+      father_name: '',
+      father_occupation: '',
+      father_email: '',
+      father_mobile: '',
+      guardian_name: '',
+      guardian_relationship: '',
+      guardian_email: '',
+      guardian_mobile: '',
+      primary_contact: '',
       // Additional Information
       good_moral_standing: null,
       illegal_activities_involved: null,
@@ -67,7 +89,8 @@
       campus: '',        // kept for backend compatibility (filled on submit)
       term: null,        // tb_mas_sy.intID (selected term)
       campus_id: null,   // kept for backend completeness (filled on submit)
-      intTuitionYear: null // resolved after selecting student level
+      intTuitionYear: null, // resolved after selecting student level
+      applicant_type_id: null // selected applicant type id
     };
 
     vm.genders = ['Male', 'Female'];
@@ -104,6 +127,7 @@
     vm.loadPreviousSchools = loadPreviousSchools;
     vm.onPreviousSchoolChange = onPreviousSchoolChange;
     vm.toggleNotOnList = toggleNotOnList;
+    vm.loadApplicantTypesForSelection = loadApplicantTypesForSelection;
 
     activate();
 
@@ -192,6 +216,15 @@
         vm.error = 'Please select a term.';
         return;
       }
+      if (!vm.form.applicant_type_id) {
+        vm.error = 'Please select an applicant type.';
+        return;
+      }
+      // Validate Parent/Guardian contacts: require at least one group with name + (email or mobile)
+      if (!validateParentContacts()) {
+        vm.error = 'Please provide at least one parent/guardian with Name and either Email Address or Mobile Number.';
+        return;
+      }
 
       // Prepare payload
       var payload = angular.copy(vm.form);
@@ -204,6 +237,9 @@
         ? parseInt(vm.form.intTuitionYear, 10)
         : null;
       payload.intTuitionYear = isNaN(tyid) ? null : tyid;
+      payload.applicant_type = (vm.form.applicant_type_id !== undefined && vm.form.applicant_type_id !== null)
+        ? parseInt(vm.form.applicant_type_id, 10)
+        : null;
 
       vm.loading = true;
 
@@ -239,8 +275,10 @@
       vm.form.term = null;
       vm.form.type_id = '';
       vm.form.intTuitionYear = null;
+      vm.form.applicant_type_id = null;
       loadCampusTerms(vm.selectedCampus.id);
       try { vm.loadProgramsForSelection(); } catch (e) {}
+      try { vm.loadApplicantTypesForSelection(); } catch (e) {}
     }
 
     function onTermTypeChange() {
@@ -268,7 +306,9 @@
       }
       // Reset program and reload programs based on new selection
       vm.form.type_id = '';
+      vm.form.applicant_type_id = null;
       try { vm.loadProgramsForSelection(); } catch (e) {}
+      try { vm.loadApplicantTypesForSelection(); } catch (e) {}
       // Load default tuition year id for this student level
       try { loadDefaultTuitionYearForSelectedStudentType(); } catch (e) { vm.form.intTuitionYear = null; }
     }
@@ -338,11 +378,12 @@
     function mapTermTypeToProgramType(tt) {
       if (!tt) return null;
       var s = ('' + tt).toLowerCase();
-      // Common mappings: 'college', 'shs', etc.
+      // Common mappings: 'college', 'shs', 'grad'
       if (s.indexOf('college') !== -1) return 'college';
       if (s.indexOf('shs') !== -1) return 'shs';
-      // fallback: if values are already 'college' / 'shs'
-      if (s === 'college' || s === 'shs') return s;
+      if (s.indexOf('grad') !== -1 || s.indexOf('graduate') !== -1) return 'grad';
+      // fallback: if values are already one of the API types
+      if (s === 'college' || s === 'shs' || s === 'grad') return s;
       return null;
     }
 
@@ -435,6 +476,90 @@
           vm.programLoading = false;
         });
     }
+
+    function loadApplicantTypesForSelection() {
+      // Clear if no student level chosen
+      if (!vm.form || !vm.form.student_type) {
+        vm.applicantTypes = [];
+        vm.applicantTypesByGroup = {};
+        vm.applicantTypeGroupOrder = ['Freshman', '2nd Degree', 'Other'];
+        vm.totalApplicantTypeCount = 0;
+        return $q.resolve([]);
+      }
+      var type = mapTermTypeToProgramType(vm.form.student_type);
+      if (!type) {
+        vm.applicantTypes = [];
+        vm.applicantTypesByGroup = {};
+        vm.applicantTypeGroupOrder = ['Freshman', '2nd Degree', 'Other'];
+        vm.totalApplicantTypeCount = 0;
+        return $q.resolve([]);
+      }
+
+      vm.loadingApplicantTypes = true;
+      return ApplicantTypesService.publicList({ type: type, per_page: 500, sort: 'name', order: 'asc' })
+        .then(function (res) {
+          var rows = (res && res.data) ? res.data : (Array.isArray(res) ? res : []);
+          // Normalize
+          var list = rows.map(function (r) {
+            var d = r && r.data ? r.data : r;
+            return {
+              id: d.id || d.intID,
+              name: d.name || '',
+              type: d.type || '',
+              sub_type: d.sub_type || 'Other'
+            };
+          });
+          vm.applicantTypes = list;
+
+          // Group by sub_type
+          var groups = {};
+          var counts = 0;
+          for (var i = 0; i < list.length; i++) {
+            var g = list[i].sub_type || 'Other';
+            if (!groups[g]) groups[g] = [];
+            groups[g].push(list[i]);
+            counts++;
+          }
+          // Sort each group's items by name
+          Object.keys(groups).forEach(function (k) {
+            groups[k].sort(function (a, b) { return ('' + a.name).localeCompare(b.name); });
+          });
+
+          // Determine group order: prefer known order, then append any others alphabetically
+          var known = ['Freshman', '2nd Degree', 'Other'];
+          var present = Object.keys(groups).sort();
+          var order = [];
+          known.forEach(function (x) { if (groups[x] && groups[x].length) order.push(x); });
+          present.forEach(function (x) { if (order.indexOf(x) === -1) order.push(x); });
+
+          vm.applicantTypesByGroup = groups;
+          vm.applicantTypeGroupOrder = order;
+          vm.totalApplicantTypeCount = counts;
+
+          return list;
+        })
+        .catch(function () {
+          vm.applicantTypes = [];
+          vm.applicantTypesByGroup = {};
+          vm.applicantTypeGroupOrder = ['Freshman', '2nd Degree', 'Other'];
+          vm.totalApplicantTypeCount = 0;
+          return [];
+        })
+        .finally(function () { vm.loadingApplicantTypes = false; });
+    }
+
+    // Parent/Guardian helpers
+    function hasValue(v) { return v !== undefined && v !== null && ('' + v).trim() !== ''; }
+    function isParentGroupValid(name, email, mobile) { return hasValue(name) && (hasValue(email) || hasValue(mobile)); }
+    function validateParentContacts() {
+      try {
+        var m = isParentGroupValid(vm.form.mother_name, vm.form.mother_email, vm.form.mother_mobile);
+        var f = isParentGroupValid(vm.form.father_name, vm.form.father_email, vm.form.father_mobile);
+        var g = isParentGroupValid(vm.form.guardian_name, vm.form.guardian_email, vm.form.guardian_mobile);
+        return !!(m || f || g);
+      } catch (e) { return false; }
+    }
+    vm.validateParentContacts = validateParentContacts;
 
     // Educational Background helpers
     function loadPreviousSchools() {

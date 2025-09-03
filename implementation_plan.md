@@ -1,213 +1,224 @@
 # Implementation Plan
 
 [Overview]
-Add a new Admin-only Payment Details management page under the Admin menu that allows searching, viewing, and editing rows from the payment_details table, with Laravel API endpoints for search/show/update and an AngularJS SPA screen styled using Tailwind utility classes.
+Implement an Admissions Applicants Analytics feature that visualizes applicant data per term (syid) using Chart.js. The solution provides a new SPA page with charts (status distribution, applicant type/sub-type, campus distribution, daily application trends, payment/waiver stats) with both single-term and side-by-side comparison modes, powered by new Laravel API analytics endpoints.
 
-This feature centralizes payment_details maintenance for system administrators. It builds on the existing Finance read endpoints but introduces an Admin-managed flow to correct or update records when necessary. The page will be accessible only to users with the admin role, routed at /admin/payment-details, grouped under Admin in the sidebar, and will use Tailwind CSS already applied across the SPA for consistent styling. The Laravel API will expose secure endpoints with admin authorization and dynamic column detection to support environments where payment_details schema varies.
+The scope includes: backend analytics aggregation endpoint(s) in Laravel, frontend AngularJS 1.x route, service, controller, and template for analytics, Chart.js integration via CDN, and wiring to admissions navigation. The data source is tb_mas_applicant_data joined to tb_mas_users (and applicant_types/campuses where available); all metrics are filtered per term (syid) and based on the latest applicant_data row per user (per syid) to avoid duplication.
 
 [Types]  
-Introduce request/response DTO shapes for the admin endpoints and the SPA controller models.
+Type definitions for API contracts and JS model shapes used by frontend and backend responses.
 
-- PaymentDetailItem (API response item)
-  - id: number (payment_details.id)
-  - student_information_id?: number|null
-  - student_number?: string|null
-  - sy_reference?: number|null
-  - description?: string|null
-  - subtotal_order?: number|null
-  - total_amount_due?: number|null
-  - status?: string|null
-  - or_no?: string|number|null (present when column exists)
-  - or_number?: string|number|null (present when column exists)
-  - invoice_number?: string|number|null (present when column exists)
-  - method?: string|null (or payment_method?: string|null when present)
-  - remarks?: string|null
-  - mode_of_payment_id?: number|null
-  - posted_at?: string|null (coalesced from paid_at/date/created_at)
-  - created_at?: string|null
-  - updated_at?: string|null
-  - source: 'payment_details' (constant)
-  - sy_label?: string (optional, if resolved/joined)
+- Backend query primitives
+  - LatestApplicantData per user and term: for a given syid, select the latest tb_mas_applicant_data row (max id) per (user_id, syid). Fallback to latest per user when syid is missing in the table.
+  - Joins:
+    - tb_mas_users u on u.intID = ad.user_id
+    - tb_mas_applicant_types t on t.intID = ad.applicant_type (optional)
+    - tb_mas_campuses c on c.id = u.campus_id (optional)
 
-- PaymentDetailSearchFilters (API query params)
-  - q?: string (search term against student_number, description, number columns)
-  - student_number?: string
-  - student_id?: number
-  - syid?: number (term filter, maps to sy_reference where applicable)
-  - mode?: 'or'|'invoice' (hints which number column to search)
-  - or_number?: string|number (exact or partial, matches or_no/or_number)
-  - invoice_number?: string|number
-  - status?: string
-  - date_from?: string (Y-m-d or ISO)
-  - date_to?: string (Y-m-d or ISO)
-  - page?: number (pagination)
-  - per_page?: number (default 20)
+- API request
+  - GET /api/v1/applicants/analytics/summary
+    - Query params:
+      - syid: int (required for primary term; if missing, 422)
+      - compare_syid: int (optional; when provided, compute a second summary)
+      - start: string Y-m-d (optional; default: 30 days before today for time series)
+      - end: string Y-m-d (optional; default: today for time series)
+      - campus: string|int (optional; filters campus by name or id; applied on u.campus_id or c.campus_name)
+      - type: string (optional; filters ApplicantType.type)
+      - sub_type: string (optional; filters ApplicantType.sub_type)
+      - status: string (optional; filters ad.status)
+      - search: string (optional; filters u.strFirstname/strLastname/strEmail/strMobileNumber LIKE %search%)
 
-- PaymentDetailUpdatePayload (API body for PATCH)
-  - description?: string
-  - subtotal_order?: number
-  - total_amount_due?: number
-  - status?: string
-  - remarks?: string
-  - method?: string (or payment_method?: string)
-  - mode_of_payment_id?: number
-  - posted_at?: string (maps to paid_at/date/created_at depending on column)
-  - or_no?: string|number (if column exists and allowed to change)
-  - or_number?: string|number (if column exists and allowed to change)
-  - invoice_number?: string|number (if column exists and allowed to change)
+- API response shapes (JSON)
+  - ApplicantsAnalyticsSummaryEnvelope
+    {
+      success: true,
+      data: {
+        terms: {
+          [syid:string]: ApplicantsAnalyticsSummary
+        },
+        meta: {
+          primary_syid: number,
+          compare_syid: number|null,
+          date_range: { start: string, end: string }
+        }
+      }
+    }
+
+  - ApplicantsAnalyticsSummary
+    {
+      syid: number,
+      counts: {
+        total_applicants: number,
+        by_status: { [status: string]: number },
+        by_applicant_type: { [type: string]: number },              // e.g., college, shs, grad
+        by_applicant_sub_type: { [sub_type: string]: number },      // if available
+        by_campus: { [campus_label: string]: number },              // campus_name or fallback id/string
+        payment_flags: {
+          paid_application_fee: number,
+          paid_reservation_fee: number
+        },
+        waivers: {
+          waive_application_fee: number
+        }
+      },
+      timeseries: {
+        daily_new_applications: Array<{ date: string (YYYY-MM-DD), count: number }>
+      }
+    }
+
+- Frontend model shapes
+  - vm.filters: {
+      syidA: number, syidB?: number|null,
+      start?: string, end?: string,
+      status?: string, campus?: string|number, type?: string, sub_type?: string
+    }
+  - vm.charts: Record of Chart.js instances keyed by chart id strings.
+  - vm.summaryA, vm.summaryB: ApplicantsAnalyticsSummary for each selected term.
 
 Validation rules:
-- subtotal_order: numeric, gt:0
-- total_amount_due: numeric, gte:subtotal_order (if provided)
-- status: string in ['Paid','Void','Pending','Cancelled','Error'] (configurable)
-- posted_at: valid date/datetime
-- or_no/or_number/invoice_number: numeric or string, unique vs other rows (validated server-side)
-- mode_of_payment_id: integer, must exist in payment_modes.id when table present
+- syid (primary) is required on backend; compare_syid optional.
+- start/end should validate to Y-m-d; fallback to defaults.
 
 [Files]
-Create new admin SPA feature and Laravel API endpoints; update routes and sidebar.
+Files to be modified and created across backend and frontend.
 
-- New frontend files
-  - frontend/unity-spa/features/admin/payment-details/edit.html
-    - Tailwind-styled page:
-      - Filters: q, student_number, term selector (reuse TermService), mode, number fields, date range, status.
-      - Results table with pagination.
-      - Inline edit modal/drawer to edit selected row fields.
-      - Admin-only guards and UX feedback.
-  - frontend/unity-spa/features/admin/payment-details/payment-details.controller.js
-    - AngularJS controller for search, load, select, edit, and save updates.
-  - frontend/unity-spa/features/admin/payment-details/payment-details.service.js
-    - AngularJS service calling Laravel admin endpoints (search/show/update).
+- New files to be created
+  - laravel-api/app/Http/Controllers/Api/V1/ApplicantAnalyticsController.php
+    - Purpose: Provide /applicants/analytics/summary endpoint aggregating applicants metrics per term and optional comparison term.
 
-- Existing frontend to modify
-  - frontend/unity-spa/core/routes.js
-    - Add route .when('/admin/payment-details', { templateUrl: 'features/admin/payment-details/edit.html', controller: 'AdminPaymentDetailsController', controllerAs: 'vm', requiredRoles: ['admin'] })
-  - frontend/unity-spa/shared/components/sidebar/sidebar.controller.js
-    - Under group key: 'admin', add child: { label: 'Payment Details', path: '/admin/payment-details' }
-  - frontend/unity-spa/shared/components/sidebar/sidebar.html
-    - No structural change required (links rendered from controller), verify access gating via vm.canAccess.
+  - frontend/unity-spa/features/admissions/applicants/analytics.service.js
+    - Purpose: AngularJS service wrapping analytics API calls with headers, params, and response unwrapping.
 
-- New backend files
-  - laravel-api/app/Http/Controllers/Api/V1/PaymentDetailAdminController.php
-    - index(): search and pagination
-    - show(int $id): fetch single row with dynamic fields
-    - update(int $id, PaymentDetailUpdateRequest $request): apply updates with validation and dynamic columns
-  - laravel-api/app/Http/Requests/Api/V1/PaymentDetailUpdateRequest.php
-    - Validation and normalization of update payload
-  - laravel-api/app/Services/PaymentDetailAdminService.php
-    - Column detection (Schema::hasColumn), search builder, uniqueness checks for number columns, coalescing date fields, safe-update writer
+  - frontend/unity-spa/features/admissions/applicants/analytics.controller.js
+    - Purpose: AngularJS controller implementing filters, term selection (on-page override), Chart.js dataset transforms, rendering and updating charts.
 
-- Existing backend to modify
+  - frontend/unity-spa/features/admissions/applicants/analytics.html
+    - Purpose: Analytics page template with filters, term selectors, and chart canvases (status doughnut, type/subtype bar, campus bar, daily line, payments/waivers bar).
+
+- Existing files to be modified
   - laravel-api/routes/api.php
-    - Register:
-      - GET /api/v1/finance/payment-details/admin → PaymentDetailAdminController@index
-      - GET /api/v1/finance/payment-details/{id} → PaymentDetailAdminController@show
-      - PATCH /api/v1/finance/payment-details/{id} → PaymentDetailAdminController@update
+    - Add route: GET /api/v1/applicants/analytics/summary → ApplicantAnalyticsController@summary, guarded with role: admissions, admin.
 
-- Files to delete or move
+  - frontend/unity-spa/core/routes.js
+    - Add route definition:
+      - path: "/admissions/applicants/analytics"
+      - template: "features/admissions/applicants/analytics.html"
+      - controller: "ApplicantsAnalyticsController"
+      - requiredRoles: ["admissions", "admin"]
+
+  - frontend/unity-spa/index.html
+    - Add Chart.js CDN script before core app files:
+      <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  - frontend/unity-spa/shared/components/sidebar/sidebar.html (optional, but recommended)
+    - Add navigation link under Admissions to "Applicants Analytics" route, gated by roles admissions/admin.
+
+- Files to be deleted or moved
   - None.
 
-- Configuration updates
-  - None (reuse existing Tailwind utilities in SPA and existing auth guard/middleware in Laravel).
+- Configuration file updates
+  - None required (Chart.js via CDN; Laravel routes only).
 
 [Functions]
-Introduce controller methods on both frontend and backend and minimally update routing.
+New functions and modifications required for analytics feature.
 
-- New frontend functions
-  - AdminPaymentDetailsController (payment-details.controller.js)
-    - init(): void — bootstrap roles, load term from TermService, default filters
-    - search(resetPage: boolean): Promise — call service.search with filters, update vm.items and vm.pagination
-    - select(item: PaymentDetailItem): void — set vm.selected and open edit drawer/modal
-    - save(): Promise — validate client-side, call service.update(selected.id, payload), toast success, refresh search results
-    - resetFilters(): void — clear filters and reload
-  - AdminPaymentDetailsService (payment-details.service.js)
-    - search(params: PaymentDetailSearchFilters): Promise<Paginated<PaymentDetailItem>>
-    - get(id: number): Promise<PaymentDetailItem>
-    - update(id: number, payload: PaymentDetailUpdatePayload): Promise<PaymentDetailItem>
+- New functions
+  - Backend: ApplicantAnalyticsController@summary (laravel-api/app/Http/Controllers/Api/V1/ApplicantAnalyticsController.php)
+    - Signature: public function summary(Request $request): JsonResponse
+    - Purpose: compute ApplicantsAnalyticsSummary for primary syid and optional compare_syid using:
+      - latest rows per (user_id, syid) via correlated subqueries (ad.id = (select max(ad2.id) ...))
+      - groupings for by_status, by_applicant_type (join tb_mas_applicant_types), by_applicant_sub_type, by_campus (join tb_mas_campuses, fallback to u.campus_id), payments &amp; waivers counts, daily_new_applications grouped by DATE(ad.created_at) within [start,end].
+    - Edge cases: If applicant_data.syid column is missing in environment, fallback to latest per user (warn in meta). If campuses/applicant_types tables/columns unavailable, gracefully skip or fallback to raw values.
 
-- Modified frontend functions
-  - routes.js — add new route definition
-  - sidebar.controller.js — push new Admin child link
+  - Frontend: ApplicantsAnalyticsService.summary (frontend/unity-spa/features/admissions/applicants/analytics.service.js)
+    - Signature: summary(params: object) → Promise<ApplicantsAnalyticsSummaryEnvelope>
+    - Purpose: GET /applicants/analytics/summary with params { syid, compare_syid?, start?, end?, ...filters }, attach X-Faculty-ID header from StorageService (like ApplicantsService).
 
-- New backend functions (PaymentDetailAdminController.php)
-  - index(Request $request): JsonResponse
-    - Authorize admin, parse filters, delegate to service, return paginated response
-  - show(int $id): JsonResponse
-    - Authorize admin, fetch item, coalesce fields, return
-  - update(int $id, PaymentDetailUpdateRequest $request): JsonResponse
-    - Authorize admin, validate, delegate to service.update, return updated item
+  - Frontend: ApplicantsAnalyticsController (frontend/unity-spa/features/admissions/applicants/analytics.controller.js)
+    - Methods:
+      - init(): read default term(s) from TermService but allow on-page override; set initial filters; load data.
+      - load(): call service, map data into chart datasets; create/update Chart.js instances.
+      - setTermA/ setTermB(): handlers for term selectors; supports single-term and side-by-side (B optional).
+      - buildCharts(): create charts (status doughnut, type/sub-type bar, campus bar, payments/waivers bar, daily line).
+      - updateChart(chart, data): utility update; destroy/recreate safely when series/labels change.
+      - toSeries(summaryA, summaryB, key): helpers to align categories and build two datasets for compare mode.
+      - onFilterChange(): reloads data with debounced behavior.
 
-- New backend service methods (PaymentDetailAdminService.php)
-  - detectColumns(): array — map number/payment/date/name/email/contact columns if present
-  - search(array $filters): LengthAwarePaginator|array — query builder with dynamic column support
-  - getById(int $id): array|null — normalized item
-  - update(int $id, array $payload): array — whitelist fields, apply column remapping, validate uniqueness for number columns, safe transaction, return updated
+- Modified functions
+  - frontend/unity-spa/core/routes.js: configure($routeProvider...) — add .when("/admissions/applicants/analytics", ...) block.
+
+- Removed functions
+  - None.
 
 [Classes]
-Add one Laravel controller, one form request, and one service.
+New classes and modifications (PHP controller class; AngularJS controllers are functions not classes in ES5 style).
 
 - New classes
-  - App\Http\Controllers\Api\V1\PaymentDetailAdminController
-    - Methods: index, show, update
-    - Middleware: auth (CodeIgniterSessionGuard) and explicit admin check via UserContextResolver
-  - App\Http\Requests\Api\V1\PaymentDetailUpdateRequest
-    - Rules and messages; authorize() returns true but controller checks admin role
-  - App\Services\PaymentDetailAdminService
-    - No inheritance; pure service for DB operations on payment_details with Schema::hasColumn checks
+  - App\Http\Controllers\Api\V1\ApplicantAnalyticsController
+    - File: laravel-api/app/Http/Controllers/Api/V1/ApplicantAnalyticsController.php
+    - Key methods: summary(Request $request): JsonResponse
+    - Inheritance: extends Controller
+    - Dependencies: Illuminate\Support\Facades\DB; optional use of Carbon for date range.
 
 - Modified classes
-  - None functionally; only api.php route registrations.
+  - None.
+
+- Removed classes
+  - None.
 
 [Dependencies]
-No new external packages.
+Add Chart.js via CDN only. No Composer or npm changes.
 
-- Frontend uses existing AngularJS and Tailwind utility classes (already present).
-- Backend uses Illuminate DB, Validation, Schema facade (already present).
+- Frontend:
+  - Chart.js v4 UMD: https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js
+
+- Backend:
+  - None (use existing Laravel DB/Query Builder).
 
 [Testing]
-Use manual test procedures and an optional smoke script; consider adding lightweight Laravel feature tests if time permits.
+A layered testing and validation approach.
 
-- Manual tests
-  1) Access control:
-     - Login as non-admin → navigate to /#/admin/payment-details → expect redirect/403/hidden.
-     - Login as admin → page loads; Admin group shows Payment Details link.
-  2) Search:
-     - Search by student_number, term, mode=or, exact or_number; results render newest-first (by posted_at desc then id).
-     - Date range filters and pagination work.
-  3) Edit and save:
-     - Edit description, amount (subtotal_order), status, remarks, method/payment_method, posted_at, mode_of_payment_id.
-     - If changing or_number/invoice_number: server validates uniqueness across payment_details and applicable cross-checks (if implemented).
-     - Save → success toast → list refresh shows updated values.
-  4) Column variants:
-     - Environments missing certain columns (e.g., method vs payment_method) continue to work; fields absent from schema are hidden and not sent.
-  5) Error cases:
-     - Invalid subtotal_order (<=0) → 422.
-     - Duplicate or_number → 422 with helpful message.
-     - Server errors log to console; SPA shows toast "Update failed."
+- Backend API:
+  - Manual smoke using browser or curl:
+    - GET /api/v1/applicants/analytics/summary?syid=29
+    - GET /api/v1/applicants/analytics/summary?syid=29&amp;compare_syid=30
+    - Include campus/type/status filters to validate filter plumbing.
+  - Optional Feature Test (PHPUnit) new test file:
+    - laravel-api/tests/Feature/ApplicantAnalyticsControllerTest.php
+      - test_summary_requires_syid_returns_422
+      - test_summary_structure_contains_expected_keys
+      - test_summary_compare_syid_contains_terms_map
 
-- Optional scripts
-  - laravel-api/scripts/test_payment_details_admin.php
-    - Simulate GET /finance/payment-details/admin and PATCH update for a known id to smoke the flow.
+- Frontend:
+  - Load /admissions/applicants/analytics with admissions/admin role.
+  - Validate single-term mode (only Term A selected) and compare mode (Term B selected).
+  - Verify each chart renders and updates when terms/filters change.
+  - Confirm on-page term override works even if sidebar term is set differently.
 
 [Implementation Order]
-Implement backend first, then frontend integration, then wiring and verification.
+A clear sequence to minimize churn and ensure verification at each step.
 
-1) Backend: Service
-   - Create PaymentDetailAdminService with detectColumns, search, getById, update; add uniqueness check for number columns and coalesced date handling.
-2) Backend: Request
-   - Add PaymentDetailUpdateRequest with strict validation and conditional rules.
-3) Backend: Controller
-   - Add PaymentDetailAdminController (index, show, update) with admin authorization using UserContextResolver.
-4) Backend: Routes
-   - Register routes in routes/api.php under /api/v1/finance/payment-details/admin (index) and /api/v1/finance/payment-details/{id} (show, update).
-5) Frontend: Service
-   - Create AdminPaymentDetailsService with search/get/update methods pointing to the new endpoints.
-6) Frontend: Controller + View
-   - Create AdminPaymentDetailsController and edit.html with Tailwind UI:
-     - Filters section, results table with paging, and edit drawer/modal.
-7) Frontend: Routes
-   - Update core/routes.js to register /admin/payment-details with requiredRoles ['admin'].
-8) Frontend: Sidebar
-   - Update sidebar.controller.js to add Admin → Payment Details link (path '/admin/payment-details'); visibility via canAccess.
-9) QA Pass
-   - Verify end-to-end flows and role restrictions; validate editing across variant schemas.
+1) Backend analytics endpoint
+   - Create ApplicantAnalyticsController.php with summary() aggregation for syid and compare_syid.
+   - Wire route in laravel-api/routes/api.php with role: admissions,admin.
+   - Quick manual test via query strings to verify JSON shape and counts.
+
+2) Frontend service
+   - Create features/admissions/applicants/analytics.service.js with summary() wrapping API call and admin headers.
+
+3) Frontend page and charts
+   - Add Chart.js script tag in frontend/unity-spa/index.html (before core app files).
+   - Create analytics.html with layout: filters (term A/B selectors, date range), chart canvases, toggles.
+   - Create analytics.controller.js to bind filters and render charts in single-term and side-by-side modes.
+
+4) Routing and navigation
+   - Update core/routes.js to add /admissions/applicants/analytics route with requiredRoles ["admissions","admin"].
+   - Optionally add link in shared/components/sidebar/sidebar.html under Admissions group.
+
+5) Verification
+   - Navigate to the page; test single term then side-by-side.
+   - Validate counts match backend JSON by logging results in console.
+   - Check performance (no heavy memory usage); verify graceful handling if types/campus tables missing.
+
+6) Optional automated test
+   - Add Feature test for controller summary() structure and 422 on missing syid (time-permitting).

@@ -41,6 +41,8 @@
   <!-- AngularJS 1.x and ngRoute -->
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular-route.min.js"></script>
+  <!-- Chart.js for analytics visualizations -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <!-- SweetAlert2 for nicer confirms/alerts -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- Select2 for enhanced selects (requires jQuery) -->
@@ -216,6 +218,7 @@
   <script src="shared/components/sidebar/sidebar.directive.js"></script>
   <!-- Shared directives -->
   <script src="shared/directives/select2.directive.js"></script>
+  <script src="shared/directives/pui-multiselect.directive.js"></script>
   <script src="shared/directives/pui-autocomplete.directive.js"></script>
   <script src="shared/directives/iti-tel.directive.js"></script>
 
@@ -252,6 +255,8 @@
   <script src="features/students/checklist.service.js"></script>
   <script src="features/students/viewer.controller.js"></script>
   <script src="features/students/records.controller.js"></script>
+  <!-- Student Dashboard -->
+  <script src="features/student-dashboard/student-dashboard.controller.js"></script>
   <!-- Admissions application feature -->
   <script src="features/admissions/apply.controller.js"></script>
   <!-- Admissions: Requirements CRUD -->
@@ -263,6 +268,12 @@
   <!-- Admissions: Applicants (List + View) -->
   <script src="features/admissions/applicants/applicants.service.js"></script>
   <script src="features/admissions/applicants/applicants.controller.js"></script>
+  <!-- Admissions: Applicants Analytics -->
+  <script src="features/admissions/applicants/analytics.service.js"></script>
+  <script src="features/admissions/applicants/analytics.controller.js"></script>
+  <!-- Admissions: Applicant Types CRUD -->
+  <script src="features/admissions/applicant-types/applicant-types.service.js"></script>
+  <script src="features/admissions/applicant-types/applicant-types.controller.js"></script>
 
   <!-- Campuses feature -->
   <script src="features/campuses/campuses.service.js"></script>

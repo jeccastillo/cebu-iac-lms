@@ -36,6 +36,8 @@ use App\Http\Controllers\Api\V1\InvoiceController;
 use App\Http\Controllers\Api\V1\RequirementController;
 use App\Http\Controllers\Api\V1\PreviousSchoolController;
 use App\Http\Controllers\Api\V1\ApplicantController;
+use App\Http\Controllers\Api\V1\ApplicantTypeController;
+use App\Http\Controllers\Api\V1\ApplicantAnalyticsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -349,10 +351,22 @@ Route::prefix('v1')->group(function () {
     Route::put('/previous-schools/{id}', [PreviousSchoolController::class, 'update'])->middleware('role:admissions,admin');
     Route::delete('/previous-schools/{id}', [PreviousSchoolController::class, 'destroy'])->middleware('role:admissions,admin');
 
+    // Applicant Types CRUD (Admissions/Admin)
+    Route::get('/applicant-types', [ApplicantTypeController::class, 'index'])->middleware('role:admissions,admin');
+    Route::get('/applicant-types/{id}', [ApplicantTypeController::class, 'show'])->middleware('role:admissions,admin');
+    Route::post('/applicant-types', [ApplicantTypeController::class, 'store'])->middleware('role:admissions,admin');
+    Route::put('/applicant-types/{id}', [ApplicantTypeController::class, 'update'])->middleware('role:admissions,admin');
+    Route::delete('/applicant-types/{id}', [ApplicantTypeController::class, 'destroy'])->middleware('role:admissions,admin');
+
     // Applicants (Admissions/Admin)
     Route::get('/applicants', [ApplicantController::class, 'index'])->middleware('role:admissions,admin');
     Route::get('/applicants/{id}', [ApplicantController::class, 'show'])->middleware('role:admissions,admin');
+    Route::put('/applicants/{id}', [ApplicantController::class, 'update'])->middleware('role:admissions,admin');
+
+    // Applicants Analytics
+    Route::get('/applicants/analytics/summary', [ApplicantAnalyticsController::class, 'summary'])->middleware('role:admissions,admin');
 
     // Public list for applicant forms (no auth)
     Route::get('/admissions/previous-schools', [PreviousSchoolController::class, 'index']);
+    Route::get('/admissions/applicant-types', [ApplicantTypeController::class, 'index']);
 });

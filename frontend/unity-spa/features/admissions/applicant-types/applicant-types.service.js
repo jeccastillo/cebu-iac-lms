@@ -3,12 +3,13 @@
 
   angular
     .module('unityApp')
-    .factory('ApplicantsService', ApplicantsService);
+    .factory('ApplicantTypesService', ApplicantTypesService);
 
-  ApplicantsService.$inject = ['$http', 'APP_CONFIG', 'StorageService'];
-  function ApplicantsService($http, APP_CONFIG, StorageService) {
+  ApplicantTypesService.$inject = ['$http', 'APP_CONFIG', 'StorageService'];
+  function ApplicantTypesService($http, APP_CONFIG, StorageService) {
     var BASE = APP_CONFIG.API_BASE; // e.g. /laravel-api/public/api/v1
-    var ROOT = BASE + '/applicants';
+    var ROOT = BASE + '/applicant-types';
+    var PUBLIC_ROOT = BASE + '/admissions/applicant-types'; // read-only endpoint for applicant forms
 
     function _getLoginState() {
       try {
@@ -37,37 +38,43 @@
       if (!filters) return p;
 
       if (filters.search) p.search = filters.search;
-      if (filters.status) p.status = filters.status;
-      if (filters.campus) p.campus = filters.campus;
-      if (filters.date_from) p.date_from = filters.date_from;
-      if (filters.date_to) p.date_to = filters.date_to;
-
+      if (filters.type) p.type = filters.type;
       if (filters.sort) p.sort = filters.sort;
       if (filters.order) p.order = filters.order;
       if (filters.page) p.page = filters.page;
       if (filters.per_page) p.per_page = filters.per_page;
 
-      // Term filter (syid)
-      if (filters.syid) p.syid = filters.syid;
-
       return p;
     }
 
     return {
-      // List applicants with optional filters/pagination
+      // Admin CRUD
       list: function (filters) {
         var params = _paramsFromFilters(filters);
         var cfg = _adminHeaders();
         cfg.params = params;
         return $http.get(ROOT, cfg).then(_unwrap);
       },
-      // Get applicant details by tb_mas_users.intID
       show: function (id) {
         return $http.get(ROOT + '/' + encodeURIComponent(id), _adminHeaders()).then(_unwrap);
       },
-      // Update core identity/contact fields for applicant
+      create: function (payload) {
+        var body = Object.assign({}, payload || {});
+        return $http.post(ROOT, body, _adminHeaders()).then(_unwrap);
+      },
       update: function (id, payload) {
-        return $http.put(ROOT + '/' + encodeURIComponent(id), payload, _adminHeaders()).then(_unwrap);
+        var body = Object.assign({}, payload || {});
+        return $http.put(ROOT + '/' + encodeURIComponent(id), body, _adminHeaders()).then(_unwrap);
+      },
+      remove: function (id) {
+        return $http.delete(ROOT + '/' + encodeURIComponent(id), _adminHeaders()).then(_unwrap);
+      },
+
+      // Public read-only (not used by admin UI but exposed for applicant forms)
+      publicList: function (filters) {
+        var params = _paramsFromFilters(filters);
+        var cfg = { params: params };
+        return $http.get(PUBLIC_ROOT, cfg).then(_unwrap);
       }
     };
   }
