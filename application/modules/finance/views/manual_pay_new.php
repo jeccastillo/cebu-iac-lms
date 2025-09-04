@@ -304,12 +304,12 @@
                                     <td>{{ payment.or_date }}</td>
                                     <td>
                                         <button
-                                            v-if="!payment.or_number && payment.status == 'Paid' && user.special_role == 2"
+                                            v-if="!payment.or_number && payment.status == 'Paid' || user.special_role == 2"
                                             data-toggle="modal" @click="or_update.id = payment.id;"
                                             data-target="#myModal" class="btn btn-primary"> Update
                                             OR </button>
                                         <button data-toggle="modal"
-                                            v-if="!payment.invoice_number && user.special_role == 2"
+                                            v-if="!payment.invoice_number || user.special_role == 2"
                                             @click="invoice_update.id = payment.id;"
                                             data-target="#invoiceUpdate" class="btn btn-primary">
                                             Update Invoice </button>

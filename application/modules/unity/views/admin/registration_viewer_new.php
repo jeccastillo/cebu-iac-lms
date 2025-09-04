@@ -556,9 +556,11 @@
                                                 <td>{{ application_payment.or_number }}</td>
                                                 <td>{{ application_payment.description }}</td>
                                                 <td>{{ application_payment.check_number }}</td>
-                                                <td>{{ numberWithCommas(application_payment.subtotal_order) }}</td>
+                                                <td>{{ numberWithCommas(application_payment.subtotal_order) }}
+                                                </td>
                                                 <td>{{ application_payment.charges }}</td>
-                                                <td>{{ numberWithCommas(application_payment.total_amount_due) }}</td>
+                                                <td>{{ numberWithCommas(application_payment.total_amount_due) }}
+                                                </td>
                                                 <td>{{ application_payment.status }}</td>
                                                 <td>{{ application_payment.or_date }}</td>
                                                 <td>{{ application_payment.remarks }}</td>
@@ -573,7 +575,7 @@
                                                         Update OR
                                                     </button> -->
                                                     <button
-                                                        v-if="application_payment.status == 'Paid' && cashier && application_payment.remarks != 'Voided' && cashier.invoice_current"
+                                                        v-if="application_payment.status == 'Paid' && cashier && application_payment.remarks != 'Voided' && cashier.invoice_current && !application_payment.invoice_number || user.special_role == 2"
                                                         data-toggle="modal"
                                                         @click="invoice_update.id = application_payment.id; invoice_update_description = application_payment.description;"
                                                         data-target="#invoiceUpdate"
@@ -613,22 +615,24 @@
                                                 <td>{{ payment.or_number }}</td>
                                                 <td>{{ payment.description }}</td>
                                                 <td>{{ payment.check_number }}</td>
-                                                <td>{{ numberWithCommas(payment.subtotal_order) }}</td>
+                                                <td>{{ numberWithCommas(payment.subtotal_order) }}
+                                                </td>
                                                 <td>{{ payment.charges }}</td>
-                                                <td>{{ numberWithCommas(payment.total_amount_due) }}</td>
+                                                <td>{{ numberWithCommas(payment.total_amount_due) }}
+                                                </td>
                                                 <td>{{ payment.status }}</td>
                                                 <td>{{ payment.or_date }}</td>
                                                 <td>{{ payment.remarks }}</td>
                                                 <td>{{ payment.void_reason }}</td>
                                                 <td>
                                                     <button
-                                                        v-if="!payment.or_number && payment.status == 'Paid' && cashier && cashier.or_current"
+                                                        v-if="!payment.or_number && payment.status == 'Paid' && cashier && cashier.or_current || user.special_role == 2"
                                                         data-toggle="modal"
                                                         @click="prepUpdate(payment.id,payment.description,payment.subtotal_order)"
                                                         data-target="#myModal"
                                                         class="btn btn-primary"> Update OR </button>
                                                     <button
-                                                        v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided' && cashier.invoice_current"
+                                                        v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided' && cashier.invoice_current && !payment.invoice_number || user.special_role == 2  "
                                                         data-toggle="modal"
                                                         @click="invoice_update.id = payment.id; invoice_update_description = payment.description;"
                                                         data-target="#invoiceUpdate"
@@ -676,9 +680,11 @@
                                                 <td>{{ reservation_payment.or_number }}</td>
                                                 <td>{{ reservation_payment.description }}</td>
                                                 <td>{{ reservation_payment.check_number }}</td>
-                                                <td>{{ numberWithCommas(reservation_payment.subtotal_order) }}</td>
+                                                <td>{{ numberWithCommas(reservation_payment.subtotal_order) }}
+                                                </td>
                                                 <td>{{ reservation_payment.charges }}</td>
-                                                <td>{{ numberWithCommas(reservation_payment.total_amount_due) }}</td>
+                                                <td>{{ numberWithCommas(reservation_payment.total_amount_due) }}
+                                                </td>
                                                 <td>{{ reservation_payment.status }}</td>
                                                 <td>{{ reservation_payment.or_date }}</td>
                                                 <td>{{ reservation_payment.remarks }}</td>
@@ -693,7 +699,7 @@
                                                         Update OR
                                                     </button> -->
                                                     <button
-                                                        v-if="reservation_payment.status == 'Paid' && cashier && reservation_payment.remarks != 'Voided' && cashier.invoice_current"
+                                                        v-if="reservation_payment.status == 'Paid' && cashier && reservation_payment.remarks != 'Voided' && cashier.invoice_current && !reservation_payment.invoice_number || user.special_role == 2"
                                                         data-toggle="modal"
                                                         @click="invoice_update.id = reservation_payment.id; invoice_update_description = reservation_payment.description;"
                                                         data-target="#invoiceUpdate"
@@ -733,22 +739,24 @@
                                                 <td>{{ payment.or_number }}</td>
                                                 <td>{{ payment.description }}</td>
                                                 <td>{{ payment.check_number }}</td>
-                                                <td>{{ numberWithCommas(payment.subtotal_order) }}</td>
+                                                <td>{{ numberWithCommas(payment.subtotal_order) }}
+                                                </td>
                                                 <td>{{ payment.charges }}</td>
-                                                <td>{{ numberWithCommas(payment.total_amount_due) }}</td>
+                                                <td>{{ numberWithCommas(payment.total_amount_due) }}
+                                                </td>
                                                 <td>{{ payment.status }}</td>
                                                 <td>{{ payment.or_date }}</td>
                                                 <td>{{ payment.remarks }}</td>
                                                 <td>{{ payment.void_reason }}</td>
                                                 <td>
                                                     <button
-                                                        v-if="(!payment.or_number && payment.status == 'Paid') && cashier && cashier.or_current"
+                                                        v-if="(!payment.or_number && payment.status == 'Paid') && cashier && cashier.or_current && !payment.or_number || user.special_role == 2"
                                                         data-toggle="modal"
                                                         @click="prepUpdate(payment.id,payment.description,payment.subtotal_order)"
                                                         data-target="#myModal"
                                                         class="btn btn-primary"> Update OR </button>
                                                     <button
-                                                        v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided' && cashier.invoice_current"
+                                                        v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided' && cashier.invoice_current && !payment.invoice_number || user.special_role == 2"
                                                         data-toggle="modal"
                                                         @click="invoice_update.id = payment.id; invoice_update_description = payment.description;"
                                                         data-target="#invoiceUpdate"
@@ -761,8 +769,7 @@
                                                         data-target="#orDetailsUpdate"
                                                         class="btn btn-primary"> Update Details
                                                     </button>
-                                                    <button
-                                                        v-if="payment.or_number && cashier"
+                                                    <button v-if="payment.or_number && cashier"
                                                         @click="printOR(payment)"
                                                         class="btn btn-primary"> Print OR </button>
                                                     <button v-if="payment.invoice_number && cashier"
@@ -1319,8 +1326,8 @@ new Vue({
                         .installment5_formatted);
                     this.registration = data.data.registration;
                     this.tuition_data = data.data.tuition_data;
-                    if (data.data.registration) {                        
-                        this.tuition = data.data.tuition;                        
+                    if (data.data.registration) {
+                        this.tuition = data.data.tuition;
                         this.downpayment_status = this.registration.downpayment;
                         this.registration_status = data.data.registration.intROG;
                         this.allow_enroll = data.data.registration.allow_enroll;
