@@ -211,11 +211,13 @@
                                     <td>{{ refunded.response_message }}</td>
                                     <td>{{ refunded.or_date }}</td>
                                     <td>
-                                        <button v-if="!refunded.or_number" data-toggle="modal"
-                                            @click="or_update.id = refunded.id;"
+                                        <button v-if="!refunded.or_number || user.special_role == 2"
+                                            data-toggle="modal" @click="or_update.id = refunded.id;"
                                             data-target="#myModal" class="btn btn-primary"> Update
                                             OR </button>
-                                        <button data-toggle="modal"
+                                        <button
+                                            v-if="!refunded.invoice_number || user.special_role == 2"
+                                            data-toggle="modal"
                                             @click="invoice_update.id = refunded.id;"
                                             data-target="#invoiceUpdate" class="btn btn-primary">
                                             Update Invoiced </button>
@@ -683,6 +685,7 @@ new Vue({
                     this.request.sy_reference = data.data.current_sem;
                     this.or_update.sy_reference = data.data.current_sem;
                     this.user = data.data.user;
+                    console.log(this.user.special_role);
                     this.particulars = data.data.particulars;
                     this.sms_account = data.data.data;
                     this.finance_manager_privilages = data.data
