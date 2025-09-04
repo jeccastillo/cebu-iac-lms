@@ -685,7 +685,6 @@ new Vue({
                     this.request.sy_reference = data.data.current_sem;
                     this.or_update.sy_reference = data.data.current_sem;
                     this.user = data.data.user;
-                    console.log(this.user.special_role);
                     this.particulars = data.data.particulars;
                     this.sms_account = data.data.data;
                     this.finance_manager_privilages = data.data
