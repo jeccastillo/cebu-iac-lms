@@ -1539,13 +1539,46 @@ class Unity extends CI_Controller {
 
             $equivalent_subjects = $this->db->get_where('tb_mas_equivalents',array('intSubjectID'=>$cs['intSubjectID']))->result_array();            
             $elective_subjects = $this->db->get_where('tb_mas_classlist_student_elective',array('elective_classlist_id'=>$cs['intSubjectID']))->result_array();            
-            $recs = 
-            $this->db->select('floatFinalGrade,strRemarks,tb_mas_subjects.strUnits,tb_mas_subjects.include_gwa,tb_mas_subjects.strCode,intFinalized')
-                     ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')  
-                     ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')                                              
-                     ->where(array('tb_mas_classlist.intSubjectID'=>$cs['intSubjectID'],'tb_mas_classlist_student.intStudentID'=>$data['student']['intID'],'tb_mas_classlist_student.strRemarks !='=>'Officially Withdrawn'))                     
-                     ->get('tb_mas_classlist_student')
-                     ->result_array();            
+
+            // Prefer curriculum_second mapping: if current subject is listed as an equivalentSubjectID,
+            // fetch the grade of the mapped intSubjectID for this student's curriculum.
+            $recs = [];
+            $secondary_map = $this->db->get_where(
+                                'tb_mas_curriculum_second',
+                                array(
+                                    'intCurriculumID' => $data['student']['intCurriculumID'],
+                                    'equivalentSubjectID' => $cs['intSubjectID']
+                                )
+                            )->result_array();
+            if(!empty($secondary_map)){
+                foreach($secondary_map as $sm){
+                    $temp_recs = $this->db->select('floatFinalGrade,strRemarks,tb_mas_subjects.strUnits,tb_mas_subjects.include_gwa,tb_mas_subjects.strCode,intFinalized')
+                                ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
+                                ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')
+                                ->where(array(
+                                    'tb_mas_classlist.intSubjectID' => $sm['intSubjectID'],
+                                    'tb_mas_classlist_student.intStudentID' => $data['student']['intID'],
+                                    'tb_mas_classlist_student.strRemarks !=' => 'Officially Withdrawn'
+                                ))
+                                ->get('tb_mas_classlist_student')
+                                ->result_array();
+                    if(count($temp_recs) > 0){
+                        $recs = $temp_recs;
+                        break;
+                    }
+                }
+            }
+
+            // If no mapped grade found via curriculum_second, use the direct subject record
+            if(count($recs) == 0){
+                $recs = 
+                $this->db->select('floatFinalGrade,strRemarks,tb_mas_subjects.strUnits,tb_mas_subjects.include_gwa,tb_mas_subjects.strCode,intFinalized')
+                         ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')  
+                         ->join('tb_mas_subjects','tb_mas_classlist.intSubjectID = tb_mas_subjects.intID')                                              
+                         ->where(array('tb_mas_classlist.intSubjectID'=>$cs['intSubjectID'],'tb_mas_classlist_student.intStudentID'=>$data['student']['intID'],'tb_mas_classlist_student.strRemarks !='=>'Officially Withdrawn'))                     
+                         ->get('tb_mas_classlist_student')
+                         ->result_array();
+            }
             if(count($recs) == 0){ //EQUIVALENT
                 foreach($equivalent_subjects as $es){
                     $erecs = 
@@ -2435,7 +2468,7 @@ class Unity extends CI_Controller {
         $data['orNumber'] = $this->data_fetcher->generateOR();
         echo json_encode($data);
         
-    }
+    } 
     
     public function edit_curriculum($id)
     {
