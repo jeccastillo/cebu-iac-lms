@@ -32,7 +32,9 @@
                                             <label>Select payment for</label>
                                             <select required @change="selectDescription"
                                                 class="form-control" v-model="request.description">
-                                                <option v-if="paid_application || student.waive_app_fee" value="Reservation Payment">Reservation
+                                                <option
+                                                    v-if="paid_application || student.waive_app_fee"
+                                                    value="Reservation Payment">Reservation
                                                 </option>
                                                 <option v-if="!student.waive_app_fee"
                                                     value="Application Payment">Application</option>
@@ -216,7 +218,7 @@
                                         <button data-toggle="modal"
                                             @click="invoice_update.id = refunded.id;"
                                             data-target="#invoiceUpdate" class="btn btn-primary">
-                                            Update Invoice </button>
+                                            Update Invoiced </button>
                                         <button v-if="refunded.or_number" @click="printOR(refunded)"
                                             class="btn btn-primary"> Print OR </button>
                                     </td>
@@ -302,11 +304,12 @@
                                     <td>{{ payment.or_date }}</td>
                                     <td>
                                         <button
-                                            v-if="!payment.or_number && payment.status == 'Paid'"
+                                            v-if="!payment.or_number && payment.status == 'Paid' && user.special_role == 2"
                                             data-toggle="modal" @click="or_update.id = payment.id;"
                                             data-target="#myModal" class="btn btn-primary"> Update
                                             OR </button>
                                         <button data-toggle="modal"
+                                            v-if="!payment.invoice_number && user.special_role == 2"
                                             @click="invoice_update.id = payment.id;"
                                             data-target="#invoiceUpdate" class="btn btn-primary">
                                             Update Invoice </button>
@@ -550,7 +553,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
     integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 <script src="<?php echo base_url(); ?>assets/themes/default/js/axios.min.js"></script>
 <script>
 new Vue({
@@ -709,8 +711,8 @@ new Vue({
                 else if (this.payments[i].status == "Paid") {
                     if (this.payments[i].description == "Application Payment") {
                         this.application_payment = this.payments[i];
-                        if(this.payments[i].status == "Paid")
-                            this.paid_application = true;
+                        if (this.payments[i].status == "Paid") this
+                            .paid_application = true;
                     }
                     if (this.payments[i].description == "Reservation Payment") {
                         this.reservation_payment = this.payments[i];
