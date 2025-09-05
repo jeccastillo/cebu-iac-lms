@@ -45,7 +45,9 @@
         label: 'Registrar',
         children: [
           { label: 'Reports', path: '/registrar/reports' },
-          { label: 'Enlistment', path: '/registrar/enlistment' },          
+          { label: 'Enlistment', path: '/registrar/enlistment' },
+          { label: 'Slot Monitoring', path: '/registrar/sections-slots' },
+          { label: 'Classlists', path: '/classlists' },          
         ]
       },
       {

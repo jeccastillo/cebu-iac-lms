@@ -5,8 +5,8 @@
     .module('unityApp')
     .controller('EnlistmentController', EnlistmentController);
 
-  EnlistmentController.$inject = ['$http', 'APP_CONFIG', 'UnityService', 'ClasslistsService', 'TermService', 'ChecklistService', 'ProgramsService', 'CurriculaService', 'StudentsService', '$scope'];
-  function EnlistmentController($http, APP_CONFIG, UnityService, ClasslistsService, TermService, ChecklistService, ProgramsService, CurriculaService, StudentsService, $scope) {
+  EnlistmentController.$inject = ['$http', 'APP_CONFIG', 'UnityService', 'ClasslistsService', 'TermService', 'ChecklistService', 'ProgramsService', 'CurriculaService', 'StudentsService', 'SectionsSlotsService', '$scope'];
+  function EnlistmentController($http, APP_CONFIG, UnityService, ClasslistsService, TermService, ChecklistService, ProgramsService, CurriculaService, StudentsService, SectionsSlotsService, $scope) {
     var vm = this;
     var BASE = APP_CONFIG.API_BASE; // e.g. /laravel-api/public/api/v1
 
@@ -86,6 +86,8 @@
     vm.generateChecklist = generateChecklist;
     vm.refreshChecklistExists = refreshChecklistExists;
     vm.onStudentQuery = onStudentQuery;
+    vm.selectedAddRemaining = selectedAddRemaining;
+    vm.selectedChangeToRemaining = selectedChangeToRemaining;
 
     // Registration details panel
     vm.loadRegistration = loadRegistration;
@@ -657,11 +659,17 @@
           if (sidKey) {
             options = classlistsBySubjectId[sidKey] || [];            
           }
+
+          // Prefer only sections with remaining slots > 0
+          var available = (options || []).filter(function (o) {
+            if (o && o.remaining_slots !== undefined && o.remaining_slots !== null) {
+              var n = parseInt(o.remaining_slots, 10);
+              return isNaN(n) ? true : n > 0;
+            }
+            return true;
+          });
+          if (!available.length) return;
           
-          if (!options.length) return;
-          
-          // Choose the first available section (could be improved with section preferences)
-          var chosen = options[0];
           var cid = chosen && chosen.intID ? parseInt(chosen.intID, 10) : 0;
           if (!cid) return;
 
@@ -984,6 +992,57 @@
         vm.subjects = res && res.data ? res.data : [];
       });
 
+      // Helper: fetch sections slots utilization and merge remaining slots into vm.sections
+      function fetchSlotsAndMerge() {
+        var acc = [];
+        var page = 1;
+        var perPage = 200;
+
+        function next() {
+          return SectionsSlotsService.list({ term: ('' + vm.term), page: page, perPage: perPage }).then(function (res) {
+            var rows = (res && res.data) ? res.data : (Array.isArray(res) ? res : []);
+            var meta = (res && res.meta) ? res.meta : null;
+            acc = acc.concat(rows || []);
+            var hasMore = false;
+            if (meta && meta.total && meta.per_page && meta.page) {
+              hasMore = (meta.page * meta.per_page) < meta.total;
+            } else {
+              hasMore = (rows || []).length === perPage;
+            }
+            if (hasMore) {
+              page += 1;
+              return next();
+            }
+          }).finally(function () {
+            try {
+              var byId = {};
+              (acc || []).forEach(function (r) {
+                if (r && r.classlist_id != null) {
+                  var id = parseInt(r.classlist_id, 10);
+                  if (!isNaN(id)) byId[id] = r;
+                }
+              });
+              (vm.sections || []).forEach(function (s) {
+                var id = parseInt(s.intID, 10);
+                var row = byId[id];
+                if (row) {
+                  s.slots = row.slots;
+                  s.enlisted_count = row.enlisted_count;
+                  s.enrolled_count = row.enrolled_count;
+                  s.remaining_slots = row.remaining_slots;
+                }
+                var subj = s.subjectCode || s.strCode || '';
+                var sect = s.sectionCode || '';
+                var remVal = (s.remaining_slots !== undefined && s.remaining_slots !== null) ? ('' + s.remaining_slots) : null;
+                var extra = remVal !== null ? (' — rem: ' + remVal) : '';
+                s.display = subj + (sect ? (' — ' + sect) : '') + extra;
+              });
+            } catch (e) {}
+          });
+        }
+        return next();
+      }
+
       // List all classlists for the term for add/change target (no pagination)
       ClasslistsService.listAll({ term: ('' + vm.term) }).then(function (res) {
         var rows = res && res.data ? res.data : (Array.isArray(res) ? res : []);
@@ -1002,6 +1061,9 @@
             display: subjCode + (sectCode ? (' — ' + sectCode) : '')
           };
         });
+
+        // Merge slots info and update display with remaining slots
+        fetchSlotsAndMerge();
       });
       
     }
@@ -1166,6 +1228,30 @@
       });
     };
 
+    // Remaining slots helpers
+    function selectedAddRemaining() {
+      try {
+        var cid = parseInt(vm.selectedAddClasslistId, 10);
+        if (!cid) return null;
+        var sel = (vm.sections || []).find(function (s) { return parseInt(s.intID, 10) === cid; });
+        if (!sel) return null;
+        if (sel.remaining_slots === undefined || sel.remaining_slots === null) return null;
+        var n = parseInt(sel.remaining_slots, 10);
+        return isNaN(n) ? null : n;
+      } catch (e) { return null; }
+    }
+    function selectedChangeToRemaining() {
+      try {
+        var toId = parseInt(vm.changeToId, 10);
+        if (!toId) return null;
+        var sel = (vm.sections || []).find(function (s) { return parseInt(s.intID, 10) === toId; });
+        if (!sel) return null;
+        if (sel.remaining_slots === undefined || sel.remaining_slots === null) return null;
+        var n = parseInt(sel.remaining_slots, 10);
+        return isNaN(n) ? null : n;
+      } catch (e) { return null; }
+    }
+
     // Queue operations
     function queueAdd() {
       var cid = parseInt(vm.selectedAddClasslistId, 10);
@@ -1179,6 +1265,16 @@
       var subjCode = sel ? (sel.subjectCode || sel.strCode || '') : '';
       var sectCode = sel ? (sel.sectionCode || '') : '';
       
+      // Prevent queuing when section is full (remaining slots <= 0)
+      if (sel && sel.remaining_slots !== undefined && sel.remaining_slots !== null && parseInt(sel.remaining_slots, 10) <= 0) {
+        if (window.Swal) {
+          Swal.fire({ icon: 'warning', title: 'Section full', text: 'No remaining slots. Cannot queue this section.' });
+        } else {
+          try { alert('Section is full. Cannot queue this section.'); } catch (e) {}
+        }
+        return;
+      }
+
       // Check prerequisites before adding to queue
       if (vm.studentNumber && sel && sel.subject_id) {
         vm.loading = true;
@@ -1272,6 +1368,15 @@
       var fromSect = fromCur ? (fromCur.section_code || '') : '';
       var toSubj = toSec ? (toSec.subjectCode || toSec.strCode || '') : '';
       var toSect = toSec ? (toSec.sectionCode || '') : '';
+      // Prevent queuing change when target section is full (remaining slots <= 0)
+      if (toSec && toSec.remaining_slots !== undefined && toSec.remaining_slots !== null && parseInt(toSec.remaining_slots, 10) <= 0) {
+        if (window.Swal) {
+          Swal.fire({ icon: 'warning', title: 'Section full', text: 'No remaining slots. Cannot queue change to this section.' });
+        } else {
+          try { alert('Section is full. Cannot queue change to this section.'); } catch (e) {}
+        }
+        return;
+      }
       vm.ops.push({
         type: 'change_section',
         from_classlist_id: fromId,

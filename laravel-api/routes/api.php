@@ -41,6 +41,7 @@ use App\Http\Controllers\Api\V1\ApplicantAnalyticsController;
 use App\Http\Controllers\Api\V1\PublicInitialRequirementsController;
 use App\Http\Controllers\Api\V1\ApplicantInterviewController;
 use App\Http\Controllers\Api\V1\ApplicantJourneyController;
+use App\Services\ClasslistSlotsService;
 
 /*
 |--------------------------------------------------------------------------
@@ -387,4 +388,19 @@ Route::prefix('v1')->group(function () {
 
     // Applicant Journey (Admissions/Admin/Registrar)
     Route::get('/admissions/applicant-data/{applicantDataId}/journey', [ApplicantJourneyController::class, 'index'])->middleware('role:admissions,registrar,admin');
+
+    // TEMP: Debug route for ClasslistSlotsService testing (remove in production)
+    Route::get('/debug/classlists/slots', function (Request $request) {
+        $svc = app(\App\Services\ClasslistSlotsService::class);
+        $params = $request->query();
+        try {
+            $result = $svc->listByTerm($params);
+            return response()->json($result);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 422);
+        }
+    })->middleware('role:registrar,admin');
 });
