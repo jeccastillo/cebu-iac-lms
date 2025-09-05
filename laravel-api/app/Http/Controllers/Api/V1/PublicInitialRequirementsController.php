@@ -199,6 +199,67 @@ class PublicInitialRequirementsController extends Controller
             // ignore logging failures
         }
 
+        // System Alert: If all initial requirements are now submitted, create a system alert (idempotent)
+        try {
+            // Count total initial requirements for student's level and submitted ones
+            $counts = DB::table('tb_mas_application_requirements as ar')
+                ->join('tb_mas_requirements as r', 'r.intID', '=', 'ar.tb_mas_requirements_id')
+                ->where('ar.intStudentID', $studentId)
+                ->where('r.is_initial_requirements', true)
+                ->selectRaw('COUNT(*) as total, SUM(CASE WHEN ar.submitted_status = 1 THEN 1 ELSE 0 END) as submitted')
+                ->first();
+
+            $total = (int) (($counts && isset($counts->total)) ? $counts->total : 0);
+            $submitted = (int) (($counts && isset($counts->submitted)) ? $counts->submitted : 0);
+
+            if ($total > 0 && $submitted === $total) {
+                // Check if we've already logged completion to avoid duplicate alerts
+                $already = DB::table('tb_mas_applicant_journey')
+                    ->where('applicant_data_id', (int) $appData->id)
+                    ->where('remarks', 'Initial Requirements Completed')
+                    ->exists();
+
+                if (!$already) {
+                    // Journey log mark
+                    app(\App\Services\ApplicantJourneyService::class)
+                        ->log((int) $appData->id, 'Initial Requirements Completed');
+
+                    // Resolve user for display name
+                    $userRow = DB::table('tb_mas_users')->where('intID', $studentId)->first();
+                    $first = $userRow->strFirstname ?? '';
+                    $last  = $userRow->strLastname ?? '';
+                    $full  = trim(trim((string) $first) . ' ' . trim((string) $last));
+                    $msg   = $full !== '' 
+                        ? ($full . ' has completed all initial requirements.')
+                        : 'An applicant has completed all initial requirements.';
+
+                    // Build link to applicant view in SPA
+                    $link = '#/admissions/applicants/' . $studentId;
+
+                    // Create alert (system_generated)
+                    $alert = \App\Models\SystemAlert::create([
+                        'title'            => 'Initial requirements completed',
+                        'message'          => $msg,
+                        'link'             => $link,
+                        'type'             => 'success',
+                        'target_all'       => false,
+                        'role_codes'       => ['admissions','registrar','admin'],
+                        'campus_ids'       => null,
+                        'starts_at'        => now(),
+                        'ends_at'          => null,
+                        'intActive'        => 1,
+                        'system_generated' => 1,
+                        'created_by'       => null,
+                    ]);
+
+                    // Broadcast to listeners; ignore failures
+                    app(\App\Services\SystemAlertService::class)->broadcast('create', $alert);
+                }
+            }
+        } catch (\Throwable $e) {
+            // swallow alert generation failures
+        }
+
         return response()->json([
             'success' => true,
             'message' => 'File uploaded successfully.',

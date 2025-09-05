@@ -82,7 +82,18 @@ class EnlistmentService
         DB::beginTransaction();
         try {
             // Ensure tb_mas_registration row exists/up-to-date for this student and term
-            $estatus = ($user->enrollment_status != "enrolled")?"enlisted":"enrolled";
+            //Get current status of registration
+            $registrationData = DB::table('tb_mas_registration')
+                    ->select('enrollment_status')
+                    ->where('intStudentID', $studentId)
+                    ->where('intAYID', $term)
+                    ->first();    
+
+            if($registrationData)
+                $estatus = ($registrationData->enrollment_status != "enrolled")?"enlisted":"enrolled";
+            else
+                $estatus = "enlisted";
+            
             $this->upsertRegistration($studentId, $term, [
                 'year_level'   => $yearLevel,
                 'student_type' => $studentType,
@@ -137,17 +148,26 @@ class EnlistmentService
         if ($okAll) {
             try {
                 if (Schema::hasTable('tb_mas_applicant_data') && Schema::hasColumn('tb_mas_applicant_data', 'status')) {
+                    
                     $updates = ['status' => 'Enlisted'];
                     if (Schema::hasColumn('tb_mas_applicant_data', 'updated_at')) {
                         $updates['updated_at'] = now();
                     }
 
                     $affected = 0;
-                    if (Schema::hasColumn('tb_mas_applicant_data', 'syid') && $term > 0) {
-                        $affected = DB::table('tb_mas_applicant_data')
-                            ->where('user_id', $studentId)
-                            ->where('syid', $term)
-                            ->update($updates);
+                    //Get Applicant Data safeguard from rollback to enlisted when already enrolled
+                    $applicantData = DB::table('tb_mas_applicant_data')
+                    ->where('user_id', $studentId)
+                    ->where('syid', $term)
+                    ->first();
+
+                    if($applicantData && $applicantData->status != "Enrolled"){
+                        if (Schema::hasColumn('tb_mas_applicant_data', 'syid') && $term > 0) {
+                            $affected = DB::table('tb_mas_applicant_data')
+                                ->where('user_id', $studentId)
+                                ->where('syid', $term)
+                                ->update($updates);
+                        }
                     }
 
                     if ($affected === 0) {
@@ -175,26 +195,58 @@ class EnlistmentService
                     } catch (Throwable $e2) {
                         // ignore log failure
                     }
+                    if($applicantData && $applicantData->status != "Enrolled" && $applicantData->status != "Enlisted"){
+                        // Journey log: Status was changed to Enlisted
+                        try {
+                            $target = DB::table('tb_mas_applicant_data')->where('user_id', $studentId);
+                            if (Schema::hasColumn('tb_mas_applicant_data', 'syid') && $term > 0) {
+                                $target = $target->where('syid', $term);
+                            }
+                            $appRow = $target->orderByDesc('id')->first();
+                            if (!$appRow) {
+                                $appRow = DB::table('tb_mas_applicant_data')
+                                    ->where('user_id', $studentId)
+                                    ->orderByDesc('id')
+                                    ->first();
+                            }
+                            if ($appRow && isset($appRow->id)) {
+                                app(\App\Services\ApplicantJourneyService::class)
+                                    ->log((int) $appRow->id, 'Status was changed to Enlisted');
+                            }
+                        } catch (Throwable $e3) {
+                            // ignore journey logging failures
+                        }
 
-                    // Journey log: Status was changed to Enlisted
-                    try {
-                        $target = DB::table('tb_mas_applicant_data')->where('user_id', $studentId);
-                        if (Schema::hasColumn('tb_mas_applicant_data', 'syid') && $term > 0) {
-                            $target = $target->where('syid', $term);
+                        // System alert: notify Admissions that applicant has been enlisted
+                        try {
+                            $last = isset($user->strLastname) ? strtoupper(trim((string) $user->strLastname)) : '';
+                            $first = isset($user->strFirstname) ? trim((string) $user->strFirstname) : '';
+                            $studNo = isset($user->strStudentNumber) ? trim((string) $user->strStudentNumber) : $studentNumber;
+                            $subject = 'Applicant Enlisted';
+                            $namePart = trim(($last !== '' ? $last : '') . ($first !== '' ? ($last !== '' ? ', ' : '') . $first : ''));
+                            $msg = 'Applicant enlisted' . ($namePart !== '' ? (': ' . $namePart) : '') . ($studNo !== '' ? ' (' . $studNo . ')' : '');
+
+                            $payloadAlert = [
+                                'title'            => $subject,
+                                'message'          => $msg,
+                                'link'             => '#/admissions/applicants/' . $studentId,
+                                'type'             => 'info',
+                                'target_all'       => false,
+                                'role_codes'       => ['admissions'],
+                                'intActive'        => 1,
+                                'system_generated' => 1,
+                                'starts_at'        => now(),
+                            ];
+
+                            if (isset($user->campus_id) && $user->campus_id !== null && $user->campus_id !== '' && is_numeric((string) $user->campus_id)) {
+                                $payloadAlert['campus_ids'] = [(int) $user->campus_id];
+                            }
+
+                            $alert = \App\Models\SystemAlert::create($payloadAlert);
+                            app(\App\Services\SystemAlertService::class)->broadcast('create', $alert);
+                        } catch (Throwable $e4) {
+                            \Log::warning('System alert creation failed for enlistment: ' . $e4->getMessage());
                         }
-                        $appRow = $target->orderByDesc('id')->first();
-                        if (!$appRow) {
-                            $appRow = DB::table('tb_mas_applicant_data')
-                                ->where('user_id', $studentId)
-                                ->orderByDesc('id')
-                                ->first();
-                        }
-                        if ($appRow && isset($appRow->id)) {
-                            app(\App\Services\ApplicantJourneyService::class)
-                                ->log((int) $appRow->id, 'Status was changed to Enlisted');
-                        }
-                    } catch (Throwable $e3) {
-                        // ignore journey logging failures
                     }
                 }
             } catch (Throwable $e) {
@@ -219,15 +271,15 @@ class EnlistmentService
         $existing = DB::table('tb_mas_registration')
             ->where('intStudentID', $studentId)
             ->where('intAYID', $term)
-            ->orderByDesc('dteRegistered')
+            ->orderByDesc('date_enrolled')
             ->first();
 
         $now = now()->toDateTimeString();
         $base = [
             'intStudentID'    => $studentId,
             'intAYID'         => $term,
-            'intROG'          => 0, // enlisted
-            'dteRegistered'   => $now,
+            'enrollment_status'  => 'enlisted', // enlisted
+            'date_enlisted'   => $now,
             'enumStudentType' => $meta['student_type'] ?? 'continuing',
             'intYearLevel'    => $meta['year_level'] ?? 1,
             'current_program'    => $meta['current_program'],
@@ -245,7 +297,7 @@ class EnlistmentService
             $update = array_merge(
                 $base,
                 // Preserve existing dteRegistered if already present
-                ['dteRegistered' => $existing->dteRegistered ?: $now]
+                ['date_enlisted' => $existing->date_enlisted ?: $now]
             );
             try {
                 DB::table('tb_mas_registration')

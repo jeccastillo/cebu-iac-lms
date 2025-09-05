@@ -608,6 +608,16 @@
       vm.ui.showTuitionModal = false;
     };
 
+    // Getter: Return the effective tuition payload for display (prefer saved snapshot when present)
+    vm.tuitionPayload = function () {
+      try {
+        if (vm.tuitionSaved && vm.tuitionSaved.payload) return vm.tuitionSaved.payload;
+        return vm.tuition || null;
+      } catch (e) {
+        return vm.tuition || null;
+      }
+    };
+
     // Invoice Details modal state and helpers
     vm.invoiceModal = {
       invoice: null,

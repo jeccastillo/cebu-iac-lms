@@ -1065,20 +1065,21 @@ class CashierController extends Controller
                 $tuitionFlag = false;
 
                 $updates = [];
+                $applicantData = DB::table('tb_mas_applicant_data')
+                ->where('user_id', $studentId)
+                ->where('syid', $syid)
+                ->first();
                 if ($isApp && Schema::hasColumn('tb_mas_applicant_data','paid_application_fee')) {
                     $updates['paid_application_fee'] = 1;
                 }
                 if ($isRes && Schema::hasColumn('tb_mas_applicant_data','paid_reservation_fee')) {
-                    $updates['paid_reservation_fee'] = 1;
-                    $updates['status'] = "Reserved";     
+                    $updates['paid_reservation_fee'] = 1;                    
                     $usrUpdates['student_status'] = "active";                      
-                    //Set User to active
-                    $applicantData = DB::table('tb_mas_applicant_data')
-                        ->where('user_id', $studentId)
-                        ->where('syid', $syid)
-                        ->first();
-                    if($applicantData)
+                    //Set User to active                   
+                    if($applicantData && $applicantData->status != "Enrolled"){
                         $usrUpdates['strStudentNumber'] = "T".date("Y").$applicantData->id;
+                        $updates['status'] = "Reserved";
+                    }
                     DB::table('tb_mas_users')
                     ->where('intID', $studentId)                    
                     ->update($usrUpdates);
@@ -1092,35 +1093,37 @@ class CashierController extends Controller
 
                     if($regData->enrollment_status != "enrolled"){
                         $regUpdates['date_enrolled'] = date("Y-m-d H:i:s");
-                        $regUpdates['enrollment_status'] = "enrolled";
-                        $updates['status'] = "Enrolled";
+                        $regUpdates['enrollment_status'] = "enrolled";                        
                         $tuitionFlag = true;
                         DB::table('tb_mas_registration')
-                            ->where('intStudentID', $studentId)                    
-                            ->update($regUpdates);
-                        // Assign Student Number: generate final number upon enrollment flip
-                        try {
-                            $finalStudentNumber = $this->generateStudentNumber($syid);
-                            if (!empty($finalStudentNumber)) {
-                                $userBefore = DB::table('tb_mas_users')->select('intID','strStudentNumber')->where('intID', $studentId)->first();
-                                DB::table('tb_mas_users')
-                                    ->where('intID', $studentId)
-                                    ->update(['strStudentNumber' => $finalStudentNumber]);
-                                try {
-                                    SystemLogService::log(
-                                        'assign_student_number',
-                                        'User',
-                                        (int) $studentId,
-                                        ['strStudentNumber' => $userBefore->strStudentNumber ?? null],
-                                        ['strStudentNumber' => $finalStudentNumber],
-                                        $request
-                                    );
-                                } catch (\Throwable $e4) {
-                                    // ignore log failures
+                                ->where('intStudentID', $studentId)                    
+                                ->update($regUpdates);
+                        if($applicantData && $applicantData->status != "Enrolled"){
+                            $updates['status'] = "Enrolled";                            
+                            // Assign Student Number: generate final number upon enrollment flip
+                            try {
+                                $finalStudentNumber = $this->generateStudentNumber($syid);
+                                if (!empty($finalStudentNumber)) {
+                                    $userBefore = DB::table('tb_mas_users')->select('intID','strStudentNumber')->where('intID', $studentId)->first();
+                                    DB::table('tb_mas_users')
+                                        ->where('intID', $studentId)
+                                        ->update(['strStudentNumber' => $finalStudentNumber]);
+                                    try {
+                                        SystemLogService::log(
+                                            'assign_student_number',
+                                            'User',
+                                            (int) $studentId,
+                                            ['strStudentNumber' => $userBefore->strStudentNumber ?? null],
+                                            ['strStudentNumber' => $finalStudentNumber],
+                                            $request
+                                        );
+                                    } catch (\Throwable $e4) {
+                                        // ignore log failures
+                                    }
                                 }
+                            } catch (\Throwable $eSN) {
+                                // silently skip if generation fails; do not block payment creation
                             }
-                        } catch (\Throwable $eSN) {
-                            // silently skip if generation fails; do not block payment creation
                         }
                     }
                 }
@@ -1179,16 +1182,50 @@ class CashierController extends Controller
 
                         if ($appRow && isset($appRow->id)) {
                             if ($isApp) {
+                                $alertMessage = 'Student paid application fee';
                                 app(\App\Services\ApplicantJourneyService::class)
                                     ->log((int) $appRow->id, 'Student paid application fee');
                             }
                             if ($isRes && isset($updates['status']) && $updates['status'] === 'Reserved') {
+                                $alertMessage = 'Reservation Fee paid! Status was changed to Reserved';
                                 app(\App\Services\ApplicantJourneyService::class)
                                     ->log((int) $appRow->id, 'Status was changed to Reserved');
                             }
-                            if ($tuitionFlag && isset($updates['status']) && $updates['status'] === 'Enrolled'){
+                            if ($tuitionFlag && isset($updates['status']) && $updates['status'] === 'Enrolled' && $applicantData && $applicantData->status != "Enrolled"){
+                                $alertMessage = 'Status was changed to Enrolled';
                                 app(\App\Services\ApplicantJourneyService::class)
                                     ->log((int) $appRow->id, 'Status was changed to Enrolled');
+                            }
+                            if($applicantData && $applicantData->status != "Enrolled"){
+                                // System alert: notify Admissions about new application
+                                try {
+                                    $last = strtoupper(trim((string) $usr->strLastname));
+                                    $first = trim((string) $usr->strFirstname);
+                                    $emailAddr = trim((string) $usr->strEmail);
+                                    $subject = $alertMessage;
+                                    $namePart = trim(($last !== '' ? $last : '') . ($first !== '' ? ($last !== '' ? ', ' : '') . $first : ''));
+                                    $msg = 'Applicant Update' . ($namePart !== '' ? (': ' . $namePart) : '') . ($emailAddr !== '' ? ' (' . $emailAddr . ')' : '');                                
+
+                                    $payloadAlert = [
+                                        'title'            => $subject,
+                                        'message'          => $msg,
+                                        'link'             => '#/admissions/applicants/' . $studentId,
+                                        'type'             => 'info',
+                                        'target_all'       => false,
+                                        'role_codes'       => ['admissions','registrar'],
+                                        'intActive'        => 1,
+                                        'system_generated' => 1,
+                                        'starts_at'        => now(),
+                                    ];
+                                    if ($campusId !== null && $campusId !== '' && is_numeric($campusId)) {
+                                        $payloadAlert['campus_ids'] = [ (int) $campusId ];
+                                    }
+
+                                    $alert = \App\Models\SystemAlert::create($payloadAlert);
+                                    app(\App\Services\SystemAlertService::class)->broadcast('create', $alert);
+                                } catch (\Throwable $e) {
+                                    print_r($e->getMessage());
+                                }
                             }
                         }
                     } catch (\Throwable $e3) {
