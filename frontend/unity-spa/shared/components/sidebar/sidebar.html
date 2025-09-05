@@ -7,15 +7,14 @@
      }">
   
   <!-- Sidebar Header -->
-  <div class="flex items-center justify-between p-4 border-b border-gray-200">
-    <div ng-if="!vm.isCollapsed" class="flex items-center space-x-2">
-      <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-        <span class="text-white font-bold text-sm">U</span>
-      </div>
-      <span class="font-semibold text-gray-900">SMS</span>
+    <div class="flex items-center justify-between p-4 border-b border-gray-200">
+      <div ng-if="!vm.isCollapsed" class="flex items-center space-x-2">
+        <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+          <span class="text-white font-bold text-sm">U</span>
+        </div>
+        <span class="font-semibold text-gray-900">SMS</span>
     </div>
-    
-    <!-- Collapse/Expand Button -->
+    <!-- Collapse/Expand Button -->     
     <button 
       ng-click="vm.toggleCollapse()"
       class="p-1.5 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200"
@@ -32,43 +31,16 @@
   <!-- Sidebar Content -->
   <div class="flex flex-col h-full">
     
-    <!-- Campus Selector Section -->
-    <div class="p-4 border-b border-gray-100" ng-if="vm.hasRole('admin')">
-      <div ng-if="!vm.isCollapsed" class="mb-2">
-        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Campus</h3>
-      </div>
 
-      <!-- Campus Selector Component -->
-      <campus-selector
-        compact="{{ vm.isCollapsed }}"
-        show-label="false">
-      </campus-selector>
-    </div>
-
-    <!-- Term Selector Section -->
-    <div class="p-4 border-b border-gray-100">
-      <div ng-if="!vm.isCollapsed" class="mb-2">
-        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Academic Term</h3>
-      </div>
-      
-      <!-- Term Selector Component -->
-      <term-selector 
-        compact="{{ vm.isCollapsed }}"
-        show-label="false">
-      </term-selector>
-    </div>
 
     <!-- Navigation Section (Hierarchical) -->
-    <nav class="flex-1 px-4 py-4 space-y-2 overflow-y-auto" ng-if="vm.menu && vm.menu.length">
+    <nav class="main-nav flex-1 py-4 space-y-2 overflow-y-auto" ng-if="vm.menu && vm.menu.length">
 
       <!-- Standalone Links -->
       <!-- Dashboard -->
       <a ng-href="{{ '#' + vm.dashboardPath }}" 
-         class="flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200"
-         ng-class="{
-           'bg-blue-100 text-blue-700': vm.isCurrentPath(vm.dashboardPath),
-           'text-gray-700 hover:bg-gray-100': !vm.isCurrentPath(vm.dashboardPath)
-         }"
+         class="sb-item"
+         ng-class="{'sb-item--active': vm.isCurrentPath(vm.dashboardPath)}"
          title="Dashboard">
         <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
@@ -80,11 +52,8 @@
       <!-- Students -->
       <a href="#/students" 
          ng-if="vm.canAccess('/students')"
-         class="flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200"
-         ng-class="{
-           'bg-blue-100 text-blue-700': vm.isCurrentPath('/students'),
-           'text-gray-700 hover:bg-gray-100': !vm.isCurrentPath('/students')
-         }"
+         class="sb-item"
+         ng-class="{'sb-item--active': vm.isCurrentPath('/students')}"
          title="Students">
         <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
@@ -95,11 +64,8 @@
       <!-- Campuses -->
       <a href="#/campuses"
          ng-if="vm.canAccess('/campuses')"
-         class="flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200"
-         ng-class="{
-           'bg-blue-100 text-blue-700': vm.isCurrentPath('/campuses'),
-           'text-gray-700 hover:bg-gray-100': !vm.isCurrentPath('/campuses')
-         }"
+         class="sb-item"
+         ng-class="{'sb-item--active': vm.isCurrentPath('/campuses')}"
          title="Campuses">
         <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path>
@@ -108,15 +74,15 @@
         <span ng-if="!vm.isCollapsed" class="ml-3">Campuses</span>
       </a>
 
-      <!-- Grouped Menus -->
-      <div ng-repeat="group in vm.menu" ng-if="vm.canShowGroup(group)" class="space-y-1">
-        <!-- Parent row -->
+      <!-- Grouped Menus (Popout) -->
+      <div ng-repeat="group in vm.menu"
+           ng-if="vm.canShowGroup(group)"
+           class="sb-group">
+        <!-- Parent row (hover to open popout) -->
         <button type="button"
-                class="w-full flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200"
-                ng-class="{
-                  'text-gray-700 hover:bg-gray-100': !vm.isCollapsed
-                }"
-                ng-click="vm.toggleGroup(group.key)"
+                class="sb-item sb-item--parent"
+                ng-class="{'sb-item--disabled': vm.isCollapsed}"
+                ng-click="vm.togglePopout(group.key, $event)"
                 title="{{ group.label }}">
           <!-- Simple folder icon -->
           <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -124,30 +90,40 @@
           </svg>
           <span ng-if="!vm.isCollapsed" class="ml-3 font-semibold text-gray-800">{{ group.label }}</span>
           <span class="ml-auto" ng-if="!vm.isCollapsed">
+            <!-- right chevron -->
             <svg class="w-4 h-4 text-gray-500 transition-transform duration-200"
-                 ng-class="{ 'rotate-180': vm.groupOpen[group.key] }"
                  fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
             </svg>
           </span>
         </button>
 
-        <!-- Children -->
-        <div ng-if="vm.groupOpen[group.key] && !vm.isCollapsed" class="space-y-1">
-          <a ng-repeat="child in group.children"
-             ng-if="vm.canAccess(child.path)"
-             ng-href="{{ '#' + (child.href || child.path) }}"
-             class="flex items-center pl-10 pr-3 py-2 text-sm rounded-md transition-colors duration-200"
-             ng-class="{
-               'bg-blue-100 text-blue-700': vm.isActivePrefix(child.path),
-               'text-gray-700 hover:bg-gray-100': !vm.isActivePrefix(child.path)
-             }"
-             title="{{ child.label }}">
-            <span>{{ child.label }}</span>
-          </a>
+        <!-- Popout panel -->
+        <div class="sb-popout"
+             ng-if="vm.groupOpen[group.key]"
+             ng-style="{
+               left: (vm.isCollapsed ? '4rem' : '16rem'),
+               top:  (vm.popoutTop[group.key] || 'calc(var(--header-height) + (100vh - var(--header-height)) / 4)')
+             }">
+          <div class="sb-popout-inner">
+            <div class="sb-popout-header">{{ group.label }}</div>
+            <div class="sb-popout-list">
+              <a ng-repeat="child in group.children"
+                 ng-if="vm.canAccess(child.path)"
+                 ng-href="{{ '#' + (child.href || child.path) }}"
+                 class="sb-popout-item"
+                 ng-class="{'sb-item--active': vm.isActivePrefix(child.path)}"
+                 title="{{ child.label }}">
+                <span>{{ child.label }}</span>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </nav>
+
+    <!-- Click-outside overlay to close popouts -->
+    <div class="sb-overlay" ng-if="vm.isAnyPopoutOpen()" ng-click="vm.closeAllGroups()"></div>
 
     <!-- Legacy Navigation Section (disabled) -->
     <nav class="flex-1 px-4 py-4 space-y-2 overflow-y-auto" ng-if="false">
@@ -562,7 +538,126 @@ app-sidebar ~ .main-content {
   }
 }
 
-.rotate-180 {
-  transform: rotate(180deg);
-}
-</style>
+ .rotate-180 {
+   transform: rotate(180deg);
+ }
+ 
+ /* Sidebar visual overhaul */
+ .app-sidebar .sb-item {
+   display: flex;
+   align-items: center;
+   width: 100%;            /* full width row */
+   box-sizing: border-box;  /* include padding in width */
+   padding: 0.5rem 0.75rem; /* py-2 px-3 */
+   font-size: 0.875rem;     /* text-sm */
+   line-height: 1.25rem;
+   color: #374151;          /* gray-700 */
+   border-bottom: 1px solid #e5e7eb; /* divider */
+   border-radius: 0;        /* flat items */
+   transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+ }
+ .app-sidebar .sb-item:hover {
+   background: #f5f5f5; /* subtle hover */
+ }
+ .app-sidebar .sb-item svg {
+   width: 1.25rem;
+   height: 1.25rem;
+   margin-right: 0.75rem;
+   color: #6b7280; /* gray-500 */
+   stroke: currentColor;
+ }
+ .app-sidebar .sb-item .ml-auto { /* right chevron container */
+   margin-left: auto;
+ }
+ .app-sidebar .sb-item--child {
+   padding-left: 2.5rem; /* indent children */
+ }
+ .app-sidebar .sb-item--parent .ml-auto svg {
+   color: #9ca3af; /* gray-400 */
+ }
+ .app-sidebar .sb-item--active {
+   background: #3a50cf; /* amber-500 */
+   color: #ffffff;
+ }
+ .app-sidebar .sb-item--active svg {
+   color: #ffffff;
+   stroke: #ffffff;
+ }
+ .app-sidebar .sb-item--disabled {
+   opacity: 0.9;
+ }
+ 
+ /* Popout styles */
+ .app-sidebar .sb-group { position: relative; }
+ .app-sidebar .sb-popout {
+   position: fixed;
+   /* Center vertically within the visible area (between header and bottom) */
+   top: calc(var(--header-height) + (100vh - var(--header-height)) / 4);
+   height: calc((100vh - var(--header-height)) / 2); /* 50% of visible area */
+   width: 720px;
+   background: #ffffff;
+   border-right: 1px solid #e5e7eb;
+   border-top: 1px solid #e5e7eb;
+   border-bottom: 1px solid #e5e7eb;
+   box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+   z-index: 1300; /* above overlay */
+   padding: 1rem;
+ }
+ /* align popout to the current sidebar width */
+ .app-sidebar.w-64 .sb-popout { left: 16rem; }
+ .app-sidebar.w-16 .sb-popout { left: 4rem; }
+ .app-sidebar .sb-popout-inner {
+   height: 100%;
+   display: flex;
+   flex-direction: column;
+ }
+ .app-sidebar .sb-popout-header {
+   font-weight: 600;
+   color: #d97706; /* amber-600 */
+   margin-bottom: 0.75rem;
+   border-bottom: 1px solid #f3f4f6;
+   padding-bottom: 0.5rem;
+ }
+ .app-sidebar .sb-popout-list {
+   display: grid;
+   grid-template-columns: repeat(3, minmax(200px, 1fr));
+   gap: 0.5rem 1rem;
+   overflow-y: auto;
+ }
+ .app-sidebar .sb-popout-item {
+   display: block;
+   padding: 0.375rem 0.5rem;
+   color: #374151;
+   border-radius: 0.25rem;
+   transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+ }
+ .app-sidebar .sb-popout-item:hover {
+   background: #f5f5f5;
+ }
+ .app-sidebar .sb-popout-item.sb-item--active {
+   background: #3a50cf;
+   color: #ffffff;
+ }
+ 
+ /* Remove previous rounded utilities to match flat list */
+ .app-sidebar a, .app-sidebar button {
+   border-radius: 0 !important;
+ }
+ 
+ /* Ensure main nav has no horizontal padding so rows span full sidebar */
+ .app-sidebar .main-nav {
+   padding-left: 0 !important;
+   padding-right: 0 !important;
+ }
+ 
+ /* Overlay that captures outside clicks */
+ .app-sidebar .sb-overlay {
+   position: fixed;
+   top: var(--header-height);
+   left: 0;
+   right: 0;
+   bottom: 0;
+   background: rgba(0,0,0,0); /* invisible click-catcher */
+   z-index: 1200; /* below popout, above page */
+ }
+ </style>

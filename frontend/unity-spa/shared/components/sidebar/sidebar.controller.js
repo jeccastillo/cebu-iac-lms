@@ -5,8 +5,8 @@
     .module('unityApp')
     .controller('SidebarController', SidebarController);
 
-  SidebarController.$inject = ['$scope', '$location', 'StorageService', 'TermService', 'CampusService', 'RoleService', 'LinkService'];
-  function SidebarController($scope, $location, StorageService, TermService, CampusService, RoleService, LinkService) {
+  SidebarController.$inject = ['$scope', '$location', '$document', 'StorageService', 'TermService', 'CampusService', 'RoleService', 'LinkService'];
+  function SidebarController($scope, $location, $document, StorageService, TermService, CampusService, RoleService, LinkService) {
     var vm = this;
 
     // Sidebar state
@@ -31,6 +31,7 @@
 
     // Group open state (persisted) and hierarchical menu
     vm.groupOpen = {};
+    vm.popoutTop = {};
     vm.menu = [
       {
         key: 'faculty',
@@ -103,6 +104,10 @@
 
     // Helpers for hierarchical menu
     vm.toggleGroup = toggleGroup;
+    vm.openGroup = openGroup;
+    vm.closeAllGroups = closeAllGroups;
+    vm.togglePopout = togglePopout;
+    vm.isAnyPopoutOpen = isAnyPopoutOpen;
     vm.isActivePrefix = isActivePrefix;
     vm.canShowGroup = canShowGroup;
 
@@ -157,6 +162,17 @@
       if (savedCollapsed === 'true') {
         vm.isCollapsed = true;
       }
+
+      // Close popouts on ESC key
+      var keydownHandler = function (e) {
+        if (e && (e.key === 'Escape' || e.keyCode === 27)) {
+          $scope.$applyAsync(closeAllGroups);
+        }
+      };
+      $document.on('keydown', keydownHandler);
+      $scope.$on('$destroy', function () {
+        try { $document.off('keydown', keydownHandler); } catch (e) {}
+      });
     }
 
     function toggleCollapse() {
@@ -197,7 +213,68 @@
       } catch (e) {}
     }
 
-    function canShowGroup(group) {
+    // Explicitly open a group (used for popout on hover/click)
+    function openGroup(key) {
+      if (!key) return;
+      closeAllGroups();
+      vm.groupOpen[key] = true;
+      try {
+        StorageService.set('sidebarOpen.' + key, 'true');
+      } catch (e) {}
+    }
+
+    // Close all groups helper
+    function closeAllGroups() {
+      try {
+        Object.keys(vm.groupOpen).forEach(function (k) {
+          vm.groupOpen[k] = false;
+          StorageService.set('sidebarOpen.' + k, 'false');
+        });
+      } catch (e) {}
+    }
+
+    function togglePopout(key, $event) {
+      if (!key) return;
+
+      // Toggle behavior
+      if (vm.groupOpen[key]) {
+        closeAllGroups();
+        return;
+      }
+
+      // Open requested group
+      openGroup(key);
+
+      // Compute top so the popout aligns with the clicked menu item
+      try {
+        var header = 56; // keep in sync with CSS --header-height
+        var pad = 8;
+        var rect = ($event && ($event.currentTarget || $event.target)) ? ($event.currentTarget || $event.target).getBoundingClientRect() : null;
+
+        // Popout height mirrors CSS rule (50% of visible area below header)
+        var popH = Math.floor((window.innerHeight - header) / 2);
+
+        // Desired top equals the clicked row's viewport top
+        var desiredTop = rect ? rect.top : (header + pad);
+
+        // Clamp so it does not exceed viewport bottom
+        var maxTop = window.innerHeight - popH - pad;
+        var clampedTop = Math.max(header + pad, Math.min(maxTop, desiredTop));
+
+        vm.popoutTop[key] = clampedTop + 'px';
+      } catch (e) {
+        // Fallback to a sensible default if any error occurs
+        vm.popoutTop[key] = (56 + 8) + 'px';
+      }
+    }
+
+    function isAnyPopoutOpen() {
+      try {
+        return Object.keys(vm.groupOpen || {}).some(function (k) { return !!vm.groupOpen[k]; });
+      } catch (e) { return false; }
+    }
+ 
+     function canShowGroup(group) {
       if (!group || !group.children || !group.children.length) return false;
       for (var i = 0; i < group.children.length; i++) {
         var c = group.children[i];
