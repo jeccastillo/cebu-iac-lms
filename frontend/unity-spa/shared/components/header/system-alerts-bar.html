@@ -1,0 +1,43 @@
+<!-- System Alerts Top Bar -->
+<div class="w-full" ng-if="vm.alerts && vm.alerts.length">
+  <div ng-repeat="a in vm.alerts track by a.id"
+       class="w-full"
+       ng-class="{
+         'bg-green-50 border-b border-green-200 text-green-800': a.type === 'success',
+         'bg-yellow-50 border-b border-yellow-200 text-yellow-800': a.type === 'warning',
+         'bg-red-50 border-b border-red-200 text-red-800': a.type === 'error',
+         'bg-blue-50 border-b border-blue-200 text-blue-800': !a.type || a.type === 'info'
+       }">
+    <div class="max-w-6xl mx-auto px-4 py-2 flex items-start justify-between gap-3">
+      <div class="flex items-start gap-2">
+        <span class="fas"
+              ng-class="{
+                'fa-check-circle text-green-600': a.type === 'success',
+                'fa-exclamation-triangle text-yellow-600': a.type === 'warning',
+                'fa-exclamation-circle text-red-600': a.type === 'error',
+                'fa-info-circle text-blue-600': !a.type || a.type === 'info'
+              }"
+              aria-hidden="true"></span>
+        <div class="min-w-0">
+          <div class="font-semibold" ng-if="a.title" ng-bind="a.title"></div>
+          <div class="text-sm break-words" ng-bind="a.message"></div>
+        </div>
+      </div>
+      <div class="flex items-center">
+        <button type="button"
+                class="text-xs px-2 py-1 rounded border"
+                ng-class="{
+                  'border-green-300 text-green-700 hover:bg-green-100': a.type === 'success',
+                  'border-yellow-300 text-yellow-700 hover:bg-yellow-100': a.type === 'warning',
+                  'border-red-300 text-red-700 hover:bg-red-100': a.type === 'error',
+                  'border-blue-300 text-blue-700 hover:bg-blue-100': !a.type || a.type === 'info'
+                }"
+                aria-label="Dismiss alert"
+                title="Dismiss"
+                ng-click="vm.dismissAlert(a)">
+          Dismiss
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

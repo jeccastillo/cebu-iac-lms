@@ -83,6 +83,7 @@
           { label: 'Curricula', path: '/curricula' },
           { label: 'School Terms', path: '/school-years' },
           { label: 'Classrooms', path: '/classrooms' },
+          { label: 'Faculty Loading', path: '/faculty-loading' },
           { label: 'Grading Systems', path: '/grading-systems' }
         ]
       },
@@ -94,6 +95,7 @@
           { label: 'Payment Details', path: '/admin/payment-details' },
           { label: 'Faculty', path: '/faculty' },
           { label: 'Roles', path: '/roles' },
+          { label: 'System Alerts', path: '/admin/system-alerts' },
           { label: 'Logs', path: '/logs' },          
         ]
       }

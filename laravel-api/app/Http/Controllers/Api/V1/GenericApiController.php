@@ -20,9 +20,10 @@ class GenericApiController extends Controller
     public function faculty(Request $request): JsonResponse
     {
         $payload = $request->validate([
-            'q'  => 'sometimes|string',
-            'id' => 'sometimes|integer',
-            'teaching' => 'sometimes|integer|in:0,1',
+            'q'         => 'sometimes|string',
+            'id'        => 'sometimes|integer',
+            'teaching'  => 'sometimes|integer|in:0,1',
+            'campus_id' => 'sometimes|integer',
         ]);
 
         $q = DB::table('tb_mas_faculty');
@@ -45,6 +46,11 @@ class GenericApiController extends Controller
             $q->where('teaching', (int) $payload['teaching']);
         } elseif (empty($payload['id']) && empty($payload['q'])) {
             $q->where('teaching', 1);
+        }
+
+        // Optional campus filter
+        if (array_key_exists('campus_id', $payload)) {
+            $q->where('campus_id', (int) $payload['campus_id']);
         }
 
         $rows = $q->orderBy('strLastname')

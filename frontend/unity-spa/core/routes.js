@@ -365,6 +365,12 @@
         controllerAs: "vm",
         requiredRoles: ["faculty_admin", "admin"],
       })
+      .when("/faculty-loading", {
+        templateUrl: "features/academics/faculty-loading/faculty-loading.html",
+        controller: "FacultyLoadingController",
+        controllerAs: "vm",
+        requiredRoles: ["registrar", "faculty_admin", "admin"],
+      })
 
       /* Tuition Years (Finance) */
       .when('/finance/tuition-years', {
@@ -432,6 +438,14 @@
         controllerAs: "vm",
         requiredRoles: ["cashier_admin","admin"],
       })
+      // Admin: System Alerts
+      .when("/admin/system-alerts", {
+        templateUrl: "features/admin/system-alerts/system-alerts.html",
+        controller: "AdminSystemAlertsController",
+        controllerAs: "vm",
+        requiredRoles: ["admin"],
+      })
+
       // Admin: Invoices CRUD
       .when("/admin/invoices", {
         templateUrl: "features/admin/invoices/list.html",

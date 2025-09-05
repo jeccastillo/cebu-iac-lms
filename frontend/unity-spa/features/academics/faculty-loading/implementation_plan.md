@@ -76,9 +76,10 @@ Introduce a new feature module in frontend and minor updates to backend routes/c
       - POST /api/v1/classlists/assign-faculty-bulk → ClasslistController@assignFacultyBulk
       - middleware: 'role:registrar,faculty_admin,admin'
   - laravel-api/app/Http/Controllers/Api/V1/ClasslistController.php
+    - Ensure update(ClasslistUpdateRequest $request, int $id) logs faculty assignment changes via SystemLogService::log('update', 'Classlist', id, old, new, request) when intFacultyID is modified (include meta semantics via old/new snapshots; ensure old.intFacultyID and new.intFacultyID differ).
     - Add method assignFacultyBulk(ClasslistAssignFacultyBulkRequest $request): JsonResponse
       - Validate per-item constraints (term match, not dissolved, teaching=1, campus match)
-      - Apply updates in a loop; log each successful change via SystemLogService
+      - Apply updates in a loop; for each applied change, call SystemLogService::log('update', 'Classlist', classlist_id, old, new, request) so logs capture intFacultyID transition (old vs new). Optionally annotate meta by merging flags into the new array (e.g., ['bulk' => true]) if desired.
       - Return structured result: { success, applied_count, total, results: [{ classlist_id, ok, message? }] }
   - laravel-api/app/Http/Controllers/Api/V1/GenericApiController.php
     - Modify faculty() to accept optional campus_id filter:
@@ -111,6 +112,8 @@ Add a bulk assign function on backend and new Angular service functions; extend 
 
 - Modified functions:
   - Backend:
+    - App\Http\Controllers\Api\V1\ClasslistController::update(ClasslistUpdateRequest $request, int $id): JsonResponse
+      - When intFacultyID changes, call SystemLogService::log('update', 'Classlist', id, old, new, request) to persist audit trail (old/new snapshots capturing intFacultyID change).
     - App\Http\Controllers\Api\V1\GenericApiController::faculty(Request $request): JsonResponse
       - Add optional campus_id filter
   - Route middleware on PUT /classlists/{id} to include faculty_admin role.
@@ -149,7 +152,9 @@ Adopt endpoint-level validation and UI flows for registrar/faculty_admin/admin r
   - Teaching=1 restriction: attempt assign to teaching=0 faculty → 422.
   - Term mismatch in bulk: specific item rejected with message; others applied.
   - Dissolved classlist rejection: isDissolved=1 → rejected.
-  - Logging: verify SystemLogService entries for successful updates.
+  - System logs:
+    - After a single update, confirm a log entry exists with action='update', entity='Classlist', entity_id={classlist_id}, where old.intFacultyID ≠ new.intFacultyID and values match the operation; actor resolved from X-Faculty-ID in request.
+    - After a bulk assignment, confirm applied_count log entries exist (one per updated classlist) with the same structure capturing the faculty change; if a bulk meta flag was included in new snapshot, verify its presence.
 - Frontend:
   - Route guard: route /faculty-loading only visible and accessible to registrar/faculty_admin/admin.
   - Faculty dropdown: filtered by teaching=1; additionally request list with campus_id (from classlist row).
@@ -174,7 +179,7 @@ Backend-first to enable API use by the UI, then frontend wiring and UI.
 6) Frontend service:
    - Implement FacultyLoadingService with list, updateSingle, assignBulk methods.
 7) Frontend controller and template:
-   - Build UI: term selector, table with subject/section/faculty, dropdowns, inline Save, Save All, filters/search.
+   - Build UI: no term selector (use global TermService-selected term and listen for termChanged), table with subject/section/faculty, dropdowns, inline Save, Save All, filters/search. Style using Tailwind CSS utility classes.
    - Filter faculty options by teaching=1 and campus_id of each classlist row.
 8) QA and polish:
    - Verify RBAC, error handling, toasts, and loading states.

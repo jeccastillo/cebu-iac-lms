@@ -42,6 +42,7 @@ use App\Http\Controllers\Api\V1\PublicInitialRequirementsController;
 use App\Http\Controllers\Api\V1\ApplicantInterviewController;
 use App\Http\Controllers\Api\V1\ApplicantJourneyController;
 use App\Services\ClasslistSlotsService;
+use App\Http\Controllers\Api\V1\SystemAlertController;
 
 /*
 |--------------------------------------------------------------------------
@@ -280,8 +281,10 @@ Route::prefix('v1')->group(function () {
     Route::get('/classlists', [ClasslistController::class, 'index']);
     Route::get('/classlists/{id}', [ClasslistController::class, 'show']);
     Route::post('/classlists', [ClasslistController::class, 'store'])->middleware('role:registrar,admin');
-    Route::put('/classlists/{id}', [ClasslistController::class, 'update'])->middleware('role:registrar,admin');
+    Route::put('/classlists/{id}', [ClasslistController::class, 'update'])->middleware('role:registrar,faculty_admin,admin');
     Route::delete('/classlists/{id}', [ClasslistController::class, 'destroy'])->middleware('role:registrar,admin');
+    // Bulk faculty assignment
+    Route::post('/classlists/assign-faculty-bulk', [ClasslistController::class, 'assignFacultyBulk'])->middleware('role:registrar,faculty_admin,admin');
 
     // Classlist Grading Viewer + Operations
     Route::get('/classlists/{id}/viewer', [ClasslistGradesController::class, 'viewerData']);
@@ -403,4 +406,12 @@ Route::prefix('v1')->group(function () {
             ], 422);
         }
     })->middleware('role:registrar,admin');
+
+    // System Alerts
+    Route::get('/system-alerts', [SystemAlertController::class, 'index'])->middleware('role:admin');
+    Route::post('/system-alerts', [SystemAlertController::class, 'store'])->middleware('role:admin');
+    Route::put('/system-alerts/{id}', [SystemAlertController::class, 'update'])->middleware('role:admin');
+    Route::delete('/system-alerts/{id}', [SystemAlertController::class, 'destroy'])->middleware('role:admin');
+    Route::get('/system-alerts/active', [SystemAlertController::class, 'active']);
+    Route::post('/system-alerts/{id}/dismiss', [SystemAlertController::class, 'dismiss']);
 });

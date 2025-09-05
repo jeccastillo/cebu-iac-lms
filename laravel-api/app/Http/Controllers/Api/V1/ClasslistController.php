@@ -10,6 +10,8 @@ use App\Models\ClasslistStudent;
 use App\Services\SystemLogService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Requests\Api\V1\ClasslistAssignFacultyBulkRequest;
 
 class ClasslistController extends Controller
 {
@@ -156,6 +158,40 @@ class ClasslistController extends Controller
         $old = $classlist->toArray();
         $data = $request->validated();
 
+        // Enforce faculty assignment constraints when provided
+        if (array_key_exists('intFacultyID', $data)) {
+            if ((int)($classlist->isDissolved ?? 0) === 1) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Cannot assign faculty to a dissolved classlist.',
+                ], 422);
+            }
+            $fid = (int) $data['intFacultyID'];
+            $faculty = DB::table('tb_mas_faculty')->where('intID', $fid)->first();
+            if (!$faculty) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Faculty not found.',
+                ], 422);
+            }
+            if ((int) ($faculty->teaching ?? 0) !== 1) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Selected faculty is not marked as teaching.',
+                ], 422);
+            }
+            $clCampus = $classlist->campus_id ?? null;
+            $facCampus = $faculty->campus_id ?? null;
+            if ($clCampus !== null) {
+                if ($facCampus === null || (int) $clCampus !== (int) $facCampus) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Campus mismatch between classlist and faculty.',
+                    ], 422);
+                }
+            }
+        }
+
         // Always enforce restricted fields to blank strings on update
         $this->applyRestrictedBlank($data);
 
@@ -216,6 +252,84 @@ class ClasslistController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Classlist dissolved',
+        ]);
+    }
+
+    /**
+     * Bulk assign faculty to classlists with validations.
+     * POST /api/v1/classlists/assign-faculty-bulk
+     */
+    public function assignFacultyBulk(ClasslistAssignFacultyBulkRequest $request): JsonResponse
+    {
+        $payload = $request->validated();
+        $term = (int) ($payload['term'] ?? 0);
+        $assignments = $payload['assignments'] ?? [];
+
+        $results = [];
+        $applied = 0;
+
+        foreach ($assignments as $idx => $item) {
+            $cid = (int) ($item['classlist_id'] ?? 0);
+            $fid = (int) ($item['faculty_id'] ?? 0);
+
+            try {
+                $classlist = \App\Models\Classlist::find($cid);
+                if (!$classlist) {
+                    $results[] = ['classlist_id' => $cid, 'ok' => false, 'message' => 'Classlist not found'];
+                    continue;
+                }
+                if ((int)($classlist->isDissolved ?? 0) === 1) {
+                    $results[] = ['classlist_id' => $cid, 'ok' => false, 'message' => 'Classlist dissolved'];
+                    continue;
+                }
+                // Term check
+                $clTerm = (int) ($classlist->strAcademicYear ?? 0);
+                if ($term > 0 && $clTerm !== $term) {
+                    $results[] = ['classlist_id' => $cid, 'ok' => false, 'message' => 'Classlist term does not match provided term'];
+                    continue;
+                }
+
+                $faculty = DB::table('tb_mas_faculty')->where('intID', $fid)->first();
+                if (!$faculty) {
+                    $results[] = ['classlist_id' => $cid, 'ok' => false, 'message' => 'Faculty not found'];
+                    continue;
+                }
+                if ((int) ($faculty->teaching ?? 0) !== 1) {
+                    $results[] = ['classlist_id' => $cid, 'ok' => false, 'message' => 'Selected faculty is not marked as teaching'];
+                    continue;
+                }
+
+                $clCampus = $classlist->campus_id ?? null;
+                $facCampus = $faculty->campus_id ?? null;
+                if ($clCampus !== null) {
+                    if ($facCampus === null || (int) $clCampus !== (int) $facCampus) {
+                        $results[] = ['classlist_id' => $cid, 'ok' => false, 'message' => 'Campus mismatch between classlist and faculty'];
+                        continue;
+                    }
+                }
+
+                $old = $classlist->toArray();
+                $classlist->update(['intFacultyID' => $fid]);
+                $new = $classlist->fresh();
+
+                try {
+                    SystemLogService::log('update', 'Classlist', (int) $classlist->getKey(), $old, $new->toArray(), $request);
+                } catch (\Throwable $e) {
+                    // swallow logging errors
+                }
+
+                $applied++;
+                $results[] = ['classlist_id' => $cid, 'ok' => true];
+            } catch (\Throwable $e) {
+                $results[] = ['classlist_id' => $cid, 'ok' => false, 'message' => $e->getMessage()];
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'applied_count' => $applied,
+            'total' => count($assignments),
+            'results' => $results,
         ]);
     }
 
