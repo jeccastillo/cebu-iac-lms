@@ -303,16 +303,7 @@ class PaymentDetailAdminService
 
         if (array_key_exists('invoice_number', $payload)) {
             $newInv = $payload['invoice_number'];
-            if ($newInv !== null && $cols['number_invoice']) {
-                $dup = DB::table($cols['table'])
-                    ->where($cols['number_invoice'], $newInv)
-                    ->where('id', '!=', $id)
-                    ->count();
-                if ($dup > 0) {
-                    throw ValidationException::withMessages([
-                        'invoice_number' => ['Invoice number already exists in payment_details']
-                    ]);
-                }
+            if ($newInv !== null && $cols['number_invoice']) {                
                 $update[$cols['number_invoice']] = $newInv;
             }
         }

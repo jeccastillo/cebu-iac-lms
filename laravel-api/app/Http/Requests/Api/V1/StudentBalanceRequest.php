@@ -12,12 +12,12 @@ class StudentBalanceRequest extends FormRequest
     }
 
     /**
-     * Validation rules for fetching student balances or ledger by student number.
+     * Validation rules for fetching student balances or ledger by student id.
      */
     public function rules(): array
     {
         return [
-            'student_number' => ['required', 'string'],
+            'student_id' => ['required', 'integer'],
         ];
     }
 }

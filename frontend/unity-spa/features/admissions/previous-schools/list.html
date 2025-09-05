@@ -66,17 +66,16 @@
       </thead>
       <tbody class="divide-y divide-gray-100">
         <tr ng-if="vm.loading">
-          <td colspan="6" class="px-4 py-6 text-center text-gray-500">Loading...</td>
+          <td colspan="5" class="px-4 py-6 text-center text-gray-500">Loading...</td>
         </tr>
         <tr ng-if="!vm.loading && (!vm.rows || vm.rows.length === 0)">
-          <td colspan="6" class="px-4 py-6 text-center text-gray-500">No records found.</td>
+          <td colspan="5" class="px-4 py-6 text-center text-gray-500">No records found.</td>
         </tr>
         <tr ng-repeat="row in vm.rows">
           <td class="px-4 py-2">{{ row.name }}</td>
           <td class="px-4 py-2">{{ row.city || '-' }}</td>
           <td class="px-4 py-2">{{ row.province || '-' }}</td>
           <td class="px-4 py-2">{{ row.country || '-' }}</td>
-          <td class="px-4 py-2">{{ (row.grade === null || row.grade === undefined) ? '-' : row.grade }}</td>
           <td class="px-4 py-2">
             <div class="flex items-center justify-end gap-2">
               <button class="px-2 py-1 text-xs bg-white border border-gray-300 rounded hover:bg-gray-50"

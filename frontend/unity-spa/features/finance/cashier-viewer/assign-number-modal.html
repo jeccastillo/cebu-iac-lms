@@ -1,0 +1,107 @@
+<!-- Assign Number Modal -->
+<div class="modal fade" id="assignNumberModal" tabindex="-1" role="dialog" aria-labelledby="assignNumberModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="assignNumberModalLabel">Assign Number to Payment</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="vm.closeAssignNumberModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Payment Info -->
+        <div class="mb-3 p-3 bg-light rounded" ng-if="vm.assignNumberPayment">
+          <div class="row">
+            <div class="col-sm-6">
+              <small class="text-muted">Date:</small><br>
+              <strong>{{ vm.assignNumberPayment.or_date || vm.assignNumberPayment.posted_at || '' }}</strong>
+            </div>
+            <div class="col-sm-6">
+              <small class="text-muted">Amount:</small><br>
+              <strong>P{{ vm.currency(vm.assignNumberPayment.subtotal_order) }}</strong>
+            </div>
+          </div>
+          <div class="mt-2">
+            <small class="text-muted">Description:</small><br>
+            <strong>{{ vm.assignNumberPayment.description }}</strong>
+          </div>
+        </div>
+
+        <!-- Error Alert -->
+        <div class="alert alert-danger" ng-if="vm.assignNumberError">
+          {{ vm.assignNumberError }}
+        </div>
+
+        <!-- Number Type Selection -->
+        <div class="form-group">
+          <label class="font-weight-bold">Number Type <span class="text-danger">*</span></label>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="numberType" id="typeOR" 
+                   ng-model="vm.assignNumber.type" value="or">
+            <label class="form-check-label" for="typeOR">
+              Official Receipt (OR)
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="numberType" id="typeInvoice" 
+                   ng-model="vm.assignNumber.type" value="invoice">
+            <label class="form-check-label" for="typeInvoice">
+              Invoice
+            </label>
+          </div>
+        </div>
+
+        <!-- Next Available Number Display -->
+        <div class="form-group" ng-if="vm.assignNumber.type">
+          <label class="font-weight-bold">Number Assignment</label>
+          <div class="alert alert-info">
+            <div ng-if="vm.assignNumber.type === 'or'">
+              <strong>Next Available OR Number:</strong> 
+              {{ (vm.myCashier.or && vm.myCashier.or.current) || 'N/A' }}
+              <span class="text-muted" ng-if="vm.myCashier.or && (vm.myCashier.or.start || vm.myCashier.or.end)">
+                (Range: {{ vm.myCashier.or.start || '—' }}–{{ vm.myCashier.or.end || '—' }})
+              </span>
+            </div>
+            <div ng-if="vm.assignNumber.type === 'invoice'">
+              <strong>Next Available Invoice Number:</strong> 
+              {{ (vm.myCashier.invoice && vm.myCashier.invoice.current) || 'N/A' }}
+              <span class="text-muted" ng-if="vm.myCashier.invoice && (vm.myCashier.invoice.start || vm.myCashier.invoice.end)">
+                (Range: {{ vm.myCashier.invoice.start || '—' }}–{{ vm.myCashier.invoice.end || '—' }})
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Custom Number (Optional) -->
+        <div class="form-group" ng-if="vm.assignNumber.type">
+          <label>Custom Number (Optional)</label>
+          <input type="number" class="form-control" ng-model="vm.assignNumber.customNumber"
+                 placeholder="Leave blank to use next available number"
+                 min="1">
+          <small class="form-text text-muted">
+            Only enter a custom number if you need to use a specific number within your range.
+          </small>
+        </div>
+
+        <!-- Validation Messages -->
+        <div class="alert alert-warning" ng-if="vm.assignNumber.type && !vm.hasAvailableNumbers()">
+          <i class="fas fa-exclamation-triangle"></i>
+          No numbers available in the selected range. Please contact an administrator to update your number range.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="vm.closeAssignNumberModal()">
+          Cancel
+        </button>
+        <button type="button" class="btn btn-primary" 
+                ng-click="vm.confirmAssignNumber()"
+                ng-disabled="!vm.canAssignNumber() || vm.loading.assignNumber">
+          <span ng-if="!vm.loading.assignNumber">Assign Number</span>
+          <span ng-if="vm.loading.assignNumber">
+            <i class="fas fa-spinner fa-spin"></i> Assigning...
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

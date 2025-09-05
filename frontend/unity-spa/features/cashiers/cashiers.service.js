@@ -108,6 +108,15 @@
       // DELETE /cashiers/{id}
       delete: function (id) {
         return $http.delete(BASE + '/cashiers/' + encodeURIComponent(id), _adminHeaders()).then(_unwrap);
+      },
+
+      // POST /cashiers/{cashier}/payments/{payment}/assign-number
+      assignPaymentNumber: function (cashierId, paymentId, payload) {
+        return $http.post(
+          BASE + '/cashiers/' + encodeURIComponent(cashierId) + '/payments/' + encodeURIComponent(paymentId) + '/assign-number',
+          payload,
+          _adminHeaders()
+        ).then(_unwrap);
       }
     };
   }

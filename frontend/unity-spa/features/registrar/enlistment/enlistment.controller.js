@@ -5,8 +5,8 @@
     .module('unityApp')
     .controller('EnlistmentController', EnlistmentController);
 
-  EnlistmentController.$inject = ['$http', 'APP_CONFIG', 'UnityService', 'ClasslistsService', 'TermService', 'ChecklistService', 'ProgramsService', 'CurriculaService', '$scope'];
-  function EnlistmentController($http, APP_CONFIG, UnityService, ClasslistsService, TermService, ChecklistService, ProgramsService, CurriculaService, $scope) {
+  EnlistmentController.$inject = ['$http', 'APP_CONFIG', 'UnityService', 'ClasslistsService', 'TermService', 'ChecklistService', 'ProgramsService', 'CurriculaService', 'StudentsService', '$scope'];
+  function EnlistmentController($http, APP_CONFIG, UnityService, ClasslistsService, TermService, ChecklistService, ProgramsService, CurriculaService, StudentsService, $scope) {
     var vm = this;
     var BASE = APP_CONFIG.API_BASE; // e.g. /laravel-api/public/api/v1
 
@@ -16,6 +16,8 @@
     vm.sections = [];
     vm.results = null;
     vm.student_id = null;
+    vm.clGenLoading = false;
+    vm.hasChecklist = false;
     // Tuition preview state
     vm.tuition = null;
     vm.tuitionLoading = false;
@@ -81,6 +83,9 @@
     vm.resetRegistration = resetRegistration;
     vm.onStudentSelected = onStudentSelected;
     vm.autoQueueFromChecklist = autoQueueFromChecklist;
+    vm.generateChecklist = generateChecklist;
+    vm.refreshChecklistExists = refreshChecklistExists;
+    vm.onStudentQuery = onStudentQuery;
 
     // Registration details panel
     vm.loadRegistration = loadRegistration;
@@ -95,6 +100,8 @@
     // Tuition preview
     vm.loadTuition = loadTuition;
 
+    vm.sanitizeStudentNumber = sanitizeStudentNumber;
+
     // Installment tabs
     vm.installmentTab = 'standard';
     vm.selectInstallmentTab = selectInstallmentTab;
@@ -107,12 +114,23 @@
     vm.canSaveTuition = canSaveTuition;
     vm.saveTuition = saveTuition;
 
+    function sanitizeStudentNumber(studentNumber){
+
+      const firstSpaceIndex = studentNumber.indexOf(' ');
+      var sn = "";
+      if(firstSpaceIndex > 0)
+        return studentNumber.substring(0, firstSpaceIndex);
+      else
+        return studentNumber;
+
+    }
+
     // Tuition loader: builds payload from current enlisted and registration
     function loadTuition(force) {
-      try {
-        if (!vm.studentNumber || !vm.term) return;
+      try {        
+        if (!vm.studentNumber || !vm.term) return;        
         // Derive program id
-        var programId = null;
+        var programId = null;        
         if (vm.regForm && vm.regForm.current_program) {
           var p1 = parseInt(vm.regForm.current_program, 10);
           if (!isNaN(p1)) programId = p1;
@@ -144,12 +162,13 @@
         }
         vm._tuitionKey = key;
 
-        vm.tuitionLoading = true;
+        vm.tuitionLoading = true;       
+        
         var payload = {
-          student_number: vm.studentNumber,
+          student_number: vm.sanitizeStudentNumber(vm.studentNumber),
           program_id: programId,
           term: ('' + vm.term),
-          subjects: subjects
+          subjects: subjects          
         };
         UnityService.tuitionPreview(payload).then(function (res) {
           // Unwrap TuitionBreakdownResource from response
@@ -188,7 +207,7 @@
 
         function doSave() {
           UnityService.tuitionSave({
-            student_number: vm.studentNumber,
+            student_number: vm.sanitizeStudentNumber(vm.studentNumber),
             term: termInt
           }).then(function (res) {
             var ok = res && res.success;
@@ -419,12 +438,10 @@
             vm.term = '';
           }
         }).finally(function () {
-          loadStudents();
           loadPrograms();
           loadTuitionYears();
         });
       } else {
-        loadStudents();
         loadPrograms();
         loadTuitionYears();
       }
@@ -450,21 +467,27 @@
 
     function onStudentSelected() {
       if (vm.studentNumber) {
-        setSelectedStudentName();
+        setSelectedStudentName();        
         // Reset tuition on change of student
         vm.tuition = null;
         vm.installmentTab = 'standard';
         vm._tuitionKey = null;
-        loadCurrent();
-        loadRegistration();
+        // Resolve and cache student id before loading current and registration
+        resolveStudentIdIfNeeded().finally(function () {
+          loadCurrent();
+          loadRegistration();
+          refreshChecklistExists();
+        });
       } else {
         vm.selectedStudentName = '';
         vm.registration = null;
         vm.regForm = {};
+        vm.student_id = null;
+        vm.hasChecklist = false;
       }
     }
     
-    function setSelectedStudentName() {
+    function setSelectedStudentName() {      
       try {
         var sel = (vm.students || []).find(function (s) { return s.student_number === vm.studentNumber; });
         if (sel) {
@@ -478,18 +501,81 @@
       }
     }
 
+    // Resolve student id if missing; prefer cached id, then local list, finally API lookup by student_number
+    function resolveStudentIdIfNeeded() {
+      return new Promise(function (resolve) {
+        try {
+          var existing = parseInt(vm.student_id, 10);
+          if (!isNaN(existing) && existing > 0) { resolve(existing); return; }
+          if (!vm.studentNumber) { resolve(null); return; }
+          // Try local list first
+          var sel = (vm.students || []).find(function (s) { return s && s.student_number === vm.studentNumber; });
+          if (sel && sel.id) {
+            vm.student_id = sel.id;
+            resolve(sel.id);            
+            return;
+          }
+          // Fallback 1: exact student_number filter
+          $http.get(APP_CONFIG.API_BASE + '/students', { params: { per_page: 1, page: 1, student_number: vm.studentNumber } })
+            .then(function (resp) {
+              var data = (resp && resp.data) ? resp.data : {};
+              var rows = data && data.data ? data.data : (Array.isArray(data) ? data : []);
+              if (rows && rows.length) {
+                var row = rows[0];
+                var id1 = row && (row.id != null ? row.id : (row.intID != null ? row.intID : null));
+                if (id1 != null) vm.student_id = id1;                
+                resolve(id1 || null);
+                return;
+              }              
+            })
+            .catch(function () { resolve(null); });
+        } catch (e) {
+          resolve(null);
+        }
+      });
+    }
+
+    function refreshChecklistExists() {
+      try {
+        vm.hasChecklist = false;
+        if (!vm.studentNumber && !vm.student_id) return;
+        resolveStudentIdIfNeeded().then(function (sid) {
+          if (!sid) { vm.hasChecklist = false; return; }
+          return ChecklistService.get(sid, {}).then(function (res) {
+            var data = (res && res.data) ? res.data : res;
+            var has = !!(data && ((data.id != null) || (data.items && data.items.length > 0)));
+            vm.hasChecklist = has;
+          }).catch(function () {
+            vm.hasChecklist = false;
+          }).finally(function () {
+            if ($scope && $scope.$applyAsync) { try { $scope.$applyAsync(); } catch (e) {} }
+          });
+        });
+      } catch (e) {
+        vm.hasChecklist = false;
+      }
+    }
+
     // Auto-queue from checklist for current year level and term
     function autoQueueFromChecklist() {
-      if (!vm.studentNumber || !vm.term) {
+      if (!vm.term || (!vm.studentNumber && !vm.student_id)) {
         if (window.Swal) {
           Swal.fire({ icon: 'warning', title: 'Missing data', text: 'Select a student and term first.' });
         }
         return;
       }
 
-      // Resolve student id by student number
-      var student = (vm.students || []).find(function (s) { return s && s.student_number === vm.studentNumber; });
-      if (!student || !student.id) {
+      // Resolve student id (prefer cached vm.student_id, fallback to selected list)
+      var sid = null;
+      if (vm.student_id) {
+        var tmp = parseInt(vm.student_id, 10);
+        if (!isNaN(tmp) && tmp > 0) sid = tmp;
+      }
+      if (!sid && vm.studentNumber) {
+        var student = (vm.students || []).find(function (s) { return s && s.student_number === vm.studentNumber; });
+        if (student && student.id) sid = student.id;
+      }
+      if (!sid) {
         if (window.Swal) {
           Swal.fire({ icon: 'error', title: 'Student not found', text: 'Unable to resolve student id for checklist.' });
         }
@@ -520,7 +606,7 @@
       });      
 
       vm.loading = true;
-      ChecklistService.get(student.id, {}).then(function (res) {
+      ChecklistService.get(sid, {}).then(function (res) {
         var data = res && res.data ? res.data : res;
         var items = (data && data.items) ? data.items : [];
         var candidateItems = [];
@@ -638,7 +724,7 @@
 
         // Batch check prerequisites
         $http.post(APP_CONFIG.API_BASE + '/subjects/check-prerequisites-batch', {
-          student_number: vm.studentNumber,
+          student_number: vm.sanitizeStudentNumber(vm.studentNumber),
           subject_ids: subjectIds
         }).then(function(resp) {
           var prerequisiteResults = (resp && resp.data && resp.data.data) ? resp.data.data : {};
@@ -726,6 +812,58 @@
       });
     }
  
+    function generateChecklist() {
+      try {
+        if (!vm.studentNumber) {
+          if (window.Swal) {
+            Swal.fire({ icon: 'warning', title: 'Select a student', text: 'Please select a student first.' });
+          } else {
+            try { alert('Please select a student first.'); } catch (e) {}
+          }
+          return;
+        }
+
+        var sid = null;
+        if (vm.student_id) {
+          sid = vm.student_id;
+        } else {
+          try {
+            var sel = (vm.students || []).find(function (s) { return s && s.student_number === vm.studentNumber; });
+            if (sel && sel.id) sid = sel.id;
+          } catch (e) {}
+        }
+
+        if (!sid) {
+          if (window.Swal) {
+            Swal.fire({ icon: 'error', title: 'Student not found', text: 'Unable to resolve student id for checklist.' });
+          } else {
+            try { alert('Unable to resolve student id for checklist.'); } catch (e) {}
+          }
+          return;
+        }
+
+        vm.clGenLoading = true;
+        ChecklistService.generate(sid, {}).then(function (res) {
+          vm.hasChecklist = true;
+          if ($scope && $scope.$applyAsync) { try { $scope.$applyAsync(); } catch (e) {} }
+          if (window.Swal) {
+            Swal.fire({ icon: 'success', title: 'Checklist generated', text: 'Graduation checklist was generated from curriculum.' });
+          }
+        }).catch(function (err) {
+          console.error('checklist.generate failed', err);
+          var m = (err && err.data && err.data.message) || 'Failed to generate checklist.';
+          if (window.Swal) {
+            Swal.fire({ icon: 'error', title: 'Error', text: m });
+          } else {
+            try { alert(m); } catch (e) {}
+          }
+        }).finally(function () {
+          vm.clGenLoading = false;
+          if ($scope && $scope.$applyAsync) { $scope.$applyAsync(); }
+        });
+      } catch (e) {}
+    }
+ 
      // Load students for searchable dropdown (aggregate all pages)
      function loadStudents() {
       vm.loading = true;
@@ -769,48 +907,70 @@
       });
     }
 
+    // Remote query hook for pui-autocomplete: fetch suggestions based on user input
+    function onStudentQuery(q) {
+      try {
+        var s = (q != null) ? ('' + q).trim() : '';
+        if (!s) return;
+        StudentsService.listSuggestions(s).then(function (rows) {
+          vm.students = rows || [];
+          try { if (vm.studentNumber) { setSelectedStudentName(); } } catch (e) {}
+        }).catch(function () {
+          vm.students = [];
+        });
+      } catch (e) {
+        vm.students = [];
+      }
+    }
+
     // Load current enlisted subjects for student/term
     function loadCurrent() {
       vm.results = null;
       vm.current = [];
-      if (!vm.studentNumber || !vm.term) return;
+      if (!vm.term) return;
 
-      vm.loading = true;
-      $http.post(BASE + '/student/records-by-term', {
-        student_number: vm.studentNumber,
-        term: ('' + vm.term),
-        include_grades: false
-      }).then(function (resp) {
-        var data = (resp && resp.data) ? resp.data : resp;
-        var payload = data && data.data ? data.data : {};
-        var terms = payload.terms || [];
-        vm.student_id = payload.student_id;
-        var first = terms.length ? terms[0] : null;
-        var recs = first ? (first.records || []) : [];
-        // Normalize minimal fields for display and drop selection
-        vm.current = recs.map(function (r) {
-          return {
-            classlist_id: r.classlist_id || r.classListId || r.classListID || r.classlistID || null,
-            code: r.code,
-            description: r.description,
-            units: r.units,
-            section_code: r.section_code || r.sectionCode || '',
-            subject_id: (function () {
-              var sid = r.subject_id || r.subjectId || r.subjectID || null;
-              if (sid === null || sid === undefined || ('' + sid).trim() === '') return null;
-              var n = parseInt(sid, 10);
-              return isNaN(n) ? null : n;
-            })()
-          };
-        }).filter(function (x) { return x.classlist_id !== null; });
+      // Ensure we have student id before requesting records for term
+      resolveStudentIdIfNeeded().then(function (sid) {
+        if (!sid) return;
+
+        vm.loading = true;
+        return $http.post(BASE + '/student/records-by-term', {
+          student_id: sid,
+          term: ('' + vm.term),
+          include_grades: false
+        }).then(function (resp) {
+          var data = (resp && resp.data) ? resp.data : resp;
+          var payload = data && data.data ? data.data : {};
+          var terms = payload.terms || [];
+          // Persist student_id from payload if provided
+          if (payload && payload.student_id) vm.student_id = payload.student_id;
+          var first = terms.length ? terms[0] : null;
+          var recs = first ? (first.records || []) : [];
+          // Normalize minimal fields for display and drop selection
+          vm.current = recs.map(function (r) {
+            return {
+              classlist_id: r.classlist_id || r.classListId || r.classListID || r.classlistID || null,
+              code: r.code,
+              description: r.description,
+              units: r.units,
+              section_code: r.section_code || r.sectionCode || '',
+              subject_id: (function () {
+                var sid = r.subject_id || r.subjectId || r.subjectID || null;
+                if (sid === null || sid === undefined || ('' + sid).trim() === '') return null;
+                var n = parseInt(sid, 10);
+                return isNaN(n) ? null : n;
+              })()
+            };
+          }).filter(function (x) { return x.classlist_id !== null; });
+        }).finally(function () {
+          vm.loading = false;
+          // Auto-load tuition after current is loaded (if possible)
+          try { vm.loadTuition(); } catch (e) {}
+        });
       }).finally(function () {
-        vm.loading = false;
-        // Auto-load tuition after current is loaded (if possible)
-        try { vm.loadTuition(); } catch (e) {}
-      });
-
-      // Refresh classlists for term for "Add" and "Change To" selections
-      loadClasslistsForTerm();
+        // Refresh classlists for term for "Add" and "Change To" selections
+        loadClasslistsForTerm();
+      });      
     }
 
     // Load classlists for selected term (for add/change UI)
@@ -1079,7 +1239,7 @@
       }
       
       $http.post(APP_CONFIG.API_BASE + '/subjects/' + subjectId + '/check-prerequisites', {
-        student_number: vm.studentNumber
+        student_number: vm.sanitizeStudentNumber(vm.studentNumber), student_id: vm.student_id
       }).then(function(resp) {
         var data = (resp && resp.data && resp.data.data) ? resp.data.data : { passed: true, missing_prerequisites: [] };
         callback(data);
@@ -1143,7 +1303,7 @@
       vm.results = null;
 
       var payload = {
-        student_number: vm.studentNumber,
+        student_number: vm.sanitizeStudentNumber(vm.studentNumber),
         term: parseInt(vm.term, 10),
         year_level: parseInt(vm.yearLevel, 10),
         student_type: vm.studentType || 'continuing',
@@ -1154,11 +1314,11 @@
         // res is already unwrapped
         vm.results = res;
         // Refresh current if success
-        loadCurrent();
+        loadCurrent();        
         // Clear queued ops
         vm.ops = [];
       }).finally(function () {
-        vm.loading = false;
+        vm.loading = false;        
       });
     }
 
@@ -1203,7 +1363,7 @@
           var pw = result.value;
  
           vm.loading = true;
-          var payload = { student_number: vm.studentNumber };
+          var payload = { student_number: vm.sanitizeStudentNumber(vm.studentNumber)};
           if (termInt) payload.term = termInt;
           payload.password = pw;
  
@@ -1252,13 +1412,14 @@
             var d = (res && res.data && res.data.deleted) || (res && res.deleted) || {};
             var cls = d && d.classlist_student_rows ? d.classlist_student_rows : 0;
             var regs = d && d.registrations ? d.registrations : 0;
-            alert('Reset completed. Deleted ' + cls + ' classlist row(s) and ' + regs + ' registration row(s).');
+            alert('Reset completed. Deleted ' + cls + ' classlist row(s) and ' + regs + ' registration row(s).');            
           } catch (e) {}
         }, function (err) {
           var m = (err && err.data && err.data.message) || 'Reset failed';
           alert(m);
         }).finally(function () {
           vm.loading = false;
+          
         });
       }
     }

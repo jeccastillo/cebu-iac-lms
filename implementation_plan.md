@@ -1,224 +1,185 @@
 # Implementation Plan
 
 [Overview]
-Implement an Admissions Applicants Analytics feature that visualizes applicant data per term (syid) using Chart.js. The solution provides a new SPA page with charts (status distribution, applicant type/sub-type, campus distribution, daily application trends, payment/waiver stats) with both single-term and side-by-side comparison modes, powered by new Laravel API analytics endpoints.
+Implement an applicant journey logging system that records key milestones into a new table, with integrations across admissions, requirements upload, payments, interviews, and enlistment, and exposes a read API for the journey.
 
-The scope includes: backend analytics aggregation endpoint(s) in Laravel, frontend AngularJS 1.x route, service, controller, and template for analytics, Chart.js integration via CDN, and wiring to admissions navigation. The data source is tb_mas_applicant_data joined to tb_mas_users (and applicant_types/campuses where available); all metrics are filtered per term (syid) and based on the latest applicant_data row per user (per syid) to avoid duplication.
+The goal is to introduce a consistent, auditable logging mechanism for applicant lifecycle events. This will be centered on a new table tb_mas_applicant_journey with minimal fields and will hook into existing controllers/services at key points to capture events. The system will standardize log remarks (human-readable messages) and timestamps. It fits into the existing Laravel API by following the current architecture patterns (Services + Controllers + System logging) and integrates where events already occur: Admissions creation, Public Initial Requirements upload, Cashier payment creation (including reservation), Interview schedule/result, and Enlistment. A dedicated read endpoint will allow consumers to fetch an applicant’s journey by applicant_data_id in chronological order.
 
 [Types]  
-Type definitions for API contracts and JS model shapes used by frontend and backend responses.
+Add a new table and corresponding model/service to store applicant journey logs.
 
-- Backend query primitives
-  - LatestApplicantData per user and term: for a given syid, select the latest tb_mas_applicant_data row (max id) per (user_id, syid). Fallback to latest per user when syid is missing in the table.
-  - Joins:
-    - tb_mas_users u on u.intID = ad.user_id
-    - tb_mas_applicant_types t on t.intID = ad.applicant_type (optional)
-    - tb_mas_campuses c on c.id = u.campus_id (optional)
+Detailed specifications:
 
-- API request
-  - GET /api/v1/applicants/analytics/summary
-    - Query params:
-      - syid: int (required for primary term; if missing, 422)
-      - compare_syid: int (optional; when provided, compute a second summary)
-      - start: string Y-m-d (optional; default: 30 days before today for time series)
-      - end: string Y-m-d (optional; default: today for time series)
-      - campus: string|int (optional; filters campus by name or id; applied on u.campus_id or c.campus_name)
-      - type: string (optional; filters ApplicantType.type)
-      - sub_type: string (optional; filters ApplicantType.sub_type)
-      - status: string (optional; filters ad.status)
-      - search: string (optional; filters u.strFirstname/strLastname/strEmail/strMobileNumber LIKE %search%)
+- Database: tb_mas_applicant_journey
+  - id: unsigned big integer, primary key, auto-increment
+  - applicant_data_id: unsigned integer, required, references tb_mas_applicant_data.id (guard foreign key to avoid legacy FK failures)
+  - remarks: string(255) or text, required; stores human-readable event description
+  - log_date: datetime, required; no timezone handling; defaults to current timestamp when not provided
+  - Indexes:
+    - idx_journey_applicant_data_id on (applicant_data_id)
+    - idx_journey_log_date on (log_date)
+  - No created_at/updated_at columns (per requirement)
 
-- API response shapes (JSON)
-  - ApplicantsAnalyticsSummaryEnvelope
-    {
-      success: true,
-      data: {
-        terms: {
-          [syid:string]: ApplicantsAnalyticsSummary
-        },
-        meta: {
-          primary_syid: number,
-          compare_syid: number|null,
-          date_range: { start: string, end: string }
-        }
-      }
-    }
+- Model: App\Models\ApplicantJourney
+  - protected $table = 'tb_mas_applicant_journey'
+  - public $timestamps = false
+  - $fillable = ['applicant_data_id', 'remarks', 'log_date']
 
-  - ApplicantsAnalyticsSummary
-    {
-      syid: number,
-      counts: {
-        total_applicants: number,
-        by_status: { [status: string]: number },
-        by_applicant_type: { [type: string]: number },              // e.g., college, shs, grad
-        by_applicant_sub_type: { [sub_type: string]: number },      // if available
-        by_campus: { [campus_label: string]: number },              // campus_name or fallback id/string
-        payment_flags: {
-          paid_application_fee: number,
-          paid_reservation_fee: number
-        },
-        waivers: {
-          waive_application_fee: number
-        }
-      },
-      timeseries: {
-        daily_new_applications: Array<{ date: string (YYYY-MM-DD), count: number }>
-      }
-    }
+- Service: App\Services\ApplicantJourneyService
+  - public function log(int $applicantDataId, string $remarks, ?\Carbon\CarbonInterface $logDate = null): void
+    - Inserts a row; if $logDate is null, uses now().
+    - Graceful no-op if applicant_data_id is invalid or missing (optional guard).
 
-- Frontend model shapes
-  - vm.filters: {
-      syidA: number, syidB?: number|null,
-      start?: string, end?: string,
-      status?: string, campus?: string|number, type?: string, sub_type?: string
-    }
-  - vm.charts: Record of Chart.js instances keyed by chart id strings.
-  - vm.summaryA, vm.summaryB: ApplicantsAnalyticsSummary for each selected term.
-
-Validation rules:
-- syid (primary) is required on backend; compare_syid optional.
-- start/end should validate to Y-m-d; fallback to defaults.
+- Standardized event messages (remarks) to be used:
+  - "Student Applied"
+  - "Student Submitted [Requirement Name]"
+  - "Student paid application fee"
+  - "Status was changed to Reserved"
+  - "Interview Scheduled"
+  - "Interview Result: Passed" or "Interview Result: Failed"
+  - "Status was changed to Enlisted"
+  - "Status was changed to Enrolled" (when enrollment confirmation is implemented)
 
 [Files]
-Files to be modified and created across backend and frontend.
+Add new files for model, service, controller, and migration; update existing controllers/services to emit journey logs.
 
-- New files to be created
-  - laravel-api/app/Http/Controllers/Api/V1/ApplicantAnalyticsController.php
-    - Purpose: Provide /applicants/analytics/summary endpoint aggregating applicants metrics per term and optional comparison term.
+Detailed breakdown:
 
-  - frontend/unity-spa/features/admissions/applicants/analytics.service.js
-    - Purpose: AngularJS service wrapping analytics API calls with headers, params, and response unwrapping.
+- New files:
+  - laravel-api/database/migrations/2025_09_04_010500_create_tb_mas_applicant_journey.php
+    - Purpose: Create tb_mas_applicant_journey with id, applicant_data_id, remarks, log_date; add indexes; guarded FK if feasible.
+  - laravel-api/app/Models/ApplicantJourney.php
+    - Purpose: Eloquent model for tb_mas_applicant_journey (no timestamps).
+  - laravel-api/app/Services/ApplicantJourneyService.php
+    - Purpose: Encapsulate creation of journey entries; single responsibility logging API for other modules.
+  - laravel-api/app/Http/Controllers/Api/V1/ApplicantJourneyController.php
+    - Purpose: Read-only endpoint to fetch journey logs by applicant_data_id with optional pagination.
 
-  - frontend/unity-spa/features/admissions/applicants/analytics.controller.js
-    - Purpose: AngularJS controller implementing filters, term selection (on-page override), Chart.js dataset transforms, rendering and updating charts.
-
-  - frontend/unity-spa/features/admissions/applicants/analytics.html
-    - Purpose: Analytics page template with filters, term selectors, and chart canvases (status doughnut, type/subtype bar, campus bar, daily line, payments/waivers bar).
-
-- Existing files to be modified
+- Existing files to be modified:
+  - laravel-api/app/Http/Controllers/Api/V1/AdmissionsController.php
+    - After inserting a new tb_mas_applicant_data row, call ApplicantJourneyService->log($applicantDataId, 'Student Applied').
+  - laravel-api/app/Http/Controllers/Api/V1/PublicInitialRequirementsController.php
+    - Method: upload()
+    - After successful update and after retrieving the requirement name (already available as $updated->name), call ApplicantJourneyService->log($appData->id, "Student Submitted {$updated->name}").
+  - laravel-api/app/Http/Controllers/Api/V1/CashierController.php
+    - Method: createPayment()
+    - When $isApp is true (application fee detected), log "Student paid application fee" using the resolved applicant_data_id for the student/syid selection (reuse existing logic that already resolves the latest row for updates).
+    - When $isRes is true (reservation payment detected and status change to Reserved executed), log "Status was changed to Reserved" using same applicant_data_id resolution.
+  - laravel-api/app/Services/ApplicantInterviewService.php
+    - Method: schedule()
+      - After creating ApplicantInterview row, determine  applicant_data_id (it’s the one used to create the row) and log "Interview Scheduled".
+    - Method: submitResult()
+      - After updating the interview including assessment and completed_at and setting interviewed flag, log "Interview Result: Passed" or "Interview Result: Failed" based on provided assessment.
+  - laravel-api/app/Services/EnlistmentService.php
+    - Method: enlist()
+    - After successful path where tb_mas_applicant_data.status is updated to "Enlisted", log "Status was changed to Enlisted" for the resolved applicant_data_id row used in that update.
+  - laravel-api/app/Services/RegistrationService.php (if/where enrollment confirmation is finalized)
+    - Identify function where a student transitions to enrolled (likely intROG or status change).
+    - Hook: After enrollment confirmation, log "Status was changed to Enrolled" against the latest applicant_data_id for the student in the relevant term.
+    - If no definitive enrollment function exists yet, place a TODO marker and skip code changes for now.
   - laravel-api/routes/api.php
-    - Add route: GET /api/v1/applicants/analytics/summary → ApplicantAnalyticsController@summary, guarded with role: admissions, admin.
+    - Add GET /api/v1/admissions/applicant-data/{applicantDataId}/journey → ApplicantJourneyController@index (role: admissions, admin, registrar as appropriate).
 
-  - frontend/unity-spa/core/routes.js
-    - Add route definition:
-      - path: "/admissions/applicants/analytics"
-      - template: "features/admissions/applicants/analytics.html"
-      - controller: "ApplicantsAnalyticsController"
-      - requiredRoles: ["admissions", "admin"]
-
-  - frontend/unity-spa/index.html
-    - Add Chart.js CDN script before core app files:
-      <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-
-  - frontend/unity-spa/shared/components/sidebar/sidebar.html (optional, but recommended)
-    - Add navigation link under Admissions to "Applicants Analytics" route, gated by roles admissions/admin.
-
-- Files to be deleted or moved
+- Files to be deleted or moved:
   - None.
 
-- Configuration file updates
-  - None required (Chart.js via CDN; Laravel routes only).
+- Configuration updates:
+  - None.
 
 [Functions]
-New functions and modifications required for analytics feature.
+Introduce the ApplicantJourneyService::log and integrate small log calls in existing workflows.
 
-- New functions
-  - Backend: ApplicantAnalyticsController@summary (laravel-api/app/Http/Controllers/Api/V1/ApplicantAnalyticsController.php)
-    - Signature: public function summary(Request $request): JsonResponse
-    - Purpose: compute ApplicantsAnalyticsSummary for primary syid and optional compare_syid using:
-      - latest rows per (user_id, syid) via correlated subqueries (ad.id = (select max(ad2.id) ...))
-      - groupings for by_status, by_applicant_type (join tb_mas_applicant_types), by_applicant_sub_type, by_campus (join tb_mas_campuses, fallback to u.campus_id), payments &amp; waivers counts, daily_new_applications grouped by DATE(ad.created_at) within [start,end].
-    - Edge cases: If applicant_data.syid column is missing in environment, fallback to latest per user (warn in meta). If campuses/applicant_types tables/columns unavailable, gracefully skip or fallback to raw values.
+Detailed breakdown:
 
-  - Frontend: ApplicantsAnalyticsService.summary (frontend/unity-spa/features/admissions/applicants/analytics.service.js)
-    - Signature: summary(params: object) → Promise<ApplicantsAnalyticsSummaryEnvelope>
-    - Purpose: GET /applicants/analytics/summary with params { syid, compare_syid?, start?, end?, ...filters }, attach X-Faculty-ID header from StorageService (like ApplicantsService).
+- New functions:
+  - App\Services\ApplicantJourneyService::log(int $applicantDataId, string $remarks, ?\Carbon\CarbonInterface $logDate = null): void
+    - Inserts into tb_mas_applicant_journey (applicant_data_id, remarks, log_date).
+  - App\Http\Controllers\Api\V1\ApplicantJourneyController::index(int $applicantDataId, Request $request): JsonResponse
+    - Query tb_mas_applicant_journey where applicant_data_id = param, orderBy log_date asc, returns array of { id, applicant_data_id, remarks, log_date }.
+    - Optional query params: page, perPage (if present, paginate).
 
-  - Frontend: ApplicantsAnalyticsController (frontend/unity-spa/features/admissions/applicants/analytics.controller.js)
-    - Methods:
-      - init(): read default term(s) from TermService but allow on-page override; set initial filters; load data.
-      - load(): call service, map data into chart datasets; create/update Chart.js instances.
-      - setTermA/ setTermB(): handlers for term selectors; supports single-term and side-by-side (B optional).
-      - buildCharts(): create charts (status doughnut, type/sub-type bar, campus bar, payments/waivers bar, daily line).
-      - updateChart(chart, data): utility update; destroy/recreate safely when series/labels change.
-      - toSeries(summaryA, summaryB, key): helpers to align categories and build two datasets for compare mode.
-      - onFilterChange(): reloads data with debounced behavior.
+- Modified functions:
+  - AdmissionsController::store(...) or equivalent method that persists applicant_data:
+    - Add call to ApplicantJourneyService->log($newApplicantDataId, 'Student Applied').
+  - PublicInitialRequirementsController::upload(string $hash, int $appReqId, Request $request): JsonResponse
+    - After updating the requirement and retrieving $updated (joined with requirements), add ApplicantJourneyService->log((int)$appData->id, "Student Submitted {$updated->name}").
+  - CashierController::createPayment($id, CashierPaymentStoreRequest $request)
+    - In the post-payment hook where $isApp is true: ApplicantJourneyService->log($applicantDataIdResolved, 'Student paid application fee').
+    - In the same post-payment hook where $isRes is true and status changed: ApplicantJourneyService->log($applicantDataIdResolved, 'Status was changed to Reserved').
+    - Resolve $applicantDataIdResolved by reusing existing logic that finds applicant_data row considering (user_id, syid) or latest fallback (same as current update code path).
+  - ApplicantInterviewService::schedule(...)
+    - After create: ApplicantJourneyService->log($applicantDataId, 'Interview Scheduled').
+  - ApplicantInterviewService::submitResult(...)
+    - After successful update: ApplicantJourneyService->log($applicantDataId, 'Interview Result: ' . ucfirst(strtolower($assessment))).
+  - EnlistmentService::enlist(array $payload, Request $request): array
+    - On the branch where status → 'Enlisted' update succeeds: ApplicantJourneyService->log($applicantDataIdUsedForUpdate, 'Status was changed to Enlisted').
+  - RegistrationService (when enrollment is finalized, if applicable)
+    - After status changes to enrolled (or equivalent), log "Status was changed to Enrolled".
 
-- Modified functions
-  - frontend/unity-spa/core/routes.js: configure($routeProvider...) — add .when("/admissions/applicants/analytics", ...) block.
-
-- Removed functions
+- Removed functions:
   - None.
 
 [Classes]
-New classes and modifications (PHP controller class; AngularJS controllers are functions not classes in ES5 style).
+Add model, service, and controller for Applicant Journey.
 
-- New classes
-  - App\Http\Controllers\Api\V1\ApplicantAnalyticsController
-    - File: laravel-api/app/Http/Controllers/Api/V1/ApplicantAnalyticsController.php
-    - Key methods: summary(Request $request): JsonResponse
-    - Inheritance: extends Controller
-    - Dependencies: Illuminate\Support\Facades\DB; optional use of Carbon for date range.
+Detailed breakdown:
 
-- Modified classes
-  - None.
+- New classes:
+  - App\Models\ApplicantJourney
+    - Table: tb_mas_applicant_journey, no timestamps, fillable: applicant_data_id, remarks, log_date.
+  - App\Services\ApplicantJourneyService
+    - Methods: log().
+  - App\Http\Controllers\Api\V1\ApplicantJourneyController
+    - Methods: index().
 
-- Removed classes
+- Modified classes:
+  - App\Http\Controllers\Api\V1\AdmissionsController (append a call to log after applicant creation).
+  - App\Http\Controllers\Api\V1\PublicInitialRequirementsController (append log call in upload()).
+  - App\Http\Controllers\Api\V1\CashierController (append log calls in createPayment()).
+  - App\Services\ApplicantInterviewService (append log calls in schedule and submitResult).
+  - App\Services\EnlistmentService (append log call after successful status change to Enlisted).
+  - App\Services\RegistrationService (append log call after enrollment, if applicable).
+
+- Removed classes:
   - None.
 
 [Dependencies]
-Add Chart.js via CDN only. No Composer or npm changes.
+No new external dependencies required.
 
-- Frontend:
-  - Chart.js v4 UMD: https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js
-
-- Backend:
-  - None (use existing Laravel DB/Query Builder).
+No composer dependencies are needed; use existing Illuminate/DB and Carbon which are already present with Laravel.
 
 [Testing]
-A layered testing and validation approach.
+Write feature tests around the new journey behavior.
 
-- Backend API:
-  - Manual smoke using browser or curl:
-    - GET /api/v1/applicants/analytics/summary?syid=29
-    - GET /api/v1/applicants/analytics/summary?syid=29&amp;compare_syid=30
-    - Include campus/type/status filters to validate filter plumbing.
-  - Optional Feature Test (PHPUnit) new test file:
-    - laravel-api/tests/Feature/ApplicantAnalyticsControllerTest.php
-      - test_summary_requires_syid_returns_422
-      - test_summary_structure_contains_expected_keys
-      - test_summary_compare_syid_contains_terms_map
+- New tests:
+  - laravel-api/tests/Feature/ApplicantJourneyTest.php
+    - test_journey_logs_on_apply: Simulate applicant creation; assert a "Student Applied" row exists for applicant_data_id.
+    - test_journey_logs_on_initial_requirement_upload: Seed requirement and perform upload; assert "Student Submitted [Requirement Name]" exists.
+    - test_journey_logs_on_application_payment_and_reservation: Create payment with description matching application fee; assert "Student paid application fee". Create reservation payment; assert "Status was changed to Reserved".
+    - test_journey_logs_on_interview_schedule_and_result: Schedule interview; assert "Interview Scheduled". Submit result; assert "Interview Result: Passed/Failed".
+    - test_journey_logs_on_enlistment: Perform enlistment via service and assert "Status was changed to Enlisted".
+    - test_get_journey_endpoint: Insert several logs and GET /api/v1/admissions/applicant-data/{id}/journey; assert order and payload.
 
-- Frontend:
-  - Load /admissions/applicants/analytics with admissions/admin role.
-  - Validate single-term mode (only Term A selected) and compare mode (Term B selected).
-  - Verify each chart renders and updates when terms/filters change.
-  - Confirm on-page term override works even if sidebar term is set differently.
+- Existing tests to modify:
+  - None required; avoid breaking existing tests.
+
+- Validation strategies:
+  - Focused DB assertions on tb_mas_applicant_journey.
+  - Controller endpoint response assertions for the GET endpoint.
 
 [Implementation Order]
-A clear sequence to minimize churn and ensure verification at each step.
+Implement migration, model, and service first; then integrate logging at source events, then add GET endpoint.
 
-1) Backend analytics endpoint
-   - Create ApplicantAnalyticsController.php with summary() aggregation for syid and compare_syid.
-   - Wire route in laravel-api/routes/api.php with role: admissions,admin.
-   - Quick manual test via query strings to verify JSON shape and counts.
-
-2) Frontend service
-   - Create features/admissions/applicants/analytics.service.js with summary() wrapping API call and admin headers.
-
-3) Frontend page and charts
-   - Add Chart.js script tag in frontend/unity-spa/index.html (before core app files).
-   - Create analytics.html with layout: filters (term A/B selectors, date range), chart canvases, toggles.
-   - Create analytics.controller.js to bind filters and render charts in single-term and side-by-side modes.
-
-4) Routing and navigation
-   - Update core/routes.js to add /admissions/applicants/analytics route with requiredRoles ["admissions","admin"].
-   - Optionally add link in shared/components/sidebar/sidebar.html under Admissions group.
-
-5) Verification
-   - Navigate to the page; test single term then side-by-side.
-   - Validate counts match backend JSON by logging results in console.
-   - Check performance (no heavy memory usage); verify graceful handling if types/campus tables missing.
-
-6) Optional automated test
-   - Add Feature test for controller summary() structure and 422 on missing syid (time-permitting).
+1) Migration: create tb_mas_applicant_journey with fields and indexes (no timestamps; datetime log_date).
+2) Model: ApplicantJourney (no timestamps).
+3) Service: ApplicantJourneyService with log() helper.
+4) Controllers/Services integration:
+   - AdmissionsController: log "Student Applied".
+   - PublicInitialRequirementsController::upload: log "Student Submitted [Requirement Name]".
+   - CashierController::createPayment: log "Student paid application fee" and "Status was changed to Reserved".
+   - ApplicantInterviewService: log "Interview Scheduled" and "Interview Result: [assessment]".
+   - EnlistmentService: log "Status was changed to Enlisted".
+   - RegistrationService: log "Status was changed to Enrolled" where finalized (if present; otherwise leave TODO).
+5) API: Add ApplicantJourneyController@index and routes entry GET /api/v1/admissions/applicant-data/{applicantDataId}/journey.
+6) Tests: Add feature tests for journey events and GET endpoint.
+7) Manual verification: exercise key flows via Postman or scripts and verify logs order and content.

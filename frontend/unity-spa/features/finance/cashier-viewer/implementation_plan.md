@@ -1,156 +1,135 @@
 # Implementation Plan
 
 [Overview]
-Refactor the existing Registrar Registration Viewer into a Finance-aligned Cashier view under the /finance namespace with proper role-based editing restrictions and updated navigation.
+Add an Assign Number action in the Payments list of the Finance Cashier Viewer that opens an Assign Number modal to assign either an OR or an Invoice number to a specific payment row, using the acting cashier’s next available sequence or a custom number.
 
-This refactor relocates, renames, and slightly augments the current registration viewer UI to become a dedicated Cashier view. Functionality remains the same (student selection, registration options, tuition breakdown, payment details, ledger, records) but is now positioned under Finance, with Finance/Admin users having edit permissions and Registrar having read-only access. No backend API changes are required; we will reuse existing endpoints and client services (UnityService, TermService, TuitionYearsService, StudentsService, Tuition endpoints). The new route path will be /finance/cashier/:id. There will be no backward-compatibility redirect from the old Registrar path.
+This update targets the Payments panel in the Cashier Viewer (frontend/unity-spa/features/finance/cashier-viewer/cashier-viewer.html) where payment_details rows are shown. A per-row button will open a new modal allowing Finance/Admin users to assign an OR or Invoice number to that payment, showing the next available number from the user’s resolved cashier (vm.myCashier) with an optional override. The modal will follow the SPA’s Tailwind/Angular overlay pattern (like the existing Tuition and Invoice modals), ensuring no Bootstrap dependency. After successful assignment, the UI will refresh the payment details and update any dependent totals or invoice caps.
 
 [Types]  
-Type system changes introduce a simple, controller-level capability flag to enforce edit vs. read-only behavior based on roles; no global TypeScript/Flow is involved.
+Controller-local UI state and models will be extended to support assign-number workflow.
 
-- Controller VM state (approximate pseudo-types for clarity):
-  - vm.state: { loggedIn: boolean, username: string, loginType: 'faculty'|'student'|string, roles?: string[], faculty_id?: number }
-  - vm.id: number (route param student id)
-  - vm.sn: string|null (student_number)
-  - vm.term: number|null (selected term ID)
-  - vm.student: object|null (shape from GET /students/{id})
-  - vm.registrationResp: { success?: boolean, data?: { exists: boolean, registration?: object } }|null
-  - vm.registration: {
-      paymentType?: 'full'|'partial',
-      tuition_year?: number,
-      allow_enroll?: 0|1,
-      downpayment?: 0|1,
-      intROG?: 0|1|2|3|4,
-      intAYID?: number
-    }|null
-  - vm.tuition: TuitionBreakdownResource|any
-  - vm.tuitionSaved: { id: number, payload: TuitionBreakdownResource, created_at?: string }|null
-  - vm.paymentDetails: { items: any[], meta?: { total_paid_filtered?: number }, sy_label?: string }|null
-  - vm.ledger: { transactions?: { amount: number, posted_at?: string, or_no?: string }[], meta?: { amount_paid?: number } }|null
-  - vm.records: { records?: any[], terms?: { term?: string, records: any[] }[] }|null
-  - vm.edit: {
-      paymentType: 'full'|'partial'|null,
-      tuition_year: number|null,
-      allow_enroll: 0|1|null,
-      downpayment: 0|1|null,
-      intROG: 0|1|2|3|4|null
-    }
-  - vm.canEdit: boolean (derived via RoleService.hasAny(['finance','admin']))
-  - vm.selectedTuitionAmount: number|null
-  - vm.meta: { amount_paid: number|null, remaining_amount: number, tuition_source: 'computed'|'saved' }
-  - vm.ui: { showTuitionModal: boolean }
+- AssignNumberModel (controller-local):
+  - type: 'or' | 'invoice' | null
+  - customNumber: number | null
+- AssignNumberContext:
+  - payment: PaymentDetailsRow | null
+  - error: string | null
+  - loading: boolean
+- PaymentDetailsRow (already exists from UnityService.paymentDetails):
+  - id?: number
+  - or_no?: string|number|null
+  - invoice_number?: string|number|null
+  - subtotal_order: number
+  - description: string
+  - or_date?: string
+  - posted_at?: string
+  - status: 'Paid' | string
+  - method?: string
+  - sy_reference?: string|number
+- CashierResolution (existing):
+  - myCashier: { id: number, or?: { start?: number, end?: number, current?: number }, invoice?: { start?: number, end?: number, current?: number } } | null
 
-Validation rules (UI-level):
-- paymentType: one of 'full' or 'partial'
-- tuition_year: integer ID present in tuitionYearOptions
-- allow_enroll, downpayment: 0 or 1
-- intROG: integer in [0..4]
+Validation rules:
+- type must be 'or' or 'invoice'
+- customNumber is optional; if provided, must be positive integer within cashier’s allowed range (client-side soft check; backend authoritative)
+- payment must be a valid payment_details row lacking the corresponding number type (e.g., no or_no for assigning OR, no invoice_number for assigning Invoice)
 
 [Files]
-We will create a new Cashier feature folder, move/rename the viewer controller and template, register a new route, update navigation, and enforce role-based edit flags.
+Add a button in the Payments table and integrate a Tailwind modal; adjust the controller to handle state and API interaction.
 
 - New files to be created:
-  - frontend/unity-spa/features/finance/cashier-viewer/cashier-viewer.controller.js
-    - Purpose: AngularJS controller renamed to CashierViewerController; content primarily sourced from registration-viewer.controller.js with minimal changes: inject RoleService, compute vm.canEdit, guard update paths and UI interactions when read-only.
-  - frontend/unity-spa/features/finance/cashier-viewer/cashier-viewer.html
-    - Purpose: Template cloned from registration-viewer.html, adjusted for controller binding and read-only UI states (disable inputs and Save button if !vm.canEdit), ensure labels remain appropriate for Cashier.
+  - None required (the existing assign-number-modal.html won’t be used as-is due to Bootstrap; a Tailwind modal will be embedded in cashier-viewer.html)
 
 - Existing files to be modified:
-  - frontend/unity-spa/core/routes.js
-    - Add route: /finance/cashier/:id → templateUrl features/finance/cashier-viewer/cashier-viewer.html, controller CashierViewerController, requiredRoles: ['finance', 'registrar', 'admin'] (to allow Registrar read-only access).
-    - Remove the old /registrar/registration/:id route entry (no backward compatibility redirect).
-  - frontend/unity-spa/shared/components/sidebar/sidebar.html
-    - Replace the Registration Viewer link pointing to #/registrar/registration/0 with new Cashier link #/finance/cashier/0.
-    - Update visibility gating to vm.canAccess('/finance/cashier').
-    - Update active-class checks to /finance/cashier.
-  - frontend/unity-spa/features/unity/unity.service.js
-    - No code changes. Listed here for awareness only (endpoints used as-is).
-  - frontend/unity-spa/core/roles.constants.js
-    - No change required to ACCESS_MATRIX since route.requiredRoles has priority. Keep '^/finance/.*$' entry as-is so other Finance routes remain Finance/Admin-only.
+  - frontend/unity-spa/features/finance/cashier-viewer/cashier-viewer.html
+    - Add per-row “Assign Number” action button in the Payments table rows where assignment is applicable.
+    - Add a new modal overlay (Angular ng-if block) for Assign Number, visually consistent with existing modals (Tuition/Invoice modals).
+    - Modal fields: Type radio (OR/Invoice), read-only next-available info based on vm.myCashier, optional custom number input, validation/display messages, Cancel/Confirm buttons.
+  - frontend/unity-spa/features/finance/cashier-viewer/cashier-viewer.controller.js
+    - Add UI state: vm.ui.showAssignNumberModal
+    - Add model: vm.assignNumber = { type: null, customNumber: null }
+    - Add context: vm.assignNumberPayment = null, vm.assignNumberError = null
+    - Add loading flag: vm.loading.assignNumber = false
+    - Add functions:
+      - vm.canShowAssignButton(p): boolean — returns true when current user can edit, a cashier is resolved, payment row exists, and the selected number type is missing (logic: show if p has neither or_no nor invoice_number, or at least the target type is missing)
+      - vm.openAssignNumberModal(payment, preferredType?): void
+      - vm.closeAssignNumberModal(): void
+      - vm.hasAvailableNumbers(): boolean — checks vm.myCashier.{or|invoice}.current and range presence
+      - vm.canAssignNumber(): boolean — validate type, cashier present, and payment row present
+      - vm.confirmAssignNumber(): Promise<void> — call service to assign number and refresh UI
+    - Add API integration: use Admin Payment Details service endpoint to assign number (see Dependencies). Fallback to a generic PUT/PATCH against a dedicated endpoint if provided.
 
-- Files to be deleted or moved
-  - Do not delete existing Registrar viewer files to preserve history; instead, the code is duplicated into the new Cashier viewer location. If desired in a later cleanup task, we can remove the Registrar viewer files once the team confirms no longer needed.
-  - Alternatively (optional future task): replace Registrar link with a clear message or remove the route entirely to prevent usage.
+- Files to be deleted or moved:
+  - None
 
-- Configuration updates
-  - None required.
+- Configuration file updates:
+  - None
 
 [Functions]
-We keep most functions intact but add role-based guards and rename the controller.
+Add controller functions to drive the Assign Number UX and API call.
 
 - New functions:
-  - CashierViewerController.canEdit (boolean property, computed once at bootstrap from RoleService.hasAny(['finance','admin']))
-    - File: frontend/unity-spa/features/finance/cashier-viewer/cashier-viewer.controller.js
-    - Purpose: Feature gating for edit actions.
+  - openAssignNumberModal(payment: PaymentDetailsRow, preferredType?: 'or'|'invoice'): void
+    - Purpose: Initialize vm.assignNumberPayment with the chosen payment row, preselect type based on current vm.payment.mode (if meaningful) or leave null, then set vm.ui.showAssignNumberModal = true.
+  - closeAssignNumberModal(): void
+    - Purpose: Reset assign-number state and close modal.
+  - hasAvailableNumbers(): boolean
+    - Purpose: Check current type selection against vm.myCashier sequences; truthy when a current value exists.
+  - canAssignNumber(): boolean
+    - Purpose: Guard confirm button; requires canEdit, myCashier set, a payment selected, a type selected, and either next-available exists or a valid custom number is entered.
+  - confirmAssignNumber(): Promise<void>
+    - Purpose: Build payload { type: 'or'|'invoice', number?: customNumber } and submit via service; on success: close modal; refresh payment details and recompute caps/totals.
 
 - Modified functions:
-  - updateRegistration (existing)
-    - File: cashier-viewer.controller.js
-    - Change: early-return if !vm.canEdit to enforce read-only for Registrar; also ensure Save UI honors vm.canEdit.
-  - onOptionChange (existing)
-    - File: cashier-viewer.controller.js
-    - Change: guard: if !vm.canEdit return; prevents firing update flows for read-only roles.
-  - Controller bootstrap (existing sequence)
-    - File: cashier-viewer.controller.js
-    - Change: inject RoleService and compute vm.canEdit at start; otherwise logic unchanged.
-  - UI bindings in cashier-viewer.html
-    - Disable controls and Save button when !vm.canEdit.
-    - Ensure "View Breakdown" stays enabled for all roles if breakdown exists.
+  - loadPaymentDetails(force): no signature changes; after successful assignment, call with force=true in confirmAssignNumber flow to refresh table.
+  - recomputeInvoicesPayments(): will naturally re-run after loadPaymentDetails(true).
+  - computeInvoiceRemaining(): ensure recalc if current selection is linked to an invoice, after assignment.
 
 - Removed functions:
-  - None.
+  - None
 
 [Classes]
-AngularJS controllers are function-based; we are introducing a new named controller to reflect the feature move.
+No class changes are required (AngularJS controller functions only).
 
 - New classes:
-  - CashierViewerController (AngularJS controller)
-    - File: frontend/unity-spa/features/finance/cashier-viewer/cashier-viewer.controller.js
-    - Inherits: none (function-based)
-    - Key methods: loadStudent, loadStudents, loadRegistration, loadTuition, loadLedger, loadPaymentDetails, loadRecords, updateRegistration, onOptionChange, refreshTuitionSummary, tuitionPayload, installmentPreview, openTuitionModal, closeTuitionModal.
+  - None
 
 - Modified classes:
-  - N/A (renamed from RegistrationViewerController; retains methods with added guards).
+  - None
 
 - Removed classes:
-  - None.
+  - None
 
 [Dependencies]
-No new package dependencies.
+No new package dependencies. Use existing Admin Payment Details service or UnityService if it exposes a suitable endpoint.
 
-- AngularJS services used remain the same: $http, $q, $rootScope, $scope, $timeout, $routeParams, $location, APP_CONFIG, StorageService, UnityService, TermService, TuitionYearsService, StudentsService, plus RoleService (new injection).
-- Backend Laravel API endpoints unchanged.
+- Expected API integration:
+  - Prefer a Payment Details API to assign a number:
+    - Endpoint example: PATCH /api/v1/payment-details/{id}/assign-number
+    - Payload: { type: 'or'|'invoice', number?: integer }
+    - Response: updated payment_details row
+  - If not present, use an existing service under features/admin/payment-details/payment-details.service.js, e.g., PaymentDetailsService.assignNumber(id, payload).
+  - If neither exists, implement a fallback using $http.patch with the known backend route (to be validated during implementation).
 
 [Testing]
-Manual end-to-end testing across role types with existing local dev stack.
+Manual testing in the SPA to validate number assignment and UI refresh.
 
-- Scenarios:
-  1) Finance user (or Admin):
-     - Navigate to #/finance/cashier/0 → select a student and term → verify registration options are enabled; making changes triggers updateRegistration and tuition-save flow; saved tuition snapshot source label flips to Saved when available.
-     - Verify Amount Paid and Remaining compute correctly via payment details and ledger fallbacks.
-  2) Registrar user:
-     - Navigate to #/finance/cashier/0 → verify controls (Payment Type, Tuition Year, Allow Enroll, Downpayment, ROG Status, Save) are disabled and no update requests are sent; read-only viewing works (tuition, payments, ledger, records).
-  3) Sidebar Navigation:
-     - Cashier link now points to #/finance/cashier/0; visibility follows canAccess('/finance/cashier'). Active state highlights when at /finance/cashier route.
-  4) Route Guarding:
-     - Confirm Registrar can access /finance/cashier/:id due to route.requiredRoles overriding ACCESS_MATRIX.
-     - Confirm non-authorized roles cannot access the page (e.g., faculty-only without admin/registrar/finance).
-  5) Regression:
-     - Old Registrar path /registrar/registration/:id is removed. Ensure no menu/link still references it. If attempting to navigate, user should not find a matching route (intended by design; no redirect per requirement).
+- Tests:
+  - Payment row without or_no/invoice_number shows “Assign Number” button (for Finance/Admin and when myCashier resolved).
+  - Clicking button opens modal; type selection and next-available numbers display correctly.
+  - Entering a custom number works; leaving blank uses next available.
+  - Confirm assigns the number; row updates with new or_no or invoice_number; totals unchanged except constraints (no regression).
+  - For invoice-linked payments, ensure invoice remaining caps recalculate as expected post-refresh.
+  - Guard rails:
+    - No button for users without canEdit or without myCashier.
+    - No button when both or_no and invoice_number already set.
+    - Error message shows when backend fails; modal remains open and allows retry/cancel.
 
 [Implementation Order]
-We will implement changes in a sequence to keep the app running and easy to verify.
+Implement UI changes and controller wiring before wiring API call, then test end-to-end.
 
-1) Create new files under features/finance/cashier-viewer/:
-   - cashier-viewer.controller.js (copy contents from RegistrationViewerController, rename controller, inject RoleService, add vm.canEdit and guards)
-   - cashier-viewer.html (copy template, change controller binding if necessary via route; add ng-disabled/guards tied to vm.canEdit)
-2) Update routes.js:
-   - Add .when('/finance/cashier/:id', { templateUrl: 'features/finance/cashier-viewer/cashier-viewer.html', controller: 'CashierViewerController', controllerAs: 'vm', requiredRoles: ['finance', 'registrar', 'admin'] })
-   - Remove the .when('/registrar/registration/:id', ...) block (no backward compatibility).
-3) Update sidebar.html:
-   - Change the Registration Viewer link to: href="#/finance/cashier/0", ng-if to vm.canAccess('/finance/cashier'), and active checks to /finance/cashier.
-4) Verify Role Access:
-   - No changes to roles.constants.js required (route.requiredRoles takes priority). Confirm with RoleService.canAccess logic.
-5) Verify UI Read-only:
-   - Ensure selections and Save button are disabled (ng-disabled="!vm.canEdit"); ensure onOptionChange respects vm.canEdit.
-6) Run manual tests across roles outlined above.
+1. Controller state: add vm.ui.showAssignNumberModal, vm.assignNumber, vm.assignNumberPayment, vm.assignNumberError, vm.loading.assignNumber.
+2. Controller functions: openAssignNumberModal, closeAssignNumberModal, hasAvailableNumbers, canAssignNumber, confirmAssignNumber (with empty $http call stub initially).
+3. HTML: add per-row “Assign Number” button in the Payments table; add a Tailwind modal block similar to existing modals (ng-if on vm.ui.showAssignNumberModal).
+4. Wire API call in confirmAssignNumber using the appropriate service or $http to backend endpoint; handle success/error, close modal, refresh payment details, recompute caps.
+5. Manual validation across different payment rows and roles.

@@ -315,19 +315,19 @@ class InvoiceController extends Controller
         $old = $this->svc->get($id);
 
         // Enforce unique invoice_number if provided
-        if (array_key_exists('invoice_number', $v) && $v['invoice_number'] !== null && $v['invoice_number'] !== '') {
-            $dup = DB::table('tb_mas_invoices')
-                ->where('invoice_number', (int) $v['invoice_number'])
-                ->where('intID', '!=', $id)
-                ->exists();
-            if ($dup) {
-                return response()->json([
-                    'success' => false,
-                    'code'    => 'DUPLICATE_INVOICE_NUMBER',
-                    'message' => 'Invoice number already exists.',
-                ], 422);
-            }
-        }
+        // if (array_key_exists('invoice_number', $v) && $v['invoice_number'] !== null && $v['invoice_number'] !== '') {
+        //     $dup = DB::table('tb_mas_invoices')
+        //         ->where('invoice_number', (int) $v['invoice_number'])
+        //         ->where('intID', '!=', $id)
+        //         ->exists();
+        //     if ($dup) {
+        //         return response()->json([
+        //             'success' => false,
+        //             'code'    => 'DUPLICATE_INVOICE_NUMBER',
+        //             'message' => 'Invoice number already exists.',
+        //         ], 422);
+        //     }
+        // }
 
         $update = [];
         foreach (['status','posted_at','due_at','remarks','campus_id','cashier_id'] as $f) {

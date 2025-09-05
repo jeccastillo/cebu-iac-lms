@@ -132,21 +132,58 @@
       if (!angular.isArray(terms)) return [];
       var copy = terms.slice();
       copy.sort(function (a, b) {
-        var ay = normalizeId(a.syid);
-        var by = normalizeId(b.syid);
-        if (ay != null && by != null && ay !== by) return ay - by;
-
-        // fallback by textual year start parsed from first record if ids equal or missing
+        // Prefer ordering by school year start, then by numeric semester (1,2,3,4). Ignore intID/syid.
         var ar = (a.records && a.records[0]) ? a.records[0] : null;
         var br = (b.records && b.records[0]) ? b.records[0] : null;
-        var ayStart = _yearStartFromRow(ar);
-        var byStart = _yearStartFromRow(br);
+  
+        function parseYearStart(text) {
+          if (!text) return null;
+          var m = ('' + text).match(/(\d{4})\s*-\s*\d{4}/);
+          if (m) return parseInt(m[1], 10);
+          var m2 = ('' + text).match(/(\d{4})/);
+          return m2 ? parseInt(m2[1], 10) : null;
+        }
+        function yearStartFromTerm(t, r) {
+          // First try explicit fields from the first record (most reliable)
+          var ys = _yearStartFromRow(r);
+          if (ys != null) return ys;
+          // Fall back to school_year or textual term/label
+          var syText = t && (t.school_year || t.schoolYear || t.sy_text || t.sy || null);
+          if (syText) {
+            var n = parseYearStart(syText);
+            if (n != null) return n;
+          }
+          var lbl = t && (t.term || t.label) ? ('' + (t.term || t.label)) : null;
+          return parseYearStart(lbl);
+        }
+        function semNumberFrom(t, r) {
+          // Prefer numeric from record
+          if (r && r.enumSem != null) {
+            var n1 = parseInt(r.enumSem, 10);
+            if (!isNaN(n1)) return n1;
+          }
+          if (r && r.intSem != null) {
+            var n2 = parseInt(r.intSem, 10);
+            if (!isNaN(n2)) return n2;
+          }
+          // Fallback to label text
+          var lbl = t && (t.term || t.label) ? ('' + (t.term || t.label)).toLowerCase() : '';
+          if (lbl.indexOf('summer') !== -1) return 4;
+          if (lbl.indexOf('1st') !== -1 || lbl.indexOf('first') !== -1 || lbl.indexOf('1 ') === 0) return 1;
+          if (lbl.indexOf('2nd') !== -1 || lbl.indexOf('second') !== -1 || lbl.indexOf('2 ') === 0) return 2;
+          if (lbl.indexOf('3rd') !== -1 || lbl.indexOf('third') !== -1 || lbl.indexOf('3 ') === 0) return 3;
+          return null;
+        }
+  
+        var ayStart = yearStartFromTerm(a, ar);
+        var byStart = yearStartFromTerm(b, br);
         if (ayStart != null && byStart != null && ayStart !== byStart) return ayStart - byStart;
-
-        // within year, order by perceived term order using label/term
-        var at = _termOrder(a.term || a.label);
-        var bt = _termOrder(b.term || b.label);
-        if (at !== bt) return at - bt;
+  
+        var as = semNumberFrom(a, ar);
+        var bs = semNumberFrom(b, br);
+        if (as != null && bs != null && as !== bs) return as - bs;
+  
+        // Stable fallback
         return 0;
       });
       return copy;
@@ -218,7 +255,9 @@
           if (resp && resp.data && resp.data.success !== false) {
             var data = resp.data.data || resp.data;
             data = deriveTermsShapeIfFlat(data) || {};
-            vm.terms = sortTerms(data.terms || []).map(function (t) {
+            // First decorate each term to ensure we have a friendly label with year text,
+            // then perform ordering using year start and numeric semester.
+            var decorated = (data.terms || []).map(function (t) {
               var r = (t.records && t.records[0]) ? t.records[0] : null;
               var ys = r ? (r.strYearStart || r.year_start || r.sy_year_start) : null;
               var ye = r ? (r.strYearEnd || r.year_end || r.sy_year_end) : null;
@@ -231,6 +270,7 @@
               }
               return t;
             });
+            vm.terms = sortTerms(decorated);
             computeSummary(vm.terms);
           } else {
             vm.error.records = 'Failed to load records.';

@@ -51,6 +51,7 @@ class ApplicantController extends Controller
                 DB::raw('COALESCE(u.student_type, \'\') as student_type'),
                 DB::raw('COALESCE(u.dteCreated, NULL) as dteCreated'),
                 'ad.status',
+                DB::raw('COALESCE(ad.interviewed, 0) as interviewed'),
                 'ad.created_at as application_created_at',
             ]);        
         // Filter: restrict to users tagged as applicant when schema supports it
@@ -231,6 +232,23 @@ class ApplicantController extends Controller
         $waiveReason = isset($appData->waive_reason) ? (string) $appData->waive_reason : null;
         $waivedAt = isset($appData->waived_at) ? $appData->waived_at : null;
 
+        // Interview summary (optional; safe if table not present)
+        $interviewSummary = null;
+        try {
+            $intv = DB::table('tb_mas_applicant_interviews')
+                ->where('applicant_data_id', $appData->id)
+                ->first();
+            if ($intv) {
+                $interviewSummary = [
+                    'scheduled_at' => isset($intv->scheduled_at) ? (string) $intv->scheduled_at : null,
+                    'assessment'   => isset($intv->assessment) ? (string) $intv->assessment : null,
+                    'completed_at' => isset($intv->completed_at) ? (string) $intv->completed_at : null,
+                ];
+            }
+        } catch (\Throwable $e) {
+            $interviewSummary = null;
+        }
+
         return response()->json([
             'success' => true,
             'data' => [
@@ -239,6 +257,8 @@ class ApplicantController extends Controller
                 'applicant_data' => $decoded,
                 'created_at' => $appData->created_at ?? null,
                 'updated_at' => $appData->updated_at ?? null,
+                'hash' => $appData->hash ?? null,
+                'applicant_data_id' => isset($appData->id) ? (int) $appData->id : null,
                 // New surfaced fields
                 'applicant_type' => $applicantTypeId,
                 'applicant_type_name' => $applicantTypeName,
@@ -248,6 +268,11 @@ class ApplicantController extends Controller
                 'waive_application_fee' => $waiveApplicationFee,
                 'waive_reason' => $waiveReason,
                 'waived_at' => $waivedAt,
+                // Term id of latest applicant_data (nullable)
+                'syid' => isset($appData->syid) ? (int) $appData->syid : null,
+                // Interview flags
+                'interviewed' => isset($appData->interviewed) ? (bool) $appData->interviewed : false,
+                'interview_summary' => $interviewSummary,
             ],
         ]);
     }

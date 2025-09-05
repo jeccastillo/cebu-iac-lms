@@ -246,7 +246,17 @@
       $http.post(APP_CONFIG.API_BASE + '/admissions/student-info', payload)
         .then(function (resp) {
           if (resp && resp.data && resp.data.success) {
-            $location.path('/admissions/success');
+            var hash = null;
+            try {
+              hash = (resp.data && resp.data.data && resp.data.data.hash) || null;
+            } catch (e) {
+              hash = null;
+            }
+            if (hash) {
+              $location.path('/admissions/success').search({ hash: hash });
+            } else {
+              $location.path('/admissions/success');
+            }
           } else {
             vm.error = (resp && resp.data && resp.data.message) || 'Submission failed.';
           }

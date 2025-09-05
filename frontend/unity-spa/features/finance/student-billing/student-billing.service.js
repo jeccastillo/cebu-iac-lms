@@ -34,7 +34,6 @@
     function _paramsFromFilters(filters) {
       var p = {};
       if (!filters) return p;
-      if (filters.student_number) p.student_number = filters.student_number;
       if (filters.student_id !== null && filters.student_id !== undefined && filters.student_id !== '') {
         var sid = parseInt(filters.student_id, 10);
         if (!isNaN(sid)) p.student_id = sid;
@@ -47,7 +46,7 @@
     }
 
     return {
-      // GET /finance/student-billing?student_number|student_id&term
+      // GET /finance/student-billing?student_id&amp;term
       list: function (filters) {
         var cfg = _headers();
         cfg.params = _paramsFromFilters(filters);

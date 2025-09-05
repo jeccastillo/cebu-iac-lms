@@ -7,6 +7,7 @@ use App\Http\Requests\Api\V1\CashierStoreRequest;
 use App\Http\Requests\Api\V1\CashierUpdateRequest;
 use App\Http\Requests\Api\V1\CashierRangeUpdateRequest;
 use App\Http\Requests\Api\V1\CashierPaymentStoreRequest;
+use App\Http\Requests\Api\V1\CashierPaymentAssignNumberRequest;
 use App\Models\Cashier;
 use App\Services\CashierService;
 use Illuminate\Http\Request;
@@ -530,6 +531,174 @@ class CashierController extends Controller
     }
 
     /**
+     * POST /api/v1/cashiers/{cashier}/payments/{payment}/assign-number
+     * Assign an OR or Invoice number to a payment that was created with mode='none'
+     */
+    public function assignNumber($cashierId, $paymentId, CashierPaymentAssignNumberRequest $request)
+    {
+        $cashier = Cashier::findOrFail((int)$cashierId);
+        $payload = $request->validated();
+        
+        $type = (string) $payload['type']; // 'or' or 'invoice'
+        $specificNumber = isset($payload['number']) ? (int) $payload['number'] : null;
+        
+        // Ensure payment_details table exists
+        if (!Schema::hasTable('payment_details')) {
+            throw ValidationException::withMessages([
+                'payment_details' => ['payment_details table not found']
+            ]);
+        }
+        
+        // Get the payment record
+        $payment = DB::table('payment_details')
+            ->where('intID', (int)$paymentId)
+            ->first();
+            
+        if (!$payment) {
+            throw ValidationException::withMessages([
+                'payment' => ['Payment not found']
+            ]);
+        }
+        
+        // Determine the number column based on type
+        $numberCol = null;
+        if ($type === 'invoice') {
+            if (Schema::hasColumn('payment_details', 'invoice_number')) {
+                $numberCol = 'invoice_number';
+            }
+        } else {
+            if (Schema::hasColumn('payment_details', 'or_no')) {
+                $numberCol = 'or_no';
+            } elseif (Schema::hasColumn('payment_details', 'or_number')) {
+                $numberCol = 'or_number';
+            }
+        }
+        
+        if ($numberCol === null) {
+            throw ValidationException::withMessages([
+                'type' => ['Number column not available in payment_details for selected type']
+            ]);
+        }
+        
+        // Check if payment already has a number assigned
+        if (isset($payment->{$numberCol}) && $payment->{$numberCol} !== null && $payment->{$numberCol} !== '') {
+            throw ValidationException::withMessages([
+                'payment' => ['Payment already has a ' . strtoupper($type) . ' number assigned: ' . $payment->{$numberCol}]
+            ]);
+        }
+        
+        // Determine the number to assign
+        $numberToAssign = null;
+        
+        if ($specificNumber !== null) {
+            // Use specific number if provided
+            $numberToAssign = $specificNumber;
+            
+            // Validate the number is within cashier's range
+            $start = $type === 'invoice' ? (int) ($cashier->invoice_start ?? 0) : (int) ($cashier->or_start ?? 0);
+            $end = $type === 'invoice' ? (int) ($cashier->invoice_end ?? 0) : (int) ($cashier->or_end ?? 0);
+            
+            if ($start <= 0 || $end <= 0 || $numberToAssign < $start || $numberToAssign > $end) {
+                throw ValidationException::withMessages([
+                    'number' => ['Number must be within cashier\'s configured range (' . $start . '-' . $end . ')']
+                ]);
+            }
+            
+            // Check if number is already used
+            $usage = $this->svc->validateRangeUsage($type, $numberToAssign, $numberToAssign);
+            if (!$usage['ok']) {
+                throw ValidationException::withMessages([
+                    'number' => ['Number already used', $usage]
+                ]);
+            }
+        } else {
+            // Use next available number from cashier's sequence
+            $start = $type === 'invoice' ? (int) ($cashier->invoice_start ?? 0) : (int) ($cashier->or_start ?? 0);
+            $end = $type === 'invoice' ? (int) ($cashier->invoice_end ?? 0) : (int) ($cashier->or_end ?? 0);
+            $current = $type === 'invoice' ? (int) ($cashier->invoice_current ?? 0) : (int) ($cashier->or_current ?? 0);
+            
+            if ($start <= 0 || $end <= 0 || $end < $start) {
+                throw ValidationException::withMessages([
+                    'range' => ['Cashier range is not properly configured for ' . strtoupper($type)]
+                ]);
+            }
+            
+            if ($current <= 0 || $current < $start || $current > $end) {
+                throw ValidationException::withMessages([
+                    'current' => ['Current pointer is not properly set for ' . strtoupper($type)]
+                ]);
+            }
+            
+            // Check if we have numbers available
+            if ($current > $end) {
+                throw ValidationException::withMessages([
+                    'range' => ['No more numbers available in cashier\'s ' . strtoupper($type) . ' range']
+                ]);
+            }
+            
+            $numberToAssign = $current;
+            
+            // Validate the number is not already used
+            $usage = $this->svc->validateRangeUsage($type, $numberToAssign, $numberToAssign);
+            if (!$usage['ok']) {
+                throw ValidationException::withMessages([
+                    'number' => ['Next number in sequence already used', $usage]
+                ]);
+            }
+        }
+        
+        // Store old value for logging
+        $oldValue = [
+            $numberCol => null
+        ];
+        
+        // Transaction: update payment and increment counter if using sequence
+        DB::transaction(function () use ($payment, $numberCol, $numberToAssign, $cashier, $type, $specificNumber, $paymentId) {
+            // Update the payment with the new number
+            DB::table('payment_details')
+                ->where('intID', (int)$paymentId)
+                ->update([
+                    $numberCol => $numberToAssign,
+                    'updated_at' => now()
+                ]);
+            
+            // If we used the cashier's sequence (not a specific number), increment the counter
+            if ($specificNumber === null) {
+                if ($type === 'invoice') {
+                    $cashier->invoice_current = (int) $cashier->invoice_current + 1;
+                } else {
+                    $cashier->or_current = (int) $cashier->or_current + 1;
+                }
+                $cashier->save();
+            }
+        });
+        
+        // Get updated payment for logging
+        $updatedPayment = DB::table('payment_details')
+            ->where('intID', (int)$paymentId)
+            ->first();
+        
+        $newValue = [
+            $numberCol => $numberToAssign
+        ];
+        
+        // System log: assign number to payment
+        SystemLogService::log('assign_number', 'PaymentDetail', (int) $paymentId, $oldValue, $newValue, $request);
+        
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'payment_id' => (int) $paymentId,
+                'type' => $type,
+                'number_assigned' => $numberToAssign,
+                'cashier_id' => (int) $cashier->intID,
+                'auto_increment' => $specificNumber === null
+            ],
+            'message' => strtoupper($type) . ' number ' . $numberToAssign . ' successfully assigned to payment'
+        ]);
+    }
+
+    /**
      * POST /api/v1/cashiers/{id}/payments
      * Create a payment_details row using the cashier's next OR/Invoice number and increment the pointer.
      */
@@ -549,7 +718,8 @@ class CashierController extends Controller
         $requestId = isset($payload['requestId']) ? $payload['convenience_fee'] : $randomString;
         $conFee  =   isset($payload['convenience_fee']) ? $payload['convenience_fee'] : 0;
         $syid      = (int) $payload['term']; // sy_reference will store SYID (per instruction)
-        $mode      = ($payload['mode'] === 'invoice') ? 'invoice' : 'or';
+        $modeIn    = (string) $payload['mode'];
+        $mode      = in_array($modeIn, ['or','invoice','none'], true) ? $modeIn : 'or';
         $amount    = (float) $payload['amount'];
         $desc      = (string) $payload['description'];
         $remarks   = (string) $payload['remarks'];
@@ -613,7 +783,7 @@ class CashierController extends Controller
                 $numberCol = 'or_number';
             }
         }
-        if ($numberCol === null) {
+        if ($numberCol === null && $mode !== 'none') {
             throw ValidationException::withMessages([
                 'mode' => ['Number column not available in payment_details for selected mode']
             ]);
@@ -637,9 +807,9 @@ class CashierController extends Controller
                 // if we cannot determine, do not skip to be safe                
             }
         }   
-        // Determine pointers and range (skip when we're using invoice number for first payment)
+        // Determine pointers and range (skip when we're using invoice number for first payment or mode is none)
         $current = null;
-        if (!$skipOrAndUseInvoice) {
+        if ($mode !== 'none' && !$skipOrAndUseInvoice) {
             $start   = $mode === 'invoice' ? (int) ($row->invoice_start ?? 0) : (int) ($row->or_start ?? 0);
             $end     = $mode === 'invoice' ? (int) ($row->invoice_end ?? 0)   : (int) ($row->or_end ?? 0);
             $current = $mode === 'invoice' ? (int) ($row->invoice_current ?? 0) : (int) ($row->or_current ?? 0);
@@ -779,11 +949,15 @@ class CashierController extends Controller
             'request_id'             => $requestId,
             'slug'                   => '',
         ];
-        // number column is OR or invoice depending on rules above
-        if ($skipOrAndUseInvoice) {            
-            $insert[$numberCol] = (int) $invoiceNumberRef;
+        // number column handling
+        if ($mode === 'none') {
+            // no primary number assigned at creation time
         } else {
-            $insert[$numberCol] = (int) $current;
+            if ($skipOrAndUseInvoice) {
+                $insert[$numberCol] = (int) $invoiceNumberRef;
+            } else {
+                $insert[$numberCol] = (int) $current;
+            }
         }
         if ($methodCol && $methodIn !== null) {
             $insert[$methodCol] = $methodIn;
@@ -880,6 +1054,127 @@ class CashierController extends Controller
             $normalized = null;
         }
         SystemLogService::log('create', 'PaymentDetail', (int) $idInserted, null, $normalized ?? $insert, $request);
+
+        // Post-payment hook: update applicant_data payment flags based on description
+        try {
+            if (Schema::hasTable('tb_mas_applicant_data')) {
+                $descNorm = strtolower(trim((string) $desc));
+                $isApp = in_array($descNorm, ['application payment','application fee'], true) || str_contains($descNorm, 'application');
+                $isRes = in_array($descNorm, ['reservation payment'], true) || str_contains($descNorm, 'reservation');
+                $isTuition = in_array($descNorm, ['tuition payment','tuition fee'], true) || str_contains($descNorm, 'tuition');
+                $tuitionFlag = false;
+
+                $updates = [];
+                if ($isApp && Schema::hasColumn('tb_mas_applicant_data','paid_application_fee')) {
+                    $updates['paid_application_fee'] = 1;
+                }
+                if ($isRes && Schema::hasColumn('tb_mas_applicant_data','paid_reservation_fee')) {
+                    $updates['paid_reservation_fee'] = 1;
+                    $updates['status'] = "Reserved";     
+                    $usrUpdates['student_status'] = "active";                      
+                    //Set User to active
+                    $applicantData = DB::table('tb_mas_applicant_data')
+                        ->where('user_id', $studentId)
+                        ->where('syid', $syid)
+                        ->first();
+                    if($applicantData)
+                        $usrUpdates['strStudentNumber'] = "T".date("Y").$applicantData->id;
+                    DB::table('tb_mas_users')
+                    ->where('intID', $studentId)                    
+                    ->update($usrUpdates);
+                }
+                if($isTuition){
+                    
+                    $regData = DB::table('tb_mas_registration')
+                        ->where('intStudentID', $studentId)
+                        ->where('intAYID', $syid)
+                        ->first();
+
+                    if($regData->enrollment_status != "enrolled"){
+                        $regUpdates['date_enrolled'] = date("Y-m-d H:i:s");
+                        $regUpdates['enrollment_status'] = "enrolled";
+                        $updates['status'] = "Enrolled";
+                        $tuitionFlag = true;
+                        DB::table('tb_mas_registration')
+                            ->where('intStudentID', $studentId)                    
+                            ->update($regUpdates);
+                    }
+                }
+
+                if (!empty($updates)) {
+                    $updates['updated_at'] = now();
+
+                    $affected = 0;
+                    if (Schema::hasColumn('tb_mas_applicant_data','syid') && $syid > 0) {
+                        $affected = DB::table('tb_mas_applicant_data')
+                            ->where('user_id', $studentId)
+                            ->where('syid', $syid)
+                            ->update($updates);
+                    }
+
+                    if ($affected === 0) {
+                        $latest = DB::table('tb_mas_applicant_data')
+                            ->where('user_id', $studentId)
+                            ->orderByDesc('id')
+                            ->first();
+                        if ($latest && isset($latest->id)) {
+                            DB::table('tb_mas_applicant_data')
+                                ->where('id', $latest->id)
+                                ->update($updates);
+                        }
+                    }
+
+                    // Non-blocking system log for applicant flags update
+                    try {
+                        SystemLogService::log(
+                            'update',
+                            'ApplicantPaymentFlag',
+                            (int) $studentId,
+                            null,
+                            array_merge(['syid' => $syid], $updates),
+                            $request
+                        );
+                    } catch (\Throwable $e2) {
+                        // ignore log failure
+                    }
+
+                    // Journey logs: payment-related milestones
+                    try {
+                        // Resolve applicant_data row to attach logs
+                        $target = DB::table('tb_mas_applicant_data')->where('user_id', $studentId);
+                        if (Schema::hasColumn('tb_mas_applicant_data','syid') && $syid > 0) {
+                            $target = $target->where('syid', $syid);
+                        }
+                        $appRow = $target->orderByDesc('id')->first();
+                        if (!$appRow) {
+                            $appRow = DB::table('tb_mas_applicant_data')
+                                ->where('user_id', $studentId)
+                                ->orderByDesc('id')
+                                ->first();
+                        }
+
+                        if ($appRow && isset($appRow->id)) {
+                            if ($isApp) {
+                                app(\App\Services\ApplicantJourneyService::class)
+                                    ->log((int) $appRow->id, 'Student paid application fee');
+                            }
+                            if ($isRes && isset($updates['status']) && $updates['status'] === 'Reserved') {
+                                app(\App\Services\ApplicantJourneyService::class)
+                                    ->log((int) $appRow->id, 'Status was changed to Reserved');
+                            }
+                            if ($tuitionFlag && isset($updates['status']) && $updates['status'] === 'Enrolled'){
+                                app(\App\Services\ApplicantJourneyService::class)
+                                    ->log((int) $appRow->id, 'Status was changed to Enrolled');
+                            }
+                        }
+                    } catch (\Throwable $e3) {
+                        // ignore journey logging failures
+                    }
+                }
+            }
+        } catch (\Throwable $e) {
+            // do not interrupt payment creation on applicant update issues
+        }
 
         return response()->json([
             'success' => true,

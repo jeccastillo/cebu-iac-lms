@@ -343,7 +343,7 @@ class TuitionService
             if (Schema::hasTable('payment_details')) {
                 $amountPaid = (float) DB::table('payment_details')
                     ->where('student_information_id', $user->intID)
-                    ->where('sy_reference', $registration->intRegistrationID)
+                    ->where('sy_reference', $syid)
                     ->where('status', 'Paid')
                     ->where(function ($q) use ($billingDescriptions) {
                         $q->where('description', 'like', 'Tuition%')
@@ -355,7 +355,7 @@ class TuitionService
                     ->sum('subtotal_order');
             }
         } catch (\Throwable $e) {
-            // Silently ignore in environments without the table/columns
+            // Silently ignore in environments without the table/columns            
             $amountPaid = 0.0;
         }
 

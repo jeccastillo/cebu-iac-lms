@@ -46,6 +46,9 @@
           pui-item-key="id"
           pui-label="(item.student_number + ' — ' + item.last_name + ', ' + item.first_name + (item.middle_name ? (' ' + item.middle_name) : ''))"
           pui-on-select="vm.onStudentSelected()"
+          pui-min-chars="1"
+          pui-query-debounce="250"
+          pui-on-query="vm.onStudentQuery($query)"
         />
       </div>
       <div class="md:col-span-2 flex md:justify-end items-end">
@@ -118,16 +121,17 @@
                 </select>
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">ROG Status</label>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
                 <select
                   class="block w-full rounded border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  ng-model="vm.edit.intROG"
+                  ng-model="vm.edit.enrollment_status"
                   ng-options="v.value as v.label for v in [
-                    {value:0,label:'Enlisted'},
-                    {value:1,label:'Enrolled'},
-                    {value:2,label:'Dropped'},
-                    {value:3,label:'Withdrawn'},
-                    {value:4,label:'LOA'}
+                    {value:'enlisted',label:'enlisted'},
+                    {value:'enrolled',label:'enrolled'},
+                    {value:'loa',label:'loa'},
+                    {value:'withdrawn before',label:'withdrawn before'},
+                    {value:'withdrawn after',label:'withdrawn after'},
+                    {value:'withdrawn end',label:'withdrawn end'}                    
                   ]"
                   ng-change="vm.onOptionChange()">
                   <option value="">-- select --</option>
@@ -570,7 +574,167 @@
         </div>
       </div>
     </div>
+
+    <!-- Assign Number Modal (Tailwind) -->
+    <div ng-if="vm.ui && vm.ui.showAssignNumberModal" class="fixed inset-0 z-50 flex items-center justify-center">
+      <!-- Backdrop -->
+      <div class="absolute inset-0 bg-black bg-opacity-50" ng-click="vm.closeAssignNumberModal()"></div>
+      <!-- Dialog -->
+      <div class="relative bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 max-h-[80vh] overflow-auto"
+           ng-click="$event.stopPropagation()"
+           tabindex="0"
+           ng-keydown="$event.keyCode===27 && vm.closeAssignNumberModal()">
+        <div class="px-4 py-2 border-b flex items-center justify-between">
+          <h3 class="text-lg font-semibold">Assign Number to Payment</h3>
+          <button class="text-gray-600 hover:text-gray-800" ng-click="vm.closeAssignNumberModal()">
+            <i class="fas fa-times"></i>
+            <span class="sr-only">Close</span>
+          </button>
+        </div>
+
+        <div class="p-4 space-y-4">
+          <!-- Payment Info -->
+          <div class="mb-3 p-3 bg-gray-50 rounded" ng-if="vm.assignNumberPayment">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <small class="text-gray-500">Date:</small><br>
+                <strong>{{ vm.assignNumberPayment.or_date || vm.assignNumberPayment.posted_at || '' }}</strong>
+              </div>
+              <div class="text-right sm:text-left">
+                <small class="text-gray-500">Amount:</small><br>
+                <strong>P{{ vm.currency(vm.assignNumberPayment.subtotal_order) }}</strong>
+              </div>
+              <div class="sm:col-span-2">
+                <small class="text-gray-500">Description:</small><br>
+                <strong>{{ vm.assignNumberPayment.description }}</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Error Alert -->
+          <div class="rounded border border-red-200 bg-red-50 text-red-700 px-4 py-3" ng-if="vm.assignNumberError">
+            {{ vm.assignNumberError }}
+          </div>
+
+          <!-- Type Selection -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Number Type</label>
+            <div class="flex items-center gap-4">
+              <label class="inline-flex items-center">
+                <input class="mr-2" type="radio" name="assignNumberType"
+                       ng-model="vm.assignNumber.type" value="or"
+                       ng-disabled="vm.assignNumberPayment && vm.assignNumberPayment.or_no">
+                OR
+                <span class="text-xs text-gray-500 ml-2" ng-if="vm.assignNumberPayment && vm.assignNumberPayment.or_no">(already assigned)</span>
+              </label>
+              <label class="inline-flex items-center">
+                <input class="mr-2" type="radio" name="assignNumberType"
+                       ng-model="vm.assignNumber.type" value="invoice"
+                       ng-disabled="vm.assignNumberPayment && vm.assignNumberPayment.invoice_number">
+                Invoice
+                <span class="text-xs text-gray-500 ml-2" ng-if="vm.assignNumberPayment && vm.assignNumberPayment.invoice_number">(already assigned)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Invoice selection when assigning Invoice number -->
+          <div ng-if="vm.assignNumber.type === 'invoice' && vm.invoices && vm.invoices.length">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Select Invoice</label>
+            <select
+              class="block w-full rounded border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              ng-model="vm.assignNumber.selectedInvoiceId"
+              ng-options="inv.id as ((inv.invoice_number || inv.number) + ' — P' + vm.currency(inv.amount_total || inv.amount || inv.total || 0) + (inv._remaining != null ? (' — Rem P' + vm.currency(inv._remaining)) : '')) for inv in vm.invoices track by inv.id"
+              ng-change="vm.onAssignInvoiceSelected()">
+              <option value="">-- select invoice --</option>
+            </select>
+            <div class="text-xs text-gray-600 mt-1" ng-if="vm.assignNumber.selectedInvoiceId && vm.assignNumber.selectedInvoiceNumber">
+              Selected #: {{ vm.assignNumber.selectedInvoiceNumber }}
+            </div>
+          </div>
+
+          <!-- Next Available Number -->
+          <div class="rounded border border-blue-200 bg-blue-50 text-blue-700 px-3 py-2" ng-if="vm.assignNumber.type">
+            <div ng-if="vm.assignNumber.type === 'or'">
+              <strong>Next Available OR Number:</strong>
+              {{ (vm.myCashier && vm.myCashier.or && vm.myCashier.or.current) || 'N/A' }}
+              <span class="ml-2 text-xs opacity-80" ng-if="vm.myCashier && vm.myCashier.or && (vm.myCashier.or.start || vm.myCashier.or.end)">
+                (Range: {{ vm.myCashier.or.start || '—' }}–{{ vm.myCashier.or.end || '—' }})
+              </span>
+            </div>
+            <div ng-if="vm.assignNumber.type === 'invoice'">
+              <strong>Next Available Invoice Number:</strong>
+              {{ (vm.myCashier && vm.myCashier.invoice && vm.myCashier.invoice.current) || 'N/A' }}
+              <span class="ml-2 text-xs opacity-80" ng-if="vm.myCashier && vm.myCashier.invoice && (vm.myCashier.invoice.start || vm.myCashier.invoice.end)">
+                (Range: {{ vm.myCashier.invoice.start || '—' }}–{{ vm.myCashier.invoice.end || '—' }})
+              </span>
+            </div>
+          </div>
+
+          <!-- Custom Number -->
+          <div ng-if="vm.assignNumber.type">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Custom Number (Optional)</label>
+            <input type="number" class="block w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                   ng-model="vm.assignNumber.customNumber"
+                   placeholder="Leave blank to use next available number" />
+          </div>
+
+          <!-- Warning -->
+          <div class="rounded border border-amber-200 bg-amber-50 text-amber-800 px-3 py-2"
+               ng-if="vm.assignNumber.type && !vm.hasAvailableNumbers()">
+            No numbers available from your assigned range. Enter a custom number or check your assigned sequence.
+          </div>
+
+          <!-- Footer -->
+          <div class="pt-2 border-t flex items-center justify-end gap-2">
+            <button class="inline-flex items-center px-3 py-2 rounded border border-gray-300 text-gray-700 bg-white hover:bg-gray-50"
+                    ng-click="vm.closeAssignNumberModal()">
+              Cancel
+            </button>
+            <button class="inline-flex items-center px-3 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50"
+                    ng-click="vm.confirmAssignNumber()"
+                    ng-disabled="!vm.canAssignNumber() || vm.loading.assignNumber">
+              <span ng-if="!vm.loading.assignNumber">Assign</span>
+              <span ng-if="vm.loading.assignNumber"><i class="fas fa-spinner fa-spin"></i>&nbsp;Assigning...</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   
+    <!-- Application Fee (Applicants) -->
+    <div class="mt-6" ng-if="vm.canShowGenerateApplicationFee()">
+      <div class="rounded border border-amber-200 bg-amber-50 text-amber-800 px-4 py-3 mb-2">
+        Application fee billing and invoice not found for this term.
+      </div>
+      <div class="rounded border border-red-200 bg-red-50 text-red-700 px-4 py-3 mb-2" ng-if="vm.appFeeGenerateError">
+        {{ vm.appFeeGenerateError }}
+      </div>
+      <button
+        class="inline-flex items-center px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50"
+        ng-click="vm.generateApplicationPayment()"
+        ng-disabled="vm.generatingAppFee">
+        <span ng-if="!vm.generatingAppFee">Generate Application Fee</span>
+        <span ng-if="vm.generatingAppFee">Generating...</span>
+      </button>
+    </div>
+
+    <!-- Reservation Fee (Applicants) -->
+    <!-- <div class="mt-4" ng-if="vm.canShowGenerateReservationFee()">
+      <div class="rounded border border-amber-200 bg-amber-50 text-amber-800 px-4 py-3 mb-2">
+        Reservation fee billing and invoice not found for this term.
+      </div>
+      <div class="rounded border border-red-200 bg-red-50 text-red-700 px-4 py-3 mb-2" ng-if="vm.resFeeGenerateError">
+        {{ vm.resFeeGenerateError }}
+      </div>
+      <button
+        class="inline-flex items-center px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50"
+        ng-click="vm.generateReservationPayment()"
+        ng-disabled="vm.generatingResFee">
+        <span ng-if="!vm.generatingResFee">Generate Reservation Fee</span>
+        <span ng-if="vm.generatingResFee">Generating...</span>
+      </button>
+    </div> -->
+
     <!-- Invoices -->
     <div class="mt-6">
       <div class="border rounded-lg shadow-sm overflow-hidden">
@@ -705,7 +869,13 @@
                       ng-change="vm.onModeChange()">
                       <option value="or">Official Receipt (OR)</option>
                       <option value="invoice">Invoice</option>
+                      <option value="none">None (No Number)</option>
                     </select>
+                    <div class="text-xs text-gray-600 mt-1">
+                      <span ng-if="vm.payment.mode === 'or'">Uses OR numbering sequence</span>
+                      <span ng-if="vm.payment.mode === 'invoice'">Uses Invoice numbering sequence</span>
+                      <span ng-if="vm.payment.mode === 'none'">Payment without OR/Invoice number</span>
+                    </div>
                   </div>
                   <div ng-if="vm.payment.mode === 'or' && vm.invoices && vm.invoices.length">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Invoice (optional)</label>
@@ -821,6 +991,7 @@
                   <th class="px-3 py-2 text-left">Status</th>
                   <th class="px-3 py-2 text-left">Method</th>
                   <th class="px-3 py-2 text-left">School Year</th>
+                  <th class="px-3 py-2 text-left" ng-if="vm.canEdit && vm.myCashier">Assign</th>
                 </tr>
               </thead>
               <tbody ng-if="vm.paymentDetails && vm.paymentDetails.items && vm.paymentDetails.items.length">
@@ -833,6 +1004,14 @@
                   <td class="px-3 py-2">{{ p.status }}</td>
                   <td class="px-3 py-2">{{ p.method }}</td>
                   <td class="px-3 py-2">{{ vm.paymentDetails.sy_label || p.sy_reference }}</td>
+                  <td class="px-3 py-2" ng-if="vm.canEdit">
+                    <button
+                      class="inline-flex items-center px-2 py-1 rounded bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50"
+                      ng-if="vm.canShowAssignButton(p)"
+                      ng-click="vm.openAssignNumberModal(p)">
+                      Assign Number
+                    </button>
+                  </td>
                 </tr>
               </tbody>
             </table>

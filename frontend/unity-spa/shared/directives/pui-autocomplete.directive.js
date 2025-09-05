@@ -38,6 +38,13 @@
         var maxResults = parseInt(attrs.puiMaxResults, 10);
         if (!isFinite(maxResults) || maxResults <= 0) maxResults = 20;
 
+        // Optional remote query support (dynamic source)
+        var minChars = parseInt(attrs.puiMinChars, 10);
+        if (!isFinite(minChars) || minChars < 0) minChars = 1;
+        var onQueryExpr = attrs.puiOnQuery || null; // e.g., "vm.onStudentQuery(q)"
+        var queryDebounce = parseInt(attrs.puiQueryDebounce, 10);
+        if (!isFinite(queryDebounce) || queryDebounce < 0) queryDebounce = 200;
+
         // Label function from expression; fallback to string(item)
         var labelExpr = attrs.puiLabel || null;
         var getLabel = labelExpr
@@ -73,6 +80,7 @@
         var itemsList = []; // raw list
         var isOpen = false;
         var lastQuery = '';
+        var queryTimer = null; // debounce timer for remote query
         var highlightedIndex = -1; // keyboard highlight index
         var currentList = []; // last rendered suggestions
 
@@ -205,16 +213,30 @@
           }
         }
 
-        // Sync displayed label when model changes from outside
+        // Sync displayed label when model changes from outside.
+        // Preserve user-typed text while focused if no selected item exists.
         function syncInputWithModel() {
           var mv = ngModelCtrl.$viewValue;
           var key = (mv != null) ? String(mv) : null;
           var item = (key != null && Object.prototype.hasOwnProperty.call(itemsIndex, key)) ? itemsIndex[key] : null;
-          var lbl = item ? (getLabel(item) || '') : '';
-          // Only update element if value differs to avoid moving cursor during typing
-          if (element.val() !== lbl) {
-            element.val(lbl);
-            lastQuery = lbl || '';
+          var isFocused = (document && document.activeElement === element[0]);
+
+          if (item) {
+            // We have a valid selected item; render its label if needed.
+            var lbl = getLabel(item) || '';
+            if (element.val() !== lbl) {
+              element.val(lbl);
+              lastQuery = lbl || '';
+            }
+          } else {
+            // No matching item for the current model value.
+            // Do NOT overwrite the input while the user is typing (focused),
+            // to avoid wiping the in-progress query as the source updates.
+            if (!isFocused) {
+              // When not focused and there's no selected item, leave the current
+              // text as-is. This avoids unexpected clearing from async source refreshes.
+              // Intentionally no-op.
+            }
           }
         }
 
@@ -226,6 +248,14 @@
         // Watch source changes
         scope.$watchCollection(function () { return getSource(scope); }, function (nv) {
           rebuildIndex(nv || []);
+          // Re-render with the latest query so freshly fetched items are shown
+          try {
+            if (document.activeElement === element[0]) {
+              var q = lastQuery || '';
+              var list = filterItems(q);
+              renderList(list, q);
+            }
+          } catch (e) {}
         });
 
         // Input handlers
@@ -236,6 +266,19 @@
           scope.$applyAsync(function () {
             renderList(list, q);
           });
+
+          // Optional remote query callback (debounced)
+          if (onQueryExpr) {
+            if (queryTimer) { $timeout.cancel(queryTimer); }
+            if ((q || '').length >= minChars) {
+              queryTimer = $timeout(function () {
+                try {
+                  // Provide q as local var in expression
+                  scope.$eval(onQueryExpr, { $query: q, query: q, q: q });
+                } catch (e) {}
+              }, queryDebounce);
+            }
+          }
         });
 
         element.on('focus', function () {

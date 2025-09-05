@@ -5,8 +5,8 @@
     .module('unityApp')
     .controller('StudentsController', StudentsController);
 
-  StudentsController.$inject = ['$location', '$http', 'APP_CONFIG', 'LinkService', 'StorageService', 'CampusService', '$scope'];
-  function StudentsController($location, $http, APP_CONFIG, LinkService, StorageService, CampusService, $scope) {
+  StudentsController.$inject = ['$location', '$http', 'APP_CONFIG', 'LinkService', 'StorageService', 'CampusService', '$scope', '$timeout'];
+  function StudentsController($location, $http, APP_CONFIG, LinkService, StorageService, CampusService, $scope, $timeout) {
     var vm = this;
 
     vm.title = 'Students';
@@ -52,6 +52,17 @@
       type: '',
       student_level: ''
     };
+
+    // Debounced trigger for server-side column search
+    vm._cfTimer = null;
+    vm.onColumnFilterChange = function () {
+      if (vm._cfTimer) { $timeout.cancel(vm._cfTimer); }
+      vm._cfTimer = $timeout(function () {
+        vm.page = 1;
+        vm.search();
+      }, 300);
+    };
+
     // Return rows filtered by per-column inputs (case-insensitive)
     vm.filteredRows = function () {
       var rows = vm.rows || [];
@@ -126,6 +137,28 @@
         // no-op if CampusService not available
       }
 
+      // Column search parameters (server-side filtering)
+      try {
+        if (vm.cf) {
+          if (vm.cf.student_number) p.student_number = vm.cf.student_number;
+          if (vm.cf.last_name) p.last_name = vm.cf.last_name;
+          if (vm.cf.first_name) p.first_name = vm.cf.first_name;
+          if (vm.cf.middle_name) p.middle_name = vm.cf.middle_name;
+          // Program code: code only (e.g., "BSIT")
+          if (vm.cf.program) p.program_code = vm.cf.program;
+          // Year level: exact numeric match only; ignore non-numeric input
+          if (vm.cf.year_level) {
+            var yl = parseInt(vm.cf.year_level, 10);
+            if (!isNaN(yl) && yl > 0) {
+              p.year_level = yl;
+            }
+          }
+          if (vm.cf.status) p.status_text = vm.cf.status;
+          if (vm.cf.student_level) p.student_level_text = vm.cf.student_level;
+          if (vm.cf.type) p.type_text = vm.cf.type;
+        }
+      } catch (e) {}
+
       // academicStatus and level are placeholders for parity; not sent yet
       return p;
     };
@@ -187,8 +220,7 @@
     };
 
     vm.viewerUrl = function (row) {
-      var sn = row && row.student_number ? row.student_number : '';
-      return '#/students/' + row.id + '?sn=' + encodeURIComponent(sn);
+      return '#/students/' + row.id;
     };
 
     // Row actions dropdown state

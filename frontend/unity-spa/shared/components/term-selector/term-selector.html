@@ -74,7 +74,7 @@
         >
           <div class="font-medium">{{ term.label }}</div>
           <div ng-if="!vm.compact" class="text-xs text-gray-500">
-            {{ term.enumSem }} {{ term.term_label }} {{ term.strYearStart }}-{{ term.strYearEnd }}
+            {{ term.term_student_type }} {{ term.enumSem }} {{ term.term_label }} {{ term.strYearStart }}-{{ term.strYearEnd }}
             <span ng-if="term.term_student_type" class="ml-1">({{ term.term_student_type }})</span>
           </div>
         </button>

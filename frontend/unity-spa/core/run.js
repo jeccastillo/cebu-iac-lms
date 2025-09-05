@@ -31,6 +31,14 @@
       var route = (next && next.$$route) || {};
       var target = route.originalPath || '';
 
+      // Toggle global chrome (header/sidebar) for public pages
+      // Hide on: /public/initial-requirements/:hash
+      try {
+        $rootScope.hideChrome = !!(typeof target === 'string' && target.indexOf('/public/initial-requirements') === 0);
+      } catch (e) {
+        $rootScope.hideChrome = false;
+      }
+
       var isProtected =
         target === '/dashboard' ||
         target === '/students' ||

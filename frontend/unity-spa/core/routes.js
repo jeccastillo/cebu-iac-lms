@@ -97,6 +97,8 @@
       })
       .when("/admissions/success", {
         templateUrl: "features/admissions/success.html",
+        controller: "AdmissionsSuccessController",
+        controllerAs: "vm",
       })
       .when("/admissions/requirements", {
         templateUrl: "features/admissions/requirements/list.html",
@@ -467,6 +469,11 @@
         controller: "StudentDashboardController",
         controllerAs: "vm",
         requiredRoles: ["student_view", "admin"],
+      })
+      .when("/public/initial-requirements/:hash", {
+        templateUrl: "features/admissions/initial-requirements/initial-requirements.html",
+        controller: "InitialRequirementsController",
+        controllerAs: "vm"
       })
       .otherwise({ redirectTo: "/login" });
 

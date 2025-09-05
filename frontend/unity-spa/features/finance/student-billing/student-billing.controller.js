@@ -11,7 +11,7 @@
 
     // Filters and pagination
     vm.filters = {
-      student_number: '',
+      student_number: '', // This will be removed
       student_id: null,
       term: null
     };
@@ -46,6 +46,8 @@
     vm.save = save;
     vm.remove = remove;
     vm.onStudentSelect = onStudentSelect; // optional if we wire autocomplete
+    vm.onStudentQuery = onStudentQuery;
+    vm.loadStudents = loadStudents;
     vm.loadActiveTerm = loadActiveTerm;
     vm.getStudentDisplay = getStudentDisplay;
     vm.getTermDisplay = getTermDisplay;
@@ -85,14 +87,9 @@
         loadActiveTerm();
       }
 
-      // Preload students for autocomplete
-      try {
-        if (StudentsService && StudentsService.listAll) {
-          StudentsService.listAll().then(function (list) {
-            vm.students = Array.isArray(list) ? list : [];
-          });
-        }
-      } catch (e2) {}
+      // Remote suggestions: initialize and preload first page for initial dropdown like Cashier
+      vm.students = [];
+      try { if (typeof vm.loadStudents === 'function') vm.loadStudents(); } catch (e) {}
 
       // Preload payment descriptions for dropdown in Add modal
       try {
@@ -175,13 +172,41 @@
         ToastService.warn('Please select a term (syid) before searching.');
         return;
       }
-      if (!vm.filters.student_number && !sid) {
-        ToastService.warn('Enter a student number or select a student.');
+
+      // If user typed into autocomplete but didn't select, try to resolve to a single student
+      if (!sid) {
+        try {
+          var raw = vm.filters && vm.filters.student_id != null ? String(vm.filters.student_id).trim() : '';
+          if (raw) {
+            var lower = raw.toLowerCase();
+            var resolved = null;
+            for (var i = 0; i < vm.students.length; i++) {
+              var st = vm.students[i];
+              if (!st) continue;
+              var stId = parseInt(st.id, 10);
+              var label = ((st.student_number && st.student_number.length ? st.student_number : ('ID:' + st.id)) + ' — ' + (st.last_name || '') + ', ' + (st.first_name || '') + (st.middle_name ? (' ' + st.middle_name) : '')).toLowerCase();
+              if ((st.student_number && st.student_number.toLowerCase() === lower) ||
+                  String(st.id) === raw ||
+                  label === lower) {
+                resolved = stId;
+                vm.selectedStudent = st;
+                break;
+              }
+            }
+            if (resolved && !isNaN(resolved)) {
+              sid = resolved;
+              vm.filters.student_id = resolved;
+            }
+          }
+        } catch (e) {}
+      }
+
+      if (!sid) {
+        ToastService.warn('Select a student.');
         return;
       }
       vm.loading = true;
       StudentBillingService.list({
-        student_number: vm.filters.student_number || null,
         student_id: sid,
         term: term
       }).then(function (data) {
@@ -361,6 +386,63 @@
       }).catch(function () {
         ToastService.error('Failed to delete billing item.');
       });
+    }
+
+    // Remote autocomplete query handler (debounced via directive)
+    function loadStudents() {
+      try {
+        if (StudentsService && typeof StudentsService.listPage === 'function') {
+          return StudentsService.listPage({ per_page: 100, page: 1, include_applicants: 1 })
+            .then(function (list) {
+              vm.students = Array.isArray(list) ? list : [];
+            })
+            .catch(function () {});
+        }
+        // Fallback: direct lightweight request for first page only
+        return $http.get(API + '/students', { params: { per_page: 100, page: 1, include_applicants: 1 } })
+          .then(function (resp) {
+            var data = (resp && resp.data) ? resp.data : {};
+            var rows = data && data.data ? data.data : (Array.isArray(data) ? data : []);
+            vm.students = (rows || []).map(function (r) {
+              return {
+                id: r.id != null ? r.id : (r.intID != null ? r.intID : null),
+                student_number: r.student_number || r.strStudentNumber || '',
+                last_name: r.last_name || r.strLastname || r.lastName || '',
+                first_name: r.first_name || r.strFirstname || r.firstName || '',
+                middle_name: r.middle_name || r.strMiddlename || r.middleName || ''
+              };
+            }).filter(function (r) { return r.id !== null; });
+            if (!vm.selectedStudentId && vm.id) {
+              vm.selectedStudentId = vm.id;
+            }
+          })
+          .catch(function () {
+            vm.students = vm.students || [];
+          });
+      } catch (e) {}
+    }
+    var _studentQuerySeq = 0;
+    function onStudentQuery(q) {
+      try {
+        _studentQuerySeq++;
+        var seq = _studentQuerySeq;
+        var text = (q || '').trim();
+        if (!text || text.length < 1) {
+          // When cleared or only 0/empty input, preload first page for dropdown-like behavior
+          return loadStudents();
+        }
+        var p = (StudentsService && typeof StudentsService.listPage === 'function')
+          ? StudentsService.listPage({ q: text, per_page: 20, page: 1, include_applicants: 1 })
+          : null;
+        if (p && typeof p.then === 'function') {
+          return p.then(function (list) {
+            // Only apply the latest query result
+            if (seq === _studentQuerySeq) {
+              vm.students = Array.isArray(list) ? list : [];
+            }
+          }).catch(function () {});
+        }
+      } catch (e) {}
     }
 
     function onStudentSelect() {

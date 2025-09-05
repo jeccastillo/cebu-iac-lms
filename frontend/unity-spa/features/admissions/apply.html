@@ -1,6 +1,12 @@
 <div class="max-w-5xl mx-auto bg-white shadow rounded p-6" ng-cloak>
   <h1 class="text-2xl font-bold text-gray-800 mb-4">Application Form</h1>
   <p class="text-sm text-gray-600 mb-6">Fill out the form below. On submit, your application will be saved and a confirmation email will be sent.</p>
+  <div class="mb-4">
+    <a href="#parents-guardian-section" class="text-blue-600 hover:underline text-sm">Jump to Parents/Guardian section</a>
+  </div>
+  <div class="mb-4">
+    <a href="#parents-guardian-section" class="text-blue-600 hover:underline text-sm">Jump to Parents/Guardian section</a>
+  </div>
 
   <form name="applyForm" novalidate ng-submit="vm.submit()">
     <fieldset class="mb-6">
@@ -172,7 +178,39 @@
       </div>
     </fieldset>
 
-    <!-- Educational Background -->
+    <!-- Parents/Guardian Information SECTION -->
+    <div id="parents-guardian-section" class="mb-6 border rounded bg-gray-50">
+      <fieldset class="p-4">
+        <legend class="text-lg font-semibold text-gray-700 mb-1 uppercase">Parents/Guardian Information</legend>
+        <div class="text-sm text-gray-600 mb-3">Provide at least one parent or guardian with name and either email or mobile.</div>
+        <div class="mb-3" ng-if="vm.form.primary_contact">
+          <span class="inline-block text-xs font-semibold bg-blue-100 text-blue-800 px-2 py-1 rounded">
+            Selected Primary Contact: {{ vm.form.primary_contact | uppercase }}
+          </span>
+        </div>
+
+        <!-- Mother -->
+        <details class="border rounded mb-4" open>
+          <summary class="cursor-pointer flex items-center justify-between px-4 py-3 bg-gray-50">
+            <span class="text-md font-semibold text-gray-700">Mother</span>
+            <label class="inline-flex items-center">
+              <input type="radio" name="primary_contact" ng-model="vm.form.primary_contact" ng-value="'mother'">
+              <span class="ml-2 text-sm text-gray-700 uppercase">Set as Primary Contact</span>
+            </label>
+          </summary>
+          <div class="px-4 py-4 grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+              <input type="text" name="mother_name" class="w-full border rounded px-3 py-2" placeholder="write 'n/a' only if not applicable" ng-model="vm.form.mother_name" />
+              <div class="text-xs text-gray-500 mt-1">(write 'n/a' only if not applicable)</div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Occupation</label>
+              <input type="text" name="mother_occupation" class="w-full border rounded px-3 py-2" ng-model="vm.form.mother_occupation" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+
     <fieldset class="mb-6">
       <legend class="text-lg font-semibold text-gray-700 mb-3 uppercase">Educational Background</legend>
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -266,110 +304,6 @@
       </div>
     </fieldset>
 
-    <!-- Parent's Information -->
-    <fieldset class="mb-6">
-      <legend class="text-lg font-semibold text-gray-700 mb-3 uppercase">Parent's Information</legend>
-
-      <!-- Mother -->
-      <div class="border rounded p-4 mb-4">
-        <div class="flex items-center justify-between mb-2">
-          <h4 class="text-md font-semibold text-gray-700">Mother</h4>
-          <label class="inline-flex items-center">
-            <input type="radio" name="primary_contact" ng-model="vm.form.primary_contact" ng-value="'mother'">
-            <span class="ml-2 text-sm text-gray-700 uppercase">Set as Primary Contact</span>
-          </label>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-            <input type="text" name="mother_name" class="w-full border rounded px-3 py-2" placeholder="write 'n/a' only if not applicable" ng-model="vm.form.mother_name" />
-            <div class="text-xs text-gray-500 mt-1">(write 'n/a' only if not applicable)</div>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Occupation</label>
-            <input type="text" name="mother_occupation" class="w-full border rounded px-3 py-2" ng-model="vm.form.mother_occupation" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-            <input type="email" name="mother_email" class="w-full border rounded px-3 py-2" ng-model="vm.form.mother_email" ng-class="{'border-red-500': applyForm.mother_email.$dirty &amp;&amp; applyForm.mother_email.$invalid}" />
-            <div class="text-xs text-red-600 mt-1" ng-if="applyForm.mother_email.$dirty &amp;&amp; applyForm.mother_email.$error.email">Enter a valid email address.</div>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
-            <input type="tel" name="mother_mobile" class="w-full border rounded px-3 py-2" ng-model="vm.form.mother_mobile" iti-tel ng-class="{'border-red-500': applyForm.mother_mobile.$dirty &amp;&amp; applyForm.mother_mobile.$error.tel}" />
-            <div class="text-xs text-red-600 mt-1" ng-if="applyForm.mother_mobile.$dirty &amp;&amp; applyForm.mother_mobile.$error.tel">Enter a valid mobile number.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Father -->
-      <div class="border rounded p-4 mb-4">
-        <div class="flex items-center justify-between mb-2">
-          <h4 class="text-md font-semibold text-gray-700">Father</h4>
-          <label class="inline-flex items-center">
-            <input type="radio" name="primary_contact" ng-model="vm.form.primary_contact" ng-value="'father'">
-            <span class="ml-2 text-sm text-gray-700 uppercase">Set as Primary Contact</span>
-          </label>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-            <input type="text" name="father_name" class="w-full border rounded px-3 py-2" placeholder="write 'n/a' only if not applicable" ng-model="vm.form.father_name" />
-            <div class="text-xs text-gray-500 mt-1">(write 'n/a' only if not applicable)</div>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Occupation</label>
-            <input type="text" name="father_occupation" class="w-full border rounded px-3 py-2" ng-model="vm.form.father_occupation" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-            <input type="email" name="father_email" class="w-full border rounded px-3 py-2" ng-model="vm.form.father_email" ng-class="{'border-red-500': applyForm.father_email.$dirty &amp;&amp; applyForm.father_email.$invalid}" />
-            <div class="text-xs text-red-600 mt-1" ng-if="applyForm.father_email.$dirty &amp;&amp; applyForm.father_email.$error.email">Enter a valid email address.</div>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
-            <input type="tel" name="father_mobile" class="w-full border rounded px-3 py-2" ng-model="vm.form.father_mobile" iti-tel ng-class="{'border-red-500': applyForm.father_mobile.$dirty &amp;&amp; applyForm.father_mobile.$error.tel}" />
-            <div class="text-xs text-red-600 mt-1" ng-if="applyForm.father_mobile.$dirty &amp;&amp; applyForm.father_mobile.$error.tel">Enter a valid mobile number.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Guardian -->
-      <div class="border rounded p-4">
-        <div class="flex items-center justify-between mb-2">
-          <h4 class="text-md font-semibold text-gray-700">Guardian</h4>
-          <label class="inline-flex items-center">
-            <input type="radio" name="primary_contact" ng-model="vm.form.primary_contact" ng-value="'guardian'">
-            <span class="ml-2 text-sm text-gray-700 uppercase">Set as Primary Contact</span>
-          </label>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-            <input type="text" name="guardian_name" class="w-full border rounded px-3 py-2" placeholder="write 'n/a' only if not applicable" ng-model="vm.form.guardian_name" />
-            <div class="text-xs text-gray-500 mt-1">(write 'n/a' only if not applicable)</div>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Relationship</label>
-            <input type="text" name="guardian_relationship" class="w-full border rounded px-3 py-2" ng-model="vm.form.guardian_relationship" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-            <input type="email" name="guardian_email" class="w-full border rounded px-3 py-2" ng-model="vm.form.guardian_email" ng-class="{'border-red-500': applyForm.guardian_email.$dirty &amp;&amp; applyForm.guardian_email.$invalid}" />
-            <div class="text-xs text-red-600 mt-1" ng-if="applyForm.guardian_email.$dirty &amp;&amp; applyForm.guardian_email.$error.email">Enter a valid email address.</div>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
-            <input type="tel" name="guardian_mobile" class="w-full border rounded px-3 py-2" ng-model="vm.form.guardian_mobile" iti-tel ng-class="{'border-red-500': applyForm.guardian_mobile.$dirty &amp;&amp; applyForm.guardian_mobile.$error.tel}" />
-            <div class="text-xs text-red-600 mt-1" ng-if="applyForm.guardian_mobile.$dirty &amp;&amp; applyForm.guardian_mobile.$error.tel">Enter a valid mobile number.</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="text-xs text-red-600 mt-2" ng-if="applyForm.$submitted &amp;&amp; !vm.validateParentContacts()">
-        Please provide at least one parent or guardian with name and either email address or mobile number.
-      </div>
-    </fieldset>
 
     <!-- Additional Information -->
     <fieldset class="mb-6">

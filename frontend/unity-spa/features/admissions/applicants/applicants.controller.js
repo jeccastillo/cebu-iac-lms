@@ -284,8 +284,8 @@
     }
   }
 
-  ApplicantViewController.$inject = ['$routeParams', '$location', 'ApplicantsService', 'ProgramsService', 'RoleService'];
-  function ApplicantViewController($routeParams, $location, ApplicantsService, ProgramsService, RoleService) {
+  ApplicantViewController.$inject = ['$routeParams', '$location', 'ApplicantsService', 'ProgramsService', 'RoleService', 'InitialRequirementsService', 'InterviewsService', 'ApplicantJourneyService'];
+  function ApplicantViewController($routeParams, $location, ApplicantsService, ProgramsService, RoleService, InitialRequirementsService, InterviewsService, ApplicantJourneyService) {
     var vm = this;
 
     vm.loading = false;
@@ -299,6 +299,12 @@
     vm.applicant_data = null;
     vm.program_name = null;
 
+    // Initial Requirements state
+    vm.hash = null;
+    vm.irLoading = false;
+    vm.irError = null;
+    vm.initial_requirements = [];
+
     // Organized sections built from raw applicant_data
     vm.sections = [];
 
@@ -311,18 +317,44 @@
     vm.waiver = { waive_application_fee: false, waive_reason: '' };
     vm.savingWaiver = false;
 
+    // Interview UI state
+    vm.canManageInterview = false;
+    vm.applicant_data_id = null;
+    vm.interview = null;
+    vm.interviewLoading = false;
+    vm.interviewError = null;
+    vm.scheduling = false;
+    vm.resultSaving = false;
+    vm.schedule = { scheduled_at: '', remarks: '' };
+    vm.result = { assessment: '', remarks: '', reason_for_failing: '' };
+
+    // Applicant Journey state
+    vm.journey = [];
+    vm.journeyLoading = false;
+    vm.journeyError = null;
+
     vm.backToList = backToList;
     vm.reload = load;
     vm.startEdit = startEdit;
     vm.cancelEdit = cancelEdit;
     vm.save = save;
     vm.saveWaiver = saveWaiver;
+    vm.loadInitialRequirements = loadInitialRequirements;
+
+    // Interview methods
+    vm.loadInterview = loadInterview;
+    vm.scheduleInterview = scheduleInterview;
+    vm.submitResult = submitResult;
+
+    // Applicant Journey
+    vm.loadJourney = loadJourney;
 
     activate();
 
     function activate() {
       try {
         vm.canEditWaiver = (RoleService && RoleService.hasAny) ? RoleService.hasAny(['admissions','admin']) : false;
+        vm.canManageInterview = (RoleService && RoleService.hasAny) ? RoleService.hasAny(['admissions','admin']) : false;
       } catch (e) {
         vm.canEditWaiver = false;
       }
@@ -356,6 +388,8 @@
           vm.applicant_type_name = d.applicant_type_name || null;
           vm.paid_application_fee = (typeof d.paid_application_fee !== 'undefined') ? d.paid_application_fee : null;
           vm.paid_reservation_fee = (typeof d.paid_reservation_fee !== 'undefined') ? d.paid_reservation_fee : null;
+          // Interviewed flag
+          vm.interviewed = (typeof d.interviewed !== 'undefined') ? !!d.interviewed : false;
 
           // Waiver fields
           vm.waive_application_fee = !!(d && d.waive_application_fee);
@@ -372,6 +406,26 @@
           try {
             if (!vm.editing) {
               seedForm();
+            }
+          } catch (e) {}
+
+          // Interview applicant_data_id and current interview load
+          vm.applicant_data_id = (typeof d.applicant_data_id !== 'undefined' && d.applicant_data_id !== null) ? parseInt(d.applicant_data_id, 10) : null;
+          try {
+            if (vm.applicant_data_id) {
+              vm.loadInterview();
+              vm.loadJourney();
+            } else {
+              vm.interview = null;
+              vm.journey = [];
+            }
+          } catch (e) {}
+
+          // Initial Requirements hash and fetch
+          vm.hash = d.hash || null;
+          try {
+            if (vm.hash) {
+              loadInitialRequirements();
             }
           } catch (e) {}
 
@@ -512,6 +566,160 @@
         }
       } catch (e) {
         // ignore safely
+      }
+    }
+
+    function loadInitialRequirements() {
+      if (!vm.hash) {
+        vm.initial_requirements = [];
+        return;
+      }
+      vm.irLoading = true;
+      vm.irError = null;
+      try {
+        InitialRequirementsService.getList(vm.hash)
+          .then(function (res) {
+            var container = (res && res.data) ? res.data : res;
+            var data = (container && container.data) ? container.data : container;
+            vm.initial_requirements = (data && data.requirements) ? data.requirements : [];
+          })
+          .catch(function (err) {
+            vm.irError = (err && (err.message || (err.data && err.data.message))) || 'Failed to load initial requirements.';
+            vm.initial_requirements = [];
+          })
+          .finally(function () {
+            vm.irLoading = false;
+          });
+      } catch (e) {
+        vm.irLoading = false;
+        vm.irError = 'Failed to load initial requirements.';
+      }
+    }
+
+    // --------------------------
+    // Interview helpers (load/schedule/result)
+    // --------------------------
+    function loadInterview() {
+      if (!vm.applicant_data_id) {
+        vm.interview = null;
+        return;
+      }
+      vm.interviewLoading = true;
+      vm.interviewError = null;
+      try {
+        InterviewsService.getByApplicantData(vm.applicant_data_id)
+          .then(function (res) {
+            var data = (res && res.data) ? res.data : res;
+            vm.interview = data || null;
+          })
+          .catch(function (err) {
+            // 404 means not scheduled yet
+            var status = err && (err.status || (err.data && err.data.status));
+            if (String(status) === '404') {
+              vm.interview = null;
+            } else {
+              vm.interviewError = (err && (err.message || (err.data && err.data.message))) || 'Failed to load interview.';
+            }
+          })
+          .finally(function () { vm.interviewLoading = false; });
+      } catch (e) {
+        vm.interviewLoading = false;
+        vm.interviewError = 'Failed to load interview.';
+      }
+    }
+
+    function scheduleInterview() {
+      if (!vm.canManageInterview || !vm.applicant_data_id) return;
+      // Avoid coercing Date objects to the string "[object Date]".
+      // Pass through Date as-is; strings get trimmed. Service will normalize.
+      var rawWhen = vm.schedule && vm.schedule.scheduled_at;
+      var when = (rawWhen instanceof Date) ? rawWhen
+               : (typeof rawWhen === 'string' ? rawWhen.trim() : '');
+      if (!when) {
+        vm.interviewError = 'Please select a schedule date and time.';
+        return;
+      }
+      vm.scheduling = true;
+      vm.interviewError = null;
+      var payload = {
+        scheduled_at: when,
+        remarks: (vm.schedule && vm.schedule.remarks ? ('' + vm.schedule.remarks).trim() : null)
+      };
+      InterviewsService.schedule(vm.applicant_data_id, payload)
+        .then(function () {
+          // Clear form and reload interview and applicant payload (interviewed flag may change after result later)
+          vm.schedule = { scheduled_at: '', remarks: '' };
+          return vm.loadInterview();
+        })
+        .catch(function (err) {
+          vm.interviewError = (err && (err.message || (err.data && err.data.message))) || 'Failed to schedule interview.';
+        })
+        .finally(function () { vm.scheduling = false; });
+    }
+
+    function submitResult(assessment) {
+      if (!vm.canManageInterview || !vm.interview || !vm.interview.id) return;
+      var a = (assessment || (vm.result && vm.result.assessment) || '').trim();
+      if (!a) {
+        vm.interviewError = 'Please select an assessment.';
+        return;
+      }
+      if (a === 'Failed') {
+        var reason = vm.result && vm.result.reason_for_failing ? ('' + vm.result.reason_for_failing).trim() : '';
+        if (!reason) {
+          vm.interviewError = 'Reason for failing is required.';
+          return;
+        }
+      }
+
+      vm.resultSaving = true;
+      vm.interviewError = null;
+      var payload = {
+        assessment: a,
+        remarks: (vm.result && vm.result.remarks ? ('' + vm.result.remarks).trim() : null)
+      };
+      if (a === 'Failed') {
+        payload.reason_for_failing = ('' + vm.result.reason_for_failing).trim();
+      }
+
+      InterviewsService.submitResult(vm.interview.id, payload)
+        .then(function () {
+          // Clear result form, reload interview, and refresh applicant payload to update flags
+          vm.result = { assessment: '', remarks: '', reason_for_failing: '' };
+          vm.loadInterview();
+          try { vm.reload(); } catch (e) {}
+        })
+        .catch(function (err) {
+          vm.interviewError = (err && (err.message || (err.data && err.data.message))) || 'Failed to submit interview result.';
+        })
+        .finally(function () { vm.resultSaving = false; });
+    }
+
+    // --------------------------
+    // Applicant Journey helper
+    // --------------------------
+    function loadJourney() {
+      if (!vm.applicant_data_id) {
+        vm.journey = [];
+        return;
+      }
+      vm.journeyLoading = true;
+      vm.journeyError = null;
+      try {
+        ApplicantJourneyService.listByApplicantData(vm.applicant_data_id)
+          .then(function (res) {
+            var data = (res && res.data) ? res.data : res;
+            var rows = Array.isArray(data) ? data : (data && data.data ? data.data : []);
+            vm.journey = rows || [];
+          })
+          .catch(function (err) {
+            vm.journey = [];
+            vm.journeyError = (err && (err.message || (err.data && err.data.message))) || 'Failed to load applicant journey.';
+          })
+          .finally(function () { vm.journeyLoading = false; });
+      } catch (e) {
+        vm.journeyLoading = false;
+        vm.journeyError = 'Failed to load applicant journey.';
       }
     }
 

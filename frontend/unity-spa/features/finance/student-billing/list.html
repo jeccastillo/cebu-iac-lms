@@ -13,8 +13,12 @@
                ng-model="vm.filters.student_id"
                pui-source="vm.students"
                pui-item-key="id"
-               pui-label="(item.student_number + ' — ' + item.last_name + ', ' + item.first_name + (item.middle_name ? (' ' + item.middle_name) : ''))"
-               pui-on-select="vm.onStudentSelect()" />
+               pui-label="(((item.student_number && item.student_number.length) ? item.student_number : ('ID:' + item.id)) + ' — ' + item.last_name + ', ' + item.first_name + (item.middle_name ? (' ' + item.middle_name) : ''))"
+               pui-on-select="vm.onStudentSelect()"
+               pui-on-query="vm.onStudentQuery($query)"
+               pui-min-chars="1"
+               pui-query-debounce="250"
+               pui-max-results="20" />
       </div>
       <div>
         <label class="block text-sm text-gray-600 mb-1">Term (SYID)</label>

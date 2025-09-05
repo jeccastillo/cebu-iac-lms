@@ -352,16 +352,29 @@ class SubjectController extends Controller
             return response()->json(['success' => false, 'message' => 'Invalid subject id'], 422);
         }
 
-        $studentNumber = $request->input('student_number');
-        if (!$studentNumber) {
-            return response()->json(['success' => false, 'message' => 'student_number is required'], 422);
-        }
+        // Resolve student by id (preferred) or by student_number (legacy)
+        $studentIdInput = $request->input('student_id');
+        $student = null;
 
-        // Resolve student ID
-        $student = DB::table('tb_mas_users')
-            ->where('strStudentNumber', $studentNumber)
-            ->select('intID', 'intProgramID')
-            ->first();
+        if ($studentIdInput !== null && $studentIdInput !== '') {
+            $sid = (int) $studentIdInput;
+            if ($sid <= 0) {
+                return response()->json(['success' => false, 'message' => 'Invalid student_id'], 422);
+            }
+            $student = DB::table('tb_mas_users')
+                ->where('intID', $sid)
+                ->select('intID', 'intProgramID')
+                ->first();
+        } else {
+            $studentNumber = $request->input('student_number');
+            if (!$studentNumber) {
+                return response()->json(['success' => false, 'message' => 'student_id or student_number is required'], 422);
+            }
+            $student = DB::table('tb_mas_users')
+                ->where('strStudentNumber', $studentNumber)
+                ->select('intID', 'intProgramID')
+                ->first();
+        }
 
         if (!$student) {
             return response()->json(['success' => false, 'message' => 'Student not found'], 404);
@@ -387,10 +400,11 @@ class SubjectController extends Controller
     public function checkPrerequisitesBatch(Request $request, PrerequisiteService $prerequisiteService)
     {
         $studentNumber = $request->input('student_number');
+        $studentIdInput = $request->input('student_id');
         $subjectIds = $request->input('subject_ids', []);
 
-        if (!$studentNumber) {
-            return response()->json(['success' => false, 'message' => 'student_number is required'], 422);
+        if ((!$studentNumber) && ($studentIdInput === null || $studentIdInput === '')) {
+            return response()->json(['success' => false, 'message' => 'student_id or student_number is required'], 422);
         }
 
         if (!is_array($subjectIds) || empty($subjectIds)) {
@@ -398,10 +412,21 @@ class SubjectController extends Controller
         }
 
         // Resolve student ID
-        $student = DB::table('tb_mas_users')
-            ->where('strStudentNumber', $studentNumber)
-            ->select('intID', 'intProgramID')
-            ->first();
+        if ($studentIdInput !== null && $studentIdInput !== '') {
+            $sid = (int) $studentIdInput;
+            if ($sid <= 0) {
+                return response()->json(['success' => false, 'message' => 'Invalid student_id'], 422);
+            }
+            $student = DB::table('tb_mas_users')
+                ->where('intID', $sid)
+                ->select('intID', 'intProgramID')
+                ->first();
+        } else {
+            $student = DB::table('tb_mas_users')
+                ->where('strStudentNumber', $studentNumber)
+                ->select('intID', 'intProgramID')
+                ->first();
+        }
 
         if (!$student) {
             return response()->json(['success' => false, 'message' => 'Student not found'], 404);

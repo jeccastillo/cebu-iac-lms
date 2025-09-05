@@ -18,8 +18,8 @@ class CashierPaymentStoreRequest extends FormRequest
             'student_id'  => ['required', 'integer', 'exists:tb_mas_users,intID'],
             // SYID (School Year ID); per project convention FinanceService reads sy_reference by SYID
             'term'        => ['required', 'integer'],
-            // Select which numbering track to use
-            'mode'        => ['required', 'in:or,invoice'],
+            // Select which numbering track to use (allow 'none' for encoding without number)
+            'mode'        => ['required', 'in:or,invoice,none'],
             // Monetary amount to be stored in payment_details.subtotal_order
             'amount'      => ['required', 'numeric', 'gt:0'],
             // e.g. "Tuition Payment", "Reservation Payment"

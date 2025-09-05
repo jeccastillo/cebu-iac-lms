@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Program;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -122,6 +123,8 @@ class AdmissionsController extends Controller
         $typeId = $request->input('type_id');
         if (in_array('intProgramID', $userColumns) && is_numeric($typeId)) {
             $userData['intProgramID'] = (int)$typeId;
+            $program = Program::find($typeId);
+            $userData['intCurriculumID'] = $program->default_curriculum;
         }
 
         // Student type (e.g., 'College - Freshmen Other', 'SHS - New', etc.)
@@ -211,6 +214,18 @@ class AdmissionsController extends Controller
                 }
             }
 
+            // Generate a unique access hash if column exists (for public initial requirements link)
+            $hashVal = null;
+            if (\Illuminate\Support\Facades\Schema::hasColumn('tb_mas_applicant_data', 'hash')) {
+                $tries = 0;
+                do {
+                    $candidate = Str::random(40);
+                    $exists = DB::table('tb_mas_applicant_data')->where('hash', $candidate)->exists();
+                    $tries++;
+                } while ($exists && $tries < 5);
+                $hashVal = $candidate;
+            }
+
             // Build insert payload with optional normalized applicant_type and syid
             $insertData = [
                 'user_id' => $userId,
@@ -218,6 +233,9 @@ class AdmissionsController extends Controller
                 'created_at' => $now,
                 'updated_at' => $now,
             ];
+            if (\Illuminate\Support\Facades\Schema::hasColumn('tb_mas_applicant_data', 'hash')) {
+                $insertData['hash'] = $hashVal;
+            }
             if (\Illuminate\Support\Facades\Schema::hasColumn('tb_mas_applicant_data', 'applicant_type')) {
                 $insertData['applicant_type'] = $normalizedApplicantType;
             }
@@ -225,9 +243,16 @@ class AdmissionsController extends Controller
                 $insertData['syid'] = $request->input('term');
             }            
 
-            DB::table('tb_mas_applicant_data')->insert($insertData);
+            $applicantDataId = DB::table('tb_mas_applicant_data')->insertGetId($insertData);
 
             DB::commit();
+
+            // Journey log: Student Applied
+            try {
+                app(\App\Services\ApplicantJourneyService::class)->log((int) $applicantDataId, 'Student Applied');
+            } catch (\Throwable $e) {
+                // ignore logging failure
+            }
 
             // Send confirmation email; do not fail application if email sending fails
             $to = $request->input('email');
@@ -251,6 +276,8 @@ class AdmissionsController extends Controller
                 'data' => [
                     'user_id' => $userId,
                     'slug'    => $slug,
+                    // Provide access hash so the frontend can construct the public upload link
+                    'hash'    => $hashVal,
                     'email_sent' => $emailSent,
                     'email_error' => $emailError,
                 ]

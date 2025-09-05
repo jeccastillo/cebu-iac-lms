@@ -91,8 +91,7 @@
       <div class="border border-gray-200 rounded-md overflow-hidden" ng-repeat="t in vm.terms track by $index">
         <div class="bg-gray-100 px-4 py-2 flex items-center justify-between">
           <div class="font-medium text-gray-800">
-            {{ t.term || t.label || ('Term ' + ($index + 1)) }}
-            <span class="ml-2 text-xs text-gray-500" ng-if="t.syid">SYID: {{ t.syid }}</span>
+            {{ t.term }}            
           </div>
           <div class="text-sm text-gray-500">
             {{ (t.records &amp;&amp; t.records.length) || 0 }} subject(s)

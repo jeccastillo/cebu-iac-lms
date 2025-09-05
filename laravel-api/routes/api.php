@@ -38,6 +38,9 @@ use App\Http\Controllers\Api\V1\PreviousSchoolController;
 use App\Http\Controllers\Api\V1\ApplicantController;
 use App\Http\Controllers\Api\V1\ApplicantTypeController;
 use App\Http\Controllers\Api\V1\ApplicantAnalyticsController;
+use App\Http\Controllers\Api\V1\PublicInitialRequirementsController;
+use App\Http\Controllers\Api\V1\ApplicantInterviewController;
+use App\Http\Controllers\Api\V1\ApplicantJourneyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -319,6 +322,7 @@ Route::prefix('v1')->group(function () {
     // Resolve acting cashier for current faculty context (place before parameterized {id} routes)
     Route::get('/cashiers/me', [CashierController::class, 'me'])->middleware('role:cashier_admin,finance,admin');
     Route::post('/cashiers/{id}/payments', [CashierController::class, 'createPayment'])->middleware('role:cashier_admin,finance,admin');
+    Route::post('/cashiers/{cashier}/payments/{payment}/assign-number', [CashierController::class, 'assignNumber'])->middleware('role:cashier_admin,finance,admin');
     Route::get('/cashiers/{id}', [CashierController::class, 'show'])->middleware('role:cashier_admin,admin');
     Route::delete('/cashiers/{id}', [CashierController::class, 'destroy'])->middleware('role:cashier_admin,admin');
 
@@ -366,7 +370,21 @@ Route::prefix('v1')->group(function () {
     // Applicants Analytics
     Route::get('/applicants/analytics/summary', [ApplicantAnalyticsController::class, 'summary'])->middleware('role:admissions,admin');
 
+    // Admissions Interviews (Admissions/Admin)
+    Route::post('/admissions/interviews', [ApplicantInterviewController::class, 'store'])->middleware('role:admissions,admin');
+    Route::get('/admissions/interviews/{id}', [ApplicantInterviewController::class, 'show'])->middleware('role:admissions,admin');
+    Route::get('/admissions/applicant-data/{applicantDataId}/interview', [ApplicantInterviewController::class, 'showByApplicantData'])->middleware('role:admissions,admin');
+    Route::put('/admissions/interviews/{id}/result', [ApplicantInterviewController::class, 'submitResult'])->middleware('role:admissions,admin');
+
     // Public list for applicant forms (no auth)
     Route::get('/admissions/previous-schools', [PreviousSchoolController::class, 'index']);
     Route::get('/admissions/applicant-types', [ApplicantTypeController::class, 'index']);
+
+    // Public Initial Requirements (hash-based access)
+    Route::get('/public/initial-requirements/{hash}', [PublicInitialRequirementsController::class, 'index']);
+    Route::post('/public/initial-requirements/{hash}/upload/{appReqId}', [PublicInitialRequirementsController::class, 'upload']);
+    Route::get('/public/initial-requirements/{hash}/file/{appReqId}', [PublicInitialRequirementsController::class, 'file']);
+
+    // Applicant Journey (Admissions/Admin/Registrar)
+    Route::get('/admissions/applicant-data/{applicantDataId}/journey', [ApplicantJourneyController::class, 'index'])->middleware('role:admissions,registrar,admin');
 });

@@ -168,10 +168,18 @@ class UserContextResolver
     protected function resolveFromRequestHeaders(Request $request): ?int
     {
         try {
-            // Check for custom user ID header
+            // Check for custom user ID header (primary)
             $userId = $request->header('X-User-ID');
             if ($userId && is_numeric($userId)) {
                 return (int) $userId;
+            }
+
+            // Fallback: allow X-Faculty-ID for legacy admin requests
+            // Note: Some clients only send X-Faculty-ID. In instances where downstream expects tb_mas_users.intID,
+            // systems without a mapping will still use this value to stamp actions.
+            $facultyId = $request->header('X-Faculty-ID');
+            if ($facultyId && is_numeric($facultyId)) {
+                return (int) $facultyId;
             }
 
             // Check for authorization header with user context

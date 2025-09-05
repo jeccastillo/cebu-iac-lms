@@ -144,22 +144,45 @@
         terms = shaped.terms || [];
       }
       terms.sort(function (a, b) {
-        var ay = normalizeId(a.syid);
-        var by = normalizeId(b.syid);
-        var ayText = a.school_year || a.schoolYear || a.sy_text || a.sy || null;
-        var byText = b.school_year || b.schoolYear || b.sy_text || b.sy || null;
-        var ayStart = ayText ? _yearStartFromText(ayText) : null;
-        var byStart = byText ? _yearStartFromText(byText) : null;
-
-        // Prefer numeric school year id if comparable, else fallback to year start text
-        if (ay != null && by != null && ay !== by) return ay - by;
+        // Order strictly by year start, then by enumSem/intSem, ignoring syid
+        var ar = (a.records && a.records[0]) ? a.records[0] : null;
+        var br = (b.records && b.records[0]) ? b.records[0] : null;
+  
+        function yearStartFrom(aTerm, r) {
+          if (r && (r.strYearStart != null || r.year_start != null || r.sy_year_start != null)) {
+            var ys = r.strYearStart != null ? r.strYearStart : (r.year_start != null ? r.year_start : r.sy_year_start);
+            var n = parseInt(ys, 10);
+            return isNaN(n) ? null : n;
+          }
+          var t = aTerm && (aTerm.school_year || aTerm.schoolYear || aTerm.sy_text || aTerm.sy || null);
+          return t ? _yearStartFromText(t) : null;
+        }
+        function semNumberFrom(aTerm, r) {
+          if (r && r.enumSem != null) {
+            var n1 = parseInt(r.enumSem, 10);
+            if (!isNaN(n1)) return n1;
+          }
+          if (r && r.intSem != null) {
+            var n2 = parseInt(r.intSem, 10);
+            if (!isNaN(n2)) return n2;
+          }
+          // Derive from label text as fallback
+          var st = _semText(null, aTerm && (aTerm.term || aTerm.label));
+          if (st === '1st Sem') return 1;
+          if (st === '2nd Sem') return 2;
+          if (st === '3rd Sem') return 3;
+          if (st === 'Summer') return 4;
+          return null;
+        }
+  
+        var ayStart = yearStartFrom(a, ar);
+        var byStart = yearStartFrom(b, br);
         if (ayStart != null && byStart != null && ayStart !== byStart) return ayStart - byStart;
-
-        // Within year, sort by term order
-        var at = _termOrder(a.term || a.label);
-        var bt = _termOrder(b.term || b.label);
-        if (at !== bt) return at - bt;
-
+  
+        var as = semNumberFrom(a, ar);
+        var bs = semNumberFrom(b, br);
+        if (as != null && bs != null && as !== bs) return as - bs;
+  
         // Stable fallback
         return 0;
       });

@@ -6,7 +6,7 @@
     </h1>
     <div class="text-sm text-gray-500">
       <span class="mr-4">ID: <span class="font-semibold">{{ vm.id }}</span></span>
-      <span>Student No: <span class="font-semibold">{{ vm.sn || '-' }}</span></span>
+      <span>Student No: <span class="font-semibold">{{ (vm.balances &amp;&amp; vm.balances.student_number) || '-' }}</span></span>
     </div>
   </div>
 
@@ -19,13 +19,10 @@
         <i class="fas fa-coins mr-1"></i> Finances (legacy)
       </a>
       <a class="px-3 py-1 bg-blue-600 text-white hover:bg-blue-700 rounded"
-         ng-if="vm.state && vm.state.roles && (vm.state.roles.indexOf('registrar') !== -1 || vm.state.roles.indexOf('admin') !== -1)"
-         ng-href="{{ '#/students/' + vm.id + '/records' + (vm.sn ? ('?sn=' + vm.sn) : '') }}">
+         ng-if="vm.state &amp;&amp; vm.state.roles &amp;&amp; (vm.state.roles.indexOf('registrar') !== -1 || vm.state.roles.indexOf('admin') !== -1)"
+         ng-href="{{ '#/students/' + vm.id + '/records' }}">
         <i class="fas fa-clipboard-list mr-1"></i> Records
       </a>
-    </div>
-    <div class="text-sm text-gray-400" ng-if="!vm.sn">
-      Provide a student number via ?sn= query.
     </div>
   </div>
 

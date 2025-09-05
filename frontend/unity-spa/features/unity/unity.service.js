@@ -50,6 +50,11 @@
         var params = { student_number: student_number, term: term };
         return $http.get(BASE + '/unity/registration', Object.assign({ params: params }, _adminHeaders())).then(_unwrap);
       },
+      // Registration: fetch by student_id (preferred when available)
+      getRegistrationById: function (student_id, term) {
+        var params = { student_id: student_id, term: term };
+        return $http.get(BASE + '/unity/registration', Object.assign({ params: params }, _adminHeaders())).then(_unwrap);
+      },
       // Registration: update editable fields for existing row
       updateRegistration: function (payload) {
         // payload: { student_number, term, fields: { ... } }

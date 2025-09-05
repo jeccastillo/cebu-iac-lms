@@ -185,15 +185,47 @@ class UnityController extends Controller
      */
     public function registration(Request $request): JsonResponse
     {
+        // Accept either student_id (preferred) or student_number (legacy)
         $validated = $request->validate([
-            'student_number' => 'required|string',
-            'term' => 'required|integer',
+            'student_id'     => 'nullable|integer',
+            'student_number' => 'nullable|string',
+            'term'           => 'required|integer',
         ]);
 
-        $studentNumber = (string) $validated['student_number'];
         $term = (int) $validated['term'];
+        $studentId = $validated['student_id'] ?? null;
+        $studentNumber = $validated['student_number'] ?? null;
 
-        $row = $this->registration->findByStudentNumberAndTerm($studentNumber, $term);
+        if (($studentId === null || $studentId === '') && ($studentNumber === null || $studentNumber === '')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'student_id or student_number is required',
+            ], 422);
+        }
+
+        if ($studentId !== null && $studentId !== '') {
+            $sid = (int) $studentId;
+            if ($sid <= 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid student_id',
+                ], 422);
+            }
+            // Prefer lookup by student_id when provided
+            if (method_exists($this->registration, 'findByStudentIdAndTerm')) {
+                $row = $this->registration->findByStudentIdAndTerm($sid, $term);
+            } else {
+                // Fallback: resolve number then delegate (should not happen if service updated)
+                $user = DB::table('tb_mas_users')->where('intID', $sid)->first();
+                if (!$user) {
+                    $row = null;
+                } else {
+                    $row = $this->registration->findByStudentNumberAndTerm((string) $user->strStudentNumber, $term);
+                }
+            }
+        } else {
+            $row = $this->registration->findByStudentNumberAndTerm((string) $studentNumber, $term);
+        }
 
         return response()->json([
             'success' => true,
