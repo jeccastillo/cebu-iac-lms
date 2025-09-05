@@ -235,7 +235,7 @@
 
         // Preflight: check if a saved snapshot already exists
         UnityService.tuitionSaved({
-          student_number: vm.studentNumber,
+          student_number: vm.sanitizeStudentNumber(vm.studentNumber),
           term: termInt
         }).then(function (res) {
           var data = (res && res.data) ? res.data : res;
@@ -669,7 +669,30 @@
             return true;
           });
           if (!available.length) return;
-          
+
+          // Choose a section to queue:
+          // - Prefer the one with the highest remaining_slots (when numeric)
+          // - Fallback to the first available option
+          var chosen = null;
+          try {
+            var withNumericRem = available.filter(function (o) {
+              var n = parseInt(o && o.remaining_slots, 10);
+              return !isNaN(n);
+            });
+            if (withNumericRem.length) {
+              withNumericRem.sort(function (a, b) {
+                var an = parseInt(a.remaining_slots, 10) || 0;
+                var bn = parseInt(b.remaining_slots, 10) || 0;
+                return bn - an; // descending
+              });
+              chosen = withNumericRem[0];
+            } else {
+              chosen = available[0];
+            }
+          } catch (e) {
+            chosen = available[0];
+          }
+
           var cid = chosen && chosen.intID ? parseInt(chosen.intID, 10) : 0;
           if (!cid) return;
 
@@ -935,10 +958,10 @@
     function loadCurrent() {
       vm.results = null;
       vm.current = [];
-      if (!vm.term) return;
-
+      if (!vm.term) return Promise.resolve();
+ 
       // Ensure we have student id before requesting records for term
-      resolveStudentIdIfNeeded().then(function (sid) {
+      return resolveStudentIdIfNeeded().then(function (sid) {
         if (!sid) return;
 
         vm.loading = true;
@@ -1418,12 +1441,21 @@
       UnityService.enlist(payload).then(function (res) {
         // res is already unwrapped
         vm.results = res;
-        // Refresh current if success
-        loadCurrent();        
-        // Clear queued ops
+ 
+        // Invalidate tuition cache and clear preview before recompute
+        vm._tuitionKey = null;
+        vm.tuition = null;
+ 
+        // Clear queued ops early to reflect submitted state
         vm.ops = [];
+ 
+        // Chain refreshes to ensure tuition computes from updated data
+        return loadCurrent()
+          .then(function () { return loadRegistration(); })
+          .then(function () { try { vm.loadTuition(true); } catch (e) {} });
       }).finally(function () {
-        vm.loading = false;        
+        vm.loading = false;
+        if ($scope && $scope.$applyAsync) { $scope.$applyAsync(); }
       });
     }
 
@@ -1507,7 +1539,7 @@
         if (pw === null) return; // cancelled
  
         vm.loading = true;
-        var payload = { student_number: vm.studentNumber };
+        var payload = { student_number: vm.sanitizeStudentNumber(vm.studentNumber) };
         if (termInt) payload.term = termInt;
         payload.password = pw;
  
@@ -1594,7 +1626,13 @@
         return;
       }
       vm.regLoading = true;
-      UnityService.getRegistration(vm.studentNumber, parseInt(vm.term, 10)).then(function (res) {
+      // Prefer student_id when available; fallback to sanitized student_number
+      var termInt = parseInt(vm.term, 10);
+      var sn = vm.sanitizeStudentNumber(vm.studentNumber);
+      var getRegPromise = (vm.student_id && !isNaN(parseInt(vm.student_id, 10)))
+        ? UnityService.getRegistrationById(parseInt(vm.student_id, 10), termInt)
+        : UnityService.getRegistration(sn, termInt);
+      return getRegPromise.then(function (res) {
         // UnityService returns unwrapped payload: { success, data: { exists, registration } }
         var exists = res && res.data && res.data.exists;
         var row = res && res.data ? res.data.registration : null;
@@ -1675,7 +1713,7 @@
       fields['withdrawal_period'] = wp;
 
       UnityService.updateRegistration({
-        student_number: vm.studentNumber,
+        student_number: vm.sanitizeStudentNumber(vm.studentNumber),
         term: parseInt(vm.term, 10),
         fields: fields
       }).then(function (res) {
