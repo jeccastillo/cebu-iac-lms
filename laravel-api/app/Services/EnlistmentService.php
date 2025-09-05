@@ -5,6 +5,7 @@ namespace App\Services;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 use Throwable;
 
 class EnlistmentService
@@ -81,12 +82,14 @@ class EnlistmentService
         DB::beginTransaction();
         try {
             // Ensure tb_mas_registration row exists/up-to-date for this student and term
+            $estatus = ($user->enrollment_status != "enrolled")?"enlisted":"enrolled";
             $this->upsertRegistration($studentId, $term, [
                 'year_level'   => $yearLevel,
                 'student_type' => $studentType,
                 'current_program' => $user->intProgramID,
                 'current_curriculum' => $user->intCurriculumID,
-                'enlisted_by' => $actorId
+                'enlisted_by' => $actorId,
+                'enrollment_status' => $estatus
             ]);
 
             foreach ($operations as $op) {
@@ -128,6 +131,75 @@ class EnlistmentService
                 'operations' => $results,
                 'current'    => $this->currentEnlisted($studentId, $term),
             ];
+        }
+
+        // Post-success hook: update applicant_data.status to "Enlisted" when all operations succeeded
+        if ($okAll) {
+            try {
+                if (Schema::hasTable('tb_mas_applicant_data') && Schema::hasColumn('tb_mas_applicant_data', 'status')) {
+                    $updates = ['status' => 'Enlisted'];
+                    if (Schema::hasColumn('tb_mas_applicant_data', 'updated_at')) {
+                        $updates['updated_at'] = now();
+                    }
+
+                    $affected = 0;
+                    if (Schema::hasColumn('tb_mas_applicant_data', 'syid') && $term > 0) {
+                        $affected = DB::table('tb_mas_applicant_data')
+                            ->where('user_id', $studentId)
+                            ->where('syid', $term)
+                            ->update($updates);
+                    }
+
+                    if ($affected === 0) {
+                        $latest = DB::table('tb_mas_applicant_data')
+                            ->where('user_id', $studentId)
+                            ->orderByDesc('id')
+                            ->first();
+                        if ($latest && isset($latest->id)) {
+                            DB::table('tb_mas_applicant_data')
+                                ->where('id', $latest->id)
+                                ->update($updates);
+                        }
+                    }
+
+                    // Non-blocking system log for applicant status update
+                    try {
+                        SystemLogService::log(
+                            'update',
+                            'ApplicantStatus',
+                            (int) $studentId,
+                            null,
+                            array_merge(['syid' => $term], $updates),
+                            $request
+                        );
+                    } catch (Throwable $e2) {
+                        // ignore log failure
+                    }
+
+                    // Journey log: Status was changed to Enlisted
+                    try {
+                        $target = DB::table('tb_mas_applicant_data')->where('user_id', $studentId);
+                        if (Schema::hasColumn('tb_mas_applicant_data', 'syid') && $term > 0) {
+                            $target = $target->where('syid', $term);
+                        }
+                        $appRow = $target->orderByDesc('id')->first();
+                        if (!$appRow) {
+                            $appRow = DB::table('tb_mas_applicant_data')
+                                ->where('user_id', $studentId)
+                                ->orderByDesc('id')
+                                ->first();
+                        }
+                        if ($appRow && isset($appRow->id)) {
+                            app(\App\Services\ApplicantJourneyService::class)
+                                ->log((int) $appRow->id, 'Status was changed to Enlisted');
+                        }
+                    } catch (Throwable $e3) {
+                        // ignore journey logging failures
+                    }
+                }
+            } catch (Throwable $e) {
+                // Do not fail enlistment response if applicant_data update encounters issues
+            }
         }
 
         return [

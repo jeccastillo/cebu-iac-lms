@@ -79,7 +79,12 @@
               var path = redirects[vm.form.loginType] || '/';
               $window.location.href = path;
             } else {
-              $location.path('/dashboard');
+              // SPA routing: route based on resolved roles to avoid mis-selected loginType
+              var hasStudentRole = Array.isArray(roles) && roles.some(function (r) {
+                return (r + '').toLowerCase() === 'student_view';
+              });
+              var dest = hasStudentRole ? '/student/dashboard' : '/dashboard';
+              $location.path(dest);
             }
           }
         } else {

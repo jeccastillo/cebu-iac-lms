@@ -51,6 +51,11 @@ class FacultyController extends Controller
             }
         }
 
+        // Optional campus filter (used by Cashier assignment UI)
+        if ($request->filled('campus_id')) {
+            $query->where('campus_id', (int) $request->query('campus_id'));
+        }
+
         // Pagination (defaults: page=1, per_page=20; cap per_page to 100)
         $per = (int) $request->query('per_page', 20);
         if ($per <= 0) $per = 20;

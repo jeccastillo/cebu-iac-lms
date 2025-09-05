@@ -50,6 +50,11 @@
         var params = { student_number: student_number, term: term };
         return $http.get(BASE + '/unity/registration', Object.assign({ params: params }, _adminHeaders())).then(_unwrap);
       },
+      // Registration: fetch by student_id (preferred when available)
+      getRegistrationById: function (student_id, term) {
+        var params = { student_id: student_id, term: term };
+        return $http.get(BASE + '/unity/registration', Object.assign({ params: params }, _adminHeaders())).then(_unwrap);
+      },
       // Registration: update editable fields for existing row
       updateRegistration: function (payload) {
         // payload: { student_number, term, fields: { ... } }
@@ -62,6 +67,33 @@
       // Tuition preview wrapper
       tuitionPreview: function (payload) {
         return $http.post(BASE + '/unity/tuition-preview', payload, _adminHeaders()).then(_unwrap);
+      },
+      // Tuition save snapshot (server recomputes for integrity)
+      tuitionSave: function (payload) {
+        // payload: { student_number: string, term: int, discount_id?: int, scholarship_id?: int }
+        return $http.post(BASE + '/unity/tuition-save', payload, _adminHeaders()).then(_unwrap);
+      },
+      // Fetch saved tuition snapshot existence/details
+      tuitionSaved: function (params) {
+        // params: { student_number: string, term: int }
+        return $http.get(BASE + '/unity/tuition-saved', Object.assign({ params: params }, _adminHeaders())).then(_unwrap);
+      },
+
+      // Payment Details for selected term/registration
+      paymentDetails: function (params) {
+        // params: { student_number: string, term: int }
+        return $http.get(BASE + '/finance/payment-details', Object.assign({ params: params }, _adminHeaders())).then(_unwrap);
+      },
+
+      // Invoices: list invoices (filter by registration_id, type, etc.)
+      invoicesList: function (params) {
+        return $http.get(BASE + '/finance/invoices', Object.assign({ params: params }, _adminHeaders())).then(_unwrap);
+      },
+
+      // Invoices: generate a new invoice
+      invoicesGenerate: function (payload) {
+        // payload: { type: 'tuition'|'billing'|'other', student_id: number, term: number, registration_id?: number, ... }
+        return $http.post(BASE + '/finance/invoices/generate', payload, _adminHeaders()).then(_unwrap);
       }
     };
   }

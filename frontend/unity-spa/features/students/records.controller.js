@@ -77,19 +77,54 @@
       var m = ('' + txt).match(/(\d{4})/);
       return m ? parseInt(m[1], 10) : null;
     }
+    function _semText(enumSem, termLabel) {
+      var n = enumSem != null ? parseInt(enumSem, 10) : null;
+      if (n === 1) return '1st Sem';
+      if (n === 2) return '2nd Sem';
+      if (n === 3) return '3rd Sem';
+      if (n === 4) return 'Summer';
+      if (termLabel) {
+        var s = ('' + termLabel).toLowerCase();
+        if (s.indexOf('summer') !== -1) return 'Summer';
+        if (s.indexOf('1st') !== -1 || s.indexOf('first') !== -1 || s.indexOf('1') === 0) return '1st Sem';
+        if (s.indexOf('2nd') !== -1 || s.indexOf('second') !== -1 || s.indexOf('2') === 0) return '2nd Sem';
+        if (s.indexOf('3rd') !== -1 || s.indexOf('third') !== -1 || s.indexOf('3') === 0) return '3rd Sem';
+      }
+      return null;
+    }
+    function buildTermLabelFromRow(r, fallbackLabel) {
+      if (!r) return fallbackLabel || null;
+      var ys = r.strYearStart || r.year_start || r.sy_year_start || null;
+      var ye = r.strYearEnd || r.year_end || r.sy_year_end || null;
+      var syText = r.school_year || r.schoolYear || r.sy_text || r.sy || r.strSchoolYear || null;
+      var semSource = (r.enumSem != null ? r.enumSem : (r.intSem != null ? r.intSem : null));
+      var sem = _semText(semSource, r.term || r.label || r.sem || r.semester || r.strSem || fallbackLabel);
+      var yearText = null;
+      if (ys && ye) {
+        yearText = (parseInt(ys, 10) + '-' + parseInt(ye, 10));
+      } else if (syText) {
+        // Expect formats like "2025-2026" or other strings that include the range.
+        var m = ('' + syText).match(/(\d{4})\s*-\s*(\d{4})/);
+        yearText = m ? (m[1] + '-' + m[2]) : ('' + syText);
+      }
+      if (sem && yearText) return sem + ' ' + yearText;
+      if (sem) return sem;
+      if (yearText) return yearText;
+      return fallbackLabel || null;
+    }
     function _deriveTermsShapeIfFlat(data) {
       if (data && angular.isArray(data.records) && !data.terms) {
         var grouped = {};
         data.records.forEach(function (r) {
           var syText = r.school_year || r.schoolYear || r.sy_text || r.sy || r.strSchoolYear || r.syid || 'unknown';
-          var label = r.term || r.label || r.sem || r.semester || r.strSem || '';
-          var key = (syText || 'unknown') + '|' + (label || '');
+          var friendly = buildTermLabelFromRow(r, r.term || r.label || r.sem || r.semester || r.strSem || '');
+          var key = (syText || 'unknown') + '|' + (friendly || '');
           if (!grouped[key]) {
             grouped[key] = {
               syid: r.syid || r.intSYID || r.sy_id || null,
               school_year: syText || null,
-              label: label || null,
-              term: label || null,
+              label: friendly || null,
+              term: friendly || null,
               records: []
             };
           }
@@ -109,24 +144,57 @@
         terms = shaped.terms || [];
       }
       terms.sort(function (a, b) {
-        var ay = normalizeId(a.syid);
-        var by = normalizeId(b.syid);
-        var ayText = a.school_year || a.schoolYear || a.sy_text || a.sy || null;
-        var byText = b.school_year || b.schoolYear || b.sy_text || b.sy || null;
-        var ayStart = ayText ? _yearStartFromText(ayText) : null;
-        var byStart = byText ? _yearStartFromText(byText) : null;
-
-        // Prefer numeric school year id if comparable, else fallback to year start text
-        if (ay != null && by != null && ay !== by) return ay - by;
+        // Order strictly by year start, then by enumSem/intSem, ignoring syid
+        var ar = (a.records && a.records[0]) ? a.records[0] : null;
+        var br = (b.records && b.records[0]) ? b.records[0] : null;
+  
+        function yearStartFrom(aTerm, r) {
+          if (r && (r.strYearStart != null || r.year_start != null || r.sy_year_start != null)) {
+            var ys = r.strYearStart != null ? r.strYearStart : (r.year_start != null ? r.year_start : r.sy_year_start);
+            var n = parseInt(ys, 10);
+            return isNaN(n) ? null : n;
+          }
+          var t = aTerm && (aTerm.school_year || aTerm.schoolYear || aTerm.sy_text || aTerm.sy || null);
+          return t ? _yearStartFromText(t) : null;
+        }
+        function semNumberFrom(aTerm, r) {
+          if (r && r.enumSem != null) {
+            var n1 = parseInt(r.enumSem, 10);
+            if (!isNaN(n1)) return n1;
+          }
+          if (r && r.intSem != null) {
+            var n2 = parseInt(r.intSem, 10);
+            if (!isNaN(n2)) return n2;
+          }
+          // Derive from label text as fallback
+          var st = _semText(null, aTerm && (aTerm.term || aTerm.label));
+          if (st === '1st Sem') return 1;
+          if (st === '2nd Sem') return 2;
+          if (st === '3rd Sem') return 3;
+          if (st === 'Summer') return 4;
+          return null;
+        }
+  
+        var ayStart = yearStartFrom(a, ar);
+        var byStart = yearStartFrom(b, br);
         if (ayStart != null && byStart != null && ayStart !== byStart) return ayStart - byStart;
-
-        // Within year, sort by term order
-        var at = _termOrder(a.term || a.label);
-        var bt = _termOrder(b.term || b.label);
-        if (at !== bt) return at - bt;
-
+  
+        var as = semNumberFrom(a, ar);
+        var bs = semNumberFrom(b, br);
+        if (as != null && bs != null && as !== bs) return as - bs;
+  
         // Stable fallback
         return 0;
+      });
+      // Decorate terms with friendly term text if possible (idempotent)
+      terms = terms.map(function (t) {
+        var r = (t.records && t.records[0]) ? t.records[0] : null;
+        var friendly = buildTermLabelFromRow(r, t.term || t.label);
+        if (friendly) {
+          t.term = friendly;
+          t.label = friendly;
+        }
+        return t;
       });
       return terms;
     };

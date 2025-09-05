@@ -247,6 +247,10 @@ class RegistrationService
             'paymentType',
             'loa_remarks',
             'withdrawal_period',
+            // parity with CI update endpoints
+            'allow_enroll',
+            'downpayment',
+            'intROG',
         ];
 
         $update = [];

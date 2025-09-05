@@ -24,7 +24,6 @@
 
     // identifiers
     vm.id = $routeParams.id;
-    vm.sn = ('' + ($location.search().sn || '')).trim();
 
     // api endpoints
     vm.api = {
@@ -269,7 +268,7 @@
     vm.fetchBalances = function () {
       vm.loading.balances = true;
       vm.error.balances = null;
-      return $http.post(vm.api.balances, { student_number: vm.sn })
+      return $http.post(vm.api.balances, { student_id: vm.id })
         .then(function (resp) {
           if (resp && resp.data && resp.data.success !== false) {
             vm.balances = resp.data.data || resp.data;
@@ -289,7 +288,7 @@
       vm.loading.records = true;
       vm.error.records = null;
 
-      var payload = { student_number: vm.sn, include_grades: true };
+      var payload = { student_id: vm.id, include_grades: true };
       var sid = normalizeId(vm.selectedTermId);
       if (sid !== null && sid !== undefined && sid !== '') {
         // API requires 'term' to be a string per StudentRecordsRequest
@@ -354,7 +353,7 @@
     vm.fetchLedger = function () {
       vm.loading.ledger = true;
       vm.error.ledger = null;
-      return $http.post(vm.api.ledger, { student_number: vm.sn })
+      return $http.post(vm.api.ledger, { student_id: vm.id })
         .then(function (resp) {
           if (resp && resp.data && resp.data.success !== false) {
             vm.ledger = resp.data.data || resp.data;
@@ -424,20 +423,18 @@
       return vm.links.unity.replace('/unity', '') + '/student/edit_student/' + vm.id;
     };
     vm.financesUrl = function () {
-      return vm.links.unity.replace('/unity', '') + '/unity/registration_viewer/' + vm.id;
+      return '#/finance/cashier/' + vm.id;
     };
 
     // init
     vm.init = function () {
-      // Checklist operates by student id; fetch regardless of student number
+      // Checklist operates by student id
       vm.fetchChecklist();
 
-      if (!vm.sn) {
-        return; // wait for a valid student number in query string for balances/records/ledger
-      }
-      // Load balances and ledger right away
+      // Load balances and ledger right away using student_id
       vm.fetchBalances();
       vm.fetchLedger();
+
       // Load terms first to apply saved/active term, then fetch records accordingly
       vm.loadTerms().then(function () {
         if (!vm.selectedTermId) {

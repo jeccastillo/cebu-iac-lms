@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Program;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -29,7 +30,9 @@ class AdmissionsController extends Controller
             'email'       => 'required|email',
             'mobile_number' => 'nullable|string|max:50',
             'gender'      => 'nullable|string|max:50',
-            'date_of_birth' => 'nullable|date',
+            'date_of_birth' => 'required|date',
+            'citizenship_country' => 'required|string|max:100',
+            'intTuitionYear' => 'int',
         ]);
 
         $now = Carbon::now();
@@ -56,6 +59,11 @@ class AdmissionsController extends Controller
             $userData['strEmail'] = $request->input('email');
         }
 
+        // Campus
+        if (in_array('campus_id', $userColumns)) {
+            $userData['campus_id'] = $request->input('campus_id');
+        }
+
         // Mobile
         if (in_array('strMobileNumber', $userColumns) && $request->filled('mobile_number')) {
             $userData['strMobileNumber'] = $request->input('mobile_number');
@@ -64,12 +72,38 @@ class AdmissionsController extends Controller
         // Gender
         if (in_array('enumGender', $userColumns) && $request->filled('gender')) {
             $userData['enumGender'] = $request->input('gender');
-        }
+        }        
 
         // Birthdate
         if (in_array('dteBirthDate', $userColumns) && $request->filled('date_of_birth')) {
             $userData['dteBirthDate'] = Carbon::parse($request->input('date_of_birth'))->format('Y-m-d');
         }
+
+        // Tuition
+        if (in_array('intTuitionYear', $userColumns) && $request->filled('intTuitionYear')) {
+            $userData['intTuitionYear'] = $request->input('intTuitionYear');
+        }
+
+        // Citizenship / Nationality
+        if ($request->filled('citizenship_country')) {
+            $valCit = $request->input('citizenship_country');
+            $citCols = ['citizenship', 'nationality', 'country_of_citizenship', 'strCitizenship', 'strNationality'];
+            foreach ($citCols as $col) {
+                if (in_array($col, $userColumns)) {
+                    $userData[$col] = $valCit;
+                    break;
+                }
+            }
+        }
+        
+        $userData['high_school'] = "";
+        $userData['high_school_address'] = "";
+        $userData['high_school_attended'] = "";
+        $userData['senior_high'] = "";
+        $userData['senior_high_address'] = "";
+        $userData['senior_high_attended'] = "";
+        $userData['strand'] = "";
+        
 
         // Address (combine pieces if provided)
         $fullAddress = $request->input('address');
@@ -89,6 +123,8 @@ class AdmissionsController extends Controller
         $typeId = $request->input('type_id');
         if (in_array('intProgramID', $userColumns) && is_numeric($typeId)) {
             $userData['intProgramID'] = (int)$typeId;
+            $program = Program::find($typeId);
+            $userData['intCurriculumID'] = $program->default_curriculum;
         }
 
         // Student type (e.g., 'College - Freshmen Other', 'SHS - New', etc.)
@@ -160,27 +196,122 @@ class AdmissionsController extends Controller
                 'ua' => substr($request->userAgent() ?? '', 0, 255)
             ];
 
-            DB::table('tb_mas_applicant_data')->insert([
+            // Normalize applicant_type (if provided)
+            $normalizedApplicantType = $request->input('applicant_type');
+            $normalizedApplicantType = is_numeric($normalizedApplicantType) ? (int) $normalizedApplicantType : null;
+
+            // Resolve syid from request (accept syid|term|current_sem)
+            $syidFromReq = null;
+            $candidates = [
+                $request->input('syid'),
+                $request->input('term'),
+                $request->input('current_sem'),
+            ];
+            foreach ($candidates as $cand) {
+                if ($cand !== null && $cand !== '' && is_numeric($cand)) {
+                    $syidFromReq = (int) $cand;
+                    break;
+                }
+            }
+
+            // Generate a unique access hash if column exists (for public initial requirements link)
+            $hashVal = null;
+            if (\Illuminate\Support\Facades\Schema::hasColumn('tb_mas_applicant_data', 'hash')) {
+                $tries = 0;
+                do {
+                    $candidate = Str::random(40);
+                    $exists = DB::table('tb_mas_applicant_data')->where('hash', $candidate)->exists();
+                    $tries++;
+                } while ($exists && $tries < 5);
+                $hashVal = $candidate;
+            }
+
+            // Build insert payload with optional normalized applicant_type and syid
+            $insertData = [
                 'user_id' => $userId,
                 'data'    => json_encode($payload),
                 'created_at' => $now,
                 'updated_at' => $now,
-            ]);
+            ];
+            if (\Illuminate\Support\Facades\Schema::hasColumn('tb_mas_applicant_data', 'hash')) {
+                $insertData['hash'] = $hashVal;
+            }
+            if (\Illuminate\Support\Facades\Schema::hasColumn('tb_mas_applicant_data', 'applicant_type')) {
+                $insertData['applicant_type'] = $normalizedApplicantType;
+            }
+            if (\Illuminate\Support\Facades\Schema::hasColumn('tb_mas_applicant_data', 'syid') && $request->filled('term')) {
+                $insertData['syid'] = $request->input('term');
+            }            
+
+            $applicantDataId = DB::table('tb_mas_applicant_data')->insertGetId($insertData);
 
             DB::commit();
 
-            // Send confirmation email
+            // Journey log: Student Applied
+            try {
+                app(\App\Services\ApplicantJourneyService::class)->log((int) $applicantDataId, 'Student Applied');
+            } catch (\Throwable $e) {
+                // ignore logging failure
+            }
+
+            // System alert: notify Admissions about new application
+            try {
+                $last = strtoupper(trim((string) $request->input('last_name', '')));
+                $first = trim((string) $request->input('first_name', ''));
+                $emailAddr = trim((string) $request->input('email', ''));
+                $subject = 'New Application Submitted';
+                $namePart = trim(($last !== '' ? $last : '') . ($first !== '' ? ($last !== '' ? ', ' : '') . $first : ''));
+                $msg = 'New applicant signup' . ($namePart !== '' ? (': ' . $namePart) : '') . ($emailAddr !== '' ? ' (' . $emailAddr . ')' : '');
+
+                $campusId = $request->input('campus_id');
+
+                $payload = [
+                    'title'            => $subject,
+                    'message'          => $msg,
+                    'link'             => '#/admissions/applicants/' . $userId,
+                    'type'             => 'info',
+                    'target_all'       => false,
+                    'role_codes'       => ['admissions'],
+                    'intActive'        => 1,
+                    'system_generated' => 1,
+                    'starts_at'        => now(),
+                ];
+                if ($campusId !== null && $campusId !== '' && is_numeric($campusId)) {
+                    $payload['campus_ids'] = [ (int) $campusId ];
+                }
+
+                $alert = \App\Models\SystemAlert::create($payload);
+                app(\App\Services\SystemAlertService::class)->broadcast('create', $alert);
+            } catch (\Throwable $e) {
+                \Log::warning('System alert creation failed for new application: ' . $e->getMessage());
+            }
+
+            // Send confirmation email; do not fail application if email sending fails
             $to = $request->input('email');
+            $emailSent = false;
+            $emailError = null;
             if ($to) {
-                $this->sendApplicantMail($to, $request->input('first_name'), $request->input('last_name'));
+                try {
+                    $this->sendApplicantMail($to, $request->input('first_name'), $request->input('last_name'));
+                    $emailSent = true;
+                } catch (Throwable $mailEx) {
+                    $emailSent = false;
+                    $emailError = $mailEx->getMessage();
+                }
             }
 
             return response()->json([
                 'success' => true,
-                'message' => 'Application submitted successfully.',
+                'message' => $emailSent
+                    ? 'Application submitted successfully.'
+                    : 'Application submitted successfully, but the confirmation email could not be sent.',
                 'data' => [
                     'user_id' => $userId,
                     'slug'    => $slug,
+                    // Provide access hash so the frontend can construct the public upload link
+                    'hash'    => $hashVal,
+                    'email_sent' => $emailSent,
+                    'email_error' => $emailError,
                 ]
             ]);
         } catch (Throwable $e) {

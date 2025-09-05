@@ -54,6 +54,18 @@
         controllerAs: "vm",
         requiredRoles: ["registrar", "admin"],
       })
+      .when("/registrar/sections-slots", {
+        templateUrl: "features/registrar/sections-slots/sections-slots.html",
+        controller: "SectionsSlotsController",
+        controllerAs: "vm",
+        requiredRoles: ["registrar", "admin"],
+      })
+      .when("/finance/cashier/:id", {
+        templateUrl: "features/finance/cashier-viewer/cashier-viewer.html",
+        controller: "CashierViewerController",
+        controllerAs: "vm",
+        requiredRoles: ["finance", "registrar", "admin"],
+      })
       .when("/finance/ledger", {
         templateUrl: "features/finance/ledger.html",
         controller: "FinanceLedgerController",
@@ -91,6 +103,81 @@
       })
       .when("/admissions/success", {
         templateUrl: "features/admissions/success.html",
+        controller: "AdmissionsSuccessController",
+        controllerAs: "vm",
+      })
+      .when("/admissions/requirements", {
+        templateUrl: "features/admissions/requirements/list.html",
+        controller: "RequirementsController",
+        controllerAs: "vm",
+        requiredRoles: ["admissions", "admin"],
+      })
+      .when("/admissions/requirements/new", {
+        templateUrl: "features/admissions/requirements/edit.html",
+        controller: "RequirementEditController",
+        controllerAs: "vm",
+        requiredRoles: ["admissions", "admin"],
+      })
+      .when("/admissions/requirements/:id/edit", {
+        templateUrl: "features/admissions/requirements/edit.html",
+        controller: "RequirementEditController",
+        controllerAs: "vm",
+        requiredRoles: ["admissions", "admin"],
+      })
+      .when("/admissions/previous-schools", {
+        templateUrl: "features/admissions/previous-schools/list.html",
+        controller: "PreviousSchoolsController",
+        controllerAs: "vm",
+        requiredRoles: ["admissions", "admin"],
+      })
+      .when("/admissions/previous-schools/new", {
+        templateUrl: "features/admissions/previous-schools/edit.html",
+        controller: "PreviousSchoolEditController",
+        controllerAs: "vm",
+        requiredRoles: ["admissions", "admin"],
+      })
+      .when("/admissions/previous-schools/:id/edit", {
+        templateUrl: "features/admissions/previous-schools/edit.html",
+        controller: "PreviousSchoolEditController",
+        controllerAs: "vm",
+        requiredRoles: ["admissions", "admin"],
+      })
+      .when("/admissions/applicant-types", {
+        templateUrl: "features/admissions/applicant-types/list.html",
+        controller: "ApplicantTypesController",
+        controllerAs: "vm",
+        requiredRoles: ["admissions", "admin"],
+      })
+      .when("/admissions/applicant-types/new", {
+        templateUrl: "features/admissions/applicant-types/edit.html",
+        controller: "ApplicantTypeEditController",
+        controllerAs: "vm",
+        requiredRoles: ["admissions", "admin"],
+      })
+      .when("/admissions/applicant-types/:id/edit", {
+        templateUrl: "features/admissions/applicant-types/edit.html",
+        controller: "ApplicantTypeEditController",
+        controllerAs: "vm",
+        requiredRoles: ["admissions", "admin"],
+      })
+      // Place analytics before the dynamic :id route to avoid "analytics" being treated as an id
+      .when("/admissions/applicants/analytics", {
+        templateUrl: "features/admissions/applicants/analytics.html",
+        controller: "ApplicantsAnalyticsController",
+        controllerAs: "vm",
+        requiredRoles: ["admissions", "admin"],
+      })
+      .when("/admissions/applicants", {
+        templateUrl: "features/admissions/applicants/list.html",
+        controller: "ApplicantsListController",
+        controllerAs: "vm",
+        requiredRoles: ["admissions", "admin"],
+      })
+      .when("/admissions/applicants/:id", {
+        templateUrl: "features/admissions/applicants/view.html",
+        controller: "ApplicantViewController",
+        controllerAs: "vm",
+        requiredRoles: ["admissions", "admin"],
       })
 
       /* Campuses CRUD */
@@ -278,6 +365,12 @@
         controllerAs: "vm",
         requiredRoles: ["faculty_admin", "admin"],
       })
+      .when("/faculty-loading", {
+        templateUrl: "features/academics/faculty-loading/faculty-loading.html",
+        controller: "FacultyLoadingController",
+        controllerAs: "vm",
+        requiredRoles: ["registrar", "faculty_admin", "admin"],
+      })
 
       /* Tuition Years (Finance) */
       .when('/finance/tuition-years', {
@@ -293,6 +386,92 @@
         requiredRoles: ['finance', 'registrar', 'admin']
       })
 
+      // Payment Descriptions (Finance)
+      .when('/finance/payment-descriptions', {
+        templateUrl: 'features/finance/payment-descriptions/list.html',
+        controller: 'PaymentDescriptionsController',
+        controllerAs: 'vm',
+        requiredRoles: ['finance', 'admin'],
+      })
+      .when('/finance/payment-descriptions/new', {
+        templateUrl: 'features/finance/payment-descriptions/edit.html',
+        controller: 'PaymentDescriptionEditController',
+        controllerAs: 'vm',
+        requiredRoles: ['finance', 'admin'],
+      })
+      .when('/finance/payment-descriptions/:id/edit', {
+        templateUrl: 'features/finance/payment-descriptions/edit.html',
+        controller: 'PaymentDescriptionEditController',
+        controllerAs: 'vm',
+        requiredRoles: ['finance', 'admin'],
+      })
+      .when('/finance/payment-modes', {
+        templateUrl: 'features/finance/payment-modes/list.html',
+        controller: 'PaymentModesController',
+        controllerAs: 'vm',
+        requiredRoles: ['finance', 'admin'],
+      })
+      .when('/finance/payment-modes/new', {
+        templateUrl: 'features/finance/payment-modes/edit.html',
+        controller: 'PaymentModeEditController',
+        controllerAs: 'vm',
+        requiredRoles: ['finance', 'admin'],
+      })
+      .when('/finance/payment-modes/:id/edit', {
+        templateUrl: 'features/finance/payment-modes/edit.html',
+        controller: 'PaymentModeEditController',
+        controllerAs: 'vm',
+        requiredRoles: ['finance', 'admin'],
+      })
+
+      // Student Billing (Finance)
+      .when('/finance/student-billing', {
+        templateUrl: 'features/finance/student-billing/list.html',
+        controller: 'FinanceStudentBillingController',
+        controllerAs: 'vm',
+        requiredRoles: ['finance', 'admin'],
+      })
+
+      .when("/cashier-admin", {
+        templateUrl: "features/cashiers/list.html",
+        controller: "CashiersController",
+        controllerAs: "vm",
+        requiredRoles: ["cashier_admin","admin"],
+      })
+      // Admin: System Alerts
+      .when("/admin/system-alerts", {
+        templateUrl: "features/admin/system-alerts/system-alerts.html",
+        controller: "AdminSystemAlertsController",
+        controllerAs: "vm",
+        requiredRoles: ["admin"],
+      })
+
+      // Admin: Invoices CRUD
+      .when("/admin/invoices", {
+        templateUrl: "features/admin/invoices/list.html",
+        controller: "AdminInvoicesController",
+        controllerAs: "vm",
+        requiredRoles: ["admin"],
+      })
+      .when("/admin/invoices/new", {
+        templateUrl: "features/admin/invoices/edit.html",
+        controller: "AdminInvoiceEditController",
+        controllerAs: "vm",
+        requiredRoles: ["admin"],
+      })
+      .when("/admin/invoices/:id/edit", {
+        templateUrl: "features/admin/invoices/edit.html",
+        controller: "AdminInvoiceEditController",
+        controllerAs: "vm",
+        requiredRoles: ["admin"],
+      })
+
+      .when("/admin/payment-details", {
+        templateUrl: "features/admin/payment-details/edit.html",
+        controller: "AdminPaymentDetailsController",
+        controllerAs: "vm",
+        requiredRoles: ["admin"],
+      })
       .when("/roles", {
         templateUrl: "features/roles/roles.html",
         controller: "RolesController",
@@ -304,6 +483,17 @@
         controller: "SystemLogsController",
         controllerAs: "vm",
         requiredRoles: ["admin"],
+      })
+      .when("/student/dashboard", {
+        templateUrl: "features/student-dashboard/student-dashboard.html",
+        controller: "StudentDashboardController",
+        controllerAs: "vm",
+        requiredRoles: ["student_view", "admin"],
+      })
+      .when("/public/initial-requirements/:hash", {
+        templateUrl: "features/admissions/initial-requirements/initial-requirements.html",
+        controller: "InitialRequirementsController",
+        controllerAs: "vm"
       })
       .otherwise({ redirectTo: "/login" });
 

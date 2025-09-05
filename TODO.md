@@ -1,32 +1,25 @@
-# Implementation Progress: Curriculum Dropdown with Campus Filtering
+# Applicant Journey Logging - TODO
 
-task_progress Items:
-- [x] Step 1: Update CurriculumController to support campus_id filtering
-- [x] Step 2: Add curriculum service method to ProgramsService
-- [x] Step 3: Modify ProgramEditController initialization with curriculum loading logic
-- [x] Step 4: Add campus change handler to reload curricula
-- [x] Step 5: Update HTML template to replace number input with dropdown
-- [x] Step 6: Enhance controller load method for proper curriculum data loading
-- [x] Step 7: Test dropdown functionality and campus filtering
-- [x] Step 8: Test form submission with curriculum ID saving
-- [x] Step 9: Test edit mode with existing curriculum selections
-- [x] Step 10: Handle edge cases and error management
+Plan source: implementation_plan.md
 
-## Current Status
-All core implementation completed! Ready for testing.
+Progress Checklist:
+- [x] Step 1: Create migration for tb_mas_applicant_journey (id, applicant_data_id, remarks, log_date), indexes, guarded FK
+- [x] Step 2: Create Eloquent model App\Models\ApplicantJourney (no timestamps)
+- [x] Step 3: Create App\Services\ApplicantJourneyService::log(applicantDataId, remarks, logDate?)
+- [x] Step 4: Create read-only API controller App\Http\Controllers\Api\V1\ApplicantJourneyController@index
+- [x] Step 5: Add GET route /api/v1/admissions/applicant-data/{applicantDataId}/journey (middleware role: admissions,registrar,admin)
+- [x] Step 6: Integrations
+  - [x] AdmissionsController: after applicant_data insert, log "Student Applied"
+  - [x] PublicInitialRequirementsController::upload: log "Student Submitted [Requirement Name]"
+  - [x] CashierController::createPayment: log "Student paid application fee" and "Status was changed to Reserved"
+  - [x] ApplicantInterviewService::schedule: log "Interview Scheduled"
+  - [x] ApplicantInterviewService::submitResult: log "Interview Result: Passed/Failed"
+  - [x] EnlistmentService::enlist: log "Status was changed to Enlisted"
+- [ ] Step 7: Smoke tests/manual verification (post-implementation)
+  - [ ] Run migration and verify schema
+  - [ ] Exercise key endpoints and confirm logs persisted and retrievable via journey endpoint
 
-## Implementation Summary
-✅ Backend: CurriculumController updated with campus_id filtering
-✅ Backend: CurriculumResource includes campus_id field
-✅ Frontend: ProgramsService.getCurricula() method added
-✅ Frontend: ProgramEditController enhanced with curriculum loading logic
-✅ Frontend: HTML template updated with dropdown and campus change handler
-✅ Frontend: Campus change triggers curriculum reload
-✅ Frontend: Proper loading states and error handling
-
-## Key Features Implemented
-- Campus-filtered curriculum dropdown
-- Dynamic curriculum loading when campus changes
-- Loading indicators and user feedback
-- Backward compatibility with existing data
-- Proper form validation and submission
+Notes:
+- applicant_data_id is the only linkage key.
+- log_date is datetime; no created_at/updated_at columns in the table.
+- Log every requirements upload.

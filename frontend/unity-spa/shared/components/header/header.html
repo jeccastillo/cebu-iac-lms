@@ -8,6 +8,73 @@
               ng-click="vm.goToEmployeePortal()">
         Employee Portal
       </button>
+      <!-- Quick access link to Cashier Admin (visible to cashier_admin/admin) -->
+      <a ng-if="vm.canAccess('/cashier-admin')"
+         href="#!/cashier-admin"
+         class="text-sm text-gray-700 hover:text-gray-900">
+        Cashier Admin
+      </a>
+
+      <!-- Alerts bell with counter and dropdown -->
+      <div class="relative"
+           ng-mouseleave="vm.scheduleCloseAlertMenu()"
+           ng-mouseenter="vm.cancelCloseAlertMenu()">
+        <button type="button"
+                class="relative flex items-center"
+                ng-click="vm.toggleAlertMenu()">
+          <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 text-gray-600">
+            <span class="fas fa-bell"></span>
+          </span>
+          <span ng-if="vm.alerts.length > 0"
+                class="absolute -top-1 -right-1 text-xs leading-none px-1.5 py-1 rounded-full bg-red-600 text-white">
+            {{ vm.alerts.length }}
+          </span>
+        </button>
+        <div class="absolute right-0 mt-2 w-96 bg-white border rounded shadow z-10"
+             ng-show="vm.alertMenuOpen"
+             ng-mouseenter="vm.cancelCloseAlertMenu()"
+             ng-mouseleave="vm.scheduleCloseAlertMenu()">
+          <div class="px-3 py-2 border-b flex items-center justify-between">
+            <span class="text-sm font-semibold text-gray-800">Notifications</span>
+            <button type="button"
+                    class="text-xs text-blue-600 hover:text-blue-700"
+                    ng-click="vm.dismissAll()"
+                    ng-disabled="!vm.alerts.length">
+              Dismiss All
+            </button>
+          </div>
+          <div class="max-h-80 overflow-auto">
+            <div class="p-3 text-sm text-gray-500" ng-if="!vm.alerts.length">
+              No alerts
+            </div>
+            <div ng-repeat="a in vm.alerts track by a.id"
+                 class="px-3 py-2 border-b last:border-b-0"
+                 ng-class="{'cursor-pointer hover:bg-gray-50': a.link}"
+                 ng-click="a.link && vm.openAlert(a)">
+              <div class="flex items-start gap-2">
+                <span class="fas mt-0.5"
+                      ng-class="{
+                        'fa-check-circle text-green-600': a.type === 'success',
+                        'fa-exclamation-triangle text-yellow-600': a.type === 'warning',
+                        'fa-exclamation-circle text-red-600': a.type === 'error',
+                        'fa-info-circle text-blue-600': !a.type || a.type === 'info'
+                      }"></span>
+                <div class="min-w-0 flex-1">
+                  <div class="text-sm font-medium" ng-if="a.title" ng-bind="a.title"></div>
+                  <div class="text-xs text-gray-700 break-words" ng-bind="a.message"></div>
+                </div>
+                <button type="button"
+                        class="text-xs text-gray-500 hover:text-gray-700"
+                        title="Dismiss"
+                        ng-click="$event.stopPropagation(); vm.dismissAlert(a)">
+                  Dismiss
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="relative" 
            ng-mouseleave="vm.scheduleCloseUserMenu()" 
            ng-mouseenter="vm.cancelCloseUserMenu()">

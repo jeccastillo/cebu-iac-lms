@@ -6,10 +6,17 @@
         This screen is being migrated from the legacy CI app. Use the button below to open the current Student Ledger page.
       </p>
     </div>
-    <a class="inline-flex items-center px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
-       ng-href="{{ vm.nav && vm.nav.dashboard || '#!/dashboard' }}">
-      <span class="fas fa-home mr-2"></span> Back to Dashboard
-    </a>
+    <div class="flex items-center gap-2">
+      <a class="inline-flex items-center px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+         ng-href="{{ vm.nav && vm.nav.dashboard || '#!/dashboard' }}">
+        <span class="fas fa-home mr-2"></span> Back to Dashboard
+      </a>
+      <a class="inline-flex items-center px-3 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700"
+         ng-if="vm.canAccess('/cashier-admin')"
+         href="#!/cashier-admin">
+        <span class="fas fa-receipt mr-2"></span> Cashier Admin
+      </a>
+    </div>
   </div>
 
   <div class="bg-white rounded shadow p-6">

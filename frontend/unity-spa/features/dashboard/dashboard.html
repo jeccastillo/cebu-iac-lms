@@ -81,6 +81,14 @@
           </a>
         </li>
         <li>
+          <a class="flex items-center justify-between px-4 py-3 hover:bg-gray-50" href="#/admissions/apply">
+            <span class="flex items-center text-gray-800">
+              <span class="fas fa-file-alt text-purple-500 w-5 mr-2"></span> Admissions Application
+            </span>
+            <span class="fas fa-angle-right text-gray-400"></span>
+          </a>
+        </li>
+        <li>
           <a class="flex items-center justify-between px-4 py-3 hover:bg-gray-50" href="#!/faculty/profile">
             <span class="flex items-center text-gray-800">
               <span class="fas fa-user text-green-500 w-5 mr-2"></span> My Profile
@@ -92,6 +100,14 @@
           <a class="flex items-center justify-between px-4 py-3 hover:bg-gray-50" href="#!/faculty/settings">
             <span class="flex items-center text-gray-800">
               <span class="fas fa-cog text-red-500 w-5 mr-2"></span> Settings
+            </span>
+            <span class="fas fa-angle-right text-gray-400"></span>
+          </a>
+        </li>
+        <li ng-if="vm.canAccess('/cashier-admin')">
+          <a class="flex items-center justify-between px-4 py-3 hover:bg-gray-50" href="#!/cashier-admin">
+            <span class="flex items-center text-gray-800">
+              <span class="fas fa-receipt text-indigo-500 w-5 mr-2"></span> Cashier Admin
             </span>
             <span class="fas fa-angle-right text-gray-400"></span>
           </a>

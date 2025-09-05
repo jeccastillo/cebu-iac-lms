@@ -17,7 +17,7 @@ class StudentRecordsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'student_number' => ['required', 'string'],
+            'student_id'     => ['required', 'integer'],
             'include_grades' => ['sometimes', 'boolean'],
             'term'           => ['nullable', 'string'],
         ];
@@ -30,6 +30,11 @@ class StudentRecordsRequest extends FormRequest
         // Normalize include_grades to boolean
         if (array_key_exists('include_grades', $in)) {
             $in['include_grades'] = (bool) $in['include_grades'];
+        }
+
+        // Normalize student_id to integer if present
+        if (array_key_exists('student_id', $in)) {
+            $in['student_id'] = (int) $in['student_id'];
         }
 
         $this->merge($in);

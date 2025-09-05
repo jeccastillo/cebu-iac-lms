@@ -34,9 +34,9 @@
     >
       <div class="flex-1 min-w-0">
         <div ng-if="vm.selectedTerm" class="truncate">
-          <span class="font-medium">{{ vm.selectedTerm.label }}</span>
+          <span class="font-medium">{{ vm.selectedTerm.term_student_type }} {{ vm.selectedTerm.label }}</span>
           <span ng-if="!vm.compact" class="text-gray-500 text-xs block">
-            {{ vm.selectedTerm.enumSem }} {{ vm.selectedTerm.term_label }} {{ vm.selectedTerm.strYearStart }}-{{ vm.selectedTerm.strYearEnd }}
+            {{ vm.selectedTerm.term_student_type }} {{ vm.selectedTerm.enumSem }} {{ vm.selectedTerm.term_label }} {{ vm.selectedTerm.strYearStart }}-{{ vm.selectedTerm.strYearEnd }}
           </span>
         </div>
         <div ng-if="!vm.selectedTerm" class="text-gray-400">
@@ -74,7 +74,7 @@
         >
           <div class="font-medium">{{ term.label }}</div>
           <div ng-if="!vm.compact" class="text-xs text-gray-500">
-            {{ term.enumSem }} {{ term.term_label }} {{ term.strYearStart }}-{{ term.strYearEnd }}
+            {{ term.term_student_type }} {{ term.enumSem }} {{ term.term_label }} {{ term.strYearStart }}-{{ term.strYearEnd }}
             <span ng-if="term.term_student_type" class="ml-1">({{ term.term_student_type }})</span>
           </div>
         </button>

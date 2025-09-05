@@ -20,7 +20,15 @@ class DataFetcherService
 
         $user = DB::table('tb_mas_users')
             ->join('tb_mas_programs', 'tb_mas_users.intProgramID', '=', 'tb_mas_programs.intProgramID')
-            ->where('strGSuiteEmail', $token)
+            // Accept multiple identifiers for robustness:
+            // - strGSuiteEmail (primary portal token)
+            // - strEmail (common login for students)
+            // - strStudentNumber (some logins use student number)
+            ->where(function ($q) use ($token) {
+                $q->where('tb_mas_users.strGSuiteEmail', $token)
+                  ->orWhere('tb_mas_users.strEmail', $token)
+                  ->orWhere('tb_mas_users.strStudentNumber', $token);
+            })
             ->select('tb_mas_users.*', 'tb_mas_programs.strProgramCode')
             ->first();
 
@@ -109,13 +117,14 @@ class DataFetcherService
      * Compute balances using tb_mas_student_ledger (charges/payments) and tb_mas_transactions as fallback.
      * Positive amounts in tb_mas_student_ledger are charges, negative are payments.
      */
-    public function getStudentBalances(string $studentNumber): array
+    public function getStudentBalances(int $studentId): array
     {
-        $user = DB::table('tb_mas_users')->where('strStudentNumber', $studentNumber)->first();
+        $user = DB::table('tb_mas_users')->where('intID', $studentId)->first();
 
         if (!$user) {
             return [
-                'student_number'    => $studentNumber,
+                'student_id'        => $studentId,
+                'student_number'    => null,
                 'total_due'         => 0.00,
                 'total_paid'        => 0.00,
                 'outstanding'       => 0.00,
@@ -131,7 +140,7 @@ class DataFetcherService
                 ->leftJoin('tb_mas_sy as sy', 'l.syid', '=', 'sy.intID')
                 ->leftJoin('tb_mas_faculty as f', 'l.added_by', '=', 'f.intID')
                 ->leftJoin('tb_mas_scholarships as sc', 'l.scholarship_id', '=', 'sc.intID')
-                ->where('l.student_id', $user->intID)
+                ->where('l.student_id', $studentId)
                 ->where('l.is_disabled', 0)
                 ->orderBy('l.date', 'asc')
                 ->select(
@@ -210,7 +219,7 @@ class DataFetcherService
         // Fallback/augment last payment date and totals from transactions
         $txRows = DB::table('tb_mas_transactions as t')
             ->join('tb_mas_registration as r', 'r.intRegistrationID', '=', 't.intRegistrationID')
-            ->where('r.intStudentID', $user->intID)
+            ->where('r.intStudentID', $studentId)
             ->select('t.intAmountPaid', 't.dtePaid')
             ->get();
 
@@ -230,7 +239,8 @@ class DataFetcherService
         $outstanding = round($totalCharges - $totalPayments, 2);
 
         return [
-            'student_number'    => $studentNumber,
+            'student_id'        => $studentId,
+            'student_number'    => $user->strStudentNumber ?? null,
             'total_due'         => round($totalCharges, 2),
             'total_paid'        => round($totalPayments, 2),
             'outstanding'       => $outstanding,
@@ -247,19 +257,17 @@ class DataFetcherService
      * Retrieve academic records. When includeGrades=true, include grade fields.
      * If $term provided, it should be a tb_mas_sy.intID; otherwise returns all terms.
      */
-    public function getStudentRecords(string $studentNumber, ?string $term, bool $includeGrades): array
+    public function getStudentRecords(int $studentId, ?string $term, bool $includeGrades): array
     {
-        $user = DB::table('tb_mas_users')->where('strStudentNumber', $studentNumber)->first();
-
         $records = [];
-        if ($user) {
+        if (true) {
             $q = DB::table('tb_mas_classlist_student as cls')
                 ->join('tb_mas_classlist as cl', 'cl.intID', '=', 'cls.intClassListID')
                 ->join('tb_mas_subjects as s', 's.intID', '=', 'cl.intSubjectID')
                 ->leftJoin('tb_mas_sy as sy', 'sy.intID', '=', 'cl.strAcademicYear')
                 ->leftJoin('tb_mas_faculty as f', 'f.intID', '=', 'cl.intFacultyID')
                 ->leftJoin('tb_mas_faculty as e', 'e.intID', '=', 'cls.enlisted_user')
-                ->where('cls.intStudentID', $user->intID);               
+                ->where('cls.intStudentID', $studentId);               
 
             $rows = $q->select(
                 'cl.SectionCode as sectionCode',
@@ -291,19 +299,45 @@ class DataFetcherService
                 if (isset($r->enumSem, $r->strYearStart, $r->strYearEnd)) {
                     $termLabel = sprintf('%s Term %s-%s', $r->enumSem, $r->strYearStart, $r->strYearEnd);
                 }
+                // Derive a numeric semester to aid front-end ordering
+                $intSem = null;
+                if (isset($r->enumSem)) {
+                    $semRaw = (string)$r->enumSem;
+                    if (is_numeric($semRaw)) {
+                        $intSem = (int)$semRaw;
+                    } else {
+                        $sem = strtolower($semRaw);
+                        if (strpos($sem, 'summer') !== false) {
+                            $intSem = 4;
+                        } elseif (strpos($sem, 'first') !== false || strpos($sem, '1st') !== false || preg_match('/(^|\s)1($|\s)/', $sem)) {
+                            $intSem = 1;
+                        } elseif (strpos($sem, 'second') !== false || strpos($sem, '2nd') !== false || preg_match('/(^|\s)2($|\s)/', $sem)) {
+                            $intSem = 2;
+                        } elseif (strpos($sem, 'third') !== false || strpos($sem, '3rd') !== false || preg_match('/(^|\s)3($|\s)/', $sem)) {
+                            $intSem = 3;
+                        }
+                    }
+                }
                 $item = [         
-                    'faculty_first'=>$r->faculty_firstname,
-                    'faculty_last'=>$r->faculty_lastname,      
-                    'enlisted_first'=>$r->reg_firstname,
-                    'enlisted_last'=>$r->reg_lastname,           
-                    'section_code'=> $r->sectionCode,
-                    'classlist_id'=> $r->classlist_id,
-                    'code'        => $r->code,
-                    'description' => $r->description,
-                    'units'       => isset($r->units) ? (int)$r->units : null,
-                    'subject_id'  => isset($r->subject_id) ? (int)$r->subject_id : null,
-                    'syid'        => $r->syid,
-                    'remarks'     => $r->remarks,                    
+                    'faculty_first' => $r->faculty_firstname,
+                    'faculty_last'  => $r->faculty_lastname,      
+                    'enlisted_first'=> $r->reg_firstname,
+                    'enlisted_last' => $r->reg_lastname,           
+                    'section_code'  => $r->sectionCode,
+                    'classlist_id'  => $r->classlist_id,
+                    'code'          => $r->code,
+                    'description'   => $r->description,
+                    'units'         => isset($r->units) ? (int)$r->units : null,
+                    'subject_id'    => isset($r->subject_id) ? (int)$r->subject_id : null,
+                    'syid'          => $r->syid,
+                    // Provide fields needed by the frontend to build friendly term labels and ordering
+                    'enumSem'       => $r->enumSem ?? null,
+                    'intSem'        => $intSem,
+                    'strYearStart'  => $r->strYearStart ?? null,
+                    'strYearEnd'    => $r->strYearEnd ?? null,
+                    'school_year'   => (isset($r->strYearStart, $r->strYearEnd) ? ($r->strYearStart . '-' . $r->strYearEnd) : null),
+                    'term'          => $termLabel, // e.g., "1st Term 2025-2026" (frontend further formats to "1st Sem ...")
+                    'remarks'       => $r->remarks,                    
                 ];
                 if ($includeGrades) {
                     $item['grades'] = [
@@ -318,7 +352,7 @@ class DataFetcherService
         }
 
         return [
-            'student_number' => $studentNumber,
+            'student_id'     => $studentId,
             'term'           => $term,
             'include_grades' => $includeGrades,
             'records'        => $records,
@@ -328,21 +362,19 @@ class DataFetcherService
     /**
      * Retrieve academic records for a specific term and return a grouped 'terms' shape.
      */
-    public function getStudentRecordsByTerm(string $studentNumber, string $term, bool $includeGrades): array
+    public function getStudentRecordsByTerm(int $studentId, string $term, bool $includeGrades): array
     {
-        $user = DB::table('tb_mas_users')->where('strStudentNumber', $studentNumber)->first();
-
         $records = [];
         $label = null;
 
-        if ($user) {
+        if (true) {
             $q = DB::table('tb_mas_classlist_student as cls')
                 ->join('tb_mas_classlist as cl', 'cl.intID', '=', 'cls.intClassListID')
                 ->join('tb_mas_subjects as s', 's.intID', '=', 'cl.intSubjectID')
                 ->leftJoin('tb_mas_sy as sy', 'sy.intID', '=', 'cl.strAcademicYear')
                 ->leftJoin('tb_mas_faculty as f', 'f.intID', '=', 'cl.intFacultyID')
                 ->leftJoin('tb_mas_faculty as e', 'e.intID', '=', 'cls.enlisted_user')
-                ->where('cls.intStudentID', $user->intID)
+                ->where('cls.intStudentID', $studentId)
                 ->where('cl.strAcademicYear', $term);
 
             $rows = $q->select(
@@ -408,8 +440,7 @@ class DataFetcherService
         }
 
         return [
-            'student_id' =>$user->intID,
-            'student_number' => $studentNumber,
+            'student_id'     => $studentId,
             'term'           => $term,
             'include_grades' => $includeGrades,
             'terms'          => [[
@@ -424,12 +455,12 @@ class DataFetcherService
     /**
      * Retrieve transaction ledger using tb_mas_transactions joined to registration and users.
      */
-    public function getStudentLedger(string $studentNumber): array
+    public function getStudentLedger(int $studentId): array
     {
         $transactions = DB::table('tb_mas_transactions as t')
             ->join('tb_mas_registration as r', 'r.intRegistrationID', '=', 't.intRegistrationID')
             ->join('tb_mas_users as u', 'u.intID', '=', 'r.intStudentID')
-            ->where('u.strStudentNumber', $studentNumber)
+            ->where('r.intStudentID', $studentId)
             ->orderBy('t.dtePaid', 'asc')
             ->orderBy('t.intORNumber', 'asc')
             ->select(
@@ -456,8 +487,8 @@ class DataFetcherService
             ->toArray();
 
         return [
-            'student_number' => $studentNumber,
-            'transactions'   => $transactions,
+            'student_id'    => $studentId,
+            'transactions'  => $transactions,
         ];
     }
 }

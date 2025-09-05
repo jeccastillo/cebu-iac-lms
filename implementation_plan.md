@@ -1,237 +1,243 @@
 # Implementation Plan
 
 [Overview]
-Implement a Laravel tuition computation service and API endpoint that reproduces the legacy CodeIgniter tuition logic, using the student's selected tuition_year on tb_mas_registration to compute a full tuition breakdown (tuition, labs, misc, scholarships, discounts, installment variants, late fees, foreign/new-student fees), with a dedicated endpoint to retrieve the result.
+Add an admin/registrar page for monitoring sections with capacity vs utilization using tb_mas_classlist.slots. For each classlist (section), compute and display:
+- Enrolled count: number of students in tb_mas_classlist_student joined to tb_mas_registration for the same term where the student is considered enrolled.
+- Enlisted count: number of students in tb_mas_classlist_student for the term (regardless of enrollment).
+- Remaining slots: slots - enrolled_count (never negative).
 
-The existing CodeIgniter implementation (Data_fetcher::getTuition/getTuitionSubjects) computes tuition based on the student's registration record, enrolled subjects for a term, and fee schedules in the tuition year tables. This plan ports that logic to Laravel so the SPA and other consumers can obtain a consistent, canonical breakdown from the new API. The Laravel service will:
-- Read the student registration row for the requested term to determine tuition_year, student status/type, class type, year level, internship tag, withdrawal periods, and program overrides.
-- Gather the student's classes for the term (and their properties such as units, lab classification, electives, modular payments).
-- Resolve fee schedules from the tuition year tables (unit rates by program or default; lab/misc fees by type and delivery mode; track/elective fees for SHS).
-- Apply special rules (NSTP, thesis, internship, foreign fees, late enrollment).
-- Compute discounts and scholarships (in-house, external, late-tagged) across tuition, lab, misc, and other fee buckets with both percentage and fixed schemes.
-- Generate installment variants with configured increases, down payment strategies (percentage or fixed), and installment fee schedules.
-- Return a structured breakdown compatible with both detailed UI display and AR/ledger reporting fields exposed by the legacy computation.
+This enables real-time capacity tracking per section, driven by legacy tables, and scoped by term (tb_mas_sy.intID). Enrolled determination is made against tb_mas_registration (same term). The page provides filtering and searching by subject, faculty, and section identifiers.
 
 [Types]  
-Define request/response types to formalize the API contract.
+Introduce a typed response model for the new API endpoint.
 
-- Request (query params):
-  - student_number: string (required) — tb_mas_users.strStudentNumber
-  - term: int (required) — tb_mas_sy.intID (syid)
-  - override_discount_id: int|null (optional) — tb_mas_student_discount.intID to compute a specific discount only (parity feature)
-  - override_scholarship_id: int|null (optional) — tb_mas_student_discount.intID to compute a specific scholarship only (parity feature)
-
-- Enums/constraints:
-  - class_type: enum {regular, online, hybrid, hyflex} — derived from registration.type_of_class or SHS year-level mapping
-  - student_type: strings consistent with CI logic: new, freshman, transferee, continuing, shiftee, returning, 2nd Degree, 2nd Degree iAC, foreign, etc.
-  - level: enum {college, shs, other, drive} — normalized from tb_mas_users.level
-  - withdrawal_period: enum {'before','during','after'} or null
-
-- Response (TuitionBreakdown):
-  - summary:
-    - tuition: float
-    - lab_total: float
-    - misc_total: float
-    - additional_total: float (new_student + foreign + internship + late_enrollment + thesis/nsf if applicable)
-    - discounts_total: float (in-house)
-    - scholarships_total: float (external + in-house distinguished in fields)
-    - total_before_deductions: float
-    - total_due: float
-    - total_installment: float
-    - total_installment30: float
-    - total_installment50: float
-    - down_payment: float
-    - down_payment30: float
-    - down_payment50: float
-    - installment_fee: float (per schedule)
-    - installment_fee30: float
-    - installment_fee50: float
-  - items:
-    - tuition: array of { code: string, subject_id: int, units: int, rate: float, amount: float, section?: string }
-    - lab: array of { code: string, lab_type: string, rate: float, hours: int, amount: float }
-    - misc: array of { name: string, amount: float }
-    - additional: array of { name: string, amount: float } (new_student, late_enrollment, foreign items, internship, thesis)
-    - discounts: array of { name: string, deduction_from: 'in-house'|'external', scope: 'tuition'|'lab'|'misc'|'other'|'total', type: 'rate'|'fixed', value: float, amount: float, date_applied?: datetime }
-    - scholarships: same structure as discounts when deduction_type = scholarship
-  - ar_reporting:
-    - ar_discounts_full, ar_discounts_installment, ar_discounts_installment30, ar_discounts_installment50: float
-    - ar_external_scholarship_full, ar_external_scholarship_installment, ar_external_scholarship_installment30, ar_external_scholarship_installment50: float
-    - ar_late_tagged_discounts_full, ar_late_tagged_discounts_installment, ar_late_tagged_discounts_installment30, ar_late_tagged_discounts_installment50: float
-    - ar_external_discounts_full, ar_external_discounts_installment, ar_external_discounts_installment30, ar_external_discounts_installment50: float
-  - meta:
-    - class_type: string
-    - tuition_year_id: int
-    - year_level: int|null
-    - program_id_used: int
-    - currency: string ('PHP')
-    - computed_at: datetime
+Detailed type definitions:
+- Request (query string)
+  - term: int required (tb_mas_sy.intID)
+  - page: int optional (default 1)
+  - perPage: int optional (default 20)
+  - filters (optional):
+    - intSubjectID: int
+    - intFacultyID: int
+    - section: string (matches tb_mas_classlist.sectionCode using LIKE)
+    - class_name: string (tb_mas_classlist.strClassName)
+    - year: int (tb_mas_classlist.year)
+    - sub_section: string
+- Response (JSON)
+  - data: Array<ClasslistSlotsItem>
+  - meta: { page: int, per_page: int, total: int }
+- ClasslistSlotsItem
+  - classlist_id: int (tb_mas_classlist.intID)
+  - section_code: string|null (tb_mas_classlist.sectionCode)
+  - class_name: string (tb_mas_classlist.strClassName)
+  - year: int|null
+  - section: string|null (tb_mas_classlist.strSection)
+  - sub_section: string|null
+  - subject_code: string
+  - subject_description: string
+  - faculty_name: string|null
+  - slots: int|null (tb_mas_classlist.slots)
+  - enlisted_count: int
+  - enrolled_count: int
+  - remaining_slots: int (max(slots - enrolled_count, 0))
+  - finalized: int (tb_mas_classlist.intFinalized)
+- Enrolled semantics
+  - A student is counted as enrolled if a tb_mas_registration row exists for (intStudentID = cls.intStudentID, intAYID = term) AND intROG indicates enrollment (>=1) AND is not withdrawn/terminal.
+  - Practical SQL filters:
+    - r.intROG >= 1
+    - r.intROG NOT IN (3,5) when columns/values are present in the schema
+  - NOTE: We will avoid relying on date fields (dteRegistered / date_enrolled) for counts to stay compatible with schema variants observed in logs.
 
 [Files]
-Introduce a new controller and enrich the TuitionService; add helpers for parity computations; add a resource for clean output; and wire the route.
+Add a dedicated API endpoint and a new AngularJS (1.x) SPA feature page.
 
-- New files:
-  - laravel-api/app/Http/Controllers/Api/V1/TuitionController.php
-    - Purpose: Validate request, orchestrate computation via TuitionService, return JSON.
-  - laravel-api/app/Http/Requests/Api/V1/TuitionComputeRequest.php
-    - Purpose: Input validation (student_number, term, optional overrides).
-  - laravel-api/app/Http/Resources/TuitionBreakdownResource.php
-    - Purpose: Shape output consistently, including AR reporting fields.
-  - laravel-api/app/Services/TuitionCalculator.php
-    - Purpose: Extracted helper methods ported from CI: getUnitPrice, getExtraFee, resolveClassType, computeSHSTrackRate, elective/track lookup, lab type resolution, late enrollment, foreign fees, installment math.
-  - laravel-api/tests/Feature/TuitionComputeTest.php
-    - Purpose: API tests for common scenarios (college with labs/misc; SHS with track/elective; with in-house/external scholarships; late enrollment; foreign).
+Detailed breakdown:
+- New files to be created
+  - laravel-api/app/Services/ClasslistSlotsService.php
+    - Purpose: Provide term-scoped, paginated classlist slot utilization with efficient SQL aggregation.
+  - laravel-api/app/Http/Controllers/Api/V1/ClasslistSlotsController.php
+    - Purpose: REST controller exposing GET /api/v1/classlists/slots with filters.
+  - frontend/unity-spa/features/registrar/sections-slots/sections-slots.controller.js
+    - Purpose: AngularJS controller for sections/slots monitoring page.
+  - frontend/unity-spa/features/registrar/sections-slots/sections-slots.html
+    - Purpose: UI view for tabular display, search, and pagination.
+  - frontend/unity-spa/features/registrar/sections-slots/sections-slots.service.js (optional, if we keep controllers lean)
+    - Purpose: Encapsulate API calls to the Laravel endpoint.
 
-- Existing files to modify:
+- Existing files to be modified
   - laravel-api/routes/api.php
-    - Add route: GET /api/v1/tuition/compute -> TuitionController@compute
-  - laravel-api/app/Services/TuitionService.php
-    - Replace placeholder preview with full parity logic:
-      - public function compute(string $studentNumber, int $syid, ?int $discountId = null, ?int $scholarshipId = null): array
-      - Internal queries to tb_mas_registration, tb_mas_classlist_student, tb_mas_classlist, tb_mas_subjects, tb_mas_tuition_year_* tables, tb_mas_student_discount + tb_mas_scholarships, tb_mas_sy, tb_mas_users.
-      - Build breakdown arrays and AR fields.
+    - Register new route GET /api/v1/classlists/slots -> ClasslistSlotsController@index
+  - frontend/unity-spa/shared/components/sidebar/sidebar.controller.js
+    - Add new menu entry under Registrar (or equivalent grouping) linking to sections/slots monitor.
+  - Optionally: laravel-api/app/Http/Resources/RegistrarClasslistResource.php
+    - If desired, add a dedicated resource ClasslistSlotsResource for consistent field naming. Not required for the first pass.
 
-- No files to delete or move.
+- Files to be deleted or moved
+  - None
 
-- Configuration:
-  - None required beyond route registration. Existing migration 2025_08_28_000400_add_missing_columns_to_tb_mas_tuition_year.php already adds needed columns (installmentFixed, freeElectiveCount, final).
+- Configuration updates
+  - None
 
 [Functions]
-Add new functions and ported helpers; modify TuitionService methods to compute full parity outputs.
+Add a new service method and a controller method for aggregation; wire a frontend fetch function.
 
-- New functions (TuitionService):
-  - compute(studentNumber: string, syid: int, discountId?: int|null, scholarshipId?: int|null): array
-    - Purpose: Orchestrate full computation and return the breakdown array.
+Detailed breakdown:
+- New functions
+  - Class: App\Services\ClasslistSlotsService
+    - Method: public function listByTerm(array $params): array
+      - Input: ['term'=>int, 'page'=>int, 'perPage'=>int, optional filters]
+      - Output: ['data'=>array, 'meta'=>array]
+      - Purpose: Construct SQL to fetch classlists for the term along with enlisted_count, enrolled_count, and derived remaining_slots. Supports optional filters and isDissolved=0 by default.
 
-- New functions (TuitionCalculator):
-  - resolveRegistrationContext(studentId: int, syid: int): array
-    - Returns registration-derived parameters: tuition_year_id, stype, class_type, year_level, internship, intROG, withdrawal_period, current_program, dteRegistered.
-  - gatherSubjectsForTerm(studentId: int, syid: int): array
-    - Return selected subjects for the term with major/elective/modular flags and payment_amount from classlist.
-  - getUnitPrice(tuitionYear: array, classType: string, programId?: int|null): float
-    - Resolve program-specific unit rate from tb_mas_tuition_year_program or fallback tuition year defaults by classType.
-  - getExtraFee(row: array, classType: string, bucket: 'misc'|'lab'): float
-    - Read correct column per class type (tuition_amount[_online|_hybrid|_hyflex]).
-  - resolveLabClassification(subjectId: int, syid: int, default: string): string
-    - Use tb_mas_subjects_labtype override else default subject classification.
-  - computeCollegeTuition(unitFee: float, subjects: array, tuitionYear: array, classType: string, syid: int): array
-    - Returns tuple [tuition: float, lab_total: float, thesis_fee: float, detailed lab list].
-  - computeSHSTuition(subjects: array, tuitionYear: array, classType: string, yearLevel: int, programId: int): array
-    - Returns [tuition: float from track, modular add-ons, elective add-ons, lab_total (usually none), line items].
-  - computeMiscFees(miscRows: array, classType: string, stype: string, yearLevel: int, wStatus: string|null, semRow: array, dteRegistered: date|null): array
-    - Builds misc_list with ID Validation omission for new students; late enrollment fee logic when dteRegistered >= sem.reconf_start; internship misc pack if needed.
-  - computeForeignFees(studentCitizenship: string, semRow: array, tuitionYear: array, classType: string): array
-    - Adds SVF/ISF as applicable and returns list + total.
-  - computeDiscountsAndScholarships(args…): array
-    - Aggregates in-house and external; computes rate/fixed per fee bucket and total assessment; builds AR fields and late-tagging segregation per sy.ar_report_date_generation; returns totals and line items; exposes installment variants (regular/installmentIncrease, 30%, 50%).
-  - computeInstallments(totals…): array
-    - Applies installmentIncrease, DP percentage or installmentFixed behavior; produces down_payment, installment_fee, 30/50 variants.
+    - Internal helpers (private)
+      - buildBaseQuery($term): \Illuminate\Database\Query\Builder
+        - Joins tb_mas_subjects and tb_mas_faculty for display fields
+      - applyFilters($q, $params): void
+        - Applies filters: intSubjectID, intFacultyID, section (LIKE), class_name, year, sub_section
+      - aggregateCounts($q, $term): void
+        - Adds subqueries/left joins for enlisted and enrolled counts
 
-- Modified functions:
-  - TuitionService::preview(array $input): array
-    - Keep for backward compatibility, but update to call compute(...) in a preview mode when student_number and term are present; otherwise return placeholder as today.
+  - Class: App\Http\Controllers\Api\V1\ClasslistSlotsController
+    - Method: public function index(Request $request): JsonResponse
+      - Validates 'term' is present and numeric
+      - Forwards to ClasslistSlotsService::listByTerm
+      - Returns JSON with data and meta
 
-- Removed functions:
-  - None.
+  - Frontend AngularJS
+    - sections-slots.service.js
+      - getList({ term, page, perPage, filters }): $http.get(...)
+    - sections-slots.controller.js
+      - $scope.state for pagination, filters, and results
+      - load() to call service and map response
+      - compute client-side derived presentation elements (e.g., percentage bars)
+    - sections-slots.html
+      - Table with columns: Section Code, Subject Code, Subject Desc, Faculty, Capacity, Enlisted, Enrolled, Remaining, Finalized, and optional filters row
+
+- Modified functions
+  - frontend/unity-spa/shared/components/sidebar/sidebar.controller.js
+    - Add navigation item linking to the new page (route path to be defined, e.g., #/registrar/sections-slots)
+
+- Removed functions
+  - None
 
 [Classes]
-Add a controller, request validator, resource, and helper service. Modify TuitionService to orchestrate parity logic.
+Introduce one new controller class and one new service class.
 
-- New classes:
-  - App\Http\Controllers\Api\V1\TuitionController
-    - Methods: compute(TuitionComputeRequest $request)
-    - Dependencies: TuitionService
-  - App\Http\Requests\Api\V1\TuitionComputeRequest
-    - Rules: student_number required, term required integer, optional overrides numeric
-  - App\Http\Resources\TuitionBreakdownResource
-    - Transforms TuitionService result into API response
-  - App\Services\TuitionCalculator
-    - Stateless helper, injected into TuitionService
+Detailed breakdown:
+- New classes
+  - App\Services\ClasslistSlotsService
+    - Key methods: listByTerm, buildBaseQuery, applyFilters, aggregateCounts
+  - App\Http\Controllers\Api\V1\ClasslistSlotsController
+    - Key methods: index()
 
-- Modified classes:
-  - App\Services\TuitionService
-    - Add compute() and integrate TuitionCalculator; retain preview() with compatibility behavior.
+- Modified classes
+  - None of the existing service classes require modification; this feature remains additive.
 
-- Removed classes:
-  - None.
+- Removed classes
+  - None
 
 [Dependencies]
-No new external composer packages are required.
+No new package dependencies.
 
-Rationale: All logic is DB-driven and can be implemented with Laravel DB/Query Builder or Eloquent. No extra libs beyond standard PHP/Carbon for dates.
+- Backend: Laravel DB facade
+- Frontend: Existing AngularJS 1.x stack; no new libs
 
 [Testing]
-Adopt API feature tests and limited unit tests for calculators.
+Use API-first verification and then UI validation.
 
-- Feature tests (laravel-api/tests/Feature/TuitionComputeTest.php):
-  - test_college_basic_with_labs_and_misc: seeds a student, registration with tuition_year, 2 subjects with units/lab, misc fees; asserts totals match CI parity calculation.
-  - test_shs_track_with_modular_and_elective: seeds track rates and elective fees; asserts tuition and add-ons.
-  - test_discounts_inhouse_rate_and_fixed: attaches in-house discounts; validates AR in-house buckets and net totals.
-  - test_scholarships_external_and_late_tagged_discounts: attaches external scholarships and late-tagged in-house discounts; validates external/lated-tagged AR fields.
-  - test_late_enrollment_fee_and_foreign_fees: sets dteRegistered after reconf_start and foreign citizenship; asserts additions.
-  - test_withdrawal_status_zero_out_on_before: sets intROG to OW/LOA/AWOL cases and w_status 'before' to zero tuition/lab/misc; asserts behavior.
+- API tests (manual via Postman/curl)
+  1) GET /api/v1/classlists/slots?term={syid}
+     - Validate each item includes capacity (slots), enlisted_count, enrolled_count, and remaining_slots = max(slots - enrolled_count, 0)
+  2) Verify filters:
+     - intSubjectID, intFacultyID, section (LIKE), class_name, year, sub_section
+  3) Verify paging meta: meta.page, meta.per_page, meta.total
+  4) Edge cases:
+     - classlists with null slots (treat as null in response, remaining_slots should be 0 or null; for display we will render 0 if null)
+     - dissolved classlists (isDissolved=1) excluded by default
+     - Zero enrolled but positive enlisted → remaining_slots equals full capacity; enlisted_count is separately visible as requested.
 
-- Manual validation:
-  - Compare outputs against CI endpoints or database-known cases.
-  - cURL example:
-    - GET http://localhost:8000/api/v1/tuition/compute?student_number=C2024-1-1234&amp;term=123
+- Enrollment determination checks
+  - Ensure joined registration r: r.intStudentID = cls.intStudentID AND r.intAYID = term
+  - Count enrolled when r.intROG >= 1 AND r.intROG NOT IN (3,5) (withdrawn/terminal)
+  - Use WHERE EXISTS subquery or LEFT JOIN + COUNT(DISTINCT CASE WHEN conditions THEN cls.intStudentID END)
+
+- UI tests
+  - Load page, set term selector (from latest term or a dropdown)
+  - Sort and filter; numbers match API
+  - Remaining slots updates as filters change
 
 [Implementation Order]
-Build from read-only endpoint outward, minimizing churn and enabling incremental validation.
+Implement backend first, then frontend wiring, then UI.
 
-1. Routes and Controller scaffolding
-   - Add GET /api/v1/tuition/compute in routes/api.php mapped to TuitionController@compute.
-   - Create TuitionComputeRequest with validation.
-   - Create TuitionBreakdownResource returning the pre-existing TuitionService::preview to keep the endpoint working during development.
+1) Backend service
+   - Create laravel-api/app/Services/ClasslistSlotsService.php
+   - Implement listByTerm($params):
+     - Base query: tb_mas_classlist as cl
+       - JOIN tb_mas_subjects as s ON s.intID = cl.intSubjectID
+       - LEFT JOIN tb_mas_faculty as f ON f.intID = cl.intFacultyID
+       - WHERE cl.strAcademicYear = :term AND cl.isDissolved = 0
+       - SELECT cl.intID, cl.sectionCode, cl.strClassName, cl.year, cl.strSection, cl.sub_section, cl.intFinalized, cl.slots, s.strCode, s.strDescription, f.strFirstname, f.strLastname
+     - enlisted_count:
+       - LEFT JOIN subq_enlisted:
+         SELECT intClassListID, COUNT(*) as enlisted_count
+         FROM tb_mas_classlist_student
+         WHERE intsyID = :term
+         GROUP BY intClassListID
+       - LEFT JOIN on cl.intID = subq_enlisted.intClassListID
+     - enrolled_count:
+       - LEFT JOIN subq_enrolled:
+         SELECT cls.intClassListID, COUNT(*) as enrolled_count
+         FROM tb_mas_classlist_student cls
+         JOIN tb_mas_registration r ON r.intStudentID = cls.intStudentID AND r.intAYID = :term
+         WHERE cls.intsyID = :term
+           AND r.intROG >= 1
+           AND (r.intROG NOT IN (3,5) OR 1=1) -- permissive for schema variants
+         GROUP BY cls.intClassListID
+       - LEFT JOIN on cl.intID = subq_enrolled.intClassListID
+     - Apply filters (subject, faculty, section LIKE, class_name, year, sub_section)
+     - Pagination (page, perPage)
+     - Map rows into response array with:
+       - faculty_name = CONCAT(f.strFirstname, ' ', f.strLastname) or null
+       - slots as int (nullable)
+       - enlisted_count = COALESCE(subq_enlisted.enlisted_count, 0)
+       - enrolled_count = COALESCE(subq_enrolled.enrolled_count, 0)
+       - remaining_slots = max((int)slots - enrolled_count, 0) when slots not null; else 0
+   - Return ['data' => items, 'meta' => ['page' => page, 'per_page' => perPage, 'total' => total]]
 
-2. Data gathering primitives
-   - In TuitionService, add methods to look up student, registration (with tuition_year, stype, class_type, year_level, internship, intROG, withdrawal_period, current_program, dteRegistered), sy row, and subjects for the term (classlist_student/classlist/subjects join mirroring CI).
+2) Backend controller and route
+   - Create laravel-api/app/Http/Controllers/Api/V1/ClasslistSlotsController.php with index(Request)
+     - Validate term
+     - Send request->query() to service
+     - Return JSON response
+   - Modify laravel-api/routes/api.php to add:
+     Route::get('/v1/classlists/slots', [ClasslistSlotsController::class, 'index']);
+   - Optional: auth/role middleware (registrar, admin) as appropriate
 
-3. TuitionCalculator helper
-   - Implement helpers: getUnitPrice(), getExtraFee(), resolveLabClassification(), resolveClassType(), and the SHS/elective/track lookup routines against:
-     - tb_mas_tuition_year_program (program-based unit rates)
-     - tb_mas_tuition_year_lab_fee (per lab classification)
-     - tb_mas_tuition_year_misc (types: regular|internship|new_student|thesis|late_enrollment|svf|isf|nstp)
-     - tb_mas_tuition_year_track (SHS track fees)
-     - tb_mas_tuition_year_elective (SHS elective fees)
-     - tb_mas_subjects_labtype (per-term lab override)
-   - Port special rules: NSTP rate, thesis fee, internship pack, foreign fees (only when sem.pay_student_visa != 0 and/or isf), late enrollment windows (sem.reconf_start).
+3) Frontend SPA page (AngularJS 1.x)
+   - Create frontend/unity-spa/features/registrar/sections-slots/sections-slots.service.js
+     - Expose getList(params)
+   - Create frontend/unity-spa/features/registrar/sections-slots/sections-slots.controller.js
+     - Manage term selection (default latest), filters, pagination
+     - Call service and bind to $scope.items and $scope.meta
+   - Create frontend/unity-spa/features/registrar/sections-slots/sections-slots.html
+     - Filters: subject code (text), faculty (select optional), section code (text)
+     - Columns:
+       - Section Code | Subject Code | Subject Description | Faculty | Capacity | Enlisted | Enrolled | Remaining | Finalized
+     - Render capacity - enrolled for Remaining
+   - Wire new route/state (if router exists in this SPA) or link from sidebar to this HTML/controller pair
 
-4. Compute college and SHS tuition
-   - For college: loop subjects and sum int(strTuitionUnits)*unit_rate, NSTP override, lab classification fee * intLab hours, thesis if flagged.
-   - For SHS: base track amount by year_level, add modular subject payment_amount, add elective subject amount via tuition_year_elective by year_level; consider delivery mapping for year level where applicable.
+4) Sidebar entry
+   - Modify frontend/unity-spa/shared/components/sidebar/sidebar.controller.js
+     - Add menu item "Sections Slots Monitor" under Registrar → route to the new page
 
-5. Compute misc and additional fees
-   - Build misc_list from misc pack (regular vs internship), omit ID VALIDATION for brand-new students (same condition set as CI), add late_enrollment fee when applicable, prepare new_student fees for stype ∈ {new,freshman,transferee, 2nd Degree, 2nd Degree iAC}, foreign fee pack, internship fee pack, thesis fee when applicable.
+5) Verification
+   - API manual checks
+   - UI smoke tests
+   - Edge checks with classlists having null slots and zero counts
 
-6. Discounts and scholarships
-   - Gather applied tb_mas_student_discount for syid and student (deduction_type ∈ {discount,scholarship}, status = 'applied'), split in-house vs external and late-tagged by date_applied vs sy.ar_report_date_generation.
-   - Compute rate/fixed reductions over tuition, lab, misc, and other buckets; also allow 'total assessment' discounts where defined; detect full scholarship when total_assessment_rate=100.
-   - Produce AR reporting fields:
-     - ar_discounts_full/installment(,30,50)
-     - ar_external_scholarship_full/installment(,30,50)
-     - ar_late_tagged_discounts_full/installment(,30,50)
-     - ar_external_discounts_full/installment(,30,50)
-   - Store per-award lines with scope/type/amount metadata in items.discounts/scholarships.
-
-7. Installment math
-   - Calculate installment totals with tuition_year.installmentIncrease for regular installment, and 30%/50% variants with 0.15 and 0.09 multipliers per parity logic.
-   - Determine down_payment:
-     - If tuition_year.installmentFixed is set and non-zero, use fixed DP (for SHS year_level 2 or 4, DP=total_installment/2 per parity) else DP = total_installment*(installmentDP/100).
-   - Compute installment_fee = (total_installment - down_payment)/5, and similarly for 30%/50%.
-
-8. Withdrawal and special-case adjustments
-   - If intROG ∈ {3(OW),4(LOA),5(AWOL)} and withdrawal_period == 'before', force tuition/lab/misc to 0 and clear per-item lists; drop late fee.
-
-9. Resource shaping and response
-   - Populate TuitionBreakdownResource from computed arrays, including summary, items, and AR reporting.
-
-10. Replace TuitionService::preview with compute
-   - Update preview() to call compute() when given valid inputs for backwards compatibility; otherwise return placeholder.
-
-11. Tests
-   - Write feature tests for major scenarios with seeded rows resembling CI data.
-   - Validate edge cases: foreign, late enrollment, full scholarship, withdrawal 'before'.
-
-12. Performance and correctness
-   - Use minimal selects, indexes (where possible), and avoid N+1 by joining once per list.
-   - Cross-validate with known CI runs and sample registrations.
+task_progress Items:
+- [ ] Step 1: Implement backend service ClasslistSlotsService::listByTerm with aggregation and filters
+- [ ] Step 2: Add ClasslistSlotsController@index and wire GET /api/v1/classlists/slots
+- [ ] Step 3: Build AngularJS page (service/controller/html) for sections/slots monitoring
+- [ ] Step 4: Add sidebar navigation to the new page
+- [ ] Step 5: Perform API and UI smoke tests; verify counts, filters, and remaining slots computation

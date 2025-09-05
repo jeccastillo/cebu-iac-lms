@@ -1,0 +1,229 @@
+<div class="space-y-6" ng-cloak>
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-semibold text-gray-800">
+      {{ vm.title }}
+    </h1>
+    <div class="flex items-center space-x-2">
+      <button class="px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+              ng-click="vm.load()" ng-disabled="vm.loading">
+        <i class="fas fa-sync-alt mr-1"></i> Refresh
+      </button>
+      <button class="px-3 py-2 bg-gray-100 text-gray-800 rounded hover:bg-gray-200"
+              ng-click="vm.clearFilters()" ng-disabled="vm.loading">
+        <i class="fas fa-undo mr-1"></i> Reset Filters
+      </button>
+    </div>
+  </div>
+
+  <!-- Error banner -->
+  <div class="p-3 rounded bg-red-50 border border-red-200 text-red-700" ng-if="vm.error">
+    <i class="fas fa-exclamation-triangle mr-1"></i> {{ vm.error }}
+  </div>
+
+  <!-- Filters -->
+  <div class="bg-white border border-gray-200 rounded p-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- Term A (required) -->
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Term A (required)</label>
+        <select pui-multiselect multiple class="w-full border-gray-300 rounded"
+                ng-model="vm.filters.syidsA"
+                ng-options="(t.intID || t.id) as vm.termLabel(t) for t in vm.terms track by (t.intID || t.id)"
+                ng-change="vm.onTermAChange()"
+                placeholder="Select one or more terms">
+        </select>
+        <div class="mt-1 text-xs text-gray-500">Hold Ctrl/Cmd to select multiple terms.</div>
+      </div>
+
+      <!-- Term B (optional compare) -->
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Term B (optional)</label>
+        <div class="flex space-x-2">
+          <select pui-multiselect multiple class="w-full border-gray-300 rounded"
+                  ng-model="vm.filters.syidsB"
+                  ng-options="(t.intID || t.id) as vm.termLabel(t) for t in vm.terms track by (t.intID || t.id)"
+                  ng-change="vm.onTermBChange()"
+                  placeholder="Select compare terms">
+          </select>
+          <button class="px-3 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+                  ng-click="vm.clearCompare()" title="Clear compare term(s)">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="mt-1 text-xs text-gray-500">Leave empty for no compare. Hold Ctrl/Cmd to select multiple.</div>
+      </div>
+
+      <!-- Campus -->
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Campus</label>
+        <select class="w-full border-gray-300 rounded"
+                ng-model="vm.filters.campus"
+                ng-change="vm.onCampusChange()"
+                ng-options="c.id as (c.campus_name || c.name || ('Campus #' + c.id)) for c in vm.campuses track by c.id">
+          <option value="">-- All --</option>
+        </select>
+      </div>
+
+      <!-- Date range -->
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Start (YYYY-MM-DD)</label>
+        <input type="date" class="w-full border-gray-300 rounded"
+               ng-model="vm.filters.start" ng-change="vm.refresh()">
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">End (YYYY-MM-DD)</label>
+        <input type="date" class="w-full border-gray-300 rounded"
+               ng-model="vm.filters.end" ng-change="vm.refresh()">
+      </div>
+
+      <!-- Status -->
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Status</label>
+        <input type="text" class="w-full border-gray-300 rounded"
+               placeholder="e.g. new, accepted"
+               ng-model="vm.filters.status" ng-change="vm.refresh()">
+      </div>
+
+      <!-- Applicant Type -->
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Applicant Type</label>
+        <input type="text" class="w-full border-gray-300 rounded"
+               placeholder="e.g. college, shs"
+               ng-model="vm.filters.type" ng-change="vm.refresh()">
+      </div>
+
+      <!-- Applicant Sub-type -->
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Applicant Sub-type</label>
+        <input type="text" class="w-full border-gray-300 rounded"
+               placeholder="e.g. incoming freshman"
+               ng-model="vm.filters.sub_type" ng-change="vm.refresh()">
+      </div>
+
+      <!-- Search -->
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Search</label>
+        <input type="text" class="w-full border-gray-300 rounded"
+               placeholder="Name, Email, Mobile"
+               ng-model="vm.filters.search" ng-change="vm.refresh()">
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="p-4 bg-white border border-gray-200 rounded text-gray-600" ng-if="vm.loading">
+    <i class="fas fa-spinner fa-spin mr-2"></i> Loading analytics...
+  </div>
+
+  <!-- Empty state -->
+  <div class="p-4 bg-white border border-gray-200 rounded text-gray-600" ng-if="!vm.loading && (!vm.filters.syidsA || !vm.filters.syidsA.length)">
+    Select at least one Term A to load analytics.
+  </div>
+
+  <!-- Quick Stats -->
+  <div class="grid grid-cols-1 xl:grid-cols-2 gap-6" ng-if="!vm.loading && vm.metrics && vm.metrics.conversionA">
+    <!-- Reserved to Enrolled -->
+    <div class="bg-white border border-gray-200 rounded p-4">
+      <div class="flex items-center justify-between mb-2">
+        <h2 class="text-lg font-medium text-gray-800">Conversion Rate Reserved to Enrolled</h2>
+      </div>
+      <div class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="p-3 border border-gray-200 rounded">
+          <div class="text-xs text-gray-500 mb-1">Term A</div>
+          <div class="text-3xl font-semibold text-gray-900">{{ (vm.metrics.conversionA.percent || 0) | number:2 }}%</div>
+        </div>
+        <div class="p-3 border border-gray-200 rounded" ng-if="vm.metrics.conversionB">
+          <div class="text-xs text-gray-500 mb-1">Term B</div>
+          <div class="text-3xl font-semibold text-gray-900">{{ (vm.metrics.conversionB.percent || 0) | number:2 }}%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Conversion Rate for Reservation -->
+    <div class="bg-white border border-gray-200 rounded p-4">
+      <div class="flex items-center justify-between mb-2">
+        <h2 class="text-lg font-medium text-gray-800">Conversion Rate for Reservation</h2>
+      </div>
+      <div class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="p-3 border border-gray-200 rounded">
+          <div class="text-xs text-gray-500 mb-1">Term A</div>
+          <div class="text-3xl font-semibold text-gray-900">{{ (vm.metrics.reservationA.percent || 0) | number:2 }}%</div>
+        </div>
+        <div class="p-3 border border-gray-200 rounded" ng-if="vm.metrics.reservationB">
+          <div class="text-xs text-gray-500 mb-1">Term B</div>
+          <div class="text-3xl font-semibold text-gray-900">{{ (vm.metrics.reservationB.percent || 0) | number:2 }}%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="grid grid-cols-1 xl:grid-cols-2 gap-6" ng-if="!vm.loading && vm.filters.syidsA && vm.filters.syidsA.length">
+    <!-- Status -->
+    <div class="bg-white border border-gray-200 rounded p-4">
+      <div class="flex items-center justify-between mb-2">
+        <h2 class="text-lg font-medium text-gray-800">Applicants by Status</h2>
+        <span class="text-xs text-gray-500" ng-if="vm.summaryA">
+          Total (A): {{ vm.summaryA.counts.total_applicants }}<span ng-if="vm.summaryB"> • Total (B): {{ vm.summaryB.counts.total_applicants }}</span>
+        </span>
+      </div>
+      <div class="h-72">
+        <canvas id="statusChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Applicant Type -->
+    <div class="bg-white border border-gray-200 rounded p-4">
+      <h2 class="text-lg font-medium text-gray-800 mb-2">Applicants by Type</h2>
+      <div class="h-72">
+        <canvas id="typesChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Sub-type -->
+    <div class="bg-white border border-gray-200 rounded p-4">
+      <h2 class="text-lg font-medium text-gray-800 mb-2">Applicants by Sub-type</h2>
+      <div class="h-72">
+        <canvas id="subTypesChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Campus -->
+    <div class="bg-white border border-gray-200 rounded p-4">
+      <h2 class="text-lg font-medium text-gray-800 mb-2">Applicants by Campus</h2>
+      <div class="h-72">
+        <canvas id="campusChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Payments -->
+    <div class="bg-white border border-gray-200 rounded p-4">
+      <h2 class="text-lg font-medium text-gray-800 mb-2">Payments</h2>
+      <div class="h-64">
+        <canvas id="paymentsChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Waivers -->
+    <div class="bg-white border border-gray-200 rounded p-4">
+      <h2 class="text-lg font-medium text-gray-800 mb-2">Waivers</h2>
+      <div class="h-64">
+        <canvas id="waiversChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Daily Time Series (full width on xl by spanning both columns) -->
+    <div class="bg-white border border-gray-200 rounded p-4 xl:col-span-2">
+      <div class="flex items-center justify-between mb-2">
+        <h2 class="text-lg font-medium text-gray-800">Daily New Applications</h2>
+        <span class="text-xs text-gray-500">
+          Date Range: {{ vm.filters.start || 'default' }} - {{ vm.filters.end || 'today' }}
+        </span>
+      </div>
+      <div class="h-80">
+        <canvas id="dailyChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>

@@ -151,41 +151,41 @@
           <tr>
             <th class="px-3 py-1">
               <input type="text" class="w-full border rounded px-2 py-1 text-xs" placeholder="Search SN"
-                     ng-model="vm.cf.student_number" />
+                     ng-model="vm.cf.student_number" ng-change="vm.onColumnFilterChange()" />
             </th>
             <th class="px-3 py-1">
               <input type="text" class="w-full border rounded px-2 py-1 text-xs" placeholder="Search Last Name"
-                     ng-model="vm.cf.last_name" />
+                     ng-model="vm.cf.last_name" ng-change="vm.onColumnFilterChange()" />
             </th>
             <th class="px-3 py-1">
               <input type="text" class="w-full border rounded px-2 py-1 text-xs" placeholder="Search First Name"
-                     ng-model="vm.cf.first_name" />
+                     ng-model="vm.cf.first_name" ng-change="vm.onColumnFilterChange()" />
             </th>
             <th class="px-3 py-1">
               <input type="text" class="w-full border rounded px-2 py-1 text-xs" placeholder="Search Middle Name"
-                     ng-model="vm.cf.middle_name" />
+                     ng-model="vm.cf.middle_name" ng-change="vm.onColumnFilterChange()" />
             </th>
             <th class="px-3 py-1">
               <input type="text" class="w-full border rounded px-2 py-1 text-xs" placeholder="Search Program"
-                     ng-model="vm.cf.program" />
+                     ng-model="vm.cf.program" ng-change="vm.onColumnFilterChange()" />
             </th>
             <th class="px-3 py-1">
               <input type="text" class="w-full border rounded px-2 py-1 text-xs" placeholder="Search Year Level"
-                     ng-model="vm.cf.year_level" />
+                     ng-model="vm.cf.year_level" ng-change="vm.onColumnFilterChange()" />
             </th>
             <th class="px-3 py-1">
               <input type="text" class="w-full border rounded px-2 py-1 text-xs" placeholder="Search Status"
-                     ng-model="vm.cf.status" />
+                     ng-model="vm.cf.status" ng-change="vm.onColumnFilterChange()" />
             </th>
             <th class="px-3 py-1">
               <input type="text" class="w-full border rounded px-2 py-1 text-xs" placeholder="Search Student Level"
-                     ng-model="vm.cf.student_level" />
+                     ng-model="vm.cf.student_level" ng-change="vm.onColumnFilterChange()" />
             </th>
             <th class="px-3 py-1"></th>
           </tr>
         </thead>
-        <tbody class="bg-white divide-y divide-gray-200" ng-if="vm.filteredRows().length">
-          <tr ng-repeat="r in vm.filteredRows() track by r.id">
+        <tbody class="bg-white divide-y divide-gray-200" ng-if="vm.rows.length">
+          <tr ng-repeat="r in vm.rows track by r.id">
             <td class="px-3 py-2 text-sm text-gray-900">{{ r.student_number }}</td>
             <td class="px-3 py-2 text-sm text-blue-700">
               <a class="hover:underline" ng-href="{{ vm.viewerUrl(r) }}">{{ r.last_name }}</a>
@@ -225,7 +225,7 @@
             </td>
           </tr>
         </tbody>
-        <tbody ng-if="!vm.filteredRows().length && !vm.loading">
+        <tbody ng-if="!vm.rows.length && !vm.loading">
           <tr>
             <td colspan="9" class="px-3 py-6 text-center text-sm text-gray-500">
               No results

@@ -1,0 +1,93 @@
+<div class="space-y-6" ng-cloak>
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-semibold text-gray-800">
+      <i class="fas fa-clipboard-list mr-2 text-blue-600"></i>
+      {{ vm.isCreate ? 'Create Requirement' : 'Edit Requirement' }}
+    </h1>
+    <div class="flex items-center space-x-2 text-sm">
+      <a href="#/admissions/requirements"
+         class="inline-flex items-center px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded">
+        <i class="fas fa-arrow-left mr-2"></i> Back to List
+      </a>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div class="bg-white shadow rounded">
+    <div class="px-4 py-3 border-b border-gray-200">
+      <h2 class="text-lg font-medium text-gray-700">
+        <i class="fas fa-edit mr-2"></i>
+        Requirement Details
+      </h2>
+    </div>
+
+    <div class="p-4">
+      <form novalidate name="requirementForm" class="space-y-5" ng-submit="vm.save()">
+        <!-- Name -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Name <span class="text-red-600">*</span></label>
+          <input type="text"
+                 class="w-full border rounded px-3 py-2"
+                 placeholder="Enter requirement name"
+                 ng-model="vm.model.name"
+                 required />
+          <p class="text-xs text-gray-500 mt-1">Example: Form 137, Good Moral Certificate, Passport Copy, etc.</p>
+        </div>
+
+        <!-- Type -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Type <span class="text-red-600">*</span></label>
+          <select class="w-full border rounded px-3 py-2"
+                  ng-model="vm.model.type"
+                  ng-options="o.value as o.label for o in vm.typeOptions"
+                  required>
+          </select>
+          <p class="text-xs text-gray-500 mt-1">Select which admissions track this requirement applies to.</p>
+        </div>
+
+        <!-- Flags -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="flex items-center">
+            <input id="is_foreign"
+                   type="checkbox"
+                   class="h-4 w-4 text-blue-600 border-gray-300 rounded"
+                   ng-model="vm.model.is_foreign" />
+            <label for="is_foreign" class="ml-2 block text-sm text-gray-700">
+              Foreign Applicant Requirement
+            </label>
+          </div>
+
+          <div class="flex items-center">
+            <input id="is_initial_requirements"
+                   type="checkbox"
+                   class="h-4 w-4 text-blue-600 border-gray-300 rounded"
+                   ng-model="vm.model.is_initial_requirements" />
+            <label for="is_initial_requirements" class="ml-2 block text-sm text-gray-700">
+              Initial Requirements
+            </label>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="pt-2">
+          <button type="button"
+                  class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded mr-2"
+                  ng-click="vm.cancel()">
+            Cancel
+          </button>
+          <button type="submit"
+                  class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded"
+                  ng-disabled="vm.loading">
+            <i class="fas fa-save mr-2" ng-class="{'hidden': vm.loading}"></i>
+            <i class="fas fa-spinner fa-spin mr-2" ng-class="{'hidden': !vm.loading}"></i>
+            {{ vm.isCreate ? 'Create' : 'Save Changes' }}
+          </button>
+          <span class="ml-3 text-sm text-gray-500" ng-if="vm.loading">
+            Saving...
+          </span>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

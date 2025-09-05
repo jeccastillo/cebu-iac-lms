@@ -5,8 +5,8 @@
     .module('unityApp')
     .controller('EnlistmentController', EnlistmentController);
 
-  EnlistmentController.$inject = ['$http', 'APP_CONFIG', 'UnityService', 'ClasslistsService', 'TermService', 'ChecklistService', 'ProgramsService', 'CurriculaService', '$scope'];
-  function EnlistmentController($http, APP_CONFIG, UnityService, ClasslistsService, TermService, ChecklistService, ProgramsService, CurriculaService, $scope) {
+  EnlistmentController.$inject = ['$http', 'APP_CONFIG', 'UnityService', 'ClasslistsService', 'TermService', 'ChecklistService', 'ProgramsService', 'CurriculaService', 'StudentsService', 'SectionsSlotsService', '$scope'];
+  function EnlistmentController($http, APP_CONFIG, UnityService, ClasslistsService, TermService, ChecklistService, ProgramsService, CurriculaService, StudentsService, SectionsSlotsService, $scope) {
     var vm = this;
     var BASE = APP_CONFIG.API_BASE; // e.g. /laravel-api/public/api/v1
 
@@ -15,6 +15,9 @@
     vm.subjects = [];
     vm.sections = [];
     vm.results = null;
+    vm.student_id = null;
+    vm.clGenLoading = false;
+    vm.hasChecklist = false;
     // Tuition preview state
     vm.tuition = null;
     vm.tuitionLoading = false;
@@ -80,6 +83,11 @@
     vm.resetRegistration = resetRegistration;
     vm.onStudentSelected = onStudentSelected;
     vm.autoQueueFromChecklist = autoQueueFromChecklist;
+    vm.generateChecklist = generateChecklist;
+    vm.refreshChecklistExists = refreshChecklistExists;
+    vm.onStudentQuery = onStudentQuery;
+    vm.selectedAddRemaining = selectedAddRemaining;
+    vm.selectedChangeToRemaining = selectedChangeToRemaining;
 
     // Registration details panel
     vm.loadRegistration = loadRegistration;
@@ -94,12 +102,37 @@
     // Tuition preview
     vm.loadTuition = loadTuition;
 
+    vm.sanitizeStudentNumber = sanitizeStudentNumber;
+
+    // Installment tabs
+    vm.installmentTab = 'standard';
+    vm.selectInstallmentTab = selectInstallmentTab;
+    vm.installmentData = installmentData;
+    vm.displayedTotalDue = displayedTotalDue;
+    vm.increaseInfo = increaseInfo;
+
+    // Tuition save snapshot
+    vm.tuitionSaving = false;
+    vm.canSaveTuition = canSaveTuition;
+    vm.saveTuition = saveTuition;
+
+    function sanitizeStudentNumber(studentNumber){
+
+      const firstSpaceIndex = studentNumber.indexOf(' ');
+      var sn = "";
+      if(firstSpaceIndex > 0)
+        return studentNumber.substring(0, firstSpaceIndex);
+      else
+        return studentNumber;
+
+    }
+
     // Tuition loader: builds payload from current enlisted and registration
     function loadTuition(force) {
-      try {
-        if (!vm.studentNumber || !vm.term) return;
+      try {        
+        if (!vm.studentNumber || !vm.term) return;        
         // Derive program id
-        var programId = null;
+        var programId = null;        
         if (vm.regForm && vm.regForm.current_program) {
           var p1 = parseInt(vm.regForm.current_program, 10);
           if (!isNaN(p1)) programId = p1;
@@ -131,12 +164,13 @@
         }
         vm._tuitionKey = key;
 
-        vm.tuitionLoading = true;
+        vm.tuitionLoading = true;       
+        
         var payload = {
-          student_number: vm.studentNumber,
+          student_number: vm.sanitizeStudentNumber(vm.studentNumber),
           program_id: programId,
           term: ('' + vm.term),
-          subjects: subjects
+          subjects: subjects          
         };
         UnityService.tuitionPreview(payload).then(function (res) {
           // Unwrap TuitionBreakdownResource from response
@@ -152,6 +186,174 @@
       } catch (e) {
         // swallow
       }
+    }
+
+    function canSaveTuition() {
+      try {
+        return !!(vm.tuition && !vm.tuitionLoading && vm.registration && vm.studentNumber && vm.term);
+      } catch (e) { return false; }
+    }
+
+    function saveTuition() {
+      try {
+        if (!canSaveTuition()) {
+          if (window.Swal) {
+            Swal.fire({ icon: 'warning', title: 'Cannot Save', text: 'Load tuition and ensure a registration exists first.' });
+          } else {
+            try { alert('Load tuition and ensure a registration exists first.'); } catch (e) {}
+          }
+          return;
+        }
+        var termInt = parseInt(vm.term, 10);
+        vm.tuitionSaving = true;
+
+        function doSave() {
+          UnityService.tuitionSave({
+            student_number: vm.sanitizeStudentNumber(vm.studentNumber),
+            term: termInt
+          }).then(function (res) {
+            var ok = res && res.success;
+            var msg = (res && res.message) || (ok ? 'Tuition saved.' : 'Failed to save tuition.');
+            if (window.Swal) {
+              Swal.fire({ icon: ok ? 'success' : 'error', title: ok ? 'Saved' : 'Error', text: msg });
+            } else {
+              try { alert(msg); } catch (e) {}
+            }
+          }).catch(function (err) {
+            console.error('tuitionSave failed', err);
+            var m = (err && err.data && err.data.message) || 'Failed to save tuition.';
+            if (window.Swal) {
+              Swal.fire({ icon: 'error', title: 'Error', text: m });
+            } else {
+              try { alert(m); } catch (e) {}
+            }
+          }).finally(function () {
+            vm.tuitionSaving = false;
+            if ($scope && $scope.$applyAsync) { $scope.$applyAsync(); }
+          });
+        }
+
+        // Preflight: check if a saved snapshot already exists
+        UnityService.tuitionSaved({
+          student_number: vm.studentNumber,
+          term: termInt
+        }).then(function (res) {
+          var data = (res && res.data) ? res.data : res;
+          var exists = !!(data && data.exists);
+          if (exists) {
+            if (window.Swal) {
+              Swal.fire({
+                icon: 'warning',
+                title: 'Overwrite saved tuition?',
+                text: 'A saved tuition snapshot already exists for this registration. Do you want to overwrite it?',
+                showCancelButton: true,
+                confirmButtonText: 'Overwrite',
+                cancelButtonText: 'Cancel'
+              }).then(function (result) {
+                if (result.isConfirmed) {
+                  doSave();
+                } else {
+                  vm.tuitionSaving = false;
+                  if ($scope && $scope.$applyAsync) { $scope.$applyAsync(); }
+                }
+              });
+            } else {
+              var c = false;
+              try { c = window.confirm('A saved tuition snapshot already exists. Overwrite?'); } catch (e) { c = true; }
+              if (c) { doSave(); } else { vm.tuitionSaving = false; }
+            }
+          } else {
+            doSave();
+          }
+        }).catch(function () {
+          // On preflight error, proceed with save to avoid blocking
+          doSave();
+        });
+      } catch (e) {
+        vm.tuitionSaving = false;
+      }
+    }
+
+    // Installment helpers
+    function selectInstallmentTab(tab) {
+      try {
+        if (tab === 'standard' || tab === 'dp30' || tab === 'dp50') {
+          vm.installmentTab = tab;
+        }
+      } catch (e) {}
+    }
+
+    function _installments() {
+      try {
+        return (vm.tuition && vm.tuition.summary && vm.tuition.summary.installments) ? vm.tuition.summary.installments : null;
+      } catch (e) { return null; }
+    }
+
+    function installmentData() {
+      try {
+        var inst = _installments();
+        if (!inst) return null;
+        if (vm.installmentTab === 'dp30') {
+          return {
+            dp: inst.down_payment30 || 0,
+            fee: inst.installment_fee30 || 0,
+            total: inst.total_installment30 || 0
+          };
+        }
+        if (vm.installmentTab === 'dp50') {
+          return {
+            dp: inst.down_payment50 || 0,
+            fee: inst.installment_fee50 || 0,
+            total: inst.total_installment50 || 0
+          };
+        }
+        // standard
+        return {
+          dp: inst.down_payment || 0,
+          fee: inst.installment_fee || 0,
+          total: inst.total_installment || 0
+        };
+      } catch (e) { return null; }
+    }
+
+    function displayedTotalDue() {
+      try {
+        var totalDue = (vm.tuition && vm.tuition.summary && vm.tuition.summary.total_due) ? vm.tuition.summary.total_due : 0;
+        var inst = _installments();
+        if (!inst) return totalDue;
+
+        if (vm.installmentTab === 'dp30') {
+          return (inst.total_installment30 || totalDue);
+        }
+        if (vm.installmentTab === 'dp50') {
+          return (inst.total_installment50 || totalDue);
+        }
+        return totalDue; // standard
+      } catch (e) { return 0; }
+    }
+
+    // Cached calculation to prevent infinite digest caused by returning a new object each digest
+    var _incCacheKey = null, _incCacheVal = null;
+    function increaseInfo() {
+      try {
+        if (!vm.tuition || !vm.tuition.summary) { _incCacheKey = null; _incCacheVal = null; return null; }
+        var sum = vm.tuition.summary;
+        var perc = 0;
+        if (vm.installmentTab === 'dp30') perc = 0.15;
+        else if (vm.installmentTab === 'dp50') perc = 0.09;
+        else { _incCacheKey = null; _incCacheVal = null; return null; }
+        var tBase = (+sum.tuition || 0);
+        var lBase = (+sum.lab_total || 0);
+        var mBase = (+sum.misc_total || 0);
+        var key = [vm.installmentTab, tBase, lBase, mBase].join('|');
+        if (_incCacheKey === key && _incCacheVal) return _incCacheVal;
+        var tInc = (tBase * perc);
+        var lInc = (lBase * perc);
+        var mInc = (mBase * perc);
+        _incCacheKey = key;
+        _incCacheVal = { percent: perc, tuitionIncrease: tInc, labIncrease: lInc, miscIncrease: mInc, tuitionNew: (tBase + tInc), labNew: (lBase + lInc) };        
+        return _incCacheVal;
+      } catch (e) { return null; }
     }
 
     // Helpers for read-only display and lookups
@@ -238,12 +440,10 @@
             vm.term = '';
           }
         }).finally(function () {
-          loadStudents();
           loadPrograms();
           loadTuitionYears();
         });
       } else {
-        loadStudents();
         loadPrograms();
         loadTuitionYears();
       }
@@ -269,20 +469,27 @@
 
     function onStudentSelected() {
       if (vm.studentNumber) {
-        setSelectedStudentName();
+        setSelectedStudentName();        
         // Reset tuition on change of student
         vm.tuition = null;
+        vm.installmentTab = 'standard';
         vm._tuitionKey = null;
-        loadCurrent();
-        loadRegistration();
+        // Resolve and cache student id before loading current and registration
+        resolveStudentIdIfNeeded().finally(function () {
+          loadCurrent();
+          loadRegistration();
+          refreshChecklistExists();
+        });
       } else {
         vm.selectedStudentName = '';
         vm.registration = null;
         vm.regForm = {};
+        vm.student_id = null;
+        vm.hasChecklist = false;
       }
     }
     
-    function setSelectedStudentName() {
+    function setSelectedStudentName() {      
       try {
         var sel = (vm.students || []).find(function (s) { return s.student_number === vm.studentNumber; });
         if (sel) {
@@ -296,18 +503,81 @@
       }
     }
 
+    // Resolve student id if missing; prefer cached id, then local list, finally API lookup by student_number
+    function resolveStudentIdIfNeeded() {
+      return new Promise(function (resolve) {
+        try {
+          var existing = parseInt(vm.student_id, 10);
+          if (!isNaN(existing) && existing > 0) { resolve(existing); return; }
+          if (!vm.studentNumber) { resolve(null); return; }
+          // Try local list first
+          var sel = (vm.students || []).find(function (s) { return s && s.student_number === vm.studentNumber; });
+          if (sel && sel.id) {
+            vm.student_id = sel.id;
+            resolve(sel.id);            
+            return;
+          }
+          // Fallback 1: exact student_number filter
+          $http.get(APP_CONFIG.API_BASE + '/students', { params: { per_page: 1, page: 1, student_number: vm.studentNumber } })
+            .then(function (resp) {
+              var data = (resp && resp.data) ? resp.data : {};
+              var rows = data && data.data ? data.data : (Array.isArray(data) ? data : []);
+              if (rows && rows.length) {
+                var row = rows[0];
+                var id1 = row && (row.id != null ? row.id : (row.intID != null ? row.intID : null));
+                if (id1 != null) vm.student_id = id1;                
+                resolve(id1 || null);
+                return;
+              }              
+            })
+            .catch(function () { resolve(null); });
+        } catch (e) {
+          resolve(null);
+        }
+      });
+    }
+
+    function refreshChecklistExists() {
+      try {
+        vm.hasChecklist = false;
+        if (!vm.studentNumber && !vm.student_id) return;
+        resolveStudentIdIfNeeded().then(function (sid) {
+          if (!sid) { vm.hasChecklist = false; return; }
+          return ChecklistService.get(sid, {}).then(function (res) {
+            var data = (res && res.data) ? res.data : res;
+            var has = !!(data && ((data.id != null) || (data.items && data.items.length > 0)));
+            vm.hasChecklist = has;
+          }).catch(function () {
+            vm.hasChecklist = false;
+          }).finally(function () {
+            if ($scope && $scope.$applyAsync) { try { $scope.$applyAsync(); } catch (e) {} }
+          });
+        });
+      } catch (e) {
+        vm.hasChecklist = false;
+      }
+    }
+
     // Auto-queue from checklist for current year level and term
     function autoQueueFromChecklist() {
-      if (!vm.studentNumber || !vm.term) {
+      if (!vm.term || (!vm.studentNumber && !vm.student_id)) {
         if (window.Swal) {
           Swal.fire({ icon: 'warning', title: 'Missing data', text: 'Select a student and term first.' });
         }
         return;
       }
 
-      // Resolve student id by student number
-      var student = (vm.students || []).find(function (s) { return s && s.student_number === vm.studentNumber; });
-      if (!student || !student.id) {
+      // Resolve student id (prefer cached vm.student_id, fallback to selected list)
+      var sid = null;
+      if (vm.student_id) {
+        var tmp = parseInt(vm.student_id, 10);
+        if (!isNaN(tmp) && tmp > 0) sid = tmp;
+      }
+      if (!sid && vm.studentNumber) {
+        var student = (vm.students || []).find(function (s) { return s && s.student_number === vm.studentNumber; });
+        if (student && student.id) sid = student.id;
+      }
+      if (!sid) {
         if (window.Swal) {
           Swal.fire({ icon: 'error', title: 'Student not found', text: 'Unable to resolve student id for checklist.' });
         }
@@ -338,7 +608,7 @@
       });      
 
       vm.loading = true;
-      ChecklistService.get(student.id, {}).then(function (res) {
+      ChecklistService.get(sid, {}).then(function (res) {
         var data = res && res.data ? res.data : res;
         var items = (data && data.items) ? data.items : [];
         var candidateItems = [];
@@ -389,11 +659,17 @@
           if (sidKey) {
             options = classlistsBySubjectId[sidKey] || [];            
           }
+
+          // Prefer only sections with remaining slots > 0
+          var available = (options || []).filter(function (o) {
+            if (o && o.remaining_slots !== undefined && o.remaining_slots !== null) {
+              var n = parseInt(o.remaining_slots, 10);
+              return isNaN(n) ? true : n > 0;
+            }
+            return true;
+          });
+          if (!available.length) return;
           
-          if (!options.length) return;
-          
-          // Choose the first available section (could be improved with section preferences)
-          var chosen = options[0];
           var cid = chosen && chosen.intID ? parseInt(chosen.intID, 10) : 0;
           if (!cid) return;
 
@@ -456,7 +732,7 @@
 
         // Batch check prerequisites
         $http.post(APP_CONFIG.API_BASE + '/subjects/check-prerequisites-batch', {
-          student_number: vm.studentNumber,
+          student_number: vm.sanitizeStudentNumber(vm.studentNumber),
           subject_ids: subjectIds
         }).then(function(resp) {
           var prerequisiteResults = (resp && resp.data && resp.data.data) ? resp.data.data : {};
@@ -544,6 +820,58 @@
       });
     }
  
+    function generateChecklist() {
+      try {
+        if (!vm.studentNumber) {
+          if (window.Swal) {
+            Swal.fire({ icon: 'warning', title: 'Select a student', text: 'Please select a student first.' });
+          } else {
+            try { alert('Please select a student first.'); } catch (e) {}
+          }
+          return;
+        }
+
+        var sid = null;
+        if (vm.student_id) {
+          sid = vm.student_id;
+        } else {
+          try {
+            var sel = (vm.students || []).find(function (s) { return s && s.student_number === vm.studentNumber; });
+            if (sel && sel.id) sid = sel.id;
+          } catch (e) {}
+        }
+
+        if (!sid) {
+          if (window.Swal) {
+            Swal.fire({ icon: 'error', title: 'Student not found', text: 'Unable to resolve student id for checklist.' });
+          } else {
+            try { alert('Unable to resolve student id for checklist.'); } catch (e) {}
+          }
+          return;
+        }
+
+        vm.clGenLoading = true;
+        ChecklistService.generate(sid, {}).then(function (res) {
+          vm.hasChecklist = true;
+          if ($scope && $scope.$applyAsync) { try { $scope.$applyAsync(); } catch (e) {} }
+          if (window.Swal) {
+            Swal.fire({ icon: 'success', title: 'Checklist generated', text: 'Graduation checklist was generated from curriculum.' });
+          }
+        }).catch(function (err) {
+          console.error('checklist.generate failed', err);
+          var m = (err && err.data && err.data.message) || 'Failed to generate checklist.';
+          if (window.Swal) {
+            Swal.fire({ icon: 'error', title: 'Error', text: m });
+          } else {
+            try { alert(m); } catch (e) {}
+          }
+        }).finally(function () {
+          vm.clGenLoading = false;
+          if ($scope && $scope.$applyAsync) { $scope.$applyAsync(); }
+        });
+      } catch (e) {}
+    }
+ 
      // Load students for searchable dropdown (aggregate all pages)
      function loadStudents() {
       vm.loading = true;
@@ -587,47 +915,70 @@
       });
     }
 
+    // Remote query hook for pui-autocomplete: fetch suggestions based on user input
+    function onStudentQuery(q) {
+      try {
+        var s = (q != null) ? ('' + q).trim() : '';
+        if (!s) return;
+        StudentsService.listSuggestions(s).then(function (rows) {
+          vm.students = rows || [];
+          try { if (vm.studentNumber) { setSelectedStudentName(); } } catch (e) {}
+        }).catch(function () {
+          vm.students = [];
+        });
+      } catch (e) {
+        vm.students = [];
+      }
+    }
+
     // Load current enlisted subjects for student/term
     function loadCurrent() {
       vm.results = null;
       vm.current = [];
-      if (!vm.studentNumber || !vm.term) return;
+      if (!vm.term) return;
 
-      vm.loading = true;
-      $http.post(BASE + '/student/records-by-term', {
-        student_number: vm.studentNumber,
-        term: ('' + vm.term),
-        include_grades: false
-      }).then(function (resp) {
-        var data = (resp && resp.data) ? resp.data : resp;
-        var payload = data && data.data ? data.data : {};
-        var terms = payload.terms || [];
-        var first = terms.length ? terms[0] : null;
-        var recs = first ? (first.records || []) : [];
-        // Normalize minimal fields for display and drop selection
-        vm.current = recs.map(function (r) {
-          return {
-            classlist_id: r.classlist_id || r.classListId || r.classListID || r.classlistID || null,
-            code: r.code,
-            description: r.description,
-            units: r.units,
-            section_code: r.section_code || r.sectionCode || '',
-            subject_id: (function () {
-              var sid = r.subject_id || r.subjectId || r.subjectID || null;
-              if (sid === null || sid === undefined || ('' + sid).trim() === '') return null;
-              var n = parseInt(sid, 10);
-              return isNaN(n) ? null : n;
-            })()
-          };
-        }).filter(function (x) { return x.classlist_id !== null; });
+      // Ensure we have student id before requesting records for term
+      resolveStudentIdIfNeeded().then(function (sid) {
+        if (!sid) return;
+
+        vm.loading = true;
+        return $http.post(BASE + '/student/records-by-term', {
+          student_id: sid,
+          term: ('' + vm.term),
+          include_grades: false
+        }).then(function (resp) {
+          var data = (resp && resp.data) ? resp.data : resp;
+          var payload = data && data.data ? data.data : {};
+          var terms = payload.terms || [];
+          // Persist student_id from payload if provided
+          if (payload && payload.student_id) vm.student_id = payload.student_id;
+          var first = terms.length ? terms[0] : null;
+          var recs = first ? (first.records || []) : [];
+          // Normalize minimal fields for display and drop selection
+          vm.current = recs.map(function (r) {
+            return {
+              classlist_id: r.classlist_id || r.classListId || r.classListID || r.classlistID || null,
+              code: r.code,
+              description: r.description,
+              units: r.units,
+              section_code: r.section_code || r.sectionCode || '',
+              subject_id: (function () {
+                var sid = r.subject_id || r.subjectId || r.subjectID || null;
+                if (sid === null || sid === undefined || ('' + sid).trim() === '') return null;
+                var n = parseInt(sid, 10);
+                return isNaN(n) ? null : n;
+              })()
+            };
+          }).filter(function (x) { return x.classlist_id !== null; });
+        }).finally(function () {
+          vm.loading = false;
+          // Auto-load tuition after current is loaded (if possible)
+          try { vm.loadTuition(); } catch (e) {}
+        });
       }).finally(function () {
-        vm.loading = false;
-        // Auto-load tuition after current is loaded (if possible)
-        try { vm.loadTuition(); } catch (e) {}
-      });
-
-      // Refresh classlists for term for "Add" and "Change To" selections
-      loadClasslistsForTerm();
+        // Refresh classlists for term for "Add" and "Change To" selections
+        loadClasslistsForTerm();
+      });      
     }
 
     // Load classlists for selected term (for add/change UI)
@@ -640,6 +991,57 @@
       ClasslistsService.getSubjectsByTerm(('' + vm.term)).then(function (res) {
         vm.subjects = res && res.data ? res.data : [];
       });
+
+      // Helper: fetch sections slots utilization and merge remaining slots into vm.sections
+      function fetchSlotsAndMerge() {
+        var acc = [];
+        var page = 1;
+        var perPage = 200;
+
+        function next() {
+          return SectionsSlotsService.list({ term: ('' + vm.term), page: page, perPage: perPage }).then(function (res) {
+            var rows = (res && res.data) ? res.data : (Array.isArray(res) ? res : []);
+            var meta = (res && res.meta) ? res.meta : null;
+            acc = acc.concat(rows || []);
+            var hasMore = false;
+            if (meta && meta.total && meta.per_page && meta.page) {
+              hasMore = (meta.page * meta.per_page) < meta.total;
+            } else {
+              hasMore = (rows || []).length === perPage;
+            }
+            if (hasMore) {
+              page += 1;
+              return next();
+            }
+          }).finally(function () {
+            try {
+              var byId = {};
+              (acc || []).forEach(function (r) {
+                if (r && r.classlist_id != null) {
+                  var id = parseInt(r.classlist_id, 10);
+                  if (!isNaN(id)) byId[id] = r;
+                }
+              });
+              (vm.sections || []).forEach(function (s) {
+                var id = parseInt(s.intID, 10);
+                var row = byId[id];
+                if (row) {
+                  s.slots = row.slots;
+                  s.enlisted_count = row.enlisted_count;
+                  s.enrolled_count = row.enrolled_count;
+                  s.remaining_slots = row.remaining_slots;
+                }
+                var subj = s.subjectCode || s.strCode || '';
+                var sect = s.sectionCode || '';
+                var remVal = (s.remaining_slots !== undefined && s.remaining_slots !== null) ? ('' + s.remaining_slots) : null;
+                var extra = remVal !== null ? (' — rem: ' + remVal) : '';
+                s.display = subj + (sect ? (' — ' + sect) : '') + extra;
+              });
+            } catch (e) {}
+          });
+        }
+        return next();
+      }
 
       // List all classlists for the term for add/change target (no pagination)
       ClasslistsService.listAll({ term: ('' + vm.term) }).then(function (res) {
@@ -659,6 +1061,9 @@
             display: subjCode + (sectCode ? (' — ' + sectCode) : '')
           };
         });
+
+        // Merge slots info and update display with remaining slots
+        fetchSlotsAndMerge();
       });
       
     }
@@ -823,6 +1228,30 @@
       });
     };
 
+    // Remaining slots helpers
+    function selectedAddRemaining() {
+      try {
+        var cid = parseInt(vm.selectedAddClasslistId, 10);
+        if (!cid) return null;
+        var sel = (vm.sections || []).find(function (s) { return parseInt(s.intID, 10) === cid; });
+        if (!sel) return null;
+        if (sel.remaining_slots === undefined || sel.remaining_slots === null) return null;
+        var n = parseInt(sel.remaining_slots, 10);
+        return isNaN(n) ? null : n;
+      } catch (e) { return null; }
+    }
+    function selectedChangeToRemaining() {
+      try {
+        var toId = parseInt(vm.changeToId, 10);
+        if (!toId) return null;
+        var sel = (vm.sections || []).find(function (s) { return parseInt(s.intID, 10) === toId; });
+        if (!sel) return null;
+        if (sel.remaining_slots === undefined || sel.remaining_slots === null) return null;
+        var n = parseInt(sel.remaining_slots, 10);
+        return isNaN(n) ? null : n;
+      } catch (e) { return null; }
+    }
+
     // Queue operations
     function queueAdd() {
       var cid = parseInt(vm.selectedAddClasslistId, 10);
@@ -836,6 +1265,16 @@
       var subjCode = sel ? (sel.subjectCode || sel.strCode || '') : '';
       var sectCode = sel ? (sel.sectionCode || '') : '';
       
+      // Prevent queuing when section is full (remaining slots <= 0)
+      if (sel && sel.remaining_slots !== undefined && sel.remaining_slots !== null && parseInt(sel.remaining_slots, 10) <= 0) {
+        if (window.Swal) {
+          Swal.fire({ icon: 'warning', title: 'Section full', text: 'No remaining slots. Cannot queue this section.' });
+        } else {
+          try { alert('Section is full. Cannot queue this section.'); } catch (e) {}
+        }
+        return;
+      }
+
       // Check prerequisites before adding to queue
       if (vm.studentNumber && sel && sel.subject_id) {
         vm.loading = true;
@@ -896,7 +1335,7 @@
       }
       
       $http.post(APP_CONFIG.API_BASE + '/subjects/' + subjectId + '/check-prerequisites', {
-        student_number: vm.studentNumber
+        student_number: vm.sanitizeStudentNumber(vm.studentNumber), student_id: vm.student_id
       }).then(function(resp) {
         var data = (resp && resp.data && resp.data.data) ? resp.data.data : { passed: true, missing_prerequisites: [] };
         callback(data);
@@ -929,6 +1368,15 @@
       var fromSect = fromCur ? (fromCur.section_code || '') : '';
       var toSubj = toSec ? (toSec.subjectCode || toSec.strCode || '') : '';
       var toSect = toSec ? (toSec.sectionCode || '') : '';
+      // Prevent queuing change when target section is full (remaining slots <= 0)
+      if (toSec && toSec.remaining_slots !== undefined && toSec.remaining_slots !== null && parseInt(toSec.remaining_slots, 10) <= 0) {
+        if (window.Swal) {
+          Swal.fire({ icon: 'warning', title: 'Section full', text: 'No remaining slots. Cannot queue change to this section.' });
+        } else {
+          try { alert('Section is full. Cannot queue change to this section.'); } catch (e) {}
+        }
+        return;
+      }
       vm.ops.push({
         type: 'change_section',
         from_classlist_id: fromId,
@@ -960,7 +1408,7 @@
       vm.results = null;
 
       var payload = {
-        student_number: vm.studentNumber,
+        student_number: vm.sanitizeStudentNumber(vm.studentNumber),
         term: parseInt(vm.term, 10),
         year_level: parseInt(vm.yearLevel, 10),
         student_type: vm.studentType || 'continuing',
@@ -971,11 +1419,11 @@
         // res is already unwrapped
         vm.results = res;
         // Refresh current if success
-        loadCurrent();
+        loadCurrent();        
         // Clear queued ops
         vm.ops = [];
       }).finally(function () {
-        vm.loading = false;
+        vm.loading = false;        
       });
     }
 
@@ -1020,7 +1468,7 @@
           var pw = result.value;
  
           vm.loading = true;
-          var payload = { student_number: vm.studentNumber };
+          var payload = { student_number: vm.sanitizeStudentNumber(vm.studentNumber)};
           if (termInt) payload.term = termInt;
           payload.password = pw;
  
@@ -1069,13 +1517,14 @@
             var d = (res && res.data && res.data.deleted) || (res && res.deleted) || {};
             var cls = d && d.classlist_student_rows ? d.classlist_student_rows : 0;
             var regs = d && d.registrations ? d.registrations : 0;
-            alert('Reset completed. Deleted ' + cls + ' classlist row(s) and ' + regs + ' registration row(s).');
+            alert('Reset completed. Deleted ' + cls + ' classlist row(s) and ' + regs + ' registration row(s).');            
           } catch (e) {}
         }, function (err) {
           var m = (err && err.data && err.data.message) || 'Reset failed';
           alert(m);
         }).finally(function () {
           vm.loading = false;
+          
         });
       }
     }

@@ -43,14 +43,28 @@ class TuitionCalculator
             }
         }
 
-        // Fallback to tuition year defaults (column names aligned to misc/lab for parity)
-        // If not present, return 0 as safe default.
-        switch ($classType) {
-            case 'online': return (float) ($tuitionYear['tuition_amount_online'] ?? 0);
-            case 'hybrid': return (float) ($tuitionYear['tuition_amount_hybrid'] ?? 0);
-            case 'hyflex': return (float) ($tuitionYear['tuition_amount_hyflex'] ?? 0);
-            default:       return (float) ($tuitionYear['tuition_amount'] ?? 0);
+        // Fallback to tuition year defaults (support both new tuition_amount* and legacy pricePerUnit* columns)
+        // Prefer tuition_amount* if present; otherwise fallback to pricePerUnit*.
+        $keyMapNew = [
+            'regular' => 'tuition_amount',
+            'online'  => 'tuition_amount_online',
+            'hybrid'  => 'tuition_amount_hybrid',
+            'hyflex'  => 'tuition_amount_hyflex',
+        ];
+        $newKey = $keyMapNew[$classType] ?? 'tuition_amount';
+        $val = $tuitionYear[$newKey] ?? null;
+        if ($val !== null && (float)$val > 0) {
+            return (float)$val;
         }
+
+        $keyMapLegacy = [
+            'regular' => 'pricePerUnit',
+            'online'  => 'pricePerUnitOnline',
+            'hybrid'  => 'pricePerUnitHybrid',
+            'hyflex'  => 'pricePerUnitHyflex',
+        ];
+        $legacyKey = $keyMapLegacy[$classType] ?? 'pricePerUnit';
+        return (float) ($tuitionYear[$legacyKey] ?? 0);
     }
 
     /**
@@ -63,12 +77,40 @@ class TuitionCalculator
             return 0.0;
         }
         $classType = $this->resolveClassType($classType);
-        switch ($classType) {
-            case 'online': return (float) ($row['tuition_amount_online'] ?? 0);
-            case 'hybrid': return (float) ($row['tuition_amount_hybrid'] ?? 0);
-            case 'hyflex': return (float) ($row['tuition_amount_hyflex'] ?? 0);
-            default:       return (float) ($row['tuition_amount'] ?? 0);
+
+        // Prefer new schema keys tuition_amount*
+        $newMap = [
+            'regular' => 'tuition_amount',
+            'online'  => 'tuition_amount_online',
+            'hybrid'  => 'tuition_amount_hybrid',
+            'hyflex'  => 'tuition_amount_hyflex',
+        ];
+        $newKey = $newMap[$classType] ?? 'tuition_amount';
+        if (array_key_exists($newKey, $row)) {
+            return (float) ($row[$newKey] ?? 0);
         }
+
+        // Fallback to legacy schema keys per bucket
+        if ($bucket === 'lab') {
+            $legacyLabMap = [
+                'regular' => 'labRegular',
+                'online'  => 'labOnline',
+                'hybrid'  => 'labHybrid',
+                'hyflex'  => 'labHyflex',
+            ];
+            $legacyKey = $legacyLabMap[$classType] ?? 'labRegular';
+            return (float) ($row[$legacyKey] ?? 0);
+        }
+
+        // bucket 'misc' (and others treated as misc)
+        $legacyMiscMap = [
+            'regular' => 'miscRegular',
+            'online'  => 'miscOnline',
+            'hybrid'  => 'miscHybrid',
+            'hyflex'  => 'miscHyflex',
+        ];
+        $legacyKey = $legacyMiscMap[$classType] ?? 'miscRegular';
+        return (float) ($row[$legacyKey] ?? 0);
     }
 
     /**
@@ -289,10 +331,104 @@ class TuitionCalculator
      */
     public function computeMiscFees(array $tuitionYear, string $classType, string $stype, int $syid, ?string $withdrawalStatus, array $semRow, ?string $dteRegistered): array
     {
+        $classType = $this->resolveClassType($classType);
+        $tuitionYearId = $tuitionYear['intID'] ?? $tuitionYear['intId'] ?? null;
+
+        $retList = [];
+        $totalMisc = 0.0;
+        $lateEnrollmentFee = 0.0;
+        $newStudentList = [];
+        $newStudentTotal = 0.0;
+
+        if (!$tuitionYearId) {
+            return [
+                'total_misc' => 0.0,
+                'list' => [],
+                'late_enrollment_fee' => 0.0,
+                'new_student_list' => [],
+                'new_student_total' => 0.0,
+            ];
+        }
+
+        // Determine which misc pack to use
+        $internshipFlag = (int)($semRow['__internship'] ?? 0);
+        $miscType = $internshipFlag ? 'internship' : 'regular';
+
+        // Load misc pack rows
+        $rows = DB::table('tb_mas_tuition_year_misc')
+            ->where('tuitionYearID', $tuitionYearId)
+            ->where('type', $miscType)
+            ->get()
+            ->map(fn($r) => (array)$r)
+            ->toArray();
+
+        // Apply ID VALIDATION omission for new student types
+        $stypeNorm = strtolower(trim($stype));
+        $isBrandNew = in_array($stypeNorm, [
+            'new', 'freshman', 'transferee', '2nd degree', '2nd degree iac'
+        ], true);
+
+        foreach ($rows as $r) {
+            $name = trim((string)($r['name'] ?? ''));
+            $nameUpper = strtoupper($name);
+
+            if ($isBrandNew && $nameUpper === 'ID VALIDATION') {
+                // Skip ID Validation for brand-new students
+                continue;
+            }
+
+            $amt = $this->getExtraFee($r, $classType, 'misc');
+            if ($amt > 0) {
+                $retList[$name] = ($retList[$name] ?? 0) + (float)$amt;
+                $totalMisc += (float)$amt;
+            }
+        }
+
+        // New student fees (separate pack)
+        if ($isBrandNew) {
+            $nsRows = DB::table('tb_mas_tuition_year_misc')
+                ->where('tuitionYearID', $tuitionYearId)
+                ->where('type', 'new_student')
+                ->get()
+                ->map(fn($r) => (array)$r)
+                ->toArray();
+
+            foreach ($nsRows as $r) {
+                $name = trim((string)($r['name'] ?? ''));
+                $amt = $this->getExtraFee($r, $classType, 'misc');
+                if ($amt > 0) {
+                    $newStudentList[$name] = ($newStudentList[$name] ?? 0) + (float)$amt;
+                    $newStudentTotal += (float)$amt;
+                }
+            }
+        }
+
+        // Late enrollment fee (only if not withdrawal before)
+        if ($withdrawalStatus !== 'before') {
+            $reconfStart = isset($semRow['reconf_start']) ? (string)$semRow['reconf_start'] : null;
+            if ($reconfStart && $dteRegistered) {
+                $dr = date('Y-m-d', strtotime($dteRegistered));
+                if ($dr >= $reconfStart) {
+                    $lateRows = DB::table('tb_mas_tuition_year_misc')
+                        ->where('tuitionYearID', $tuitionYearId)
+                        ->where('type', 'late_enrollment')
+                        ->get()
+                        ->map(fn($r) => (array)$r)
+                        ->toArray();
+
+                    foreach ($lateRows as $r) {
+                        $lateEnrollmentFee += (float)$this->getExtraFee($r, $classType, 'misc');
+                    }
+                }
+            }
+        }
+
         return [
-            'total_misc' => 0.0,
-            'list' => [],
-            'late_enrollment_fee' => 0.0,
+            'total_misc' => round($totalMisc, 2),
+            'list' => $retList,
+            'late_enrollment_fee' => round($lateEnrollmentFee, 2),
+            'new_student_list' => $newStudentList,
+            'new_student_total' => round($newStudentTotal, 2),
         ];
     }
 
@@ -306,9 +442,51 @@ class TuitionCalculator
      */
     public function computeForeignFees(string $citizenship, array $semRow, array $tuitionYear, string $classType): array
     {
+        $classType = $this->resolveClassType($classType);
+        $tuitionYearId = $tuitionYear['intID'] ?? $tuitionYear['intId'] ?? null;
+
+        if (!$tuitionYearId || strtolower(trim($citizenship)) === 'philippines') {
+            return [
+                'total_foreign' => 0.0,
+                'list' => [],
+            ];
+        }
+
+        $list = [];
+        $total = 0.0;
+
+        // Student Visa Fee (SVF) only when term indicates pay_student_visa != 0
+        $payVisa = (int)($semRow['pay_student_visa'] ?? 0);
+        if ($payVisa !== 0) {
+            $svf = DB::table('tb_mas_tuition_year_misc')
+                ->where('tuitionYearID', $tuitionYearId)
+                ->where('type', 'svf')
+                ->first();
+            if ($svf) {
+                $amt = $this->getExtraFee((array)$svf, $classType, 'misc');
+                if ($amt > 0) {
+                    $list['Student Visa'] = (float)$amt;
+                    $total += (float)$amt;
+                }
+            }
+        }
+
+        // International Student Fee (ISF)
+        $isf = DB::table('tb_mas_tuition_year_misc')
+            ->where('tuitionYearID', $tuitionYearId)
+            ->where('type', 'isf')
+            ->first();
+        if ($isf) {
+            $amt = $this->getExtraFee((array)$isf, $classType, 'misc');
+            if ($amt > 0) {
+                $list['International Student Fee'] = (float)$amt;
+                $total += (float)$amt;
+            }
+        }
+
         return [
-            'total_foreign' => 0.0,
-            'list' => [],
+            'total_foreign' => round($total, 2),
+            'list' => $list,
         ];
     }
 
@@ -360,16 +538,75 @@ class TuitionCalculator
      */
     public function computeInstallments(array $totals, array $tuitionYear, string $level, ?int $yearLevel): array
     {
+        // Expect $totals keys:
+        // tuition, lab, misc, additional, discount_total, scholarship_total
+        $tuition = (float) ($totals['tuition'] ?? 0);
+        $lab     = (float) ($totals['lab'] ?? 0);
+        $misc    = (float) ($totals['misc'] ?? 0);
+        $additional = (float) ($totals['additional'] ?? 0);
+        $disc    = (float) ($totals['discount_total'] ?? 0);
+        $sch     = (float) ($totals['scholarship_total'] ?? 0);
+
+        $increase = (float) ($tuitionYear['installmentIncrease'] ?? 0) / 100.0;
+
+        // Baseline installment total uses configured installmentIncrease on tuition and lab only
+        $tuition_i = $tuition + ($tuition * $increase);
+        $lab_i     = $lab + ($lab * $increase);
+        $gross_installment = $tuition_i + $lab_i + $misc + $additional;
+
+        // Variants per business rules:
+        // - 30% DP applies plan increase on all buckets (tuition, lab, misc, additional)
+        // - 50% DP should have the same total as the Standard installment
+        $gross_normal = $tuition + $lab + $misc + $additional;
+
+        // 30% scheme: +15% applied to tuition and misc (lab/additional unchanged)
+        $tuition_i30      = $tuition * 1.15;
+        $lab_i30         = $lab * 1.15;
+        $gross_installment30 = $tuition_i30 + $lab_i30 + $misc + $additional;
+
+        // 50% scheme: +9% applied to tuition and misc (lab/additional unchanged)
+        $tuition_i50      = $tuition * 1.09;
+        $lab_i50         = $lab * 1.09;
+        $gross_installment50 = $tuition_i50 + $lab_i50 + $misc + $additional;
+
+        // Net of discounts/scholarships
+        $net_installment   = max(0.0, round($gross_installment   - $disc - $sch, 2));
+        $net_installment30 = max(0.0, round($gross_installment30 - $disc - $sch, 2));
+        $net_installment50 = max(0.0, round($gross_installment50 - $disc - $sch, 2));
+
+        // Down payment rules
+        $dpPercent = (float) ($tuitionYear['installmentDP'] ?? 0) / 100.0;
+        $dpFixed   = (float) ($tuitionYear['installmentFixed'] ?? 0);
+
+        // Default DP from percent unless fixed is set (>0)
+        $dp   = $dpFixed > 0 ? min($net_installment, $dpFixed) : $net_installment * $dpPercent;
+        $dp30 = $net_installment30 * 0.30; // explicit 30% scheme
+        $dp50 = $net_installment50 * 0.50; // explicit 50% scheme
+
+        // SHS special rule: if level is shs and year level is 2 or 4, DP = 1/2 of installment
+        if (strtolower($level) === 'shs' && in_array((int)$yearLevel, [2, 4], true)) {
+            $dp = $net_installment / 2.0;
+        }
+
+        $dp   = round($dp, 2);
+        $dp30 = round($dp30, 2);
+        $dp50 = round($dp50, 2);
+
+        // Per-installment fee (5 remaining payments after DP)
+        $ifee   = $net_installment   > 0 ? round(($net_installment   - $dp)   / 5.0, 2) : 0.0;
+        $ifee30 = $net_installment30 > 0 ? round(($net_installment30 - $dp30) / 5.0, 2) : 0.0;
+        $ifee50 = $net_installment50 > 0 ? round(($net_installment50 - $dp50) / 5.0, 2) : 0.0;
+
         return [
-            'total_installment' => 0.0,
-            'total_installment30' => 0.0,
-            'total_installment50' => 0.0,
-            'down_payment' => 0.0,
-            'down_payment30' => 0.0,
-            'down_payment50' => 0.0,
-            'installment_fee' => 0.0,
-            'installment_fee30' => 0.0,
-            'installment_fee50' => 0.0,
+            'total_installment'    => $net_installment,
+            'total_installment30'  => $net_installment30,
+            'total_installment50'  => $net_installment50,
+            'down_payment'         => $dp,
+            'down_payment30'       => $dp30,
+            'down_payment50'       => $dp50,
+            'installment_fee'      => $ifee,
+            'installment_fee30'    => $ifee30,
+            'installment_fee50'    => $ifee50,
         ];
     }
 }

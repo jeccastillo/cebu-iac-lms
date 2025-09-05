@@ -1,0 +1,163 @@
+<div class="space-y-6" ng-cloak>
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-semibold text-gray-900">{{ vm.title }}</h1>
+      <p class="text-sm text-gray-600" ng-if="vm.total !== null">Total: {{ vm.total }}</p>
+    </div>
+    <div class="flex items-center gap-2">
+      <button type="button"
+              class="inline-flex items-center px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+              ng-click="vm.create()">
+        <i class="fas fa-plus mr-2"></i>
+        New Invoice
+      </button>
+      <button type="button"
+              class="inline-flex items-center px-3 py-2 rounded border border-gray-300 text-gray-700 hover:bg-gray-50"
+              ng-click="vm.load()"
+              ng-disabled="vm.loading">
+        <i class="fas fa-sync-alt mr-2" ng-class="{'animate-spin': vm.loading}"></i>
+        Refresh
+      </button>
+    </div>
+  </div>
+
+  <!-- Error -->
+  <div class="rounded border border-red-200 bg-red-50 text-red-700 px-4 py-3" ng-if="vm.error">
+    <i class="fas fa-exclamation-triangle mr-2"></i>{{ vm.error }}
+  </div>
+
+  <!-- Filters -->
+  <div class="bg-white rounded shadow p-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Student ID</label>
+        <input type="number" class="mt-1 block w-full rounded border-gray-300" ng-model="vm.filters.student_id" placeholder="e.g. 12345">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Student Number</label>
+        <input type="text" class="mt-1 block w-full rounded border-gray-300" ng-model="vm.filters.student_number" placeholder="e.g. 20-xxxxx">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Term (syid)</label>
+        <input type="number" class="mt-1 block w-full rounded border-gray-300" ng-model="vm.filters.term" placeholder="e.g. 202501">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Type</label>
+        <select class="mt-1 block w-full rounded border-gray-300" ng-model="vm.filters.type">
+          <option value="">Any</option>
+          <option value="tuition">tuition</option>
+          <option value="billing">billing</option>
+          <option value="other">other</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Status</label>
+        <select class="mt-1 block w-full rounded border-gray-300" ng-model="vm.filters.status">
+          <option value="">Any</option>
+          <option value="Draft">Draft</option>
+          <option value="Issued">Issued</option>
+          <option value="Paid">Paid</option>
+          <option value="Void">Void</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Campus ID</label>
+        <input type="number" class="mt-1 block w-full rounded border-gray-300" ng-model="vm.filters.campus_id" placeholder="e.g. 1">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Registration ID</label>
+        <input type="number" class="mt-1 block w-full rounded border-gray-300" ng-model="vm.filters.registration_id" placeholder="optional">
+      </div>
+    </div>
+    <div class="mt-4 flex items-center gap-2">
+      <button type="button" class="inline-flex items-center px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+              ng-click="vm.search()" ng-disabled="vm.loading">
+        <i class="fas fa-search mr-2"></i> Search
+      </button>
+      <button type="button" class="inline-flex items-center px-3 py-2 rounded border border-gray-300 text-gray-700 hover:bg-gray-50"
+              ng-click="vm.clearFilters()" ng-disabled="vm.loading">
+        <i class="fas fa-eraser mr-2"></i> Clear
+      </button>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="bg-white rounded shadow overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr class="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+          <th class="px-4 py-3">ID</th>
+          <th class="px-4 py-3">Student</th>
+          <th class="px-4 py-3">Term</th>
+          <th class="px-4 py-3">Type</th>
+          <th class="px-4 py-3">Status</th>
+          <th class="px-4 py-3">Invoice #</th>
+          <th class="px-4 py-3">Total</th>
+          <th class="px-4 py-3">Posted</th>
+          <th class="px-4 py-3 w-1">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100" ng-class="{'opacity-60': vm.loading}">
+        <tr ng-if="!vm.rows || vm.rows.length === 0">
+          <td colspan="9" class="px-4 py-6 text-center text-gray-500">No invoices found.</td>
+        </tr>
+        <tr ng-repeat="r in vm.rows">
+          <td class="px-4 py-3 font-mono text-sm">{{ r.id }}</td>
+          <td class="px-4 py-3 text-sm">{{ r.student_id }}</td>
+          <td class="px-4 py-3 text-sm">{{ r.syid }}</td>
+          <td class="px-4 py-3 text-sm">
+            <span class="px-2 py-0.5 rounded text-xs font-semibold"
+                  ng-class="{
+                    'bg-indigo-100 text-indigo-700': r.type === 'tuition',
+                    'bg-yellow-100 text-yellow-700': r.type === 'billing',
+                    'bg-gray-100 text-gray-700': r.type === 'other'
+                  }">
+              {{ r.type || '-' }}
+            </span>
+          </td>
+          <td class="px-4 py-3 text-sm">
+            <span class="px-2 py-0.5 rounded text-xs font-semibold"
+                  ng-class="{
+                    'bg-gray-200 text-gray-800': r.status === 'Draft',
+                    'bg-blue-100 text-blue-700': r.status === 'Issued',
+                    'bg-green-100 text-green-700': r.status === 'Paid',
+                    'bg-red-100 text-red-700': r.status === 'Void'
+                  }">
+              {{ r.status || '-' }}
+            </span>
+          </td>
+          <td class="px-4 py-3 text-sm">{{ r.invoice_number || '-' }}</td>
+          <td class="px-4 py-3 text-sm font-semibold">₱ {{ (r.amount_total || 0) | number:2 }}</td>
+          <td class="px-4 py-3 text-sm">{{ r.posted_at || '-' }}</td>
+          <td class="px-4 py-3 text-sm relative">
+            <div class="inline-flex items-center gap-1">
+              <button class="px-2 py-1 rounded border border-gray-300 text-gray-700 hover:bg-gray-50"
+                      ng-click="vm.edit(r)">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="px-2 py-1 rounded border border-gray-300 text-gray-700 hover:bg-gray-50"
+                      ng-click="vm.pdf(r)">
+                <i class="fas fa-file-pdf"></i>
+              </button>
+              <div class="relative inline-block">
+                <button class="px-2 py-1 rounded border border-red-300 text-red-700 hover:bg-red-50"
+                        ng-click="vm.remove(r)">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Loading overlay -->
+  <div class="fixed inset-0 bg-black bg-opacity-10 flex items-center justify-center z-10" ng-if="vm.loading">
+    <div class="bg-white rounded shadow px-6 py-4 flex items-center gap-3">
+      <i class="fas fa-spinner animate-spin text-gray-600"></i>
+      <div class="text-gray-700">Loading...</div>
+    </div>
+  </div>
+</div>
