@@ -1,9 +1,13 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\AdmissionsController;
+use App\Http\Controllers\Api\V1\ApplicantAnalyticsController;
+use App\Http\Controllers\Api\V1\ApplicantController;
+use App\Http\Controllers\Api\V1\ApplicantInterviewController;
+use App\Http\Controllers\Api\V1\ApplicantJourneyController;
+use App\Http\Controllers\Api\V1\ApplicantTypeController;
 use App\Http\Controllers\Api\V1\CampusController;
+use App\Http\Controllers\Api\V1\CashierController;
 use App\Http\Controllers\Api\V1\ClasslistController;
 use App\Http\Controllers\Api\V1\ClasslistGradesController;
 use App\Http\Controllers\Api\V1\ClassroomController;
@@ -12,37 +16,34 @@ use App\Http\Controllers\Api\V1\FacultyController;
 use App\Http\Controllers\Api\V1\FinanceController;
 use App\Http\Controllers\Api\V1\GenericApiController;
 use App\Http\Controllers\Api\V1\GradingSystemController;
+use App\Http\Controllers\Api\V1\InvoiceController;
+use App\Http\Controllers\Api\V1\PaymentDescriptionController;
+use App\Http\Controllers\Api\V1\PaymentDetailAdminController;
+use App\Http\Controllers\Api\V1\PaymentModeController;
 use App\Http\Controllers\Api\V1\PortalController;
+use App\Http\Controllers\Api\V1\PreviousSchoolController;
 use App\Http\Controllers\Api\V1\ProgramController;
+use App\Http\Controllers\Api\V1\PublicInitialRequirementsController;
 use App\Http\Controllers\Api\V1\RegistrarController;
 use App\Http\Controllers\Api\V1\ReportsController;
+use App\Http\Controllers\Api\V1\RequirementController;
 use App\Http\Controllers\Api\V1\RoleController;
+use App\Http\Controllers\Api\V1\ScheduleController;
 use App\Http\Controllers\Api\V1\ScholarshipController;
 use App\Http\Controllers\Api\V1\SchoolYearController;
+use App\Http\Controllers\Api\V1\StudentBillingController;
 use App\Http\Controllers\Api\V1\StudentChecklistController;
 use App\Http\Controllers\Api\V1\StudentController;
 use App\Http\Controllers\Api\V1\SubjectController;
+use App\Http\Controllers\Api\V1\SystemAlertController;
 use App\Http\Controllers\Api\V1\SystemLogController;
 use App\Http\Controllers\Api\V1\TuitionController;
-use App\Http\Controllers\Api\V1\CashierController;
-use App\Http\Controllers\Api\V1\PaymentModeController;
-use App\Http\Controllers\Api\V1\PaymentDescriptionController;
-use App\Http\Controllers\Api\V1\PaymentDetailAdminController;
-use App\Http\Controllers\Api\V1\StudentBillingController;
-use App\Http\Controllers\Api\V1\InvoiceController;
-use App\Http\Controllers\Api\V1\RequirementController;
-use App\Http\Controllers\Api\V1\PreviousSchoolController;
-use App\Http\Controllers\Api\V1\ApplicantController;
-use App\Http\Controllers\Api\V1\ApplicantTypeController;
-use App\Http\Controllers\Api\V1\ApplicantAnalyticsController;
-use App\Http\Controllers\Api\V1\PublicInitialRequirementsController;
-use App\Http\Controllers\Api\V1\ApplicantInterviewController;
-use App\Http\Controllers\Api\V1\ApplicantJourneyController;
-use App\Services\ClasslistSlotsService;
-use App\Http\Controllers\Api\V1\SystemAlertController;
 use App\Http\Controllers\Api\V1\TuitionYearController;
 use App\Http\Controllers\Api\V1\UnityController;
 use App\Http\Controllers\Api\V1\UsersController;
+use App\Services\ClasslistSlotsService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -188,6 +189,14 @@ Route::prefix('v1')->group(function () {
     Route::post('/classroom', [ClassroomController::class, 'store'])->middleware('role:building_admin,admin');
     Route::put('/classroom/{id}', [ClassroomController::class, 'update'])->middleware('role:building_admin,admin');
     Route::delete('/classroom/{id}', [ClassroomController::class, 'destroy'])->middleware('role:building_admin,admin');
+
+    // Schedule endpoints (read + write)
+    Route::get('/schedules', [ScheduleController::class, 'index']);
+    Route::get('/schedules/summary', [ScheduleController::class, 'summary']);
+    Route::get('/schedules/{id}', [ScheduleController::class, 'show']);
+    Route::post('/schedules', [ScheduleController::class, 'store'])->middleware('role:registrar,admin');
+    Route::put('/schedules/{id}', [ScheduleController::class, 'update'])->middleware('role:registrar,admin');
+    Route::delete('/schedules/{id}', [ScheduleController::class, 'destroy'])->middleware('role:registrar,admin');
 
     // Student endpoints (baseline)
     Route::get('/students', [StudentController::class, 'index']);
@@ -393,7 +402,7 @@ Route::prefix('v1')->group(function () {
 
     // TEMP: Debug route for ClasslistSlotsService testing (remove in production)
     Route::get('/debug/classlists/slots', function (Request $request) {
-        $svc = app(\App\Services\ClasslistSlotsService::class);
+        $svc = app(ClasslistSlotsService::class);
         $params = $request->query();
         try {
             $result = $svc->listByTerm($params);
