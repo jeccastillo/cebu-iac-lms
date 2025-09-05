@@ -1,0 +1,338 @@
+<div class="space-y-6" ng-cloak>
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-semibold text-gray-800">
+      <i class="fas fa-id-card mr-2 text-blue-600"></i>
+      {{ vm.title }}
+    </h1>
+    <div class="text-sm text-gray-500">
+      <span class="mr-4">ID: <span class="font-semibold">{{ vm.id }}</span></span>
+      <span>Student No: <span class="font-semibold">{{ (vm.balances &amp;&amp; vm.balances.student_number) || '-' }}</span></span>
+    </div>
+  </div>
+
+  <div class="flex items-center justify-between">
+    <div class="text-sm text-gray-600">
+      <a class="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded mr-2" ng-href="{{ vm.editUrl() }}">
+        <i class="fas fa-edit mr-1"></i> Edit (legacy)
+      </a>
+      <a class="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded mr-2" ng-href="{{ vm.financesUrl() }}">
+        <i class="fas fa-coins mr-1"></i> Finances (legacy)
+      </a>
+      <a class="px-3 py-1 bg-blue-600 text-white hover:bg-blue-700 rounded"
+         ng-if="vm.state &amp;&amp; vm.state.roles &amp;&amp; (vm.state.roles.indexOf('registrar') !== -1 || vm.state.roles.indexOf('admin') !== -1)"
+         ng-href="{{ '#/students/' + vm.id + '/records' }}">
+        <i class="fas fa-clipboard-list mr-1"></i> Records
+      </a>
+    </div>
+  </div>
+
+  <!-- Balances -->
+  <div class="bg-white shadow rounded">
+    <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+      <h2 class="text-lg font-medium text-gray-700">
+        <i class="fas fa-balance-scale mr-2"></i> Balances
+      </h2>
+      <div class="text-sm text-gray-500" ng-if="vm.loading.balances">
+        <i class="fas fa-spinner fa-spin mr-1"></i> Loading...
+      </div>
+      <div class="text-sm text-red-600" ng-if="vm.error.balances">{{ vm.error.balances }}</div>
+    </div>
+    <div class="p-4">
+      <div ng-if="vm.balances">
+        <!-- Unknown exact shape; show generic dump plus quick highlights if present -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <div class="p-3 bg-gray-50 rounded" ng-if="vm.balances.total_due !== undefined">
+            <div class="text-xs text-gray-500">Total Due</div>
+            <div class="text-lg font-semibold">₱ {{ vm.balances.total_due | number:2 }}</div>
+          </div>
+          <div class="p-3 bg-gray-50 rounded" ng-if="vm.balances.total_paid !== undefined">
+            <div class="text-xs text-gray-500">Total Paid</div>
+            <div class="text-lg font-semibold">₱ {{ vm.balances.total_paid | number:2 }}</div>
+          </div>
+          <div class="p-3 bg-gray-50 rounded" ng-if="vm.balances.balance !== undefined">
+            <div class="text-xs text-gray-500">Balance</div>
+            <div class="text-lg font-semibold">₱ {{ vm.balances.balance | number:2 }}</div>
+          </div>
+        </div>
+        <pre class="text-xs bg-gray-50 p-3 rounded overflow-x-auto">{{ vm.balances | json }}</pre>
+      </div>
+      <div ng-if="!vm.balances && !vm.loading.balances" class="text-sm text-gray-500">No data</div>
+    </div>
+  </div>
+
+  <!-- Records -->
+  <div class="bg-white shadow rounded">
+    <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+      <h2 class="text-lg font-medium text-gray-700">
+        <i class="fas fa-book mr-2"></i> Subjects
+      </h2>      
+    </div>
+    <div class="p-4">
+      <div ng-if="vm.records">
+        <!-- Try to show common shapes -->
+        <div ng-if="vm.records.terms &amp;&amp; vm.records.terms.length">
+          <div class="space-y-3">
+            <div class="border rounded" ng-repeat="t in vm.filteredTerms() track by $index">
+              <div class="px-3 py-2 bg-gray-50 border-b">
+                <div class="text-sm font-medium text-gray-700">
+                  {{ t.term || t.label || ('Term #' + ($index+1)) }}
+                </div>
+                <div class="text-xs text-gray-500" ng-if="t.gwa">GWA: {{ t.gwa }}</div>
+              </div>
+              <div class="p-3">
+                <div ng-if="t.records &amp;&amp; t.records.length">
+                  <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                      <thead class="bg-gray-50">
+                        <tr>
+                          <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Section Code</th>
+                          <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course Code</th>
+                          <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Units</th>
+                          <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Midterm</th>
+                          <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Final</th>
+                          <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Remarks</th>
+                          <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Faculty</th>
+                          <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Enlisted By</th>                                                    
+                        </tr>
+                      </thead>
+                      <tbody class="bg-white divide-y divide-gray-200">
+                        <tr ng-repeat="r in t.records track by $index">
+                          <td class="px-3 py-2 text-sm text-gray-900">{{ r.section_code || '-' }}</td>
+                          <td class="px-3 py-2 text-sm text-gray-900">{{ r.code || r.strCode }}</td>
+                          <td class="px-3 py-2 text-sm text-gray-900">{{ r.units || r.strUnits }}</td>
+                          <td class="px-3 py-2 text-sm text-gray-900">{{ r.midterm || (r.grades &amp;&amp; r.grades.midterm) || r.floatMidtermGrade || '-' }}</td>
+                          <td class="px-3 py-2 text-sm text-gray-900">{{ r.final || r.finals || (r.grades &amp;&amp; (r.grades.final || r.grades.finals)) || r.floatFinalGrade || '-' }}</td>
+                          <td class="px-3 py-2 text-sm text-gray-900">{{ r.remarks || r.strRemarks }}</td>
+                          <td class="px-3 py-2 text-sm text-gray-900">
+                            {{ ((r.faculty_last || r.faculty_first) ? ((r.faculty_last || '') + ', ' + (r.faculty_first || '')) : 'unassigned') }}
+                          </td>
+                          <td class="px-3 py-2 text-sm text-gray-900">
+                            {{ ((r.enlisted_last || r.enlisted_first) ? ((r.enlisted_last || '') + ', ' + (r.enlisted_first || '')) : '-') }}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div ng-if="!t.records || !t.records.length" class="text-sm text-gray-500">
+                  No subject records in this term.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div ng-if="vm.selectedTermId &amp;&amp; vm.records &amp;&amp; vm.records.terms &amp;&amp; vm.records.terms.length &amp;&amp; !vm.filteredTerms().length &amp;&amp; !(vm.records.records &amp;&amp; vm.records.records.length)" class="text-sm text-gray-500">
+          No records for selected term.
+        </div>
+        <div ng-if="!(vm.records.terms &amp;&amp; vm.records.terms.length)">
+          <div ng-if="vm.records.records &amp;&amp; vm.records.records.length">
+            <div class="overflow-x-auto">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Section Code</th>
+                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course Code</th>
+                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Units</th>
+                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Midterm</th>
+                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Final</th>
+                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Remarks</th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <tr ng-repeat="r in vm.records.records track by $index">
+                    <td class="px-3 py-2 text-sm text-gray-900">{{ r.sectionCode || r.section || r.strSection || r.section_code || '-' }}</td>
+                    <td class="px-3 py-2 text-sm text-gray-900">{{ r.code || r.strCode }}</td>
+                    <td class="px-3 py-2 text-sm text-gray-900">{{ r.units || r.strUnits }}</td>
+                    <td class="px-3 py-2 text-sm text-gray-900">{{ r.midterm || (r.grades &amp;&amp; r.grades.midterm) || r.floatMidtermGrade || '-' }}</td>
+                    <td class="px-3 py-2 text-sm text-gray-900">{{ r.final || r.finals || (r.grades &amp;&amp; (r.grades.final || r.grades.finals)) || r.floatFinalGrade || '-' }}</td>
+                    <td class="px-3 py-2 text-sm text-gray-900">{{ r.remarks || r.strRemarks }}</td>
+                    <td class="px-3 py-2 text-sm text-gray-900">
+                      {{ r.faculty || r.faculty_name || ((r.faculty_last || r.faculty_first) ? ((r.faculty_last || '') + ', ' + (r.faculty_first || '')) : 'unassigned') }}
+                    </td>
+                    <td class="px-3 py-2 text-sm text-gray-900">
+                      {{ r.enlisted_by || r.enlistedBy || r.added_by_name || r.cashier || r.cashier_name || ((r.enlisted_last || r.enlisted_first) ? ((r.enlisted_last || '') + ', ' + (r.enlisted_first || '')) : '-') }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div ng-if="!vm.records.records || !vm.records.records.length">
+            <pre class="text-xs bg-gray-50 p-3 rounded overflow-x-auto">{{ vm.records | json }}</pre>
+          </div>
+        </div>
+      </div>
+      <div ng-if="!vm.records && !vm.loading.records" class="text-sm text-gray-500">No data</div>
+    </div>
+  </div>
+
+  <!-- Ledger -->
+  <div class="bg-white shadow rounded">
+    <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+      <h2 class="text-lg font-medium text-gray-700">
+        <i class="fas fa-file-invoice-dollar mr-2"></i> Ledger
+      </h2>
+      <div class="text-sm text-gray-500" ng-if="vm.loading.ledger">
+        <i class="fas fa-spinner fa-spin mr-1"></i> Loading...
+      </div>
+      <div class="text-sm text-red-600" ng-if="vm.error.ledger">{{ vm.error.ledger }}</div>
+    </div>
+    <div class="p-4">
+      <div ng-if="vm.ledger &amp;&amp; vm.ledger.transactions &amp;&amp; vm.ledger.transactions.length">
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">OR/Ref</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr ng-repeat="t in vm.ledger.transactions track by $index">
+                <td class="px-3 py-2 text-sm text-gray-900">{{ t.date || t.dtePaid || t.created_at }}</td>
+                <td class="px-3 py-2 text-sm text-gray-900">{{ t.type || t.strTransactionType }}</td>
+                <td class="px-3 py-2 text-sm text-gray-900">{{ (t.amount !== undefined ? t.amount : t.intAmountPaid) | number:2 }}</td>
+                <td class="px-3 py-2 text-sm text-gray-900">{{ t.reference || t.intORNumber || '-' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div ng-if="vm.ledger &amp;&amp; (!vm.ledger.transactions || !vm.ledger.transactions.length)">
+        <pre class="text-xs bg-gray-50 p-3 rounded overflow-x-auto">{{ vm.ledger | json }}</pre>
+      </div>
+      <div ng-if="!vm.ledger && !vm.loading.ledger" class="text-sm text-gray-500">No data</div>
+    </div>
+  </div>
+
+  <!-- Checklist -->
+  <div class="bg-white shadow rounded" ng-if="vm.state && vm.state.roles && (vm.state.roles.indexOf('registrar') !== -1 || vm.state.roles.indexOf('admin') !== -1)">
+    <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+      <h2 class="text-lg font-medium text-gray-700">
+        <i class="fas fa-tasks mr-2"></i> Checklist
+      </h2>
+      <div class="text-sm text-gray-500" ng-if="vm.loading.checklist || vm.loading.checklistAction">
+        <i class="fas fa-spinner fa-spin mr-1"></i> Working...
+      </div>
+      <div class="text-sm text-red-600" ng-if="vm.error.checklist">{{ vm.error.checklist }}</div>
+      <div class="text-sm text-red-600" ng-if="vm.error.checklistAction">{{ vm.error.checklistAction }}</div>
+    </div>
+    <div class="p-4 space-y-4">
+      <!-- Summary -->
+      <div class="p-3 bg-gray-50 rounded" ng-if="vm.checklistSummary">
+        <div class="flex items-center justify-between">
+          <div class="text-sm text-gray-600">
+            <span class="mr-4">Total: <span class="font-semibold">{{ vm.checklistSummary.total }}</span></span>
+            <span class="mr-4">Required: <span class="font-semibold">{{ vm.checklistSummary.required }}</span></span>
+            <span class="mr-4">Completed: <span class="font-semibold">{{ vm.checklistSummary.completed }}</span></span>
+            <span>Remaining: <span class="font-semibold">{{ vm.checklistSummary.remaining }}</span></span>
+          </div>
+          <div class="text-sm font-semibold text-gray-700">
+            {{ vm.checklistSummary.percent }}%
+          </div>
+        </div>
+      </div>
+
+      <!-- Generate form -->
+      <div class="border rounded p-3">
+        <div class="text-sm text-gray-600 mb-2">
+          Generate from current curriculum.
+        </div>
+        <div class="flex flex-wrap items-center gap-3">
+          <button class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700"
+                  ng-click="vm.generateChecklist()"
+                  ng-disabled="vm.loading.checklistAction">
+            <i class="fas fa-magic mr-1"></i> Generate
+          </button>
+        </div>
+      </div>
+
+      <!-- Items table -->
+      <div ng-if="vm.checklist && vm.checklist.items && vm.checklist.items.length">
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subject Code</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Units</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year Level</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Semester</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Completed</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Required</th>
+                <th class="px-3 py-2"></th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr ng-repeat="it in vm.checklist.items track by it.id">
+                <td class="px-3 py-2 text-sm text-gray-900">{{ (it.subject &amp;&amp; it.subject.code) || '-' }}</td>
+                <td class="px-3 py-2 text-sm text-gray-900">{{ (it.subject &amp;&amp; it.subject.description) || '-' }}</td>
+                <td class="px-3 py-2 text-sm text-gray-900">{{ (it.subject &amp;&amp; it.subject.units) || '-' }}</td>
+                <td class="px-3 py-2 text-sm text-gray-900">
+                  <select class="border rounded px-2 py-1"
+                          ng-model="it.intYearLevel"
+                          ng-options="n as n for n in [1,2,3,4]"
+                          ng-change="vm.updateChecklistItem(it)">
+                    <option value=""></option>
+                  </select>
+                </td>
+                <td class="px-3 py-2 text-sm text-gray-900">
+                  <select class="border rounded px-2 py-1"
+                          ng-model="it.intSem"
+                          ng-options="n as (n === 1 ? '1st' : (n === 2 ? '2nd' : '3rd')) for n in [1,2,3]"
+                          ng-change="vm.updateChecklistItem(it)">
+                    <option value=""></option>
+                  </select>
+                </td>
+                <td class="px-3 py-2 text-sm text-gray-900">
+                  <select class="border rounded px-2 py-1" ng-model="it.strStatus" ng-change="vm.updateChecklistItem(it)">
+                    <option value="planned">planned</option>
+                    <option value="in-progress">in-progress</option>
+                    <option value="passed">passed</option>
+                    <option value="failed">failed</option>
+                    <option value="waived">waived</option>
+                  </select>
+                </td>
+                <td class="px-3 py-2 text-sm text-gray-900">
+                  <input type="date" class="border rounded px-2 py-1" ng-model="it.dteCompleted" ng-change="vm.updateChecklistItem(it)" />
+                </td>
+                <td class="px-3 py-2 text-sm text-gray-900">
+                  <input type="checkbox" ng-model="it.isRequired" ng-change="vm.updateChecklistItem(it)" />
+                </td>
+                <td class="px-3 py-2 text-right">
+                  <button class="px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700"
+                          ng-click="vm.removeChecklistItem(it)"
+                          ng-disabled="vm.loading.checklistAction">
+                    <i class="fas fa-trash mr-1"></i> Remove
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div ng-if="vm.checklist && (!vm.checklist.items || !vm.checklist.items.length)" class="text-sm text-gray-500">
+        No items found in checklist.
+      </div>
+
+      <!-- Add subject -->
+      <div class="border rounded p-3">
+        <div class="flex items-center gap-3">
+          <div>
+            <label class="block text-xs text-gray-500">Subject ID</label>
+            <input type="number" class="border rounded px-2 py-1" ng-model="vm.addSubjectId" placeholder="Enter Subject ID" />
+          </div>
+          <button class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  ng-click="vm.addChecklistItem()"
+                  ng-disabled="!vm.checklist || !vm.checklist.id || !vm.addSubjectId || vm.loading.checklistAction">
+            <i class="fas fa-plus mr-1"></i> Add
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

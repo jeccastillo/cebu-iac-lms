@@ -1,0 +1,202 @@
+<div class="max-w-6xl mx-auto px-4 py-8">
+  <!-- Header -->
+  <div class="flex items-start justify-between mb-6">
+    <div>
+      <h2 class="text-2xl font-semibold text-gray-800">Faculty Dashboard</h2>
+      <p class="text-gray-600">Welcome, <span class="font-semibold">{{ vm.state.username }}</span></p>
+    </div>
+    <div class="flex gap-2">
+      <button
+        type="button"
+        class="inline-flex items-center justify-center bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring"
+        ng-click="vm.goToSystem()"
+      >
+        {{ vm.destLabel }}
+      </button>
+      <button
+        type="button"
+        class="inline-flex items-center justify-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded focus:outline-none focus:ring"
+        ng-click="vm.logout()"
+      >
+        Logout
+      </button>
+    </div>
+  </div>
+
+  <!-- Quick Stats -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <div class="bg-white rounded shadow p-4">
+      <div class="text-sm text-gray-500">My Classes This Term</div>
+      <div class="text-3xl font-bold text-gray-800">{{ vm.stats.myClassesCount }}</div>
+    </div>
+    <div class="bg-white rounded shadow p-4">
+      <div class="text-sm text-gray-500">Total Students</div>
+      <div class="text-3xl font-bold text-gray-800">{{ vm.stats.totalStudentsTaught }}</div>
+    </div>
+    <div class="bg-white rounded shadow p-4">
+      <div class="text-sm text-gray-500">Pending Grades</div>
+      <div class="text-3xl font-bold text-gray-800">{{ vm.stats.pendingGrades }}</div>
+    </div>
+    <div class="bg-white rounded shadow p-4">
+      <div class="text-sm text-gray-500">Submitted Grades</div>
+      <div class="text-3xl font-bold text-gray-800">{{ vm.stats.submittedGrades }}</div>
+    </div>
+  </div>
+
+  <!-- Term Information -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+    <div class="bg-white rounded shadow p-4 flex items-center">
+      <div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center mr-4">
+        <span class="fas fa-calendar"></span>
+      </div>
+      <div>
+        <div class="text-xs text-gray-500">{{ vm.activeTerm.label }}</div>
+        <div class="text-lg font-semibold text-gray-800">{{ vm.activeTerm.value }}</div>
+      </div>
+    </div>
+    <div class="bg-white rounded shadow p-4 flex items-center">
+      <div class="flex-shrink-0 h-10 w-10 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center mr-4">
+        <span class="fas fa-file-alt"></span>
+      </div>
+      <div>
+        <div class="text-xs text-gray-500">{{ vm.appTerm.label }}</div>
+        <div class="text-lg font-semibold text-gray-800">{{ vm.appTerm.value }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <!-- Quick Actions -->
+    <div class="bg-white rounded shadow">
+      <div class="border-b px-4 py-3">
+        <h3 class="font-semibold text-gray-800"><span class="fas fa-bolt mr-2 text-green-600"></span>Quick Actions</h3>
+      </div>
+      <ul class="divide-y">
+        <li>
+          <a class="flex items-center justify-between px-4 py-3 hover:bg-gray-50" ng-href="{{ vm.links.classlist }}">
+            <span class="flex items-center text-gray-800">
+              <span class="fas fa-list text-blue-500 w-5 mr-2"></span> My Classes
+            </span>
+            <span class="fas fa-angle-right text-gray-400"></span>
+          </a>
+        </li>
+        <li>
+          <a class="flex items-center justify-between px-4 py-3 hover:bg-gray-50" href="#/admissions/apply">
+            <span class="flex items-center text-gray-800">
+              <span class="fas fa-file-alt text-purple-500 w-5 mr-2"></span> Admissions Application
+            </span>
+            <span class="fas fa-angle-right text-gray-400"></span>
+          </a>
+        </li>
+        <li>
+          <a class="flex items-center justify-between px-4 py-3 hover:bg-gray-50" href="#!/faculty/profile">
+            <span class="flex items-center text-gray-800">
+              <span class="fas fa-user text-green-500 w-5 mr-2"></span> My Profile
+            </span>
+            <span class="fas fa-angle-right text-gray-400"></span>
+          </a>
+        </li>
+        <li>
+          <a class="flex items-center justify-between px-4 py-3 hover:bg-gray-50" href="#!/faculty/settings">
+            <span class="flex items-center text-gray-800">
+              <span class="fas fa-cog text-red-500 w-5 mr-2"></span> Settings
+            </span>
+            <span class="fas fa-angle-right text-gray-400"></span>
+          </a>
+        </li>
+        <li ng-if="vm.canAccess('/cashier-admin')">
+          <a class="flex items-center justify-between px-4 py-3 hover:bg-gray-50" href="#!/cashier-admin">
+            <span class="flex items-center text-gray-800">
+              <span class="fas fa-receipt text-indigo-500 w-5 mr-2"></span> Cashier Admin
+            </span>
+            <span class="fas fa-angle-right text-gray-400"></span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="bg-white rounded shadow">
+      <div class="border-b px-4 py-3">
+        <h3 class="font-semibold text-gray-800"><span class="fas fa-history mr-2 text-gray-600"></span>Recent Activity</h3>
+      </div>
+      <div class="p-4">
+        <div ng-if="vm.recentSubmissions.length === 0" class="text-center text-gray-500">
+          <div class="fas fa-clock text-3xl mb-2 opacity-70"></div>
+          <p>No recent activity in the last 7 days</p>
+        </div>
+        <div ng-if="vm.recentSubmissions.length > 0" class="overflow-x-auto">
+          <table class="min-w-full text-sm">
+            <thead>
+              <tr class="text-left text-gray-500">
+                <th class="py-2 pr-4">Class</th>
+                <th class="py-2 pr-4">Subject</th>
+                <th class="py-2 pr-4">Section</th>
+                <th class="py-2 pr-4">Submission Date</th>
+                <th class="py-2 pr-4">Status</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y">
+              <tr ng-repeat="s in vm.recentSubmissions">
+                <td class="py-2 pr-4">{{ s.className }}</td>
+                <td class="py-2 pr-4">{{ s.subject }}</td>
+                <td class="py-2 pr-4">{{ s.section }}</td>
+                <td class="py-2 pr-4">{{ s.submittedAt }}</td>
+                <td class="py-2 pr-4">
+                  <span class="inline-flex px-2 py-1 rounded text-xs font-semibold bg-green-100 text-green-800">{{ s.status || 'Submitted' }}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- My Classes Overview -->
+  <div class="bg-white rounded shadow">
+    <div class="border-b px-4 py-3 flex items-center justify-between">
+      <h3 class="font-semibold text-gray-800"><span class="fas fa-graduation-cap mr-2 text-indigo-600"></span>My Classes Overview</h3>
+      <a class="text-sm text-blue-600 hover:text-blue-700" ng-href="{{ vm.links.classlist }}">View Classes</a>
+    </div>
+    <div class="p-4">
+      <div ng-if="vm.myClasses.length === 0" class="text-center text-gray-500">
+        <div class="fas fa-graduation-cap text-3xl mb-2 opacity-70"></div>
+        <p>No classes assigned for this term</p>
+      </div>
+      <div ng-if="vm.myClasses.length > 0" class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <thead>
+            <tr class="text-left text-gray-500">
+              <th class="py-2 pr-4">Subject Code</th>
+              <th class="py-2 pr-4">Class Name</th>
+              <th class="py-2 pr-4">Section</th>
+              <th class="py-2 pr-4">Units</th>
+              <th class="py-2 pr-4">Status</th>
+              <th class="py-2 pr-4">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y">
+            <tr ng-repeat="c in vm.myClasses">
+              <td class="py-2 pr-4 font-semibold">{{ c.subjectCode }}</td>
+              <td class="py-2 pr-4">{{ c.className }}</td>
+              <td class="py-2 pr-4">{{ c.section }}</td>
+              <td class="py-2 pr-4">{{ c.units }}</td>
+              <td class="py-2 pr-4">
+                <span ng-if="c.status === 'completed'" class="inline-flex px-2 py-1 rounded text-xs font-semibold bg-green-100 text-green-800">Completed</span>
+                <span ng-if="c.status === 'final_pending'" class="inline-flex px-2 py-1 rounded text-xs font-semibold bg-blue-100 text-blue-800">Final Pending</span>
+                <span ng-if="!c.status || c.status === 'midterm_pending'" class="inline-flex px-2 py-1 rounded text-xs font-semibold bg-yellow-100 text-yellow-800">Midterm Pending</span>
+              </td>
+              <td class="py-2 pr-4">
+                <a class="inline-flex items-center px-2 py-1 rounded bg-blue-600 text-white hover:bg-blue-700"
+                   ng-href="{{ vm.links.classlist }}">
+                  <span class="fas fa-eye mr-1"></span> View
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

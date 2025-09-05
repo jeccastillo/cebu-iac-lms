@@ -1,0 +1,151 @@
+<div class="space-y-6" ng-cloak>
+
+  <!-- Page Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-semibold text-gray-800">
+        {{ vm.title }}
+      </h1>
+      <p class="text-sm text-gray-500">
+        View your class schedules and records grouped by academic term.
+      </p>
+    </div>
+  </div>
+
+  <!-- Profile and Summary -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <!-- Profile -->
+    <div class="col-span-2 bg-white rounded-md shadow p-4">
+      <div class="flex items-start gap-4">
+        <div class="flex-1">
+          <h2 class="text-lg font-medium text-gray-800">Student Profile</h2>
+          <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
+            <div class="flex">
+              <span class="w-32 text-gray-500">Name</span>
+              <span class="text-gray-900 font-medium">
+                <span ng-if="vm.profile">{{ vm.profile.first_name }} {{ vm.profile.last_name }}</span>
+                <span ng-if="!vm.profile">-</span>
+              </span>
+            </div>
+            <div class="flex">
+              <span class="w-32 text-gray-500">Program</span>
+              <span class="text-gray-900">{{ (vm.profile && vm.profile.course_name) || '-' }}</span>
+            </div>
+            <div class="flex">
+              <span class="w-32 text-gray-500">Student No.</span>
+              <span class="text-gray-900">{{ vm.student_number || (vm.profile &amp;&amp; vm.profile.student_number) || '-' }}</span>
+            </div>
+            <div class="flex">
+              <span class="w-32 text-gray-500">Last Term</span>
+              <span class="text-gray-900">
+                <span ng-if="vm.profile &amp;&amp; (vm.profile.last_term || vm.profile.last_term_sy)">
+                  {{ vm.profile.last_term || '' }} <span ng-if="vm.profile.last_term_sy">({{ vm.profile.last_term_sy }})</span>
+                </span>
+                <span ng-if="!vm.profile || (!vm.profile.last_term &amp;&amp; !vm.profile.last_term_sy)">-</span>
+              </span>
+            </div>
+          </div>
+
+          <!-- Profile loading/error -->
+          <div class="mt-3">
+            <div class="text-blue-600 text-sm" ng-if="vm.loading.profile">Loading profile...</div>
+            <div class="text-red-600 text-sm" ng-if="vm.error.profile">{{ vm.error.profile }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="bg-white rounded-md shadow p-4">
+      <h2 class="text-lg font-medium text-gray-800">Summary</h2>
+      <div class="mt-3 grid grid-cols-2 gap-3">
+        <div class="rounded border border-gray-200 p-3">
+          <div class="text-gray-500 text-xs">Total Subjects</div>
+          <div class="text-xl font-semibold text-gray-900">{{ vm.summary.totalSubjects || 0 }}</div>
+        </div>
+        <div class="rounded border border-gray-200 p-3">
+          <div class="text-gray-500 text-xs">Total Units</div>
+          <div class="text-xl font-semibold text-gray-900">{{ vm.summary.totalUnits || 0 }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Records by Term -->
+  <div class="bg-white rounded-md shadow p-4">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="text-lg font-medium text-gray-800">Schedules &amp; Records</h2>
+    </div>
+
+    <!-- Loading / Error -->
+    <div class="text-blue-600 text-sm" ng-if="vm.loading.records">Loading records...</div>
+    <div class="text-red-600 text-sm" ng-if="vm.error.records">{{ vm.error.records }}</div>
+
+    <!-- Empty State -->
+    <div class="text-gray-500 text-sm" ng-if="!vm.loading.records &amp;&amp; !vm.error.records &amp;&amp; (!vm.terms || vm.terms.length === 0)">
+      No records found.
+    </div>
+
+    <!-- Terms Loop -->
+    <div class="space-y-6" ng-if="!vm.loading.records &amp;&amp; !vm.error.records &amp;&amp; vm.terms &amp;&amp; vm.terms.length">
+      <div class="border border-gray-200 rounded-md overflow-hidden" ng-repeat="t in vm.terms track by $index">
+        <div class="bg-gray-100 px-4 py-2 flex items-center justify-between">
+          <div class="font-medium text-gray-800">
+            {{ t.term }}            
+          </div>
+          <div class="text-sm text-gray-500">
+            {{ (t.records &amp;&amp; t.records.length) || 0 }} subject(s)
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Code</th>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Description</th>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Section</th>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Faculty</th>
+                <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Units</th>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Remarks</th>
+                <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">Prelim</th>
+                <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">Midterm</th>
+                <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">Finals</th>
+                <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">Final</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-100">
+              <tr ng-repeat="r in t.records track by $index">
+                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">{{ r.code || '-' }}</td>
+                <td class="px-4 py-2 text-sm text-gray-900">{{ r.description || '-' }}</td>
+                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">{{ r.section_code || r.sectionCode || '-' }}</td>
+                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
+                  <span ng-if="r.faculty_first || r.faculty_last">{{ (r.faculty_first || '') + (r.faculty_last ? (' ' + r.faculty_last) : '') }}</span>
+                  <span ng-if="!r.faculty_first &amp;&amp; !r.faculty_last">-</span>
+                </td>
+                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900 text-right">{{ r.units != null ? r.units : '-' }}</td>
+                <td class="px-4 py-2 text-sm text-gray-900">{{ r.remarks || '-' }}</td>
+                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900 text-center">
+                  {{ (r.grades &amp;&amp; r.grades.prelim != null) ? r.grades.prelim : '-' }}
+                </td>
+                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900 text-center">
+                  {{ (r.grades &amp;&amp; r.grades.midterm != null) ? r.grades.midterm : '-' }}
+                </td>
+                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900 text-center">
+                  {{ (r.grades &amp;&amp; r.grades.finals != null) ? r.grades.finals : '-' }}
+                </td>
+                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900 text-center">
+                  {{ (r.grades &amp;&amp; r.grades.final != null) ? r.grades.final : '-' }}
+                </td>
+              </tr>
+              <tr ng-if="!t.records || !t.records.length">
+                <td class="px-4 py-3 text-sm text-gray-500 text-center" colspan="10">No subjects for this term.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en" ng-app="unityApp">
+<head>
+  <meta charset="utf-8">
+  <title>iACADEMY SMS - Unity SPA</title>
+  <base href="./">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <!-- Tailwind CSS via CDN (ok for dev; replace for production) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome for icons used in templates -->
+  <!-- Remove SRI to avoid integrity mismatch in some environments; jsDelivr fallback remains below -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+  <!-- Fallback Font Awesome (jsDelivr) and safety weight fix -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css">
+  <style>
+    /* Ensure solid icons render even if other CSS overrides font-weight */
+    .fas { font-weight: 900 !important; }
+  </style>
+
+  <!-- Pre-bootstrap normalization: fix malformed hash paths like '#//registrar/...'
+       This must run BEFORE Angular is loaded to prevent $location:badpath on initial parse. -->
+  <script>
+    (function () {
+      try {
+        var h = window.location.hash || '';
+        // Normalize any leading double-slashes after the hash to a single slash
+        var fixed = h.replace(/^#\/{2,}/, '#\/');
+        if (fixed !== h) {
+          // Use replace() to avoid polluting history
+          var href = window.location.href.replace(h, fixed);
+          window.location.replace(href);
+        }
+      } catch (e) {
+        // swallow
+      }
+    })();
+  </script>
+
+  <!-- jQuery must load before AngularJS so Angular picks full jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- AngularJS 1.x and ngRoute -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular-route.min.js"></script>
+  <!-- ng-file-upload for file uploads -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/danialfarid-angular-file-upload/12.2.13/ng-file-upload-all.min.js"></script>
+  <!-- Chart.js for analytics visualizations -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <!-- SweetAlert2 for nicer confirms/alerts -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- Select2 for enhanced selects (requires jQuery) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <!-- intl-tel-input (flags + dial codes) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.7.1/build/css/intlTelInput.css">
+  <!-- CSS fallbacks in case a CDN is blocked -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css">
+  <link rel="stylesheet" href="https://unpkg.com/intl-tel-input@18.7.1/build/css/intlTelInput.css">
+  <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.7.1/build/js/intlTelInput.min.js"></script>
+  <!-- Preload utils to ensure formatting/masking availability -->
+  <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.7.1/build/js/utils.js"></script>
+  <!-- Minimal fallback CSS so the full country list doesn't render if library CSS fails to load -->
+  <style>
+    /* Fallback only — real styles are provided by the CDN CSS above */
+    .iti { position: relative; display: inline-block; width: 100%; overflow: visible; }
+    .iti__flag-container { position: absolute; top: 0; bottom: 0; left: 0; display: flex; align-items: center; padding-left: 0; }
+    .iti__selected-flag { height: 100%; cursor: pointer; }
+    .iti input[type="tel"], .iti input[type="text"] { padding-left: 3rem; }
+    .iti--separate-dial-code input[type="tel"], .iti--separate-dial-code input[type="text"] { padding-left: 5.5rem; }
+    /* Country list (supports both inline container and body container) */
+    .iti__country-list { position: absolute; z-index: 2147483647; background: #fff; border: 1px solid #d1d5db; max-height: 240px; overflow-y: auto; width: 320px; margin: 0; padding: 4px 0; list-style: none; display: none; pointer-events: auto; }
+    .iti--open .iti__country-list,
+    .iti--container .iti__country-list { display: block !important; visibility: visible; opacity: 1; }
+    /* Ensure body-level container is positioned when dropdownContainer: document.body */
+    .iti--container { position: absolute !important; top: 0; left: 0; z-index: 2147483647 !important; display: block; }
+    .iti__hide { display: none !important; }
+    .iti__country { padding: 4px 10px; }
+    .iti__country:hover { background: #f3f4f6; }
+
+    /* Additional fallback for older classnames used by some builds */
+    .country-list { position: absolute; z-index: 1000; background: #fff; border: 1px solid #d1d5db; max-height: 240px; overflow-y: auto; width: 320px; margin: 0; padding: 4px 0; list-style: none; display: none; }
+    .iti--open .country-list { display: block; }
+  </style>
+  <!-- Select2 theming to match Tailwind input styles -->
+  <style>
+    /* Ensure Select2 fills container */
+    .select2-container { width: 100% !important; }
+
+    /* Match Tailwind input: border, radius, padding, height */
+    .select2-container .select2-selection--single {
+      height: 2.5rem; /* ~40px */
+      border: 1px solid #d1d5db; /* gray-300 */
+      border-radius: 0.25rem; /* rounded */
+      padding: 0.375rem 0.75rem; /* py-1.5 px-3 */
+      display: flex;
+      align-items: center;
+      background-color: #fff;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+      color: #111827; /* gray-900 */
+      line-height: 1.25rem;
+      padding-left: 0;
+      margin-left: 0;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__placeholder {
+      color: #6b7280; /* gray-500 */
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+      height: 100%;
+      right: 0.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    /* Focus ring to match Tailwind focus:ring-blue-500 */
+    .select2-container--default .select2-selection--single:focus,
+    .select2-container--default .select2-selection--single:focus-within,
+    .select2-container--default.select2-container--focus .select2-selection--single {
+      outline: none;
+      border-color: #3b82f6; /* blue-500 */
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+    }
+
+    /* Dropdown styling */
+    .select2-dropdown {
+      border-color: #d1d5db; /* gray-300 */
+      border-radius: 0.25rem;
+      overflow: hidden;
+    }
+
+    .select2-search--dropdown .select2-search__field {
+      border: 1px solid #d1d5db;
+      border-radius: 0.25rem;
+      padding: 0.375rem 0.75rem;
+    }
+
+    .select2-results__option--highlighted.select2-results__option--selectable {
+      background-color: #3b82f6; /* blue-500 */
+      color: #fff;
+    }
+
+    .select2-results__option--selected {
+      background-color: #e5e7eb; /* gray-200 */
+      color: #111827;
+    }
+  </style>
+
+  <!-- Runtime base/config bootstrap -->
+  <script>
+    (function () {
+      // Compute base root of this project when served from XAMPP or any subfolder.
+      // If this file is served from /iacademy/cebu-iac-lms/frontend/unity-ng/dist/... then adjust baseRoot accordingly.
+      var path = window.location.pathname || '/';
+      var parts = path.split('/');
+      // try to detect /dist/<project>/... and go 2 levels up to repo root
+      // fallback to previous heuristic trimming last 3 segments for original folder structure
+      var trimmed = parts;
+      if (trimmed.length >= 3) {
+        trimmed = parts.slice(0, parts.length - 4);
+      }
+      var baseRoot = trimmed.join('/') || '/';
+      if (baseRoot.length > 1) {
+        baseRoot = baseRoot.replace(/\/+$/, '');
+      }
+
+      var defaultApi = (baseRoot === '/' ? '' : baseRoot) + '/laravel-api/public/api/v1';
+
+      // Base URL of the Laravel API v1. Can be overridden by setting window.API_BASE before this script.
+      window.API_BASE = window.API_BASE || defaultApi;
+
+      // Optional: redirects after successful login (if served under same host)
+      window.AFTER_LOGIN_REDIRECTS = window.AFTER_LOGIN_REDIRECTS || {
+        faculty: (baseRoot === '/' ? '' : baseRoot) + '/unity',
+        student: (baseRoot === '/' ? '' : baseRoot) + '/portal'
+      };
+
+      // Control whether to use redirects above or show a local dashboard
+      window.LOGIN_APP_CONFIG = Object.assign(
+        { useRedirects: false },
+        window.LOGIN_APP_CONFIG || {}
+      );
+    })();
+  </script>
+
+  <!-- RBAC role overrides -->
+  <script>
+    // Frontend-only role mapping for specific users. This augments (not replaces) any existing map.
+    window.USER_ROLE_MAP = Object.assign({}, window.USER_ROLE_MAP || {}, {
+      'smssuperadmin': ['admin']
+    });
+  </script>
+
+  <!-- Core app files -->
+  <script src="assets/unity-spa/core/app.module.js"></script>
+  <script src="assets/unity-spa/core/filters.js"></script>
+  <script src="assets/unity-spa/core/constants.js"></script>
+  <script src="assets/unity-spa/core/roles.constants.js"></script>
+  <script src="assets/unity-spa/core/role.service.js"></script>
+  <script src="assets/unity-spa/core/link.service.js"></script>
+  <script src="assets/unity-spa/core/storage.service.js"></script>
+  <script src="assets/unity-spa/core/campus.service.js"></script>
+  <script src="assets/unity-spa/core/term.service.js"></script>
+  <script src="assets/unity-spa/core/routes.js"></script>
+  <script src="assets/unity-spa/core/template-base.config.js"></script>
+  <script src="assets/unity-spa/core/run.js"></script>
+  <script src="assets/unity-spa/core/toast.service.js"></script>
+  <script src="assets/unity-spa/core/system-alerts.service.js"></script>
+
+  <!-- Shared components -->
+  <script src="assets/unity-spa/shared/components/header/header.controller.js"></script>
+  <script src="assets/unity-spa/shared/components/header/header.directive.js"></script>
+  <!-- Campus selector (used inside sidebar) -->
+  <script src="assets/unity-spa/shared/components/campus-selector/campus-selector.controller.js"></script>
+  <script src="assets/unity-spa/shared/components/campus-selector/campus-selector.directive.js"></script>
+  <!-- Term selector (used inside sidebar) -->
+  <script src="assets/unity-spa/shared/components/term-selector/term-selector.controller.js"></script>
+  <script src="assets/unity-spa/shared/components/term-selector/term-selector.directive.js"></script>
+  <!-- Sidebar component -->
+  <script src="assets/unity-spa/shared/components/sidebar/sidebar.controller.js"></script>
+  <script src="assets/unity-spa/shared/components/sidebar/sidebar.directive.js"></script>
+  <!-- Shared directives -->
+  <script src="assets/unity-spa/shared/directives/select2.directive.js"></script>
+  <script src="assets/unity-spa/shared/directives/pui-multiselect.directive.js"></script>
+  <script src="assets/unity-spa/shared/directives/pui-autocomplete.directive.js"></script>
+  <script src="assets/unity-spa/shared/directives/iti-tel.directive.js"></script>
+
+  <!-- Features -->
+  <script src="assets/unity-spa/features/auth/auth.service.js"></script>
+  <script src="assets/unity-spa/features/auth/login.controller.js"></script>
+
+  <script src="assets/unity-spa/features/dashboard/dashboard.controller.js"></script>
+
+  <script src="assets/unity-spa/features/faculty/profile.controller.js"></script>
+  <script src="assets/unity-spa/features/faculty/settings.controller.js"></script>
+  <script src="assets/unity-spa/features/faculty/classes.controller.js"></script>
+
+  <!-- Registrar/Finance/Scholarship placeholders -->
+  <script src="assets/unity-spa/features/registrar/reports.service.js"></script>
+  <script src="assets/unity-spa/features/registrar/reports.controller.js"></script>
+  <!-- Daily Enrollment (SPA) -->
+  <script src="assets/unity-spa/features/registrar/daily-enrollment.service.js"></script>
+  <script src="assets/unity-spa/features/registrar/daily-enrollment.controller.js"></script>
+  <script src="assets/unity-spa/features/finance/ledger.controller.js"></script>
+  <!-- Finance: Payment Modes -->
+  <script src="assets/unity-spa/features/finance/payment-modes/payment-modes.service.js"></script>
+  <script src="assets/unity-spa/features/finance/payment-modes/payment-modes.controller.js"></script>
+  <!-- Finance: Payment Descriptions -->
+  <script src="assets/unity-spa/features/finance/payment-descriptions/payment-descriptions.service.js"></script>
+  <script src="assets/unity-spa/features/finance/payment-descriptions/payment-descriptions.controller.js"></script>
+
+  <!-- Finance: Student Billing -->
+  <script src="assets/unity-spa/features/finance/student-billing/student-billing.service.js"></script>
+  <script src="assets/unity-spa/features/finance/student-billing/student-billing.controller.js"></script>
+  <script src="assets/unity-spa/features/scholarship/students.controller.js"></script>
+  <script src="assets/unity-spa/features/students/students.controller.js"></script>
+  <script src="assets/unity-spa/features/students/students.service.js"></script>
+  <script src="assets/unity-spa/features/students/checklist.service.js"></script>
+  <script src="assets/unity-spa/features/students/viewer.controller.js"></script>
+  <script src="assets/unity-spa/features/students/records.controller.js"></script>
+  <!-- Student Dashboard -->
+  <script src="assets/unity-spa/features/student-dashboard/student-dashboard.controller.js"></script>
+  <!-- Admissions application feature -->
+  <script src="assets/unity-spa/features/admissions/apply.controller.js"></script>
+  <script src="assets/unity-spa/features/admissions/success.controller.js"></script>
+  <!-- Admissions: Requirements CRUD -->
+  <script src="assets/unity-spa/features/admissions/requirements/requirements.service.js"></script>
+  <script src="assets/unity-spa/features/admissions/requirements/requirements.controller.js"></script>
+  <!-- Admissions: Initial Requirements (Public) -->
+  <script src="assets/unity-spa/features/admissions/initial-requirements/initial-requirements.service.js"></script>
+  <script src="assets/unity-spa/features/admissions/initial-requirements/initial-requirements.controller.js"></script>
+  <!-- Admissions: Previous Schools CRUD -->
+  <script src="assets/unity-spa/features/admissions/previous-schools/previous-schools.service.js"></script>
+  <script src="assets/unity-spa/features/admissions/previous-schools/previous-schools.controller.js"></script>
+  <!-- Admissions: Interviews Service -->
+  <script src="assets/unity-spa/features/admissions/interviews/interviews.service.js"></script>
+  <!-- Admissions: Applicants (List + View) -->
+  <script src="assets/unity-spa/features/admissions/applicants/applicants.service.js"></script>
+  <script src="assets/unity-spa/features/admissions/applicants/journey.service.js"></script>
+  <script src="assets/unity-spa/features/admissions/applicants/applicants.controller.js"></script>
+  <!-- Admissions: Applicants Analytics -->
+  <script src="assets/unity-spa/features/admissions/applicants/analytics.service.js"></script>
+  <script src="assets/unity-spa/features/admissions/applicants/analytics.controller.js"></script>
+  <!-- Admissions: Applicant Types CRUD -->
+  <script src="assets/unity-spa/features/admissions/applicant-types/applicant-types.service.js"></script>
+  <script src="assets/unity-spa/features/admissions/applicant-types/applicant-types.controller.js"></script>
+
+  <!-- Campuses feature -->
+  <script src="assets/unity-spa/features/campuses/campuses.service.js"></script>
+  <script src="assets/unity-spa/features/campuses/campuses.controller.js"></script>
+  <script src="assets/unity-spa/features/campuses/campus-edit.controller.js"></script>
+
+  <!-- Programs feature -->
+  <script src="assets/unity-spa/features/programs/programs.service.js"></script>
+  <script src="assets/unity-spa/features/programs/programs.controller.js"></script>
+
+  <!-- Faculty admin feature -->
+  <script src="assets/unity-spa/features/faculty/faculty.service.js"></script>
+  <script src="assets/unity-spa/features/faculty/faculty.controller.js"></script>
+
+  <!-- School Years feature -->
+  <script src="assets/unity-spa/features/school-years/school-years.service.js"></script>
+  <script src="assets/unity-spa/features/school-years/school-years.controller.js"></script>
+
+  <!-- Subjects feature -->
+  <script src="assets/unity-spa/features/subjects/subjects.service.js"></script>
+  <script src="assets/unity-spa/features/subjects/subjects.controller.js"></script>
+
+  <!-- Curricula feature -->
+  <script src="assets/unity-spa/features/curricula/curricula.service.js"></script>
+  <script src="assets/unity-spa/features/curricula/curricula.controller.js"></script>
+
+  <!-- Classlists feature -->
+  <script src="assets/unity-spa/features/classlists/classlists.service.js"></script>
+  <script src="assets/unity-spa/features/classlists/classlists.controller.js"></script>
+  <script src="assets/unity-spa/features/classlists/classlist-edit.controller.js"></script>
+  <script src="assets/unity-spa/features/classlists/viewer.controller.js"></script>
+
+  <!-- Grading Systems feature -->
+  <script src="assets/unity-spa/features/grading/grading.service.js"></script>
+  <script src="assets/unity-spa/features/grading/grading.controller.js"></script>
+
+  <!-- Academics: Faculty Loading -->
+  <script src="assets/unity-spa/features/academics/faculty-loading/faculty-loading.service.js"></script>
+  <script src="assets/unity-spa/features/academics/faculty-loading/faculty-loading.controller.js"></script>
+
+  <!-- Tuition Years feature (Finance) -->
+  <script src="assets/unity-spa/features/tuition-years/tuition-years.service.js"></script>
+  <script src="assets/unity-spa/features/tuition-years/tuition-years.controller.js"></script>
+
+  <!-- Cashiers feature -->
+  <script src="assets/unity-spa/features/cashiers/cashiers.service.js"></script>
+  <script src="assets/unity-spa/features/cashiers/cashiers.controller.js"></script>
+
+  <!-- Roles feature -->
+  <script src="assets/unity-spa/features/roles/roles.service.js"></script>
+  <script src="assets/unity-spa/features/roles/roles.controller.js"></script>
+
+  <!-- System Logs feature -->
+  <script src="assets/unity-spa/features/logs/logs.service.js"></script>
+  <script src="assets/unity-spa/features/logs/logs.controller.js"></script>
+
+  <!-- Admin: Payment Details -->
+  <script src="assets/unity-spa/features/admin/payment-details/payment-details.service.js"></script>
+  <script src="assets/unity-spa/features/admin/payment-details/payment-details.controller.js"></script>
+
+  <!-- Admin: Invoices CRUD -->
+  <script src="assets/unity-spa/features/admin/invoices/invoices.service.js"></script>
+  <script src="assets/unity-spa/features/admin/invoices/invoices.controller.js"></script>
+  <script src="assets/unity-spa/features/admin/invoices/invoice-edit.controller.js"></script>
+  <script src="assets/unity-spa/features/admin/system-alerts/system-alerts.controller.js"></script>
+
+  <!-- Unity feature -->
+  <script src="assets/unity-spa/features/unity/unity.service.js"></script>
+  <!-- Finance Cashier Viewer -->
+  <script src="assets/unity-spa/features/finance/cashier-viewer/cashier-viewer.controller.js"></script>
+  <!-- Registrar Registration Viewer (new SPA) -->
+  <script src="assets/unity-spa/features/registrar/registration-viewer/registration-viewer.controller.js"></script>
+  <!-- Registrar Enlistment feature -->
+  <script src="assets/unity-spa/features/registrar/enlistment/enlistment.controller.js"></script>
+  <!-- Registrar Sections &amp; Slots Monitor -->
+  <script src="assets/unity-spa/features/registrar/sections-slots/sections-slots.service.js"></script>
+  <script src="assets/unity-spa/features/registrar/sections-slots/sections-slots.controller.js"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <!-- Angular (v17) app mount; kept to initialize Angular CLI shell. -->
+  <app-root></app-root>
+
+  <!-- Global header (hidden on public upload pages) -->
+  <app-header ng-if="!hideChrome"></app-header>
+
+  <!-- Sidebar (hidden on public upload pages) -->
+  <app-sidebar ng-if="!hideChrome"></app-sidebar>
+
+  <!-- Route outlet -->
+  <div class="main-content container mx-auto px-4 py-10">
+    <div ng-view></div>
+  </div>
+</body>
+</html>

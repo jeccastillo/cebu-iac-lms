@@ -1,0 +1,136 @@
+<div class="p-4" ng-controller="ApplicantTypesController as vm">
+  <div class="flex items-center justify-between mb-4">
+    <h1 class="text-xl font-semibold text-gray-800">{{ vm.title }}</h1>
+    <div>
+      <button class="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm"
+              ng-click="vm.add()">
+        New Applicant Type
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="bg-white p-4 border border-gray-200 rounded-md mb-4">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+      <div class="md:col-span-2">
+        <label class="block text-sm text-gray-600 mb-1">Search</label>
+        <input type="text" class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+               placeholder="Search name"
+               ng-model="vm.filters.search"
+               ng-keypress="$event.keyCode === 13 &amp;&amp; vm.search()">
+      </div>
+      <div class="md:col-span-1">
+        <label class="block text-sm text-gray-600 mb-1">Type</label>
+        <select class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+                ng-model="vm.filters.type">
+          <option ng-repeat="opt in vm.typeOptions" ng-value="opt.value">{{ opt.label }}</option>
+        </select>
+      </div>
+      <div class="md:col-span-1">
+        <label class="block text-sm text-gray-600 mb-1">Sort</label>
+        <select class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+                ng-model="vm.filters.sort">
+          <option value="name">Name</option>
+          <option value="type">Type</option>
+          <option value="created_at">Created</option>
+        </select>
+      </div>
+      <div class="md:col-span-1">
+        <label class="block text-sm text-gray-600 mb-1">Order</label>
+        <select class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+                ng-model="vm.filters.order">
+          <option value="asc">Ascending</option>
+          <option value="desc">Descending</option>
+        </select>
+      </div>
+    </div>
+    <div class="mt-3 flex items-center gap-2">
+      <button class="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm" ng-click="vm.search()">Apply</button>
+      <button class="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-md text-sm" ng-click="vm.clearFilters()">Clear</button>
+    </div>
+  </div>
+
+  <!-- Error -->
+  <div class="mb-3" ng-if="vm.error">
+    <div class="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-md text-sm">
+      {{ vm.error }}
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="bg-white border border-gray-200 rounded-md overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200 text-sm">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-4 py-2 text-left font-semibold text-gray-700 cursor-pointer" ng-click="vm.changeSort('name')">Name</th>
+          <th class="px-4 py-2 text-left font-semibold text-gray-700 cursor-pointer" ng-click="vm.changeSort('type')">Type</th>
+          <th class="px-4 py-2 text-left font-semibold text-gray-700">Sub Type</th>
+          <th class="px-4 py-2 text-left font-semibold text-gray-700 cursor-pointer" ng-click="vm.changeSort('created_at')">Created</th>
+          <th class="px-4 py-2 text-right font-semibold text-gray-700">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        <tr ng-if="vm.loading">
+          <td colspan="5" class="px-4 py-6 text-center text-gray-500">Loading...</td>
+        </tr>
+        <tr ng-if="!vm.loading && (!vm.rows || vm.rows.length === 0)">
+          <td colspan="5" class="px-4 py-6 text-center text-gray-500">No records found.</td>
+        </tr>
+        <tr ng-repeat="row in vm.rows">
+          <td class="px-4 py-2">{{ row.name }}</td>
+          <td class="px-4 py-2">
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium"
+                  ng-class="{
+                    'bg-blue-100 text-blue-800': row.type === 'college',
+                    'bg-green-100 text-green-800': row.type === 'shs',
+                    'bg-purple-100 text-purple-800': row.type === 'grad'
+                  }">
+              {{ row.type | uppercase }}
+            </span>
+          </td>
+          <td class="px-4 py-2">{{ row.sub_type || '-' }}</td>
+          <td class="px-4 py-2">{{ row.created_at || '-' }}</td>
+          <td class="px-4 py-2">
+            <div class="flex items-center justify-end gap-2">
+              <button class="px-2 py-1 text-xs bg-white border border-gray-300 rounded hover:bg-gray-50"
+                      ng-click="vm.edit(row)">Edit</button>
+              <div class="relative inline-block text-left" ng-mouseleave="vm.closeMenu()">
+                <button class="px-2 py-1 text-xs bg-white border border-gray-300 rounded hover:bg-gray-50"
+                        ng-click="vm.toggleMenu(row.id)">More</button>
+                <div class="origin-top-right absolute right-0 mt-1 w-28 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10"
+                     ng-if="vm.isMenuOpen(row.id)">
+                  <div class="py-1">
+                    <a href="" class="block px-3 py-1 text-xs text-red-600 hover:bg-red-50"
+                       ng-click="vm.remove(row)">Delete</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="mt-3 flex items-center justify-between">
+    <div class="text-sm text-gray-600">
+      Total: {{ vm.total }}
+    </div>
+    <div class="flex items-center gap-2">
+      <button class="px-3 py-1 border border-gray-300 rounded text-sm bg-white hover:bg-gray-50"
+              ng-disabled="vm.meta.current_page <= 1"
+              ng-click="vm.changePage(-1)">Prev</button>
+      <span class="text-sm text-gray-700">Page {{ vm.meta.current_page }} / {{ vm.meta.last_page }}</span>
+      <button class="px-3 py-1 border border-gray-300 rounded text-sm bg-white hover:bg-gray-50"
+              ng-disabled="vm.meta.current_page >= vm.meta.last_page"
+              ng-click="vm.changePage(1)">Next</button>
+      <select class="ml-2 border border-gray-300 rounded px-2 py-1 text-sm"
+              ng-model="vm.filters.per_page" ng-change="vm.changePerPage()">
+        <option value="10">10 / page</option>
+        <option value="20">20 / page</option>
+        <option value="50">50 / page</option>
+      </select>
+    </div>
+  </div>
+</div>

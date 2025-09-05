@@ -18,7 +18,10 @@
 		RewriteRule ^(.*)$ index.php?/$1 [L]
 	</IfModule>
 
-    RewriteCond $1 !^(index\.php|images|css|js|robots\.txt|favicon\.ico|)
+    # Serve existing files and Angular dist directly; only rewrite non-files/dirs to CodeIgniter
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond $1 !^(index\.php|images|css|js|robots\.txt|favicon\.ico|frontend/unity-ng/dist/)
     RewriteRule ^(.*)$ index.php/$1 [L]
 
 </IfModule>

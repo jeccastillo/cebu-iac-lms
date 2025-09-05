@@ -1,0 +1,613 @@
+<div class="p-6" ng-init="vm.local = { misc: {}, lab: {}, track: {}, program: {}, elective: {} }">
+  <div class="flex items-center justify-between mb-4">
+    <h1 class="text-xl font-semibold text-gray-900">Edit Tuition Year #{{ vm.id }}</h1>
+
+    <div class="flex items-center space-x-2">
+      <button ng-click="vm.save()"
+              ng-disabled="vm.loading || vm.form.final === 1"
+              class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md shadow-sm transition disabled:opacity-50">
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        Save
+      </button>
+
+      <button ng-if="vm.form.final !== 1"
+              ng-click="vm.finalize()"
+              class="inline-flex items-center px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-md shadow-sm transition">
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"></path>
+        </svg>
+        Finalize
+      </button>
+
+      <button ng-if="vm.form.final === 1"
+              ng-click="vm.unfinalize()"
+              class="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md shadow-sm transition">
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+        Un-finalize
+      </button>
+    </div>
+  </div>
+
+  <div class="bg-white shadow rounded-lg overflow-hidden">
+    <div class="px-4 py-3 border-b border-gray-200 flex items-center">
+      <svg ng-if="vm.loading" class="animate-spin h-5 w-5 text-blue-600 mr-2" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor"
+          d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+      </svg>
+      <span class="text-sm text-gray-600">
+        {{ vm.form.final === 1 ? 'Finalized — fields are read-only. Un-finalize to edit.' : 'Draft — editable.' }}
+      </span>
+      <span class="ml-4 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium"
+            ng-class="{ 'bg-purple-100 text-purple-800': vm.form.final === 1, 'bg-gray-100 text-gray-800': vm.form.final !== 1 }">
+        {{ vm.form.final === 1 ? 'Finalized' : 'Draft' }}
+      </span>
+    </div>
+
+    <!-- Base fields -->
+    <div class="px-6 py-5">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Year Label</label>
+          <input type="text" class="mt-1 block w-full border rounded px-3 py-2"
+                 ng-model="vm.form.year" ng-disabled="vm.form.final === 1" placeholder="AY 2025-2026" />
+        </div>
+
+        <div class="flex items-center space-x-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Default (College)</label>
+            <input type="checkbox" class="mt-2" ng-model="vm.form.isDefault" ng-true-value="1" ng-false-value="0" ng-disabled="vm.form.final === 1">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Default (SHS)</label>
+            <input type="checkbox" class="mt-2" ng-model="vm.form.isDefaultShs" ng-true-value="1" ng-false-value="0" ng-disabled="vm.form.final === 1">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Price Per Unit (Regular)</label>
+          <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2"
+                 ng-model="vm.form.pricePerUnit" ng-disabled="vm.form.final === 1" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Price Per Unit (Online)</label>
+          <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2"
+                 ng-model="vm.form.pricePerUnitOnline" ng-disabled="vm.form.final === 1" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Price Per Unit (Hyflex)</label>
+          <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2"
+                 ng-model="vm.form.pricePerUnitHyflex" ng-disabled="vm.form.final === 1" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Price Per Unit (Hybrid)</label>
+          <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2"
+                 ng-model="vm.form.pricePerUnitHybrid" ng-disabled="vm.form.final === 1" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Installment % Increase</label>
+          <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2"
+                 ng-model="vm.form.installmentIncrease" ng-disabled="vm.form.final === 1" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Installment Down Payment %</label>
+          <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2"
+                 ng-model="vm.form.installmentDP" ng-disabled="vm.form.final === 1" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Fixed Down Payment (optional)</label>
+          <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2"
+                 ng-model="vm.form.installmentFixed" ng-disabled="vm.form.final === 1" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Free Elective Count (SHS)</label>
+          <input type="number" step="1" class="mt-1 block w-full border rounded px-3 py-2"
+                 ng-model="vm.form.freeElectiveCount" ng-disabled="vm.form.final === 1" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Sections -->
+    <div class="px-6 pb-6 space-y-10">
+
+      <!-- Misc -->
+      <section>
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-lg font-semibold text-gray-900">Miscellaneous Fees</h2>
+        </div>
+        <div class="overflow-x-auto border rounded">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Regular</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Online</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Hyflex</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Hybrid</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
+                <th class="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200" ng-if="(vm.misc || []).length > 0">
+              <tr ng-repeat-start="m in vm.misc track by m.intID">
+                <td class="px-3 py-2 text-sm text-gray-700">{{ m.name }}</td>
+                <td class="px-3 py-2 text-sm text-gray-700">{{ m.miscRegular }}</td>
+                <td class="px-3 py-2 text-sm text-gray-700">{{ m.miscOnline }}</td>
+                <td class="px-3 py-2 text-sm text-gray-700">{{ m.miscHyflex }}</td>
+                <td class="px-3 py-2 text-sm text-gray-700">{{ m.miscHybrid }}</td>
+                <td class="px-3 py-2 text-sm text-gray-700">{{ m.type }}</td>
+                <td class="px-3 py-2 text-sm text-right">
+                  <button ng-if="vm.form.final !== 1"
+                          ng-click="vm.startEditMisc(m)"
+                          class="px-2 py-1 text-xs bg-white border border-blue-300 text-blue-700 rounded hover:bg-blue-50 mr-2">
+                    Edit
+                  </button>
+                  <button ng-if="vm.form.final !== 1"
+                          ng-click="vm.deleteMisc(m.intID)"
+                          class="px-2 py-1 text-xs bg-white border border-red-300 text-red-700 rounded hover:bg-red-50">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+              <tr ng-repeat-end ng-if="vm.form.final !== 1 && vm.editing.miscId == m.intID">
+                <td colspan="7" class="bg-gray-50 px-3 py-3">
+                  <div class="grid grid-cols-1 md:grid-cols-6 gap-3">
+                    <div class="md:col-span-2">
+                      <label class="block text-xs font-medium text-gray-600">Name</label>
+                      <input type="text" class="mt-1 block w-full border rounded px-3 py-2"
+                             ng-model="vm.local.miscEdit.name" placeholder="Name">
+                    </div>
+                    <div>
+                      <label class="block text-xs font-medium text-gray-600">Regular</label>
+                      <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2"
+                             ng-model="vm.local.miscEdit.miscRegular">
+                    </div>
+                    <div>
+                      <label class="block text-xs font-medium text-gray-600">Online</label>
+                      <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2"
+                             ng-model="vm.local.miscEdit.miscOnline">
+                    </div>
+                    <div>
+                      <label class="block text-xs font-medium text-gray-600">Hyflex</label>
+                      <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2"
+                             ng-model="vm.local.miscEdit.miscHyflex">
+                    </div>
+                    <div>
+                      <label class="block text-xs font-medium text-gray-600">Hybrid</label>
+                      <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2"
+                             ng-model="vm.local.miscEdit.miscHybrid">
+                    </div>
+                    <div class="md:col-span-2">
+                      <label class="block text-xs font-medium text-gray-600">Type</label>
+                      <select class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.miscEdit.type">
+                        <option value="regular">Regular</option>
+                        <option value="nsf">New Student Misc</option>
+                        <option value="new_student">New Student Fees</option>
+                        <option value="late_tuition">Late Tuition Fee</option>
+                        <option value="late_enrollment">Late Enrollment Fee</option>
+                        <option value="thesis">Thesis</option>
+                        <option value="internship">Internship</option>
+                        <option value="nstp">NSTP/ROTC</option>
+                        <option value="isf">International Student Fee</option>
+                        <option value="svf">Student Visa Fee</option>
+                        <option value="other">Other</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="mt-3 flex items-center space-x-2">
+                    <button class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded"
+                            ng-click="vm.updateMisc(m.intID)">
+                      Save
+                    </button>
+                    <button class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs rounded border"
+                            ng-click="vm.cancelEditMisc()">
+                      Cancel
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody ng-if="!vm.loading && (vm.misc || []).length === 0">
+              <tr><td colspan="7" class="px-3 py-4 text-center text-sm text-gray-500">No items</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-3" ng-if="vm.form.final !== 1">
+          <div class="grid grid-cols-1 md:grid-cols-6 gap-3">
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700">Name</label>
+              <input type="text" class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.misc.name" placeholder="Name">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Regular</label>
+              <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.misc.miscRegular">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Online</label>
+              <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.misc.miscOnline">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Hyflex</label>
+              <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.misc.miscHyflex">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Hybrid</label>
+              <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.misc.miscHybrid">
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700">Type</label>
+              <select class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.misc.type">
+                <option value="regular">Regular</option>
+                <option value="nsf">New Student Misc</option>
+                <option value="new_student">New Student Fees</option>
+                <option value="late_tuition">Late Tuition Fee</option>
+                <option value="late_enrollment">Late Enrollment Fee</option>
+                <option value="thesis">Thesis</option>
+                <option value="internship">Internship</option>
+                <option value="nstp">NSTP/ROTC</option>
+                <option value="isf">International Student Fee</option>
+                <option value="svf">Student Visa Fee</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="mt-3">
+            <button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded"
+                    ng-click="vm.addMisc(vm.local.misc)">
+              Add Item
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Lab Fees -->
+      <section>
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-lg font-semibold text-gray-900">Lab Fees</h2>
+        </div>
+        <div class="overflow-x-auto border rounded">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Regular</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Online</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Hyflex</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Hybrid</th>
+                <th class="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200" ng-if="(vm.labs || []).length > 0">
+              <tr ng-repeat-start="l in vm.labs track by l.intID">
+                <td class="px-3 py-2 text-sm text-gray-700">{{ l.name }}</td>
+                <td class="px-3 py-2 text-sm text-gray-700">{{ l.labRegular }}</td>
+                <td class="px-3 py-2 text-sm text-gray-700">{{ l.labOnline }}</td>
+                <td class="px-3 py-2 text-sm text-gray-700">{{ l.labHyflex }}</td>
+                <td class="px-3 py-2 text-sm text-gray-700">{{ l.labHybrid }}</td>
+                <td class="px-3 py-2 text-sm text-right">
+                  <button ng-if="vm.form.final !== 1"
+                          ng-click="vm.startEditLab(l)"
+                          class="px-2 py-1 text-xs bg-white border border-blue-300 text-blue-700 rounded hover:bg-blue-50 mr-2">
+                    Edit
+                  </button>
+                  <button ng-if="vm.form.final !== 1"
+                          ng-click="vm.deleteLab(l.intID)"
+                          class="px-2 py-1 text-xs bg-white border border-red-300 text-red-700 rounded hover:bg-red-50">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+              <tr ng-repeat-end ng-if="vm.form.final !== 1 && vm.editing.labId == l.intID">
+                <td colspan="6" class="bg-gray-50 px-3 py-3">
+                  <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+                    <div class="md:col-span-2">
+                      <label class="block text-xs font-medium text-gray-600">Name</label>
+                      <input type="text" class="mt-1 block w-full border rounded px-3 py-2"
+                             ng-model="vm.local.labEdit.name" placeholder="Name">
+                    </div>
+                    <div>
+                      <label class="block text-xs font-medium text-gray-600">Regular</label>
+                      <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2"
+                             ng-model="vm.local.labEdit.labRegular">
+                    </div>
+                    <div>
+                      <label class="block text-xs font-medium text-gray-600">Online</label>
+                      <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2"
+                             ng-model="vm.local.labEdit.labOnline">
+                    </div>
+                    <div>
+                      <label class="block text-xs font-medium text-gray-600">Hyflex</label>
+                      <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2"
+                             ng-model="vm.local.labEdit.labHyflex">
+                    </div>
+                    <div>
+                      <label class="block text-xs font-medium text-gray-600">Hybrid</label>
+                      <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2"
+                             ng-model="vm.local.labEdit.labHybrid">
+                    </div>
+                  </div>
+                  <div class="mt-3 flex items-center space-x-2">
+                    <button class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded"
+                            ng-click="vm.updateLab(l.intID)">
+                      Save
+                    </button>
+                    <button class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs rounded border"
+                            ng-click="vm.cancelEditLab()">
+                      Cancel
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody ng-if="!vm.loading && (vm.labs || []).length === 0">
+              <tr><td colspan="6" class="px-3 py-4 text-center text-sm text-gray-500">No items</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-3" ng-if="vm.form.final !== 1">
+          <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700">Name</label>
+              <input type="text" class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.lab.name" placeholder="Name">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Regular</label>
+              <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.lab.labRegular">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Online</label>
+              <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.lab.labOnline">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Hyflex</label>
+              <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.lab.labHyflex">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Hybrid</label>
+              <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.lab.labHybrid">
+            </div>
+          </div>
+          <div class="mt-3">
+            <button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded"
+                    ng-click="vm.addLab(vm.local.lab)">
+              Add Lab Fee
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SHS Tracks -->
+      <section>
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-lg font-semibold text-gray-900">SHS Tracks</h2>
+        </div>
+        <div class="overflow-x-auto border rounded">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Track</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Regular</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Online</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Hyflex</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Hybrid</th>
+                <th class="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200" ng-if="(vm.tracks || []).length > 0">
+              <tr ng-repeat="t in vm.tracks track by t.id">
+                <td class="px-3 py-2 text-sm text-gray-700">{{ vm.lookupShsProgram(t.track_id) }}</td>
+                <td class="px-3 py-2 text-sm text-gray-700">{{ t.tuition_amount }}</td>
+                <td class="px-3 py-2 text-sm text-gray-700">{{ t.tuition_amount_online }}</td>
+                <td class="px-3 py-2 text-sm text-gray-700">{{ t.tuition_amount_hyflex }}</td>
+                <td class="px-3 py-2 text-sm text-gray-700">{{ t.tuition_amount_hybrid }}</td>
+                <td class="px-3 py-2 text-sm text-right">
+                  <button ng-if="vm.form.final !== 1"
+                          ng-click="vm.deleteTrack(t.id)"
+                          class="px-2 py-1 text-xs bg-white border border-red-300 text-red-700 rounded hover:bg-red-50">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+            <tbody ng-if="!vm.loading && (vm.tracks || []).length === 0">
+              <tr><td colspan="6" class="px-3 py-4 text-center text-sm text-gray-500">No tracks</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-3" ng-if="vm.form.final !== 1">
+          <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Track (Program)</label>
+              <select class="mt-1 block w-full border rounded px-3 py-2"
+                      ng-model="vm.local.track.track_id"
+                      ng-options="p.id as p.label for p in vm.shsProgramOptions track by p.id">
+                <option value=""></option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Regular</label>
+              <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.track.tuition_amount">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Online</label>
+              <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.track.tuition_amount_online">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Hyflex</label>
+              <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.track.tuition_amount_hyflex">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Hybrid</label>
+              <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.track.tuition_amount_hybrid">
+            </div>
+          </div>
+          <div class="mt-3">
+            <button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded"
+                    ng-click="vm.addTrack(vm.local.track)">
+              Add Track Rate
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- College Programs -->
+      <section>
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-lg font-semibold text-gray-900">College Programs</h2>
+        </div>
+        <div class="overflow-x-auto border rounded">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Program</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Regular</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Online</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Hyflex</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Hybrid</th>
+                <th class="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200" ng-if="(vm.programs || []).length > 0">
+              <tr ng-repeat="p in vm.programs track by p.id">
+                <td class="px-3 py-2 text-sm text-gray-700">{{ vm.lookupCollegeProgram(p.track_id) }}</td>
+                <td class="px-3 py-2 text-sm text-gray-700">{{ p.tuition_amount }}</td>
+                <td class="px-3 py-2 text-sm text-gray-700">{{ p.tuition_amount_online }}</td>
+                <td class="px-3 py-2 text-sm text-gray-700">{{ p.tuition_amount_hyflex }}</td>
+                <td class="px-3 py-2 text-sm text-gray-700">{{ p.tuition_amount_hybrid }}</td>
+                <td class="px-3 py-2 text-sm text-right">
+                  <button ng-if="vm.form.final !== 1"
+                          ng-click="vm.deleteProgram(p.id)"
+                          class="px-2 py-1 text-xs bg-white border border-red-300 text-red-700 rounded hover:bg-red-50">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+            <tbody ng-if="!vm.loading && (vm.programs || []).length === 0">
+              <tr><td colspan="6" class="px-3 py-4 text-center text-sm text-gray-500">No records</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-3" ng-if="vm.form.final !== 1">
+          <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Program (Program)</label>
+              <select class="mt-1 block w-full border rounded px-3 py-2"
+                      ng-model="vm.local.program.track_id"
+                      ng-options="p.id as p.label for p in vm.collegeProgramOptions track by p.id">
+                <option value=""></option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Regular</label>
+              <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.program.tuition_amount">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Online</label>
+              <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.program.tuition_amount_online">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Hyflex</label>
+              <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.program.tuition_amount_hyflex">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Hybrid</label>
+              <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.program.tuition_amount_hybrid">
+            </div>
+          </div>
+          <div class="mt-3">
+            <button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded"
+                    ng-click="vm.addProgram(vm.local.program)">
+              Add Program Rate
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SHS Electives -->
+      <section>
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-lg font-semibold text-gray-900">SHS Electives</h2>
+        </div>
+        <div class="overflow-x-auto border rounded">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Subject</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">G11 1st (Reg)</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">G12 1st (Online)</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">G11 2nd (Hyflex)</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">G12 2nd (Hybrid)</th>
+                <th class="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200" ng-if="(vm.electives || []).length > 0">
+              <tr ng-repeat="e in vm.electives track by e.id">
+                <td class="px-3 py-2 text-sm text-gray-700">{{ vm.lookupSubject(e.subject_id) }}</td>
+                <td class="px-3 py-2 text-sm text-gray-700">{{ e.tuition_amount }}</td>
+                <td class="px-3 py-2 text-sm text-gray-700">{{ e.tuition_amount_online }}</td>
+                <td class="px-3 py-2 text-sm text-gray-700">{{ e.tuition_amount_hyflex }}</td>
+                <td class="px-3 py-2 text-sm text-gray-700">{{ e.tuition_amount_hybrid }}</td>
+                <td class="px-3 py-2 text-sm text-right">
+                  <button ng-if="vm.form.final !== 1"
+                          ng-click="vm.deleteElective(e.id)"
+                          class="px-2 py-1 text-xs bg-white border border-red-300 text-red-700 rounded hover:bg-red-50">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+            <tbody ng-if="!vm.loading && (vm.electives || []).length === 0">
+              <tr><td colspan="6" class="px-3 py-4 text-center text-sm text-gray-500">No electives</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-3" ng-if="vm.form.final !== 1">
+          <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Subject</label>
+              <select class="mt-1 block w-full border rounded px-3 py-2"
+                      ng-model="vm.local.elective.subject_id"
+                      ng-options="s.id as s.label for s in vm.subjectOptions">
+                <option value=""></option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">G11 1st (Reg)</label>
+              <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.elective.tuition_amount">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">G12 1st (Online)</label>
+              <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.elective.tuition_amount_online">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">G11 2nd (Hyflex)</label>
+              <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.elective.tuition_amount_hyflex">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">G12 2nd (Hybrid)</label>
+              <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.elective.tuition_amount_hybrid">
+            </div>
+          </div>
+          <div class="mt-3">
+            <button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded"
+                    ng-click="vm.addElective(vm.local.elective)">
+              Add Elective Rate
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,120 @@
+<div class="campus-selector relative" ng-class="{'compact': vm.compact}">
+  <!-- Label (optional) -->
+  <div ng-if="vm.showLabel && !vm.compact" class="text-sm font-medium text-gray-700 mb-2">
+    Campus
+  </div>
+
+  <!-- Loading State -->
+  <div ng-if="vm.loading" class="flex items-center space-x-2 p-2 text-sm text-gray-500">
+    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+    <span>Loading campuses...</span>
+  </div>
+
+  <!-- Error State -->
+  <div ng-if="vm.error && !vm.loading" class="p-2 text-sm text-red-600 bg-red-50 rounded border border-red-200">
+    <div class="flex items-center justify-between">
+      <span>{{ vm.error }}</span>
+      <button ng-click="vm.refresh()" class="text-red-700 hover:text-red-800 underline text-xs">
+        Retry
+      </button>
+    </div>
+  </div>
+
+  <!-- Campus Selector -->
+  <div ng-if="!vm.loading && !vm.error" class="relative">
+    <!-- Selected Campus Display / Dropdown Trigger -->
+    <button
+      ng-click="vm.toggleDropdown()"
+      class="w-full flex items-center justify-between px-3 py-2 text-left bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+      ng-class="{
+        'text-sm': vm.compact,
+        'text-base': !vm.compact,
+        'ring-2 ring-blue-500 border-blue-500': vm.dropdownOpen
+      }"
+    >
+      <div class="flex-1 min-w-0">
+        <div ng-if="vm.selectedCampus" class="truncate">
+          <span class="font-medium">{{ vm.selectedCampus.campus_name }}</span>
+          <span ng-if="!vm.compact && (vm.selectedCampus.status || vm.selectedCampus.description)" class="text-gray-500 text-xs block">
+            <span ng-if="vm.selectedCampus.status">Status: {{ vm.selectedCampus.status }}</span>
+            <span ng-if="vm.selectedCampus.description" class="ml-1">{{ vm.selectedCampus.description }}</span>
+          </span>
+        </div>
+        <div ng-if="!vm.selectedCampus" class="text-gray-400">
+          Select a campus...
+        </div>
+      </div>
+      <div class="ml-2 flex-shrink-0">
+        <svg class="h-4 w-4 text-gray-400 transition-transform duration-200"
+             ng-class="{'rotate-180': vm.dropdownOpen}"
+             fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </div>
+    </button>
+
+    <!-- Dropdown Menu -->
+    <div ng-if="vm.dropdownOpen"
+         class="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
+      
+      <!-- No campuses available -->
+      <div ng-if="!vm.availableCampuses.length" class="px-3 py-2 text-sm text-gray-500">
+        No campuses available
+      </div>
+
+      <!-- Campus Options -->
+      <div ng-if="vm.availableCampuses.length" class="py-1">
+        <button
+          ng-repeat="campus in vm.availableCampuses track by campus.id"
+          ng-click="vm.selectCampus(campus)"
+          class="w-full text-left px-3 py-2 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none transition-colors duration-150"
+          ng-class="{
+            'bg-blue-50 text-blue-700': vm.selectedCampus && ('' + campus.id) === ('' + vm.selectedCampus.id),
+            'text-gray-900': !vm.selectedCampus || ('' + campus.id) !== ('' + vm.selectedCampus.id)
+          }"
+        >
+          <div class="font-medium">{{ campus.campus_name }}</div>
+          <div ng-if="!vm.compact && (campus.status || campus.description)" class="text-xs text-gray-500">
+            <span ng-if="campus.status">Status: {{ campus.status }}</span>
+            <span ng-if="campus.description" class="ml-1">{{ campus.description }}</span>
+          </div>
+        </button>
+      </div>
+
+      <!-- Refresh Option -->
+      <div class="border-t border-gray-200 py-1">
+        <button
+          ng-click="vm.refresh()"
+          class="w-full text-left px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none transition-colors duration-150"
+        >
+          <div class="flex items-center space-x-2">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            </svg>
+            <span>Refresh campuses</span>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Compact mode styles -->
+<style>
+.campus-selector.compact .truncate {
+  max-width: 150px;
+}
+
+.campus-selector .animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.campus-selector .rotate-180 {
+  transform: rotate(180deg);
+}
+</style>

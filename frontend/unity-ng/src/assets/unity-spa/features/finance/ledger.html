@@ -1,0 +1,40 @@
+<div class="max-w-6xl mx-auto px-4 py-8">
+  <div class="flex items-start justify-between mb-6">
+    <div>
+      <h2 class="text-2xl font-semibold text-gray-800">{{ vm.title }}</h2>
+      <p class="text-gray-600">
+        This screen is being migrated from the legacy CI app. Use the button below to open the current Student Ledger page.
+      </p>
+    </div>
+    <div class="flex items-center gap-2">
+      <a class="inline-flex items-center px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+         ng-href="{{ vm.nav && vm.nav.dashboard || '#!/dashboard' }}">
+        <span class="fas fa-home mr-2"></span> Back to Dashboard
+      </a>
+      <a class="inline-flex items-center px-3 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700"
+         ng-if="vm.canAccess('/cashier-admin')"
+         href="#!/cashier-admin">
+        <span class="fas fa-receipt mr-2"></span> Cashier Admin
+      </a>
+    </div>
+  </div>
+
+  <div class="bg-white rounded shadow p-6">
+    <div class="flex items-center justify-between">
+      <div>
+        <h3 class="text-lg font-semibold text-gray-800">Student Ledger (Legacy)</h3>
+        <p class="text-gray-600">Opens the current CI Student Ledger list.</p>
+      </div>
+      <a class="inline-flex items-center px-3 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700"
+         ng-href="{{ vm.links.financeStudentLedger }}" target="_blank" rel="noopener">
+        <span class="fas fa-external-link-alt mr-2"></span> Open CI Student Ledger
+      </a>
+    </div>
+  </div>
+
+  <div class="mt-6 bg-white rounded shadow p-6">
+    <p class="text-gray-600">
+      Placeholder content. This page will later render API-driven ledger data from the Laravel service.
+    </p>
+  </div>
+</div>

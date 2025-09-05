@@ -1,0 +1,160 @@
+<div class="space-y-6">
+  <!-- Header + Actions -->
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-semibold text-gray-900">{{ vm.title }}</h1>
+    <div class="flex items-center space-x-3" ng-if="true">
+      <button type="button"
+              class="inline-flex items-center px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+              ng-click="vm.add()">
+        <i class="fas fa-plus mr-2"></i>
+        New School Year
+      </button>
+      <button type="button"
+              class="inline-flex items-center px-3 py-2 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
+              ng-click="vm.search()">
+        <i class="fas fa-sync-alt mr-2"></i>
+        Refresh
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="bg-white border border-gray-200 rounded-lg p-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+        <input type="text"
+               class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+               placeholder="Sem, Year Start/End"
+               ng-model="vm.filters.search"
+               ng-change="vm.search()">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Student Type</label>
+        <select class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                ng-model="vm.filters.term_student_type"
+                ng-change="vm.search()"
+                ng-options="t.value as t.label for t in vm.types">
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Campus</label>
+        <!-- Read-only indicator of selected campus; campus changes are driven by global Campus selector -->
+        <div class="flex items-center h-10 px-3 rounded-md border border-gray-300 bg-gray-50 text-gray-700">
+          <span class="truncate" ng-if="vm.filters.campus_id">Campus ID: {{ vm.filters.campus_id }}</span>
+          <span class="truncate" ng-if="!vm.filters.campus_id">All Campuses</span>
+        </div>
+        <p class="text-xs text-gray-500 mt-1">Change campus from the sidebar selector.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- List / Table -->
+  <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr class="text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+            <th class="px-4 py-3">ID</th>
+            <th class="px-4 py-3">Sem</th>
+            <th class="px-4 py-3">Year</th>
+            <th class="px-4 py-3">Label</th>
+            <th class="px-4 py-3">Type</th>
+            <th class="px-4 py-3">Campus</th>
+            <th class="px-4 py-3">Midterm Window</th>
+            <th class="px-4 py-3">Final Window</th>
+            <th class="px-4 py-3">End of Submission</th>
+            <th class="px-4 py-3">Status</th>
+            <th class="px-4 py-3 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100" ng-class="{ 'opacity-50': vm.loading }">
+          <tr ng-repeat="row in vm.rows track by (row.intID || row.id)">
+            <td class="px-4 py-3 text-sm text-gray-900">
+              {{ row.intID || row.id }}
+            </td>
+            <td class="px-4 py-3 text-sm text-gray-700">
+              {{ row.enumSem }}
+            </td>
+            <td class="px-4 py-3 text-sm text-gray-700">
+              {{ row.strYearStart }} - {{ row.strYearEnd }}
+            </td>
+            <td class="px-4 py-3 text-sm text-gray-700">
+              {{ row.term_label || '—' }}
+            </td>
+            <td class="px-4 py-3 text-sm">
+              <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium"
+                    ng-class="{
+                      'bg-blue-100 text-blue-800': row.term_student_type === 'college',
+                      'bg-purple-100 text-purple-800': row.term_student_type === 'shs',
+                      'bg-gray-100 text-gray-800': !row.term_student_type || (row.term_student_type !== 'college' && row.term_student_type !== 'shs')
+                    }">
+                {{ row.term_student_type || 'n/a' }}
+              </span>
+            </td>
+            <td class="px-4 py-3 text-sm text-gray-700">
+              {{ row.campus_id || '—' }}
+            </td>
+            <td class="px-4 py-3 text-xs text-gray-700">
+              <div>
+                <div><span class="text-gray-500">Start:</span> <span>{{ row.midterm_start | date:'yyyy-MM-dd HH:mm' }}</span></div>
+                <div><span class="text-gray-500">End:</span> <span>{{ row.midterm_end | date:'yyyy-MM-dd HH:mm' }}</span></div>
+              </div>
+            </td>
+            <td class="px-4 py-3 text-xs text-gray-700">
+              <div>
+                <div><span class="text-gray-500">Start:</span> <span>{{ row.final_start | date:'yyyy-MM-dd HH:mm' }}</span></div>
+                <div><span class="text-gray-500">End:</span> <span>{{ row.final_end | date:'yyyy-MM-dd HH:mm' }}</span></div>
+              </div>
+            </td>
+            <td class="px-4 py-3 text-xs text-gray-700">
+              {{ row.end_of_submission | date:'yyyy-MM-dd HH:mm' }}
+            </td>
+            <td class="px-4 py-3 text-sm">
+              <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium"
+                    ng-class="{
+                      'bg-green-100 text-green-800': row.enumStatus === 'active',
+                      'bg-red-100 text-red-800': row.enumStatus === 'inactive',
+                      'bg-gray-100 text-gray-800': !row.enumStatus
+                    }">
+                {{ row.enumStatus || 'n/a' }}
+              </span>
+            </td>
+            <td class="px-4 py-3 text-sm text-right whitespace-nowrap">
+              <button type="button"
+                      class="inline-flex items-center px-3 py-1.5 rounded border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 mr-2"
+                      ng-click="vm.edit(row)">
+                <i class="fas fa-edit mr-2"></i>Edit
+              </button>
+              <button type="button"
+                      class="inline-flex items-center px-3 py-1.5 rounded bg-red-600 text-white hover:bg-red-700"
+                      ng-click="vm.remove(row)">
+                <i class="fas fa-trash-alt mr-2"></i>Delete
+              </button>
+            </td>
+          </tr>
+
+          <tr ng-if="!vm.loading && (!vm.rows || !vm.rows.length)">
+            <td colspan="11" class="px-4 py-6 text-center text-sm text-gray-500">
+              No School Years found.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Loading indicator -->
+    <div class="p-4" ng-if="vm.loading">
+      <div class="flex items-center justify-center text-sm text-gray-600">
+        <i class="fas fa-spinner fa-spin mr-2"></i> Loading...
+      </div>
+    </div>
+
+    <!-- Error -->
+    <div class="p-4" ng-if="vm.error">
+      <div class="rounded-md bg-red-50 p-3 text-sm text-red-700">
+        {{ vm.error }}
+      </div>
+    </div>
+  </div>
+</div>
