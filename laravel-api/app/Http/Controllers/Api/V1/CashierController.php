@@ -1098,6 +1098,30 @@ class CashierController extends Controller
                         DB::table('tb_mas_registration')
                             ->where('intStudentID', $studentId)                    
                             ->update($regUpdates);
+                        // Assign Student Number: generate final number upon enrollment flip
+                        try {
+                            $finalStudentNumber = $this->generateStudentNumber($syid);
+                            if (!empty($finalStudentNumber)) {
+                                $userBefore = DB::table('tb_mas_users')->select('intID','strStudentNumber')->where('intID', $studentId)->first();
+                                DB::table('tb_mas_users')
+                                    ->where('intID', $studentId)
+                                    ->update(['strStudentNumber' => $finalStudentNumber]);
+                                try {
+                                    SystemLogService::log(
+                                        'assign_student_number',
+                                        'User',
+                                        (int) $studentId,
+                                        ['strStudentNumber' => $userBefore->strStudentNumber ?? null],
+                                        ['strStudentNumber' => $finalStudentNumber],
+                                        $request
+                                    );
+                                } catch (\Throwable $e4) {
+                                    // ignore log failures
+                                }
+                            }
+                        } catch (\Throwable $eSN) {
+                            // silently skip if generation fails; do not block payment creation
+                        }
                     }
                 }
 
@@ -1185,5 +1209,101 @@ class CashierController extends Controller
                 'cashier_id'  => (int) $row->intID,
             ],
         ], 201);
+    }
+
+    /**
+     * Generate a final student number for the given term (syid).
+     * Format (no separators):
+     *  - College: {strYearStart}{semCode}{NNN} e.g., 202501001
+     *  - SHS:     {strYearStart}SHA{semCode}{NNN} e.g., 2025SHA01001
+     *
+     * Rules:
+     *  - semCode: enumSem "1st"->"01", "2nd"->"02", "3rd"->"03", "4th"->"04"
+     *             fallback extracts digits and left-pads to 2
+     *  - Counter: incrementing 3-digit suffix per unique prefix, based on max existing
+     */
+    protected function generateStudentNumber(int $syid): string
+    {
+        $sy = DB::table('tb_mas_sy')
+            ->select('strYearStart', 'enumSem', 'term_student_type')
+            ->where('intID', $syid)
+            ->first();
+
+        if (!$sy) {
+            throw new \RuntimeException('Term (tb_mas_sy) not found for syid=' . $syid);
+        }
+
+        $year = isset($sy->strYearStart) ? (string) $sy->strYearStart : '';
+        $sem  = isset($sy->enumSem) ? (string) $sy->enumSem : '';
+        $type = isset($sy->term_student_type) ? (string) $sy->term_student_type : '';
+
+        // Map enumSem to two-digit code
+        $map = [
+            '1st' => '01',
+            '2nd' => '02',
+            '3rd' => '03',
+            '4th' => '04',
+        ];
+        $semKey = strtolower(trim($sem));
+        $semCode = $map[$semKey] ?? null;
+        if ($semCode === null) {
+            if (preg_match('/\d+/', $semKey, $m)) {
+                $semCode = str_pad((string) $m[0], 2, '0', STR_PAD_LEFT);
+            } else {
+                $semCode = '01'; // safe default
+            }
+        }
+
+        // SHS detection - insert "SHA" after year
+        $isShs = (stripos($type, 'shs') !== false);
+        $basePrefix = $year . ($isShs ? 'SHA' : '') . $semCode;
+
+        // Campus letter prefix: when campus_id != 1, prepend first letter of campus name
+        $fullPrefix = $basePrefix;
+        try {
+            if (\Illuminate\Support\Facades\Schema::hasTable('tb_mas_sy') && \Illuminate\Support\Facades\Schema::hasColumn('tb_mas_sy', 'campus_id')) {
+                $campusIdVal = DB::table('tb_mas_sy')->where('intID', $syid)->value('campus_id');
+                if (!is_null($campusIdVal) && (int) $campusIdVal !== 1 && \Illuminate\Support\Facades\Schema::hasTable('tb_mas_campuses')) {
+                    $campusName = DB::table('tb_mas_campuses')->where('id', (int) $campusIdVal)->value('campus_name');
+                    if (is_string($campusName) && trim($campusName) !== '') {
+                        $letter = strtoupper(substr(trim($campusName), 0, 1));
+                        $fullPrefix = $letter . $basePrefix;
+                    }
+                }
+            }
+        } catch (\Throwable $e) {
+            // ignore campus prefixing failures; fallback to base prefix
+        }
+
+        // Find current max for this prefix
+        $latest = DB::table('tb_mas_users')
+            ->whereNotNull('strStudentNumber')
+            ->where('strStudentNumber', 'like', $fullPrefix . '%')
+            ->orderBy('strStudentNumber', 'desc')
+            ->value('strStudentNumber');
+
+        $next = 1;
+        if (!empty($latest) && is_string($latest)) {
+            $suffix = substr($latest, strlen($fullPrefix));
+            if ($suffix !== false) {
+                $digits = preg_replace('/\D/', '', $suffix);
+                if ($digits !== '' && ctype_digit($digits)) {
+                    $next = max(1, (int) $digits + 1);
+                }
+            }
+        }
+
+        // Collision hardening: recheck existence and increment until available
+        for ($attempts = 0; $attempts < 5; $attempts++) {
+            $candidate = $fullPrefix . str_pad((string) $next, 3, '0', STR_PAD_LEFT);
+            $exists = DB::table('tb_mas_users')->where('strStudentNumber', $candidate)->exists();
+            if (!$exists) {
+                return $candidate;
+            }
+            $next++;
+        }
+
+        // Fallback last resort
+        return $fullPrefix . str_pad((string) $next, 3, '0', STR_PAD_LEFT);
     }
 }
