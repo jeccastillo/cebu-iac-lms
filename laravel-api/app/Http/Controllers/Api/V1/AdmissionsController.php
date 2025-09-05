@@ -254,6 +254,38 @@ class AdmissionsController extends Controller
                 // ignore logging failure
             }
 
+            // System alert: notify Admissions about new application
+            try {
+                $last = strtoupper(trim((string) $request->input('last_name', '')));
+                $first = trim((string) $request->input('first_name', ''));
+                $emailAddr = trim((string) $request->input('email', ''));
+                $subject = 'New Application Submitted';
+                $namePart = trim(($last !== '' ? $last : '') . ($first !== '' ? ($last !== '' ? ', ' : '') . $first : ''));
+                $msg = 'New applicant signup' . ($namePart !== '' ? (': ' . $namePart) : '') . ($emailAddr !== '' ? ' (' . $emailAddr . ')' : '');
+
+                $campusId = $request->input('campus_id');
+
+                $payload = [
+                    'title'            => $subject,
+                    'message'          => $msg,
+                    'link'             => '#/admissions/applicants/' . $userId,
+                    'type'             => 'info',
+                    'target_all'       => false,
+                    'role_codes'       => ['admissions'],
+                    'intActive'        => 1,
+                    'system_generated' => 1,
+                    'starts_at'        => now(),
+                ];
+                if ($campusId !== null && $campusId !== '' && is_numeric($campusId)) {
+                    $payload['campus_ids'] = [ (int) $campusId ];
+                }
+
+                $alert = \App\Models\SystemAlert::create($payload);
+                app(\App\Services\SystemAlertService::class)->broadcast('create', $alert);
+            } catch (\Throwable $e) {
+                \Log::warning('System alert creation failed for new application: ' . $e->getMessage());
+            }
+
             // Send confirmation email; do not fail application if email sending fails
             $to = $request->input('email');
             $emailSent = false;

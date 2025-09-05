@@ -25,16 +25,31 @@
       // ignore normalization errors
     }
 
+    // Set initial chrome visibility on first load to avoid flicker
+    try {
+      var initState = StorageService.getJSON('loginState');
+      var initTarget = $location.path() || '';
+      var initIsPublic = (typeof initTarget === 'string' && initTarget.indexOf('/public/initial-requirements') === 0);
+      var initIsLogin = (initTarget === '/login');
+      var initNotLoggedIn = !(initState && initState.loggedIn);
+      $rootScope.hideChrome = !!(initIsPublic || initIsLogin || initNotLoggedIn);
+    } catch (e) {
+      $rootScope.hideChrome = false;
+    }
+
     // Basic route guard + role-based gate
     $rootScope.$on('$routeChangeStart', function (event, next) {
       var state = getLoginState();
       var route = (next && next.$$route) || {};
       var target = route.originalPath || '';
 
-      // Toggle global chrome (header/sidebar) for public pages
-      // Hide on: /public/initial-requirements/:hash
+      // Toggle global chrome (header/sidebar) visibility
+      // Hide when: public pages, login page, or when user is not logged in
       try {
-        $rootScope.hideChrome = !!(typeof target === 'string' && target.indexOf('/public/initial-requirements') === 0);
+        var isPublicPage = (typeof target === 'string' && target.indexOf('/public/initial-requirements') === 0);
+        var isLoginPage = (target === '/login');
+        var notLoggedIn = !(state && state.loggedIn);
+        $rootScope.hideChrome = !!(isPublicPage || isLoginPage || notLoggedIn);
       } catch (e) {
         $rootScope.hideChrome = false;
       }
