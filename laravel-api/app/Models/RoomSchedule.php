@@ -10,4 +10,12 @@ class RoomSchedule extends Model
     protected $primaryKey = 'intRoomSchedID';
     public $timestamps = false;
     protected $guarded = [];
+
+    /**
+     * Get the classroom associated with this schedule.
+     */
+    public function classroom()
+    {
+        return $this->belongsTo(Classroom::class, 'intRoomID', 'intID');
+    }
 }

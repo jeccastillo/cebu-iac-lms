@@ -12,6 +12,7 @@
       admissions: 'admissions',
       campus_admin: 'campus_admin',
       faculty_admin: 'faculty_admin',
+      building_admin: 'building_admin',
       student_view: 'student_view',
       cashier_admin: 'cashier_admin',
       admin: 'admin'
@@ -52,6 +53,7 @@
       { test: '^/classlists(?:/.*)?$', roles: ['registrar', 'admin'] },
       { test: '^/faculty-loading(?:/.*)?$', roles: ['registrar', 'admin'] },
       { test: '^/classrooms(?:/.*)?$', roles: ['faculty', 'registrar', 'admin'] },
+      { test: '^/schedules(?:/.*)?$', roles: ['registrar', 'admin'] },
       { test: '^/cashier-admin(?:/.*)?$', roles: ['cashier_admin', 'admin'] },
       { test: '^/logs(?:/.*)?$', roles: ['admin'] },
       { test: '^/admin(?:/.*)?$', roles: ['admin'] },

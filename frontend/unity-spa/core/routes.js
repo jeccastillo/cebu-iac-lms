@@ -341,15 +341,35 @@
       })
       .when("/classrooms/add", {
         templateUrl: "features/classrooms/classroom-edit.html",
-        controller: "ClassroomEditController",
+        controller: "ClassroomsController",
         controllerAs: "vm",
         requiredRoles: ["building_admin", "admin"],
       })
       .when("/classrooms/:id/edit", {
         templateUrl: "features/classrooms/classroom-edit.html",
-        controller: "ClassroomEditController",
+        controller: "ClassroomsController",
         controllerAs: "vm",
         requiredRoles: ["building_admin", "admin"],
+      })
+
+      /* Schedules CRUD */
+      .when("/schedules", {
+        templateUrl: "features/schedules/schedules.html",
+        controller: "SchedulesController",
+        controllerAs: "vm",
+        requiredRoles: ["registrar", "admin"],
+      })
+      .when("/schedules/add", {
+        templateUrl: "features/schedules/schedule-edit.html",
+        controller: "SchedulesController",
+        controllerAs: "vm",
+        requiredRoles: ["registrar", "admin"],
+      })
+      .when("/schedules/:id/edit", {
+        templateUrl: "features/schedules/schedule-edit.html",
+        controller: "SchedulesController",
+        controllerAs: "vm",
+        requiredRoles: ["registrar", "admin"],
       })
 
       /* Grading Systems CRUD */
