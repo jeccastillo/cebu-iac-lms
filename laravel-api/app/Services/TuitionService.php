@@ -312,6 +312,14 @@ class TuitionService
         ];
 
         // 9) Meta and returned items
+        $itemsNewStudent = [];
+        foreach ($newStudentList as $name => $amt) {
+            $itemsNewStudent[] = [
+                'name'   => (string) $name,
+                'amount' => round((float) $amt, 2),
+            ];
+        }
+
         $items = [
             'tuition'      => $itemsTuition,
             'misc'         => $itemsMisc,
@@ -320,6 +328,7 @@ class TuitionService
             'scholarships' => $itemsScholarships,
             'additional'   => $itemsAdditional,
             'billing'      => $itemsBilling,
+            'new_student'  => $itemsNewStudent,
         ];
 
         // Installment breakdown (baseline using current partial totals and zero discounts/scholarships)

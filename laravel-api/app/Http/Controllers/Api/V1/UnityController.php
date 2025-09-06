@@ -725,13 +725,19 @@ class UnityController extends Controller
             ->orderBy('s.strCode', 'asc')
             ->get();
 
-        // Tuition breakdown summary for assessment block
+        // Tuition breakdown summary and items for assessment block
         $summary = null;
+        $items = [];
+        $installments = [];
         try {
             $breakdown = $this->tuition->compute($sn, $syid, null, null);
-            $summary = is_array($breakdown['summary'] ?? null) ? $breakdown['summary'] : null;
+            $summary = is_array($breakdown['summary'] ?? null) ? $breakdown['summary'] : null;            
+            $items = is_array($breakdown['items'] ?? null) ? $breakdown['items'] : [];
+            $installments = is_array($summary['installments'] ?? null) ? $summary['installments'] : [];
         } catch (\Throwable $e) {
             $summary = null;
+            $items = [];
+            $installments = [];
         }
 
         // Build PDF (no external template). Use A3 size so existing coordinates fit.
@@ -744,9 +750,9 @@ class UnityController extends Controller
 
         
         // Header fields (Letter page positioning)
-        $pdf->SetFont('Arial', '', 8.5);
+        $pdf->SetFont('Helvetica', '', 8.5);
         
-        $pdf->SetXY(10, 25);
+        $pdf->SetXY(5, 25);
         $pdf->Cell(0, 5, 'STUDENT NUMBER', 0, 1, 'L');
 
         
@@ -754,14 +760,14 @@ class UnityController extends Controller
         $pdf->Cell(0, 5, $sn, 0, 1, 'L');
 
         
-        $pdf->SetXY(10, 30);
+        $pdf->SetXY(5, 30);
         $pdf->Cell(0, 5, 'NAME', 0, 1, 'L');
         // Student Name
         $pdf->SetXY(46, 30);
         $pdf->Cell(0, 5, strtoupper($studentName), 0, 1, 'L');
 
         
-        $pdf->SetXY(10, 35);
+        $pdf->SetXY(5, 35);
         $pdf->Cell(0, 5, 'PROGRAM', 0, 1, 'L');
         // Program (code)
         $pdf->SetXY(46, 35);
@@ -782,9 +788,9 @@ class UnityController extends Controller
         
         // Subjects table starting around (16,70): Code, Description, Section, Units (fitted to Letter width)
         
-        $pdf->SetFont('Arial', 'B', 8.2);
-        $lineH = 5;
-        $columns = [10,30,110,125,135,150,175];
+        $pdf->SetFont('Helvetica', 'B', 8.2);
+        $lineH = 4;
+        $columns = [5,25,105,120,130,145,170];
         // Code        
         $pdf->SetXY($columns[0], 55);
         $pdf->Cell(35, $lineH, "SECTION", 0, 0, 'L');
@@ -807,7 +813,7 @@ class UnityController extends Controller
         $pdf->SetXY($columns[6], 55);
         $pdf->Cell(20, $lineH, "ROOM", 0, 1, 'L');
 
-        $pdf->SetFont('Arial', '', 8.2);
+        $pdf->SetFont('Helvetica', '', 8.2);
         $y = 60;        
         foreach ($subjects as $subj) {
             $code = (string)($subj->code ?? '');
@@ -830,37 +836,275 @@ class UnityController extends Controller
 
             $y += $lineH;
             // Stop early if we are approaching the footer area on Letter page
-            if ($y > 220) {
+            if ($y > 100) {
                 break;
             }
         }
 
-        // Assessment block around (16,240) if summary available (Letter page)
+        // Assessment block with three-column breakdown + schedules.
         if (is_array($summary)) {
-            $pdf->SetFont('Arial', '', 10);
-            $ay = 240;
+            $money = function ($x) {
+                return number_format((float)($x ?? 0), 2);
+            };
 
-            $pdf->SetXY(16, $ay);
-            $pdf->Cell(60, 5, 'Tuition: ' . number_format((float)($summary['tuition'] ?? 0), 2), 0, 1, 'L');
+            $items = is_array($breakdown['items'] ?? null) ? $breakdown['items'] : [];
+            $miscItems = is_array($items['misc'] ?? null) ? $items['misc'] : [];
+            $newStudentItems = is_array($items['new_student'] ?? null) ? $items['new_student'] : [];
+            $newStudentTotal = 0.0;
+            foreach ($newStudentItems as $r) {
+                $newStudentTotal += (float)($r['amount'] ?? 0);
+            }
 
-            $pdf->SetXY(16, $ay + 6);
-            $pdf->Cell(60, 5, 'Misc: ' . number_format((float)($summary['misc_total'] ?? 0), 2), 0, 1, 'L');
+            $inst = is_array($summary['installments'] ?? null) ? $summary['installments'] : [];
 
-            $pdf->SetXY(16, $ay + 12);
-            $pdf->Cell(60, 5, 'Lab: ' . number_format((float)($summary['lab_total'] ?? 0), 2), 0, 1, 'L');
+            // Column headers
+            $colX = [5, 25, 55, 83, 113,153,163,188]; // FULL, 50%, 30%
+            $colW = [20,30, 28, 30, 40, 10, 25, 10];
+            // Layout anchors
+            $pdf->SetFont('Helvetica', 'B', 8);
+            $ay = 108;
+            $pdf->SetXY($colX[0], $ay);
+            $pdf->Cell(0, 5, 'ASSESSMENT SUMMARY', 0, 1, 'L');
+            $pdf->SetXY($colX[4], $ay);
+            $pdf->Cell(0, 5, 'MISCELLANEOUS DETAIL', 0, 1, 'L');
+            $pdf->SetXY($colX[6], $ay);
+            $pdf->Cell(0, 5, 'OTHER FEES DETAIL', 0, 1, 'L');
+            $lineH = 3.5;
+            // Misc list (left column)     
+            $pdf->SetFont('Helvetica', '', 7);       
+            $yL = $ay + 4.5;
+            $yR = $ay + 4.7;
+            $miscTotalNum = (float)($summary['misc_total'] ?? 0);
+            if (!empty($miscItems)) {
+                foreach ($miscItems as $row) {
+                    $name = (string)($row['name'] ?? '');
+                    $amt  = $money($row['amount'] ?? 0);
+                    $pdf->SetXY($colX[4], $yL);
+                    $pdf->Cell($colW[4], 4.5, $name, 0, 0, 'L');
+                    $pdf->SetXY($colX[5], $yL);
+                    $pdf->Cell($colW[5], 4.5, $amt, 0, 1, 'R');
+                    $yL += $lineH;
+                    //if ($yL > 270) { $pdf->AddPage('P', 'A4'); $yL = 20; }
+                }
+            }
+            if (!empty($newStudentItems)) {
+                foreach ($newStudentItems as $row) {
+                    $name = (string)($row['name'] ?? '');
+                    $amt  = $money($row['amount'] ?? 0);
+                    $pdf->SetXY($colX[6], $yR);
+                    $pdf->Cell($colW[6], $lineH, $name, 0, 0, 'L');
+                    $pdf->SetXY($colX[7], $yR);
+                    $pdf->Cell($colW[7], $lineH, $amt, 0, 1, 'R');
+                    $yR += $lineH;
+                    if ($yR > 270) { $pdf->AddPage('P', 'A4'); $yR = 20; }
+                }
+            }           
+                        
 
-            $pdf->SetXY(100, $ay);
-            $pdf->Cell(60, 5, 'Additional: ' . number_format((float)($summary['additional_total'] ?? 0), 2), 0, 1, 'L');
+            $pdf->SetFont('Helvetica', 'U', 7);
+            $pdf->SetXY($colX[1], $ay + 5);
+            $pdf->Cell($colW[1], $lineH, 'FULL PAYMENT', 0, 0, 'R');
 
-            $pdf->SetXY(100, $ay + 6);
-            $pdf->Cell(60, 5, 'Scholarships: ' . number_format((float)($summary['scholarships_total'] ?? 0), 2), 0, 1, 'L');
+            $pdf->SetXY($colX[2], $ay + 5);
+            $pdf->Cell($colW[2], $lineH, '50% DOWN PAYMENT', 0, 0, 'R');
 
-            $pdf->SetXY(100, $ay + 12);
-            $pdf->Cell(60, 5, 'Discounts: ' . number_format((float)($summary['discounts_total'] ?? 0), 2), 0, 1, 'L');
+            $pdf->SetXY($colX[3], $ay + 5);
+            $pdf->Cell($colW[3], $lineH, '30% DOWN PAYMENT', 0, 1, 'R');
 
-            $pdf->SetFont('Arial', 'B', 11);
-            $pdf->SetXY(200, $ay);
-            $pdf->Cell(60, 5, 'Total Due: ' . number_format((float)($summary['total_due'] ?? 0), 2), 0, 1, 'L');
+            // Column rows
+            $pdf->SetFont('Helvetica', '', 7);
+
+            // ROW 1
+            $y = $ay + 8;
+            $pdf->SetXY($colX[0], $y);
+            $pdf->Cell($colW[0], $lineH, 'Tuition Fee ', 0, 1, 'L');
+            $pdf->SetXY($colX[1], $y);
+            $pdf->Cell($colW[1], $lineH, $money($summary['tuition'] ?? 0), 0, 1, 'R');                  
+            $pdf->SetXY($colX[2], $y);
+            $pdf->Cell($colW[2], $lineH, $money(($summary['tuition'] + ($summary['tuition'] * 0.09)) ?? 0), 0, 1, 'R');
+            $pdf->SetXY($colX[3], $y);
+            $pdf->Cell($colW[3], $lineH, $money(($summary['tuition'] + ($summary['tuition'] * 0.15)) ?? 0), 0, 1, 'R');            
+            // ROW 2
+            $y += $lineH;
+            $pdf->SetXY($colX[0], $y);
+            $pdf->Cell($colW[0], $lineH, 'Laboratory ', 0, 1, 'L');
+            $pdf->SetXY($colX[1], $y);
+            $pdf->Cell($colW[1], $lineH, $money($summary['lab_total'] ?? 0), 0, 1, 'R');                  
+            $pdf->SetXY($colX[2], $y);
+            $pdf->Cell($colW[2], $lineH, $money(($summary['lab_total'] + ($summary['lab_total'] * 0.09)) ?? 0), 0, 1, 'R');
+            $pdf->SetXY($colX[3], $y);
+            $pdf->Cell($colW[3], $lineH, $money(($summary['lab_total'] + ($summary['lab_total'] * 0.15)) ?? 0), 0, 1, 'R');
+            // ROW 3
+            $y += $lineH;
+            $pdf->SetXY($colX[0], $y);
+            $pdf->Cell($colW[0], $lineH, 'Miscellaneous ', 0, 1, 'L');
+            $pdf->SetXY($colX[1], $y);
+            $pdf->Cell($colW[1], $lineH, $money($summary['misc_total'] ?? 0), 0, 1, 'R');                  
+            $pdf->SetXY($colX[2], $y);
+            $pdf->Cell($colW[2], $lineH, $money(($summary['misc_total']) ?? 0), 0, 1, 'R');
+            $pdf->SetXY($colX[3], $y);
+            $pdf->Cell($colW[3], $lineH, $money(($summary['misc_total'] ) ?? 0), 0, 1, 'R');
+            // ROW 4
+            if($newStudentTotal){
+            $y += $lineH;
+                $pdf->SetXY($colX[0], $y);
+                $pdf->Cell($colW[0], $lineH, 'Other Fees ', 0, 1, 'L');
+                $pdf->SetXY($colX[1], $y);
+                $pdf->Cell($colW[1], $lineH, $money($newStudentTotal ?? 0), 0, 1, 'R');                  
+                $pdf->SetXY($colX[2], $y);
+                $pdf->Cell($colW[2], $lineH, $money(($newStudentTotal) ?? 0), 0, 1, 'R');
+                $pdf->SetXY($colX[3], $y);
+                $pdf->Cell($colW[3], $lineH, $money(($newStudentTotal ) ?? 0), 0, 1, 'R');
+            }
+            // ROW 5
+            $pdf->SetFont('Helvetica', 'B', 7);
+            $y += $lineH;
+            $pdf->SetXY($colX[0], $y);
+            $pdf->Cell($colW[0], $lineH, 'Total ', 0, 1, 'L');
+            $pdf->SetFont('Helvetica', 'BU', 7);
+            $pdf->SetXY($colX[1], $y);
+            $pdf->Cell($colW[1], $lineH, $money($summary['total_due'] ?? 0), 0, 1, 'R');                  
+            $pdf->SetXY($colX[2], $y);
+            $pdf->Cell($colW[2], $lineH, $money(($inst['total_installment50']) ?? 0), 0, 1, 'R');
+            $pdf->SetXY($colX[3], $y);
+            $pdf->Cell($colW[3], $lineH, $money(($inst['total_installment30'] ) ?? 0), 0, 1, 'R');
+            $pdf->SetFont('Helvetica', '', 7);
+            //ROW 6
+            $y += $lineH;
+            $pdf->SetXY($colX[0], $y);
+            $pdf->Cell($colW[0], $lineH, 'DOWN PAYMENT', 0, 1, 'L');
+            $pdf->SetXY($colX[2], $y);
+            $pdf->Cell($colW[2], $lineH, $inst['down_payment50'], 0, 1, 'R');
+            $pdf->SetXY($colX[3], $y);
+            $pdf->Cell($colW[3], $lineH, $inst['down_payment30'], 0, 1, 'R');
+            $y += $lineH;
+            // INSTALLMENT ROWS
+            $labels = ['1st INSTALLMENT','2nd INSTALLMENT','3rd INSTALLMENT','4th INSTALLMENT','5th INSTALLMENT'];
+            $ifee30 = (float)($inst['installment_fee30'] ?? 0);
+            $ifee50 = (float)($inst['installment_fee50'] ?? 0);
+            foreach ($labels as $lbl) {
+                $pdf->SetXY($colX[0], $y);
+                $pdf->Cell($colW[0], $lineH, $lbl, 0, 1, 'L');
+                $pdf->SetXY($colX[1], $y);
+                $pdf->Cell($colW[1], $lineH, '', 0, 1, 'R');
+                $pdf->SetXY($colX[2], $y);
+                $pdf->Cell($colW[2], $lineH, $money($ifee50), 0, 1, 'R');
+                $pdf->SetXY($colX[3], $y);
+                $pdf->Cell($colW[3], $lineH, $money($ifee30), 0, 1, 'R');
+                $y += $lineH;
+
+            }
+            $pdf->SetFont('Helvetica', 'BU', 7);
+            $pdf->SetXY($colX[2], $y);
+            $pdf->Cell($colW[2], $lineH, $inst['total_installment50'], 0, 1, 'R');
+            $pdf->SetXY($colX[3], $y);
+            $pdf->Cell($colW[3], $lineH, $inst['total_installment30'], 0, 1, 'R');
+            $pdf->SetFont('Helvetica', '', 7);                        
+
+           
+        }
+        // Footer and policy block (generated from screenshot)
+        try {
+            // Determine acting registrar/cashier name
+            $actorId = $this->ctx->resolveUserId($request);
+            if ($actorId === null) {
+                $xfac = $request->header('X-Faculty-ID');
+                if ($xfac !== null && is_numeric($xfac)) {
+                    $actorId = (int) $xfac;
+                }
+            }
+            $actorName = null;
+            if ($actorId !== null) {
+                $fac = DB::table('tb_mas_faculty')->where('intID', (int)$actorId)->first();
+                if ($fac) {
+                    $fFirst = trim((string)($fac->strFirstname ?? ''));
+                    $fLast  = trim((string)($fac->strLastname ?? ''));
+                    $actorName = trim($fFirst . ' ' . $fLast);
+                    if ($actorName === '') {
+                        $actorName = isset($fac->name) ? (string) $fac->name : null;
+                    }
+                }
+            }
+
+            $generated = now()->format('Y-m-d h:i A');
+            if ($actorName) {
+                $generated .= ' by ' . $actorName;
+            }
+
+            // Start Y anchor for footer content; keep within page
+            $startY = 180; // ensure footer begins low enough            
+
+            $pdf->SetTextColor(0,0,0);
+            $pdf->SetFont('Helvetica','',7.5);
+
+            // Row 1: OR number/date and Enrollment Confirmed by (placeholders)
+            $pdf->SetXY(5, $startY);
+            $pdf->Cell(90, 4.5, 'Official Receipt Number/date ________________________________', 0, 0, 'L');
+
+            $pdf->SetXY(115, $startY);
+            $pdf->Cell(85, 4.5, 'Enrollment Confirmed by: ________________________________', 0, 1, 'L');
+
+            // Row 2: dual signature lines + captions
+            $y2 = $startY + 8;
+            // left line
+            $pdf->SetXY(5, $y2);
+            $pdf->Cell(90, 0, '_________________________________________', 0, 1, 'L');
+            $pdf->SetXY(5, $y2 + 2.8);
+            $pdf->Cell(90, 3.5, 'Authorized Signatory', 0, 1, 'L');
+            // right line
+            $pdf->SetXY(115, $y2);
+            $pdf->Cell(90, 0, '_________________________________________', 0, 1, 'L');
+            $pdf->SetXY(115, $y2 + 2.8);
+            $pdf->Cell(90, 3.5, 'Registrar', 0, 1, 'L');
+
+            // Row 3: Note and Generated text
+            $y3 = $y2 + 10;
+            $pdf->SetXY(5, $y3);
+            $pdf->Cell(100, 4.5, 'Note: Class schedule is subject to change', 0, 0, 'L');
+
+            $pdf->SetXY(115, $y3);
+            $pdf->Cell(85, 4.5, 'Generated: ' . $generated, 0, 1, 'L');
+
+            // Policy header and body
+            $y4 = $y3 + 6;
+            $pdf->SetFont('Helvetica','',7.5);
+            $pdf->SetXY(5, $y4);
+            $policy = "I shall abide by all existing rules and regulations of the School and those that may be promulgated from time to time. I understand that the school has to collect my personal data and I allow the school to process all my information and all purposes related to this.";
+            $pdf->MultiCell(195, 3.8, $policy, 0, 'L');
+
+            $y5 = $pdf->GetY() + 2;
+            $pdf->SetFont('Helvetica','',7.5);
+            $pdf->SetXY(5, $y5);
+            $pdf->Cell(120, 4.5, 'Policy on School Charges and Refund of Fees', 0, 1, 'L');
+
+            $y5 += 4.5;
+            $pdf->SetXY(5, $y5);
+            $rules1 = "Officially Enrolled Students who withdraw their enrollment before the official start of classes shall be charged a Withdrawal Fee of two thousand five hundred pesos (PhP 2,500.00). Officially Enrolled Students who withdraw their enrollment after the official start of classes, and have already paid the pertinent tuition and other school fees in full or for any length longer than one month (regardless of whether or not he has actually attended classes) shall be charged the appropriate retention fee as stipulated in CHED Manual of Regulations for Private Higher Education (MORPHE) of 2009, as follows:";
+            $pdf->MultiCell(195, 3.8, $rules1, 0, 'L');
+
+            // Bulleted list
+            $y6 = $pdf->GetY() + 1.5;
+            $pdf->SetXY(10, $y6);
+            $pdf->Cell(185, 3.8, chr(149) . ' Within the first week of classes - twenty-five percent (25%) of the total school fees.', 0, 1, 'L');
+            $pdf->SetXY(10, $y6 + 4);
+            $pdf->Cell(185, 3.8, chr(149) . ' Within the second week of classes - fifty percent (50%) of the total school fees.', 0, 1, 'L');
+            $pdf->SetXY(10, $y6 + 8);
+            $pdf->Cell(185, 3.8, chr(149) . ' Beyond the second week of classes - one hundred percent (100%) of the total school fees.', 0, 1, 'L');
+
+            $y7 = $y6 + 13;
+            $pdf->SetXY(5, $y7);
+            $pdf->MultiCell(195, 3.8, 'One-time penalty for the late enrollment (PhP 500.00) shall be charged after the first day of official start of classes per term.', 0, 'L');
+
+            // Bottom centered student signature
+            $yBottom = $pdf->GetY() + 15;
+            
+            $pdf->SetXY(70, $yBottom);
+            $pdf->Cell(70, 0, '__________________________________________', 0, 1, 'C');
+            $pdf->SetXY(70, $yBottom + 3);
+            $pdf->Cell(70, 4, 'Student Signature/Date', 0, 1, 'C');
+
+        } catch (\Throwable $e) {
+            // Do not block PDF on footer render issues
         }
 
         // Stream inline with filename
