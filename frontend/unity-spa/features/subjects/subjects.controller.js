@@ -104,8 +104,8 @@
     vm.search();
   }
 
-  SubjectEditController.$inject = ['$routeParams', '$location', 'StorageService', 'SubjectsService', '$scope'];
-  function SubjectEditController($routeParams, $location, StorageService, SubjectsService, $scope) {
+  SubjectEditController.$inject = ['$routeParams', '$location', 'StorageService', 'SubjectsService', 'GradingService', '$scope'];
+  function SubjectEditController($routeParams, $location, StorageService, SubjectsService, GradingService, $scope) {
     var vm = this;
 
     vm.state = StorageService.getJSON('loginState');
@@ -147,6 +147,19 @@
       strand: null,
       intBridging: 0,
       intMajor: 0
+    };
+
+    // Grading systems
+    vm.gradingSystems = [];
+    vm.loadGradingSystems = function () {
+      GradingService.list()
+        .then(function (res) {
+          var rows = (res && res.data) ? res.data : (Array.isArray(res) ? res : []);
+          vm.gradingSystems = (rows || []).map(function (r) {
+            return { id: (r && r.id != null) ? parseInt(r.id, 10) : null, name: (r && r.name) ? r.name : ('ID ' + (r && r.id)) };
+          });
+        })
+        .catch(function () { vm.gradingSystems = []; });
     };
 
     // Prerequisites management
@@ -407,6 +420,7 @@
     // Init
     vm.load();
     vm.loadAvailableSubjects();
+    vm.loadGradingSystems();
   }
 
 })();

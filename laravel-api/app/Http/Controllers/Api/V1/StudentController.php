@@ -119,7 +119,9 @@ class StudentController extends Controller
                 'u.student_status as status',
                 'u.student_type as type',
                 'u.level as student_level',
-                'p.strProgramCode as program'
+                'u.intProgramID as program_id',
+                'p.strProgramCode as program',
+                'p.strProgramDescription as program_description'
             )
             ->first();
 
@@ -321,7 +323,9 @@ class StudentController extends Controller
                 'u.student_status as status',
                 'u.student_type as type',
                 'u.level as student_level',
-                'p.strProgramCode as program'
+                'u.intProgramID as program_id',
+                'p.strProgramCode as program',
+                'p.strProgramDescription as program_description'
             )
             ->get();
 
@@ -353,6 +357,258 @@ class StudentController extends Controller
             'data'    => [
                 'student_id'   => $studentId,
                 'transactions' => TransactionResource::collection($transactions),
+            ],
+        ]);
+    }
+
+    /**
+     * GET /api/v1/student/applicant-journey/{applicantDataId}
+     * Read-only journey logs for the given applicant_data_id (student-facing).
+     * Mirrors ApplicantJourneyController@index but without role middleware.
+     * Returns: { success: true, data: [ { id, applicant_data_id, remarks, log_date }, ... ] }
+     */
+    public function applicantJourney(int $applicantDataId): JsonResponse
+    {
+        // Basic validation
+        if ($applicantDataId <= 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid applicant data id.'
+            ], 422);
+        }
+
+        try {
+            // Ensure table exists; then fetch ordered by log_date ASC
+            $rows = DB::table('tb_mas_applicant_journey')
+                ->where('applicant_data_id', $applicantDataId)
+                ->orderBy('log_date', 'asc')
+                ->select('id', 'applicant_data_id', 'remarks', 'log_date')
+                ->get();
+        } catch (\Throwable $e) {
+            // If table missing or other DB error, return empty list for student UI
+            $rows = collect([]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $rows
+        ]);
+    }
+
+    /**
+     * POST /api/v1/student/applicant
+     * Resolve current student's applicant details (read-only) using either:
+     *  - token: string (preferred; same as /student/viewer)
+     *  - student_id: int (fallback)
+     *
+     * Returns similar payload to ApplicantController@show:
+     * {
+     *   success: true,
+     *   data: {
+     *     user, status, applicant_data, created_at, updated_at, hash, applicant_data_id,
+     *     applicant_type, applicant_type_name,
+     *     paid_application_fee, paid_reservation_fee,
+     *     waive_application_fee, waive_reason, waived_at,
+     *     syid, interviewed, interview_summary
+     *   }
+     * }
+     */
+    public function applicant(Request $request): JsonResponse
+    {
+        // Accept multiple shapes from various frontends
+        $token = $request->input('token', $request->input('username'));
+        $studentIdInput = $request->input('student_id', $request->input('id', $request->input('user_id', $request->input('intID'))));
+        $studentNumber = $request->input('student_number');
+
+        $token = is_string($token) ? trim($token) : $token;
+        $studentNumber = is_string($studentNumber) ? trim($studentNumber) : $studentNumber;
+
+        $id = null;
+
+        // 1) Direct numeric id when provided in any of: student_id, id, user_id, intID
+        if ($studentIdInput !== null && $studentIdInput !== '' && is_numeric($studentIdInput)) {
+            $id = (int) $studentIdInput;
+        }
+
+        // 2) Resolve via token/username (parity with /student/viewer)
+        if ($id === null && $token !== null && $token !== '') {
+            try {
+                $row = $this->fetcher->getStudentByToken((string) $token);
+                if ($row) {
+                    if (is_array($row)) {
+                        $id = isset($row['intID']) ? (int) $row['intID'] : (isset($row['id']) ? (int) $row['id'] : null);
+                    } else {
+                        $id = (property_exists($row, 'intID') && $row->intID !== null)
+                            ? (int) $row->intID
+                            : ((property_exists($row, 'id') && $row->id !== null) ? (int) $row->id : null);
+                    }
+                }
+            } catch (\Throwable $e) {
+                // ignore token resolution failure
+            }
+        }
+
+        // 3) Resolve via student number when available
+        if ($id === null && $studentNumber !== null && $studentNumber !== '') {
+            try {
+                $idBySn = DB::table('tb_mas_users')->where('strStudentNumber', $studentNumber)->value('intID');
+                if ($idBySn !== null) {
+                    $id = (int) $idBySn;
+                }
+            } catch (\Throwable $e) {
+                // ignore student number resolution failure
+            }
+        }
+
+        // 4) Resolve via explicit email, or token if it looks like an email
+        if ($id === null) {
+            $email = $request->input('email', $request->input('strEmail'));
+            if (is_string($email)) { $email = trim($email); }
+            if ($email !== null && $email !== '') {
+                try {
+                    $idByEmail = DB::table('tb_mas_users')->where('strEmail', $email)->value('intID');
+                    if ($idByEmail !== null) {
+                        $id = (int) $idByEmail;
+                    }
+                } catch (\Throwable $e) {
+                    // ignore email resolution failure
+                }
+            } elseif (is_string($token) && strpos($token, '@') !== false) {
+                try {
+                    $idByTokenEmail = DB::table('tb_mas_users')->where('strEmail', $token)->value('intID');
+                    if ($idByTokenEmail !== null) {
+                        $id = (int) $idByTokenEmail;
+                    }
+                } catch (\Throwable $e) {
+                    // ignore token email resolution failure
+                }
+            }
+        }
+
+        // 5) Resolve via username (when token is a non-email username)
+        if ($id === null && is_string($token) && $token !== '' && strpos($token, '@') === false) {
+            try {
+                $idByUsername = DB::table('tb_mas_users')->where('strUsername', $token)->value('intID');
+                if ($idByUsername !== null) {
+                    $id = (int) $idByUsername;
+                }
+            } catch (\Throwable $e) {
+                // ignore username resolution failure
+            }
+        }
+
+        if ($id === null) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unable to resolve student id.'
+            ], 422);
+        }
+
+        // Mirror ApplicantController@show using resolved $id
+        $user = DB::table('tb_mas_users')->where('intID', $id)->first();
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Applicant not found'
+            ], 404);
+        }
+
+        // Enrich campus name for core user (prefer campus_name, fallback to legacy campus or campus_id)
+        try {
+            $campusName = null;
+            if (property_exists($user, 'campus_id') && !is_null($user->campus_id)) {
+                $campusName = DB::table('tb_mas_campuses')->where('id', (int)$user->campus_id)->value('campus_name');
+            }
+            if (!isset($user->campus)) {
+                $user->campus = $campusName ?? (property_exists($user, 'campus') ? $user->campus : (property_exists($user, 'campus_id') ? $user->campus_id : null));
+            } elseif ($user->campus === null || $user->campus === '') {
+                $user->campus = $campusName ?? $user->campus;
+            }
+        } catch (\Throwable $e) {
+            // ignore enrichment failure
+        }
+
+        // Latest applicant_data row
+        $appData = DB::table('tb_mas_applicant_data')
+            ->where('user_id', $id)
+            ->orderByDesc('id')
+            ->first();
+
+        if (!$appData) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Applicant data not found'
+            ], 404);
+        }
+
+        $decoded = null;
+        if (isset($appData->data)) {
+            try {
+                $decoded = is_string($appData->data) ? json_decode($appData->data, true) : $appData->data;
+            } catch (\Throwable $e) {
+                $decoded = null;
+            }
+        }
+
+        // Surface applicant_type and payment flags from latest applicant_data row
+        $applicantTypeId = isset($appData->applicant_type) ? (int) $appData->applicant_type : null;
+        $applicantTypeName = null;
+        if ($applicantTypeId) {
+            try {
+                $applicantTypeName = DB::table('tb_mas_applicant_types')->where('intID', $applicantTypeId)->value('name');
+            } catch (\Throwable $e) {
+                $applicantTypeName = null;
+            }
+        }
+        $paidApplicationFee = isset($appData->paid_application_fee) ? (bool) $appData->paid_application_fee : null;
+        $paidReservationFee = isset($appData->paid_reservation_fee) ? (bool) $appData->paid_reservation_fee : null;
+
+        // Waiver fields
+        $waiveApplicationFee = isset($appData->waive_application_fee) ? (bool) $appData->waive_application_fee : null;
+        $waiveReason = isset($appData->waive_reason) ? (string) $appData->waive_reason : null;
+        $waivedAt = isset($appData->waived_at) ? $appData->waived_at : null;
+
+        // Interview summary (optional; safe if table not present)
+        $interviewSummary = null;
+        try {
+            $intv = DB::table('tb_mas_applicant_interviews')
+                ->where('applicant_data_id', $appData->id)
+                ->first();
+            if ($intv) {
+                $interviewSummary = [
+                    'scheduled_at' => isset($intv->scheduled_at) ? (string) $intv->scheduled_at : null,
+                    'assessment'   => isset($intv->assessment) ? (string) $intv->assessment : null,
+                    'completed_at' => isset($intv->completed_at) ? (string) $intv->completed_at : null,
+                ];
+            }
+        } catch (\Throwable $e) {
+            $interviewSummary = null;
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'user' => $user,
+                'status' => $appData->status ?? null,
+                'applicant_data' => $decoded,
+                'created_at' => $appData->created_at ?? null,
+                'updated_at' => $appData->updated_at ?? null,
+                'hash' => $appData->hash ?? null,
+                'applicant_data_id' => isset($appData->id) ? (int) $appData->id : null,
+                // Surfaced fields
+                'applicant_type' => $applicantTypeId,
+                'applicant_type_name' => $applicantTypeName,
+                'paid_application_fee' => $paidApplicationFee,
+                'paid_reservation_fee' => $paidReservationFee,
+                // Waiver surfaced fields
+                'waive_application_fee' => $waiveApplicationFee,
+                'waive_reason' => $waiveReason,
+                'waived_at' => $waivedAt,
+                // Term id of latest applicant_data (nullable)
+                'syid' => isset($appData->syid) ? (int) $appData->syid : null,
+                // Interview flags
+                'interviewed' => isset($appData->interviewed) ? (bool) $appData->interviewed : false,
+                'interview_summary' => $interviewSummary,
             ],
         ]);
     }

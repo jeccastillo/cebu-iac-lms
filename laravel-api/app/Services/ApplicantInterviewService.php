@@ -7,6 +7,8 @@ use App\Services\SystemLogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Mail;
 
 class ApplicantInterviewService
 {
@@ -65,24 +67,24 @@ class ApplicantInterviewService
             'completed_at'        => null,
         ]);
 
-        // System log (guarded)
-        try {
-            SystemLogService::log(
-                'create',
-                'ApplicantInterview',
-                (int) $interview->id,
-                null,
-                [
-                    'applicant_data_id' => $interview->applicant_data_id,
-                    'scheduled_at'      => $interview->scheduled_at,
-                    'interviewer_user_id'=> $interview->interviewer_user_id,
-                    'remarks'           => $interview->remarks,
-                ],
-                $ctx
-            );
-        } catch (\Throwable $e) {
-            // ignore logging failures
-        }
+            // System log (guarded)
+            try {
+                SystemLogService::log(
+                    'create',
+                    'ApplicantInterview',
+                    (int) $interview->id,
+                    null,
+                    [
+                        'applicant_data_id' => $interview->applicant_data_id,
+                        'scheduled_at'      => $interview->scheduled_at,
+                        'interviewer_user_id'=> $interview->interviewer_user_id,
+                        'remarks'           => $interview->remarks,
+                    ],
+                    $ctx
+                );
+            } catch (\Throwable $e) {
+                // ignore logging failures
+            }
 
         // Journey log (guarded): Interview Scheduled
         try {
@@ -150,7 +152,67 @@ class ApplicantInterviewService
                 ->where('id', $interview->applicant_data_id)
                 ->update(['interviewed' => true]);
 
+            // If failed, set status to 'Rejected' when column exists
+            if ($assessment === ApplicantInterview::ASSESSMENT_FAILED) {
+                try {
+                    if (Schema::hasTable('tb_mas_applicant_data') && Schema::hasColumn('tb_mas_applicant_data', 'status')) {
+                        DB::table('tb_mas_applicant_data')
+                            ->where('id', $interview->applicant_data_id)
+                            ->update(['status' => 'Rejected']);
+                    }
+                } catch (\Throwable $e) {
+                    // ignore failures
+                }
+            }
+
             DB::commit();
+
+            // If failed, best-effort email applicant and add journey log
+            try {
+                if ($assessment === ApplicantInterview::ASSESSMENT_FAILED) {
+                    // Resolve applicant email from tb_mas_users via applicant_data.user_id
+                    $appDataRow = null;
+                    try {
+                        $appDataRow = DB::table('tb_mas_applicant_data')->where('id', $interview->applicant_data_id)->first();
+                    } catch (\Throwable $e) {
+                        $appDataRow = null;
+                    }
+
+                    if ($appDataRow && isset($appDataRow->user_id)) {
+                        $user = DB::table('tb_mas_users')->where('intID', $appDataRow->user_id)->first();
+                        if ($user && isset($user->strEmail) && is_string($user->strEmail)) {
+                            $email = trim((string) $user->strEmail);
+                            if ($email !== '' && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                                $name = trim(
+                                    (($user->strFirstname ?? '') . ' ' .
+                                    ($user->strMiddlename ?? '') . ' ' .
+                                    ($user->strLastname ?? ''))
+                                );
+                                $name = $name !== '' ? $name : null;
+
+                                // Send rejection email (best-effort)
+                                try {
+                                    Mail::to($email)->send(
+                                        new \App\Mail\Admissions\RejectedApplicationMail($name, $interview->reason_for_failing)
+                                    );
+                                } catch (\Throwable $mailEx) {
+                                    // ignore email sending failures
+                                }
+                            }
+                        }
+                    }
+
+                    // Additional Journey log
+                    try {
+                        app(\App\Services\ApplicantJourneyService::class)
+                            ->log((int) $interview->applicant_data_id, 'Application Rejected');
+                    } catch (\Throwable $e) {
+                        // ignore logging failures
+                    }
+                }
+            } catch (\Throwable $e) {
+                // ignore side-effect failures
+            }
 
             // System log (guarded)
             try {

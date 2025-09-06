@@ -72,6 +72,15 @@
         <h2 class="text-lg font-semibold text-gray-800">Core Information</h2>
       </div>
       <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- 2x2 Photo from Initial Requirements -->
+        <div class="md:col-span-2" ng-if="vm.photo2x2Url">
+          <label class="block text-xs font-medium text-gray-500">2x2 Photo</label>
+          <div class="mt-1">
+            <img ng-src="{{ vm.photo2x2Url }}"
+                 alt="2x2 Photo"
+                 class="w-28 h-28 rounded object-cover border border-gray-200 shadow-sm" />
+          </div>
+        </div>
         <div>
           <label class="block text-xs font-medium text-gray-500">Name</label>
           <div class="text-sm text-gray-900 font-medium">
@@ -93,6 +102,10 @@
         <div>
           <label class="block text-xs font-medium text-gray-500">Student Type</label>
           <div class="text-sm text-gray-900">{{ vm.user.student_type || '-' }}</div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500">Country of Citizenship</label>
+          <div class="text-sm text-gray-900">{{ vm.user.strCitizenship || '-' }}</div>
         </div>
         <div>
           <label class="block text-xs font-medium text-gray-500">Created</label>
@@ -360,6 +373,7 @@
                   <th class="px-4 py-2 text-left font-medium text-gray-700">Type</th>
                   <th class="px-4 py-2 text-left font-medium text-gray-700">Status</th>
                   <th class="px-4 py-2 text-left font-medium text-gray-700">File</th>
+                  <th class="px-4 py-2 text-left font-medium text-gray-700" ng-if="vm.canManageInitialRequirements">Actions</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-100 bg-white">
@@ -384,6 +398,16 @@
                       View
                     </a>
                     <span class="text-gray-400" ng-if="!req.file_link">-</span>
+                  </td>
+                  <td class="px-4 py-2" ng-if="vm.canManageInitialRequirements">
+                    <button class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white text-xs rounded-md hover:bg-blue-700 disabled:opacity-50"
+                            ngf-select="vm.onIRFilePicked(req, $file)"
+                            ngf-accept="'application/pdf,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv,image/*'"
+                            ngf-max-size="'10MB'"
+                            ng-disabled="req._uploading">
+                      <span ng-if="!req._uploading">{{ req.submitted_status ? 'Replace' : 'Upload' }}</span>
+                      <span ng-if="req._uploading">Uploading...</span>
+                    </button>
                   </td>
                 </tr>
               </tbody>

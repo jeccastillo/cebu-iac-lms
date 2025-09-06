@@ -1,0 +1,331 @@
+<div class="space-y-6" ng-cloak>
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-semibold text-gray-800">My Application</h1>
+      <p class="text-sm text-gray-500" ng-if="vm.user">ID: {{ vm.user.intID }}</p>
+    </div>
+    <div class="flex items-center space-x-2">
+      <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium border"
+            ng-class="{
+              'bg-gray-100 text-gray-800 border-gray-200': (vm.status || 'new') === 'new',
+              'bg-yellow-100 text-yellow-800 border-yellow-200': vm.status === 'reserved' || vm.status === 'interviewed',
+              'bg-green-100 text-green-800 border-green-200': vm.status === 'paid' || vm.status === 'enrolled'
+            }">
+        {{ vm.status || 'new' }}
+      </span>
+      <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium"
+            ng-class="{'bg-green-100 text-green-800': vm.paid_application_fee, 'bg-gray-100 text-gray-700': !vm.paid_application_fee}">
+        <span class="fas" ng-class="{'fa-check-circle mr-1': vm.paid_application_fee, 'fa-times-circle mr-1': !vm.paid_application_fee}"></span>
+        Application Fee: {{ vm.paid_application_fee ? 'Paid' : 'Unpaid' }}
+      </span>
+      <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium"
+            ng-class="{'bg-green-100 text-green-800': !!vm.interviewed, 'bg-gray-100 text-gray-700': !vm.interviewed}">
+        <span class="fas" ng-class="{'fa-check-circle mr-1': !!vm.interviewed, 'fa-times-circle mr-1': !vm.interviewed}"></span>
+        Interviewed: {{ vm.interviewed ? 'Yes' : 'No' }}
+      </span>
+      <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium"
+            ng-class="{'bg-green-100 text-green-800': vm.paid_reservation_fee, 'bg-gray-100 text-gray-700': !vm.paid_reservation_fee}">
+        <span class="fas" ng-class="{'fa-check-circle mr-1': vm.paid_reservation_fee, 'fa-times-circle mr-1': !vm.paid_reservation_fee}"></span>
+        Reservation Fee: {{ vm.paid_reservation_fee ? 'Paid' : 'Unpaid' }}
+      </span>
+      <a class="inline-flex items-center px-3 py-2 bg-gray-100 text-gray-700 text-sm rounded-md hover:bg-gray-200"
+         href="#/student/dashboard">
+        Back
+      </a>
+    </div>
+  </div>
+
+  <!-- Alerts -->
+  <div class="rounded-md bg-red-50 p-4 border border-red-200" ng-if="vm.error">
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-.75-10.75a.75.75 0 011.5 0v4.5a.75.75 0 11-1.5 0v-4.5zm.75 7a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+        </svg>
+      </div>
+      <div class="ml-3">
+        <h3 class="text-sm font-medium text-red-800">Error</h3>
+        <div class="mt-2 text-sm text-red-700">{{ vm.error }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Skeleton/loading -->
+  <div ng-if="vm.loading" class="space-y-4">
+    <div class="animate-pulse h-6 bg-gray-200 rounded w-1/3"></div>
+    <div class="animate-pulse h-4 bg-gray-200 rounded w-1/2"></div>
+    <div class="animate-pulse h-64 bg-gray-100 rounded"></div>
+  </div>
+
+  <!-- Content -->
+  <div ng-if="!vm.loading && vm.user" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Core details -->
+    <div class="bg-white shadow-sm border border-gray-200 rounded-lg lg:col-span-1">
+      <div class="border-b border-gray-200 px-4 py-3">
+        <h2 class="text-lg font-semibold text-gray-800">Core Information</h2>
+      </div>
+      <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- 2x2 Photo from Initial Requirements -->
+        <div class="md:col-span-2" ng-if="vm.photo2x2Url">
+          <label class="block text-xs font-medium text-gray-500">2x2 Photo</label>
+          <div class="mt-1">
+            <img ng-src="{{ vm.photo2x2Url }}"
+                 alt="2x2 Photo"
+                 class="w-28 h-28 rounded object-cover border border-gray-200 shadow-sm" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500">Name</label>
+          <div class="text-sm text-gray-900 font-medium">
+            {{ (vm.user.strLastname || '') | uppercase }}<span ng-if="vm.user.strLastname && vm.user.strFirstname">, </span>{{ vm.user.strFirstname || '' }}
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500">Email</label>
+          <div class="text-sm text-gray-900">{{ vm.user.strEmail || '-' }}</div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500">Mobile</label>
+          <div class="text-sm text-gray-900">{{ vm.user.strMobileNumber || vm.user.strPhoneNumber || '-' }}</div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500">Campus</label>
+          <div class="text-sm text-gray-900">{{ vm.user.campus || vm.user.campus_id || '-' }}</div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500">Student Type</label>
+          <div class="text-sm text-gray-900">{{ vm.user.student_type || '-' }}</div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500">Country of Citizenship</label>
+          <div class="text-sm text-gray-900">{{ vm.user.strCitizenship || '-' }}</div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500">Created</label>
+          <div class="text-sm text-gray-900">
+            <span ng-if="vm.created_at">{{ vm.created_at | date:'medium' }}</span>
+            <span ng-if="!vm.created_at">{{ vm.user.dteCreated || '-' }}</span>
+          </div>
+        </div>
+        <div ng-if="vm.updated_at">
+          <label class="block text-xs font-medium text-gray-500">Last Updated</label>
+          <div class="text-sm text-gray-900">{{ vm.updated_at | date:'medium' }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interview (read-only) -->
+    <div class="bg-white shadow-sm border border-gray-200 rounded-lg lg:col-span-1">
+      <div class="border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+        <h2 class="text-lg font-semibold text-gray-800">Interview</h2>
+        <div class="flex items-center space-x-2">
+          <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium border"
+                ng-if="!vm.interview">
+            Not Scheduled
+          </span>
+          <!-- Scheduled -->
+          <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium border bg-yellow-50 text-yellow-800 border-yellow-200"
+                ng-if="vm.interview && !vm.interview.completed_at">
+            Scheduled
+          </span>
+          <!-- Completed -->
+          <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium border"
+                ng-if="vm.interview && vm.interview.completed_at"
+                ng-class="{
+                  'bg-green-100 text-green-800 border-green-200': (vm.interview.assessment || '').toLowerCase() === 'passed',
+                  'bg-red-100 text-red-800 border-red-200': (vm.interview.assessment || '').toLowerCase() === 'failed',
+                  'bg-gray-100 text-gray-800 border-gray-200': (vm.interview.assessment || '').toLowerCase() !== 'passed' && (vm.interview.assessment || '').toLowerCase() !== 'failed'
+                }">
+            Completed — {{ vm.interview.assessment || 'N/A' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="p-4 space-y-3">
+        <!-- Existing interview -->
+        <div ng-if="vm.interview" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-gray-500">Scheduled At</label>
+            <div class="text-sm text-gray-900">{{ vm.interview.scheduled_at || '-' }}</div>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-500">Assessment</label>
+            <div class="text-sm text-gray-900">{{ vm.interview.assessment || '-' }}</div>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-500">Completed At</label>
+            <div class="text-sm text-gray-900">{{ vm.interview.completed_at || '-' }}</div>
+          </div>
+        </div>
+
+        <!-- No actions for students -->
+        <div class="text-xs text-gray-500" ng-if="!vm.interview">
+          Your interview schedule will appear here if one is set.
+        </div>
+      </div>
+    </div>
+
+    <!-- Initial Requirements (student upload) -->
+    <div class="bg-white shadow-sm border border-gray-200 rounded-lg lg:col-span-1">
+      <div class="border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+        <h2 class="text-lg font-semibold text-gray-800">Initial Requirements</h2>
+        <div class="flex items-center space-x-2" ng-if="vm.hash">
+          <button class="inline-flex items-center px-3 py-1.5 bg-gray-100 text-gray-700 text-xs rounded-md hover:bg-gray-200"
+                  ng-click="vm.loadInitialRequirements()" ng-disabled="vm.irLoading">
+            <span ng-if="!vm.irLoading">Reload</span>
+            <span ng-if="vm.irLoading">Loading...</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="p-4 space-y-3">
+        <!-- No hash / not available -->
+        <div class="text-sm text-gray-500" ng-if="!vm.hash">
+          No initial requirements link available at this time.
+        </div>
+
+        <!-- Loading -->
+        <div ng-if="vm.irLoading">
+          <div class="animate-pulse h-5 bg-gray-200 rounded w-1/4 mb-2"></div>
+          <div class="animate-pulse h-10 bg-gray-100 rounded"></div>
+        </div>
+
+        <!-- Error -->
+        <div class="rounded-md bg-red-50 p-3 border border-red-200" ng-if="vm.irError">
+          <div class="text-sm text-red-700">{{ vm.irError }}</div>
+        </div>
+
+        <!-- Empty -->
+        <div class="text-sm text-gray-500" ng-if="vm.hash && !vm.irLoading && !vm.irError && (!vm.initial_requirements || vm.initial_requirements.length === 0)">
+          No initial requirements found.
+        </div>
+
+        <!-- List -->
+        <div ng-if="vm.hash && !vm.irLoading && !vm.irError && vm.initial_requirements && vm.initial_requirements.length">
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 text-sm">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="px-4 py-2 text-left font-medium text-gray-700">Requirement</th>
+                  <th class="px-4 py-2 text-left font-medium text-gray-700">Description</th>
+                  <th class="px-4 py-2 text-left font-medium text-gray-700">Type</th>
+                  <th class="px-4 py-2 text-left font-medium text-gray-700">Status</th>
+                  <th class="px-4 py-2 text-left font-medium text-gray-700">File</th>
+                  <th class="px-4 py-2 text-left font-medium text-gray-700">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100 bg-white">
+                <tr ng-repeat="req in vm.initial_requirements">
+                  <td class="px-4 py-2 text-gray-900 font-medium">{{ req.name }}</td>
+                  <td class="px-4 py-2 text-gray-700">
+                    <span ng-if="req.description && req.description.length">{{ req.description }}</span>
+                    <span ng-if="!req.description || !req.description.length" class="text-gray-400">-</span>
+                  </td>
+                  <td class="px-4 py-2 text-gray-700">
+                    <span class="uppercase tracking-wide text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-700 border border-gray-200">{{ req.type || '-' }}</span>
+                  </td>
+                  <td class="px-4 py-2">
+                    <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium"
+                          ng-class="{'bg-green-100 text-green-800': !!req.submitted_status, 'bg-gray-100 text-gray-700': !req.submitted_status}">
+                      <span class="fas" ng-class="{'fa-check-circle mr-1': !!req.submitted_status, 'fa-times-circle mr-1': !req.submitted_status}"></span>
+                      {{ req.submitted_status ? 'Submitted' : 'Not Submitted' }}
+                    </span>
+                  </td>
+                  <td class="px-4 py-2">
+                    <a ng-if="req.file_link" class="text-blue-600 hover:underline" href="{{ req.file_link }}" target="_blank" rel="noopener">
+                      View
+                    </a>
+                    <span class="text-gray-400" ng-if="!req.file_link">-</span>
+                  </td>
+                  <td class="px-4 py-2">
+                    <div class="flex items-center gap-2">
+                      <button class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white text-xs rounded-md hover:bg-blue-700 disabled:opacity-50"
+                              ngf-select="vm.onFilePicked(req, $file)"
+                              ngf-accept="vm.accept"
+                              ngf-max-size="'10MB'"
+                              ng-disabled="vm.uploading[req.app_req_id]">
+                        <i class="fas fa-upload mr-2"></i>
+                        <span ng-if="!vm.uploading[req.app_req_id]">{{ req.submitted_status ? 'Replace' : 'Upload' }}</span>
+                        <span ng-if="vm.uploading[req.app_req_id]">Uploading...</span>
+                      </button>
+                      <!-- Progress bar -->
+                      <div class="w-40" ng-if="vm.uploading[req.app_req_id]">
+                        <div class="h-2 w-full bg-gray-200 rounded">
+                          <div class="h-2 bg-blue-600 rounded" ng-style="{ width: (vm.progress[req.app_req_id] || 0) + '%' }"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="text-xs text-gray-500 mt-2">
+            Only PDF, Excel (xls, xlsx, csv), and image files (jpg, jpeg, png, gif, webp) up to 10MB are accepted.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Application Data -->
+    <div class="bg-white shadow-sm border border-gray-200 rounded-lg lg:col-span-2">
+      <div class="border-b border-gray-200 px-4 py-3">
+        <h2 class="text-lg font-semibold text-gray-800">Application Data</h2>
+      </div>
+
+      <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-medium text-gray-500">Applicant Type</label>
+          <div class="text-sm text-gray-900">{{ vm.applicant_type_name || (vm.applicant_data && vm.applicant_data.applicant_type) || '-' }}</div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500">Program</label>
+          <div class="text-sm text-gray-900">{{ vm.program_name || (vm.applicant_data && (vm.applicant_data.program || vm.applicant_data.type)) || '-' }}</div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500">Gender</label>
+          <div class="text-sm text-gray-900">{{ (vm.applicant_data && vm.applicant_data.gender) || vm.user.enumGender || '-' }}</div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500">Date of Birth</label>
+          <div class="text-sm text-gray-900">
+            <span ng-if="vm.applicant_data && vm.applicant_data.date_of_birth">{{ vm.applicant_data.date_of_birth | date:'mediumDate' }}</span>
+            <span ng-if="!(vm.applicant_data && vm.applicant_data.date_of_birth)">{{ vm.user.dteBirthDate || '-' }}</span>
+          </div>
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-xs font-medium text-gray-500">Address</label>
+          <div class="text-sm text-gray-900">
+            <span ng-if="vm.user.strAddress">{{ vm.user.strAddress }}</span>
+            <span ng-if="!vm.user.strAddress">
+              {{ vm.applicant_data && (vm.applicant_data.address || vm.applicant_data.city || vm.applicant_data.state || vm.applicant_data.province || vm.applicant_data.country) ? '' : '-' }}
+              <span ng-if="vm.applicant_data && vm.applicant_data.address">{{ vm.applicant_data.address }}</span>
+              <span ng-if="vm.applicant_data && vm.applicant_data.city">, {{ vm.applicant_data.city }}</span>
+              <span ng-if="vm.applicant_data && (vm.applicant_data.state || vm.applicant_data.province)">, {{ vm.applicant_data.state || vm.applicant_data.province }}</span>
+              <span ng-if="vm.applicant_data && vm.applicant_data.country">, {{ vm.applicant_data.country }}</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Organized Application Data -->
+      <div class="px-4 pb-2" ng-if="vm.sections && vm.sections.length">
+        <div class="space-y-4">
+          <div class="border border-gray-200 rounded-lg" ng-repeat="section in vm.sections">
+            <div class="px-4 py-2 border-b border-gray-200 bg-gray-50">
+              <h3 class="text-sm font-semibold text-gray-800">{{ section.title }}</h3>
+            </div>
+            <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div ng-repeat="item in section.items">
+                <label class="block text-xs font-medium text-gray-500">{{ item.label }}</label>
+                <div class="text-sm text-gray-900 whitespace-pre-wrap break-words" ng-bind="item.value"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>     
+    </div>
+  </div>
+</div>

@@ -40,6 +40,7 @@
     }
 
     return {
+      // Admin/Admissions/Registrar route (requires roles)
       // GET /admissions/applicant-data/{applicantDataId}/journey
       // Optional params: { page, perPage }
       listByApplicantData: function (applicantDataId, params) {
@@ -54,6 +55,23 @@
         }
         return $http
           .get(BASE + '/admissions/applicant-data/' + encodeURIComponent(applicantDataId) + '/journey', cfg)
+          .then(_unwrap);
+      },
+
+      // Student-facing route (no role middleware)
+      // GET /student/applicant-journey/{applicantDataId}
+      listByApplicantDataStudent: function (applicantDataId, params) {
+        if (!applicantDataId) {
+          return Promise.reject({ message: 'Missing applicantDataId' });
+        }
+        var cfg = {};
+        if (params && typeof params === 'object') {
+          cfg.params = {};
+          if (params.page != null) cfg.params.page = params.page;
+          if (params.perPage != null) cfg.params.perPage = params.perPage;
+        }
+        return $http
+          .get(BASE + '/student/applicant-journey/' + encodeURIComponent(applicantDataId), cfg)
           .then(_unwrap);
       }
     };

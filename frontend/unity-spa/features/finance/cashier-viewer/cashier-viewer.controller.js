@@ -1688,7 +1688,7 @@ vm.loading.createPayment = false;
             var totalDue = _n(sum.total_due || payload.total || sum.total || sum.grand_total);
             var billingTotal = _n(payload.billing_total || sum.billing_total || (payload.meta && payload.meta.billing_total));
             vm.meta.billing_total = billingTotal;
-            var remain = (totalDue + billingTotal) - _n(vm.meta.amount_paid);
+            var remain = (totalDue + billingTotal) - _n(vm.meta.amount_paid) - _n(vm.meta.billing_paid);
             vm.meta.remaining_amount = isFinite(remain) ? remain : 0;
           }
         }
@@ -1696,7 +1696,21 @@ vm.loading.createPayment = false;
         // no-op
       }
     };
-
+ 
+    // Auto-save tuition snapshot when possible (non-blocking)
+    vm.autoSaveTuitionIfPossible = function () {
+      try {
+        if (!UnityService || typeof UnityService.tuitionSave !== 'function') return $q.when();
+        if (!vm.sn || !vm.term) return $q.when();
+        return UnityService.tuitionSave({
+          student_number: vm.sn,
+          term: vm.term
+        }).catch(function () { return null; });
+      } catch (e) {
+        return $q.when();
+      }
+    };
+ 
     var _termChangePromise = null;
     vm.onTermChange = function () {
       // Debounce to prevent burst-triggered duplicate loads
@@ -1716,6 +1730,7 @@ vm.loading.createPayment = false;
           chain = chain
             .then(vm.loadRegistration)
             .then(vm.loadTuition)
+            .then(vm.autoSaveTuitionIfPossible)
             .then(vm.loadRecords)
             .then(vm.loadLedger);
         }
@@ -2091,7 +2106,7 @@ vm.loading.createPayment = false;
               var totalDue2 = _n2(s2.total_due || td.total || s2.total || s2.grand_total);
               var billingTotal2 = _n2(td.billing_total || s2.billing_total || (td.meta && td.meta.billing_total));
               vm.meta.billing_total = billingTotal2;
-              vm.meta.remaining_amount = (totalDue2 + billingTotal2) - _n2(vm.meta.amount_paid);
+              vm.meta.remaining_amount = (totalDue2 + billingTotal2) - _n2(vm.meta.amount_paid) - _n2(vm.meta.billing_paid);
               if (!isFinite(vm.meta.remaining_amount)) vm.meta.remaining_amount = 0;
             }
           } catch (e) {}
@@ -2161,7 +2176,7 @@ vm.loading.createPayment = false;
                 var apaid = _numS(vm.meta.amount_paid);
                 apaid = isFinite(apaid) ? apaid : 0;
                 vm.meta.billing_total = (isFinite(billingTotalS) ? billingTotalS : 0);
-                vm.meta.remaining_amount = ((isFinite(totalDueS) ? totalDueS : 0) + (isFinite(billingTotalS) ? billingTotalS : 0)) - apaid;
+                vm.meta.remaining_amount = ((isFinite(totalDueS) ? totalDueS : 0) + (isFinite(billingTotalS) ? billingTotalS : 0)) - apaid - (isFinite(vm.meta && vm.meta.billing_paid) ? parseFloat(vm.meta.billing_paid) : 0);
                 if (!isFinite(vm.meta.remaining_amount)) vm.meta.remaining_amount = 0;
               }
             } catch (e) {}
@@ -2301,13 +2316,47 @@ vm.loading.createPayment = false;
                 : null;
                 vm.paymentDetailsTotal = isFinite(total) ? total : 0;
 
-                // If tuition/ledger did not provide an amount_paid, use filtered payment_details total
-                if (vm.meta && (vm.meta.amount_paid == null || !isFinite(vm.meta.amount_paid))) {
-                vm.meta.amount_paid = vm.paymentDetailsTotal || 0;
+                // Always sync amount_paid to filtered Payment Details total for current term
+                if (vm.meta) {
+                  vm.meta.amount_paid = vm.paymentDetailsTotal || 0;
                 }
+
+                // Compute total paid toward Billing items (exclude tuition/reservation)
+                try {
+                  var invIndex = {};
+                  try {
+                    var invs = Array.isArray(vm.invoices) ? vm.invoices : [];
+                    for (var ii = 0; ii < invs.length; ii++) {
+                      var inv = invs[ii] || {};
+                      var num = (inv.invoice_number != null ? ('' + inv.invoice_number).trim() : (inv.number != null ? ('' + inv.number).trim() : ''));
+                      if (num) invIndex[num] = (inv.type ? ('' + inv.type).toLowerCase() : null);
+                    }
+                  } catch (_eIdx) { invIndex = {}; }
+                  var items = (vm.paymentDetails && vm.paymentDetails.items) ? vm.paymentDetails.items : [];
+                  var billingPaid = 0;
+                  for (var pi = 0; pi < items.length; pi++) {
+                    var row = items[pi] || {};
+                    if (row.status !== 'Paid') continue;
+                    var amt = parseFloat(row.subtotal_order); if (!isFinite(amt)) amt = 0;
+                    var invNo = row.invoice_number != null ? ('' + row.invoice_number).trim() : '';
+                    var itype = invNo && invIndex[invNo] ? invIndex[invNo] : null;
+                    var desc = (row.description == null ? '' : ('' + row.description)).trim().toLowerCase();
+                    // classify as billing when invoice type says 'billing', or when not clearly tuition/reservation
+                    var isTuitionRes = (desc === 'tuition fee') || _isApplicationFeeDesc(desc) || _isReservationFeeDesc(desc);
+                    if (itype === 'billing' || (!itype && !isTuitionRes)) {
+                      billingPaid += amt;
+                    }
+                  }
+                  if (!vm.meta) vm.meta = {};
+                  vm.meta.billing_paid = billingPaid;
+                } catch (_eBP) {
+                  if (!vm.meta) vm.meta = {};
+                  if (vm.meta.billing_paid == null) vm.meta.billing_paid = 0;
+                }
+
                 // Refresh remaining computation with latest paid
                 if (typeof vm.refreshTuitionSummary === 'function') {
-                vm.refreshTuitionSummary();
+                  vm.refreshTuitionSummary();
                 }
                 try { if (typeof vm.recomputeInvoicesPayments === 'function') vm.recomputeInvoicesPayments(); } catch (e2) {}
             } catch (e) {}
@@ -2441,6 +2490,7 @@ vm.loading.createPayment = false;
       .then(vm.loadApplicantInfo)
       .then(function () { return vm.loadRegistration(); })
       .then(function () { return vm.loadTuition(); })
+      .then(function () { return vm.autoSaveTuitionIfPossible(); })
       .then(function () { return vm.loadLedger(); })
       .then(function () { return vm.loadInvoices(); })
       .then(function () { return vm.loadPaymentDetails(); })

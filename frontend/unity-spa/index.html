@@ -261,6 +261,8 @@
   <script src="features/students/records.controller.js"></script>
   <!-- Student Dashboard -->
   <script src="features/student-dashboard/student-dashboard.controller.js"></script>
+  <!-- Student Applicant Viewer -->
+  <script src="features/student/applicant-viewer/student-applicant-viewer.controller.js"></script>
   <!-- Admissions application feature -->
   <script src="features/admissions/apply.controller.js"></script>
   <script src="features/admissions/success.controller.js"></script>
@@ -367,6 +369,7 @@
   <script src="features/registrar/registration-viewer/registration-viewer.controller.js"></script>
   <!-- Registrar Enlistment feature -->
   <script src="features/registrar/enlistment/enlistment.controller.js"></script>
+  <script src="features/registrar/enlistment/enlistment-applicants.controller.js"></script>
   <!-- Registrar Sections & Slots Monitor -->
   <script src="features/registrar/sections-slots/sections-slots.service.js"></script>
   <script src="features/registrar/sections-slots/sections-slots.controller.js"></script>
@@ -379,7 +382,7 @@
   <app-sidebar ng-if="!hideChrome"></app-sidebar>
 
   <!-- Route outlet -->
-  <div class="main-content container mx-auto px-4 py-10">
+  <div class="main-content container mx-auto px-4 py-24">
     <div ng-view></div>
   </div>
 </body>

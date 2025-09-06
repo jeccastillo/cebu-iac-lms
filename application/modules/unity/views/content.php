@@ -1,1 +1,0 @@
-<p><?php var_dump($this->session->all_userdata()); ?></p>

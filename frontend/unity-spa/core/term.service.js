@@ -12,6 +12,11 @@
     var TERMS_CACHE_KEY = 'termsCache';
     var CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
+    // Coalescing/in-flight guards to prevent duplicate API calls
+    service._initPromise = null;
+    service._termsLoadPromise = null;
+    service._activePromise = null;
+
     // Service state
     service.selectedTerm = null;
     service.availableTerms = [];
@@ -30,6 +35,11 @@
      * Initialize the service - load terms and set default selection
      */
     function init() {
+      // Reuse ongoing init cycle to avoid duplicate terms/active-term loads
+      if (service._initPromise) {
+        return service._initPromise;
+      }
+
       // Ensure campus context is initialized first if available
       var campusPromise = (CampusService && CampusService.init) ? CampusService.init() : $q.resolve();
 
@@ -62,7 +72,7 @@
         });
       }
 
-      return campusPromise.then(function () {
+      service._initPromise = campusPromise.then(function () {
         return loadTerms()
           .then(function() {
             // Try to restore previously selected term for current campus
@@ -91,6 +101,8 @@
         console.error('TermService init error:', error);
         return null;
       });
+
+      return service._initPromise;
     }
 
     /**
@@ -104,10 +116,15 @@
         return $q.resolve(cached);
       }
 
+      // Coalesce concurrent requests
+      if (service._termsLoadPromise) {
+        return service._termsLoadPromise;
+      }
+
       service.loading = true;
       service.error = null;
 
-      return $http.get(buildUrl(APP_CONFIG.API_BASE + '/generic/terms'))
+      service._termsLoadPromise = $http.get(buildUrl(APP_CONFIG.API_BASE + '/generic/terms'))
         .then(function(response) {
           if (response && response.data && response.data.success) {
             service.availableTerms = response.data.data || [];
@@ -126,14 +143,21 @@
         })
         .finally(function() {
           service.loading = false;
+          service._termsLoadPromise = null;
         });
+
+      return service._termsLoadPromise;
     }
 
     /**
      * Get the active term from API
      */
     function getActiveTerm() {
-      return $http.get(buildUrl(APP_CONFIG.API_BASE + '/generic/active-term'))
+      // Coalesce concurrent requests
+      if (service._activePromise) {
+        return service._activePromise;
+      }
+      service._activePromise = $http.get(buildUrl(APP_CONFIG.API_BASE + '/generic/active-term'))
         .then(function(response) {
           if (response && response.data && response.data.success) {
             return response.data.data;
@@ -143,7 +167,11 @@
         .catch(function(error) {
           console.error('TermService getActiveTerm error:', error);
           return null;
+        })
+        .finally(function () {
+          service._activePromise = null;
         });
+      return service._activePromise;
     }
 
     /**

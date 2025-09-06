@@ -41,9 +41,11 @@ use App\Http\Controllers\Api\V1\TuitionController;
 use App\Http\Controllers\Api\V1\TuitionYearController;
 use App\Http\Controllers\Api\V1\UnityController;
 use App\Http\Controllers\Api\V1\UsersController;
+use App\Http\Controllers\Api\V1\InitialRequirementsAdminController;
 use App\Services\ClasslistSlotsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -202,6 +204,9 @@ Route::prefix('v1')->group(function () {
     Route::get('/students', [StudentController::class, 'index']);
     Route::get('/students/{id}', [StudentController::class, 'show']);
     Route::post('/student/viewer', [StudentController::class, 'viewer']);
+    Route::post('/student/applicant', [StudentController::class, 'applicant']);
+    // Student: Applicant Journey (read-only)
+    Route::get('/student/applicant-journey/{applicantDataId}', [StudentController::class, 'applicantJourney']);
     Route::post('/student/balances', [StudentController::class, 'balances']);
     Route::post('/student/records', [StudentController::class, 'records']);
     Route::post('/student/records-by-term', [StudentController::class, 'recordsByTerm']);
@@ -378,6 +383,11 @@ Route::prefix('v1')->group(function () {
     Route::get('/applicants', [ApplicantController::class, 'index'])->middleware('role:admissions,admin');
     Route::get('/applicants/{id}', [ApplicantController::class, 'show'])->middleware('role:admissions,admin');
     Route::put('/applicants/{id}', [ApplicantController::class, 'update'])->middleware('role:admissions,admin');
+    // Admissions: Admin upload/replace initial requirements file for a student's requirement
+    Route::post('/admissions/initial-requirements/{student}/upload/{appReqId}', [InitialRequirementsAdminController::class, 'upload'])->middleware('role:admissions,admin');
+
+    // Enlistment Applicants (Registrar/Admissions/Admin)
+    Route::get('/enlistment/applicants', [ApplicantController::class, 'eligibleForEnlistment'])->middleware('role:registrar,admissions,admin');
 
     // Applicants Analytics
     Route::get('/applicants/analytics/summary', [ApplicantAnalyticsController::class, 'summary'])->middleware('role:admissions,admin');

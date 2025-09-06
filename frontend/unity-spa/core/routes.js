@@ -54,6 +54,12 @@
         controllerAs: "vm",
         requiredRoles: ["registrar", "admin"],
       })
+      .when("/registrar/enlistment-applicants", {
+        templateUrl: "features/registrar/enlistment/applicants.html",
+        controller: "EnlistmentApplicantsController",
+        controllerAs: "vm",
+        requiredRoles: ["registrar", "admin"],
+      })
       .when("/registrar/sections-slots", {
         templateUrl: "features/registrar/sections-slots/sections-slots.html",
         controller: "SectionsSlotsController",
@@ -507,6 +513,12 @@
       .when("/student/dashboard", {
         templateUrl: "features/student-dashboard/student-dashboard.html",
         controller: "StudentDashboardController",
+        controllerAs: "vm",
+        requiredRoles: ["student_view", "admin"],
+      })
+      .when("/student/applicant", {
+        templateUrl: "features/student/applicant-viewer/student-applicant-viewer.html",
+        controller: "StudentApplicantViewerController",
         controllerAs: "vm",
         requiredRoles: ["student_view", "admin"],
       })

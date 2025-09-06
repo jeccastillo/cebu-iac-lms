@@ -5,8 +5,8 @@
     .module('unityApp')
     .controller('HeaderController', HeaderController);
 
-  HeaderController.$inject = ['$rootScope', '$scope', '$location', '$window', '$timeout', 'LinkService', 'StorageService', 'RoleService', 'SystemAlertsService'];
-  function HeaderController($rootScope, $scope, $location, $window, $timeout, LinkService, StorageService, RoleService, SystemAlertsService) {
+  HeaderController.$inject = ['$rootScope', '$scope', '$location', '$window', '$timeout', 'LinkService', 'StorageService', 'RoleService', 'SystemAlertsService', 'TermService', 'CampusService'];
+  function HeaderController($rootScope, $scope, $location, $window, $timeout, LinkService, StorageService, RoleService, SystemAlertsService, TermService, CampusService) {
     var vm = this;
     var closeMenuTimeout;
 
@@ -19,6 +19,13 @@
 
     // RBAC helper for conditional header links
     vm.canAccess = RoleService.canAccess;
+    vm.hasRole = RoleService.hasRole;
+
+    // Initialize global campus/term services to ensure selectors work from header
+    try {
+      if (TermService && TermService.init) { TermService.init(); }
+      if (CampusService && CampusService.init) { CampusService.init(); }
+    } catch (e) {}
 
     vm.userMenuOpen = false;
     vm.alertMenuOpen = false;
