@@ -22,6 +22,12 @@
         // Fallback for super admin
         headers["X-Faculty-ID"] = "smssuperadmin";
       }
+      
+      // Add campus_id header if available
+      if (state && state.campus_id) {
+        headers["X-Campus-ID"] = state.campus_id;
+      }
+      
       return { headers: headers };
     }
 
@@ -38,8 +44,8 @@
           if (params.search && ("" + params.search).trim() !== "") {
             queryParams.search = params.search;
           }
-          if (params.semester) {
-            queryParams.semester = params.semester;
+          if (params.intSem) {
+            queryParams.intSem = params.intSem;
           }
           if (params.room_id) {
             queryParams.room_id = params.room_id;
@@ -49,6 +55,9 @@
           }
           if (params.class_type) {
             queryParams.class_type = params.class_type;
+          }
+          if (params.classlist_id) {
+            queryParams.classlist_id = params.classlist_id;
           }
         }
         
@@ -96,10 +105,10 @@
           .then(_unwrap);
       },
 
-      summary: function (semester) {
+      summary: function (intSem) {
         var params = {};
-        if (semester) {
-          params.semester = semester;
+        if (intSem) {
+          params.intSem = intSem;
         }
         
         return $http
@@ -107,6 +116,49 @@
             params: params,
             headers: _adminHeaders().headers,
           })
+          .then(_unwrap);
+      },
+
+      getAcademicYears: function() {
+        return $http
+          .get(BASE + "/schedules/academic-years", _adminHeaders())
+          .then(_unwrap);
+      },
+
+      getAvailableClasslists: function(intSem, blockSectionID) {
+        var params = {};
+        if (intSem) {
+          params.intSem = intSem;
+        }
+        if (blockSectionID) {
+          params.blockSectionID = blockSectionID;
+        }
+        
+        return $http
+          .get(BASE + "/schedules/available-classlists", {
+            params: params,
+            headers: _adminHeaders().headers,
+          })
+          .then(_unwrap);
+      },
+
+      getBlockSections: function(intSem) {
+        var params = {};
+        if (intSem) {
+          params.intSem = intSem;
+        }
+        
+        return $http
+          .get(BASE + "/schedules/block-sections", {
+            params: params,
+            headers: _adminHeaders().headers,
+          })
+          .then(_unwrap);
+      },
+
+      getAllClasslists: function() {
+        return $http
+          .get(BASE + "/classlists", _adminHeaders())
           .then(_unwrap);
       }
     };

@@ -18,4 +18,20 @@ class RoomSchedule extends Model
     {
         return $this->belongsTo(Classroom::class, 'intRoomID', 'intID');
     }
+
+    /**
+     * Get the academic year/school year associated with this schedule.
+     */
+    public function sy()
+    {
+        return $this->belongsTo(SchoolYear::class, 'intSem', 'intID');
+    }
+
+    /**
+     * Get the classlist associated with this schedule.
+     */
+    public function classlist()
+    {
+        return $this->belongsTo(Classlist::class, 'intClasslistID', 'intID');
+    }
 }

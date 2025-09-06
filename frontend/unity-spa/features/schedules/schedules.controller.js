@@ -14,6 +14,10 @@
     vm.pageTitle = 'Room Schedules';
     vm.rows = [];
     vm.classrooms = [];
+    vm.academicYears = [];
+    vm.availableClasslists = [];
+    vm.allClasslists = []; // For filtering all classlists
+    vm.blockSections = []; // For block section selection
     vm.form = {};
     vm.filters = {};
     vm.q = '';
@@ -39,6 +43,8 @@
     // Data properties
     vm.rows = [];
     vm.classrooms = [];
+    vm.academicYears = [];
+    vm.availableClasslists = [];
     vm.form = {};
     vm.filters = {};
     vm.q = '';
@@ -103,8 +109,12 @@
         vm.form = {
           strDay: 1, // Monday
           enumClassType: 'lect',
-          intSem: 1
+          intSem: null,
+          intClasslistID: null
         };
+        
+        // Load academic years first
+        loadAcademicYears();
         
         // Load schedule data if editing
         if (vm.isEdit) {
@@ -114,6 +124,8 @@
       } else {
         // Load schedule list
         console.log('Loading schedule list...'); // Debug logging
+        loadAcademicYears(); // Also load for filter dropdown
+        loadAllClasslists(); // Load classlists for filtering
         search();
       }
     }
@@ -129,8 +141,8 @@
       };
       
       // Apply filters
-      if (vm.filters.semester) {
-        params.semester = vm.filters.semester;
+      if (vm.filters.intSem) {
+        params.intSem = vm.filters.intSem;
       }
       if (vm.filters.room_id) {
         params.room_id = vm.filters.room_id;
@@ -140,6 +152,9 @@
       }
       if (vm.filters.class_type) {
         params.class_type = vm.filters.class_type;
+      }
+      if (vm.filters.classlist_id) {
+        params.classlist_id = vm.filters.classlist_id;
       }
       
       console.log('Search params:', params); // Debug logging
@@ -226,6 +241,64 @@
     };
 
     // === FORM VIEW METHODS ===
+    function loadAcademicYears() {
+      SchedulesService.getAcademicYears()
+        .then(function(data) {
+          if (data && data.success !== false && angular.isArray(data.data)) {
+            vm.academicYears = data.data;
+            console.log('Loaded academic years:', vm.academicYears); // Debug logging
+          } else {
+            vm.error = 'Failed to load academic years.';
+            vm.academicYears = [];
+          }
+        })
+        .catch(function(err) {
+          vm.error = 'Failed to load academic years.';
+          vm.academicYears = [];
+          console.error('SchedulesController loadAcademicYears error:', err);
+        });
+    }
+
+    function loadAvailableClasslists() {
+      if (!vm.form.intSem) {
+        vm.availableClasslists = [];
+        return;
+      }
+
+      vm.loadingClasslists = true;
+      SchedulesService.getAvailableClasslists(vm.form.intSem, vm.form.blockSectionID)
+        .then(function(data) {
+          if (data && data.success !== false && angular.isArray(data.data)) {
+            vm.availableClasslists = data.data;
+            console.log('Loaded available classlists:', vm.availableClasslists); // Debug logging
+          } else {
+            vm.error = 'Failed to load available classlists.';
+            vm.availableClasslists = [];
+          }
+        })
+        .catch(function(err) {
+          vm.error = 'Failed to load available classlists.';
+          vm.availableClasslists = [];
+          console.error('SchedulesController loadAvailableClasslists error:', err);
+        })
+        .finally(function() {
+          vm.loadingClasslists = false;
+        });
+    }
+
+    // Watch for academic year changes to reload classlists
+    vm.onAcademicYearChange = function() {
+      vm.form.intClasslistID = null; // Reset classlist selection
+      vm.form.blockSectionID = null; // Reset block section selection
+      loadAvailableClasslists();
+      loadBlockSections();
+    };
+
+    // Watch for block section changes to reload classlists
+    vm.onBlockSectionChange = function() {
+      vm.form.intClasslistID = null; // Reset classlist selection
+      loadAvailableClasslists(); // Reload classlists filtered by block section program
+    };
     function loadClassrooms() {
       // Load classrooms using $http directly to avoid dependency issues
       var state = StorageService.getJSON('loginState');
@@ -263,6 +336,49 @@
       });
     }
 
+    function loadAllClasslists() {
+      SchedulesService.getAllClasslists()
+        .then(function(data) {
+          if (data && data.success !== false && angular.isArray(data.data)) {
+            vm.allClasslists = data.data;
+          } else if (angular.isArray(data)) {
+            vm.allClasslists = data;
+          } else {
+            vm.allClasslists = [];
+          }
+          console.log('Loaded all classlists for filtering:', vm.allClasslists); // Debug logging
+        })
+        .catch(function(err) {
+          vm.error = 'Failed to load classlists.';
+          vm.allClasslists = [];
+          console.error('SchedulesController loadAllClasslists error:', err);
+        });
+    }
+
+    function loadBlockSections() {
+      if (!vm.form.intSem) {
+        vm.blockSections = [];
+        return;
+      }
+
+      SchedulesService.getBlockSections(vm.form.intSem)
+        .then(function(data) {
+          if (data && data.success !== false && angular.isArray(data.data)) {
+            vm.blockSections = data.data;
+          } else if (angular.isArray(data)) {
+            vm.blockSections = data;
+          } else {
+            vm.blockSections = [];
+          }
+          console.log('Loaded block sections:', vm.blockSections); // Debug logging
+        })
+        .catch(function(err) {
+          vm.error = 'Failed to load block sections.';
+          vm.blockSections = [];
+          console.error('SchedulesController loadBlockSections error:', err);
+        });
+    }
+
     function loadSchedule() {
       vm.loading = true;
       vm.error = null;
@@ -279,7 +395,19 @@
               vm.form.strDay = parseInt(vm.form.strDay, 10);
             }
             if (vm.form.intSem) {
-              vm.form.intSem = parseInt(vm.form.intSem, 10);
+              vm.form.intSem = vm.form.intSem.toString();
+            }
+            if (vm.form.intClasslistID) {
+              vm.form.intClasslistID = vm.form.intClasslistID.toString();
+            }
+            if (vm.form.blockSectionID) {
+              vm.form.blockSectionID = vm.form.blockSectionID.toString();
+            }
+            
+            // Load available classlists and block sections for the selected academic year
+            if (vm.form.intSem) {
+              loadAvailableClasslists();
+              loadBlockSections();
             }
           } else {
             vm.error = 'Schedule not found.';
@@ -302,6 +430,21 @@
       // Basic validation
       if (!vm.form.intRoomID) {
         ToastService.error('Classroom is required.');
+        return;
+      }
+
+      if (!vm.form.intClasslistID) {
+        ToastService.error('Classlist is required.');
+        return;
+      }
+
+      if (!vm.form.intSem) {
+        ToastService.error('Academic year is required.');
+        return;
+      }
+
+      if (!vm.form.blockSectionID) {
+        ToastService.error('Block section is required.');
         return;
       }
 
@@ -331,12 +474,14 @@
 
       var payload = {
         intRoomID: parseInt(vm.form.intRoomID, 10),
+        intClasslistID: parseInt(vm.form.intClasslistID, 10),
+        blockSectionID: parseInt(vm.form.blockSectionID, 10),
         strScheduleCode: vm.form.strScheduleCode.trim(),
         strDay: parseInt(vm.form.strDay, 10),
         dteStart: vm.form.dteStart,
         dteEnd: vm.form.dteEnd,
         enumClassType: vm.form.enumClassType || 'lect',
-        intSem: parseInt(vm.form.intSem, 10) || 1
+        intSem: parseInt(vm.form.intSem, 10)
       };
 
       var promise = vm.isEdit 
@@ -415,6 +560,38 @@
       if (!time) return '';
       // Convert HH:MM:SS to HH:MM format
       return time.substring(0, 5);
+    };
+
+    vm.getAcademicYearLabel = function(intSem) {
+      var found = vm.academicYears.find(function(ay) {
+        return ay.intID == intSem;
+      });
+      if (found) {
+        return found.enumSem + ' Term SY ' + found.strYearStart + '-' + found.strYearEnd;
+      }
+      return 'Unknown';
+    };
+
+    vm.getClasslistLabel = function(classlistData) {
+      if (!classlistData) return 'Unknown';
+      
+      var parts = [];
+      if (classlistData.subject && classlistData.subject.strCode) {
+        parts.push(classlistData.subject.strCode);
+      }
+      if (classlistData.strClassName) {
+        parts.push(classlistData.strClassName);
+      }
+      if (classlistData.sectionCode) {
+        parts.push('Section ' + classlistData.sectionCode);
+      }
+      
+      return parts.join(' - ');
+    };
+
+    vm.getFacultyName = function(faculty) {
+      if (!faculty) return 'Unknown Faculty';
+      return (faculty.strFirstname + ' ' + faculty.strLastname).trim();
     };
   }
 })();

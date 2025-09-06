@@ -10,4 +10,12 @@ class BlockSection extends Model
     protected $primaryKey = 'intID';
     public $timestamps = false;
     protected $guarded = [];
+
+    /**
+     * Get the program that owns the block section.
+     */
+    public function program()
+    {
+        return $this->belongsTo(Program::class, 'intProgramID', 'intProgramID');
+    }
 }

@@ -61,7 +61,7 @@ class SchoolYearController extends Controller
      */
     public function show(int $id): JsonResponse
     {
-        $item = SchoolYear::find($id);
+    $item = SchoolYear::find($id);
         if (!$item) {
             return response()->json([
                 'success' => false,
