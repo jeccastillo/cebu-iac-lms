@@ -9,6 +9,7 @@
   function ApplicantsService($http, APP_CONFIG, StorageService) {
     var BASE = APP_CONFIG.API_BASE; // e.g. /laravel-api/public/api/v1
     var ROOT = BASE + '/applicants';
+    var ENLIST_ROOT = BASE + '/enlistment/applicants';
 
     function _getLoginState() {
       try {
@@ -60,6 +61,13 @@
         var cfg = _adminHeaders();
         cfg.params = params;
         return $http.get(ROOT, cfg).then(_unwrap);
+      },
+      // List applicants eligible for enlistment (status=Reserved and paid flags)
+      listEligible: function (filters) {
+        var params = _paramsFromFilters(filters);
+        var cfg = _adminHeaders();
+        cfg.params = params;
+        return $http.get(ENLIST_ROOT, cfg).then(_unwrap);
       },
       // Get applicant details by tb_mas_users.intID
       show: function (id) {

@@ -1,0 +1,185 @@
+<div class="space-y-6" ng-cloak>
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-semibold text-gray-800">{{ vm.title }}</h1>
+      <p class="text-sm text-gray-500" ng-if="vm.selectedTerm">
+        Term: {{ (vm.selectedTerm.term_student_type || '') }} {{ (vm.selectedTerm.enumSem || '') }} {{ (vm.selectedTerm.term_label || '') }}
+        <span ng-if="vm.selectedTerm.strYearStart && vm.selectedTerm.strYearEnd"> ({{ vm.selectedTerm.strYearStart }}-{{ vm.selectedTerm.strYearEnd }})</span>
+      </p>
+    </div>
+    <div class="text-sm text-gray-600">
+      <span class="inline-flex items-center">
+        <span class="w-2 h-2 rounded-full mr-2" ng-class="vm.loading ? 'bg-yellow-500' : 'bg-green-500'"></span>
+        <span ng-if="vm.loading">Loading...</span>
+        <span ng-if="!vm.loading">Ready</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="bg-white rounded-md border border-gray-200 p-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div>
+        <label class="block text-xs font-medium text-gray-600 mb-1">Search</label>
+        <input
+          type="text"
+          class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Name, email, or mobile"
+          ng-model="vm.filters.search"
+          ng-keypress="$event.which === 13 &amp;&amp; vm.search()"
+        />
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-gray-600 mb-1">Per Page</label>
+        <select
+          class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          ng-model="vm.meta.per_page"
+          ng-change="vm.filters.per_page = vm.meta.per_page; vm.changePerPage()"
+        >
+          <option value="10">10</option>
+          <option value="20" selected>20</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+        </select>
+      </div>
+      <div class="flex items-end space-x-2">
+        <button
+          class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
+          ng-click="vm.search()"
+          ng-disabled="vm.loading"
+        >
+          Search
+        </button>
+        <button
+          class="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 text-sm"
+          ng-click="vm.clearFilters()"
+          ng-disabled="vm.loading"
+        >
+          Clear
+        </button>
+      </div>
+    </div>
+    <div class="mt-2 text-xs text-gray-500">
+      Showing applicants with status "Reserved" and paid Reservation + Application fees.
+    </div>
+  </div>
+
+  <!-- Error -->
+  <div class="p-3 bg-red-50 border border-red-200 text-red-700 rounded" ng-if="vm.error">
+    {{ vm.error }}
+  </div>
+
+  <!-- Table -->
+  <div class="bg-white rounded-md border border-gray-200 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="min-w-full text-sm">
+        <thead class="bg-gray-50">
+          <tr class="text-left text-gray-600">
+            <th class="px-4 py-2 cursor-pointer" ng-click="vm.changeSort('strLastname')">
+              Name
+              <span ng-if="vm.filters.sort === 'strLastname'">
+                <i class="fas" ng-class="{'fa-sort-up': vm.filters.order==='asc', 'fa-sort-down': vm.filters.order==='desc'}"></i>
+              </span>
+            </th>
+            <th class="px-4 py-2 cursor-pointer" ng-click="vm.changeSort('strEmail')">
+              Email
+              <span ng-if="vm.filters.sort === 'strEmail'">
+                <i class="fas" ng-class="{'fa-sort-up': vm.filters.order==='asc', 'fa-sort-down': vm.filters.order==='desc'}"></i>
+              </span>
+            </th>
+            <th class="px-4 py-2">Mobile</th>
+            <th class="px-4 py-2 cursor-pointer" ng-click="vm.changeSort('campus')">
+              Campus
+              <span ng-if="vm.filters.sort === 'campus'">
+                <i class="fas" ng-class="{'fa-sort-up': vm.filters.order==='asc', 'fa-sort-down': vm.filters.order==='desc'}"></i>
+              </span>
+            </th>
+            <th class="px-4 py-2 cursor-pointer" ng-click="vm.changeSort('status')">
+              Status
+              <span ng-if="vm.filters.sort === 'status'">
+                <i class="fas" ng-class="{'fa-sort-up': vm.filters.order==='asc', 'fa-sort-down': vm.filters.order==='desc'}"></i>
+              </span>
+            </th>
+            <th class="px-4 py-2">Reservation Paid</th>
+            <th class="px-4 py-2">Application Paid</th>
+            <th class="px-4 py-2 cursor-pointer" ng-click="vm.changeSort('application_created_at')">
+              Application Date
+              <span ng-if="vm.filters.sort === 'application_created_at'">
+                <i class="fas" ng-class="{'fa-sort-up': vm.filters.order==='asc', 'fa-sort-down': vm.filters.order==='desc'}"></i>
+              </span>
+            </th>
+            <th class="px-4 py-2">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-if="!vm.loading && (!vm.rows || vm.rows.length === 0)">
+            <td colspan="8" class="px-4 py-6 text-center text-gray-500">
+              No eligible applicants found.
+            </td>
+          </tr>
+          <tr ng-repeat="r in vm.rows track by r.id" class="border-t border-gray-100 hover:bg-gray-50">
+            <td class="px-4 py-2 font-medium text-gray-800">{{ vm.fullName(r) }}</td>
+            <td class="px-4 py-2">{{ r.strEmail || '-' }}</td>
+            <td class="px-4 py-2">{{ r.strMobileNumber || '-' }}</td>
+            <td class="px-4 py-2">{{ r.campus || '-' }}</td>
+            <td class="px-4 py-2">
+              <span class="inline-flex items-center px-2 py-0.5 rounded text-xs"
+                    ng-class="{'bg-blue-50 text-blue-700': r.status === 'Reserved', 'bg-gray-100 text-gray-700': r.status !== 'Reserved'}">
+                {{ r.status || '-' }}
+              </span>
+            </td>
+            <td class="px-4 py-2">
+              <span class="inline-flex items-center px-2 py-0.5 rounded text-xs"
+                    ng-class="(r.paid_reservation_fee==1 || r.paid_reservation_fee===true || r.paid_reservation_fee==='1') ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'">
+                {{ vm.readablePaid(r.paid_reservation_fee) }}
+              </span>
+            </td>
+            <td class="px-4 py-2">
+              <span class="inline-flex items-center px-2 py-0.5 rounded text-xs"
+                    ng-class="(r.paid_application_fee==1 || r.paid_application_fee===true || r.paid_application_fee==='1') ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'">
+                {{ vm.readablePaid(r.paid_application_fee) }}
+              </span>
+            </td>
+            <td class="px-4 py-2">
+              <span>{{ r.application_created_at | date:'medium' }}</span>
+            </td>
+            <td class="px-4 py-2">
+              <a class="inline-flex items-center px-3 py-1.5 rounded bg-blue-600 text-white text-xs hover:bg-blue-700"
+                 ng-href="#/registrar/enlistment?student_id={{ r.id }}"
+                 title="Proceed to Enlistment">
+                <i class="fas fa-external-link-alt mr-2" aria-hidden="true"></i>
+                Enlist
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="flex items-center justify-between px-4 py-3 border-t border-gray-200 bg-gray-50">
+      <div class="text-sm text-gray-600">
+        Total: <span class="font-medium">{{ vm.total }}</span>
+      </div>
+      <div class="flex items-center space-x-2">
+        <button class="px-3 py-1.5 rounded border text-sm"
+                ng-class="vm.meta.current_page <= 1 ? 'text-gray-400 border-gray-200 cursor-not-allowed' : 'text-gray-700 border-gray-300 hover:bg-gray-100'"
+                ng-click="vm.changePage(-1)"
+                ng-disabled="vm.meta.current_page <= 1 || vm.loading">
+          Prev
+        </button>
+        <span class="text-sm text-gray-600">
+          Page <span class="font-medium">{{ vm.meta.current_page || 1 }}</span>
+          of <span class="font-medium">{{ vm.meta.last_page || 1 }}</span>
+        </span>
+        <button class="px-3 py-1.5 rounded border text-sm"
+                ng-class="(vm.meta.current_page >= vm.meta.last_page) ? 'text-gray-400 border-gray-200 cursor-not-allowed' : 'text-gray-700 border-gray-300 hover:bg-gray-100'"
+                ng-click="vm.changePage(1)"
+                ng-disabled="vm.meta.current_page >= vm.meta.last_page || vm.loading">
+          Next
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

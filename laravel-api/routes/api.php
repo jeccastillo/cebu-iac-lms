@@ -371,6 +371,9 @@ Route::prefix('v1')->group(function () {
     Route::get('/applicants/{id}', [ApplicantController::class, 'show'])->middleware('role:admissions,admin');
     Route::put('/applicants/{id}', [ApplicantController::class, 'update'])->middleware('role:admissions,admin');
 
+    // Enlistment Applicants (Registrar/Admissions/Admin)
+    Route::get('/enlistment/applicants', [ApplicantController::class, 'eligibleForEnlistment'])->middleware('role:registrar,admissions,admin');
+
     // Applicants Analytics
     Route::get('/applicants/analytics/summary', [ApplicantAnalyticsController::class, 'summary'])->middleware('role:admissions,admin');
 

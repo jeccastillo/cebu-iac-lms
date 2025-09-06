@@ -113,7 +113,8 @@
                  ng-href="{{ '#' + (child.href || child.path) }}"
                  class="sb-popout-item"
                  ng-class="{'sb-item--active': vm.isActivePrefix(child.path)}"
-                 title="{{ child.label }}">
+                 title="{{ child.label }}"
+                 ng-click="vm.closeAllGroups()">
                 <span>{{ child.label }}</span>
               </a>
             </div>

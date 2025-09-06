@@ -526,4 +526,133 @@ class ApplicantController extends Controller
             ];
         }
     }
+
+    /**
+     * GET /api/v1/enlistment/applicants
+     *
+     * Lists applicants eligible for enlistment:
+     * - tb_mas_applicant_data.status = 'Reserved'
+     * - paid_application_fee = 1
+     * - paid_reservation_fee = 1
+     *
+     * Optional filters:
+     * - search, campus (same as index)
+     * - syid or term (alias) to scope by term when available
+     * Supports pagination and sorting.
+     */
+    public function eligibleForEnlistment(Request $request): JsonResponse
+    {
+        // Guard: ensure required table/columns exist to avoid SQL errors in partially migrated environments
+        try {
+            $has = \Illuminate\Support\Facades\Schema::hasTable('tb_mas_applicant_data')
+                && \Illuminate\Support\Facades\Schema::hasColumn('tb_mas_applicant_data', 'status')
+                && \Illuminate\Support\Facades\Schema::hasColumn('tb_mas_applicant_data', 'paid_application_fee')
+                && \Illuminate\Support\Facades\Schema::hasColumn('tb_mas_applicant_data', 'paid_reservation_fee');
+        } catch (\Throwable $e) {
+            $has = false;
+        }
+        if (!$has) {
+            return response()->json([
+                'success' => true,
+                'data'    => [],
+                'meta'    => ['current_page' => 1, 'per_page' => 10, 'total' => 0, 'last_page' => 1],
+            ]);
+        }
+
+        // Base query: latest applicant_data per user_id
+        $q = DB::table('tb_mas_users as u')
+            ->join('tb_mas_applicant_data as ad', 'ad.user_id', '=', 'u.intID')
+            ->leftJoin('tb_mas_campuses as c', 'c.id', '=', 'u.campus_id')
+            ->whereRaw('ad.id = (SELECT MAX(adx.id) FROM tb_mas_applicant_data adx WHERE adx.user_id = u.intID)')
+            ->select([
+                'u.intID as id',
+                'u.strFirstname',
+                'u.strLastname',
+                'u.strEmail',
+                DB::raw('COALESCE(u.strMobileNumber, \'\') as strMobileNumber'),
+                DB::raw('COALESCE(c.campus_name,u.campus_id, \'\') as campus'),
+                DB::raw('COALESCE(u.student_type, \'\') as student_type'),
+                DB::raw('COALESCE(u.dteCreated, NULL) as dteCreated'),
+                'ad.status',
+                DB::raw('COALESCE(ad.paid_application_fee, 0) as paid_application_fee'),
+                DB::raw('COALESCE(ad.paid_reservation_fee, 0) as paid_reservation_fee'),
+                DB::raw('COALESCE(ad.interviewed, 0) as interviewed'),
+                'ad.syid',
+                'ad.created_at as application_created_at',
+            ])
+            ->where('ad.status', 'Reserved')
+            ->where('ad.paid_application_fee', 1)
+            ->where('ad.paid_reservation_fee', 1);
+
+        // Filters
+        $search = trim((string) $request->query('search', ''));
+        if ($search !== '') {
+            $like = '%' . str_replace(['%', '_'], ['\\%', '\\_'], $search) . '%';
+            $q->where(function ($w) use ($like) {
+                $w->where('u.strFirstname', 'like', $like)
+                  ->orWhere('u.strLastname', 'like', $like)
+                  ->orWhere('u.strEmail', 'like', $like)
+                  ->orWhere('u.strMobileNumber', 'like', $like);
+            });
+        }
+
+        $campus = trim((string) $request->query('campus', ''));
+        if ($campus !== '') {
+            $q->where(function ($w) use ($campus) {
+                $w->where('c.campus_name', $campus)
+                  ->orWhere('u.campus_id', $campus);
+            });
+        }
+
+        // Optional term filter (syid or alias term)
+        $syidParam = $request->query('syid', null);
+        $termParam = $request->query('term', null);
+        $syid = null;
+        if ($syidParam !== null && $syidParam !== '') {
+            $syid = is_numeric($syidParam) ? (int) $syidParam : null;
+        }
+        if ($syid === null && $termParam !== null && $termParam !== '') {
+            $syid = is_numeric($termParam) ? (int) $termParam : null;
+        }
+        if ($syid !== null) {
+            $q->where('ad.syid', $syid);
+        }
+
+        // Sorting
+        $sort = (string) $request->query('sort', 'application_created_at');
+        $order = strtolower((string) $request->query('order', 'desc')) === 'asc' ? 'asc' : 'desc';
+        $allowedSort = ['application_created_at', 'strLastname', 'strFirstname', 'strEmail', 'campus', 'status'];
+        if (!in_array($sort, $allowedSort, true)) {
+            $sort = 'application_created_at';
+        }
+
+        // Pagination optional (default per_page=20)
+        $paginate = $request->filled('page') || $request->filled('per_page');
+        if ($paginate) {
+            $perPage = max(1, (int) $request->query('per_page', 20));
+            $page = max(1, (int) $request->query('page', 1));
+
+            $total = (clone $q)->count();
+            $rows = (clone $q)->orderBy($sort, $order)
+                ->forPage($page, $perPage)
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => $rows,
+                'meta' => [
+                    'current_page' => $page,
+                    'per_page' => $perPage,
+                    'total' => $total,
+                    'last_page' => (int) ceil($total / $perPage),
+                ],
+            ]);
+        }
+
+        $rows = $q->orderBy($sort, $order)->get();
+        return response()->json([
+            'success' => true,
+            'data' => $rows,
+        ]);
+    }
 }

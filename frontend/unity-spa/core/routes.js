@@ -54,6 +54,12 @@
         controllerAs: "vm",
         requiredRoles: ["registrar", "admin"],
       })
+      .when("/registrar/enlistment-applicants", {
+        templateUrl: "features/registrar/enlistment/applicants.html",
+        controller: "EnlistmentApplicantsController",
+        controllerAs: "vm",
+        requiredRoles: ["registrar", "admin"],
+      })
       .when("/registrar/sections-slots", {
         templateUrl: "features/registrar/sections-slots/sections-slots.html",
         controller: "SectionsSlotsController",
