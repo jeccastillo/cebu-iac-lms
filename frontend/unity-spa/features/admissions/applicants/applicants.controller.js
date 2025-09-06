@@ -304,6 +304,8 @@
     vm.irLoading = false;
     vm.irError = null;
     vm.initial_requirements = [];
+    // Resolved 2x2 photo URL from uploaded initial requirements
+    vm.photo2x2Url = null;
 
     // Organized sections built from raw applicant_data
     vm.sections = [];
@@ -341,6 +343,10 @@
     vm.saveWaiver = saveWaiver;
     vm.loadInitialRequirements = loadInitialRequirements;
 
+    // Admin control for Initial Requirements upload/replace
+    vm.canManageInitialRequirements = false;
+    vm.onIRFilePicked = onIRFilePicked;
+
     // Interview methods
     vm.loadInterview = loadInterview;
     vm.scheduleInterview = scheduleInterview;
@@ -355,8 +361,10 @@
       try {
         vm.canEditWaiver = (RoleService && RoleService.hasAny) ? RoleService.hasAny(['admissions','admin']) : false;
         vm.canManageInterview = (RoleService && RoleService.hasAny) ? RoleService.hasAny(['admissions','admin']) : false;
+        vm.canManageInitialRequirements = (RoleService && RoleService.hasAny) ? RoleService.hasAny(['admissions','admin']) : false;
       } catch (e) {
         vm.canEditWaiver = false;
+        vm.canManageInitialRequirements = false;
       }
       load();
     }
@@ -572,6 +580,7 @@
     function loadInitialRequirements() {
       if (!vm.hash) {
         vm.initial_requirements = [];
+        vm.photo2x2Url = null;
         return;
       }
       vm.irLoading = true;
@@ -582,10 +591,32 @@
             var container = (res && res.data) ? res.data : res;
             var data = (container && container.data) ? container.data : container;
             vm.initial_requirements = (data && data.requirements) ? data.requirements : [];
+
+            // Derive 2x2 photo URL from submitted initial requirements
+            try {
+              var url = null;
+              if (Array.isArray(vm.initial_requirements)) {
+                for (var i = 0; i < vm.initial_requirements.length; i++) {
+                  var req = vm.initial_requirements[i] || {};
+                  var submitted = !!req.submitted_status;
+                  var n = ((req.name || req.description || '') + '').toLowerCase();
+                  if (submitted && n) {
+                    if (/2\s*x\s*2/.test(n) || n.indexOf('2x2') !== -1 || n.indexOf('2 x 2') !== -1) {
+                      url = req.file_link || null;
+                      if (url) break;
+                    }
+                  }
+                }
+              }
+              vm.photo2x2Url = url;
+            } catch (e) {
+              vm.photo2x2Url = null;
+            }
           })
           .catch(function (err) {
             vm.irError = (err && (err.message || (err.data && err.data.message))) || 'Failed to load initial requirements.';
             vm.initial_requirements = [];
+            vm.photo2x2Url = null;
           })
           .finally(function () {
             vm.irLoading = false;
@@ -594,6 +625,55 @@
         vm.irLoading = false;
         vm.irError = 'Failed to load initial requirements.';
       }
+    }
+
+    // --------------------------
+    // Initial Requirements — Admin Upload/Replace
+    // --------------------------
+    function onIRFilePicked(req, file) {
+      if (!vm.canManageInitialRequirements) return;
+      if (!req || !file || !vm.user || !vm.user.intID) return;
+
+      // Basic client-side validation to mirror backend constraints
+      try {
+        var maxBytes = 10 * 1024 * 1024; // 10MB
+        if (file.size > maxBytes) {
+          try { Swal.fire('Invalid File', 'Maximum file size is 10MB.', 'warning'); } catch (e) { alert('Maximum file size is 10MB.'); }
+          return;
+        }
+        var allowed = [
+          'application/pdf',
+          'application/vnd.ms-excel',
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          'text/csv'
+        ];
+        var name = (file.name || '').toLowerCase();
+        var ok = (file.type && file.type.indexOf('image/') === 0)
+              || allowed.indexOf(file.type) !== -1
+              || /\.(pdf|xls|xlsx|csv|jpg|jpeg|png|gif|webp)$/i.test(name);
+        if (!ok) {
+          try { Swal.fire('Invalid File', 'Only PDF, Excel (xls, xlsx, csv), and image files are allowed.', 'warning'); } catch (e) { alert('Only PDF, Excel (xls, xlsx, csv), and image files are allowed.'); }
+          return;
+        }
+      } catch (e) { /* ignore */ }
+
+      // UI flag
+      req._uploading = true;
+
+      InitialRequirementsService
+        .adminUpload(vm.user.intID, req.app_req_id, file)
+        .then(function () {
+          try { Swal.fire('Uploaded', 'File uploaded successfully.', 'success'); } catch (e) {}
+          // Reload list to reflect updated status and file link
+          try { vm.loadInitialRequirements(); } catch (e) {}
+        })
+        .catch(function (err) {
+          var msg = (err && (err.message || (err.data && (err.data.message || (err.data.errors && err.data.errors.file && err.data.errors.file[0]))))) || 'Upload failed';
+          try { Swal.fire('Error', msg, 'error'); } catch (e) { alert(msg); }
+        })
+        .finally(function () {
+          req._uploading = false;
+        });
     }
 
     // --------------------------

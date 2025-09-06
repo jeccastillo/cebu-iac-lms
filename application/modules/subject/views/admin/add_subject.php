@@ -76,6 +76,18 @@
                             </select>
                         </div>
                         <div class="form-group col-xs-6">
+                            <label for="grading_system_id">Select Grading System</label>
+                            <select class="form-control" name="grading_system_id" id="grading_system_id">
+                                <?php if(isset($grading_systems) && count($grading_systems) > 0): ?>
+                                    <?php foreach($grading_systems as $gs): ?>
+                                        <option value="<?php echo $gs['id']; ?>"><?php echo $gs['name']; ?></option>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <option value="" disabled selected>No grading systems configured</option>
+                                <?php endif; ?>
+                            </select>
+                        </div>
+                        <div class="form-group col-xs-6">
                             <label for="include_gwa">Include in GWA?</label>
                             <select class="form-control" name="include_gwa" id="include_gwa" >
                                 <option value="0">No</option>

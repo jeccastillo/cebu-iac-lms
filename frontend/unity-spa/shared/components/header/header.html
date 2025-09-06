@@ -2,10 +2,10 @@
 <div class="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-50">
   <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-6">
     <div class="flex items-center gap-3">      
-      <!-- Global Campus Selector (admin only) -->
-       <label class="text-sm">Campus:</label>
+      <!-- Global Campus Selector (admin only; hidden for student logins) -->
+      <label class="text-sm" ng-if="vm.state && vm.state.loginType !== 'student' && vm.hasRole('admin')">Campus:</label>
       <campus-selector
-        ng-if="vm.hasRole('admin')"
+        ng-if="vm.state && vm.state.loginType !== 'student' && vm.hasRole('admin')"
         compact="true"
         show-label="false"></campus-selector>
 

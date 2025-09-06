@@ -14,8 +14,11 @@
     vm.loading = false;
     vm.subjects = [];
     vm.sections = [];
+    vm.blockSection = '';
+    vm.blockSections = [];
     vm.results = null;
     vm.student_id = null;
+    vm.studentDefaultProgramId = null;
     vm.clGenLoading = false;
     vm.hasChecklist = false;
     // Tuition preview state
@@ -40,7 +43,7 @@
     };
 
     vm.yearLevel = 1;
-    vm.studentType = 'continuing';
+    vm.studentType = 'new';
 
     // Checklist-driven auto-load inputs
     // Legacy (kept for backward compatibility)
@@ -492,6 +495,12 @@
           // Cache ids and number
           vm.student_id = (row.id != null) ? row.id : ((row.intID != null) ? row.intID : id);
           vm.studentNumber = sn;
+          try {
+            vm.studentDefaultProgramId = (row.program_id != null) ? row.program_id
+              : ((row.intProgramID != null) ? row.intProgramID : null);
+          } catch (e) {
+            vm.studentDefaultProgramId = null;
+          }
 
           // Reset tuition state similar to onStudentSelected
           vm.tuition = null;
@@ -533,7 +542,19 @@
         // Clear any previously resolved/cached id so that resolution follows the selected studentNumber
         vm.student_id = null;
         // Resolve and cache student id before loading current and registration
-        resolveStudentIdIfNeeded().finally(function () {
+        resolveStudentIdIfNeeded().then(function (sid) {
+          if (sid) {
+            try {
+              $http.get(APP_CONFIG.API_BASE + '/students/' + sid).then(function (resp) {
+                var data = (resp && resp.data) ? resp.data : resp;
+                var row = (data && data.data) ? data.data : data;
+                vm.studentDefaultProgramId = (row && (row.program_id != null ? row.program_id : (row.intProgramID != null ? row.intProgramID : null))) || null;
+              }).catch(function () { vm.studentDefaultProgramId = null; });
+            } catch (e) { vm.studentDefaultProgramId = null; }
+          } else {
+            vm.studentDefaultProgramId = null;
+          }
+        }).finally(function () {
           loadCurrent();
           loadRegistration();
           refreshChecklistExists();
@@ -543,6 +564,7 @@
         vm.registration = null;
         vm.regForm = {};
         vm.student_id = null;
+        vm.studentDefaultProgramId = null;
         vm.hasChecklist = false;
       }
     }
@@ -716,6 +738,15 @@
           var sidKey = (subjId !== null && !isNaN(subjId)) ? String(subjId) : null;                    
           if (sidKey) {
             options = classlistsBySubjectId[sidKey] || [];            
+          }
+
+          // Apply optional Block Section filter
+          if (vm.blockSection && ('' + vm.blockSection).trim() !== '') {
+            var want = ('' + vm.blockSection).trim().toUpperCase();
+            options = (options || []).filter(function (o) {
+              var sec = (o && o.sectionCode != null) ? ('' + o.sectionCode).trim().toUpperCase() : '';
+              return sec === want;
+            });
           }
 
           // Prefer only sections with remaining slots > 0
@@ -1142,6 +1173,21 @@
             display: subjCode + (sectCode ? (' — ' + sectCode) : '')
           };
         });
+
+        // Build Block Section list from available classlists
+        try {
+          var uniq = {};
+          (vm.sections || []).forEach(function (s) {
+            var code = (s && s.sectionCode != null) ? ('' + s.sectionCode).trim() : '';
+            if (code) {
+              var key = code.toUpperCase();
+              if (!uniq[key]) uniq[key] = code;
+            }
+          });
+          vm.blockSections = Object.keys(uniq).sort().map(function (k) { return uniq[k]; });
+        } catch (e) {
+          vm.blockSections = [];
+        }
 
         // Merge slots info and update display with remaining slots
         fetchSlotsAndMerge();

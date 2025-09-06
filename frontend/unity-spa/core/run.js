@@ -61,6 +61,7 @@
         target.indexOf('/registrar/') === 0 ||
         target.indexOf('/finance/') === 0 ||
         target.indexOf('/scholarship/') === 0 ||
+        target.indexOf('/academics/') === 0 ||
         target.indexOf('/campuses') === 0;
 
       if (isProtected && (!state || !state.loggedIn)) {

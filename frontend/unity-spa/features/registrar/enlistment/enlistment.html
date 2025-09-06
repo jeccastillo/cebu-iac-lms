@@ -2,7 +2,7 @@
   <h1 class="text-2xl font-semibold">Registrar Enlistment</h1>
 
   <!-- Controls -->
-  <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+  <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
     <div>
       <label class="block text-sm font-medium text-gray-700">Student</label>
       <input
@@ -42,6 +42,13 @@
         <option value="transfer">Transfer</option>
       </select>
     </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Block Section</label>
+      <select ng-model="vm.blockSection" class="mt-1 block w-full border rounded px-3 py-2">
+        <option value="">All Sections</option>
+        <option ng-repeat="s in vm.blockSections" ng-value="s">{{s}}</option>
+      </select>
+    </div>
   </div>  
 
   <div class="flex items-center gap-3">    
@@ -64,6 +71,12 @@
          class="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700">
         <i class="fas fa-external-link-alt"></i> View Records
       </a>
+    </div>
+    <div ng-if="vm.selectedStudentName" class="text-xs text-gray-600 mb-2">
+      Program:
+      <span class="font-semibold">
+        {{ vm.programLabel(vm.findProgramById(vm.regForm.current_program || (vm.registration && vm.registration.current_program) || vm.studentDefaultProgramId)) || '—' }}
+      </span>
     </div>
     <h2 class="text-lg font-semibold mb-3">Current Enlisted (Selected Term)</h2>
     <div ng-if="!vm.current.length" class="text-gray-500">No enlisted classes loaded.</div>
@@ -325,7 +338,7 @@
           <div>
             <div class="text-gray-500 uppercase text-xs">Program</div>
             <div class="font-medium">
-              {{ vm.programLabel(vm.findProgramById(vm.registration.current_program)) || '—' }}
+              {{ vm.programLabel(vm.findProgramById(vm.regForm.current_program || (vm.registration && vm.registration.current_program) || vm.studentDefaultProgramId)) || '—' }}
             </div>
           </div>
           <div>

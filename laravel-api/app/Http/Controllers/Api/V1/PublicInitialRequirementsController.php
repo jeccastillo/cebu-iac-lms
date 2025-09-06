@@ -45,8 +45,9 @@ class PublicInitialRequirementsController extends Controller
         }
 
         $level = $this->normalizeLevel($user->student_type ?? null);
+        $isForeign = $this->normalizeCitizenshipIsForeign($user->strCitizenship ?? null);
 
-        $this->seedInitialRequirementsIfEmpty($studentId, $level);
+        $this->seedInitialRequirementsIfEmpty($studentId, $level, $isForeign);
 
         $select = [
             'ar.intID as app_req_id',
@@ -65,6 +66,8 @@ class PublicInitialRequirementsController extends Controller
         $rows = DB::table('tb_mas_application_requirements as ar')
             ->join('tb_mas_requirements as r', 'r.intID', '=', 'ar.tb_mas_requirements_id')
             ->where('ar.intStudentID', $studentId)
+            ->where('r.is_initial_requirements', true)
+            ->where('r.is_foreign', $isForeign)
             ->select($select)
             ->orderBy('r.name')
             ->get()
@@ -201,11 +204,16 @@ class PublicInitialRequirementsController extends Controller
 
         // System Alert: If all initial requirements are now submitted, create a system alert (idempotent)
         try {
+            // Determine applicant citizenship to scope counts to appropriate requirement set
+            $userRowForCit = DB::table('tb_mas_users')->where('intID', $studentId)->first();
+            $isForeign = $this->normalizeCitizenshipIsForeign($userRowForCit->strCitizenship ?? null);
+
             // Count total initial requirements for student's level and submitted ones
             $counts = DB::table('tb_mas_application_requirements as ar')
                 ->join('tb_mas_requirements as r', 'r.intID', '=', 'ar.tb_mas_requirements_id')
                 ->where('ar.intStudentID', $studentId)
                 ->where('r.is_initial_requirements', true)
+                ->where('r.is_foreign', $isForeign)
                 ->selectRaw('COUNT(*) as total, SUM(CASE WHEN ar.submitted_status = 1 THEN 1 ELSE 0 END) as submitted')
                 ->first();
 
@@ -271,12 +279,13 @@ class PublicInitialRequirementsController extends Controller
      * If no application requirements exist for the student, seed them based on initial tb_mas_requirements
      * filtered by the user's level (type).
      */
-    protected function seedInitialRequirementsIfEmpty(int $studentId, ?string $level): void
+    protected function seedInitialRequirementsIfEmpty(int $studentId, ?string $level, bool $isForeign): void
     {
         // Ensure all initial requirements for the student's level exist.
         // 1) Fetch master requirement IDs for the applicable level
         $q = DB::table('tb_mas_requirements')
-            ->where('is_initial_requirements', true);
+            ->where('is_initial_requirements', true)
+            ->where('is_foreign', $isForeign);
 
         if ($level !== null) {
             $q->where('type', $level);
@@ -397,6 +406,16 @@ class PublicInitialRequirementsController extends Controller
         $fullPath = Storage::disk('public')->path($relative);
 
         return response()->file($fullPath);
+    }
+
+    /**
+     * Determine if citizenship is foreign (not Philippines, case-insensitive).
+     */
+    protected function normalizeCitizenshipIsForeign(?string $citizenship): bool
+    {
+        if (!$citizenship) return false;
+        $c = strtolower(trim($citizenship));
+        return $c !== 'philippines';
     }
 
     /**

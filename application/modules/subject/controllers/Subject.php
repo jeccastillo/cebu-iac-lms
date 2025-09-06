@@ -64,6 +64,7 @@ class Subject extends CI_Controller {
                 $dpt[$dept] = $dept;
 
             $this->data['lab_types'] = $this->data_fetcher->getLabTypesForDropdown();
+            $this->data['grading_systems'] = $this->data_fetcher->fetch_table('tb_mas_grading');
             
             $this->data['dpt'] = $dpt;
             $this->data['page'] = "add_subject";

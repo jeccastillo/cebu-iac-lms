@@ -50,6 +50,7 @@
       { test: '^/subjects(?:/.*)?$', roles: ['registrar', 'admin'] },
       { test: '^/curricula(?:/.*)?$', roles: ['registrar', 'admin'] },
       { test: '^/classlists(?:/.*)?$', roles: ['registrar', 'admin'] },
+      { test: '^/faculty-loading(?:/.*)?$', roles: ['registrar', 'admin'] },
       { test: '^/classrooms(?:/.*)?$', roles: ['faculty', 'registrar', 'admin'] },
       { test: '^/cashier-admin(?:/.*)?$', roles: ['cashier_admin', 'admin'] },
       { test: '^/logs(?:/.*)?$', roles: ['admin'] },

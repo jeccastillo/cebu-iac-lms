@@ -26,10 +26,49 @@
       return $http.get(APP_CONFIG.API_BASE + '/system-alerts/active', { headers: headers })
         .then(function (resp) {
           var payload = resp && resp.data ? resp.data : resp;
+          var rows = [];
           if (payload && payload.success !== false && Array.isArray(payload.data)) {
-            return payload.data;
+            rows = payload.data;
+          } else if (Array.isArray(payload)) {
+            rows = payload;
           }
-          return Array.isArray(payload) ? payload : [];
+
+          // Defensive client-side audience filtering (roles + campus) to avoid over-broadcast
+          try {
+            var myRoles = (RoleService && RoleService.getRoles ? RoleService.getRoles() : [])
+              .map(function (r) { return (r || '').toLowerCase().trim(); })
+              .filter(function (r) { return !!r; });
+
+            var campus = (CampusService && CampusService.getSelectedCampus) ? CampusService.getSelectedCampus() : null;
+            var campusId = (campus && campus.id != null) ? String(campus.id) : null;
+
+            rows = (rows || []).filter(function (a) {
+              try {
+                if (!a) return false;
+
+                // Allow global alerts
+                if (a.target_all === true || a.target_all === 1 || a.target_all === '1') return true;
+
+                // Role filter: require intersection when role_codes present
+                var rc = Array.isArray(a.role_codes)
+                  ? a.role_codes.map(function (r) { return (r || '').toLowerCase().trim(); }).filter(Boolean)
+                  : [];
+                var rolesOk = rc.length ? rc.some(function (code) { return myRoles.indexOf(code) !== -1; }) : false;
+                if (!rolesOk) return false;
+
+                // Campus filter: if campus_ids provided, must contain current campus (else pass)
+                var cids = Array.isArray(a.campus_ids) ? a.campus_ids.map(function (id) { return String(id); }) : [];
+                var campusOk = (!cids.length || campusId == null || cids.indexOf(String(campusId)) !== -1);
+                return campusOk;
+              } catch (e) {
+                return false;
+              }
+            });
+          } catch (e) {
+            // best-effort; fall back to original rows
+          }
+
+          return rows;
         })
         .catch(function () {
           return [];
