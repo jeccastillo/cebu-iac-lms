@@ -113,6 +113,9 @@
     vm.installmentData = installmentData;
     vm.displayedTotalDue = displayedTotalDue;
     vm.increaseInfo = increaseInfo;
+    vm.canGenerateRegForm = canGenerateRegForm;
+    vm.regFormUrl = regFormUrl;
+    vm.openRegFormPdf = openRegFormPdf;
 
     // Tuition save snapshot
     vm.tuitionSaving = false;
@@ -128,6 +131,124 @@
       else
         return studentNumber;
 
+    }
+
+    // Determine if Reg Form generation should be enabled
+    function canGenerateRegForm() {
+      try {
+        if (!vm.registration) return false;
+        var status = (vm.registration.enrollment_status || '').toString().toLowerCase();
+        console.log("STATUS",status);
+        var enlistedByStatus = (status === 'enlisted' || status === 'enrolled');
+        var enlistedByDate = !!vm.registration.date_enlisted; // fallback if status is missing but date_enlisted is present
+        var hasKeys = !!vm.studentNumber && !!vm.term;
+        return hasKeys && (enlistedByStatus || enlistedByDate);
+      } catch (e) {
+        return false;
+      }
+    }
+    // Build Registration Form PDF URL (inline open). Visible only if canGenerateRegForm() is true.
+    function regFormUrl() {
+      try {
+        if (!canGenerateRegForm()) return '';
+        var termInt = parseInt(vm.term, 10);
+        if (!termInt || isNaN(termInt)) return '';
+        var sn = vm.sanitizeStudentNumber(vm.studentNumber);
+        return UnityService.regFormUrl(sn, termInt) || '';
+      } catch (e) {
+        return '';
+      }
+    }
+    // Open Registration Form PDF with headers via XHR + Blob (to include X-Faculty-ID)
+    function openRegFormPdf() {
+      try {
+        if (!canGenerateRegForm()) {
+          if (window.Swal) {
+            Swal.fire({ icon: 'warning', title: 'Unavailable', text: 'Registration Form is only available for enlisted/enrolled registrations with a selected student and term.' });
+          } else {
+            try { alert('Registration Form is only available for enlisted/enrolled registrations with a selected student and term.'); } catch (e) {}
+          }
+          return;
+        }
+        var termInt = parseInt(vm.term, 10);
+        if (!termInt || isNaN(termInt)) {
+          if (window.Swal) { Swal.fire({ icon: 'warning', title: 'Invalid term', text: 'Selected term is invalid.' }); }
+          else { try { alert('Selected term is invalid.'); } catch (e) {} }
+          return;
+        }
+        var sn = vm.sanitizeStudentNumber(vm.studentNumber);
+        vm.regPdfLoading = true;
+
+        UnityService.regFormFetch(sn, termInt).then(function (resp) {
+          var data = resp && resp.data;
+          if (!data) throw new Error('Empty PDF response');
+
+          // Build filename from Content-Disposition when present
+          var filename = 'reg-form-' + sn + '-' + termInt + '.pdf';
+          try {
+            var cd = resp && resp.headers ? (resp.headers('Content-Disposition') || resp.headers('content-disposition')) : null;
+            if (cd) {
+              var m = /filename\*?=(?:UTF-8''|")?([^\";]+)/i.exec(cd);
+              if (m && m[1]) {
+                var raw = (m[1] || '').replace(/\"/g, '');
+                try { filename = decodeURIComponent(raw); } catch (e) { filename = raw; }
+              }
+            }
+          } catch (e) { /* ignore */ }
+
+          var blob = new Blob([data], { type: 'application/pdf' });
+          var URL_ = (window.URL || window.webkitURL);
+          var url = URL_ && URL_.createObjectURL ? URL_.createObjectURL(blob) : null;
+
+          if (url) {
+            var win = null;
+            try { win = window.open(url, '_blank'); } catch (e) { win = null; }
+            if (!win) {
+              // Fallback: force download
+              var a = document.createElement('a');
+              a.href = url;
+              a.download = filename;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+            }
+            // Revoke after a short delay
+            setTimeout(function () { try { URL_.revokeObjectURL(url); } catch (e) {} }, 10000);
+          } else {
+            // As a last resort, create a data URL (may be blocked for large files)
+            try {
+              var reader = new FileReader();
+              reader.onloadend = function () {
+                var dataUrl = reader.result;
+                var w = null;
+                try { w = window.open(dataUrl, '_blank'); } catch (e) { w = null; }
+                if (!w) {
+                  var a2 = document.createElement('a');
+                  a2.href = dataUrl;
+                  a2.download = filename;
+                  document.body.appendChild(a2);
+                  a2.click();
+                  document.body.removeChild(a2);
+                }
+              };
+              reader.readAsDataURL(blob);
+            } catch (e) {
+              if (window.Swal) { Swal.fire({ icon: 'error', title: 'Error', text: 'Unable to open the PDF.' }); }
+              else { try { alert('Unable to open the PDF.'); } catch (e2) {} }
+            }
+          }
+        }).catch(function (err) {
+          console.error('regFormFetch failed', err);
+          var msg = (err && err.data && err.data.message) || (err && err.message) || 'Failed to generate Registration Form PDF.';
+          if (window.Swal) { Swal.fire({ icon: 'error', title: 'Error', text: msg }); }
+          else { try { alert(msg); } catch (e) {} }
+        }).finally(function () {
+          vm.regPdfLoading = false;
+          if ($scope && $scope.$applyAsync) { $scope.$applyAsync(); }
+        });
+      } catch (e) {
+        vm.regPdfLoading = false;
+      }
     }
 
     // Tuition loader: builds payload from current enlisted and registration

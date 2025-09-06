@@ -16,6 +16,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Cashier;
+use setasign\Fpdi\Fpdi;
 
 class UnityController extends Controller
 {
@@ -639,6 +640,237 @@ class UnityController extends Controller
         return response()->json([
             'success' => true,
             'data'    => ['exists' => true, 'saved' => $saved],
+        ]);
+    }
+
+    /**
+     * GET /api/v1/unity/reg-form?student_number=SN&amp;term=SYID
+     * Generates a student-specific Registration Form PDF by overlaying data on reg_form.pdf template.
+     * Fields:
+     *  - Student Number @ (16,78)
+     *  - Student Name   @ (16,88)  format: Last, First Middle
+     *  - Program        @ (16,98)  program code (registration.current_program fallback to user.intProgramID)
+     *  - Term           @ (295,78) enumSem + YearStart-YearEnd
+     *  - Address        @ (295,88)
+     *  - Subjects start @ (16,128)  columns: Code, Description, Section, Units
+     *  - Assessment     @ (16,288)  Tuition/Misc/Lab/Additional/Scholarships/Discounts/Total Due
+     */
+    public function regForm(Request $request)
+    {
+        $payload = $request->validate([
+            'student_number' => 'required|string',
+            'term'           => 'required|integer',
+        ]);
+
+        $sn = (string) $payload['student_number'];
+        $syid = (int) $payload['term'];
+
+        // Resolve student with fallback program code
+        $user = DB::table('tb_mas_users as u')
+            ->leftJoin('tb_mas_programs as up', 'up.intProgramID', '=', 'u.intProgramID')
+            ->select('u.*', 'up.strProgramCode as user_program_code')
+            ->where('u.strStudentNumber', $sn)
+            ->first();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Student not found',
+            ], 404);
+        }
+
+        // Registration row for the term + program code resolution
+        $reg = DB::table('tb_mas_registration as r')
+            ->leftJoin('tb_mas_programs as rp', 'rp.intProgramID', '=', 'r.current_program')
+            ->select('r.*', 'rp.strProgramDescription as reg_program_code')
+            ->where('r.intStudentID', (int) $user->intID)
+            ->where('r.intAYID', $syid)
+            ->first();
+
+        $programCode = '';
+        if ($reg && isset($reg->reg_program_code) && $reg->reg_program_code !== null && $reg->reg_program_code !== '') {
+            $programCode = (string) $reg->reg_program_code;
+        } elseif (isset($user->user_program_code) && $user->user_program_code !== null) {
+            $programCode = (string) $user->user_program_code;
+        }
+
+        // Term label (enumSem + school year)
+        $termRow = DB::table('tb_mas_sy')->where('intID', $syid)->first();
+        $termLabel = $termRow
+            ? ((string) $termRow->enumSem . ' ' .(string)$termRow->term_label. ' ' .(string) $termRow->strYearStart . '-' . (string) $termRow->strYearEnd)
+            : (string) $syid;
+
+        // Student name: "Last, First Middle"
+        $last = isset($user->strLastname) ? trim((string) $user->strLastname) : '';
+        $first = isset($user->strFirstname) ? trim((string) $user->strFirstname) : '';
+        $middle = isset($user->strMiddlename) ? trim((string) $user->strMiddlename) : '';
+        $studentName = ($last !== '' ? ($last . ', ') : '') . $first . ($middle !== '' ? (' ' . $middle) : '');
+
+        // Address
+        $address = isset($user->strAddress) ? (string) $user->strAddress : '';
+
+        // Current enlisted subjects for the term (include section)
+        $subjects = DB::table('tb_mas_classlist_student as cls')
+            ->join('tb_mas_classlist as cl', 'cl.intID', '=', 'cls.intClassListID')
+            ->join('tb_mas_subjects as s', 's.intID', '=', 'cl.intSubjectID')
+            ->where('cls.intStudentID', (int) $user->intID)
+            ->where('cl.strAcademicYear', $syid)
+            ->select(
+                's.strCode as code',
+                's.strDescription as description',
+                's.strUnits as units',
+                's.intLab as lab_units',
+                DB::raw("COALESCE(cl.sectionCode, cl.strSection, '') as section_code")
+            )
+            ->orderBy('s.strCode', 'asc')
+            ->get();
+
+        // Tuition breakdown summary for assessment block
+        $summary = null;
+        try {
+            $breakdown = $this->tuition->compute($sn, $syid, null, null);
+            $summary = is_array($breakdown['summary'] ?? null) ? $breakdown['summary'] : null;
+        } catch (\Throwable $e) {
+            $summary = null;
+        }
+
+        // Build PDF (no external template). Use A3 size so existing coordinates fit.
+        // This removes dependency on reg_form.pdf while preserving positions.
+        $pdf = new \setasign\Fpdi\Fpdi('P', 'mm', array(8.5,13));
+        $pdf->AddPage('P', 'A4');
+
+        // Set text color and baseline font
+        $pdf->SetTextColor(0, 0, 0);
+
+        
+        // Header fields (Letter page positioning)
+        $pdf->SetFont('Arial', '', 8.5);
+        
+        $pdf->SetXY(10, 25);
+        $pdf->Cell(0, 5, 'STUDENT NUMBER', 0, 1, 'L');
+
+        
+        $pdf->SetXY(46, 25);
+        $pdf->Cell(0, 5, $sn, 0, 1, 'L');
+
+        
+        $pdf->SetXY(10, 30);
+        $pdf->Cell(0, 5, 'NAME', 0, 1, 'L');
+        // Student Name
+        $pdf->SetXY(46, 30);
+        $pdf->Cell(0, 5, strtoupper($studentName), 0, 1, 'L');
+
+        
+        $pdf->SetXY(10, 35);
+        $pdf->Cell(0, 5, 'PROGRAM', 0, 1, 'L');
+        // Program (code)
+        $pdf->SetXY(46, 35);
+        $pdf->MultiCell(60, 5, $programCode, 0,'L');
+
+        $pdf->SetXY(115,25);
+        $pdf->Cell(0, 5, 'TERM/SY', 0, 1, 'L');
+        // Term (top-right for Letter)
+        $pdf->SetXY(140, 25);
+        $pdf->Cell(0, 5, $termLabel, 0, 1, 'L');
+
+        $pdf->SetXY(115,30);
+        $pdf->Cell(0, 5, 'ADDRESS', 0, 1, 'L');
+
+        //Headers for subjects        
+        $pdf->SetXY(140, 30);
+        $pdf->MultiCell(60, 5, $address, 0, 'L');
+        
+        // Subjects table starting around (16,70): Code, Description, Section, Units (fitted to Letter width)
+        
+        $pdf->SetFont('Arial', 'B', 8.2);
+        $lineH = 5;
+        $columns = [10,30,110,125,135,150,175];
+        // Code        
+        $pdf->SetXY($columns[0], 55);
+        $pdf->Cell(35, $lineH, "SECTION", 0, 0, 'L');
+        // Description      
+        $pdf->SetXY($columns[1], 55);  
+        $pdf->Cell(95, $lineH, "SUBJECT NAME", 0, 0, 'L');
+        // Section        
+        $pdf->SetXY($columns[2], 55);
+        $pdf->Cell(30, $lineH, "LAB", 0, 0, 'C');
+        // Units        
+        $pdf->SetXY($columns[3], 55);
+        $pdf->Cell(20, $lineH, "UNITS", 0, 1, 'C');
+        // DAY
+        $pdf->SetXY($columns[4], 55);
+        $pdf->Cell(20, $lineH, "DAY", 0, 1, 'C');
+        // TIME
+        $pdf->SetXY($columns[5], 55);
+        $pdf->Cell(20, $lineH, "TIME", 0, 1, 'L');
+        // ROOM        
+        $pdf->SetXY($columns[6], 55);
+        $pdf->Cell(20, $lineH, "ROOM", 0, 1, 'L');
+
+        $pdf->SetFont('Arial', '', 8.2);
+        $y = 60;        
+        foreach ($subjects as $subj) {
+            $code = (string)($subj->code ?? '');
+            $desc = (string)($subj->description ?? '');
+            $sect = (string)($subj->section_code ?? '');
+            $units = (string)($subj->units ?? '');
+            $labUnits = (string)($subj->lab_units ?? '0');
+            // Code
+            $pdf->SetXY($columns[0], $y);
+            $pdf->Cell(35, $lineH, $sect, 0, 0, 'L');
+            // Description
+            $pdf->SetXY($columns[1], $y);
+            $pdf->Cell(95, $lineH, $desc, 0, 0, 'L');
+            // Section
+            $pdf->SetXY($columns[2], $y);
+            $pdf->Cell(30, $lineH, $labUnits, 0, 0, 'C');
+            // Units
+            $pdf->SetXY($columns[3], $y);
+            $pdf->Cell(20, $lineH, $units, 0, 1, 'C');
+
+            $y += $lineH;
+            // Stop early if we are approaching the footer area on Letter page
+            if ($y > 220) {
+                break;
+            }
+        }
+
+        // Assessment block around (16,240) if summary available (Letter page)
+        if (is_array($summary)) {
+            $pdf->SetFont('Arial', '', 10);
+            $ay = 240;
+
+            $pdf->SetXY(16, $ay);
+            $pdf->Cell(60, 5, 'Tuition: ' . number_format((float)($summary['tuition'] ?? 0), 2), 0, 1, 'L');
+
+            $pdf->SetXY(16, $ay + 6);
+            $pdf->Cell(60, 5, 'Misc: ' . number_format((float)($summary['misc_total'] ?? 0), 2), 0, 1, 'L');
+
+            $pdf->SetXY(16, $ay + 12);
+            $pdf->Cell(60, 5, 'Lab: ' . number_format((float)($summary['lab_total'] ?? 0), 2), 0, 1, 'L');
+
+            $pdf->SetXY(100, $ay);
+            $pdf->Cell(60, 5, 'Additional: ' . number_format((float)($summary['additional_total'] ?? 0), 2), 0, 1, 'L');
+
+            $pdf->SetXY(100, $ay + 6);
+            $pdf->Cell(60, 5, 'Scholarships: ' . number_format((float)($summary['scholarships_total'] ?? 0), 2), 0, 1, 'L');
+
+            $pdf->SetXY(100, $ay + 12);
+            $pdf->Cell(60, 5, 'Discounts: ' . number_format((float)($summary['discounts_total'] ?? 0), 2), 0, 1, 'L');
+
+            $pdf->SetFont('Arial', 'B', 11);
+            $pdf->SetXY(200, $ay);
+            $pdf->Cell(60, 5, 'Total Due: ' . number_format((float)($summary['total_due'] ?? 0), 2), 0, 1, 'L');
+        }
+
+        // Stream inline with filename
+        $safeSn = preg_replace('/[^A-Za-z0-9\-]/', '', $sn);
+        $filename = 'reg-form-' . ($safeSn ?: 'SN') . '-' . $syid . '.pdf';
+        $content = $pdf->Output('S');
+
+        return response($content, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="' . $filename . '"',
         ]);
     }
 }

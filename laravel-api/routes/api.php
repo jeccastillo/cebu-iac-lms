@@ -267,6 +267,8 @@ Route::prefix('v1')->group(function () {
     // Tuition save/fetch
     Route::post('/unity/tuition-save', [UnityController::class, 'tuitionSave'])->middleware('role:registrar,finance,admin');
     Route::get('/unity/tuition-saved', [UnityController::class, 'tuitionSaved'])->middleware('role:registrar,finance,admin');
+    // Registration Form PDF (inline)
+    Route::get('/unity/reg-form', [UnityController::class, 'regForm'])->middleware('role:registrar,admin');
 
     // Generic API endpoints
     Route::get('/generic/faculty', [GenericApiController::class, 'faculty']);

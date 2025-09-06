@@ -1,243 +1,133 @@
 # Implementation Plan
 
 [Overview]
-Add an admin/registrar page for monitoring sections with capacity vs utilization using tb_mas_classlist.slots. For each classlist (section), compute and display:
-- Enrolled count: number of students in tb_mas_classlist_student joined to tb_mas_registration for the same term where the student is considered enrolled.
-- Enlisted count: number of students in tb_mas_classlist_student for the term (regardless of enrollment).
-- Remaining slots: slots - enrolled_count (never negative).
+Add a Generate Reg Form (PDF) button on the Registrar Enlistment page that is visible when the selected student’s registration for the selected term has enrollment_status = 'enlisted' or 'enrolled'. When clicked, it opens a student-specific Registration Form PDF (rendered from the repo-root template reg_form.pdf) inline in a new browser tab, with the browser’s standard download option available.
 
-This enables real-time capacity tracking per section, driven by legacy tables, and scoped by term (tb_mas_sy.intID). Enrolled determination is made against tb_mas_registration (same term). The page provides filtering and searching by subject, faculty, and section identifiers.
+This implementation leverages an existing Laravel API controller method UnityController::regForm that generates the Registration Form PDF using the reg_form.pdf template via setasign/fpdi. We will expose this endpoint via GET /api/v1/unity/reg-form and integrate it in the Unity SPA Enlistment UI. The front-end will construct the correct URL and conditionally render the button based on the current registration’s enrollment_status. The output should stream inline with appropriate headers to allow viewing and downloading from the browser’s native PDF viewer.
 
 [Types]  
-Introduce a typed response model for the new API endpoint.
+No new back-end PHP types or database schema. Minor front-end ViewModel and service shape additions.
 
-Detailed type definitions:
-- Request (query string)
-  - term: int required (tb_mas_sy.intID)
-  - page: int optional (default 1)
-  - perPage: int optional (default 20)
-  - filters (optional):
-    - intSubjectID: int
-    - intFacultyID: int
-    - section: string (matches tb_mas_classlist.sectionCode using LIKE)
-    - class_name: string (tb_mas_classlist.strClassName)
-    - year: int (tb_mas_classlist.year)
-    - sub_section: string
-- Response (JSON)
-  - data: Array<ClasslistSlotsItem>
-  - meta: { page: int, per_page: int, total: int }
-- ClasslistSlotsItem
-  - classlist_id: int (tb_mas_classlist.intID)
-  - section_code: string|null (tb_mas_classlist.sectionCode)
-  - class_name: string (tb_mas_classlist.strClassName)
-  - year: int|null
-  - section: string|null (tb_mas_classlist.strSection)
-  - sub_section: string|null
-  - subject_code: string
-  - subject_description: string
-  - faculty_name: string|null
-  - slots: int|null (tb_mas_classlist.slots)
-  - enlisted_count: int
-  - enrolled_count: int
-  - remaining_slots: int (max(slots - enrolled_count, 0))
-  - finalized: int (tb_mas_classlist.intFinalized)
-- Enrolled semantics
-  - A student is counted as enrolled if a tb_mas_registration row exists for (intStudentID = cls.intStudentID, intAYID = term) AND intROG indicates enrollment (>=1) AND is not withdrawn/terminal.
-  - Practical SQL filters:
-    - r.intROG >= 1
-    - r.intROG NOT IN (3,5) when columns/values are present in the schema
-  - NOTE: We will avoid relying on date fields (dteRegistered / date_enrolled) for counts to stay compatible with schema variants observed in logs.
+Detailed definitions and behaviors:
+- Query parameters to GET /api/v1/unity/reg-form:
+  - student_number: string (required) – sanitized student number (vm.sanitizeStudentNumber(vm.studentNumber))
+  - term: integer (required) – selected term syid (vm.term)
+- Front-end VM fields used:
+  - vm.registration: object|null – existing registration for the selected student and term
+    - vm.registration.enrollment_status: string, must equal 'enlisted' or 'enrolled' to enable the button
+  - vm.studentNumber: string – selected student number (may include display suffix; must sanitize)
+  - vm.term: number|string – selected term syid (coerced to integer for query)
+- Front-end additions:
+  - vm.regFormUrl(): () => string – builds the absolute API URL to GET inline PDF
+- Validation rules:
+  - Button visible only when vm.registration && (vm.registration.enrollment_status === 'enlisted' || vm.registration.enrollment_status === 'enrolled') && vm.studentNumber && vm.term
+  - URL building must sanitize student_number to the canonical value before passing as query param
 
 [Files]
-Add a dedicated API endpoint and a new AngularJS (1.x) SPA feature page.
+We will introduce one new API route and minimal UI updates. No files are deleted or moved.
 
-Detailed breakdown:
-- New files to be created
-  - laravel-api/app/Services/ClasslistSlotsService.php
-    - Purpose: Provide term-scoped, paginated classlist slot utilization with efficient SQL aggregation.
-  - laravel-api/app/Http/Controllers/Api/V1/ClasslistSlotsController.php
-    - Purpose: REST controller exposing GET /api/v1/classlists/slots with filters.
-  - frontend/unity-spa/features/registrar/sections-slots/sections-slots.controller.js
-    - Purpose: AngularJS controller for sections/slots monitoring page.
-  - frontend/unity-spa/features/registrar/sections-slots/sections-slots.html
-    - Purpose: UI view for tabular display, search, and pagination.
-  - frontend/unity-spa/features/registrar/sections-slots/sections-slots.service.js (optional, if we keep controllers lean)
-    - Purpose: Encapsulate API calls to the Laravel endpoint.
-
-- Existing files to be modified
+- New files to be created: None.
+- Existing files to be modified:
   - laravel-api/routes/api.php
-    - Register new route GET /api/v1/classlists/slots -> ClasslistSlotsController@index
-  - frontend/unity-spa/shared/components/sidebar/sidebar.controller.js
-    - Add new menu entry under Registrar (or equivalent grouping) linking to sections/slots monitor.
-  - Optionally: laravel-api/app/Http/Resources/RegistrarClasslistResource.php
-    - If desired, add a dedicated resource ClasslistSlotsResource for consistent field naming. Not required for the first pass.
-
-- Files to be deleted or moved
-  - None
-
-- Configuration updates
-  - None
+    - Add GET /api/v1/unity/reg-form mapped to UnityController@regForm and protect with role:registrar,admin (and optionally finance if desired).
+  - laravel-api/app/Http/Controllers/Api/V1/UnityController.php
+    - Ensure regForm returns a streamed inline PDF with headers:
+      - Content-Type: application/pdf
+      - Content-Disposition: inline; filename="reg-form-{student_number}-{term}.pdf"
+    - Confirm template path uses base_path('../reg_form.pdf') and fails gracefully when missing.
+    - Confirm it overlays Student Number, Student Name, Program, Term, Address, Enlisted Subjects (Code, Description, Section, Units), and Assessment summary.
+  - frontend/unity-spa/features/unity/unity.service.js
+    - Add helper method regFormUrl(student_number: string, term: number): string that returns BASE + '/unity/reg-form?student_number=...&term=...'
+  - frontend/unity-spa/features/registrar/enlistment/enlistment.controller.js
+    - Add vm.regFormUrl function delegating to UnityService.regFormUrl with sanitized student number and integer term.
+  - frontend/unity-spa/features/registrar/enlistment/enlistment.html
+    - In the “Current Enlisted (Selected Term)” section header area, add a button aligned to the right:
+      - Visible when vm.registration && (vm.registration.enrollment_status === 'enlisted' || vm.registration.enrollment_status === 'enrolled') && vm.studentNumber && vm.term
+      - Opens UnityService.regFormUrl(...) in a new tab (target="_blank")
+      - Label: “Generate Reg Form (PDF)”
+- Configuration file updates: None.
 
 [Functions]
-Add a new service method and a controller method for aggregation; wire a frontend fetch function.
+We will add a small utility function in the Unity service and Enlistment controller; the Laravel controller function exists already and must return inline PDF with headers.
 
-Detailed breakdown:
-- New functions
-  - Class: App\Services\ClasslistSlotsService
-    - Method: public function listByTerm(array $params): array
-      - Input: ['term'=>int, 'page'=>int, 'perPage'=>int, optional filters]
-      - Output: ['data'=>array, 'meta'=>array]
-      - Purpose: Construct SQL to fetch classlists for the term along with enlisted_count, enrolled_count, and derived remaining_slots. Supports optional filters and isDissolved=0 by default.
-
-    - Internal helpers (private)
-      - buildBaseQuery($term): \Illuminate\Database\Query\Builder
-        - Joins tb_mas_subjects and tb_mas_faculty for display fields
-      - applyFilters($q, $params): void
-        - Applies filters: intSubjectID, intFacultyID, section (LIKE), class_name, year, sub_section
-      - aggregateCounts($q, $term): void
-        - Adds subqueries/left joins for enlisted and enrolled counts
-
-  - Class: App\Http\Controllers\Api\V1\ClasslistSlotsController
-    - Method: public function index(Request $request): JsonResponse
-      - Validates 'term' is present and numeric
-      - Forwards to ClasslistSlotsService::listByTerm
-      - Returns JSON with data and meta
-
-  - Frontend AngularJS
-    - sections-slots.service.js
-      - getList({ term, page, perPage, filters }): $http.get(...)
-    - sections-slots.controller.js
-      - $scope.state for pagination, filters, and results
-      - load() to call service and map response
-      - compute client-side derived presentation elements (e.g., percentage bars)
-    - sections-slots.html
-      - Table with columns: Section Code, Subject Code, Subject Desc, Faculty, Capacity, Enlisted, Enrolled, Remaining, Finalized, and optional filters row
-
-- Modified functions
-  - frontend/unity-spa/shared/components/sidebar/sidebar.controller.js
-    - Add navigation item linking to the new page (route path to be defined, e.g., #/registrar/sections-slots)
-
-- Removed functions
-  - None
+- New functions:
+  - frontend/unity-spa/features/unity/unity.service.js
+    - regFormUrl(student_number: string, term: number): string
+      - Returns BASE + '/unity/reg-form?student_number=' + encodeURIComponent(student_number) + '&term=' + term
+      - No network call; used to construct a link for target="_blank" inline streaming.
+  - frontend/unity-spa/features/registrar/enlistment/enlistment.controller.js
+    - vm.regFormUrl(): string
+      - Uses vm.sanitizeStudentNumber(vm.studentNumber) and parseInt(vm.term, 10), then calls UnityService.regFormUrl.
+      - Returns empty string when prerequisites are missing.
+- Modified functions:
+  - laravel-api/app/Http/Controllers/Api/V1/UnityController.php
+    - public function regForm(Request $request)
+      - Ensure it ends with an inline streaming response:
+        - $content = $pdf->Output('S'); // string
+        - return response($content, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="' . $filename . '"',
+          ]);
+      - Include robust try/catch around tuition compute; allow PDF generation even if breakdown fails, with no assessment block values.
+- Removed functions: None.
 
 [Classes]
-Introduce one new controller class and one new service class.
+No new classes or inheritance changes.
 
-Detailed breakdown:
-- New classes
-  - App\Services\ClasslistSlotsService
-    - Key methods: listByTerm, buildBaseQuery, applyFilters, aggregateCounts
-  - App\Http\Controllers\Api\V1\ClasslistSlotsController
-    - Key methods: index()
-
-- Modified classes
-  - None of the existing service classes require modification; this feature remains additive.
-
-- Removed classes
-  - None
+- New classes: None.
+- Modified classes:
+  - App\Http\Controllers\Api\V1\UnityController – regForm method behavior (response/headers).
+- Removed classes: None.
 
 [Dependencies]
-No new package dependencies.
+No new third-party dependencies.
 
-- Backend: Laravel DB facade
-- Frontend: Existing AngularJS 1.x stack; no new libs
+- Back-end:
+  - setasign/fpdi is already used and configured; no changes required.
+- Front-end:
+  - No new packages; AngularJS app already includes UnityService to centralize API URL building and admin headers for X-Faculty-ID on AJAX calls. For this download/view, we only need a plain URL; custom headers are not needed since the endpoint does not require request body or protected header for authorization beyond role middleware (cookie/session).
 
 [Testing]
-Use API-first verification and then UI validation.
+Manual end-to-end validation from the Registrar Enlistment page.
 
-- API tests (manual via Postman/curl)
-  1) GET /api/v1/classlists/slots?term={syid}
-     - Validate each item includes capacity (slots), enlisted_count, enrolled_count, and remaining_slots = max(slots - enrolled_count, 0)
-  2) Verify filters:
-     - intSubjectID, intFacultyID, section (LIKE), class_name, year, sub_section
-  3) Verify paging meta: meta.page, meta.per_page, meta.total
-  4) Edge cases:
-     - classlists with null slots (treat as null in response, remaining_slots should be 0 or null; for display we will render 0 if null)
-     - dissolved classlists (isDissolved=1) excluded by default
-     - Zero enrolled but positive enlisted → remaining_slots equals full capacity; enlisted_count is separately visible as requested.
-
-- Enrollment determination checks
-  - Ensure joined registration r: r.intStudentID = cls.intStudentID AND r.intAYID = term
-  - Count enrolled when r.intROG >= 1 AND r.intROG NOT IN (3,5) (withdrawn/terminal)
-  - Use WHERE EXISTS subquery or LEFT JOIN + COUNT(DISTINCT CASE WHEN conditions THEN cls.intStudentID END)
-
-- UI tests
-  - Load page, set term selector (from latest term or a dropdown)
-  - Sort and filter; numbers match API
-  - Remaining slots updates as filters change
+- Preconditions:
+  - Select a student and term with current enlisted records and an existing registration row with enrollment_status = 'enlisted'.
+- UI tests:
+  - Verify the Generate Reg Form (PDF) button is visible only when enrollment_status === 'enlisted'.
+  - Click the button and confirm a new tab opens with a PDF inline viewer and browser-native download option is present.
+  - Verify PDF content:
+    - Header fields: Student Number, Student Name (Last, First Middle), Program, Term, Address
+    - Subject table: Code, Description, Section, Units (contains current enlisted of the term)
+    - Assessment block shows computed tuition summary if available, or is left blank when compute fails
+- API tests:
+  - Directly GET /api/v1/unity/reg-form?student_number=SN&term=SYID via browser; confirm content-type and disposition headers.
+  - 404 / 500 behavior: Missing student returns 404 JSON error; missing template returns 500 JSON error (as already implemented).
+- Non-regression:
+  - Enlistment flows and tuition preview/save remain unaffected.
 
 [Implementation Order]
-Implement backend first, then frontend wiring, then UI.
+Status and next steps.
 
-1) Backend service
-   - Create laravel-api/app/Services/ClasslistSlotsService.php
-   - Implement listByTerm($params):
-     - Base query: tb_mas_classlist as cl
-       - JOIN tb_mas_subjects as s ON s.intID = cl.intSubjectID
-       - LEFT JOIN tb_mas_faculty as f ON f.intID = cl.intFacultyID
-       - WHERE cl.strAcademicYear = :term AND cl.isDissolved = 0
-       - SELECT cl.intID, cl.sectionCode, cl.strClassName, cl.year, cl.strSection, cl.sub_section, cl.intFinalized, cl.slots, s.strCode, s.strDescription, f.strFirstname, f.strLastname
-     - enlisted_count:
-       - LEFT JOIN subq_enlisted:
-         SELECT intClassListID, COUNT(*) as enlisted_count
-         FROM tb_mas_classlist_student
-         WHERE intsyID = :term
-         GROUP BY intClassListID
-       - LEFT JOIN on cl.intID = subq_enlisted.intClassListID
-     - enrolled_count:
-       - LEFT JOIN subq_enrolled:
-         SELECT cls.intClassListID, COUNT(*) as enrolled_count
-         FROM tb_mas_classlist_student cls
-         JOIN tb_mas_registration r ON r.intStudentID = cls.intStudentID AND r.intAYID = :term
-         WHERE cls.intsyID = :term
-           AND r.intROG >= 1
-           AND (r.intROG NOT IN (3,5) OR 1=1) -- permissive for schema variants
-         GROUP BY cls.intClassListID
-       - LEFT JOIN on cl.intID = subq_enrolled.intClassListID
-     - Apply filters (subject, faculty, section LIKE, class_name, year, sub_section)
-     - Pagination (page, perPage)
-     - Map rows into response array with:
-       - faculty_name = CONCAT(f.strFirstname, ' ', f.strLastname) or null
-       - slots as int (nullable)
-       - enlisted_count = COALESCE(subq_enlisted.enlisted_count, 0)
-       - enrolled_count = COALESCE(subq_enrolled.enrolled_count, 0)
-       - remaining_slots = max((int)slots - enrolled_count, 0) when slots not null; else 0
-   - Return ['data' => items, 'meta' => ['page' => page, 'per_page' => perPage, 'total' => total]]
+- [x] 1. Laravel: GET /api/v1/unity/reg-form route in laravel-api/routes/api.php mapped to UnityController@regForm with middleware('role:registrar,admin').
+- [x] 2. Laravel: UnityController::regForm streams inline PDF with filename: reg-form-{student_number}-{term}.pdf using response($pdf->Output('S'), ...) and proper headers.
+- [x] 3. Front-end: frontend/unity-spa/features/unity/unity.service.js includes regFormUrl(student_number, term).
+- [x] 4. Front-end: frontend/unity-spa/features/registrar/enlistment/enlistment.controller.js exposes vm.regFormUrl() delegating to UnityService.regFormUrl with sanitized SN and parsed term.
+- [x] 5. Front-end: frontend/unity-spa/features/registrar/enlistment/enlistment.html adds the button in the “Current Enlisted (Selected Term)” header; visibility now allows 'enlisted' or 'enrolled'.
+- [ ] 6. Manual smoke test: Select an enlisted or enrolled student and click the button; verify inline PDF with download.
+- [ ] 7. Edge-case test: When not enlisted/enrolled, the button is hidden; when no current enlisted/registration, behavior remains unchanged.
 
-2) Backend controller and route
-   - Create laravel-api/app/Http/Controllers/Api/V1/ClasslistSlotsController.php with index(Request)
-     - Validate term
-     - Send request->query() to service
-     - Return JSON response
-   - Modify laravel-api/routes/api.php to add:
-     Route::get('/v1/classlists/slots', [ClasslistSlotsController::class, 'index']);
-   - Optional: auth/role middleware (registrar, admin) as appropriate
+[Progress Update]
+- Backend route and controller confirmed present and functional for inline PDF.
+- UnityService.regFormUrl implemented and used by vm.regFormUrl.
+- Enlistment HTML button updated to be visible when enrollment_status is 'enlisted' or 'enrolled'.
+- Decision: per product direction, allow when status is enrolled as well.
 
-3) Frontend SPA page (AngularJS 1.x)
-   - Create frontend/unity-spa/features/registrar/sections-slots/sections-slots.service.js
-     - Expose getList(params)
-   - Create frontend/unity-spa/features/registrar/sections-slots/sections-slots.controller.js
-     - Manage term selection (default latest), filters, pagination
-     - Call service and bind to $scope.items and $scope.meta
-   - Create frontend/unity-spa/features/registrar/sections-slots/sections-slots.html
-     - Filters: subject code (text), faculty (select optional), section code (text)
-     - Columns:
-       - Section Code | Subject Code | Subject Description | Faculty | Capacity | Enlisted | Enrolled | Remaining | Finalized
-     - Render capacity - enrolled for Remaining
-   - Wire new route/state (if router exists in this SPA) or link from sidebar to this HTML/controller pair
-
-4) Sidebar entry
-   - Modify frontend/unity-spa/shared/components/sidebar/sidebar.controller.js
-     - Add menu item "Sections Slots Monitor" under Registrar → route to the new page
-
-5) Verification
-   - API manual checks
-   - UI smoke tests
-   - Edge checks with classlists having null slots and zero counts
-
-task_progress Items:
-- [ ] Step 1: Implement backend service ClasslistSlotsService::listByTerm with aggregation and filters
-- [ ] Step 2: Add ClasslistSlotsController@index and wire GET /api/v1/classlists/slots
-- [ ] Step 3: Build AngularJS page (service/controller/html) for sections/slots monitoring
-- [ ] Step 4: Add sidebar navigation to the new page
-- [ ] Step 5: Perform API and UI smoke tests; verify counts, filters, and remaining slots computation
+[Testing/Verification]
+- UI:
+  - Button visible only when vm.registration exists, status is 'enlisted' or 'enrolled', and vm.studentNumber and vm.term are set.
+  - Clicking opens a new tab with inline PDF; browser-native download is available.
+- API:
+  - GET {API_BASE}/unity/reg-form?student_number=SN&amp;term=SYID returns Content-Type: application/pdf and Content-Disposition: inline; filename="reg-form-SN-SYID.pdf".
+  - Error cases: 404 when student not found; 500 when template missing.
+- Non-regression:
+  - Enlistment flows and tuition preview/save remain unaffected.

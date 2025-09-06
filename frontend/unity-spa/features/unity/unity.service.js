@@ -94,6 +94,31 @@
       invoicesGenerate: function (payload) {
         // payload: { type: 'tuition'|'billing'|'other', student_id: number, term: number, registration_id?: number, ... }
         return $http.post(BASE + '/finance/invoices/generate', payload, _adminHeaders()).then(_unwrap);
+      },
+      // Registration Form PDF fetcher (attaches admin headers; returns raw $http response)
+      regFormFetch: function (student_number, term) {
+        try {
+          var t = (term != null ? parseInt(term, 10) : NaN);
+          if (!student_number || !t || isNaN(t)) {
+            return Promise.reject({ message: 'Missing parameters' });
+          }
+          var params = { student_number: student_number, term: t };
+          var cfg = Object.assign({ params: params, responseType: 'arraybuffer' }, _adminHeaders());
+          return $http.get(BASE + '/unity/reg-form', cfg);
+        } catch (e) {
+          return Promise.reject(e);
+        }
+      },
+      // Registration Form PDF URL builder (legacy direct link; left for compatibility)
+      regFormUrl: function (student_number, term) {
+        try {
+          var sn = encodeURIComponent(student_number || '');
+          var t = (term != null ? parseInt(term, 10) : NaN);
+          if (!sn || !t || isNaN(t)) return '';
+          return BASE + '/unity/reg-form?student_number=' + sn + '&term=' + t;
+        } catch (e) {
+          return '';
+        }
       }
     };
   }
