@@ -9,6 +9,7 @@ use App\Http\Requests\Api\V1\CurriculumUpsertRequest;
 use App\Http\Resources\CurriculumResource;
 use App\Http\Resources\CurriculumSubjectResource;
 use App\Services\SystemLogService;
+use App\Http\Requests\Api\V1\CurriculumSubjectsBulkRequest;
 
 class CurriculumController extends Controller
 {
@@ -323,6 +324,129 @@ class CurriculumController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Subject removed from curriculum successfully'
+        ]);
+    }
+
+    /**
+     * POST /api/v1/curriculum/{id}/subjects/bulk
+     * Bulk add/update subjects to a curriculum.
+     * Body:
+     *  - update_if_exists?: bool (default false)
+     *  - subjects: [{ intSubjectID:int, intYearLevel:int(1..10), intSem:int(1..3) }, ...] (max 60)
+     */
+    public function addSubjectsBulk(CurriculumSubjectsBulkRequest $request, $id)
+    {
+        $payload = $request->validated();
+        $updateIfExists = (bool)($payload['update_if_exists'] ?? false);
+        $items = $payload['subjects'] ?? [];
+
+        // Validate curriculum exists
+        $curriculum = DB::table('tb_mas_curriculum')->where('intID', $id)->first();
+        if (!$curriculum) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Curriculum not found'
+            ], 404);
+        }
+
+        $inserted = 0;
+        $updated  = 0;
+        $skipped  = 0;
+        $errors   = [];
+        $seen     = [];
+
+        DB::beginTransaction();
+        try {
+            foreach ($items as $idx => $item) {
+                $sid = (int)($item['intSubjectID'] ?? 0);
+                $yl  = (int)($item['intYearLevel'] ?? 0);
+                $sem = (int)($item['intSem'] ?? 0);
+
+                if ($sid <= 0) {
+                    $errors[] = ['index' => $idx, 'subject_id' => null, 'message' => 'Invalid intSubjectID'];
+                    $skipped++;
+                    continue;
+                }
+
+                // De-duplicate per payload to avoid double processing
+                if (isset($seen[$sid])) {
+                    $skipped++;
+                    continue;
+                }
+                $seen[$sid] = true;
+
+                // Validate subject exists
+                $subject = DB::table('tb_mas_subjects')->where('intID', $sid)->first();
+                if (!$subject) {
+                    $errors[] = ['index' => $idx, 'subject_id' => $sid, 'message' => 'Subject not found'];
+                    $skipped++;
+                    continue;
+                }
+
+                // Check existing link
+                $existing = DB::table('tb_mas_curriculum_subject')
+                    ->where('intCurriculumID', $id)
+                    ->where('intSubjectID', $sid)
+                    ->first();
+
+                if ($existing) {
+                    if ($updateIfExists) {
+                        DB::table('tb_mas_curriculum_subject')
+                            ->where('intID', $existing->intID)
+                            ->update([
+                                'intYearLevel' => $yl,
+                                'intSem'       => $sem,
+                            ]);
+                        $updated++;
+                    } else {
+                        $skipped++;
+                    }
+                    continue;
+                }
+
+                // Insert new link
+                DB::table('tb_mas_curriculum_subject')->insert([
+                    'intCurriculumID' => (int) $id,
+                    'intSubjectID'    => $sid,
+                    'intYearLevel'    => $yl,
+                    'intSem'          => $sem,
+                ]);
+                $inserted++;
+            }
+
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Bulk add failed: ' . $e->getMessage()
+            ], 422);
+        }
+
+        // System log summary
+        try {
+            SystemLogService::log('update', 'Curriculum', (int) $id, null, [
+                'bulk_subjects' => [
+                    'count'            => count($items),
+                    'inserted'         => $inserted,
+                    'updated'          => $updated,
+                    'skipped'          => $skipped,
+                    'update_if_exists' => $updateIfExists,
+                ]
+            ], $request);
+        } catch (\Throwable $e) {
+            // do not fail response on logging errors
+        }
+
+        return response()->json([
+            'success' => true,
+            'result' => [
+                'inserted' => $inserted,
+                'updated'  => $updated,
+                'skipped'  => $skipped,
+                'errors'   => $errors,
+                'limit'    => 60
+            ]
         ]);
     }
 }

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use App\Services\Pdf\InvoicePdf;
 use App\Http\Requests\Api\V1\InvoiceUpdateRequest;
 use App\Services\SystemLogService;
+use App\Services\PaymentDetailAdminService;
 
 class InvoiceController extends Controller
 {
@@ -148,17 +149,30 @@ class InvoiceController extends Controller
                     $first = isset($u->strFirstname) ? trim((string) $u->strFirstname) : '';
                     $middle = isset($u->strMiddlename) ? trim((string) $u->strMiddlename) : '';
                     $studentName = ($last !== '' ? ($last . ', ') : '') . $first . ($middle !== '' ? (' ' . $middle) : '');
+                    $studentNumber = isset($u->strStudentNumber) ? trim((string) $u->strStudentNumber) : '';
                 }
             }
         } catch (\Throwable $e) {}
 
         // Term label (when syid available)
         $termLabel = '';
+        $termForShs = '';
+        $termForUg  = '';
         try {
             if (!empty($invoice['syid'])) {
                 $t = DB::table('tb_mas_sy')->where('intID', (int) $invoice['syid'])->first();
                 if ($t) {
-                    $termLabel = (string) $t->enumSem . ' ' . (string) $t->strYearStart . '-' . (string) $t->strYearEnd;
+                    $ySpan   = (string) $t->strYearStart . '-' . (string) $t->strYearEnd;
+                    $enumSem = trim((string) ($t->enumSem ?? ''));     // e.g., "1st Sem"
+                    $termLbl = trim((string) ($t->term_label ?? ''));  // e.g., "1st Term"
+
+                    // Existing combined label (kept for backward-compat or other uses)
+                    $termLabel = trim($enumSem . ' ' . $termLbl . ' ' . $ySpan);
+
+                    // Separate display variants used for reservation printouts
+                    // SHS prefers Sem-based label; UG prefers Term-based label; fall back to whichever is present
+                    $termForShs = trim((($enumSem !== '' ? $enumSem : $termLbl)) . ' ' . $ySpan);
+                    $termForUg  = trim((($termLbl !== '' ? $termLbl : $enumSem)) . ' ' . $ySpan);
                 }
             }
         } catch (\Throwable $e) {}
@@ -179,19 +193,93 @@ class InvoiceController extends Controller
         }
 
         // Synthesize single line when items are absent but we have a total
+        $reservationSignature = false;
         if (empty($items)) {
-            $desc = 'Invoice amount';
-            if (strtolower((string)$type) === 'tuition' && $termLabel !== '') {
-                $desc = 'UG Tuition Fee / ' . $termLabel;
-            } elseif (strtolower((string)$type) === 'tuition') {
-                $desc = 'UG Tuition Fee';
+            // Default description
+            $desc = ($invoice['type'])?strtoupper($invoice['type']):'Invoice amount';
+
+            // Attempt to detect if this invoice corresponds to a Reservation Payment
+            $isReservation = false;
+            $appScope = 'ug'; // 'shs' or 'ug'
+            try {
+                // Resolve applicant type scope (latest applicant_data for this student, optionally filtered by syid)
+                if (!empty($invoice['student_id'])) {
+                    $adQ = DB::table('tb_mas_applicant_data as ad')
+                        ->where('ad.user_id', (int) $invoice['student_id'])
+                        ->orderBy('ad.id', 'desc');
+                    if (\Illuminate\Support\Facades\Schema::hasColumn('tb_mas_applicant_data', 'syid') && !empty($invoice['syid'])) {
+                        $adQ->where('ad.syid', (int) $invoice['syid']);
+                    }
+                    $ad = $adQ->first();
+                    if ($ad && \Illuminate\Support\Facades\Schema::hasColumn('tb_mas_applicant_data', 'applicant_type') && !empty($ad->applicant_type)) {
+                        $trow = DB::table('tb_mas_applicant_types')->where('intID', (int) $ad->applicant_type)->select('type')->first();
+                        if ($trow && strtolower((string) $trow->type) === 'shs') {
+                            $appScope = 'shs';
+                        }
+                    }
+                }
+
+                // DB-based detection of reservation payments for this student/term
+                $colsRes = app(PaymentDetailAdminService::class)->detectColumns();
+                if (
+                    ($colsRes['exists'] ?? false) &&
+                    !empty($colsRes['table']) &&
+                    !empty($colsRes['student_id']) &&
+                    !empty($invoice['student_id'])
+                ) {
+                    $qRes = DB::table($colsRes['table'])
+                        ->where($colsRes['student_id'], (int) $invoice['student_id'])
+                        ->where($colsRes['description'], 'like', 'Reservation%');
+                    if (!empty($colsRes['sy_reference']) && !empty($invoice['syid'])) {
+                        $qRes->where($colsRes['sy_reference'], (int) $invoice['syid']);
+                    }
+                    if (!empty($colsRes['status'])) {
+                        $qRes->where($colsRes['status'], 'Paid');
+                    }
+                    $isReservation = $qRes->exists();
+                }
+            } catch (\Throwable $e) {
+                // fail open; keep defaults
             }
-            $items[] = [
-                'description' => $desc,
-                'qty' => 1,
-                'price' => (float) $total,
-                'amount' => (float) $total,
-            ];
+
+            // Build description depending on type/reservation context
+            // Restrict reservation printout to non-tuition invoices only (tuition invoices should not show reservation header/notes/signature)
+            if ($isReservation && strtolower((string) $type) == 'reservation payment') {
+                $termDisplay = $appScope === 'shs'
+                    ? ($termForShs !== '' ? $termForShs : $termLabel)
+                    : ($termForUg !== '' ? $termForUg : $termLabel);
+                $prefix = $appScope === 'shs' ? 'SHS' : 'UG';
+                $desc = $prefix . ' Reservation Payment' . ($termDisplay !== '' ? (' / ' . $termDisplay) : '');
+
+                // Main amount line
+                $items[] = [
+                    'description' => $desc,
+                    'qty' => 1,
+                    'price' => (float) $total,
+                    'amount' => (float) $total,
+                ];
+
+                // Notes below the main line (no qty/price/amount shown)
+                $note1 = $appScope === 'shs'
+                    ? ('RESERVATION FEE FOR SENIOR HIGHSCHOOL' . ($termDisplay !== '' ? (' for ' . $termDisplay) : ''))
+                    : ('RESERVATION FEE, UNDERGRAD' . ($termDisplay !== '' ? (' for ' . $termDisplay) : ''));
+                $items[] = ['description' => $note1, 'note_only' => true];
+                $items[] = ['description' => '"NON REFUNDABLE", "NON TRANSFERABLE"', 'note_only' => true];
+                // Enable signature line rendering for reservation invoices
+                $reservationSignature = true;
+            } else {
+                if (strtolower((string)$type) === 'tuition' && $termLabel !== '') {
+                    $desc = 'UG Tuition Fee / ' . $termLabel;
+                } elseif (strtolower((string)$type) === 'tuition') {
+                    $desc = 'UG Tuition Fee';
+                }
+                $items[] = [
+                    'description' => $desc,
+                    'qty' => 1,
+                    'price' => (float) $total,
+                    'amount' => (float) $total,
+                ];
+            }
         }
 
         // Format date as m/d/Y
@@ -205,15 +293,151 @@ class InvoiceController extends Controller
             }
         } catch (\Throwable $e) {}
 
+        // Before building the DTO, inject Reservation Payment offset as a negative line item (if any)
+        try {
+            $reservationSum = 0.0;
+
+            // Apply reservation offset only for Tuition invoices
+            if (strtolower((string) $type) === 'tuition') {
+                // Use PaymentDetailAdminService column detection to be schema-safe
+                $cols = app(PaymentDetailAdminService::class)->detectColumns();
+                if (
+                    ($cols['exists'] ?? false) &&
+                    !empty($cols['table']) &&
+                    !empty($cols['student_id']) &&
+                    !empty($cols['sy_reference']) &&
+                    !empty($cols['description']) &&
+                    !empty($cols['subtotal_order'])
+                ) {
+                    // Identifier is term id (syid) + Reservation description (not invoice number)
+                    $q = DB::table($cols['table'])
+                        ->where($cols['student_id'], (int) ($invoice['student_id'] ?? 0))
+                        ->where($cols['sy_reference'], (int) ($invoice['syid'] ?? 0))
+                        ->where($cols['description'], 'like', 'Reservation%');
+
+                    // Filter to Paid status when status column exists
+                    if (!empty($cols['status'])) {
+                        $q->where($cols['status'], 'Paid');
+                    }
+
+                    $reservationSum = (float) $q->sum($cols['subtotal_order']);
+                }
+
+                if ($reservationSum > 0) {
+                    $neg = -1 * round($reservationSum, 2);
+                    $items[] = [
+                        'description' => 'Reservation Payment',
+                        'qty'         => 1,
+                        'price'       => $neg,
+                        'amount'      => $neg,
+                    ];
+                    $total = (float) $total - (float) $reservationSum;
+                }
+            }
+        } catch (\Throwable $e) {
+            // Silently ignore any DB/schema errors to avoid breaking PDF rendering
+        }
+
+        // Compute first Tuition payment amount for this invoice (to display in the PDF anchors)
+        $firstTuitionPaid = null;
+        try {
+            $cols2 = app(PaymentDetailAdminService::class)->detectColumns();
+            if (
+                ($cols2['exists'] ?? false) &&
+                !empty($cols2['table']) &&
+                !empty($cols2['description']) &&
+                !empty($cols2['subtotal_order']) &&
+                !empty($cols2['student_id']) &&
+                !empty($cols2['sy_reference']) &&
+                !empty($invoice['student_id']) &&
+                !empty($invoice['syid'])
+            ) {
+                // Strictly identify by student_id + syid (do not use invoice_number)
+                $q2 = DB::table($cols2['table'])
+                    ->where($cols2['description'], 'like', 'Tuition%')
+                    ->where($cols2['student_id'], (int) $invoice['student_id'])
+                    ->where($cols2['sy_reference'], (int) $invoice['syid']);
+
+                // Restrict to 'Paid' rows when status column exists
+                if (!empty($cols2['status'])) {
+                    $q2->where($cols2['status'], 'Paid');
+                }
+
+                // Oldest (first) payment by date when available; else by id
+                if (!empty($cols2['date'])) {
+                    $q2->orderBy($cols2['date'], 'asc');
+                }
+                $q2->orderBy('id', 'asc');
+
+                $r2 = $q2->first();
+                if ($r2) {
+                    $firstTuitionPaid = round((float) ($r2->{$cols2['subtotal_order']} ?? 0), 2);
+                }
+            }
+        } catch (\Throwable $e) {
+            // Ignore schema issues
+        }
+
+        // Resolve footer cashier name (bottom-right)
+        // Priority: invoice.cashier_id -> X-Faculty-ID header -> created_by
+        $footerName = null;
+        try {
+            $footerFacultyId = null;
+
+            // 1) From invoice.cashier_id -> tb_mas_cashiers.faculty_id
+            if (!empty($invoice['cashier_id'])) {
+                $cRow = DB::table('tb_mas_cashiers')
+                    ->where('intID', (int) $invoice['cashier_id'])
+                    ->select('faculty_id')
+                    ->first();
+                if ($cRow && !empty($cRow->faculty_id)) {
+                    $footerFacultyId = (int) $cRow->faculty_id;
+                }
+            }
+
+            // 2) From header X-Faculty-ID
+            if (!$footerFacultyId) {
+                $hdrFaculty = $request->header('X-Faculty-ID');
+                if ($hdrFaculty !== null && $hdrFaculty !== '' && is_numeric($hdrFaculty)) {
+                    $footerFacultyId = (int) $hdrFaculty;
+                }
+            }
+
+            // 3) From invoice.created_by
+            if (!$footerFacultyId && !empty($invoice['created_by'])) {
+                $footerFacultyId = (int) $invoice['created_by'];
+            }
+
+            // Lookup faculty name
+            if ($footerFacultyId) {
+                $f = DB::table('tb_mas_faculty')
+                    ->where('intID', $footerFacultyId)
+                    ->select('strFirstname', 'strMiddlename', 'strLastname')
+                    ->first();
+                if ($f) {
+                    $parts = [];
+                    if (!empty($f->strFirstname))  $parts[] = trim((string) $f->strFirstname);
+                    if (!empty($f->strMiddlename)) $parts[] = trim((string) $f->strMiddlename);
+                    if (!empty($f->strLastname))   $parts[] = trim((string) $f->strLastname);
+                    $footerName = trim(implode(' ', array_filter($parts, function ($x) { return $x !== null && $x !== ''; })));
+                }
+            }
+        } catch (\Throwable $e) {
+            // Swallow any DB/lookup errors to avoid breaking PDF generation
+        }
+
         // Build DTO for renderer
         $dto = [
             'number'       => $invNo,
             'date'         => $dateStr,
             'student_name' => $studentName,
+            'student_number'=>$studentNumber,
             'term_label'   => $termLabel,
             'items'        => $items,
             'total'        => (float) $total,
-            'footer_name'  => null,
+            'footer_name'  => $footerName,
+            'amount_paid_first_tuition' => $firstTuitionPaid,
+            'reservation_signature' => isset($reservationSignature) ? (bool)$reservationSignature : false,
         ];
 
         // Render and stream inline

@@ -1,11 +1,25 @@
 <div class="bg-white shadow rounded-lg p-6">
   <div class="flex items-center justify-between mb-4">
     <h1 class="text-xl font-semibold text-gray-800">Curricula</h1>
-    <button class="inline-flex items-center px-3 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
-            ng-click="vm.addNew()">
-      <i class="fas fa-plus mr-2"></i>
-      Add Curriculum
-    </button>
+    <div class="space-x-2">
+      <button class="inline-flex items-center px-3 py-2 bg-white text-gray-800 border border-gray-300 text-sm rounded hover:bg-gray-50"
+              ng-click="vm.downloadTemplate()">
+        <i class="fas fa-file-download mr-2"></i>
+        Download Template
+      </button>
+      <button class="inline-flex items-center px-3 py-2 bg-white text-gray-800 border border-gray-300 text-sm rounded hover:bg-gray-50"
+              ng-click="vm.openImportDialog()">
+        <i class="fas fa-file-upload mr-2"></i>
+        Import
+      </button>
+      <button class="inline-flex items-center px-3 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+              ng-click="vm.addNew()">
+        <i class="fas fa-plus mr-2"></i>
+        Add Curriculum
+      </button>
+    </div>
+    <!-- Hidden file input for import -->
+    <input id="curriculumImportFile" type="file" accept=".xlsx,.xls,.csv" style="display:none" />
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
@@ -27,6 +41,48 @@
 
   <div class="text-sm text-red-600 mb-2" ng-if="vm.error">
     <i class="fas fa-exclamation-triangle mr-1"></i>{{ vm.error }}
+  </div>
+
+  <!-- Import error -->
+  <div class="text-sm text-red-600 mb-2" ng-if="vm.importError">
+    <i class="fas fa-exclamation-circle mr-1"></i>{{ vm.importError }}
+  </div>
+
+  <!-- Import summary -->
+  <div class="text-sm mb-3 border border-gray-200 rounded p-3 bg-gray-50" ng-if="vm.importSummary">
+    <div class="font-semibold text-gray-700 mb-1">Import Summary</div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+      <div>Total Rows: <span class="font-medium">{{ vm.importSummary.totalRows }}</span></div>
+      <div>Curricula — Inserted: <span class="font-medium text-green-700">{{ vm.importSummary.insertedCurricula }}</span>,
+        Updated: <span class="font-medium text-blue-700">{{ vm.importSummary.updatedCurricula }}</span>,
+        Skipped: <span class="font-medium text-gray-700">{{ vm.importSummary.skippedCurricula }}</span></div>
+      <div>Subject Links — Inserted: <span class="font-medium text-green-700">{{ vm.importSummary.insertedSubjectLinks }}</span>,
+        Updated: <span class="font-medium text-blue-700">{{ vm.importSummary.updatedSubjectLinks }}</span>,
+        Skipped: <span class="font-medium text-gray-700">{{ vm.importSummary.skippedSubjectLinks }}</span></div>
+    </div>
+    <div class="mt-2" ng-if="vm.importSummary.errors && vm.importSummary.errors.length">
+      <div class="text-gray-700 font-medium mb-1">Errors ({{ vm.importSummary.errors.length }}):</div>
+      <div class="max-h-40 overflow-auto border border-gray-200 rounded bg-white">
+        <table class="min-w-full text-xs">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="px-2 py-1 text-left text-gray-600">Sheet</th>
+              <th class="px-2 py-1 text-left text-gray-600">Line</th>
+              <th class="px-2 py-1 text-left text-gray-600">Key</th>
+              <th class="px-2 py-1 text-left text-gray-600">Message</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="e in vm.importSummary.errors track by $index" class="border-t">
+              <td class="px-2 py-1 text-gray-700">{{ e.sheet || '—' }}</td>
+              <td class="px-2 py-1 text-gray-700">{{ e.line || '—' }}</td>
+              <td class="px-2 py-1 text-gray-700">{{ e.key || '—' }}</td>
+              <td class="px-2 py-1 text-gray-700">{{ e.message || '—' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
   <div class="overflow-x-auto border border-gray-200 rounded-lg">

@@ -727,7 +727,7 @@
       }
     };
 
-    // Trigger invoice PDF download
+    // Trigger invoice PDF open in new tab
     vm.printInvoice = function (inv) {
       try {
         inv = inv || (vm.invoiceModal && vm.invoiceModal.invoice) || null;
@@ -742,40 +742,42 @@
         vm.printing[id] = true;
 
         var url = (APP_CONFIG && APP_CONFIG.API_BASE ? APP_CONFIG.API_BASE : '') + '/finance/invoices/' + id + '/pdf';
-        return $http.get(url, {
-          responseType: 'arraybuffer',
-          headers: vm._adminHeaders()
-        }).then(function (resp) {
-          try {
-            var blob = new Blob([resp.data], { type: 'application/pdf' });
-            var link = document.createElement('a');
-            var num = inv.invoice_number || inv.number || id;
-            link.href = window.URL.createObjectURL(blob);
-            link.download = 'invoice-' + num + '.pdf';
-            document.body.appendChild(link);
-            link.click();
-            setTimeout(function () {
-              try { document.body.removeChild(link); } catch (_e) {}
-              try { window.URL.revokeObjectURL(link.href); } catch (_e2) {}
-            }, 0);
-          } catch (e) {
-            // fallback open in new tab
-            try {
-              var blob2 = new Blob([resp.data], { type: 'application/pdf' });
-              var url2 = window.URL.createObjectURL(blob2);
-              window.open(url2, '_blank');
-              setTimeout(function () { try { window.URL.revokeObjectURL(url2); } catch (_e3) {} }, 1000);
-            } catch (e2) {}
+        // Append faculty_id as query param to satisfy role middleware when session auth is not available in new tab
+        try {
+          var state = vm.state || (StorageService && StorageService.getJSON ? StorageService.getJSON('loginState') : null);
+          var fid = state && state.faculty_id != null ? state.faculty_id : null;
+          if (fid != null && fid !== '') {
+            url += (url.indexOf('?') === -1 ? '?' : '&') + 'faculty_id=' + encodeURIComponent(fid);
           }
-        }).catch(function () {
-          // no-op; could surface toast if available
-        }).finally(function () {
-          try { vm.printing[id] = false; } catch (_e4) {}
-        });
+        } catch (_eFID) {}
+
+        // Try opening in a new tab
+        var opened = null;
+        try { opened = window.open(url, '_blank'); } catch (_eOpen) { opened = null; }
+
+        // Fallback: anchor with target _blank when popup is blocked
+        if (!opened) {
+          try {
+            var a = document.createElement('a');
+            a.href = url;
+            a.target = '_blank';
+            a.rel = 'noopener';
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(function () { try { document.body.removeChild(a); } catch (_eRm) {} }, 0);
+          } catch (_eA) {}
+        }
+
+        // Clear printing flag shortly after to re-enable button
+        $timeout(function () {
+          try { vm.printing[id] = false; } catch (_eFlag) {}
+        }, 300);
+
+        return $q.when();
       } catch (e) {
         try {
           if (inv && inv.id != null) vm.printing[parseInt(inv.id, 10)] = false;
-        } catch (_e5) {}
+        } catch (_e2) {}
         return $q.when();
       }
     };

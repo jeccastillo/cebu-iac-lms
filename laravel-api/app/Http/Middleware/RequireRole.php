@@ -30,6 +30,22 @@ class RequireRole
             ], 500);
         }
 
+        // First: allow authenticated session users to pass if they have any required role
+        try {
+            if (\Illuminate\Support\Facades\Auth::check()) {
+                $user = \Illuminate\Support\Facades\Auth::user();
+                if ($user && method_exists($user, 'hasAnyRole') && $user->hasAnyRole($required)) {
+                    // Expose faculty model when applicable for downstream consumers
+                    if ($user instanceof \App\Models\Faculty) {
+                        $request->attributes->set('faculty', $user);
+                    }
+                    return $next($request);
+                }
+            }
+        } catch (\Throwable $e) {
+            // fall through to header-based resolution
+        }
+
         // Resolve faculty id (temporary dev approach)
         $facultyId = $request->headers->get('X-Faculty-ID', $request->input('faculty_id'));
 

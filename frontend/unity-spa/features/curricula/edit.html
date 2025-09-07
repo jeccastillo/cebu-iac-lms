@@ -108,6 +108,228 @@
     </div>
   </form>
 
+  <!-- Curriculum Subjects Tabs (visible on Edit only) -->
+  <div class="mt-8" ng-if="vm.isEdit">
+    <!-- Tabs header -->
+    <div class="border-b mb-4">
+      <nav class="flex space-x-4" role="tablist" aria-label="Curriculum subjects tabs">
+        <button type="button"
+                ng-click="vm.activeTab = 'added'"
+                ng-class="vm.activeTab === 'added' ? 'border-b-2 border-blue-600 text-blue-700' : 'text-gray-600 hover:text-gray-800'"
+                class="px-3 py-2 text-sm font-medium focus:outline-none">
+          Curriculum Subjects
+        </button>
+        <button type="button"
+                ng-click="vm.activeTab = 'add'"
+                ng-class="vm.activeTab === 'add' ? 'border-b-2 border-blue-600 text-blue-700' : 'text-gray-600 hover:text-gray-800'"
+                class="px-3 py-2 text-sm font-medium focus:outline-none">
+          Add Subjects
+        </button>
+      </nav>
+    </div>
+
+    <!-- Already Added tab -->
+    <div ng-if="vm.activeTab === 'added'">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-lg font-semibold text-gray-800">Curriculum Subjects</h2>
+        <button class="px-3 py-2 border border-gray-300 rounded bg-white text-sm hover:bg-gray-50"
+                type="button"
+                ng-click="vm.loadCurriculumSubjects()">
+          Refresh
+        </button>
+      </div>
+
+      <div ng-if="vm.curriculumGroups && vm.curriculumGroups.length">
+        <div class="mb-4" ng-repeat="grp in vm.curriculumGroups track by grp.key">
+          <div class="text-sm font-semibold text-gray-700 mb-1">{{ grp.title }}</div>
+          <div class="overflow-x-auto border border-gray-200 rounded-lg" ng-class="{'opacity-50': vm.loading}">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th class="px-4 py-3">Code</th>
+                  <th class="px-4 py-3">Description</th>
+                  <th class="px-4 py-3">Units</th>
+                  <th class="px-4 py-3">Year Level</th>
+                  <th class="px-4 py-3">Term</th>
+                  <th class="px-4 py-3 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-100">
+                <tr ng-repeat="row in grp.items track by row.curriculum_subject_id">
+                  <td class="px-4 py-2 whitespace-nowrap text-gray-900 font-medium">{{ row.strCode }}</td>
+                  <td class="px-4 py-2 whitespace-nowrap text-gray-700">{{ row.strDescription }}</td>
+                  <td class="px-4 py-2 whitespace-nowrap text-gray-700">{{ row.strUnits }}</td>
+                  <td class="px-4 py-2 whitespace-nowrap text-gray-700">{{ row.intYearLevel }}</td>
+                  <td class="px-4 py-2 whitespace-nowrap text-gray-700">{{ row.intSem }}</td>
+                  <td class="px-4 py-2 whitespace-nowrap text-right">
+                    <button class="text-red-600 hover:text-red-800 text-sm"
+                            type="button"
+                            ng-click="vm.removeSubjectLink(row)">
+                      <i class="fas fa-trash mr-1"></i>Remove
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div ng-if="!vm.curriculumGroups || vm.curriculumGroups.length === 0" class="overflow-x-auto border border-gray-200 rounded-lg">
+        <div class="px-4 py-8 text-center text-gray-500">
+          No subjects linked to this curriculum yet.
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Subjects tab -->
+    <div ng-if="vm.activeTab === 'add'">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-lg font-semibold text-gray-800">Add Subjects to Curriculum</h2>
+        <div class="text-sm text-gray-600">
+          Selected: <span class="font-medium">{{ vm.selectedCount() }}</span> / 60
+        </div>
+      </div>
+
+      <!-- Search and Filters -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+        <div class="md:col-span-2">
+          <label class="block text-xs font-medium text-gray-600 mb-1">Search (Code or Description)</label>
+          <div class="flex">
+            <input type="text"
+                   class="flex-1 px-3 py-2 border border-gray-300 rounded-l-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+                   placeholder="e.g. CS101, Calculus"
+                   ng-model="vm.subjectsSearch"
+                   ng-keypress="$event.which === 13 &amp;&amp; vm.loadSubjects()">
+            <button class="px-3 py-2 border border-gray-300 rounded-r-md bg-gray-50 hover:bg-gray-100 text-sm"
+                    ng-click="vm.loadSubjects()">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-600 mb-1">Department (optional)</label>
+          <input type="text"
+                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+                 placeholder="Filter by department"
+                 ng-model="vm.subjectsDepartment"
+                 ng-keypress="$event.which === 13 &amp;&amp; vm.loadSubjects()">
+        </div>
+      </div>
+
+      <!-- Defaults + Toggle -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+        <div>
+          <label class="block text-xs font-medium text-gray-600 mb-1">Default Year Level</label>
+          <input type="number" min="1" max="10"
+                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+                 ng-model="vm.defaultYearLevel">
+          <div class="text-xs text-gray-500 mt-1">Applied when selecting a subject; you can override per-row.</div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-600 mb-1">Default Sem</label>
+          <input type="number" min="1" max="3"
+                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+                 ng-model="vm.defaultSem">
+        </div>
+        <div class="flex items-center mt-6">
+          <input id="toggleUpdateIfExists" type="checkbox"
+                 class="h-4 w-4 text-blue-600 border-gray-300 rounded mr-2"
+                 ng-model="vm.updateIfExists">
+          <label for="toggleUpdateIfExists" class="text-sm text-gray-700">Update Year/Sem if link already exists</label>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <button class="px-3 py-2 border border-gray-300 rounded bg-white text-sm hover:bg-gray-50"
+                type="button"
+                ng-click="vm.applyDefaultsToSelection()">
+          Apply Defaults to Selected
+        </button>
+      </div>
+
+      <!-- Subjects list -->
+      <div class="overflow-x-auto border border-gray-200 rounded-lg" ng-class="{'opacity-50': vm.subjectsLoading}">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th class="px-4 py-3">Select</th>
+              <th class="px-4 py-3">Code</th>
+              <th class="px-4 py-3">Description</th>
+              <th class="px-4 py-3">Units</th>
+              <th class="px-4 py-3">Department</th>
+              <th class="px-4 py-3">Year</th>
+              <th class="px-4 py-3">Sem</th>
+              <th class="px-4 py-3">Status</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-100">
+            <tr ng-if="!vm.subjectsLoading && (!vm.subjectsRows || vm.subjectsRows.length === 0)">
+              <td colspan="8" class="px-4 py-8 text-center text-gray-500">No subjects found.</td>
+            </tr>
+            <tr ng-repeat="row in vm.subjectsRows track by row.intID">
+              <td class="px-4 py-2">
+                <input type="checkbox"
+                       class="h-4 w-4 text-blue-600 border-gray-300 rounded"
+                       ng-checked="!!vm.selectionMap[row.intID]"
+                       ng-disabled="vm.selectedCount() >= 60 &amp;&amp; !vm.selectionMap[row.intID]"
+                       ng-click="vm.toggleSelectSubject(row)">
+              </td>
+              <td class="px-4 py-2 whitespace-nowrap text-gray-900 font-medium">{{ row.strCode }}</td>
+              <td class="px-4 py-2 whitespace-nowrap text-gray-700">{{ row.strDescription }}</td>
+              <td class="px-4 py-2 whitespace-nowrap text-gray-700">{{ row.strUnits }}</td>
+              <td class="px-4 py-2 whitespace-nowrap text-gray-700">{{ row.strDepartment || '—' }}</td>
+              <td class="px-4 py-2">
+                <input type="number" min="1" max="10"
+                       class="w-20 px-2 py-1 border border-gray-300 rounded text-sm"
+                       ng-disabled="!vm.selectionMap[row.intID]"
+                       ng-model="vm.selectionMap[row.intID].intYearLevel">
+              </td>
+              <td class="px-4 py-2">
+                <input type="number" min="1" max="3"
+                       class="w-16 px-2 py-1 border border-gray-300 rounded text-sm"
+                       ng-disabled="!vm.selectionMap[row.intID]"
+                       ng-model="vm.selectionMap[row.intID].intSem">
+              </td>
+              <td class="px-4 py-2">
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs"
+                      ng-class="row.alreadyLinked ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-600'">
+                  {{ row.alreadyLinked ? 'Already Linked' : 'Not Linked' }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination + Actions -->
+      <div class="flex items-center justify-between mt-3">
+        <div class="space-x-2">
+          <button class="px-3 py-1 border border-gray-300 rounded bg-white text-sm hover:bg-gray-50"
+                  ng-disabled="vm.subjectsLoading || vm.subjectsPage <= 1"
+                  ng-click="vm.subjectsPage = vm.subjectsPage - 1; vm.loadSubjects();">
+            Prev
+          </button>
+          <button class="px-3 py-1 border border-gray-300 rounded bg-white text-sm hover:bg-gray-50"
+                  ng-disabled="vm.subjectsLoading || (vm.subjectsMeta &amp;&amp; (vm.subjectsMeta.page * vm.subjectsMeta.limit) >= vm.subjectsMeta.total)"
+                  ng-click="vm.subjectsPage = vm.subjectsPage + 1; vm.loadSubjects();">
+            Next
+          </button>
+        </div>
+        <div class="space-x-2">
+          <button class="px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 disabled:opacity-50"
+                  ng-disabled="vm.saving || vm.selectedCount() === 0"
+                  ng-click="vm.submitSubjectsBulk()">
+            <i class="fas fa-plus mr-1"></i> Add Selected Subjects
+          </button>
+        </div>
+      </div>
+
+      <div class="text-xs text-gray-500 mt-2">
+        Tip: Selection is capped at 60 per submission. Use search and filters to find subjects quickly.
+      </div>
+    </div>
+  </div>
+
   <div class="flex items-center text-sm text-gray-500 mt-4" ng-if="vm.loading">
     <i class="fas fa-spinner fa-spin mr-2"></i> Loading...
   </div>

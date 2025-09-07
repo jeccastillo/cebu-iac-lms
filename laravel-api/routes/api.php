@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\V1\ClasslistController;
 use App\Http\Controllers\Api\V1\ClasslistGradesController;
 use App\Http\Controllers\Api\V1\ClassroomController;
 use App\Http\Controllers\Api\V1\CurriculumController;
+use App\Http\Controllers\Api\V1\CurriculumImportController;
 use App\Http\Controllers\Api\V1\FacultyController;
 use App\Http\Controllers\Api\V1\FinanceController;
 use App\Http\Controllers\Api\V1\GenericApiController;
@@ -32,10 +33,12 @@ use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\ScheduleController;
 use App\Http\Controllers\Api\V1\ScholarshipController;
 use App\Http\Controllers\Api\V1\SchoolYearController;
+use App\Http\Controllers\Api\V1\SchoolYearImportController;
 use App\Http\Controllers\Api\V1\StudentBillingController;
 use App\Http\Controllers\Api\V1\StudentChecklistController;
 use App\Http\Controllers\Api\V1\StudentController;
 use App\Http\Controllers\Api\V1\SubjectController;
+use App\Http\Controllers\Api\V1\SubjectImportController;
 use App\Http\Controllers\Api\V1\SystemAlertController;
 use App\Http\Controllers\Api\V1\SystemLogController;
 use App\Http\Controllers\Api\V1\TuitionController;
@@ -146,6 +149,10 @@ Route::prefix('v1')->group(function () {
     Route::post('/subjects/delete-coreq', [SubjectController::class, 'deleteCoreq'])->middleware('role:registrar,admin');
     Route::post('/subjects/delete', [SubjectController::class, 'delete'])->middleware('role:registrar,admin');
 
+    // Subjects Import
+    Route::get('/subjects/import/template', [SubjectImportController::class, 'template'])->middleware('role:registrar,admin');
+    Route::post('/subjects/import', [SubjectImportController::class, 'import'])->middleware('role:registrar,admin');
+
     // RESTful facade routes mapping to parity handlers
     Route::post('/subjects', [SubjectController::class, 'submit'])->middleware('role:registrar,admin');
     Route::put('/subjects/{id}', function (Request $request, $id) {
@@ -184,7 +191,12 @@ Route::prefix('v1')->group(function () {
     Route::put('/curriculum/{id}', [CurriculumController::class, 'update'])->middleware('role:registrar,admin');
     Route::delete('/curriculum/{id}', [CurriculumController::class, 'destroy'])->middleware('role:registrar,admin');
     Route::post('/curriculum/{id}/subjects', [CurriculumController::class, 'addSubject'])->middleware('role:registrar,admin');
+    Route::post('/curriculum/{id}/subjects/bulk', [CurriculumController::class, 'addSubjectsBulk'])->middleware('role:registrar,admin');
     Route::delete('/curriculum/{id}/subjects/{subjectId}', [CurriculumController::class, 'removeSubject'])->middleware('role:registrar,admin');
+
+    // Curriculum Import
+    Route::get('/curriculum/import/template', [CurriculumImportController::class, 'template'])->middleware('role:registrar,admin');
+    Route::post('/curriculum/import', [CurriculumImportController::class, 'import'])->middleware('role:registrar,admin');
 
     // Classroom endpoints (read + write)
     Route::get('/classroom', [ClassroomController::class, 'index']);
@@ -334,6 +346,10 @@ Route::prefix('v1')->group(function () {
     Route::post('/school-years', [SchoolYearController::class, 'store'])->middleware('role:registrar,admin');
     Route::put('/school-years/{id}', [SchoolYearController::class, 'update'])->middleware('role:registrar,admin');
     Route::delete('/school-years/{id}', [SchoolYearController::class, 'destroy'])->middleware('role:registrar,admin');
+
+    // School Years Import
+    Route::get('/school-years/import/template', [SchoolYearImportController::class, 'template'])->middleware('role:registrar,admin');
+    Route::post('/school-years/import', [SchoolYearImportController::class, 'import'])->middleware('role:registrar,admin');
 
     // Tuition computation (parity with CI Data_fetcher::getTuition/getTuitionSubjects)
     Route::get('/tuition/compute', [TuitionController::class, 'compute']);

@@ -4,6 +4,18 @@
     <h1 class="text-2xl font-semibold text-gray-900">{{ vm.title }}</h1>
     <div class="flex items-center space-x-3" ng-if="true">
       <button type="button"
+              class="inline-flex items-center px-3 py-2 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
+              ng-click="vm.downloadTemplate()">
+        <i class="fas fa-download mr-1"></i>
+        Download Template
+      </button>
+      <button type="button"
+              class="inline-flex items-center px-3 py-2 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
+              ng-click="vm.openImportDialog()">
+        <i class="fas fa-file-import mr-1"></i>
+        Import
+      </button>
+      <button type="button"
               class="inline-flex items-center px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
               ng-click="vm.add()">
         <i class="fas fa-plus mr-2"></i>
@@ -17,6 +29,7 @@
       </button>
     </div>
   </div>
+  <input id="schoolYearsImportFile" type="file" accept=".xlsx,.xls,.csv" style="display:none" />
 
   <!-- Filters -->
   <div class="bg-white border border-gray-200 rounded-lg p-4">
@@ -45,6 +58,36 @@
           <span class="truncate" ng-if="!vm.filters.campus_id">All Campuses</span>
         </div>
         <p class="text-xs text-gray-500 mt-1">Change campus from the sidebar selector.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Import status / summary -->
+  <div class="mb-4" ng-if="vm.importing || vm.importError || vm.importSummary">
+    <div class="p-3 border rounded"
+         ng-class="vm.importError ? 'border-red-300 bg-red-50 text-red-700' : 'border-green-300 bg-green-50 text-green-700'">
+      <div ng-if="vm.importing">
+        <i class="fas fa-spinner fa-spin mr-2"></i> Importing...
+      </div>
+      <div ng-if="vm.importError">
+        <i class="fas fa-exclamation-triangle mr-1"></i>{{ vm.importError }}
+      </div>
+      <div ng-if="vm.importSummary">
+        <div class="font-semibold mb-1">Import Summary</div>
+        <div class="text-sm">
+          Total: {{ vm.importSummary.totalRows }} •
+          Inserted: {{ vm.importSummary.inserted }} •
+          Updated: {{ vm.importSummary.updated }} •
+          Skipped: {{ vm.importSummary.skipped }}
+        </div>
+        <div class="mt-2" ng-if="vm.importSummary.errors && vm.importSummary.errors.length">
+          <div class="text-sm font-medium mb-1">Errors:</div>
+          <ul class="list-disc pl-6 text-sm">
+            <li ng-repeat="e in vm.importSummary.errors track by $index">
+              Line {{ e.line }} <span ng-if="e.code">[{{ e.code }}]</span>: {{ e.message }}
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>

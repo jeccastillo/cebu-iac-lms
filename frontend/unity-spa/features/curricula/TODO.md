@@ -1,35 +1,9 @@
-# Curricula Module TODO
-
-Scope: Track implementation progress for implementation_plan_curriculum.md
-
-Status Legend:
-- [x] Completed
-- [ ] Pending
-
-Backend
-- [x] Validation: CurriculumUpsertRequest requires campus_id on POST, sometimes on update; defaults active=1, isEnhanced=0 on create
-- [x] Logging: CurriculumController logs create, update, delete, addSubject, removeSubject via SystemLogService
-- [x] Routes: API routes wired with role:registrar,admin for write endpoints
-
-Frontend (Routing & Base Screens)
-- [x] Routes: Added /curricula, /curricula/add, /curricula/:id/edit with requiredRoles ['registrar','admin']
-- [x] List screen: features/curricula/list.html + controller for listing/search/delete
-- [x] Edit screen: features/curricula/edit.html + controller for create/update with campus default from CampusService
-- [x] Service base: CurriculaService with list/get/create/update/remove, plus getPrograms/getCampuses
-
-Frontend (Subjects Management)
-- [ ] Service: Add subjects(), addSubject(), removeSubject() methods in CurriculaService
-- [ ] Controller: In CurriculumEditController, load subjects for existing curriculum, and expose add/remove subject actions
-- [ ] View: In edit.html, add a minimal Subjects section:
-  - [ ] Display subjects table (code, description, year level, sem) with remove action
-  - [ ] Add-subject mini-form (intSubjectID, intYearLevel, intSem) and Add button
-
-List View Enhancement (Optional)
-- [ ] Show Campus column/badge in list.html to make campus context visible
-
-Testing & Verification
-- [ ] (Optional) Smoke script: laravel-api/tests/scripts/curriculum-smoke.ps1 to validate index/create/show/update/subjects/add/remove/delete
-- [ ] Manual UI check for subjects add/remove and campus defaulting
-
-Documentation
-- [ ] Update implementation_plan_curriculum.md with a Status Update section reflecting completed items and remaining tasks
+task_progress Items:
+- [x] Step 1: Backend - create App/Http/Requests/Api/V1/CurriculumSubjectsBulkRequest.php (validation with max 60, ranges)
+- [x] Step 2: Backend - register POST /v1/curriculum/{id}/subjects/bulk route with role:registrar,admin
+- [x] Step 3: Backend - implement CurriculumController::addSubjectsBulk() with counters, per-item errors, and SystemLogService logging
+- [x] Step 4: Frontend - add CurriculaService.addSubjectsBulk(curriculumId, payload)
+- [x] Step 5: Frontend - extend CurriculumEditController with subject search/list, selection map, defaults, updateIfExists, submit handler
+- [x] Step 6: Frontend - update features/curricula/edit.html with "Add Subjects" panel (search, filters, list with checkboxes, defaults, toggle, submit)
+- [ ] Step 7: Critical-path tests - API happy paths and duplicate update; UI selection cap 60, submit summary; basic regressions
+- [x] Step 8: Update TODO.md checkboxes reflecting completed steps

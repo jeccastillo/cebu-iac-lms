@@ -56,19 +56,30 @@ Introduce a new feature module in frontend and minor updates to backend routes/c
     - Purpose: AngularJS controller handling state, filters, pending changes, and save actions.
   - frontend/unity-spa/features/academics/faculty-loading/faculty-loading.service.js
     - Purpose: AngularJS service wrapping /api/v1/classlists list, single PUT update, and bulk assignment endpoint.
+  - frontend/unity-spa/features/academics/faculty-loading/by-faculty.html
+    - Purpose: Faculty-centric UI to assign sections by faculty. Select a faculty (filtered by teaching=1 and campus), view unassigned sections and sections assigned to that faculty, move items between lists, and bulk save.
+  - frontend/unity-spa/features/academics/faculty-loading/by-faculty.controller.js
+    - Purpose: AngularJS controller for the by-faculty assignment page. Manages selected faculty, loads classlists (assigned and unassigned), queues changes, and triggers bulk save to assign sections to the chosen faculty.
   - frontend/unity-spa/features/academics/faculty-loading/implementation_plan.md
     - This document.
 
 - Existing files to be modified:
   - frontend/unity-spa/core/routes.js
-    - Add route:
+    - Add routes:
       - path: "/faculty-loading"
-      - templateUrl: "features/academics/faculty-loading/faculty-loading.html"
-      - controller: "FacultyLoadingController as vm"
-      - requiredRoles: ["registrar", "faculty_admin", "admin"]
+        - templateUrl: "features/academics/faculty-loading/faculty-loading.html"
+        - controller: "FacultyLoadingController"
+        - controllerAs: "vm"
+        - requiredRoles: ["registrar", "faculty_admin", "admin"]
+      - path: "/faculty-loading/by-faculty"
+        - templateUrl: "features/academics/faculty-loading/by-faculty.html"
+        - controller: "FacultyLoadingByFacultyController"
+        - controllerAs: "vm"
+        - requiredRoles: ["registrar", "faculty_admin", "admin"]
   - frontend/unity-spa/shared/components/sidebar/sidebar.controller.js
-    - Under Academics group, add menu item:
+    - Under Academics group, add menu items:
       - { label: "Faculty Loading", path: "/faculty-loading" }
+      - { label: "Assign by Faculty", path: "/faculty-loading/by-faculty" }
   - laravel-api/routes/api.php
     - Update existing route permissions:
       - PUT /api/v1/classlists/{id}: add faculty_admin to middleware 'role:registrar,faculty_admin,admin'
@@ -102,18 +113,28 @@ Add a bulk assign function on backend and new Angular service functions; extend 
     - App\Http\Controllers\Api\V1\ClasslistController::assignFacultyBulk(ClasslistAssignFacultyBulkRequest $request): JsonResponse
       - Purpose: Process multiple classlist→faculty assignments with validation and campus/teaching constraints.
       - Signature: public function assignFacultyBulk(ClasslistAssignFacultyBulkRequest $request): JsonResponse
-  - Frontend:
+  - Frontend (Service):
     - FacultyLoadingService.list(params): Promise<{data, meta}>
       - GET /api/v1/classlists?term=...&amp;filters...
+    - FacultyLoadingService.listUnassigned(params): Promise<{data, meta}>
+      - GET /api/v1/classlists?term=...&amp;unassigned=1 (server-side when supported) or client-side filter where intFacultyID is null when unassigned flag used.
     - FacultyLoadingService.updateSingle(classlistId, facultyId): Promise<any>
       - PUT /api/v1/classlists/{id} with { intFacultyID: facultyId }
     - FacultyLoadingService.assignBulk(term, assignments): Promise<{applied_count,total,results}>
       - POST /api/v1/classlists/assign-faculty-bulk
+  - Frontend (Controller methods - by-faculty page):
+    - FacultyLoadingByFacultyController.loadFacultyOptions(campusId?): loads teaching=1 faculty; filters by campus_id when present.
+    - FacultyLoadingByFacultyController.loadLists(): loads sections assigned to selected faculty and unassigned sections for the active term.
+    - FacultyLoadingByFacultyController.queueAssign(classlistId): marks a classlist to be assigned to the selected faculty.
+    - FacultyLoadingByFacultyController.queueUnassign(classlistId): marks a classlist to be cleared (set intFacultyID=null) — optional; if unassign is not allowed, this action can be omitted.
+    - FacultyLoadingByFacultyController.saveAll(): builds assignments [{classlist_id, faculty_id}] for queued items and calls FacultyLoadingService.assignBulk; refreshes lists based on result.
 
 - Modified functions:
   - Backend:
     - App\Http\Controllers\Api\V1\ClasslistController::update(ClasslistUpdateRequest $request, int $id): JsonResponse
       - When intFacultyID changes, call SystemLogService::log('update', 'Classlist', id, old, new, request) to persist audit trail (old/new snapshots capturing intFacultyID change).
+    - App\Http\Controllers\Api\V1\ClasslistController::index(Request $request): JsonResponse
+      - Add optional query flag unassigned=1 to filter tb_mas_classlist.intFacultyID IS NULL (in combination with term).
     - App\Http\Controllers\Api\V1\GenericApiController::faculty(Request $request): JsonResponse
       - Add optional campus_id filter
   - Route middleware on PUT /classlists/{id} to include faculty_admin role.
@@ -156,10 +177,14 @@ Adopt endpoint-level validation and UI flows for registrar/faculty_admin/admin r
     - After a single update, confirm a log entry exists with action='update', entity='Classlist', entity_id={classlist_id}, where old.intFacultyID ≠ new.intFacultyID and values match the operation; actor resolved from X-Faculty-ID in request.
     - After a bulk assignment, confirm applied_count log entries exist (one per updated classlist) with the same structure capturing the faculty change; if a bulk meta flag was included in new snapshot, verify its presence.
 - Frontend:
-  - Route guard: route /faculty-loading only visible and accessible to registrar/faculty_admin/admin.
+  - Route guard: routes /faculty-loading and /faculty-loading/by-faculty only visible and accessible to registrar/faculty_admin/admin.
   - Faculty dropdown: filtered by teaching=1; additionally request list with campus_id (from classlist row).
   - Inline save: selecting faculty and saving single row updates immediately and refreshes row.
   - Bulk save: multiple edits queued; Save All sends payload; partial failures show per-row errors; successes clear pending state.
+  - By-faculty page:
+    - Faculty selector loads teaching=1 faculty; respects campus_id filtering.
+    - Lists show: (A) sections currently assigned to selected faculty, (B) unassigned sections for the active term; moving items between lists updates the local queue.
+    - Save All assigns queued sections to the selected faculty via bulk API; refreshes lists and surfaces per-row errors.
 
 [Implementation Order]
 Backend-first to enable API use by the UI, then frontend wiring and UI.
@@ -175,12 +200,7 @@ Backend-first to enable API use by the UI, then frontend wiring and UI.
    - Add campus_id filter to GenericApiController::faculty for client-side dropdown constraints.
 5) Frontend routing and menu:
    - Add /faculty-loading route (requiredRoles: registrar, faculty_admin, admin).
-   - Add "Faculty Loading" under Academics in sidebar.
+   - Add /faculty-loading/by-faculty route (requiredRoles: registrar, faculty_admin, admin).
+   - Add "Faculty Loading" and "Assign by Faculty" under Academics in sidebar.
 6) Frontend service:
-   - Implement FacultyLoadingService with list, updateSingle, assignBulk methods.
-7) Frontend controller and template:
-   - Build UI: no term selector (use global TermService-selected term and listen for termChanged), table with subject/section/faculty, dropdowns, inline Save, Save All, filters/search. Style using Tailwind CSS utility classes.
-   - Filter faculty options by teaching=1 and campus_id of each classlist row.
-8) QA and polish:
-   - Verify RBAC, error handling, toasts, and loading states.
-   - Remove any debug logs; keep consistent API error messages.
+   - Implement FacultyLoadingService with list, listUnassigned (temporary client-side filter until backend supports unassigned=1), updateSingle, assignBulk methods.

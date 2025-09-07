@@ -147,6 +147,53 @@
           BASE + '/subjects/check-corequisites-batch',
           body
         ).then(_unwrap);
+      },
+
+      // Download import template (.xlsx)
+      downloadImportTemplate: function () {
+        var cfg = { responseType: 'arraybuffer', headers: {} };
+        try {
+          var state = _getLoginState();
+          if (state && state.faculty_id != null) {
+            cfg.headers['X-Faculty-ID'] = state.faculty_id;
+          }
+        } catch (e) {}
+        return $http.get(BASE + '/subjects/import/template', cfg).then(function (resp) {
+          var headers = resp && resp.headers ? resp.headers : null;
+          var filename = 'subjects-import-template.xlsx';
+          try {
+            if (headers && typeof headers === 'function') {
+              var cd = headers('Content-Disposition') || headers('content-disposition');
+              if (cd && /filename="?([^"]+)"?/i.test(cd)) {
+                filename = cd.match(/filename="?([^"]+)"?/i)[1];
+              }
+            }
+          } catch (e) {}
+          return { data: resp.data, filename: filename };
+        });
+      },
+
+      // Import subjects file (.xlsx/.xls/.csv)
+      importFile: function (file, opts) {
+        if (!file) {
+          return Promise.reject({ message: 'No file selected' });
+        }
+        var fd = new FormData();
+        fd.append('file', file);
+        if (opts && typeof opts.dry_run !== 'undefined') {
+          fd.append('dry_run', opts.dry_run ? '1' : '0');
+        }
+        var headers = { 'Content-Type': undefined };
+        try {
+          var state = _getLoginState();
+          if (state && state.faculty_id != null) {
+            headers['X-Faculty-ID'] = state.faculty_id;
+          }
+        } catch (e) {}
+        return $http.post(BASE + '/subjects/import', fd, {
+          headers: headers,
+          transformRequest: angular.identity
+        }).then(_unwrap);
       }
     };
   }
