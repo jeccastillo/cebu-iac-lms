@@ -48,14 +48,25 @@
                ng-keyup="$event.keyCode == 13 && vm.search()">
       </div>
       <div>
-        <label class="block text-xs font-medium text-gray-500 mb-1">Semester</label>
+        <label class="block text-xs font-medium text-gray-500 mb-1">Academic Year</label>
         <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
-                ng-model="vm.filters.semester"
+                ng-model="vm.filters.intSem"
                 ng-change="vm.search()">
-          <option value="">All Semesters</option>
-          <option value="1">1st Semester</option>
-          <option value="2">2nd Semester</option>
-          <option value="3">Summer</option>
+          <option value="">All Academic Years</option>
+          <option ng-repeat="ay in vm.academicYears" value="{{ ay.intID }}">
+            {{ ay.enumSem }} Term SY {{ ay.strYearStart }}-{{ ay.strYearEnd }}
+          </option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-gray-500 mb-1">Classlist</label>
+        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+                ng-model="vm.filters.classlist_id"
+                ng-change="vm.search()">
+          <option value="">All Classlists</option>
+          <option ng-repeat="classlist in vm.allClasslists" value="{{ classlist.intID }}">
+            {{ vm.getClasslistLabel(classlist) }} - {{ vm.getFacultyName(classlist.faculty) }}
+          </option>
         </select>
       </div>
       <div>
@@ -126,11 +137,13 @@
         <thead class="bg-gray-50">
           <tr>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Schedule Code</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Classlist</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Faculty</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Classroom</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Day</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Semester</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Academic Year</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
           </tr>
         </thead>
@@ -138,6 +151,25 @@
           <tr ng-repeat="schedule in vm.rows" class="hover:bg-gray-50">
             <td class="px-6 py-4 whitespace-nowrap">
               <div class="text-sm font-medium text-gray-900">{{ schedule.strScheduleCode }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-900" ng-if="schedule.classlist">
+                {{ vm.getClasslistLabel(schedule.classlist) }}
+              </div>
+              <div class="text-sm text-gray-500" ng-if="schedule.classlist && schedule.classlist.subject">
+                {{ schedule.classlist.subject.strDescription }}
+              </div>
+              <div class="text-sm text-gray-500" ng-if="!schedule.classlist">
+                No Classlist
+              </div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-900" ng-if="schedule.classlist && schedule.classlist.faculty">
+                {{ vm.getFacultyName(schedule.classlist.faculty) }}
+              </div>
+              <div class="text-sm text-gray-500" ng-if="!schedule.classlist || !schedule.classlist.faculty">
+                Unknown Faculty
+              </div>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
               <div class="text-sm text-gray-900">
@@ -162,10 +194,10 @@
               </span>
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              <span ng-if="schedule.intSem === 1">1st Semester</span>
-              <span ng-if="schedule.intSem === 2">2nd Semester</span>
-              <span ng-if="schedule.intSem === 3">Summer</span>
-              <span ng-if="schedule.intSem > 3">Semester {{ schedule.intSem }}</span>
+              <span ng-if="schedule.sy">
+                {{ vm.getAcademicYearLabel(schedule.intSem) }}
+              </span>
+              <span ng-if="!schedule.sy">Unknown Academic Year</span>
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
               <div class="flex items-center space-x-3">

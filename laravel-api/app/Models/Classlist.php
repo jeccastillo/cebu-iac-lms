@@ -29,4 +29,9 @@ class Classlist extends Model
     {
         return $this->hasMany(ClasslistStudent::class, 'intClassListID', 'intID');
     }
+
+    public function schedules(): HasMany
+    {
+        return $this->hasMany(RoomSchedule::class, 'intClasslistID', 'intID');
+    }
 }

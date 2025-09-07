@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\V1\FacultyController;
 use App\Http\Controllers\Api\V1\FinanceController;
 use App\Http\Controllers\Api\V1\GenericApiController;
 use App\Http\Controllers\Api\V1\GradingSystemController;
+use App\Http\Controllers\Api\V1\InitialRequirementsAdminController;
 use App\Http\Controllers\Api\V1\InvoiceController;
 use App\Http\Controllers\Api\V1\PaymentDescriptionController;
 use App\Http\Controllers\Api\V1\PaymentDetailAdminController;
@@ -194,8 +195,12 @@ Route::prefix('v1')->group(function () {
     Route::delete('/classroom/{id}', [ClassroomController::class, 'destroy'])->middleware('role:building_admin,admin');
 
     // Schedule endpoints (read + write)
+    // Schedules
     Route::get('/schedules', [ScheduleController::class, 'index']);
     Route::get('/schedules/summary', [ScheduleController::class, 'summary']);
+    Route::get('/schedules/academic-years', [ScheduleController::class, 'getAcademicYears']);
+    Route::get('/schedules/available-classlists', [ScheduleController::class, 'getAvailableClasslists']);
+    Route::get('/schedules/block-sections', [ScheduleController::class, 'getBlockSections']);
     Route::get('/schedules/{id}', [ScheduleController::class, 'show']);
     Route::post('/schedules', [ScheduleController::class, 'store'])->middleware('role:registrar,admin');
     Route::put('/schedules/{id}', [ScheduleController::class, 'update'])->middleware('role:registrar,admin');
