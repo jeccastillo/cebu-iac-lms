@@ -10,6 +10,7 @@ use RuntimeException;
 
 class SchoolYearImportService
 {
+    private array $campusCacheByName = [];
     private const SHEET_TERMS = 'school_years';
 
     // Template headers (order matters)
@@ -18,7 +19,7 @@ class SchoolYearImportService
         'enumSem',
         'strYearStart',
         'strYearEnd',
-        'campus_id',
+        'campus',
         'term_label',
         'term_student_type',
         // Optional
@@ -75,9 +76,10 @@ class SchoolYearImportService
             $notes->setCellValue('A1', 'Instructions');
             $notes->getStyle('A1')->getFont()->setBold(true);
             $r = 2;
-            $notes->setCellValue('A' . $r++, 'Required columns: enumSem, strYearStart (YYYY), strYearEnd (YYYY), campus_id (numeric), term_label, term_student_type.');
-            $notes->setCellValue('A' . $r++, 'Upsert identity (unique key): (strYearStart, strYearEnd, enumSem, campus_id).');
+            $notes->setCellValue('A' . $r++, 'Required columns: enumSem, strYearStart (YYYY), strYearEnd (YYYY), campus (name), term_label, term_student_type.');
+            $notes->setCellValue('A' . $r++, 'Upsert identity (unique key): (strYearStart, strYearEnd, enumSem, campus).');
             $notes->setCellValue('A' . $r++, 'If a matching term exists, the row updates; otherwise it inserts.');
+            $notes->setCellValue('A' . $r++, 'Campus should be the campus name as listed in the system (case-insensitive match).');
             $notes->setCellValue('A' . $r++, 'Optional columns accept ISO date strings (YYYY-MM-DD). Leave blank to keep null.');
             $notes->setCellValue('A' . $r++, 'Allowed enumSem examples: 1st, 2nd, 3rd, 4th, Summer.');
             $notes->setCellValue('A' . $r++, 'term_student_type examples: college, shs, next, others.');
@@ -196,7 +198,11 @@ class SchoolYearImportService
         $enumSem           = (string) ($get('enumSem') ?? $get('enumsem') ?? '');
         $strYearStartRaw   = $get('strYearStart') ?? $get('stryearstart');
         $strYearEndRaw     = $get('strYearEnd') ?? $get('stryearend');
-        $campusRaw         = $get('campus_id');
+        $campusId          = $this->resolveCampusId([
+            'campus_id'   => $get('campus_id'),
+            'campus'      => $get('campus'),
+            'campus_name' => $get('campus_name'),
+        ]);
         $termLabel         = (string) ($get('term_label') ?? '');
         $termStudentType   = (string) ($get('term_student_type') ?? '');
 
@@ -212,9 +218,13 @@ class SchoolYearImportService
         if ($strYearEnd === null) {
             $errors[] = 'Invalid strYearEnd (YYYY)';
         }
-        $campusId = $this->toIntOrNull($campusRaw);
         if ($campusId === null) {
-            $errors[] = 'Invalid campus_id (numeric required)';
+            $campusNameTried = $get('campus') ?? $get('campus_name') ?? null;
+            if ($campusNameTried !== null && trim((string) $campusNameTried) !== '') {
+                $errors[] = 'Unknown campus name: "' . (string) $campusNameTried . '"';
+            } else {
+                $errors[] = 'Missing campus (name) or campus_id';
+            }
         }
         if ($termLabel === '') {
             $errors[] = 'Missing term_label';
@@ -244,9 +254,9 @@ class SchoolYearImportService
         ];
 
         // Optional numeric flags
-        $payStudentVisa = $this->toIntOrNull($get('pay_student_visa'));
-        $isLocked       = $this->toIntOrNull($get('is_locked'));
-        $intProcessing  = $this->toIntOrNull($get('intProcessing') ?? $get('intprocessing'));
+        $payStudentVisa = $this->defaultIfEmpty((int)$get('pay_student_visa'),0);
+        $isLocked       = $this->defaultIfEmpty((int)$get('is_locked'),0);
+        $intProcessing  = $this->defaultIfEmpty((int)$get('intProcessing'),0);
 
         $cols = [
             // Required / core
@@ -276,15 +286,15 @@ class SchoolYearImportService
             'ar_report_date_generation' => $dates['ar_report_date_generation'],
 
             // Optional misc
-            'classType'          => $this->nullIfEmpty($get('classType') ?? $get('classtype')),
+            'classType'          => $this->defaultIfEmpty($get('classType'),'regular'),
             'pay_student_visa'   => $payStudentVisa,
             'is_locked'          => $isLocked,
-            'enumGradingPeriod'  => $this->nullIfEmpty($get('enumGradingPeriod') ?? $get('enumgradingperiod')),
-            'enumMGradingPeriod' => $this->nullIfEmpty($get('enumMGradingPeriod') ?? $get('enummgradingperiod')),
-            'enumFGradingPeriod' => $this->nullIfEmpty($get('enumFGradingPeriod') ?? $get('enumfgradingperiod')),
+            'enumGradingPeriod'  => $this->defaultIfEmpty($get('enumGradingPeriod'),'inactive'),
+            'enumMGradingPeriod' => $this->defaultIfEmpty($get('enumMGradingPeriod'),'inactive'),
+            'enumFGradingPeriod' => $this->defaultIfEmpty($get('enumFGradingPeriod'),'inactive'),
             'intProcessing'      => $intProcessing,
-            'enumStatus'         => $this->nullIfEmpty($get('enumStatus') ?? $get('enumstatus')),
-            'enumFinalized'      => $this->nullIfEmpty($get('enumFinalized') ?? $get('enumfinalized')),
+            'enumStatus'         => $this->defaultIfEmpty($get('enumStatus'),'inactive'),
+            'enumFinalized'      => $this->defaultIfEmpty($get('enumFinalized'),'no'),
         ];
 
         return [$cols, $errors];
@@ -356,6 +366,40 @@ class SchoolYearImportService
     // Helpers
     // ----------------------
 
+    private function resolveCampusId(array $inputs): ?int
+    {
+        $idRaw     = $inputs['campus_id'] ?? null;
+        $nameInput = $inputs['campus'] ?? ($inputs['campus_name'] ?? null);
+
+        // Prefer numeric campus_id if provided
+        $id = $this->toIntOrNull($idRaw);
+        if ($id !== null) {
+            return $id;
+        }
+
+        if ($nameInput === null) {
+            return null;
+        }
+        $name = trim((string) $nameInput);
+        if ($name === '') {
+            return null;
+        }
+
+        $key = mb_strtolower($name);
+        if (array_key_exists($key, $this->campusCacheByName)) {
+            return $this->campusCacheByName[$key];
+        }
+
+        $found = DB::table('tb_mas_campuses')
+            ->whereRaw('LOWER(campus_name) = ?', [$key])
+            ->value('id');
+
+        $resolved = $found !== null ? (int) $found : null;
+        $this->campusCacheByName[$key] = $resolved;
+
+        return $resolved;
+    }
+
     private function normalizeYear($v): ?int
     {
         if ($v === null) return null;
@@ -406,5 +450,12 @@ class SchoolYearImportService
         if ($v === null) return null;
         $s = (string) $v;
         return trim($s) === '' ? null : $s;
+    }
+
+    private function defaultIfEmpty($v,$default)
+    {
+        if ($v === null) return $default;
+        $s = (string) $v;
+        return trim($s) === '' ? $default : $s;
     }
 }

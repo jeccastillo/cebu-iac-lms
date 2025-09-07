@@ -32,7 +32,7 @@
     }
 
     function _unwrap(resp) {
-      console.log('SchedulesService API response:', resp); // Debug logging
+      //console.log('SchedulesService API response:', resp); // Debug logging
       return resp && resp.data ? resp.data : resp;
     }
 
@@ -125,14 +125,11 @@
           .then(_unwrap);
       },
 
-      getAvailableClasslists: function(intSem, blockSectionID) {
+      getAvailableClasslists: function(intSem) {
         var params = {};
         if (intSem) {
           params.intSem = intSem;
-        }
-        if (blockSectionID) {
-          params.blockSectionID = blockSectionID;
-        }
+        }        
         
         return $http
           .get(BASE + "/schedules/available-classlists", {

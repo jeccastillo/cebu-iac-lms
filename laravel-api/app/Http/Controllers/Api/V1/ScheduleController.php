@@ -149,8 +149,8 @@ class ScheduleController extends Controller
 
             $validated = $request->validate([
                 'intRoomID' => 'required|integer|exists:tb_mas_classrooms,intID',
-                'intClasslistID' => 'required|integer|exists:tb_mas_classlist,intID',
-                'blockSectionID' => 'required|integer',
+                'intClasslistID' => 'required|integer|exists:tb_mas_classlist,intID',        
+                'blockSection' => 'required|string',        
                 'strScheduleCode' => 'required|string|max:20',
                 'strDay' => 'required|integer|min:1|max:7',
                 'dteStart' => 'required|date_format:H:i',
@@ -197,8 +197,8 @@ class ScheduleController extends Controller
             }
 
             // Check for section conflicts
-            if ($validated['blockSectionID']) {
-                $sectionConflicts = $this->checkSectionConflict($validated, null, $validated['blockSectionID']);
+            if ($validated['blockSection']) {
+                $sectionConflicts = $this->checkSectionConflict($validated, null, $validated['blockSection']);
                 if (!empty($sectionConflicts)) {
                     return response()->json([
                         'success' => false,
@@ -338,7 +338,7 @@ class ScheduleController extends Controller
             $validated = $request->validate([
                 'intRoomID' => 'required|integer|exists:tb_mas_classrooms,intID',
                 'intClasslistID' => 'required|integer|exists:tb_mas_classlist,intID',
-                'blockSectionID' => 'required|integer',
+                'blockSection' => 'required|string',
                 'strScheduleCode' => 'required|string|max:20',
                 'strDay' => 'required|integer|min:1|max:7',
                 'dteStart' => 'required|date_format:H:i',
@@ -385,8 +385,8 @@ class ScheduleController extends Controller
             }
 
             // Check for section conflicts
-            if ($validated['blockSectionID']) {
-                $sectionConflicts = $this->checkSectionConflict($validated, $id, $validated['blockSectionID']);
+            if ($validated['blockSection']) {
+                $sectionConflicts = $this->checkSectionConflict($validated, $id, $validated['blockSection']);
                 if (!empty($sectionConflicts)) {
                     return response()->json([
                         'success' => false,
@@ -586,7 +586,7 @@ class ScheduleController extends Controller
             }
 
             $academicYear = $request->query('intSem');
-            $blockSectionID = $request->query('blockSectionID');
+            $blockSection = $request->query('blockSection');
             
             if (!$academicYear) {
                 return response()->json([
@@ -609,17 +609,7 @@ class ScheduleController extends Controller
 
             // Get classlists for the academic year that don't have schedules yet
             $classlistQuery = Classlist::where('strAcademicYear', $academicYear)
-                                      ->whereDoesntHave('schedules');
-
-            // If block section is provided, filter by program ID
-            if ($blockSectionID) {
-                $blockSection = BlockSection::find($blockSectionID);
-                if ($blockSection && $blockSection->intProgramID) {
-                    $classlistQuery->whereHas('subject', function ($q) use ($blockSection) {
-                        $q->where('intProgramID', $blockSection->intProgramID);
-                    });
-                }
-            }
+                                      ->whereDoesntHave('schedules');           
 
             $classlists = $classlistQuery->with([
                                       'faculty' => function ($q) {
@@ -744,7 +734,7 @@ class ScheduleController extends Controller
     /**
      * Check for section conflicts.
      */
-    private function checkSectionConflict($data, $excludeId = null, $blockSectionID = null)
+    private function checkSectionConflict($data, $excludeId = null, $blockSection = null)
     {
         $query = RoomSchedule::with(['classlist.subject'])
             ->where(function ($q) use ($data) {
@@ -767,8 +757,8 @@ class ScheduleController extends Controller
                   ->where('intSem', $data['intSem']);
         } else {
             $query->where('strDay', $data['strDay'])
-                  ->whereHas('classlist', function($q) use ($blockSectionID) {
-                      $q->where('blockSectionID', $blockSectionID);
+                  ->whereHas('classlist', function($q) use ($blockSection) {
+                      $q->where('blockSection', $blockSection);
                   })
                   ->where('intSem', $data['intSem']);
         }

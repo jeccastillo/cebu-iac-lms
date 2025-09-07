@@ -19,6 +19,38 @@ class AcademicRecordService
      */
     public function hasStudentPassedSubject(int $studentId, int $subjectId): bool
     {
+        // 1) Check credited subjects (direct and via equivalents)
+        // Build set of equivalent subject IDs for the requested subject
+        $equivRows = DB::table('tb_mas_equivalents')
+            ->select(['intSubjectID', 'intEquivalentID'])
+            ->where('intSubjectID', $subjectId)
+            ->orWhere('intEquivalentID', $subjectId)
+            ->get();
+
+        $equivIds = [];
+        foreach ($equivRows as $r) {
+            $a = (int)($r->intSubjectID ?? 0);
+            $b = (int)($r->intEquivalentID ?? 0);
+            if ($a === $subjectId && $b > 0) {
+                $equivIds[] = $b;
+            }
+            if ($b === $subjectId && $a > 0) {
+                $equivIds[] = $a;
+            }
+        }
+        $checkIds = array_unique(array_merge([$subjectId], $equivIds));
+
+        $hasCredit = DB::table('tb_mas_classlist_student')
+            ->where('intStudentID', $studentId)
+            ->where('is_credited_subject', 1)
+            ->whereIn('equivalent_subject', $checkIds)
+            ->exists();
+
+        if ($hasCredit) {
+            return true;
+        }
+
+        // 2) Fallback to academic records (grades/remarks)
         $records = DB::table('tb_mas_classlist_student as cls')
             ->join('tb_mas_classlist as cl', 'cl.intID', '=', 'cls.intClassListID')
             ->where('cls.intStudentID', $studentId)

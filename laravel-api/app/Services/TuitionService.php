@@ -110,6 +110,7 @@ class TuitionService
             ->join('tb_mas_classlist as cl', 'cl.intID', '=', 'cls.intClassListID')
             ->join('tb_mas_subjects as s', 's.intID', '=', 'cl.intSubjectID')
             ->where('cls.intStudentID', $user->intID)
+            ->where('cls.is_credited_subject', 0)
             ->where('cl.strAcademicYear', $syid)
             ->select(
                 's.intID as subjectID',

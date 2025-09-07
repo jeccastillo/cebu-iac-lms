@@ -267,7 +267,8 @@ class DataFetcherService
                 ->leftJoin('tb_mas_sy as sy', 'sy.intID', '=', 'cl.strAcademicYear')
                 ->leftJoin('tb_mas_faculty as f', 'f.intID', '=', 'cl.intFacultyID')
                 ->leftJoin('tb_mas_faculty as e', 'e.intID', '=', 'cls.enlisted_user')
-                ->where('cls.intStudentID', $studentId);               
+                ->where('cls.intStudentID', $studentId)
+                ->where('cls.is_credited_subject', 0);               
 
             $rows = $q->select(
                 'cl.SectionCode as sectionCode',
@@ -375,6 +376,7 @@ class DataFetcherService
                 ->leftJoin('tb_mas_faculty as f', 'f.intID', '=', 'cl.intFacultyID')
                 ->leftJoin('tb_mas_faculty as e', 'e.intID', '=', 'cls.enlisted_user')
                 ->where('cls.intStudentID', $studentId)
+                ->where('cls.is_credited_subject', 0)
                 ->where('cl.strAcademicYear', $term);
 
             $rows = $q->select(
