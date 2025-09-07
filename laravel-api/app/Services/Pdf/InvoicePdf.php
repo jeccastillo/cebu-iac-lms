@@ -1,0 +1,155 @@
+<?php
+
+namespace App\Services\Pdf;
+
+use setasign\Fpdi\Fpdi;
+
+/**
+ * InvoicePdf
+ *
+ * Lightweight invoice PDF renderer using FPDF/FPDI.
+ * Returns a binary PDF string suitable for Laravel response() streaming.
+ */
+class InvoicePdf
+{
+    /**
+     * Render the invoice into a PDF string.
+     *
+     * Expected $dto keys:
+     * - number: string|int|null
+     * - date: string|null (already formatted e.g. m/d/Y)
+     * - student_name: string
+     * - term_label: string|null
+     * - items: array<array{description:string, qty?:float, price?:float, amount?:float}>
+     * - total: float
+     * - footer_name?: string|null
+     */
+    public function render(array $dto): string
+    {
+        $number      = $dto['number'] ?? null;
+        $date        = $dto['date'] ?? null;
+        $studentName = (string) ($dto['student_name'] ?? '');
+        $termLabel   = (string) ($dto['term_label'] ?? '');
+        $items       = is_array($dto['items'] ?? null) ? $dto['items'] : [];
+        $total       = (float) ($dto['total'] ?? 0);
+        $footerName  = $dto['footer_name'] ?? null;
+
+        $pdf = new Fpdi('P', 'mm', 'Letter');
+        $pdf->AddPage('P', 'Letter');
+        $pdf->SetAutoPageBreak(true, 15);
+        $pdf->SetTextColor(0, 0, 0);
+
+        // Header
+        $pdf->SetFont('Helvetica', '', 9);
+        $this->text($pdf, 10, 16, strtoupper($studentName));
+        if ($termLabel !== '') {
+            $this->text($pdf, 10, 22, $termLabel);
+        }
+
+        $pdf->SetFont('Helvetica', '', 8.5);
+        $this->text($pdf, 150, 10, 'Invoice No:', 'R', 30);
+        $pdf->SetFont('Helvetica', 'B', 9);
+        $this->text($pdf, 183, 10, ($number === null || $number === '') ? '-' : (string) $number, 'R', 25);
+
+        $pdf->SetFont('Helvetica', '', 8.5);
+        $this->text($pdf, 150, 16, 'Date:', 'R', 30);
+        $pdf->SetFont('Helvetica', 'B', 9);
+        $this->text($pdf, 183, 16, ($date ?: ''), 'R', 25);
+
+        // Items header
+        $yStart = 34;
+        $pdf->SetFont('Helvetica', 'B', 8.5);
+        $this->text($pdf, 10, $yStart, 'DESCRIPTION');
+        $this->text($pdf, 142, $yStart, 'QTY', 'R', 15);
+        $this->text($pdf, 162, $yStart, 'PRICE', 'R', 25);
+        $this->text($pdf, 187, $yStart, 'AMOUNT', 'R', 25);
+
+        // Items body
+        $y = $yStart + 7;
+        $pdf->SetFont('Helvetica', '', 8.5);
+        $lineH = 5.5;
+
+        foreach ($items as $line) {
+            $desc = isset($line['description']) ? (string) $line['description'] : '';
+            $qty  = isset($line['qty']) && is_numeric($line['qty']) ? (float) $line['qty'] : 1.0;
+            $price = isset($line['price']) && is_numeric($line['price'])
+                ? (float) $line['price']
+                : (isset($line['amount']) ? (float) $line['amount'] : 0.0);
+            $amount = isset($line['amount']) && is_numeric($line['amount'])
+                ? (float) $line['amount']
+                : ($qty * $price);
+
+            // Description (truncate softly to fit one line)
+            $pdf->SetXY(10, $y);
+            $pdf->Cell(128, $lineH, $this->truncate($desc, 80), 0, 0, 'L');
+
+            // Qty
+            $pdf->SetXY(135, $y);
+            $pdf->Cell(20, $lineH, rtrim(rtrim(number_format($qty, 2, '.', ''), '0'), '.'), 0, 0, 'R');
+
+            // Price
+            $pdf->SetXY(155, $y);
+            $pdf->Cell(30, $lineH, $this->money($price), 0, 0, 'R');
+
+            // Amount
+            $pdf->SetXY(180, $y);
+            $pdf->Cell(30, $lineH, $this->money($amount), 0, 1, 'R');
+
+            $y += $lineH;
+            if ($y > 230) {
+                $pdf->AddPage('P', 'Letter');
+                $y = 20;
+            }
+        }
+
+        // Total section
+        $y += 4;
+        $pdf->SetFont('Helvetica', 'B', 9);
+        $pdf->SetXY(155, $y);
+        $pdf->Cell(25, $lineH, 'Total', 0, 0, 'R');
+        $pdf->SetFont('Helvetica', 'BU', 10);
+        $pdf->SetXY(180, $y);
+        $pdf->Cell(30, $lineH, $this->money($total), 0, 1, 'R');
+
+        // Echo totals similar to the screenshot (visual anchors)
+        $pdf->SetFont('Helvetica', '', 9);
+        $this->text($pdf, 185, 80,  $this->money($total), 'R', 25);
+        $this->text($pdf, 185, 130, $this->money($total), 'R', 25);
+        $this->text($pdf, 185, 210, $this->money($total), 'R', 25);
+
+        // Footer signature name (optional)
+        if (!empty($footerName)) {
+            $pdf->SetFont('Helvetica', 'B', 10);
+            $this->text($pdf, 150, 255, strtoupper($footerName), 'L', 60);
+        }
+
+        return $pdf->Output('S');
+    }
+
+    private function money(float $v): string
+    {
+        return number_format($v, 2, '.', ',');
+    }
+
+    private function truncate(string $s, int $limit): string
+    {
+        if (mb_strlen($s) <= $limit) return $s;
+        return rtrim(mb_substr($s, 0, $limit - 1)) . '…';
+    }
+
+    /**
+     * Helper for simple positioned text.
+     *
+     * @param Fpdi   $pdf
+     * @param float  $x
+     * @param float  $y
+     * @param string $txt
+     * @param string $align 'L'|'C'|'R'
+     * @param float  $w cell width for alignment context
+     */
+    private function text(Fpdi $pdf, float $x, float $y, string $txt, string $align = 'L', float $w = 0): void
+    {
+        $pdf->SetXY($x, $y);
+        $pdf->Cell($w > 0 ? $w : 0, 0, $txt, 0, 1, $align);
+    }
+}

@@ -8,7 +8,7 @@ use App\Services\InvoiceService;
 use App\Models\Cashier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
+use App\Services\Pdf\InvoicePdf;
 use App\Http\Requests\Api\V1\InvoiceUpdateRequest;
 use App\Services\SystemLogService;
 
@@ -104,7 +104,7 @@ class InvoiceController extends Controller
 
     /**
      * GET /api/v1/finance/invoices/{id}/pdf
-     * Streams a minimal PDF of the invoice (inline).
+     * Streams a minimal PDF of the invoice (inline) using FPDI (Letter, Helvetica).
      */
     public function pdf($id, Request $request)
     {
@@ -116,48 +116,115 @@ class InvoiceController extends Controller
             ], 404);
         }
 
-        // Normalize shape for the view
+        // Normalize shape for processing
         $invoice = is_array($row) ? $row : (array) $row;
-        $items = [];
+
+        // Resolve items (normalize each into description/qty/price/amount)
+        $rawItems = [];
         if (isset($invoice['items']) && is_array($invoice['items'])) {
-            $items = $invoice['items'];
+            $rawItems = $invoice['items'];
         } elseif (isset($invoice['invoice_items']) && is_array($invoice['invoice_items'])) {
-            $items = $invoice['invoice_items'];
+            $rawItems = $invoice['invoice_items'];
         }
 
         // Resolve display fields with fallbacks
-        $invNo = $invoice['invoice_number'] ?? ($invoice['number'] ?? null);
-        $posted = $invoice['posted_at'] ?? ($invoice['created_at'] ?? null);
-        $type = $invoice['type'] ?? '-';
-        $status = $invoice['status'] ?? '-';
-        $remarks = $invoice['remarks'] ?? '';
+        $invNo   = $invoice['invoice_number'] ?? ($invoice['number'] ?? null);
+        $posted  = $invoice['posted_at'] ?? ($invoice['created_at'] ?? null);
+        $type    = $invoice['type'] ?? '-';
         // Total: first numeric among amount_total, amount, total
         $total = null;
         foreach (['amount_total', 'amount', 'total'] as $k) {
             if (isset($invoice[$k]) && is_numeric($invoice[$k])) { $total = (float) $invoice[$k]; break; }
         }
-        if ($total === null) $total = 0;
+        if ($total === null) $total = 0.0;
 
-        $pdf = PDF::loadView('pdf.invoice', [
-            'invoice' => $invoice,
-            'items'   => $items,
-            'meta'    => [
-                'number'   => $invNo,
-                'posted'   => $posted,
-                'type'     => $type,
-                'status'   => $status,
-                'remarks'  => $remarks,
-                'total'    => $total,
-            ],
-        ])
-        ->setPaper('a4')
-        ->setOption('margin-top', '12mm')
-        ->setOption('margin-right', '12mm')
-        ->setOption('margin-bottom', '12mm')
-        ->setOption('margin-left', '12mm');
+        // Student name
+        $studentName = '';
+        try {
+            if (!empty($invoice['student_id'])) {
+                $u = DB::table('tb_mas_users')->where('intID', (int) $invoice['student_id'])->first();
+                if ($u) {
+                    $last = isset($u->strLastname) ? trim((string) $u->strLastname) : '';
+                    $first = isset($u->strFirstname) ? trim((string) $u->strFirstname) : '';
+                    $middle = isset($u->strMiddlename) ? trim((string) $u->strMiddlename) : '';
+                    $studentName = ($last !== '' ? ($last . ', ') : '') . $first . ($middle !== '' ? (' ' . $middle) : '');
+                }
+            }
+        } catch (\Throwable $e) {}
 
-        $filename = 'invoice-' . ($invNo ?: $id) . '.pdf';
-        return $pdf->inline($filename);
+        // Term label (when syid available)
+        $termLabel = '';
+        try {
+            if (!empty($invoice['syid'])) {
+                $t = DB::table('tb_mas_sy')->where('intID', (int) $invoice['syid'])->first();
+                if ($t) {
+                    $termLabel = (string) $t->enumSem . ' ' . (string) $t->strYearStart . '-' . (string) $t->strYearEnd;
+                }
+            }
+        } catch (\Throwable $e) {}
+
+        // Normalize items for renderer
+        $items = [];
+        foreach ($rawItems as $it) {
+            if (!is_array($it)) continue;
+            $desc = isset($it['description']) ? (string) $it['description'] : ((isset($it['name']) ? (string)$it['name'] : ''));
+            $amt  = isset($it['amount']) ? (float) $it['amount'] : (isset($it['price']) ? (float)$it['price'] : 0.0);
+            if ($desc === '' && $amt == 0.0) continue;
+            $items[] = [
+                'description' => $desc !== '' ? $desc : 'Item',
+                'qty' => 1,
+                'price' => $amt,
+                'amount' => $amt,
+            ];
+        }
+
+        // Synthesize single line when items are absent but we have a total
+        if (empty($items)) {
+            $desc = 'Invoice amount';
+            if (strtolower((string)$type) === 'tuition' && $termLabel !== '') {
+                $desc = 'UG Tuition Fee / ' . $termLabel;
+            } elseif (strtolower((string)$type) === 'tuition') {
+                $desc = 'UG Tuition Fee';
+            }
+            $items[] = [
+                'description' => $desc,
+                'qty' => 1,
+                'price' => (float) $total,
+                'amount' => (float) $total,
+            ];
+        }
+
+        // Format date as m/d/Y
+        $dateStr = '';
+        try {
+            if (!empty($posted)) {
+                $ts = strtotime((string) $posted);
+                if ($ts !== false) {
+                    $dateStr = date('m/d/Y', $ts);
+                }
+            }
+        } catch (\Throwable $e) {}
+
+        // Build DTO for renderer
+        $dto = [
+            'number'       => $invNo,
+            'date'         => $dateStr,
+            'student_name' => $studentName,
+            'term_label'   => $termLabel,
+            'items'        => $items,
+            'total'        => (float) $total,
+            'footer_name'  => null,
+        ];
+
+        // Render and stream inline
+        $renderer = app(InvoicePdf::class);
+        $content = $renderer->render($dto);
+
+        $filename = 'invoice-' . (($invNo !== null && $invNo !== '') ? $invNo : $id) . '.pdf';
+        return response($content, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="' . $filename . '"',
+        ]);
     }
 
     /**

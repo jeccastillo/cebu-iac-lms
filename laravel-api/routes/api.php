@@ -42,7 +42,6 @@ use App\Http\Controllers\Api\V1\TuitionController;
 use App\Http\Controllers\Api\V1\TuitionYearController;
 use App\Http\Controllers\Api\V1\UnityController;
 use App\Http\Controllers\Api\V1\UsersController;
-use App\Http\Controllers\Api\V1\InitialRequirementsAdminController;
 use App\Http\Controllers\Api\V1\StudentImportController;
 use App\Services\ClasslistSlotsService;
 use Illuminate\Http\Request;
