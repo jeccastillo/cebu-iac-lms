@@ -148,7 +148,8 @@ class ScheduleController extends Controller
 
             $validated = $request->validate([
                 'intRoomID' => 'required|integer|exists:tb_mas_classrooms,intID',
-                'intClasslistID' => 'required|integer|exists:tb_mas_classlist,intID',
+                'intClasslistID' => 'required|integer|exists:tb_mas_classlist,intID',        
+                'blockSection' => 'required|string',        
                 'strScheduleCode' => 'required|string|max:20',
                 'strDay' => 'required|integer|min:1|max:7',
                 'dteStart' => 'required|date_format:H:i',
@@ -192,6 +193,18 @@ class ScheduleController extends Controller
                     'message' => 'Schedule conflict detected. The room is already booked for this time slot.',
                     'conflicts' => $scheduleConflicts
                 ], 422);
+            }
+
+            // Check for section conflicts
+            if ($validated['blockSection']) {
+                $sectionConflicts = $this->checkSectionConflict($validated, null, $validated['blockSection']);
+                if (!empty($sectionConflicts)) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Section conflict detected. This section already has a schedule for this time slot.',
+                        'conflicts' => $sectionConflicts
+                    ], 422);
+                }
             }
 
             // Check for faculty conflicts
@@ -324,6 +337,7 @@ class ScheduleController extends Controller
             $validated = $request->validate([
                 'intRoomID' => 'required|integer|exists:tb_mas_classrooms,intID',
                 'intClasslistID' => 'required|integer|exists:tb_mas_classlist,intID',
+                'blockSection' => 'required|string',
                 'strScheduleCode' => 'required|string|max:20',
                 'strDay' => 'required|integer|min:1|max:7',
                 'dteStart' => 'required|date_format:H:i',
@@ -367,6 +381,18 @@ class ScheduleController extends Controller
                     'message' => 'Schedule conflict detected. The room is already booked for this time slot.',
                     'conflicts' => $scheduleConflicts
                 ], 422);
+            }
+
+            // Check for section conflicts
+            if ($validated['blockSection']) {
+                $sectionConflicts = $this->checkSectionConflict($validated, $id, $validated['blockSection']);
+                if (!empty($sectionConflicts)) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Section conflict detected. This section already has a schedule for this time slot.',
+                        'conflicts' => $sectionConflicts
+                    ], 422);
+                }
             }
 
             // Check for faculty conflicts
@@ -559,6 +585,7 @@ class ScheduleController extends Controller
             }
 
             $academicYear = $request->query('intSem');
+            $blockSection = $request->query('blockSection');
             
             if (!$academicYear) {
                 return response()->json([
@@ -580,9 +607,10 @@ class ScheduleController extends Controller
             }
 
             // Get classlists for the academic year that don't have schedules yet
-            $classlists = Classlist::where('strAcademicYear', $academicYear)
-                                  ->whereDoesntHave('schedules')
-                                  ->with([
+            $classlistQuery = Classlist::where('strAcademicYear', $academicYear)
+                                      ->whereDoesntHave('schedules');           
+
+            $classlists = $classlistQuery->with([
                                       'faculty' => function ($q) {
                                           $q->select('intID', 'strFirstname', 'strLastname');
                                       },
@@ -640,6 +668,41 @@ class ScheduleController extends Controller
         } else {
             $query->where('strDay', $data['strDay'])
                   ->where('intRoomID', $data['intRoomID'])
+                  ->where('intSem', $data['intSem']);
+        }
+
+        return $query->get()->toArray();
+    }
+
+    /**
+     * Check for section conflicts.
+     */
+    private function checkSectionConflict($data, $excludeId = null, $blockSection = null)
+    {
+        $query = RoomSchedule::with(['classlist.subject'])
+            ->where(function ($q) use ($data) {
+                $q->where(function ($timeQuery) use ($data) {
+                    $timeQuery->whereBetween('dteStart', [$data['dteStart'], $data['dteEnd']])
+                             ->orWhereBetween('dteEnd', [$data['dteStart'], $data['dteEnd']])
+                             ->orWhere(function ($overlapQuery) use ($data) {
+                                 $overlapQuery->where('dteStart', '<=', $data['dteStart'])
+                                             ->where('dteEnd', '>=', $data['dteEnd']);
+                             });
+                });
+            });
+
+        if ($excludeId) {
+            $query->where('intRoomSchedID', '!=', $excludeId);
+        }
+
+        if ($data['strDay'] == 7) {
+            $query->where('intRoomID', $data['intRoomID'])
+                  ->where('intSem', $data['intSem']);
+        } else {
+            $query->where('strDay', $data['strDay'])
+                  ->whereHas('classlist', function($q) use ($blockSection) {
+                      $q->where('blockSection', $blockSection);
+                  })
                   ->where('intSem', $data['intSem']);
         }
 

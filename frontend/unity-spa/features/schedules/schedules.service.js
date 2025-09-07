@@ -32,7 +32,7 @@
     }
 
     function _unwrap(resp) {
-      console.log('SchedulesService API response:', resp); // Debug logging
+      //console.log('SchedulesService API response:', resp); // Debug logging
       return resp && resp.data ? resp.data : resp;
     }
 
@@ -129,7 +129,7 @@
         var params = {};
         if (intSem) {
           params.intSem = intSem;
-        }
+        }        
         
         return $http
           .get(BASE + "/schedules/available-classlists", {

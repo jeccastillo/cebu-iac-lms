@@ -204,7 +204,123 @@
           vm._selectedFile = null;
         });
     };
+    
+    // ---------------------------------------------
+    // Class Records (tb_mas_classlist_student) Import
+    // ---------------------------------------------
+    vm.crImporting = false;
+    vm.crImportError = null;
+    vm.crImportSummary = null;
+    vm._crSelectedFile = null;
 
+    vm.downloadClassRecordsTemplate = function () {
+      vm.crImportError = null;
+      try {
+        StudentsService.downloadClassRecordsTemplate().then(function (res) {
+          var data = res && res.data ? res.data : null;
+          var filename = (res && res.filename) ? res.filename : 'class-records-import-template.xlsx';
+          if (!data) {
+            vm.crImportError = 'Failed to download class records template.';
+            return;
+          }
+          var blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          var url = ($window.URL || $window.webkitURL).createObjectURL(blob);
+          var a = document.createElement('a');
+          a.href = url;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(function () {
+            ($window.URL || $window.webkitURL).revokeObjectURL(url);
+            try { document.body.removeChild(a); } catch (e) {}
+          }, 0);
+        }).catch(function () {
+          vm.crImportError = 'Failed to download class records template.';
+        });
+      } catch (e) {
+        vm.crImportError = 'Failed to download class records template.';
+      }
+    };
+
+    vm.openClassRecordsImportDialog = function () {
+      vm.crImportError = null;
+      vm.crImportSummary = null;
+      var el = document.getElementById('classRecordsImportFile');
+      if (el) {
+        try {
+          el.value = '';
+          el.onchange = function (evt) {
+            var files = (evt && evt.target) ? evt.target.files : null;
+            try {
+              $scope.$applyAsync(function () {
+                vm.onCRFileSelected(files);
+              });
+            } catch (e) {
+              vm.onCRFileSelected(files);
+            }
+          };
+        } catch (e) {}
+        el.click();
+      }
+    };
+
+    vm.onCRFileSelected = function (files) {
+      vm.crImportError = null;
+      vm.crImportSummary = null;
+      try {
+        if (files && files.length > 0) {
+          vm._crSelectedFile = files[0];
+        } else {
+          vm._crSelectedFile = null;
+        }
+      } catch (e) {
+        vm._crSelectedFile = null;
+      }
+      if (vm._crSelectedFile) {
+        vm.runCRImport();
+      }
+    };
+
+    vm.runCRImport = function () {
+      if (!vm._crSelectedFile) {
+        vm.crImportError = 'No file selected';
+        return;
+      }
+      vm.crImporting = true;
+      vm.crImportError = null;
+      vm.crImportSummary = null;
+      StudentsService.importClassRecords(vm._crSelectedFile, { dry_run: false })
+        .then(function (res) {
+          var ok = res && (res.success !== false);
+          var result = res && res.result ? res.result : null;
+          if (!ok || !result) {
+            vm.crImportError = (res && res.message) ? res.message : 'Import failed.';
+            return;
+          }
+          vm.crImportSummary = {
+            totalRows: result.totalRows || 0,
+            inserted: result.inserted || 0,
+            updated: result.updated || 0,
+            skipped: result.skipped || 0,
+            errors: Array.isArray(result.errors) ? result.errors : []
+          };
+          // Refresh list after successful import
+          vm.search();
+        })
+        .catch(function (e) {
+          vm.crImportError = (e && e.data && e.data.message) ? e.data.message : 'Import failed.';
+        })
+        .finally(function () {
+          vm.crImporting = false;
+          // clear file input
+          try {
+            var el = document.getElementById('classRecordsImportFile');
+            if (el) el.value = '';
+          } catch (e) {}
+          vm._crSelectedFile = null;
+        });
+    };
+    
     vm.programs = [];
     vm.loadPrograms = function () {
       return $http.get(APP_CONFIG.API_BASE + '/programs')

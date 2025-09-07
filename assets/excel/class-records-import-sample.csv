@@ -1,0 +1,2 @@
+student_number,sectionCode,subjectCode,term,campus,is_credited_subject,credited_subject_name,floatMidtermGrade,floatFinalGrade,floatSemFinalGrade,strUnits,enumStatus,strRemarks
+20230001,MMA11,FUNDPROG,"1st 2025-2026 college",Cebu,1,"Intro to Programming (Credited)",85,90,88,3,act,"sample import row with grades"

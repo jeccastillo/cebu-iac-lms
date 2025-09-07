@@ -39,7 +39,10 @@ use App\Http\Controllers\Api\V1\StudentChecklistController;
 use App\Http\Controllers\Api\V1\StudentController;
 use App\Http\Controllers\Api\V1\SubjectController;
 use App\Http\Controllers\Api\V1\SubjectImportController;
+use App\Http\Controllers\Api\V1\ClasslistImportController;
+use App\Http\Controllers\Api\V1\ClasslistStudentImportController;
 use App\Http\Controllers\Api\V1\SystemAlertController;
+use App\Http\Controllers\Api\V1\CreditedSubjectsController;
 use App\Http\Controllers\Api\V1\SystemLogController;
 use App\Http\Controllers\Api\V1\TuitionController;
 use App\Http\Controllers\Api\V1\TuitionYearController;
@@ -153,6 +156,14 @@ Route::prefix('v1')->group(function () {
     Route::get('/subjects/import/template', [SubjectImportController::class, 'template'])->middleware('role:registrar,admin');
     Route::post('/subjects/import', [SubjectImportController::class, 'import'])->middleware('role:registrar,admin');
 
+    // Classlists Import
+    Route::get('/classlists/import/template', [ClasslistImportController::class, 'template'])->middleware('role:registrar,admin');
+    Route::post('/classlists/import', [ClasslistImportController::class, 'import'])->middleware('role:registrar,admin');
+
+    // Class Records (tb_mas_classlist_student) Import
+    Route::get('/class-records/import/template', [ClasslistStudentImportController::class, 'template'])->middleware('role:registrar,admin');
+    Route::post('/class-records/import', [ClasslistStudentImportController::class, 'import'])->middleware('role:registrar,admin');
+
     // RESTful facade routes mapping to parity handlers
     Route::post('/subjects', [SubjectController::class, 'submit'])->middleware('role:registrar,admin');
     Route::put('/subjects/{id}', function (Request $request, $id) {
@@ -235,6 +246,11 @@ Route::prefix('v1')->group(function () {
 
     // Student Checklist endpoints
     Route::get('/students/{student}/checklist', [StudentChecklistController::class, 'index']);
+
+    // Credited Subjects (Registrar/Admin)
+    Route::get('/students/{student_number}/credits', [CreditedSubjectsController::class, 'index'])->middleware('role:registrar,admin');
+    Route::post('/students/{student_number}/credits', [CreditedSubjectsController::class, 'store'])->middleware('role:registrar,admin');
+    Route::delete('/students/{student_number}/credits/{id}', [CreditedSubjectsController::class, 'destroy'])->middleware('role:registrar,admin');
     Route::post('/students/{student}/checklist/generate', [StudentChecklistController::class, 'generate'])->middleware('role:registrar,admin');
     Route::post('/students/{student}/checklist/items', [StudentChecklistController::class, 'addItem'])->middleware('role:registrar,admin');
     Route::put('/students/{student}/checklist/items/{item}', [StudentChecklistController::class, 'updateItem'])->middleware('role:registrar,admin');

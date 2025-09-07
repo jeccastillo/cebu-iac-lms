@@ -12,6 +12,9 @@ class ClasslistStudent extends Model
     public $timestamps = false;
 
     protected $guarded = [];
+    protected $casts = [
+        'is_credited_subject' => 'boolean',
+    ];
 
     public function classlist(): BelongsTo
     {

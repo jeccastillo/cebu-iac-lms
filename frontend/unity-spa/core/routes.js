@@ -66,6 +66,12 @@
         controllerAs: "vm",
         requiredRoles: ["registrar", "admin"],
       })
+      .when("/registrar/credit-subjects", {
+        templateUrl: "features/registrar/credit-subjects/credit-subjects.html",
+        controller: "CreditSubjectsController",
+        controllerAs: "vm",
+        requiredRoles: ["registrar", "admin"],
+      })
       .when("/finance/cashier/:id", {
         templateUrl: "features/finance/cashier-viewer/cashier-viewer.html",
         controller: "CashierViewerController",

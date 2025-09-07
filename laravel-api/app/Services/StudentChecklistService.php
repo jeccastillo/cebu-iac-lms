@@ -78,6 +78,7 @@ class StudentChecklistService
      */
     public function computePassedMap(int $intStudentID): array
     {
+        // 1) Passed via grades/remarks from classlist joins
         $rows = DB::table('tb_mas_classlist_student as cls')
             ->join('tb_mas_classlist as cl', 'cl.intID', '=', 'cls.intClassListID')
             ->join('tb_mas_subjects as s', 's.intID', '=', 'cl.intSubjectID')
@@ -106,7 +107,11 @@ class StudentChecklistService
                 }
             }
             if (!$passed && $remarks !== '') {
-                if (strpos($remarks, 'pass') !== false) {
+                // Accept 'pass', 'passed', and 'credit/credited' as pass indicators
+                if (strpos($remarks, 'pass') !== false
+                    || strpos($remarks, 'passed') !== false
+                    || strpos($remarks, 'credit') !== false
+                    || strpos($remarks, 'credited') !== false) {
                     $passed = true;
                 }
             }
@@ -115,6 +120,48 @@ class StudentChecklistService
                 $out[$sid] = true;
             }
         }
+
+        // 2) Passed via credited subjects (direct)
+        $credited = DB::table('tb_mas_classlist_student')
+            ->where('intStudentID', $intStudentID)
+            ->where('is_credited_subject', 1)
+            ->pluck('equivalent_subject')
+            ->filter()
+            ->map(function ($v) { return (int)$v; })
+            ->unique()
+            ->values();
+
+        foreach ($credited as $cid) {
+            if ($cid > 0) {
+                $out[$cid] = true;
+            }
+        }
+
+        // 3) Equivalents mapping (credits and academic passes imply passes for equivalents)
+        $seedIds = array_map('intval', array_keys($out));
+        if (!empty($seedIds)) {
+            $eqRows = DB::table('tb_mas_equivalents')
+                ->select(['intSubjectID', 'intEquivalentID'])
+                ->where(function ($q) use ($seedIds) {
+                    $q->whereIn('intSubjectID', $seedIds)
+                      ->orWhereIn('intEquivalentID', $seedIds);
+                })
+                ->get();
+
+            foreach ($eqRows as $row) {
+                $a = (int)($row->intSubjectID ?? 0);
+                $b = (int)($row->intEquivalentID ?? 0);
+                if ($a > 0 && $b > 0) {
+                    if (isset($out[$a])) {
+                        $out[$b] = true;
+                    }
+                    if (isset($out[$b])) {
+                        $out[$a] = true;
+                    }
+                }
+            }
+        }
+
         return $out;
     }
 

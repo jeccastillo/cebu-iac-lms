@@ -3,10 +3,10 @@
 
   angular
     .module('unityApp')
-    .controller('ClasslistsController', ClasslistsController);
+  .controller('ClasslistsController', ClasslistsController);
 
-  ClasslistsController.$inject = ['$scope', '$location', 'ClasslistsService', 'TermService'];
-  function ClasslistsController($scope, $location, ClasslistsService, TermService) {
+  ClasslistsController.$inject = ['$scope', '$location', '$window', 'ClasslistsService', 'TermService'];
+  function ClasslistsController($scope, $location, $window, ClasslistsService, TermService) {
     var vm = this;
 
     // State
@@ -30,6 +30,8 @@
     // Expose
     vm.init = init;
     vm.reload = reload;
+    vm.downloadTemplate = downloadTemplate;
+    vm.openImportDialog = openImportDialog;
     vm.goAdd = goAdd;
     vm.goEdit = goEdit;
     vm.goView = goView;
@@ -60,6 +62,12 @@
     vm._booting = true;
     vm._loadingList = false;
     vm._reloadPromise = null;
+
+    // Import UI State
+    vm.importing = false;
+    vm.importError = null;
+    vm.importSummary = null;
+    vm._selectedFile = null;
 
     function init() {
       vm.loading = true;
@@ -241,6 +249,118 @@
         })
         .finally(function () {
           vm.loading = false;
+        });
+    }
+
+    // -----------------------------
+    // Import: Template download + File upload (parity with Subjects)
+    // -----------------------------
+    function downloadTemplate() {
+      vm.importError = null;
+      try {
+        ClasslistsService.downloadImportTemplate()
+          .then(function (res) {
+            var data = res && res.data ? res.data : null;
+            var filename = (res && res.filename) ? res.filename : 'classlists-import-template.xlsx';
+            if (!data) {
+              vm.importError = 'Failed to download template.';
+              return;
+            }
+            var blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            var url = ($window.URL || $window.webkitURL).createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(function () {
+              ($window.URL || $window.webkitURL).revokeObjectURL(url);
+              try { document.body.removeChild(a); } catch (e) {}
+            }, 0);
+          })
+          .catch(function () {
+            vm.importError = 'Failed to download template.';
+          });
+      } catch (e) {
+        vm.importError = 'Failed to download template.';
+      }
+    }
+
+    function openImportDialog() {
+      vm.importError = null;
+      vm.importSummary = null;
+      var el = document.getElementById('classlistsImportFile');
+      if (el) {
+        try {
+          el.value = '';
+          el.onchange = function (evt) {
+            var files = (evt && evt.target) ? evt.target.files : null;
+            try {
+              onFileSelected(files);
+            } catch (e) {
+              onFileSelected(files);
+            }
+          };
+        } catch (e) {}
+        el.click();
+      }
+    }
+
+    function onFileSelected(files) {
+      vm.importError = null;
+      vm.importSummary = null;
+      try {
+        if (files && files.length > 0) {
+          vm._selectedFile = files[0];
+        } else {
+          vm._selectedFile = null;
+        }
+      } catch (e) {
+        vm._selectedFile = null;
+      }
+      if (vm._selectedFile) {
+        runImport();
+      }
+    }
+
+    function runImport() {
+      if (!vm._selectedFile) {
+        vm.importError = 'No file selected';
+        return;
+      }
+      vm.importing = true;
+      vm.importError = null;
+      vm.importSummary = null;
+
+      ClasslistsService.importFile(vm._selectedFile, { dry_run: false })
+        .then(function (res) {
+          var ok = res && (res.success !== false);
+          var result = res && res.result ? res.result : null;
+          if (!ok || !result) {
+            vm.importError = (res && res.message) ? res.message : 'Import failed.';
+            return;
+          }
+          vm.importSummary = {
+            totalRows: result.totalRows || 0,
+            inserted: result.inserted || 0,
+            updated: result.updated || 0,
+            skipped: result.skipped || 0,
+            errors: Array.isArray(result.errors) ? result.errors : []
+          };
+          // Refresh list after successful import
+          reload();
+        })
+        .catch(function (e) {
+          vm.importError = (e && e.data && e.data.message) ? e.data.message : 'Import failed.';
+        })
+        .finally(function () {
+          vm.importing = false;
+          // clear file input
+          try {
+            var el = document.getElementById('classlistsImportFile');
+            if (el) el.value = '';
+          } catch (e) {}
+          vm._selectedFile = null;
         });
     }
 

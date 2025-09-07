@@ -173,6 +173,72 @@
       },
       unfinalize: function (id) {
         return $http.post(BASE + '/classlists/' + encodeURIComponent(id) + '/unfinalize', {}, _adminHeaders()).then(_unwrap);
+      },
+
+      // -----------------------------
+      // Import Template + Import (parity with Subjects)
+      // -----------------------------
+
+      // Download import template (.xlsx)
+      downloadImportTemplate: function () {
+        var cfg = { responseType: 'arraybuffer', headers: {} };
+        try {
+          var state = _getLoginState();
+          if (state && state.faculty_id != null) {
+            cfg.headers['X-Faculty-ID'] = state.faculty_id;
+          }
+          // propagate roles if present (parity with _adminHeaders)
+          var roles = null;
+          if (state && Array.isArray(state.roles)) roles = state.roles;
+          else if (state && Array.isArray(state.role_codes)) roles = state.role_codes;
+          else if (state && typeof state.roles === 'string') roles = [state.roles];
+          if (roles && roles.length) {
+            cfg.headers['X-User-Roles'] = roles.join(',');
+          }
+        } catch (e) {}
+        return $http.get(BASE + '/classlists/import/template', cfg).then(function (resp) {
+          var headers = resp && resp.headers ? resp.headers : null;
+          var filename = 'classlists-import-template.xlsx';
+          try {
+            if (headers && typeof headers === 'function') {
+              var cd = headers('Content-Disposition') || headers('content-disposition');
+              if (cd && /filename="?([^"]+)"?/i.test(cd)) {
+                filename = cd.match(/filename="?([^"]+)"?/i)[1];
+              }
+            }
+          } catch (e) {}
+          return { data: resp.data, filename: filename };
+        });
+      },
+
+      // Import classlists file (.xlsx/.xls/.csv)
+      importFile: function (file, opts) {
+        if (!file) {
+          return Promise.reject({ message: 'No file selected' });
+        }
+        var fd = new FormData();
+        fd.append('file', file);
+        if (opts && typeof opts.dry_run !== 'undefined') {
+          fd.append('dry_run', opts.dry_run ? '1' : '0');
+        }
+        var headers = { 'Content-Type': undefined };
+        try {
+          var state = _getLoginState();
+          if (state && state.faculty_id != null) {
+            headers['X-Faculty-ID'] = state.faculty_id;
+          }
+          var roles = null;
+          if (state && Array.isArray(state.roles)) roles = state.roles;
+          else if (state && Array.isArray(state.role_codes)) roles = state.role_codes;
+          else if (state && typeof state.roles === 'string') roles = [state.roles];
+          if (roles && roles.length) {
+            headers['X-User-Roles'] = roles.join(',');
+          }
+        } catch (e) {}
+        return $http.post(BASE + '/classlists/import', fd, {
+          headers: headers,
+          transformRequest: angular.identity
+        }).then(_unwrap);
       }
     };
   }

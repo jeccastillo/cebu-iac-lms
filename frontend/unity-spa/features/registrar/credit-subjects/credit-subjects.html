@@ -1,0 +1,108 @@
+<div class="p-4 space-y-4" ng-controller="CreditSubjectsController as vm">
+  <div class="bg-white border border-gray-200 rounded-md shadow-sm p-4">
+    <h2 class="text-lg font-semibold mb-3">Credit Subjects</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Student Number</label>
+        <input type="text"
+               class="w-full border border-gray-300 rounded px-3 py-2"
+               placeholder="e.g. 2023-00001"
+               ng-model="vm.student_number" />
+      </div>
+      <div class="flex space-x-2">
+        <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-60"
+                ng-click="vm.load()"
+                ng-disabled="vm.loading.list">
+          <span ng-if="!vm.loading.list">Load Credits</span>
+          <span ng-if="vm.loading.list">Loading...</span>
+        </button>
+        <button class="px-4 py-2 bg-gray-100 text-gray-800 rounded hover:bg-gray-200"
+                ng-click="vm.clearForm()">
+          Clear Form
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded-md shadow-sm p-4">
+    <h3 class="text-md font-semibold mb-3">Add Credit</h3>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Subject ID</label>
+        <input type="number"
+               class="w-full border border-gray-300 rounded px-3 py-2"
+               placeholder="e.g. 156"
+               ng-model="vm.form.subject_id" />
+        <div class="text-xs text-gray-500 mt-1">Enter the Subject's intID</div>
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Term Taken</label>
+        <input type="text"
+               class="w-full border border-gray-300 rounded px-3 py-2"
+               placeholder="e.g. 1st Term 2022-2023"
+               ng-model="vm.form.term_taken" />
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">School Taken</label>
+        <input type="text"
+               class="w-full border border-gray-300 rounded px-3 py-2"
+               placeholder="e.g. Transfer University"
+               ng-model="vm.form.school_taken" />
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Remarks</label>
+        <input type="text"
+               class="w-full border border-gray-300 rounded px-3 py-2"
+               placeholder="credited"
+               ng-model="vm.form.remarks" />
+      </div>
+    </div>
+    <div class="mt-3">
+      <button class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-60"
+              ng-click="vm.add()"
+              ng-disabled="vm.loading.add">
+        <span ng-if="!vm.loading.add">Add Credit</span>
+        <span ng-if="vm.loading.add">Adding...</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded-md shadow-sm p-4">
+    <h3 class="text-md font-semibold mb-3">Credited Subjects</h3>
+    <div class="overflow-auto">
+      <table class="min-w-full border border-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="text-left text-sm font-medium text-gray-600 px-3 py-2 border-b">ID</th>
+            <th class="text-left text-sm font-medium text-gray-600 px-3 py-2 border-b">Subject</th>
+            <th class="text-left text-sm font-medium text-gray-600 px-3 py-2 border-b">Term Taken</th>
+            <th class="text-left text-sm font-medium text-gray-600 px-3 py-2 border-b">School Taken</th>
+            <th class="text-left text-sm font-medium text-gray-600 px-3 py-2 border-b">Remarks</th>
+            <th class="text-left text-sm font-medium text-gray-600 px-3 py-2 border-b">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-if="!vm.credits.length">
+            <td colspan="6" class="text-center text-sm text-gray-500 px-3 py-4">No credited subjects found.</td>
+          </tr>
+          <tr ng-repeat="row in vm.credits">
+            <td class="px-3 py-2 border-b text-sm">{{ row.id }}</td>
+            <td class="px-3 py-2 border-b text-sm">
+              <div class="font-medium">{{ row.subject_code || '(ID ' + row.subject_id + ')' }}</div>
+              <div class="text-xs text-gray-500">{{ row.subject_description || row.credited_subject_name }}</div>
+            </td>
+            <td class="px-3 py-2 border-b text-sm">{{ row.term_taken || '-' }}</td>
+            <td class="px-3 py-2 border-b text-sm">{{ row.school_taken || '-' }}</td>
+            <td class="px-3 py-2 border-b text-sm">{{ row.remarks || '-' }}</td>
+            <td class="px-3 py-2 border-b text-sm">
+              <button class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
+                      ng-click="vm.remove(row)">
+                Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

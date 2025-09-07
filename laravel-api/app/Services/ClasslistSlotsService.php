@@ -66,6 +66,7 @@ class ClasslistSlotsService
         $subEnlisted = DB::table('tb_mas_classlist_student as cls')
             ->select('cls.intClassListID', DB::raw('COUNT(*) as enlisted_count'))
             ->where('cls.intsyID', $term)
+            ->where('cls.is_credited_subject', 0)
             ->groupBy('cls.intClassListID');
 
         // Subquery: enrolled counts for the term
@@ -76,7 +77,8 @@ class ClasslistSlotsService
                   ->where('r.intAYID', '=', $term);
             })
             ->select('cls.intClassListID', DB::raw('COUNT(*) as enrolled_count'))
-            ->where('cls.intsyID', $term)            
+            ->where('cls.intsyID', $term)
+            ->where('cls.is_credited_subject', 0)
             ->whereIn('r.enrollment_status', ['enrolled','withdrawn after','withdrawn end'])
             ->groupBy('cls.intClassListID');
 

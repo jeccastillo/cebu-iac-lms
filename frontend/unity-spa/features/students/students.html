@@ -135,6 +135,16 @@
             <i class="fas fa-upload mr-2"></i> {{ vm.importing ? 'Importing...' : 'Import' }}
           </button>
           <input id="studentsImportFile" type="file" accept=".xlsx,.xls,.csv" style="display:none" />
+          <span class="mx-2 text-gray-300">|</span>
+          <button class="inline-flex items-center px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded"
+                  ng-click="vm.downloadClassRecordsTemplate()">
+            <i class="fas fa-file-excel mr-2 text-green-600"></i> Download Class Records Template
+          </button>
+          <button class="inline-flex items-center px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded"
+                  ng-click="vm.openClassRecordsImportDialog()" ng-disabled="vm.crImporting">
+            <i class="fas fa-upload mr-2"></i> {{ vm.crImporting ? 'Importing Class Records...' : 'Import Class Records' }}
+          </button>
+          <input id="classRecordsImportFile" type="file" accept=".xlsx,.xls,.csv" style="display:none" />
         </div>
       </div>
       <div class="mt-3" ng-if="vm.importError">
@@ -165,6 +175,42 @@
                 <tr ng-repeat="e in (vm.importSummary.errors | limitTo:50)">
                   <td class="px-2 py-1">{{ e.line }}</td>
                   <td class="px-2 py-1">{{ e.student_number || '-' }}</td>
+                  <td class="px-2 py-1">{{ e.message }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- Class Records import status -->
+      <div class="mt-3" ng-if="vm.crImportError">
+        <div class="px-3 py-2 rounded border border-red-200 bg-red-50 text-red-700 text-sm">
+          <i class="fas fa-exclamation-triangle mr-1"></i> {{ vm.crImportError }}
+        </div>
+      </div>
+      <div class="mt-3" ng-if="vm.crImportSummary">
+        <div class="px-3 py-2 rounded border border-indigo-200 bg-indigo-50 text-indigo-700 text-sm">
+          <span class="font-semibold">Class Records import summary:</span>
+          <span class="ml-2">Total: {{ vm.crImportSummary.totalRows }}</span>
+          <span class="ml-2">Inserted: {{ vm.crImportSummary.inserted }}</span>
+          <span class="ml-2">Updated: {{ vm.crImportSummary.updated }}</span>
+          <span class="ml-2">Skipped: {{ vm.crImportSummary.skipped }}</span>
+        </div>
+        <div class="mt-2" ng-if="vm.crImportSummary.errors.length">
+          <div class="text-sm text-gray-700 mb-1">Errors (showing up to 50):</div>
+          <div class="max-h-40 overflow-auto border border-gray-200 rounded">
+            <table class="min-w-full text-xs">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="px-2 py-1 text-left">Line</th>
+                  <th class="px-2 py-1 text-left">Code</th>
+                  <th class="px-2 py-1 text-left">Message</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="e in (vm.crImportSummary.errors | limitTo:50)">
+                  <td class="px-2 py-1">{{ e.line }}</td>
+                  <td class="px-2 py-1">{{ e.code || '-' }}</td>
                   <td class="px-2 py-1">{{ e.message }}</td>
                 </tr>
               </tbody>
