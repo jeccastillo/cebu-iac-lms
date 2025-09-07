@@ -6,6 +6,7 @@
     </h1>
     <div class="text-sm text-gray-500">
       <span class="mr-4">Student ID: <span class="font-semibold">{{ vm.id }}</span></span>
+      <span class="mr-4" ng-if="vm.student && vm.student.full_name">Name: <span class="font-semibold">{{ vm.student.full_name }}</span></span>
     </div>
   </div>
 
@@ -174,11 +175,19 @@
         </div>
 
         <div ng-if="vm.records">
+          <div class="p-3 mb-2 bg-blue-50 border border-blue-200 rounded" ng-if="vm.totalGpa().hasData">
+            <div class="text-lg font-semibold text-blue-800">
+              Overall GPA — Midterm: {{ (vm.totalGpa().midterm != null ? (vm.totalGpa().midterm | number:2) : '-') }} | Final: {{ (vm.totalGpa().final != null ? (vm.totalGpa().final | number:2) : '-') }}
+            </div>
+          </div>
           <div class="space-y-3">
             <div class="border rounded" ng-repeat="t in vm.sortedTerms() track by $index">
               <div class="px-3 py-2 bg-gray-50 border-b">
                 <div class="text-sm font-medium text-gray-700">
                   {{ t.term }}
+                </div>
+                <div class="text-base font-medium text-gray-700 mt-1" ng-if="vm.termGpa(t).hasData">
+                  Midterm GPA: {{ (vm.termGpa(t).midterm != null ? (vm.termGpa(t).midterm | number:2) : '-') }} | Final GPA: {{ (vm.termGpa(t).final != null ? (vm.termGpa(t).final | number:2) : '-') }}
                 </div>
               </div>
               <div class="p-3">

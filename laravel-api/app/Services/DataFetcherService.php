@@ -289,7 +289,8 @@ class DataFetcherService
                 'cls.floatPrelimGrade as prelim',
                 'cls.floatMidtermGrade as midterm',
                 'cls.floatFinalsGrade as finals',
-                'cls.floatFinalGrade as final'
+                'cls.floatFinalGrade as final',
+                's.include_gwa as include_gwa'
             )
             ->orderBy('sy.strYearStart', 'asc')
             ->orderBy('sy.enumSem', 'asc')            
@@ -338,6 +339,7 @@ class DataFetcherService
                     'strYearEnd'    => $r->strYearEnd ?? null,
                     'school_year'   => (isset($r->strYearStart, $r->strYearEnd) ? ($r->strYearStart . '-' . $r->strYearEnd) : null),
                     'term'          => $termLabel, // e.g., "1st Term 2025-2026" (frontend further formats to "1st Sem ...")
+                    'include_gwa'   => isset($r->include_gwa) ? (int)$r->include_gwa : 0,
                     'remarks'       => $r->remarks,                    
                 ];
                 if ($includeGrades) {
@@ -398,7 +400,8 @@ class DataFetcherService
                 'cls.floatPrelimGrade as prelim',
                 'cls.floatMidtermGrade as midterm',
                 'cls.floatFinalsGrade as finals',
-                'cls.floatFinalGrade as final'
+                'cls.floatFinalGrade as final',
+                's.include_gwa as include_gwa'
             )
             ->orderBy('s.strCode', 'asc')
             ->get();
@@ -420,6 +423,7 @@ class DataFetcherService
                     'subject_id'  => isset($r->subject_id) ? (int)$r->subject_id : null,
                     'term'        => $label,
                     'syid'        => $r->syid,
+                    'include_gwa' => isset($r->include_gwa) ? (int)$r->include_gwa : 0,
                     'remarks'     => $r->remarks,                    
                 ];
                 if ($includeGrades) {

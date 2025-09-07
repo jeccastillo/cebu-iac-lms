@@ -54,6 +54,8 @@
 
     // Grades data
     vm.records = null;
+    // Student meta (name, number)
+    vm.student = null;
 
     // Helpers
     function normalizeId(id) {
@@ -197,6 +199,95 @@
         return t;
       });
       return terms;
+    };
+
+    // GPA helpers
+    function _num(v) {
+      if (v === null || v === undefined) return null;
+      var n = parseFloat(v);
+      return isFinite(n) ? n : null;
+    }
+    function _units(r) {
+      if (!r) return null;
+      var u = (r.units != null ? r.units : (r.strUnits != null ? r.strUnits : null));
+      u = _num(u);
+      return (u != null && u > 0) ? u : null;
+    }
+    // Get grade value from record given possible key candidates (e.g., ['midterm'] or ['final','finals'])
+    function _grade(r, keyCandidates) {
+      if (!r) return null;
+      var g = null;
+      // direct fields
+      for (var i = 0; i < keyCandidates.length; i++) {
+        var k = keyCandidates[i];
+        if (r[k] != null) {
+          g = _num(r[k]);
+          if (g != null) return g;
+        }
+      }
+      // nested grades object
+      if (r.grades) {
+        for (var j = 0; j < keyCandidates.length; j++) {
+          var kg = keyCandidates[j];
+          if (r.grades[kg] != null) {
+            g = _num(r.grades[kg]);
+            if (g != null) return g;
+          }
+        }
+      }
+      // common fallbacks from previous shapes
+      if (keyCandidates.indexOf('midterm') !== -1 && r.floatMidtermGrade != null) {
+        g = _num(r.floatMidtermGrade);
+        if (g != null) return g;
+      }
+      if ((keyCandidates.indexOf('final') !== -1 || keyCandidates.indexOf('finals') !== -1) && r.floatFinalGrade != null) {
+        g = _num(r.floatFinalGrade);
+        if (g != null) return g;
+      }
+      return null;
+    }
+    // Compute weighted GPA = Sum(grade * units) / Sum(units)
+    vm._computeWeightedGpa = function (records, gradeKeys) {
+      if (!angular.isArray(records) || !records.length) return null;
+      var num = 0, den = 0;
+      for (var i = 0; i < records.length; i++) {
+        var r = records[i];
+        // Only include if subject include_gwa is true (1) and this is not a credited subject (backend already filters)
+        if (!(r && (r.include_gwa === 1 || r.include_gwa === true))) continue;
+        var u = _units(r);
+        if (u == null) continue;
+        var g = _grade(r, gradeKeys);
+        if (g == null) continue;
+        num += (g * u);
+        den += u;
+      }
+      if (den <= 0) return null;
+      return num / den;
+    };
+    // Per-term GPAs
+    vm.termGpa = function (term) {
+      if (!term || !angular.isArray(term.records)) return { midterm: null, final: null, hasData: false };
+      var mid = vm._computeWeightedGpa(term.records, ['midterm']);
+      var fin = vm._computeWeightedGpa(term.records, ['final', 'finals']);
+      return { midterm: mid, final: fin, hasData: (mid != null || fin != null) };
+    };
+    // Overall GPAs across all terms
+    vm.totalGpa = function () {
+      if (!vm.records) return { midterm: null, final: null, hasData: false };
+      var all = [];
+      if (angular.isArray(vm.records.terms)) {
+        vm.records.terms.forEach(function (t) {
+          if (t && angular.isArray(t.records)) {
+            Array.prototype.push.apply(all, t.records);
+          }
+        });
+      } else if (angular.isArray(vm.records.records)) {
+        all = vm.records.records.slice();
+      }
+      if (!all.length) return { midterm: null, final: null, hasData: false };
+      var mid = vm._computeWeightedGpa(all, ['midterm']);
+      var fin = vm._computeWeightedGpa(all, ['final', 'finals']);
+      return { midterm: mid, final: fin, hasData: (mid != null || fin != null) };
     };
 
     // Grades actions
@@ -361,6 +452,29 @@
         });
     };
 
+    // Fetch minimal student meta (name, number); also set vm.sn if available
+    vm.fetchStudentMeta = function () {
+      return $http.get(APP_CONFIG.API_BASE + '/students/' + encodeURIComponent(vm.id), _adminHeaders())
+        .then(function (resp) {
+          var data = (resp && resp.data && (resp.data.data || resp.data)) ? (resp.data.data || resp.data) : null;
+          if (data) {
+            var first = data.first_name || data.strFirstname || null;
+            var last = data.last_name || data.strLastname || null;
+            var sn = data.student_number || data.strStudentNumber || null;
+            vm.student = {
+              first_name: first,
+              last_name: last,
+              student_number: sn,
+              full_name: (last || first) ? ((last || '') + (last && first ? ', ' : '') + (first || '')) : null
+            };
+            if (!vm.sn && sn) {
+              vm.sn = ('' + sn).trim();
+            }
+          }
+        })
+        .catch(function () { /* ignore meta fetch errors */ });
+    };
+
     // If ?sn is missing, attempt to resolve student_number from API: GET /students/{id}
     vm.ensureStudentNumber = function () {
       if (vm.sn) return;
@@ -389,12 +503,16 @@
       // Checklist always by student id
       vm.fetchChecklist();
 
-      // Grades: use ?sn when present, else resolve via /students/{id}
-      if (vm.sn) {
-        vm.fetchGrades();
-      } else {
-        vm.ensureStudentNumber();
-      }
+      // Always fetch student meta (name and possibly student_number), then load grades
+      vm.fetchStudentMeta()
+        .finally(function () {
+          // Grades: use ?sn when present, else resolve via /students/{id}
+          if (vm.sn) {
+            vm.fetchGrades();
+          } else {
+            vm.ensureStudentNumber();
+          }
+        });
     };
 
     vm.init();

@@ -119,8 +119,7 @@ class TuitionService
                 's.intLab as intLab',
                 's.strLabClassification as labClass',
                 's.isNSTP as isNSTP',
-                's.isThesisSubject as isThesisSubject',
-                's.intMajor as intMajor',
+                's.isThesisSubject as isThesisSubject',                
                 's.isElective as isElective',
                 'cls.additional_elective as additional_elective',
                 'cl.is_modular as is_modular',
@@ -134,8 +133,7 @@ class TuitionService
                 $arr['units'] = isset($arr['units']) ? (int) $arr['units'] : 0;
                 $arr['labClass'] = $arr['labClass'] ?? 'none';
                 $arr['isNSTP'] = (int) ($arr['isNSTP'] ?? 0);
-                $arr['isThesisSubject'] = (int) ($arr['isThesisSubject'] ?? 0);
-                $arr['intMajor'] = (int) ($arr['intMajor'] ?? 0);
+                $arr['isThesisSubject'] = (int) ($arr['isThesisSubject'] ?? 0);                
                 $arr['isElective'] = (int) ($arr['isElective'] ?? 0);
                 $arr['additional_elective'] = (int) ($arr['additional_elective'] ?? 0);
                 $arr['is_modular'] = (int) ($arr['is_modular'] ?? 0);

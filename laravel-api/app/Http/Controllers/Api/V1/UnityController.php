@@ -323,7 +323,7 @@ class UnityController extends Controller
         } catch (\Throwable $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to compute tuition preview',
+                'message' => $e->getMessage()//'Failed to compute tuition preview',
             ], 500);
         }
     }
