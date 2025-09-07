@@ -330,7 +330,7 @@
         }
         return false;
       }
-
+      
       var endpoint = (sid !== null && sid !== undefined && sid !== '' ? vm.api.recordsByTerm : vm.api.records);
       return $http.post(endpoint, payload)
         .then(function (resp) {
@@ -437,14 +437,14 @@
 
       // Load terms first to apply saved/active term, then fetch records accordingly
       vm.loadTerms().then(function () {
-        if (!vm.selectedTermId) {
+        if (!vm.selectedTermId) {          
           // No preset term; fetch unfiltered records
           vm.fetchRecords();
         }
         // If selectedTermId was set, vm.onTermChange() inside loadTerms already triggered fetchRecords()
       });
     };
-
+    
     vm.init();
   }
 

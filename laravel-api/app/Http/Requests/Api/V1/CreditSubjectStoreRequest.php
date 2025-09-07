@@ -15,10 +15,11 @@ class CreditSubjectStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'subject_id'   => ['required', 'integer', 'exists:tb_mas_subjects,intID'],
-            'term_taken'   => ['nullable', 'string', 'max:100'],
-            'school_taken' => ['nullable', 'string', 'max:255'],
-            'remarks'      => ['nullable', 'string', 'max:255'],
+            'subject_id'       => ['required', 'integer', 'exists:tb_mas_subjects,intID'],
+            'term_taken'       => ['nullable', 'string', 'max:100'],
+            'school_taken'     => ['nullable', 'string', 'max:255'],
+            'remarks'          => ['nullable', 'string', 'max:255'],
+            'floatFinalGrade'  => ['nullable', 'string', 'max:20'],
         ];
     }
 

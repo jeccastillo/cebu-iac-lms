@@ -201,13 +201,13 @@
 
     // Grades actions
     vm.fetchGrades = function () {
-      if (!vm.sn) {
+      if (!vm.id) {
         vm.records = null;
         return;
       }
       vm.loading.grades = true;
       vm.error.grades = null;
-      var payload = { student_number: vm.sn, include_grades: true };
+      var payload = { student_id: vm.id, include_grades: true };
       return $http.post(vm.api.records, payload, _adminHeaders())
         .then(function (resp) {
           if (resp && resp.data && resp.data.success !== false) {

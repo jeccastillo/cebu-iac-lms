@@ -17,18 +17,15 @@ class CreditedSubjectsService
      */
     public function list(string $studentNumber): array
     {
-        $student = DB::table('tb_mas_users')
-            ->where('strStudentNumber', $studentNumber)
-            ->select('intID')
-            ->first();
+        $studentId = $this->resolveStudentId($studentNumber);
 
-        if (!$student) {
+        if (!$studentId) {
             throw new \InvalidArgumentException('Student not found');
         }
 
         $rows = DB::table('tb_mas_classlist_student as cls')
             ->leftJoin('tb_mas_subjects as s', 's.intID', '=', 'cls.equivalent_subject')
-            ->where('cls.intStudentID', (int) $student->intID)
+            ->where('cls.intStudentID', (int) $studentId)
             ->where('cls.is_credited_subject', 1)
             ->select([
                 'cls.intCSID as id',
@@ -37,6 +34,7 @@ class CreditedSubjectsService
                 'cls.school_taken',
                 'cls.strRemarks',
                 'cls.credited_subject_name',
+                'cls.floatFinalGrade',
                 's.strCode as subject_code',
                 's.strDescription as subject_description',
             ])
@@ -52,6 +50,7 @@ class CreditedSubjectsService
                 'credited_subject_name' => $r->credited_subject_name,
                 'term_taken' => $r->term_taken,
                 'school_taken' => $r->school_taken,
+                'final_grade' => isset($r->floatFinalGrade) ? (string) $r->floatFinalGrade : null,
                 'remarks' => $r->strRemarks,
             ];
         })->toArray();
@@ -71,12 +70,9 @@ class CreditedSubjectsService
      */
     public function create(string $studentNumber, int $subjectId, ?string $termTaken, ?string $schoolTaken, ?string $remarks, Request $request): array
     {
-        $student = DB::table('tb_mas_users')
-            ->where('strStudentNumber', $studentNumber)
-            ->select('intID')
-            ->first();
+        $studentId = $this->resolveStudentId($studentNumber);
 
-        if (!$student) {
+        if (!$studentId) {
             throw new \InvalidArgumentException('Student not found');
         }
 
@@ -88,7 +84,7 @@ class CreditedSubjectsService
 
         // Prevent duplicates
         $exists = DB::table('tb_mas_classlist_student')
-            ->where('intStudentID', (int) $student->intID)
+            ->where('intStudentID', (int) $studentId)
             ->where('is_credited_subject', 1)
             ->where('equivalent_subject', $subjectId)
             ->exists();
@@ -98,14 +94,17 @@ class CreditedSubjectsService
         }
 
         // Prepare row payload
+        $grade = $request->input('floatFinalGrade', null);
+
         $row = [
-            'intStudentID'          => (int) $student->intID,
+            'intStudentID'          => (int) $studentId,
             'is_credited_subject'   => 1,
             'equivalent_subject'    => (int) $subjectId,
             'credited_subject_name' => $this->buildCreditedName($subject),
             'term_taken'            => $termTaken !== '' ? $termTaken : null,
             'school_taken'          => $schoolTaken !== '' ? $schoolTaken : null,
             'strRemarks'            => ($remarks !== null && $remarks !== '') ? $remarks : 'credited',
+            'floatFinalGrade'       => ($grade !== null && $grade !== '') ? (string) $grade : null,
         ];
 
         // Some schemas enforce non-null intClassListID; if present, set to 0 sentinel.
@@ -128,12 +127,13 @@ class CreditedSubjectsService
 
         return [
             'id' => (int) $id,
-            'student_id' => (int) $student->intID,
+            'student_id' => (int) $studentId,
             'subject_id' => (int) $subjectId,
             'term_taken' => $row['term_taken'],
             'school_taken' => $row['school_taken'],
             'remarks' => $row['strRemarks'],
             'credited_subject_name' => $row['credited_subject_name'],
+            'final_grade' => $row['floatFinalGrade'] ?? null,
         ];
     }
 
@@ -147,12 +147,9 @@ class CreditedSubjectsService
      */
     public function delete(string $studentNumber, int $creditId, Request $request): bool
     {
-        $student = DB::table('tb_mas_users')
-            ->where('strStudentNumber', $studentNumber)
-            ->select('intID')
-            ->first();
+        $studentId = $this->resolveStudentId($studentNumber);
 
-        if (!$student) {
+        if (!$studentId) {
             throw new \InvalidArgumentException('Student not found');
         }
 
@@ -160,7 +157,7 @@ class CreditedSubjectsService
             ->where('intCSID', $creditId)
             ->first();
 
-        if (!$existing || (int) $existing->intStudentID !== (int) $student->intID || (int) $existing->is_credited_subject !== 1) {
+        if (!$existing || (int) $existing->intStudentID !== (int) $studentId || (int) $existing->is_credited_subject !== 1) {
             throw new \InvalidArgumentException('Credited subject entry not found for this student');
         }
 
@@ -200,6 +197,43 @@ class CreditedSubjectsService
             if ($b === $subjectId && $a > 0) $out[] = $a;
         }
         return array_values(array_unique($out));
+    }
+
+    protected function resolveStudentId(string $identifier): ?int
+    {
+        $raw = trim((string) $identifier);
+        if ($raw === '') { return null; }
+
+        // If identifier appears as a composed label "STUDENT_NUMBER — Last, First", extract the student number.
+        if (mb_strpos($raw, '—') !== false) {
+            $parts = preg_split('/\s*—\s*/u', $raw, 2);
+            $raw = trim($parts[0] ?? $raw);
+        }
+
+        // Try numeric internal user id
+        if (ctype_digit($raw)) {
+            $byId = DB::table('tb_mas_users')->where('intID', (int) $raw)->value('intID');
+            if ($byId !== null) {
+                return (int) $byId;
+            }
+        }
+
+        // Try exact student number
+        $bySn = DB::table('tb_mas_users')->where('strStudentNumber', $raw)->value('intID');
+        if ($bySn !== null) {
+            return (int) $bySn;
+        }
+
+        // Fallback: tolerate accidental spaces instead of hyphen in student number
+        $alt = preg_replace('/\s+/', '-', $raw);
+        if ($alt !== $raw) {
+            $byAlt = DB::table('tb_mas_users')->where('strStudentNumber', $alt)->value('intID');
+            if ($byAlt !== null) {
+                return (int) $byAlt;
+            }
+        }
+
+        return null;
     }
 
     protected function buildCreditedName(object $subject): string

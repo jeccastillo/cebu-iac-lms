@@ -69,9 +69,9 @@
           }
         } catch (e) {}
 
-        // Create dropdown panel
+        // Create dropdown panel (positioned under the input)
         var panel = angular.element(
-          '<ul class="pui-ac-panel absolute z-50 w-full bg-white border border-gray-200 rounded shadow max-h-60 overflow-auto hidden" role="listbox"></ul>'
+          '<ul class="pui-ac-panel absolute z-50 w-full bg-white border border-gray-200 rounded shadow max-h-60 overflow-auto hidden" role="listbox" style="top:100%;left:0;margin-top:4px;"></ul>'
         );
         element.after(panel);
 
@@ -86,6 +86,10 @@
 
         function openPanel() {
           if (!isOpen) {
+            // Ensure panel is aligned with the input (below and left-aligned)
+            try {
+              panel.css({ top: '100%', left: '0', marginTop: '4px' });
+            } catch (e) {}
             panel.removeClass('hidden');
             isOpen = true;
           }

@@ -49,6 +49,7 @@
           { label: 'Enlistment', path: '/registrar/enlistment' },
           { label: 'Enlistment Applicants', path: '/registrar/enlistment-applicants' },
           { label: 'Slot Monitoring', path: '/registrar/sections-slots' },
+          { label: 'Credit Subjects', path: '/registrar/credit-subjects' },
           { label: 'Classlists', path: '/classlists' },          
         ]
       },

@@ -1,15 +1,25 @@
 <div class="p-4 space-y-4" ng-controller="CreditSubjectsController as vm">
   <div class="bg-white border border-gray-200 rounded-md shadow-sm p-4">
     <h2 class="text-lg font-semibold mb-3">Credit Subjects</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">
-      <div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-center">
+      <div class="relative">
         <label class="block text-sm text-gray-600 mb-1">Student Number</label>
         <input type="text"
                class="w-full border border-gray-300 rounded px-3 py-2"
-               placeholder="e.g. 2023-00001"
-               ng-model="vm.student_number" />
+               placeholder="Type to search student..."
+               ng-model="vm.student_number"
+               pui-autocomplete
+               pui-source="vm.studentResults"
+               pui-item-key="student_number"
+               pui-label="(item.student_number + ' — ' + item.last_name + ', ' + item.first_name + (item.program ? ' (' + item.program + ')' : ''))"
+               pui-on-query="vm.onStudentQuery($query)"
+               pui-min-chars="2"
+               pui-query-debounce="250"
+               pui-max-results="10"
+               pui-on-select="vm.load()" />
+        <div class="text-xs text-gray-500 mt-1">Search by student number or name; select from suggestions to load credits.</div>
       </div>
-      <div class="flex space-x-2">
+      <div class="flex space-x-2 md:self-center">
         <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-60"
                 ng-click="vm.load()"
                 ng-disabled="vm.loading.list">
@@ -26,14 +36,17 @@
 
   <div class="bg-white border border-gray-200 rounded-md shadow-sm p-4">
     <h3 class="text-md font-semibold mb-3">Add Credit</h3>
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
       <div>
-        <label class="block text-sm text-gray-600 mb-1">Subject ID</label>
-        <input type="number"
-               class="w-full border border-gray-300 rounded px-3 py-2"
-               placeholder="e.g. 156"
-               ng-model="vm.form.subject_id" />
-        <div class="text-xs text-gray-500 mt-1">Enter the Subject's intID</div>
+        <label class="block text-sm text-gray-600 mb-1">Subject</label>
+        <select
+          class="w-full border border-gray-300 rounded px-3 py-2"
+          ng-model="vm.form.subject_id"
+          ng-disabled="vm.loading.bootstrap"
+          ng-options="s.intID as (s.strCode + ' - ' + s.strDescription) for s in vm.subjects track by s.intID">
+          <option value="">-- Select subject --</option>
+        </select>
+        <div class="text-xs text-gray-500 mt-1" ng-if="vm.loading.bootstrap">Loading subjects…</div>
       </div>
       <div>
         <label class="block text-sm text-gray-600 mb-1">Term Taken</label>
@@ -48,6 +61,12 @@
                class="w-full border border-gray-300 rounded px-3 py-2"
                placeholder="e.g. Transfer University"
                ng-model="vm.form.school_taken" />
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Grade Given</label>
+        <input type="text" class="w-full border border-gray-300 rounded px-3 py-2"
+               placeholder="e.g. 1.75"
+               ng-model="vm.form.floatFinalGrade" />        
       </div>
       <div>
         <label class="block text-sm text-gray-600 mb-1">Remarks</label>
@@ -77,6 +96,7 @@
             <th class="text-left text-sm font-medium text-gray-600 px-3 py-2 border-b">Subject</th>
             <th class="text-left text-sm font-medium text-gray-600 px-3 py-2 border-b">Term Taken</th>
             <th class="text-left text-sm font-medium text-gray-600 px-3 py-2 border-b">School Taken</th>
+            <th class="text-left text-sm font-medium text-gray-600 px-3 py-2 border-b">Grade Given</th>
             <th class="text-left text-sm font-medium text-gray-600 px-3 py-2 border-b">Remarks</th>
             <th class="text-left text-sm font-medium text-gray-600 px-3 py-2 border-b">Actions</th>
           </tr>
@@ -93,6 +113,7 @@
             </td>
             <td class="px-3 py-2 border-b text-sm">{{ row.term_taken || '-' }}</td>
             <td class="px-3 py-2 border-b text-sm">{{ row.school_taken || '-' }}</td>
+            <td class="px-3 py-2 border-b text-sm">{{ row.final_grade != null ? row.final_grade : '-' }}</td>
             <td class="px-3 py-2 border-b text-sm">{{ row.remarks || '-' }}</td>
             <td class="px-3 py-2 border-b text-sm">
               <button class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"

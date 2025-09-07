@@ -51,7 +51,7 @@
 
       <!-- My Application (Student) -->
       <a href="#/student/applicant" 
-         ng-if="vm.canAccess('/student/applicant')"
+         ng-if="vm.hasRole('student_view')"
          class="sb-item"
          ng-class="{'sb-item--active': vm.isCurrentPath('/student/applicant')}"
          title="My Application">

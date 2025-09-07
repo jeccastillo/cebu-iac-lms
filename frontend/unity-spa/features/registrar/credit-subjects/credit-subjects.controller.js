@@ -5,8 +5,8 @@
     .module('unityApp')
     .controller('CreditSubjectsController', CreditSubjectsController);
 
-  CreditSubjectsController.$inject = ['$q', 'ToastService', 'CreditSubjectsService'];
-  function CreditSubjectsController($q, ToastService, CreditSubjectsService) {
+  CreditSubjectsController.$inject = ['$q', 'ToastService', 'CreditSubjectsService', 'SubjectsService', 'StudentsService'];
+  function CreditSubjectsController($q, ToastService, CreditSubjectsService, SubjectsService, StudentsService) {
     var vm = this;
 
     // State
@@ -19,12 +19,15 @@
     // Search/select student by student_number
     vm.student_number = '';
     vm.credits = [];
+    vm.subjects = [];
+    vm.studentResults = []; // pui-autocomplete dynamic source
 
     // Add form
     vm.form = {
       subject_id: '',
       term_taken: '',
       school_taken: '',
+      floatFinalGrade: '',
       remarks: 'credited'
     };
 
@@ -33,22 +36,59 @@
     vm.add = add;
     vm.remove = remove;
     vm.clearForm = clearForm;
+    vm.onStudentQuery = onStudentQuery; // pui-autocomplete remote query
 
     activate();
 
     function activate() {
-      // page init
+      // preload subjects for dropdown
+      vm.loading.bootstrap = true;
+      vm.subjects = [];
+      try {
+        SubjectsService.list({ limit: 500, page: 1 })
+          .then(function (res) {
+            var items = (res && res.data) ? res.data : (res || []);
+            vm.subjects = Array.isArray(items) ? items : [];
+          })
+          .catch(function (err) {
+            var msg = extractMsg(err, 'Failed to load subjects.');
+            ToastService.error(msg);
+          })
+          .finally(function () {
+            vm.loading.bootstrap = false;
+          });
+      } catch (e) {
+        vm.loading.bootstrap = false;
+      }
+    }
+
+    // Remote query for student_number autocomplete (no preloading)
+    function onStudentQuery(q) {
+      var term = (q || '').trim();
+      if (term.length < 2) {
+        vm.studentResults = [];
+        return $q.when();
+      }
+      // Query students endpoint with free-text filter
+      return StudentsService.listSuggestions(term)
+        .then(function (items) {
+          vm.studentResults = Array.isArray(items) ? items : [];
+        })
+        .catch(function () {
+          vm.studentResults = [];
+        });
     }
 
     function load() {
-      if (!vm.student_number || !vm.student_number.trim()) {
-        ToastService.warning('Enter a student number to load credited subjects.');
+      var sn = normalizedStudentNumber();
+      if (!sn) {
+        ToastService.warn('Enter a student number to load credited subjects.');
         return $q.when();
       }
       if (vm.loading.list) return $q.when();
 
       vm.loading.list = true;
-      return CreditSubjectsService.list(vm.student_number.trim())
+      return CreditSubjectsService.list(sn)
         .then(function (resp) {
           // resp expected shape: { success: true, data: [...] }
           var data = resp && resp.data ? resp.data : (resp || []);
@@ -65,13 +105,14 @@
     }
 
     function add() {
-      if (!vm.student_number || !vm.student_number.trim()) {
-        ToastService.warning('Enter a student number first.');
+      var sn = normalizedStudentNumber();
+      if (!sn) {
+        ToastService.warn('Enter a student number first.');
         return $q.when();
       }
       var subjId = parseInt(vm.form.subject_id, 10);
       if (!subjId || subjId <= 0) {
-        ToastService.warning('Enter a valid subject ID.');
+        ToastService.warn('Enter a valid subject ID.');
         return $q.when();
       }
       if (vm.loading.add) return $q.when();
@@ -81,10 +122,11 @@
         subject_id: subjId,
         term_taken: nullIfEmpty(vm.form.term_taken),
         school_taken: nullIfEmpty(vm.form.school_taken),
-        remarks: nullIfEmpty(vm.form.remarks)
+        remarks: nullIfEmpty(vm.form.remarks),
+        floatFinalGrade: nullIfEmpty(vm.form.floatFinalGrade)
       };
 
-      return CreditSubjectsService.add(vm.student_number.trim(), payload)
+      return CreditSubjectsService.add(sn, payload)
         .then(function () {
           ToastService.success('Credited subject added.');
           clearForm();
@@ -99,10 +141,15 @@
 
     function remove(row) {
       if (!row || !row.id) {
-        ToastService.warning('Select a valid credited entry.');
+        ToastService.warn('Select a valid credited entry.');
         return $q.when();
       }
-      return CreditSubjectsService.remove(vm.student_number.trim(), row.id)
+      var sn = normalizedStudentNumber();
+      if (!sn) {
+        ToastService.warn('Enter a student number first.');
+        return $q.when();
+      }
+      return CreditSubjectsService.remove(sn, row.id)
         .then(function () {
           ToastService.success('Credited subject removed.');
           return load();
@@ -117,6 +164,7 @@
       vm.form.subject_id = '';
       vm.form.term_taken = '';
       vm.form.school_taken = '';
+      vm.form.floatFinalGrade = '';
       vm.form.remarks = 'credited';
     }
 
@@ -124,6 +172,20 @@
       if (v === undefined || v === null) return null;
       var s = ('' + v).trim();
       return s === '' ? null : s;
+    }
+
+    function normalizedStudentNumber() {
+      try {
+        var raw = (vm.student_number || '').toString().trim();
+        if (!raw) return '';
+        // When the input displays "STUDENT_NUMBER — Last, First", keep the student number part.
+        if (raw.indexOf('—') !== -1) {
+          raw = raw.split('—')[0].trim();
+        }
+        return raw;
+      } catch (e) {
+        return (vm.student_number || '').trim();
+      }
     }
 
     function extractMsg(err, fallback) {
