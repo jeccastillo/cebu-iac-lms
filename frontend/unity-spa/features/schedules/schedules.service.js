@@ -125,31 +125,14 @@
           .then(_unwrap);
       },
 
-      getAvailableClasslists: function(intSem, blockSectionID) {
+      getAvailableClasslists: function(intSem) {
         var params = {};
         if (intSem) {
           params.intSem = intSem;
-        }
-        if (blockSectionID) {
-          params.blockSectionID = blockSectionID;
         }
         
         return $http
           .get(BASE + "/schedules/available-classlists", {
-            params: params,
-            headers: _adminHeaders().headers,
-          })
-          .then(_unwrap);
-      },
-
-      getBlockSections: function(intSem) {
-        var params = {};
-        if (intSem) {
-          params.intSem = intSem;
-        }
-        
-        return $http
-          .get(BASE + "/schedules/block-sections", {
             params: params,
             headers: _adminHeaders().headers,
           })

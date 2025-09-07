@@ -79,25 +79,6 @@
           </select>
         </div>
 
-        <!-- Block Section -->
-        <div>
-          <label for="blockSectionID" class="block text-sm font-medium text-gray-700 mb-2">
-            Block Section <span class="text-red-500">*</span>
-          </label>
-          <select id="blockSectionID"
-                  ng-model="vm.form.blockSectionID" 
-                  ng-change="vm.onBlockSectionChange()"
-                  ng-disabled="!vm.form.intSem"
-                  required
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-            <option value="">Select a block section</option>
-            <option ng-repeat="section in vm.blockSections" value="{{ section.intID }}">
-              {{ section.displayName }}
-            </option>
-          </select>
-          <p class="mt-1 text-sm text-gray-500">Choose the block section for this schedule</p>
-        </div>
-
         <!-- Classlist -->
         <div>
           <label for="intClasslistID" class="block text-sm font-medium text-gray-700 mb-2">
