@@ -392,7 +392,7 @@
               vm.form.intRoomID = vm.form.intRoomID.toString();
             }
             if (vm.form.strDay) {
-              vm.form.strDay = parseInt(vm.form.strDay, 10);
+              vm.form.strDay = vm.form.strDay.toString();
             }
             if (vm.form.intSem) {
               vm.form.intSem = vm.form.intSem.toString();
@@ -406,6 +406,16 @@
             if (vm.form.blockSection) {
               vm.form.blockSection = vm.form.blockSection.toString();
             }
+            
+            // Convert time fields to match timeSlots format (HH:MM)
+            if (vm.form.dteStart) {
+              vm.form.dteStart = vm.form.dteStart.substring(0, 5); // Remove seconds if present
+            }
+            if (vm.form.dteEnd) {
+              vm.form.dteEnd = vm.form.dteEnd.substring(0, 5); // Remove seconds if present
+            }
+            
+            console.log('Loaded schedule data:', vm.form); // Debug logging
             
             // Load available classlists for the selected academic year
             if (vm.form.intSem) {

@@ -375,6 +375,7 @@ class ScheduleController extends Controller
             
             // Check for comprehensive conflicts (excluding current record)
             $scheduleConflicts = $this->checkScheduleConflict($validated, $id);
+            die(var_dump($scheduleConflicts));
             if (!empty($scheduleConflicts)) {
                 return response()->json([
                     'success' => false,
@@ -649,11 +650,11 @@ class ScheduleController extends Controller
             ->where(function ($q) use ($data) {
                 $q->where(function ($timeQuery) use ($data) {
                     $timeQuery->whereBetween('dteStart', [$data['dteStart'], $data['dteEnd']])
-                             ->orWhereBetween('dteEnd', [$data['dteStart'], $data['dteEnd']])
-                             ->orWhere(function ($overlapQuery) use ($data) {
-                                 $overlapQuery->where('dteStart', '<=', $data['dteStart'])
-                                             ->where('dteEnd', '>=', $data['dteEnd']);
-                             });
+                            ->orWhereBetween('dteEnd', [$data['dteStart'], $data['dteEnd']])
+                            ->orWhere(function ($overlapQuery) use ($data) {
+                                $overlapQuery->where('dteStart', '<=', $data['dteStart'])
+                                            ->where('dteEnd', '>=', $data['dteEnd']);
+                            });
                 });
             })
             ->where('intRoomID', '!=', 99999);
@@ -664,11 +665,11 @@ class ScheduleController extends Controller
 
         if ($data['strDay'] == 7) {
             $query->where('intRoomID', $data['intRoomID'])
-                  ->where('intSem', $data['intSem']);
+                ->where('intSem', $data['intSem']);
         } else {
             $query->where('strDay', $data['strDay'])
-                  ->where('intRoomID', $data['intRoomID'])
-                  ->where('intSem', $data['intSem']);
+                ->where('intRoomID', $data['intRoomID'])
+                ->where('intSem', $data['intSem']);
         }
 
         return $query->get()->toArray();
