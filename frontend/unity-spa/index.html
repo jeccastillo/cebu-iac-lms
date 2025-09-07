@@ -165,8 +165,8 @@
         baseRoot = baseRoot.replace(/\/+$/, '');
       }
 
-      var defaultApi = (baseRoot === '/' ? '' : baseRoot) + '/laravel-api/public/api/v1';
-      //var defaultApi = "http://127.0.0.1:8000/api/v1";
+      // var defaultApi = (baseRoot === '/' ? '' : baseRoot) + '/laravel-api/public/api/v1';
+      var defaultApi = "http://127.0.0.1:8000/api/v1";
 
       // Base URL of the Laravel API v1. Can be overridden by setting window.API_BASE before this script.
       window.API_BASE = window.API_BASE || defaultApi;

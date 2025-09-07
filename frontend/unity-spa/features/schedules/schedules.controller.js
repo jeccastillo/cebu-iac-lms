@@ -17,7 +17,6 @@
     vm.academicYears = [];
     vm.availableClasslists = [];
     vm.allClasslists = []; // For filtering all classlists
-    vm.blockSections = []; // For block section selection
     vm.form = {};
     vm.filters = {};
     vm.q = '';
@@ -408,7 +407,7 @@
               vm.form.blockSection = vm.form.blockSection.toString();
             }
             
-            // Load available classlists and block sections for the selected academic year
+            // Load available classlists for the selected academic year
             if (vm.form.intSem) {
               loadAvailableClasslists();
               //loadBlockSections();

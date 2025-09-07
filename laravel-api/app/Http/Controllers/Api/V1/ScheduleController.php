@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Models\BlockSection;
 use App\Models\Classlist;
 use App\Models\Classroom;
 use App\Models\RoomSchedule;
@@ -616,7 +615,7 @@ class ScheduleController extends Controller
                                           $q->select('intID', 'strFirstname', 'strLastname');
                                       },
                                       'subject' => function ($q) {
-                                          $q->select('intID', 'strCode', 'strDescription', 'intProgramID');
+                                          $q->select('intID', 'strCode', 'strDescription');
                                       }
                                   ])
                                   ->select('intID', 'strClassName', 'sectionCode', 'intFacultyID', 'intSubjectID')
@@ -632,62 +631,6 @@ class ScheduleController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to retrieve available classlists',
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
-
-    /**
-     * Get available block sections.
-     */
-    public function getBlockSections(Request $request): JsonResponse
-    {
-        try {
-            // Get campus_id from header (required)
-            $campusId = $request->header('X-Campus-ID');
-            if (!$campusId) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Campus ID is required in X-Campus-ID header'
-                ], 400);
-            }
-
-            $academicYear = $request->query('intSem');
-
-            // Get block sections using BlockSection model with program information
-            $query = BlockSection::select('intID', 'name', 'intProgramID')
-                                ->with(['program' => function ($q) use ($campusId) {
-                                    $q->select('intProgramID', 'strProgramCode')
-                                    ->where('campus_id', $campusId);
-                                }])
-                                ->whereNotNull('intSYID');
-            if ($academicYear) {
-                $query->where('intSYID', $academicYear);
-            }
-
-            $blockSections = $query->orderBy('name')->get();
-
-            // Transform the data to include program code in display
-            $transformedSections = $blockSections->map(function ($section) {
-                return [
-                    'intID' => $section->intID,
-                    'name' => $section->name,
-                    'intProgramID' => $section->intProgramID,
-                    'displayName' => $section->name . ' - ' . ($section->program ? $section->program->strProgramCode : 'No Program'),
-                    'program' => $section->program
-                ];
-            });
-
-            return response()->json([
-                'success' => true,
-                'data' => $transformedSections,
-                'message' => 'Block sections retrieved successfully'
-            ]);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to retrieve block sections',
                 'error' => $e->getMessage()
             ], 500);
         }

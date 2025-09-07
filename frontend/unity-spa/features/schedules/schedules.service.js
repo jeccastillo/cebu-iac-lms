@@ -139,20 +139,6 @@
           .then(_unwrap);
       },
 
-      getBlockSections: function(intSem) {
-        var params = {};
-        if (intSem) {
-          params.intSem = intSem;
-        }
-        
-        return $http
-          .get(BASE + "/schedules/block-sections", {
-            params: params,
-            headers: _adminHeaders().headers,
-          })
-          .then(_unwrap);
-      },
-
       getAllClasslists: function() {
         return $http
           .get(BASE + "/classlists", _adminHeaders())
