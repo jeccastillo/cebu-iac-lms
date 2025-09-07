@@ -42,6 +42,7 @@ use App\Http\Controllers\Api\V1\TuitionYearController;
 use App\Http\Controllers\Api\V1\UnityController;
 use App\Http\Controllers\Api\V1\UsersController;
 use App\Http\Controllers\Api\V1\InitialRequirementsAdminController;
+use App\Http\Controllers\Api\V1\StudentImportController;
 use App\Services\ClasslistSlotsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -203,6 +204,10 @@ Route::prefix('v1')->group(function () {
     // Student endpoints (baseline)
     Route::get('/students', [StudentController::class, 'index']);
     Route::get('/students/{id}', [StudentController::class, 'show']);
+
+    // Students Import
+    Route::get('/students/import/template', [StudentImportController::class, 'template'])->middleware('role:registrar,admin');
+    Route::post('/students/import', [StudentImportController::class, 'import'])->middleware('role:registrar,admin');
     Route::post('/student/viewer', [StudentController::class, 'viewer']);
     Route::post('/student/applicant', [StudentController::class, 'applicant']);
     // Student: Applicant Journey (read-only)

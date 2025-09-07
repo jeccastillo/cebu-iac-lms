@@ -114,15 +114,63 @@
         </div>
       </div>
 
-      <div class="mt-4">
-        <button class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded"
-                ng-click="vm.page = 1; vm.search()">
-          <i class="fas fa-search mr-2"></i> Search
-        </button>
-        <span class="ml-3 text-sm text-gray-500" ng-if="vm.loading">
-          <i class="fas fa-spinner fa-spin mr-1"></i> Loading...
-        </span>
-        <span class="ml-3 text-sm text-red-600" ng-if="vm.error">{{ vm.error }}</span>
+      <div class="mt-4 flex items-center justify-between flex-wrap gap-3">
+        <div class="flex items-center gap-3">
+          <button class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded"
+                  ng-click="vm.page = 1; vm.search()">
+            <i class="fas fa-search mr-2"></i> Search
+          </button>
+          <span class="text-sm text-gray-500" ng-if="vm.loading">
+            <i class="fas fa-spinner fa-spin mr-1"></i> Loading...
+          </span>
+          <span class="text-sm text-red-600" ng-if="vm.error">{{ vm.error }}</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button class="inline-flex items-center px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded"
+                  ng-click="vm.downloadTemplate()">
+            <i class="fas fa-file-excel mr-2 text-green-600"></i> Download Template
+          </button>
+          <button class="inline-flex items-center px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded"
+                  ng-click="vm.openImportDialog()" ng-disabled="vm.importing">
+            <i class="fas fa-upload mr-2"></i> {{ vm.importing ? 'Importing...' : 'Import' }}
+          </button>
+          <input id="studentsImportFile" type="file" accept=".xlsx,.xls,.csv" style="display:none" />
+        </div>
+      </div>
+      <div class="mt-3" ng-if="vm.importError">
+        <div class="px-3 py-2 rounded border border-red-200 bg-red-50 text-red-700 text-sm">
+          <i class="fas fa-exclamation-triangle mr-1"></i> {{ vm.importError }}
+        </div>
+      </div>
+      <div class="mt-3" ng-if="vm.importSummary">
+        <div class="px-3 py-2 rounded border border-green-200 bg-green-50 text-green-700 text-sm">
+          <span class="font-semibold">Import summary:</span>
+          <span class="ml-2">Total: {{ vm.importSummary.totalRows }}</span>
+          <span class="ml-2">Inserted: {{ vm.importSummary.inserted }}</span>
+          <span class="ml-2">Updated: {{ vm.importSummary.updated }}</span>
+          <span class="ml-2">Skipped: {{ vm.importSummary.skipped }}</span>
+        </div>
+        <div class="mt-2" ng-if="vm.importSummary.errors.length">
+          <div class="text-sm text-gray-700 mb-1">Errors (showing up to 50):</div>
+          <div class="max-h-40 overflow-auto border border-gray-200 rounded">
+            <table class="min-w-full text-xs">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="px-2 py-1 text-left">Line</th>
+                  <th class="px-2 py-1 text-left">Student #</th>
+                  <th class="px-2 py-1 text-left">Message</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="e in (vm.importSummary.errors | limitTo:50)">
+                  <td class="px-2 py-1">{{ e.line }}</td>
+                  <td class="px-2 py-1">{{ e.student_number || '-' }}</td>
+                  <td class="px-2 py-1">{{ e.message }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   </div>

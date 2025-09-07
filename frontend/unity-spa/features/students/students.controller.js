@@ -5,8 +5,8 @@
     .module('unityApp')
     .controller('StudentsController', StudentsController);
 
-  StudentsController.$inject = ['$location', '$http', 'APP_CONFIG', 'LinkService', 'StorageService', 'CampusService', '$scope', '$timeout'];
-  function StudentsController($location, $http, APP_CONFIG, LinkService, StorageService, CampusService, $scope, $timeout) {
+  StudentsController.$inject = ['$location', '$http', 'APP_CONFIG', 'LinkService', 'StorageService', 'CampusService', 'StudentsService', '$scope', '$timeout', '$window'];
+  function StudentsController($location, $http, APP_CONFIG, LinkService, StorageService, CampusService, StudentsService, $scope, $timeout, $window) {
     var vm = this;
 
     vm.title = 'Students';
@@ -87,6 +87,123 @@
 
     vm.loading = false;
     vm.error = null;
+
+    // Import state
+    vm.importing = false;
+    vm.importError = null;
+    vm.importSummary = null;
+    vm._selectedFile = null;
+
+    vm.downloadTemplate = function () {
+      vm.importError = null;
+      try {
+        StudentsService.downloadTemplate().then(function (res) {
+          var data = res && res.data ? res.data : null;
+          var filename = (res && res.filename) ? res.filename : 'students-import-template.xlsx';
+          if (!data) {
+            vm.importError = 'Failed to download template.';
+            return;
+          }
+          var blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          var url = ($window.URL || $window.webkitURL).createObjectURL(blob);
+          var a = document.createElement('a');
+          a.href = url;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(function () {
+            ($window.URL || $window.webkitURL).revokeObjectURL(url);
+            try { document.body.removeChild(a); } catch (e) {}
+          }, 0);
+        }).catch(function () {
+          vm.importError = 'Failed to download template.';
+        });
+      } catch (e) {
+        vm.importError = 'Failed to download template.';
+      }
+    };
+
+    vm.openImportDialog = function () {
+      vm.importError = null;
+      vm.importSummary = null;
+      var el = document.getElementById('studentsImportFile');
+      if (el) {
+        try {
+          // reset previous selection to ensure change event fires even for same file
+          el.value = '';
+          el.onchange = function (evt) {
+            var files = (evt && evt.target) ? evt.target.files : null;
+            try {
+              $scope.$applyAsync(function () {
+                vm.onFileSelected(files);
+              });
+            } catch (e) {
+              // fallback without digest
+              vm.onFileSelected(files);
+            }
+          };
+        } catch (e) {}
+        el.click();
+      }
+    };
+
+    vm.onFileSelected = function (files) {
+      vm.importError = null;
+      vm.importSummary = null;
+      try {
+        if (files && files.length > 0) {
+          vm._selectedFile = files[0];
+        } else {
+          vm._selectedFile = null;
+        }
+      } catch (e) {
+        vm._selectedFile = null;
+      }
+      // Auto-run import upon selection
+      if (vm._selectedFile) {
+        vm.runImport();
+      }
+    };
+
+    vm.runImport = function () {
+      if (!vm._selectedFile) {
+        vm.importError = 'No file selected';
+        return;
+      }
+      vm.importing = true;
+      vm.importError = null;
+      vm.importSummary = null;
+      StudentsService.importFile(vm._selectedFile, { dry_run: false })
+        .then(function (res) {
+          var ok = res && (res.success !== false);
+          var result = res && res.result ? res.result : null;
+          if (!ok || !result) {
+            vm.importError = (res && res.message) ? res.message : 'Import failed.';
+            return;
+          }
+          vm.importSummary = {
+            totalRows: result.totalRows || 0,
+            inserted: result.inserted || 0,
+            updated: result.updated || 0,
+            skipped: result.skipped || 0,
+            errors: Array.isArray(result.errors) ? result.errors : []
+          };
+          // Refresh list after successful import
+          vm.search();
+        })
+        .catch(function (e) {
+          vm.importError = (e && e.data && e.data.message) ? e.data.message : 'Import failed.';
+        })
+        .finally(function () {
+          vm.importing = false;
+          // clear file input
+          try {
+            var el = document.getElementById('studentsImportFile');
+            if (el) el.value = '';
+          } catch (e) {}
+          vm._selectedFile = null;
+        });
+    };
 
     vm.programs = [];
     vm.loadPrograms = function () {
