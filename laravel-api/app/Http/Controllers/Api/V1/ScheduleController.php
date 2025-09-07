@@ -375,7 +375,6 @@ class ScheduleController extends Controller
             
             // Check for comprehensive conflicts (excluding current record)
             $scheduleConflicts = $this->checkScheduleConflict($validated, $id);
-            die(var_dump($scheduleConflicts));
             if (!empty($scheduleConflicts)) {
                 return response()->json([
                     'success' => false,
