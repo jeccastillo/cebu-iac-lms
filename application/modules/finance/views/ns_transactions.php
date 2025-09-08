@@ -77,6 +77,11 @@
                                             data-target="#orDetailsUpdate" class="btn btn-primary">
                                             Update Details </button>
                                         <button
+                                            v-if="payment.remarks != 'Voided' && cashier && finance_manager_privilages"
+                                            data-toggle="modal" data-target="#voidPaymentModal"
+                                            class="btn btn-primary"
+                                            @click="setToVoid(payment.id)">Void/Cancel</button>
+                                        <button
                                             v-if="cashier && finance_manager_privilages && payment.status == 'Paid'"
                                             class="btn btn-danger"
                                             @click="deletePayment(payment.id)">Retract
@@ -173,6 +178,30 @@
                 </div>
             </form>
         </div>
+        <div class="modal fade" id="voidPaymentModal" role="dialog">
+            <form @submit.prevent="voidPayment" class="modal-dialog modal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!-- modal header  -->
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Set Payment to Void</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <textarea class="form-control" v-model="void_reason"
+                                required></textarea>
+                        </div>
+                    </div>
+                    <div class=" modal-footer">
+                        <!-- modal footer  -->
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="button" class="btn btn-default"
+                            data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
     <!---vue container--->
 </aside>
@@ -231,6 +260,8 @@ new Vue({
             invoice_amount_ves: 0,
             invoice_amount_vzrs: 0,
         },
+        void_id: undefined,
+        void_reason: undefined,
     },
     mounted() {
         let url_string = window.location.href;
@@ -423,6 +454,49 @@ new Vue({
                 }, delayInMilliseconds);
             });
         },
+        voidPayment: function() {
+            let url = api_url + 'finance/set_void';
+            this.loader_spinner = true;
+            Swal.fire({
+                title: 'Continue with processing Payment',
+                text: "Are you sure you want to process payment?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    let payload = {
+                        'id': this.void_id,
+                        'void_reason': this.void_reason
+                    }
+                    return axios.post(url, payload, {
+                        headers: {
+                            Authorization: `Bearer ${window.token}`
+                        }
+                    }).then(data => {
+                        this.loader_spinner = false;
+                        if (data.data.success) Swal.fire({
+                            title: "Success",
+                            text: data.data.message,
+                            icon: "success"
+                        }).then(function() {
+                            location.reload();
+                        });
+                        else Swal.fire({
+                            title: "Failed",
+                            text: data.data.message,
+                            icon: "error"
+                        }).then(function() {
+                            //location.reload();
+                        });
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {})
+        },
         cashierDetails: function(id) {
             axios.get(base_url + 'finance/cashier_details/' + id).then((data) => {
                 var cashier_details = data.data.cashier_data;
@@ -437,6 +511,10 @@ new Vue({
         selectTerm: function(event) {
             document.location = base_url + "finance/ns_transactions/" + this.payee_id +
                 "/" + event.target.value;
+        },
+        setToVoid: function(payment_id) {
+            this.void_id = payment_id;
+            this.void_reason = undefined;
         },
     }
 })
