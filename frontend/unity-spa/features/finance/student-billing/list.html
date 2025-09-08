@@ -156,6 +156,44 @@
           <p ng-if="!vm.editing" class="text-xs text-gray-500 -mt-2 mb-2">
             Uncheck to add the billing entry without creating an invoice. You can generate one later from Cashier or Invoices.
           </p>
+
+          <!-- Extra invoice fields shown only when generating an invoice now -->
+          <div ng-if="!vm.editing &amp;&amp; vm.current.generate_invoice" class="grid grid-cols-1 md:grid-cols-2 gap-4 border rounded p-3 bg-gray-50">
+            <div>
+              <label class="block text-sm text-gray-600 mb-1">Less EWT (%)</label>
+              <input type="number"
+                     min="0"
+                     max="100"
+                     step="1"
+                     class="w-full border rounded px-3 py-2"
+                     ng-model="vm.current.withholding_tax_percentage"
+                     placeholder="e.g., 1 or 2" />
+            </div>
+            <div>
+              <label class="block text-sm text-gray-600 mb-1">Vatable Amount</label>
+              <input type="number"
+                     step="0.01"
+                     class="w-full border rounded px-3 py-2"
+                     ng-model="vm.current.invoice_amount"
+                     placeholder="e.g., 1000.00" />
+            </div>
+            <div>
+              <label class="block text-sm text-gray-600 mb-1">Vat Exempt Tax</label>
+              <input type="number"
+                     step="0.01"
+                     class="w-full border rounded px-3 py-2"
+                     ng-model="vm.current.invoice_amount_ves"
+                     placeholder="e.g., 0.00" />
+            </div>
+            <div>
+              <label class="block text-sm text-gray-600 mb-1">Vat Zero Rated Sales</label>
+              <input type="number"
+                     step="0.01"
+                     class="w-full border rounded px-3 py-2"
+                     ng-model="vm.current.invoice_amount_vzrs"
+                     placeholder="e.g., 0.00" />
+            </div>
+          </div>
           <div>
             <label class="block text-sm text-gray-600 mb-1">Remarks (optional)</label>
             <textarea class="w-full border rounded px-3 py-2"

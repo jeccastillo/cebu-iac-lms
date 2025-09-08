@@ -30,9 +30,18 @@
     }
 
     return {
-      list: function (q) {
+      list: function (qOrOpts) {
         var params = {};
-        if (q && ("" + q).trim() !== "") params.search = q;
+        if (angular.isObject(qOrOpts)) {
+          if (qOrOpts.search && ("" + qOrOpts.search).trim() !== "") {
+            params.search = qOrOpts.search;
+          }
+          if (qOrOpts.campus_id !== null && qOrOpts.campus_id !== undefined && ("" + qOrOpts.campus_id).trim() !== "") {
+            params.campus_id = parseInt(qOrOpts.campus_id, 10);
+          }
+        } else if (qOrOpts && ("" + qOrOpts).trim() !== "") {
+          params.search = qOrOpts;
+        }
         return $http
           .get(BASE + "/classroom", {
             params: params,
@@ -66,6 +75,31 @@
             _adminHeaders()
           )
           .then(_unwrap);
+      },
+
+      // Download classrooms import template (.xlsx)
+      downloadImportTemplate: function () {
+        var opts = _adminHeaders();
+        return $http.get(BASE + "/classrooms/import/template", {
+          headers: opts.headers,
+          responseType: "arraybuffer"
+        }).then(function (resp) { return resp.data; });
+      },
+
+      // Upload classrooms import file (.xlsx/.xls/.csv)
+      importFile: function (file, dryRun) {
+        var fd = new FormData();
+        fd.append("file", file);
+        if (typeof dryRun !== "undefined") {
+          fd.append("dry_run", dryRun ? "1" : "0");
+        }
+        var hdrs = Object.assign({}, _adminHeaders().headers, {
+          "Content-Type": undefined // let browser set boundary
+        });
+        return $http.post(BASE + "/classrooms/import", fd, {
+          headers: hdrs,
+          transformRequest: angular.identity
+        }).then(_unwrap);
       },
     };
   }

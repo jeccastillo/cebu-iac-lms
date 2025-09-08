@@ -12,6 +12,7 @@ use App\Services\TuitionService;
 use App\Services\EnlistmentService;
 use App\Services\UserContextResolver;
 use App\Services\RegistrationService;
+use App\Services\ScheduleService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -24,13 +25,15 @@ class UnityController extends Controller
     protected EnlistmentService $enlistment;
     protected UserContextResolver $ctx;
     protected RegistrationService $registration;
+    protected ScheduleService $schedule;
 
-    public function __construct(TuitionService $tuition, EnlistmentService $enlistment, UserContextResolver $ctx, RegistrationService $registration)
+    public function __construct(TuitionService $tuition, EnlistmentService $enlistment, UserContextResolver $ctx, RegistrationService $registration, ScheduleService $schedule)
     {
         $this->tuition = $tuition;
         $this->enlistment = $enlistment;
         $this->ctx = $ctx;
         $this->registration = $registration;
+        $this->schedule = $schedule;
     }
 
     /**
@@ -720,10 +723,25 @@ class UnityController extends Controller
                 's.strDescription as description',
                 's.strUnits as units',
                 's.intLab as lab_units',
+                'cl.intID as classlist_id',
                 DB::raw("COALESCE(cl.sectionCode, cl.strSection, '') as section_code")
             )
             ->orderBy('s.strCode', 'asc')
             ->get();
+
+        // Build per-classlist schedule summaries for DAY/TIME/ROOM columns
+        $classlistIds = $subjects->pluck('classlist_id')->filter()->map(function ($id) { return (int) $id; })->unique()->values()->all();
+        $scheduleSummaries = [];
+        if (!empty($classlistIds)) {
+            try {
+                $schedMap = $this->schedule->getClasslistSchedulesForTerm($classlistIds, $syid);
+                foreach ($schedMap as $clid => $rows) {
+                    $scheduleSummaries[(int) $clid] = $this->schedule->summarizeSchedules($rows);
+                }
+            } catch (\Throwable $e) {
+                $scheduleSummaries = [];
+            }
+        }
 
         // Tuition breakdown summary and items for assessment block
         $summary = null;
@@ -790,7 +808,7 @@ class UnityController extends Controller
         
         $pdf->SetFont('Helvetica', 'B', 8.2);
         $lineH = 4;
-        $columns = [5,25,105,120,130,145,170];
+        $columns = [5,25,105,120,135,150,185];
         // Code        
         $pdf->SetXY($columns[0], 55);
         $pdf->Cell(35, $lineH, "SECTION", 0, 0, 'L');
@@ -805,13 +823,13 @@ class UnityController extends Controller
         $pdf->Cell(20, $lineH, "UNITS", 0, 1, 'C');
         // DAY
         $pdf->SetXY($columns[4], 55);
-        $pdf->Cell(20, $lineH, "DAY", 0, 1, 'C');
+        $pdf->Cell(15, $lineH, "DAY", 0, 1, 'C');
         // TIME
         $pdf->SetXY($columns[5], 55);
-        $pdf->Cell(20, $lineH, "TIME", 0, 1, 'L');
+        $pdf->Cell(25, $lineH, "TIME", 0, 1, 'L');
         // ROOM        
         $pdf->SetXY($columns[6], 55);
-        $pdf->Cell(20, $lineH, "ROOM", 0, 1, 'L');
+        $pdf->Cell(25, $lineH, "ROOM", 0, 1, 'L');
 
         $pdf->SetFont('Helvetica', '', 8.2);
         $y = 60;        
@@ -821,18 +839,35 @@ class UnityController extends Controller
             $sect = (string)($subj->section_code ?? '');
             $units = (string)($subj->units ?? '');
             $labUnits = (string)($subj->lab_units ?? '0');
-            // Code
+
+            // Resolve schedule summary for this classlist
+            $clid = isset($subj->classlist_id) ? (int)$subj->classlist_id : null;
+            $sum = ($clid !== null && isset($scheduleSummaries[$clid])) ? $scheduleSummaries[$clid] : null;
+            $dayStr = is_array($sum) ? (string)($sum['days'] ?? '') : '';
+            $timeStr = is_array($sum) ? (string)($sum['times'] ?? '') : '';
+            $roomStr = is_array($sum) ? (string)($sum['rooms'] ?? '') : '';
+
+            // Section
             $pdf->SetXY($columns[0], $y);
             $pdf->Cell(35, $lineH, $sect, 0, 0, 'L');
-            // Description
+            // Subject Name
             $pdf->SetXY($columns[1], $y);
             $pdf->Cell(95, $lineH, $desc, 0, 0, 'L');
-            // Section
+            // Lab
             $pdf->SetXY($columns[2], $y);
             $pdf->Cell(30, $lineH, $labUnits, 0, 0, 'C');
             // Units
             $pdf->SetXY($columns[3], $y);
-            $pdf->Cell(20, $lineH, $units, 0, 1, 'C');
+            $pdf->Cell(20, $lineH, $units, 0, 0, 'C');
+            // Day
+            $pdf->SetXY($columns[4], $y);
+            $pdf->Cell(15, $lineH, $dayStr, 0, 0, 'C');
+            // Time
+            $pdf->SetXY($columns[5], $y);
+            $pdf->Cell(25, $lineH, $timeStr, 0, 0, 'L');
+            // Room
+            $pdf->SetXY($columns[6], $y);
+            $pdf->Cell(25, $lineH, $roomStr, 0, 1, 'L');
 
             $y += $lineH;
             // Stop early if we are approaching the footer area on Letter page

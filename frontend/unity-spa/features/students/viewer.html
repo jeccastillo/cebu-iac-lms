@@ -88,6 +88,7 @@
                           <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Section Code</th>
                           <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course Code</th>
                           <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Units</th>
+                          <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Schedule</th>
                           <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Midterm</th>
                           <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Final</th>
                           <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Remarks</th>
@@ -100,6 +101,7 @@
                           <td class="px-3 py-2 text-sm text-gray-900">{{ r.section_code || '-' }}</td>
                           <td class="px-3 py-2 text-sm text-gray-900">{{ r.code || r.strCode }}</td>
                           <td class="px-3 py-2 text-sm text-gray-900">{{ r.units || r.strUnits }}</td>
+                          <td class="px-3 py-2 text-sm text-gray-900">{{ vm.formatSchedule(r) }}</td>
                           <td class="px-3 py-2 text-sm text-gray-900">{{ r.midterm || (r.grades &amp;&amp; r.grades.midterm) || r.floatMidtermGrade || '-' }}</td>
                           <td class="px-3 py-2 text-sm text-gray-900">{{ r.final || r.finals || (r.grades &amp;&amp; (r.grades.final || r.grades.finals)) || r.floatFinalGrade || '-' }}</td>
                           <td class="px-3 py-2 text-sm text-gray-900">{{ r.remarks || r.strRemarks }}</td>
@@ -133,9 +135,12 @@
                     <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Section Code</th>
                     <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course Code</th>
                     <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Units</th>
+                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Schedule</th>
                     <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Midterm</th>
                     <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Final</th>
                     <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Remarks</th>
+                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Faculty</th>
+                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Enlisted By</th>
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -143,6 +148,7 @@
                     <td class="px-3 py-2 text-sm text-gray-900">{{ r.sectionCode || r.section || r.strSection || r.section_code || '-' }}</td>
                     <td class="px-3 py-2 text-sm text-gray-900">{{ r.code || r.strCode }}</td>
                     <td class="px-3 py-2 text-sm text-gray-900">{{ r.units || r.strUnits }}</td>
+                    <td class="px-3 py-2 text-sm text-gray-900">{{ vm.formatSchedule(r) }}</td>
                     <td class="px-3 py-2 text-sm text-gray-900">{{ r.midterm || (r.grades &amp;&amp; r.grades.midterm) || r.floatMidtermGrade || '-' }}</td>
                     <td class="px-3 py-2 text-sm text-gray-900">{{ r.final || r.finals || (r.grades &amp;&amp; (r.grades.final || r.grades.finals)) || r.floatFinalGrade || '-' }}</td>
                     <td class="px-3 py-2 text-sm text-gray-900">{{ r.remarks || r.strRemarks }}</td>

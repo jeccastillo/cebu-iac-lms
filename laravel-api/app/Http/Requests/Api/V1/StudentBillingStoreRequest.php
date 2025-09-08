@@ -15,26 +15,35 @@ class StudentBillingStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'student_id'       => ['required', 'integer'],
-            'term'             => ['required', 'integer'], // syid
-            'description'      => ['required', 'string', 'max:255'],
-            'amount'           => ['required', 'numeric', 'not_in:0'],
-            'posted_at'        => ['sometimes', 'nullable', 'date'],
-            'remarks'          => ['sometimes', 'nullable', 'string'],
-            'generate_invoice' => ['sometimes', 'boolean'],
+            'student_id'                  => ['required', 'integer'],
+            'term'                        => ['required', 'integer'], // syid
+            'description'                 => ['required', 'string', 'max:255'],
+            'amount'                      => ['required', 'numeric', 'not_in:0'],
+            'posted_at'                   => ['sometimes', 'nullable', 'date'],
+            'remarks'                     => ['sometimes', 'nullable', 'string'],
+            'generate_invoice'            => ['sometimes', 'boolean'],
+            // Optional invoice fields when generating invoice now
+            'withholding_tax_percentage'  => ['sometimes', 'nullable', 'integer', 'min:0', 'max:100'],
+            'invoice_amount'              => ['sometimes', 'nullable', 'numeric'],
+            'invoice_amount_ves'          => ['sometimes', 'nullable', 'numeric'],
+            'invoice_amount_vzrs'         => ['sometimes', 'nullable', 'numeric'],
         ];
     }
 
     public function attributes(): array
     {
         return [
-            'student_id'       => 'student id',
-            'term'             => 'term (syid)',
-            'description'      => 'description',
-            'amount'           => 'amount',
-            'posted_at'        => 'posted at',
-            'remarks'          => 'remarks',
-            'generate_invoice' => 'generate invoice',
+            'student_id'                 => 'student id',
+            'term'                      => 'term (syid)',
+            'description'               => 'description',
+            'amount'                    => 'amount',
+            'posted_at'                 => 'posted at',
+            'remarks'                   => 'remarks',
+            'generate_invoice'          => 'generate invoice',
+            'withholding_tax_percentage'=> 'Less EWT (%)',
+            'invoice_amount'            => 'Vatable Amount',
+            'invoice_amount_ves'        => 'Vat Exempt Tax',
+            'invoice_amount_vzrs'       => 'Vat Zero Rated Sales',
         ];
     }
 

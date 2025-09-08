@@ -109,7 +109,8 @@ class ClassroomController extends Controller
                 'tb_mas_classrooms.enumType',
                 'tb_mas_classrooms.strRoomCode',
                 'tb_mas_classrooms.description',
-                'tb_mas_classrooms.campus_id'
+                'tb_mas_classrooms.campus_id',
+                'tb_mas_campuses.campus_name'
             ])
             ->first();
 

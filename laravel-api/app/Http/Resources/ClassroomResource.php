@@ -21,6 +21,7 @@ class ClassroomResource extends JsonResource
             'strRoomCode' => isset($r['strRoomCode']) ? (string) $r['strRoomCode'] : null,
             'description' => $r['description'] ?? null,
             'campus_id'    => isset($r['campus_id']) ? (int) $r['campus_id'] : null,
+            'campus_name'  => $r['campus_name'] ?? null,
         ];
     }
 }

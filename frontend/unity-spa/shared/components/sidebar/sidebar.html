@@ -87,6 +87,19 @@
         <span ng-if="!vm.isCollapsed" class="ml-3">Campuses</span>
       </a>
 
+      <!-- Cashier (Top-level) -->
+      <a href="#/finance/cashier/0"
+         ng-if="vm.canAccess('/finance/cashier')"
+         class="sb-item"
+         ng-class="{'sb-item--active': vm.isActivePrefix('/finance/cashier')}"
+         title="Cashier">
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <!-- receipt/document icon -->
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6M9 11h6M9 15h4M5 4h10a2 2 0 012 2v12l-3-2-3 2-3-2-3 2V6a2 2 0 012-2z"></path>
+        </svg>
+        <span ng-if="!vm.isCollapsed" class="ml-3">Cashier</span>
+      </a>
+
       <!-- Grouped Menus (Popout) -->
       <div ng-repeat="group in vm.menu"
            ng-if="vm.canShowGroup(group)"
@@ -551,21 +564,6 @@
         <span ng-if="!vm.isCollapsed" class="ml-3">Payment Modes</span>
       </a>
 
-      <!-- Registration Viewer (Finance) -->
-      <a href="#/finance/cashier/0"
-         ng-if="vm.canAccess('/finance/cashier')"
-         class="flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200"
-         ng-class="{
-           'bg-blue-100 text-blue-700': vm.isCurrentPath('/finance/cashier'),
-           'text-gray-700 hover:bg-gray-100': !vm.isCurrentPath('/finance/cashier')
-         }"
-         title="Cashier">
-        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <!-- receipt/document icon -->
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6M9 11h6M9 15h4M5 4h10a2 2 0 012 2v12l-3-2-3 2-3-2-3 2V6a2 2 0 012-2z"></path>
-        </svg>
-        <span ng-if="!vm.isCollapsed" class="ml-3">Cashier</span>
-      </a>
 
       <!-- Scholarships -->
       <a href="#/scholarship/students" 

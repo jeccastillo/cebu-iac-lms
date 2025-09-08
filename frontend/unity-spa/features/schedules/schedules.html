@@ -2,13 +2,32 @@
   <!-- Header -->
   <div class="flex items-center justify-between">
     <h1 class="text-2xl font-semibold text-gray-900">{{ vm.pageTitle }}</h1>
-    <button type="button"
-            ng-if="vm.canCreate"
-            class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            ng-click="vm.add()">
-      <i class="fas fa-plus mr-2"></i>
-      Add Schedule
-    </button>
+    <div class="flex items-center space-x-2">
+      <button type="button"
+              ng-if="vm.canCreate"
+              class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              ng-click="vm.add()">
+        <i class="fas fa-plus mr-2"></i>
+        Add Schedule
+      </button>
+      <button type="button"
+              ng-if="vm.canCreate"
+              class="inline-flex items-center px-4 py-2 bg-gray-700 hover:bg-gray-800 text-white text-sm font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500"
+              ng-click="vm.downloadTemplate()">
+        <i class="fas fa-file-download mr-2"></i>
+        Download Template
+      </button>
+      <button type="button"
+              ng-if="vm.canCreate"
+              class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+              ng-click="vm.openImportDialog()"
+              ng-disabled="vm.importing">
+        <i class="fas fa-file-upload mr-2"></i>
+        <span ng-if="!vm.importing">Import</span>
+        <span ng-if="vm.importing">Importing...</span>
+      </button>
+      <input id="scheduleImportInput" type="file" accept=".xlsx,.xls,.csv" style="display:none" />
+    </div>
   </div>
 
   <!-- Alerts -->
@@ -33,6 +52,52 @@
       <button type="button" class="text-green-500 hover:text-green-700" ng-click="vm.clearAlert()">
         <i class="fas fa-times"></i>
       </button>
+    </div>
+  </div>
+
+  <!-- Import Result Panel -->
+  <div ng-if="vm.importResult" class="p-4 rounded-md bg-blue-50 border border-blue-200 text-sm mb-4">
+    <div class="flex items-center justify-between mb-2">
+      <div class="font-medium text-blue-800">
+        Import Summary
+      </div>
+      <button type="button" class="text-blue-600 hover:text-blue-800" ng-click="vm.clearImportResult()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-2 mb-3 text-blue-900">
+      <div><span class="font-semibold">Total:</span> {{ vm.importResult.totalRows || 0 }}</div>
+      <div><span class="font-semibold">Inserted:</span> {{ vm.importResult.inserted || 0 }}</div>
+      <div><span class="font-semibold">Updated:</span> {{ vm.importResult.updated || 0 }}</div>
+      <div><span class="font-semibold">Skipped:</span> {{ vm.importResult.skipped || 0 }}</div>
+      <div ng-if="vm.importResult.errors && vm.importResult.errors.length">
+        <span class="font-semibold">Errors:</span> {{ vm.importResult.errors.length }}
+      </div>
+    </div>
+    <div ng-if="vm.importResult.errors && vm.importResult.errors.length" class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-blue-200">
+        <thead class="bg-blue-100">
+          <tr>
+            <th class="px-4 py-2 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">Line</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">Code</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">Message</th>
+          </tr>
+        </thead>
+        <tbody class="bg-blue-50 divide-y divide-blue-200">
+          <tr ng-repeat="e in vm.importResult.errors">
+            <td class="px-4 py-2">{{ e.line }}</td>
+            <td class="px-4 py-2">{{ e.code || '&mdash;' }}</td>
+            <td class="px-4 py-2">
+              <div>{{ e.message }}</div>
+              <div class="text-xs text-blue-700" ng-if="e.conflicts">
+                <div ng-if="e.conflicts.room && e.conflicts.room.length">Room conflicts: {{ e.conflicts.room.length }}</div>
+                <div ng-if="e.conflicts.section && e.conflicts.section.length">Section conflicts: {{ e.conflicts.section.length }}</div>
+                <div ng-if="e.conflicts.faculty && e.conflicts.faculty.length">Faculty conflicts: {{ e.conflicts.faculty.length }}</div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 

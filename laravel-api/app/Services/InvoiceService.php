@@ -85,6 +85,11 @@ class InvoiceService
             'status'         => $status,
             'invoice_number' => array_key_exists('invoice_number', $options) ? $options['invoice_number'] : null, // allow assignment when provided (e.g., cashier flow)
             'amount_total'   => round($total, 2),
+            // Extra amount fields
+            'withholding_tax_percentage' => array_key_exists('withholding_tax_percentage', $options) ? $options['withholding_tax_percentage'] : null,
+            'invoice_amount'             => array_key_exists('invoice_amount', $options) ? $options['invoice_amount'] : null,
+            'invoice_amount_ves'         => array_key_exists('invoice_amount_ves', $options) ? $options['invoice_amount_ves'] : null,
+            'invoice_amount_vzrs'        => array_key_exists('invoice_amount_vzrs', $options) ? $options['invoice_amount_vzrs'] : null,
             'posted_at'      => $options['posted_at'] ?? null,
             'due_at'         => $options['due_at'] ?? null,
             'remarks'        => $options['remarks'] ?? null,
@@ -309,6 +314,11 @@ class InvoiceService
             'status'        => (string) ($r['status'] ?? ''),
             'invoice_number'=> isset($r['invoice_number']) ? $r['invoice_number'] : null,
             'amount_total'  => round((float) ($r['amount_total'] ?? 0), 2),
+            // Expose extra amount fields
+            'withholding_tax_percentage' => array_key_exists('withholding_tax_percentage', $r) ? (int) $r['withholding_tax_percentage'] : null,
+            'invoice_amount'             => array_key_exists('invoice_amount', $r) ? (float) $r['invoice_amount'] : null,
+            'invoice_amount_ves'         => array_key_exists('invoice_amount_ves', $r) ? (float) $r['invoice_amount_ves'] : null,
+            'invoice_amount_vzrs'        => array_key_exists('invoice_amount_vzrs', $r) ? (float) $r['invoice_amount_vzrs'] : null,
             'posted_at'     => isset($r['posted_at']) ? (string) $r['posted_at'] : null,
             'due_at'        => isset($r['due_at']) ? (string) $r['due_at'] : null,
             'remarks'       => isset($r['remarks']) ? (string) $r['remarks'] : null,

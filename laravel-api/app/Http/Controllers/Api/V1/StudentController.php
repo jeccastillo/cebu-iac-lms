@@ -10,6 +10,7 @@ use App\Http\Resources\StudentResource;
 use App\Http\Resources\StudentBalanceResource;
 use App\Http\Resources\TransactionResource;
 use App\Services\DataFetcherService;
+use App\Services\ScheduleService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,10 +18,12 @@ use Illuminate\Support\Facades\DB;
 class StudentController extends Controller
 {
     protected DataFetcherService $fetcher;
+    protected ScheduleService $scheduleService;
 
-    public function __construct(DataFetcherService $fetcher)
+    public function __construct(DataFetcherService $fetcher, ScheduleService $scheduleService)
     {
         $this->fetcher = $fetcher;
+        $this->scheduleService = $scheduleService;
     }
 
     /**
@@ -75,6 +78,11 @@ class StudentController extends Controller
 
         $data = $this->fetcher->getStudentRecords($studentId, $term, $includeGrades);
 
+        // Enrich records with schedule information
+        if (isset($data['records']) && is_array($data['records'])) {
+            $this->scheduleService->enrichRecordsWithSchedules($data['records'], $term);
+        }
+
         return response()->json([
             'success' => true,
             'data'    => $data,
@@ -93,6 +101,11 @@ class StudentController extends Controller
         $includeGrades = (bool) $request->input('include_grades', false);
 
         $data = $this->fetcher->getStudentRecordsByTerm($studentId, $term, $includeGrades);
+
+        // Enrich terms with schedule information
+        if (isset($data['terms']) && is_array($data['terms'])) {
+            $this->scheduleService->enrichTermsWithSchedules($data['terms']);
+        }
 
         return response()->json([
             'success' => true,

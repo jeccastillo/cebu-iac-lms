@@ -153,6 +153,36 @@
       }
     }
 
+    // Helper: description contains "tuition" (case-insensitive)
+    function _isTuitionDesc(s) {
+      try {
+        var d = (s == null ? '' : ('' + s)).toLowerCase();
+        return d.indexOf('tuition') !== -1;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    // Sum of Paid Reservation payments for current term from payment_details
+    function _sumReservationPaidFromPaymentDetails() {
+      try {
+        var items = (vm.paymentDetails && vm.paymentDetails.items) ? vm.paymentDetails.items : [];
+        var sum = 0;
+        for (var i = 0; i < items.length; i++) {
+          var row = items[i] || {};
+          if (row.status !== 'Paid') continue;
+          var desc = (row.description == null ? '' : ('' + row.description)).trim().toLowerCase();
+          var isRes = _isReservationFeeDesc(desc) || desc.indexOf('reservation') === 0;
+          if (!isRes) continue;
+          var amt = parseFloat(row.subtotal_order);
+          sum += isFinite(amt) ? amt : 0;
+        }
+        return Math.max(0, sum);
+      } catch (e) {
+        return 0;
+      }
+    }
+
     // Load applicant info (syid, waiver flag, paid app fee, interviewed) for this user id
     vm.loadApplicantInfo = function () {
       try {
@@ -590,6 +620,20 @@
       enrollment_status: null
     };
 
+    // Stable option arrays to avoid inline literals in templates (prevents infinite digest)
+    vm.paymentTypeOptions = ['full', 'partial'];
+    vm.booleanOptions = [{ value: 0, label: 'No' }, { value: 1, label: 'Yes' }];
+    vm.enrollmentStatusOptions = [
+      { value: 'enlisted', label: 'enlisted' },
+      { value: 'enrolled', label: 'enrolled' },
+      { value: 'loa', label: 'loa' },
+      { value: 'withdrawn before', label: 'withdrawn before' },
+      { value: 'withdrawn after', label: 'withdrawn after' },
+      { value: 'withdrawn end', label: 'withdrawn end' }
+    ];
+    // Fixed list of payment method options (no auto-populate from Payment Mode)
+    vm.methodOptions = ['Cash', 'Check', 'Credit Card', 'Debit Card', 'Online Payment'];
+
     // Helpers
     vm.currency = function (num) {
       var n = parseFloat(num || 0);
@@ -697,10 +741,19 @@
 
         vm.invoiceModal.payments = payments;
         vm.invoiceModal.items = items;
+        var _isTu = (inv && inv.type ? ('' + inv.type).toLowerCase() : '') === 'tuition';
+        var _resA = 0;
+        try { _resA = (vm.meta && isFinite(parseFloat(vm.meta.reservation_paid))) ? parseFloat(vm.meta.reservation_paid) : 0; } catch (_eR) { _resA = 0; }
+        var _tot = isFinite(total) ? total : 0;
+        var _totEff = _isTu ? Math.max(0, _tot - _resA) : _tot;
+        var _remEff = _isTu ? Math.max(0, _totEff - paid) : (remaining != null ? remaining : 0);
         vm.invoiceModal.totals = {
-          total: isFinite(total) ? total : 0,
+          total: _tot,
           paid: paid,
-          remaining: (remaining != null ? remaining : 0)
+          remaining: (remaining != null ? remaining : 0),
+          total_effective: _totEff,
+          reservation_applied: _resA,
+          remaining_effective: _remEff
         };
 
         vm.ui.showInvoiceModal = true;
@@ -1104,27 +1157,10 @@ if (vm.ui.showAssignNumberModal == null) vm.ui.showAssignNumberModal = false;
       }
     };
 
-    // Auto-fill method from selected Payment Mode (use pmethod as value)
+    // Do not auto-fill method when a Payment Mode is selected; user selects from fixed list
     vm.onPaymentModeChange = function () {
-      try {
-        var mopId = parseInt(vm.payment && vm.payment.mode_of_payment_id, 10);
-        if (!isFinite(mopId)) {
-          vm.payment.method = null;
-          return;
-        }
-        var list = vm.paymentModes || [];
-        for (var i = 0; i < list.length; i++) {
-          var m = list[i];
-          if (m && (parseInt(m.id, 10) === mopId)) {
-            // Prefer pmethod; fallback to method if present
-            vm.payment.method = (m.pmethod != null ? ('' + m.pmethod).trim() : (m.method != null ? ('' + m.method).trim() : ''));
-            return;
-          }
-        }
-        vm.payment.method = null;
-      } catch (e) {
-        vm.payment.method = null;
-      }
+      // Intentionally no-op per requirement
+      return;
     };
 
     // Auto-fill amount when selecting a description that comes from payment_descriptions table
@@ -1198,6 +1234,7 @@ if (vm.ui.showAssignNumberModal == null) vm.ui.showAssignNumberModal = false;
       }
     };
     // Compute remaining amount for selected invoice based on payment_details 'Paid' rows
+    // For Tuition invoices, subtract Reservation payments from the invoice total (effective total).
     vm.computeInvoiceRemaining = function () {
       try {
         var sel = vm.payment && vm.payment.invoice_id != null ? parseInt(vm.payment.invoice_id, 10) : null;
@@ -1205,6 +1242,8 @@ if (vm.ui.showAssignNumberModal == null) vm.ui.showAssignNumberModal = false;
           vm.invoiceCtx = { id: null, number: null, total: null, paid: 0, remaining: null };
           return null;
         }
+
+        // Find selected invoice object
         var invoices = Array.isArray(vm.invoices) ? vm.invoices : [];
         var invObj = null;
         for (var i = 0; i < invoices.length; i++) {
@@ -1212,21 +1251,27 @@ if (vm.ui.showAssignNumberModal == null) vm.ui.showAssignNumberModal = false;
           var id = inv && inv.id != null ? parseInt(inv.id, 10) : null;
           if (isFinite(id) && id === sel) { invObj = inv; break; }
         }
+
         var invNo = null;
-        var total = 0;
+        var totalRaw = 0;
+        var isTuition = false;
         if (invObj) {
           invNo = invObj.invoice_number || invObj.number || null;
-          var cands = [invObj.amount_total, invObj.amount, invObj.total];
+          var t = (invObj.type == null ? '' : ('' + invObj.type)).toLowerCase();
+          isTuition = (t === 'tuition');
+          // Prefer precomputed _total when available; otherwise use raw totals
+          var cands = [invObj._total, invObj.amount_total, invObj.amount, invObj.total];
           for (var j = 0; j < cands.length; j++) {
             var v = parseFloat(cands[j]);
-            if (isFinite(v)) { total = v; break; }
+            if (isFinite(v)) { totalRaw = v; break; }
           }
         }
         if (!invNo) {
           vm.invoiceCtx = { id: sel, number: null, total: null, paid: 0, remaining: null };
           return null;
         }
-        // sum of paid amounts for this invoice number from loaded payment_details
+
+        // Sum of paid amounts for this invoice number from loaded payment_details
         var items = (vm.paymentDetails && vm.paymentDetails.items) ? vm.paymentDetails.items : [];
         var paid = 0;
         for (var k = 0; k < items.length; k++) {
@@ -1239,10 +1284,17 @@ if (vm.ui.showAssignNumberModal == null) vm.ui.showAssignNumberModal = false;
             paid += isFinite(amt) ? amt : 0;
           }
         }
-        var remaining = total - paid;
+
+        // Apply Reservation offset for Tuition invoices
+        var resApplied = 0;
+        try { resApplied = (vm.meta && isFinite(parseFloat(vm.meta.reservation_paid))) ? parseFloat(vm.meta.reservation_paid) : 0; } catch (_e) { resApplied = 0; }
+        var totalEff = isTuition ? Math.max(0, (isFinite(totalRaw) ? totalRaw : 0) - resApplied) : (isFinite(totalRaw) ? totalRaw : null);
+
+        var remaining = (totalEff != null) ? (totalEff - paid) : null;
         if (!isFinite(remaining)) remaining = null;
         if (remaining != null && remaining < 0) remaining = 0;
-        vm.invoiceCtx = { id: sel, number: invNo, total: isFinite(total) ? total : null, paid: paid, remaining: remaining };
+
+        vm.invoiceCtx = { id: sel, number: invNo, total: (totalEff != null ? totalEff : null), paid: paid, remaining: remaining };
         return remaining;
       } catch (e) {
         vm.invoiceCtx = { id: null, number: null, total: null, paid: 0, remaining: null };
@@ -1283,12 +1335,79 @@ if (vm.ui.showAssignNumberModal == null) vm.ui.showAssignNumberModal = false;
           inv._total = (total != null && isFinite(total)) ? total : null;
           inv._paid = paid;
           inv._remaining = remaining;
+
+          // Compute effective totals for display: apply Reservation payments to Tuition invoices
+          var _tType = (inv.type == null ? '' : ('' + inv.type)).toLowerCase();
+          var _isTuition = (_tType === 'tuition');
+          var _res = 0;
+          try { _res = (vm.meta && isFinite(parseFloat(vm.meta.reservation_paid))) ? parseFloat(vm.meta.reservation_paid) : 0; } catch (_e) { _res = 0; }
+          if (_isTuition) {
+            inv._reservation_applied = _res;
+            var _te = (isFinite(inv._total) ? inv._total : 0) - _res;
+            if (!isFinite(_te) || _te < 0) _te = 0;
+            inv._total_effective = _te;
+            var _re = _te - (isFinite(inv._paid) ? inv._paid : 0);
+            if (!isFinite(_re) || _re < 0) _re = 0;
+            inv._remaining_effective = _re;
+          } else {
+            inv._reservation_applied = 0;
+            inv._total_effective = inv._total;
+            inv._remaining_effective = inv._remaining;
+          }
         }
         return true;
       } catch (e) {
         return false;
       }
     };
+
+    // Check if currently selected invoice is a Tuition invoice
+    vm.selectedInvoiceIsTuition = function () {
+      try {
+        var sel = vm.payment && vm.payment.invoice_id != null ? parseInt(vm.payment.invoice_id, 10) : null;
+        if (!isFinite(sel)) return false;
+        var list = Array.isArray(vm.invoices) ? vm.invoices : [];
+        for (var i = 0; i < list.length; i++) {
+          var inv = list[i] || {};
+          var id = inv && inv.id != null ? parseInt(inv.id, 10) : null;
+          if (isFinite(id) && id === sel) {
+            var t = (inv.type == null ? '' : ('' + inv.type)).toLowerCase();
+            return t === 'tuition';
+          }
+        }
+        return false;
+      } catch (e) { return false; }
+    };
+
+    // Getter for first-due object computed by installments panel
+    vm.installmentsFirstDue = function () {
+      try {
+        return (vm.installmentsUI && vm.installmentsUI.firstDue) ? vm.installmentsUI.firstDue : null;
+      } catch (e) { return null; }
+    };
+    // Helper: gating for the "Use" buttons next to first-due amounts
+    vm.canUseFirstDue = function(key) {
+      try {
+        if (!vm.selectedInvoiceIsTuition || !vm.selectedInvoiceIsTuition()) return false;
+        var fd = (typeof vm.installmentsFirstDue === 'function') ? vm.installmentsFirstDue() : (vm.installmentsUI && vm.installmentsUI.firstDue);
+        if (!fd || !isFinite(parseFloat(fd.amount)) || parseFloat(fd.amount) <= 0) return false;
+        if (key && fd.key !== key) return false;
+        return true;
+      } catch (e) { return false; }
+    };
+
+    // Action: copy first-due amount into the payment form's Amount input
+    vm.useFirstDueAmount = function () {
+      try {
+        var fd = (typeof vm.installmentsFirstDue === 'function') ? vm.installmentsFirstDue() : (vm.installmentsUI && vm.installmentsUI.firstDue);
+        if (!fd || !isFinite(parseFloat(fd.amount)) || parseFloat(fd.amount) <= 0) return;
+        if (!vm.selectedInvoiceIsTuition || !vm.selectedInvoiceIsTuition()) return;
+        vm.payment = vm.payment || {};
+        vm.payment.amount = Math.floor(parseFloat(fd.amount) * 100) / 100;
+        try { if (typeof vm.onAmountChange === 'function') vm.onAmountChange(); } catch (_e) {}
+      } catch (e) {}
+    };
+
     // Return current max cap for amount (when invoice is selected)
     vm.amountMax = function () {
       try {
@@ -1697,6 +1816,7 @@ vm.loading.createPayment = false;
       } catch (e) {
         // no-op
       }
+      try { if (typeof vm._recomputeInstallmentsPanel === 'function') vm._recomputeInstallmentsPanel(); } catch (e2) {}
     };
  
     // Auto-save tuition snapshot when possible (non-blocking)
@@ -2003,6 +2123,8 @@ vm.loading.createPayment = false;
           vm.edit.enrollment_status = vm.registration ? (vm.registration.enrollment_status != null ? vm.registration.enrollment_status : null) : null;
           // Mark last loaded params to prevent duplicate API calls
           vm._last.registration = { sn: vm.sn, term: vm.term };
+          // Recompute Installment panel UI
+          try { if (typeof vm._recomputeInstallmentsPanel === 'function') vm._recomputeInstallmentsPanel(); } catch (_eIP) {}
 
           // Refresh tuition invoice state for this registration
           if (typeof vm.checkTuitionInvoice === 'function') {
@@ -2192,6 +2314,7 @@ vm.loading.createPayment = false;
           if (vm.sn && vm.term) {
             vm._last.tuition = { sn: vm.sn, term: vm.term };
           }
+          try { if (typeof vm._recomputeInstallmentsPanel === 'function') vm._recomputeInstallmentsPanel(); } catch (_eIP2) {}
           vm.loading.tuition = false;
         });
     };
@@ -2360,6 +2483,15 @@ vm.loading.createPayment = false;
                 if (typeof vm.refreshTuitionSummary === 'function') {
                   vm.refreshTuitionSummary();
                 }
+                // Compute Reservation payments sum (Paid, description LIKE 'Reservation%') for current term
+                try {
+                  var _resPaid = _sumReservationPaidFromPaymentDetails();
+                  if (!vm.meta) vm.meta = {};
+                  vm.meta.reservation_paid = _resPaid;
+                } catch (_eRes) {
+                  if (!vm.meta) vm.meta = {};
+                  if (vm.meta.reservation_paid == null) vm.meta.reservation_paid = 0;
+                }
                 try { if (typeof vm.recomputeInvoicesPayments === 'function') vm.recomputeInvoicesPayments(); } catch (e2) {}
             } catch (e) {}
             // Mark last
@@ -2452,6 +2584,7 @@ vm.loading.createPayment = false;
             .then(function () {
               // Ensure summary reflects latest server state immediately after tuition reload
               vm.refreshTuitionSummary();
+              try { if (typeof vm._recomputeInstallmentsPanel === 'function') vm._recomputeInstallmentsPanel(); } catch (_eIP3) {}
               return vm.loadRecords(true);
             });
         })
@@ -2502,6 +2635,145 @@ vm.loading.createPayment = false;
         vm._inBootstrap = false;
         vm.loading.bootstrap = false;
       });
+
+      // =========================
+      // Installment side panel (Partial Payment) - precomputed UI model
+      // =========================
+      vm.installmentsUI = { show: false, summary: null, list: [] };
+
+      vm._recomputeInstallmentsPanel = function () {
+        try {
+          var pt = (vm.registration && vm.registration.paymentType) || (vm.edit && vm.edit.paymentType) || null;
+          var payload = (vm.tuitionSaved && vm.tuitionSaved.payload) ? vm.tuitionSaved.payload : (vm.tuition || null);
+          var s = payload && payload.summary ? payload.summary : null;
+          var inst = s && s.installments ? s.installments : null;
+
+          var show = (pt === 'partial' && !!inst);
+          vm.installmentsUI.show = !!show;
+
+          if (!show) {
+            vm.installmentsUI.summary = null;
+            vm.installmentsUI.list = [];
+            return;
+          }
+
+          function num(x) { var v = parseFloat(x); return isFinite(v) ? v : 0; }
+
+          // Base plan amounts (as computed by tuition)
+          var base = {
+            dp: num(inst.down_payment),
+            fee: num(inst.installment_fee),
+            total: num(inst.total_installment)
+          };
+
+          // Compute total "paid toward tuition" using payment details:
+          // include rows whose description contains "tuition" OR matches reservation fee/payment; status must be "Paid".
+          var paidTuition = 0;
+          try {
+            var rows = (vm.paymentDetails && vm.paymentDetails.items) ? vm.paymentDetails.items : [];
+            for (var r = 0; r < rows.length; r++) {
+              var row = rows[r] || {};
+              if (row.status !== 'Paid') continue;
+              var desc = (row.description == null ? '' : ('' + row.description)).trim().toLowerCase();
+              if (_isTuitionDesc(desc) || _isReservationFeeDesc(desc)) {
+                var amt = parseFloat(row.subtotal_order);
+                paidTuition += isFinite(amt) ? amt : 0;
+              }
+            }
+          } catch (_ePaid) {
+            paidTuition = 0;
+          }
+
+          // Build buckets in order: DP, I1..I5
+          var buckets = [{ key: 'dp', label: 'Down Payment', due: base.dp }];
+          for (var i = 1; i <= 5; i++) {
+            buckets.push({ key: 'i' + i, label: 'Installment ' + i, due: base.fee });
+          }
+
+          // Allocate paid amount against buckets sequentially
+          var remList = [];
+          var paidLeft = isFinite(paidTuition) ? paidTuition : 0;
+          var dpRemaining = base.dp;
+          var installmentsRemainingTotal = 0;
+
+          for (var b = 0; b < buckets.length; b++) {
+            var bucket = buckets[b];
+            var remain = bucket.due;
+
+            if (isFinite(paidLeft) && paidLeft > 0) {
+              paidLeft = paidLeft - bucket.due;
+              if (paidLeft <= 0) {
+                // Partially covered this bucket
+                remain = Math.abs(paidLeft);
+              } else {
+                // Fully covered this bucket
+                remain = 0;
+              }
+            }
+
+            // normalize to 2dp truncate, not round (consistent with onAmount* behavior)
+            remain = Math.max(0, Math.floor(remain * 100) / 100);
+
+            if (bucket.key === 'dp') dpRemaining = remain;
+            else installmentsRemainingTotal += remain;
+
+            remList.push({ key: bucket.key, label: bucket.label, amount: remain });
+          }
+
+          // Update UI model: show remaining amounts after applying payments
+          vm.installmentsUI.summary = {
+            dp: dpRemaining,
+            fee: base.fee, // keep reference value (not shown)
+            total: installmentsRemainingTotal
+          };
+          vm.installmentsUI.list = remList;
+
+          // Determine the first non-zero due amount (prefer DP, else first installment)
+          var first = null;
+          try {
+            if (isFinite(dpRemaining) && dpRemaining > 0) {
+              first = { key: 'dp', label: 'Down Payment', amount: dpRemaining };
+            } else if (Array.isArray(remList)) {
+              for (var fi = 0; fi < remList.length; fi++) {
+                var ri = remList[fi] || {};
+                if (ri.key === 'dp') continue;
+                var amt = parseFloat(ri.amount);
+                if (isFinite(amt) && amt > 0) { first = { key: ri.key, label: ri.label, amount: amt }; break; }
+              }
+            }
+          } catch (_eFD) { first = null; }
+          vm.installmentsUI.firstDue = first;
+        } catch (e) {
+          try {
+            vm.installmentsUI.show = false;
+            vm.installmentsUI.summary = null;
+            vm.installmentsUI.list = [];
+          } catch (_e) {}
+        }
+      };
+
+      // View helpers for Installment Plan (template API)
+      vm.shouldShowInstallmentPanel = function () {
+        try {
+          return !!(vm.installmentsUI && vm.installmentsUI.show);
+        } catch (e) {
+          return false;
+        }
+      };
+      vm.installmentsSummary = function () {
+        try {
+          return (vm.installmentsUI && vm.installmentsUI.summary) ? vm.installmentsUI.summary : null;
+        } catch (e) {
+          return null;
+        }
+      };
+      vm.installmentsList = function () {
+        try {
+          return (vm.installmentsUI && Array.isArray(vm.installmentsUI.list)) ? vm.installmentsUI.list : [];
+        } catch (e) {
+          return [];
+        }
+      };
   }
 
 })();

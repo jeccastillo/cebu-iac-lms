@@ -606,9 +606,15 @@ class ScheduleController extends Controller
                 ], 422);
             }
 
-            // Get classlists for the academic year that don't have schedules yet
-            $classlistQuery = Classlist::where('strAcademicYear', $academicYear)
-                                      ->whereDoesntHave('schedules');           
+            // Get classlists for the academic year; optionally include those that already have schedules
+            $includeScheduled = $request->boolean('include_scheduled');
+
+            $classlistQuery = Classlist::where('strAcademicYear', $academicYear);
+
+            if (!$includeScheduled) {
+                // Default behavior: only classlists without schedules
+                $classlistQuery->whereDoesntHave('schedules');
+            }
 
             $classlists = $classlistQuery->with([
                                       'faculty' => function ($q) {

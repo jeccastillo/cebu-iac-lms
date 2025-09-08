@@ -165,8 +165,8 @@
         baseRoot = baseRoot.replace(/\/+$/, '');
       }
 
-      // var defaultApi = (baseRoot === '/' ? '' : baseRoot) + '/laravel-api/public/api/v1';
-      var defaultApi = "http://127.0.0.1:8000/api/v1";
+       var defaultApi = (baseRoot === '/' ? '' : baseRoot) + '/laravel-api/public/api/v1';
+      //var defaultApi = "http://127.0.0.1:8000/api/v1";
 
       // Base URL of the Laravel API v1. Can be overridden by setting window.API_BASE before this script.
       window.API_BASE = window.API_BASE || defaultApi;
@@ -254,6 +254,11 @@
   <script src="features/finance/student-billing/student-billing.service.js"></script>
   <script src="features/finance/student-billing/student-billing.controller.js"></script>
   <script src="features/scholarship/students.controller.js"></script>
+  <script src="features/scholarship/scholarships/scholarships.service.js"></script>
+  <script src="features/scholarship/scholarships/scholarships.controller.js"></script>
+  <!-- Scholarship Assignments -->
+  <script src="features/scholarship/assignments/assignments.service.js"></script>
+  <script src="features/scholarship/assignments/assignments.controller.js"></script>
   <script src="features/students/students.controller.js"></script>
   <script src="features/students/students.service.js"></script>
   <script src="features/students/checklist.service.js"></script>

@@ -5,8 +5,8 @@
     .module('unityApp')
     .controller('SchedulesController', SchedulesController);
 
-  SchedulesController.$inject = ['$location', '$window', '$routeParams', '$http', 'StorageService', 'SchedulesService', 'RoleService', 'ToastService'];
-  function SchedulesController($location, $window, $routeParams, $http, StorageService, SchedulesService, RoleService, ToastService) {
+  SchedulesController.$inject = ['$location', '$window', '$routeParams', '$http', '$scope', 'StorageService', 'SchedulesService', 'RoleService', 'ToastService'];
+  function SchedulesController($location, $window, $routeParams, $http, $scope, StorageService, SchedulesService, RoleService, ToastService) {
     console.log('SchedulesController starting to load...'); // Debug logging
     var vm = this;
 
@@ -93,6 +93,98 @@
     */
 
     console.log('About to call init()'); // Debug logging
+
+    // === IMPORT (Schedules) ===
+    vm.importing = false;
+    vm.importResult = null;
+
+    vm.clearImportResult = function () {
+      vm.importResult = null;
+    };
+
+    vm.downloadTemplate = function () {
+      vm.error = null;
+      var filename = 'schedules-import-template.xlsx';
+      SchedulesService.downloadImportTemplate()
+        .then(function (data) {
+          try {
+            var blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            var url = (window.URL || window.webkitURL).createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            (window.URL || window.webkitURL).revokeObjectURL(url);
+            ToastService.success('Template downloaded.');
+          } catch (e) {
+            console.error('Download template error:', e);
+            vm.error = 'Failed to download template.';
+            ToastService.error(vm.error);
+          }
+        })
+        .catch(function (err) {
+          console.error('Download template request error:', err);
+          vm.error = 'Failed to download template.';
+          ToastService.error(vm.error);
+        });
+    };
+
+    vm.openImportDialog = function () {
+      var input = document.getElementById('scheduleImportInput');
+      if (!input) {
+        vm.error = 'Import input not found in DOM.';
+        ToastService.error(vm.error);
+        return;
+      }
+      // Bind change handler once
+      if (!input._bbBound) {
+        input._bbBound = true;
+        input.addEventListener('change', function (ev) {
+          var file = ev.target.files && ev.target.files[0];
+          if (!file) return;
+          // Ensure Angular digest
+          $scope.$apply(function () {
+            vm.importFileSelected(file, input);
+          });
+        });
+      }
+      input.click();
+    };
+
+    vm.importFileSelected = function (file, inputEl) {
+      vm.importing = true;
+      vm.importResult = null;
+      vm.error = null;
+
+      // Single-step import (no dry-run)
+      SchedulesService.importFile(file)
+        .then(function (resp) {
+          var result = resp && resp.result ? resp.result : resp;
+          vm.importResult = result;
+          ToastService.success('Import completed.');
+          // refresh list after successful import
+          if (vm.isList) {
+            search();
+          }
+        })
+        .catch(function (err) {
+          console.error('Import error:', err);
+          var msg = 'Import failed.';
+          if (err && err.data && err.data.message) {
+            msg = err.data.message;
+          }
+          vm.error = msg;
+          ToastService.error(msg);
+        })
+        .finally(function () {
+          vm.importing = false;
+          try {
+            if (inputEl) inputEl.value = '';
+          } catch (_) {}
+        });
+    };
     // === INITIALIZATION ===
     init();
 
@@ -266,7 +358,7 @@
       }
 
       vm.loadingClasslists = true;
-      SchedulesService.getAvailableClasslists(vm.form.intSem)
+      SchedulesService.getAvailableClasslists(vm.form.intSem, true, vm.form.blockSection)
         .then(function(data) {
           if (data && data.success !== false && angular.isArray(data.data)) {
             vm.availableClasslists = data.data;

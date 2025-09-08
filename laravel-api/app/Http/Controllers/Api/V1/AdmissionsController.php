@@ -33,6 +33,12 @@ class AdmissionsController extends Controller
             'date_of_birth' => 'required|date',
             'citizenship_country' => 'required|string|max:100',
             'intTuitionYear' => 'int',
+            // Require at least one awareness item
+            'awareness' => 'required|array|min:1',
+            'awareness.*.name' => 'required|string|max:255',
+            'awareness.*.sub_name' => 'nullable|string|max:255',
+            'awareness.*.referral' => 'sometimes|boolean',
+            'awareness.*.name_of_referee' => 'nullable|string|max:255',
         ]);
 
         $now = Carbon::now();
@@ -94,15 +100,7 @@ class AdmissionsController extends Controller
                     break;
                 }
             }
-        }
-        
-        $userData['high_school'] = "";
-        $userData['high_school_address'] = "";
-        $userData['high_school_attended'] = "";
-        $userData['senior_high'] = "";
-        $userData['senior_high_address'] = "";
-        $userData['senior_high_attended'] = "";
-        $userData['strand'] = "";
+        }        
         
 
         // Address (combine pieces if provided)
@@ -244,6 +242,17 @@ class AdmissionsController extends Controller
             }            
 
             $applicantDataId = DB::table('tb_mas_applicant_data')->insertGetId($insertData);
+
+            // Persist application awareness (multi-select "How did you find out about iACADEMY?")
+            try {
+                $awareness = $request->input('awareness', []);
+                if (is_array($awareness) && !empty($awareness)) {
+                    app(\App\Services\ApplicationAwarenessService::class)->createMany((int) $applicantDataId, $awareness);
+                }
+            } catch (\Throwable $e) {
+                // Bubble up to rollback the transaction and return error
+                throw $e;
+            }
 
             DB::commit();
 

@@ -1,0 +1,396 @@
+<div ng-cloak>
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-semibold text-gray-900">{{ vm.title }}</h1>
+    <button class="inline-flex items-center px-3 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700"
+            ng-click="vm.openCreate()">
+      <span class="fas fa-plus mr-2"></span> New Scholarship/Discount
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <div class="bg-white border rounded p-4 shadow-sm">
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+      <div class="md:col-span-2">
+        <label class="block text-sm text-gray-600 mb-1">Search (Name/Code)</label>
+        <input type="text" class="w-full border rounded px-3 py-2"
+               placeholder="Search..."
+               ng-model="vm.filters.q"
+               ng-keypress="$event.which === 13 &amp;&amp; vm.search()">
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Status</label>
+        <select class="w-full border rounded px-3 py-2" ng-model="vm.filters.status">
+          <option value="">Any</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+          <option value="suspended">Suspended</option>
+          <option value="revoked">Revoked</option>
+          <option value="expired">Expired</option>
+          <option value="pending">Pending</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Deduction Type</label>
+        <select class="w-full border rounded px-3 py-2" ng-model="vm.filters.deduction_type">
+          <option value="">Any</option>
+          <option value="scholarship">Scholarship</option>
+          <option value="discount">Discount</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">From</label>
+        <select class="w-full border rounded px-3 py-2" ng-model="vm.filters.deduction_from">
+          <option value="">Any</option>
+          <option value="in-house">In-house</option>
+          <option value="external">External</option>
+        </select>
+      </div>
+    </div>
+    <div class="mt-4 flex items-center gap-2">
+      <button class="inline-flex items-center px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+              ng-click="vm.search()">
+        <span class="fas fa-search mr-2"></span> Search
+      </button>
+      <button class="inline-flex items-center px-3 py-2 rounded bg-gray-100 text-gray-800 hover:bg-gray-200"
+              ng-click="vm.resetFilters()">
+        <span class="fas fa-undo mr-2"></span> Reset
+      </button>
+      <span class="ml-4 text-sm text-gray-500" ng-if="vm.loading">
+        <span class="fas fa-circle-notch fa-spin mr-1"></span> Loading...
+      </span>
+      <span class="ml-4 text-sm text-red-600" ng-if="vm.error">{{ vm.error }}</span>
+    </div>
+  </div>
+
+  <!-- List -->
+  <div class="bg-white border rounded shadow-sm overflow-x-auto">
+    <table class="min-w-full text-sm">
+      <thead class="bg-gray-50 text-gray-700">
+        <tr>
+          <th class="text-left font-semibold px-4 py-2">Code</th>
+          <th class="text-left font-semibold px-4 py-2">Name</th>
+          <th class="text-left font-semibold px-4 py-2">Type</th>
+          <th class="text-left font-semibold px-4 py-2">From</th>
+          <th class="text-left font-semibold px-4 py-2">Status</th>
+          <th class="text-right font-semibold px-4 py-2">Percent</th>
+          <th class="text-right font-semibold px-4 py-2">Fixed Amount</th>
+          <th class="text-left font-semibold px-4 py-2">Actions</th>
+        </tr>
+      </thead>
+      <tbody ng-if="vm.items.length">
+        <tr ng-repeat="s in vm.items" class="border-t">
+          <td class="px-4 py-2">{{ s.code || '—' }}</td>
+          <td class="px-4 py-2">{{ s.name || '—' }}</td>
+          <td class="px-4 py-2">{{ vm.typeLabel(s.deduction_type) }}</td>
+          <td class="px-4 py-2">{{ vm.fromLabel(s.deduction_from) }}</td>
+          <td class="px-4 py-2">
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs"
+                  ng-class="{
+                    'bg-green-100 text-green-700': s.status === 'active',
+                    'bg-gray-100 text-gray-700': s.status === 'inactive',
+                    'bg-yellow-100 text-yellow-700': s.status === 'pending',
+                    'bg-red-100 text-red-700': s.status === 'revoked' || s.status === 'suspended',
+                    'bg-blue-100 text-blue-700': s.status === 'expired'
+                  }">
+              {{ vm.statusLabel(s.status || '—') }}
+            </span>
+          </td>
+          <td class="px-4 py-2 text-right">
+            <span ng-if="s.percent != null">{{ s.percent | number:2 }}%</span>
+            <span ng-if="s.percent == null">—</span>
+          </td>
+          <td class="px-4 py-2 text-right">
+            <span ng-if="s.fixed_amount != null">₱ {{ s.fixed_amount | number:2 }}</span>
+            <span ng-if="s.fixed_amount == null">—</span>
+          </td>
+          <td class="px-4 py-2">
+            <div class="flex items-center gap-2">
+              <button class="inline-flex items-center px-2 py-1 rounded bg-gray-100 hover:bg-gray-200"
+                      ng-click="vm.openEdit(s)">
+                <span class="fas fa-edit mr-1"></span> Edit
+              </button>
+              <button class="inline-flex items-center px-2 py-1 rounded bg-red-100 text-red-700 hover:bg-red-200"
+                      ng-if="s.status !== 'inactive'"
+                      ng-click="vm.softDelete(s)">
+                <span class="fas fa-trash mr-1"></span> Disable
+              </button>
+              <button class="inline-flex items-center px-2 py-1 rounded bg-green-100 text-green-700 hover:bg-green-200"
+                      ng-if="s.status === 'inactive'"
+                      ng-click="vm.restore(s)">
+                <span class="fas fa-undo mr-1"></span> Restore
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+      <tbody ng-if="!vm.items.length">
+        <tr>
+          <td class="px-4 py-8 text-center text-gray-500" colspan="8">
+            No records found.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Form Modal -->
+  <div ng-if="vm.showForm"
+       class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div class="bg-white rounded shadow-lg w-full max-w-6xl">
+      <div class="flex items-center justify-between px-4 py-3 border-b">
+        <h3 class="text-lg font-semibold">
+          {{ vm.isEditing ? 'Edit Scholarship/Discount' : 'New Scholarship/Discount' }}
+        </h3>
+        <button class="text-gray-500 hover:text-gray-700"
+                ng-click="vm.cancelForm()">
+          <span class="fas fa-times"></span>
+        </button>
+      </div>
+      <div class="p-4 space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">          
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Name</label>
+            <input type="text" class="w-full border rounded px-3 py-2"
+                   ng-model="vm.form.name">
+            <div class="text-xs text-red-600 mt-1" ng-if="vm.validation.name">
+              {{ (vm.validation.name[0] || '') }}
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Deduction Type</label>
+            <select class="w-full border rounded px-3 py-2"
+                    ng-model="vm.form.deduction_type">
+              <option value="scholarship">Scholarship</option>
+              <option value="discount">Discount</option>
+            </select>
+            <div class="text-xs text-red-600 mt-1" ng-if="vm.validation.deduction_type">
+              {{ (vm.validation.deduction_type[0] || '') }}
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Deduction From</label>
+            <select class="w-full border rounded px-3 py-2"
+                    ng-model="vm.form.deduction_from">
+              <option value="in-house">In-house</option>
+              <option value="external">External</option>
+            </select>
+            <div class="text-xs text-red-600 mt-1" ng-if="vm.validation.deduction_from">
+              {{ (vm.validation.deduction_from[0] || '') }}
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Status</label>
+            <select class="w-full border rounded px-3 py-2"
+                    ng-model="vm.form.status">
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+              <option value="suspended">Suspended</option>
+              <option value="revoked">Revoked</option>
+              <option value="expired">Expired</option>
+              <option value="pending">Pending</option>
+            </select>
+            <div class="text-xs text-red-600 mt-1" ng-if="vm.validation.status">
+              {{ (vm.validation.status[0] || '') }}
+            </div>
+          </div>                    
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Description</label>
+            <textarea class="w-full border rounded px-3 py-2"
+                      rows="3"
+                      ng-model="vm.form.description"
+                      placeholder="Optional description"></textarea>
+            <div class="text-xs text-red-600 mt-1" ng-if="vm.validation.description">
+              {{ (vm.validation.description[0] || '') }}
+            </div>
+          </div>
+
+          <!-- Advanced: Per-fee Overrides -->
+          <div class="md:col-span-2 mt-2">
+            <div class="text-sm font-semibold text-gray-800">Per-fee Overrides</div>
+            <div class="text-xs text-gray-500">Set either Rate (%) or Fixed Amount (₱). Leave blank if not applicable.</div>
+          </div>
+
+          <div class="md:col-span-3 grid grid-cols-1 md:grid-cols-6 gap-4">
+
+          <!-- Tuition -->
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Tuition Fee Rate (%)</label>
+            <input type="number" step="1" min="0" max="100"
+                   class="w-full border rounded px-3 py-2"
+                   ng-model="vm.form.tuition_fee_rate"
+                   placeholder="0 - 100">
+            <div class="text-xs text-red-600 mt-1" ng-if="vm.validation.tuition_fee_rate">
+              {{ (vm.validation.tuition_fee_rate[0] || '') }}
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Tuition Fee Fixed (₱)</label>
+            <input type="number" step="0.01" min="0"
+                   class="w-full border rounded px-3 py-2"
+                   ng-model="vm.form.tuition_fee_fixed"
+                   placeholder="0.00">
+            <div class="text-xs text-red-600 mt-1" ng-if="vm.validation.tuition_fee_fixed">
+              {{ (vm.validation.tuition_fee_fixed[0] || '') }}
+            </div>
+          </div>
+
+          <!-- Basic -->
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Basic Fee Rate (%)</label>
+            <input type="number" step="1" min="0" max="100"
+                   class="w-full border rounded px-3 py-2"
+                   ng-model="vm.form.basic_fee_rate"
+                   placeholder="0 - 100">
+            <div class="text-xs text-red-600 mt-1" ng-if="vm.validation.basic_fee_rate">
+              {{ (vm.validation.basic_fee_rate[0] || '') }}
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Basic Fee Fixed (₱)</label>
+            <input type="number" step="0.01" min="0"
+                   class="w-full border rounded px-3 py-2"
+                   ng-model="vm.form.basic_fee_fixed"
+                   placeholder="0.00">
+            <div class="text-xs text-red-600 mt-1" ng-if="vm.validation.basic_fee_fixed">
+              {{ (vm.validation.basic_fee_fixed[0] || '') }}
+            </div>
+          </div>
+
+          <!-- Misc -->
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Misc Fee Rate (%)</label>
+            <input type="number" step="1" min="0" max="100"
+                   class="w-full border rounded px-3 py-2"
+                   ng-model="vm.form.misc_fee_rate"
+                   placeholder="0 - 100">
+            <div class="text-xs text-red-600 mt-1" ng-if="vm.validation.misc_fee_rate">
+              {{ (vm.validation.misc_fee_rate[0] || '') }}
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Misc Fee Fixed (₱)</label>
+            <input type="number" step="0.01" min="0"
+                   class="w-full border rounded px-3 py-2"
+                   ng-model="vm.form.misc_fee_fixed"
+                   placeholder="0.00">
+            <div class="text-xs text-red-600 mt-1" ng-if="vm.validation.misc_fee_fixed">
+              {{ (vm.validation.misc_fee_fixed[0] || '') }}
+            </div>
+          </div>
+
+          <!-- Laboratory -->
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Laboratory Fee Rate (%)</label>
+            <input type="number" step="1" min="0" max="100"
+                   class="w-full border rounded px-3 py-2"
+                   ng-model="vm.form.lab_fee_rate"
+                   placeholder="0 - 100">
+            <div class="text-xs text-red-600 mt-1" ng-if="vm.validation.lab_fee_rate">
+              {{ (vm.validation.lab_fee_rate[0] || '') }}
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Laboratory Fee Fixed (₱)</label>
+            <input type="number" step="0.01" min="0"
+                   class="w-full border rounded px-3 py-2"
+                   ng-model="vm.form.lab_fee_fixed"
+                   placeholder="0.00">
+            <div class="text-xs text-red-600 mt-1" ng-if="vm.validation.lab_fee_fixed">
+              {{ (vm.validation.lab_fee_fixed[0] || '') }}
+            </div>
+          </div>
+
+          <!-- Penalty -->
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Penalty Fee Rate (%)</label>
+            <input type="number" step="1" min="0" max="100"
+                   class="w-full border rounded px-3 py-2"
+                   ng-model="vm.form.penalty_fee_rate"
+                   placeholder="0 - 100">
+            <div class="text-xs text-red-600 mt-1" ng-if="vm.validation.penalty_fee_rate">
+              {{ (vm.validation.penalty_fee_rate[0] || '') }}
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Penalty Fee Fixed (₱)</label>
+            <input type="number" step="0.01" min="0"
+                   class="w-full border rounded px-3 py-2"
+                   ng-model="vm.form.penalty_fee_fixed"
+                   placeholder="0.00">
+            <div class="text-xs text-red-600 mt-1" ng-if="vm.validation.penalty_fee_fixed">
+              {{ (vm.validation.penalty_fee_fixed[0] || '') }}
+            </div>
+          </div>
+
+          <!-- Other Fees -->
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Other Fees Rate (%)</label>
+            <input type="number" step="1" min="0" max="100"
+                   class="w-full border rounded px-3 py-2"
+                   ng-model="vm.form.other_fees_rate"
+                   placeholder="0 - 100">
+            <div class="text-xs text-red-600 mt-1" ng-if="vm.validation.other_fees_rate">
+              {{ (vm.validation.other_fees_rate[0] || '') }}
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Other Fees Fixed (₱)</label>
+            <input type="number" step="0.01" min="0"
+                   class="w-full border rounded px-3 py-2"
+                   ng-model="vm.form.other_fees_fixed"
+                   placeholder="0.00">
+            <div class="text-xs text-red-600 mt-1" ng-if="vm.validation.other_fees_fixed">
+              {{ (vm.validation.other_fees_fixed[0] || '') }}
+            </div>
+          </div>
+
+          <!-- Total Assessment -->
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Total Assessment Rate (%)</label>
+            <input type="number" step="1" min="0" max="100"
+                   class="w-full border rounded px-3 py-2"
+                   ng-model="vm.form.total_assessment_rate"
+                   placeholder="0 - 100">
+            <div class="text-xs text-red-600 mt-1" ng-if="vm.validation.total_assessment_rate">
+              {{ (vm.validation.total_assessment_rate[0] || '') }}
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Total Assessment Fixed (₱)</label>
+            <input type="number" step="0.01" min="0"
+                   class="w-full border rounded px-3 py-2"
+                   ng-model="vm.form.total_assessment_fixed"
+                   placeholder="0.00">
+            <div class="text-xs text-red-600 mt-1" ng-if="vm.validation.total_assessment_fixed">
+              {{ (vm.validation.total_assessment_fixed[0] || '') }}
+            </div>
+          </div>
+          <!-- Created By -->
+          <div class="md:col-span-2">
+            <label class="block text-sm text-gray-600 mb-1">Created By (User ID)</label>
+            <input type="number" step="1" min="1"
+                   class="w-full border rounded px-3 py-2"
+                   ng-model="vm.form.created_by_id"
+                   placeholder="e.g. 123">
+            <div class="text-xs text-red-600 mt-1" ng-if="vm.validation.created_by_id">
+              {{ (vm.validation.created_by_id[0] || '') }}
+            </div>
+          </div>
+          </div>
+
+          
+        </div>
+      </div>
+      <div class="px-4 py-3 border-t flex items-center justify-end gap-2">
+        <button class="inline-flex items-center px-3 py-2 rounded bg-gray-100 text-gray-800 hover:bg-gray-200"
+                ng-click="vm.cancelForm()">
+          Cancel
+        </button>
+        <button class="inline-flex items-center px-3 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700"
+                ng-click="vm.submitForm()">
+          <span class="fas fa-save mr-2"></span> {{ vm.isEditing ? 'Update' : 'Create' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

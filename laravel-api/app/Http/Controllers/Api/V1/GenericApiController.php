@@ -113,11 +113,12 @@ class GenericApiController extends Controller
             ->get()
             ->map(function ($r) {
                 $label = sprintf(
-                    '%s %s %s-%s',
+                    '%s %s %s-%s %s',
                     $r->enumSem,
                     ($r->term_label === 'Semester' ? 'Sem' : $r->term_label),
                     $r->strYearStart,
-                    $r->strYearEnd
+                    $r->strYearEnd,
+                    $r->term_student_type
                 );
                 return [
                     'intID'             => $r->intID,

@@ -278,7 +278,12 @@
         posted_at: toInputDateTime(new Date()),
         remarks: '',
         payment_description_id: null,
-        generate_invoice: true
+        generate_invoice: true,
+        // Extra invoice fields (shown only when generate_invoice is true)
+        withholding_tax_percentage: null,
+        invoice_amount: null,
+        invoice_amount_ves: null,
+        invoice_amount_vzrs: null
       };
       vm.modalOpen = true;
     }
@@ -359,6 +364,27 @@
         payload.term = vm.current.term;
         // Pass generate_invoice flag (default true)
         payload.generate_invoice = !!vm.current.generate_invoice;
+
+        // Include extra invoice fields when generating invoice now
+        if (payload.generate_invoice) {
+          if (vm.current.withholding_tax_percentage !== null && vm.current.withholding_tax_percentage !== undefined && vm.current.withholding_tax_percentage !== '') {
+            var wtp = parseInt(vm.current.withholding_tax_percentage, 10);
+            if (!isNaN(wtp)) payload.withholding_tax_percentage = wtp;
+          }
+          if (vm.current.invoice_amount !== null && vm.current.invoice_amount !== undefined && vm.current.invoice_amount !== '') {
+            var invAmt = parseFloat(vm.current.invoice_amount);
+            if (!isNaN(invAmt)) payload.invoice_amount = invAmt;
+          }
+          if (vm.current.invoice_amount_ves !== null && vm.current.invoice_amount_ves !== undefined && vm.current.invoice_amount_ves !== '') {
+            var invVes = parseFloat(vm.current.invoice_amount_ves);
+            if (!isNaN(invVes)) payload.invoice_amount_ves = invVes;
+          }
+          if (vm.current.invoice_amount_vzrs !== null && vm.current.invoice_amount_vzrs !== undefined && vm.current.invoice_amount_vzrs !== '') {
+            var invVzrs = parseFloat(vm.current.invoice_amount_vzrs);
+            if (!isNaN(invVzrs)) payload.invoice_amount_vzrs = invVzrs;
+          }
+        }
+
         StudentBillingService.create(payload).then(function () {
           ToastService.success('Student billing item created.');
           vm.modalOpen = false;

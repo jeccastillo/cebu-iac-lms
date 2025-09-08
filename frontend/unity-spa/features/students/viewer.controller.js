@@ -148,6 +148,33 @@
       });
     };
 
+    // Fallback schedule formatter: prefer backend schedule_text; otherwise compose from fields
+    vm.formatSchedule = function (r) {
+      if (!r) return '-';
+      var txt = (r.schedule_text !== undefined && r.schedule_text !== null) ? ('' + r.schedule_text).trim() : '';
+      if (txt) return txt;
+
+      // Try alternate field names as defensive fallbacks
+      var days = r.schedule_days || r.scheduleDays || r.days || null;
+      var times = r.schedule_times || r.scheduleTimes || r.times || null;
+      var rooms = r.schedule_rooms || r.scheduleRooms || r.rooms || null;
+
+      var parts = [];
+      if (days && times) {
+        parts.push((days + ' ' + times).trim());
+      } else if (times) {
+        parts.push(('' + times).trim());
+      } else if (days) {
+        parts.push(('' + days).trim());
+      }
+      if (rooms) {
+        parts.push(('' + rooms).trim());
+      }
+
+      var out = parts.join(' — ');
+      return out && out.trim() !== '' ? out : '-';
+    };
+
     // Checklist actions
     vm.fetchChecklist = function () {
       vm.loading.checklist = true;

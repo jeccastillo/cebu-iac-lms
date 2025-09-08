@@ -30,7 +30,8 @@
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Date of Birth <span class="text-red-500">*</span></label>
-          <input type="date" class="w-full border rounded px-3 py-2" ng-model="vm.form.date_of_birth" required />
+          <input type="date" name="date_of_birth" class="w-full border rounded px-3 py-2" ng-model="vm.form.date_of_birth" ng-class="{'border-red-500': applyForm.date_of_birth.$dirty && applyForm.date_of_birth.$invalid}" required />
+          <div class="text-xs text-red-600 mt-1" ng-if="applyForm.date_of_birth.$dirty && applyForm.date_of_birth.$error.required">Date of birth is required.</div>
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Campus <span class="text-red-500">*</span></label>
@@ -348,24 +349,29 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="md:col-span-2">
           <label class="block text-sm font-medium text-gray-700 mb-1">Home Number/Street/Subdivision <span class="text-red-500">*</span></label>
-          <input type="text" class="w-full border rounded px-3 py-2" ng-model="vm.form.address" required />
+          <input type="text" name="address" class="w-full border rounded px-3 py-2" ng-model="vm.form.address" ng-class="{'border-red-500': applyForm.address.$dirty && applyForm.address.$invalid}" required />
+          <div class="text-xs text-red-600 mt-1" ng-if="applyForm.address.$dirty && applyForm.address.$error.required">Address is required.</div>
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">City <span class="text-red-500">*</span></label>
-          <input type="text" class="w-full border rounded px-3 py-2" ng-model="vm.form.city" required />
+          <input type="text" name="city" class="w-full border rounded px-3 py-2" ng-model="vm.form.city" ng-class="{'border-red-500': applyForm.city.$dirty && applyForm.city.$invalid}" required />
+          <div class="text-xs text-red-600 mt-1" ng-if="applyForm.city.$dirty && applyForm.city.$error.required">City is required.</div>
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">State/Province <span class="text-red-500">*</span></label>
-          <input type="text" class="w-full border rounded px-3 py-2" ng-model="vm.form.province" required />
+          <input type="text" name="province" class="w-full border rounded px-3 py-2" ng-model="vm.form.province" ng-class="{'border-red-500': applyForm.province.$dirty && applyForm.province.$invalid}" required />
+          <div class="text-xs text-red-600 mt-1" ng-if="applyForm.province.$dirty && applyForm.province.$error.required">State/Province is required.</div>
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Country <span class="text-red-500">*</span></label>
-          <select class="w-full border rounded px-3 py-2"
+          <select name="country" class="w-full border rounded px-3 py-2"
                   ng-model="vm.form.country"
                   ng-options="c for c in vm.countries"
+                  ng-class="{'border-red-500': applyForm.country.$dirty && applyForm.country.$invalid}"
                   required>
             <option value="">-- Select --</option>
           </select>
+          <div class="text-xs text-red-600 mt-1" ng-if="applyForm.country.$dirty && applyForm.country.$error.required">Country is required.</div>
         </div>
       </div>
     </fieldset>
@@ -493,6 +499,92 @@
         </div>
       </div>
     </fieldset>
+
+    <!-- HOW DID YOU FIND OUT ABOUT OUR SCHOOL? -->
+    <fieldset class="mb-6">
+      <legend class="text-lg font-semibold text-gray-700 mb-3 uppercase">HOW DID YOU FIND OUT ABOUT OUR SCHOOL?</legend>
+      <div class="border rounded p-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+          <label class="inline-flex items-center">
+            <input type="checkbox" name="awareness_google" ng-model="vm.form.awareness.google" />
+            <span class="ml-2">Google</span>
+          </label>
+          <label class="inline-flex items-center">
+            <input type="checkbox" ng-model="vm.form.awareness.facebook" />
+            <span class="ml-2">Facebook</span>
+          </label>
+          <label class="inline-flex items-center">
+            <input type="checkbox" ng-model="vm.form.awareness.instagram" />
+            <span class="ml-2">Instagram</span>
+          </label>
+          <label class="inline-flex items-center">
+            <input type="checkbox" ng-model="vm.form.awareness.tiktok" />
+            <span class="ml-2">Tiktok</span>
+          </label>
+          <label class="inline-flex items-center">
+            <input type="checkbox" ng-model="vm.form.awareness.news" />
+            <span class="ml-2">News</span>
+          </label>
+          <label class="inline-flex items-center">
+            <input type="checkbox" ng-model="vm.form.awareness.school_fair_orientation" />
+            <span class="ml-2">School Fair/Orientation</span>
+          </label>
+          <label class="inline-flex items-center">
+            <input type="checkbox" ng-model="vm.form.awareness.billboard" />
+            <span class="ml-2">Billboard</span>
+          </label>
+          <label class="inline-flex items-center">
+            <input type="checkbox" ng-model="vm.form.awareness.event" />
+            <span class="ml-2">Event (please specify)</span>
+          </label>
+        </div>
+
+        <div class="mt-2" ng-if="vm.form.awareness.event">
+          <input type="text" class="w-full border rounded px-3 py-2"
+                 placeholder="Event name"
+                 ng-model="vm.form.awareness.event_name" />
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
+          <label class="inline-flex items-center">
+            <input type="checkbox" ng-model="vm.form.awareness.referral" />
+            <span class="ml-2">Referral (please specify)</span>
+          </label>
+          <label class="inline-flex items-center">
+            <input type="checkbox" ng-model="vm.form.awareness.others" />
+            <span class="ml-2">Others (please specify)</span>
+          </label>
+        </div>
+
+        <div class="mt-2" ng-if="vm.form.awareness.referral">
+          <input type="text" class="w-full border rounded px-3 py-2"
+                 placeholder="Name of referee"
+                 ng-model="vm.form.awareness.name_of_referee" />
+        </div>
+
+        <div class="mt-2" ng-if="vm.form.awareness.others">
+          <input type="text" class="w-full border rounded px-3 py-2"
+                 placeholder="Please specify"
+                 ng-model="vm.form.awareness.others_specify" />
+        </div>
+      </div>
+      <div class="text-xs text-red-600 mt-1" ng-if="applyForm.$submitted && !vm.hasAnyAwarenessSelected()">
+        Please select at least one awareness option.
+      </div>
+    </fieldset>
+
+    <!-- Privacy Policy Consent -->
+    <div class="mt-6 text-center">
+      <p class="text-sm text-gray-700">
+        iACADEMY shall retain in confidence all confidential information concerning and involving every student and the school.
+        <a href="https://iacademy.edu.ph/privacypolicy.htm" target="_blank" rel="noopener" class="text-blue-600 underline">https://iacademy.edu.ph/privacypolicy.htm</a>
+      </p>
+      <label class="inline-flex items-center mt-3">
+        <input type="checkbox" name="privacy_policy_agreed" ng-model="vm.form.privacy_policy_agreed" required />
+        <span class="ml-2 italic text-gray-700 text-sm">I have read and I agree to the said policy.</span>
+      </label>
+      <div class="text-xs text-red-600 mt-1" ng-if="applyForm.$submitted && !vm.form.privacy_policy_agreed">Please agree to the privacy policy.</div>
+    </div>
 
     <div class="mb-4" ng-if="vm.error">
       <div class="bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded">

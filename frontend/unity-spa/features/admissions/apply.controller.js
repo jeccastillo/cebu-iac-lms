@@ -5,9 +5,9 @@
     .module('unityApp')
     .controller('AdmissionsApplyController', AdmissionsApplyController);
 
-  AdmissionsApplyController.$inject = ['$http', '$location', 'APP_CONFIG', '$q', 'CampusService', 'SchoolYearsService', 'ProgramsService', 'TuitionYearsService', 'PreviousSchoolsService', 'ApplicantTypesService', '$scope'];
+  AdmissionsApplyController.$inject = ['$http', '$location', 'APP_CONFIG', '$q', 'CampusService', 'SchoolYearsService', 'ProgramsService', 'TuitionYearsService', 'PreviousSchoolsService', 'ApplicantTypesService', '$scope', 'ToastService', '$document', '$timeout', '$window'];
 
-  function AdmissionsApplyController($http, $location, APP_CONFIG, $q, CampusService, SchoolYearsService, ProgramsService, TuitionYearsService, PreviousSchoolsService, ApplicantTypesService, $scope) {
+  function AdmissionsApplyController($http, $location, APP_CONFIG, $q, CampusService, SchoolYearsService, ProgramsService, TuitionYearsService, PreviousSchoolsService, ApplicantTypesService, $scope, ToastService, $document, $timeout, $window) {
     var vm = this;
 
     vm.loading = false;
@@ -90,7 +90,25 @@
       term: null,        // tb_mas_sy.intID (selected term)
       campus_id: null,   // kept for backend completeness (filled on submit)
       intTuitionYear: null, // resolved after selecting student level
-      applicant_type_id: null // selected applicant type id
+      applicant_type_id: null, // selected applicant type id
+      // Awareness section (multi-select)
+      awareness: {
+        google: false,
+        facebook: false,
+        instagram: false,
+        tiktok: false,
+        news: false,
+        school_fair_orientation: false,
+        billboard: false,
+        event: false,
+        event_name: '',
+        referral: false,
+        name_of_referee: '',
+        others: false,
+        others_specify: ''
+      },
+      // Privacy Policy consent
+      privacy_policy_agreed: false
     };
 
     vm.genders = ['Male', 'Female'];
@@ -128,8 +146,43 @@
     vm.onPreviousSchoolChange = onPreviousSchoolChange;
     vm.toggleNotOnList = toggleNotOnList;
     vm.loadApplicantTypesForSelection = loadApplicantTypesForSelection;
+    vm.hasAnyAwarenessSelected = hasAnyAwarenessSelected;
 
     activate();
+
+    // Toast + scroll utilities
+    function getElementByName(name) {
+      try { return ($document[0] || document).querySelector("[name='" + name + "']"); } catch (e) { return null; }
+    }
+    function scrollToElement(el) {
+      if (!el) return;
+      try { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {
+        try { el.scrollIntoView(); } catch (e2) {}
+      }
+      try { if (el.focus) { el.focus(); } } catch (e3) {}
+    }
+    function scrollToName(name) {
+      $timeout(function () { scrollToElement(getElementByName(name)); }, 0);
+    }
+    function scrollToFirstInvalid() {
+      try {
+        var form = $scope && $scope.applyForm ? $scope.applyForm : null;
+        var ctrl = null;
+        if (form && form.$error) {
+          var order = ['required', 'email', 'tel', 'pattern', 'min', 'max'];
+          for (var i = 0; i < order.length; i++) {
+            var group = form.$error[order[i]];
+            if (group && group.length) { ctrl = group[0]; break; }
+          }
+        }
+        if (ctrl && ctrl.$name) {
+          scrollToName(ctrl.$name);
+          return;
+        }
+      } catch (e) {}
+      // Fallback to privacy policy checkbox if nothing found
+      scrollToName('privacy_policy_agreed');
+    }
 
     function activate() {
       // React to global campus changes
@@ -191,38 +244,72 @@
     function submit() {
       vm.error = null;
 
-      // Basic validations
+      // Mark form as submitted to surface validation state
+      try { if ($scope && $scope.applyForm && $scope.applyForm.$setSubmitted) { $scope.applyForm.$setSubmitted(); } } catch (e) {}
+
+      // Angular form-level validation first
+      if ($scope && $scope.applyForm && $scope.applyForm.$invalid) {
+        ToastService.error('Please complete the required fields.');
+        try { scrollToFirstInvalid(); } catch (e) {}
+        return;
+      }
+
+      // Basic validations with targeted scroll
       if (!vm.form.email || vm.form.email !== vm.form.email_confirmation) {
-        vm.error = 'Email address does not match confirmation.';
+        ToastService.error('Email address does not match confirmation.');
+        scrollToName('email_confirmation');
         return;
       }
       if (!vm.form.mobile_number || vm.form.mobile_number !== vm.form.mobile_number_confirmation) {
-        vm.error = 'Mobile number does not match confirmation.';
+        ToastService.error('Mobile number does not match confirmation.');
+        scrollToName('mobile_number_confirmation');
         return;
       }
       if (!vm.form.type_id) {
-        vm.error = 'Please select a program.';
+        ToastService.error('Please select a program.');
+        scrollToName('type_id');
         return;
       }
       if (!vm.selectedCampus || vm.selectedCampus.id === undefined || vm.selectedCampus.id === null) {
-        vm.error = 'Please select a campus.';
+        ToastService.error('Please select a campus.');
+        scrollToName('campus');
         return;
       }
       if (!vm.form.student_type) {
-        vm.error = 'Please select a student type.';
+        ToastService.error('Please select a student type.');
+        scrollToName('student_type');
         return;
       }
       if (!vm.form.term) {
-        vm.error = 'Please select a term.';
+        ToastService.error('Please select a term.');
+        scrollToName('term');
         return;
       }
       if (!vm.form.applicant_type_id) {
-        vm.error = 'Please select an applicant type.';
+        ToastService.error('Please select an applicant type.');
+        scrollToName('applicant_type_id');
         return;
       }
       // Validate Parent/Guardian contacts: require at least one group with name + (email or mobile)
       if (!validateParentContacts()) {
-        vm.error = 'Please provide at least one parent/guardian with Name and either Email Address or Mobile Number.';
+        ToastService.error('Please provide at least one parent/guardian with Name and either Email Address or Mobile Number.');
+        // Best-effort focus to first parent group field
+        scrollToName('mother_name');
+        return;
+      }
+
+      // Privacy policy consent
+      if (!vm.form.privacy_policy_agreed) {
+        // Do not use blocking alerts; use toast and auto-scroll
+        ToastService.error('Please agree to the privacy policy.');
+        scrollToName('privacy_policy_agreed');
+        return;
+      }
+
+      // Require at least one awareness option
+      if (!vm.hasAnyAwarenessSelected()) {
+        ToastService.error('Please select at least one awareness option.');
+        scrollToName('awareness_google');
         return;
       }
 
@@ -240,6 +327,13 @@
       payload.applicant_type = (vm.form.applicant_type_id !== undefined && vm.form.applicant_type_id !== null)
         ? parseInt(vm.form.applicant_type_id, 10)
         : null;
+
+      // Build awareness payload (array of items)
+      try {
+        payload.awareness = buildAwareness(vm.form.awareness);
+      } catch (e) {
+        payload.awareness = [];
+      }
 
       vm.loading = true;
 
@@ -623,6 +717,51 @@
         // Return to list mode
         vm.form.previous_school_name = '';
       }
+    }
+
+    // Awareness helpers
+    function hasAnyAwarenessSelected() {
+      try {
+        return buildAwareness(vm.form.awareness).length > 0;
+      } catch (e) { return false; }
+    }
+    function buildAwareness(a) {
+      var items = [];
+      if (!a) return items;
+
+      if (a.google) items.push({ name: 'Google' });
+      if (a.facebook) items.push({ name: 'Facebook' });
+      if (a.instagram) items.push({ name: 'Instagram' });
+      if (a.tiktok) items.push({ name: 'Tiktok' });
+      if (a.news) items.push({ name: 'News' });
+      if (a.school_fair_orientation) items.push({ name: 'School Fair/Orientation' });
+      if (a.billboard) items.push({ name: 'Billboard' });
+
+      if (a.event) {
+        var ev = { name: 'Event' };
+        if (a.event_name && ('' + a.event_name).trim() !== '') {
+          ev.sub_name = ('' + a.event_name).trim();
+        }
+        items.push(ev);
+      }
+
+      if (a.referral) {
+        var ref = { name: 'Referral', referral: true };
+        if (a.name_of_referee && ('' + a.name_of_referee).trim() !== '') {
+          ref.name_of_referee = ('' + a.name_of_referee).trim();
+        }
+        items.push(ref);
+      }
+
+      if (a.others) {
+        var oth = { name: 'Others' };
+        if (a.others_specify && ('' + a.others_specify).trim() !== '') {
+          oth.sub_name = ('' + a.others_specify).trim();
+        }
+        items.push(oth);
+      }
+
+      return items;
     }
   }
 })();

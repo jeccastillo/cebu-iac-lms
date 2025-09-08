@@ -125,12 +125,18 @@
           .then(_unwrap);
       },
 
-      getAvailableClasslists: function(intSem) {
+      getAvailableClasslists: function(intSem, includeScheduled, blockSection) {
         var params = {};
         if (intSem) {
           params.intSem = intSem;
-        }        
-        
+        }
+        if (includeScheduled === true) {
+          params.include_scheduled = true;
+        }
+        if (blockSection) {
+          params.blockSection = blockSection;
+        }
+
         return $http
           .get(BASE + "/schedules/available-classlists", {
             params: params,
@@ -143,6 +149,32 @@
         return $http
           .get(BASE + "/classlists", _adminHeaders())
           .then(_unwrap);
+      },
+
+      // Download schedules import template (.xlsx)
+      downloadImportTemplate: function() {
+        var opts = _adminHeaders();
+        // Ensure arraybuffer to capture binary
+        return $http.get(BASE + "/schedules/import/template", {
+          headers: opts.headers,
+          responseType: 'arraybuffer'
+        }).then(function(resp) { return resp.data; });
+      },
+
+      // Upload schedules import file (.xlsx/.xls/.csv)
+      importFile: function(file, dryRun) {
+        var fd = new FormData();
+        fd.append('file', file);
+        if (typeof dryRun !== 'undefined') {
+          fd.append('dry_run', dryRun ? '1' : '0');
+        }
+        var hdrs = Object.assign({}, _adminHeaders().headers, {
+          'Content-Type': undefined // let browser set boundary
+        });
+        return $http.post(BASE + "/schedules/import", fd, {
+          headers: hdrs,
+          transformRequest: angular.identity
+        }).then(_unwrap);
       }
     };
   }

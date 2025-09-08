@@ -65,6 +65,15 @@
         ]
       },
       {
+        key: 'scholarship',
+        label: 'Scholarship',
+        children: [
+          { label: 'Assign Scholarships', path: '/scholarship/assignments' },
+          { label: 'Students', path: '/scholarship/students' },
+          { label: 'Catalog', path: '/scholarship/scholarships' }
+        ]
+      },
+      {
         key: 'finance',
         label: 'Finance',
         children: [
@@ -73,7 +82,6 @@
           { label: 'Payment Descriptions', path: '/finance/payment-descriptions' },
           { label: 'Payment Modes', path: '/finance/payment-modes' },
           { label: 'Student Billing', path: '/finance/student-billing' },
-          { label: 'Cashier', path: '/finance/cashier', href: '/finance/cashier/0' },
           { label: 'Cashier Admin', path: '/cashier-admin' }          
         ]
       },

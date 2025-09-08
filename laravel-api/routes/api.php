@@ -49,6 +49,8 @@ use App\Http\Controllers\Api\V1\TuitionYearController;
 use App\Http\Controllers\Api\V1\UnityController;
 use App\Http\Controllers\Api\V1\UsersController;
 use App\Http\Controllers\Api\V1\StudentImportController;
+use App\Http\Controllers\Api\V1\ClassroomImportController;
+use App\Http\Controllers\Api\V1\ScheduleImportController;
 use App\Services\ClasslistSlotsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -216,6 +218,10 @@ Route::prefix('v1')->group(function () {
     Route::put('/classroom/{id}', [ClassroomController::class, 'update'])->middleware('role:building_admin,admin');
     Route::delete('/classroom/{id}', [ClassroomController::class, 'destroy'])->middleware('role:building_admin,admin');
 
+    // Classrooms Import
+    Route::get('/classrooms/import/template', [ClassroomImportController::class, 'template'])->middleware('role:building_admin,admin');
+    Route::post('/classrooms/import', [ClassroomImportController::class, 'import'])->middleware('role:building_admin,admin');
+
     // Schedule endpoints (read + write)
     // Schedules
     Route::get('/schedules', [ScheduleController::class, 'index']);
@@ -227,6 +233,10 @@ Route::prefix('v1')->group(function () {
     Route::post('/schedules', [ScheduleController::class, 'store'])->middleware('role:registrar,admin');
     Route::put('/schedules/{id}', [ScheduleController::class, 'update'])->middleware('role:registrar,admin');
     Route::delete('/schedules/{id}', [ScheduleController::class, 'destroy'])->middleware('role:registrar,admin');
+
+    // Schedules Import
+    Route::get('/schedules/import/template', [ScheduleImportController::class, 'template'])->middleware('role:registrar,admin');
+    Route::post('/schedules/import', [ScheduleImportController::class, 'import'])->middleware('role:registrar,admin');
 
     // Student endpoints (baseline)
     Route::get('/students', [StudentController::class, 'index']);
@@ -293,13 +303,27 @@ Route::prefix('v1')->group(function () {
     Route::put('/finance/invoices/{id}', [InvoiceController::class, 'update'])->middleware('role:admin');
     Route::delete('/finance/invoices/{id}', [InvoiceController::class, 'destroy'])->middleware('role:admin');
 
-    // Scholarship endpoints (read-only baseline)
+    // Scholarship endpoints (catalog CRUD + read)
     Route::get('/scholarships', [ScholarshipController::class, 'index']);
+    // Place literal routes before parameterized to avoid collision
     Route::get('/scholarships/assigned', [ScholarshipController::class, 'assigned']);
     Route::get('/scholarships/enrolled', [ScholarshipController::class, 'enrolled']);
-    // write stubs for parity (return 501 Not Implemented)
-    Route::post('/scholarships/upsert', [ScholarshipController::class, 'upsert'])->middleware('role:scholarship,admin');
+
+    // Assignment management (Scholarship/Admin)
+    Route::get('/scholarships/assignments', [ScholarshipController::class, 'assignments'])->middleware('role:scholarship,admin');
+    Route::post('/scholarships/assignments', [ScholarshipController::class, 'assignmentsStore'])->middleware('role:scholarship,admin');
+    Route::patch('/scholarships/assignments/apply', [ScholarshipController::class, 'assignmentsApply'])->middleware('role:scholarship,admin');
+    Route::delete('/scholarships/assignments/{id}', [ScholarshipController::class, 'assignmentsDelete'])->middleware('role:scholarship,admin');
+
+    // Catalog CRUD (Scholarship/Discount definitions)
+    Route::get('/scholarships/{id}', [ScholarshipController::class, 'show']);
+    Route::post('/scholarships', [ScholarshipController::class, 'store'])->middleware('role:scholarship,admin');
+    Route::put('/scholarships/{id}', [ScholarshipController::class, 'update'])->middleware('role:scholarship,admin');
     Route::delete('/scholarships/{id}', [ScholarshipController::class, 'delete'])->middleware('role:scholarship,admin');
+    Route::post('/scholarships/{id}/restore', [ScholarshipController::class, 'restore'])->middleware('role:scholarship,admin');
+
+    // Write stub retained for assignment parity
+    Route::post('/scholarships/upsert', [ScholarshipController::class, 'upsert'])->middleware('role:scholarship,admin');
 
     // Unity endpoints (baseline scaffold)
     Route::post('/unity/advising', [UnityController::class, 'advising']);

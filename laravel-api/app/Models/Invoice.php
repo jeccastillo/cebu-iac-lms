@@ -18,6 +18,11 @@ class Invoice extends Model
         'status',
         'invoice_number',
         'amount_total',
+        // Extra amounts
+        'withholding_tax_percentage',
+        'invoice_amount',
+        'invoice_amount_ves',
+        'invoice_amount_vzrs',
         'posted_at',
         'due_at',
         'remarks',
@@ -32,5 +37,9 @@ class Invoice extends Model
         'posted_at' => 'datetime',
         'due_at' => 'date',
         'payload' => 'array',
+        'withholding_tax_percentage' => 'integer',
+        'invoice_amount' => 'float',
+        'invoice_amount_ves' => 'float',
+        'invoice_amount_vzrs' => 'float',
     ];
 }

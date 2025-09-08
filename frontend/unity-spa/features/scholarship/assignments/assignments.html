@@ -1,0 +1,219 @@
+<div class="px-4 py-6">
+  <div class="mb-6">
+    <h1 class="text-2xl font-semibold text-gray-800">Scholarship/Discount Assignments</h1>
+    <p class="text-sm text-gray-500">Assign scholarships or discounts per student and term. New assignments are saved as Pending; you can activate them later (Applied).</p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Left: Filters -->
+    <div class="col-span-1 space-y-4">
+      <!-- Term selection -->
+      <div class="bg-white shadow rounded p-4">
+        <h2 class="text-sm font-medium text-gray-700 mb-2">Term</h2>
+        <select class="w-full border rounded px-3 py-2"
+                ng-model="vm.selectedTerm"
+                ng-options="t as vm.termLabel(t) for t in vm.terms track by t.intID"
+                ng-change="vm.onTermChange()">
+        </select>
+      </div>
+
+      <!-- Student selector -->
+      <div class="bg-white shadow rounded p-4 space-y-3">
+        <h2 class="text-sm font-medium text-gray-700">Student</h2>
+        <label class="block text-xs text-gray-600 mb-1">Search or select a student</label>
+        <div class="relative">
+          <input
+            class="w-full border rounded px-3 py-2"
+            pui-autocomplete
+            ng-model="vm.studentId"
+            pui-source="vm.students"
+            pui-item-key="id"
+            pui-label="vm.studentLabel(item)"
+            pui-on-select="vm.onStudentSelect()"
+            pui-on-query="vm.onStudentQuery($query)"
+            pui-min-chars="1"
+            pui-query-debounce="250"
+            pui-max-results="20"
+            ng-change="vm.onStudentIdChange()"
+            placeholder="Search by student number or name..." />
+        </div>
+        <div class="flex items-center justify-between">
+          <button type="button"
+                  class="text-xs text-gray-600 underline"
+                  ng-click="vm.studentId=''; vm.items=[]">
+            Clear selection
+          </button>
+          <div class="text-xs text-gray-500" ng-if="vm.studentId">Selected ID: {{ vm.studentId }}</div>
+        </div>
+      </div>
+
+      <!-- Catalog selector -->
+      <div class="bg-white shadow rounded p-4 space-y-3">
+        <h2 class="text-sm font-medium text-gray-700">Catalog</h2>
+        <div class="flex gap-2 items-center">
+          <label class="text-xs text-gray-600">Type</label>
+          <select class="border rounded px-2 py-1 text-sm"
+                  ng-model="vm.catalogFilter.type"
+                  ng-change="">
+            <option value="">All</option>
+            <option value="scholarship">Scholarship</option>
+            <option value="discount">Discount</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs text-gray-600 mb-1">Scholarship/Discount</label>
+          <select class="w-full border rounded px-3 py-2"
+                  ng-model="vm.pendingSelection.discount_id"
+                  ng-options="c.id as (c.name + ' (' + (c.deduction_type || '-') + ')') for c in vm.filteredCatalog()"
+                  ng-change="vm.onDiscountChange()">
+            <option value="">-- Select --</option>
+          </select>
+          <!-- Referrer UI shown only for referral discounts -->
+          <div class="mt-3 space-y-2" ng-if="vm.requiresReferrer()">
+            <label class="block text-xs text-gray-600 mb-1">Referrer</label>
+            <div class="flex items-center gap-4 text-sm">
+              <label class="inline-flex items-center gap-1">
+                <input type="radio" ng-model="vm.referrer.mode" value="student" />
+                <span>Existing student</span>
+              </label>
+              <label class="inline-flex items-center gap-1">
+                <input type="radio" ng-model="vm.referrer.mode" value="text" />
+                <span>Free text</span>
+              </label>
+            </div>
+            <div ng-if="vm.referrer.mode === 'student'">
+              <input
+                class="w-full border rounded px-3 py-2"
+                pui-autocomplete
+                ng-model="vm.referrer.studentId"
+                pui-source="vm.referrerStudents"
+                pui-item-key="id"
+                pui-label="vm.studentLabel(item)"
+                pui-on-select="vm.onReferrerSelect()"
+                pui-on-query="vm.onReferrerQuery($query)"
+                pui-min-chars="1"
+                pui-query-debounce="250"
+                pui-max-results="20"
+                placeholder="Search referrer student by number or name..." />
+              <div class="text-xs text-gray-500 mt-1" ng-if="vm.referrer.studentId">
+                Selected Referrer ID: {{ vm.referrer.studentId }}
+              </div>
+            </div>
+            <div ng-if="vm.referrer.mode === 'text'">
+              <input type="text"
+                     class="w-full border rounded px-3 py-2"
+                     ng-model="vm.referrer.text"
+                     placeholder="Enter referrer full name..." />
+            </div>
+            <div class="text-xs text-gray-500">Required for referral discounts.</div>
+          </div>
+        </div>
+        <button type="button"
+                class="inline-flex items-center px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm disabled:opacity-60"
+                ng-click="vm.createPending()"
+                ng-disabled="vm.creating
+                             || !vm.hasSelectedStudent()
+                             || !vm.pendingSelection.discount_id
+                             || !vm.selectedTerm
+                             || (vm.requiresReferrer()
+                                 && (
+                                      (vm.referrer.mode === 'student' && !vm.referrer.studentId)
+                                      || (vm.referrer.mode === 'text' && !(vm.referrer.text && vm.referrer.text.trim().length))
+                                    )
+                                )">
+          <span ng-if="!vm.creating">Add as Pending</span>
+          <span ng-if="vm.creating">Adding...</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Right: Results -->
+    <div class="col-span-2 space-y-4">
+      <div class="bg-white shadow rounded p-4">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h2 class="text-sm font-medium text-gray-700">Assignments</h2>
+            <div class="text-xs text-gray-500">
+              Term: <span class="font-medium">{{ vm.termLabel(vm.selectedTerm) || '—' }}</span>
+              <span class="mx-2">|</span>
+              Results: <span class="font-medium">{{ vm.items.length }}</span>
+            </div>
+          </div>
+          <div>
+            <button type="button"
+                    class="inline-flex items-center px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded text-sm disabled:opacity-60"
+                    ng-click="vm.applySelected()"
+                    ng-disabled="vm.applying || !vm.hasSelectedStudent()">
+              <span ng-if="!vm.applying">Apply Selected</span>
+              <span ng-if="vm.applying">Applying...</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-sm border border-gray-200 rounded">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-3 py-2 text-left w-10">Sel</th>
+                <th class="px-3 py-2 text-left">Name</th>
+                <th class="px-3 py-2 text-left">Type</th>
+                <th class="px-3 py-2 text-left">From</th>
+                <th class="px-3 py-2 text-left">Assignment</th>
+                <th class="px-3 py-2 text-left">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="it in vm.items" class="border-t">
+                <td class="px-3 py-2 align-top">
+                  <input type="checkbox"
+                         ng-checked="vm.selectedIds[it.id]"
+                         ng-disabled="!vm.isPending(it)"
+                         ng-click="vm.toggleSelected(it)" />
+                </td>
+                <td class="px-3 py-2 align-top">
+                  <div class="font-medium text-gray-800">{{ it.name || '-' }}</div>
+                  <div class="text-xs text-gray-500">ID: {{ it.id }}</div>
+                </td>
+                <td class="px-3 py-2 align-top">
+                  <span class="inline-flex px-2 py-1 rounded text-xs"
+                        ng-class="{
+                          'bg-blue-100 text-blue-800': it.deduction_type === 'scholarship',
+                          'bg-purple-100 text-purple-800': it.deduction_type === 'discount'
+                        }">
+                    {{ it.deduction_type || '-' }}
+                  </span>
+                </td>
+                <td class="px-3 py-2 align-top">
+                  {{ it.deduction_from || '-' }}
+                </td>
+                <td class="px-3 py-2 align-top">
+                  <span class="inline-flex px-2 py-1 rounded text-xs"
+                        ng-class="{
+                          'bg-yellow-100 text-yellow-800': vm.isPending(it),
+                          'bg-green-100 text-green-800': vm.isApplied(it)
+                        }">
+                    {{ it.assignment_status || '-' }}
+                  </span>
+                </td>
+                <td class="px-3 py-2 align-top">
+                  <button type="button"
+                          class="px-2 py-1 text-xs rounded border border-red-300 text-red-700 hover:bg-red-50"
+                          ng-disabled="vm.removing[it.id]"
+                          ng-click="vm.removeItem(it)">
+                    <span ng-if="!vm.removing[it.id]">Delete</span>
+                    <span ng-if="vm.removing[it.id]">Deleting...</span>
+                  </button>
+                </td>
+              </tr>
+              <tr ng-if="!vm.items.length">
+                <td colspan="6" class="px-3 py-6 text-center text-gray-500">No assignments found.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-3 text-sm text-red-600" ng-if="vm.error">{{ vm.error }}</div>
+      </div>
+    </div>
+  </div>
+</div>

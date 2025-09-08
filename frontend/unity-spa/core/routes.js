@@ -90,6 +90,18 @@
         controllerAs: "vm",
         requiredRoles: ["scholarship", "admin"],
       })
+      .when("/scholarship/scholarships", {
+        templateUrl: "features/scholarship/scholarships/list.html",
+        controller: "ScholarshipsController",
+        controllerAs: "vm",
+        requiredRoles: ["scholarship", "admin"],
+      })
+      .when("/scholarship/assignments", {
+        templateUrl: "features/scholarship/assignments/assignments.html",
+        controller: "ScholarshipAssignmentsController",
+        controllerAs: "vm",
+        requiredRoles: ["scholarship", "admin"],
+      })
       .when("/students", {
         templateUrl: "features/students/students.html",
         controller: "StudentsController",

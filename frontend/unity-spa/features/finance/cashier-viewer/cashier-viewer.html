@@ -520,6 +520,21 @@
               <div class="text-lg font-semibold text-red-900">P{{ vm.currency(vm.invoiceModal.totals.remaining || 0) }}</div>
             </div>
           </div>
+          <!-- Tuition-only: show effective totals after Reservation -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-2" ng-if="(vm.invoiceModal.invoice && (vm.invoiceModal.invoice.type || '').toLowerCase() === 'tuition')">
+            <div class="rounded border border-gray-300 bg-gray-50 px-4 py-3">
+              <div class="text-xs text-gray-600 uppercase">Total (after Reservation)</div>
+              <div class="text-lg font-semibold text-gray-900">P{{ vm.currency(vm.invoiceModal.totals.total_effective || 0) }}</div>
+            </div>
+            <div class="rounded border border-amber-200 bg-amber-50 px-4 py-3">
+              <div class="text-xs text-amber-700 uppercase">Reservation applied</div>
+              <div class="text-lg font-semibold text-amber-900">-P{{ vm.currency(vm.invoiceModal.totals.reservation_applied || 0) }}</div>
+            </div>
+            <div class="rounded border border-red-300 bg-red-50 px-4 py-3">
+              <div class="text-xs text-red-700 uppercase">Remaining (effective)</div>
+              <div class="text-lg font-semibold text-red-900">P{{ vm.currency(vm.invoiceModal.totals.remaining_effective || 0) }}</div>
+            </div>
+          </div>
           <!-- Invoice Items -->
           <div ng-if="vm.invoiceModal.items && vm.invoiceModal.items.length">
             <h4 class="font-semibold">Invoice Items</h4>
@@ -643,7 +658,7 @@
             <select
               class="block w-full rounded border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               ng-model="vm.assignNumber.selectedInvoiceId"
-              ng-options="inv.id as ((inv.invoice_number || inv.number) + ' — P' + vm.currency(inv.amount_total || inv.amount || inv.total || 0) + (inv._remaining != null ? (' — Rem P' + vm.currency(inv._remaining)) : '')) for inv in vm.invoices track by inv.id"
+              ng-options="inv.id as ((inv.invoice_number || inv.number) + ' — P' + vm.currency((inv._total_effective != null ? inv._total_effective : (inv._total != null ? inv._total : (inv.amount_total || inv.amount || inv.total || 0)))) + ((inv._remaining_effective != null) ? (' — Rem P' + vm.currency(inv._remaining_effective)) : (inv._remaining != null ? (' — Rem P' + vm.currency(inv._remaining)) : ''))) for inv in vm.invoices track by inv.id"
               ng-change="vm.onAssignInvoiceSelected()">
               <option value="">-- select invoice --</option>
             </select>
@@ -743,7 +758,9 @@
           <span class="text-sm opacity-90" ng-if="vm.loading.invoices"><em>loading...</em></span>
         </div>
         <div class="p-4 bg-white">
-          <div class="text-sm text-gray-600 mb-3">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="md:col-span-4">
+              <div class="text-sm text-gray-600 mb-3">
             <span ng-if="vm.termLabel">Term: <strong>{{ vm.termLabel }}</strong></span>
             <span ng-if="!vm.termLabel" class="text-gray-500">Term not resolved.</span>
           </div>
@@ -775,9 +792,27 @@
                   <td class="px-3 py-2">{{ inv.invoice_number || inv.number }}</td>
                   <td class="px-3 py-2">{{ inv.type || '-' }}</td>
                   <td class="px-3 py-2">{{ inv.status || '-' }}</td>
-                  <td class="px-3 py-2 text-right">P{{ vm.currency(inv.amount_total || inv.amount || inv.total || 0) }}</td>
+                  <td class="px-3 py-2 text-right">
+                    <div>
+                      <span ng-if="(inv.type || '').toLowerCase() === 'tuition'">
+                        P{{ vm.currency((inv._total_effective != null ? inv._total_effective : (inv._total != null ? inv._total : (inv.amount_total || inv.amount || inv.total || 0)))) }}
+                      </span>
+                      <span ng-if="(inv.type || '').toLowerCase() !== 'tuition'">
+                        P{{ vm.currency(inv._total != null ? inv._total : (inv.amount_total || inv.amount || inv.total || 0)) }}
+                      </span>
+                    </div>
+                    <div class="text-xs text-gray-500" ng-if="(inv.type || '').toLowerCase() === 'tuition' && (inv._reservation_applied || 0) > 0">
+                      Reservation payments applied: -P{{ vm.currency(inv._reservation_applied || 0) }}
+                    </div>
+                  </td>
                   <td class="px-3 py-2 text-right">P{{ vm.currency(inv._paid || 0) }}</td>
-                  <td class="px-3 py-2 text-right" ng-class="{'text-red-700': (inv._remaining || 0) > 0, 'text-gray-500': (inv._remaining || 0) === 0}">P{{ vm.currency(inv._remaining || 0) }}</td>
+                  <td class="px-3 py-2 text-right"
+                      ng-class="{
+                        'text-red-700': (((inv.type || '').toLowerCase() === 'tuition' ? (inv._remaining_effective || 0) : (inv._remaining || 0)) > 0),
+                        'text-gray-500': (((inv.type || '').toLowerCase() === 'tuition' ? (inv._remaining_effective || 0) : (inv._remaining || 0)) === 0)
+                      }">
+                    P{{ vm.currency(((inv.type || '').toLowerCase() === 'tuition' ? (inv._remaining_effective || 0) : (inv._remaining || 0))) }}
+                  </td>
                   <td class="px-3 py-2">{{ inv.remarks || '' }}</td>
                   <td class="px-3 py-2">
                     <button
@@ -842,128 +877,133 @@
             </div>
           </div>
 
-          <!-- Add Payment (visible to Finance/Admin only) -->
-          <div class="mb-4" ng-if="vm.canEdit">
-            <div class="rounded border border-emerald-200 bg-emerald-50">
-              <div class="px-4 py-2 flex items-center justify-between">
-                <strong class="text-emerald-800">Add Payment</strong>
-                <span class="text-xs text-emerald-700" ng-if="vm.loading.createPayment"><em>submitting...</em></span>
-              </div>
-              <div class="p-4 bg-white border-t">
-                <!-- Missing cashier notice -->
-                <div class="rounded border border-yellow-200 bg-yellow-50 text-yellow-700 px-4 py-3 mb-3" ng-if="!vm.myCashier">
-                  No assigned cashier found for your faculty account. You can view payments, but cannot add a payment until a cashier assignment exists.
+          <!-- Add Payment + Installment Plan (side-by-side) -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <!-- Left: Add Payment -->
+            <div class="md:col-span-1" ng-if="vm.canEdit">
+              <div class="rounded border border-emerald-200 bg-emerald-50">
+                <div class="px-4 py-2 flex items-center justify-between">
+                  <strong class="text-emerald-800">Add Payment</strong>
+                  <span class="text-xs text-emerald-700" ng-if="vm.loading.createPayment"><em>submitting...</em></span>
                 </div>
+                <div class="p-4 bg-white border-t">
+                  <!-- Missing cashier notice -->
+                  <div class="rounded border border-yellow-200 bg-yellow-50 text-yellow-700 px-4 py-3 mb-3" ng-if="!vm.myCashier">
+                    No assigned cashier found for your faculty account. You can view payments, but cannot add a payment until a cashier assignment exists.
+                  </div>
 
-                <!-- Error message -->
-                <div class="rounded border border-red-200 bg-red-50 text-red-700 px-4 py-3 mb-3" ng-if="vm.paymentError">
-                  {{ vm.paymentError }}
-                </div>
+                  <!-- Error message -->
+                  <div class="rounded border border-red-200 bg-red-50 text-red-700 px-4 py-3 mb-3" ng-if="vm.paymentError">
+                    {{ vm.paymentError }}
+                  </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4" ng-if="vm.myCashier">
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Numbering Mode</label>
-                    <select
-                      class="block w-full rounded border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                      ng-model="vm.payment.mode"
-                      ng-change="vm.onModeChange()">
-                      <option value="or">Official Receipt (OR)</option>
-                      <option value="invoice">Invoice</option>
-                      <option value="none">None (No Number)</option>
-                    </select>
-                    <div class="text-xs text-gray-600 mt-1">
-                      <span ng-if="vm.payment.mode === 'or'">Uses OR numbering sequence</span>
-                      <span ng-if="vm.payment.mode === 'invoice'">Uses Invoice numbering sequence</span>
-                      <span ng-if="vm.payment.mode === 'none'">Payment without OR/Invoice number</span>
+                  <div class="grid grid-cols-1 md:grid-cols-4 gap-4" ng-if="vm.myCashier">
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-1">Numbering Mode</label>
+                      <select
+                        class="block w-full rounded border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                        ng-model="vm.payment.mode"
+                        ng-change="vm.onModeChange()">
+                        <option value="or">Official Receipt (OR)</option>
+                        <option value="invoice">Invoice</option>
+                        <option value="none">None (No Number)</option>
+                      </select>
+                      <div class="text-xs text-gray-600 mt-1">
+                        <span ng-if="vm.payment.mode === 'or'">Uses OR numbering sequence</span>
+                        <span ng-if="vm.payment.mode === 'invoice'">Uses Invoice numbering sequence</span>
+                        <span ng-if="vm.payment.mode === 'none'">Payment without OR/Invoice number</span>
+                      </div>
+                    </div>
+                    <div ng-if="vm.payment.mode === 'or' && vm.invoices && vm.invoices.length">
+                      <label class="block text-sm font-medium text-gray-700 mb-1">Invoice (optional)</label>
+                      <select
+                        class="block w-full rounded border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                        ng-model="vm.payment.invoice_id"
+              ng-options="inv.id as ((inv.invoice_number || inv.number) + ' — P' + vm.currency((inv._total_effective != null ? inv._total_effective : (inv._total != null ? inv._total : (inv.amount_total || inv.amount || inv.total || 0))))) for inv in vm.invoices track by inv.id"
+                        ng-change="vm.onInvoiceSelected()">
+                        <option value="">-- select invoice --</option>
+                      </select>
+                      <div class="text-xs text-gray-600 mt-1" ng-if="vm.payment.invoice_id && vm.invoiceCtx && vm.invoiceCtx.number">
+                        <span>Invoice Total: P{{ vm.currency(vm.invoiceCtx.total || 0) }}</span>
+                        <span class="ml-2">Paid: <span class="text-green-700">P{{ vm.currency(vm.invoiceCtx.paid || 0) }}</span></span>
+                        <span class="ml-2">Remaining: <span ng-class="{'text-red-700': (vm.invoiceCtx.remaining || 0) > 0, 'text-gray-500': (vm.invoiceCtx.remaining || 0) === 0}">P{{ vm.currency(vm.invoiceCtx.remaining || 0) }}</span></span>
+                      </div>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-1">Amount</label>
+                      <input type="number" step="0.01" min="0.01" inputmode="decimal"
+                        class="block w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                        ng-model="vm.payment.amount"
+                        ng-attr-max="{{ vm.amountMax() || undefined }}"
+                        ng-change="vm.onAmountChange()"
+                        ng-blur="vm.onAmountBlur()"
+                        ng-pattern="/^\d+(\.\d{1,2})?$/"
+                        placeholder="0.00" />
+                      <div class="text-xs mt-1" ng-if="vm.payment.invoice_id && (vm.amountMax() != null)">
+                        <span class="text-gray-600">Max: P{{ vm.currency(vm.amountMax() || 0) }}</span>
+                        <span class="ml-2 text-red-600" ng-if="vm.payment.amount && (parseFloat(vm.payment.amount) > (vm.amountMax() + 0.00001))">Amount exceeds remaining.</span>
+                      </div>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-1">Payment Mode</label>
+                      <input
+                        type="text"
+                        class="block w-full rounded border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                        placeholder="Select a payment mode"
+                        pui-autocomplete
+                        ng-model="vm.payment.mode_of_payment_id"
+                        pui-source="vm.paymentModes"
+                        pui-item-key="id"
+                        pui-label="(item.name + (item.pchannel ? ' — ' + item.pchannel : '') + (item.pmethod ? ' — ' + item.pmethod : ''))"
+                      />
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-1">Method (optional)</label>
+                      <select
+                        class="block w-full rounded border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                        ng-model="vm.payment.method"
+                        ng-options="m for m in vm.methodOptions">
+                        <option value="">-- select method --</option>
+                      </select>
                     </div>
                   </div>
-                  <div ng-if="vm.payment.mode === 'or' && vm.invoices && vm.invoices.length">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Invoice (optional)</label>
-                    <select
-                      class="block w-full rounded border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                      ng-model="vm.payment.invoice_id"
-                      ng-options="inv.id as ((inv.invoice_number || inv.number) + ' — P' + vm.currency(inv.amount_total || inv.amount || inv.total || 0)) for inv in vm.invoices track by inv.id"
-                      ng-change="vm.onInvoiceSelected()">
-                      <option value="">-- select invoice --</option>
-                    </select>
-                    <div class="text-xs text-gray-600 mt-1" ng-if="vm.payment.invoice_id && vm.invoiceCtx && vm.invoiceCtx.number">
-                      <span>Invoice Total: P{{ vm.currency(vm.invoiceCtx.total || 0) }}</span>
-                      <span class="ml-2">Paid: <span class="text-green-700">P{{ vm.currency(vm.invoiceCtx.paid || 0) }}</span></span>
-                      <span class="ml-2">Remaining: <span ng-class="{'text-red-700': (vm.invoiceCtx.remaining || 0) > 0, 'text-gray-500': (vm.invoiceCtx.remaining || 0) === 0}">P{{ vm.currency(vm.invoiceCtx.remaining || 0) }}</span></span>
+
+                  <!-- Description + Remarks -->
+                  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-2" ng-if="vm.myCashier">
+                    <div class="md:col-span-2">
+                      <label class="block text-sm font-medium text-gray-700 mb-1">Payment Description</label>
+                      <select
+                        class="block w-full rounded border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                        ng-model="vm.payment.description"
+                        ng-change="vm.onPaymentDescriptionChange()"
+                        ng-options="name for name in vm.paymentDescriptionOptions">
+                        <option value="">-- select description --</option>
+                      </select>
+                      <div class="text-xs text-gray-600 mt-1">
+                        Choosing a description may auto-fill Amount (if configured).
+                      </div>
+                    </div>
+                    <div class="md:col-span-2">
+                      <label class="block text-sm font-medium text-gray-700 mb-1">Remarks</label>
+                      <input type="text"
+                        class="block w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                        ng-model="vm.payment.remarks" placeholder="Enter remarks (required)" />
                     </div>
                   </div>
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Amount</label>
-                    <input type="number" step="0.01" min="0.01" inputmode="decimal"
-                      class="block w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                      ng-model="vm.payment.amount"
-                      ng-attr-max="{{ vm.amountMax() || undefined }}"
-                      ng-change="vm.onAmountChange()"
-                      ng-blur="vm.onAmountBlur()"
-                      ng-pattern="/^\d+(\.\d{1,2})?$/"
-                      placeholder="0.00" />
-                    <div class="text-xs mt-1" ng-if="vm.payment.invoice_id && (vm.amountMax() != null)">
-                      <span class="text-gray-600">Max: P{{ vm.currency(vm.amountMax() || 0) }}</span>
-                      <span class="ml-2 text-red-600" ng-if="vm.payment.amount && (parseFloat(vm.payment.amount) > (vm.amountMax() + 0.00001))">Amount exceeds remaining.</span>
-                    </div>
-                  </div>
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Payment Mode</label>
-                    <input
-                      type="text"
-                      class="block w-full rounded border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                      placeholder="Select a payment mode"
-                      pui-autocomplete
-                      ng-model="vm.payment.mode_of_payment_id"
-                      pui-source="vm.paymentModes"
-                      pui-item-key="id"
-                      pui-label="(item.name + (item.pchannel ? ' — ' + item.pchannel : '') + (item.pmethod ? ' — ' + item.pmethod : ''))"
-                      pui-on-select="vm.onPaymentModeChange()"
-                    />
-                  </div>
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Method (optional)</label>
-                    <input type="text"
-                      class="block w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                      ng-model="vm.payment.method" placeholder="e.g., Cash, GCash, Bank" />
-                  </div>                  
-                </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4" ng-if="vm.myCashier">
-                  <div class="md:col-span-3">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                    <select
-                      ng-model="vm.payment.description"
-                      ng-options="d for d in vm.paymentDescriptionOptions track by d"
-                      ng-change="vm.onPaymentDescriptionChange()"                                                             
-                      class="block w-full rounded border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                    >                                                                          
-                    </select>
+                  <!-- Submit -->
+                  <div class="flex items-center justify-end mt-3" ng-if="vm.myCashier">
+                    <button
+                      class="inline-flex items-center px-4 py-2 rounded bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50"
+                      ng-click="vm.submitPayment()"
+                      ng-disabled="!vm.canSubmitPayment() || vm.loading.createPayment">
+                      <span ng-if="!vm.loading.createPayment">Submit Payment</span>
+                      <span ng-if="vm.loading.createPayment"><i class="fas fa-spinner fa-spin"></i>&nbsp;Submitting...</span>
+                    </button>
                   </div>
-                </div>
 
-                <div class="mt-4" ng-if="vm.myCashier">
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Remarks</label>
-                  <textarea rows="2"
-                    class="block w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                    ng-model="vm.payment.remarks" placeholder="Required"></textarea>
-                </div>
-
-                <div class="mt-4 text-right" ng-if="vm.myCashier">
-                  <button
-                    class="inline-flex items-center px-4 py-2 rounded bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50"
-                    ng-disabled="!vm.canSubmitPayment()"
-                    ng-click="vm.submitPayment()">
-                    <span ng-if="!vm.loading.createPayment">Submit Payment</span>
-                    <span ng-if="vm.loading.createPayment">Submitting...</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-  
           <!-- Totals comparison -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 my-4">
             <div class="rounded border border-emerald-200 bg-emerald-50 px-4 py-3">
               <div class="text-sm text-emerald-700">Payment Details Total (Paid Tuition/Reservation)</div>
               <div class="text-xl font-semibold text-emerald-900">
@@ -1020,7 +1060,125 @@
               <em>No payment details found.</em>
             </div>
           </div>
+          <!-- Close left column for payments content -->
+            </div>            
+          </div>
         </div>
+
+      <!-- Right: Installment Plan + Subjects -->
+      <div class="md:col-span-1">
+        <!-- Installment Plan -->
+        <div class="rounded border border-emerald-200 bg-emerald-50">
+          <div ng-if="vm.canEdit &amp;&amp; vm.shouldShowInstallmentPanel()">
+            <div class="px-4 py-2 flex items-center justify-between">
+              <strong class="text-emerald-800">Installment Plan</strong>
+              <span class="text-xs text-emerald-700">Partial payment</span>
+            </div>
+            <div class="p-4" ng-init="firstDue = vm.installmentsFirstDue()">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div class="space-y-1">
+                  <div class="text-xs text-gray-600 uppercase">Down Payment</div>
+                  <div class="text-base font-semibold flex items-center gap-2">
+                    <span>₱ {{ (vm.installmentsSummary().dp || 0) | number:2 }}</span>
+                    <button
+                      class="inline-flex items-center px-2 py-1 rounded border border-emerald-600 text-emerald-700 bg-white hover:bg-emerald-50 text-xs"
+                      ng-if="firstDue && firstDue.key === 'dp' && vm.selectedInvoiceIsTuition && vm.selectedInvoiceIsTuition() && (firstDue.amount || 0) > 0"
+                      ng-click="vm.useFirstDueAmount()">
+                      Auto Amount
+                    </button>
+                  </div>
+                </div>
+                <div class="space-y-1">
+                  <div class="text-xs text-gray-600 uppercase">Total Installment</div>
+                  <div class="text-base font-semibold">₱ {{ (vm.installmentsSummary().total || 0) | number:2 }}</div>
+                </div>
+              </div>
+              <div class="mt-2">
+                <div class="text-xs text-gray-600 uppercase mb-1">Installments (5x)</div>
+                <ul class="divide-y divide-gray-200 border rounded bg-white">
+                  <li class="px-3 py-2 flex items-center justify-between" ng-repeat="it in vm.installmentsList() track by it.key" ng-if="it.key !== 'dp'">
+                    <span class="text-gray-700">{{ it.label }}</span>
+                    <span class="font-semibold flex items-center gap-2">
+                      <span>₱ {{ (it.amount || 0) | number:2 }}</span>
+                      <button
+                        class="inline-flex items-center px-2 py-1 rounded border border-emerald-600 text-emerald-700 bg-white hover:bg-emerald-50 text-xs"
+                        ng-if="firstDue && firstDue.key === it.key && vm.selectedInvoiceIsTuition && vm.selectedInvoiceIsTuition() && (it.amount || 0) > 0"
+                        ng-click="vm.useFirstDueAmount()">
+                        Auto Amount
+                      </button>
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            </div>       
+          </div>   
+          <div class="bg-gray-100 text-gray-800 px-4 py-2 flex items-center justify-between">
+            <strong>Subjects (Selected Term)</strong>
+            <span class="text-sm opacity-90" ng-if="vm.loading.records"><em>loading...</em></span>
+          </div>
+          <div class="p-4 bg-white">
+            <div class="max-h-96 overflow-auto">
+              <div class="text-gray-500" ng-if="!vm.records || (!vm.records.records && !vm.records.terms)">
+                <em>No records found.</em>
+              </div>
+
+              <!-- By-term shape -->
+              <div ng-if="vm.records && vm.records.terms && vm.records.terms.length">
+                <div ng-repeat="term in vm.records.terms" class="mb-4">
+                  <h5 class="font-medium text-gray-800 mb-2">{{ term.term || term.label || ('SY ' + (term.syid || '')) }}</h5>
+                  <table class="w-full text-sm border border-gray-200 rounded">
+                    <thead class="bg-gray-50">
+                      <tr>
+                        <th class="px-3 py-2 text-left">Code</th>
+                        <th class="px-3 py-2 text-left">Description</th>
+                        <th class="px-3 py-2 text-left">Units</th>
+                        <th class="px-3 py-2 text-left">Remarks</th>
+                        <th class="px-3 py-2 text-left">Final</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="odd:bg-white even:bg-gray-50" ng-repeat="r in term.records">
+                        <td class="px-3 py-2">{{ r.code }}</td>
+                        <td class="px-3 py-2">{{ r.description }}</td>
+                        <td class="px-3 py-2">{{ r.units }}</td>
+                        <td class="px-3 py-2">{{ r.remarks }}</td>
+                        <td class="px-3 py-2">{{ r.grades && r.grades.final ? r.grades.final : '' }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="border-t my-4"></div>
+                </div>
+              </div>
+
+              <!-- Flat shape -->
+              <div ng-if="vm.records && vm.records.records && vm.records.records.length && !vm.records.terms">
+                <table class="w-full text-sm border border-gray-200 rounded">
+                  <thead class="bg-gray-50">
+                    <tr>
+                      <th class="px-3 py-2 text-left">Code</th>
+                      <th class="px-3 py-2 text-left">Description</th>
+                      <th class="px-3 py-2 text-left">Units</th>
+                      <th class="px-3 py-2 text-left">Remarks</th>
+                      <th class="px-3 py-2 text-left">Final</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="odd:bg-white even:bg-gray-50" ng-repeat="r in vm.records.records">
+                      <td class="px-3 py-2">{{ r.code }}</td>
+                      <td class="px-3 py-2">{{ r.description }}</td>
+                      <td class="px-3 py-2">{{ r.units }}</td>
+                      <td class="px-3 py-2">{{ r.remarks }}</td>
+                      <td class="px-3 py-2">{{ r.grades && r.grades.final ? r.grades.final : '' }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>          
+        </div>
+
+        <!-- Subjects (Selected Term) under Installment Plan -->
+        
       </div>
     </div>
   
@@ -1060,77 +1218,7 @@
             </div>
           </div>
         </div>
-      </div>
-  
-      <!-- Records Card -->
-      <div>
-        <div class="border rounded-lg shadow-sm overflow-hidden">
-          <div class="bg-gray-100 text-gray-800 px-4 py-2 flex items-center justify-between">
-            <strong>Subjects (Selected Term)</strong>
-            <span class="text-sm opacity-90" ng-if="vm.loading.records"><em>loading...</em></span>
-          </div>
-          <div class="p-4 bg-white">
-            <div class="max-h-96 overflow-auto">
-              <div class="text-gray-500" ng-if="!vm.records || (!vm.records.records && !vm.records.terms)">
-                <em>No records found.</em>
-              </div>
-  
-              <!-- By-term shape -->
-              <div ng-if="vm.records && vm.records.terms && vm.records.terms.length">
-                <div ng-repeat="term in vm.records.terms" class="mb-4">
-                  <h5 class="font-medium text-gray-800 mb-2">{{ term.term || term.label || ('SY ' + (term.syid || '')) }}</h5>
-                  <table class="w-full text-sm border border-gray-200 rounded">
-                    <thead class="bg-gray-50">
-                      <tr>
-                        <th class="px-3 py-2 text-left">Code</th>
-                        <th class="px-3 py-2 text-left">Description</th>
-                        <th class="px-3 py-2 text-left">Units</th>
-                        <th class="px-3 py-2 text-left">Remarks</th>
-                        <th class="px-3 py-2 text-left">Final</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr class="odd:bg-white even:bg-gray-50" ng-repeat="r in term.records">
-                        <td class="px-3 py-2">{{ r.code }}</td>
-                        <td class="px-3 py-2">{{ r.description }}</td>
-                        <td class="px-3 py-2">{{ r.units }}</td>
-                        <td class="px-3 py-2">{{ r.remarks }}</td>
-                        <td class="px-3 py-2">{{ r.grades && r.grades.final ? r.grades.final : '' }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <div class="border-t my-4"></div>
-                </div>
-              </div>
-  
-              <!-- Flat shape -->
-              <div ng-if="vm.records && vm.records.records && vm.records.records.length && !vm.records.terms">
-                <table class="w-full text-sm border border-gray-200 rounded">
-                  <thead class="bg-gray-50">
-                    <tr>
-                      <th class="px-3 py-2 text-left">Code</th>
-                      <th class="px-3 py-2 text-left">Description</th>
-                      <th class="px-3 py-2 text-left">Units</th>
-                      <th class="px-3 py-2 text-left">Remarks</th>
-                      <th class="px-3 py-2 text-left">Final</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr class="odd:bg-white even:bg-gray-50" ng-repeat="r in vm.records.records">
-                      <td class="px-3 py-2">{{ r.code }}</td>
-                      <td class="px-3 py-2">{{ r.description }}</td>
-                      <td class="px-3 py-2">{{ r.units }}</td>
-                      <td class="px-3 py-2">{{ r.remarks }}</td>
-                      <td class="px-3 py-2">{{ r.grades && r.grades.final ? r.grades.final : '' }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-  
-            </div>
-          </div>
-        </div>
-      </div>
+      </div>             
     </div>
   </div>
   

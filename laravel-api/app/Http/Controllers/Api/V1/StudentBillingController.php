@@ -131,6 +131,11 @@ class StudentBillingController extends Controller
                     ],
                     'amount'         => round((float) $data['amount'], 2),
                     'status'         => 'Draft',
+                    // Extra invoice fields (optional)
+                    'withholding_tax_percentage' => $data['withholding_tax_percentage'] ?? null,
+                    'invoice_amount'             => $data['invoice_amount'] ?? null,
+                    'invoice_amount_ves'         => $data['invoice_amount_ves'] ?? null,
+                    'invoice_amount_vzrs'        => $data['invoice_amount_vzrs'] ?? null,
                 ];
 
                 app(InvoiceService::class)->generate(

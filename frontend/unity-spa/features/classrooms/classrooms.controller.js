@@ -5,8 +5,8 @@
     .module('unityApp')
     .controller('ClassroomsController', ClassroomsController);
 
-  ClassroomsController.$inject = ['$location', '$window', '$routeParams', 'StorageService', 'ClassroomsService', 'CampusesService', 'RoleService', 'ToastService'];
-  function ClassroomsController($location, $window, $routeParams, StorageService, ClassroomsService, CampusesService, RoleService, ToastService) {
+  ClassroomsController.$inject = ['$location', '$window', '$routeParams', '$scope', 'StorageService', 'ClassroomsService', 'CampusesService', 'CampusService', 'RoleService', 'ToastService'];
+  function ClassroomsController($location, $window, $routeParams, $scope, StorageService, ClassroomsService, CampusesService, CampusService, RoleService, ToastService) {
     var vm = this;
 
     vm.state = StorageService.getJSON('loginState');
@@ -63,6 +63,98 @@
       { value: 'pe', label: 'Physical Education' }
     ];
 
+    // === IMPORT (Classrooms) ===
+    vm.importing = false;
+    vm.importResult = null;
+
+    vm.clearImportResult = function () {
+      vm.importResult = null;
+    };
+
+    vm.downloadTemplate = function () {
+      vm.error = null;
+      var filename = 'classrooms-import-template.xlsx';
+      ClassroomsService.downloadImportTemplate()
+        .then(function (data) {
+          try {
+            var blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            var url = (window.URL || window.webkitURL).createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            (window.URL || window.webkitURL).revokeObjectURL(url);
+            ToastService.success('Template downloaded.');
+          } catch (e) {
+            console.error('Download template error (classrooms):', e);
+            vm.error = 'Failed to download template.';
+            ToastService.error(vm.error);
+          }
+        })
+        .catch(function (err) {
+          console.error('Download template request error (classrooms):', err);
+          vm.error = 'Failed to download template.';
+          ToastService.error(vm.error);
+        });
+    };
+
+    vm.openImportDialog = function () {
+      var input = document.getElementById('classroomsImportInput');
+      if (!input) {
+        vm.error = 'Import input not found in DOM.';
+        ToastService.error(vm.error);
+        return;
+      }
+      // Bind change handler once
+      if (!input._bbBound) {
+        input._bbBound = true;
+        input.addEventListener('change', function (ev) {
+          var file = ev.target.files && ev.target.files[0];
+          if (!file) return;
+          // Ensure Angular digest
+          $scope.$apply(function () {
+            vm.importFileSelected(file, input);
+          });
+        });
+      }
+      input.click();
+    };
+
+    vm.importFileSelected = function (file, inputEl) {
+      vm.importing = true;
+      vm.importResult = null;
+      vm.error = null;
+
+      // Single-step import (no dry-run)
+      ClassroomsService.importFile(file)
+        .then(function (resp) {
+          var result = resp && resp.result ? resp.result : resp;
+          vm.importResult = result;
+          ToastService.success('Import completed.');
+          // Refresh list view after import completes
+          if (vm.isList) {
+            search();
+          }
+        })
+        .catch(function (err) {
+          console.error('Import error (classrooms):', err);
+          var msg = 'Import failed.';
+          if (err && err.data && err.data.message) {
+            msg = err.data.message;
+          }
+          vm.error = msg;
+          ToastService.error(msg);
+        })
+        .finally(function () {
+          vm.importing = false;
+          try {
+            if (inputEl) inputEl.value = '';
+          } catch (_) {}
+        });
+    };
+
     // === INITIALIZATION ===
     init();
 
@@ -76,8 +168,15 @@
           loadClassroom();
         }
       } else {
-        // Load classroom list only for list view
-        search();
+        // Load classroom list only for list view, scoped by selected campus
+        var p = (CampusService && CampusService.init) ? CampusService.init() : null;
+        function run() { search(); }
+        if (p && p.then) { p.then(run); } else { run(); }
+
+        // React to global campus changes
+        $scope.$on('campusChanged', function () {
+          search();
+        });
       }
     }
 
@@ -85,7 +184,20 @@
     function search() {
       vm.loading = true;
       vm.error = null;
-      return ClassroomsService.list(vm.q)
+
+      // Build params with search and selected campus_id
+      var opts = {};
+      if (vm.q && ('' + vm.q).trim() !== '') {
+        opts.search = vm.q;
+      }
+      try {
+        var campus = CampusService && CampusService.getSelectedCampus ? CampusService.getSelectedCampus() : null;
+        if (campus && campus.id !== undefined && campus.id !== null && ('' + campus.id).trim() !== '') {
+          opts.campus_id = parseInt(campus.id, 10);
+        }
+      } catch (e) { /* no-op */ }
+
+      return ClassroomsService.list(opts)
         .then(function (data) {
           // data may be { success, data } or plain array fallback
           if (data && data.success !== false && angular.isArray(data.data)) {

@@ -70,8 +70,9 @@
         } catch (e) {}
 
         // Create dropdown panel (positioned under the input)
+        // Note: Do not rely on CSS top:100%; compute exact pixel position instead.
         var panel = angular.element(
-          '<ul class="pui-ac-panel absolute z-50 w-full bg-white border border-gray-200 rounded shadow max-h-60 overflow-auto hidden" role="listbox" style="top:100%;left:0;margin-top:4px;"></ul>'
+          '<ul class="pui-ac-panel absolute z-50 bg-white border border-gray-200 rounded shadow max-h-60 overflow-auto hidden" role="listbox"></ul>'
         );
         element.after(panel);
 
@@ -86,10 +87,7 @@
 
         function openPanel() {
           if (!isOpen) {
-            // Ensure panel is aligned with the input (below and left-aligned)
-            try {
-              panel.css({ top: '100%', left: '0', marginTop: '4px' });
-            } catch (e) {}
+            try { positionPanel(); } catch (e) {}
             panel.removeClass('hidden');
             isOpen = true;
           }
@@ -102,6 +100,25 @@
         }
         function clearPanel() {
           panel.empty();
+        }
+
+        // Precisely position panel just below the input, matching its width.
+        // This positions relative to the nearest positioned ancestor (the parent),
+        // since the panel is absolutely positioned within the same container.
+        function positionPanel() {
+          try {
+            var inputEl = element[0];
+            var top = inputEl.offsetTop + inputEl.offsetHeight;
+            var left = inputEl.offsetLeft;
+            var width = inputEl.offsetWidth;
+
+            panel.css({
+              top: top + 'px',
+              left: left + 'px',
+              width: width + 'px',
+              marginTop: '4px'
+            });
+          } catch (e) {}
         }
 
 
@@ -172,6 +189,7 @@
               panel.append(li);
             })(list[i], i);
           }
+          try { positionPanel(); } catch (e) {}
           openPanel();
         }
 
@@ -363,9 +381,15 @@
         }
         $document.on('click', onDocClick);
 
+        // Reposition on window resize
+        var winEl = angular.element(window);
+        function onResize() { if (isOpen) { try { positionPanel(); } catch (e) {} } }
+        winEl.on('resize', onResize);
+
         // Cleanup
         scope.$on('$destroy', function () {
           try { $document.off('click', onDocClick); } catch (e) {}
+          try { winEl.off('resize', onResize); } catch (eR) {}
           try { element.off(); } catch (e2) {}
           try { panel.remove(); } catch (e3) {}
         });
