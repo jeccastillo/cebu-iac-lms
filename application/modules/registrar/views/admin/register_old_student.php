@@ -67,6 +67,7 @@
                                     <option value="2nd Degree iAC">2nd Degree iAC</option>                                 
                                     <option value="returning">Returnee</option>
                                     <option value="transferee">Transferee</option>
+                                    <option value="new">New</option>
                                 </select>
                                 <br /> 
                                 <label for="enumStudentType">Internship</label>
@@ -330,7 +331,7 @@ new Vue({
                         .then(data => {                            
                             this.tuition_text = data.data.tuition;  
                             this.tuition_data = data.data.full_data;                            
-                            this.subjects_loaded =  true;                          
+                            this.subjects_loaded =  true;
                             
                         });
 
