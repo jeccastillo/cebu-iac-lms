@@ -72,6 +72,7 @@
           <th class="text-left font-semibold px-4 py-2">Type</th>
           <th class="text-left font-semibold px-4 py-2">From</th>
           <th class="text-left font-semibold px-4 py-2">Status</th>
+          <th class="text-right font-semibold px-4 py-2">Max Stacks</th>
           <th class="text-right font-semibold px-4 py-2">Percent</th>
           <th class="text-right font-semibold px-4 py-2">Fixed Amount</th>
           <th class="text-left font-semibold px-4 py-2">Actions</th>
@@ -96,6 +97,10 @@
             </span>
           </td>
           <td class="px-4 py-2 text-right">
+            <span ng-if="s.max_stacks != null">{{ s.max_stacks }}</span>
+            <span ng-if="s.max_stacks == null">—</span>
+          </td>
+          <td class="px-4 py-2 text-right">
             <span ng-if="s.percent != null">{{ s.percent | number:2 }}%</span>
             <span ng-if="s.percent == null">—</span>
           </td>
@@ -105,6 +110,10 @@
           </td>
           <td class="px-4 py-2">
             <div class="flex items-center gap-2">
+              <button class="inline-flex items-center px-2 py-1 rounded bg-purple-100 text-purple-700 hover:bg-purple-200"
+                      ng-click="vm.openME(s)">
+                <span class="fas fa-link mr-1"></span> Mutual Exclusions…
+              </button>
               <button class="inline-flex items-center px-2 py-1 rounded bg-gray-100 hover:bg-gray-200"
                       ng-click="vm.openEdit(s)">
                 <span class="fas fa-edit mr-1"></span> Edit
@@ -125,7 +134,7 @@
       </tbody>
       <tbody ng-if="!vm.items.length">
         <tr>
-          <td class="px-4 py-8 text-center text-gray-500" colspan="8">
+          <td class="px-4 py-8 text-center text-gray-500" colspan="9">
             No records found.
           </td>
         </tr>
@@ -136,7 +145,7 @@
   <!-- Form Modal -->
   <div ng-if="vm.showForm"
        class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-    <div class="bg-white rounded shadow-lg w-full max-w-6xl">
+    <div class="bg-white rounded shadow-lg w-full max-w-7xl">
       <div class="flex items-center justify-between px-4 py-3 border-b">
         <h3 class="text-lg font-semibold">
           {{ vm.isEditing ? 'Edit Scholarship/Discount' : 'New Scholarship/Discount' }}
@@ -192,7 +201,30 @@
             <div class="text-xs text-red-600 mt-1" ng-if="vm.validation.status">
               {{ (vm.validation.status[0] || '') }}
             </div>
-          </div>                    
+          </div>
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Max Stacks</label>
+            <input type="number" min="1" step="1"
+                   class="w-full border rounded px-3 py-2"
+                   ng-model="vm.form.max_stacks"
+                   placeholder="1">
+            <div class="text-xs text-gray-500 mt-1">
+              How many times this exact scholarship/discount can be assigned to the same student in the same term.
+            </div>
+            <div class="text-xs text-red-600 mt-1" ng-if="vm.validation.max_stacks">
+              {{ (vm.validation.max_stacks[0] || '') }}
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">Compute on Full Assessment</label>
+            <label class="inline-flex items-center">
+              <input type="checkbox" ng-model="vm.form.compute_full">
+              <span class="ml-2 text-sm text-gray-700">If enabled, this scholarship/discount is computed on full assessment.</span>
+            </label>
+            <div class="text-xs text-red-600 mt-1" ng-if="vm.validation.compute_full">
+              {{ (vm.validation.compute_full[0] || '') }}
+            </div>
+          </div>
           <div>
             <label class="block text-sm text-gray-600 mb-1">Description</label>
             <textarea class="w-full border rounded px-3 py-2"
@@ -389,6 +421,85 @@
         <button class="inline-flex items-center px-3 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700"
                 ng-click="vm.submitForm()">
           <span class="fas fa-save mr-2"></span> {{ vm.isEditing ? 'Update' : 'Create' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mutual Exclusions Modal -->
+  <div ng-if="vm.me.open"
+       class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div class="bg-white rounded shadow-lg w-full max-w-4xl">
+      <div class="flex items-center justify-between px-4 py-3 border-b">
+        <h3 class="text-lg font-semibold">
+          Mutual Exclusions — {{ (vm.me.base && vm.me.base.name) || '' }}
+        </h3>
+        <button class="text-gray-500 hover:text-gray-700"
+                ng-click="vm.closeME()">
+          <span class="fas fa-times"></span>
+        </button>
+      </div>
+
+      <div class="p-4 space-y-4">
+        <!-- Existing pairs -->
+        <div>
+          <div class="text-sm font-semibold text-gray-800 mb-2">Existing pairs</div>
+          <div class="border rounded overflow-x-auto">
+            <table class="min-w-full text-sm">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="text-left px-3 py-2">Name</th>
+                  <th class="text-left px-3 py-2">Type</th>
+                  <th class="text-left px-3 py-2">Actions</th>
+                </tr>
+              </thead>
+              <tbody ng-if="(vm.me.existing || []).length">
+                <tr class="border-t" ng-repeat="it in vm.me.existing">
+                  <td class="px-3 py-2">{{ it.name }}</td>
+                  <td class="px-3 py-2">{{ vm.typeLabel(it.deduction_type) }}</td>
+                  <td class="px-3 py-2">
+                    <button class="inline-flex items-center px-2 py-1 rounded bg-red-100 text-red-700 hover:bg-red-200"
+                            ng-click="vm.removeME(it)">
+                      <span class="fas fa-unlink mr-1"></span> Remove
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+              <tbody ng-if="!(vm.me.existing || []).length">
+                <tr>
+                  <td class="px-3 py-4 text-center text-gray-500" colspan="3">No pairs configured.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Add new pair -->
+        <div class="border rounded p-3">
+          <div class="text-sm font-semibold text-gray-800 mb-2">Add a new pair</div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-center">
+            <div class="md:col-span-2">
+              <label class="block text-sm text-gray-600 mb-1">Select scholarship/discount to pair with "{{ vm.me.base.name }}"</label>
+              <select class="w-full border rounded px-3 py-2"
+                      ng-options="opt.id as (opt.name + ' — ' + (opt.deduction_type || '')) for opt in vm.meOptions track by opt.id"
+                      ng-model="vm.me.selection">
+                <option value="">-- Select --</option>
+              </select>
+            </div>
+            <div class="flex items-end">
+              <button class="inline-flex items-center px-3 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700"
+                      ng-click="vm.addME()">
+                <span class="fas fa-plus mr-2"></span> Add Pair
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="px-4 py-3 border-t flex items-center justify-end gap-2">
+        <button class="inline-flex items-center px-3 py-2 rounded bg-gray-100 text-gray-800 hover:bg-gray-200"
+                ng-click="vm.closeME()">
+          Close
         </button>
       </div>
     </div>

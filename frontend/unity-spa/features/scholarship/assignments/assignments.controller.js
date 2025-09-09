@@ -460,7 +460,8 @@
         var type = normalizeName(it.deduction_type);
         if (type !== 'discount') return false;
         var n = normalizeName(it.name);
-        return !!REFERRAL_NAMES_SET[n];
+        // Substring match to tolerate variants like "Referral" / "Referal"
+        return (n.indexOf('referral') !== -1) || (n.indexOf('referal') !== -1);
       } catch (e) { return false; }
     }
 

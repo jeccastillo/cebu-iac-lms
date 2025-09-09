@@ -31,6 +31,8 @@ class ScholarshipResource extends JsonResource
             'deduction_type'    => $get('deduction_type') ?? null,
             'deduction_from'    => $get('deduction_from') ?? null,
             'status'            => $get('status') ?? null,
+            'max_stacks'        => $get('max_stacks') ?? null,
+            'compute_full'      => ($get('compute_full') !== null ? (bool) $get('compute_full') : null),
             'tuition_fee_rate'  => $get('tuition_fee_rate') ?? $get('tuition_fee_rate') ?? null,
             'tuition_fee_fixed' => $get('tuition_fee_fixed') ?? $get('tuition_fee_fixed') ?? null,
             'basic_fee_rate'    => $get('basic_fee_rate') ?? $get('basic_fee_rate') ?? null,

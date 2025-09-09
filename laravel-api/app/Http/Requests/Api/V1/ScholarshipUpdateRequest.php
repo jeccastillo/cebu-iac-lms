@@ -26,6 +26,8 @@ class ScholarshipUpdateRequest extends FormRequest
             'percent'         => 'sometimes|nullable|numeric|min:0|max:100',
             'fixed_amount'    => 'sometimes|nullable|numeric|min:0',
             'description'     => 'sometimes|nullable|string|max:2000',
+            'max_stacks'      => 'sometimes|integer|min:1|max:255',
+            'compute_full'    => 'sometimes|boolean',
 
             'created_by_id'           => 'sometimes|integer|min:1',
 

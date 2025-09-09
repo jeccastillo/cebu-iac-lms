@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class TuitionCalculator
 {
@@ -490,53 +491,7 @@ class TuitionCalculator
         ];
     }
 
-    /**
-     * Placeholder for discounts/scholarships aggregation and AR fields.
-     * Return bucket with all totals and arrays necessary.
-     */
-    public function computeDiscountsAndScholarships(array $args): array
-    {
-        return [
-            'scholarship_grand_total' => 0.0,
-            'discount_grand_total' => 0.0,
-            'installment' => [
-                'scholarship' => 0.0,
-                'discount' => 0.0,
-                'scholarship30' => 0.0,
-                'discount30' => 0.0,
-                'scholarship50' => 0.0,
-                'discount50' => 0.0,
-            ],
-            'lines' => [
-                'scholarships' => [],
-                'discounts' => [],
-            ],
-            'ar' => [
-                'ar_discounts_full' => 0.0,
-                'ar_discounts_installment' => 0.0,
-                'ar_discounts_installment30' => 0.0,
-                'ar_discounts_installment50' => 0.0,
-                'ar_external_scholarship_full' => 0.0,
-                'ar_external_scholarship_installment' => 0.0,
-                'ar_external_scholarship_installment30' => 0.0,
-                'ar_external_scholarship_installment50' => 0.0,
-                'ar_late_tagged_discounts_full' => 0.0,
-                'ar_late_tagged_discounts_installment' => 0.0,
-                'ar_late_tagged_discounts_installment30' => 0.0,
-                'ar_late_tagged_discounts_installment50' => 0.0,
-                'ar_external_discounts_full' => 0.0,
-                'ar_external_discounts_installment' => 0.0,
-                'ar_external_discounts_installment30' => 0.0,
-                'ar_external_discounts_installment50' => 0.0,
-            ],
-        ];
-    }
-
-    /**
-     * Placeholder for installment math (installmentIncrease, DP rules, 30/50 variants).
-     * Return array with totals and DP/installment_fee values.
-     */
-    public function computeInstallments(array $totals, array $tuitionYear, string $level, ?int $yearLevel): array
+    public function computeInstallments(array $totals, array $tuitionYear, string $level, ?int $yearLevel, ?array $dsLines = null): array
     {
         // Expect $totals keys:
         // tuition, lab, misc, additional, discount_total, scholarship_total
@@ -560,8 +515,8 @@ class TuitionCalculator
         $gross_normal = $tuition + $lab + $misc + $additional;
 
         // 30% scheme: +15% applied to tuition and misc (lab/additional unchanged)
-        $tuition_i30      = $tuition * 1.15;
-        $lab_i30         = $lab * 1.15;
+        $tuition_i30      = $tuition + ($tuition * 0.15);
+        $lab_i30         = $lab * ($lab * 0.15);
         $gross_installment30 = $tuition_i30 + $lab_i30 + $misc + $additional;
 
         // 50% scheme: +9% applied to tuition and misc (lab/additional unchanged)
@@ -570,9 +525,74 @@ class TuitionCalculator
         $gross_installment50 = $tuition_i50 + $lab_i50 + $misc + $additional;
 
         // Net of discounts/scholarships
-        $net_installment   = max(0.0, round($gross_installment   - $disc - $sch, 2));
-        $net_installment30 = max(0.0, round($gross_installment30 - $disc - $sch, 2));
-        $net_installment50 = max(0.0, round($gross_installment50 - $disc - $sch, 2));
+        // When dsLines provided (discount/scholarship lines with basis), scale tuition/lab deductions by installment increases per scheme.
+        $useDiscStd = $disc;
+        $useSchStd  = $sch;
+        $useDisc30  = $disc;
+        $useSch30   = $sch;
+        $useDisc50  = $disc;
+        $useSch50   = $sch;
+
+        if ($dsLines !== null && is_array($dsLines)) {
+            // Normalize to flat list of lines
+            $flat = [];
+            if (isset($dsLines['discounts']) || isset($dsLines['scholarships'])) {
+                if (isset($dsLines['discounts']) && is_array($dsLines['discounts'])) {
+                    foreach ($dsLines['discounts'] as $ln) { $flat[] = $ln; }
+                }
+                if (isset($dsLines['scholarships']) && is_array($dsLines['scholarships'])) {
+                    foreach ($dsLines['scholarships'] as $ln) { $flat[] = $ln; }
+                }
+            } else {
+                $flat = $dsLines;
+            }
+
+            $incStd = max(0.0, (float) ($tuitionYear['installmentIncrease'] ?? 0)) / 100.0;
+            $inc30  = 0.15; // 15% on tuition/lab for 30% scheme
+            $inc50  = 0.09; // 9% on tuition/lab for 50% scheme
+
+            $discStd = 0.0; $schStd = 0.0;
+            $disc30s = 0.0; $sch30s = 0.0;
+            $disc50s = 0.0; $sch50s = 0.0;
+
+            foreach ((array)$flat as $line) {
+                if (!is_array($line)) continue;
+                $basis = strtolower((string)($line['basis'] ?? ''));
+                $type  = strtolower((string)($line['deduction_type'] ?? 'discount'));
+                $amt   = (float) ($line['amount'] ?? 0);
+                if ($amt <= 0) continue;
+
+                $isTuLab = in_array($basis, ['tuition','lab'], true);
+                $fStd = $isTuLab ? (1.0 + $incStd) : 1.0;
+                $f30  = $isTuLab ? 1.15 : 1.0;
+                $f50  = $isTuLab ? 1.09 : 1.0;
+
+                $adjStd = round($amt * $fStd, 2);
+                $adj30  = round($amt * $f30, 2);
+                $adj50  = round($amt * $f50, 2);
+
+                if ($type === 'scholarship') {
+                    $schStd += $adjStd;
+                    $sch30s += $adj30;
+                    $sch50s += $adj50;
+                } else {
+                    $discStd += $adjStd;
+                    $disc30s += $adj30;
+                    $disc50s += $adj50;
+                }
+            }
+
+            $useDiscStd = $discStd;
+            $useSchStd  = $schStd;
+            $useDisc30  = $disc30s;
+            $useSch30   = $sch30s;
+            $useDisc50  = $disc50s;
+            $useSch50   = $sch50s;
+        }
+
+        $net_installment   = max(0.0, round($gross_installment   - $useDiscStd - $useSchStd, 2));
+        $net_installment30 = max(0.0, round($gross_installment30 - $useDisc30  - $useSch30,  2));
+        $net_installment50 = max(0.0, round($gross_installment50 - $useDisc50  - $useSch50,  2));
 
         // Down payment rules
         $dpPercent = (float) ($tuitionYear['installmentDP'] ?? 0) / 100.0;

@@ -5,8 +5,8 @@
     .module('unityApp')
     .controller('ScholarshipsController', ScholarshipsController);
 
-  ScholarshipsController.$inject = ['$location', 'ScholarshipsService', 'StorageService'];
-  function ScholarshipsController($location, ScholarshipsService, StorageService) {
+  ScholarshipsController.$inject = ['$location', 'ScholarshipsService', 'StorageService', 'ToastService'];
+  function ScholarshipsController($location, ScholarshipsService, StorageService, ToastService) {
     var vm = this;
 
     // State
@@ -34,11 +34,22 @@
       deduction_type: 'scholarship',
       deduction_from: 'in-house',
       status: 'active',
+      compute_full: true,
       percent: null,
       fixed_amount: null,
+      max_stacks: 1,
       description: ''
     };
     vm.validation = {};
+
+    // Mutual Exclusions modal state
+    vm.me = {
+      open: false,
+      base: null,       // selected scholarship row
+      existing: [],     // [{id,name,deduction_type,status}]
+      selection: ''     // other_id to add
+    };
+    vm.meOptions = [];  // available options for selection (derived from vm.items)
 
     // Methods
     vm.load = load;
@@ -57,7 +68,93 @@
     vm.typeLabel = typeLabel;
     vm.fromLabel = fromLabel;
 
+    // Mutual Exclusions actions
+    vm.openME = openME;
+    vm.closeME = closeME;
+    vm.addME = addME;
+    vm.removeME = removeME;
+
     activate();
+
+    // Mutual Exclusions (ME) modal helpers
+    function openME(row) {
+      if (!row || !row.id) return;
+      vm.me.base = row;
+      vm.me.open = true;
+      vm.me.selection = '';
+      loadME(row.id);
+    }
+
+    function closeME() {
+      vm.me = { open: false, base: null, existing: [], selection: '' };
+      vm.meOptions = [];
+    }
+
+    function loadME(baseId) {
+      if (!baseId) return;
+      return ScholarshipsService.listME(baseId)
+        .then(function (res) {
+          var items = (res && res.data && res.data.items) ? res.data.items
+            : (res && res.items) ? res.items
+            : (Array.isArray(res) ? res : []);
+          vm.me.existing = Array.isArray(items) ? items : [];
+          computeMEOptions();
+        })
+        .catch(function () {
+          try { ToastService && ToastService.error && ToastService.error('Failed to load mutual exclusions'); } catch (e) {}
+        });
+    }
+
+    function computeMEOptions() {
+      try {
+        var baseId = vm.me.base && vm.me.base.id;
+        var existingIds = {};
+        (vm.me.existing || []).forEach(function (it) { existingIds[it.id] = true; });
+        vm.meOptions = (vm.items || []).filter(function (it) {
+          var id = parseInt(it && it.id, 10);
+          if (isNaN(id) || id <= 0) return false;
+          if (id === baseId) return false;
+          if (existingIds[id]) return false;
+          return true;
+        });
+      } catch (e) {
+        vm.meOptions = [];
+      }
+    }
+
+    function addME() {
+      var base = vm.me.base;
+      var otherId = parseInt(vm.me.selection, 10);
+      if (!base || isNaN(otherId) || otherId <= 0) {
+        try { ToastService && ToastService.warn && ToastService.warn('Select another scholarship/discount.'); } catch (e) {}
+        return;
+      }
+      return ScholarshipsService.addME(base.id, otherId)
+        .then(function () {
+          try { ToastService && ToastService.success && ToastService.success('Mutual exclusion added.'); } catch (e) {}
+          vm.me.selection = '';
+          return loadME(base.id);
+        })
+        .catch(function (err) {
+          var msg = (err && err.data && err.data.message) ? err.data.message : 'Failed to add mutual exclusion';
+          try { ToastService && ToastService.error && ToastService.error(msg); } catch (e) {}
+        });
+    }
+
+    function removeME(other) {
+      var base = vm.me.base;
+      var otherId = (other && other.id) ? other.id : parseInt(other, 10);
+      if (!base || !otherId) return;
+      return ScholarshipsService.removeME(base.id, otherId)
+        .then(function () {
+          try { ToastService && ToastService.success && ToastService.success('Mutual exclusion removed.'); } catch (e) {}
+          return loadME(base.id);
+        })
+        .catch(function (err) {
+          var msg = (err && err.data && err.data.message) ? err.data.message : 'Failed to remove mutual exclusion';
+          try { ToastService && ToastService.error && ToastService.error(msg); } catch (e) {}
+        });
+    }
 
     function getLoginState() {
       try {
@@ -129,6 +226,8 @@
         deduction_type: 'scholarship',
         deduction_from: 'in-house',
         status: 'active',
+        compute_full: true,
+        max_stacks: 1,
         tuition_fee_rate: '',
         tuition_fee_fixed: '',
         basic_fee_rate: '',
@@ -158,6 +257,8 @@
         deduction_type: row.deduction_type || 'scholarship',
         deduction_from: row.deduction_from || 'in-house',
         status: row.status || 'active',
+        compute_full: (row && row.compute_full === false) ? false : true,
+        max_stacks: (typeof row.max_stacks === 'number' && row.max_stacks > 0) ? row.max_stacks : 1,
         tuition_fee_rate: row.tuition_fee_rate,
         tuition_fee_fixed: row.tuition_fee_fixed,
         basic_fee_rate: row.basic_fee_rate,
@@ -191,6 +292,7 @@
         deduction_type: vm.form.deduction_type || 'scholarship',
         deduction_from: vm.form.deduction_from || 'in-house',
         status: vm.form.status || 'active',
+        compute_full: !!vm.form.compute_full,
         tuition_fee_rate: vm.form.tuition_fee_rate === '' ? null : vm.form.tuition_fee_rate,
         tuition_fee_fixed	: vm.form.tuition_fee_fixed	 === '' ? null : vm.form.tuition_fee_fixed	,
         basic_fee_rate: vm.form.basic_fee_rate === '' ? null : vm.form.basic_fee_rate,
@@ -208,6 +310,11 @@
         description: vm.form.description || ''
       };
 
+      // Normalize and include max_stacks (default to 1 if blank/invalid)
+      var _ms = parseInt(vm.form.max_stacks, 10);
+      if (isNaN(_ms) || _ms < 1) { _ms = 1; }
+      payload.max_stacks = _ms;
+
       setLoading(true);
 
       var p = vm.isEditing
@@ -215,6 +322,9 @@
         : ScholarshipsService.create(payload);
 
       p.then(function () {
+          if (vm.isEditing) {
+            try { ToastService && ToastService.success && ToastService.success('Scholarship updated.'); } catch (e) {}
+          }
           cancelForm();
           load();
         })

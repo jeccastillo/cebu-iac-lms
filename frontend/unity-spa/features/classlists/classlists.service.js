@@ -239,6 +239,11 @@
           headers: headers,
           transformRequest: angular.identity
         }).then(_unwrap);
+      },
+      // Merge classlists: POST /classlists/merge
+      merge: function (payload) {
+        // payload: { target_id: number, source_ids: number[], options?: {} }
+        return $http.post(BASE + '/classlists/merge', payload, _adminHeaders()).then(_unwrap);
       }
     };
   }

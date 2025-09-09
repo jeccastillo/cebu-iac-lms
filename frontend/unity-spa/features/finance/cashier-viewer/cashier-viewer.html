@@ -263,7 +263,7 @@
                 <div>Discounts: -₱ {{ (prev.dp30.discounts || 0) | number:2 }}</div>
                 <div class="font-semibold text-indigo-700">Total: ₱ {{ (prev.dp30.totalNew || 0) | number:2 }}</div>
               </div>
-              <div class="text-xs text-gray-500 mt-2">Note: Tuition +15%, Misc +15%. Lab and Additional unchanged.</div>
+              <div class="text-xs text-gray-500 mt-2">Note: Tuition +15%, Lab +15%. Misc and Additional unchanged.</div>
             </div>
             <div class="bg-white border rounded p-3" ng-if="prev && prev.dp50">
               <div class="text-gray-500 uppercase text-xs">50% DP Preview</div>
@@ -276,7 +276,7 @@
                 <div>Discounts: -₱ {{ (prev.dp50.discounts || 0) | number:2 }}</div>
                 <div class="font-semibold text-indigo-700">Total: ₱ {{ (prev.dp50.totalNew || 0) | number:2 }}</div>
               </div>
-              <div class="text-xs text-gray-500 mt-2">Note: Tuition +9%, Misc +9%. Lab and Additional unchanged.</div>
+              <div class="text-xs text-gray-500 mt-2">Note: Tuition +9%, Lab +9%. Misc and Additional unchanged.</div>
             </div>
           </div>
   
@@ -383,20 +383,29 @@
             </table>
           </div>
   
-          <!-- Scholarships and Discounts -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Scholarships and Discounts (shown for Partial payment type) -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4"
+               ng-if="(vm.registration && vm.registration.paymentType === 'partial') || (vm.edit && vm.edit.paymentType === 'partial')">
             <div ng-if="p && p.items && p.items.scholarships && p.items.scholarships.length">
               <h4 class="font-semibold">Scholarships</h4>
               <table class="min-w-full text-sm">
                 <thead>
                   <tr class="text-left border-b">
                     <th class="py-2 pr-4">Name</th>
+                    <th class="py-2 pr-4">Basis</th>
+                    <th class="py-2 pr-4">Rate/Fixed</th>
                     <th class="py-2 pr-4">Amount</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr ng-repeat="s in p.items.scholarships" class="border-b">
                     <td class="py-2 pr-4">{{s.name || '—'}}</td>
+                    <td class="py-2 pr-4">{{ s.basis_label || s.basis || '—' }}</td>
+                    <td class="py-2 pr-4">
+                      <span ng-if="s.rate != null">{{ s.rate }}%</span>
+                      <span ng-if="s.rate == null && s.fixed != null">₱ {{ (s.fixed || 0) | number:2 }}</span>
+                      <span ng-if="s.rate == null && s.fixed == null">—</span>
+                    </td>
                     <td class="py-2 pr-4 text-green-700">₱ {{ (s.amount || 0) | number:2 }}</td>
                   </tr>
                 </tbody>
@@ -408,14 +417,20 @@
                 <thead>
                   <tr class="text-left border-b">
                     <th class="py-2 pr-4">Name</th>
-                    <th class="py-2 pr-4">Percent</th>
+                    <th class="py-2 pr-4">Basis</th>
+                    <th class="py-2 pr-4">Rate/Fixed</th>
                     <th class="py-2 pr-4">Amount</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr ng-repeat="d in p.items.discounts" class="border-b">
                     <td class="py-2 pr-4">{{d.name || '—'}}</td>
-                    <td class="py-2 pr-4">{{d.percent != null ? (d.percent + '%') : '—'}}</td>
+                    <td class="py-2 pr-4">{{ d.basis_label || d.basis || '—' }}</td>
+                    <td class="py-2 pr-4">
+                      <span ng-if="d.rate != null">{{ d.rate }}%</span>
+                      <span ng-if="d.rate == null && d.fixed != null">₱ {{ (d.fixed || 0) | number:2 }}</span>
+                      <span ng-if="d.rate == null && d.fixed == null">—</span>
+                    </td>
                     <td class="py-2 pr-4 text-green-700">₱ {{ (d.amount || 0) | number:2 }}</td>
                   </tr>
                 </tbody>

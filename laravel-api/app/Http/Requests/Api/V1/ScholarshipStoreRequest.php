@@ -23,6 +23,8 @@ class ScholarshipStoreRequest extends FormRequest
             'percent'         => 'nullable|numeric|min:0|max:100',
             'fixed_amount'    => 'nullable|numeric|min:0',
             'description'     => 'nullable|string|max:2000',
+            'max_stacks'      => 'sometimes|integer|min:1|max:255',
+            'compute_full'    => 'sometimes|boolean',
 
             'created_by_id'           => 'sometimes|integer|min:1',
 

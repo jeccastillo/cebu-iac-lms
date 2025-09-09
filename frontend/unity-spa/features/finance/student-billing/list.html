@@ -93,7 +93,7 @@
 
   <!-- Modal -->
   <div class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50" ng-if="vm.modalOpen">
-    <div class="bg-white rounded shadow-xl w-full max-w-lg">
+    <div class="bg-white rounded shadow-xl w-full max-w-4xl">
       <div class="border-b px-4 py-3 flex items-center justify-between">
         <h2 class="text-lg font-semibold text-gray-800">
           {{ vm.editing ? 'Edit Billing Item' : 'Add Billing Item' }}
@@ -101,7 +101,7 @@
         <button class="text-gray-500 hover:text-gray-700" ng-click="vm.closeModal()">✕</button>
       </div>
       <div class="p-4">
-        <div class="grid grid-cols-1 gap-4">
+        <div class="grid grid-cols-2 gap-4">
           <div ng-if="!vm.editing">
             <label class="block text-sm text-gray-600 mb-1">Student</label>
             <div class="w-full border rounded px-3 py-2 bg-gray-50 text-gray-800">

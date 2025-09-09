@@ -74,6 +74,27 @@
       // POST /scholarships/{id}/restore
       restore: function (id) {
         return $http.post(BASE + '/scholarships/' + encodeURIComponent(id) + '/restore', {}, _adminHeaders()).then(_unwrap);
+      },
+
+      // === Mutual Exclusions (ME) management ===
+      // GET /scholarships/{id}/me
+      listME: function (id) {
+        return $http.get(BASE + '/scholarships/' + encodeURIComponent(id) + '/me', _adminHeaders()).then(_unwrap);
+      },
+      // POST /scholarships/{id}/me  body: { other_id }
+      addME: function (id, otherId) {
+        return $http.post(
+          BASE + '/scholarships/' + encodeURIComponent(id) + '/me',
+          { other_id: otherId },
+          _adminHeaders()
+        ).then(_unwrap);
+      },
+      // DELETE /scholarships/{id}/me/{otherId}
+      removeME: function (id, otherId) {
+        return $http.delete(
+          BASE + '/scholarships/' + encodeURIComponent(id) + '/me/' + encodeURIComponent(otherId),
+          _adminHeaders()
+        ).then(_unwrap);
       }
     };
   }

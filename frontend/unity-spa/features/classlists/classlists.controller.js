@@ -27,6 +27,14 @@
       sectionCode: ''
     };
 
+    // Selection / Merge state
+    vm.selected = {};
+    vm._selectAll = false;
+    vm.mergeDialogOpen = false;
+    vm.mergeTargetId = null;
+    vm.mergeCandidates = [];
+    vm.merging = false;
+
     // Expose
     vm.init = init;
     vm.reload = reload;
@@ -42,6 +50,14 @@
     vm.prevPage = prevPage;
     vm.onPerPageChange = onPerPageChange;
     vm.goToPage = goToPage;
+
+    // Merge handlers
+    vm.openMergeDialog = openMergeDialog;
+    vm.closeMergeDialog = closeMergeDialog;
+    vm.selectedCount = selectedCount;
+    vm.toggleAll = toggleAll;
+    vm.onToggleRow = onToggleRow;
+    vm.mergeSelected = mergeSelected;
 
     vm.finalizedOptions = [
       { value: '', label: 'All' },
@@ -361,6 +377,115 @@
             if (el) el.value = '';
           } catch (e) {}
           vm._selectedFile = null;
+        });
+    }
+
+    // -----------------------------
+    // Merge helpers/handlers
+    // -----------------------------
+    function selectedCount() {
+      try {
+        return Object.keys(vm.selected || {}).filter(function (k) { return !!vm.selected[k]; }).length;
+      } catch (e) {
+        return 0;
+      }
+    }
+
+    function eligibleRow(row) {
+      if (!row) return false;
+      if (row.isDissolved == 1) return false;
+      if (parseInt(row.intFinalized, 10) !== 0) return false;
+      return true;
+    }
+
+    function toggleAll() {
+      var sel = !!vm._selectAll;
+      (vm.records || []).forEach(function (r) {
+        if (eligibleRow(r)) {
+          vm.selected[r.intID] = sel;
+        }
+      });
+    }
+
+    function onToggleRow(row) {
+      // Update header checkbox based on current page selection state
+      var allEligible = true;
+      var anyEligible = false;
+      (vm.records || []).forEach(function (r) {
+        if (eligibleRow(r)) {
+          anyEligible = true;
+          if (!vm.selected[r.intID]) {
+            allEligible = false;
+          }
+        }
+      });
+      vm._selectAll = anyEligible && allEligible;
+    }
+
+    function openMergeDialog() {
+      var ids = [];
+      var candidates = [];
+      (vm.records || []).forEach(function (r) {
+        if (vm.selected[r.intID] && eligibleRow(r)) {
+          ids.push(r.intID);
+          candidates.push(r);
+        }
+      });
+      if (ids.length < 2) {
+        vm.error = 'Select at least two eligible classlists (non-finalized, not dissolved) to merge.';
+        return;
+      }
+      vm.mergeCandidates = candidates;
+      vm.mergeTargetId = (candidates[0] && candidates[0].intID) || null;
+      vm.mergeDialogOpen = true;
+      vm.error = null;
+      vm.success = null;
+    }
+
+    function closeMergeDialog() {
+      vm.mergeDialogOpen = false;
+      vm.mergeTargetId = null;
+      vm.merging = false;
+    }
+
+    function mergeSelected() {
+      if (!vm.mergeDialogOpen) return;
+      var target = parseInt(vm.mergeTargetId, 10);
+      if (!target) {
+        vm.error = 'Please select a target classlist.';
+        return;
+      }
+      var selectedIds = (vm.mergeCandidates || []).map(function (r) { return r.intID; });
+      var sourceIds = selectedIds.filter(function (id) { return id !== target; });
+      if (sourceIds.length < 1) {
+        vm.error = 'Select at least one source classlist.';
+        return;
+      }
+
+      vm.merging = true;
+      ClasslistsService.merge({ target_id: target, source_ids: sourceIds })
+        .then(function (res) {
+          var result = (res && res.result) ? res.result : res;
+          var moved = result && result.moved || 0;
+          var skipped = result && result.skipped || 0;
+          var dissolved = result && result.dissolved_sources || 0;
+          vm.success = 'Merge completed. Moved: ' + moved + ', Skipped: ' + skipped + ', Sources dissolved: ' + dissolved + '.';
+          vm.error = null;
+
+          // Clear selection for processed ids
+          selectedIds.forEach(function (id) { delete vm.selected[id]; });
+          vm._selectAll = false;
+
+          closeMergeDialog();
+          // Refresh list to reflect dissolved sources
+          reload();
+        })
+        .catch(function (e) {
+          var msg = (e && e.data && e.data.message) ? e.data.message : 'Merge failed.';
+          vm.error = msg;
+        })
+        .finally(function () {
+          vm.merging = false;
         });
     }
 

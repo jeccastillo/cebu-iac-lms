@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\CampusController;
 use App\Http\Controllers\Api\V1\CashierController;
 use App\Http\Controllers\Api\V1\ClasslistController;
 use App\Http\Controllers\Api\V1\ClasslistGradesController;
+use App\Http\Controllers\Api\V1\ClasslistMergeController;
 use App\Http\Controllers\Api\V1\ClassroomController;
 use App\Http\Controllers\Api\V1\CurriculumController;
 use App\Http\Controllers\Api\V1\CurriculumImportController;
@@ -32,6 +33,7 @@ use App\Http\Controllers\Api\V1\RequirementController;
 use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\ScheduleController;
 use App\Http\Controllers\Api\V1\ScholarshipController;
+use App\Http\Controllers\Api\V1\ScholarshipMEController;
 use App\Http\Controllers\Api\V1\SchoolYearController;
 use App\Http\Controllers\Api\V1\SchoolYearImportController;
 use App\Http\Controllers\Api\V1\StudentBillingController;
@@ -325,6 +327,11 @@ Route::prefix('v1')->group(function () {
     // Write stub retained for assignment parity
     Route::post('/scholarships/upsert', [ScholarshipController::class, 'upsert'])->middleware('role:scholarship,admin');
 
+    // Scholarship Mutual-Exclusions management (Scholarship/Admin)
+    Route::get('/scholarships/{id}/me', [ScholarshipMEController::class, 'list'])->middleware('role:scholarship,admin');
+    Route::post('/scholarships/{id}/me', [ScholarshipMEController::class, 'add'])->middleware('role:scholarship,admin');
+    Route::delete('/scholarships/{id}/me/{otherId}', [ScholarshipMEController::class, 'delete'])->middleware('role:scholarship,admin');
+
     // Unity endpoints (baseline scaffold)
     Route::post('/unity/advising', [UnityController::class, 'advising']);
     Route::post('/unity/enlist', [UnityController::class, 'enlist'])->middleware('role:registrar,admin');
@@ -354,6 +361,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/reports/daily-enrollment', [ReportsController::class, 'dailyEnrollmentSummary'])->middleware('role:registrar,admin');
 
     // Classlists CRUD
+    Route::post('/classlists/merge', [ClasslistMergeController::class, 'merge'])->middleware('role:registrar,admin');
     Route::get('/classlists', [ClasslistController::class, 'index']);
     Route::get('/classlists/{id}', [ClasslistController::class, 'show']);
     Route::post('/classlists', [ClasslistController::class, 'store'])->middleware('role:registrar,admin');

@@ -274,8 +274,8 @@ class TuitionService
         // Note: billing (student_billing) is separated and NOT included in additional_total
         $additionalTotal = round($foreignTotal + $thesisFee + $lateEnrollmentFee + $newStudentTotal, 2);
 
-        // Discounts and scholarships aggregation (shape only; totals may remain zero until implemented)
-        $ds = $calc->computeDiscountsAndScholarships([
+        // Discounts and scholarships aggregation via dedicated service
+        $ds = (new DiscountScholarshipService())->computeDiscountsAndScholarships([
             'student_id'        => (int) $user->intID,
             'syid'              => (int) $syid,
             'tuition_year'      => $tuitionYear,

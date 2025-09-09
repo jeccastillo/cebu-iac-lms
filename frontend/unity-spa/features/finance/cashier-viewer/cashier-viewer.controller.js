@@ -152,6 +152,16 @@
         return false;
       }
     }
+    // Helper: detect Reservation-related billing labels (exclude from Billing totals on this page)
+    function _isReservationBillingLabel(s) {
+      try {
+        var d = (s == null ? '' : ('' + s)).trim().toLowerCase();
+        if (!d) return false;
+        return _isReservationFeeDesc(d) || d.indexOf('reservation') === 0;
+      } catch (e) {
+        return false;
+      }
+    }
 
     // Helper: description contains "tuition" (case-insensitive)
     function _isTuitionDesc(s) {
@@ -653,12 +663,43 @@
     };
 
     // Getter: Return the effective tuition payload for display (prefer saved snapshot when present)
+    // For the Cashier Viewer, exclude Reservation Fee from Billing items and totals (display-only).
     vm.tuitionPayload = function () {
       try {
-        if (vm.tuitionSaved && vm.tuitionSaved.payload) return vm.tuitionSaved.payload;
-        return vm.tuition || null;
+        var p0 = (vm.tuitionSaved && vm.tuitionSaved.payload) ? vm.tuitionSaved.payload : (vm.tuition || null);
+        if (!p0) return p0;
+        // Shallow clone base and nested structures we need
+        var dp = {};
+        try { dp = JSON.parse(JSON.stringify(p0)); } catch (_eClone) { dp = angular.copy ? angular.copy(p0) : p0; }
+        dp = dp || p0;
+
+        // Ensure containers exist
+        dp.summary = dp.summary || {};
+        dp.items = dp.items || {};
+        var billing = Array.isArray(dp.items.billing) ? dp.items.billing.slice() : [];
+
+        // Filter out Reservation-related billing lines
+        var filtered = [];
+        var sum = 0;
+        for (var i = 0; i < billing.length; i++) {
+          var it = billing[i] || {};
+          var label = it.description || it.name || it.code || '';
+          if (_isReservationBillingLabel(label)) {
+            continue;
+          }
+          filtered.push(it);
+          var amt = parseFloat(it.amount != null ? it.amount : (it.total != null ? it.total : 0));
+          if (isFinite(amt)) sum += amt;
+        }
+
+        // Apply filtered list and recomputed totals
+        dp.items.billing = filtered;
+        dp.summary.billing_total = Math.max(0, Math.floor((isFinite(sum) ? sum : 0) * 100) / 100);
+        dp.billing_total = dp.summary.billing_total;
+
+        return dp;
       } catch (e) {
-        return vm.tuition || null;
+        return (vm.tuitionSaved && vm.tuitionSaved.payload) ? vm.tuitionSaved.payload : (vm.tuition || null);
       }
     };
 
@@ -1718,6 +1759,8 @@ vm.loading.createPayment = false;
     };
 
     // Compute preview figures for DP30 and DP50 scenarios
+    // If payment type is partial, display scholarship/discount amounts adjusted for installment increases
+    // on tuition/lab-based deductions. Misc/Additional-based deductions remain unchanged.
     vm.installmentPreview = function (payload) {
       try {
         var p = payload || vm.tuitionPayload() || {};
@@ -1727,22 +1770,70 @@ vm.loading.createPayment = false;
         var misc = num(s.misc_total);
         var lab = num(s.lab_total);
         var additional = num(s.additional_total);
-        var scholarships = num(s.scholarships_total);
-        var discounts = num(s.discounts_total);
+
+        // Base totals from summary (fallbacks)
+        var scholarshipsBase = num(s.scholarships_total);
+        var discountsBase = num(s.discounts_total);
+
+        // Lines (when available) let us scale by basis (tuition|lab) only
+        var schLines = (p && p.items && Array.isArray(p.items.scholarships)) ? p.items.scholarships : [];
+        var discLines = (p && p.items && Array.isArray(p.items.discounts)) ? p.items.discounts : [];
+
+        function amtOf(line) {
+          try {
+            var n = parseFloat(line && (line.amount != null ? line.amount : (line.total != null ? line.total : 0)));
+            return isFinite(n) ? n : 0;
+          } catch (_e) { return 0; }
+        }
+        function isTuLab(line) {
+          try {
+            var b = (line && line.basis != null) ? ('' + line.basis).toLowerCase() : '';
+            return b === 'tuition' || b === 'lab';
+          } catch (_e) { return false; }
+        }
 
         function compute(mult) {
           var tuitionNew = tuition * mult;
-          var miscNew = misc * mult;
-          var labNew = lab;
+          var miscNew = misc;
+          var labNew = lab * mult;
           var additionalNew = additional;
-          var totalNew = (tuitionNew + miscNew + labNew + additionalNew) - scholarships - discounts;
+
+          // Scale scholarship/discount amounts for tuition/lab lines by mult; others unchanged.
+          var schScaled = 0, discScaled = 0;
+
+          if ((schLines && schLines.length) || (discLines && discLines.length)) {
+            try {
+              for (var i = 0; i < schLines.length; i++) {
+                var ls = schLines[i] || {};
+                var factorS = isTuLab(ls) ? mult : 1;
+                schScaled += amtOf(ls) * factorS;
+              }
+              for (var j = 0; j < discLines.length; j++) {
+                var ld = discLines[j] || {};
+                var factorD = isTuLab(ld) ? mult : 1;
+                discScaled += amtOf(ld) * factorD;
+              }
+            } catch (_eL) {
+              // Fallback to unscaled totals on any error
+              schScaled = scholarshipsBase;
+              discScaled = discountsBase;
+            }
+          } else {
+            // No line breakdown available: do not attempt to scale
+            schScaled = scholarshipsBase;
+            discScaled = discountsBase;
+          }
+
+          // New total after scaled deductions
+          var totalNew = (tuitionNew + miscNew + labNew + additionalNew) - schScaled - discScaled;
+
           return {
             tuitionNew: tuitionNew,
             miscNew: miscNew,
             labNew: labNew,
             additionalNew: additionalNew,
-            scholarships: scholarships,
-            discounts: discounts,
+            scholarships: schScaled,
+            discounts: discScaled,
             totalNew: totalNew
           };
         }
@@ -1806,7 +1897,22 @@ vm.loading.createPayment = false;
             var payload = (typeof vm.tuitionPayload === 'function') ? vm.tuitionPayload() : (vm.tuitionSaved && vm.tuitionSaved.payload) || vm.tuition || {};
             var sum = payload && payload.summary ? payload.summary : {};
             function _n(x){ var v = parseFloat(x); return isFinite(v) ? v : 0; }
-            var totalDue = _n(sum.total_due || payload.total || sum.total || sum.grand_total);
+            // For partial payments, base remaining on computed total_installment instead of full
+            var totalDue = (function () {
+              try {
+                var installments = (sum && sum.installments) ? sum.installments : {};
+                if (isPartial) {
+                  var cand = (sum.total_installment != null ? sum.total_installment : null);
+                  if (cand == null && payload && payload.total_installment != null) cand = payload.total_installment;
+                  if (cand == null && installments && installments.total_installment != null) cand = installments.total_installment;
+                  return _n(cand);
+                } else {
+                  return _n(sum.total_due || payload.total || sum.total || sum.grand_total);
+                }
+              } catch (_eTD) {
+                return _n(sum.total_due || payload.total || sum.total || sum.grand_total);
+              }
+            })();
             var billingTotal = _n(payload.billing_total || sum.billing_total || (payload.meta && payload.meta.billing_total));
             vm.meta.billing_total = billingTotal;
             var remain = (totalDue + billingTotal) - _n(vm.meta.amount_paid) - _n(vm.meta.billing_paid);
@@ -2210,6 +2316,21 @@ vm.loading.createPayment = false;
               // keep previous or default to 0
               if (vm.meta && (vm.meta.billing_total == null || !isFinite(vm.meta.billing_total))) vm.meta.billing_total = 0;
             }
+            // Recompute billing_total for display by excluding Reservation Fee billing items
+            try {
+              var _billList = (td && td.items && Array.isArray(td.items.billing)) ? td.items.billing : [];
+              var _sumBill = 0;
+              for (var bi = 0; bi < _billList.length; bi++) {
+                var b = _billList[bi] || {};
+                var lbl = b.description || b.name || b.code || '';
+                if (_isReservationBillingLabel(lbl)) continue;
+                var bam = parseFloat(b.amount != null ? b.amount : (b.total != null ? b.total : 0));
+                if (isFinite(bam)) _sumBill += bam;
+              }
+              vm.meta.billing_total = Math.max(0, Math.floor((isFinite(_sumBill) ? _sumBill : 0) * 100) / 100);
+            } catch (_eBill) {
+              // leave vm.meta.billing_total as-is
+            }
 
             // Determine registered payment type: prefer saved registration over edit snapshot
             var paymentType = (vm.registration && vm.registration.paymentType) || vm.edit.paymentType || null;
@@ -2227,7 +2348,23 @@ vm.loading.createPayment = false;
             if (!vm.meta.remaining_amount) {
               var s2 = td.summary || {};
               function _n2(x){ var v = parseFloat(x); return isFinite(v) ? v : 0; }
-              var totalDue2 = _n2(s2.total_due || td.total || s2.total || s2.grand_total);
+              // For partial payments, use total_installment as the base instead of full totals
+              var totalDue2 = (function () {
+                try {
+                  var inst2 = (s2 && s2.installments) ? s2.installments : {};
+                  if (isPartial) {
+                    var cand2 = (s2.total_installment != null ? s2.total_installment : null);
+                    if (cand2 == null && td && td.total_installment != null) cand2 = td.total_installment;
+                    if (cand2 == null && inst2 && inst2.total_installment != null) cand2 = inst2.total_installment;
+                    if (cand2 == null && td && td.meta && td.meta.installments && td.meta.installments.total_installment != null) cand2 = td.meta.installments.total_installment;
+                    return _n2(cand2);
+                  } else {
+                    return _n2(s2.total_due || td.total || s2.total || s2.grand_total);
+                  }
+                } catch (_eTD2) {
+                  return _n2(s2.total_due || td.total || s2.total || s2.grand_total);
+                }
+              })();
               var billingTotal2 = _n2(td.billing_total || s2.billing_total || (td.meta && td.meta.billing_total));
               vm.meta.billing_total = billingTotal2;
               vm.meta.remaining_amount = (totalDue2 + billingTotal2) - _n2(vm.meta.amount_paid) - _n2(vm.meta.billing_paid);
@@ -2285,6 +2422,19 @@ vm.loading.createPayment = false;
                 var _btS = parseFloat(sd.billing_total != null ? sd.billing_total : (ssum && ssum.billing_total != null ? ssum.billing_total : (sd.meta && sd.meta.billing_total)));
                 vm.meta.billing_total = isFinite(_btS) ? _btS : (vm.meta.billing_total || 0);
               } catch (_eBtS) {}
+              // Recompute billing_total (display-only) excluding Reservation Fee billing items from saved payload
+              try {
+                var _billListS = (sd && sd.items && Array.isArray(sd.items.billing)) ? sd.items.billing : [];
+                var _sumBillS = 0;
+                for (var biS = 0; biS < _billListS.length; biS++) {
+                  var bS = _billListS[biS] || {};
+                  var lblS = bS.description || bS.name || bS.code || '';
+                  if (_isReservationBillingLabel(lblS)) continue;
+                  var bamS = parseFloat(bS.amount != null ? bS.amount : (bS.total != null ? bS.total : 0));
+                  if (isFinite(bamS)) _sumBillS += bamS;
+                }
+                vm.meta.billing_total = Math.max(0, Math.floor((isFinite(_sumBillS) ? _sumBillS : 0) * 100) / 100);
+              } catch (_eBillS) {}
 
               var selectedSaved = isPartial
                 ? (sd.total_installment != null ? parseFloat(sd.total_installment) : 0)
@@ -2295,7 +2445,22 @@ vm.loading.createPayment = false;
                 vm.meta.tuition_source = 'saved';
 
                 // Recompute remaining based on total_due + billing_total - amount_paid
-                var totalDueS = _numS(ssum.total_due || sd.total || ssum.total || ssum.grand_total);
+                var totalDueS = (function () {
+                  try {
+                    var instS = (ssum && ssum.installments) ? ssum.installments : {};
+                    if (isPartial) {
+                      var candS = (ssum.total_installment != null ? ssum.total_installment : null);
+                      if (candS == null && sd && sd.total_installment != null) candS = sd.total_installment;
+                      if (candS == null && instS && instS.total_installment != null) candS = instS.total_installment;
+                      if (candS == null && sd && sd.meta && sd.meta.installments && sd.meta.installments.total_installment != null) candS = sd.meta.installments.total_installment;
+                      return _numS(candS);
+                    } else {
+                      return _numS(ssum.total_due || sd.total || ssum.total || ssum.grand_total);
+                    }
+                  } catch (_eTDS) {
+                    return _numS(ssum.total_due || sd.total || ssum.total || ssum.grand_total);
+                  }
+                })();
                 var billingTotalS = _numS(sd.billing_total || ssum.billing_total || (sd.meta && sd.meta.billing_total));
                 var apaid = _numS(vm.meta.amount_paid);
                 apaid = isFinite(apaid) ? apaid : 0;

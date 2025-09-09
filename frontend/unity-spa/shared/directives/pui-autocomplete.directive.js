@@ -235,6 +235,56 @@
           }
         }
 
+        // Try to commit a selection based on the current free-typed text.
+        // Strategy:
+        //  - If text equals an item's key exactly, select it.
+        //  - Else if text equals an item's label exactly (case-insensitive), and unique, select it.
+        //  - Else if filter yields a single item, select it.
+        // Returns true if a selection was made.
+        function tryCommitByText(txt) {
+          try {
+            var raw = (txt != null ? String(txt) : '').trim();
+            if (!raw) return false;
+
+            // 1) Match by key (id) exact
+            for (var i = 0; i < itemsList.length; i++) {
+              var it = itemsList[i];
+              if (!it) continue;
+              var keyVal = (it[keyField] != null) ? String(it[keyField]) : '';
+              if (keyVal && keyVal === raw) {
+                scope.$applyAsync(function () { selectItem(it); });
+                return true;
+              }
+            }
+
+            var lower = raw.toLowerCase();
+
+            // 2) Exact label match (case-insensitive)
+            var exactMatches = [];
+            for (var j = 0; j < itemsList.length; j++) {
+              var item = itemsList[j];
+              if (!item) continue;
+              var lbl = '';
+              try { lbl = (getLabel(item) || '').toString().trim().toLowerCase(); } catch (e1) { lbl = ''; }
+              if (lbl && lbl === lower) {
+                exactMatches.push(item);
+              }
+            }
+            if (exactMatches.length === 1) {
+              scope.$applyAsync(function () { selectItem(exactMatches[0]); });
+              return true;
+            }
+
+            // 3) Unique filtered result
+            var filtered = filterItems(raw);
+            if (filtered && filtered.length === 1) {
+              scope.$applyAsync(function () { selectItem(filtered[0]); });
+              return true;
+            }
+          } catch (err) {}
+          return false;
+        }
+
         // Sync displayed label when model changes from outside.
         // Preserve user-typed text while focused if no selected item exists.
         function syncInputWithModel() {
@@ -350,6 +400,13 @@
                   angular.element(first).triggerHandler('mousedown');
                 }
               }
+            } else {
+              // Panel closed: attempt to commit by typed text
+              var textVal = element.val() || '';
+              var committed = tryCommitByText(textVal);
+              if (committed) {
+                evt.preventDefault();
+              }
             }
           }
         });
@@ -358,15 +415,20 @@
         element.on('blur', function () {
           $timeout(function () {
             closePanel();
-            // If text doesn't match any item exactly, keep the text but do not change model.
-            // If cleared, set model to null.
             var txt = element.val() || '';
+
+            // If cleared, set model to null.
             if (!txt) {
               scope.$applyAsync(function () {
                 ngModelCtrl.$setViewValue(null);
                 ngModelCtrl.$render();
               });
+              return;
             }
+
+            // When not cleared, try to resolve the free-typed text into a unique item
+            // so users are not forced to press Enter explicitly.
+            tryCommitByText(txt);
           }, 150);
         });
 

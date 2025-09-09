@@ -15,6 +15,11 @@
               ng-click="vm.goAdd()">
         <span class="fas fa-plus mr-2"></span> Add Classlist
       </button>
+      <button class="inline-flex items-center px-3 py-2 rounded bg-purple-600 text-white hover:bg-purple-700"
+              ng-disabled="vm.selectedCount() < 2"
+              ng-click="vm.openMergeDialog()">
+        <span class="fas fa-object-group mr-2"></span> Merge
+      </button>
       <label class="inline-flex items-center text-sm text-gray-700">
         <input type="checkbox" class="mr-2" ng-model="vm.includeDissolved" ng-change="vm.reload()">
         Include dissolved
@@ -121,6 +126,9 @@
     <table class="min-w-full divide-y divide-gray-200">
       <thead class="bg-gray-50">
         <tr class="text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+          <th class="px-4 py-3">
+            <input type="checkbox" ng-model="vm._selectAll" ng-change="vm.toggleAll()" ng-disabled="!vm.records.length">
+          </th>
           <th class="px-4 py-3">ID</th>
           <th class="px-4 py-3">Section Code</th>
           <th class="px-4 py-3">Subject</th>
@@ -133,6 +141,12 @@
       </thead>
       <tbody class="bg-white divide-y divide-gray-100" ng-class="{ 'opacity-50': vm.loading }">
         <tr ng-repeat="row in vm.records">
+          <td class="px-4 py-2 text-sm">
+            <input type="checkbox"
+                   ng-model="vm.selected[row.intID]"
+                   ng-disabled="row.isDissolved == 1 || row.intFinalized != 0"
+                   ng-change="vm.onToggleRow(row)">
+          </td>
           <td class="px-4 py-2 text-sm text-gray-800">{{ row.intID }}</td>
           <td class="px-4 py-2 text-sm text-gray-800">{{ row.sectionCode || '-' }}</td>
           <td class="px-4 py-2 text-sm text-gray-800">{{ (row.subjectCode || '-') + (row.subjectDescription ? (' - ' + row.subjectDescription) : '') }}</td>
@@ -174,7 +188,7 @@
           </td>
         </tr>
         <tr ng-if="!vm.loading && (!vm.records || vm.records.length === 0)">
-          <td colspan="8" class="px-4 py-6 text-center text-sm text-gray-500">
+          <td colspan="9" class="px-4 py-6 text-center text-sm text-gray-500">
             No classlists found for the selected filters.
           </td>
         </tr>
@@ -211,4 +225,45 @@
       </div>
     </div>
   </div>
+
+  <!-- Merge Dialog -->
+  <div class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50" ng-if="vm.mergeDialogOpen">
+    <div class="bg-white rounded shadow-lg w-full max-w-lg p-4">
+      <div class="text-lg font-semibold mb-2">Merge Classlists</div>
+      <div class="text-sm text-gray-600 mb-3">
+        Select the target classlist. All other selected classlists will be merged into it. Rules: same term; finalized and dissolved classlists cannot be merged; duplicate students in the target are skipped; sources will be dissolved after merge.
+      </div>
+
+      <div class="mb-3">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Target</label>
+        <select class="w-full border rounded px-3 py-2"
+                ng-model="vm.mergeTargetId"
+                ng-options="r.intID as ((r.sectionCode || ('ID ' + r.intID)) + ' — ' + ((r.subjectCode || '-') + (r.subjectDescription ? (' - ' + r.subjectDescription) : ''))) for r in vm.mergeCandidates">
+          <option value="">Select target…</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <div class="text-sm font-medium text-gray-700 mb-1">Sources</div>
+        <ul class="list-disc pl-5 text-sm max-h-40 overflow-auto">
+          <li ng-repeat="r in vm.mergeCandidates"
+              ng-if="vm.mergeTargetId !== r.intID">
+            {{ r.intID }} • {{ r.sectionCode || '-' }} • {{ r.subjectCode || '-' }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="flex items-center justify-end space-x-2">
+        <button class="px-3 py-2 rounded bg-gray-100 text-gray-800 hover:bg-gray-200" ng-click="vm.closeMergeDialog()">Cancel</button>
+        <button class="px-3 py-2 rounded bg-purple-600 text-white hover:bg-purple-700"
+                ng-disabled="!vm.mergeTargetId || vm.mergeCandidates.length < 2 || vm.merging"
+                ng-click="vm.mergeSelected()">
+          <span class="fas fa-object-group mr-2"></span>
+          <span ng-if="!vm.merging">Merge</span>
+          <span ng-if="vm.merging"><i class="fas fa-spinner fa-spin mr-1"></i> Merging…</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
 </div>

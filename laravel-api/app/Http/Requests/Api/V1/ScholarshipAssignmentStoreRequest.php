@@ -15,9 +15,12 @@ class ScholarshipAssignmentStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'student_id'  => ['required', 'integer'],
-            'syid'        => ['required', 'integer'],
-            'discount_id' => ['required', 'integer', 'exists:tb_mas_scholarships,intID'],
+            'student_id'          => ['required', 'integer'],
+            'syid'                => ['required', 'integer'],
+            'discount_id'         => ['required', 'integer', 'exists:tb_mas_scholarships,intID'],
+            // Optional referrer fields (one of these may be provided by the UI for referral discounts)
+            'referrer_student_id' => ['sometimes', 'integer'],
+            'referrer_name'       => ['sometimes', 'string'],
         ];
     }
 

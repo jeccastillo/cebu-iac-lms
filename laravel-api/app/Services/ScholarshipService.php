@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use App\Models\Scholarship;
 use App\Services\SystemLogService;
+use App\Services\StudentPaymentStatusService;
 
 class ScholarshipService
 {
@@ -63,6 +64,8 @@ class ScholarshipService
                     'deduction_from'         => $r->deduction_from ?? null,
                     'status'                 => $r->status ?? null,                    
                     'description'            => $r->description ?? null,
+                    'max_stacks'             => isset($r->max_stacks) ? (int) $r->max_stacks : null,
+                    'compute_full'           => isset($r->compute_full) ? (bool) $r->compute_full : null,
 
                     'created_by_id'          => $r->created_by_id ?? null,
 
@@ -130,6 +133,7 @@ class ScholarshipService
                 'sc.name',
                 'sc.deduction_type',
                 'sc.deduction_from',
+                'sd.referrer',
                 'sc.status',
                 'sd.status as assignment_status'
             )
@@ -147,6 +151,7 @@ class ScholarshipService
                 'name'              => $r->name,
                 'deduction_type'    => $r->deduction_type,
                 'deduction_from'    => $r->deduction_from,
+                'referrer'          => $r->referrer ?? null,
                 'status'            => $r->status,
                 'assignment_status' => $r->assignment_status ?? null,
             ];
@@ -265,7 +270,31 @@ class ScholarshipService
         $studentId  = isset($payload['student_id']) ? (int) $payload['student_id'] : 0;
         $syid       = isset($payload['syid']) ? (int) $payload['syid'] : 0;
         $discountId = isset($payload['discount_id']) ? (int) $payload['discount_id'] : 0;
-        $referrer =   isset($payload['referrer']) ? (int) $payload['referrer'] : "na";
+        // Resolve referrer name (string) from either referrer_student_id or referrer_name
+        $referrerName = null;
+        if (!empty($payload['referrer_student_id'])) {
+            $rid = (int) $payload['referrer_student_id'];
+            if ($rid > 0) {
+                $u = DB::table('tb_mas_users')
+                    ->select('strFirstname', 'strMiddlename', 'strLastname', 'strStudentNumber', 'intID')
+                    ->where('intID', $rid)
+                    ->first();
+                if ($u) {
+                    $first  = trim((string) ($u->strFirstname ?? ''));
+                    $middle = trim((string) ($u->strMiddlename ?? ''));
+                    $last   = trim((string) ($u->strLastname ?? ''));
+                    $referrerName = trim(($last !== '' ? ($last . ', ') : '') . $first . ($middle !== '' ? (' ' . $middle) : ''));
+                    if ($referrerName === '') {
+                        $referrerName = (string) ($u->strStudentNumber ?? '');
+                    }
+                }
+            }
+        } elseif (array_key_exists('referrer_name', $payload)) {
+            $referrerName = trim((string) $payload['referrer_name']);
+            if ($referrerName === '') {
+                $referrerName = null;
+            }
+        }
 
         if ($studentId <= 0 || $syid <= 0 || $discountId <= 0) {
             throw new \InvalidArgumentException('student_id, syid, and discount_id are required');
@@ -277,26 +306,66 @@ class ScholarshipService
             throw new \InvalidArgumentException('Invalid discount_id');
         }
 
-        // Idempotent check
-        $existing = DB::table('tb_mas_student_discount')
+        // If a referrer is provided, ensure they are fully paid for the same term before proceeding
+        if (!empty($payload['referrer_student_id'])) {
+            $rid = (int) $payload['referrer_student_id'];
+            if ($rid > 0) {
+                /** @var StudentPaymentStatusService $paymentStatus */
+                $paymentStatus = app(StudentPaymentStatusService::class);
+                $status = $paymentStatus->isFullyPaidForTerm($rid, $syid);
+                if (empty($status['is_fully_paid'])) {
+                    throw new \InvalidArgumentException('The referree you are trying to tag is not yet fully paid');
+                }
+            }
+        }
+
+        // Check duplicate referrer for same term
+        if (!empty($payload['referrer_student_id']) && $referrerName !== null && $referrerName !== '') {
+            $existsRef = DB::table('tb_mas_student_discount')
+                ->where('syid', $syid)
+                ->where('referrer', $referrerName)
+                ->exists();
+            if ($existsRef) {
+                throw new \InvalidArgumentException('That student is alreadyt tagged as a referree for this term.');
+            }
+        }
+
+        // Count existing assignments for the same (student_id, syid, discount_id)
+        $existingCount = DB::table('tb_mas_student_discount')
             ->where('student_id', $studentId)
             ->where('syid', $syid)
             ->where('discount_id', $discountId)
-            ->first();
+            ->count();
+
+        // Determine allowed maximum stacks for this scholarship/discount (default 1)
+        $maxStacks = (int) (DB::table('tb_mas_scholarships')->where('intID', $discountId)->value('max_stacks') ?? 1);
+        if ($maxStacks < 1) {
+            $maxStacks = 1;
+        }
+
+        // Mutual-exclusion check for a new assignment attempt
+        $conf = $this->detectMutualExclusionConflict($studentId, $syid, $discountId);
+        if (!empty($conf['has_conflict'])) {
+            $sel = $conf['names']['selected'] ?? 'selected';
+            $ex  = $conf['names']['existing'] ?? 'existing';
+            throw new \InvalidArgumentException("can not tag {$sel} with {$ex}");
+        }
+
+        // Enforce stacking cap
+        if ($existingCount >= $maxStacks) {
+            throw new \InvalidArgumentException("This scholarship can only be assigned {$maxStacks} time(s).");
+        }
 
         $pk = $this->sdPk();
 
-        if (!$existing) {
-            $id = DB::table('tb_mas_student_discount')->insertGetId([
-                'student_id'  => $studentId,
-                'syid'        => $syid,
-                'discount_id' => $discountId,
-                'status'      => 'pending',
-                'referrer'    => $referrer
-            ]);
-        } else {
-            $id = (int) ($existing->$pk ?? 0);
-        }
+        // Insert a new row (allow stacking until cap is reached)
+        $id = DB::table('tb_mas_student_discount')->insertGetId([
+            'student_id'  => $studentId,
+            'syid'        => $syid,
+            'discount_id' => $discountId,
+            'status'      => 'pending',
+            'referrer'    => $referrerName !== null ? $referrerName : '',
+        ]);
 
         // Return normalized joined row
         $row = DB::table('tb_mas_student_discount as sd')
@@ -366,6 +435,7 @@ class ScholarshipService
                 'sc.name',
                 'sc.deduction_type',
                 'sc.deduction_from',
+                'sd.referrer',
                 'sc.status'
             );
 
@@ -393,6 +463,7 @@ class ScholarshipService
                     'name'              => $r->name,
                     'deduction_type'    => $r->deduction_type,
                     'deduction_from'    => $r->deduction_from,
+                    'referrer'          => $r->referrer ?? null,
                     'status'            => $r->status, // catalog status
                     'assignment_status' => $r->assignment_status ?? null,
                 ];
@@ -553,7 +624,7 @@ class ScholarshipService
         // Base whitelisted fields
         $out = [];
         $allow = [
-            'code','name','deduction_type','deduction_from','status','description',
+            'code','name','deduction_type','deduction_from','status','description','max_stacks','compute_full',
             'created_by_id',
             'tuition_fee_rate','tuition_fee_fixed',
             'basic_fee_rate','basic_fee_fixed',
@@ -636,6 +707,8 @@ class ScholarshipService
             'deduction_type'         => $get('deduction_type'),
             'deduction_from'         => $get('deduction_from'),
             'status'                 => $get('status'),
+            'max_stacks'             => $get('max_stacks') !== null ? (int) $get('max_stacks') : null,
+            'compute_full'           => $get('compute_full') !== null ? (bool) $get('compute_full') : null,
             'percent'                => $percent !== null ? (float) $percent : null,
             'fixed_amount'           => $fixed !== null ? (float) $fixed : null,
             'description'            => $get('description'),
@@ -664,5 +737,159 @@ class ScholarshipService
             'total_assessment_fixed' => $get('total_assessment_fixed') !== null ? (float) $get('total_assessment_fixed') : null,
         ];
 
+    }
+
+    /**
+     * Get assigned discount ids for a student in a term across all statuses.
+     *
+     * @return array<int>
+     */
+    private function getAssignedDiscountIds(int $studentId, int $syid, ?int $excludeDiscountId = null): array
+    {
+        $sid  = (int) $studentId;
+        $term = (int) $syid;
+        if ($sid <= 0 || $term <= 0) {
+            return [];
+        }
+
+        $rows = DB::table('tb_mas_student_discount')
+            ->where('student_id', $sid)
+            ->where('syid', $term)
+            ->select('discount_id')
+            ->get();
+
+        $ids = [];
+        foreach ($rows as $r) {
+            $d = (int) ($r->discount_id ?? 0);
+            if ($d > 0) {
+                if ($excludeDiscountId !== null && $d === (int) $excludeDiscountId) {
+                    continue;
+                }
+                $ids[] = $d;
+            }
+        }
+        return array_values(array_unique($ids));
+    }
+
+    /**
+     * Find counterpart ids that are mutually exclusive with the given discountId.
+     * Only active pairs considered.
+     *
+     * @return array<int>
+     */
+    private function findMutualExclusionsFor(int $discountId): array
+    {
+        $id = (int) $discountId;
+        if ($id <= 0) {
+            return [];
+        }
+
+        $rows = DB::table('tb_mas_scholarship_me')
+            ->where('status', 'active')
+            ->where(function ($q) use ($id) {
+                $q->where('discount_id_a', $id)
+                  ->orWhere('discount_id_b', $id);
+            })
+            ->get();
+
+        $out = [];
+        foreach ($rows as $r) {
+            $a = (int) ($r->discount_id_a ?? 0);
+            $b = (int) ($r->discount_id_b ?? 0);
+            if ($a === $id && $b > 0) {
+                $out[] = $b;
+            }
+            if ($b === $id && $a > 0) {
+                $out[] = $a;
+            }
+        }
+        // ensure uniqueness
+        return array_values(array_unique($out));
+    }
+
+    /**
+     * Resolve scholarship/discount names by ids.
+     *
+     * @param array<int> $ids
+     * @return array<int, string> id => name
+     */
+    private function resolveNames(array $ids): array
+    {
+        $norm = [];
+        foreach ($ids as $v) {
+            $i = (int) $v;
+            if ($i > 0) {
+                $norm[] = $i;
+            }
+        }
+        $ids = array_values(array_unique($norm));
+        if (empty($ids)) {
+            return [];
+        }
+
+        $rows = DB::table('tb_mas_scholarships')
+            ->whereIn('intID', $ids)
+            ->select('intID', 'name')
+            ->get();
+
+        $out = [];
+        foreach ($rows as $r) {
+            $out[(int) ($r->intID ?? 0)] = (string) ($r->name ?? '');
+        }
+        return $out;
+    }
+
+    /**
+     * Detect if selectedDiscountId conflicts with any already assigned ids for the student/term.
+     *
+     * @return array{has_conflict:bool, with_id?:int, names?:array{selected:string, existing:string}}
+     */
+    private function detectMutualExclusionConflict(int $studentId, int $syid, int $selectedDiscountId): array
+    {
+        $selectedId = (int) $selectedDiscountId;
+
+        // Collect assigned discount ids for same student and term (pending + applied)
+        $assigned = $this->getAssignedDiscountIds($studentId, $syid, null);
+        if (empty($assigned)) {
+            return ['has_conflict' => false];
+        }
+
+        // Find exclusions for the selected id
+        $blocked = $this->findMutualExclusionsFor($selectedId);
+        if (empty($blocked)) {
+            return ['has_conflict' => false];
+        }
+
+        // Build set for O(1) lookup
+        $assignedSet = [];
+        foreach ($assigned as $a) {
+            $assignedSet[(int) $a] = true;
+        }
+
+        $conflictWith = null;
+        foreach ($blocked as $b) {
+            $bb = (int) $b;
+            if (!empty($assignedSet[$bb])) {
+                $conflictWith = $bb;
+                break;
+            }
+        }
+
+        if ($conflictWith === null) {
+            return ['has_conflict' => false];
+        }
+
+        $names = $this->resolveNames([$selectedId, $conflictWith]);
+        $selName = $names[$selectedId] ?? (string) $selectedId;
+        $exName  = $names[$conflictWith] ?? (string) $conflictWith;
+
+        return [
+            'has_conflict' => true,
+            'with_id'      => $conflictWith,
+            'names'        => [
+                'selected' => $selName,
+                'existing' => $exName,
+            ],
+        ];
     }
 }
