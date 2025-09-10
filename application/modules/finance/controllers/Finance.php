@@ -437,6 +437,44 @@ class Finance extends CI_Controller {
             
         }
         
+        // Add previous balance-only terms (not in registrations)
+        $reg_term_ids = array();
+        foreach($registrations as $r){
+            $reg_term_ids[] = $r['intID'];
+        }
+        $prev_all = $this->db->get_where('tb_mas_prev_balance', array('student_number'=> $std_num))->result_array();
+        if($prev_all){
+            $by_term = array();
+            foreach($prev_all as $pb){
+                $by_term[$pb['term']][] = $pb;
+            }
+            foreach($by_term as $term_id => $balances){
+                if(!in_array($term_id, $reg_term_ids)){
+                    $sy = $this->db->get_where('tb_mas_sy', array('intID' => $term_id))->first_row('array');
+                    if($sy){
+                        $temp = array();
+                        // Ensure required fields exist so the view logic works safely
+                        $sy['paymentType'] = 'full'; // default, amounts are set to 0 below
+                        $temp['term'] = $sy;
+                        $temp['payments_tuition'] = array();
+                        $temp['payments_other'] = array();
+                        $temp['ledger'] = array();
+                        $temp['other'] = array();
+                        $temp['scholarship'] = array();
+                        $temp['discount'] = array();
+                        $temp['scholarship_deductions_installment_array'] = array();
+                        $temp['scholarship_deductions_array'] = array();
+                        $temp['scholarship_deductions_installment_dc_array'] = array();
+                        $temp['scholarship_deductions_dc_array'] = array();
+                        $temp['ti_before_deductions'] = 0;
+                        $temp['total_before_deductions'] = 0;
+                        $temp['balance'] = $balances;
+                        $tuition[] = $temp;
+                    }
+                }
+            }
+        }
+
         $data['tuition'] = $tuition;
         $data['user'] = $this->data["user"];
         $data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
