@@ -437,40 +437,103 @@ class Finance extends CI_Controller {
             
         }
         
-        // Add previous balance-only terms (not in registrations)
+        // Add previous balance and/or ledger-only terms (not in registrations)
         $reg_term_ids = array();
         foreach($registrations as $r){
             $reg_term_ids[] = $r['intID'];
         }
+
+        // Gather extra term IDs from prev_balance and student_ledger
+        $extra_term_ids = array();
+
         $prev_all = $this->db->get_where('tb_mas_prev_balance', array('student_number'=> $std_num))->result_array();
         if($prev_all){
-            $by_term = array();
             foreach($prev_all as $pb){
-                $by_term[$pb['term']][] = $pb;
+                if(!in_array($pb['term'], $extra_term_ids)){
+                    $extra_term_ids[] = $pb['term'];
+                }
             }
-            foreach($by_term as $term_id => $balances){
-                if(!in_array($term_id, $reg_term_ids)){
-                    $sy = $this->db->get_where('tb_mas_sy', array('intID' => $term_id))->first_row('array');
-                    if($sy){
-                        $temp = array();
-                        // Ensure required fields exist so the view logic works safely
-                        $sy['paymentType'] = 'full'; // default, amounts are set to 0 below
-                        $temp['term'] = $sy;
-                        $temp['payments_tuition'] = array();
-                        $temp['payments_other'] = array();
-                        $temp['ledger'] = array();
-                        $temp['other'] = array();
-                        $temp['scholarship'] = array();
-                        $temp['discount'] = array();
-                        $temp['scholarship_deductions_installment_array'] = array();
-                        $temp['scholarship_deductions_array'] = array();
-                        $temp['scholarship_deductions_installment_dc_array'] = array();
-                        $temp['scholarship_deductions_dc_array'] = array();
-                        $temp['ti_before_deductions'] = 0;
-                        $temp['total_before_deductions'] = 0;
-                        $temp['balance'] = $balances;
-                        $tuition[] = $temp;
+        }
+
+        $ledger_terms = $this->db->select('syid')
+                                 ->from('tb_mas_student_ledger')
+                                 ->where(array('student_id' => $id))
+                                 ->group_by('syid')
+                                 ->get()
+                                 ->result_array();
+        foreach($ledger_terms as $lt){
+            if(isset($lt['syid']) && !in_array($lt['syid'], $extra_term_ids)){
+                $extra_term_ids[] = $lt['syid'];
+            }
+        }
+
+        // Build temp entries for extra terms not in registrations
+        foreach($extra_term_ids as $term_id){
+            if(!in_array($term_id, $reg_term_ids)){
+                $sy = $this->db->get_where('tb_mas_sy', array('intID' => $term_id))->first_row('array');
+                if($sy){
+                    $temp = array();
+                    $sy['paymentType'] = 'full';
+                    $temp['term'] = $sy;
+
+                    // payments left empty (Option A)
+                    $temp['payments_tuition'] = array();
+                    $temp['payments_other'] = array();
+
+                    // fetch tuition-type ledger for this term
+                    $ledger = $this->db->select('tb_mas_student_ledger.*,tb_mas_scholarships.name as scholarship_name, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')
+                        ->from('tb_mas_student_ledger')
+                        ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
+                        ->join('tb_mas_scholarships', 'tb_mas_student_ledger.scholarship_id = tb_mas_scholarships.intID','left')
+                        ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')
+                        ->where(array('student_id'=>$id,'tb_mas_student_ledger.type'=>'tuition','syid' => $term_id))
+                        ->order_by("strYearStart asc, enumSem asc, date asc")
+                        ->get()
+                        ->result_array();
+                    $temp['ledger'] = array();
+                    foreach($ledger as $item){
+                        $item['date'] = date('M j, Y',strtotime($item['date']));
+                        $temp['ledger'][] = $item;
                     }
+
+                    // fetch other-type ledger for this term
+                    $other = $this->db->select('tb_mas_student_ledger.*, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')
+                        ->from('tb_mas_student_ledger')
+                        ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
+                        ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')
+                        ->where(array('student_id'=>$id,'tb_mas_student_ledger.type'=>'other','syid' => $term_id))
+                        ->get()
+                        ->result_array();
+                    $temp['other'] = array();
+                    foreach($other as $item){
+                        $item['date'] = date('M j, Y',strtotime($item['date']));
+                        $temp['other'][] = $item;
+                    }
+
+                    // scholarship/discount empty arrays for consistency
+                    $temp['scholarship'] = array();
+                    $temp['discount'] = array();
+                    $temp['scholarship_deductions_installment_array'] = array();
+                    $temp['scholarship_deductions_array'] = array();
+                    $temp['scholarship_deductions_installment_dc_array'] = array();
+                    $temp['scholarship_deductions_dc_array'] = array();
+
+                    // tuition amounts zero by default
+                    $temp['ti_before_deductions'] = 0;
+                    $temp['total_before_deductions'] = 0;
+
+                    // attach prev balances for this term if any
+                    $balances = array();
+                    if($prev_all){
+                        foreach($prev_all as $pb){
+                            if($pb['term'] == $term_id){
+                                $balances[] = $pb;
+                            }
+                        }
+                    }
+                    $temp['balance'] = $balances;
+
+                    $tuition[] = $temp;
                 }
             }
         }
