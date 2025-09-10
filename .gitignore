@@ -1,3 +1,4 @@
 application/config/database.php
 application/config/courses.php
 assets/photos/exam
+frontend/unity-spa/core/baseRoot.js
