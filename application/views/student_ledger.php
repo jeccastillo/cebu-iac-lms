@@ -135,7 +135,7 @@
                                 <td :class="item.muted">{{  item.or_number }}</td>
                                 <td :class="item.muted">{{  item.invoice_number }}</td>
                                 <td :class="item.muted">{{  item.remarks }}</td>
-                                <td :class="item.muted">{{ (item.type != 'payment' || (item.type == 'balance' && item.amount >= 0))?numberWithCommas(item.amount):'-' }}</td>
+                                <td :class="item.muted">{{ ((item.type != 'payment' && item.type != 'balance') || (item.type == 'balance' && item.amount >= 0))?numberWithCommas(item.amount):'-' }}</td>
                                 <td :class="item.muted">{{ (item.type == 'payment' || (item.type == 'balance' && item.amount < 0))?numberWithCommas(item.amount):'-' }}</td>
                                 <td :class="item.muted">{{ item.balance < 0 ?"(" + numberWithCommas(item.balance * -1) + ")": numberWithCommas(item.balance) }}</td>
                                 <td :class="item.muted">{{ (item.added_by != 0) ? 'Manually Generated': 'System Generated' }}</td>   
