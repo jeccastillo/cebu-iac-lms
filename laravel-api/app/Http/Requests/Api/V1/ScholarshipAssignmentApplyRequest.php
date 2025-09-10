@@ -15,8 +15,9 @@ class ScholarshipAssignmentApplyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'ids'   => ['required', 'array', 'min:1'],
-            'ids.*' => ['integer'],
+            'ids'    => ['required', 'array', 'min:1'],
+            'ids.*'  => ['integer'],
+            'force'  => ['sometimes', 'boolean'],
         ];
     }
 

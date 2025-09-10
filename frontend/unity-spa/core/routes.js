@@ -84,6 +84,12 @@
         controllerAs: "vm",
         requiredRoles: ["finance", "admin"],
       })
+      .when("/finance/debit-credit", {
+        templateUrl: "features/finance/debit-credit/debit-credit.html",
+        controller: "DebitCreditController",
+        controllerAs: "vm",
+        requiredRoles: ["finance", "admin"],
+      })
       .when("/scholarship/students", {
         templateUrl: "features/scholarship/students.html",
         controller: "ScholarshipStudentsController",

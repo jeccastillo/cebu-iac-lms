@@ -76,13 +76,37 @@ class DiscountScholarshipService
         $discountFilterId    = isset($args['discount_id']) ? (int) $args['discount_id'] : null;
         $scholarshipFilterId = isset($args['scholarship_id']) ? (int) $args['scholarship_id'] : null;
 
-        // Load assignments (applied only) joined to active scholarships, with optional filtering
+        // Load assignments (applied only) joined to active scholarships, with optional inclusion of specific assignment IDs regardless of status
+        $assignmentIds = [];
+        if (!empty($args['assignment_ids']) && is_array($args['assignment_ids'])) {
+            $assignmentIds = array_values(array_unique(array_filter(array_map(function ($v) {
+                $i = (int) $v;
+                return $i > 0 ? $i : null;
+            }, $args['assignment_ids']))));
+        }
+
+        $sdPkCol = Schema::hasColumn('tb_mas_student_discount', 'intID') ? 'sd.intID' : (Schema::hasColumn('tb_mas_student_discount', 'id') ? 'sd.id' : null);
+        $onlySelected = (!empty($assignmentIds) && !empty($args['only_selected']));
+
         $q = DB::table('tb_mas_student_discount as sd')
             ->join('tb_mas_scholarships as sc', 'sc.intID', '=', 'sd.discount_id')
             ->where('sd.student_id', $studentId)
             ->where('sd.syid', $syid)
-            ->where('sd.status', 'applied')
-            ->where('sc.status', 'active');
+            ->where(function ($w) use ($assignmentIds, $sdPkCol, $onlySelected) {
+                if ($onlySelected && !empty($assignmentIds) && $sdPkCol !== null) {
+                    $w->whereIn(DB::raw($sdPkCol), $assignmentIds);
+                } else {
+                    $w->where('sd.status', 'applied');
+                    if (!empty($assignmentIds) && $sdPkCol !== null) {
+                        $w->orWhereIn(DB::raw($sdPkCol), $assignmentIds);
+                    }
+                }
+            })
+            // Treat null status as active; accept common active truthy variants and case-insensitive values
+            ->where(function ($w) {
+                $w->whereNull('sc.status')
+                  ->orWhereIn('sc.status', ['active', 'Active', 'ACTIVE', 1, '1', true]);
+            });
 
         if ($discountFilterId && $scholarshipFilterId) {
             $q->where(function ($w) use ($discountFilterId, $scholarshipFilterId) {
@@ -277,8 +301,10 @@ class DiscountScholarshipService
             if (!array_key_exists($key, $r)) return null;
             $v = $r[$key];
             if ($v === null || $v === '') return null;
-            $iv = (int)$v;
-            return max(0, min(100, $iv));
+            $iv = (int) $v;
+            // Treat 0 or negative as "not set" so zero-rate columns won't block generic fallback
+            if ($iv <= 0) return null;
+            return min(100, $iv);
         };
         $getFixed = function (?string $key) use ($r): ?float {
             if (!$key) return null;
@@ -415,6 +441,47 @@ class DiscountScholarshipService
                 'fixed'          => $peFixed,
                 'notes'          => null,
             ];
+        }
+
+        // Generic fallback:
+        // If none of the specific per-bucket fields (tuition/basic/misc/lab/other/penalty or total_assessment)
+        // are set on the scholarship catalog row, but generic percent/percentage or fixed_amount/amount exist,
+        // treat it as a Full Assessment (total_assessment) basis so it shows in the breakdown.
+        if (empty($specs)) {
+            $genericPercent = null;
+            if (array_key_exists('percent', $r) && $r['percent'] !== null && $r['percent'] !== '') {
+                $genericPercent = max(0, min(100, (int) $r['percent']));
+            } elseif (array_key_exists('percentage', $r) && $r['percentage'] !== null && $r['percentage'] !== '') {
+                $genericPercent = max(0, min(100, (int) $r['percentage']));
+            }
+
+            $genericFixed = null;
+            if (array_key_exists('fixed_amount', $r) && $r['fixed_amount'] !== null && $r['fixed_amount'] !== '') {
+                $genericFixed = (float) $r['fixed_amount'];
+                if ($genericFixed <= 0) {
+                    $genericFixed = null;
+                }
+            } elseif (array_key_exists('amount', $r) && $r['amount'] !== null && $r['amount'] !== '') {
+                $genericFixed = (float) $r['amount'];
+                if ($genericFixed <= 0) {
+                    $genericFixed = null;
+                }
+            }
+
+            if ($genericPercent !== null || $genericFixed !== null) {
+                $specs[] = [
+                    'assignment_id'  => $assignmentId,
+                    'scholarship_id' => $scholarshipId,
+                    'name'           => $name,
+                    'basis'          => 'total_assessment',
+                    'deduction_type' => $deductionType,
+                    'deduction_from' => $deductionFrom,
+                    'compute_full'   => $computeFull,
+                    'rate'           => $genericFixed !== null ? null : $genericPercent,
+                    'fixed'          => $genericFixed,
+                    'notes'          => 'generic_fallback',
+                ];
+            }
         }
 
         return $specs;

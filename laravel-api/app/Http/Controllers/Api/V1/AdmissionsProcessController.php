@@ -865,7 +865,7 @@ class AdmissionProcessController extends Controller
             $data['success'] = true;   
         }
         else{
-            $data['message'] = 'Can not delete status needs to be new.';
+            $data['message'] = 'Cannot delete status needs to be new.';
             $data['success'] = false;   
         }
                 
@@ -1483,7 +1483,7 @@ class AdmissionProcessController extends Controller
             if(!$sched){
                 $data['success'] = false;
                 $data['data'] = [];
-                $data['message'] = 'This applicant does not have an interview schedule can not proceed with update';
+                $data['message'] = 'This applicant does not have an interview schedule cannot proceed with update';
                 return response()->json($data);
             }
             $studentInformation->date_interviewed = $sched->date;

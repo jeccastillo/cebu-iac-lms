@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Schema;
 use App\Models\Scholarship;
 use App\Services\SystemLogService;
 use App\Services\StudentPaymentStatusService;
+use App\Services\DiscountScholarshipService;
+use App\Services\TuitionService;
 
 class ScholarshipService
 {
@@ -348,7 +350,7 @@ class ScholarshipService
         if (!empty($conf['has_conflict'])) {
             $sel = $conf['names']['selected'] ?? 'selected';
             $ex  = $conf['names']['existing'] ?? 'existing';
-            throw new \InvalidArgumentException("can not tag {$sel} with {$ex}");
+            throw new \InvalidArgumentException("cannot tag {$sel} with {$ex}");
         }
 
         // Enforce stacking cap
@@ -472,9 +474,17 @@ class ScholarshipService
     }
 
     /**
-     * Bulk-apply assignments by IDs. Returns { updated: count }.
+     * Bulk-apply assignments by IDs with pre-check against remaining tuition.
+     * If the deductions from the selected assignments exceed remaining (gross - payments),
+     * returns confirm_required with details unless $force is true.
+     *
+     * Returns:
+     *  - On confirm needed:
+     *      { confirm_required: true, groups: [{student_id, syid, remaining, preview_total, will_overpay_by, ids:int[]}] }
+     *  - On success:
+     *      { updated:int, snapshots:int, confirm_required:false }
      */
-    public function applyAssignments(array $ids, ?int $actorId = null): array
+    public function applyAssignments(array $ids, ?int $actorId = null, bool $force = false): array
     {
         // Normalize ids to unique positive ints
         $ids = array_values(array_unique(array_filter(array_map(function ($v) {
@@ -483,23 +493,187 @@ class ScholarshipService
         }, $ids))));
 
         if (empty($ids)) {
-            return ['updated' => 0];
+            return ['updated' => 0, 'snapshots' => 0, 'confirm_required' => false];
         }
- 
+
         $pk = $this->sdPk();
+
+        // Prefetch affected assignments with (student_id, syid)
+        $groups = []; // key => ['student_id'=>, 'syid'=>, 'ids'=>[]]
+        try {
+            $rows = DB::table('tb_mas_student_discount')
+                ->whereIn($pk, $ids)
+                ->select(
+                    DB::raw($pk . ' as id'),
+                    'student_id',
+                    'syid',
+                    'status'
+                )
+                ->get();
+
+            foreach ($rows as $r) {
+                $sid  = (int) ($r->student_id ?? 0);
+                $syid = (int) ($r->syid ?? 0);
+                $rid  = (int) ($r->id ?? 0);
+                if ($sid > 0 && $syid > 0 && $rid > 0) {
+                    $key = $sid . ':' . $syid;
+                    if (!isset($groups[$key])) {
+                        $groups[$key] = [
+                            'student_id' => $sid,
+                            'syid'       => $syid,
+                            'ids'        => [],
+                        ];
+                    }
+                    $groups[$key]['ids'][] = $rid;
+                }
+            }
+        } catch (\Throwable $e) {
+            // If we cannot prefetch, proceed without pre-check
+            $groups = [];
+        }
+
+        // Pre-check negative remaining if we have groups and not forced
+        $confirmList = [];
+        if (!empty($groups) && !$force) {
+            /** @var DiscountScholarshipService $dsSvc */
+            $dsSvc = app(DiscountScholarshipService::class);
+            /** @var TuitionService $tuition */
+            $tuition = app(TuitionService::class);
+            /** @var StudentPaymentStatusService $paySvc */
+            $paySvc = app(StudentPaymentStatusService::class);
+
+            foreach ($groups as $g) {
+                $sid = (int) $g['student_id'];
+                $syid = (int) $g['syid'];
+                $gids = (array) $g['ids'];
+
+                // Compute payments_total (Tuition + Reservation)
+                $paymentsTotal = 0.0;
+                try {
+                    $bal = $paySvc->termBalance($sid, $syid);
+                    $paymentsTotal = (float) ($bal['payments_total'] ?? 0.0);
+                } catch (\Throwable $e) {
+                    $paymentsTotal = 0.0;
+                }
+
+                // Compute gross tuition components (tuition + misc + lab + additional)
+                $tu = 0.0; $mi = 0.0; $la = 0.0; $ad = 0.0;
+                try {
+                    $user = DB::table('tb_mas_users')->where('intID', $sid)->first();
+                    if ($user) {
+                        $br = $tuition->compute((string) ($user->strStudentNumber ?? ''), $syid, null, null);
+                        $sum = is_array($br['summary'] ?? null) ? $br['summary'] : [];
+                        $tu = (float) ($sum['tuition'] ?? 0.0);
+                        $mi = (float) ($sum['misc_total'] ?? 0.0);
+                        $la = (float) ($sum['lab_total'] ?? 0.0);
+                        $ad = (float) ($sum['additional_total'] ?? 0.0);
+                    }
+                } catch (\Throwable $e) {
+                    // keep zeros on failure
+                }
+                $gross = round($tu + $mi + $la + $ad, 2);
+                $remaining = max(0.0, round($gross - $paymentsTotal, 2));
+
+                // Preview total deductions for the selected assignment IDs only
+                $preview = 0.0;
+                try {
+                    $previewOut = $dsSvc->computeDiscountsAndScholarships([
+                        'student_id'       => $sid,
+                        'syid'             => $syid,
+                        'tuition'          => $tu,
+                        'misc_total'       => $mi,
+                        'lab_total'        => $la,
+                        'additional_total' => $ad,
+                        'assignment_ids'   => $gids,
+                        'only_selected'    => true,
+                    ]);
+                    $preview = round(
+                        (float) ($previewOut['scholarship_grand_total'] ?? 0.0)
+                        + (float) ($previewOut['discount_grand_total'] ?? 0.0),
+                        2
+                    );
+                } catch (\Throwable $e) {
+                    $preview = 0.0;
+                }
+
+                if ($preview > $remaining) {
+                    $confirmList[] = [
+                        'student_id'      => $sid,
+                        'syid'            => $syid,
+                        'remaining'       => $remaining,
+                        'preview_total'   => $preview,
+                        'will_overpay_by' => round($preview - $remaining, 2),
+                        'ids'             => $gids,
+                    ];
+                }
+            }
+
+            if (!empty($confirmList)) {
+                return [
+                    'confirm_required' => true,
+                    'groups'           => $confirmList,
+                ];
+            }
+        }
+
+        // No confirmation needed (or forced) -> apply status and save snapshots
         $updated = DB::table('tb_mas_student_discount')
             ->whereIn($pk, $ids)
             ->where('status', '<>', 'applied')
             ->update(['status' => 'applied']);
- 
-        return ['updated' => (int) $updated];
+
+        // Recompute and save tuition snapshots for affected students/terms
+        $snapshots = 0;
+        $pairs = [];
+        if (!empty($groups)) {
+            foreach ($groups as $g) {
+                $key = $g['student_id'] . ':' . $g['syid'];
+                $pairs[$key] = ['student_id' => (int) $g['student_id'], 'syid' => (int) $g['syid']];
+            }
+        } else {
+            // Fallback pair prefetch when grouping failed
+            try {
+                $rows = DB::table('tb_mas_student_discount')
+                    ->whereIn($pk, $ids)
+                    ->select('student_id', 'syid')
+                    ->get();
+                foreach ($rows as $r) {
+                    $sid = (int) ($r->student_id ?? 0);
+                    $term = (int) ($r->syid ?? 0);
+                    if ($sid > 0 && $term > 0) {
+                        $pairs[$sid . ':' . $term] = ['student_id' => $sid, 'syid' => $term];
+                    }
+                }
+            } catch (\Throwable $e) {
+                $pairs = [];
+            }
+        }
+
+        if (!empty($pairs)) {
+            /** @var TuitionService $tuition */
+            $tuition = app(TuitionService::class);
+            foreach ($pairs as $p) {
+                try {
+                    $tuition->saveSnapshotByStudentId((int) $p['student_id'], (int) $p['syid'], $actorId, null, null);
+                    $snapshots++;
+                } catch (\Throwable $e) {
+                    // continue other pairs
+                }
+            }
+        }
+
+        return [
+            'updated'          => (int) $updated,
+            'snapshots'        => (int) $snapshots,
+            'confirm_required' => false,
+        ];
     }
 
     /**
      * Delete an assignment row by ID. Allowed only when status != 'applied'.
      * Returns { deleted: bool }.
      */
-    public function deleteAssignment(int $id): array
+    public function deleteAssignment(int $id, ?int $actorId = null): array
     {
         $pk = $this->sdPk();
 
@@ -517,6 +691,21 @@ class ScholarshipService
         try {
             SystemLogService::log('delete', 'StudentDiscount', (int) $id, $before, null, request());
         } catch (\Throwable $e) {}
+
+        // After deletion, recompute and save tuition snapshot for the affected student/term.
+        if ($deleted > 0) {
+            try {
+                $sid = (int) ($row->student_id ?? 0);
+                $syid = (int) ($row->syid ?? 0);
+                if ($sid > 0 && $syid > 0) {
+                    /** @var \App\Services\TuitionService $tuition */
+                    $tuition = app(\App\Services\TuitionService::class);
+                    $tuition->saveSnapshotByStudentId($sid, $syid, $actorId, null, null);
+                }
+            } catch (\Throwable $e) {
+                // ignore snapshot errors to avoid blocking deletion response
+            }
+        }
 
         return ['deleted' => $deleted > 0];
     }

@@ -212,6 +212,7 @@
     vm.tracks = [];
     vm.programs = [];
     vm.electives = [];
+    vm.installments = [];
 
     // Select options
     vm.shsProgramOptions = [];
@@ -227,7 +228,7 @@
     vm.lookupSubject = function (id) { return lookupLabel(vm._subjectMap, id); };
 
     // Inline edit state
-    vm.editing = { miscId: null, labId: null };
+    vm.editing = { miscId: null, labId: null, installmentId: null };
 
     // Methods
     vm.loadAll = loadAll;
@@ -255,6 +256,14 @@
 
     vm.addElective = addElective;
     vm.deleteElective = deleteElective;
+
+    // Installment Plans
+    vm.loadInstallments = loadInstallments;
+    vm.addInstallment = addInstallment;
+    vm.deleteInstallment = deleteInstallment;
+    vm.startEditInstallment = startEditInstallment;
+    vm.cancelEditInstallment = cancelEditInstallment;
+    vm.updateInstallment = updateInstallment;
 
     activate();
 
@@ -345,6 +354,9 @@
         });
         TuitionYearsService.listElectives(vm.id).then(function (res) {
           vm.electives = (res && res.data) ? res.data : (Array.isArray(res) ? res : []);
+        });
+        TuitionYearsService.listInstallments(vm.id).then(function (res) {
+          vm.installments = (res && res.data) ? res.data : (Array.isArray(res) ? res : []);
         });
         vm.loading = false;
       });
@@ -543,6 +555,161 @@
       TuitionYearsService.deleteExtra('elective', id)
         .then(function () { loadAll(); if (window.Swal) Swal.fire({ icon: 'success', title: 'Deleted' }); })
         .catch(function (err) { alertErr(err, 'Delete failed'); });
+    }
+
+    // ---- Installment Plans ----
+    function loadInstallments() {
+      if (!vm.id) return;
+      TuitionYearsService.listInstallments(vm.id).then(function (res) {
+        vm.installments = (res && res.data) ? res.data : (Array.isArray(res) ? res : []);
+      }).catch(function () {
+        vm.installments = [];
+      });
+    }
+
+    function addInstallment(item) {
+      if (!vm.id || !item || vm.form.final === 1) return;
+      var code = (item.code || '').trim();
+      var label = (item.label || '').trim();
+      var dpType = (item.dp_type || 'percent').toLowerCase();
+      var dpValue = parseFloat(item.dp_value);
+      var incPct = parseFloat(item.increase_percent);
+      var count = parseInt(item.installment_count, 10);
+      var sort = parseInt(item.sort_order, 10);
+      var level = (item.level || '').toLowerCase();
+
+      if (!code || !label) {
+        if (window.Swal) Swal.fire({ icon: 'error', title: 'Code and Label are required' });
+        return;
+      }
+      if (dpType !== 'percent' && dpType !== 'fixed') dpType = 'percent';
+      if (isNaN(dpValue) || dpValue < 0) dpValue = 0;
+      if (dpType === 'percent' && dpValue > 100) dpValue = 100;
+      if (isNaN(incPct) || incPct < 0) incPct = 0;
+      if (isNaN(count) || count < 1) count = 5;
+      if (isNaN(sort)) sort = 0;
+      if (['college','shs','both'].indexOf(level) === -1) level = '';
+
+      var body = {
+        tuitionyear_id: vm.id,
+        code: code,
+        label: label,
+        dp_type: dpType,
+        dp_value: dpValue,
+        increase_percent: incPct,
+        installment_count: count,
+        sort_order: sort,
+        is_active: item.is_active ? 1 : 0,
+        level: level
+      };
+
+      TuitionYearsService.addExtra('installment', body)
+        .then(function () {
+          if (window.Swal) Swal.fire({ icon: 'success', title: 'Added' });
+          vm.local = vm.local || {};
+          vm.local.installment = {};
+          loadInstallments();
+        })
+        .catch(function (err) { alertErr(err, 'Add failed'); });
+    }
+
+    function deleteInstallment(id) {
+      if (!id || vm.form.final === 1) return;
+      var doDelete = function () {
+        TuitionYearsService.deleteExtra('installment', id)
+          .then(function (res) {
+            // If API returns {success:false} with 422, it's caught; here assume success
+            if (window.Swal) Swal.fire({ icon: 'success', title: 'Deleted' });
+            loadInstallments();
+          })
+          .catch(function (err) {
+            var msg = (err && err.data && err.data.message) || (err && err.message) || 'Delete failed';
+            if (window.Swal) Swal.fire({ icon: 'error', title: 'Cannot delete', text: msg });
+          });
+      };
+      if (window.Swal) {
+        Swal.fire({
+          title: 'Delete Installment Plan',
+          text: 'This action cannot be undone. Continue?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Delete'
+        }).then(function (res) {
+          if (!res.isConfirmed) return;
+          doDelete();
+        });
+      } else {
+        if (!confirm('Delete this installment plan?')) return;
+        doDelete();
+      }
+    }
+
+    function startEditInstallment(row) {
+      if (vm.form.final === 1 || !row) return;
+      vm.editing.installmentId = row.id;
+      vm.local = vm.local || {};
+      vm.local.installmentEdit = {
+        code: row.code,
+        label: row.label,
+        dp_type: row.dp_type || 'percent',
+        dp_value: row.dp_value,
+        increase_percent: row.increase_percent,
+        installment_count: row.installment_count,
+        sort_order: row.sort_order || 0,
+        is_active: row.is_active ? 1 : 0,
+        level: row.level || ''
+      };
+    }
+
+    function cancelEditInstallment() {
+      vm.editing.installmentId = null;
+      vm.local = vm.local || {};
+      vm.local.installmentEdit = {};
+    }
+
+    function updateInstallment(id) {
+      if (!id || vm.form.final === 1) return;
+      var e = (vm.local && vm.local.installmentEdit) || {};
+      var code = (e.code || '').trim();
+      var label = (e.label || '').trim();
+      var dpType = (e.dp_type || 'percent').toLowerCase();
+      var dpValue = parseFloat(e.dp_value);
+      var incPct = parseFloat(e.increase_percent);
+      var count = parseInt(e.installment_count, 10);
+      var sort = parseInt(e.sort_order, 10);
+      var level = (e.level || '').toLowerCase();
+
+      if (!code || !label) {
+        if (window.Swal) Swal.fire({ icon: 'error', title: 'Code and Label are required' });
+        return;
+      }
+      if (dpType !== 'percent' && dpType !== 'fixed') dpType = 'percent';
+      if (isNaN(dpValue) || dpValue < 0) dpValue = 0;
+      if (dpType === 'percent' && dpValue > 100) dpValue = 100;
+      if (isNaN(incPct) || incPct < 0) incPct = 0;
+      if (isNaN(count) || count < 1) count = 1;
+      if (isNaN(sort)) sort = 0;
+      if (['college','shs','both'].indexOf(level) === -1) level = '';
+
+      var payload = {
+        code: code,
+        label: label,
+        dp_type: dpType,
+        dp_value: dpValue,
+        increase_percent: incPct,
+        installment_count: count,
+        is_active: e.is_active ? 1 : 0,
+        sort_order: sort,
+        level: level
+      };
+
+      TuitionYearsService.updateExtra('installment', id, payload)
+        .then(function () {
+          if (window.Swal) Swal.fire({ icon: 'success', title: 'Updated' });
+          vm.editing.installmentId = null;
+          loadInstallments();
+        })
+        .catch(function (err) { alertErr(err, 'Update failed'); });
     }
 
     // Helpers

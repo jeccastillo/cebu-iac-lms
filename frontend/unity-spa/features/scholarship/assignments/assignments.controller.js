@@ -28,7 +28,8 @@
     'ScholarshipAssignmentsService',
     'ScholarshipsService',
     'ToastService',
-    'StudentsService'
+    'StudentsService',
+    'ConfirmService'
   ];
 
   function ScholarshipAssignmentsController(
@@ -39,7 +40,8 @@
     ScholarshipAssignmentsService,
     ScholarshipsService,
     ToastService,
-    StudentsService
+    StudentsService,
+    ConfirmService
   ) {
     var vm = this;
 
@@ -347,14 +349,66 @@
       vm.applying = true;
       vm.error = null;
 
-      ScholarshipAssignmentsService.apply(ids)
-        .then(function () {
-          return loadItems();
+      // First attempt without force; backend may respond with confirm_required
+      ScholarshipAssignmentsService.apply(ids, false)
+        .then(function (res) {
+          // unwrap payload shapes: { success, data: {...} } or direct {...}
+          var payload = (res && res.data) ? res.data : res;
+          var data = (payload && payload.data) ? payload.data : payload;
+
+          if (data && data.confirm_required) {
+            // Build rich confirmation content
+            var groups = Array.isArray(data.groups) ? data.groups : [];
+            var htmlLines = [];
+            htmlLines.push('<div style="text-align:left;">');
+            htmlLines.push('<p>Applying the selected discounts will exceed the remaining amount for some student(s):</p>');
+            if (groups.length) {
+              htmlLines.push('<ul style="margin-left:1rem;list-style:disc;">');
+              groups.forEach(function (g, idx) {
+                var sid = g.student_id, syid = g.syid;
+                var rem = Number(g.remaining || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                var prev = Number(g.preview_total || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                var over = Number(g.will_overpay_by || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                htmlLines.push(
+                  '<li><strong>StudentID ' + sid + '</strong> • Term ' + syid +
+                  ' — Remaining: ₱' + rem + ', Applying: ₱' + prev + ', <span style="color:#b91c1c;">Over by: ₱' + over + '</span></li>'
+                );
+              });
+              htmlLines.push('</ul>');
+            }
+            htmlLines.push('<p style="margin-top:0.5rem;">Do you want to proceed anyway? This will apply the discounts and save a new tuition snapshot.</p>');
+            htmlLines.push('</div>');
+            var htmlMsg = htmlLines.join('');
+
+            return ConfirmService.confirm({
+              title: 'Confirm apply discounts',
+              html: htmlMsg,
+              icon: 'warning',
+              confirmText: 'Proceed',
+              cancelText: 'Cancel',
+              showCancel: true
+            }).then(function (confirmed) {
+              if (!confirmed) {
+                notify('warn', 'Action cancelled.');
+                return null;
+              }
+              // Proceed with force
+              return ScholarshipAssignmentsService.apply(ids, true)
+                .then(function () {
+                  notify('success', 'Assignments applied.');
+                  return loadItems();
+                });
+            });
+          } else {
+            notify('success', 'Assignments applied.');
+            return loadItems();
+          }
         })
         .catch(function (e) {
           console.error('Apply failed:', e);
           vm.error = (e && e.data && e.data.message) ? e.data.message : 'Failed to apply assignments';
           notify('error', vm.error);
+          return null;
         })
         .finally(function () {
           vm.applying = false;

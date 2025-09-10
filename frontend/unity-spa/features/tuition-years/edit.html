@@ -1,4 +1,4 @@
-<div class="p-6" ng-init="vm.local = { misc: {}, lab: {}, track: {}, program: {}, elective: {} }">
+<div class="p-6" ng-init="vm.local = { misc: {}, lab: {}, track: {}, program: {}, elective: {}, installment: {} }">
   <div class="flex items-center justify-between mb-4">
     <h1 class="text-xl font-semibold text-gray-900">Edit Tuition Year #{{ vm.id }}</h1>
 
@@ -603,6 +603,186 @@
             <button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded"
                     ng-click="vm.addElective(vm.local.elective)">
               Add Elective Rate
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Installment Plans -->
+      <section>
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-lg font-semibold text-gray-900">Installment Plans</h2>
+        </div>
+
+        <div class="overflow-x-auto border rounded">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Code</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Label</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">DP Type</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">DP Value</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Increase %</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Installments</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Level</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Sort</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Active</th>
+                <th class="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200" ng-if="(vm.installments || []).length > 0">
+              <tr ng-repeat-start="p in vm.installments track by p.id">
+                <td class="px-3 py-2 text-sm text-gray-700">{{ p.code }}</td>
+                <td class="px-3 py-2 text-sm text-gray-700">{{ p.label }}</td>
+                <td class="px-3 py-2 text-sm text-gray-700">{{ p.dp_type || 'percent' }}</td>
+                <td class="px-3 py-2 text-sm text-gray-700">{{ p.dp_value }}</td>
+                <td class="px-3 py-2 text-sm text-gray-700">{{ p.increase_percent }}</td>
+                <td class="px-3 py-2 text-sm text-gray-700">{{ p.installment_count }}</td>
+                <td class="px-3 py-2 text-sm text-gray-700">{{ p.level || '' }}</td>
+                <td class="px-3 py-2 text-sm text-gray-700">{{ p.sort_order || 0 }}</td>
+                <td class="px-3 py-2 text-sm text-gray-700">
+                  <span ng-class="{'text-green-700': (p.is_active==1||p.is_active===true), 'text-gray-500': !(p.is_active==1||p.is_active===true)}">
+                    {{ (p.is_active==1||p.is_active===true) ? 'Yes' : 'No' }}
+                  </span>
+                </td>
+                <td class="px-3 py-2 text-sm text-right">
+                  <button ng-if="vm.form.final !== 1"
+                          ng-click="vm.startEditInstallment(p)"
+                          class="px-2 py-1 text-xs bg-white border border-blue-300 text-blue-700 rounded hover:bg-blue-50 mr-2">
+                    Edit
+                  </button>
+                  <button ng-if="vm.form.final !== 1"
+                          ng-click="vm.deleteInstallment(p.id)"
+                          class="px-2 py-1 text-xs bg-white border border-red-300 text-red-700 rounded hover:bg-red-50"
+                          ng-disabled="p.used_count > 0">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+              <tr ng-repeat-end ng-if="vm.form.final !== 1 && vm.editing.installmentId == p.id">
+                <td colspan="10" class="bg-gray-50 px-3 py-3">
+                  <div class="grid grid-cols-1 md:grid-cols-10 gap-3">
+                    <div>
+                      <label class="block text-xs font-medium text-gray-600">Code</label>
+                      <input type="text" class="mt-1 block w-full border rounded px-3 py-2"
+                             ng-model="vm.local.installmentEdit.code" placeholder="code">
+                    </div>
+                    <div class="md:col-span-2">
+                      <label class="block text-xs font-medium text-gray-600">Label</label>
+                      <input type="text" class="mt-1 block w-full border rounded px-3 py-2"
+                             ng-model="vm.local.installmentEdit.label" placeholder="Label">
+                    </div>
+                    <div>
+                      <label class="block text-xs font-medium text-gray-600">DP Type</label>
+                      <select class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.installmentEdit.dp_type">
+                        <option value="percent">Percent</option>
+                        <option value="fixed">Fixed</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block text-xs font-medium text-gray-600">DP Value</label>
+                      <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2"
+                             ng-model="vm.local.installmentEdit.dp_value">
+                    </div>
+                    <div>
+                      <label class="block text-xs font-medium text-gray-600">Increase %</label>
+                      <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2"
+                             ng-model="vm.local.installmentEdit.increase_percent">
+                    </div>
+                    <div>
+                      <label class="block text-xs font-medium text-gray-600">Installments</label>
+                      <input type="number" step="1" class="mt-1 block w-full border rounded px-3 py-2"
+                             ng-model="vm.local.installmentEdit.installment_count">
+                    </div>
+                    <div>
+                      <label class="block text-xs font-medium text-gray-600">Level</label>
+                      <select class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.installmentEdit.level">
+                        <option value=""></option>
+                        <option value="college">College</option>
+                        <option value="shs">SHS</option>
+                        <option value="both">Both</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block text-xs font-medium text-gray-600">Sort</label>
+                      <input type="number" step="1" class="mt-1 block w-full border rounded px-3 py-2"
+                             ng-model="vm.local.installmentEdit.sort_order">
+                    </div>
+                    <div class="flex items-center">
+                      <label class="block text-xs font-medium text-gray-600 mr-2">Active</label>
+                      <input type="checkbox" class="mt-2" ng-model="vm.local.installmentEdit.is_active" ng-true-value="1" ng-false-value="0">
+                    </div>
+                  </div>
+                  <div class="mt-3 flex items-center space-x-2">
+                    <button class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded"
+                            ng-click="vm.updateInstallment(p.id)">
+                      Save
+                    </button>
+                    <button class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs rounded border"
+                            ng-click="vm.cancelEditInstallment()">
+                      Cancel
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody ng-if="!vm.loading && (vm.installments || []).length === 0">
+              <tr><td colspan="10" class="px-3 py-4 text-center text-sm text-gray-500">No installment plans</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-3" ng-if="vm.form.final !== 1">
+          <div class="grid grid-cols-1 md:grid-cols-10 gap-3">
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Code</label>
+              <input type="text" class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.installment.code" placeholder="code">
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700">Label</label>
+              <input type="text" class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.installment.label" placeholder="Label">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">DP Type</label>
+              <select class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.installment.dp_type">
+                <option value="percent">Percent</option>
+                <option value="fixed">Fixed</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">DP Value</label>
+              <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.installment.dp_value">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Increase %</label>
+              <input type="number" step="0.01" class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.installment.increase_percent">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Installments</label>
+              <input type="number" step="1" class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.installment.installment_count">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Level</label>
+              <select class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.installment.level">
+                <option value=""></option>
+                <option value="college">College</option>
+                <option value="shs">SHS</option>
+                <option value="both">Both</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Sort</label>
+              <input type="number" step="1" class="mt-1 block w-full border rounded px-3 py-2" ng-model="vm.local.installment.sort_order">
+            </div>
+            <div class="flex items-center">
+              <label class="block text-sm font-medium text-gray-700 mr-2">Active</label>
+              <input type="checkbox" class="mt-2" ng-model="vm.local.installment.is_active" ng-true-value="1" ng-false-value="0">
+            </div>
+          </div>
+          <div class="mt-3">
+            <button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded"
+                    ng-click="vm.addInstallment(vm.local.installment)">
+              Add Installment Plan
             </button>
           </div>
         </div>

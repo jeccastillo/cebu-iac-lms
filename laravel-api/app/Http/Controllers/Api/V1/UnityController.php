@@ -881,6 +881,18 @@ class UnityController extends Controller
             $money = function ($x) {
                 return number_format((float)($x ?? 0), 2);
             };
+            $fmtNeg = function ($x) use ($money) {
+                $v = (float)($x ?? 0);
+                return $v > 0 ? ('-' . $money($v)) : $money(0);
+            };
+            $scaled = function ($amount, $basis, $mult) {
+                $amt = (float)($amount ?? 0);
+                $b = strtolower((string)($basis ?? ''));
+                if (in_array($b, ['tuition','lab'], true)) {
+                    return round($amt * $mult, 2);
+                }
+                return round($amt, 2);
+            };
 
             $items = is_array($breakdown['items'] ?? null) ? $breakdown['items'] : [];
             $miscItems = is_array($items['misc'] ?? null) ? $items['misc'] : [];
@@ -891,6 +903,35 @@ class UnityController extends Controller
             }
 
             $inst = is_array($summary['installments'] ?? null) ? $summary['installments'] : [];
+
+            // Resolve first two active dynamic plans (fallback to legacy 50/30 labels and increases)
+            $plans = is_array($inst) && isset($inst['plans']) && is_array($inst['plans']) ? $inst['plans'] : [];
+            $p1 = isset($plans[0]) ? $plans[0] : null;
+            $p2 = isset($plans[1]) ? $plans[1] : null;
+
+            $plan1Label = $p1 && !empty($p1['label']) ? strtoupper((string)$p1['label']) : '50% DOWN PAYMENT';
+            $plan2Label = $p2 && !empty($p2['label']) ? strtoupper((string)$p2['label']) : '30% DOWN PAYMENT';
+
+            $p1Inc = (float) ($p1['increase_percent'] ?? 9.0);
+            $p2Inc = (float) ($p2['increase_percent'] ?? 15.0);
+
+            $p1DP = (float) ($p1['down_payment'] ?? ($inst['down_payment50'] ?? 0));
+            $p2DP = (float) ($p2['down_payment'] ?? ($inst['down_payment30'] ?? 0));
+
+            $p1Fee = (float) ($p1['installment_fee'] ?? ($inst['installment_fee50'] ?? 0));
+            $p2Fee = (float) ($p2['installment_fee'] ?? ($inst['installment_fee30'] ?? 0));
+
+            $p1Total = (float) ($p1['total_installment'] ?? ($inst['total_installment50'] ?? 0));
+            $p2Total = (float) ($p2['total_installment'] ?? ($inst['total_installment30'] ?? 0));
+
+            $p1Count = (int) ($p1['installment_count'] ?? 5);
+            $p2Count = (int) ($p2['installment_count'] ?? 5);
+            $maxShow = min(5, max($p1Count, $p2Count));
+
+            // Helper: apply increase on Tuition/Lab only
+            $applyInc = function (float $base, float $incPercent): float {
+                return round($base + ($base * max(0.0, $incPercent) / 100.0), 2);
+            };
 
             // Column headers
             $colX = [5, 25, 55, 83, 113,153,163,188]; // FULL, 50%, 30%
@@ -941,10 +982,10 @@ class UnityController extends Controller
             $pdf->Cell($colW[1], $lineH, 'FULL PAYMENT', 0, 0, 'R');
 
             $pdf->SetXY($colX[2], $ay + 5);
-            $pdf->Cell($colW[2], $lineH, '50% DOWN PAYMENT', 0, 0, 'R');
+            $pdf->Cell($colW[2], $lineH, $plan1Label, 0, 0, 'R');
 
             $pdf->SetXY($colX[3], $ay + 5);
-            $pdf->Cell($colW[3], $lineH, '30% DOWN PAYMENT', 0, 1, 'R');
+            $pdf->Cell($colW[3], $lineH, $plan2Label, 0, 1, 'R');
 
             // Column rows
             $pdf->SetFont('Helvetica', '', 7);
@@ -956,9 +997,9 @@ class UnityController extends Controller
             $pdf->SetXY($colX[1], $y);
             $pdf->Cell($colW[1], $lineH, $money($summary['tuition'] ?? 0), 0, 1, 'R');                  
             $pdf->SetXY($colX[2], $y);
-            $pdf->Cell($colW[2], $lineH, $money(($summary['tuition'] + ($summary['tuition'] * 0.09)) ?? 0), 0, 1, 'R');
+            $pdf->Cell($colW[2], $lineH, $money($applyInc((float)($summary['tuition'] ?? 0), $p1Inc)), 0, 1, 'R');
             $pdf->SetXY($colX[3], $y);
-            $pdf->Cell($colW[3], $lineH, $money(($summary['tuition'] + ($summary['tuition'] * 0.15)) ?? 0), 0, 1, 'R');            
+            $pdf->Cell($colW[3], $lineH, $money($applyInc((float)($summary['tuition'] ?? 0), $p2Inc)), 0, 1, 'R');
             // ROW 2
             $y += $lineH;
             $pdf->SetXY($colX[0], $y);
@@ -966,9 +1007,9 @@ class UnityController extends Controller
             $pdf->SetXY($colX[1], $y);
             $pdf->Cell($colW[1], $lineH, $money($summary['lab_total'] ?? 0), 0, 1, 'R');                  
             $pdf->SetXY($colX[2], $y);
-            $pdf->Cell($colW[2], $lineH, $money(($summary['lab_total'] + ($summary['lab_total'] * 0.09)) ?? 0), 0, 1, 'R');
+            $pdf->Cell($colW[2], $lineH, $money($applyInc((float)($summary['lab_total'] ?? 0), $p1Inc)), 0, 1, 'R');
             $pdf->SetXY($colX[3], $y);
-            $pdf->Cell($colW[3], $lineH, $money(($summary['lab_total'] + ($summary['lab_total'] * 0.15)) ?? 0), 0, 1, 'R');
+            $pdf->Cell($colW[3], $lineH, $money($applyInc((float)($summary['lab_total'] ?? 0), $p2Inc)), 0, 1, 'R');
             // ROW 3
             $y += $lineH;
             $pdf->SetXY($colX[0], $y);
@@ -991,6 +1032,65 @@ class UnityController extends Controller
                 $pdf->SetXY($colX[3], $y);
                 $pdf->Cell($colW[3], $lineH, $money(($newStudentTotal ) ?? 0), 0, 1, 'R');
             }
+
+            // Scholarships and Discounts rows
+            try {
+                $schLines = [];
+                $discLines = [];
+                if (isset($items['scholarships']) && is_array($items['scholarships'])) {
+                    $schLines = $items['scholarships'];
+                }
+                if (isset($items['discounts']) && is_array($items['discounts'])) {
+                    $discLines = $items['discounts'];
+                }
+
+                $rowsToDraw = [];
+
+                // scholarships first
+                foreach ($schLines as $ln) {
+                    if (!is_array($ln)) { continue; }
+                    $label = (string)($ln['name'] ?? '');
+                    $basis = $ln['basis'] ?? '';
+                    $fullAmt = (float)($ln['amount'] ?? 0);
+                    if ($fullAmt <= 0) { continue; }
+                    $a50 = $scaled($fullAmt, $basis, 1.09);
+                    $a30 = $scaled($fullAmt, $basis, 1.15);
+                    $rowsToDraw[] = ['label' => $label, 'f' => $fullAmt, 'a50' => $a50, 'a30' => $a30];
+                }
+                // then discounts
+                foreach ($discLines as $ln) {
+                    if (!is_array($ln)) { continue; }
+                    $label = (string)($ln['name'] ?? '');
+                    $basis = $ln['basis'] ?? '';
+                    $fullAmt = (float)($ln['amount'] ?? 0);
+                    if ($fullAmt <= 0) { continue; }
+                    $a50 = $scaled($fullAmt, $basis, 1.09);
+                    $a30 = $scaled($fullAmt, $basis, 1.15);
+                    $rowsToDraw[] = ['label' => $label, 'f' => $fullAmt, 'a50' => $a50, 'a30' => $a30];
+                }
+
+                if (!empty($rowsToDraw)) {
+                    $y += $lineH;
+                    foreach ($rowsToDraw as $r) {
+                        $y += $lineH;
+                        $pdf->SetXY($colX[0], $y);
+                        $pdf->Cell($colW[0], $lineH, (string)$r['label'], 0, 1, 'L');
+
+                        $pdf->SetXY($colX[1], $y);
+                        $pdf->Cell($colW[1], $lineH, $fmtNeg($r['f']), 0, 1, 'R');
+
+                        $pdf->SetXY($colX[2], $y);
+                        $pdf->Cell($colW[2], $lineH, $fmtNeg($r['a50']), 0, 1, 'R');
+
+                        $pdf->SetXY($colX[3], $y);
+                        $pdf->Cell($colW[3], $lineH, $fmtNeg($r['a30']), 0, 1, 'R');
+                    }
+                    $y += $lineH;
+                }
+            } catch (\Throwable $e) {
+                // ignore scholarship/discount rows on error
+            }
+            
             // ROW 5
             $pdf->SetFont('Helvetica', 'B', 7);
             $y += $lineH;
@@ -1009,31 +1109,29 @@ class UnityController extends Controller
             $pdf->SetXY($colX[0], $y);
             $pdf->Cell($colW[0], $lineH, 'DOWN PAYMENT', 0, 1, 'L');
             $pdf->SetXY($colX[2], $y);
-            $pdf->Cell($colW[2], $lineH, $inst['down_payment50'], 0, 1, 'R');
+            $pdf->Cell($colW[2], $lineH, $money($p1DP), 0, 1, 'R');
             $pdf->SetXY($colX[3], $y);
-            $pdf->Cell($colW[3], $lineH, $inst['down_payment30'], 0, 1, 'R');
+            $pdf->Cell($colW[3], $lineH, $money($p2DP), 0, 1, 'R');
             $y += $lineH;
             // INSTALLMENT ROWS
             $labels = ['1st INSTALLMENT','2nd INSTALLMENT','3rd INSTALLMENT','4th INSTALLMENT','5th INSTALLMENT'];
-            $ifee30 = (float)($inst['installment_fee30'] ?? 0);
-            $ifee50 = (float)($inst['installment_fee50'] ?? 0);
-            foreach ($labels as $lbl) {
+            for ($i = 0; $i < $maxShow; $i++) {
+                $lbl = $labels[$i] ?? ('Installment ' . ($i + 1));
                 $pdf->SetXY($colX[0], $y);
                 $pdf->Cell($colW[0], $lineH, $lbl, 0, 1, 'L');
                 $pdf->SetXY($colX[1], $y);
                 $pdf->Cell($colW[1], $lineH, '', 0, 1, 'R');
                 $pdf->SetXY($colX[2], $y);
-                $pdf->Cell($colW[2], $lineH, $money($ifee50), 0, 1, 'R');
+                $pdf->Cell($colW[2], $lineH, $money(($i < $p1Count) ? $p1Fee : 0), 0, 1, 'R');
                 $pdf->SetXY($colX[3], $y);
-                $pdf->Cell($colW[3], $lineH, $money($ifee30), 0, 1, 'R');
+                $pdf->Cell($colW[3], $lineH, $money(($i < $p2Count) ? $p2Fee : 0), 0, 1, 'R');
                 $y += $lineH;
-
             }
             $pdf->SetFont('Helvetica', 'BU', 7);
             $pdf->SetXY($colX[2], $y);
-            $pdf->Cell($colW[2], $lineH, $inst['total_installment50'], 0, 1, 'R');
+            $pdf->Cell($colW[2], $lineH, $money($p1Total), 0, 1, 'R');
             $pdf->SetXY($colX[3], $y);
-            $pdf->Cell($colW[3], $lineH, $inst['total_installment30'], 0, 1, 'R');
+            $pdf->Cell($colW[3], $lineH, $money($p2Total), 0, 1, 'R');
             $pdf->SetFont('Helvetica', '', 7);                        
 
            

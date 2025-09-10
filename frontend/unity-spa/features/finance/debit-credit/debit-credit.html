@@ -1,0 +1,238 @@
+<div class="container mx-auto p-4" ng-cloak>
+  <div class="flex items-center justify-between mb-4">
+    <h1 class="text-xl font-semibold text-gray-900">Finance > Debit / Credit</h1>
+    <div class="text-sm text-gray-600" ng-if="vm.termLabel">
+      Current Term: <span class="font-medium">{{ vm.termLabel }}</span>
+    </div>
+  </div>
+
+  <!-- Access guard notice -->
+  <div class="mb-4" ng-if="!vm.canEdit">
+    <div class="p-3 border border-yellow-300 bg-yellow-50 text-yellow-800 rounded">
+      You do not have permission to modify finance entries. View-only mode.
+    </div>
+  </div>
+
+  <!-- Student selector -->
+  <div class="bg-white border border-gray-200 rounded p-4 mb-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+      <div>
+        <label class="block text-sm text-gray-700 mb-1">Search Student</label>
+        <input
+          type="text"
+          class="w-full border border-gray-300 rounded px-3 py-2"
+          placeholder="Type name or student number"
+          ng-model="vm.studentQuery"
+          ng-change="vm.onStudentQuery(vm.studentQuery)"
+        />
+        <div class="text-xs text-red-600 mt-1" ng-if="vm.error.students">{{ vm.error.students }}</div>
+      </div>
+      <div>
+        <label class="block text-sm text-gray-700 mb-1">Results</label>
+        <select class="w-full border border-gray-300 rounded px-3 py-2"
+                ng-options="s as (s.student_number + ' - ' + s.last_name + ', ' + s.first_name) for s in vm.students track by s.id"
+                ng-model="vm.selectedStudent"
+                ng-change="vm.onStudentSelected(vm.selectedStudent)">
+          <option value="">-- Select student --</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm text-gray-700 mb-1">Selected</label>
+        <div class="px-3 py-2 border border-gray-200 rounded bg-gray-50 min-h-[42px]">
+          <span ng-if="vm.selectedStudent">
+            {{ vm.selectedStudent.student_number }} - {{ vm.selectedStudent.last_name }}, {{ vm.selectedStudent.first_name }}
+          </span>
+          <span ng-if="!vm.selectedStudent" class="text-gray-400">No student selected</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Forms -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" ng-class="{'opacity-50 pointer-events-none': !vm.selectedStudent || !vm.term}">
+    <!-- Debit -->
+    <div class="bg-white border border-gray-200 rounded p-4">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-lg font-medium text-gray-800">Debit (Increase balance)</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm text-gray-700 mb-1">Amount</label>
+          <input type="number" min="0.01" step="0.01" class="w-full border border-gray-300 rounded px-3 py-2"
+                 ng-model="vm.debit.amount"/>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-700 mb-1">Posted At (optional)</label>
+          <input type="text" class="w-full border border-gray-300 rounded px-3 py-2"
+                 placeholder="YYYY-MM-DD HH:mm:ss"
+                 ng-model="vm.debit.posted_at"/>
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm text-gray-700 mb-1">Description</label>
+          <input type="text" class="w-full border border-gray-300 rounded px-3 py-2"
+                 placeholder="e.g., Tuition Adjustment"
+                 ng-model="vm.debit.description"/>
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm text-gray-700 mb-1">Remarks (optional)</label>
+          <input type="text" class="w-full border border-gray-300 rounded px-3 py-2"
+                 placeholder="DEBIT ADJUSTMENT"
+                 ng-model="vm.debit.remarks"/>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-700 mb-1">Method (optional)</label>
+          <select class="w-full border border-gray-300 rounded px-3 py-2"
+                  ng-model="vm.debit.method"
+                  ng-options="m for m in vm.methodOptions">
+            <option value="">-- Select --</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-700 mb-1">Mode of Payment (optional)</label>
+          <select class="w-full border border-gray-300 rounded px-3 py-2"
+                  ng-model="vm.debit.mode_of_payment_id"
+                  ng-options="m.id as m.name for m in vm.paymentModes">
+            <option value="">-- Select --</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-700 mb-1">Invoice (optional)</label>
+          <select class="w-full border border-gray-300 rounded px-3 py-2"
+                  ng-model="vm.debit.invoice_id"
+                  ng-change="vm.onDebitInvoiceSelected()"
+                  ng-options="i.id as ( (i.invoice_number || i.number) + ' - ' + (i.type || 'invoice') ) for i in vm.invoices">
+            <option value="">-- None --</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-700 mb-1">Invoice Number (fallback)</label>
+          <input type="number" class="w-full border border-gray-300 rounded px-3 py-2"
+                 ng-model="vm.debit.invoice_number" placeholder="e.g., 800001"/>
+        </div>
+      </div>
+      <div class="mt-4">
+        <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+                ng-disabled="!vm.canSubmitDebit()"
+                ng-click="vm.submitDebit()">
+          <span ng-if="!vm.loading.postDebit">Post Debit</span>
+          <span ng-if="vm.loading.postDebit">Posting...</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Credit -->
+    <div class="bg-white border border-gray-200 rounded p-4">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-lg font-medium text-gray-800">Credit (Decrease balance)</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm text-gray-700 mb-1">Amount</label>
+          <input type="number" min="0.01" step="0.01" class="w-full border border-gray-300 rounded px-3 py-2"
+                 ng-model="vm.credit.amount"/>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-700 mb-1">Posted At (optional)</label>
+          <input type="text" class="w-full border border-gray-300 rounded px-3 py-2"
+                 placeholder="YYYY-MM-DD HH:mm:ss"
+                 ng-model="vm.credit.posted_at"/>
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm text-gray-700 mb-1">Description</label>
+          <input type="text" class="w-full border border-gray-300 rounded px-3 py-2"
+                 placeholder="e.g., Tuition Payment Adjustment"
+                 ng-model="vm.credit.description"/>
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm text-gray-700 mb-1">Remarks (optional)</label>
+          <input type="text" class="w-full border border-gray-300 rounded px-3 py-2"
+                 placeholder="CREDIT ADJUSTMENT"
+                 ng-model="vm.credit.remarks"/>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-700 mb-1">Method (optional)</label>
+          <select class="w-full border border-gray-300 rounded px-3 py-2"
+                  ng-model="vm.credit.method"
+                  ng-options="m for m in vm.methodOptions">
+            <option value="">-- Select --</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-700 mb-1">Mode of Payment (optional)</label>
+          <select class="w-full border border-gray-300 rounded px-3 py-2"
+                  ng-model="vm.credit.mode_of_payment_id"
+                  ng-options="m.id as m.name for m in vm.paymentModes">
+            <option value="">-- Select --</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-700 mb-1">Invoice (optional)</label>
+          <select class="w-full border border-gray-300 rounded px-3 py-2"
+                  ng-model="vm.credit.invoice_id"
+                  ng-change="vm.onCreditInvoiceSelected()"
+                  ng-options="i.id as ( (i.invoice_number || i.number) + ' - ' + (i.type || 'invoice') ) for i in vm.invoices">
+            <option value="">-- None --</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-700 mb-1">Invoice Number (fallback)</label>
+          <input type="number" class="w-full border border-gray-300 rounded px-3 py-2"
+                 ng-model="vm.credit.invoice_number" placeholder="e.g., 800001"/>
+        </div>
+        <div class="md:col-span-2 flex items-center space-x-2">
+          <input id="enforceRem" type="checkbox" class="h-4 w-4"
+                 ng-model="vm.credit.enforce_invoice_remaining" />
+          <label for="enforceRem" class="text-sm text-gray-700">Enforce not exceeding invoice remaining</label>
+        </div>
+      </div>
+      <div class="mt-4">
+        <button class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
+                ng-disabled="!vm.canSubmitCredit()"
+                ng-click="vm.submitCredit()">
+          <span ng-if="!vm.loading.postCredit">Post Credit</span>
+          <span ng-if="vm.loading.postCredit">Posting...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Current Term Payment Details -->
+  <div class="bg-white border border-gray-200 rounded p-4 mt-6" ng-if="vm.paymentDetails && vm.paymentDetails.items">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-md font-medium text-gray-800">Payment Details (Current Term)</h3>
+      <div class="text-sm text-gray-500" ng-if="vm.paymentDetails.meta">
+        Paid (filtered): <span class="font-medium">{{ vm.currency(vm.paymentDetails.meta.total_paid_filtered) }}</span>
+      </div>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="min-w-full text-sm">
+        <thead>
+          <tr class="text-left text-gray-600 border-b">
+            <th class="px-2 py-2">Date</th>
+            <th class="px-2 py-2">Description</th>
+            <th class="px-2 py-2">Status</th>
+            <th class="px-2 py-2">Invoice #</th>
+            <th class="px-2 py-2">OR #</th>
+            <th class="px-2 py-2 text-right">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="r in vm.paymentDetails.items" class="border-b">
+            <td class="px-2 py-2">{{ r.or_date || r.posted_at || '-' }}</td>
+            <td class="px-2 py-2">{{ r.description }}</td>
+            <td class="px-2 py-2">{{ r.status || '-' }}</td>
+            <td class="px-2 py-2">{{ r.invoice_number || '-' }}</td>
+            <td class="px-2 py-2">{{ r.or_no || '-' }}</td>
+            <td class="px-2 py-2 text-right"
+                ng-class="{'text-red-600': (r.subtotal_order < 0), 'text-gray-900': (r.subtotal_order >= 0)}">
+              {{ vm.currency(r.subtotal_order) }}
+            </td>
+          </tr>
+          <tr ng-if="!vm.paymentDetails.items.length">
+            <td colspan="6" class="px-2 py-2 text-center text-gray-500">No payment details found for current term.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

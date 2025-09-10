@@ -92,6 +92,25 @@ class TuitionYearController extends Controller
     }
 
     /**
+     * GET /api/v1/tuition-years/{id}/installments
+     * Returns active installment plans (tb_mas_tuition_year_installment).
+     */
+    public function installments($id)
+    {
+        $data = DB::table('tb_mas_tuition_year_installment')
+            ->where('tuitionyear_id', $id)
+            ->where('is_active', 1)
+            ->orderBy('sort_order')
+            ->orderBy('code')
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'data'    => $data,
+        ]);
+    }
+
+    /**
      * GET /api/v1/tuition-years/{id}/tracks
      * Returns track/program-specific rates (tb_mas_tuition_year_track joined to tb_mas_programs).
      */
@@ -222,14 +241,14 @@ class TuitionYearController extends Controller
     public function submitExtra(Request $request)
     {
         $type = $request->input('type');
-        if (!in_array($type, ['misc','lab_fee','track','program','elective'])) {
+        if (!in_array($type, ['misc','lab_fee','track','program','elective','installment'])) {
             return response()->json(['success' => false, 'message' => 'Invalid type'], 422);
         }
 
         $table = 'tb_mas_tuition_year_' . $type;
         $data  = $request->except(['type']);
 
-        if (in_array($type, ['track','program','elective'])) {
+        if (in_array($type, ['track','program','elective','installment'])) {
             // expects tuitionyear_id
             if (!$request->has('tuitionyear_id')) {
                 return response()->json(['success' => false, 'message' => 'tuitionyear_id required'], 422);
@@ -260,7 +279,7 @@ class TuitionYearController extends Controller
         $type = $request->input('type');
         $id   = $request->input('id');
 
-        if (!in_array($type, ['misc','lab_fee','track','program','elective'])) {
+        if (!in_array($type, ['misc','lab_fee','track','program','elective','installment'])) {
             return response()->json(['success' => false, 'message' => 'Invalid type'], 422);
         }
         if (!$id) {
@@ -268,7 +287,18 @@ class TuitionYearController extends Controller
         }
 
         $table = 'tb_mas_tuition_year_' . $type;
-        $pk    = in_array($type, ['track','program','elective']) ? 'id' : 'intID';
+        $pk    = in_array($type, ['track','program','elective','installment']) ? 'id' : 'intID';
+
+        // Prevent deleting an installment plan that is in use by any registration
+        if ($type === 'installment') {
+            $inUse = DB::table('tb_mas_registration')->where('tuition_installment_plan_id', $id)->count();
+            if ($inUse > 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Cannot delete: installment plan is in use by ' . (int)$inUse . ' registration(s).'
+                ], 422);
+            }
+        }
 
         DB::table($table)->where($pk, $id)->delete();
 
@@ -428,7 +458,7 @@ class TuitionYearController extends Controller
         $tableType = $request->input('xtype', $request->input('type'));
         $id        = $request->input('id');
 
-        if (!in_array($tableType, ['misc','lab_fee','track','program','elective'])) {
+        if (!in_array($tableType, ['misc','lab_fee','track','program','elective','installment'])) {
             return response()->json(['success' => false, 'message' => 'Invalid type'], 422);
         }
         if (!$id) {
@@ -436,7 +466,7 @@ class TuitionYearController extends Controller
         }
 
         $table = 'tb_mas_tuition_year_' . $tableType;
-        $pk    = in_array($tableType, ['track','program','elective']) ? 'id' : 'intID';
+        $pk    = in_array($tableType, ['track','program','elective','installment']) ? 'id' : 'intID';
 
         // Determine allowed fields per type (prevent FK/PK tampering)
         $allowed = [];
@@ -449,6 +479,8 @@ class TuitionYearController extends Controller
             $allowed = ['track_id','tuition_amount','tuition_amount_online','tuition_amount_hyflex','tuition_amount_hybrid'];
         } elseif ($tableType === 'elective') {
             $allowed = ['subject_id','tuition_amount','tuition_amount_online','tuition_amount_hyflex','tuition_amount_hybrid'];
+        } elseif ($tableType === 'installment') {
+            $allowed = ['code','label','dp_type','dp_value','increase_percent','installment_count','is_active','sort_order','level'];
         }
 
         $payload = $request->only($allowed);

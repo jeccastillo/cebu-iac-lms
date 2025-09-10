@@ -121,6 +121,13 @@
         ).then(_unwrap);
       },
 
+      // GET /tuition-years/{id}/installments
+      listInstallments: function (tuitionYearId) {
+        return $http.get(
+          BASE + '/tuition-years/' + encodeURIComponent(tuitionYearId) + '/installments'
+        ).then(_unwrap);
+      },
+
       // -----------------------------
       // Related entities mutations
       // -----------------------------

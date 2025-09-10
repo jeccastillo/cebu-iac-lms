@@ -89,7 +89,7 @@
                   <option value="">-- select --</option>
                 </select>
               </div>
-              <div>
+              <div ng-if="vm.displayAdminOptions">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Tuition Year</label>
                 <select
                   class="block w-full rounded border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -111,16 +111,7 @@
                   ng-change="vm.onOptionChange()">
                 </select>
               </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Has Downpayment</label>
-                <select
-                  class="block w-full rounded border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  ng-model="vm.edit.downpayment"
-                  ng-options="v.value as v.label for v in [{value:0,label:'No'},{value:1,label:'Yes'}]"
-                  ng-change="vm.onOptionChange()">
-                </select>
-              </div>
-              <div>
+              <div ng-if="vm.displayAdminOptions">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
                 <select
                   class="block w-full rounded border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -174,14 +165,14 @@
             <div ng-if="vm.tuition || vm.tuitionSaved" class="space-y-3">
               <!-- Registered tuition amount, based on payment type -->
               <div>
-                <div class="text-sm text-gray-500">Tuition Amount (Registered)</div>
+                <div class="text-sm text-gray-500">Total Bill</div>
                 <div class="text-lg font-semibold">
                   P{{ vm.currency(
                     (vm.selectedTuitionAmount != null
-                      ? vm.selectedTuitionAmount
+                      ? vm.selectedTuitionAmount + (vm.meta.billing_total || 0)
                       : ((vm.registration && vm.registration.paymentType === 'partial')
-                          ? (vm.tuition.total_installment || 0)
-                          : (vm.tuition.total || 0)))
+                          ? (vm.tuition.total_installment || 0) + (vm.meta.billing_total || 0)
+                          : (vm.tuition.total || 0) + (vm.meta.billing_total || 0) ))
                     ) }}
                 </div>
               </div>
@@ -192,6 +183,13 @@
                   <div>Computed Total (Installment): <strong>P{{ vm.currency(((vm.tuition && vm.tuition.total_installment) || (vm.tuitionSaved && vm.tuitionSaved.payload && vm.tuitionSaved.payload.total_installment) || 0)) }}</strong></div>
                 </div>
                 <div class="space-y-1">
+                  <div>Tuition Amount:<strong> P{{ vm.currency(
+                    (vm.selectedTuitionAmount != null
+                      ? vm.selectedTuitionAmount
+                      : ((vm.registration && vm.registration.paymentType === 'partial')
+                          ? (vm.tuition.total_installment || 0)
+                          : (vm.tuition.total || 0)))
+                    ) }}</strong></div>
                   <div>Billing Total: <strong>P{{ vm.currency(vm.meta.billing_total || 0) }}</strong></div>
                   <div>Amount Paid: <strong class="text-green-600">P{{ vm.currency(vm.paymentDetailsTotal || 0) }}</strong></div>
                   <div>Remaining: <strong class="text-red-600">P{{ vm.currency(vm.meta.remaining_amount || 0) }}</strong></div>
@@ -233,7 +231,7 @@
       <!-- Backdrop -->
       <div class="absolute inset-0 bg-black bg-opacity-50" ng-click="vm.closeTuitionModal()"></div>
       <!-- Dialog -->
-      <div class="relative bg-white rounded-lg shadow-xl w-full max-w-4xl mx-4 max-h-[80vh] overflow-auto"
+      <div class="relative bg-white rounded-lg shadow-xl w-full max-w-6xl mx-4 max-h-[80vh] overflow-auto"
            ng-click="$event.stopPropagation()"
            tabindex="0"
            ng-keydown="$event.keyCode===27 && vm.closeTuitionModal()">
@@ -1087,9 +1085,19 @@
           <div ng-if="vm.canEdit &amp;&amp; vm.shouldShowInstallmentPanel()">
             <div class="px-4 py-2 flex items-center justify-between">
               <strong class="text-emerald-800">Installment Plan</strong>
-              <span class="text-xs text-emerald-700">Partial payment</span>
+              <span class="text-s text-emerald-700">Selected Plan: {{ vm.selectedInstallmentPlanName }}</span>
             </div>
             <div class="p-4" ng-init="firstDue = vm.installmentsFirstDue()">
+              <div class="mb-3">
+                <label class="block text-xs text-gray-600 uppercase mb-1">Select to Change Plan</label>
+                <select
+                  class="block w-full rounded border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                  ng-model="vm.selectedInstallmentPlanId"
+                  ng-options="p.id as (p.label || p.code) for p in vm.installmentPlans track by p.id"
+                  ng-change="vm.onInstallmentPlanChange()">
+                  <option value="">-- select plan --</option>
+                </select>
+              </div>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div class="space-y-1">
                   <div class="text-xs text-gray-600 uppercase">Down Payment</div>
@@ -1109,7 +1117,7 @@
                 </div>
               </div>
               <div class="mt-2">
-                <div class="text-xs text-gray-600 uppercase mb-1">Installments (5x)</div>
+                <div class="text-xs text-gray-600 uppercase mb-1">Installments ({{ (vm.installmentsSummary() &amp;&amp; vm.installmentsSummary().count) || 5 }}x)</div>
                 <ul class="divide-y divide-gray-200 border rounded bg-white">
                   <li class="px-3 py-2 flex items-center justify-between" ng-repeat="it in vm.installmentsList() track by it.key" ng-if="it.key !== 'dp'">
                     <span class="text-gray-700">{{ it.label }}</span>

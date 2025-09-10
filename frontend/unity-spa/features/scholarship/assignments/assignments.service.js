@@ -56,9 +56,11 @@
       },
 
       // PATCH /scholarships/assignments/apply
-      // payload: { ids: number[] }
-      apply: function (ids) {
-        return $http.patch(BASE + '/scholarships/assignments/apply', { ids: ids }, _adminHeaders()).then(_unwrap);
+      // payload: { ids: number[], force?: boolean }
+      apply: function (ids, force) {
+        var payload = { ids: ids };
+        if (typeof force === 'boolean') payload.force = !!force;
+        return $http.patch(BASE + '/scholarships/assignments/apply', payload, _adminHeaders()).then(_unwrap);
       },
 
       // DELETE /scholarships/assignments/{id}

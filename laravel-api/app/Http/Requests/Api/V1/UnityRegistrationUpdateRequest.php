@@ -48,6 +48,7 @@ class UnityRegistrationUpdateRequest extends FormRequest
             'fields.current_program'    => ['sometimes', 'integer', 'exists:tb_mas_programs,intProgramID'],
             'fields.current_curriculum' => ['sometimes', 'integer', 'exists:tb_mas_curriculum,intID'],
             'fields.tuition_year'       => ['sometimes', 'integer', 'exists:tb_mas_tuition_year,intID'],
+            'fields.tuition_installment_plan_id' => ['sometimes', 'nullable', 'integer', 'exists:tb_mas_tuition_year_installment,id'],
 
             'fields.paymentType'      => ['sometimes', 'nullable', 'string', 'max:50'],
             'fields.loa_remarks'      => ['sometimes', 'nullable', 'string', 'max:1000'],
@@ -66,6 +67,7 @@ class UnityRegistrationUpdateRequest extends FormRequest
             'fields.current_program' => 'current program',
             'fields.current_curriculum' => 'current curriculum',
             'fields.tuition_year'    => 'tuition year',
+            'fields.tuition_installment_plan_id' => 'tuition installment plan',
             'fields.paymentType'     => 'payment type',
             'fields.loa_remarks'     => 'LOA remarks',
             'fields.withdrawal_period' => 'withdrawal period',

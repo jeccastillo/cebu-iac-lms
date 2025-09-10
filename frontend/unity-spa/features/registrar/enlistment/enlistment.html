@@ -499,7 +499,15 @@
 
     <div ng-if="!vm.tuitionLoading && vm.tuition" class="space-y-4">
       <!-- Installment Tabs -->
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2" ng-if="vm.tuition &amp;&amp; vm.tuition.summary &amp;&amp; vm.tuition.summary.installments &amp;&amp; vm.tuition.summary.installments.plans &amp;&amp; vm.tuition.summary.installments.plans.length">
+        <button class="px-3 py-1 rounded text-sm"
+                ng-repeat="p in vm.tuition.summary.installments.plans track by p.id"
+                ng-class="{'bg-indigo-600 text-white': vm.selectedInstallmentPlanId===p.id, 'bg-gray-200 text-gray-700': vm.selectedInstallmentPlanId!==p.id}"
+                ng-click="vm.selectedInstallmentPlanId = p.id">
+          {{ p.label || p.code }}
+        </button>
+      </div>
+      <div class="flex items-center gap-2" ng-if="!(vm.tuition &amp;&amp; vm.tuition.summary &amp;&amp; vm.tuition.summary.installments &amp;&amp; vm.tuition.summary.installments.plans &amp;&amp; vm.tuition.summary.installments.plans.length)">
         <button class="px-3 py-1 rounded text-sm"
                 ng-class="{'bg-indigo-600 text-white': vm.installmentTab==='standard', 'bg-gray-200 text-gray-700': vm.installmentTab!=='standard'}"
                 ng-click="vm.selectInstallmentTab('standard')">Standard</button>
@@ -512,37 +520,29 @@
       </div>
 
       <!-- Installment Figures -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm" ng-if="vm.tuition.summary.installments">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm" ng-if="vm.tuition.summary.installments" ng-init="inst = vm.tuition.summary.installments; sp = (inst &amp;&amp; inst.plans &amp;&amp; inst.plans.length) ? ((inst.plans | filter:{id:vm.selectedInstallmentPlanId}:true)[0] || inst.plans[0]) : null">
         <div class="bg-white border rounded p-3">
           <div class="text-gray-500 uppercase text-xs">Down Payment</div>
-          <div class="font-semibold">₱ {{ (vm.installmentData() && vm.installmentData().dp || 0) | number:2 }}</div>
+          <div class="font-semibold">₱ {{ (vm.installmentData() &amp;&amp; vm.installmentData().dp || 0) | number:2 }}</div>
         </div>
         <div class="bg-white border rounded p-3">
-          <div class="text-gray-500 uppercase text-xs">Per-Installment (x5)</div>
-          <div class="font-semibold">₱ {{ (vm.installmentData() && vm.installmentData().fee || 0) | number:2 }}</div>
+          <div class="text-gray-500 uppercase text-xs">Per-Installment (x{{ (sp &amp;&amp; sp.installment_count) || 5 }})</div>
+          <div class="font-semibold">₱ {{ (vm.installmentData() &amp;&amp; vm.installmentData().fee || 0) | number:2 }}</div>
         </div>
         <div class="bg-white border rounded p-3">
           <div class="text-gray-500 uppercase text-xs">Total Installment</div>
-          <div class="font-semibold">₱ {{ (vm.installmentData() && vm.installmentData().total || 0) | number:2 }}</div>
+          <div class="font-semibold">₱ {{ (vm.installmentData() &amp;&amp; vm.installmentData().total || 0) | number:2 }}</div>
         </div>
       </div>
       <div class="text-gray-500 text-xs" ng-if="!vm.tuition.summary.installments">
         Installment details unavailable.
       </div>
       <!-- Installment Scheme Notes -->
-      <div class="text-xs text-gray-600" ng-if="vm.tuition.summary.installments">
-        <div ng-if="vm.installmentTab === 'standard'">
-          Note: Standard uses installment increase
-          <span class="font-semibold">{{ (vm.tuition.meta &amp;&amp; vm.tuition.meta.installment_increase_percent) || 0 }}%</span>
+      <div class="text-xs text-gray-600" ng-if="vm.tuition.summary.installments" ng-init="inst = vm.tuition.summary.installments; sp = (inst &amp;&amp; inst.plans &amp;&amp; inst.plans.length) ? ((inst.plans | filter:{id:vm.selectedInstallmentPlanId}:true)[0] || inst.plans[0]) : null">
+        <div>
+          <span class="font-semibold">{{ (sp &amp;&amp; (sp.label || sp.code)) || 'Standard' }}</span> plan increase:
+          <span class="font-semibold">{{ (sp &amp;&amp; sp.increase_percent) || (vm.tuition.meta &amp;&amp; vm.tuition.meta.installment_increase_percent) || 0 }}%</span>
           applied to Tuition and Lab. Misc and Additional are unchanged.
-        </div>
-        <div ng-if="vm.installmentTab === 'dp30'">
-          Note: 30% DP applies increases to Tuition <span class="font-semibold">+15%</span> and Misc
-          <span class="font-semibold">+15%</span>. Lab and Additional are unchanged.
-        </div>
-        <div ng-if="vm.installmentTab === 'dp50'">
-          Note: 50% DP applies increases to Tuition <span class="font-semibold">+9%</span> and Misc
-          <span class="font-semibold">+9%</span>. Lab and Additional are unchanged.
         </div>
       </div>
 

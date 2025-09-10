@@ -330,8 +330,9 @@ class TuitionService
             'new_student'  => $itemsNewStudent,
         ];
 
-        // Installment breakdown (baseline using current partial totals and zero discounts/scholarships)
-        $installments = (new TuitionCalculator())->computeInstallments([
+        // Installment breakdown (legacy baseline and dynamic plans)
+        // Legacy (kept for backward compatibility and dp30/dp50 exposure)
+        $legacyInstallments = (new TuitionCalculator())->computeInstallments([
             'tuition'           => $tuition,
             'lab'               => $labTotal,
             'misc'              => $miscTotal,
@@ -340,7 +341,49 @@ class TuitionService
             'scholarship_total' => $scholarshipTotal,
         ], $tuitionYear, $level, $yearLevel);
 
-        // Attach installment figures under meta for now
+        // Dynamic plans (tb_mas_tuition_year_installment)
+        $totalsForPlans = [
+            'tuition'           => $tuition,
+            'lab'               => $labTotal,
+            'misc'              => $miscTotal,
+            'additional'        => $additionalTotal,
+            'discount_total'    => $discountTotal,
+            'scholarship_total' => $scholarshipTotal,
+        ];
+
+        $planSvc = new InstallmentPlanService();
+        $activePlans = $planSvc->listByTuitionYear((int) $tuitionYearId, $level);
+        $computedPlanList = $planSvc->computeAllPlans($totalsForPlans, $activePlans, $level, $yearLevel);
+
+        $preferredPlanId = isset($registration->tuition_installment_plan_id) ? (int) $registration->tuition_installment_plan_id : null;
+        $selectedPlanId = $planSvc->resolveSelectedPlanId($preferredPlanId, $activePlans);
+
+        // Find selected plan's computed output
+        $selectedPlanOut = null;
+        if (!empty($computedPlanList)) {
+            foreach ($computedPlanList as $cp) {
+                if (isset($cp['id']) && (int)$cp['id'] === (int)$selectedPlanId) {
+                    $selectedPlanOut = $cp;
+                    break;
+                }
+            }
+            if ($selectedPlanOut === null) {
+                $selectedPlanOut = $computedPlanList[0];
+            }
+        }
+
+        // Merge legacy with dynamic and override base fields with selected plan results when available
+        $installments = $legacyInstallments;
+        $installments['selected_plan_id'] = $selectedPlanId;
+        $installments['plans'] = $computedPlanList;
+
+        if (is_array($selectedPlanOut)) {
+            $installments['total_installment'] = (float) ($selectedPlanOut['total_installment'] ?? ($installments['total_installment'] ?? 0));
+            $installments['down_payment']     = (float) ($selectedPlanOut['down_payment'] ?? ($installments['down_payment'] ?? 0));
+            $installments['installment_fee']  = (float) ($selectedPlanOut['installment_fee'] ?? ($installments['installment_fee'] ?? 0));
+        }
+
+        // Attach to summary
         $summary['installments'] = $installments;
 
         // Compute amount paid for this registration from payment_details
@@ -349,22 +392,53 @@ class TuitionService
         $amountPaid = 0.0;        
         try {
             if (Schema::hasTable('payment_details')) {
+                // Base paid amount (cashier + journal credits that happen to match tuition/reservation/billing)
                 $amountPaid = (float) DB::table('payment_details')
                     ->where('student_information_id', $user->intID)
                     ->where('sy_reference', $syid)
                     ->where('status', 'Paid')
                     ->where(function ($q) use ($billingDescriptions) {
                         $q->where('description', 'like', 'Tuition%')
-                          ->orWhere('description', 'like', 'Reservation%');
+                          ->orWhere('description', 'like', 'Reservation%');                                              
                         if (!empty($billingDescriptions)) {
                             $q->orWhereIn('description', array_values(array_unique($billingDescriptions)));
                         }
                     })
                     ->sum('subtotal_order');
+                }
+            } catch (\Throwable $e) {
+                // keep existing amountPaid when journal tables/columns are missing
+            }
+                // Include Payment Journal entries:
+                // - Credit journal entries (status='Paid') flagged via remarks 'CREDIT ADJUSTMENT' and not already counted above
+
+        // Include Payment Journal debit/credit entries into amountPaid
+        try {
+            if (Schema::hasTable('payment_details')) {
+                // Payment Journal debits (negative subtotal_order, status='Journal')
+                $journalDebitSum = (float) DB::table('payment_details')
+                    ->where('student_information_id', $user->intID)
+                    ->where('sy_reference', $syid)
+                    ->where('status', 'Journal')
+                    ->sum('subtotal_order');
+
+                // Payment Journal credits (status='Paid') identified via default remarks flag when available
+                $journalCreditSum = 0.0;
+                if (Schema::hasColumn('payment_details', 'remarks')) {
+                    $journalCreditSum = (float) DB::table('payment_details')
+                        ->where('student_information_id', $user->intID)
+                        ->where('sy_reference', $syid)
+                        ->where('status', 'Paid')
+                        ->where('remarks', 'like', '%CREDIT ADJUSTMENT%')
+                        ->sum('subtotal_order');
+                }
+
+                // Add journal sums to amountPaid (debits are negative, credits positive)                
+                $amountPaid = (float) ($amountPaid + $journalDebitSum + $journalCreditSum);
             }
         } catch (\Throwable $e) {
-            // Silently ignore in environments without the table/columns            
-            $amountPaid = 0.0;
+            // keep existing amountPaid when journal tables/columns are missing
+            echo $e->getMessage();
         }
 
         $meta = [
@@ -380,10 +454,11 @@ class TuitionService
             'level'             => $level,
             // Expose installmentIncrease percent for frontend display (Standard scheme)
             'installment_increase_percent' => (float) ($tuitionYear['installmentIncrease'] ?? 0),
+            // Selected plan id for dynamic installment plans (nullable)
+            'selected_installment_plan_id' => $selectedPlanId ?? null,
             // Amount paid derived from payment_details for this registration
             'amount_paid' => round($amountPaid, 2),
-        ];
-
+        ];        
         // Attach AR fields from discounts/scholarships aggregator (shape-ready)
         $meta['ar'] = $ds['ar'] ?? [];
 
@@ -427,6 +502,29 @@ class TuitionService
             $discountId !== null ? (int) $discountId : null,
             $scholarshipId !== null ? (int) $scholarshipId : null
         );
+
+        // Override total_due on save to NOT subtract discounts/scholarships from the computed total.
+        // Preserve the discounted total in total_due_discounted.
+        try {
+            if (is_array($breakdown['summary'] ?? null)) {
+                $sum = $breakdown['summary'];
+                $tuition = (float) ($sum['tuition'] ?? 0);
+                $misc = (float) ($sum['misc_total'] ?? 0);
+                $lab = (float) ($sum['lab_total'] ?? 0);
+                $additional = (float) ($sum['additional_total'] ?? 0);
+                $gross = round($tuition + $misc + $lab + $additional, 2);
+
+                $origTotalDue = $sum['total_due'] ?? null;
+                if (is_numeric($origTotalDue)) {
+                    $breakdown['summary']['total_due_discounted'] = round((float) $origTotalDue, 2);
+                } else {
+                    $breakdown['summary']['total_due_discounted'] = null;
+                }
+                $breakdown['summary']['total_due'] = $gross;
+            }
+        } catch (\Throwable $e) {
+            // Non-fatal; continue with existing totals if any issue arises
+        }
 
         $now = now()->toDateTimeString();
         $key = [

@@ -244,6 +244,7 @@ class RegistrationService
             'current_program',
             'current_curriculum',
             'tuition_year',
+            'tuition_installment_plan_id',
             'paymentType',
             'loa_remarks',
             'withdrawal_period',
@@ -257,6 +258,29 @@ class RegistrationService
         foreach ($whitelist as $k) {
             if (array_key_exists($k, $fields)) {
                 $update[$k] = $fields[$k];
+            }
+        }
+
+        // Validate tuition_installment_plan_id belongs to the registration's tuition_year
+        if (array_key_exists('tuition_installment_plan_id', $update)) {
+            $planId = $update['tuition_installment_plan_id'];
+            if ($planId !== null && $planId !== '') {
+                $planId = (int) $planId;
+                // Determine target tuition year: prefer new field if being updated, else current
+                $targetTuitionYear = array_key_exists('tuition_year', $update)
+                    ? (int) $update['tuition_year']
+                    : (int) ($existing->tuition_year ?? 0);
+
+                if ($targetTuitionYear > 0) {
+                    $ok = DB::table('tb_mas_tuition_year_installment')
+                        ->where('id', $planId)
+                        ->where('tuitionyear_id', $targetTuitionYear)
+                        ->exists();
+                    if (!$ok) {
+                        // Invalidate when plan does not belong to the registration's tuition year
+                        $update['tuition_installment_plan_id'] = null;
+                    }
+                }
             }
         }
 

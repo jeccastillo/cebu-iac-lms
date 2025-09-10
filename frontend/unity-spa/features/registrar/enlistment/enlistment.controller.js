@@ -117,6 +117,69 @@
     vm.regFormUrl = regFormUrl;
     vm.openRegFormPdf = openRegFormPdf;
 
+    // Add dynamic installment tabs from tuition.summary.installments.plans
+    vm.installmentPlans = [];
+    vm.selectedInstallmentPlanId = null;
+
+    function selectInstallmentTab(tabKey) {
+      try {
+        if (!vm.installmentPlans || !vm.installmentPlans.length) return;
+        if (tabKey === 'standard' || tabKey === 'dp30' || tabKey === 'dp50') {
+          vm.installmentTab = tabKey;
+        } else {
+          // Check if tabKey matches any plan code
+          var found = vm.installmentPlans.find(function (p) { return p.code === tabKey; });
+          if (found) {
+            vm.installmentTab = tabKey;
+          }
+        }
+      } catch (e) {}
+    }
+
+    function installmentData() {
+      try {
+        var inst = vm.tuition && vm.tuition.summary && vm.tuition.summary.installments;
+        if (!inst) return null;
+        var plans = inst.plans || [];
+        var selectedPlan = null;
+        if (vm.selectedInstallmentPlanId) {
+          selectedPlan = plans.find(function (p) { return p.id === vm.selectedInstallmentPlanId; });
+        }
+        if (!selectedPlan && plans.length) {
+          selectedPlan = plans[0];
+        }
+        if (!selectedPlan) return null;
+
+        return {
+          dp: selectedPlan.down_payment || 0,
+          fee: selectedPlan.installment_fee || 0,
+          total: selectedPlan.total_installment || 0
+        };
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function displayedTotalDue() {
+      try {
+        var inst = vm.tuition && vm.tuition.summary && vm.tuition.summary.installments;
+        if (!inst) return 0;
+        var plans = inst.plans || [];
+        var selectedPlan = null;
+        if (vm.selectedInstallmentPlanId) {
+          selectedPlan = plans.find(function (p) { return p.id === vm.selectedInstallmentPlanId; });
+        }
+        if (!selectedPlan && plans.length) {
+          selectedPlan = plans[0];
+        }
+        if (!selectedPlan) return 0;
+
+        return selectedPlan.total_installment || 0;
+      } catch (e) {
+        return 0;
+      }
+    }
+
     // Tuition save snapshot
     vm.tuitionSaving = false;
     vm.canSaveTuition = canSaveTuition;
@@ -300,6 +363,36 @@
           // Unwrap TuitionBreakdownResource from response
           var data = (res && res.data) ? res.data : res;
           vm.tuition = data || null;
+          // Initialize selected installment plan id (dynamic plans) when available
+          try {
+            var inst = (vm.tuition && vm.tuition.summary && vm.tuition.summary.installments) ? vm.tuition.summary.installments : null;
+            var plans = inst && Array.isArray(inst.plans) ? inst.plans : [];
+            if (plans.length) {
+              var spid = (inst && inst.selected_plan_id != null) ? inst.selected_plan_id : (plans[0] && plans[0].id);
+              if (spid != null) vm.selectedInstallmentPlanId = spid;
+            }
+          } catch (_eSelPlan) {}
+
+          // Populate dynamic installment plans from payload for tabs
+          try {
+            var inst = vm.tuition && vm.tuition.summary && vm.tuition.summary.installments;
+            var plans = inst && Array.isArray(inst.plans) ? inst.plans.slice() : [];
+            vm.installmentPlans = plans;
+            if (plans && plans.length) {
+              var spid = inst && inst.selected_plan_id != null ? parseInt(inst.selected_plan_id, 10) : null;
+              if (isFinite(spid)) {
+                vm.selectedInstallmentPlanId = spid;
+              } else {
+                var firstId = plans[0] && plans[0].id != null ? parseInt(plans[0].id, 10) : null;
+                vm.selectedInstallmentPlanId = isFinite(firstId) ? firstId : null;
+              }
+            } else {
+              vm.selectedInstallmentPlanId = null;
+            }
+          } catch (_ePlans) {
+            vm.installmentPlans = [];
+            vm.selectedInstallmentPlanId = null;
+          }
         }).catch(function (err) {
           console.error('tuitionPreview failed', err);
           vm.tuition = null;
@@ -401,9 +494,21 @@
     // Installment helpers
     function selectInstallmentTab(tab) {
       try {
-        if (tab === 'standard' || tab === 'dp30' || tab === 'dp50') {
-          vm.installmentTab = tab;
+        // Dynamic: map by plan code when plans available; fallback to legacy
+        var inst = vm.tuition && vm.tuition.summary && vm.tuition.summary.installments;
+        var plans = inst && Array.isArray(inst.plans) ? inst.plans : [];
+        if (plans.length) {
+          var found = null;
+          for (var i = 0; i < plans.length; i++) {
+            if ((plans[i].code || '') === (tab || '')) { found = plans[i]; break; }
+          }
+          if (found && found.id != null) {
+            vm.selectedInstallmentPlanId = found.id;
+            return;
+          }
         }
+        // Legacy fallback
+        vm.installmentTab = tab;
       } catch (e) {}
     }
 
@@ -417,21 +522,24 @@
       try {
         var inst = _installments();
         if (!inst) return null;
-        if (vm.installmentTab === 'dp30') {
+        var plans = inst.plans || [];
+        var selected = null;
+        if (vm.selectedInstallmentPlanId != null) {
+          var selId = parseInt(vm.selectedInstallmentPlanId, 10);
+          for (var i = 0; i < plans.length; i++) {
+            var p = plans[i] || {};
+            if (p.id != null && parseInt(p.id, 10) === selId) { selected = p; break; }
+          }
+        }
+        if (!selected && plans.length) selected = plans[0];
+        if (selected) {
           return {
-            dp: inst.down_payment30 || 0,
-            fee: inst.installment_fee30 || 0,
-            total: inst.total_installment30 || 0
+            dp: selected.down_payment || 0,
+            fee: selected.installment_fee || 0,
+            total: selected.total_installment || 0
           };
         }
-        if (vm.installmentTab === 'dp50') {
-          return {
-            dp: inst.down_payment50 || 0,
-            fee: inst.installment_fee50 || 0,
-            total: inst.total_installment50 || 0
-          };
-        }
-        // standard
+        // Fallback to legacy baseline
         return {
           dp: inst.down_payment || 0,
           fee: inst.installment_fee || 0,
@@ -442,42 +550,118 @@
 
     function displayedTotalDue() {
       try {
-        var totalDue = (vm.tuition && vm.tuition.summary && vm.tuition.summary.total_due) ? vm.tuition.summary.total_due : 0;
+        var sumDue = (vm.tuition && vm.tuition.summary && vm.tuition.summary.total_due) ? vm.tuition.summary.total_due : 0;
         var inst = _installments();
-        if (!inst) return totalDue;
-
-        if (vm.installmentTab === 'dp30') {
-          return (inst.total_installment30 || totalDue);
+        if (!inst) return sumDue;
+        var plans = inst.plans || [];
+        var selected = null;
+        if (vm.selectedInstallmentPlanId != null) {
+          var selId = parseInt(vm.selectedInstallmentPlanId, 10);
+          for (var i = 0; i < plans.length; i++) {
+            var p = plans[i] || {};
+            if (p.id != null && parseInt(p.id, 10) === selId) { selected = p; break; }
+          }
         }
-        if (vm.installmentTab === 'dp50') {
-          return (inst.total_installment50 || totalDue);
+        if (!selected && plans.length) selected = plans[0];
+        var total = selected && selected.total_installment;
+        if (!isFinite(parseFloat(total))) {
+          total = inst.total_installment != null ? inst.total_installment : sumDue;
         }
-        return totalDue; // standard
+        return parseFloat(total) || 0;
       } catch (e) { return 0; }
     }
 
     // Cached calculation to prevent infinite digest caused by returning a new object each digest
-    var _incCacheKey = null, _incCacheVal = null;
     function increaseInfo() {
       try {
-        if (!vm.tuition || !vm.tuition.summary) { _incCacheKey = null; _incCacheVal = null; return null; }
-        var sum = vm.tuition.summary;
-        var perc = 0;
-        if (vm.installmentTab === 'dp30') perc = 0.15;
-        else if (vm.installmentTab === 'dp50') perc = 0.09;
-        else { _incCacheKey = null; _incCacheVal = null; return null; }
-        var tBase = (+sum.tuition || 0);
-        var lBase = (+sum.lab_total || 0);
-        var mBase = (+sum.misc_total || 0);
-        var key = [vm.installmentTab, tBase, lBase, mBase].join('|');
-        if (_incCacheKey === key && _incCacheVal) return _incCacheVal;
-        var tInc = (tBase * perc);
-        var lInc = (lBase * perc);
-        var mInc = (mBase * perc);
-        _incCacheKey = key;
-        _incCacheVal = { percent: perc, tuitionIncrease: tInc, labIncrease: lInc, miscIncrease: mInc, tuitionNew: (tBase + tInc), labNew: (lBase + lInc) };        
-        return _incCacheVal;
-      } catch (e) { return null; }
+        // Must have tuition summary
+        if (!vm || !vm.tuition || !vm.tuition.summary) return null;
+        var sum = vm.tuition.summary || {};
+        var baseTuition = parseFloat(sum.tuition);
+        if (!isFinite(baseTuition)) baseTuition = 0;
+        var baseLab = parseFloat(sum.lab_total);
+        if (!isFinite(baseLab)) baseLab = 0;
+
+        // Determine increase percent:
+        // Priority:
+        // 1) Selected dynamic plan's increase_percent (when available)
+        // 2) vm.tuition.meta.installment_increase_percent
+        // 3) Legacy mapping by vm.installmentTab (dp30/dp50) → default to 0 if unknown
+        var percent = null;
+        var selectedPlan = null;
+
+        var inst = (vm.tuition && vm.tuition.summary && vm.tuition.summary.installments) ? vm.tuition.summary.installments : null;
+        var plans = inst && Array.isArray(inst.plans) ? inst.plans : [];
+
+        if (plans.length && vm.selectedInstallmentPlanId != null) {
+          var selId = parseInt(vm.selectedInstallmentPlanId, 10);
+          if (isFinite(selId)) {
+            for (var i = 0; i < plans.length; i++) {
+              var p = plans[i] || {};
+              var pid = p.id != null ? parseInt(p.id, 10) : null;
+              if (pid != null && pid === selId) { selectedPlan = p; break; }
+            }
+          }
+        }
+        if (!selectedPlan && plans.length) {
+          selectedPlan = plans[0];
+        }
+        if (selectedPlan && selectedPlan.increase_percent != null) {
+          var p1 = parseFloat(selectedPlan.increase_percent);
+          if (isFinite(p1)) percent = p1;
+        }
+
+        if (percent === null || !isFinite(percent)) {
+          var metaPct = vm.tuition && vm.tuition.meta && vm.tuition.meta.installment_increase_percent;
+          if (metaPct != null && metaPct !== '') {
+            var p2 = parseFloat(metaPct);
+            if (isFinite(p2)) percent = p2;
+          }
+        }
+
+        // Legacy fallback: if still unknown, provide safe defaults per tab
+        if (percent === null || !isFinite(percent)) {
+          if (vm.installmentTab === 'dp30') {
+            percent = 0; // no implicit assumption without backend/meta
+          } else if (vm.installmentTab === 'dp50') {
+            percent = 0; // no implicit assumption without backend/meta
+          } else {
+            percent = 0;
+          }
+        }
+
+        // Compute new amounts
+        var factor = 1 + (Math.max(0, percent) / 100.0);
+        var tuitionNew = Math.round((baseTuition * factor) * 100) / 100;
+        var labNew = Math.round((baseLab * factor) * 100) / 100;
+
+        // Cache to avoid returning a new object every digest
+        var cacheKey = [
+          vm.installmentTab || '',
+          (selectedPlan && selectedPlan.id) != null ? String(selectedPlan.id) : '',
+          String(baseTuition),
+          String(baseLab),
+          String(percent)
+        ].join('|');
+
+        vm._increaseInfoCache = vm._increaseInfoCache || { key: null, val: null };
+        if (vm._increaseInfoCache.key === cacheKey && vm._increaseInfoCache.val) {
+          return vm._increaseInfoCache.val;
+        }
+
+        var out = {
+          percent: percent,
+          tuitionBase: baseTuition,
+          labBase: baseLab,
+          tuitionNew: tuitionNew,
+          labNew: labNew
+        };
+        vm._increaseInfoCache.key = cacheKey;
+        vm._increaseInfoCache.val = out;
+        return out;
+      } catch (e) {
+        return null;
+      }
     }
 
     // Helpers for read-only display and lookups

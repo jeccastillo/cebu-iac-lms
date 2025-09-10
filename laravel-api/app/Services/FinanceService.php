@@ -284,6 +284,35 @@ class FinanceService
             })
             ->sum('subtotal_order');
 
+        // Include Payment Journal debit/credit entries into amountPaid
+            try {
+                if (Schema::hasTable('payment_details')) {
+                    // Payment Journal debits (negative subtotal_order, status='Journal')
+                    $journalDebitSum = (float) DB::table('payment_details')
+                        ->where('student_information_id', $studentId)
+                        ->where('sy_reference', $syid)
+                        ->where('status', 'Journal')
+                        ->sum('subtotal_order');
+
+                    // Payment Journal credits (status='Paid') identified via default remarks flag when available
+                    $journalCreditSum = 0.0;
+                    if (Schema::hasColumn('payment_details', 'remarks')) {
+                        $journalCreditSum = (float) DB::table('payment_details')
+                            ->where('student_information_id', $studentId)
+                            ->where('sy_reference', $syid)
+                            ->where('status', 'Paid')
+                            ->where('remarks', 'like', '%CREDIT ADJUSTMENT%')
+                            ->sum('subtotal_order');
+                    }
+
+                    // Add journal sums to amountPaid (debits are negative, credits positive)                
+                    $totalPaidFiltered = (float) ($totalPaidFiltered + $journalDebitSum + $journalCreditSum);
+                }
+            } catch (\Throwable $e) {
+                // keep existing amountPaid when journal tables/columns are missing
+                echo $e->getMessage();
+            }
+
         $countRows = (int) (clone $base)->count();
 
         // Build select list (with null fallbacks for optional columns)

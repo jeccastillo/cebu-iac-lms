@@ -26,11 +26,12 @@
     'PaymentDescriptionsService',
     'StudentBillingService',
     'ApplicantsService',
+    'ToastService',
     'AdminPaymentDetailsService'
   ];
   function CashierViewerController(
     $routeParams, $location, $http, $q, $rootScope, $scope, $timeout, $injector,
-    APP_CONFIG, StorageService, UnityService, TermService, TuitionYearsService, StudentsService, RoleService, CashiersService, PaymentModesService, PaymentDescriptionsService, StudentBillingService, ApplicantsService, AdminPaymentDetailsService
+    APP_CONFIG, StorageService, UnityService, TermService, TuitionYearsService, StudentsService, RoleService, CashiersService, PaymentModesService, PaymentDescriptionsService, StudentBillingService, ApplicantsService, ToastService, AdminPaymentDetailsService
   ) {
     var vm = this;
 
@@ -43,6 +44,7 @@
 
     // Capability: allow edits only for Finance/Admin
     vm.canEdit = !!(RoleService && typeof RoleService.hasAny === 'function' ? RoleService.hasAny(['finance', 'admin']) : false);
+    vm.displayAdminOptions = !!(RoleService && typeof RoleService.hasAny === 'function' ? RoleService.hasAny(['finance_admin', 'admin']) : false);
 
     // Identifiers
     vm.id = parseInt($routeParams.id, 10);
@@ -116,6 +118,11 @@
     };
     // Track last handled termChanged to suppress duplicate bursts
     vm._lastTermEvent = { term: null, ts: 0 };
+    // In-flight promise map and tokens to coalesce duplicate calls
+    vm._inflight = {};
+    vm._tokens = {};
+    vm._tuitionSavedOnce = {};
+    vm._updateRegTimer = null;
     // Selected tuition amount based on registered payment type (full vs partial)
     vm.selectedTuitionAmount = null;
 
@@ -625,6 +632,7 @@
     vm.edit = {
       paymentType: null,
       tuition_year: null,
+      tuition_installment_plan_id: null,
       allow_enroll: null,
       downpayment: null,
       enrollment_status: null
@@ -1958,7 +1966,6 @@ vm.loading.createPayment = false;
           chain = chain
             .then(vm.loadRegistration)
             .then(vm.loadTuition)
-            .then(vm.autoSaveTuitionIfPossible)
             .then(vm.loadRecords)
             .then(vm.loadLedger);
         }
@@ -1969,7 +1976,7 @@ vm.loading.createPayment = false;
           .then(vm.loadPaymentDetails)
           .then(vm.loadBilling)
           .catch(function () { /* errors captured per-call */ });
-      }, 150);
+      }, 500);
     };
 
     // Build human-readable term label from global term object
@@ -2017,7 +2024,7 @@ vm.loading.createPayment = false;
       // Guard: ignore duplicate term events within a suppression window
       try {
         var now = Date.now();
-        if (vm._lastTermEvent && vm._lastTermEvent.term === newTerm && (now - vm._lastTermEvent.ts) < 1000) {
+        if (vm._lastTermEvent && vm._lastTermEvent.term === newTerm && (now - vm._lastTermEvent.ts) < 2000) {
           return;
         }
         vm._lastTermEvent = { term: newTerm, ts: now };
@@ -2224,6 +2231,7 @@ vm.loading.createPayment = false;
           // Bind editable fields snapshot
           vm.edit.paymentType = vm.registration ? (vm.registration.paymentType || null) : null;
           vm.edit.tuition_year = vm.registration ? (vm.registration.tuition_year || null) : null;
+          vm.edit.tuition_installment_plan_id = vm.registration ? (vm.registration.tuition_installment_plan_id || null) : null;
           vm.edit.allow_enroll = vm.registration ? (vm.registration.allow_enroll != null ? parseInt(vm.registration.allow_enroll, 10) : null) : null;
           vm.edit.downpayment = vm.registration ? (vm.registration.downpayment != null ? parseInt(vm.registration.downpayment, 10) : null) : null;
           vm.edit.enrollment_status = vm.registration ? (vm.registration.enrollment_status != null ? vm.registration.enrollment_status : null) : null;
@@ -2534,6 +2542,7 @@ vm.loading.createPayment = false;
       if (!force && vm._last && vm._last.invoices && vm._last.invoices.key === key && vm._last.invoices.term === vm.term) {
         return $q.when();
       }
+      if (vm._inflight && vm._inflight.invoices) return vm._inflight.invoices;
       if (vm.loading.invoices) return $q.when();
       vm.loading.invoices = true;
       vm.error.invoices = null;
@@ -2547,7 +2556,7 @@ vm.loading.createPayment = false;
         }
       } catch (e) {}
 
-      return UnityService.invoicesList(params)
+      return (vm._inflight.invoices = UnityService.invoicesList(params))
         .then(function (body) {
           var data = body && body.data ? body.data : body;
           var list = Array.isArray(data) ? data : (data && data.items ? data.items : []);
@@ -2571,6 +2580,7 @@ vm.loading.createPayment = false;
         })
         .finally(function () {
           vm.loading.invoices = false;
+          if (vm._inflight) vm._inflight.invoices = null;
         });
     };
 
@@ -2583,8 +2593,6 @@ vm.loading.createPayment = false;
         if (!force && vm._last && vm._last.payments && vm._last.payments.key === key && vm._last.payments.term === vm.term) {
             return $q.when();
         }
-        if (vm.loading.payments) return $q.when();
-        vm.loading.payments = true;
         vm.error.payments = null;
 
         // Prefer student_id -> payment_details.student_information_id matching; fallback to student_number
@@ -2601,15 +2609,41 @@ vm.loading.createPayment = false;
             vm.paymentDetails = data || { items: [], meta: {} };
 
             try {
-                var total = (vm.paymentDetails && vm.paymentDetails.meta && vm.paymentDetails.meta.total_paid_filtered != null)
+            var total = (vm.paymentDetails && vm.paymentDetails.meta && vm.paymentDetails.meta.total_paid_filtered != null)
                 ? parseFloat(vm.paymentDetails.meta.total_paid_filtered)
                 : null;
-                vm.paymentDetailsTotal = isFinite(total) ? total : 0;
+            console.log(total);
+            vm.paymentDetailsTotal = isFinite(total) ? total : 0;
 
-                // Always sync amount_paid to filtered Payment Details total for current term
-                if (vm.meta) {
-                  vm.meta.amount_paid = vm.paymentDetailsTotal || 0;
+            // Apply Debit/Credit adjustments to Amount Paid:
+            // - Credits are already included in total_paid_filtered (status='Paid')
+            // - Debits (Journal entries) should reduce Amount Paid
+            var itemsForAdj = (vm.paymentDetails && vm.paymentDetails.items) ? vm.paymentDetails.items : [];            
+            var debitAdj = 0;
+            try {
+              for (var di = 0; di < itemsForAdj.length; di++) {
+                var rdi = itemsForAdj[di] || {};
+                var amt = parseFloat(rdi.subtotal_order);
+                // Consider Journal rows or any negative subtotal as debit adjustments
+                var isJournal = false;
+                try {
+                  isJournal = (rdi.status && ('' + rdi.status).toLowerCase() === 'journal');
+                } catch (_eJ) { isJournal = false; }
+                if (isJournal || (isFinite(amt) && amt < 0)) {
+                  debitAdj += Math.abs(isFinite(amt) ? amt : 0);
                 }
+              }
+            } catch (_eAdj) {
+              debitAdj = 0;
+            }
+            var adjustedPaid = vm.paymentDetailsTotal - debitAdj;
+            if (!isFinite(adjustedPaid)) adjustedPaid = vm.paymentDetailsTotal;
+            if (adjustedPaid < 0) adjustedPaid = 0;
+
+            // Sync adjusted amount paid
+            if (vm.meta) {
+              vm.meta.amount_paid = adjustedPaid;
+            }
 
                 // Compute total paid toward Billing items (exclude tuition/reservation)
                 try {
@@ -2623,22 +2657,25 @@ vm.loading.createPayment = false;
                     }
                   } catch (_eIdx) { invIndex = {}; }
                   var items = (vm.paymentDetails && vm.paymentDetails.items) ? vm.paymentDetails.items : [];
-                  var billingPaid = 0;
-                  for (var pi = 0; pi < items.length; pi++) {
-                    var row = items[pi] || {};
-                    if (row.status !== 'Paid') continue;
-                    var amt = parseFloat(row.subtotal_order); if (!isFinite(amt)) amt = 0;
-                    var invNo = row.invoice_number != null ? ('' + row.invoice_number).trim() : '';
-                    var itype = invNo && invIndex[invNo] ? invIndex[invNo] : null;
-                    var desc = (row.description == null ? '' : ('' + row.description)).trim().toLowerCase();
-                    // classify as billing when invoice type says 'billing', or when not clearly tuition/reservation
-                    var isTuitionRes = (desc === 'tuition fee') || _isApplicationFeeDesc(desc) || _isReservationFeeDesc(desc);
-                    if (itype === 'billing' || (!itype && !isTuitionRes)) {
-                      billingPaid += amt;
-                    }
+                var billingPaid = 0;
+                for (var pi = 0; pi < items.length; pi++) {
+                  var row = items[pi] || {};
+                  if (row.status !== 'Paid') continue;
+                  var amt = parseFloat(row.subtotal_order); if (!isFinite(amt)) amt = 0;
+                  var invNo = row.invoice_number != null ? ('' + row.invoice_number).trim() : '';
+                  var itype = invNo && invIndex[invNo] ? invIndex[invNo] : null;
+                  var desc = (row.description == null ? '' : ('' + row.description)).trim().toLowerCase();
+                  // classify as billing when invoice type says 'billing', or when not clearly tuition/reservation
+                  var isTuitionRes = (desc === 'tuition fee') || _isApplicationFeeDesc(desc) || _isReservationFeeDesc(desc);
+                  if (itype === 'billing' || (!itype && !isTuitionRes)) {
+                    console.log(amt);
+                    billingPaid += amt;
                   }
-                  if (!vm.meta) vm.meta = {};
-                  vm.meta.billing_paid = billingPaid;
+                }
+                if (!vm.meta) vm.meta = {};
+                // Add negative billing amounts to amount_paid
+                vm.meta.billing_paid = billingPaid;
+               
                 } catch (_eBP) {
                   if (!vm.meta) vm.meta = {};
                   if (vm.meta.billing_paid == null) vm.meta.billing_paid = 0;
@@ -2704,13 +2741,14 @@ vm.loading.createPayment = false;
 
     vm.updateRegistration = function () {
       if (!vm.sn || !vm.term) return;
-      if (!vm.canEdit) return; // guard: read-only for non-finance/admin
+      if (!vm.canEdit) { try { ToastService && ToastService.error && ToastService.error('You are not allowed to edit this option'); } catch (e) {} return; } // guard: read-only for non-finance/admin
       vm.loading.update = true;
       vm.error.update = null;
 
       var fields = {};
       if (vm.edit.paymentType !== null && vm.edit.paymentType !== undefined) fields.paymentType = vm.edit.paymentType;
       if (vm.edit.tuition_year !== null && vm.edit.tuition_year !== undefined) fields.tuition_year = vm.edit.tuition_year;
+      if (vm.edit.tuition_installment_plan_id !== null && vm.edit.tuition_installment_plan_id !== undefined) fields.tuition_installment_plan_id = parseInt(vm.edit.tuition_installment_plan_id, 10);
       if (vm.edit.allow_enroll !== null && vm.edit.allow_enroll !== undefined) fields.allow_enroll = parseInt(vm.edit.allow_enroll, 10);
       if (vm.edit.downpayment !== null && vm.edit.downpayment !== undefined) fields.downpayment = parseInt(vm.edit.downpayment, 10);
       if (vm.edit.enrollment_status !== null && vm.edit.enrollment_status !== undefined) fields.enrollment_status = vm.edit.enrollment_status;
@@ -2763,7 +2801,7 @@ vm.loading.createPayment = false;
 
     // Auto-update saved tuition when options change
     vm.onOptionChange = function () {
-      if (!vm.canEdit) return; // guard: read-only for non-finance/admin
+      if (!vm.canEdit) { try { ToastService && ToastService.error && ToastService.error('You are not allowed to edit this option'); } catch (e) {} return; } // guard: read-only for non-finance/admin
       // Trigger update, which chains tuition-save and tuition reload
       vm.updateRegistration();
     };
@@ -2790,7 +2828,6 @@ vm.loading.createPayment = false;
       .then(vm.loadApplicantInfo)
       .then(function () { return vm.loadRegistration(); })
       .then(function () { return vm.loadTuition(); })
-      .then(function () { return vm.autoSaveTuitionIfPossible(); })
       .then(function () { return vm.loadLedger(); })
       .then(function () { return vm.loadInvoices(); })
       .then(function () { return vm.loadPaymentDetails(); })
@@ -2805,13 +2842,27 @@ vm.loading.createPayment = false;
       // Installment side panel (Partial Payment) - precomputed UI model
       // =========================
       vm.installmentsUI = { show: false, summary: null, list: [] };
+      vm.installmentPlans = [];
+      vm.selectedInstallmentPlanId = null;
+      vm.onInstallmentPlanChange = function () {
+        try {
+          // Persist selection to registration (only when cashier can edit)
+          if (vm.canEdit) {
+            vm.edit = vm.edit || {};
+            vm.edit.tuition_installment_plan_id = (vm.selectedInstallmentPlanId != null ? parseInt(vm.selectedInstallmentPlanId, 10) : null);
+            if (typeof vm.onOptionChange === 'function') vm.onOptionChange();
+          }
+          // Recompute panel immediately for visual feedback
+          if (typeof vm._recomputeInstallmentsPanel === 'function') vm._recomputeInstallmentsPanel();
+        } catch (e) {}
+      };
 
       vm._recomputeInstallmentsPanel = function () {
         try {
           var pt = (vm.registration && vm.registration.paymentType) || (vm.edit && vm.edit.paymentType) || null;
           var payload = (vm.tuitionSaved && vm.tuitionSaved.payload) ? vm.tuitionSaved.payload : (vm.tuition || null);
           var s = payload && payload.summary ? payload.summary : null;
-          var inst = s && s.installments ? s.installments : null;
+          var inst = s && s.installments ? s.installments : null;          
 
           var show = (pt === 'partial' && !!inst);
           vm.installmentsUI.show = !!show;
@@ -2824,12 +2875,71 @@ vm.loading.createPayment = false;
 
           function num(x) { var v = parseFloat(x); return isFinite(v) ? v : 0; }
 
-          // Base plan amounts (as computed by tuition)
+          // Determine selected plan (dynamic plans from backend), fallback to legacy baseline
+          var plans = (inst && Array.isArray(inst.plans)) ? inst.plans : [];
+          // Normalize ids to strings for stable ng-options binding
+          try {
+            plans = plans.map(function (p) {
+              p = p || {};
+              p.id = (p.id != null ? ('' + p.id) : p.id);
+              return p;
+            });
+          } catch (_eNorm) {}
+          vm.installmentPlans = plans;
+
+          // Initialize selected plan id when absent or invalid
+          try {
+            var hasSelection = (vm.selectedInstallmentPlanId != null) &&
+              plans.some(function (p) { return ('' + p.id) === ('' + vm.selectedInstallmentPlanId); });
+            if (!hasSelection) {
+              var spid = (inst && inst.selected_plan_id != null)
+                ? ('' + inst.selected_plan_id)
+                : (plans.length ? ('' + plans[0].id) : null);
+              vm.selectedInstallmentPlanId = spid;
+            }
+          } catch (_eSel) {}
+
+          function pickPlanById(id) {
+            try {
+              var rid = (id != null ? ('' + id) : null);
+              if (rid == null) return null;
+              for (var ii = 0; ii < plans.length; ii++) {
+                var p = plans[ii] || {};
+                if (('' + p.id) === rid) return p;
+              }
+              return null;
+            } catch (_eP) { return null; }
+          }
+          var selPlan = pickPlanById(vm.selectedInstallmentPlanId) || (plans.length ? plans[0] : null);
+          // Reflect normalized id back to model to ensure the dropdown shows selection
+          vm.selectedInstallmentPlanId = selPlan ? ('' + selPlan.id) : vm.selectedInstallmentPlanId;
+          // Normalize model to match option id type so selection displays correctly
+          vm.selectedInstallmentPlanId = selPlan ? selPlan.id : vm.selectedInstallmentPlanId;
+          vm.selectedInstallmentPlanName = selPlan ? selPlan.label : vm.selectedInstallmentPlanName
+
           var base = {
-            dp: num(inst.down_payment),
-            fee: num(inst.installment_fee),
-            total: num(inst.total_installment)
+            dp: (selPlan && selPlan.down_payment != null) ? num(selPlan.down_payment) : num(inst.down_payment),
+            fee: (selPlan && selPlan.installment_fee != null) ? num(selPlan.installment_fee) : num(inst.installment_fee),
+            total: (selPlan && selPlan.total_installment != null) ? num(selPlan.total_installment) : num(inst.total_installment)
           };
+
+          // Resolve installment count robustly from plan or summary meta (fallback 5)
+          function _resolveCount(instObj, planObj) {
+            try {
+              var cand = null;
+              if (planObj && planObj.installment_count != null) cand = planObj.installment_count;
+              else if (instObj && instObj.installment_count != null) cand = instObj.installment_count;
+              else if (instObj && instObj.count != null) cand = instObj.count;
+              // allow "0" to mean all-in-DP (no subsequent installments)
+              var n = parseInt(cand, 10);              
+              if (isFinite(n) && n >= 0) return n;
+              return 5;
+            } catch (_eCnt) {
+              
+              return 5;
+            }
+          }
+          var count = _resolveCount(inst, selPlan);
 
           // Compute total "paid toward tuition" using payment details:
           // include rows whose description contains "tuition" OR matches reservation fee/payment; status must be "Paid".
@@ -2849,9 +2959,9 @@ vm.loading.createPayment = false;
             paidTuition = 0;
           }
 
-          // Build buckets in order: DP, I1..I5
+          // Build buckets in order: DP, I1..IN (N = installment_count or default 5)
           var buckets = [{ key: 'dp', label: 'Down Payment', due: base.dp }];
-          for (var i = 1; i <= 5; i++) {
+          for (var i = 1; i <= count; i++) {
             buckets.push({ key: 'i' + i, label: 'Installment ' + i, due: base.fee });
           }
 
@@ -2889,7 +2999,8 @@ vm.loading.createPayment = false;
           vm.installmentsUI.summary = {
             dp: dpRemaining,
             fee: base.fee, // keep reference value (not shown)
-            total: installmentsRemainingTotal
+            total: installmentsRemainingTotal,
+            count: count
           };
           vm.installmentsUI.list = remList;
 

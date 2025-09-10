@@ -325,8 +325,12 @@ class ScholarshipController extends Controller
      */
     public function assignmentsApply(ScholarshipAssignmentApplyRequest $request): JsonResponse
     {
-        $ids = $request->validated()['ids'] ?? [];
-        $res = $this->scholarships->applyAssignments($ids, null);
+        $validated = $request->validated();
+        $ids = $validated['ids'] ?? [];
+        $force = isset($validated['force']) ? (bool) $validated['force'] : (bool) $request->input('force', false);
+        $actorId = optional($request->user())->intID ?? null;
+
+        $res = $this->scholarships->applyAssignments($ids, $actorId, $force);
 
         return response()->json([
             'success' => true,
@@ -338,10 +342,11 @@ class ScholarshipController extends Controller
      * DELETE /api/v1/scholarships/assignments/{id}
      * Delete an assignment when not applied.
      */
-    public function assignmentsDelete(int $id): JsonResponse
+    public function assignmentsDelete(Request $request, int $id): JsonResponse
     {
         try {
-            $res = $this->scholarships->deleteAssignment($id);
+            $actorId = optional($request->user())->intID ?? null;
+            $res = $this->scholarships->deleteAssignment($id, $actorId);
         } catch (\RuntimeException $e) {
             return response()->json([
                 'success' => false,

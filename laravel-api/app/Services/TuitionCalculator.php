@@ -515,8 +515,8 @@ class TuitionCalculator
         $gross_normal = $tuition + $lab + $misc + $additional;
 
         // 30% scheme: +15% applied to tuition and misc (lab/additional unchanged)
-        $tuition_i30      = $tuition + ($tuition * 0.15);
-        $lab_i30         = $lab * ($lab * 0.15);
+        $tuition_i30      = $tuition * 1.15;
+        $lab_i30         = $lab  * 1.15;
         $gross_installment30 = $tuition_i30 + $lab_i30 + $misc + $additional;
 
         // 50% scheme: +9% applied to tuition and misc (lab/additional unchanged)
@@ -593,7 +593,7 @@ class TuitionCalculator
         $net_installment   = max(0.0, round($gross_installment   - $useDiscStd - $useSchStd, 2));
         $net_installment30 = max(0.0, round($gross_installment30 - $useDisc30  - $useSch30,  2));
         $net_installment50 = max(0.0, round($gross_installment50 - $useDisc50  - $useSch50,  2));
-
+        
         // Down payment rules
         $dpPercent = (float) ($tuitionYear['installmentDP'] ?? 0) / 100.0;
         $dpFixed   = (float) ($tuitionYear['installmentFixed'] ?? 0);
@@ -616,8 +616,8 @@ class TuitionCalculator
         $ifee   = $net_installment   > 0 ? round(($net_installment   - $dp)   / 5.0, 2) : 0.0;
         $ifee30 = $net_installment30 > 0 ? round(($net_installment30 - $dp30) / 5.0, 2) : 0.0;
         $ifee50 = $net_installment50 > 0 ? round(($net_installment50 - $dp50) / 5.0, 2) : 0.0;
-
-        return [
+        
+        return [    
             'total_installment'    => $net_installment,
             'total_installment30'  => $net_installment30,
             'total_installment50'  => $net_installment50,

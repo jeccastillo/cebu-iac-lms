@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Services\FinanceService;
+use App\Services\StudentLedgerService;
 
 class FinanceController extends Controller
 {
@@ -113,5 +114,140 @@ class FinanceController extends Controller
             'success' => true,
             'data'    => $data,
         ]);
+    }
+
+    /**
+     * GET /api/v1/finance/student-ledger
+     * Query:
+     *  - student_number?: string
+     *  - student_id?: int
+     *  - term: 'all' | int
+     *  - sort?: 'asc'|'desc'
+     *
+     * Returns a unified ledger-like list composed from Saved Tuition (assessment),
+     * Student Billing (charges/credits), and Paid Payment Details (payments).
+     */
+    public function studentLedger(Request $request): JsonResponse
+    {
+        $payload = $request->validate([
+            'student_number' => 'sometimes|nullable|string',
+            'student_id'     => 'sometimes|nullable|integer',
+            'term'           => 'required',
+            'sort'           => 'sometimes|in:asc,desc',
+        ]);
+
+        $termParam = $payload['term'];
+        $term = (is_string($termParam) && strtolower($termParam) === 'all') ? 'all' : (int) $termParam;
+        $sort = isset($payload['sort']) ? (string) $payload['sort'] : 'asc';
+
+        /** @var StudentLedgerService $svc */
+        $svc = app(\App\Services\StudentLedgerService::class);
+
+        $data = $svc->getLedger(
+            $payload['student_number'] ?? null,
+            isset($payload['student_id']) ? (int)$payload['student_id'] : null,
+            $term,
+            $sort
+        );
+
+        // Augment ledger with any applied excess payment applications
+        try {
+            $excessSvc = app(\App\Services\ExcessPaymentService::class);
+            $data = $excessSvc->augmentLedger($data, $sort);
+        } catch (\Throwable $e) {
+            // fail-open: if augmentation fails, return base ledger
+        }
+
+        return response()->json([
+            'success' => true,
+            'data'    => $data,
+        ]);
+    }
+
+    /**
+     * POST /api/v1/finance/ledger/excess/apply
+     * Body:
+     *  - student_id: int (required)
+     *  - source_term_id: int (required)
+     *  - target_term_id: int (required)
+     *  - amount: number (required, > 0)
+     *  - notes?: string
+     */
+    public function applyExcessPayment(Request $request): JsonResponse
+    {
+        $payload = $request->validate([
+            'student_id'     => 'required|integer',
+            'source_term_id' => 'required|integer',
+            'target_term_id' => 'required|integer',
+            'amount'         => 'required|numeric|min:0.01',
+            'notes'          => 'sometimes|nullable|string',
+        ]);
+
+        try {
+            $actorId = (int) ($request->header('X-Faculty-ID') ?? 0) ?: null;
+            $svc = app(\App\Services\ExcessPaymentService::class);
+            $app = $svc->applyExcessPayment(
+                (int) $payload['student_id'],
+                (int) $payload['source_term_id'],
+                (int) $payload['target_term_id'],
+                (float) $payload['amount'],
+                $actorId,
+                $payload['notes'] ?? null
+            );
+
+            return response()->json([
+                'success' => true,
+                'data'    => $app,
+            ]);
+        } catch (\InvalidArgumentException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 422);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to apply excess payment',
+            ], 500);
+        }
+    }
+
+    /**
+     * POST /api/v1/finance/ledger/excess/revert
+     * Body:
+     *  - application_id: int (required)
+     *  - notes?: string
+     */
+    public function revertExcessPayment(Request $request): JsonResponse
+    {
+        $payload = $request->validate([
+            'application_id' => 'required|integer',
+            'notes'          => 'sometimes|nullable|string',
+        ]);
+
+        try {
+            $actorId = (int) ($request->header('X-Faculty-ID') ?? 0) ?: null;
+            $svc = app(\App\Services\ExcessPaymentService::class);
+            $app = $svc->revertExcessPayment(
+                (int) $payload['application_id'],
+                $actorId,
+                $payload['notes'] ?? null
+            );
+
+            return response()->json([
+                'success' => true,
+                'data'    => $app,
+            ]);
+        } catch (\InvalidArgumentException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 422);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to revert excess payment',
+            ], 500);
+        }
     }
 }

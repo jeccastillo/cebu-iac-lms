@@ -23,6 +23,7 @@ use App\Http\Controllers\Api\V1\InvoiceController;
 use App\Http\Controllers\Api\V1\PaymentDescriptionController;
 use App\Http\Controllers\Api\V1\PaymentDetailAdminController;
 use App\Http\Controllers\Api\V1\PaymentModeController;
+use App\Http\Controllers\Api\V1\PaymentJournalController;
 use App\Http\Controllers\Api\V1\PortalController;
 use App\Http\Controllers\Api\V1\PreviousSchoolController;
 use App\Http\Controllers\Api\V1\ProgramController;
@@ -187,6 +188,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/tuition-years/{id}/tracks', [TuitionYearController::class, 'tracks']);
     Route::get('/tuition-years/{id}/programs', [TuitionYearController::class, 'programs']);
     Route::get('/tuition-years/{id}/electives', [TuitionYearController::class, 'electives']);
+    Route::get('/tuition-years/{id}/installments', [TuitionYearController::class, 'installments']);
 
     // write operations
     Route::post('/tuition-years/add', [TuitionYearController::class, 'add'])->middleware('role:registrar,admin');
@@ -280,6 +282,12 @@ Route::prefix('v1')->group(function () {
     Route::get('/finance/transactions', [FinanceController::class, 'transactions']);
     Route::get('/finance/or-lookup', [FinanceController::class, 'orLookup']);
     Route::get('/finance/payment-details', [FinanceController::class, 'paymentDetails']);
+    Route::post('/finance/payment-details/debit', [PaymentJournalController::class, 'debit'])->middleware('role:finance,admin');
+    Route::post('/finance/payment-details/credit', [PaymentJournalController::class, 'credit'])->middleware('role:finance,admin');
+    Route::get('/finance/student-ledger', [FinanceController::class, 'studentLedger'])->middleware('role:finance,admin');
+    // Excess Payment Applications
+    Route::post('/finance/ledger/excess/apply', [FinanceController::class, 'applyExcessPayment'])->middleware('role:finance,admin');
+    Route::post('/finance/ledger/excess/revert', [FinanceController::class, 'revertExcessPayment'])->middleware('role:finance,admin');
     // Admin Payment Details management (admin-only)
     // Place 'admin' literal route BEFORE the parameterized {id} to avoid collision
     Route::get('/finance/payment-details/admin', [PaymentDetailAdminController::class, 'index'])->middleware('role:admin');
@@ -338,7 +346,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/unity/reset-registration', [UnityController::class, 'resetRegistration'])->middleware('role:registrar,admin');
     // Registration read/update for existing rows only
     Route::get('/unity/registration', [UnityController::class, 'registration'])->middleware('role:registrar,finance,admin');
-    Route::put('/unity/registration', [UnityController::class, 'updateRegistration'])->middleware('role:registrar,admin');
+    Route::put('/unity/registration', [UnityController::class, 'updateRegistration'])->middleware('role:registrar,admin,finance');
     Route::post('/unity/tag-status', [UnityController::class, 'tagStatus']);
     Route::post('/unity/tuition-preview', [UnityController::class, 'tuitionPreview']);
     // Tuition save/fetch
