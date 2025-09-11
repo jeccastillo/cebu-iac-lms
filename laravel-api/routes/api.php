@@ -367,6 +367,8 @@ Route::prefix('v1')->group(function () {
     Route::get('/reports/enrolled-students/export', [ReportsController::class, 'enrolledStudentsExport'])->middleware('role:registrar,admin');
     // Registrar reports - Daily Enrollment JSON
     Route::get('/reports/daily-enrollment', [ReportsController::class, 'dailyEnrollmentSummary'])->middleware('role:registrar,admin');
+    // Grading Sheet PDF (Registrar / Faculty Admin / Admin)
+    Route::get('/reports/grading-sheet/pdf', [ReportsController::class, 'gradingSheetPdf'])->middleware('role:registrar,faculty_admin,admin');
 
     // Classlists CRUD
     Route::post('/classlists/merge', [ClasslistMergeController::class, 'merge'])->middleware('role:registrar,admin');

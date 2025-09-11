@@ -54,6 +54,7 @@
       { test: '^/curricula(?:/.*)?$', roles: ['registrar', 'admin'] },
       { test: '^/classlists(?:/.*)?$', roles: ['registrar', 'admin'] },
       { test: '^/faculty-loading(?:/.*)?$', roles: ['registrar', 'faculty_admin', 'admin'] },
+      { test: '^/academics/grading-sheet(?:/.*)?$', roles: ['registrar', 'faculty_admin', 'admin'] },
       { test: '^/classrooms(?:/.*)?$', roles: ['faculty', 'registrar', 'admin'] },
       { test: '^/schedules(?:/.*)?$', roles: ['registrar', 'admin'] },
       { test: '^/cashier-admin(?:/.*)?$', roles: ['cashier_admin', 'admin'] },

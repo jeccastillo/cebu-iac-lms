@@ -98,7 +98,8 @@
           { label: 'Schedules', path: '/schedules' },
           // { label: 'Faculty Loading', path: '/faculty-loading' },
           { label: 'Faculty Loading', path: '/faculty-loading/by-faculty' },
-          { label: 'Grading Systems', path: '/grading-systems' }
+          { label: 'Grading Systems', path: '/grading-systems' },
+          { label: 'Grading Sheet', path: '/academics/grading-sheet' }
         ]
       },
       {

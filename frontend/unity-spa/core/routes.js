@@ -427,6 +427,12 @@
         controllerAs: "vm",
         requiredRoles: ["registrar", "faculty_admin", "admin"],
       })
+      .when("/academics/grading-sheet", {
+        templateUrl: "features/academics/grading-sheet/grading-sheet.html",
+        controller: "GradingSheetController",
+        controllerAs: "vm",
+        requiredRoles: ["registrar", "faculty_admin", "admin"],
+      })
 
       /* Tuition Years (Finance) */
       .when('/finance/tuition-years', {

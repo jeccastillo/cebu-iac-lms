@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Exports\EnrolledStudentsExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
+use App\Services\GradingSheetService;
+use App\Services\Pdf\GradingSheetPdf;
 
 class ReportsController extends Controller
 {
@@ -142,6 +144,31 @@ class ReportsController extends Controller
             'date_to' => $dateTo,
             'data' => $data,
             'totals' => $totals,
+        ]);
+    }
+
+    /**
+     * GET /api/v1/reports/grading-sheet/pdf?student_id=INT&amp;syid=INT&amp;period=midterm|final
+     * Streams a grading sheet PDF inline.
+     * Guarded by role middleware in routes: registrar, faculty_admin, admin.
+     */
+    public function gradingSheetPdf(Request $request, GradingSheetService $service)
+    {
+        $payload = $request->validate([
+            'student_id' => 'required|integer',
+            'syid'       => 'required|integer',
+            'period'     => 'required|string|in:midterm,final',
+        ]);
+
+        $dto = $service->buildDto((int) $payload['student_id'], (int) $payload['syid'], (string) $payload['period'], $request);
+
+        $renderer = app(GradingSheetPdf::class);
+        $content = $renderer->render($dto);
+
+        $filename = 'grading-sheet-' . now()->format('Ymd-His') . '.pdf';
+        return response($content, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="' . $filename . '"',
         ]);
     }
 }

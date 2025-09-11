@@ -1,0 +1,74 @@
+<div class="max-w-5xl mx-auto">
+  <!-- Page header -->
+  <div class="mb-6">
+    <h1 class="text-2xl font-semibold text-gray-800">Grading Sheet</h1>
+    <p class="text-sm text-gray-600 mt-1">Generate a per-student grading sheet PDF for the selected academic term.</p>
+  </div>
+
+  <!-- Alerts -->
+  <div class="mb-4" ng-if="vm.error">
+    <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+      {{ vm.error }}
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div class="bg-white border border-gray-200 rounded shadow-sm p-4 md:p-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- Term (readonly, global) -->
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Academic Term</label>
+        <div class="h-10 flex items-center px-3 border rounded bg-gray-50 text-gray-700">
+          <span ng-bind="vm.termLabel || 'Select a term from the sidebar'"></span>
+        </div>
+        <p class="text-xs text-gray-500 mt-1">Term is sourced from the global selector in the sidebar.</p>
+      </div>
+
+      <!-- Student (autocomplete) -->
+      <div class="relative">
+        <label class="block text-sm text-gray-600 mb-1">Student</label>
+        <input type="text"
+               class="block w-full rounded border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+               placeholder="Search or select a student..."
+               pui-autocomplete
+               ng-model="vm.selectedStudentId"
+               pui-source="vm.students"
+               pui-on-query="vm.onStudentQuery(q)"
+               pui-label="vm.studentLabel(item)"
+               pui-max-results="20"
+               pui-min-chars="1"
+               pui-query-debounce="250">
+        <p class="text-xs text-gray-500 mt-1">Type a name or student number, then select from the list.</p>
+      </div>
+
+      <!-- Period -->
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Period</label>
+        <div class="flex items-center h-10 space-x-6 px-2">
+          <label class="inline-flex items-center space-x-2 cursor-pointer">
+            <input type="radio" class="form-radio" ng-model="vm.period" value="midterm">
+            <span class="text-gray-700">Midterm</span>
+          </label>
+          <label class="inline-flex items-center space-x-2 cursor-pointer">
+            <input type="radio" class="form-radio" ng-model="vm.period" value="final">
+            <span class="text-gray-700">Final</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-6 flex items-center space-x-3">
+      <button class="inline-flex items-center px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60"
+              ng-click="vm.generate()"
+              ng-disabled="vm.loading">
+        <span class="fas fa-file-pdf mr-2"></span>
+        <span ng-if="!vm.loading">Generate PDF</span>
+        <span ng-if="vm.loading">Generating...</span>
+      </button>
+      <span class="text-sm text-gray-500" ng-if="vm.loading">
+        <img src="assets/img/ajax-loader.gif" alt="Loading" class="inline-block align-middle mr-2">
+        Please wait while we generate the PDF.
+      </span>
+    </div>
+  </div>
+</div>
