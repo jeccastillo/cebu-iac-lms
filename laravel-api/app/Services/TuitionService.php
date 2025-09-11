@@ -170,7 +170,7 @@ class TuitionService
         $stype = $registration->enumStudentType ?? ($user->student_type ?? 'continuing');
         $syArr = $sy ? (array) $sy : [];
         $withdrawalStatus = $registration->withdrawal_period ?? null;
-        $dteRegistered = $registration->dteRegistered ?? null;
+        $dteRegistered = $registration->date_enrolled ?? null;
 
         $misc = $calc->computeMiscFees($tuitionYear, $classType, (string) $stype, (int) $syid, $withdrawalStatus, $syArr, $dteRegistered);
         $miscTotal = (float) ($misc['total_misc'] ?? 0);

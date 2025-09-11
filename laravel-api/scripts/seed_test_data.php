@@ -152,8 +152,8 @@ if ($ty && $student) {
         $db->table('tb_mas_registration')->insert([
             'intStudentID'       => $student->intID,
             'intAYID'            => $ty->intID,
-            'dteRegistered'      => date('Y-m-d H:i:s'),
-            'intROG'             => 1, // enrolled
+            'date_enrolled'      => date('Y-m-d H:i:s'),
+            'enrollment_status'             => 'enrolled', // enrolled
             'enumStudentType'    => 'continuing',
             // Provide non-null fields commonly required by schema
             'intYearLevel'       => 1,

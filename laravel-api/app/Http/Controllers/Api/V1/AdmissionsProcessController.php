@@ -1404,7 +1404,7 @@ class AdmissionProcessController extends Controller
 
         foreach($registrations as $registration){
             $studentInformation = $this->studentInformation->where('slug', $registration['slug'])->first();    
-            $studentInformation->date_enrolled = date("Y-m-d",strtotime($registration['dteRegistered']));
+            $studentInformation->date_enrolled = date("Y-m-d",strtotime($registration['date_enrolled']));
             $studentInformation->update();
         }
 

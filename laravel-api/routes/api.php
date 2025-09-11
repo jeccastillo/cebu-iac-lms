@@ -371,6 +371,8 @@ Route::prefix('v1')->group(function () {
     // Classlists CRUD
     Route::post('/classlists/merge', [ClasslistMergeController::class, 'merge'])->middleware('role:registrar,admin');
     Route::get('/classlists', [ClasslistController::class, 'index']);
+    // Place export BEFORE parameterized {id} to avoid route collision
+    Route::get('/classlists/export-faculty-assignments', [ClasslistController::class, 'exportFacultyAssignments'])->middleware('role:registrar,faculty_admin,admin');
     Route::get('/classlists/{id}', [ClasslistController::class, 'show']);
     Route::post('/classlists', [ClasslistController::class, 'store'])->middleware('role:registrar,admin');
     Route::put('/classlists/{id}', [ClasslistController::class, 'update'])->middleware('role:registrar,faculty_admin,admin');

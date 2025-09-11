@@ -11,9 +11,12 @@
 
     var svc = {
       list: list,
+      listByFaculty: listByFaculty,
+      listUnassigned: listUnassigned,
       updateSingle: updateSingle,
       assignBulk: assignBulk,
-      facultyOptions: facultyOptions
+      facultyOptions: facultyOptions,
+      exportAssignments: exportAssignments
     };
     return svc;
 
@@ -54,9 +57,135 @@
     }
 
     /**
+     * Export faculty assignments to Excel.
+     * params: {
+     *   term: number (required),
+     *   intFacultyID?: number,
+     *   sectionCode?: string,
+     *   subjectCode?: string,
+     *   includeUnassigned?: boolean,
+     *   includeDissolved?: boolean
+     * }
+     * Returns a Promise resolving to a Blob download.
+     */
+    function exportAssignments(params) {
+      var query = Object.assign({}, params || {});
+      // Coerce boolean-like flags to 1/0 so Laravel boolean validator accepts them
+      if (typeof query.includeUnassigned !== 'undefined') {
+        query.includeUnassigned = query.includeUnassigned ? 1 : 0;
+      }
+      if (typeof query.includeDissolved !== 'undefined') {
+        query.includeDissolved = query.includeDissolved ? 1 : 0;
+      }
+      var cfg = Object.assign(
+        { params: query, responseType: 'arraybuffer' },
+        _adminHeaders({ 'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+      );
+      return $http.get(BASE + '/classlists/export-faculty-assignments', cfg).then(function (res) {
+        var blob = new Blob([res.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        var contentDisposition = res.headers('content-disposition') || '';
+        var filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/i);
+        var filename = filenameMatch ? filenameMatch[1].replace(/['"]/g, '') : 'faculty-assignments.xlsx';
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+          window.navigator.msSaveOrOpenBlob(blob, filename);
+        } else {
+          var link = document.createElement('a');
+          link.href = window.URL.createObjectURL(blob);
+          link.download = filename;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+        return Promise.resolve();
+      }, _unwrapErr);
+    }
+
+    /**
+     * Convenience wrapper to list classlists assigned to a specific faculty.
+     * @param {{ term:number, facultyId?:number, intFacultyID?:number, page?:number, per_page?:number }} params
+     */
+    function listByFaculty(params) {
+      var p = Object.assign({}, params || {});           
+      var fid = p.facultyId != null ? p.facultyId : p.intFacultyID;
+      if (fid != null) {
+        p.intFacultyID = fid;
+      }
+      delete p.facultyId;
+      return list(p);
+    }
+
+    /**
+     * Client-side "unassigned" list. Fetch page and filter locally where intFacultyID is null/0/''.
+     * Returns a list-shaped object with filtered data. Meta is adjusted for data length only (server totals preserved via original meta if needed).
+     * @param {{ term:number, page?:number, per_page?:number }} params
+     */
+    function listUnassigned(params) {
+      // Aggregate across pages (server caps per_page at 100). We fetch pages until we have
+      // enough unassigned rows to fill the requested page or we reach the last page.
+      
+      var desiredPage = parseInt(params && params.page, 10) || 1;
+      var desiredPerPage = parseInt(params && params.per_page, 10) || 20;
+      var base = Object.assign({}, params || {});      
+      var page = 1;
+      var perPage = 100;
+      var filtered = [];
+      var lastPage = null;
+      
+      function isUnassigned(r) {
+        var v = r && r.intFacultyID;
+        // Treat 0, '0', null, '', undefined as unassigned
+        return v === null || v === 0 || v === '' || v === '0' || typeof v === 'undefined';
+      }
+      
+      function loop() {
+        var q = Object.assign({}, base, { page: page, per_page: perPage });
+        return list(q).then(function (res) {          
+          var data = Array.isArray(res.data) ? res.data : [];          
+          filtered.push.apply(filtered, data.filter(isUnassigned));
+          console.log(filtered);
+          var meta = res.meta || {};
+          lastPage = parseInt(meta.last_page, 10) || page; // fallback to current if missing
+  
+          // Stop early if we already have enough rows to fill the requested page
+          var need = desiredPage * desiredPerPage;
+          if (filtered.length >= need) {
+            return done();
+          }
+  
+          page += 1;
+          if (page > lastPage) {
+            return done();
+          }
+          return loop();
+        });
+      }
+  
+      function done() {
+        var total = filtered.length;
+        var computedLast = Math.max(1, Math.ceil(total / desiredPerPage));
+        if (desiredPage > computedLast) desiredPage = computedLast;
+        var start = (desiredPage - 1) * desiredPerPage;
+        var end = start + desiredPerPage;
+        var pageData = filtered.slice(start, end);             
+        return {
+          success: true,
+          data: pageData,
+          meta: {
+            current_page: desiredPage,
+            per_page: desiredPerPage,
+            total: total,
+            last_page: computedLast
+          }
+        };
+      }
+  
+      return loop();
+    }
+
+    /**
      * Update a single classlist faculty assignment.
      * @param {number} classlistId
-     * @param {number} facultyId
+     * @param {number|null} facultyId
      * Body: { intFacultyID: facultyId }
      */
     function updateSingle(classlistId, facultyId) {
@@ -91,6 +220,8 @@
       var cfg = Object.assign({ params: query }, _adminHeaders());
       return $http.get(BASE + '/generic/faculty', cfg).then(_unwrap, _unwrapErr);
     }
+
+
 
     // --------------- Internal response helpers ---------------
     function _unwrap(res) {

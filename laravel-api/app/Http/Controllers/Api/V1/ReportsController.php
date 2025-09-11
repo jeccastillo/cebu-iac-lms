@@ -57,18 +57,18 @@ class ReportsController extends Controller
 
         // Build base query
         $query = DB::table('tb_mas_registration')
-            ->select(DB::raw('DATE(dteRegistered) as d'), 'enumStudentType')
+            ->select(DB::raw('DATE(date_enrolled) as d'), 'enumStudentType')
             ->where('intAYID', $syid)
-            ->where('intROG', 1);
+            ->where('enrollment_status', 'enrolled');
 
         // Apply optional date filters
         if (!empty($dateFrom)) {
-            $query->where('dteRegistered', '>=', $dateFrom . ' 00:00:00');
+            $query->where('date_enrolled', '>=', $dateFrom . ' 00:00:00');
         }
         if (!empty($dateTo)) {
             // Inclusive end date via exclusive upper-bound at next day 00:00:00
             $endExclusive = date('Y-m-d', strtotime($dateTo . ' +1 day'));
-            $query->where('dteRegistered', '<', $endExclusive . ' 00:00:00');
+            $query->where('date_enrolled', '<', $endExclusive . ' 00:00:00');
         }
 
         $rows = $query->orderBy('d')->get();

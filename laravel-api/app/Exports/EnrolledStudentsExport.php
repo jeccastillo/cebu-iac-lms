@@ -41,7 +41,7 @@ class EnrolledStudentsExport implements FromCollection, WithHeadings, WithMappin
             ->leftJoin('tb_mas_programs as rp', 'rp.intProgramID', '=', 'r.current_program')
             ->leftJoin('tb_mas_programs as up', 'up.intProgramID', '=', 'u.intProgramID')
             ->where('r.intAYID', $syid)
-            ->where('r.intROG', 1)
+            ->where('r.enrollment_status', 'enrolled')
             ->select(
                 'u.strStudentNumber as student_number',
                 'u.strFirstname as first_name',
@@ -49,7 +49,7 @@ class EnrolledStudentsExport implements FromCollection, WithHeadings, WithMappin
                 'u.strMiddlename as middle_name',
                 DB::raw('COALESCE(rp.strProgramCode, up.strProgramCode) as program_code'),
                 'u.intID as student_id',
-                'r.dteRegistered as date_enrolled',
+                'r.date_enrolled as date_enrolled',
                 'r.enumStudentType as type'
             )
             // ensure one row per student in case of duplicates from joins

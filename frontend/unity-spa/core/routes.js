@@ -421,6 +421,12 @@
         controllerAs: "vm",
         requiredRoles: ["registrar", "faculty_admin", "admin"],
       })
+      .when("/faculty-loading/by-faculty", {
+        templateUrl: "features/academics/faculty-loading/by-faculty.html",
+        controller: "FacultyLoadingByFacultyController",
+        controllerAs: "vm",
+        requiredRoles: ["registrar", "faculty_admin", "admin"],
+      })
 
       /* Tuition Years (Finance) */
       .when('/finance/tuition-years', {

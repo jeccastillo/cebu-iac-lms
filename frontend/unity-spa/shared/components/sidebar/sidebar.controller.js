@@ -96,7 +96,8 @@
           { label: 'School Terms', path: '/school-years' },
           { label: 'Classrooms', path: '/classrooms' },
           { label: 'Schedules', path: '/schedules' },
-          { label: 'Faculty Loading', path: '/faculty-loading' },
+          // { label: 'Faculty Loading', path: '/faculty-loading' },
+          { label: 'Faculty Loading', path: '/faculty-loading/by-faculty' },
           { label: 'Grading Systems', path: '/grading-systems' }
         ]
       },

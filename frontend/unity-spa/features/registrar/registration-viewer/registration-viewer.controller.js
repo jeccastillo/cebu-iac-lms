@@ -106,7 +106,7 @@
       tuition_year: null,
       allow_enroll: null,
       downpayment: null,
-      intROG: null
+      enrollment_status: null
     };
 
     // Helpers
@@ -422,7 +422,7 @@
           vm.edit.tuition_year = vm.registration ? (vm.registration.tuition_year || null) : null;
           vm.edit.allow_enroll = vm.registration ? (vm.registration.allow_enroll != null ? parseInt(vm.registration.allow_enroll, 10) : null) : null;
           vm.edit.downpayment = vm.registration ? (vm.registration.downpayment != null ? parseInt(vm.registration.downpayment, 10) : null) : null;
-          vm.edit.intROG = vm.registration ? (vm.registration.intROG != null ? parseInt(vm.registration.intROG, 10) : null) : null;
+          vm.edit.enrollment_status = vm.registration ? (vm.registration.enrollment_status != null ? parseInt(vm.registration.enrollment_status, 10) : null) : null;
           // Mark last loaded params to prevent duplicate API calls
           vm._last.registration = { sn: vm.sn, term: vm.term };
         })
@@ -721,7 +721,7 @@
       if (vm.edit.tuition_year !== null && vm.edit.tuition_year !== undefined) fields.tuition_year = vm.edit.tuition_year;
       if (vm.edit.allow_enroll !== null && vm.edit.allow_enroll !== undefined) fields.allow_enroll = parseInt(vm.edit.allow_enroll, 10);
       if (vm.edit.downpayment !== null && vm.edit.downpayment !== undefined) fields.downpayment = parseInt(vm.edit.downpayment, 10);
-      if (vm.edit.intROG !== null && vm.edit.intROG !== undefined) fields.intROG = parseInt(vm.edit.intROG, 10);
+      if (vm.edit.enrollment_status !== null && vm.edit.enrollment_status !== undefined) fields.enrollment_status = parseInt(vm.edit.enrollment_status, 10);
 
       var payload = {
         student_number: vm.sn,

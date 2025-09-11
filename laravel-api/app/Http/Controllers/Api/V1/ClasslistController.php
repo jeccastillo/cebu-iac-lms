@@ -12,6 +12,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\Api\V1\ClasslistAssignFacultyBulkRequest;
+use App\Exports\FacultyAssignmentsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ClasslistController extends Controller
 {
@@ -59,6 +61,13 @@ class ClasslistController extends Controller
             $section = trim((string) $request->query('sectionCode', ''));
             if ($section !== '') {
                 $query->where('tb_mas_classlist.sectionCode', 'like', '%' . str_replace(['%', '_'], ['\\%','\\_'], $section) . '%');
+            }
+        }
+        // Optional filter: subjectCode (supports partial match on subject strCode)
+        if ($request->filled('subjectCode')) {
+            $subj = trim((string) $request->query('subjectCode', ''));
+            if ($subj !== '') {
+                $query->where('s.strCode', 'like', '%' . str_replace(['%', '_'], ['\\%','\\_'], $subj) . '%');
             }
         }
         // Use query() presence check instead of filled() so that "0" is a valid filter value
@@ -160,34 +169,45 @@ class ClasslistController extends Controller
 
         // Enforce faculty assignment constraints when provided
         if (array_key_exists('intFacultyID', $data)) {
-            if ((int)($classlist->isDissolved ?? 0) === 1) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Cannot assign faculty to a dissolved classlist.',
-                ], 422);
-            }
-            $fid = (int) $data['intFacultyID'];
-            $faculty = DB::table('tb_mas_faculty')->where('intID', $fid)->first();
-            if (!$faculty) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Faculty not found.',
-                ], 422);
-            }
-            if ((int) ($faculty->teaching ?? 0) !== 1) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Selected faculty is not marked as teaching.',
-                ], 422);
-            }
-            $clCampus = $classlist->campus_id ?? null;
-            $facCampus = $faculty->campus_id ?? null;
-            if ($clCampus !== null) {
-                if ($facCampus === null || (int) $clCampus !== (int) $facCampus) {
+            // Unassign branch: allow clearing assignment when null (still block dissolved)
+            if ($data['intFacultyID'] === null) {
+                if ((int)($classlist->isDissolved ?? 0) === 1) {
                     return response()->json([
                         'success' => false,
-                        'message' => 'Campus mismatch between classlist and faculty.',
+                        'message' => 'Cannot unassign faculty from a dissolved classlist.',
                     ], 422);
+                }
+                // Skip further faculty validations; proceed to update below
+            } else {
+                if ((int)($classlist->isDissolved ?? 0) === 1) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Cannot assign faculty to a dissolved classlist.',
+                    ], 422);
+                }
+                $fid = (int) $data['intFacultyID'];
+                $faculty = DB::table('tb_mas_faculty')->where('intID', $fid)->first();
+                if (!$faculty) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Faculty not found.',
+                    ], 422);
+                }
+                if ((int) ($faculty->teaching ?? 0) !== 1) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Selected faculty is not marked as teaching.',
+                    ], 422);
+                }
+                $clCampus = $classlist->campus_id ?? null;
+                $facCampus = $faculty->campus_id ?? null;
+                if ($clCampus !== null) {
+                    if ($facCampus === null || (int) $clCampus !== (int) $facCampus) {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Campus mismatch between classlist and faculty.',
+                        ], 422);
+                    }
                 }
             }
         }
@@ -259,6 +279,8 @@ class ClasslistController extends Controller
      * Bulk assign faculty to classlists with validations.
      * POST /api/v1/classlists/assign-faculty-bulk
      */
+    use App\Services\ScheduleImportService;
+
     public function assignFacultyBulk(ClasslistAssignFacultyBulkRequest $request): JsonResponse
     {
         $payload = $request->validated();
@@ -267,6 +289,8 @@ class ClasslistController extends Controller
 
         $results = [];
         $applied = 0;
+
+        $scheduleService = new ScheduleImportService();
 
         foreach ($assignments as $idx => $item) {
             $cid = (int) ($item['classlist_id'] ?? 0);
@@ -308,6 +332,22 @@ class ClasslistController extends Controller
                     }
                 }
 
+                // Schedule conflict check
+                $conflicts = $scheduleService->checkFacultyConflicts(
+                    ['intClasslistID' => $cid],
+                    null,
+                    $fid
+                );
+                if (!empty($conflicts)) {
+                    $results[] = [
+                        'classlist_id' => $cid,
+                        'ok' => false,
+                        'message' => 'Faculty schedule conflict detected',
+                        'conflicts' => $conflicts,
+                    ];
+                    continue;
+                }
+
                 $old = $classlist->toArray();
                 $classlist->update(['intFacultyID' => $fid]);
                 $new = $classlist->fresh();
@@ -331,6 +371,34 @@ class ClasslistController extends Controller
             'total' => count($assignments),
             'results' => $results,
         ]);
+    }
+
+    /**
+     * GET /api/v1/classlists/export-faculty-assignments
+     *
+     * Streams an XLSX of faculty assignments for a term with optional filters.
+     * Guards: role:registrar,faculty_admin,admin (via routes).
+     */
+    public function exportFacultyAssignments(Request $request)
+    {
+        $payload = $request->validate([
+            'term'              => ['required', 'integer'],
+            'intFacultyID'      => ['sometimes', 'integer'],
+            'sectionCode'       => ['sometimes', 'string'],
+            'subjectCode'       => ['sometimes', 'string'],
+            'includeUnassigned' => ['sometimes', 'boolean'],
+            'includeDissolved'  => ['sometimes', 'boolean'],
+        ]);
+
+        $filters = [];
+        foreach (['term','intFacultyID','sectionCode','subjectCode','includeUnassigned','includeDissolved'] as $key) {
+            if (array_key_exists($key, $payload)) {
+                $filters[$key] = $payload[$key];
+            }
+        }
+
+        $filename = 'faculty-assignments-' . now()->format('Ymd-His') . '.xlsx';
+        return Excel::download(new FacultyAssignmentsExport($filters), $filename);
     }
 
     /**

@@ -39,8 +39,8 @@ class DataFetcherService
         $registered = DB::table('tb_mas_registration')
             ->join('tb_mas_sy', 'tb_mas_registration.intAYID', '=', 'tb_mas_sy.intID')
             ->where('intStudentID', $user->intID)
-            ->whereNotNull('dteRegistered')
-            ->orderBy('dteRegistered', 'desc')
+            ->whereNotNull('date_enrolled')
+            ->orderBy('date_enrolled', 'desc')
             ->select(
                 'tb_mas_registration.*',
                 'tb_mas_sy.enumSem',
@@ -90,8 +90,8 @@ class DataFetcherService
         $registered = DB::table('tb_mas_registration')
             ->join('tb_mas_sy', 'tb_mas_registration.intAYID', '=', 'tb_mas_sy.intID')
             ->where('intStudentID', $user->intID)
-            ->whereNotNull('dteRegistered')
-            ->orderBy('dteRegistered', 'desc')
+            ->whereNotNull('date_enrolled')
+            ->orderBy('date_enrolled', 'desc')
             ->select(
                 'tb_mas_registration.*',
                 'tb_mas_sy.enumSem',
