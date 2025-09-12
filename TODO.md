@@ -1,41 +1,75 @@
-# Tuition Year Installment Plans - Implementation TODO
+# Cashier Viewer — Missing Billing Invoices Implementation TODO
 
-- [ ] Step 1: Add migration to create `tb_mas_tuition_year_installment` table
-- [ ] Step 2: Add migration to add `tuition_installment_plan_id` to `tb_mas_registration`
-- [ ] Step 3: Create Eloquent model `App\Models\TuitionYearInstallment`
-- [ ] Step 4: Add `App\Services\InstallmentPlanService` with `listByTuitionYear` and `computePlan`
-- [ ] Step 5: Update `UnityRegistrationUpdateRequest` to accept `tuition_installment_plan_id`
-- [ ] Step 6: Update `RegistrationService` to persist `tuition_installment_plan_id` and validate ownership to registration's `tuition_year`
-- [ ] Step 7: Extend `TuitionYearController` with `installments()` endpoint and support for `type=installment` in `submitExtra`/`editType`/`deleteType`
-- [ ] Step 8: Update `TuitionCalculator` to add `computeInstallmentForPlan` and keep legacy `computeInstallments` for compatibility
-- [ ] Step 9: Update `TuitionService::compute` to populate `summary.installments` (plans + `selected_plan_id`) and adjust invoice amount logic for partial using selected plan
-- [ ] Step 10: Update `UnityController::regForm` PDF to output Full + first two plans (DP and N installments)
-- [ ] Step 11: Frontend Cashier Viewer: add plan selector, render DP + N installment rows, persist registration change, “Use” controls per bucket
-- [ ] Step 12: Frontend Enlistment: dynamic plan tabs, DP/fee/total per plan, update Total Due display
-- [ ] Step 13: Seed default plans (`standard`, `dp50`, `dp30`) for existing tuition years (within migration)
-- [ ] Step 14: Thorough testing: backend endpoints, UI flows, PDF output, and edge cases
+Plan Source: implementation_plan.md
 
-## Testing Plan (Thorough)
+Scope:
+- Backend (Laravel API): Add endpoints to list student billing items without invoices and to generate an invoice for a billing item.
+- Frontend (AngularJS SPA): Cashier Viewer — auto-open modal listing missing-invoice billings, per-row generate action, and bottom-right floating bell icon with badge to reopen the modal.
 
-- Backend/API:
-  - [ ] GET `/api/v1/tuition-years/{id}/installments`
-  - [ ] POST `/api/v1/tuition-years/submit-extra` with `type=installment`
-  - [ ] POST `/api/v1/tuition-years/edit-type` with `xtype=installment`
-  - [ ] POST `/api/v1/tuition-years/delete-type` with `type=installment`
-  - [ ] PUT `/api/v1/unity/registration` accepts `tuition_installment_plan_id` and persists correctly
-  - [ ] Tuition compute includes `summary.installments` with `plans` + `selected_plan_id`
-  - [ ] Tuition invoice amount derivation for partial uses selected plan’s `total_installment`
-  - [ ] Unity `/tuition-preview` and `/tuition-save` continue working
+Testing Mode: Critical-path testing (as requested).
 
-- UI:
-  - [ ] Cashier Viewer: plan selector defaults, DP and Installments N, “Use” with invoice cap, persistence
-  - [ ] Registrar Enlistment: dynamic plan tabs, DP/fee/total, Total Due switching
-  - [ ] Registration Form PDF: Full + first two active plans, DP and N installment rows (cap 5)
+---
 
-- Edge Cases:
-  - [ ] `dp_type` fixed vs percent; `dp_value` bounds; `increase_percent=0`
-  - [ ] `installment_count` 1..12; amounts round/truncate 2 dp
-  - [ ] SHS special rules, year level handling, no plans defined (legacy fallback)
-  - [ ] Invalid plan id, inactive plan, plan not in tuition_year
-  - [ ] PDF layout constraints for N installments and long labels
-  - [ ] Cashier permissions, reservation offsets, remaining calculations
+## Task Progress
+
+- [x] Step 1: Backend — Create StudentBillingExtrasService (service layer)
+  - [x] listMissingInvoices(studentId:int, term:int): array
+  - [x] generateInvoiceForBilling(billingId:int, opts: {posted_at?, remarks?}): array { invoice_id, invoice_number }
+  - [x] augmentBillingWithInvoiceInfo(rows, studentId, term) (internal helper) — covered within listMissingInvoices/hasInvoice heuristics
+  - [x] Strategy for determining existing invoice: explicit linkage (remarks "Billing #id") or deterministic match on {description, amount}
+
+- [x] Step 2: Backend — Create StudentBillingExtrasController
+  - [x] missingInvoices(Request): validate student_id and term, call service, return JSON
+  - [x] generateInvoice(int $id, Request): validate billing ownership/term/un-invoiced, call service, return invoice info
+  - [x] Add role middleware: finance,admin
+
+- [x] Step 3: Backend — Wire routes
+  - [x] GET /api/v1/finance/student-billing/missing-invoices → missingInvoices
+  - [x] POST /api/v1/finance/student-billing/{id}/generate-invoice → generateInvoice
+
+- [x] Step 4: Frontend Service — Extend StudentBillingService
+  - [x] missingInvoices(filters:{student_id, term})
+  - [x] generateInvoiceForBilling(id:number, body?:{posted_at?, remarks?})
+
+- [x] Step 5: Frontend Controller — Update CashierViewerController
+  - [x] Add state: vm.missingBilling, vm.ui.showMissingBillingModal, vm.ui.dismissedMissingBilling, vm.badge
+  - [x] Add methods: loadMissingBilling(force), openMissingBillingModal(), closeMissingBillingModal(), generateInvoiceForBilling(billing)
+  - [x] Insert loadMissingBilling in bootstrap and onTermChange chains
+  - [x] After generate success: refresh invoices, billing, and missing list; update badge
+
+- [x] Step 6: Frontend Template — Update cashier-viewer.html
+  - [x] Modal: "Billings Without Invoice" (date, description, amount, action)
+  - [x] Floating bell icon (bottom-right) with badge indicating count; click opens modal
+  - [x] Visibility gated by Finance/Admin role
+
+- [ ] Step 7: Critical-Path Testing
+  - [ ] Backend: missing-invoices returns correct rows; generate-invoice creates billing-type invoice, forbids duplicates, role-guarded
+  - [ ] Frontend:
+    - [ ] Auto-open modal when items exist
+    - [ ] Generate Invoice button works; refresh lists and badge
+    - [ ] Close modal → floating bell shows; click reopens modal; hides at count=0
+    - [ ] Term change re-evaluates and auto-opens if needed
+    - [ ] Role gating (Finance/Admin only)
+
+  Testing instructions (manual / curl):
+  - Backend:
+    1) List missing-invoices
+       curl -X GET "http://localhost/laravel-api/public/api/v1/finance/student-billing/missing-invoices?student_id=123&amp;term=20251" -H "X-Faculty-ID: <faculty_id>"
+    2) Generate invoice for a billing id
+       curl -X POST "http://localhost/laravel-api/public/api/v1/finance/student-billing/456/generate-invoice" -H "Content-Type: application/json" -H "X-Faculty-ID: <faculty_id>" -d "{}"
+    3) Verify invoices list:
+       curl -X GET "http://localhost/laravel-api/public/api/v1/finance/invoices?student_id=123&amp;term=20251" -H "X-Faculty-ID: <faculty_id>"
+  - Frontend:
+    - Open Cashier Viewer for the student/term that has un-invoiced billing items.
+    - Confirm modal auto-opens and lists items; click Generate Invoice per-row; verify count shrinks and invoices panel updates.
+    - Close modal; confirm floating bell shows with correct badge; clicking reopens modal; bell hides when count reaches zero.
+    - Switch term via global selector; confirm behavior re-evaluates correctly.
+    - Confirm only Finance/Admin role can see modal/bell.
+
+- [ ] Step 8: Polish and Error Handling
+  - [ ] User feedback via ToastService on success/error
+  - [ ] Loading states and disabled buttons during calls
+
+Notes:
+- There is currently no explicit backend field indicating invoice linkage for billing items; we will add dedicated endpoints and compute linkage server-side.
+- Invoice generation for billing will target existing /finance/invoices/generate semantics with type='billing' and single item matching the billing row.

@@ -1,208 +1,155 @@
 # Implementation Plan
 
 [Overview]
-Deliver a new Academics: Faculty Loading "Assign by Faculty" page so registrar, faculty_admin, and admin users can select a faculty member and assign or unassign sections (classlists) for the active term. This complements the existing classlist-centric assignment page with a faculty-centric workflow using dual lists (Assigned vs Unassigned) and bulk operations.
+Enhance the Registrar Transcript page to stop displaying a separate “Paid Billing — Transcript / Change of Grades” list and instead surface the payment status directly within the History table. The “Paid” status must be computed across all terms by matching invoices/billings for the same transcript type, and a new “Paid” column will be added to the History grid.
 
-The solution reuses existing backend APIs for listing classlists, single-row updates, and bulk-assign. The only backend change required is to explicitly allow unassigning (clearing intFacultyID) in the single update endpoint. The frontend adds a dedicated route, controller, and template, extends the service with helper methods, and updates the sidebar and role guards accordingly. Unassigned filtering remains client-side per requirements.
+This change removes the per-term restriction for paid billing visibility and consolidates status into History entries. The backend will compute the paid flags (to avoid Registrar hitting finance-protected endpoints), using robust invoice payment checks that work across environments: an invoice is considered fully paid when the sum of payment_details amounts for its invoice_number is greater than or equal to invoice.amount_total OR invoice.status is “Paid.” The frontend will update the transcript History UI to show the Paid status and remove the separate paid billing section.
 
 [Types]  
-Type system changes are limited to AngularJS JSDoc typedefs and explicit request/response contracts used in the SPA. No TypeScript is used in this repository.
+Add server-computed fields to Transcript History items returned by ReportsController@listTranscriptRequests.
 
-Detailed type definitions and contracts:
-- AngularJS Interfaces (doc types in code comments)
-  - FacultyOption
-    - id: number
-    - full_name: string
-    - first_name?: string
-    - middle_name?: string
-    - last_name?: string
-    - teaching?: 0|1
-  - ClasslistRow
-    - intID: number
-    - intSubjectID: number
-    - sectionCode: string
-    - strAcademicYear: string (term id)
-    - intFacultyID: number|null
-    - subjectCode?: string
-    - subjectDescription?: string
-    - facultyFirstname?: string
-    - facultyLastname?: string
-    - campus_id?: number|null
-    - isDissolved?: 0|1
-    - intFinalized?: number
-  - FacultyLoadingListResponse
-    - success: boolean
-    - data: ClasslistRow[]
-    - meta: { current_page: number, per_page: number, total: number, last_page: number }
-  - AssignBulkRequest
-    - term: number
-    - assignments: Array<{ classlist_id: number, faculty_id: number }>
-  - AssignBulkResponse
-    - success: boolean
-    - applied_count: number
-    - total: number
-    - results: Array<{ classlist_id: number, ok: boolean, message?: string }>
-
-Validation rules and relationships:
-- Assigning requires faculty.teaching=1 and classlist.campus_id to match faculty.campus_id when classlist.campus_id is not null (enforced server-side).
-- Unassigning sets intFacultyID to null (requires backend update endpoint to accept nullable intFacultyID).
-- Client-side “unassigned” listing fetches and filters the dataset by intFacultyID in [null, 0, '', undefined]; aggregates up to enough rows to fill requested page.
+Detailed type definitions:
+- TranscriptHistoryItem (server response)
+  - id: int
+  - created_at: string
+  - date_issued: string|null
+  - type: 'transcript' | 'copy'
+  - amount: number|null
+  - payment_description_id: number|null
+  - term_ids: number[]
+  - has_billing: boolean           (existing)
+  - billing_id: number|null        (existing)
+  - [new] paid: boolean            (server-computed across all terms)
+  - [new] paid_invoice_numbers?: string[] (optional; for visibility/debugging)
+  - [new] paid_at?: string|null (optional; if determinable from latest payment or invoice posted_at)
+Validation/relationships:
+- Matching invoices via billing linkage: tb_mas_invoices.billing_id → tb_mas_student_billing.intID. The matched billing descriptions must be one of:
+  - Transcript: “Transcript of Records”
+  - Copy of Grades: “Copy of Grades”
+- Fully paid check: SUM(payment_details.subtotal_order WHERE status='Paid' AND invoice_number = i.invoice_number) >= i.amount_total OR i.status == 'Paid'.
 
 [Files]
-Frontend adds a faculty-centric page and service helpers; backend allows nullable intFacultyID on update. Role guards and sidebar gain entries for the new route.
+Frontend transcript page and Reports endpoints will be modified; no new endpoints are required.
 
 Detailed breakdown:
-- New files to be created (frontend)
-  - frontend/unity-spa/features/academics/faculty-loading/by-faculty.html
-    - Purpose: Dual-list UI (Assigned vs Unassigned) with faculty selector, section search, pagination on both lists, and Save All for bulk apply.
-  - frontend/unity-spa/features/academics/faculty-loading/by-faculty.controller.js
-    - Purpose: AngularJS controller for the faculty-centric page. Handles term sync, faculty selection, list loading, queues (assign/unassign), and saving.
-
-- Existing files to be modified (frontend)
-  - frontend/unity-spa/features/academics/faculty-loading/faculty-loading.service.js
-    - Add:
-      - listByFaculty(params): wraps list() to inject intFacultyID from params.facultyId|intFacultyID.
-      - listUnassigned(params): calls list() and client-filters rows where intFacultyID is null/0/''; adjusts meta locally.
-    - Update:
-      - updateSingle(classlistId, facultyId) to support facultyId null for unassign.
-  - frontend/unity-spa/core/routes.js
-    - Add route:
-      - "/faculty-loading/by-faculty"
-        - templateUrl: "features/academics/faculty-loading/by-faculty.html"
-        - controller: "FacultyLoadingByFacultyController"
-        - controllerAs: "vm"
-        - requiredRoles: ["registrar", "faculty_admin", "admin"]
-    - Ensure existing "/faculty-loading" route has requiredRoles: ["registrar", "faculty_admin", "admin"].
-  - frontend/unity-spa/core/roles.constants.js
-    - ACCESS_MATRIX: ensure { test: '^/faculty-loading(?:/.*)?$', roles: ['registrar', 'faculty_admin', 'admin'] }.
-  - frontend/unity-spa/shared/components/sidebar/sidebar.controller.js (or sidebar.html if menu is declarative)
-    - Add menu entry under Academics:
-      - { label: 'Assign by Faculty', path: '/faculty-loading/by-faculty' }
-  - frontend/unity-spa/index.html
-    - Include script tag for features/academics/faculty-loading/by-faculty.controller.js
-
-- Existing files to be modified (backend)
-  - laravel-api/app/Http/Requests/Api/V1/ClasslistUpdateRequest.php
-    - Change intFacultyID rule to allow nullable:
-      - ['sometimes', 'nullable', 'integer', 'exists:tb_mas_faculty,intID']
-  - laravel-api/app/Http/Controllers/Api/V1/ClasslistController.php
-    - In update(): if intFacultyID is present and is null, allow unassign:
-      - Guard dissolved classlists with 422.
-      - Update intFacultyID to null.
-      - Persist system log via SystemLogService.
-    - Keep existing validations for assignment: faculty exists, teaching=1, campus match when classlist.campus_id != null.
-
+- Existing files to be modified:
+  - laravel-api/app/Http/Controllers/Api/V1/ReportsController.php
+    - listTranscriptRequests(): augment returned items with a new boolean field paid (computed across all terms).
+    - Add private helpers to compute invoice paid state (across all terms) for the given student and type.
+  - frontend/unity-spa/features/registrar/transcripts/transcripts.html
+    - Remove the “Paid Billing — Transcript / Change of Grades” section entirely.
+    - Add a new “Paid” column to the History table; show a badge “Paid” or “Unpaid”.
+  - frontend/unity-spa/features/registrar/transcripts/transcripts.controller.js
+    - Remove vm.billingPaid state and loadTranscriptBilling() logic, including invocations on student select/term change.
+    - Keep History loading via ReportsService.listTranscriptRequests() (now includes paid flag).
+  - frontend/unity-spa/features/registrar/reports.service.js
+    - No API change; ensure client consumes the new paid field in the UI (no code change necessary beyond reading h.paid in controller/template).
 - Files to be deleted or moved
   - None.
-
 - Configuration file updates
-  - None required. Reuse APP_CONFIG.API_BASE, X-Faculty-ID header, and existing middleware for role checks.
-
-[Functions]
-Frontend adds new controller functions and service helpers; backend modifies the update path for unassign support.
-
-Detailed breakdown:
-- New functions (frontend)
-  - FacultyLoadingService.listByFaculty(params: { term:number, facultyId?:number, intFacultyID?:number, page?:number, per_page?:number }): Promise<FacultyLoadingListResponse>
-  - FacultyLoadingService.listUnassigned(params: { term:number, page?:number, per_page?:number }): Promise<FacultyLoadingListResponse> (client-side filter and pagination)
-  - FacultyLoadingByFacultyController (file: frontend/unity-spa/features/academics/faculty-loading/by-faculty.controller.js)
-    - activate()
-    - setTerm(id)
-    - onFacultyChange()
-    - reload(force?)
-    - applySearch()
-    - clearSearch()
-    - onSectionQuery(q)
-    - onSectionSelect()
-    - pageAssignedPrev/Next/Go
-    - pageUnassignedPrev/Next/Go
-    - moveToAssign(row)
-    - moveToUnassign(row)
-    - queueAssign(row)
-    - queueUnassign(row)
-    - isQueuedAssign(row)
-    - isQueuedUnassign(row)
-    - hasPending()
-    - saveAll()
-    - facultyNameOfRow(row)
-    - getTermLabel(sel, id)
-
-- Modified functions (backend)
-  - App\Http\Controllers\Api\V1\ClasslistController::update(ClasslistUpdateRequest $request, int $id): JsonResponse
-    - Add branch to set intFacultyID = null when provided and null; skip faculty validations in this branch; still guard dissolved.
-  - App\Http\Requests\Api\V1\ClasslistUpdateRequest::rules(): array
-    - Allow nullable for intFacultyID.
-
-- Removed functions
   - None.
 
+[Functions]
+Add paid computation and remove per-term paid billing UI.
+
+Detailed breakdown:
+- New backend helpers (ReportsController.php)
+  - private function isInvoiceFullyPaid(array $inv): bool
+    - Logic:
+      - If $inv['status'] == 'Paid' => return true.
+      - Else if payment_details table and invoice_number column exist:
+        - Sum paid credits: SUM(payment_details.subtotal_order WHERE status='Paid' AND invoice_number = i.invoice_number)
+        - If sum >= $inv['amount_total'] => true; else false.
+      - Else false.
+  - private function anyFullyPaidInvoicesForType(int $studentId, string $type): array
+    - Normalize $type: 'transcript' => 'Transcript of Records'; 'copy' => 'Copy of Grades'.
+    - Query tb_mas_student_billing sb WHERE sb.intStudentID = :studentId AND LOWER(sb.description) = LOWER($desc).
+    - Join tb_mas_invoices i ON i.billing_id = sb.intID AND i.intStudentID = :studentId (across all syid/terms).
+    - For each i row, call isInvoiceFullyPaid(); collect matches and the invoice_numbers that are fully paid.
+    - Return [ 'paid' => bool, 'invoice_numbers' => string[] ].
+- Modified backend function
+  - ReportsController::listTranscriptRequests(Request $request, int $studentId)
+    - For each transcript request row:
+      - Determine $type = transcript|copy.
+      - Compute $paidInfo = anyFullyPaidInvoicesForType($studentId, $type).
+      - Set item['paid'] = $paidInfo['paid'].
+      - Optionally include item['paid_invoice_numbers'].
+    - Preserve existing has_billing and billing_id behavior honoring optional ?term_id.
+- Frontend controller/template changes
+  - transcripts.controller.js
+    - Remove:
+      - vm.loading.billing, vm.error.billing, vm.billingPaid
+      - vm.loadTranscriptBilling and calls (in selectStudent() and term change watcher)
+    - History remains: vm.history returned items now include h.paid.
+  - transcripts.html
+    - Remove entire “Paid Billing — Transcript / Change of Grades” section.
+    - In History grid header, insert a “Paid” column.
+    - In History rows, render a badge:
+      - if h.paid => green “Paid”
+      - else => gray “Unpaid”
+
 [Classes]
-No new backend classes; one new AngularJS controller is added.
+Add helper methods within an existing controller; no new classes required.
 
 Detailed breakdown:
 - New classes
-  - FacultyLoadingByFacultyController (AngularJS)
-    - Key methods described above; follows existing controller patterns; no inheritance.
+  - None.
 - Modified classes
-  - ClasslistController (Laravel): update() method extended for unassign as described.
-  - ClasslistUpdateRequest (Laravel): rules() updated for nullable intFacultyID.
+  - App\Http\Controllers\Api\V1\ReportsController
+    - Add two private helpers (isInvoiceFullyPaid, anyFullyPaidInvoicesForType).
+    - Modify listTranscriptRequests() to enrich items with paid flag computed across all terms.
 - Removed classes
   - None.
 
 [Dependencies]
-No new external dependencies or packages.
+No new packages.
 
-The feature reuses:
-- GenericApiController@faculty for dropdown (teaching=1 default; supports q and campus_id filters).
-- Classlist endpoints:
-  - GET /api/v1/classlists (term, sectionCode, intFacultyID, paging)
-  - PUT /api/v1/classlists/{id} (now supports intFacultyID: null)
-  - POST /api/v1/classlists/assign-faculty-bulk (bulk assign)
-- TermService, StorageService, ToastService, and APP_CONFIG.API_BASE in the SPA.
-- RequireRole via X-Faculty-ID header for protected routes, consistent with other admin features.
+- Reuse:
+  - Illuminate\Support\Facades\DB, Illuminate\Support\Facades\Schema (for safety across environments).
+  - Existing tables: tb_mas_student_billing, tb_mas_invoices, payment_details.
+  - Existing logic patterns from Finance/StudentLedger services for payment_details summation semantics (status='Paid', subtotal_order).
 
 [Testing]
-Testing focuses on role-gated access and critical-path flows for assign/unassign.
+Add manual and targeted verification; automated tests if test harness is used.
 
-- Backend (manual API checks)
-  - PUT /api/v1/classlists/{id} with { intFacultyID: null }
-    - Expect 200 success when not dissolved; log entry created.
-    - Expect 422 on dissolved classlist.
-    - Expect 404 on not found.
-  - PUT /api/v1/classlists/{id} with { intFacultyID: <teaching faculty id> }
-    - Expect success; campus/teaching rules enforced (422 with message on violations).
-  - POST /api/v1/classlists/assign-faculty-bulk
-    - Bulk success and partial failure handling (collects per-row results).
-  - GET /api/v1/classlists
-    - Verify filtering via term, intFacultyID, sectionCode, pagination meta.
-
-- Frontend (manual UI checks)
-  - Route access enforced for registrar, faculty_admin, admin.
-  - Dropdown loads teaching=1 faculty; campus filter works when applied; q search returns expected results.
-  - Unassigned list aggregates client-side across pages until enough rows are gathered; respects page/per_page; performance acceptable with per_page up to 100 per fetch.
-  - Moving items between lists updates assign/unassign queues; Save All applies:
-    - Assign queue via assignBulk
-    - Unassign queue via sequential PUTs with { intFacultyID: null }
-  - Toast messages display for success, partial failures, and error cases; list refreshes reflect final state.
+- Backend:
+  - Unit/Feature:
+    - listTranscriptRequests returns paid=true when there exists at least one fully paid invoice for the matching type across any term.
+    - paid detection falls back to invoice.status == 'Paid' if payment_details invoice_number is unavailable.
+    - Ensure when no invoices exist, paid=false.
+    - Preserve term_id behavior for has_billing/billing_id (does not affect paid).
+- Frontend:
+  - Transcript page displays History with Paid column; badges appear correctly.
+  - The previous “Paid Billing — Transcript / Change of Grades” section is removed.
+  - Selecting different terms (global term change) must not restrict paid computation; History paid status unchanged (computed on server across all terms).
+  - Generation, reprint continue to function unchanged.
 
 [Implementation Order]
-Backend unassign allowance first, then frontend service and page, followed by role/menu wiring and QA.
+Implement backend paid computation first, then update the frontend UI and controller to remove the paid billing section and display the new Paid column.
 
-1) Backend (Unassign allowance)
-   1.1 Update ClasslistUpdateRequest to accept nullable intFacultyID.
-   1.2 Extend ClasslistController::update to handle intFacultyID === null (unassign) with dissolved guard; keep existing assignment validations.
-   1.3 Smoke-test with curl.
-
-2) Frontend: Service and Page
-   2.1 Extend FacultyLoadingService with listByFaculty and listUnassigned (client filtering).
-   2.2 Implement by-faculty.controller.js for faculty-centric workflow (dual lists, search, pagination, queues).
-   2.3 Implement by-faculty.html for the UI.
-   2.4 Add route "/faculty-loading/by-faculty" with requiredRoles ["registrar", "faculty_admin", "admin"].
-   2.5 Update roles.constants.js ACCESS_MATRIX for '^/faculty-loading' to include faculty_admin.
-   2.6 Add sidebar menu entry "Assign by Faculty" under Academics.
-   2.7 Include by-faculty.controller.js in index.html.
-
-3) QA and Verification
-   3.1 Verify permissions for registrar/faculty_admin/admin; ensure hidden for other roles.
-   3.2 Verify assign and unassign flows; check edge cases (teaching=0, campus mismatch, dissolved).
-   3.3 Confirm pagination and search behave as expected in both lists; validate bulk and per-row operations and toasts.
+1) Backend: ReportsController
+   1.1 Add private helper isInvoiceFullyPaid(array $inv): bool.
+       - Check invoice.status
+       - If available, sum payment_details.subtotal_order where status='Paid' and invoice_number matches; compare to amount_total
+   1.2 Add private helper anyFullyPaidInvoicesForType(int $studentId, string $type): array
+       - Map type => description ("Transcript of Records"|"Copy of Grades")
+       - Join student_billing→invoices, fetch across all terms
+       - Evaluate each invoice via isInvoiceFullyPaid; collect fully paid invoice_numbers
+   1.3 Modify listTranscriptRequests()
+       - For each item, compute paid info using anyFullyPaidInvoicesForType($studentId, $type)
+       - Merge paid boolean and optional paid_invoice_numbers into response
+       - Keep existing has_billing/billing_id behavior for provided ?term_id
+2) Frontend: transcripts.html
+   2.1 Remove the entire “Paid Billing — Transcript / Change of Grades” section
+   2.2 Add a “Paid” column in the History header
+   2.3 In row: render a badge Paid/Unpaid using h.paid
+3) Frontend: transcripts.controller.js
+   3.1 Remove billingPaid state and loaders:
+       - vm.loading.billing, vm.error.billing, vm.billingPaid
+       - function loadTranscriptBilling(studentId) and references
+       - Stop invoking loadTranscriptBilling() on selectStudent and on termChanged
+   3.2 Keep history load as-is; it will receive paid flags from backend
+4) QA
+   4.1 Seed test data: student billing rows for Transcript/Copy across two terms; invoices linked to some billings; payment_details entries for invoice_number partially and fully paying them
+   4.2 Confirm History paid column reflects true if any fully paid invoice exists across all terms for the type
+   4.3 Confirm removal of Paid Billing section and no per-term restriction remains in UI

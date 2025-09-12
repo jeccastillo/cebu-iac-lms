@@ -326,7 +326,23 @@
 
         // Both billing and invoice for Application Fee must be missing
         if (vm.hasAppBilling) return false;
-        if (typeof vm.hasAppInvoice === 'function' && vm.hasAppInvoice()) return false;
+
+        // Check invoices for Application Payment type (case-insensitive)
+        var hasAppInv = false;
+        try {
+          var list = Array.isArray(vm.invoices) ? vm.invoices : [];
+          for (var i = 0; i < list.length; i++) {
+            var inv = list[i] || {};
+            var t = (inv.type || '').toLowerCase();
+            if (t === 'application payment' || t === 'application fee') {
+              hasAppInv = true;
+              break;
+            }
+          }
+        } catch (e) {
+          hasAppInv = false;
+        }
+        if (hasAppInv) return false;
 
         return true;
       } catch (e) {
@@ -352,10 +368,26 @@
 
         // Both billing and invoice for Reservation Fee must be missing
         if (vm.hasReservationBilling) return false;
-        if (typeof vm.hasReservationInvoice === 'function' && vm.hasReservationInvoice()) return false;
+
+        // Check invoices for Reservation Payment type (case-insensitive)
+        var hasResInv = false;
+        try {
+          var list = Array.isArray(vm.invoices) ? vm.invoices : [];
+          for (var i = 0; i < list.length; i++) {
+            var inv = list[i] || {};
+            var t = (inv.type || '').toLowerCase();
+            if (t === 'reservation payment' || t === 'reservation fee') {
+              hasResInv = true;
+              break;
+            }
+          }
+        } catch (e) {
+          hasResInv = false;
+        }
+        if (hasResInv) return false;
 
         return true;
-      } catch (e) {
+      } catch (e) {        
         return false;
       }
     };
@@ -403,11 +435,9 @@
 
         return StudentBillingService.create(payload)
           .then(function () {
-            // Refresh dependent panels
+            // Refresh dependent panels via aggregated endpoint
             return $q.when()
-              .then(function () { return vm.loadBilling(true); })
-              .then(function () { return vm.loadInvoices(true); })
-              .then(function () { return vm.loadPaymentDetails(true); });
+              .then(function () { return vm.loadViewerData(true); });
           })
           .catch(function (err) {
             var msg = 'Failed to generate Application Fee.';
@@ -469,11 +499,9 @@
 
         return StudentBillingService.create(payload)
           .then(function () {
-            // Refresh dependent panels
+            // Refresh dependent panels via aggregated endpoint
             return $q.when()
-              .then(function () { return vm.loadBilling(true); })
-              .then(function () { return vm.loadInvoices(true); })
-              .then(function () { return vm.loadPaymentDetails(true); });
+              .then(function () { return vm.loadViewerData(true); });
           })
           .catch(function (err) {
             var msg = 'Failed to generate Reservation Fee.';
@@ -660,7 +688,12 @@
     };
 
     // UI: Tuition Breakdown modal state and helpers
-    vm.ui = vm.ui || { showTuitionModal: false, showInvoiceModal: false, showAssignNumberModal: false };
+    vm.ui = vm.ui || { showTuitionModal: false, showInvoiceModal: false, showAssignNumberModal: false, showMissingBillingModal: false, dismissedMissingBilling: false };
+    // Missing Billing Invoices state
+    vm.missingBilling = [];
+    vm.missingBillingError = null;
+    vm.badge = { count: 0 };
+    vm.generatingBillingInvoiceId = null;
 
     vm.openTuitionModal = function () {
       vm.ui.showTuitionModal = true;
@@ -1081,10 +1114,9 @@ if (vm.ui.showAssignNumberModal == null) vm.ui.showAssignNumberModal = false;
         return AdminPaymentDetailsService.update(id, payload)
           .then(function () {
             vm.closeAssignNumberModal();
-            // Refresh payments and invoices to reflect changes
+            // Refresh via aggregated endpoint to reflect changes
             return $q.when()
-              .then(function () { return vm.loadPaymentDetails(true); })
-              .then(function () { return vm.loadInvoices(true); })
+              .then(function () { return vm.loadViewerData(true); })
               .then(function () {
                 // Recompute invoice remaining if a selection exists
                 try {
@@ -1403,7 +1435,56 @@ if (vm.ui.showAssignNumberModal == null) vm.ui.showAssignNumberModal = false;
             inv._total_effective = inv._total;
             inv._remaining_effective = inv._remaining;
           }
+
+          // Display type label: for billing invoices, prefer the first invoice item's description/name/code
+          try {
+            var tType2 = (inv.type == null ? '' : ('' + inv.type)).toLowerCase();
+            var displayType = inv.type || '';
+            if (tType2 === 'billing') {
+              var firstItem = null;
+              if (Array.isArray(inv.items) && inv.items.length) {
+                firstItem = inv.items[0];
+              } else if (inv && inv.payload && Array.isArray(inv.payload.items) && inv.payload.items.length) {
+                firstItem = inv.payload.items[0];
+              } else if (Array.isArray(inv.invoice_items) && inv.invoice_items.length) {
+                firstItem = inv.invoice_items[0];
+              } else if (inv && inv.payload && Array.isArray(inv.payload.invoice_items) && inv.payload.invoice_items.length) {
+                firstItem = inv.payload.invoice_items[0];
+              }
+              if (firstItem) {
+                var dsc = firstItem.description || firstItem.name || firstItem.code || '';
+                if (dsc) displayType = dsc;
+              }
+            }
+            inv._display_type = displayType;
+          } catch (_eDT) {
+            inv._display_type = inv.type || '';
+          }
         }
+
+        // Clear current selection if it is now fully paid and thus not selectable
+        try {
+          if (vm && vm.payment && vm.payment.invoice_id != null) {
+            var _selId = parseInt(vm.payment.invoice_id, 10);
+            if (isFinite(_selId)) {
+              var _selected = null;
+              for (var _si = 0; _si < list.length; _si++) {
+                var _invX = list[_si] || {};
+                var _idX = (_invX && _invX.id != null) ? parseInt(_invX.id, 10) : null;
+                if (isFinite(_idX) && _idX === _selId) { _selected = _invX; break; }
+              }
+              var _tX = (_selected && _selected.type ? ('' + _selected.type).toLowerCase() : '');
+              var _remX = (_tX === 'tuition') ? _selected._remaining_effective : _selected._remaining;
+              var _remNum = parseFloat(_remX);
+              if (!isFinite(_remNum) || _remNum <= 0.00001) {
+                vm.payment.invoice_id = null;
+                vm.payment.invoice_number = null;
+                vm.invoiceCtx = { id: null, number: null, total: null, paid: 0, remaining: null };
+              }
+            }
+          }
+        } catch (_eSelClear) {}
+
         return true;
       } catch (e) {
         return false;
@@ -1426,6 +1507,30 @@ if (vm.ui.showAssignNumberModal == null) vm.ui.showAssignNumberModal = false;
         }
         return false;
       } catch (e) { return false; }
+    };
+
+    // Predicate used by ng-options filter to exclude fully-paid invoices from Add Payment select
+    vm.invoicesNotFullyPaid = function (inv) {
+      try {
+        if (!inv) return false;
+        var t = (inv.type == null ? '' : ('' + inv.type)).toLowerCase();
+        var rem = (t === 'tuition') ? inv._remaining_effective : inv._remaining;
+        var num = parseFloat(rem);
+        if (!isFinite(num)) {
+          // Fallback: compute from totals when precomputed remaining is absent
+          var totCands = [inv._total, inv.amount_total, inv.amount, inv.total];
+          var total = null;
+          for (var i = 0; i < totCands.length; i++) {
+            var v = parseFloat(totCands[i]);
+            if (isFinite(v)) { total = v; break; }
+          }
+          var paid = parseFloat(inv._paid);
+          if (!isFinite(paid)) paid = 0;
+          if (total == null) return true; // when total is unknown, keep it selectable
+          num = total - paid;
+        }
+        return num > 0.00001;
+      } catch (e) { return true; }
     };
 
     // Getter for first-due object computed by installments panel
@@ -1736,8 +1841,7 @@ vm.loading.createPayment = false;
           } catch (e) { p = null; }
 
           return $q.when(p)
-            .then(function () { return vm.loadPaymentDetails(true); })
-            .then(function () { return vm.loadLedger(); })
+            .then(function () { return vm.loadViewerData(true); })
             .then(function () {
               if (typeof vm.refreshTuitionSummary === 'function') {
                 vm.refreshTuitionSummary();
@@ -1966,15 +2070,13 @@ vm.loading.createPayment = false;
           chain = chain
             .then(vm.loadRegistration)
             .then(vm.loadTuition)
-            .then(vm.loadRecords)
-            .then(vm.loadLedger);
+            .then(function () { try { vm.autoSaveTuitionIfPossible(); } catch (e) {} return null; })
+            .then(vm.loadRecords);
         }
 
-        // Always try invoices and payment details (they can use student_id)
+        // Use aggregated viewer data endpoint to load invoices, payment details, billing, and missing billing in one call
         chain = chain
-          .then(vm.loadInvoices)
-          .then(vm.loadPaymentDetails)
-          .then(vm.loadBilling)
+          .then(function () { return vm.loadViewerData(); })
           .catch(function () { /* errors captured per-call */ });
       }, 500);
     };
@@ -2490,48 +2592,7 @@ vm.loading.createPayment = false;
           try { if (typeof vm._recomputeInstallmentsPanel === 'function') vm._recomputeInstallmentsPanel(); } catch (_eIP2) {}
           vm.loading.tuition = false;
         });
-    };
-
-    vm.loadLedger = function () {
-      if (!vm.sn) return $q.when();
-      vm.loading.ledger = true;
-      vm.error.ledger = null;
-      return $http.post(API + '/student/ledger', { student_number: vm.sn, student_id: vm.student.id})
-        .then(function (resp) {
-          var data = resp && resp.data ? resp.data : null;
-          vm.ledger = (data && data.data) ? data.data : (data || null);
-
-          // compute paid sum; prefer API-provided filtered amounts when available
-          try {
-            // Always compute transactions sum for comparison UI
-            var txs = vm.ledger && vm.ledger.transactions ? vm.ledger.transactions : [];
-            var sum = 0;
-            for (var i = 0; i < txs.length; i++) {
-              var t = txs[i];
-              var amt = (t && t.amount != null) ? parseFloat(t.amount) : 0;
-              sum += isFinite(amt) ? amt : 0;
-            }
-            vm.transactionsTotal = sum;
-
-            // If API returns meta.amount_paid specific to current registration/term, use it.
-            var apiPaid = vm.ledger && vm.ledger.meta && vm.ledger.meta.amount_paid != null
-              ? parseFloat(vm.ledger.meta.amount_paid) : null;
-
-            if (apiPaid != null && isFinite(apiPaid)) {
-              vm.meta.amount_paid = apiPaid;
-            } else if (vm.meta.amount_paid == null) {
-              // Safeguard: do not override amount_paid if tuition/compute already provided it
-              vm.meta.amount_paid = sum;
-            }
-          } catch (e) {}
-        })
-        .catch(function () {
-          vm.error.ledger = 'Failed to load ledger.';
-        })
-        .finally(function () {
-          vm.loading.ledger = false;
-        });
-    };
+    };    
 
     // Invoices loader (for selected term/registration)
     vm.loadInvoices = function (force) {
@@ -2612,7 +2673,7 @@ vm.loading.createPayment = false;
             var total = (vm.paymentDetails && vm.paymentDetails.meta && vm.paymentDetails.meta.total_paid_filtered != null)
                 ? parseFloat(vm.paymentDetails.meta.total_paid_filtered)
                 : null;
-            console.log(total);
+            
             vm.paymentDetailsTotal = isFinite(total) ? total : 0;
 
             // Apply Debit/Credit adjustments to Amount Paid:
@@ -2667,8 +2728,7 @@ vm.loading.createPayment = false;
                   var desc = (row.description == null ? '' : ('' + row.description)).trim().toLowerCase();
                   // classify as billing when invoice type says 'billing', or when not clearly tuition/reservation
                   var isTuitionRes = (desc === 'tuition fee') || _isApplicationFeeDesc(desc) || _isReservationFeeDesc(desc);
-                  if (itype === 'billing' || (!itype && !isTuitionRes)) {
-                    console.log(amt);
+                  if (itype === 'billing' || (!itype && !isTuitionRes)) {                    
                     billingPaid += amt;
                   }
                 }
@@ -2781,9 +2841,8 @@ vm.loading.createPayment = false;
 
           return vm.loadRegistration(true)
             .then(function () { return vm.loadTuition(true); })
-            // Auto-reload invoices after saving options to reflect updated tuition invoice totals/creation
-            .then(function () { return vm.loadInvoices(true); })
-            .then(function () { return vm.loadPaymentDetails(true); })
+            // Use aggregated load to refresh invoices/payment-details/billing/missing-billing
+            .then(function () { return vm.loadViewerData(true); })
             .then(function () {
               // Ensure summary reflects latest server state immediately after tuition reload
               vm.refreshTuitionSummary();
@@ -2810,16 +2869,9 @@ vm.loading.createPayment = false;
     vm._inBootstrap = true;
     vm.loading.bootstrap = true;
     $q.when()
-      .then(vm.loadStudent)
-      .then(vm.loadStudents)
+      .then(vm.loadStudent)      
       // Resolve acting cashier if callable (finance without cashier_admin may be forbidden; UI will handle null)
-      .then(vm.loadMyCashier)
-      // Fire-and-forget: do NOT block bootstrap on payment modes in case API is slow/unreachable
-      .then(function () {
-        try { vm.loadPaymentModes(); } catch (e) {}
-        try { vm.loadPaymentDescriptions(); } catch (e2) {}
-        return null;
-      })
+      .then(vm.loadMyCashier)          
       // Use existing global term selection; avoid calling TermService.init() here to prevent duplicate term list fetches
       .then(function () {
         applyGlobalTerm();
@@ -2828,10 +2880,8 @@ vm.loading.createPayment = false;
       .then(vm.loadApplicantInfo)
       .then(function () { return vm.loadRegistration(); })
       .then(function () { return vm.loadTuition(); })
-      .then(function () { return vm.loadLedger(); })
-      .then(function () { return vm.loadInvoices(); })
-      .then(function () { return vm.loadPaymentDetails(); })
-      .then(function () { return vm.loadBilling(); })
+      // Aggregated load replaces separate loads for invoices/payment-details/billing/missing-billing
+      .then(function () { return vm.loadViewerData(); })
       .then(function () { return vm.loadRecords(); })
       .finally(function () {
         vm._inBootstrap = false;
@@ -3050,6 +3100,195 @@ vm.loading.createPayment = false;
           return [];
         }
       };
+
+      // =========================
+      // Missing Billing Invoices (Modal + Floating Bell)
+      // =========================
+      vm.openMissingBillingModal = function () {
+        try {
+          vm.ui = vm.ui || {};
+          vm.ui.showMissingBillingModal = true;
+          vm.ui.dismissedMissingBilling = false;
+        } catch (e) {}
+      };
+
+      vm.closeMissingBillingModal = function () {
+        try {
+          vm.ui = vm.ui || {};
+          vm.ui.showMissingBillingModal = false;
+          // Mark dismissed so floating bell can appear
+          vm.ui.dismissedMissingBilling = true;
+        } catch (e) {}
+      };      
+
+      vm.generateInvoiceForBilling = function (b) {
+        try {
+          if (!b || !b.id) return $q.when();
+          if (!vm.canEdit) return $q.when();
+          vm.generatingBillingInvoiceId = b.id;
+
+          return StudentBillingService.generateInvoiceForBilling(b.id, {})
+            .then(function () {
+              try { ToastService && ToastService.success && ToastService.success('Invoice generated for billing.'); } catch (_eTo) {}
+              // Refresh via aggregated endpoint and update counts
+              return $q.when()
+                .then(function () { return vm.loadViewerData(true); })
+                .then(function () {
+                  // If list is now empty, hide modal and bell
+                  if ((vm.badge && vm.badge.count === 0) || (vm.missingBilling && vm.missingBilling.length === 0)) {
+                    vm.ui.showMissingBillingModal = false;
+                    vm.ui.dismissedMissingBilling = false;
+                  }
+                  return null;
+                });
+            })
+            .catch(function (err) {
+              var msg = 'Failed to generate invoice.';
+              try { if (err && err.data && err.data.message) msg = err.data.message; else if (err && err.message) msg = err.message; } catch (_e) {}
+              vm.missingBillingError = msg;
+              try { ToastService && ToastService.error && ToastService.error(msg); } catch (_eTo2) {}
+            })
+            .finally(function () {
+              vm.generatingBillingInvoiceId = null;
+            });
+        } catch (e) {
+          vm.generatingBillingInvoiceId = null;
+          return $q.when();
+        }
+      };
+
+    // Aggregated viewer data loader (single-call endpoint)
+    vm.loadViewerData = function (force) {
+      try {
+        // Allow student_id-only flows (applicants) or student_number; term is required
+        var hasId = vm.student && vm.student.id != null;
+        if (!vm.term || (!vm.sn && !hasId)) return $q.when();
+        // Avoid duplicate loads unless forced
+        if (!force && vm._last && vm._last.viewer && vm._last.viewer.term === vm.term) {
+          var lastKey = vm._last.viewer.key || null;
+          var currKey = vm.sn ? ('sn:' + vm.sn) : (hasId ? ('id:' + vm.student.id) : null);
+          if (lastKey && currKey && lastKey === currKey) {
+            return $q.when();
+          }
+        }
+        var params = { term: vm.term };
+        try {
+          if (vm.sn) params.student_number = vm.sn;
+        } catch (_eSN) {}
+        try {
+          if (hasId) params.student_id = vm.student.id;
+        } catch (_e) {}
+        return UnityService.cashierViewerData(params)
+          .then(function (body) {
+            var data = body && body.data ? body.data : body;
+
+            // Bind invoices (already enriched with _paid/_remaining and effective totals)
+            vm.invoices = Array.isArray(data && data.invoices) ? data.invoices.slice() : [];
+
+            // Bind payment details block and derive totals
+            vm.paymentDetails = data && data.payment_details ? data.payment_details : { items: [], meta: {} };
+            try {
+              var total = (vm.paymentDetails && vm.paymentDetails.meta && vm.paymentDetails.meta.total_paid_filtered != null)
+                ? parseFloat(vm.paymentDetails.meta.total_paid_filtered)
+                : null;
+              vm.paymentDetailsTotal = isFinite(total) ? total : 0;
+            } catch (_eTot) {
+              vm.paymentDetailsTotal = 0;
+            }
+
+            // Bind student billing and missing billing rows
+            vm.billingItems = Array.isArray(data && data.student_billing) ? data.student_billing.slice() : [];
+            vm.missingBilling = Array.isArray(data && data.missing_billing) ? data.missing_billing.slice() : [];
+            vm.badge = vm.badge || { count: 0 };
+            vm.badge.count = vm.missingBilling.length || 0;
+          
+
+            // Auto-open Missing Billing modal when items exist and not dismissed
+            try {
+              if (vm.badge.count > 0) {
+                vm.ui = vm.ui || {};
+                if (!vm.ui.dismissedMissingBilling) {
+                  vm.ui.showMissingBillingModal = true;
+                  try { console.log('[CashierViewer][diag] auto-opened missing-billing modal'); } catch (_eLog) {}
+                } else {
+                  try { console.log('[CashierViewer][diag] modal not auto-opened because dismissedMissingBilling=true'); } catch (_eLog2) {}
+                }
+              }
+            } catch (_eAuto) {}
+
+            // Bind meta rollups
+            try {
+              vm.meta = vm.meta || {};
+              if (data && data.meta) {
+                if (data.meta.amount_paid != null) vm.meta.amount_paid = parseFloat(data.meta.amount_paid) || 0;
+                if (data.meta.billing_paid != null) vm.meta.billing_paid = parseFloat(data.meta.billing_paid) || 0;
+                if (data.meta.reservation_paid != null) vm.meta.reservation_paid = parseFloat(data.meta.reservation_paid) || 0;
+              }
+            } catch (_eMeta) {}
+
+            // Bind aggregated payment modes where present (avoid extra round-trips)
+            try {
+              if (data && Array.isArray(data.payment_modes)) {
+                vm.paymentModes = data.payment_modes.slice();
+              }
+            } catch (_ePM) {}
+
+            // Bind aggregated payment descriptions (rebuild index and options for auto-fill)
+            try {
+              if (data && Array.isArray(data.payment_descriptions)) {
+                var itemsPD = data.payment_descriptions;
+                var namesPD = [];
+                var indexPD = {};
+                for (var pdi = 0; pdi < itemsPD.length; pdi++) {
+                  var itPD = itemsPD[pdi] || {};
+                  if (itPD && itPD.name) {
+                    var nmPD = ('' + itPD.name).trim();
+                    if (nmPD) {
+                      namesPD.push(nmPD);
+                      var amtRawPD = (itPD.amount != null) ? parseFloat(itPD.amount) : null;
+                      var amtPD = isFinite(amtRawPD) ? amtRawPD : null;
+                      indexPD[nmPD.toLowerCase()] = { amount: amtPD };
+                    }
+                  }
+                }
+                function _dedupPD(list) {
+                  var out = [];
+                  var seen = {};
+                  for (var j = 0; j < list.length; j++) {
+                    var s = ('' + list[j]).trim();
+                    if (!s) continue;
+                    var key = s.toLowerCase();
+                    if (!seen[key]) { seen[key] = true; out.push(s); }
+                  }
+                  return out;
+                }
+                var defaultsPD = ['Tuition Fee', 'Reservation Payment', 'Application Payment'];
+                vm.paymentDescriptionsIndex = indexPD;
+                vm.paymentDescriptionOptions = _dedupPD(defaultsPD.concat(namesPD));
+              }
+            } catch (_ePD) {}
+
+            // Recompute summaries/UI based on bound data
+            try { if (typeof vm.refreshTuitionSummary === 'function') vm.refreshTuitionSummary(); } catch (_eRS) {}
+            try { if (typeof vm.recomputeInvoicesPayments === 'function') vm.recomputeInvoicesPayments(); } catch (_eRI) {}
+
+            // Mark last
+            vm._last = vm._last || {};
+            vm._last.viewer = { sn: vm.sn, term: vm.term, key: (vm.sn ? ('sn:' + vm.sn) : (vm.student && vm.student.id != null ? ('id:' + vm.student.id) : null)) };
+          })
+          .catch(function (err) {
+            try {
+              var msg = 'Failed to load aggregated viewer data.';
+              if (err && err.data && err.data.message) msg = err.data.message;
+              vm.viewerDataError = msg;
+            } catch (_eMsg) {
+              vm.viewerDataError = 'Failed to load aggregated viewer data.';
+            }
+          });
+      } catch (e) {
+        return $q.when();
+      }
+    };
   }
 
 })();

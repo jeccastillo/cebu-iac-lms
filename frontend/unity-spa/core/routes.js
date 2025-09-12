@@ -42,6 +42,12 @@
         controllerAs: "vm",
         requiredRoles: ["registrar", "admin"],
       })
+      .when("/registrar/transcripts", {
+        templateUrl: "features/registrar/transcripts/transcripts.html",
+        controller: "RegistrarTranscriptsController",
+        controllerAs: "vm",
+        requiredRoles: ["registrar", "admin"],
+      })
       .when("/registrar/daily-enrollment", {
         templateUrl: "features/registrar/daily-enrollment.html",
         controller: "DailyEnrollmentController",

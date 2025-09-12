@@ -8,6 +8,7 @@ use App\Http\Requests\Api\V1\ClasslistUpdateRequest;
 use App\Models\Classlist;
 use App\Models\ClasslistStudent;
 use App\Services\SystemLogService;
+use App\Services\ScheduleImportService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -279,7 +280,7 @@ class ClasslistController extends Controller
      * Bulk assign faculty to classlists with validations.
      * POST /api/v1/classlists/assign-faculty-bulk
      */
-    use App\Services\ScheduleImportService;
+    
 
     public function assignFacultyBulk(ClasslistAssignFacultyBulkRequest $request): JsonResponse
     {

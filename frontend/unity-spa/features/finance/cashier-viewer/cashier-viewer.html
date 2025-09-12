@@ -510,7 +510,7 @@
           <!-- Header info -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3" ng-if="vm.invoiceModal.invoice">
             <div class="text-sm text-gray-700">
-              <div><span class="text-gray-500">Type:</span> <strong>{{ vm.invoiceModal.invoice.type || '-' }}</strong></div>
+              <div><span class="text-gray-500">Type:</span> <strong>{{ (vm.invoiceModal.invoice._display_type || vm.invoiceModal.invoice.type) || '-' }}</strong></div>
               <div><span class="text-gray-500">Status:</span> <strong>{{ vm.invoiceModal.invoice.status || '-' }}</strong></div>
               <div><span class="text-gray-500">Date:</span> <strong>{{ vm.invoiceModal.invoice.posted_at || vm.invoiceModal.invoice.created_at || '' }}</strong></div>
             </div>
@@ -666,12 +666,12 @@
           </div>
 
           <!-- Invoice selection when assigning Invoice number -->
-          <div ng-if="vm.assignNumber.type === 'invoice' && vm.invoices && vm.invoices.length">
+<div ng-if="vm.assignNumber.type === 'invoice' && vm.invoices && vm.invoices.length">
             <label class="block text-sm font-medium text-gray-700 mb-1">Select Invoice</label>
             <select
               class="block w-full rounded border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               ng-model="vm.assignNumber.selectedInvoiceId"
-              ng-options="inv.id as ((inv.invoice_number || inv.number) + ' — P' + vm.currency((inv._total_effective != null ? inv._total_effective : (inv._total != null ? inv._total : (inv.amount_total || inv.amount || inv.total || 0)))) + ((inv._remaining_effective != null) ? (' — Rem P' + vm.currency(inv._remaining_effective)) : (inv._remaining != null ? (' — Rem P' + vm.currency(inv._remaining)) : ''))) for inv in vm.invoices track by inv.id"
+              ng-options="inv.id as ((inv.invoice_number || inv.number) + ' — P' + vm.currency((inv._total_effective != null ? inv._total_effective : (inv._total != null ? inv._total : (inv.amount_total || inv.amount || inv.total || 0)))) + ((inv._remaining_effective != null) ? (' — Rem P' + vm.currency(inv._remaining_effective)) : (inv._remaining != null ? (' — Rem P' + vm.currency(inv._remaining)) : '')) + ((inv._display_type || inv.type) ? (' — ' + (inv._display_type || inv.type)) : '')) for inv in vm.invoices track by inv.id"
               ng-change="vm.onAssignInvoiceSelected()">
               <option value="">-- select invoice --</option>
             </select>
@@ -728,6 +728,85 @@
         </div>
       </div>
     </div>
+
+    <!-- Missing Billing Invoices Modal -->
+    <div ng-if="vm.ui && vm.ui.showMissingBillingModal" class="fixed inset-0 z-50 flex items-center justify-center">
+      <!-- Backdrop -->
+      <div class="absolute inset-0 bg-black bg-opacity-50" ng-click="vm.closeMissingBillingModal()"></div>
+      <!-- Dialog -->
+      <div class="relative bg-white rounded-lg shadow-xl w-full max-w-3xl mx-4 max-h-[80vh] overflow-auto"
+           ng-click="$event.stopPropagation()"
+           tabindex="0"
+           ng-keydown="$event.keyCode===27 && vm.closeMissingBillingModal()">
+        <div class="px-4 py-2 border-b flex items-center justify-between">
+          <h3 class="text-lg font-semibold">Billings Without Invoice</h3>
+          <button class="text-gray-600 hover:text-gray-800" ng-click="vm.closeMissingBillingModal()">
+            <i class="fas fa-times"></i>
+            <span class="sr-only">Close</span>
+          </button>
+        </div>
+        <div class="p-4 space-y-3">
+          <!-- Error Alert -->
+          <div class="rounded border border-red-200 bg-red-50 text-red-700 px-4 py-3" ng-if="vm.missingBillingError">
+            {{ vm.missingBillingError }}
+          </div>
+
+          <div class="text-sm text-gray-600">
+            Found <strong>{{ vm.missingBilling.length || 0 }}</strong> billing item<span ng-if="(vm.missingBilling.length || 0) !== 1">s</span> without an invoice.
+          </div>
+
+          <div class="max-h-96 overflow-auto border rounded">
+            <table class="w-full text-sm">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="px-3 py-2 text-left">Date</th>
+                  <th class="px-3 py-2 text-left">Description</th>
+                  <th class="px-3 py-2 text-right">Amount</th>
+                  <th class="px-3 py-2 text-left">Action</th>
+                </tr>
+              </thead>
+              <tbody ng-if="vm.missingBilling && vm.missingBilling.length">
+                <tr class="odd:bg-white even:bg-gray-50" ng-repeat="b in vm.missingBilling track by b.id">
+                  <td class="px-3 py-2">{{ b.posted_at || '' }}</td>
+                  <td class="px-3 py-2">{{ b.description }}</td>
+                  <td class="px-3 py-2 text-right">₱ {{ (b.amount || 0) | number:2 }}</td>
+                  <td class="px-3 py-2">
+                    <button
+                      class="inline-flex items-center px-2 py-1 rounded bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50"
+                      ng-click="vm.generateInvoiceForBilling(b)"
+                      ng-disabled="vm.generatingBillingInvoiceId === b.id">
+                      <span ng-if="vm.generatingBillingInvoiceId !== b.id">Generate Invoice</span>
+                      <span ng-if="vm.generatingBillingInvoiceId === b.id"><i class="fas fa-spinner fa-spin"></i>&nbsp;Generating...</span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="p-3 text-gray-500" ng-if="!vm.missingBilling || !vm.missingBilling.length">
+              <em>No billing items without invoices.</em>
+            </div>
+          </div>
+
+          <div class="pt-2 border-t text-right">
+            <button class="inline-flex items-center px-3 py-2 rounded border border-gray-300 text-gray-700 bg-white hover:bg-gray-50"
+                    ng-click="vm.closeMissingBillingModal()">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating Bell (opens Missing Billing Invoices Modal) -->
+    <button
+      ng-if="vm.canEdit && vm.ui && vm.ui.dismissedMissingBilling && vm.badge && vm.badge.count > 0"
+      class="fixed z-40 bottom-6 right-6 inline-flex items-center justify-center rounded-full w-12 h-12 bg-amber-600 text-white shadow-lg hover:bg-amber-700 focus:outline-none"
+      ng-click="vm.openMissingBillingModal()">
+      <i class="fas fa-bell"></i>
+      <span class="absolute -top-1 -right-1 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-600 rounded-full">
+        {{ vm.badge.count }}
+      </span>
+    </button>
   
     <!-- Application Fee (Applicants) -->
     <div class="mt-6" ng-if="vm.canShowGenerateApplicationFee()">
@@ -803,7 +882,7 @@
                 <tr class="odd:bg-white even:bg-gray-50" ng-repeat="inv in vm.invoices">
                   <td class="px-3 py-2">{{ inv.posted_at || inv.created_at || '' }}</td>
                   <td class="px-3 py-2">{{ inv.invoice_number || inv.number }}</td>
-                  <td class="px-3 py-2">{{ inv.type || '-' }}</td>
+                  <td class="px-3 py-2">{{ (inv._display_type || inv.type) || '-' }}</td>
                   <td class="px-3 py-2">{{ inv.status || '-' }}</td>
                   <td class="px-3 py-2 text-right">
                     <div>
@@ -927,12 +1006,12 @@
                         <span ng-if="vm.payment.mode === 'none'">Payment without OR/Invoice number</span>
                       </div>
                     </div>
-                    <div ng-if="vm.payment.mode === 'or' && vm.invoices && vm.invoices.length">
+                    <div class="md:col-span-2" ng-if="vm.payment.mode === 'or' && vm.invoices && vm.invoices.length">
                       <label class="block text-sm font-medium text-gray-700 mb-1">Invoice (optional)</label>
                       <select
                         class="block w-full rounded border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                         ng-model="vm.payment.invoice_id"
-              ng-options="inv.id as ((inv.invoice_number || inv.number) + ' — P' + vm.currency((inv._total_effective != null ? inv._total_effective : (inv._total != null ? inv._total : (inv.amount_total || inv.amount || inv.total || 0))))) for inv in vm.invoices track by inv.id"
+              ng-options="inv.id as ((inv.invoice_number || inv.number) + ' — P' + vm.currency((inv._total_effective != null ? inv._total_effective : (inv._total != null ? inv._total : (inv.amount_total || inv.amount || inv.total || 0))))) + ((inv._display_type || inv.type) ? (' — ' + (inv._display_type || inv.type)) : '') for inv in (vm.invoices | filter:vm.invoicesNotFullyPaid) track by inv.id"
                         ng-change="vm.onInvoiceSelected()">
                         <option value="">-- select invoice --</option>
                       </select>
@@ -1203,45 +1282,6 @@
         <!-- Subjects (Selected Term) under Installment Plan -->
         
       </div>
-    </div>
-  
-    <!-- Ledger + Records -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-      <!-- Ledger Card -->
-      <div>
-        <div class="border rounded-lg shadow-sm overflow-hidden">
-          <div class="bg-gray-100 text-gray-800 px-4 py-2 flex items-center justify-between">
-            <strong>Ledger</strong>
-            <span class="text-sm opacity-90" ng-if="vm.loading.ledger"><em>loading...</em></span>
-          </div>
-          <div class="p-4 bg-white">
-            <div class="max-h-96 overflow-auto">
-              <table class="w-full text-sm border border-gray-200 rounded">
-                <thead class="bg-gray-50">
-                  <tr>
-                    <th class="px-3 py-2 text-left">Date</th>
-                    <th class="px-3 py-2 text-left">Description</th>
-                    <th class="px-3 py-2 text-right">Amount</th>
-                    <th class="px-3 py-2 text-left">OR#</th>
-                  </tr>
-                </thead>
-                <tbody ng-if="(vm.ledger && vm.ledger.transactions && vm.ledger.transactions.length) || (vm.ledger && vm.ledger.ledger && vm.ledger.ledger.length)">
-                  <tr class="odd:bg-white even:bg-gray-50" ng-repeat="t in (vm.ledger.transactions || vm.ledger.ledger)">
-                    <td class="px-3 py-2">{{ t.posted_at || t.date }}</td>
-                    <td class="px-3 py-2">{{ t.type || t.name }}</td>
-                    <td class="px-3 py-2 text-right">P{{ vm.currency(t.amount) }}</td>
-                    <td class="px-3 py-2">{{ t.or_no || t.or_number }}</td>
-                  </tr>
-                </tbody>
-              </table>
-  
-              <div class="mt-2 text-gray-500" ng-if="!vm.ledger || ((!vm.ledger.transactions || !vm.ledger.transactions.length) && (!vm.ledger.ledger || !vm.ledger.ledger.length))">
-                <em>No ledger entries found.</em>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>             
-    </div>
+    </div>    
   </div>
   

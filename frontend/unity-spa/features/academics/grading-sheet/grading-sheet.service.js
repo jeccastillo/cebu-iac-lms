@@ -7,8 +7,7 @@
 
   GradingSheetService.$inject = ['$http', '$window', 'APP_CONFIG', 'StorageService'];
   function GradingSheetService($http, $window, APP_CONFIG, StorageService) {
-    var BASE = APP_CONFIG.API_BASE; // e.g., /laravel-api/public/api/v1
-    var IMG_BASE = APP_CONFIG.IMG_BASE; // e.g., /laravel-api/public/api/v1
+    var BASE = APP_CONFIG.API_BASE; // e.g., /laravel-api/public/api/v1    
     function _getLoginState() {
       try { return StorageService.getJSON('loginState') || null; } catch (e) { return null; }
     }

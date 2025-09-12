@@ -117,6 +117,55 @@ class FinanceController extends Controller
     }
 
     /**
+     * GET /api/v1/finance/cashier/viewer-data
+     * Query params:
+     *  - student_number: string (required)
+     *  - term: int (required)
+     *  - student_id?: int (optional fallback)
+     */
+    public function viewerData(Request $request): JsonResponse
+    {
+        $payload = $request->validate([
+            'student_number' => 'sometimes|nullable|string',
+            'term'           => 'required|integer',
+            'student_id'     => 'sometimes|nullable|integer',
+        ]);
+
+        // Require at least one of student_number or student_id
+        $studentNumber = isset($payload['student_number']) ? (string) $payload['student_number'] : null;
+        $studentId = array_key_exists('student_id', $payload) ? (int) $payload['student_id'] : null;
+
+        if ((empty($studentNumber) || $studentNumber === '') && empty($studentId)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Either student_number or student_id is required.'
+            ], 422);
+        }
+
+        // Resolve student_number when only student_id is provided
+        if ((empty($studentNumber) || $studentNumber === '') && $studentId) {
+            $sn = DB::table('tb_mas_users')
+                ->where('intID', $studentId)
+                ->value('strStudentNumber');
+            $studentNumber = $sn ? (string) $sn : '';
+        }
+
+        /** @var \App\Services\CashierViewerAggregateService $svc */
+        $svc = app(\App\Services\CashierViewerAggregateService::class);
+
+        $data = $svc->buildByStudentNumber(
+            (string) $studentNumber,
+            (int) $payload['term'],
+            $studentId ?: null
+        );
+
+        return response()->json([
+            'success' => true,
+            'data'    => $data,
+        ]);
+    }
+
+    /**
      * GET /api/v1/finance/student-ledger
      * Query:
      *  - student_number?: string

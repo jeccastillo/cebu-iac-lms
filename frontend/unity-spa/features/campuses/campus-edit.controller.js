@@ -22,6 +22,7 @@
     vm.model = {
       campus_name: '',
       description: '',
+      address: '',
       status: 'active'
     };
 
@@ -38,10 +39,12 @@
           if (data && data.success !== false && data.data) {
             vm.model.campus_name = data.data.campus_name || '';
             vm.model.description = data.data.description || '';
+            vm.model.address = data.data.address || '';
             vm.model.status = data.data.status || 'active';
           } else if (data && data.campus_name) {
             vm.model.campus_name = data.campus_name || '';
             vm.model.description = data.description || '';
+            vm.model.address = data.address || '';
             vm.model.status = data.status || 'active';
           } else {
             vm.error = 'Campus not found.';
@@ -63,6 +66,7 @@
       var payload = {
         campus_name: (vm.model.campus_name || '').trim(),
         description: vm.model.description || null,
+        address: (vm.model.address && vm.model.address.trim()) ? vm.model.address.trim() : null,
         status: vm.model.status || 'active'
       };
 

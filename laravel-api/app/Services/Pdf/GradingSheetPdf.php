@@ -23,6 +23,7 @@ class GradingSheetPdf
         $genBy    = (string)($dto['generated_by'] ?? '');
         $genAt    = (string)($dto['generated_at'] ?? '');
         $logoPath = isset($dto['logo_path']) && is_string($dto['logo_path']) ? $dto['logo_path'] : null;
+        
 
         $schoolName = (string)($header['school_name'] ?? 'iACADEMY');
         $title      = (string)($header['title'] ?? ($period === 'midterm' ? 'Midterm Grade' : 'Finals Grade'));
@@ -38,7 +39,7 @@ class GradingSheetPdf
         $pdf->AddPage('P', 'A4');
         $pdf->SetAutoPageBreak(true, 14);
         $pdf->SetTextColor(0, 0, 0);
-
+        
         // Header: logo + headings
         if ($logoPath && @file_exists($logoPath)) {
             try {

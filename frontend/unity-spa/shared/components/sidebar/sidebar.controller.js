@@ -46,6 +46,7 @@
         label: 'Registrar',
         children: [
           { label: 'Reports', path: '/registrar/reports' },
+          { label: 'Transcripts / Copy of Grades', path: '/registrar/transcripts' },
           { label: 'Enlistment', path: '/registrar/enlistment' },
           { label: 'Enlistment Applicants', path: '/registrar/enlistment-applicants' },
           { label: 'Slot Monitoring', path: '/registrar/sections-slots' },

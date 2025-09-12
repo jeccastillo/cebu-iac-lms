@@ -36,6 +36,22 @@
           </span>
         </button>
 
+        <!-- Enrollment Statistics PDF -->
+        <button type="button"
+                class="inline-flex items-center px-3 py-2 rounded bg-green-600 text-white hover:bg-green-700 disabled:opacity-60"
+                ng-click="vm.exportEnrollmentStatsPdf()"
+                ng-disabled="vm.loadingStats">
+          <span class="fas fa-file-pdf mr-2"></span>
+          <span ng-if="!vm.loadingStats">Enrollment Statistics PDF</span>
+          <span ng-if="vm.loadingStats" class="inline-flex items-center">
+            <svg class="animate-spin h-4 w-4 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-30" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-90" fill="currentColor" d="M4 12a8 8 0 018-8v4A4 4 0 008 12H4z"></path>
+            </svg>
+            Generating...
+          </span>
+        </button>
+
         <!-- Selected term indicator -->
         <span class="text-sm text-gray-600" ng-if="vm.selectedTerm">
           Term: {{ vm.selectedTerm.enumSem }} {{ vm.selectedTerm.term_label }} {{ vm.selectedTerm.strYearStart }}-{{ vm.selectedTerm.strYearEnd }}

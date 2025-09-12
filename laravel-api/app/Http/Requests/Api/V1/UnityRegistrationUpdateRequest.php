@@ -44,14 +44,14 @@ class UnityRegistrationUpdateRequest extends FormRequest
 
             'fields.intYearLevel'    => ['sometimes', 'integer', 'min:1'],
             'fields.enumStudentType' => ['sometimes', 'string', 'in:continuing,new,returnee,transfer'],
-
+            'fields.enrollment_status'      => ['sometimes','string', 'in:enlisted,enrolled,loa,withdrawn before,withdrawn after,withdrawn end,awol'],
             'fields.current_program'    => ['sometimes', 'integer', 'exists:tb_mas_programs,intProgramID'],
             'fields.current_curriculum' => ['sometimes', 'integer', 'exists:tb_mas_curriculum,intID'],
             'fields.tuition_year'       => ['sometimes', 'integer', 'exists:tb_mas_tuition_year,intID'],
             'fields.tuition_installment_plan_id' => ['sometimes', 'nullable', 'integer', 'exists:tb_mas_tuition_year_installment,id'],
 
             'fields.paymentType'      => ['sometimes', 'nullable', 'string', 'max:50'],
-            'fields.loa_remarks'      => ['sometimes', 'nullable', 'string', 'max:1000'],
+            'fields.loa_remarks'      => ['sometimes', 'nullable', 'string', 'max:1000'],            
             'fields.withdrawal_period'=> ['sometimes', 'nullable', 'string', 'in:before,start,end'],
         ];
     }

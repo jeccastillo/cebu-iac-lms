@@ -25,10 +25,12 @@ class GradingSheetService
 
         $student = DB::table('tb_mas_users as u')
             ->leftJoin('tb_mas_programs as p', 'u.intProgramID', '=', 'p.intProgramID')
+            ->leftJoin('tb_mas_campuses as c', 'u.campus_id', '=', 'c.id')
             ->where('u.intID', $studentId)
             ->select(
                 'u.intID as id',
                 'u.strStudentNumber as student_number',
+                'c.campus_name as campus_name',
                 'u.strLastname as last_name',
                 'u.strFirstname as first_name',
                 'u.strMiddlename as middle_name',
@@ -136,7 +138,7 @@ class GradingSheetService
             'grading_system_notes' => '1.00 (98-100) Excellent; 1.25 (95-97); 1.50 (92-94) Very Good; 1.75 (89-91); 2.00 (86-88); 2.25 (83-85); 2.50 (80-82) Satisfactory; 2.75 (77-79) Fair; 3.00 (75-76); 5.00 (Below 75) Failed; OD (Officially Dropped); UD (Unofficially Dropped); FA (Failure due to Absences); IP (In Progress) for internship only; P (Passed); F (Failed); OW (Officially Withdrawn); UW (Unofficially Withdrawn); NGS (No Grade Submitted)',
             'generated_by' => $generatedBy,
             'generated_at' => $generatedAt,
-            'logo_path'    => $this->detectLogoPath(),
+            'logo_path'    => $this->detectLogoPath($student->campus_name),
         ];
     }
 
@@ -217,17 +219,32 @@ class GradingSheetService
         return trim($full);
     }
 
-    private function detectLogoPath(): ?string
+    private function detectLogoPath($campusName = "Cebu"): ?string
     {
-        // Attempt to resolve a logo relative to Laravel public/ or project root
+        // 1) Allow override via config/env
+        try {
+            $override = config('app.logo_path') ?: env('APP_LOGO_PATH');
+            if (is_string($override) && $override !== '') {
+                $p = realpath($override) ?: $override;
+                if (@file_exists($p)) {
+                    return $p;
+                }
+            }
+        } catch (\Throwable $e) {}
+
+        // 2) Attempt to resolve a logo relative to Laravel public/, laravel-api/, and mono-repo root
+        $projectRoot = dirname(base_path()); // mono-repo root (one level up from laravel-api)
         $candidates = [
-            public_path('assets/img/iacademy-logo.png'),
-            base_path('assets/img/iacademy-logo.png'),
+            public_path('assets/img/seal_'.strtolower($campusName).'.png'), // laravel-api/public/assets/...
+            base_path('assets/img/seal_'.strtolower($campusName).'.png'),   // laravel-api/assets/...
+            $projectRoot . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . 'seal_'.strtolower($campusName).'.png', // repo-root/assets/...
         ];
+
         foreach ($candidates as $p) {
             try {
-                if ($p && file_exists($p)) {
-                    return $p;
+                $rp = is_string($p) ? (realpath($p) ?: $p) : $p;
+                if ($rp && @file_exists($rp)) {
+                    return $rp;
                 }
             } catch (\Throwable $e) {}
         }

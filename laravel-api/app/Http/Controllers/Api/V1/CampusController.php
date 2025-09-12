@@ -65,6 +65,7 @@ class CampusController extends Controller
         $validated = $request->validate([
             'campus_name' => 'required|string|max:255|unique:tb_mas_campuses,campus_name',
             'description' => 'nullable|string',
+            'address' => 'nullable|string|max:255',
             'status' => 'nullable|in:active,inactive',
         ]);
 
@@ -100,6 +101,7 @@ class CampusController extends Controller
         $validated = $request->validate([
             'campus_name' => 'sometimes|required|string|max:255|unique:tb_mas_campuses,campus_name,' . $id . ',id',
             'description' => 'nullable|string',
+            'address' => 'nullable|string|max:255',
             'status' => 'nullable|in:active,inactive',
         ]);
 

@@ -112,6 +112,45 @@
       return (sn ? (sn + ' — ') : '') + name;
     }
 
+    // Resolve selected student id even if ng-model holds a typed string (e.g., student_number or label)
+    function resolveSelectedStudentId() {
+      try {
+        var sid = vm.selectedStudentId;
+        if (sid == null) return null;
+        if (typeof sid === 'number') return sid;
+
+        var raw = ('' + sid).trim();
+        var list = Array.isArray(vm.students) ? vm.students : [];
+
+        // 1) Exact match by student_number
+        for (var i = 0; i < list.length; i++) {
+          var s = list[i];
+          if (s && ('' + (s.student_number || '')).trim() === raw) {
+            return s.id != null ? parseInt(s.id, 10) : null;
+          }
+        }
+        // 2) Exact match by label rendering
+        for (var j = 0; j < list.length; j++) {
+          var t = list[j];
+          if (t) {
+            try {
+              var lbl = (studentLabel(t) || '').trim();
+              if (lbl && lbl === raw) {
+                return t.id != null ? parseInt(t.id, 10) : null;
+              }
+            } catch (e1) {}
+          }
+        }
+        // 3) If raw is digits only, treat as id
+        if (/^\d+$/.test(raw)) {
+          return parseInt(raw, 10);
+        }
+        return null;
+      } catch (e) {
+        return null;
+      }
+    }
+
     function generate() {
       vm.error = null;
 
@@ -121,7 +160,7 @@
         ToastService && ToastService.error && ToastService.error(vm.error);
         return;
       }
-      var sid = vm.selectedStudentId;
+      var sid = resolveSelectedStudentId();
       if (!sid) {
         vm.error = 'Please select a student.';
         ToastService && ToastService.error && ToastService.error(vm.error);

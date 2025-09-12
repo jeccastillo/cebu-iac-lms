@@ -193,7 +193,7 @@ class StudentController extends Controller
         }
         if ($request->has('gender') && in_array((int)$request->query('gender'), [1, 2], true)) {
             $gender = (int)$request->query('gender') === 1 ? 'male' : 'female';
-            $q->where('u.strGender', $gender);
+            $q->where('u.enumGender', $gender);
         }
         if ($request->has('graduated') && in_array((int)$request->query('graduated'), [1, 2], true)) {
             if ((int)$request->query('graduated') === 1) {

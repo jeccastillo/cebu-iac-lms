@@ -1,4 +1,4 @@
-<div class="max-w-5xl mx-auto">
+<div class="max-w-5xl mx-auto" ng-init="vm.period = vm.period || 'final'">
   <!-- Page header -->
   <div class="mb-6">
     <h1 class="text-2xl font-semibold text-gray-800">Grading Sheet</h1>
@@ -33,6 +33,7 @@
                pui-autocomplete
                ng-model="vm.selectedStudentId"
                pui-source="vm.students"
+               pui-item-key="id"
                pui-on-query="vm.onStudentQuery(q)"
                pui-label="vm.studentLabel(item)"
                pui-max-results="20"

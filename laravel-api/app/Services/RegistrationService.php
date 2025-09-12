@@ -111,7 +111,7 @@ class RegistrationService
                 ];
             }
 
-            $addWithdrawn = ((int)$st->enrollment_status === 3) ? 1 : 0;
+            $addWithdrawn = ($st->enrollment_status === 'withdrawn after' || $st->enrollment_status === 'withdrawn end') ? 1 : 0;
 
             if ($st->enumStudentType === 'continuing') {
                 $perDay[$date]['continuing'] += 1;
