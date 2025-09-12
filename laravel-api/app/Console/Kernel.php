@@ -13,32 +13,34 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('reminders:inactive-applications')
+        // Send inactive applicant reminders every 2 days at 9 AM
+        $schedule->command('reminders:inactive-applicants')
                 ->dailyAt('09:00')
-                ->days([1, 3, 5, 0])
-                ->withoutOverlapping(10)
+                ->days([1, 3, 5, 0]) // Monday, Wednesday, Friday, Sunday (every ~2 days)
+                ->withoutOverlapping(10) // 10 minute timeout
                 ->runInBackground()
                 ->sendOutputTo('/var/log/laravel/email-reminders.log')
                 ->emailOutputOnFailure('lancekenjiparce@gmail.com')
                 ->onSuccess(function () {
-                    Log::info('Inactive applications reminder completed successfully');
+                    Log::info('Inactive applicants reminder completed successfully');
                 })
                 ->onFailure(function () {
-                    Log::error('Inactive applications reminder failed');
+                    Log::error('Inactive applicants reminder failed');
                 });
 
-        $schedule->command('reminders:interviewed-not-reserved')
+        // Send reservation reminders every 2 days at 10 AM
+        $schedule->command('reminders:reservation-needed')
                 ->dailyAt('10:00') 
-                ->days([1, 3, 5, 0])
-                ->withoutOverlapping(10)
+                ->days([1, 3, 5, 0]) // Monday, Wednesday, Friday, Sunday (every ~2 days)
+                ->withoutOverlapping(10) // 10 minute timeout
                 ->runInBackground()
                 ->sendOutputTo('/var/log/laravel/email-reminders.log')
                 ->emailOutputOnFailure('lancekenjiparce@gmail.com')
                 ->onSuccess(function () {
-                    Log::info('Interviewed not reserved reminder completed successfully');
+                    Log::info('Reservation reminders completed successfully');
                 })
                 ->onFailure(function () {
-                    Log::error('Interviewed not reserved reminder failed');
+                    Log::error('Reservation reminders failed');
                 });
     }
 
