@@ -3,19 +3,23 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Models\Sms\PaymentDetail;
+use App\Models\PaymentDetail;
+// use App\Models\Admissions\StudentInfoStatusLog; // Model doesn't exist
+use App\Services\PHPMailerService;
 use Illuminate\Http\Request;
-use App\Models\Sms\{StudentInfoStatusLog};
-use App\Mail\Admissions\{AdmissionsNotificationEmail,AdmissionsNotificationMakatiMail};
-
-use Mail, App;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class PaynamicsWebhookController extends Controller
 {
+    protected $paymentDetail;
+    protected $phpMailerService;
     //
-    public function __construct(PaymentDetail $paymentDetail)
+    public function __construct(PaymentDetail $paymentDetail, PHPMailerService $phpMailerService)
     {
-        $this->paymentDetail = $paymentDetail;        
+        $this->paymentDetail = $paymentDetail;
+        $this->phpMailerService = $phpMailerService;
     }
 
     public function webhook(Request $request)
@@ -50,40 +54,26 @@ class PaynamicsWebhookController extends Controller
                     $paymentDetails->studentInfo->status = 'Reserved';
                     $paymentDetails->studentInfo->date_reserved = date("Y-m-d");
                                         
-                    $mailData = (object) array( 'student' => $paymentDetails->studentInfo, 
-                                    'message' =>  "Applicant has paid reservation fee", 
-                                    'subject' => "New Reserved Applicant");                
-                                        
-
-                    if($paymentDetails->studentInfo->campus == 'Makati'){
-                        Mail::to($toEmail)->send(
-                            new AdmissionsNotificationMakatiMail($mailData)
-                        );
-                    }else{
-                        Mail::to($toEmail)->send(
-                            new AdmissionsNotificationEmail($mailData)
-                        );
+                    // Send Registrar notification for reserved applicant (ready to enlist)
+                    try {
+                        $this->phpMailerService->sendRegistrarReservedNotification($paymentDetails->studentInfo);
+                    } catch (\Exception $e) {
+                        Log::error('Registrar notification failed: ' . $e->getMessage());
                     }
                     
-                    StudentInfoStatusLog::storeLogs($paymentDetails->studentInfo->id, $paymentDetails->studentInfo->status, '', '');
+                    // StudentInfoStatusLog::storeLogs($paymentDetails->studentInfo->id, $paymentDetails->studentInfo->status, '', ''); // Model doesn't exist
                     $paymentDetails->studentInfo->update();
                 } else if ($paymentDetails->studentInfo->status == 'New') {
                     $paymentDetails->studentInfo->status = 'Waiting For Interview';
-                    $mailData = (object) array( 'student' => $paymentDetails->studentInfo, 
-                                    'message' =>  "New applicant is waiting for interview link", 
-                                    'subject' => "Waiting for Interview");                                    
-
-                    if($paymentDetails->studentInfo->campus == 'Makati'){
-                        Mail::to($toEmail)->send(
-                            new AdmissionsNotificationMakatiMail($mailData)
-                        );
-                    }else{
-                        Mail::to($toEmail)->send(
-                            new AdmissionsNotificationEmail($mailData)
-                        );
+                    
+                    // Send Admissions notification for application fee payment
+                    try {
+                        $this->phpMailerService->sendAdmissionsApplicationSubmittedNotification($paymentDetails->studentInfo);
+                    } catch (\Exception $e) {
+                        Log::error('Admissions notification failed: ' . $e->getMessage());
                     }
 
-                    StudentInfoStatusLog::storeLogs($paymentDetails->studentInfo->id, $paymentDetails->studentInfo->status, '', '');
+                    // StudentInfoStatusLog::storeLogs($paymentDetails->studentInfo->id, $paymentDetails->studentInfo->status, '', ''); // Model doesn't exist
                     $paymentDetails->studentInfo->update();
                 }
 

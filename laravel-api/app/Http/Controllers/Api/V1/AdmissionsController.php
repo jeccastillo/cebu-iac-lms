@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Throwable;
@@ -214,7 +215,7 @@ class AdmissionsController extends Controller
 
             // Generate a unique access hash if column exists (for public initial requirements link)
             $hashVal = null;
-            if (\Illuminate\Support\Facades\Schema::hasColumn('tb_mas_applicant_data', 'hash')) {
+            if (Schema::hasColumn('tb_mas_applicant_data', 'hash')) {
                 $tries = 0;
                 do {
                     $candidate = Str::random(40);
@@ -231,13 +232,13 @@ class AdmissionsController extends Controller
                 'created_at' => $now,
                 'updated_at' => $now,
             ];
-            if (\Illuminate\Support\Facades\Schema::hasColumn('tb_mas_applicant_data', 'hash')) {
+            if (Schema::hasColumn('tb_mas_applicant_data', 'hash')) {
                 $insertData['hash'] = $hashVal;
             }
-            if (\Illuminate\Support\Facades\Schema::hasColumn('tb_mas_applicant_data', 'applicant_type')) {
+            if (Schema::hasColumn('tb_mas_applicant_data', 'applicant_type')) {
                 $insertData['applicant_type'] = $normalizedApplicantType;
             }
-            if (\Illuminate\Support\Facades\Schema::hasColumn('tb_mas_applicant_data', 'syid') && $request->filled('term')) {
+            if (Schema::hasColumn('tb_mas_applicant_data', 'syid') && $request->filled('term')) {
                 $insertData['syid'] = $request->input('term');
             }            
 
@@ -249,7 +250,7 @@ class AdmissionsController extends Controller
                 if (is_array($awareness) && !empty($awareness)) {
                     app(\App\Services\ApplicationAwarenessService::class)->createMany((int) $applicantDataId, $awareness);
                 }
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 // Bubble up to rollback the transaction and return error
                 throw $e;
             }
@@ -259,7 +260,7 @@ class AdmissionsController extends Controller
             // Journey log: Student Applied
             try {
                 app(\App\Services\ApplicantJourneyService::class)->log((int) $applicantDataId, 'Student Applied');
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 // ignore logging failure
             }
 
@@ -291,8 +292,8 @@ class AdmissionsController extends Controller
 
                 $alert = \App\Models\SystemAlert::create($payload);
                 app(\App\Services\SystemAlertService::class)->broadcast('create', $alert);
-            } catch (\Throwable $e) {
-                \Log::warning('System alert creation failed for new application: ' . $e->getMessage());
+            } catch (Throwable $e) {
+                Log::warning('System alert creation failed for new application: ' . $e->getMessage());
             }
 
             // Send confirmation email; do not fail application if email sending fails
@@ -366,19 +367,78 @@ class AdmissionsController extends Controller
 
     protected function sendApplicantMail(string $to, ?string $first, ?string $last): void
     {
-        $subject = 'iACADEMY Application Received';
         $name = trim(($first ?? '') . ' ' . ($last ?? ''));
-        $body = "Hello {$name},\n\n"
-            . "Your application has been received successfully. Our Admissions Team will review your submission and contact you for the next steps.\n\n"
-            . "Regards,\n"
-            . "iACADEMY Admissions";
+        
+        // Generate application number and confirmation code
+        $applicationNumber = $this->generateApplicationNumber();
+        $confirmationCode = $this->generateConfirmationCode();
+        
+        // Generate username from email or name
+        $username = $this->makeUsername($to, $first, $last);
+        
+        try {
+            // Use PHPMailerService for better email handling
+            $phpMailerService = app(\App\Services\PHPMailerService::class);
+            $phpMailerService->sendApplicationConfirmation(
+                $to,
+                $name,
+                $applicationNumber,
+                $username,
+                $confirmationCode
+            );
+        } catch (\Exception $e) {
+            // Fallback to basic Laravel mail if PHPMailerService fails
+            $subject = 'iACADEMY Application Received';
+            $body = "Hello {$name},\n\n"
+                . "Your application has been received successfully.\n\n"
+                . "Application Number: {$applicationNumber}\n"
+                . "Username: {$username}\n"
+                . "Confirmation Code: {$confirmationCode}\n\n"
+                . "Our Admissions Team will review your submission and contact you for the next steps.\n\n"
+                . "Regards,\n"
+                . "iACADEMY Admissions";
 
-        // Use a test sender as requested
-        Mail::raw($body, function ($message) use ($to, $subject) {
-            $message->to($to);
-            // Test sender address as requested
-            $message->from('josephedmundcastillo@gmail.com', 'iACADEMY Admissions');
-            $message->subject($subject);
-        });
+            Mail::raw($body, function ($message) use ($to, $subject) {
+                $message->to($to);
+                $message->from('josephedmundcastillo@gmail.com', 'iACADEMY Admissions');
+                $message->subject($subject);
+            });
+        }
+    }
+
+    protected function generateApplicationNumber(): string
+    {
+        $year = date('Y');
+        $sem = '1'; // Default semester, could be made dynamic
+        
+        do {
+            $randomNumber = rand(1000, 9999);
+            $applicationNumber = $year . '0' . $sem . $randomNumber;
+            
+            // Check if application number already exists in tb_mas_users or tb_mas_applicant_data
+            $exists = DB::table('tb_mas_users')->where('strStudentNumber', $applicationNumber)->exists() ||
+                     DB::table('tb_mas_applicant_data')->where('data', 'LIKE', '%"application_number":"' . $applicationNumber . '"%')->exists();
+                     
+        } while ($exists);
+        
+        return $applicationNumber;
+    }
+
+    protected function generateConfirmationCode(): string
+    {
+        $year = date('Y');
+        $sem = '1'; // Default semester, could be made dynamic
+        
+        do {
+            $randomNumber = rand(1000, 9999);
+            $code = $year . '0' . $sem . $randomNumber;
+            $confirmationCode = substr(md5($code), 0, 20);
+            
+            // Check if confirmation code already exists
+            $exists = DB::table('tb_mas_applicant_data')->where('data', 'LIKE', '%"confirmation_code":"' . $confirmationCode . '"%')->exists();
+            
+        } while ($exists);
+        
+        return $confirmationCode;
     }
 }
