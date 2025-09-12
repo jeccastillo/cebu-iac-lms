@@ -1,176 +1,208 @@
-<div class="container-fluid" ng-controller="ClinicController as vm">
-  <div class="page-header">
-    <h2>Clinic &amp; Health Records</h2>
+<div ng-controller="ClinicController as vm" class="space-y-6">
+  <!-- Page Header -->
+  <div>
+    <h2 class="text-2xl font-semibold text-gray-800">Clinic &amp; Health Records</h2>
   </div>
 
-  <div class="alert alert-danger" ng-if="vm.error">
+  <!-- Error Alert -->
+  <div class="rounded-md bg-red-50 border border-red-200 p-4 text-red-700" ng-if="vm.error">
     {{ vm.error }}
   </div>
 
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <strong>Search Filters</strong>
+  <!-- Search Filters Card -->
+  <div class="bg-white rounded-lg shadow p-6">
+    <div class="mb-4">
+      <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-600">Search Filters</h3>
     </div>
-    <div class="panel-body">
-      <form class="form-horizontal" ng-submit="vm.search(1)">
-        <div class="row">
-          <div class="col-sm-3">
-            <div class="form-group">
-              <label class="control-label col-sm-4">Query</label>
-              <div class="col-sm-8">
-                <input type="text" class="form-control" ng-model="vm.filters.q" placeholder="Name, diagnosis, medication, allergy..." />
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-3">
-            <div class="form-group">
-              <label class="control-label col-sm-5">Student #</label>
-              <div class="col-sm-7">
-                <input type="text" class="form-control" ng-model="vm.filters.student_number" />
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-3">
-            <div class="form-group">
-              <label class="control-label col-sm-5">Faculty ID</label>
-              <div class="col-sm-7">
-                <input type="text" class="form-control" ng-model="vm.filters.faculty_id" />
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-3">
-            <div class="form-group">
-              <label class="control-label col-sm-5">Campus</label>
-              <div class="col-sm-7">
-                <input type="number" class="form-control" ng-model="vm.filters.campus_id" />
-              </div>
-            </div>
-          </div>
-        </div><!-- row -->
 
-        <div class="row">
-          <div class="col-sm-3">
-            <div class="form-group">
-              <label class="control-label col-sm-4">Program</label>
-              <div class="col-sm-8">
-                <input type="number" class="form-control" ng-model="vm.filters.program_id" />
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-3">
-            <div class="form-group">
-              <label class="control-label col-sm-5">Year Level</label>
-              <div class="col-sm-7">
-                <input type="number" class="form-control" ng-model="vm.filters.year_level" />
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-3">
-            <div class="form-group">
-              <label class="control-label col-sm-5">Date From</label>
-              <div class="col-sm-7">
-                <input type="date" class="form-control" ng-model="vm.filters.date_from" />
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-3">
-            <div class="form-group">
-              <label class="control-label col-sm-5">Date To</label>
-              <div class="col-sm-7">
-                <input type="date" class="form-control" ng-model="vm.filters.date_to" />
-              </div>
-            </div>
-          </div>
-        </div><!-- row -->
-
-        <div class="row">
-          <div class="col-sm-12 text-right">
-            <button type="button" class="btn btn-default" ng-click="vm.clearFilters()" ng-disabled="vm.loading">Clear</button>
-            <button type="submit" class="btn btn-primary" ng-disabled="vm.loading">
-              <span ng-if="!vm.loading">Search</span>
-              <span ng-if="vm.loading">
-                <img src="assets/img/ajax-loader.gif" alt="" style="height:14px"> Searching...
-              </span>
-            </button>
-          </div>
+    <form ng-submit="vm.search(1)" class="space-y-4">
+      <!-- Grid Fields -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Query -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Query</label>
+          <input type="text" class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                 ng-model="vm.filters.q" placeholder="Name, diagnosis, medication, allergy..." />
         </div>
-      </form>
-    </div><!-- panel-body -->
-  </div><!-- panel -->
 
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <strong>Results</strong>
-      <span class="text-muted" ng-if="vm.meta && vm.meta.total"> ({{ vm.meta.total | number }} records)</span>
+        <!-- Student # -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Student #</label>
+          <input type="text" class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                 ng-model="vm.filters.student_number" />
+        </div>
+
+        <!-- Faculty ID -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Faculty ID</label>
+          <input type="text" class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                 ng-model="vm.filters.faculty_id" />
+        </div>
+
+
+        <!-- Program -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Program</label>
+          <input type="number" class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                 ng-model="vm.filters.program_id" />
+        </div>
+
+        <!-- Year Level -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Year Level</label>
+          <input type="number" class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                 ng-model="vm.filters.year_level" />
+        </div>
+
+        <!-- Date From -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Date From</label>
+          <input type="date" class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                 ng-model="vm.filters.date_from" />
+        </div>
+
+        <!-- Date To -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Date To</label>
+          <input type="date" class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                 ng-model="vm.filters.date_to" />
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center justify-end gap-3 pt-2">
+        <button type="button"
+                class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                ng-click="vm.clearFilters()" ng-disabled="vm.loading">
+          Clear
+        </button>
+        <button type="submit"
+                class="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                ng-disabled="vm.loading">
+          <span ng-if="!vm.loading">Search</span>
+          <span ng-if="vm.loading" class="inline-flex items-center gap-2">
+            <img src="assets/img/ajax-loader.gif" alt="" class="h-4"> Searching...
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Results Card -->
+  <div class="bg-white rounded-lg shadow">
+    <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+      <div>
+        <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-600">Results
+          <span class="text-gray-400 normal-case font-normal" ng-if="vm.meta && vm.meta.total">
+            ({{ vm.meta.total | number }} records)
+          </span>
+        </h3>
+      </div>
+      <div>
+        <button type="button"
+                class="inline-flex items-center rounded-md bg-green-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                ng-click="vm.goNew()"
+                ng-disabled="vm.loading">
+          Add Record
+        </button>
+      </div>
     </div>
-    <div class="table-responsive">
-      <table class="table table-striped table-hover">
-        <thead>
+
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
           <tr>
-            <th style="width: 80px;">ID</th>
-            <th>Person</th>
-            <th>Type</th>
-            <th>Campus</th>
-            <th>Blood Type</th>
-            <th>Allergies</th>
-            <th>Medications</th>
-            <th style="width: 120px;">Actions</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-20">ID</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Person</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Blood Type</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Allergies</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Medications</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-32">Actions</th>
           </tr>
         </thead>
-        <tbody>
-          <tr ng-repeat="r in vm.records">
-            <td>{{ r.id }}</td>
-            <td>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <!-- Row -->
+          <tr ng-repeat="r in vm.records" class="hover:bg-gray-50">
+            <td class="px-4 py-2 text-sm text-gray-700">{{ r.id }}</td>
+            <td class="px-4 py-2">
               <div ng-if="r.person_type === 'student'">
-                <div><strong>{{ r.student_name || '-' }}</strong></div>
-                <div class="text-muted">Student #: {{ r.student_number || '-' }}</div>
+                <div class="font-medium text-gray-900">{{ r.student_name || '-' }}</div>
+                <div class="text-gray-500 text-xs">Student #: {{ r.student_number || '-' }}</div>
               </div>
               <div ng-if="r.person_type === 'faculty'">
-                <div><strong>{{ r.faculty_name || '-' }}</strong></div>
-                <div class="text-muted">Faculty ID: {{ r.faculty_id || '-' }}</div>
+                <div class="font-medium text-gray-900">{{ r.faculty_name || '-' }}</div>
+                <div class="text-gray-500 text-xs">Faculty ID: {{ r.faculty_id || '-' }}</div>
               </div>
             </td>
-            <td>{{ r.person_type }}</td>
-            <td>{{ r.campus_id || '-' }}</td>
-            <td>{{ r.blood_type || '-' }}</td>
-            <td>
-              <span ng-repeat="a in (r.allergies || []) track by $index" class="label label-danger" style="margin-right:4px">
-                {{ a.name }}
-              </span>
-              <span ng-if="!(r.allergies || []).length" class="text-muted">—</span>
+            <td class="px-4 py-2 text-sm text-gray-700">{{ r.person_type }}</td>
+            <td class="px-4 py-2 text-sm text-gray-700">{{ r.blood_type || '-' }}</td>
+            <td class="px-4 py-2">
+              <div class="flex flex-wrap gap-1">
+                <span ng-repeat="a in (r.allergies || []) track by $index"
+                      class="inline-flex items-center rounded-full bg-red-100 text-red-800 px-2.5 py-0.5 text-xs font-medium">
+                  {{ a.name }}
+                </span>
+                <span ng-if="!(r.allergies || []).length" class="text-gray-400 text-sm">—</span>
+              </div>
             </td>
-            <td>
-              <span ng-repeat="m in (r.medications || []) track by $index" class="label label-info" style="margin-right:4px">
-                {{ m.name }}
-              </span>
-              <span ng-if="!(r.medications || []).length" class="text-muted">—</span>
+            <td class="px-4 py-2">
+              <div class="flex flex-wrap gap-1">
+                <span ng-repeat="m in (r.medications || []) track by $index"
+                      class="inline-flex items-center rounded-full bg-blue-100 text-blue-800 px-2.5 py-0.5 text-xs font-medium">
+                  {{ m.name }}
+                </span>
+                <span ng-if="!(r.medications || []).length" class="text-gray-400 text-sm">—</span>
+              </div>
             </td>
-            <td>
-              <button class="btn btn-xs btn-primary" ng-click="vm.viewRecord(r)">View</button>
+            <td class="px-4 py-2">
+              <div class="flex items-center gap-2">
+                <button class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-700"
+                        ng-click="vm.viewRecord(r)">
+                  View
+                </button>
+                <button class="inline-flex items-center rounded-md bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700"
+                        ng-click="vm.editRecord(r)">
+                  Edit
+                </button>
+              </div>
             </td>
           </tr>
+
+          <!-- Empty state -->
           <tr ng-if="!vm.loading && (!vm.records || !vm.records.length)">
-            <td colspan="8" class="text-center text-muted">No records found.</td>
+            <td colspan="7" class="px-4 py-8 text-center text-gray-500">No records found.</td>
           </tr>
+
+          <!-- Loading state -->
           <tr ng-if="vm.loading">
-            <td colspan="8" class="text-center">
-              <img src="assets/img/ajax-loader.gif" alt="" style="height:18px"> Loading...
+            <td colspan="7" class="px-4 py-8 text-center">
+              <span class="inline-flex items-center gap-2 text-gray-600">
+                <img src="assets/img/ajax-loader.gif" alt="" class="h-5"> Loading...
+              </span>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <div class="panel-footer" ng-if="vm.meta && vm.meta.last_page > 1">
-      <ul class="pagination pagination-sm" style="margin:0;">
-        <li ng-class="{disabled: vm.meta.page <= 1}">
-          <a href="" ng-click="vm.gotoPage(vm.meta.page - 1)">«</a>
-        </li>
-        <li class="active"><span>Page {{ vm.meta.page }} / {{ vm.meta.last_page }}</span></li>
-        <li ng-class="{disabled: vm.meta.page >= vm.meta.last_page}">
-          <a href="" ng-click="vm.gotoPage(vm.meta.page + 1)">»</a>
-        </li>
-      </ul>
+    <!-- Pagination -->
+    <div class="px-6 py-3 border-t border-gray-200" ng-if="vm.meta && vm.meta.last_page > 1">
+      <div class="flex items-center justify-between">
+        <div class="text-sm text-gray-600">
+          Page {{ vm.meta.page }} / {{ vm.meta.last_page }}
+        </div>
+        <div class="flex items-center gap-2">
+          <button ng-click="vm.gotoPage(vm.meta.page - 1)" ng-disabled="vm.meta.page <= 1"
+                  class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+            « Prev
+          </button>
+          <button ng-click="vm.gotoPage(vm.meta.page + 1)" ng-disabled="vm.meta.page >= vm.meta.last_page"
+                  class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+            Next »
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

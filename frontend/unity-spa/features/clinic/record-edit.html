@@ -1,0 +1,172 @@
+<div ng-controller="ClinicRecordEditController as vm" class="space-y-6">
+  <!-- Page Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h2 class="text-2xl font-semibold text-gray-800">Edit Health Record</h2>
+      <div class="text-sm text-gray-500 mt-1" ng-if="vm.person_type === 'student'">
+        Subject: <span class="font-medium text-gray-800">{{ vm.student_name || 'Student' }}</span>
+        <span class="text-gray-400" ng-if="vm.student_number"> — {{ vm.student_number }}</span>
+      </div>
+      <div class="text-sm text-gray-500 mt-1" ng-if="vm.person_type === 'faculty'">
+        Subject: <span class="font-medium text-gray-800">{{ vm.faculty_name || 'Faculty' }}</span>
+      </div>
+    </div>
+    <div class="flex gap-2">
+      <a href="#/clinic/records/{{ vm.id }}"
+         class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+        Cancel
+      </a>
+      <button type="button"
+              class="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+              ng-click="vm.save()" ng-disabled="vm.saving || vm.loading">
+        <span ng-if="!vm.saving">Save Changes</span>
+        <span ng-if="vm.saving" class="inline-flex items-center gap-2">
+          <img src="assets/img/ajax-loader.gif" alt="" class="h-4"> Saving...
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Error Alert -->
+  <div class="rounded-md bg-red-50 border border-red-200 p-4 text-red-700" ng-if="vm.error">
+    {{ vm.error }}
+  </div>
+
+  <!-- Loading -->
+  <div ng-if="vm.loading" class="text-center py-3">
+    <span class="inline-flex items-center gap-2 text-gray-700">
+      <img src="assets/img/ajax-loader.gif" alt="" class="h-5"> Loading record...
+    </span>
+  </div>
+
+  <div ng-if="!vm.loading" class="bg-white rounded-lg shadow p-6">
+    <form novalidate>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Blood Type -->
+        <div class="col-span-1">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Blood Type</label>
+          <select class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  ng-model="vm.form.blood_type">
+            <option value="">—</option>
+            <option value="A+">A+</option><option value="A-">A-</option>
+            <option value="B+">B+</option><option value="B-">B-</option>
+            <option value="AB+">AB+</option><option value="AB-">AB-</option>
+            <option value="O+">O+</option><option value="O-">O-</option>
+          </select>
+        </div>
+
+        <!-- Height -->
+        <div class="col-span-1">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Height (cm)</label>
+          <input type="number" step="0.01" min="0" max="300"
+                 class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                 placeholder="Optional"
+                 ng-model="vm.form.height_cm" />
+        </div>
+
+        <!-- Weight -->
+        <div class="col-span-1">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Weight (kg)</label>
+          <input type="number" step="0.01" min="0" max="500"
+                 class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                 placeholder="Optional"
+                 ng-model="vm.form.weight_kg" />
+        </div>
+      </div>
+
+      <!-- Notes -->
+      <div class="mt-6">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+        <textarea rows="4"
+                  class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  placeholder="Optional"
+                  ng-model="vm.form.notes"></textarea>
+      </div>
+
+      <!-- Simple CSV helpers -->
+      <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Allergies (comma-separated names)</label>
+          <input type="text"
+                 class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                 placeholder="e.g. penicillin, latex"
+                 ng-model="vm._allergiesCsv" />
+          <p class="text-xs text-gray-500 mt-1">If the list below is empty on save, this text will be used.</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Medications (comma-separated names)</label>
+          <input type="text"
+                 class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                 placeholder="e.g. paracetamol, ibuprofen"
+                 ng-model="vm._medicationsCsv" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Immunizations (comma-separated names)</label>
+          <input type="text"
+                 class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                 placeholder="e.g. MMR, Tetanus"
+                 ng-model="vm._immunizationsCsv" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Conditions (comma-separated names)</label>
+          <input type="text"
+                 class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                 placeholder="e.g. asthma, diabetes"
+                 ng-model="vm._conditionsCsv" />
+        </div>
+      </div>
+
+      <!-- Existing arrays preview -->
+      <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <div class="text-sm font-medium text-gray-700 mb-1">Allergies</div>
+          <div class="flex flex-wrap gap-1">
+            <span class="inline-flex items-center rounded-full bg-red-100 text-red-800 px-2.5 py-0.5 text-xs font-medium"
+                  ng-repeat="a in (vm.form.allergies || []) track by $index">{{ a.name }}</span>
+            <span ng-if="!(vm.form.allergies || []).length" class="text-gray-400 text-sm">—</span>
+          </div>
+        </div>
+        <div>
+          <div class="text-sm font-medium text-gray-700 mb-1">Medications</div>
+          <div class="flex flex-wrap gap-1">
+            <span class="inline-flex items-center rounded-full bg-blue-100 text-blue-800 px-2.5 py-0.5 text-xs font-medium"
+                  ng-repeat="m in (vm.form.medications || []) track by $index">{{ m.name }}</span>
+            <span ng-if="!(vm.form.medications || []).length" class="text-gray-400 text-sm">—</span>
+          </div>
+        </div>
+        <div>
+          <div class="text-sm font-medium text-gray-700 mb-1">Immunizations</div>
+          <div class="flex flex-wrap gap-1">
+            <span class="inline-flex items-center rounded-full bg-green-100 text-green-800 px-2.5 py-0.5 text-xs font-medium"
+                  ng-repeat="i in (vm.form.immunizations || []) track by $index">{{ i.name }}</span>
+            <span ng-if="!(vm.form.immunizations || []).length" class="text-gray-400 text-sm">—</span>
+          </div>
+        </div>
+        <div>
+          <div class="text-sm font-medium text-gray-700 mb-1">Conditions</div>
+          <div class="flex flex-wrap gap-1">
+            <span class="inline-flex items-center rounded-full bg-gray-200 text-gray-800 px-2.5 py-0.5 text-xs font-medium"
+                  ng-repeat="c in (vm.form.conditions || []) track by $index">{{ c.name }}</span>
+            <span ng-if="!(vm.form.conditions || []).length" class="text-gray-400 text-sm">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions bottom -->
+      <div class="mt-8 flex items-center justify-end gap-3">
+        <a href="#/clinic/records/{{ vm.id }}"
+           class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+          Cancel
+        </a>
+        <button type="button"
+                class="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+                ng-click="vm.save()" ng-disabled="vm.saving || vm.loading">
+          <span ng-if="!vm.saving">Save Changes</span>
+          <span ng-if="vm.saving" class="inline-flex items-center gap-2">
+            <img src="assets/img/ajax-loader.gif" alt="" class="h-4"> Saving...
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

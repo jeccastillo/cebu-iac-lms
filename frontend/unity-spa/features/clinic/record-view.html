@@ -1,196 +1,249 @@
-<div class="container-fluid" ng-controller="ClinicRecordViewController as vm">
-  <div class="page-header">
-    <h2>Health Record
-      <small ng-if="vm.record && vm.record.person_type === 'student'">
+<div ng-controller="ClinicRecordViewController as vm" class="space-y-6">
+  <!-- Page Header -->
+  <div class="flex items-center justify-between">
+    <h2 class="text-2xl font-semibold text-gray-800">
+      Health Record
+      <small class="text-gray-500 font-normal" ng-if="vm.record && vm.record.person_type === 'student'">
         — {{ vm.record.student_name || 'Student' }} ({{ vm.record.student_number || '-' }})
       </small>
-      <small ng-if="vm.record && vm.record.person_type === 'faculty'">
-        — {{ vm.record.faculty_name || 'Faculty' }} (ID: {{ vm.record.faculty_id || '-' }})
+      <small class="text-gray-500 font-normal" ng-if="vm.record && vm.record.person_type === 'faculty'">
+        — {{ vm.record.faculty_name || 'Faculty' }}
       </small>
     </h2>
+    <a href="#/clinic"
+       class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50">
+      ← Back
+    </a>
   </div>
 
-  <div class="alert alert-danger" ng-if="vm.error">
+  <!-- Error Alert -->
+  <div class="rounded-md bg-red-50 border border-red-200 p-4 text-red-700" ng-if="vm.error">
     {{ vm.error }}
   </div>
 
-  <div ng-if="vm.loading" class="text-center" style="padding: 12px;">
-    <img src="assets/img/ajax-loader.gif" alt="" style="height:18px"> Loading record...
+  <!-- Loading -->
+  <div ng-if="vm.loading" class="text-center py-3">
+    <span class="inline-flex items-center gap-2 text-gray-700">
+      <img src="assets/img/ajax-loader.gif" alt="" class="h-5"> Loading record...
+    </span>
   </div>
 
-  <div ng-if="vm.record">
-    <div class="row">
-      <div class="col-sm-6">
-        <div class="panel panel-default">
-          <div class="panel-heading"><strong>Demographics</strong></div>
-          <div class="panel-body">
-            <div class="row">
-              <div class="col-xs-6">
-                <div><strong>Type:</strong> {{ vm.record.person_type }}</div>
-                <div><strong>Campus ID:</strong> {{ vm.record.campus_id || '-' }}</div>
-              </div>
-              <div class="col-xs-6">
-                <div><strong>Blood Type:</strong> {{ vm.record.blood_type || '-' }}</div>
-                <div><strong>Updated By (ID):</strong> {{ vm.record.last_updated_by || '-' }}</div>
-              </div>
+  <div ng-if="vm.record" class="space-y-6">
+    <!-- Top grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Demographics -->
+      <div class="bg-white rounded-lg shadow">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-600">Demographics</h3>
+        </div>
+        <div class="p-6">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <div class="text-sm text-gray-500">Type</div>
+              <div class="text-gray-900 font-medium">{{ vm.record.person_type }}</div>
             </div>
-            <div class="row" style="margin-top: 8px;">
-              <div class="col-xs-6">
-                <div><strong>Height (cm):</strong> {{ vm.record.height_cm || '-' }}</div>
-              </div>
-              <div class="col-xs-6">
-                <div><strong>Weight (kg):</strong> {{ vm.record.weight_kg || '-' }}</div>
-              </div>
+            <div>
+              <div class="text-sm text-gray-500">Blood Type</div>
+              <div class="text-gray-900 font-medium">{{ vm.record.blood_type || '-' }}</div>
             </div>
-            <div class="row" style="margin-top: 8px;">
-              <div class="col-xs-12">
-                <div><strong>Notes:</strong></div>
-                <div class="well well-sm" style="margin-bottom: 0;" ng-bind="vm.record.notes || '—'"></div>
-              </div>
+            <div>
+              <div class="text-sm text-gray-500">Campus ID</div>
+              <div class="text-gray-900 font-medium">{{ vm.record.campus_id || '-' }}</div>
+            </div>
+            <div>
+              <div class="text-sm text-gray-500">Updated By (ID)</div>
+              <div class="text-gray-900 font-medium">{{ vm.record.last_updated_by || '-' }}</div>
+            </div>
+            <div>
+              <div class="text-sm text-gray-500">Height (cm)</div>
+              <div class="text-gray-900 font-medium">{{ vm.record.height_cm || '-' }}</div>
+            </div>
+            <div>
+              <div class="text-sm text-gray-500">Weight (kg)</div>
+              <div class="text-gray-900 font-medium">{{ vm.record.weight_kg || '-' }}</div>
             </div>
           </div>
-        </div>
-      </div><!-- /col-sm-6 -->
 
-      <div class="col-sm-6">
-        <div class="panel panel-default">
-          <div class="panel-heading"><strong>Allergies</strong></div>
-          <div class="panel-body">
-            <div ng-if="!(vm.record.allergies || []).length" class="text-muted">No allergies recorded.</div>
-            <ul class="list-unstyled" ng-if="(vm.record.allergies || []).length">
-              <li ng-repeat="a in vm.record.allergies track by $index">
-                <span class="label label-danger" style="margin-right: 6px;">{{ a.name }}</span>
-                <span class="text-muted" ng-if="a.reaction">Reaction: {{ a.reaction }}</span>
-                <span class="text-muted" ng-if="a.severity">| Severity: {{ a.severity }}</span>
+          <div class="mt-4">
+            <div class="text-sm text-gray-500 mb-1">Notes</div>
+            <div class="rounded-md border border-gray-200 bg-gray-50 p-3 text-gray-800" ng-bind="vm.record.notes || '—'"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Allergies + Medications -->
+      <div class="space-y-6">
+        <!-- Allergies -->
+        <div class="bg-white rounded-lg shadow">
+          <div class="px-6 py-4 border-b border-gray-200">
+            <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-600">Allergies</h3>
+          </div>
+          <div class="p-6">
+            <div ng-if="!(vm.record.allergies || []).length" class="text-gray-500">No allergies recorded.</div>
+            <ul class="space-y-2" ng-if="(vm.record.allergies || []).length">
+              <li ng-repeat="a in vm.record.allergies track by $index" class="text-sm">
+                <span class="inline-flex items-center rounded-full bg-red-100 text-red-800 px-2.5 py-0.5 text-xs font-medium mr-2">{{ a.name }}</span>
+                <span class="text-gray-600" ng-if="a.reaction">Reaction: {{ a.reaction }}</span>
+                <span class="text-gray-400" ng-if="a.reaction && a.severity"> | </span>
+                <span class="text-gray-600" ng-if="a.severity">Severity: {{ a.severity }}</span>
               </li>
             </ul>
           </div>
         </div>
 
-        <div class="panel panel-default">
-          <div class="panel-heading"><strong>Medications</strong></div>
-          <div class="panel-body">
-            <div ng-if="!(vm.record.medications || []).length" class="text-muted">No medications recorded.</div>
-            <ul class="list-unstyled" ng-if="(vm.record.medications || []).length">
-              <li ng-repeat="m in vm.record.medications track by $index">
-                <span class="label label-info" style="margin-right: 6px;">{{ m.name }}</span>
-                <span class="text-muted" ng-if="m.dose">Dose: {{ m.dose }}</span>
-                <span class="text-muted" ng-if="m.freq">| Freq: {{ m.freq }}</span>
-                <span class="text-muted" ng-if="m.ongoing">| Ongoing</span>
+        <!-- Medications -->
+        <div class="bg-white rounded-lg shadow">
+          <div class="px-6 py-4 border-b border-gray-200">
+            <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-600">Medications</h3>
+          </div>
+          <div class="p-6">
+            <div ng-if="!(vm.record.medications || []).length" class="text-gray-500">No medications recorded.</div>
+            <ul class="space-y-2" ng-if="(vm.record.medications || []).length">
+              <li ng-repeat="m in vm.record.medications track by $index" class="text-sm">
+                <span class="inline-flex items-center rounded-full bg-blue-100 text-blue-800 px-2.5 py-0.5 text-xs font-medium mr-2">{{ m.name }}</span>
+                <span class="text-gray-600" ng-if="m.dose">Dose: {{ m.dose }}</span>
+                <span class="text-gray-400" ng-if="m.dose && m.freq"> | </span>
+                <span class="text-gray-600" ng-if="m.freq">Freq: {{ m.freq }}</span>
+                <span class="text-gray-600" ng-if="m.ongoing"> | Ongoing</span>
               </li>
             </ul>
           </div>
         </div>
-      </div><!-- /col-sm-6 -->
-    </div><!-- /row -->
+      </div>
+    </div>
 
-    <div class="row">
-      <div class="col-sm-6">
-        <div class="panel panel-default">
-          <div class="panel-heading"><strong>Immunizations</strong></div>
-          <div class="panel-body">
-            <div ng-if="!(vm.record.immunizations || []).length" class="text-muted">No immunizations recorded.</div>
-            <ul class="list-unstyled" ng-if="(vm.record.immunizations || []).length">
-              <li ng-repeat="i in vm.record.immunizations track by $index">
-                <span class="label label-success" style="margin-right: 6px;">{{ i.name }}</span>
-                <span class="text-muted" ng-if="i.date">Date: {{ i.date }}</span>
-                <span class="text-muted" ng-if="i.lot">| Lot: {{ i.lot }}</span>
-                <span class="text-muted" ng-if="i.site">| Site: {{ i.site }}</span>
-              </li>
-            </ul>
-          </div>
+    <!-- Bottom grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Immunizations -->
+      <div class="bg-white rounded-lg shadow">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-600">Immunizations</h3>
         </div>
-      </div><!-- /col-sm-6 -->
+        <div class="p-6">
+          <div ng-if="!(vm.record.immunizations || []).length" class="text-gray-500">No immunizations recorded.</div>
+          <ul class="space-y-2" ng-if="(vm.record.immunizations || []).length">
+            <li ng-repeat="i in vm.record.immunizations track by $index" class="text-sm">
+              <span class="inline-flex items-center rounded-full bg-green-100 text-green-800 px-2.5 py-0.5 text-xs font-medium mr-2">{{ i.name }}</span>
+              <span class="text-gray-600" ng-if="i.date">Date: {{ i.date }}</span>
+              <span class="text-gray-400" ng-if="i.date && i.lot"> | </span>
+              <span class="text-gray-600" ng-if="i.lot">Lot: {{ i.lot }}</span>
+              <span class="text-gray-400" ng-if="(i.date || i.lot) && i.site"> | </span>
+              <span class="text-gray-600" ng-if="i.site">Site: {{ i.site }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
 
-      <div class="col-sm-6">
-        <div class="panel panel-default">
-          <div class="panel-heading"><strong>Conditions</strong></div>
-          <div class="panel-body">
-            <div ng-if="!(vm.record.conditions || []).length" class="text-muted">No conditions recorded.</div>
-            <ul class="list-unstyled" ng-if="(vm.record.conditions || []).length">
-              <li ng-repeat="c in vm.record.conditions track by $index">
-                <span class="label label-default" style="margin-right: 6px;">{{ c.name }}</span>
-                <span class="text-muted" ng-if="c.since">Since: {{ c.since }}</span>
-                <span class="text-muted" ng-if="c.status">| Status: {{ c.status }}</span>
-              </li>
-            </ul>
-          </div>
+      <!-- Conditions -->
+      <div class="bg-white rounded-lg shadow">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-600">Conditions</h3>
         </div>
-      </div><!-- /col-sm-6 -->
-    </div><!-- /row -->
+        <div class="p-6">
+          <div ng-if="!(vm.record.conditions || []).length" class="text-gray-500">No conditions recorded.</div>
+          <ul class="space-y-2" ng-if="(vm.record.conditions || []).length">
+            <li ng-repeat="c in vm.record.conditions track by $index" class="text-sm">
+              <span class="inline-flex items-center rounded-full bg-gray-200 text-gray-800 px-2.5 py-0.5 text-xs font-medium mr-2">{{ c.name }}</span>
+              <span class="text-gray-600" ng-if="c.since">Since: {{ c.since }}</span>
+              <span class="text-gray-400" ng-if="c.since && c.status"> | </span>
+              <span class="text-gray-600" ng-if="c.status">Status: {{ c.status }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
 
     <!-- Visits -->
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <strong>Clinic Visits</strong>
-        <span class="text-muted" ng-if="vm.vmeta && vm.vmeta.total"> ({{ vm.vmeta.total | number }} visits)</span>
+    <div class="bg-white rounded-lg shadow">
+      <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+        <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-600">
+          Clinic Visits
+          <span class="text-gray-400 normal-case font-normal" ng-if="vm.vmeta && vm.vmeta.total"> ({{ vm.vmeta.total | number }} visits)</span>
+        </h3>
       </div>
-      <div class="table-responsive">
-        <table class="table table-striped table-hover">
-          <thead>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
             <tr>
-              <th style="width: 160px;">Visit Date</th>
-              <th>Reason</th>
-              <th>Assessment</th>
-              <th>Diagnosis</th>
-              <th>Treatment</th>
-              <th>Medications Dispensed</th>
-              <th style="width: 90px;">Attachments</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-40">Visit Date</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reason</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Assessment</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Diagnosis</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Treatment</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Medications Dispensed</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-24">Attachments</th>
             </tr>
           </thead>
-          <tbody>
-            <tr ng-repeat="v in vm.visits">
-              <td>{{ v.visit_date || '-' }}</td>
-              <td>{{ v.reason || '-' }}</td>
-              <td>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr ng-repeat="v in vm.visits" class="hover:bg-gray-50">
+              <td class="px-4 py-2 text-sm text-gray-700">{{ v.visit_date || '-' }}</td>
+              <td class="px-4 py-2 text-sm text-gray-700">{{ v.reason || '-' }}</td>
+              <td class="px-4 py-2 text-sm text-gray-700">
                 <span ng-if="v.assessment">{{ v.assessment | limitTo: 80 }}<span ng-if="(v.assessment || '').length > 80">…</span></span>
-                <span ng-if="!v.assessment" class="text-muted">—</span>
+                <span ng-if="!v.assessment" class="text-gray-400">—</span>
               </td>
-              <td>
-                <span ng-if="(v.diagnosis_codes || []).length">
-                  <span class="label label-default" ng-repeat="d in v.diagnosis_codes track by $index" style="margin-right: 4px;">{{ d }}</span>
+              <td class="px-4 py-2 text-sm text-gray-700">
+                <span ng-if="(v.diagnosis_codes || []).length" class="flex flex-wrap gap-1">
+                  <span class="inline-flex items-center rounded-full bg-gray-200 text-gray-800 px-2.5 py-0.5 text-xs font-medium" ng-repeat="d in v.diagnosis_codes track by $index">{{ d }}</span>
                 </span>
-                <span ng-if="!(v.diagnosis_codes || []).length" class="text-muted">—</span>
+                <span ng-if="!(v.diagnosis_codes || []).length" class="text-gray-400">—</span>
               </td>
-              <td>
+              <td class="px-4 py-2 text-sm text-gray-700">
                 <span ng-if="v.treatment">{{ v.treatment | limitTo: 80 }}<span ng-if="(v.treatment || '').length > 80">…</span></span>
-                <span ng-if="!v.treatment" class="text-muted">—</span>
+                <span ng-if="!v.treatment" class="text-gray-400">—</span>
               </td>
-              <td>
-                <span ng-if="(v.medications_dispensed || []).length">
-                  <span class="label label-info" ng-repeat="m in v.medications_dispensed track by $index" style="margin-right: 4px;">{{ m.name }}</span>
-                </span>
-                <span ng-if="!(v.medications_dispensed || []).length" class="text-muted">—</span>
+              <td class="px-4 py-2 text-sm">
+                <div class="flex flex-wrap gap-1">
+                  <span ng-if="(v.medications_dispensed || []).length">
+                    <span class="inline-flex items-center rounded-full bg-blue-100 text-blue-800 px-2.5 py-0.5 text-xs font-medium" ng-repeat="m in v.medications_dispensed track by $index">{{ m.name }}</span>
+                  </span>
+                  <span ng-if="!(v.medications_dispensed || []).length" class="text-gray-400">—</span>
+                </div>
               </td>
-              <td class="text-center">{{ v.attachments_count || 0 }}</td>
+              <td class="px-4 py-2 text-sm text-gray-700 text-center">{{ v.attachments_count || 0 }}</td>
             </tr>
+
+            <!-- Empty state -->
             <tr ng-if="!vm.visitsLoading && (!vm.visits || !vm.visits.length)">
-              <td colspan="7" class="text-center text-muted">No visits found.</td>
+              <td colspan="7" class="px-4 py-8 text-center text-gray-500">No visits found.</td>
             </tr>
+            <!-- Loading state -->
             <tr ng-if="vm.visitsLoading">
-              <td colspan="7" class="text-center">
-                <img src="assets/img/ajax-loader.gif" alt="" style="height:18px"> Loading visits...
+              <td colspan="7" class="px-4 py-8 text-center">
+                <span class="inline-flex items-center gap-2 text-gray-600">
+                  <img src="assets/img/ajax-loader.gif" alt="" class="h-5"> Loading visits...
+                </span>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <div class="panel-footer" ng-if="vm.vmeta && vm.vmeta.last_page > 1">
-        <ul class="pagination pagination-sm" style="margin:0;">
-          <li ng-class="{disabled: vm.vmeta.page <= 1}">
-            <a href="" ng-click="vm.gotoVisitPage(vm.vmeta.page - 1)">«</a>
-          </li>
-          <li class="active"><span>Page {{ vm.vmeta.page }} / {{ vm.vmeta.last_page }}</span></li>
-          <li ng-class="{disabled: vm.vmeta.page >= vm.vmeta.last_page}">
-            <a href="" ng-click="vm.gotoVisitPage(vm.vmeta.page + 1)">»</a>
-          </li>
-        </ul>
+      <!-- Visits Pagination -->
+      <div class="px-6 py-3 border-t border-gray-200" ng-if="vm.vmeta && vm.vmeta.last_page > 1">
+        <div class="flex items-center justify-between">
+          <div class="text-sm text-gray-600">
+            Page {{ vm.vmeta.page }} / {{ vm.vmeta.last_page }}
+          </div>
+          <div class="flex items-center gap-2">
+            <button ng-click="vm.gotoVisitPage(vm.vmeta.page - 1)" ng-disabled="vm.vmeta.page <= 1"
+                    class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+              « Prev
+            </button>
+            <button ng-click="vm.gotoVisitPage(vm.vmeta.page + 1)" ng-disabled="vm.vmeta.page >= vm.vmeta.last_page"
+                    class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+              Next »
+            </button>
+          </div>
+        </div>
       </div>
-      <div class="alert alert-danger" ng-if="vm.visitsError" style="margin: 10px;">
-        {{ vm.visitsError }}
+
+      <!-- Visits Error -->
+      <div class="px-6 pb-4" ng-if="vm.visitsError">
+        <div class="rounded-md bg-red-50 border border-red-200 p-3 text-red-700">
+          {{ vm.visitsError }}
+        </div>
       </div>
     </div>
-
-  </div><!-- /vm.record -->
+  </div>
 </div>

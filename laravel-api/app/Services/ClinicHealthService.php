@@ -42,15 +42,46 @@ class ClinicHealthService
         // Normalize JSON array fields
         foreach (['allergies', 'medications', 'immunizations', 'conditions'] as $jsonField) {
             if (isset($payload[$jsonField]) && $payload[$jsonField] !== null) {
+                // Accept JSON string or array
                 if (is_string($payload[$jsonField])) {
                     $decoded = json_decode($payload[$jsonField], true);
                     if (json_last_error() === JSON_ERROR_NONE) {
                         $payload[$jsonField] = $decoded;
                     }
                 }
+                // Enforce array or null
                 if (!is_array($payload[$jsonField])) {
-                    // enforce arrays (or null)
                     $payload[$jsonField] = null;
+                } else {
+                    // Coerce array entries into { name: string, ... } objects where possible.
+                    // This allows the SPA to send simple strings or loosely shaped objects.
+                    $normalized = array_map(function ($it) {
+                        if (is_string($it)) {
+                            $n = trim($it);
+                            return $n !== '' ? ['name' => $n] : null;
+                        }
+                        if (is_array($it)) {
+                            // Prefer 'name' when present
+                            if (isset($it['name'])) {
+                                $it['name'] = trim((string) $it['name']);
+                                return $it['name'] !== '' ? $it : null;
+                            }
+                            // Fallback common key
+                            if (isset($it['value'])) {
+                                $n = trim((string) $it['value']);
+                                if ($n === '') return null;
+                                unset($it['value']);
+                                $it['name'] = $n;
+                                return $it;
+                            }
+                        }
+                        return null;
+                    }, $payload[$jsonField]);
+
+                    // Filter out null/empty entries and reindex
+                    $normalized = array_values(array_filter($normalized, function ($x) { return $x !== null; }));
+
+                    $payload[$jsonField] = count($normalized) ? $normalized : null;
                 }
             }
         }

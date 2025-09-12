@@ -1,0 +1,169 @@
+<div ng-controller="ClinicRecordNewController as vm" class="space-y-6">
+  <!-- Page Header -->
+  <div class="flex items-center justify-between">
+    <h2 class="text-2xl font-semibold text-gray-800">Add Health Record</h2>
+    <button type="button"
+            class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            ng-click="vm.cancel()">
+      Cancel
+    </button>
+  </div>
+
+  <!-- Error Alert -->
+  <div class="rounded-md bg-red-50 border border-red-200 p-4 text-red-700" ng-if="vm.error">
+    {{ vm.error }}
+  </div>
+
+  <!-- Form Card -->
+  <div class="bg-white rounded-lg shadow p-6">
+    <form ng-submit="vm.save()" novalidate>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Person Type -->
+        <div class="col-span-1">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Person Type</label>
+          <select class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  ng-model="vm.form.person_type">
+            <option value="student">Student</option>
+            <option value="faculty">Faculty</option>
+          </select>
+        </div>
+
+        <!-- Student -->
+        <div class="col-span-1" ng-if="vm.form.person_type === 'student'">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Student</label>
+          <div class="relative">
+            <input type="text"
+                   class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                   placeholder="Search student by name or number…"
+                   pui-autocomplete
+                   ng-model="vm.form.person_student_id"
+                   pui-source="vm.studentResults"
+                   pui-item-key="id"
+                   pui-label="((item.student_number || '') + ' — ' + (item.last_name || '') + ', ' + (item.first_name || '') + (item.middle_name ? (' ' + item.middle_name) : ''))"
+                   pui-on-query="vm.onStudentQuery(q)"
+                   pui-min-chars="2"
+                   pui-max-results="20" />
+          </div>
+          <p class="text-xs text-gray-500 mt-1" ng-if="vm.form.person_student_id">Selected ID: {{ vm.form.person_student_id }}</p>
+        </div>
+
+        <!-- Faculty -->
+        <div class="col-span-1" ng-if="vm.form.person_type === 'faculty'">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Faculty</label>
+          <div class="relative">
+            <input type="text"
+                   class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                   placeholder="Search faculty by name…"
+                   pui-autocomplete
+                   ng-model="vm.form.person_faculty_id"
+                   pui-source="vm.facultyResults"
+                   pui-item-key="id"
+                   pui-label="(item.full_name || ('Faculty #' + item.id))"
+                   pui-on-query="vm.onFacultyQuery(q)"
+                   pui-min-chars="2"
+                   pui-max-results="20" />
+          </div>
+          <p class="text-xs text-gray-500 mt-1" ng-if="vm.form.person_faculty_id">Selected ID: {{ vm.form.person_faculty_id }}</p>
+        </div>
+
+        <!-- Campus -->
+        <input type="hidden" ng-model="vm.form.campus_id" />
+        
+
+        <!-- Blood Type -->
+        <div class="col-span-1">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Blood Type</label>
+          <select class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  ng-model="vm.form.blood_type">
+            <option value="">—</option>
+            <option value="A+">A+</option><option value="A-">A-</option>
+            <option value="B+">B+</option><option value="B-">B-</option>
+            <option value="AB+">AB+</option><option value="AB-">AB-</option>
+            <option value="O+">O+</option><option value="O-">O-</option>
+          </select>
+        </div>
+
+        <!-- Height -->
+        <div class="col-span-1">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Height (cm)</label>
+          <input type="number" step="0.01" min="0" max="300"
+                 class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                 placeholder="Optional"
+                 ng-model="vm.form.height_cm" />
+        </div>
+
+        <!-- Weight -->
+        <div class="col-span-1">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Weight (kg)</label>
+          <input type="number" step="0.01" min="0" max="500"
+                 class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                 placeholder="Optional"
+                 ng-model="vm.form.weight_kg" />
+        </div>
+      </div>
+
+      <!-- Notes -->
+      <div class="mt-6">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+        <textarea rows="4"
+                  class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  placeholder="Optional"
+                  ng-model="vm.form.notes"></textarea>
+      </div>
+
+      <!-- Optional JSON Arrays (simple text input helpers) -->
+      <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Allergies (comma-separated names)</label>
+          <input type="text"
+                 class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                 placeholder="e.g. penicillin, latex"
+                 ng-model="vm._allergiesCsv"
+                 ng-change="vm.form.allergies = (vm._allergiesCsv || '').split(',').map(function(s){s=s.trim();return s?{name:s}:null;}).filter(Boolean)" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Medications (comma-separated names)</label>
+          <input type="text"
+                 class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                 placeholder="e.g. paracetamol, ibuprofen"
+                 ng-model="vm._medicationsCsv"
+                 ng-change="vm.form.medications = (vm._medicationsCsv || '').split(',').map(function(s){s=s.trim();return s?{name:s}:null;}).filter(Boolean)" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Immunizations (comma-separated names)</label>
+          <input type="text"
+                 class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                 placeholder="e.g. MMR, Tetanus"
+                 ng-model="vm._immunizationsCsv"
+                 ng-change="vm.form.immunizations = (vm._immunizationsCsv || '').split(',').map(function(s){s=s.trim();return s?{name:s}:null;}).filter(Boolean)" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Conditions (comma-separated names)</label>
+          <input type="text"
+                 class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                 placeholder="e.g. asthma, diabetes"
+                 ng-model="vm._conditionsCsv"
+                 ng-change="vm.form.conditions = (vm._conditionsCsv || '').split(',').map(function(s){s=s.trim();return s?{name:s}:null;}).filter(Boolean)" />
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="mt-8 flex items-center justify-end gap-3">
+        <button type="button"
+                class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                ng-click="vm.reset()"
+                ng-disabled="vm.saving">
+          Reset
+        </button>
+        <button type="submit"
+                class="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                ng-disabled="vm.saving">
+          <span ng-if="!vm.saving">Save</span>
+          <span ng-if="vm.saving" class="inline-flex items-center gap-2">
+            <img src="assets/img/ajax-loader.gif" alt="" class="h-4"> Saving...
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

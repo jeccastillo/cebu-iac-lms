@@ -582,6 +582,19 @@
         controllerAs: "vm",
         requiredRoles: ["clinic_staff", "clinic_admin", "admin"]
       })
+      // Place 'new' route before parameterized :id to avoid collision
+      .when("/clinic/records/new", {
+        templateUrl: "features/clinic/record-new.html",
+        controller: "ClinicRecordNewController",
+        controllerAs: "vm",
+        requiredRoles: ["clinic_staff", "clinic_admin", "admin"]
+      })
+      .when("/clinic/records/:id/edit", {
+        templateUrl: "features/clinic/record-edit.html",
+        controller: "ClinicRecordEditController",
+        controllerAs: "vm",
+        requiredRoles: ["clinic_staff", "clinic_admin", "admin"]
+      })
       .when("/clinic/records/:id", {
         templateUrl: "features/clinic/record-view.html",
         controller: "ClinicRecordViewController",
