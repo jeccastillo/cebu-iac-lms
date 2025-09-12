@@ -499,6 +499,12 @@
         controllerAs: 'vm',
         requiredRoles: ['finance', 'admin'],
       })
+      .when('/finance/payment-actions', {
+        templateUrl: 'features/finance/payment-actions/payment-actions.html',
+        controller: 'FinancePaymentActionsController',
+        controllerAs: 'vm',
+        requiredRoles: ['finance_admin', 'admin'],
+      })
 
       .when("/cashier-admin", {
         templateUrl: "features/cashiers/list.html",

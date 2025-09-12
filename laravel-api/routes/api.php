@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\V1\PaymentDescriptionController;
 use App\Http\Controllers\Api\V1\PaymentDetailAdminController;
 use App\Http\Controllers\Api\V1\PaymentModeController;
 use App\Http\Controllers\Api\V1\PaymentJournalController;
+use App\Http\Controllers\Api\V1\FinancePaymentActionsController;
 use App\Http\Controllers\Api\V1\PortalController;
 use App\Http\Controllers\Api\V1\PreviousSchoolController;
 use App\Http\Controllers\Api\V1\ProgramController;
@@ -290,6 +291,12 @@ Route::prefix('v1')->group(function () {
     // Excess Payment Applications
     Route::post('/finance/ledger/excess/apply', [FinanceController::class, 'applyExcessPayment'])->middleware('role:finance,admin');
     Route::post('/finance/ledger/excess/revert', [FinanceController::class, 'revertExcessPayment'])->middleware('role:finance,admin');
+
+    // Finance Payment Actions (finance_admin/admin)
+    Route::get('/finance/payment-actions/search', [FinancePaymentActionsController::class, 'search'])->middleware('role:finance_admin,admin');
+    Route::post('/finance/payment-actions/{id}/void', [FinancePaymentActionsController::class, 'void'])->middleware('role:finance_admin,admin');
+    Route::delete('/finance/payment-actions/{id}/retract', [FinancePaymentActionsController::class, 'retract'])->middleware('role:finance_admin,admin');
+
     // Admin Payment Details management (admin-only)
     // Place 'admin' literal route BEFORE the parameterized {id} to avoid collision
     Route::get('/finance/payment-details/admin', [PaymentDetailAdminController::class, 'index'])->middleware('role:admin');
