@@ -13,20 +13,24 @@ return new class extends Migration
     public function up()
     {
         // Add indexes for better reminder query performance
-        DB::statement('CREATE INDEX IF NOT EXISTS idx_applicant_data_status_updated ON tb_mas_applicant_data(status, updated_at)');
-        DB::statement('CREATE INDEX IF NOT EXISTS idx_applicant_data_reminder_tracking ON tb_mas_applicant_data(last_inactive_reminder_sent, last_reservation_reminder_sent)');
-        DB::statement('CREATE INDEX IF NOT EXISTS idx_applicant_data_user_status ON tb_mas_applicant_data(user_id, status)');
-        DB::statement('CREATE INDEX IF NOT EXISTS idx_applicant_data_created_status ON tb_mas_applicant_data(created_at, status)');
+        Schema::table('tb_mas_applicant_data', function (Blueprint $table) {
+        	$table->index(['status', 'updated_at'], 'idx_applicant_data_status_updated');
+        	$table->index(['last_inactive_reminder_sent', 'last_reservation_reminder_sent'], 'idx_applicant_data_reminder_tracking');
+        	$table->index(['user_id', 'status'], 'idx_applicant_data_user_status');
+        	$table->index(['created_at', 'status'], 'idx_applicant_data_created_status');
+    	});
     }
 
     /**
      * Remove the indexes
      */
-    public function down()
-    {
-        DB::statement('DROP INDEX IF EXISTS idx_applicant_data_status_updated ON tb_mas_applicant_data');
-        DB::statement('DROP INDEX IF EXISTS idx_applicant_data_reminder_tracking ON tb_mas_applicant_data');
-        DB::statement('DROP INDEX IF EXISTS idx_applicant_data_user_status ON tb_mas_applicant_data');
-        DB::statement('DROP INDEX IF EXISTS idx_applicant_data_created_status ON tb_mas_applicant_data');
-    }
+   public function down()
+   {
+	Schema::table('tb_mas_applicant_data', function (Blueprint $table) {
+    		$table->dropIndex('idx_applicant_data_status_updated');
+    		$table->dropIndex('idx_applicant_data_reminder_tracking');
+    		$table->dropIndex('idx_applicant_data_user_status');
+    		$table->dropIndex('idx_applicant_data_created_status');
+    	});
+   }
 };
