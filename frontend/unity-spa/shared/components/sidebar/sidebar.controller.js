@@ -46,6 +46,7 @@
         label: 'Registrar',
         children: [
           { label: 'Reports', path: '/registrar/reports' },
+          { label: 'Transcripts / Copy of Grades', path: '/registrar/transcripts' },
           { label: 'Enlistment', path: '/registrar/enlistment' },
           { label: 'Enlistment Applicants', path: '/registrar/enlistment-applicants' },
           { label: 'Slot Monitoring', path: '/registrar/sections-slots' },
@@ -82,6 +83,7 @@
           { label: 'Payment Descriptions', path: '/finance/payment-descriptions' },
           { label: 'Payment Modes', path: '/finance/payment-modes' },
           { label: 'Student Billing', path: '/finance/student-billing' },
+          { label: 'Payment Actions', path: '/finance/payment-actions' },
           { label: 'Cashier Admin', path: '/cashier-admin' },
           { label: 'Credit/Debit', path: '/finance/debit-credit' },                    
         ]
@@ -96,8 +98,10 @@
           { label: 'School Terms', path: '/school-years' },
           { label: 'Classrooms', path: '/classrooms' },
           { label: 'Schedules', path: '/schedules' },
-          { label: 'Faculty Loading', path: '/faculty-loading' },
-          { label: 'Grading Systems', path: '/grading-systems' }
+          // { label: 'Faculty Loading', path: '/faculty-loading' },
+          { label: 'Faculty Loading', path: '/faculty-loading/by-faculty' },
+          { label: 'Grading Systems', path: '/grading-systems' },
+          { label: 'Grading Sheet', path: '/academics/grading-sheet' }
         ]
       },
       {

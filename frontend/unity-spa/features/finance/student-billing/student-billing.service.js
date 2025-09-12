@@ -95,6 +95,33 @@
         return $http
           .delete(BASE + '/finance/student-billing/' + encodeURIComponent(id), _headers())
           .then(_unwrap);
+      },
+
+      // GET /finance/student-billing/missing-invoices
+      // filters: { student_id:int, term:int }
+      missingInvoices: function (filters) {
+        var cfg = _headers();
+        cfg.params = {};
+        if (filters && filters.student_id != null && filters.student_id !== '') {
+          var sid = parseInt(filters.student_id, 10);
+          if (!isNaN(sid)) cfg.params.student_id = sid;
+        }
+        if (filters && filters.term != null && filters.term !== '') {
+          var term = parseInt(filters.term, 10);
+          if (!isNaN(term)) cfg.params.term = term;
+        }
+        return $http
+          .get(BASE + '/finance/student-billing/missing-invoices', cfg)
+          .then(_unwrap);
+      },
+
+      // POST /finance/student-billing/{id}/generate-invoice
+      // body: { posted_at?: string, remarks?: string }
+      generateInvoiceForBilling: function (id, body) {
+        var payload = Object.assign({}, body || {});
+        return $http
+          .post(BASE + '/finance/student-billing/' + encodeURIComponent(id) + '/generate-invoice', payload, _headers())
+          .then(_unwrap);
       }
     };
   }

@@ -1,0 +1,282 @@
+<div class="max-w-7xl mx-auto" ng-controller="FacultyLoadingByFacultyController as vm">
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-2xl font-semibold text-gray-800">Faculty Loading — Assign by Faculty</h2>
+
+    <div class="flex items-center gap-3">
+      <label class="inline-flex items-center text-sm text-gray-700 mr-2">
+        <input type="checkbox" class="mr-2" ng-model="vm.includeUnassignedForExport">
+        <span>Include unassigned</span>
+      </label>
+
+      <button class="inline-flex items-center px-4 py-2 rounded-md text-white bg-green-600 hover:bg-green-700 disabled:opacity-50"
+              ng-disabled="!vm.term"
+              ng-click="vm.exportAssignments()">
+        Export to Excel
+      </button>
+
+      <!-- Save All -->
+      <button class="inline-flex items-center px-4 py-2 rounded-md text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50"
+              ng-disabled="!vm.hasPending() || vm.loading.saving"
+              ng-click="vm.saveAll()">
+        <i class="fas fa-spinner fa-spin mr-2" ng-if="vm.loading.saving"></i>
+        <span ng-if="!vm.loading.saving">Save All</span>
+        <span ng-if="vm.loading.saving">Saving...</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Bootstrap loading -->
+  <div ng-if="vm.loading.bootstrap" class="rounded-md border border-blue-200 bg-blue-50 text-blue-800 px-4 py-3 mb-6">
+    Initializing...
+  </div>
+
+  <div ng-if="!vm.loading.bootstrap">
+    <!-- Controls -->
+    <div class="bg-white rounded-lg shadow mb-6">
+      <div class="p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Faculty Selector -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Faculty</label>
+          <select class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                  ng-model="vm.selectedFacultyId"
+                  ng-disabled="vm.loading.facultyOptions"
+                  ng-change="vm.onFacultyChange()"
+                  ng-options="f.id as f.full_name for f in vm.facultyOptions track by f.id">
+            <option value="">-- Select Faculty --</option>
+          </select>
+          <div class="text-xs text-gray-500 mt-1" ng-if="vm.loading.facultyOptions">
+            <i class="fas fa-spinner fa-spin mr-1"></i> Loading faculty...
+          </div>
+        </div>
+
+        <!-- Search -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+          <div class="flex flex-col md:flex-row md:items-center gap-2">
+            <div class="relative flex-1">
+              <input id="searchSection"
+                     type="text"
+                     class="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                     placeholder="Section code"
+                     ng-model="vm.search.sectionCode"
+                     pui-autocomplete
+                     pui-source="vm.sectionOptions"
+                     pui-item-key="code"
+                     pui-label="item.code"
+                     pui-min-chars="1"
+                     pui-query-debounce="200"
+                     pui-on-query="vm.onSectionQuery(q)"
+                     pui-on-select="vm.onSectionSelect()" />
+            </div>
+            <div class="flex-1">
+              <input id="searchSubjectCode"
+                     type="text"
+                     class="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                     placeholder="Subject code (e.g., MATH101)"
+                     ng-model="vm.search.subjectCode"
+                     ng-keypress="$event.which === 13 &amp;&amp; vm.applySearch()" />
+            </div>
+            <div class="flex gap-2 md:ml-2">
+              <button class="rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-gray-700 hover:bg-gray-100"
+                      ng-click="vm.applySearch()">Search</button>
+              <button class="rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-700 hover:bg-gray-50"
+                      ng-click="vm.clearSearch()">Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Term indicator -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Active Term</label>
+          <div class="flex items-center h-[42px] text-gray-700">
+            <span ng-if="vm.term">{{ vm.termLabel || ('#' + vm.term) }}</span>
+            <span ng-if="!vm.term" class="italic text-gray-400">No term selected</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Unassigned -->
+      <div class="bg-white rounded-lg shadow">
+        <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+          <strong class="text-gray-800">Unassigned Sections</strong>
+          <div class="text-sm text-gray-500">
+            Page <span class="font-semibold">{{ vm.unassignedMeta.current_page }}</span> / {{ vm.unassignedMeta.last_page }}
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-20">ID</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subject</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Section</th>
+                <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider w-32">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <!-- Loading state -->
+              <tr ng-if="vm.loading.lists">
+                <td colspan="4" class="px-4 py-6 text-gray-600">
+                  <i class="fas fa-spinner fa-spin mr-2"></i> Loading...
+                </td>
+              </tr>
+
+              <!-- Empty state -->
+              <tr ng-if="!vm.loading.lists &amp;&amp; (!vm.unassigned || !vm.unassigned.length)">
+                <td colspan="4" class="px-4 py-6 text-gray-500">
+                  No unassigned sections found for the selected term.
+                </td>
+              </tr>
+
+              <!-- Rows -->
+              <tr ng-repeat="row in vm.unassigned track by row.intID" class="hover:bg-gray-50">
+                <td class="px-4 py-3 text-sm text-gray-700">{{ row.intID }}</td>
+                <td class="px-4 py-3">
+                  <div class="text-sm">
+                    <div class="font-semibold text-gray-800">{{ row.subjectCode || '—' }}</div>
+                    <div class="text-gray-500">{{ row.subjectDescription || '' }}</div>
+                  </div>
+                </td>
+                <td class="px-4 py-3 text-sm text-gray-700">{{ row.sectionCode || '—' }}</td>
+                <td class="px-4 py-3 text-right">
+                  <button class="inline-flex items-center px-3 py-2 rounded-md text-white bg-green-600 hover:bg-green-700 disabled:opacity-50"
+                          ng-disabled="!vm.selectedFacultyId"
+                          ng-click="vm.moveToAssign(row)">
+                    Assign &raquo;
+                  </button>
+                  <div class="text-xs text-gray-400 mt-1" ng-if="!vm.selectedFacultyId">
+                    Select a faculty first
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Footer / Pagination -->
+        <div class="px-4 py-3 border-t border-gray-200">
+          <div class="flex items-center justify-between">
+            <div class="text-sm text-gray-600">
+              Page <span class="font-semibold text-gray-800">{{ vm.unassignedMeta.current_page }}</span> / {{ vm.unassignedMeta.last_page }}
+            </div>
+            <div class="flex items-center space-x-2">
+              <button class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                      ng-click="vm.pageUnassignedPrev()"
+                      ng-disabled="vm.unassignedMeta.current_page <= 1">Prev</button>
+              <button class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                      ng-click="vm.pageUnassignedNext()"
+                      ng-disabled="vm.unassignedMeta.current_page >= vm.unassignedMeta.last_page">Next</button>
+              <div class="flex items-center space-x-2">
+                <span class="text-sm text-gray-600">Go to:</span>
+                <input type="number" min="1"
+                       class="w-20 rounded-md border border-gray-300 bg-white px-2 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                       ng-model="gotoUnPage"
+                       ng-keypress="$event.which === 13 &amp;&amp; vm.pageUnassignedGo(gotoUnPage)">
+                <button class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-700 hover:bg-gray-50"
+                        ng-click="vm.pageUnassignedGo(gotoUnPage)">Go</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Assigned -->
+      <div class="bg-white rounded-lg shadow">
+        <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+          <strong class="text-gray-800">Assigned to Selected Faculty</strong>
+          <div class="text-sm text-gray-500">
+            Page <span class="font-semibold">{{ vm.assignedMeta.current_page }}</span> / {{ vm.assignedMeta.last_page }}
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-20">ID</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subject</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Section</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Current Faculty</th>
+                <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider w-36">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <!-- Loading state -->
+              <tr ng-if="vm.loading.lists">
+                <td colspan="5" class="px-4 py-6 text-gray-600">
+                  <i class="fas fa-spinner fa-spin mr-2"></i> Loading...
+                </td>
+              </tr>
+
+              <!-- Empty state -->
+              <tr ng-if="!vm.loading.lists &amp;&amp; (!vm.assigned || !vm.assigned.length)">
+                <td colspan="5" class="px-4 py-6 text-gray-500">
+                  No sections assigned to this faculty for the selected term.
+                </td>
+              </tr>
+
+              <!-- Rows -->
+              <tr ng-repeat="row in vm.assigned track by row.intID" class="hover:bg-gray-50">
+                <td class="px-4 py-3 text-sm text-gray-700">{{ row.intID }}</td>
+                <td class="px-4 py-3">
+                  <div class="text-sm">
+                    <div class="font-semibold text-gray-800">{{ row.subjectCode || '—' }}</div>
+                    <div class="text-gray-500">{{ row.subjectDescription || '' }}</div>
+                  </div>
+                </td>
+                <td class="px-4 py-3 text-sm text-gray-700">{{ row.sectionCode || '—' }}</td>
+                <td class="px-4 py-3 text-sm text-gray-700">
+                  <span ng-if="row.intFacultyID">{{ vm.facultyNameOfRow(row) || ('#' + row.intFacultyID) }}</span>
+                  <span ng-if="!row.intFacultyID" class="text-gray-400 italic">Unassigned</span>
+                </td>
+                <td class="px-4 py-3 text-right">
+                  <button class="inline-flex items-center px-3 py-2 rounded-md text-white bg-red-600 hover:bg-red-700"
+                          ng-click="vm.moveToUnassign(row)">
+                    &laquo; Unassign
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Footer / Pagination -->
+        <div class="px-4 py-3 border-t border-gray-200">
+          <div class="flex items-center justify-between">
+            <div class="text-sm text-gray-600">
+              Page <span class="font-semibold text-gray-800">{{ vm.assignedMeta.current_page }}</span> / {{ vm.assignedMeta.last_page }}
+            </div>
+            <div class="flex items-center space-x-2">
+              <button class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                      ng-click="vm.pageAssignedPrev()"
+                      ng-disabled="vm.assignedMeta.current_page <= 1">Prev</button>
+              <button class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                      ng-click="vm.pageAssignedNext()"
+                      ng-disabled="vm.assignedMeta.current_page >= vm.assignedMeta.last_page">Next</button>
+              <div class="flex items-center space-x-2">
+                <span class="text-sm text-gray-600">Go to:</span>
+                <input type="number" min="1"
+                       class="w-20 rounded-md border border-gray-300 bg-white px-2 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                       ng-model="gotoAsPage"
+                       ng-keypress="$event.which === 13 &amp;&amp; vm.pageAssignedGo(gotoAsPage)">
+                <button class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-700 hover:bg-gray-50"
+                        ng-click="vm.pageAssignedGo(gotoAsPage)">Go</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pending summary -->
+    <div class="mt-6 text-sm text-gray-600">
+      <span class="mr-4">Pending Assign: {{ (vm.assignQueue && Object.keys(vm.assignQueue).length) || 0 }}</span>
+      <span>Pending Unassign: {{ (vm.unassignQueue && Object.keys(vm.unassignQueue).length) || 0 }}</span>
+    </div>
+  </div>
+</div>

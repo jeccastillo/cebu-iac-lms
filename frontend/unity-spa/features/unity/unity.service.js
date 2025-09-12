@@ -95,6 +95,11 @@
         // payload: { type: 'tuition'|'billing'|'other', student_id: number, term: number, registration_id?: number, ... }
         return $http.post(BASE + '/finance/invoices/generate', payload, _adminHeaders()).then(_unwrap);
       },
+      // Cashier Viewer aggregate endpoint (enriched payload)
+      cashierViewerData: function (params) {
+        // params: { student_number: string, term: int, student_id?: int }
+        return $http.get(BASE + '/finance/cashier/viewer-data', Object.assign({ params: params }, _adminHeaders())).then(_unwrap);
+      },
       // Registration Form PDF fetcher (attaches admin headers; returns raw $http response)
       regFormFetch: function (student_number, term) {
         try {

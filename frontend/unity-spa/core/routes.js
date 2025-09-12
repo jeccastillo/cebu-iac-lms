@@ -42,6 +42,12 @@
         controllerAs: "vm",
         requiredRoles: ["registrar", "admin"],
       })
+      .when("/registrar/transcripts", {
+        templateUrl: "features/registrar/transcripts/transcripts.html",
+        controller: "RegistrarTranscriptsController",
+        controllerAs: "vm",
+        requiredRoles: ["registrar", "admin"],
+      })
       .when("/registrar/daily-enrollment", {
         templateUrl: "features/registrar/daily-enrollment.html",
         controller: "DailyEnrollmentController",
@@ -421,6 +427,18 @@
         controllerAs: "vm",
         requiredRoles: ["registrar", "faculty_admin", "admin"],
       })
+      .when("/faculty-loading/by-faculty", {
+        templateUrl: "features/academics/faculty-loading/by-faculty.html",
+        controller: "FacultyLoadingByFacultyController",
+        controllerAs: "vm",
+        requiredRoles: ["registrar", "faculty_admin", "admin"],
+      })
+      .when("/academics/grading-sheet", {
+        templateUrl: "features/academics/grading-sheet/grading-sheet.html",
+        controller: "GradingSheetController",
+        controllerAs: "vm",
+        requiredRoles: ["registrar", "faculty_admin", "admin"],
+      })
 
       /* Tuition Years (Finance) */
       .when('/finance/tuition-years', {
@@ -480,6 +498,12 @@
         controller: 'FinanceStudentBillingController',
         controllerAs: 'vm',
         requiredRoles: ['finance', 'admin'],
+      })
+      .when('/finance/payment-actions', {
+        templateUrl: 'features/finance/payment-actions/payment-actions.html',
+        controller: 'FinancePaymentActionsController',
+        controllerAs: 'vm',
+        requiredRoles: ['finance_admin', 'admin'],
       })
 
       .when("/cashier-admin", {

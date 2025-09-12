@@ -29,6 +29,7 @@
     vm.selectedTerm = (TermService && TermService.getSelectedTerm) ? TermService.getSelectedTerm() : null;
 
     vm.exportEnrolled = exportEnrolled;
+    vm.exportEnrollmentStatsPdf = exportEnrollmentStatsPdf;
 
     // Keep selected term in sync with sidebar TermSelector
     $scope.$on('termChanged', function (event, data) {
@@ -97,6 +98,57 @@
         })
         .finally(function () {
           vm.loading = false;
+        });
+    }
+
+    // Open Enrollment Statistics PDF in a new tab (inline)
+    function exportEnrollmentStatsPdf() {
+      vm.error = null;
+      vm.loadingStats = true;
+
+      var term = vm.selectedTerm;
+      if (!term || !term.intID) {
+        try {
+          var t = TermService && TermService.getSelectedTerm && TermService.getSelectedTerm();
+          if (t && t.intID) {
+            term = t;
+            vm.selectedTerm = t;
+          }
+        } catch (e) {}
+      }
+
+      if (!term || !term.intID) {
+        vm.loadingStats = false;
+        vm.error = 'Please select an academic term first.';
+        return;
+      }
+
+      ReportsService.exportEnrollmentStatsPdf(term.intID)
+        .then(function (resp) {
+          var blob = new Blob([resp.data], { type: 'application/pdf' });
+          var url = window.URL.createObjectURL(blob);
+          // Open in a new tab
+          var win = window.open(url, '_blank');
+          if (!win) {
+            // Popup blocked; fallback to creating a link the user can click
+            var a = document.createElement('a');
+            a.href = url;
+            a.target = '_blank';
+            a.textContent = 'Open Enrollment Statistics PDF';
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(function () {
+              document.body.removeChild(a);
+            }, 0);
+          }
+          // Revoke after some time to ensure the tab loads
+          setTimeout(function () { window.URL.revokeObjectURL(url); }, 60000);
+        })
+        .catch(function (err) {
+          vm.error = (err && err.data && err.data.message) ? err.data.message : 'Failed to generate PDF';
+        })
+        .finally(function () {
+          vm.loadingStats = false;
         });
     }
   }
