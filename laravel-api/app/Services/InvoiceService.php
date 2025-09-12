@@ -78,26 +78,27 @@ class InvoiceService
         $campusId = $this->resolveCampusId($options, $actorId);
 
         $row = Invoice::create([
-            'intStudentID'   => $studentId,
-            'syid'           => $syid,
-            'registration_id'=> $options['registration_id'] ?? null,
-            'type'           => $type,
-            'status'         => $status,
-            'invoice_number' => array_key_exists('invoice_number', $options) ? $options['invoice_number'] : null, // allow assignment when provided (e.g., cashier flow)
-            'amount_total'   => round($total, 2),
+            'intStudentID'    => $studentId,
+            'syid'            => $syid,
+            'registration_id' => $options['registration_id'] ?? null,
+            'billing_id'      => $options['billing_id'] ?? null,
+            'type'            => $type,
+            'status'          => $status,
+            'invoice_number'  => array_key_exists('invoice_number', $options) ? $options['invoice_number'] : null, // allow assignment when provided (e.g., cashier flow)
+            'amount_total'    => round($total, 2),
             // Extra amount fields
             'withholding_tax_percentage' => array_key_exists('withholding_tax_percentage', $options) ? $options['withholding_tax_percentage'] : null,
             'invoice_amount'             => array_key_exists('invoice_amount', $options) ? $options['invoice_amount'] : null,
             'invoice_amount_ves'         => array_key_exists('invoice_amount_ves', $options) ? $options['invoice_amount_ves'] : null,
             'invoice_amount_vzrs'        => array_key_exists('invoice_amount_vzrs', $options) ? $options['invoice_amount_vzrs'] : null,
-            'posted_at'      => $options['posted_at'] ?? null,
-            'due_at'         => $options['due_at'] ?? null,
-            'remarks'        => $options['remarks'] ?? null,
-            'payload'        => $payload,
-            'campus_id'      => $campusId,
-            'cashier_id'     => $options['cashier_id'] ?? null,
-            'created_by'     => $actorId,
-            'updated_by'     => $actorId,
+            'posted_at'       => $options['posted_at'] ?? null,
+            'due_at'          => $options['due_at'] ?? null,
+            'remarks'         => $options['remarks'] ?? null,
+            'payload'         => $payload,
+            'campus_id'       => $campusId,
+            'cashier_id'      => $options['cashier_id'] ?? null,
+            'created_by'      => $actorId,
+            'updated_by'      => $actorId,
         ]);
 
         return $this->normalizeRow($row->toArray());
@@ -310,6 +311,7 @@ class InvoiceService
             'student_id'    => (int) ($r['intStudentID'] ?? 0),
             'syid'          => (int) ($r['syid'] ?? 0),
             'registration_id'=> isset($r['registration_id']) ? (int) $r['registration_id'] : null,
+            'billing_id'     => isset($r['billing_id']) ? (int) $r['billing_id'] : null,
             'type'          => (string) ($r['type'] ?? ''),
             'status'        => (string) ($r['status'] ?? ''),
             'invoice_number'=> isset($r['invoice_number']) ? $r['invoice_number'] : null,

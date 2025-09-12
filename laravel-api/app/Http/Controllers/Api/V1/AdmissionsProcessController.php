@@ -3,39 +3,61 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+// Most Mail classes don't exist - commenting out for now
+// use App\Mail\SubmitInformationMail;
+// use App\Mail\ScholarshipApplication\VerifyRequirementsMail;
+use App\Http\Resources\Admissions\{StudentInformationResource, AdmissionFileResource, AcceptanceAttachmentResource};
+use App\Models\Admissions\{AdmissionFile, AcceptanceLetterAttachment}; // StudentInfoStatusLog doesn't exist
+use App\Models\Admissions\{AdmissionDesiredProgram, StudentInformationRequirement, AdmissionStudentApplyingAndProgram};
+use App\Models\Admissions\AdmissionStudentInformation;
+use App\Models\Admissions\AdmissionStudentType;
+use App\Models\Admissions\School;
+use App\Models\ApplicantInterview;
+use App\Models\PaymentDetail;
+// use App\Mail\Admissions\{SendAcceptanceLetterMail, SubmitRequirementsMail, ForEnrollmentMail};
+// use App\Mail\Admissions\{ForInterviewMail, ForReservationMail, ForInterviewMakatiMail};
+// use App\Mail\Admissions\{AdmissionsNotificationEmail, ForEnrollmentRegistrarMail};
+// use App\Mail\Admissions\{SubmitInformationMakatiMail, SendAcceptanceLetterMakatiMail, ForReservationMakatiMail, ForEnrollmentMakatiMail, ForEnrollmentRegistrarMakatiMail};
+use App\Services\PHPMailerService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+// use App\Exports\StudentInformationExport; // Class doesn't exist
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use App\Models\Sms\AdmissionStudentInformation;
-use App\Models\Sms\AdmissionStudentType;
-use App\Models\Sms\{AdmissionDesiredProgram, StudentInformationRequirement, AdmissionInterviewSchedule};
-use App\Models\Sms\{AdmissionFile, StudentInfoStatusLog};
-use App\Models\Sms\PaymentDetail;
-use App\Models\Sms\School;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use App\Mail\SubmitInformationMail;
-use App\Mail\ScholarshipApplication\VerifyRequirementsMail;
-use App\Http\Resources\Admissions\{StudentInformationResource, AdmissionFileResource};
-use App\Mail\Admissions\{SendAcceptanceLetterMail, SubmitRequirementsMail, ForEnrollmentMail};
-use App\Mail\Admissions\{ForInterviewMail, ForReservationMail, ForInterviewMakatiMail};
-use App\Mail\Admissions\{AdmissionsNotificationEmail, ForEnrollmentRegistrarMail};
-use App\Mail\Admissions\{SubmitInformationMakatiMail, SendAcceptanceLetterMakatiMail, ForReservationMakatiMail, ForEnrollmentMakatiMail, ForEnrollmentRegistrarMakatiMail};
+use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
-
-use DB, Mail, App;
-
-class AdmissionProcessController extends Controller
+class AdmissionsProcessController extends Controller
 {
+    protected $studentInformation;
+    protected $interviewSchedule;
+    protected $studentType;
+    protected $desiredProgram;
+    protected $admissionFile;
+    protected $studentInformationRequirement;
+    protected $paymentDetail;
+    protected $school;
+    protected $phpMailerService;
+    protected $acceptanceLetterAttachment;
+    protected $applyingAndProgram;
     
     //
     public function __construct(
         AdmissionStudentInformation $studentInformation,
-        AdmissionInterviewSchedule $interviewSchedule,
+        ApplicantInterview $interviewSchedule,
         AdmissionStudentType $studentType,
         AdmissionDesiredProgram $desiredProgram,
         AdmissionFile $admissionFile,
         StudentInformationRequirement $studentInformationRequirement,
         PaymentDetail $paymentDetail,
-        School $school
+        School $school,
+        PHPMailerService $phpMailerService,
+        AcceptanceLetterAttachment $acceptanceLetterAttachment,
+        AdmissionStudentApplyingAndProgram $applyingAndProgram
     ) {
         $this->studentInformation = $studentInformation;
         $this->studentType = $studentType;
@@ -45,6 +67,9 @@ class AdmissionProcessController extends Controller
         $this->admissionFile = $admissionFile;
         $this->studentInformationRequirement = $studentInformationRequirement;
         $this->school = $school;
+        $this->phpMailerService = $phpMailerService;
+        $this->acceptanceLetterAttachment = $acceptanceLetterAttachment;
+        $this->applyingAndProgram = $applyingAndProgram;
     }
 
     /**
@@ -1016,18 +1041,42 @@ class AdmissionProcessController extends Controller
                 }
             }
             
-            $studentInformation->slug = \Str::uuid();
+            $studentInformation->slug = Str::uuid();
             $studentInformation->save();
 
             if($studentInformation->campus == 'Cebu'){
-                // Email registrant
-                Mail::to($studentInformation)->send(
-                    new SubmitInformationMail($studentInformation)
-                );
+                // Email registrant using PHPMailerService
+                try {
+                    // Generate username and confirmation code
+                    $username = $this->makeUsername($studentInformation->email, $studentInformation->first_name, $studentInformation->last_name);
+                    $confirmationCode = $this->generateConfirmationCode();
+                    
+                    $this->phpMailerService->sendApplicationConfirmation(
+                        $studentInformation->email,
+                        $studentInformation->first_name . ' ' . $studentInformation->last_name,
+                        $studentInformation->slug,
+                        $username,
+                        $confirmationCode
+                    );
+                } catch (\Exception $e) {
+                    Log::error('Application confirmation email failed: ' . $e->getMessage());
+                }
             }else if($studentInformation->campus == 'Makati'){
-                Mail::to($studentInformation)->send(
-                    new SubmitInformationMakatiMail($studentInformation)
-                );
+                try {
+                    // Generate username and confirmation code
+                    $username = $this->makeUsername($studentInformation->email, $studentInformation->first_name, $studentInformation->last_name);
+                    $confirmationCode = $this->generateConfirmationCode();
+                    
+                    $this->phpMailerService->sendApplicationConfirmation(
+                        $studentInformation->email,
+                        $studentInformation->first_name . ' ' . $studentInformation->last_name,
+                        $studentInformation->slug,
+                        $username,
+                        $confirmationCode
+                    );
+                } catch (\Exception $e) {
+                    Log::error('Application confirmation email failed: ' . $e->getMessage());
+                }
             }
 
             $data['message'] = 'Success! Please check your email for the next step.';
@@ -1313,7 +1362,7 @@ class AdmissionProcessController extends Controller
             return response()->json($data);
         }
 
-        \Storage::delete('public/admission_files/' . $file->filename . '.' . $file->filetype);
+        Storage::delete('public/admission_files/' . $file->filename . '.' . $file->filetype);
 
         $req = $this->studentInformationRequirement
                     ->where('student_information_id', request('student_information_id'))
@@ -1366,10 +1415,33 @@ class AdmissionProcessController extends Controller
         }
 
         if (count(request('requirements'))) {
-           //Email admissions
-            Mail::to($toEmail)->send(
-                new SubmitRequirementsMail($studentInformation, $updatedFields)
-            );
+           // Email admissions using PHPMailerService
+            try {
+                // Get tb_mas_applicant_data ID for proper application number generation
+                $applicantData = null;
+                if ($studentInformation->email) {
+                    // Try to find by email in tb_mas_users first, then get applicant_data
+                    $user = DB::table('tb_mas_users')->where('strEmail', $studentInformation->email)->first();
+                    if ($user) {
+                        $applicantData = DB::table('tb_mas_applicant_data')->where('user_id', $user->intID)->first();
+                    }
+                }
+                
+                // Fallback: use student information ID if applicant data not found
+                $applicationNumber = $applicantData 
+                    ? 'A' . str_pad($applicantData->id, 6, '0', STR_PAD_LEFT)
+                    : 'A' . str_pad($studentInformation->id, 6, '0', STR_PAD_LEFT);
+
+                $this->phpMailerService->sendAdmissionsAllRequirementsSubmittedNotification([
+                    'applicant_name' => $studentInformation->first_name . ' ' . $studentInformation->last_name,
+                    'application_number' => $applicationNumber,
+                    'submission_date' => date('Y-m-d H:i:s'),
+                    'campus' => $studentInformation->campus,
+                    'requirements_count' => count(request('requirements'))
+                ]);
+            } catch (\Exception $e) {
+                Log::error('Requirements submission notification failed: ' . $e->getMessage());
+            }
         }
 
         $data['message'] = 'Successfully submitted';
@@ -1404,7 +1476,7 @@ class AdmissionProcessController extends Controller
 
         foreach($registrations as $registration){
             $studentInformation = $this->studentInformation->where('slug', $registration['slug'])->first();    
-            $studentInformation->date_enrolled = date("Y-m-d",strtotime($registration['dteRegistered']));
+            $studentInformation->date_enrolled = date("Y-m-d",strtotime($registration['date_enrolled']));
             $studentInformation->update();
         }
 
@@ -1443,10 +1515,55 @@ class AdmissionProcessController extends Controller
         
         $studentInformation->status = request('status');
         
+        // Department Notifications - Send to relevant departments based on status changes
+        try {
+            switch (request('status')) {
+                case 'Reserved':
+                    // Notify Registrar when applicant is reserved (paid reservation fee)
+                    $this->phpMailerService->sendRegistrarReservedNotification([
+                        'applicant_name' => $studentInformation->first_name . ' ' . $studentInformation->last_name,
+                        'application_number' => $this->generateApplicationNumber($studentInformation),
+                        'program' => $studentInformation->type?->name ?? 'N/A',
+                        'campus' => $studentInformation->campus,
+                        'payment_date' => date('Y-m-d H:i:s'),
+                        'academic_term' => 'Current Term'
+                    ]);
+                    break;
+                    
+                case 'Enlisted':
+                    // Notify Finance when applicant is enlisted (ready to enroll)
+                    $this->phpMailerService->sendFinanceEnlistedNotification([
+                        'applicant_name' => $studentInformation->first_name . ' ' . $studentInformation->last_name,
+                        'application_number' => $this->generateApplicationNumber($studentInformation),
+                        'program' => $studentInformation->type?->name ?? 'N/A',
+                        'campus' => $studentInformation->campus,
+                        'tuition_amount' => 'To be assessed',
+                        'payment_deadline' => date('Y-m-d', strtotime('+30 days'))
+                    ]);
+                    break;
+                    
+                case 'Enrolled':
+                    // Notify Admissions when applicant successfully enrolls
+                    $this->phpMailerService->sendAdmissionsApplicantEnrolledNotification([
+                        'applicant_name' => $studentInformation->first_name . ' ' . $studentInformation->last_name,
+                        'application_number' => $this->generateApplicationNumber($studentInformation),
+                        'student_id' => 'Auto-generated',
+                        'program' => $studentInformation->type?->name ?? 'N/A',
+                        'academic_year' => date('Y'),
+                        'application_date' => $studentInformation->created_at->format('Y-m-d')
+                    ]);
+                    break;
+            }
+        } catch (\Exception $e) {
+            // Log the error but don't stop the status update process
+            Log::error('Department notification failed: ' . $e->getMessage());
+        }
+        
         if(request('status') == "Enrolled" && $studentInformation->date_enrolled == null)
             $studentInformation->date_enrolled = date("Y-m-d");
         
-        StudentInfoStatusLog::storeLogs($studentInformation->id, request('status'), request('admissions_officer'), request('remarks'));
+        // StudentInfoStatusLog::storeLogs($studentInformation->id, request('status'), request('admissions_officer'), request('remarks'));
+        // TODO: Implement StudentInfoStatusLog class or remove this functionality
 
         if (App::environment(['local', 'staging'])) 
                 $regEmail = "rms@iacademy.edu.ph";
@@ -1459,14 +1576,24 @@ class AdmissionProcessController extends Controller
             }
 
         if (request('status') == 'For Interview') {
-            if($studentInformation->campus == 'Makati'){
-                Mail::to($studentInformation->email)->send(
-                    new ForInterviewMakatiMail($studentInformation)
-                );
-            }else if($studentInformation->campus == 'Cebu'){
-                Mail::to($studentInformation->email)->send(
-                    new ForInterviewMail($studentInformation)
-                );
+            try {
+                // Get interview schedule
+                $sched = $this->interviewSchedule->where('student_information_id',$studentInformation->id)->first();
+                
+                if ($sched) {
+                    // Send interview schedule notification using PHPMailerService
+                    $interviewDate = date('Y-m-d', strtotime($sched->date));
+                    $interviewTime = date('H:i', strtotime($sched->time));
+                    
+                    $this->phpMailerService->sendInterviewScheduleNotification(
+                        $studentInformation->email,
+                        $studentInformation->first_name . ' ' . $studentInformation->last_name,
+                        $interviewDate,
+                        $interviewTime
+                    );
+                }
+            } catch (\Exception $e) {
+                error_log('Failed to send interview notification: ' . $e->getMessage());
             }
         } else if (request('status') == 'Withdrawn Before' || request('status') == 'Withdrawn After' || request('status') == 'Withdrawn End') {             
                             
@@ -1489,17 +1616,27 @@ class AdmissionProcessController extends Controller
             $studentInformation->date_interviewed = $sched->date;
 
             if($studentInformation->campus == 'Makati'){
-                Mail::to($studentInformation->email)
-                ->bcc(['admissions@iacademy.edu.ph'])
-                ->send(
-                    new ForReservationMakatiMail($studentInformation, $dataResp->active_sem)
-                );  
+                try {
+                    // Send reservation notification using PHPMailerService
+                    $this->phpMailerService->sendRegistrarReservedNotification([
+                        'applicant_name' => $studentInformation->first_name . ' ' . $studentInformation->last_name,
+                        'applicant_email' => $studentInformation->email,
+                        'campus' => $studentInformation->campus
+                    ]);
+                } catch (\Exception $e) {
+                    error_log('Failed to send reservation notification: ' . $e->getMessage());
+                }
             }else{
-                Mail::to($studentInformation->email)
-                ->bcc(['admissionscebu@iacademy.edu.ph'])
-                ->send(
-                    new ForReservationMail($studentInformation, $dataResp->active_sem)
-                );                  
+                try {
+                    // Send reservation notification using PHPMailerService  
+                    $this->phpMailerService->sendRegistrarReservedNotification([
+                        'applicant_name' => $studentInformation->first_name . ' ' . $studentInformation->last_name,
+                        'applicant_email' => $studentInformation->email,
+                        'campus' => $studentInformation->campus
+                    ]);
+                } catch (\Exception $e) {
+                    error_log('Failed to send reservation notification: ' . $e->getMessage());
+                }              
             }
         }else if (request('status') == 'For Enrollment') {                        
 
@@ -1531,31 +1668,50 @@ class AdmissionProcessController extends Controller
             $data['response'] = $response->body();
         
             if($studentInformation->campus == 'Cebu'){
-                Mail::to($studentInformation->email)->send(
-                    new ForEnrollmentMail($studentInformation)
-                );
+                try {
+                    // Send enrollment notification using PHPMailerService
+                    $this->phpMailerService->sendFinanceEnlistedNotification([
+                        'applicant_name' => $studentInformation->first_name . ' ' . $studentInformation->last_name,
+                        'applicant_email' => $studentInformation->email,
+                        'campus' => $studentInformation->campus
+                    ]);
+                } catch (\Exception $e) {
+                    error_log('Failed to send enrollment notification: ' . $e->getMessage());
+                }
             }else{
-                Mail::to($studentInformation->email)->send(
-                    new ForEnrollmentMakatiMail($studentInformation)
-                );
+                try {
+                    // Send enrollment notification using PHPMailerService  
+                    $this->phpMailerService->sendFinanceEnlistedNotification([
+                        'applicant_name' => $studentInformation->first_name . ' ' . $studentInformation->last_name,
+                        'applicant_email' => $studentInformation->email,
+                        'campus' => $studentInformation->campus
+                    ]);
+                } catch (\Exception $e) {
+                    error_log('Failed to send enrollment notification: ' . $e->getMessage());
+                }
             }
 
             
         }else if (request('status') == 'Confirmed') { 
             //Registrar Email here
-            if($studentInformation->campus == 'Makati'){
-                Mail::to($regEmail)->send(
-                    new ForEnrollmentRegistrarMakatiMail($studentInformation)
-                );
-            }else{
-                Mail::to($regEmail)->send(
-                    new ForEnrollmentRegistrarMail($studentInformation)
-                );
+            try {
+                // Send confirmation notification to registrar using PHPMailerService
+                $subject = 'Student Confirmed - ' . $studentInformation->first_name . ' ' . $studentInformation->last_name;
+                $body = 'Student ' . $studentInformation->first_name . ' ' . $studentInformation->last_name . ' has been confirmed for enrollment.';
+                $this->phpMailerService->sendMail($regEmail, $subject, $body);
+            } catch (\Exception $e) {
+                error_log('Failed to send registrar confirmation notification: ' . $e->getMessage());
             }
         }
 
         if(request('voucher')){
-            $studentInformation->voucher = hp()->uploadFile('admission_files/voucher', request('voucher'));
+            // Handle voucher file upload
+            $file = request()->file('voucher');
+            if ($file) {
+                $filename = time() . '.' . $file->getClientOriginalExtension();
+                $path = $file->storeAs('public/admission_files/voucher', $filename);
+                $studentInformation->voucher = Storage::url($path);
+            }
         }
         $studentInformation->update();
 
@@ -1665,8 +1821,10 @@ class AdmissionProcessController extends Controller
             $data['success'] = true;
             $data['message'] = 'Successfully deleted.';
 
-            //Activity Logs
-            storeActivity('School', 'Delete School', "Successfully deleted school : " . $school->id);
+            // Activity Logs
+            // storeActivity('School', 'Delete School', "Successfully deleted school : " . $school->id);
+            // TODO: Implement activity logging or remove this functionality
+            Log::info('School deleted: ' . $school->id);
 
             $school->delete();
         } else {
@@ -1691,7 +1849,8 @@ class AdmissionProcessController extends Controller
         }
 
         $field = request('field');
-        StudentInfoStatusLog::storeLogs($studentInformation->id, $studentInformation->status, request('admissions_officer'), "Updated ".$field." from ".$studentInformation->$field." to ".request('value'));
+        // StudentInfoStatusLog::storeLogs($studentInformation->id, $studentInformation->status, request('admissions_officer'), "Updated ".$field." from ".$studentInformation->$field." to ".request('value'));
+        // TODO: Implement StudentInfoStatusLog class or remove this functionality
         $studentInformation->$field = request('value');
         if($field == "type_id"){
             //$program  = $this->studentType->find(request('value'));
@@ -1751,7 +1910,7 @@ class AdmissionProcessController extends Controller
     public function saveStudentTypes($infoID, $types)
     {
         foreach ($types as $key => $typeID) {
-            $applyingAndProgram = new $this->applyingAndProgram();
+            $applyingAndProgram = new AdmissionStudentApplyingAndProgram();
             $applyingAndProgram->student_information_id = $infoID;
             $applyingAndProgram->ref_id = $typeID;
             $applyingAndProgram->ref_type = 'student_type';
@@ -1787,7 +1946,7 @@ class AdmissionProcessController extends Controller
             $fileNameToStore = $filename . '.' . $extension;
             $path = $file->storeAs('public/acceptance_attachments', $fileNameToStore);
 
-            $attachment = new $this->acceptanceLetterAttachment();
+            $attachment = new AcceptanceLetterAttachment();
             $attachment->student_information_id = $id;
             $attachment->filename = $filename;
             $attachment->orig_filename =  $filenameWithExt;
@@ -1821,6 +1980,20 @@ class AdmissionProcessController extends Controller
             $studentInformation->status = 'For Reservation';
             $studentInformation->update();
 
+            // Determine URL based on environment and campus
+            if (App::environment(['local', 'staging'])){ 
+                if($studentInformation->campus == "Cebu")
+                    $url = 'http://172.16.80.26/';          
+                else
+                    $url = 'http://172.16.80.26/makati-dev/';
+            }              
+            else{
+                if($studentInformation->campus == "Cebu")
+                    $url = 'http://172.16.80.38/';
+                else
+                    $url = 'http://172.16.80.38/makati_sms/';
+            }
+
             $response = Http::get($url.'unity/get_active_sem');              
 
             $dataResp = $response->body();            
@@ -1828,14 +2001,22 @@ class AdmissionProcessController extends Controller
             
             if($studentInformation->campus == 'Makati'){
                 //Email acceptance letter
-                Mail::to($studentInformation->email)->send(
-                    new SendAcceptanceLetterMakatiMail($studentInformation, $dataResp->active_sem)
-                );
+                try {
+                    $subject = 'Acceptance Letter - ' . $studentInformation->first_name . ' ' . $studentInformation->last_name;
+                    $body = 'Congratulations! Please find your acceptance letter attached.';
+                    $this->phpMailerService->sendMail($studentInformation->email, $subject, $body);
+                } catch (\Exception $e) {
+                    error_log('Failed to send acceptance letter: ' . $e->getMessage());
+                }
             }else if($studentInformation->campus == 'Cebu'){
                 //Email acceptance letter
-                Mail::to($studentInformation->email)->send(
-                    new SendAcceptanceLetterMail($studentInformation, $dataResp->active_sem)
-                );
+                try {
+                    $subject = 'Acceptance Letter - ' . $studentInformation->first_name . ' ' . $studentInformation->last_name;
+                    $body = 'Congratulations! Please find your acceptance letter attached.';
+                    $this->phpMailerService->sendMail($studentInformation->email, $subject, $body);
+                } catch (\Exception $e) {
+                    error_log('Failed to send acceptance letter: ' . $e->getMessage());
+                }
             }
 
             $data['message'] = 'Successfully sent.';
@@ -1854,7 +2035,7 @@ class AdmissionProcessController extends Controller
 
     public function deleteAttachment($id)
     {
-        $attachment = $this->acceptanceLetterAttachment->find($id);
+        $attachment = AcceptanceLetterAttachment::find($id);
 
         if (!$attachment) {
             $data['success'] = false;
@@ -1862,7 +2043,7 @@ class AdmissionProcessController extends Controller
             return response()->json($data);
         }
 
-        \Storage::delete('public/acceptance_attachments/' . $attachment->filename . '.' . $attachment->filetype);
+        Storage::delete('public/acceptance_attachments/' . $attachment->filename . '.' . $attachment->filetype);
 
         $attachment->delete();
 
@@ -1874,7 +2055,7 @@ class AdmissionProcessController extends Controller
     public function saveDesiredPrograms($infoID, $programs)
     {
         foreach ($programs as $key => $programID) {
-            $applyingAndProgram = new $this->applyingAndProgram();
+            $applyingAndProgram = new AdmissionStudentApplyingAndProgram();
             $applyingAndProgram->student_information_id = $infoID;
             $applyingAndProgram->ref_id = $programID;
             $applyingAndProgram->ref_type = 'desired_program';
@@ -1884,7 +2065,12 @@ class AdmissionProcessController extends Controller
 
     public function download($status)
     {
-        return Excel::download(new StudentInformationExport($status), 'student_informations.xlsx');
+        // TODO: Create StudentInformationExport class
+        // return Excel::download(new StudentInformationExport($status), 'student_informations.xlsx');
+        
+        $data['success'] = false;
+        $data['message'] = 'Export functionality not implemented yet';
+        return response()->json($data);
     }
 
     public function uploadVoucher($slug)
@@ -1934,7 +2120,14 @@ class AdmissionProcessController extends Controller
             if($applicant){
                 $campus = $applicant->campus;
                 if($emailToken == 0){
-                    Mail::to($email)->send(new VerifyRequirementsMail($applicant));
+                    try {
+                        // Send verification email using PHPMailerService
+                        $subject = 'Verify Requirements - ' . $applicant->first_name . ' ' . $applicant->last_name;
+                        $body = 'Please verify your requirements for admission.';
+                        $this->phpMailerService->sendMail($email, $subject, $body);
+                    } catch (\Exception $e) {
+                        error_log('Failed to send verification email: ' . $e->getMessage());
+                    }
                 }
                 
                 //check if complete requirements
@@ -1984,5 +2177,91 @@ class AdmissionProcessController extends Controller
             
             return response()->json($responseData);
         }
+    }
+
+    /**
+     * Helper methods for username and confirmation code generation
+     */
+
+    /**
+     * Generate application number based on tb_mas_applicant_data ID
+     * Format: A000001, A000002, etc.
+     */
+    protected function generateApplicationNumber($studentInformation): string
+    {
+        // Get tb_mas_applicant_data ID for proper application number generation
+        $applicantData = null;
+        if (is_object($studentInformation) && $studentInformation->email) {
+            // Try to find by email in tb_mas_users first, then get applicant_data
+            $user = DB::table('tb_mas_users')->where('strEmail', $studentInformation->email)->first();
+            if ($user) {
+                $applicantData = DB::table('tb_mas_applicant_data')->where('user_id', $user->intID)->first();
+            }
+        }
+        
+        // If $studentInformation is just an ID (old usage), use it as fallback
+        $fallbackId = is_object($studentInformation) ? $studentInformation->id : $studentInformation;
+        
+        // Fallback: use provided ID if applicant data not found
+        $applicationId = $applicantData ? $applicantData->id : $fallbackId;
+        
+        return 'A' . str_pad($applicationId, 6, '0', STR_PAD_LEFT);
+    }
+    protected function makeUsername(?string $email, ?string $first, ?string $last): string
+    {
+        if ($email && strpos($email, '@') !== false) {
+            return substr($email, 0, strpos($email, '@'));
+        }
+        $base = trim(($first ? Str::slug($first) : '') . '.' . ($last ? Str::slug($last) : ''), '.');
+        if ($base === '') {
+            $base = 'applicant';
+        }
+        return $base . '.' . Str::lower(Str::random(6));
+    }
+
+    /**
+     * Get active school year and semester from tb_mas_sy
+     */
+    protected function getActiveSchoolYearInfo(): array
+    {
+        $activeSy = DB::table('tb_mas_sy')
+            ->where('enumStatus', 'active')
+            ->first();
+
+        if ($activeSy) {
+            // Extract year and semester from active school year
+            $year = $activeSy->strYear ?? date('Y');
+            $sem = $activeSy->strSem ?? $activeSy->semester ?? '1';
+            
+            return [
+                'year' => $year,
+                'semester' => $sem
+            ];
+        }
+
+        // Fallback to current year and semester 1 if no active SY found
+        return [
+            'year' => date('Y'),
+            'semester' => '1'
+        ];
+    }
+
+    protected function generateConfirmationCode(): string
+    {
+        $syInfo = $this->getActiveSchoolYearInfo();
+        $year = $syInfo['year'];
+        $sem = $syInfo['semester'];
+        
+        do {
+            $randomNumber = rand(1000, 9999);
+            $code = $year . '0' . $sem . $randomNumber;
+            $confirmationCode = substr(md5($code), 0, 20);
+            
+            // Check if confirmation code already exists
+            $exists = DB::table('tb_mas_applicant_data')->where('data', 'LIKE', '%"confirmation_code":"' . $confirmationCode . '"%')->exists();
+            
+        } while ($exists);
+        
+        return $confirmationCode;
     }
 }

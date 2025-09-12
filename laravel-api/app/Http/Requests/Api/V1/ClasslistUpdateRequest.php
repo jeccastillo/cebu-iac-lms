@@ -18,7 +18,7 @@ class ClasslistUpdateRequest extends FormRequest
         return [
             // Optional foreign keys
             'intSubjectID' => ['sometimes', 'integer', 'exists:tb_mas_subjects,intID'],
-            'intFacultyID' => ['sometimes', 'integer', 'exists:tb_mas_faculty,intID'],
+            'intFacultyID' => ['sometimes', 'nullable', 'integer', 'exists:tb_mas_faculty,intID'],
 
             // Optional term/syid
             'strAcademicYear' => ['sometimes', 'string', 'max:50'],

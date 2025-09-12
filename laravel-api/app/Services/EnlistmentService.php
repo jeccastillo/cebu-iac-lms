@@ -217,6 +217,35 @@ class EnlistmentService
                             // ignore journey logging failures
                         }
 
+                        // Send finance notification when applicant status changes to Enlisted
+                        try {
+                            $phpMailerService = app(\App\Services\PHPMailerService::class);
+                            
+                            // Get applicant information for email
+                            $userInfo = $user ?? DB::table('tb_mas_users')->where('intID', $studentId)->first();
+                            $applicantInfo = $appRow ?? DB::table('tb_mas_applicant_data')
+                                ->where('user_id', $studentId)
+                                ->where('syid', $term)
+                                ->first();
+                            
+                            if ($userInfo && $applicantInfo) {
+                                $applicantName = trim(($userInfo->strFirstname ?? '') . ' ' . ($userInfo->strLastname ?? ''));
+                                $applicationNumber = 'A' . str_pad($applicantInfo->id, 6, '0', STR_PAD_LEFT);
+                                
+                                $phpMailerService->sendFinanceEnlistedNotification([
+                                    'applicant_name' => $applicantName,
+                                    'applicant_email' => $userInfo->strEmail ?? '',
+                                    'application_number' => $applicationNumber,
+                                    'student_number' => $userInfo->strStudentNumber ?? '',
+                                    'enlistment_date' => now()->format('Y-m-d H:i:s'),
+                                    'previous_status' => $applicantData->status ?? 'Unknown'
+                                ]);
+                            }
+                        } catch (Throwable $e5) {
+                            // Don't block enlistment process if email fails
+                            Log::warning('Finance notification email failed: ' . $e5->getMessage());
+                        }
+
                         // System alert: notify Admissions that applicant has been enlisted
                         try {
                             $last = isset($user->strLastname) ? strtoupper(trim((string) $user->strLastname)) : '';
@@ -245,7 +274,7 @@ class EnlistmentService
                             $alert = \App\Models\SystemAlert::create($payloadAlert);
                             app(\App\Services\SystemAlertService::class)->broadcast('create', $alert);
                         } catch (Throwable $e4) {
-                            \Log::warning('System alert creation failed for enlistment: ' . $e4->getMessage());
+                            Log::warning('System alert creation failed for enlistment: ' . $e4->getMessage());
                         }
                     }
                 }

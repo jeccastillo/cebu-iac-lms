@@ -5,11 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
-use App\User;
-use App\Http\Resources\Website\WorkShopResource;
-use App\Mail\Registrar\RegistrationConfirmationMakatiMail;
-use App\Models\Website\WorkShop;
-use App, Mail;
+use App\Models\User;
+// use App\Models\PaymentOrderItem; // Class doesn't exist
+use App\Models\Admissions\AdmissionStudentInformation;
+// use App\Http\Resources\Website\WorkShopResource; // Class doesn't exist
+// use App\Mail\Registrar\RegistrationConfirmationMakatiMail; // Class doesn't exist
+// use App\Models\Website\WorkShop; // Class doesn't exist
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Mail;
 
 class PaymentDetail extends Model
 {
@@ -66,7 +69,8 @@ class PaymentDetail extends Model
 
     public function orders()
     {
-        return $this->hasMany(PaymentOrderItem::class, 'payment_detail_id', 'id');
+        // return $this->hasMany(PaymentOrderItem::class, 'payment_detail_id', 'id'); // PaymentOrderItem class doesn't exist
+        return collect([]); // Return empty collection for now
     }
 
     public function sendEmailAfterPayment($paymentDetails)
@@ -90,8 +94,9 @@ class PaymentDetail extends Model
 
         $data = array("payment" => $paymentDetails, 'logo' => $logo);
         
-        $workShops = Workshop::get();
-        $workShops = WorkShopResource::collection($workShops);        
+        // $workShops = Workshop::get(); // Workshop class doesn't exist
+        // $workShops = WorkShopResource::collection($workShops); // WorkShopResource class doesn't exist
+        $workShops = []; // Default empty array for now
 
         if($paymentDetails->student_campus == 'Makati'){
             Mail::send('emails.admissions.makati.notify_requestor_success_payment_makati', $data, function ($message) use ($toName, $toEmail, $subjectData) {
@@ -103,9 +108,9 @@ class PaymentDetail extends Model
             });
             if($paymentDetails->studentInfo)
                 if($paymentDetails->studentInfo->status == 'For Reservation'){
-                    Mail::to($paymentDetails->studentInfo->email)->send(
-                        new RegistrationConfirmationMakatiMail($paymentDetails->studentInfo,$workShops)
-                    );
+                    // Mail::to($paymentDetails->studentInfo->email)->send(
+                    //     new RegistrationConfirmationMakatiMail($paymentDetails->studentInfo,$workShops)
+                    // ); // RegistrationConfirmationMakatiMail class doesn't exist
                 }
 
         }else{
@@ -173,7 +178,7 @@ class PaymentDetail extends Model
     {
         //template requestor, finance and dept head
         $toEmail = $paymentDetails->personal_email;
-        $toName = @$paymentDetails->first_name . ' ' . @$requestedLaptop->last_name;
+        $toName = @$paymentDetails->first_name . ' ' . @$paymentDetails->last_name;
         $subjectData = 'iACADEMY Finance: Online Payment Instructions';
 
         if (App::environment(['local', 'staging'])) {

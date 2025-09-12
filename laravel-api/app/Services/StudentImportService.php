@@ -55,8 +55,8 @@ class StudentImportService
             // Fallback to a reasonable subset if schema introspection fails
             $cols = [
                 'strStudentNumber', 'strUsername', 'strEmail', 'strGSuiteEmail',
-                'strFirstname', 'strMiddlename', 'strLastname', 'strGender',
-                'date_of_birth', 'intProgramID', 'intCurriculumID', 'campus_id',
+                'strFirstname', 'strMiddlename', 'strLastname', 'enumGender',
+                'dteBirthDate', 'intProgramID', 'intCurriculumID', 'campus_id',
                 'student_status', 'student_type', 'level', 'strMobileNumber',
             ];
         }

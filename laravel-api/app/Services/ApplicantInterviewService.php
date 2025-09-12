@@ -7,8 +7,8 @@ use App\Services\SystemLogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Schema;
 
 class ApplicantInterviewService
 {
@@ -94,6 +94,13 @@ class ApplicantInterviewService
             // ignore logging failures
         }
 
+        // Send interview schedule notification email (best-effort)
+        try {
+            $this->sendInterviewScheduleNotification($interview);
+        } catch (\Throwable $e) {
+            // ignore email sending failures
+        }
+
         return $interview;
     }
 
@@ -167,51 +174,15 @@ class ApplicantInterviewService
 
             DB::commit();
 
-            // If failed, best-effort email applicant and add journey log
+            // Send result notification emails (best-effort)
             try {
                 if ($assessment === ApplicantInterview::ASSESSMENT_FAILED) {
-                    // Resolve applicant email from tb_mas_users via applicant_data.user_id
-                    $appDataRow = null;
-                    try {
-                        $appDataRow = DB::table('tb_mas_applicant_data')->where('id', $interview->applicant_data_id)->first();
-                    } catch (\Throwable $e) {
-                        $appDataRow = null;
-                    }
-
-                    if ($appDataRow && isset($appDataRow->user_id)) {
-                        $user = DB::table('tb_mas_users')->where('intID', $appDataRow->user_id)->first();
-                        if ($user && isset($user->strEmail) && is_string($user->strEmail)) {
-                            $email = trim((string) $user->strEmail);
-                            if ($email !== '' && filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                                $name = trim(
-                                    (($user->strFirstname ?? '') . ' ' .
-                                    ($user->strMiddlename ?? '') . ' ' .
-                                    ($user->strLastname ?? ''))
-                                );
-                                $name = $name !== '' ? $name : null;
-
-                                // Send rejection email (best-effort)
-                                try {
-                                    Mail::to($email)->send(
-                                        new \App\Mail\Admissions\RejectedApplicationMail($name, $interview->reason_for_failing)
-                                    );
-                                } catch (\Throwable $mailEx) {
-                                    // ignore email sending failures
-                                }
-                            }
-                        }
-                    }
-
-                    // Additional Journey log
-                    try {
-                        app(\App\Services\ApplicantJourneyService::class)
-                            ->log((int) $interview->applicant_data_id, 'Application Rejected');
-                    } catch (\Throwable $e) {
-                        // ignore logging failures
-                    }
+                    $this->sendInterviewFailedNotification($interview);
+                } else {
+                    $this->sendInterviewPassedNotification($interview);
                 }
             } catch (\Throwable $e) {
-                // ignore side-effect failures
+                // ignore email sending failures  
             }
 
             // System log (guarded)
@@ -271,5 +242,162 @@ class ApplicantInterviewService
             throw new \RuntimeException('Invalid date/time value: ' . (string) $value);
         }
         return Carbon::createFromTimestamp($ts);
+    }
+
+    /**
+     * Send interview schedule notification email
+     */
+    protected function sendInterviewScheduleNotification(ApplicantInterview $interview): void
+    {
+        $applicantData = $this->getApplicantEmailAndName($interview->applicant_data_id);
+        if (!$applicantData) {
+            return;
+        }
+
+        [$email, $name] = $applicantData;
+
+        try {
+            $phpMailerService = app(\App\Services\PHPMailerService::class);
+            $phpMailerService->sendInterviewScheduleNotification(
+                $email,
+                $name,
+                $interview->scheduled_at ? $interview->scheduled_at->format('Y-m-d H:i:s') : 'TBD',
+                $interview->remarks
+            );
+        } catch (\Exception $e) {
+            // Fallback to basic Laravel mail
+            $subject = 'iACADEMY Interview Scheduled';
+            $body = "Hello {$name},\n\n"
+                . "Your interview has been scheduled.\n\n"
+                . "Date & Time: " . ($interview->scheduled_at ? $interview->scheduled_at->format('F j, Y \a\t g:i A') : 'TBD') . "\n\n"
+                . ($interview->remarks ? "Remarks: {$interview->remarks}\n\n" : "")
+                . "Please prepare for your interview. We look forward to meeting you.\n\n"
+                . "Best regards,\n"
+                . "iACADEMY Admissions Team";
+
+            Mail::raw($body, function ($message) use ($email, $subject) {
+                $message->to($email);
+                $message->from('josephedmundcastillo@gmail.com', 'iACADEMY Admissions');
+                $message->subject($subject);
+            });
+        }
+    }
+
+    /**
+     * Send interview passed notification email
+     */
+    protected function sendInterviewPassedNotification(ApplicantInterview $interview): void
+    {
+        $applicantData = $this->getApplicantEmailAndName($interview->applicant_data_id);
+        if (!$applicantData) {
+            return;
+        }
+
+        [$email, $name] = $applicantData;
+
+        try {
+            $phpMailerService = app(\App\Services\PHPMailerService::class);
+            $phpMailerService->sendInterviewPassedNotification(
+                $email,
+                $name,
+                $interview->remarks
+            );
+        } catch (\Exception $e) {
+            // Fallback to basic Laravel mail
+            $subject = 'iACADEMY Interview Results - Congratulations!';
+            $body = "Hello {$name},\n\n"
+                . "Congratulations! You have successfully passed your interview.\n\n"
+                . ($interview->remarks ? "Comments: {$interview->remarks}\n\n" : "")
+                . "Our Admissions Team will contact you soon with next steps.\n\n"
+                . "Welcome to iACADEMY!\n\n"
+                . "Best regards,\n"
+                . "iACADEMY Admissions Team";
+
+            Mail::raw($body, function ($message) use ($email, $subject) {
+                $message->to($email);
+                $message->from('josephedmundcastillo@gmail.com', 'iACADEMY Admissions');
+                $message->subject($subject);
+            });
+        }
+    }
+
+    /**
+     * Send interview failed notification email
+     */
+    protected function sendInterviewFailedNotification(ApplicantInterview $interview): void
+    {
+        $applicantData = $this->getApplicantEmailAndName($interview->applicant_data_id);
+        if (!$applicantData) {
+            return;
+        }
+
+        [$email, $name] = $applicantData;
+
+        try {
+            $phpMailerService = app(\App\Services\PHPMailerService::class);
+            $phpMailerService->sendInterviewFailedNotification(
+                $email,
+                $name,
+                $interview->reason_for_failing
+            );
+        } catch (\Exception $e) {
+            // Fallback to basic Laravel mail
+            $subject = 'iACADEMY Interview Results';
+            $body = "Hello {$name},\n\n"
+                . "Thank you for taking the time to interview with us.\n\n"
+                . "After careful consideration, we regret to inform you that we will not be moving forward with your application at this time.\n\n"
+                . ($interview->reason_for_failing ? "Feedback: {$interview->reason_for_failing}\n\n" : "")
+                . "We encourage you to continue developing your skills and consider reapplying in the future.\n\n"
+                . "Best regards,\n"
+                . "iACADEMY Admissions Team";
+
+            Mail::raw($body, function ($message) use ($email, $subject) {
+                $message->to($email);
+                $message->from('josephedmundcastillo@gmail.com', 'iACADEMY Admissions');
+                $message->subject($subject);
+            });
+        }
+
+        // Additional Journey log for failed interviews
+        try {
+            app(\App\Services\ApplicantJourneyService::class)
+                ->log((int) $interview->applicant_data_id, 'Application Rejected');
+        } catch (\Throwable $e) {
+            // ignore logging failures
+        }
+    }
+
+    /**
+     * Get applicant email and name from user data
+     */
+    protected function getApplicantEmailAndName(int $applicantDataId): ?array
+    {
+        try {
+            $appDataRow = DB::table('tb_mas_applicant_data')->where('id', $applicantDataId)->first();
+            if (!$appDataRow || !isset($appDataRow->user_id)) {
+                return null;
+            }
+
+            $user = DB::table('tb_mas_users')->where('intID', $appDataRow->user_id)->first();
+            if (!$user || !isset($user->strEmail) || !is_string($user->strEmail)) {
+                return null;
+            }
+
+            $email = trim((string) $user->strEmail);
+            if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                return null;
+            }
+
+            $name = trim(
+                (($user->strFirstname ?? '') . ' ' .
+                ($user->strMiddlename ?? '') . ' ' .
+                ($user->strLastname ?? ''))
+            );
+            $name = $name !== '' ? $name : 'Student';
+
+            return [$email, $name];
+        } catch (\Throwable $e) {
+            return null;
+        }
     }
 }

@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\V1\PaymentDescriptionController;
 use App\Http\Controllers\Api\V1\PaymentDetailAdminController;
 use App\Http\Controllers\Api\V1\PaymentModeController;
 use App\Http\Controllers\Api\V1\PaymentJournalController;
+use App\Http\Controllers\Api\V1\FinancePaymentActionsController;
 use App\Http\Controllers\Api\V1\PortalController;
 use App\Http\Controllers\Api\V1\PreviousSchoolController;
 use App\Http\Controllers\Api\V1\ProgramController;
@@ -38,6 +39,7 @@ use App\Http\Controllers\Api\V1\ScholarshipMEController;
 use App\Http\Controllers\Api\V1\SchoolYearController;
 use App\Http\Controllers\Api\V1\SchoolYearImportController;
 use App\Http\Controllers\Api\V1\StudentBillingController;
+use App\Http\Controllers\Api\V1\StudentBillingExtrasController;
 use App\Http\Controllers\Api\V1\StudentChecklistController;
 use App\Http\Controllers\Api\V1\StudentController;
 use App\Http\Controllers\Api\V1\SubjectController;
@@ -284,10 +286,17 @@ Route::prefix('v1')->group(function () {
     Route::get('/finance/payment-details', [FinanceController::class, 'paymentDetails']);
     Route::post('/finance/payment-details/debit', [PaymentJournalController::class, 'debit'])->middleware('role:finance,admin');
     Route::post('/finance/payment-details/credit', [PaymentJournalController::class, 'credit'])->middleware('role:finance,admin');
+    Route::get('/finance/cashier/viewer-data', [FinanceController::class, 'viewerData'])->middleware('role:finance,admin');
     Route::get('/finance/student-ledger', [FinanceController::class, 'studentLedger'])->middleware('role:finance,admin');
     // Excess Payment Applications
     Route::post('/finance/ledger/excess/apply', [FinanceController::class, 'applyExcessPayment'])->middleware('role:finance,admin');
     Route::post('/finance/ledger/excess/revert', [FinanceController::class, 'revertExcessPayment'])->middleware('role:finance,admin');
+
+    // Finance Payment Actions (finance_admin/admin)
+    Route::get('/finance/payment-actions/search', [FinancePaymentActionsController::class, 'search'])->middleware('role:finance_admin,admin');
+    Route::post('/finance/payment-actions/{id}/void', [FinancePaymentActionsController::class, 'void'])->middleware('role:finance_admin,admin');
+    Route::delete('/finance/payment-actions/{id}/retract', [FinancePaymentActionsController::class, 'retract'])->middleware('role:finance_admin,admin');
+
     // Admin Payment Details management (admin-only)
     // Place 'admin' literal route BEFORE the parameterized {id} to avoid collision
     Route::get('/finance/payment-details/admin', [PaymentDetailAdminController::class, 'index'])->middleware('role:admin');
@@ -301,6 +310,10 @@ Route::prefix('v1')->group(function () {
     Route::post('/finance/student-billing', [StudentBillingController::class, 'store'])->middleware('role:finance,admin');
     Route::put('/finance/student-billing/{id}', [StudentBillingController::class, 'update'])->middleware('role:finance,admin');
     Route::delete('/finance/student-billing/{id}', [StudentBillingController::class, 'destroy'])->middleware('role:finance,admin');
+
+    // Student Billing Extras (Finance/Admin)
+    Route::get('/finance/student-billing/missing-invoices', [StudentBillingExtrasController::class, 'missingInvoices'])->middleware('role:finance,admin');
+    Route::post('/finance/student-billing/{id}/generate-invoice', [StudentBillingExtrasController::class, 'generateInvoice'])->middleware('role:finance,admin');
 
     // Invoices (Finance/Admin)
     Route::get('/finance/invoices', [InvoiceController::class, 'index'])->middleware('role:finance,admin');
@@ -367,10 +380,24 @@ Route::prefix('v1')->group(function () {
     Route::get('/reports/enrolled-students/export', [ReportsController::class, 'enrolledStudentsExport'])->middleware('role:registrar,admin');
     // Registrar reports - Daily Enrollment JSON
     Route::get('/reports/daily-enrollment', [ReportsController::class, 'dailyEnrollmentSummary'])->middleware('role:registrar,admin');
+    // Registrar reports - Enrollment Statistics PDF
+    Route::get('/reports/enrollment-statistics/pdf', [ReportsController::class, 'enrollmentStatisticsPdf'])->middleware('role:registrar,admin');
+    // Grading Sheet PDF (Registrar / Faculty Admin / Admin)
+    Route::get('/reports/grading-sheet/pdf', [ReportsController::class, 'gradingSheetPdf'])->middleware('role:registrar,faculty_admin,admin');
+    // Student Transcript/Copy of Grades (Registrar/Admin)
+    Route::post('/reports/students/{studentId}/transcript', [ReportsController::class, 'studentTranscriptPdf'])->middleware('role:registrar,admin');
+
+    // Transcript fee, history, reprint, and billing (Registrar/Admin)
+    Route::get('/reports/transcript-fee', [ReportsController::class, 'transcriptFee'])->middleware('role:registrar,admin');
+    Route::get('/reports/students/{studentId}/transcripts', [ReportsController::class, 'listTranscriptRequests'])->middleware('role:registrar,admin');
+    Route::post('/reports/students/{studentId}/transcripts/{requestId}/billing', [ReportsController::class, 'createTranscriptBilling'])->middleware('role:registrar,admin');
+    Route::get('/reports/students/{studentId}/transcripts/{requestId}/reprint', [ReportsController::class, 'reprintTranscript'])->middleware('role:registrar,admin');
 
     // Classlists CRUD
     Route::post('/classlists/merge', [ClasslistMergeController::class, 'merge'])->middleware('role:registrar,admin');
     Route::get('/classlists', [ClasslistController::class, 'index']);
+    // Place export BEFORE parameterized {id} to avoid route collision
+    Route::get('/classlists/export-faculty-assignments', [ClasslistController::class, 'exportFacultyAssignments'])->middleware('role:registrar,faculty_admin,admin');
     Route::get('/classlists/{id}', [ClasslistController::class, 'show']);
     Route::post('/classlists', [ClasslistController::class, 'store'])->middleware('role:registrar,admin');
     Route::put('/classlists/{id}', [ClasslistController::class, 'update'])->middleware('role:registrar,faculty_admin,admin');

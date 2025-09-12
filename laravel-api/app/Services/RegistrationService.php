@@ -88,16 +88,15 @@ class RegistrationService
         $enrollments = DB::table('tb_mas_registration as r')
             ->join('tb_mas_users as u', 'u.intID', '=', 'r.intStudentID')
             ->where('r.intAYID', $syid)
-            ->where('r.intROG', '>=', 1) // enrolled/withdrawn etc.
-            ->where('r.intROG', '!=', 5) // exclude some terminal state (parity with CI)
-            ->whereNotNull('r.dteRegistered')
-            ->whereBetween('r.dteRegistered', [$begin, $endDate])
+            ->whereIn('r.enrollment_status', ['enrolled','withdrawn after','withdrawn end'])
+            ->whereNotNull('r.date_enrolled')
+            ->whereBetween('r.date_enrolled', [$begin, $endDate])
             ->orderBy('r.intRegistrationID', 'desc')
             ->select('r.*', 'u.student_type', 'u.slug', 'u.enumStudentType')
             ->get();
 
         foreach ($enrollments as $st) {
-            $date = substr((string)$st->dteRegistered, 0, 10);
+            $date = substr((string)$st->date_enrolled, 0, 10);
             if (!isset($perDay[$date])) {
                 $perDay[$date] = [
                     'freshman' => 0,
@@ -112,7 +111,7 @@ class RegistrationService
                 ];
             }
 
-            $addWithdrawn = ((int)$st->intROG === 3) ? 1 : 0;
+            $addWithdrawn = ($st->enrollment_status === 'withdrawn after' || $st->enrollment_status === 'withdrawn end') ? 1 : 0;
 
             if ($st->enumStudentType === 'continuing') {
                 $perDay[$date]['continuing'] += 1;
@@ -251,7 +250,7 @@ class RegistrationService
             // parity with CI update endpoints
             'allow_enroll',
             'downpayment',
-            'intROG',
+            'enrollment_status',
         ];
 
         $update = [];
