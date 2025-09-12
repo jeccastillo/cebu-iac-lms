@@ -575,6 +575,19 @@
         controller: "InitialRequirementsController",
         controllerAs: "vm"
       })
+      // Clinic &amp; Health Records
+      .when("/clinic", {
+        templateUrl: "features/clinic/clinic.html",
+        controller: "ClinicController",
+        controllerAs: "vm",
+        requiredRoles: ["clinic_staff", "clinic_admin", "admin"]
+      })
+      .when("/clinic/records/:id", {
+        templateUrl: "features/clinic/record-view.html",
+        controller: "ClinicRecordViewController",
+        controllerAs: "vm",
+        requiredRoles: ["clinic_staff", "clinic_admin", "admin"]
+      })
       .otherwise({ redirectTo: "/login" });
 
     // Keep hashbang routing for simple static hosting

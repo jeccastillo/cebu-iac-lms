@@ -1,0 +1,15 @@
+{
+  "person_type": "student",
+  "person_student_id": 1,
+  "blood_type": "O+",
+  "height_cm": 170,
+  "weight_kg": 65,
+  "allergies": [
+    { "name": "penicillin" }
+  ],
+  "medications": [],
+  "immunizations": [],
+  "conditions": [],
+  "notes": "clinic test record",
+  "campus_id": 1
+}

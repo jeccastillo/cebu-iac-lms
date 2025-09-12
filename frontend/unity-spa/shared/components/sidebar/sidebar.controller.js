@@ -89,6 +89,13 @@
         ]
       },
       {
+        key: 'clinic',
+        label: 'Clinic',
+        children: [
+          { label: 'Health Records', path: '/clinic' }
+        ]
+      },
+      {
         key: 'academics',
         label: 'Academics',
         children: [

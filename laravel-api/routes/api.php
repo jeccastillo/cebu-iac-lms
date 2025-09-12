@@ -56,6 +56,9 @@ use App\Http\Controllers\Api\V1\UsersController;
 use App\Http\Controllers\Api\V1\StudentImportController;
 use App\Http\Controllers\Api\V1\ClassroomImportController;
 use App\Http\Controllers\Api\V1\ScheduleImportController;
+use App\Http\Controllers\Api\V1\ClinicHealthController;
+use App\Http\Controllers\Api\V1\ClinicVisitController;
+use App\Http\Controllers\Api\V1\ClinicAttachmentController;
 use App\Services\ClasslistSlotsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -542,4 +545,20 @@ Route::prefix('v1')->group(function () {
     Route::delete('/system-alerts/{id}', [SystemAlertController::class, 'destroy'])->middleware('role:admin');
     Route::get('/system-alerts/active', [SystemAlertController::class, 'active']);
     Route::post('/system-alerts/{id}/dismiss', [SystemAlertController::class, 'dismiss']);
+
+    // Clinic & Health Records
+    Route::get('/clinic/records', [ClinicHealthController::class, 'index'])->middleware('role:clinic_staff,clinic_admin,admin');
+    Route::post('/clinic/records', [ClinicHealthController::class, 'store'])->middleware('role:clinic_staff,clinic_admin,admin');
+    Route::get('/clinic/records/{id}', [ClinicHealthController::class, 'show'])->middleware('role:clinic_staff,clinic_admin,admin');
+    Route::put('/clinic/records/{id}', [ClinicHealthController::class, 'update'])->middleware('role:clinic_staff,clinic_admin,admin');
+
+    Route::get('/clinic/visits', [ClinicVisitController::class, 'index'])->middleware('role:clinic_staff,clinic_admin,admin');
+    Route::post('/clinic/visits', [ClinicVisitController::class, 'store'])->middleware('role:clinic_staff,clinic_admin,admin');
+    Route::get('/clinic/visits/{id}', [ClinicVisitController::class, 'show'])->middleware('role:clinic_staff,clinic_admin,admin');
+    Route::put('/clinic/visits/{id}', [ClinicVisitController::class, 'update'])->middleware('role:clinic_staff,clinic_admin,admin');
+
+    Route::get('/clinic/attachments', [ClinicAttachmentController::class, 'index'])->middleware('role:clinic_staff,clinic_admin,admin');
+    Route::post('/clinic/attachments', [ClinicAttachmentController::class, 'store'])->middleware('role:clinic_staff,clinic_admin,admin');
+    Route::get('/clinic/attachments/{id}/download', [ClinicAttachmentController::class, 'download'])->middleware('role:clinic_staff,clinic_admin,admin');
+    Route::delete('/clinic/attachments/{id}', [ClinicAttachmentController::class, 'destroy'])->middleware('role:clinic_admin,admin');
 });
