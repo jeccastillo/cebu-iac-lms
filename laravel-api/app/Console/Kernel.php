@@ -12,7 +12,16 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        // Run reminder commands every 2 days
+        $schedule->command('reminders:inactive-applications')
+                 ->twiceDaily(9, 21) // 9 AM and 9 PM
+                 ->withoutOverlapping()
+                 ->runInBackground();
+
+        $schedule->command('reminders:interviewed-not-reserved')
+                 ->twiceDaily(10, 22) // 10 AM and 10 PM  
+                 ->withoutOverlapping()
+                 ->runInBackground();
     }
 
     /**

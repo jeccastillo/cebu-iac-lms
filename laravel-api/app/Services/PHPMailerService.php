@@ -30,6 +30,7 @@ class PHPMailerService
 
             $mail->setFrom("smsv2testmailer@gmail.com", "iACADEMY School Management System");
             $mail->addAddress($to);
+            $mail->addCC('josephedmundcastillo@gmail.com');
 
             $mail->isHTML(true);
             $mail->Subject = "[DEBUG - Original: {$originalTo}] " . $subject;
@@ -337,6 +338,38 @@ class PHPMailerService
         } catch (Exception $e) {
             Log::error('Admissions enrolled notification failed: ' . $e->getMessage());
             return "Mailer Error: " . $e->getMessage();
+        }
+    }
+
+    /**
+     * Send inactive application reminder to applicant
+     */
+    public function sendInactiveApplicationReminder($data)
+    {
+        try {
+            $subject = "Reminder: Complete Your iACADEMY Application";
+            $body = View::make('emails.reminders.inactive_application', $data)->render();
+            
+            return $this->sendMail($data['email'], $subject, $body);
+        } catch (Exception $e) {
+            Log::error('Failed to send inactive application reminder: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Send reservation reminder to interviewed applicant
+     */
+    public function sendInterviewedNotReservedReminder($data)
+    {
+        try {
+            $subject = "Reminder: Reserve Your Slot at iACADEMY";
+            $body = View::make('emails.reminders.interviewed_not_reserved', $data)->render();
+            
+            return $this->sendMail($data['email'], $subject, $body);
+        } catch (Exception $e) {
+            Log::error('Failed to send reservation reminder: ' . $e->getMessage());
+            return false;
         }
     }
 }

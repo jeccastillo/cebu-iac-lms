@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Program;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
-use Carbon\Carbon;
 use Throwable;
 
 class AdmissionsController extends Controller
@@ -302,7 +302,7 @@ class AdmissionsController extends Controller
             $emailError = null;
             if ($to) {
                 try {
-                    $this->sendApplicantMail($to, $request->input('first_name'), $request->input('last_name'));
+                    $this->sendApplicantMail($to, $request->input('first_name'), $request->input('last_name'), $applicantDataId);
                     $emailSent = true;
                 } catch (Throwable $mailEx) {
                     $emailSent = false;
@@ -365,12 +365,12 @@ class AdmissionsController extends Controller
         return $slug;
     }
 
-    protected function sendApplicantMail(string $to, ?string $first, ?string $last): void
+    protected function sendApplicantMail(string $to, ?string $first, ?string $last, int $applicantDataId): void
     {
         $name = trim(($first ?? '') . ' ' . ($last ?? ''));
         
-        // Generate application number and confirmation code
-        $applicationNumber = $this->generateApplicationNumber();
+        // Generate application number based on applicant data ID
+        $applicationNumber = $this->generateApplicationNumber($applicantDataId);
         $confirmationCode = $this->generateConfirmationCode();
         
         // Generate username from email or name
@@ -406,28 +406,47 @@ class AdmissionsController extends Controller
         }
     }
 
-    protected function generateApplicationNumber(): string
+    /**
+     * Get active school year and semester from tb_mas_sy
+     */
+    protected function getActiveSchoolYearInfo(): array
     {
-        $year = date('Y');
-        $sem = '1'; // Default semester, could be made dynamic
-        
-        do {
-            $randomNumber = rand(1000, 9999);
-            $applicationNumber = $year . '0' . $sem . $randomNumber;
+        $activeSy = DB::table('tb_mas_sy')
+            ->where('enumStatus', 'active')
+            ->first();
+
+        if ($activeSy) {
+            // Extract year and semester from active school year
+            $year = $activeSy->strYear ?? date('Y');
+            $sem = $activeSy->strSem ?? $activeSy->semester ?? '1';
             
-            // Check if application number already exists in tb_mas_users or tb_mas_applicant_data
-            $exists = DB::table('tb_mas_users')->where('strStudentNumber', $applicationNumber)->exists() ||
-                     DB::table('tb_mas_applicant_data')->where('data', 'LIKE', '%"application_number":"' . $applicationNumber . '"%')->exists();
-                     
-        } while ($exists);
-        
-        return $applicationNumber;
+            return [
+                'year' => $year,
+                'semester' => $sem
+            ];
+        }
+
+        // Fallback to current year and semester 1 if no active SY found
+        return [
+            'year' => date('Y'),
+            'semester' => '1'
+        ];
+    }
+
+    /**
+     * Generate application number based on tb_mas_applicant_data ID
+     * Format: A000001, A000002, etc.
+     */
+    protected function generateApplicationNumber($applicantDataId): string
+    {
+        return 'A' . str_pad($applicantDataId, 6, '0', STR_PAD_LEFT);
     }
 
     protected function generateConfirmationCode(): string
     {
-        $year = date('Y');
-        $sem = '1'; // Default semester, could be made dynamic
+        $syInfo = $this->getActiveSchoolYearInfo();
+        $year = $syInfo['year'];
+        $sem = $syInfo['semester'];
         
         do {
             $randomNumber = rand(1000, 9999);
