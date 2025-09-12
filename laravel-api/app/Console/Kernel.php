@@ -4,24 +4,42 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Log;
 
 class Kernel extends ConsoleKernel
 {
     /**
      * Define the application's command schedule.
      */
-    protected function schedule(Schedule $schedule): void
+    protected function schedule(Schedule $schedule)
     {
-        // Run reminder commands every 2 days
         $schedule->command('reminders:inactive-applications')
-                 ->twiceDaily(9, 21) // 9 AM and 9 PM
-                 ->withoutOverlapping()
-                 ->runInBackground();
+                ->dailyAt('09:00')
+                ->days([1, 3, 5, 0])
+                ->withoutOverlapping(10)
+                ->runInBackground()
+                ->sendOutputTo('/var/log/laravel/email-reminders.log')
+                ->emailOutputOnFailure('lancekenjiparce@gmail.com')
+                ->onSuccess(function () {
+                    Log::info('Inactive applications reminder completed successfully');
+                })
+                ->onFailure(function () {
+                    Log::error('Inactive applications reminder failed');
+                });
 
         $schedule->command('reminders:interviewed-not-reserved')
-                 ->twiceDaily(10, 22) // 10 AM and 10 PM  
-                 ->withoutOverlapping()
-                 ->runInBackground();
+                ->dailyAt('10:00') 
+                ->days([1, 3, 5, 0])
+                ->withoutOverlapping(10)
+                ->runInBackground()
+                ->sendOutputTo('/var/log/laravel/email-reminders.log')
+                ->emailOutputOnFailure('lancekenjiparce@gmail.com')
+                ->onSuccess(function () {
+                    Log::info('Interviewed not reserved reminder completed successfully');
+                })
+                ->onFailure(function () {
+                    Log::error('Interviewed not reserved reminder failed');
+                });
     }
 
     /**

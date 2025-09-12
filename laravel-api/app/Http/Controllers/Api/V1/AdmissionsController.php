@@ -310,6 +310,36 @@ class AdmissionsController extends Controller
                 }
             }
 
+            // Notify admissions department about new application
+            try {
+                $phpMailerService = app(\App\Services\PHPMailerService::class);
+                $phpMailerService->sendAdmissionsApplicationSubmittedNotification([
+                    'applicant_name' => trim(($request->input('first_name', '') . ' ' . $request->input('last_name', ''))),
+                    'applicant_email' => $request->input('email'),
+                    'application_number' => $this->generateApplicationNumber($applicantDataId),
+                    'desired_program' => $request->input('desired_program', 'Not specified'),
+                    'submission_date' => now()->format('Y-m-d H:i:s'),
+                    'campus' => $request->input('campus', 'Cebu')
+                ]);
+            } catch (Throwable $e) {
+                Log::warning('Admissions notification failed: ' . $e->getMessage());
+            }
+
+            // Notify admissions department about new application
+            try {
+                $phpMailerService = app(\App\Services\PHPMailerService::class);
+                $phpMailerService->sendAdmissionsApplicationSubmittedNotification([
+                    'applicant_name' => trim(($request->input('first_name', '') . ' ' . $request->input('last_name', ''))),
+                    'applicant_email' => $request->input('email'),
+                    'application_number' => $this->generateApplicationNumber($applicantDataId),
+                    'desired_program' => $request->input('desired_program', 'Not specified'),
+                    'campus' => $request->input('campus', 'Not specified'),
+                    'submitted_at' => now()->format('Y-m-d H:i:s')
+                ]);
+            } catch (Throwable $e) {
+                Log::warning('Failed to send admissions notification for new application: ' . $e->getMessage());
+            }
+
             return response()->json([
                 'success' => true,
                 'message' => $emailSent

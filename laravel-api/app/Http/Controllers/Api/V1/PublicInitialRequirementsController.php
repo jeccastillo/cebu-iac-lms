@@ -262,6 +262,20 @@ class PublicInitialRequirementsController extends Controller
 
                     // Broadcast to listeners; ignore failures
                     app(\App\Services\SystemAlertService::class)->broadcast('create', $alert);
+
+                    // Send email notification to admissions team
+                    try {
+                        $phpMailerService = app(\App\Services\PHPMailerService::class);
+                        $phpMailerService->sendAdmissionsAllRequirementsSubmittedNotification([
+                            'applicant_name' => $full,
+                            'application_number' => 'A' . str_pad($appData->id, 6, '0', STR_PAD_LEFT),
+                            'submission_date' => now()->format('Y-m-d H:i:s'),
+                            'campus' => $userRow->campus ?? 'N/A',
+                            'requirements_count' => $submitted
+                        ]);
+                    } catch (\Exception $e) {
+                        \Illuminate\Support\Facades\Log::error('Initial requirements notification failed: ' . $e->getMessage());
+                    }
                 }
             }
         } catch (\Throwable $e) {
@@ -403,7 +417,7 @@ class PublicInitialRequirementsController extends Controller
             ], 404);
         }
 
-        $fullPath = Storage::disk('public')->path($relative);
+        $fullPath = storage_path('app/public/' . $relative);
 
         return response()->file($fullPath);
     }

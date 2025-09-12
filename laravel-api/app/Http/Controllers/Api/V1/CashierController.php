@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\V1\CashierPaymentAssignNumberRequest;
+use App\Http\Requests\Api\V1\CashierPaymentStoreRequest;
+use App\Http\Requests\Api\V1\CashierRangeUpdateRequest;
 use App\Http\Requests\Api\V1\CashierStoreRequest;
 use App\Http\Requests\Api\V1\CashierUpdateRequest;
-use App\Http\Requests\Api\V1\CashierRangeUpdateRequest;
-use App\Http\Requests\Api\V1\CashierPaymentStoreRequest;
-use App\Http\Requests\Api\V1\CashierPaymentAssignNumberRequest;
 use App\Models\Cashier;
 use App\Services\CashierService;
+use App\Services\PaymentDetailAdminService;
+use App\Services\SystemLogService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\ValidationException;
-use App\Services\SystemLogService;
-use App\Services\PaymentDetailAdminService;
 
 class CashierController extends Controller
 {
@@ -1165,6 +1165,72 @@ class CashierController extends Controller
                         // ignore log failure
                     }
 
+                    // Send email notifications for payment milestones
+                    try {
+                        $phpMailerService = app(\App\Services\PHPMailerService::class);
+                        
+                        // Get applicant information for emails
+                        $userInfo = DB::table('tb_mas_users')->where('intID', $studentId)->first();
+                        $applicantInfo = DB::table('tb_mas_applicant_data')
+                            ->where('user_id', $studentId)
+                            ->where('syid', $syid)
+                            ->first();
+                        
+                        if ($userInfo && $applicantInfo) {
+                            $applicantName = trim(($userInfo->strFirstname ?? '') . ' ' . ($userInfo->strLastname ?? ''));
+                            $applicationNumber = 'A' . str_pad($applicantInfo->id, 6, '0', STR_PAD_LEFT);
+                            
+                            // Notify admissions about application fee payment
+                            if (isset($updates['paid_application_fee'])) {
+                                $phpMailerService->sendAdmissionsApplicationFeePaymentNotification([
+                                    'applicant_name' => $applicantName,
+                                    'applicant_email' => $userInfo->strEmail ?? '',
+                                    'application_number' => $applicationNumber,
+                                    'payment_amount' => $amount + $conFee,
+                                    'payment_date' => now()->format('Y-m-d H:i:s'),
+                                    'payment_reference' => $requestId ?? 'N/A'
+                                ]);
+                            }
+                            
+                            // Notify admissions about reservation fee payment
+                            if (isset($updates['paid_reservation_fee'])) {
+                                $phpMailerService->sendAdmissionsReservationFeePaymentNotification([
+                                    'applicant_name' => $applicantName,
+                                    'applicant_email' => $userInfo->strEmail ?? '',
+                                    'application_number' => $applicationNumber,
+                                    'payment_amount' => $amount + $conFee,
+                                    'payment_date' => now()->format('Y-m-d H:i:s'),
+                                    'payment_reference' => $requestId ?? 'N/A'
+                                ]);
+                            }
+                            
+                            // Notify registrar when applicant status changes to Reserved
+                            if (isset($updates['status']) && $updates['status'] === 'Reserved') {
+                                $phpMailerService->sendRegistrarReservedNotification([
+                                    'applicant_name' => $applicantName,
+                                    'applicant_email' => $userInfo->strEmail ?? '',
+                                    'application_number' => $applicationNumber,
+                                    'status_change_date' => now()->format('Y-m-d H:i:s'),
+                                    'previous_status' => $applicantData->status ?? 'Unknown'
+                                ]);
+                            }
+                            
+                            // Notify admissions when applicant status changes to Enrolled
+                            if (isset($updates['status']) && $updates['status'] === 'Enrolled') {
+                                $phpMailerService->sendAdmissionsApplicantEnrolledNotification([
+                                    'applicant_name' => $applicantName,
+                                    'applicant_email' => $userInfo->strEmail ?? '',
+                                    'application_number' => $applicationNumber,
+                                    'enrollment_date' => now()->format('Y-m-d H:i:s'),
+                                    'previous_status' => $applicantData->status ?? 'Unknown'
+                                ]);
+                            }
+                        }
+                    } catch (\Throwable $e3) {
+                        // Don't block payment processing if email fails
+                        \Illuminate\Support\Facades\Log::warning('Payment notification email failed: ' . $e3->getMessage());
+                    }
+
                     // Journey logs: payment-related milestones
                     try {
                         // Resolve applicant_data row to attach logs
@@ -1298,9 +1364,9 @@ class CashierController extends Controller
         // Campus letter prefix: when campus_id != 1, prepend first letter of campus name
         $fullPrefix = $basePrefix;
         try {
-            if (\Illuminate\Support\Facades\Schema::hasTable('tb_mas_sy') && \Illuminate\Support\Facades\Schema::hasColumn('tb_mas_sy', 'campus_id')) {
+            if (Schema::hasTable('tb_mas_sy') && Schema::hasColumn('tb_mas_sy', 'campus_id')) {
                 $campusIdVal = DB::table('tb_mas_sy')->where('intID', $syid)->value('campus_id');
-                if (!is_null($campusIdVal) && (int) $campusIdVal !== 1 && \Illuminate\Support\Facades\Schema::hasTable('tb_mas_campuses')) {
+                if (!is_null($campusIdVal) && (int) $campusIdVal !== 1 && Schema::hasTable('tb_mas_campuses')) {
                     $campusName = DB::table('tb_mas_campuses')->where('id', (int) $campusIdVal)->value('campus_name');
                     if (is_string($campusName) && trim($campusName) !== '') {
                         $letter = strtoupper(substr(trim($campusName), 0, 1));

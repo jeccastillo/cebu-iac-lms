@@ -1417,9 +1417,24 @@ class AdmissionsProcessController extends Controller
         if (count(request('requirements'))) {
            // Email admissions using PHPMailerService
             try {
+                // Get tb_mas_applicant_data ID for proper application number generation
+                $applicantData = null;
+                if ($studentInformation->email) {
+                    // Try to find by email in tb_mas_users first, then get applicant_data
+                    $user = DB::table('tb_mas_users')->where('strEmail', $studentInformation->email)->first();
+                    if ($user) {
+                        $applicantData = DB::table('tb_mas_applicant_data')->where('user_id', $user->intID)->first();
+                    }
+                }
+                
+                // Fallback: use student information ID if applicant data not found
+                $applicationNumber = $applicantData 
+                    ? 'A' . str_pad($applicantData->id, 6, '0', STR_PAD_LEFT)
+                    : 'A' . str_pad($studentInformation->id, 6, '0', STR_PAD_LEFT);
+
                 $this->phpMailerService->sendAdmissionsAllRequirementsSubmittedNotification([
                     'applicant_name' => $studentInformation->first_name . ' ' . $studentInformation->last_name,
-                    'application_number' => $this->generateApplicationNumber($studentInformation->id),
+                    'application_number' => $applicationNumber,
                     'submission_date' => date('Y-m-d H:i:s'),
                     'campus' => $studentInformation->campus,
                     'requirements_count' => count(request('requirements'))
@@ -1507,7 +1522,7 @@ class AdmissionsProcessController extends Controller
                     // Notify Registrar when applicant is reserved (paid reservation fee)
                     $this->phpMailerService->sendRegistrarReservedNotification([
                         'applicant_name' => $studentInformation->first_name . ' ' . $studentInformation->last_name,
-                        'application_number' => $this->generateApplicationNumber($studentInformation->id),
+                        'application_number' => $this->generateApplicationNumber($studentInformation),
                         'program' => $studentInformation->type?->name ?? 'N/A',
                         'campus' => $studentInformation->campus,
                         'payment_date' => date('Y-m-d H:i:s'),
@@ -1519,7 +1534,7 @@ class AdmissionsProcessController extends Controller
                     // Notify Finance when applicant is enlisted (ready to enroll)
                     $this->phpMailerService->sendFinanceEnlistedNotification([
                         'applicant_name' => $studentInformation->first_name . ' ' . $studentInformation->last_name,
-                        'application_number' => $this->generateApplicationNumber($studentInformation->id),
+                        'application_number' => $this->generateApplicationNumber($studentInformation),
                         'program' => $studentInformation->type?->name ?? 'N/A',
                         'campus' => $studentInformation->campus,
                         'tuition_amount' => 'To be assessed',
@@ -1531,7 +1546,7 @@ class AdmissionsProcessController extends Controller
                     // Notify Admissions when applicant successfully enrolls
                     $this->phpMailerService->sendAdmissionsApplicantEnrolledNotification([
                         'applicant_name' => $studentInformation->first_name . ' ' . $studentInformation->last_name,
-                        'application_number' => $this->generateApplicationNumber($studentInformation->id),
+                        'application_number' => $this->generateApplicationNumber($studentInformation),
                         'student_id' => 'Auto-generated',
                         'program' => $studentInformation->type?->name ?? 'N/A',
                         'academic_year' => date('Y'),
@@ -2169,12 +2184,28 @@ class AdmissionsProcessController extends Controller
      */
 
     /**
-     * Generate application number based on tb_mas_applicant_data ID or admission_student_information ID
+     * Generate application number based on tb_mas_applicant_data ID
      * Format: A000001, A000002, etc.
      */
-    protected function generateApplicationNumber($id): string
+    protected function generateApplicationNumber($studentInformation): string
     {
-        return 'A' . str_pad($id, 6, '0', STR_PAD_LEFT);
+        // Get tb_mas_applicant_data ID for proper application number generation
+        $applicantData = null;
+        if (is_object($studentInformation) && $studentInformation->email) {
+            // Try to find by email in tb_mas_users first, then get applicant_data
+            $user = DB::table('tb_mas_users')->where('strEmail', $studentInformation->email)->first();
+            if ($user) {
+                $applicantData = DB::table('tb_mas_applicant_data')->where('user_id', $user->intID)->first();
+            }
+        }
+        
+        // If $studentInformation is just an ID (old usage), use it as fallback
+        $fallbackId = is_object($studentInformation) ? $studentInformation->id : $studentInformation;
+        
+        // Fallback: use provided ID if applicant data not found
+        $applicationId = $applicantData ? $applicantData->id : $fallbackId;
+        
+        return 'A' . str_pad($applicationId, 6, '0', STR_PAD_LEFT);
     }
     protected function makeUsername(?string $email, ?string $first, ?string $last): string
     {

@@ -71,6 +71,21 @@ class SendInactiveApplicationReminders extends Command
                 }
                 
                 try {
+                    // Get tb_mas_applicant_data ID for proper application number generation
+                    $applicantData = null;
+                    if ($application->email) {
+                        // Try to find by email in tb_mas_users first, then get applicant_data
+                        $user = \Illuminate\Support\Facades\DB::table('tb_mas_users')->where('strEmail', $application->email)->first();
+                        if ($user) {
+                            $applicantData = \Illuminate\Support\Facades\DB::table('tb_mas_applicant_data')->where('user_id', $user->intID)->first();
+                        }
+                    }
+                    
+                    // Fallback: use admission_student_information ID if applicant data not found
+                    $applicationNumber = $applicantData 
+                        ? 'A' . str_pad($applicantData->id, 6, '0', STR_PAD_LEFT)
+                        : 'A' . str_pad($application->id, 6, '0', STR_PAD_LEFT);
+
                     if ($simulate) {
                         // Simulate sending email
                         $this->info("SIMULATED: Would send inactive reminder to: {$application->email}");
@@ -79,7 +94,7 @@ class SendInactiveApplicationReminders extends Command
                         $result = $this->phpMailerService->sendInactiveApplicationReminder([
                             'email' => $application->email,
                             'name' => $application->first_name . ' ' . $application->last_name,
-                            'application_number' => 'A' . str_pad($application->id, 6, '0', STR_PAD_LEFT),
+                            'application_number' => $applicationNumber,
                             'status' => $application->status,
                             'days_inactive' => Carbon::parse($application->updated_at)->diffInDays(Carbon::now())
                         ]);
