@@ -3984,12 +3984,16 @@ class Unity extends CI_Controller {
         
         $student = $this->data_fetcher->fetch_table('tb_mas_classlist_student',null,null,array('intStudentID'=>$post['intStudentID'],'intClassListID'=>$post['intClassListID']));
         
-        $active_sem = $this->data_fetcher->get_sem_by_id($post['activeSem']);
+        $active_sem = $this->data_fetcher->get_active_sem();
+        if(isset($post['activeSem'])){
+            $active_sem = $this->data_fetcher->get_sem_by_id($post['activeSem']);
+        }
         
         $enlisted = $this->data_fetcher->checkStudentSubject($active_sem['intID'],$classlist['intSubjectID'],$post['intStudentID']);
-       
         
-        
+        // New: Prevent add when classlist is full
+        $remaining = $this->data_fetcher->countRemainingSlotsClasslist($classlist['intID']);
+
         if(!$this->is_super_admin() && !$this->is_registrar())
         {
             $data['message'] = "failed3";
@@ -3998,6 +4002,8 @@ class Unity extends CI_Controller {
             $data['message'] = "failed2";
         elseif(!empty($enlisted))
             $data['message'] = "enlisted in different classlist section: ".$enlisted['strSection'];
+        elseif($remaining <= 0)
+            $data['message'] = "Classlist is already full";
         elseif(empty($student)){
             $this->data_poster->addStudentClasslist($send,$this->data["user"]["intID"]);
             $data['message'] = "success";
