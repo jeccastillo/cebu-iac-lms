@@ -57,7 +57,7 @@
         <span class="fas fa-save mr-1"></span> Save Grades
       </button>
       <button class="px-3 py-2 rounded bg-green-600 text-white hover:bg-green-700 disabled:opacity-50"
-              ng-disabled="!vm.permissions.can_finalize || vm.loading || vm.hasIncompleteGrades()"
+              ng-disabled="!vm.permissions.can_finalize || vm.loading || vm.hasIncompleteGrades() || vm.classlist.intFinalized === 2"
               ng-click="vm.finalize()">
         <span class="fas fa-check mr-1"></span> Finalize {{ vm.period | uppercase }}
       </button>
@@ -149,7 +149,7 @@
           <td class="px-4 py-2 text-sm text-gray-800">
             <div ng-if="vm.options.finals.mode === 'system'">
               <select class="w-40 border rounded px-2 py-1"
-                      ng-disabled="vm.period !== 'finals' || !vm.permissions.can_edit"
+                      ng-disabled="vm.period !== 'finals' || !vm.permissions.can_edit || vm.classlist.intFinalized === 2"
                       ng-model="vm.edits[s.intCSID].finals"
                       ng-options="it.value as it.value for it in vm.options.finals.items">
                 <option value="">NGS</option>
@@ -158,7 +158,7 @@
             <div ng-if="vm.options.finals.mode !== 'system'">
               <input type="number" class="w-28 border rounded px-2 py-1"
                      min="{{ vm.options.finals.min || 1 }}" max="{{ vm.options.finals.max || 100 }}"
-                     ng-disabled="vm.period !== 'finals' || !vm.permissions.can_edit"
+                     ng-disabled="vm.period !== 'finals' || !vm.permissions.can_edit || vm.classlist.intFinalized === 2"
                      ng-model="vm.edits[s.intCSID].finals" placeholder="NGS" />
             </div>
           </td>

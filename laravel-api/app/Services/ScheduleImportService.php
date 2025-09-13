@@ -371,10 +371,57 @@ class ScheduleImportService
 
     /**
      * Check faculty conflicts. Returns array of conflicting rows (may be empty).
+     *
+     * Supports two modes:
+     *  - Time-window mode: when $data includes dteStart, dteEnd, strDay, intSem.
+     *  - Classlist mode: when only intClasslistID is provided; will fetch its schedule slices and check each.
      */
     public function checkFacultyConflicts(array $data, ?int $excludeId = null, ?int $facultyId = null): array
     {
         if (!$facultyId) {
+            return [];
+        }
+
+        $hasWindow =
+            array_key_exists('dteStart', $data) &&
+            array_key_exists('dteEnd', $data) &&
+            array_key_exists('strDay', $data) &&
+            array_key_exists('intSem', $data);
+
+        // Classlist mode: resolve slices and check each
+        if (!$hasWindow && isset($data['intClasslistID'])) {
+            $slices = DB::table('tb_mas_room_schedule')
+                ->where('intClasslistID', (int) $data['intClasslistID'])
+                ->select('strDay', 'dteStart', 'dteEnd', 'intSem')
+                ->orderBy('strDay')
+                ->orderBy('dteStart')
+                ->limit(50)
+                ->get();
+
+            $conflicts = [];
+            foreach ($slices as $s) {
+                $sliceData = [
+                    'strDay'   => $s->strDay,
+                    'dteStart' => $s->dteStart,
+                    'dteEnd'   => $s->dteEnd,
+                    'intSem'   => $s->intSem,
+                ];
+                $sliceConf = $this->checkFacultyConflicts($sliceData, $excludeId, $facultyId);
+                if (!empty($sliceConf)) {
+                    // Merge but cap at 5 results overall
+                    foreach ($sliceConf as $row) {
+                        $conflicts[] = $row;
+                        if (count($conflicts) >= 5) {
+                            return array_slice($conflicts, 0, 5);
+                        }
+                    }
+                }
+            }
+            return array_slice($conflicts, 0, 5);
+        }
+
+        // If still no window data, nothing to check
+        if (!$hasWindow) {
             return [];
         }
 
@@ -393,13 +440,15 @@ class ScheduleImportService
             $q->where('rs.intRoomSchedID', '!=', $excludeId);
         }
 
+        // Always constrain by faculty and term
         if ((int) $data['strDay'] === 7) {
-            $q->where('rs.intRoomID', $data['intRoomID'])
-              ->where('rs.intSem', $data['intSem']);
+            // Day 7 special-case: do not constrain by room (was a bug); constrain by term + faculty only
+            $q->where('rs.intSem', $data['intSem'])
+              ->where('cl.intFacultyID', $facultyId);
         } else {
             $q->where('rs.strDay', $data['strDay'])
-              ->where('cl.intFacultyID', $facultyId)
-              ->where('rs.intSem', $data['intSem']);
+              ->where('rs.intSem', $data['intSem'])
+              ->where('cl.intFacultyID', $facultyId);
         }
 
         return $q->limit(5)->get()->toArray();
