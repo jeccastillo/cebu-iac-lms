@@ -501,13 +501,23 @@ new Vue({
                                         })
                                         .then(data => {
                                             this.loader_spinner = false;
-                                            Swal.fire({
-                                                title: "Success",
-                                                text: data.data.message,
-                                                icon: "success"
-                                            }).then(function() {
-                                                location.reload();
-                                            });
+                                            if(data.data.message == 'success'){
+                                                Swal.fire({
+                                                    title: "Success",
+                                                    text: data.data.message,
+                                                    icon: "success"
+                                                }).then(function() {
+                                                    location.reload();
+                                                });
+                                            }else{
+                                                Swal.fire({
+                                                    title: 'Failed',
+                                                    text: data.data.message,
+                                                    icon: "error"
+                                                }).then(function() {
+                                                    location.reload();
+                                                });
+                                            }
                                         });
                                     }
                                 });
@@ -518,14 +528,24 @@ new Vue({
                                     }
                                 })
                                 .then(data => {
-                                    this.loader_spinner = false;
-                                    Swal.fire({
-                                        title: "Success",
-                                        text: data.data.message,
-                                        icon: "success"
-                                    }).then(function() {
-                                        location.reload();
-                                    });
+                                    console.log(data.data);
+                                    if(data.data.message == 'success'){
+                                        Swal.fire({
+                                            title: "Success",
+                                            text: data.data.message,
+                                            icon: "success"
+                                        }).then(function() {
+                                            location.reload();
+                                        });
+                                    }else{
+                                        Swal.fire({
+                                            title: 'Failed',
+                                            text: data.data.message,
+                                            icon: "error"
+                                        }).then(function() {
+                                            location.reload();
+                                        });
+                                    }
                                 });
                         });
                         
