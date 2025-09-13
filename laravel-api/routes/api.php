@@ -59,6 +59,7 @@ use App\Http\Controllers\Api\V1\ScheduleImportController;
 use App\Http\Controllers\Api\V1\ClinicHealthController;
 use App\Http\Controllers\Api\V1\ClinicVisitController;
 use App\Http\Controllers\Api\V1\ClinicAttachmentController;
+use App\Http\Controllers\Api\V1\ClasslistAttendanceController;
 use App\Services\ClasslistSlotsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -412,7 +413,26 @@ Route::prefix('v1')->group(function () {
     Route::get('/classlists/{id}/viewer', [ClasslistGradesController::class, 'viewerData']);
     Route::post('/classlists/{id}/grades', [ClasslistGradesController::class, 'saveGrades']);
     Route::post('/classlists/{id}/finalize', [ClasslistGradesController::class, 'finalize']);
+    // Excel grades template download and import
+    Route::get('/classlists/{id}/grades/template', [ClasslistGradesController::class, 'template']);
+    Route::post('/classlists/{id}/grades/import', [ClasslistGradesController::class, 'import']);
     Route::post('/classlists/{id}/unfinalize', [ClasslistGradesController::class, 'unfinalize'])->middleware('role:registrar,admin');
+
+    // Classlist Attendance
+    Route::get('/classlists/{id}/attendance/dates', [ClasslistAttendanceController::class, 'dates']);
+    Route::post('/classlists/{id}/attendance/dates', [ClasslistAttendanceController::class, 'createDate']);
+    // All-dates template + import (place before parameterized {dateId})
+    Route::get('/classlists/{id}/attendance/template', [ClasslistAttendanceController::class, 'templateAll']);
+    Route::post('/classlists/{id}/attendance/import', [ClasslistAttendanceController::class, 'importAll']);
+    // Matrix template + import (date range, per period)
+    Route::get('/classlists/{id}/attendance/matrix/template', [ClasslistAttendanceController::class, 'templateMatrix']);
+    Route::post('/classlists/{id}/attendance/matrix/import', [ClasslistAttendanceController::class, 'importMatrix']);
+    // Per-date template + import
+    Route::get('/classlists/{id}/attendance/dates/{dateId}/template', [ClasslistAttendanceController::class, 'template']);
+    Route::post('/classlists/{id}/attendance/dates/{dateId}/import', [ClasslistAttendanceController::class, 'import']);
+    Route::get('/classlists/{id}/attendance/dates/{dateId}', [ClasslistAttendanceController::class, 'dateDetails']);
+    Route::put('/classlists/{id}/attendance/dates/{dateId}', [ClasslistAttendanceController::class, 'save']);
+    Route::delete('/classlists/{id}/attendance/dates/{dateId}', [ClasslistAttendanceController::class, 'deleteDate']);
 
     // Grading Systems CRUD
     Route::get('/grading-systems', [GradingSystemController::class, 'index']);

@@ -5,12 +5,16 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\ClasslistFinalizeRequest;
 use App\Http\Requests\Api\V1\ClasslistGradeSaveRequest;
+use App\Http\Requests\Api\V1\ClasslistGradesImportRequest;
+use App\Exports\ClasslistGradesTemplateExport;
 use App\Services\ClasslistService;
 use App\Services\GradingWindowService;
+use App\Services\ClasslistGradesImportService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class ClasslistGradesController extends Controller
 {
@@ -465,6 +469,179 @@ class ClasslistGradesController extends Controller
                 'intFinalized' => $new,
             ],
         ]);
+    }
+
+    /**
+     * GET /api/v1/classlists/{id}/grades/template?period=midterm|finals
+     * Returns an .xlsx template containing enrolled students with an editable "grade" column.
+     * Authorization: same visibility policy as viewer (assigned faculty OR registrar/admin).
+     */
+    public function template(Request $request, int $id)
+    {
+        $cl = $this->classlists->getClasslistForGrading($id);
+        if (!$cl) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Classlist not found',
+            ], 404);
+        }
+
+        $period = strtolower(trim((string) $request->query('period', '')));
+        if (!in_array($period, ['midterm', 'finals'], true)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid or missing period. Use period=midterm|finals.',
+            ], 422);
+        }
+
+        // Authorization via Gate with header-role fallback (parity with viewer/save)
+        $user = $request->user();
+        $role = $this->resolveUserPrimaryRole($user);
+
+        $headerRoles = [];
+        try {
+            $hdr = (string) ($request->header('X-User-Roles') ?? '');
+            if ($hdr !== '') {
+                $headerRoles = array_filter(array_map('trim', explode(',', strtolower($hdr))));
+            }
+        } catch (\Throwable $e) {
+            $headerRoles = [];
+        }
+        $headerIsAdminOrRegistrar = in_array('admin', $headerRoles, true) || in_array('registrar', $headerRoles, true);
+
+        $gateAllows = Gate::allows('grade.classlist.edit', $id);
+        $headerFacultyId = (int) ($request->header('X-Faculty-ID') ?? 0);
+        $headerHasFacultyRole = in_array('faculty', $headerRoles, true);
+        $headerAssignedFaculty = $headerHasFacultyRole && $headerFacultyId > 0 && $headerFacultyId === (int) ($cl->intFacultyID ?? 0);
+
+        if (!($headerIsAdminOrRegistrar || $gateAllows || $headerAssignedFaculty)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Forbidden',
+            ], 403);
+        }
+
+        try {
+            $export = app(ClasslistGradesTemplateExport::class);
+            $spreadsheet = $export->build($id, $period);
+            $writer = new Xlsx($spreadsheet);
+
+            $filename = 'classlist-' . $id . '-' . $period . '-template.xlsx';
+
+            return response()->streamDownload(function () use ($writer) {
+                $writer->save('php://output');
+            }, $filename, [
+                'Content-Type'        => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Cache-Control'       => 'no-store, no-cache, must-revalidate, max-age=0',
+                'Pragma'              => 'no-cache',
+                'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 422);
+        }
+    }
+
+    /**
+     * POST /api/v1/classlists/{id}/grades/import
+     * Body: multipart/form-data { period: 'midterm'|'finals', file: .xlsx }
+     * Behavior:
+     *  - Registrar/Admin: bypass windows
+     *  - Faculty (assigned): allowed only if period window active or extension set; otherwise 403
+     *  - Validates grades per mode (numeric/system) and updates rows; returns summary
+     */
+    public function import(ClasslistGradesImportRequest $request, int $id): JsonResponse
+    {
+        $cl = $this->classlists->getClasslistForGrading($id);
+        if (!$cl) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Classlist not found',
+            ], 404);
+        }
+
+        // Authorization via Gate with header-role fallback for admin/registrar or assigned faculty
+        $user = $request->user();
+        $role = $this->resolveUserPrimaryRole($user);
+
+        $headerRoles = [];
+        try {
+            $hdr = (string) ($request->header('X-User-Roles') ?? '');
+            if ($hdr !== '') {
+                $headerRoles = array_filter(array_map('trim', explode(',', strtolower($hdr))));
+            }
+        } catch (\Throwable $e) {
+            $headerRoles = [];
+        }
+        $headerIsAdminOrRegistrar = in_array('admin', $headerRoles, true) || in_array('registrar', $headerRoles, true);
+
+        $gateAllows = Gate::allows('grade.classlist.edit', $id);
+        $headerFacultyId = (int) ($request->header('X-Faculty-ID') ?? 0);
+        $headerHasFacultyRole = in_array('faculty', $headerRoles, true);
+        $headerAssignedFaculty = $headerHasFacultyRole && $headerFacultyId > 0 && $headerFacultyId === (int) ($cl->intFacultyID ?? 0);
+
+        if (!($headerIsAdminOrRegistrar || $gateAllows || $headerAssignedFaculty)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Forbidden',
+            ], 403);
+        }
+
+        // If API user context is missing but header indicates admin/registrar, use it to set bypass role
+        if (!$role && $headerIsAdminOrRegistrar) {
+            $role = in_array('admin', $headerRoles, true) ? 'admin' : 'registrar';
+        } elseif (!$role && $headerAssignedFaculty) {
+            $role = 'faculty';
+        }
+
+        $payload = $request->validated();
+        $period  = strtolower(trim((string) $payload['period']));
+
+        // Window enforcement for faculty
+        $isBypass = in_array($role, ['registrar', 'admin'], true);
+        if (!$isBypass) {
+            $can = $this->windows->canEditPeriod($period, (int) ($cl->syid ?? 0), $id, 'faculty');
+            if (!$can) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Grading window is not active for this period',
+                ], 403);
+            }
+        }
+
+        try {
+            $file = $request->file('file');
+            if (!$file || !$file->isValid()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid upload.',
+                ], 422);
+            }
+
+            // Ensure readable temp path for PhpSpreadsheet
+            $tmpPath = $file->getRealPath();
+            if ($tmpPath === false || $tmpPath === null) {
+                $tmpPath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . uniqid('class_grades_import_', true) . '.xlsx';
+                $file->move(dirname($tmpPath), basename($tmpPath));
+            }
+
+            /** @var ClasslistGradesImportService $svc */
+            $svc = app(ClasslistGradesImportService::class);
+            $iter = $svc->parseXlsx($tmpPath);
+            $res = $svc->upsert($iter, $cl, $period);
+
+            return response()->json([
+                'success' => true,
+                'result'  => $res,
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 422);
+        }
     }
 
     // ----------------------

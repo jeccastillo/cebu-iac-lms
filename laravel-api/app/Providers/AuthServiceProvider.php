@@ -94,6 +94,44 @@ class AuthServiceProvider extends ServiceProvider
                 return false;
             }
         });
+
+        // ------------------------------
+        // Attendance gates (view/edit)
+        // Policy: assigned faculty OR admin
+        // ------------------------------
+        Gate::define('attendance.classlist.view', function ($user, int $classlistId) {
+            try {
+                if (!$user) return false;
+                if (self::userHasAnyRole($user, ['admin'])) return true;
+
+                $uid = (int) ($user->intID ?? 0);
+                if ($uid <= 0) return false;
+
+                $cl = DB::table('tb_mas_classlist')->where('intID', $classlistId)->first();
+                if (!$cl) return false;
+
+                return (int) ($cl->intFacultyID ?? 0) === $uid;
+            } catch (\Throwable $e) {
+                return false;
+            }
+        });
+
+        Gate::define('attendance.classlist.edit', function ($user, int $classlistId) {
+            try {
+                if (!$user) return false;
+                if (self::userHasAnyRole($user, ['admin'])) return true;
+
+                $uid = (int) ($user->intID ?? 0);
+                if ($uid <= 0) return false;
+
+                $cl = DB::table('tb_mas_classlist')->where('intID', $classlistId)->first();
+                if (!$cl) return false;
+
+                return (int) ($cl->intFacultyID ?? 0) === $uid;
+            } catch (\Throwable $e) {
+                return false;
+            }
+        });
     }
 
     /**

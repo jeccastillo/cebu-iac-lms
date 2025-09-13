@@ -244,6 +244,260 @@
       merge: function (payload) {
         // payload: { target_id: number, source_ids: number[], options?: {} }
         return $http.post(BASE + '/classlists/merge', payload, _adminHeaders()).then(_unwrap);
+      },
+
+      // -----------------------------
+      // Attendance APIs
+      // -----------------------------
+      getAttendanceDates: function (classlistId) {
+        return $http.get(BASE + '/classlists/' + encodeURIComponent(classlistId) + '/attendance/dates', _adminHeaders()).then(_unwrap);
+      },
+      createAttendanceDate: function (classlistId, date, period) {
+        function toYMD(val) {
+          try {
+            // Handle native Date object (AngularJS type="date" binds to Date)
+            if (val && Object.prototype.toString.call(val) === '[object Date]') {
+              if (isNaN(val.getTime())) return null;
+              var y = val.getFullYear();
+              var m = ('0' + (val.getMonth() + 1)).slice(-2);
+              var d = ('0' + val.getDate()).slice(-2);
+              return y + '-' + m + '-' + d;
+            }
+            // Handle strings: either already YYYY-MM-DD or parseable ISO/local
+            if (typeof val === 'string') {
+              if (/^\d{4}-\d{2}-\d{2}$/.test(val)) return val;
+              var dt = new Date(val);
+              if (!isNaN(dt.getTime())) {
+                var yy = dt.getFullYear();
+                var mm = ('0' + (dt.getMonth() + 1)).slice(-2);
+                var dd = ('0' + dt.getDate()).slice(-2);
+                return yy + '-' + mm + '-' + dd;
+              }
+            }
+          } catch (e) {}
+          return null;
+        }
+        var payload = { date: toYMD(date) || date, period: (period || 'midterm') };
+        return $http.post(BASE + '/classlists/' + encodeURIComponent(classlistId) + '/attendance/dates', payload, _adminHeaders()).then(_unwrap);
+      },
+      getAttendanceByDate: function (classlistId, dateId) {
+        return $http.get(BASE + '/classlists/' + encodeURIComponent(classlistId) + '/attendance/dates/' + encodeURIComponent(dateId), _adminHeaders()).then(_unwrap);
+      },
+      saveAttendance: function (classlistId, dateId, items) {
+        var payload = { items: items };
+        return $http.put(BASE + '/classlists/' + encodeURIComponent(classlistId) + '/attendance/dates/' + encodeURIComponent(dateId), payload, _adminHeaders()).then(_unwrap);
+      },
+
+      // Download attendance template (.xlsx) for a specific date
+      downloadAttendanceTemplate: function (classlistId, dateId) {
+        var cfg = { responseType: 'arraybuffer', headers: {} };
+        try {
+          var state = _getLoginState();
+          if (state && state.faculty_id != null) {
+            cfg.headers['X-Faculty-ID'] = state.faculty_id;
+          }
+          var roles = null;
+          if (state && Array.isArray(state.roles)) roles = state.roles;
+          else if (state && Array.isArray(state.role_codes)) roles = state.role_codes;
+          else if (state && typeof state.roles === 'string') roles = [state.roles];
+          if (roles && roles.length) {
+            cfg.headers['X-User-Roles'] = roles.join(',');
+          }
+        } catch (e) {}
+        var url = BASE + '/classlists/' + encodeURIComponent(classlistId) + '/attendance/dates/' + encodeURIComponent(dateId) + '/template';
+        return $http.get(url, cfg).then(function (resp) {
+          var headers = resp && resp.headers ? resp.headers : null;
+          var filename = 'classlist-' + classlistId + '-attendance-' + dateId + '-template.xlsx';
+          try {
+            if (headers && typeof headers === 'function') {
+              var cd = headers('Content-Disposition') || headers('content-disposition');
+              if (cd && /filename="?([^"]+)"?/i.test(cd)) {
+                filename = cd.match(/filename="?([^"]+)"?/i)[1];
+              }
+            }
+          } catch (e) {}
+          return { data: resp.data, filename: filename };
+        });
+      },
+
+      // Import attendance (.xlsx) for a specific date
+      importAttendance: function (classlistId, dateId, file) {
+        if (!file) {
+          return Promise.reject({ message: 'No file selected' });
+        }
+        var fd = new FormData();
+        fd.append('file', file);
+        var headers = { 'Content-Type': undefined };
+        try {
+          var state = _getLoginState();
+          if (state && state.faculty_id != null) {
+            headers['X-Faculty-ID'] = state.faculty_id;
+          }
+          var roles = null;
+          if (state && Array.isArray(state.roles)) roles = state.roles;
+          else if (state && Array.isArray(state.role_codes)) roles = state.role_codes;
+          else if (state && typeof state.roles === 'string') roles = [state.roles];
+          if (roles && roles.length) {
+            headers['X-User-Roles'] = roles.join(',');
+          }
+        } catch (e) {}
+        var url = BASE + '/classlists/' + encodeURIComponent(classlistId) + '/attendance/dates/' + encodeURIComponent(dateId) + '/import';
+        return $http.post(url, fd, {
+          headers: headers,
+          transformRequest: angular.identity
+        }).then(_unwrap);
+      },
+
+      // Download attendance matrix template (.xlsx) for a classlist over a date range (per period)
+      downloadAttendanceMatrixTemplate: function (classlistId, start, end, period) {
+        // Local toYMD helper (mirrors logic in createAttendanceDate)
+        function toYMD(val) {
+          try {
+            if (val && Object.prototype.toString.call(val) === '[object Date]') {
+              if (isNaN(val.getTime())) return null;
+              var y = val.getFullYear();
+              var m = ('0' + (val.getMonth() + 1)).slice(-2);
+              var d = ('0' + val.getDate()).slice(-2);
+              return y + '-' + m + '-' + d;
+            }
+            if (typeof val === 'string') {
+              if (/^\d{4}-\d{2}-\d{2}$/.test(val)) return val;
+              var dt = new Date(val);
+              if (!isNaN(dt.getTime())) {
+                var yy = dt.getFullYear();
+                var mm = ('0' + (dt.getMonth() + 1)).slice(-2);
+                var dd = ('0' + dt.getDate()).slice(-2);
+                return yy + '-' + mm + '-' + dd;
+              }
+            }
+          } catch (e) {}
+          return null;
+        }
+
+        var cfg = { responseType: 'arraybuffer', headers: {}, params: {
+          start: toYMD(start) || start,
+          end: toYMD(end) || end,
+          period: (period || 'midterm')
+        } };
+        try {
+          var state = _getLoginState();
+          if (state && state.faculty_id != null) {
+            cfg.headers['X-Faculty-ID'] = state.faculty_id;
+          }
+          var roles = null;
+          if (state && Array.isArray(state.roles)) roles = state.roles;
+          else if (state && Array.isArray(state.role_codes)) roles = state.role_codes;
+          else if (state && typeof state.roles === 'string') roles = [state.roles];
+          if (roles && roles.length) {
+            cfg.headers['X-User-Roles'] = roles.join(',');
+          }
+        } catch (e) {}
+        var url = BASE + '/classlists/' + encodeURIComponent(classlistId) + '/attendance/matrix/template';
+        return $http.get(url, cfg).then(function (resp) {
+          var headers = resp && resp.headers ? resp.headers : null;
+          var filename = 'classlist-' + classlistId + '-attendance-matrix-' + (period || 'midterm') + '.xlsx';
+          try {
+            if (headers && typeof headers === 'function') {
+              var cd = headers('Content-Disposition') || headers('content-disposition');
+              if (cd && /filename="?([^"]+)"?/i.test(cd)) {
+                filename = cd.match(/filename="?([^"]+)"?/i)[1];
+              }
+            }
+          } catch (e) {}
+          return { data: resp.data, filename: filename };
+        });
+      },
+
+      // Import attendance matrix (.xlsx) for a classlist over a date range (per period)
+      importAttendanceMatrix: function (classlistId, file, period) {
+        if (!file) {
+          return Promise.reject({ message: 'No file selected' });
+        }
+        var fd = new FormData();
+        fd.append('file', file);
+        fd.append('period', (period || 'midterm'));
+        var headers = { 'Content-Type': undefined };
+        try {
+          var state = _getLoginState();
+          if (state && state.faculty_id != null) {
+            headers['X-Faculty-ID'] = state.faculty_id;
+          }
+          var roles = null;
+          if (state && Array.isArray(state.roles)) roles = state.roles;
+          else if (state && Array.isArray(state.role_codes)) roles = state.role_codes;
+          else if (state && typeof state.roles === 'string') roles = [state.roles];
+          if (roles && roles.length) {
+            headers['X-User-Roles'] = roles.join(',');
+          }
+        } catch (e) {}
+        var url = BASE + '/classlists/' + encodeURIComponent(classlistId) + '/attendance/matrix/import';
+        return $http.post(url, fd, {
+          headers: headers,
+          transformRequest: angular.identity
+        }).then(_unwrap);
+      },
+
+      // -----------------------------
+      // Grades Excel Template & Import
+      // -----------------------------
+
+      // Download per-classlist grades template (.xlsx) for a period
+      downloadGradesTemplate: function (id, period) {
+        var cfg = { responseType: 'arraybuffer', headers: {}, params: { period: period } };
+        try {
+          var state = _getLoginState();
+          if (state && state.faculty_id != null) {
+            cfg.headers['X-Faculty-ID'] = state.faculty_id;
+          }
+          var roles = null;
+          if (state && Array.isArray(state.roles)) roles = state.roles;
+          else if (state && Array.isArray(state.role_codes)) roles = state.role_codes;
+          else if (state && typeof state.roles === 'string') roles = [state.roles];
+          if (roles && roles.length) {
+            cfg.headers['X-User-Roles'] = roles.join(',');
+          }
+        } catch (e) {}
+        return $http.get(BASE + '/classlists/' + encodeURIComponent(id) + '/grades/template', cfg).then(function (resp) {
+          var headers = resp && resp.headers ? resp.headers : null;
+          var filename = 'classlist-' + id + '-' + (period || 'period') + '-template.xlsx';
+          try {
+            if (headers && typeof headers === 'function') {
+              var cd = headers('Content-Disposition') || headers('content-disposition');
+              if (cd && /filename="?([^"]+)"?/i.test(cd)) {
+                filename = cd.match(/filename="?([^"]+)"?/i)[1];
+              }
+            }
+          } catch (e) {}
+          return { data: resp.data, filename: filename };
+        });
+      },
+
+      // Import grades (.xlsx only) for a period
+      importGrades: function (id, file, period) {
+        if (!file) {
+          return Promise.reject({ message: 'No file selected' });
+        }
+        var fd = new FormData();
+        fd.append('file', file);
+        fd.append('period', period);
+        var headers = { 'Content-Type': undefined };
+        try {
+          var state = _getLoginState();
+          if (state && state.faculty_id != null) {
+            headers['X-Faculty-ID'] = state.faculty_id;
+          }
+          var roles = null;
+          if (state && Array.isArray(state.roles)) roles = state.roles;
+          else if (state && Array.isArray(state.role_codes)) roles = state.role_codes;
+          else if (state && typeof state.roles === 'string') roles = [state.roles];
+          if (roles && roles.length) {
+            headers['X-User-Roles'] = roles.join(',');
+          }
+        } catch (e) {}
+        return $http.post(BASE + '/classlists/' + encodeURIComponent(id) + '/grades/import', fd, {
+          headers: headers,
+          transformRequest: angular.identity
+        }).then(_unwrap);
       }
     };
   }

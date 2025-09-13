@@ -1,0 +1,268 @@
+<div class="space-y-6" ng-controller="ClasslistAttendanceController as vm">
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-semibold text-gray-800">
+        Classlist Attendance
+        <span class="text-sm text-gray-500 ml-2">#{{ vm.id }}</span>
+      </h1>
+      <p class="text-sm text-gray-600 mt-1">
+        Create a date, then mark each student as Present, Absent (with optional remarks), or Unset.
+      </p>
+    </div>
+    <div class="flex items-center space-x-2">
+      <a class="px-3 py-2 rounded bg-gray-100 text-gray-800 hover:bg-gray-200" ng-href="#/classlists/{{ vm.id }}/viewer">
+        <span class="fas fa-arrow-left mr-1"></span> Back to Viewer
+      </a>
+    </div>
+  </div>
+
+  <!-- Alerts -->
+  <div ng-if="vm.error" class="rounded border border-red-200 bg-red-50 text-red-800 px-4 py-3">
+    <span class="fas fa-exclamation-triangle mr-2"></span> {{ vm.error }}
+  </div>
+  <div ng-if="vm.success" class="rounded border border-green-200 bg-green-50 text-green-800 px-4 py-3">
+    <span class="fas fa-check mr-2"></span> {{ vm.success }}
+  </div>
+
+  <!-- Date manager -->
+  <div class="bg-white rounded shadow border border-gray-200 p-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- Create date -->
+      <div class="md:col-span-1">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Create Attendance Date</label>
+        <div class="flex items-center space-x-2">
+          <input type="date" class="border rounded px-2 py-1 w-44" ng-model="vm.newDate" placeholder="YYYY-MM-DD" />
+          <select class="border rounded px-2 py-1"
+                  ng-model="vm.newPeriod">
+            <option value="midterm">Midterm</option>
+            <option value="finals">Finals</option>
+          </select>
+          <button class="px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+                  ng-disabled="vm.loading || !vm.newDate"
+                  ng-click="vm.createDate()">
+            <span class="fas fa-plus mr-1"></span> Create
+          </button>
+        </div>
+        <p class="text-xs text-gray-500 mt-1">
+          New dates seed all enrolled students with Unset state by default.
+        </p>
+      </div>
+
+      <!-- Dates list -->
+      <div class="md:col-span-2">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Dates</label>
+        <div class="overflow-x-auto border rounded">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr class="text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                <th class="px-3 py-2">Date</th>
+                <th class="px-3 py-2">Period</th>
+                <th class="px-3 py-2">Present</th>
+                <th class="px-3 py-2">Absent</th>
+                <th class="px-3 py-2">Unset</th>
+                <th class="px-3 py-2">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-100">
+              <tr ng-repeat="d in vm.dates" ng-class="{'bg-blue-50': vm.selectedDate && vm.selectedDate.id === d.id}">
+                <td class="px-3 py-2 text-sm text-gray-800">{{ d.attendance_date }}</td>
+                <td class="px-3 py-2 text-sm text-gray-800">{{ (d.period || '').toUpperCase() }}</td>
+                <td class="px-3 py-2 text-sm text-green-700">{{ d.present_count }}</td>
+                <td class="px-3 py-2 text-sm text-red-700">{{ d.absent_count }}</td>
+                <td class="px-3 py-2 text-sm text-gray-600">{{ d.unset_count }}</td>
+                <td class="px-3 py-2 text-sm">
+                  <button class="px-2 py-1 rounded bg-indigo-600 text-white hover:bg-indigo-700"
+                          ng-click="vm.selectDate(d)">
+                    <span class="fas fa-eye mr-1"></span> View
+                  </button>
+                </td>
+              </tr>
+              <tr ng-if="!vm.loading && (!vm.dates || vm.dates.length === 0)">
+                <td colspan="6" class="px-3 py-3 text-center text-sm text-gray-500">No attendance dates yet.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Matrix (Date Range) — Template & Import -->
+  <div class="bg-white rounded shadow border border-gray-200 p-4">
+    <div class="flex items-center justify-between mb-3">
+      <div>
+        <h2 class="text-lg font-semibold text-gray-800">Matrix (Date Range) Import/Export</h2>
+        <p class="text-sm text-gray-600">
+          Download a matrix template with dates in the header and students in rows. Edit cells with 1 (present), 0 (absent), or leave blank (unset).
+          Period is required; missing dates will be auto-created on import.
+        </p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Download Matrix Template -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Download Matrix Template</label>
+        <div class="flex flex-wrap items-center gap-2">
+          <input type="date" class="border rounded px-2 py-1 w-44" ng-model="vm.matrixStart" placeholder="Start YYYY-MM-DD" />
+          <span class="text-gray-500">to</span>
+          <input type="date" class="border rounded px-2 py-1 w-44" ng-model="vm.matrixEnd" placeholder="End YYYY-MM-DD" />
+          <select class="border rounded px-2 py-1" ng-model="vm.matrixPeriod">
+            <option value="midterm">Midterm</option>
+            <option value="finals">Finals</option>
+          </select>
+          <button class="px-3 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50"
+                  ng-disabled="vm.matrixDownloading || !vm.matrixStart || !vm.matrixEnd"
+                  ng-click="vm.downloadMatrixTemplate()">
+            <span class="fas fa-download mr-1"></span> Download Matrix
+          </button>
+        </div>
+        <p class="text-xs text-gray-500 mt-1">
+          First row are date headers (YYYY-MM-DD). Columns A-D are identifiers (intCSID, student number, last name, first name).
+        </p>
+      </div>
+
+      <!-- Import Matrix -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Import Matrix File (.xlsx)</label>
+        <div class="flex flex-wrap items-center gap-2">
+          <!-- Use label-for pattern to guarantee user-gesture file dialog without programmatic .click() -->
+          <input id="attendanceMatrixFile" type="file" accept=".xlsx"
+                 style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0"
+                 onchange="angular.element(this).scope().vm.onMatrixFileChange(this.files[0])" />
+          <label for="attendanceMatrixFile"
+                 class="px-3 py-2 rounded bg-gray-100 text-gray-800 hover:bg-gray-200 cursor-pointer inline-flex items-center">
+            <span class="fas fa-file-upload mr-1"></span> Choose File
+          </label>
+          <span class="text-xs text-gray-600 truncate max-w-[200px]" title="{{ vm.matrixFile &amp;&amp; vm.matrixFile.name }}">
+            {{ vm.matrixFile &amp;&amp; vm.matrixFile.name || 'No file selected' }}
+          </span>
+          <!-- Loading indicator while the selected file is being prepared -->
+          <span class="text-xs text-blue-600 inline-flex items-center" ng-if="vm.matrixFileLoading" aria-live="polite">
+            <span class="fas fa-spinner fa-spin mr-1"></span> Loading file...
+          </span>
+          <select class="border rounded px-2 py-1" ng-model="vm.matrixPeriod">
+            <option value="midterm">Midterm</option>
+            <option value="finals">Finals</option>
+          </select>
+          <button class="px-3 py-2 rounded bg-teal-600 text-white hover:bg-teal-700 disabled:opacity-50"
+                  ng-disabled="vm.matrixUploading || vm.matrixFileLoading || !vm.matrixFile"
+                  ng-click="vm.importMatrix()">
+            <span class="fas fa-upload mr-1"></span> Upload Matrix
+          </button>
+        </div>
+        <p class="text-xs text-gray-500 mt-1">
+          Values: 1=present, 0=absent, blank=unset. Remarks are not used in matrix mode.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Selected date details -->
+  <div class="bg-white rounded shadow border border-gray-200 p-4" ng-if="vm.selectedDate && vm.selectedDate.id">
+    <div class="flex items-center justify-between mb-3">
+      <div class="text-gray-800">
+        <span class="font-medium">Selected Date:</span>
+        <span class="ml-1 px-2 py-1 rounded bg-gray-100 text-gray-800 text-sm">
+          {{ vm.selectedDate.attendance_date }}
+        </span>
+        <span class="ml-2 font-medium">Period:</span>
+        <span class="ml-1 px-2 py-1 rounded bg-gray-100 text-gray-800 text-sm">
+          {{ (vm.selectedDate.period || '').toUpperCase() }}
+        </span>
+      </div>
+      <div class="flex items-center space-x-2">
+        <button class="px-3 py-2 rounded bg-emerald-600 text-white hover:bg-emerald-700" ng-click="vm.markAllPresent()">
+          <span class="fas fa-user-check mr-1"></span> Mark All Present
+        </button>
+        <button class="px-3 py-2 rounded bg-red-600 text-white hover:bg-red-700" ng-click="vm.markAllAbsent()">
+          <span class="fas fa-user-times mr-1"></span> Mark All Absent
+        </button>
+        <button class="px-3 py-2 rounded bg-gray-600 text-white hover:bg-gray-700" ng-click="vm.markAllUnset()">
+          <span class="fas fa-undo mr-1"></span> Reset All (Unset)
+        </button>
+
+        <!-- Download Template -->
+        <button class="px-3 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50"
+                ng-disabled="vm.loading || !vm.selectedDate || !vm.selectedDate.id"
+                ng-click="vm.downloadTemplate()">
+          <span class="fas fa-download mr-1"></span> Download Template
+        </button>
+
+        <!-- Upload Import -->
+        <input id="attendanceImportFile" type="file" accept=".xlsx" class="hidden"
+               onchange="angular.element(this).scope().vm.onImportFileChange(this.files[0])" />
+        <button class="px-3 py-2 rounded bg-gray-100 text-gray-800 hover:bg-gray-200"
+                ng-click="document.getElementById('attendanceImportFile').click()">
+          <span class="fas fa-file-upload mr-1"></span> Choose File
+        </button>
+        <span class="text-xs text-gray-600 truncate max-w-[200px]" title="{{ vm.importFile &amp;&amp; vm.importFile.name }}">
+          {{ vm.importFile &amp;&amp; vm.importFile.name || 'No file selected' }}
+        </span>
+        <button class="px-3 py-2 rounded bg-teal-600 text-white hover:bg-teal-700 disabled:opacity-50"
+                ng-disabled="vm.uploading || !vm.importFile || !vm.selectedDate || !vm.selectedDate.id"
+                ng-click="vm.importAttendance()">
+          <span class="fas fa-upload mr-1"></span> Upload
+        </button>
+
+        <!-- Save Changes -->
+        <button class="px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+                ng-disabled="vm.loading"
+                ng-click="vm.save()">
+          <span class="fas fa-save mr-1"></span> Save Changes
+        </button>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto" ng-class="{ 'opacity-50': vm.loading }">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr class="text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+            <th class="px-3 py-2">Student No.</th>
+            <th class="px-3 py-2">Name</th>
+            <th class="px-3 py-2">Status</th>
+            <th class="px-3 py-2">Remarks (when Absent)</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-100">
+          <tr ng-repeat="r in vm.rows track by r.intCSID">
+            <td class="px-3 py-2 text-sm text-gray-800">{{ r.strStudentNumber || r.intStudentID }}</td>
+            <td class="px-3 py-2 text-sm text-gray-800">
+              {{ (r.strLastname || '') + (r.strFirstname ? (r.strLastname ? ', ' : '') + r.strFirstname : '') }}
+            </td>
+            <td class="px-3 py-2 text-sm">
+              <div class="inline-flex items-center space-x-1">
+                <button class="px-2 py-1 rounded"
+                        ng-class="r.is_present === true ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-800 hover:bg-gray-200'"
+                        ng-click="vm.setPresent(r)">
+                  Present
+                </button>
+                <button class="px-2 py-1 rounded"
+                        ng-class="r.is_present === false ? 'bg-red-600 text-white' : 'bg-gray-100 text-gray-800 hover:bg-gray-200'"
+                        ng-click="vm.setAbsent(r)">
+                  Absent
+                </button>
+                <button class="px-2 py-1 rounded"
+                        ng-class="r.is_present === null ? 'bg-gray-600 text-white' : 'bg-gray-100 text-gray-800 hover:bg-gray-200'"
+                        ng-click="vm.setUnset(r)">
+                  Unset
+                </button>
+              </div>
+            </td>
+            <td class="px-3 py-2 text-sm">
+              <input type="text" class="border rounded px-2 py-1 w-72"
+                     ng-disabled="r.is_present === true"
+                     ng-model="r.remarks"
+                     ng-change="vm.onRemarksChange(r)"
+                     placeholder="Optional remarks (only when Absent)" />
+            </td>
+          </tr>
+          <tr ng-if="!vm.loading && (!vm.rows || vm.rows.length === 0)">
+            <td colspan="4" class="px-3 py-4 text-center text-sm text-gray-500">No students found for this date.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,155 +1,175 @@
 # Implementation Plan
 
 [Overview]
-Enhance the Registrar Transcript page to stop displaying a separate “Paid Billing — Transcript / Change of Grades” list and instead surface the payment status directly within the History table. The “Paid” status must be computed across all terms by matching invoices/billings for the same transcript type, and a new “Paid” column will be added to the History grid.
+Add per-date Classlist Attendance template download (.xlsx) and file upload (import) so authorized users can bulk-mark attendance for a selected date. This extends the existing attendance module with Excel-based workflows similar to classlist grades import/export, using per-date endpoints and the same authorization fallbacks.
 
-This change removes the per-term restriction for paid billing visibility and consolidates status into History entries. The backend will compute the paid flags (to avoid Registrar hitting finance-protected endpoints), using robust invoice payment checks that work across environments: an invoice is considered fully paid when the sum of payment_details amounts for its invoice_number is greater than or equal to invoice.amount_total OR invoice.status is “Paid.” The frontend will update the transcript History UI to show the Paid status and remove the separate paid billing section.
+The scope includes:
+- Backend: export builder for attendance templates, import service to parse and upsert attendance rows, controller endpoints, and routes.
+- Frontend: UI actions to download the template and upload an .xlsx file for the currently selected attendance date, using the existing service pattern with X-Faculty-ID and X-User-Roles headers.
+
+Why needed:
+- Mirrors the grades import/export productivity pattern for attendance.
+- Allows faculty/admin to quickly prepare, update, and re-import attendance outside the UI, then sync back into the system.
+- Keeps consistent authorization and header fallbacks used across this project.
 
 [Types]  
-Add server-computed fields to Transcript History items returned by ReportsController@listTranscriptRequests.
+Introduce attendance template export and import types; reuse existing DB tables and attendance rows.
 
-Detailed type definitions:
-- TranscriptHistoryItem (server response)
-  - id: int
-  - created_at: string
-  - date_issued: string|null
-  - type: 'transcript' | 'copy'
-  - amount: number|null
-  - payment_description_id: number|null
-  - term_ids: number[]
-  - has_billing: boolean           (existing)
-  - billing_id: number|null        (existing)
-  - [new] paid: boolean            (server-computed across all terms)
-  - [new] paid_invoice_numbers?: string[] (optional; for visibility/debugging)
-  - [new] paid_at?: string|null (optional; if determinable from latest payment or invoice posted_at)
-Validation/relationships:
-- Matching invoices via billing linkage: tb_mas_invoices.billing_id → tb_mas_student_billing.intID. The matched billing descriptions must be one of:
-  - Transcript: “Transcript of Records”
-  - Copy of Grades: “Copy of Grades”
-- Fully paid check: SUM(payment_details.subtotal_order WHERE status='Paid' AND invoice_number = i.invoice_number) >= i.amount_total OR i.status == 'Paid'.
+Detailed type specifications:
+- Excel Template Format (.xlsx; sheet name: "attendance")
+  - Headers (exact, case-insensitive on read):
+    - intCSID: string|int; required per row
+    - student_number: string; readonly informational
+    - last_name: string; readonly informational
+    - first_name: string; readonly informational
+    - attendance_date: string YYYY-MM-DD; informational, matches selected date
+    - period: string "midterm"|"finals"; informational, from attendance date row
+    - is_present: string|int|bool|null; editable
+      - Allowed input values (case-insensitive; normalized):
+        - true values: "1","true","present","p","yes"
+        - false values: "0","false","absent","a","no"
+        - null/unset: "", "null", "unset"
+    - remarks: string|null; optional (only persisted when is_present=false; cleared when is_present=true|null)
+- PHP DTOs (FormRequests)
+  - AttendanceImportRequest (POST /classlists/{id}/attendance/dates/{dateId}/import)
+    - file: required, .xlsx mimetype application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+- Import Result Structure (JSON)
+  - { success: true, result: { updated: int, skipped: int, totalRows: int, errors: [ { line, code, message } ] } }
+- Authorization
+  - Download template: view permission (assigned faculty or admin)
+  - Import: edit permission (assigned faculty or admin)
+  - Fallback headers honored: X-Faculty-ID and X-User-Roles
 
 [Files]
-Frontend transcript page and Reports endpoints will be modified; no new endpoints are required.
+Add new files for export/import and modify existing controller, routes, and frontend.
 
 Detailed breakdown:
-- Existing files to be modified:
-  - laravel-api/app/Http/Controllers/Api/V1/ReportsController.php
-    - listTranscriptRequests(): augment returned items with a new boolean field paid (computed across all terms).
-    - Add private helpers to compute invoice paid state (across all terms) for the given student and type.
-  - frontend/unity-spa/features/registrar/transcripts/transcripts.html
-    - Remove the “Paid Billing — Transcript / Change of Grades” section entirely.
-    - Add a new “Paid” column to the History table; show a badge “Paid” or “Unpaid”.
-  - frontend/unity-spa/features/registrar/transcripts/transcripts.controller.js
-    - Remove vm.billingPaid state and loadTranscriptBilling() logic, including invocations on student select/term change.
-    - Keep History loading via ReportsService.listTranscriptRequests() (now includes paid flag).
-  - frontend/unity-spa/features/registrar/reports.service.js
-    - No API change; ensure client consumes the new paid field in the UI (no code change necessary beyond reading h.paid in controller/template).
+- New files to be created
+  - laravel-api/app/Exports/ClasslistAttendanceTemplateExport.php
+    - Builds an .xlsx Spreadsheet with the "attendance" sheet and specified headers/rows.
+  - laravel-api/app/Http/Requests/Api/V1/Attendance/AttendanceImportRequest.php
+    - Validates upload (.xlsx only).
+  - laravel-api/app/Services/ClasslistAttendanceImportService.php
+    - Parses .xlsx and upserts attendance rows for a specific attendance date, normalizing is_present and remarks.
+- Existing files to be modified
+  - laravel-api/app/Http/Controllers/Api/V1/ClasslistAttendanceController.php
+    - Add:
+      - template(Request $request, int $id, int $dateId)
+      - import(AttendanceImportRequest $request, int $id, int $dateId)
+    - Use existing authorized() helper with action "view" for template and "edit" for import.
+  - laravel-api/routes/api.php
+    - Add routes:
+      - GET  /api/v1/classlists/{id}/attendance/dates/{dateId}/template
+      - POST /api/v1/classlists/{id}/attendance/dates/{dateId}/import
+  - frontend/unity-spa/features/classlists/classlists.service.js
+    - Add:
+      - downloadAttendanceTemplate(classlistId, dateId)
+      - importAttendance(classlistId, dateId, file)
+  - frontend/unity-spa/features/classlists/attendance.controller.js
+    - Add UI handlers:
+      - downloadTemplate()
+      - onImportFileChange($event)
+      - importAttendance()
+    - Track vm.importFile and vm.uploading flags.
+  - frontend/unity-spa/features/classlists/attendance.html
+    - Add UI:
+      - "Download Template" button for selected date
+      - File input and "Upload" button to import .xlsx
 - Files to be deleted or moved
   - None.
-- Configuration file updates
-  - None.
+- Configuration updates
+  - None; PhpSpreadsheet already present and used in grades export/import.
 
 [Functions]
-Add paid computation and remove per-term paid billing UI.
+Add export/import functions in backend and wire frontend service/controller functions.
 
 Detailed breakdown:
-- New backend helpers (ReportsController.php)
-  - private function isInvoiceFullyPaid(array $inv): bool
-    - Logic:
-      - If $inv['status'] == 'Paid' => return true.
-      - Else if payment_details table and invoice_number column exist:
-        - Sum paid credits: SUM(payment_details.subtotal_order WHERE status='Paid' AND invoice_number = i.invoice_number)
-        - If sum >= $inv['amount_total'] => true; else false.
-      - Else false.
-  - private function anyFullyPaidInvoicesForType(int $studentId, string $type): array
-    - Normalize $type: 'transcript' => 'Transcript of Records'; 'copy' => 'Copy of Grades'.
-    - Query tb_mas_student_billing sb WHERE sb.intStudentID = :studentId AND LOWER(sb.description) = LOWER($desc).
-    - Join tb_mas_invoices i ON i.billing_id = sb.intID AND i.intStudentID = :studentId (across all syid/terms).
-    - For each i row, call isInvoiceFullyPaid(); collect matches and the invoice_numbers that are fully paid.
-    - Return [ 'paid' => bool, 'invoice_numbers' => string[] ].
-- Modified backend function
-  - ReportsController::listTranscriptRequests(Request $request, int $studentId)
-    - For each transcript request row:
-      - Determine $type = transcript|copy.
-      - Compute $paidInfo = anyFullyPaidInvoicesForType($studentId, $type).
-      - Set item['paid'] = $paidInfo['paid'].
-      - Optionally include item['paid_invoice_numbers'].
-    - Preserve existing has_billing and billing_id behavior honoring optional ?term_id.
-- Frontend controller/template changes
-  - transcripts.controller.js
-    - Remove:
-      - vm.loading.billing, vm.error.billing, vm.billingPaid
-      - vm.loadTranscriptBilling and calls (in selectStudent() and term change watcher)
-    - History remains: vm.history returned items now include h.paid.
-  - transcripts.html
-    - Remove entire “Paid Billing — Transcript / Change of Grades” section.
-    - In History grid header, insert a “Paid” column.
-    - In History rows, render a badge:
-      - if h.paid => green “Paid”
-      - else => gray “Unpaid”
+- New backend functions
+  - laravel-api/app/Exports/ClasslistAttendanceTemplateExport.php
+    - build(int $classlistId, int $dateId): Spreadsheet
+      - Validates date belongs to classlist, fetches roster, fills template rows.
+  - laravel-api/app/Services/ClasslistAttendanceImportService.php
+    - parseXlsx(string $path): \Generator of ['line' => int, 'data' => array]
+      - Reads sheet "attendance" or first sheet; builds header map; yields non-empty rows.
+    - upsert(iterable $rows, int $classlistId, int $dateId): array { updated, skipped, totalRows, errors[] }
+      - Validates date/classlist ownership; normalizes is_present; trims remarks; updates tb_mas_classlist_attendance per (dateId, intCSID).
+    - normalizeIsPresent($val): ?bool
+      - Converts accepted tokens to true/false/null.
+- Modified backend functions
+  - laravel-api/app/Http/Controllers/Api/V1/ClasslistAttendanceController.php
+    - template(Request $request, int $id, int $dateId)
+      - Authorization: authorized($request, $id, 'view'); streamDownload Xlsx
+    - import(AttendanceImportRequest $request, int $id, int $dateId)
+      - Authorization: authorized($request, $id, 'edit'); parse + upsert; return JSON summary
+- Frontend service functions
+  - downloadAttendanceTemplate(classlistId, dateId) -> Promise<{ data: ArrayBuffer, filename: string }>
+  - importAttendance(classlistId, dateId, file) -> Promise<ApiResponse>
+- Frontend controller functions
+  - downloadTemplate()
+  - onImportFileChange($event)
+  - importAttendance()
 
 [Classes]
-Add helper methods within an existing controller; no new classes required.
+Introduce export/import classes and extend controller.
 
 Detailed breakdown:
 - New classes
-  - None.
+  - App\Exports\ClasslistAttendanceTemplateExport
+    - Methods: build(classlistId, dateId)
+  - App\Http\Requests\Api\V1\Attendance\AttendanceImportRequest
+    - Rules: file .xlsx only
+  - App\Services\ClasslistAttendanceImportService
+    - Methods: parseXlsx, upsert, normalizeIsPresent
 - Modified classes
-  - App\Http\Controllers\Api\V1\ReportsController
-    - Add two private helpers (isInvoiceFullyPaid, anyFullyPaidInvoicesForType).
-    - Modify listTranscriptRequests() to enrich items with paid flag computed across all terms.
+  - App\Http\Controllers\Api\V1\ClasslistAttendanceController
+    - Add methods template() and import()
 - Removed classes
-  - None.
+  - None
 
 [Dependencies]
-No new packages.
+No dependency modifications.
 
-- Reuse:
-  - Illuminate\Support\Facades\DB, Illuminate\Support\Facades\Schema (for safety across environments).
-  - Existing tables: tb_mas_student_billing, tb_mas_invoices, payment_details.
-  - Existing logic patterns from Finance/StudentLedger services for payment_details summation semantics (status='Paid', subtotal_order).
+Details:
+- PhpSpreadsheet already used for grades export/import.
+- Continue to use Gate + header fallbacks.
 
 [Testing]
-Add manual and targeted verification; automated tests if test harness is used.
+Adopt feature tests for backend and manual QA for frontend.
 
-- Backend:
-  - Unit/Feature:
-    - listTranscriptRequests returns paid=true when there exists at least one fully paid invoice for the matching type across any term.
-    - paid detection falls back to invoice.status == 'Paid' if payment_details invoice_number is unavailable.
-    - Ensure when no invoices exist, paid=false.
-    - Preserve term_id behavior for has_billing/billing_id (does not affect paid).
-- Frontend:
-  - Transcript page displays History with Paid column; badges appear correctly.
-  - The previous “Paid Billing — Transcript / Change of Grades” section is removed.
-  - Selecting different terms (global term change) must not restrict paid computation; History paid status unchanged (computed on server across all terms).
-  - Generation, reprint continue to function unchanged.
+Test coverage:
+- Backend (new)
+  - tests/Feature/Api/V1/ClasslistAttendanceImportExportTest.php
+    - test_template_download_requires_view_permission()
+    - test_import_requires_edit_permission()
+    - test_template_contains_expected_headers_and_rows()
+    - test_import_normalizes_is_present_values_and_persists_remarks()
+    - test_import_skips_rows_with_invalid_csid_or_not_in_date()
+    - test_import_clears_remarks_when_present_or_unset()
+- Manual Frontend QA
+  - Navigate to /#!/classlists/:id/attendance
+  - Create/select a date
+  - Use "Download Template" and verify headers/rows
+  - Fill some is_present values: 1/0/blank and present/absent/unset; add remarks for absences only
+  - Upload .xlsx; verify success message and that reloading date shows persisted values
+  - Try import as non-assigned faculty; verify forbidden
 
 [Implementation Order]
-Implement backend paid computation first, then update the frontend UI and controller to remove the paid billing section and display the new Paid column.
+Sequence to minimize risk and ensure end-to-end flow.
 
-1) Backend: ReportsController
-   1.1 Add private helper isInvoiceFullyPaid(array $inv): bool.
-       - Check invoice.status
-       - If available, sum payment_details.subtotal_order where status='Paid' and invoice_number matches; compare to amount_total
-   1.2 Add private helper anyFullyPaidInvoicesForType(int $studentId, string $type): array
-       - Map type => description ("Transcript of Records"|"Copy of Grades")
-       - Join student_billing→invoices, fetch across all terms
-       - Evaluate each invoice via isInvoiceFullyPaid; collect fully paid invoice_numbers
-   1.3 Modify listTranscriptRequests()
-       - For each item, compute paid info using anyFullyPaidInvoicesForType($studentId, $type)
-       - Merge paid boolean and optional paid_invoice_numbers into response
-       - Keep existing has_billing/billing_id behavior for provided ?term_id
-2) Frontend: transcripts.html
-   2.1 Remove the entire “Paid Billing — Transcript / Change of Grades” section
-   2.2 Add a “Paid” column in the History header
-   2.3 In row: render a badge Paid/Unpaid using h.paid
-3) Frontend: transcripts.controller.js
-   3.1 Remove billingPaid state and loaders:
-       - vm.loading.billing, vm.error.billing, vm.billingPaid
-       - function loadTranscriptBilling(studentId) and references
-       - Stop invoking loadTranscriptBilling() on selectStudent and on termChanged
-   3.2 Keep history load as-is; it will receive paid flags from backend
-4) QA
-   4.1 Seed test data: student billing rows for Transcript/Copy across two terms; invoices linked to some billings; payment_details entries for invoice_number partially and fully paying them
-   4.2 Confirm History paid column reflects true if any fully paid invoice exists across all terms for the type
-   4.3 Confirm removal of Paid Billing section and no per-term restriction remains in UI
+1) Backend: Export builder
+   - Create ClasslistAttendanceTemplateExport with build(classlistId, dateId).
+2) Backend: Import request + service
+   - Create AttendanceImportRequest (.xlsx only)
+   - Create ClasslistAttendanceImportService (parseXlsx, normalizeIsPresent, upsert).
+3) Backend: Controller endpoints
+   - Add template() and import() to ClasslistAttendanceController using existing authorized() checks.
+4) Routes
+   - Register GET /classlists/{id}/attendance/dates/{dateId}/template and POST /classlists/{id}/attendance/dates/{dateId}/import.
+5) Frontend: Service
+   - Implement downloadAttendanceTemplate and importAttendance in classlists.service.js with headers and filename extraction.
+6) Frontend: Controller/UI
+   - Add "Download Template" and file upload controls in attendance.html
+   - Wire handlers in attendance.controller.js; track vm.importFile, vm.uploading; success/error toasts.
+7) QA
+   - Manual run-through on a sample classlist with a few rows; verify both paths.
+   - Add/execute backend tests as appropriate.

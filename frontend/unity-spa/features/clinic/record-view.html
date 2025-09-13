@@ -160,6 +160,13 @@
           Clinic Visits
           <span class="text-gray-400 normal-case font-normal" ng-if="vm.vmeta && vm.vmeta.total"> ({{ vm.vmeta.total | number }} visits)</span>
         </h3>
+        <div>
+          <button type="button"
+                  class="inline-flex items-center rounded-md bg-green-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  ng-click="vm.openAddVisitModal()" ng-disabled="vm.visitsLoading">
+            Add Visit
+          </button>
+        </div>
       </div>
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
@@ -172,11 +179,13 @@
               <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Treatment</th>
               <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Medications Dispensed</th>
               <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-24">Attachments</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-24">Triage</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-40">Actions</th>
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
             <tr ng-repeat="v in vm.visits" class="hover:bg-gray-50">
-              <td class="px-4 py-2 text-sm text-gray-700">{{ v.visit_date || '-' }}</td>
+              <td class="px-4 py-2 text-sm text-gray-700">{{ vm.formatVisitDate(v.visit_date) || '-' }}</td>
               <td class="px-4 py-2 text-sm text-gray-700">{{ v.reason || '-' }}</td>
               <td class="px-4 py-2 text-sm text-gray-700">
                 <span ng-if="v.assessment">{{ v.assessment | limitTo: 80 }}<span ng-if="(v.assessment || '').length > 80">…</span></span>
@@ -195,12 +204,31 @@
               <td class="px-4 py-2 text-sm">
                 <div class="flex flex-wrap gap-1">
                   <span ng-if="(v.medications_dispensed || []).length">
-                    <span class="inline-flex items-center rounded-full bg-blue-100 text-blue-800 px-2.5 py-0.5 text-xs font-medium" ng-repeat="m in v.medications_dispensed track by $index">{{ m.name }}</span>
+                    <span class="inline-flex items-center bg-blue-100 text-blue-800 px-2.5 py-0.5 text-xs font-medium rounded cursor-pointer hover:bg-blue-200"
+                          ng-repeat="m in v.medications_dispensed track by $index"
+                          ng-click="vm.openMedicationModal(v, m)">{{ m.name }}</span>
                   </span>
                   <span ng-if="!(v.medications_dispensed || []).length" class="text-gray-400">—</span>
                 </div>
               </td>
               <td class="px-4 py-2 text-sm text-gray-700 text-center">{{ v.attachments_count || 0 }}</td>
+              <td class="px-4 py-2 text-sm">
+                <button type="button"
+                        class="inline-flex items-center rounded-md bg-indigo-600 px-2.5 py-1 text-xs font-medium text-white hover:bg-indigo-700"
+                        ng-click="vm.openTriageModal(v)">View Triage</button>
+              </td>
+              <td class="px-4 py-2 text-sm">
+                <!-- Hidden file input for uploads -->
+                <input id="att-{{v.id}}" type="file" class="hidden" data-vid="{{v.id}}" onchange="angular.element(this).scope().vm.handleAttachmentSelected(this.getAttribute('data-vid'), event)">
+                <div class="flex items-center gap-2">
+                  <button type="button"
+                          class="inline-flex items-center rounded-md bg-blue-600 px-2.5 py-1 text-xs font-medium text-white hover:bg-blue-700"
+                          ng-click="vm.triggerFileInput(v.id)">Add Attachment</button>
+                  <button type="button"
+                          class="inline-flex items-center rounded-md border border-gray-300 bg-white px-2.5 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50"
+                          ng-click="vm.openAttachmentsModal(v)">View Attachments</button>
+                </div>
+              </td>
             </tr>
 
             <!-- Empty state -->
@@ -243,6 +271,235 @@
         <div class="rounded-md bg-red-50 border border-red-200 p-3 text-red-700">
           {{ vm.visitsError }}
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Medication Details Modal -->
+  <div class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50" ng-if="vm.medModal.open">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+      <div class="px-6 py-3 border-b border-gray-200 flex items-center justify-between">
+        <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-700">Medication Details</h3>
+        <button class="text-gray-500 hover:text-gray-700" ng-click="vm.closeMedicationModal()" aria-label="Close">&times;</button>
+      </div>
+      <div class="p-6 space-y-2 text-sm">
+        <div><span class="text-gray-500">Name:</span> <span class="font-medium">{{ vm.medModal.item.name || '—' }}</span></div>
+        <div><span class="text-gray-500">Dose:</span> <span class="font-medium">{{ vm.medModal.item.dose || '—' }}</span></div>
+        <div><span class="text-gray-500">Qty:</span> <span class="font-medium">{{ vm.medModal.item.qty != null ? vm.medModal.item.qty : '—' }}</span></div>
+        <div><span class="text-gray-500">Instructions:</span> <span class="font-medium">{{ vm.medModal.item.instructions || '—' }}</span></div>
+      </div>
+      <div class="px-6 py-3 border-t border-gray-200 text-right">
+        <button class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50" ng-click="vm.closeMedicationModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Triage Modal -->
+  <div class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50" ng-if="vm.triageModal.open">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+      <div class="px-6 py-3 border-b border-gray-200 flex items-center justify-between">
+        <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-700">Triage Details</h3>
+        <button class="text-gray-500 hover:text-gray-700" ng-click="vm.closeTriageModal()" aria-label="Close">&times;</button>
+      </div>
+      <div class="p-6 grid grid-cols-2 gap-3 text-sm">
+        <div><span class="text-gray-500">BP:</span> <span class="font-medium">{{ (vm.triageModal.triage && vm.triageModal.triage.bp) || '—' }}</span></div>
+        <div><span class="text-gray-500">HR:</span> <span class="font-medium">{{ (vm.triageModal.triage && vm.triageModal.triage.hr) != null ? vm.triageModal.triage.hr : '—' }}</span></div>
+        <div><span class="text-gray-500">RR:</span> <span class="font-medium">{{ (vm.triageModal.triage && vm.triageModal.triage.rr) != null ? vm.triageModal.triage.rr : '—' }}</span></div>
+        <div><span class="text-gray-500">Temp (°C):</span> <span class="font-medium">{{ (vm.triageModal.triage && vm.triageModal.triage.temp_c) != null ? vm.triageModal.triage.temp_c : '—' }}</span></div>
+        <div><span class="text-gray-500">SpO2 (%):</span> <span class="font-medium">{{ (vm.triageModal.triage && vm.triageModal.triage.spo2) != null ? vm.triageModal.triage.spo2 : '—' }}</span></div>
+        <div><span class="text-gray-500">Pain (0–10):</span> <span class="font-medium">{{ (vm.triageModal.triage && vm.triageModal.triage.pain) != null ? vm.triageModal.triage.pain : '—' }}</span></div>
+      </div>
+      <div class="px-6 py-3 border-t border-gray-200 text-right">
+        <button class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50" ng-click="vm.closeTriageModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Attachments Modal -->
+  <div class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50" ng-if="vm.attachModal.open">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl">
+      <div class="px-6 py-3 border-b border-gray-200 flex items-center justify-between">
+        <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-700">Visit Attachments</h3>
+        <button class="text-gray-500 hover:text-gray-700" ng-click="vm.closeAttachmentsModal()" aria-label="Close">&times;</button>
+      </div>
+      <div class="p-6">
+        <div ng-if="vm.attachModal.loading" class="text-gray-600 text-sm">
+          <span class="inline-flex items-center gap-2"><img src="assets/img/ajax-loader.gif" class="h-4"> Loading...</span>
+        </div>
+        <div ng-if="vm.attachModal.error" class="rounded-md bg-red-50 border border-red-200 p-3 text-red-700 text-sm">
+          {{ vm.attachModal.error }}
+        </div>
+        <div ng-if="!vm.attachModal.loading && !vm.attachModal.error">
+          <div ng-if="!(vm.attachModal.list || []).length" class="text-gray-500 text-sm">No attachments.</div>
+          <table class="min-w-full divide-y divide-gray-200" ng-if="(vm.attachModal.list || []).length">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">File</th>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-32">Size</th>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-24">Action</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr ng-repeat="a in vm.attachModal.list">
+                <td class="px-4 py-2 text-sm text-gray-700">{{ a.original_name || ('Attachment #' + a.id) }}</td>
+                <td class="px-4 py-2 text-sm text-gray-700">{{ a.size_bytes || 0 | number }} bytes</td>
+                <td class="px-4 py-2 text-sm">
+                  <a class="inline-flex items-center rounded-md bg-indigo-600 px-2.5 py-1 text-xs font-medium text-white hover:bg-indigo-700"
+                     ng-href="{{ vm.downloadAttachmentUrl(a.id) }}">Download</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="px-6 py-3 border-t border-gray-200 text-right">
+        <button class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50" ng-click="vm.closeAttachmentsModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Visit Modal -->
+  <div class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50" ng-if="vm.ui.showAddVisitModal">
+    <div class="bg-white rounded-lg shadow-xl w-full" style="width:95vw; max-width:1400px; max-height:90vh; overflow:auto;">
+      <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+        <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-700">Add Visit</h3>
+        <button class="text-gray-500 hover:text-gray-700" ng-click="vm.closeAddVisitModal()" aria-label="Close">&times;</button>
+      </div>
+      <div class="p-6 space-y-4">
+        <!-- Error block -->
+        <div class="rounded-md bg-red-50 border border-red-200 p-3 text-red-700" ng-if="vm.ui.error">
+          {{ vm.ui.error }}
+          <ul class="mt-2 list-disc list-inside text-xs" ng-if="vm.ui.validationErrors">
+            <li ng-repeat="(k, msgs) in vm.ui.validationErrors">{{k}}: {{ Array.isArray(msgs) ? msgs.join(', ') : msgs }}</li>
+          </ul>
+        </div>
+
+        <form class="space-y-4" ng-submit="vm.saveVisit()">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Visit Date</label>
+              <input type="datetime-local"
+                     class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
+                     ng-model="vm.visitForm.visit_date">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Reason</label>
+              <input type="text"
+                     class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
+                     ng-model="vm.visitForm.reason" maxlength="255">
+            </div>
+            <input type="hidden" ng-model="vm.visitForm.campus_id">
+          </div>
+
+          <!-- Triage -->
+          <div class="bg-gray-50 border border-gray-200 rounded-md p-4">
+            <div class="text-sm font-semibold text-gray-700 mb-2">Triage</div>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+              <div>
+                <label class="block text-xs text-gray-600 mb-1">BP</label>
+                <input type="text" ng-model="vm.visitForm.triage.bp"
+                       class="w-full rounded-md border border-gray-300 px-2 py-1">
+              </div>
+              <div>
+                <label class="block text-xs text-gray-600 mb-1">HR</label>
+                <input type="number" ng-model="vm.visitForm.triage.hr"
+                       class="w-full rounded-md border border-gray-300 px-2 py-1">
+              </div>
+              <div>
+                <label class="block text-xs text-gray-600 mb-1">RR</label>
+                <input type="number" ng-model="vm.visitForm.triage.rr"
+                       class="w-full rounded-md border border-gray-300 px-2 py-1">
+              </div>
+              <div>
+                <label class="block text-xs text-gray-600 mb-1">Temp (°C)</label>
+                <input type="number" step="0.1" ng-model="vm.visitForm.triage.temp_c"
+                       class="w-full rounded-md border border-gray-300 px-2 py-1">
+              </div>
+              <div>
+                <label class="block text-xs text-gray-600 mb-1">SpO2 (%)</label>
+                <input type="number" ng-model="vm.visitForm.triage.spo2"
+                       class="w-full rounded-md border border-gray-300 px-2 py-1">
+              </div>
+              <div>
+                <label class="block text-xs text-gray-600 mb-1">Pain (0–10)</label>
+                <input type="number" ng-model="vm.visitForm.triage.pain"
+                       class="w-full rounded-md border border-gray-300 px-2 py-1">
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Assessment</label>
+            <textarea class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2" rows="3" ng-model="vm.visitForm.assessment"></textarea>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Diagnosis Codes (CSV)</label>
+              <input type="text"
+                     class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
+                     ng-model="vm.visitForm.diagnosis_csv" placeholder="e.g. A00.0, B25, C19">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Treatment</label>
+              <textarea class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2" rows="6" ng-model="vm.visitForm.treatment"></textarea>
+            </div>
+          </div>
+
+          <!-- Medications Dispensed -->
+          <div class="bg-gray-50 border border-gray-200 rounded-md p-4">
+            <div class="flex items-center justify-between mb-2">
+              <div class="text-sm font-semibold text-gray-700">Medications Dispensed</div>
+              <button type="button"
+                      class="inline-flex items-center rounded-md bg-blue-600 px-2 py-1 text-xs font-medium text-white hover:bg-blue-700"
+                      ng-click="vm.addMedicationRow()">Add Row</button>
+            </div>
+            <div class="space-y-2">
+              <div class="grid grid-cols-12 gap-2 items-end" ng-repeat="m in vm.visitForm.medications_dispensed track by $index">
+                <div class="col-span-3">
+                  <label class="block text-xs text-gray-600 mb-1">Name<span class="text-red-600">*</span></label>
+                  <input type="text" class="w-full rounded-md border border-gray-300 px-2 py-1" ng-model="m.name">
+                </div>
+                <div class="col-span-3">
+                  <label class="block text-xs text-gray-600 mb-1">Dose</label>
+                  <input type="text" class="w-full rounded-md border border-gray-300 px-2 py-1" ng-model="m.dose">
+                </div>
+                <div class="col-span-2">
+                  <label class="block text-xs text-gray-600 mb-1">Qty</label>
+                  <input type="number" class="w-full rounded-md border border-gray-300 px-2 py-1" ng-model="m.qty">
+                </div>
+                <div class="col-span-3">
+                  <label class="block text-xs text-gray-600 mb-1">Instructions</label>
+                  <input type="text" class="w-full rounded-md border border-gray-300 px-2 py-1" ng-model="m.instructions">
+                </div>
+                <div class="col-span-1">
+                  <button type="button"
+                          class="inline-flex items-center rounded-md border border-gray-300 bg-white px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50"
+                          ng-click="vm.removeMedicationRow($index)">Remove</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Follow-up</label>
+            <textarea class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2" rows="2" ng-model="vm.visitForm.follow_up"></textarea>
+          </div>
+
+          <div class="flex items-center justify-end gap-3 pt-1">
+            <button type="button"
+                    class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    ng-click="vm.closeAddVisitModal()" ng-disabled="vm.ui.savingVisit">Cancel</button>
+            <button type="submit"
+                    class="inline-flex items-center rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    ng-disabled="vm.ui.savingVisit">
+              <span ng-if="!vm.ui.savingVisit">Save Visit</span>
+              <span ng-if="vm.ui.savingVisit" class="inline-flex items-center gap-2">
+                <img src="assets/img/ajax-loader.gif" alt="" class="h-4"> Saving...
+              </span>
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>

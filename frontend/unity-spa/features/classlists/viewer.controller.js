@@ -37,6 +37,13 @@
     vm.back = back;
     vm.hasIncompleteGrades = hasIncompleteGrades;
 
+    // Excel template + import (per-classlist)
+    vm.downloadTemplate = downloadTemplate;
+    vm.onFilePicked = onFilePicked;
+    vm._onFileChange = _onFileChange; // DOM onchange handler wrapper
+    vm.upload = upload;
+    vm.uploads = { midterm: null, finals: null };
+
     function init() {
       if (!vm.id || isNaN(vm.id)) {
         vm.error = 'Invalid classlist id';
@@ -273,6 +280,120 @@
 
     function back() {
       $location.path('/classlists');
+    }
+
+    // Download per-classlist template for a period
+    function downloadTemplate(period) {
+      try {
+        vm.loading = true;
+        ClasslistsService.downloadGradesTemplate(vm.id, period)
+          .then(function (res) {
+            var data = (res && res.data) ? res.data : null;
+            var filename = (res && res.filename) ? res.filename : ('classlist-' + vm.id + '-' + (period || 'period') + '-template.xlsx');
+            if (!data) {
+              throw new Error('No file data');
+            }
+            var blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            var url = (window.URL || window.webkitURL).createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(function () {
+              document.body.removeChild(a);
+              (window.URL || window.webkitURL).revokeObjectURL(url);
+            }, 0);
+            ToastService && ToastService.success && ToastService.success('Template downloaded: ' + filename);
+          })
+          .catch(function (e) {
+            var msg = (e && e.message) ? e.message : 'Failed to download template';
+            ToastService && ToastService.error && ToastService.error(msg);
+          })
+          .finally(function () {
+            vm.loading = false;
+          });
+      } catch (err) {
+        vm.loading = false;
+        ToastService && ToastService.error && ToastService.error('Failed to download template');
+      }
+    }
+
+    // DOM onchange wrapper: file input calls this; routes to onFilePicked for current active period
+    function _onFileChange($event) {
+      try {
+        onFilePicked(vm.period, $event);
+      } catch (e) {
+        // no-op
+      }
+    }
+
+    // Capture selected file
+    function onFilePicked(period, $event) {
+      try {
+        var file = $event && $event.target && $event.target.files && $event.target.files.length ? $event.target.files[0] : null;
+        if (!file) {
+          ToastService && ToastService.warn && ToastService.warn('No file selected');
+          return;
+        }
+        if (!/\.xlsx$/i.test(file.name)) {
+          ToastService && ToastService.warn && ToastService.warn('Please select an .xlsx file');
+          return;
+        }
+        vm.uploads = vm.uploads || { midterm: null, finals: null };
+        vm.uploads[period] = file;
+        ToastService && ToastService.success && ToastService.success('Selected: ' + file.name + ' for ' + (period || '').toUpperCase());
+      } catch (e) {
+        ToastService && ToastService.error && ToastService.error('Failed to read selected file');
+      }
+    }
+
+    // Upload grades for the given period using the selected file
+    function upload(period) {
+      vm.error = null;
+      vm.success = null;
+
+      if (!vm.permissions || !vm.permissions.can_edit) {
+        ToastService && ToastService.error && ToastService.error('Not allowed to upload grades.');
+        return;
+      }
+
+      var file = vm.uploads && vm.uploads[period];
+      if (!file) {
+        ToastService && ToastService.warn && ToastService.warn('Please select an .xlsx file first.');
+        return;
+      }
+
+      vm.loading = true;
+      ClasslistsService.importGrades(vm.id, file, period)
+        .then(function (res) {
+          if (res && res.success) {
+            var result = res.result || {};
+            var msg = 'Upload complete: ' + (result.updated || 0) + ' updated, ' + (result.skipped || 0) + ' skipped.';
+            vm.success = msg;
+            ToastService && ToastService.success && ToastService.success(msg);
+            // Clear file input and cache
+            try {
+              var el = document.getElementById('gradesUploadInput');
+              if (el) el.value = '';
+            } catch (_e) {}
+            if (vm.uploads) vm.uploads[period] = null;
+            // Refresh viewer to reflect latest grades/remarks
+            reload();
+          } else {
+            var emsg = (res && res.message) ? res.message : 'Upload failed';
+            vm.error = emsg;
+            ToastService && ToastService.error && ToastService.error(emsg);
+          }
+        })
+        .catch(function (e) {
+          var apiMsg = (e && e.data && e.data.message) ? e.data.message : (e && e.message ? e.message : null);
+          vm.error = apiMsg || 'Upload failed';
+          ToastService && ToastService.error && ToastService.error(vm.error);
+        })
+        .finally(function () {
+          vm.loading = false;
+        });
     }
 
     // Kick off

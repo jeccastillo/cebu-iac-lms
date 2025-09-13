@@ -30,6 +30,10 @@
       </div>
     </div>
     <div class="flex items-center space-x-2">
+      <a class="px-3 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700"
+         ng-href="#/classlists/{{ vm.id }}/attendance">
+        <span class="fas fa-user-check mr-1"></span> Attendance
+      </a>
       <button class="px-3 py-2 rounded bg-gray-100 text-gray-800 hover:bg-gray-200" ng-click="vm.back()">
         <span class="fas fa-arrow-left mr-1"></span> Back
       </button>
@@ -62,6 +66,38 @@
               ng-click="vm.unfinalize()">
         <span class="fas fa-undo mr-1"></span> Unfinalize
       </button>
+    </div>
+  </div>
+
+  <!-- Excel Import/Export controls -->
+  <div class="bg-white p-4 rounded shadow border border-gray-200 mt-3">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <span class="text-sm font-medium text-gray-700">Excel Templates:</span>
+        <button class="px-3 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50"
+                ng-disabled="vm.loading"
+                ng-click="vm.downloadTemplate('midterm')">
+          <span class="fas fa-file-excel mr-1"></span> Download Midterm Template
+        </button>
+        <button class="px-3 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50"
+                ng-disabled="vm.loading"
+                ng-click="vm.downloadTemplate('finals')">
+          <span class="fas fa-file-excel mr-1"></span> Download Finals Template
+        </button>
+      </div>
+      <div class="flex items-center space-x-2">
+        <span class="text-xs text-gray-600 mr-2">Upload applies to active period: <strong>{{ vm.period | uppercase }}</strong></span>
+        <input id="gradesUploadInput"
+               type="file"
+               accept=".xlsx"
+               class="text-sm"
+               onchange="angular.element(this).scope().vm._onFileChange(event)" />
+        <button class="px-3 py-2 rounded bg-purple-600 text-white hover:bg-purple-700 disabled:opacity-50"
+                ng-disabled="!vm.permissions.can_edit || vm.loading"
+                ng-click="vm.upload(vm.period)">
+          <span class="fas fa-upload mr-1"></span> Upload Grades
+        </button>
+      </div>
     </div>
   </div>
 

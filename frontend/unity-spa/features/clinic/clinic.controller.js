@@ -226,6 +226,315 @@
       if (p > (vm.vmeta.last_page || 1)) p = vm.vmeta.last_page || 1;
       loadVisits(p);
     }
+
+    // --- Add Visit Modal: UI state and form helpers ---
+    vm.ui = vm.ui || { showAddVisitModal: false, savingVisit: false };
+    vm.visitForm = vm.visitForm || {};
+
+    function openAddVisitModal() {
+      resetVisitForm();
+      vm.ui.error = null;
+      vm.ui.validationErrors = null;
+      vm.ui.showAddVisitModal = true;
+    }
+
+    function closeAddVisitModal() {
+      vm.ui.showAddVisitModal = false;
+      vm.ui.savingVisit = false;
+      vm.ui.error = null;
+      vm.ui.validationErrors = null;
+    }
+
+    function resetVisitForm() {
+      try {
+        var campusId = (vm.record && vm.record.campus_id != null) ? parseInt(vm.record.campus_id, 10) : null;
+        var isoNow = (new Date()).toISOString().slice(0, 16); // yyyy-MM-ddTHH:mm for datetime-local
+        vm.visitForm = {
+          visit_date: isoNow,
+          reason: '',
+          triage: {
+            bp: '',
+            hr: null,
+            rr: null,
+            temp_c: null,
+            spo2: null,
+            pain: null
+          },
+          assessment: '',
+          diagnosis_csv: '',
+          diagnosis_codes: null, // computed on save
+          treatment: '',
+          medications_dispensed: [
+            { name: '', dose: '', qty: null, instructions: '' }
+          ],
+          follow_up: '',
+          campus_id: campusId
+        };
+      } catch (e) {
+        vm.visitForm = {
+          visit_date: null,
+          reason: '',
+          triage: { bp: '', hr: null, rr: null, temp_c: null, spo2: null, pain: null },
+          assessment: '',
+          diagnosis_csv: '',
+          diagnosis_codes: null,
+          treatment: '',
+          medications_dispensed: [{ name: '', dose: '', qty: null, instructions: '' }],
+          follow_up: '',
+          campus_id: null
+        };
+      }
+    }
+
+    function addMedicationRow() {
+      if (!vm.visitForm) vm.visitForm = {};
+      if (!Array.isArray(vm.visitForm.medications_dispensed)) {
+        vm.visitForm.medications_dispensed = [];
+      }
+      vm.visitForm.medications_dispensed.push({ name: '', dose: '', qty: null, instructions: '' });
+    }
+
+    function removeMedicationRow(idx) {
+      if (!vm.visitForm || !Array.isArray(vm.visitForm.medications_dispensed)) return;
+      if (idx < 0 || idx >= vm.visitForm.medications_dispensed.length) return;
+      vm.visitForm.medications_dispensed.splice(idx, 1);
+      if (vm.visitForm.medications_dispensed.length === 0) {
+        vm.visitForm.medications_dispensed.push({ name: '', dose: '', qty: null, instructions: '' });
+      }
+    }
+
+    function saveVisit() {
+      vm.ui = vm.ui || {};
+      vm.ui.error = null;
+      vm.ui.validationErrors = null;
+
+      if (!vm.record || !vm.record.id) {
+        vm.ui.error = 'Record not loaded.';
+        return;
+      }
+
+      // Build triage clean object
+      var tri = null;
+      try {
+        var t = vm.visitForm.triage || {};
+        tri = {
+          bp: (t.bp || '').trim() || null,
+          hr: (t.hr !== '' && t.hr != null) ? parseInt(t.hr, 10) : null,
+          rr: (t.rr !== '' && t.rr != null) ? parseInt(t.rr, 10) : null,
+          temp_c: (t.temp_c !== '' && t.temp_c != null) ? parseFloat(t.temp_c) : null,
+          spo2: (t.spo2 !== '' && t.spo2 != null) ? parseInt(t.spo2, 10) : null,
+          pain: (t.pain !== '' && t.pain != null) ? parseInt(t.pain, 10) : null
+        };
+        // Drop empty triage entirely if all fields are null
+        var allNull = true;
+        Object.keys(tri).forEach(function(k){ if (tri[k] !== null) allNull = false; });
+        if (allNull) tri = null;
+      } catch (eTri) { tri = null; }
+
+      // Diagnosis codes from CSV
+      var diag = null;
+      try {
+        var csv = (vm.visitForm.diagnosis_csv || '').split(',').map(function (s) {
+          return (s || '').trim();
+        }).filter(function (s) { return !!s; });
+        diag = csv.length ? csv : null;
+      } catch (eDiag) { diag = null; }
+
+      // Medications dispensed
+      var meds = null;
+      try {
+        var inputMeds = Array.isArray(vm.visitForm.medications_dispensed) ? vm.visitForm.medications_dispensed : [];
+        meds = inputMeds.map(function (m) {
+          var name = (m && m.name != null) ? ('' + m.name).trim() : '';
+          if (!name) return null;
+          var dose = (m.dose != null && ('' + m.dose).trim() !== '') ? ('' + m.dose).trim() : null;
+          var qty = (m.qty !== '' && m.qty != null) ? (isNaN(+m.qty) ? null : +m.qty) : null;
+          var instructions = (m.instructions != null && ('' + m.instructions).trim() !== '') ? ('' + m.instructions).trim() : null;
+          var obj = { name: name };
+          if (dose !== null) obj.dose = dose;
+          if (qty !== null) obj.qty = qty;
+          if (instructions !== null) obj.instructions = instructions;
+          return obj;
+        }).filter(Boolean);
+        if (!meds.length) meds = null;
+      } catch (eMeds) { meds = null; }
+
+      // visit_date: pass as-is (datetime-local value acceptable)
+      var vdate = vm.visitForm.visit_date || null;
+      if (typeof vdate === 'string' && vdate.trim() === '') vdate = null;
+
+      // Compose payload
+      var payload = {
+        record_id: vm.record.id,
+        visit_date: vdate,
+        reason: (vm.visitForm.reason || '').trim() || null,
+        triage: tri,
+        assessment: (vm.visitForm.assessment || '').trim() || null,
+        diagnosis_codes: diag,
+        treatment: (vm.visitForm.treatment || '').trim() || null,
+        medications_dispensed: meds,
+        follow_up: (vm.visitForm.follow_up || '').trim() || null,
+        campus_id: (vm.visitForm.campus_id != null && vm.visitForm.campus_id !== '') ? parseInt(vm.visitForm.campus_id, 10) : (vm.record.campus_id != null ? parseInt(vm.record.campus_id, 10) : null),
+        created_by: 13
+      };
+
+      vm.ui.savingVisit = true;
+      ClinicService.createVisit(payload)
+        .then(function (res) {
+          if (res && res.success) {
+            // Refresh visits (keep current page but default to 1 for newest-first consistency)
+            var pageToLoad = 1;
+            try { pageToLoad = vm.vmeta && vm.vmeta.page ? vm.vmeta.page : 1; } catch (e) { pageToLoad = 1; }
+            loadVisits(pageToLoad);
+            closeAddVisitModal();
+          } else {
+            vm.ui.error = 'Failed to create visit.';
+          }
+        })
+        .catch(function (err) {
+          try {
+            if (err && err.data) {
+              vm.ui.validationErrors = err.data.errors || null;
+              vm.ui.error = err.data.message || err.data.error || 'Failed to create visit.';
+            } else {
+              vm.ui.error = 'Failed to create visit.';
+            }
+          } catch (e) {
+            vm.ui.error = 'Failed to create visit.';
+          }
+        })
+        .finally(function () {
+          vm.ui.savingVisit = false;
+        });
+    }
+
+    // expose handlers
+    vm.openAddVisitModal = openAddVisitModal;
+    vm.closeAddVisitModal = closeAddVisitModal;
+    vm.resetVisitForm = resetVisitForm;
+    vm.addMedicationRow = addMedicationRow;
+    vm.removeMedicationRow = removeMedicationRow;
+    vm.saveVisit = saveVisit;
+
+    // --- Visit list helpers: format date ---
+    vm.formatVisitDate = formatVisitDate;
+
+    // Medication details modal
+    vm.medModal = { open: false, item: null, visit: null };
+    vm.openMedicationModal = openMedicationModal;
+    vm.closeMedicationModal = closeMedicationModal;
+
+    // Triage details modal
+    vm.triageModal = { open: false, triage: null, visit: null };
+    vm.openTriageModal = openTriageModal;
+    vm.closeTriageModal = closeTriageModal;
+
+    // Attachments modal and upload handlers
+    vm.attachModal = { open: false, loading: false, list: [], visitId: null, error: null };
+    vm.openAttachmentsModal = openAttachmentsModal;
+    vm.closeAttachmentsModal = closeAttachmentsModal;
+    vm.triggerFileInput = triggerFileInput;
+    vm.handleAttachmentSelected = handleAttachmentSelected;
+    vm.downloadAttachmentUrl = ClinicService.downloadAttachmentUrl;
+
+    function formatVisitDate(d) {
+      try {
+        if (!d) return null;
+        var dt = new Date(d);
+        if (isNaN(dt)) return d;
+        var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sept','Oct','Nov','Dec'];
+        var m = months[dt.getMonth()];
+        var day = dt.getDate();
+        var yr = dt.getFullYear();
+        var hh = dt.getHours();
+        var ampm = hh >= 12 ? 'PM' : 'AM';
+        var h = hh % 12;
+        if (h === 0) h = 12;
+        var mm = dt.getMinutes();
+        var mm2 = mm < 10 ? ('0' + mm) : mm;
+        return m + ' ' + day + ', ' + yr + ' ' + h + ':' + mm2 + ' ' + ampm;
+      } catch (e) { return d; }
+    }
+
+    function openMedicationModal(visit, med) {
+      vm.medModal.visit = visit || null;
+      vm.medModal.item = angular.copy(med || {});
+      vm.medModal.open = true;
+    }
+    function closeMedicationModal() {
+      vm.medModal.open = false;
+      vm.medModal.item = null;
+      vm.medModal.visit = null;
+    }
+
+    function openTriageModal(v) {
+      vm.triageModal.visit = v || null;
+      vm.triageModal.triage = angular.copy((v && v.triage) || {});
+      vm.triageModal.open = true;
+    }
+    function closeTriageModal() {
+      vm.triageModal.open = false;
+      vm.triageModal.triage = null;
+      vm.triageModal.visit = null;
+    }
+
+    function openAttachmentsModal(v) {
+      vm.attachModal.open = true;
+      vm.attachModal.visitId = v && v.id ? v.id : null;
+      vm.attachModal.list = [];
+      vm.attachModal.error = null;
+      vm.attachModal.loading = true;
+      if (!vm.attachModal.visitId) { vm.attachModal.loading = false; return; }
+      ClinicService.listAttachments({ visit_id: vm.attachModal.visitId, page: 1, per_page: 50 })
+        .then(function (res) {
+          try { vm.attachModal.list = (res && res.data) ? res.data : []; }
+          catch (e) { vm.attachModal.list = []; }
+        })
+        .catch(function (err) {
+          try { vm.attachModal.error = (err && err.data && (err.data.message || err.data.error)) || 'Failed to load attachments.'; }
+          catch (e) { vm.attachModal.error = 'Failed to load attachments.'; }
+        })
+        .finally(function () { vm.attachModal.loading = false; });
+    }
+    function closeAttachmentsModal() {
+      vm.attachModal.open = false;
+      vm.attachModal.list = [];
+      vm.attachModal.visitId = null;
+      vm.attachModal.error = null;
+    }
+
+    function triggerFileInput(visitId) {
+      try {
+        var el = document.getElementById('att-' + visitId);
+        if (el && el.click) el.click();
+      } catch (e) {}
+    }
+
+    function handleAttachmentSelected(visitId, event) {
+      try {
+        var files = (event && event.target && event.target.files) ? event.target.files : null;
+        if (!files || !files.length) return;
+        var file = files[0];
+        var rid = vm.record && vm.record.id;
+        if (!rid) return;
+        ClinicService.uploadAttachment(file, rid, visitId, 13)
+          .then(function () {
+            // Refresh visits to update attachments_count
+            var p = 1;
+            try { p = vm.vmeta && vm.vmeta.page ? vm.vmeta.page : 1; } catch (e) { p = 1; }
+            loadVisits(p);
+            // If attachments modal open for this visit, reload list
+            if (vm.attachModal.open && vm.attachModal.visitId === visitId) {
+              openAttachmentsModal({ id: visitId });
+            }
+          })
+          .catch(function (err) {
+            try { alert((err && err.data && (err.data.message || err.data.error)) || 'Upload failed'); }
+            catch (e) { alert('Upload failed'); }
+          })
+          .finally(function () { try { event.target.value = ''; } catch (e) {} });
+      } catch (eOuter) {}
+    }
   }
  
   // New: ClinicRecordNewController

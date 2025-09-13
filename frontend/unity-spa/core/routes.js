@@ -361,6 +361,12 @@
         controllerAs: "vm",
         requiredRoles: ["faculty", "registrar", "admin"],
       })
+      .when("/classlists/:id/attendance", {
+        templateUrl: "features/classlists/attendance.html",
+        controller: "ClasslistAttendanceController",
+        controllerAs: "vm",
+        requiredRoles: ["faculty", "admin"],
+      })
 
       /* Classrooms CRUD */
       .when("/classrooms", {
@@ -600,6 +606,25 @@
         controller: "ClinicRecordViewController",
         controllerAs: "vm",
         requiredRoles: ["clinic_staff", "clinic_admin", "admin"]
+      })
+      // Classlists
+      .when("/classlists", {
+        templateUrl: "features/classlists/list.html",
+        controller: "ClasslistsController",
+        controllerAs: "vm",
+        requiredRoles: ["faculty", "registrar", "admin"]
+      })
+      .when("/classlists/:id/viewer", {
+        templateUrl: "features/classlists/viewer.html",
+        controller: "ClasslistViewerController",
+        controllerAs: "vm",
+        requiredRoles: ["faculty", "registrar", "admin"]
+      })
+      .when("/classlists/:id/attendance", {
+        templateUrl: "features/classlists/attendance.html",
+        controller: "ClasslistAttendanceController",
+        controllerAs: "vm",
+        requiredRoles: ["faculty", "admin"]
       })
       .otherwise({ redirectTo: "/login" });
 
