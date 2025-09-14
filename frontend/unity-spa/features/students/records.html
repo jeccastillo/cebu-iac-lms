@@ -99,14 +99,20 @@
                         <tr ng-repeat="it in group.items track by it.id"
                             ng-class="{
                               'bg-green-50 border-green-200': it.strStatus === 'passed',
-                              'bg-blue-50 border-blue-200': it.strStatus === 'planned'
+                              'bg-blue-50 border-blue-200': it.strStatus === 'planned',
+                              'bg-blue-50 border-blue-200': it.strStatus === 'enrolled',
+                              'bg-red-50 border-red-200': it.strStatus === 'failed'
                             }">
                           <td class="px-3 py-2 text-sm text-gray-900">{{ (it.subject && it.subject.code) || '-' }}</td>
                           <td class="px-3 py-2 text-sm text-gray-900">{{ (it.subject && it.subject.description) || '-' }}</td>
                           <td class="px-3 py-2 text-sm text-gray-900">{{ (it.subject && it.subject.units) || '-' }}</td>
                           <td class="px-3 py-2 text-sm text-gray-900">{{ it.intYearLevel || '-' }}</td>
                           <td class="px-3 py-2 text-sm text-gray-900">{{ vm.getSemesterLabel(it.intSem) || '-' }}</td>
-                          <td class="px-3 py-2 text-sm text-gray-900">{{ it.strStatus || '-' }}</td>
+                          <td class="px-3 py-2 text-sm">
+                            <span ng-class="vm.getStatusInfo(it.strStatus).class">
+                              {{ vm.getStatusInfo(it.strStatus).label }}
+                            </span>
+                          </td>
                           <td class="px-3 py-2 text-sm text-gray-900">{{ it.dteCompleted || '-' }}</td>
                           <td class="px-3 py-2 text-sm text-gray-900">{{ it.isRequired ? 'Yes' : 'No' }}</td>
                         </tr>

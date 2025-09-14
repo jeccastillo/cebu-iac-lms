@@ -349,6 +349,22 @@
       else return semester || '';
     };
 
+    // Helper function for status label formatting with color classes
+    vm.getStatusInfo = function(status) {
+      switch (status) {
+        case 'passed':
+          return { label: 'Passed', class: 'text-green-600 font-semibold' };
+        case 'failed':
+          return { label: 'Failed', class: 'text-red-600 font-semibold' };
+        case 'enrolled':
+          return { label: 'Currently Enrolled', class: 'text-yellow-600 font-semibold' };
+        case 'planned':
+          return { label: 'Not Yet Taken', class: 'text-blue-600' };
+        default:
+          return { label: status || '-', class: 'text-gray-600' };
+      }
+    };
+
     // Group checklist items by term and year using actual student records data
     vm.groupChecklistByTerm = function() {
       if (!vm.checklist || !vm.checklist.items) {

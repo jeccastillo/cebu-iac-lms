@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Carbon;
 use App\Models\StudentChecklist;
 use App\Models\StudentChecklistItem;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 /**
  * StudentChecklistService
@@ -32,8 +32,10 @@ class StudentChecklistService
             'created_by'      => null,
         ]);
 
-        // Gather passed subjects for the student
+        // Gather subject status maps for the student
         $passedMap = $this->computePassedMap($intStudentID);
+        $enrolledMap = $this->computeEnrolledMap($intStudentID);
+        $failedMap = $this->computeFailedMap($intStudentID);
 
         // Pull subjects from curriculum (tb_mas_curriculum_subject)
         $curriculumSubjects = DB::table('tb_mas_curriculum_subject')
@@ -48,15 +50,27 @@ class StudentChecklistService
             if ($subjectId <= 0) {
                 continue;
             }
-            $isPassed = isset($passedMap[$subjectId]) && $passedMap[$subjectId] === true;
+            
+            // Determine status based on priority: passed > failed > enrolled > planned
+            $status = 'planned';
+            $dateCompleted = null;
+            
+            if (isset($passedMap[$subjectId]) && $passedMap[$subjectId] === true) {
+                $status = 'passed';
+                $dateCompleted = $now->toDateString();
+            } elseif (isset($failedMap[$subjectId]) && $failedMap[$subjectId] === true) {
+                $status = 'failed';
+            } elseif (isset($enrolledMap[$subjectId]) && $enrolledMap[$subjectId] === true) {
+                $status = 'enrolled';
+            }
 
             StudentChecklistItem::create([
                 'intChecklistID' => $checklist->intID,
                 'intSubjectID'   => $subjectId,
                 'intYearLevel'   => isset($row->intYearLevel) ? (int)$row->intYearLevel : null,
                 'intSem'         => isset($row->intSem) ? (int)$row->intSem : null,
-                'strStatus'      => $isPassed ? 'passed' : 'planned',
-                'dteCompleted'   => $isPassed ? $now->toDateString() : null,
+                'strStatus'      => $status,
+                'dteCompleted'   => $dateCompleted,
                 'isRequired'     => 1,
             ]);
         }
@@ -190,5 +204,88 @@ class StudentChecklistService
             'remaining' => (int)$remaining,
             'percent'   => (float)$percent,
         ];
+    }
+
+    /**
+     * Check which subjects the student is currently enrolled in (without grades)
+     * Returns map: subjectId => bool
+     */
+    private function computeEnrolledMap(int $intStudentID): array
+    {
+        $enrolledMap = [];
+
+        // Check for current enrollments without final grades
+        $enrolled = DB::table('tb_mas_classlist_student as cls')
+            ->join('tb_mas_classlist as cl', 'cls.intClasslistID', '=', 'cl.intID')
+            ->join('tb_mas_subjects as subj', 'cl.intSubjectID', '=', 'subj.intID')
+            ->where('cls.intStudentID', $intStudentID)
+            ->where(function($query) {
+                // No final grade recorded, or final grade is null/empty
+                $query->whereNull('cls.numFinalGrade')
+                      ->orWhere('cls.numFinalGrade', '=', 0)
+                      ->orWhere('cls.numFinalGrade', '=', '');
+            })
+            ->where(function($query) {
+                // No completion remarks or not marked as dropped/withdrawn
+                $query->whereNull('cls.strRemarks')
+                      ->orWhere('cls.strRemarks', '=', '')
+                      ->orWhere('cls.strRemarks', 'not like', '%drop%')
+                      ->orWhere('cls.strRemarks', 'not like', '%withdraw%')
+                      ->orWhere('cls.strRemarks', 'not like', '%incomplete%');
+            })
+            ->select('subj.intID as subject_id')
+            ->get();
+
+        foreach ($enrolled as $row) {
+            $subjectId = (int)($row->subject_id ?? 0);
+            if ($subjectId > 0) {
+                $enrolledMap[$subjectId] = true;
+            }
+        }
+
+        return $enrolledMap;
+    }
+
+    /**
+     * Check which subjects the student has failed
+     * Returns map: subjectId => bool
+     */
+    private function computeFailedMap(int $intStudentID): array
+    {
+        $failedMap = [];
+
+        // Check for failed subjects (final grade > 3.0 or fail-related remarks)
+        $failed = DB::table('tb_mas_classlist_student as cls')
+            ->join('tb_mas_classlist as cl', 'cls.intClasslistID', '=', 'cl.intID')
+            ->join('tb_mas_subjects as subj', 'cl.intSubjectID', '=', 'subj.intID')
+            ->where('cls.intStudentID', $intStudentID)
+            ->where(function($query) {
+                $query->where(function($subQuery) {
+                    // Failed by grade (> 3.0)
+                    $subQuery->whereNotNull('cls.numFinalGrade')
+                             ->where('cls.numFinalGrade', '>', 3.0);
+                })
+                ->orWhere(function($subQuery) {
+                    // Failed by remarks
+                    $subQuery->whereNotNull('cls.strRemarks')
+                             ->where(function($remarkQuery) {
+                                 $remarkQuery->where('cls.strRemarks', 'like', '%fail%')
+                                             ->orWhere('cls.strRemarks', 'like', '%dropped%')
+                                             ->orWhere('cls.strRemarks', 'like', '%incomplete%')
+                                             ->orWhere('cls.strRemarks', 'like', '%withdraw%');
+                             });
+                });
+            })
+            ->select('subj.intID as subject_id')
+            ->get();
+
+        foreach ($failed as $row) {
+            $subjectId = (int)($row->subject_id ?? 0);
+            if ($subjectId > 0) {
+                $failedMap[$subjectId] = true;
+            }
+        }
+
+        return $failedMap;
     }
 }
