@@ -47,11 +47,16 @@
         <h2 class="text-lg font-medium text-gray-700">
           <i class="fas fa-tasks mr-2"></i> Graduation Checklist
         </h2>
-        <div class="text-sm text-gray-500" ng-if="vm.loading.checklist || vm.loading.checklistAction">
-          <i class="fas fa-spinner fa-spin mr-1"></i> Working...
+        <div class="flex items-center space-x-3">
+          <div class="text-sm text-gray-500" ng-if="vm.loading.checklist || vm.loading.checklistAction">
+            <i class="fas fa-spinner fa-spin mr-1"></i> Working...
+          </div>
+          <div class="text-sm text-red-600" ng-if="vm.error.checklist">{{ vm.error.checklist }}</div>
+          <div class="text-sm text-red-600" ng-if="vm.error.checklistAction">{{ vm.error.checklistAction }}</div>
+          <a ng-href="#/students/{{vm.id}}/checklist/edit" class="px-3 py-1 text-sm border border-blue-600 rounded text-blue-600 bg-white hover:bg-blue-50 transition-colors">
+            <i class="fas fa-edit mr-1"></i> Edit Checklist
+          </a>
         </div>
-        <div class="text-sm text-red-600" ng-if="vm.error.checklist">{{ vm.error.checklist }}</div>
-        <div class="text-sm text-red-600" ng-if="vm.error.checklistAction">{{ vm.error.checklistAction }}</div>
       </div>
 
       <div class="p-4 space-y-4">
