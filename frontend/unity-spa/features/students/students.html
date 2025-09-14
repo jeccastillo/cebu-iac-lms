@@ -309,6 +309,9 @@
                        ng-href="{{ vm.viewerUrl(r) }}">Viewer</a>
                     <a class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
                        ng-click="vm.closeMenu()"
+                       ng-href="{{ vm.editChecklistUrl(r.id) }}">Edit Checklist</a>
+                    <a class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                       ng-click="vm.closeMenu()"
                        ng-href="{{ vm.financesUrl(r.id) }}">Finances</a>
                     <a class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
                        ng-click="vm.closeMenu()"
