@@ -132,6 +132,127 @@ class AuthServiceProvider extends ServiceProvider
                 return false;
             }
         });
+
+        // ------------------------------
+        // Department deficiencies gates
+        // ------------------------------
+        Gate::define('department.deficiency.view', function ($user, string $departmentCode) {
+            try {
+                // Admin bypass: authenticated user role OR X-User-Roles header contains 'admin'
+                if ($user && self::userHasAnyRole($user, ['admin'])) return true;
+                $rolesHdr = (string) request()->header('X-User-Roles', '');
+                $rolesParts = [];
+                if ($rolesHdr !== '') {
+                    $rolesParts = preg_split('/[,\s]+/', $rolesHdr) ?: [];
+                    $rolesParts = array_values(array_unique(array_map(function ($r) { return strtolower(trim((string) $r)); }, $rolesParts)));
+                    if (in_array('admin', $rolesParts, true)) {
+                        return true;
+                    }
+                }
+
+                // If caller has department_admin role, allow as long as department_code is a valid canonical code.
+                if (!empty($rolesParts) && in_array('department_admin', $rolesParts, true)) {
+                    $wantTmp = strtolower(trim((string) $departmentCode));
+                    $codes = config('departments.codes', ['registrar','finance','admissions','building_admin','purchasing','academics','clinic','guidance','osas']);
+                    $codes = array_values(array_unique(array_map(function ($c) { return strtolower(trim((string) $c)); }, (array) $codes)));
+                    if (in_array($wantTmp, $codes, true)) {
+                        return true;
+                    }
+                }
+
+                // Prefer acting faculty from middleware-injected request attribute,
+                // then X-Faculty-ID header, then fallback to authenticated user
+                $uid = null;
+
+                // 1) Middleware (RequireRole) attaches 'faculty' to request attributes
+                try {
+                    $facAttr = request()->attributes->get('faculty');
+                    if ($facAttr && isset($facAttr->intID)) {
+                        $uid = (int) $facAttr->intID;
+                    }
+                } catch (\Throwable $e) { /* ignore */ }
+
+                // 2) Header fallback
+                if (!$uid) {
+                    $hdr = request()->header('X-Faculty-ID');
+                    if ($hdr !== null && $hdr !== '' && is_numeric($hdr)) {
+                        $uid = (int) $hdr;
+                    }
+                }
+
+                // 3) Authenticated user fallback
+                if (!$uid && $user) {
+                    $uid = (int) ($user->intID ?? 0);
+                }
+
+                if (!$uid || $uid <= 0) return false;
+
+                $want = strtolower(trim((string) $departmentCode));
+                $allowed = \App\Models\FacultyDepartment::allowedForFaculty($uid, null);
+                return in_array($want, $allowed, true);
+            } catch (\Throwable $e) {
+                return false;
+            }
+        });
+
+        Gate::define('department.deficiency.manage', function ($user, string $departmentCode) {
+            try {
+                // Admin bypass: authenticated user role OR X-User-Roles header contains 'admin'
+                if ($user && self::userHasAnyRole($user, ['admin'])) return true;
+                $rolesHdr = (string) request()->header('X-User-Roles', '');
+                $rolesParts = [];
+                if ($rolesHdr !== '') {
+                    $rolesParts = preg_split('/[,\s]+/', $rolesHdr) ?: [];
+                    $rolesParts = array_values(array_unique(array_map(function ($r) { return strtolower(trim((string) $r)); }, $rolesParts)));
+                    if (in_array('admin', $rolesParts, true)) {
+                        return true;
+                    }
+                }
+
+                // If caller has department_admin role, allow as long as department_code is a valid canonical code.
+                if (!empty($rolesParts) && in_array('department_admin', $rolesParts, true)) {
+                    $wantTmp = strtolower(trim((string) $departmentCode));
+                    $codes = config('departments.codes', ['registrar','finance','admissions','building_admin','purchasing','academics','clinic','guidance','osas']);
+                    $codes = array_values(array_unique(array_map(function ($c) { return strtolower(trim((string) $c)); }, (array) $codes)));
+                    if (in_array($wantTmp, $codes, true)) {
+                        return true;
+                    }
+                }
+
+                // Prefer acting faculty from middleware-injected request attribute,
+                // then X-Faculty-ID header, then fallback to authenticated user
+                $uid = null;
+
+                // 1) Middleware (RequireRole) attaches 'faculty' to request attributes
+                try {
+                    $facAttr = request()->attributes->get('faculty');
+                    if ($facAttr && isset($facAttr->intID)) {
+                        $uid = (int) $facAttr->intID;
+                    }
+                } catch (\Throwable $e) { /* ignore */ }
+
+                // 2) Header fallback
+                if (!$uid) {
+                    $hdr = request()->header('X-Faculty-ID');
+                    if ($hdr !== null && $hdr !== '' && is_numeric($hdr)) {
+                        $uid = (int) $hdr;
+                    }
+                }
+
+                // 3) Authenticated user fallback
+                if (!$uid && $user) {
+                    $uid = (int) ($user->intID ?? 0);
+                }
+
+                if (!$uid || $uid <= 0) return false;
+
+                $want = strtolower(trim((string) $departmentCode));
+                $allowed = \App\Models\FacultyDepartment::allowedForFaculty($uid, null);
+                return in_array($want, $allowed, true);
+            } catch (\Throwable $e) {
+                return false;
+            }
+        });
     }
 
     /**

@@ -1,75 +1,35 @@
-# Cashier Viewer — Missing Billing Invoices Implementation TODO
+# Department Deficiency Tagging — Implementation TODO
 
-Plan Source: implementation_plan.md
+task_progress Items:
+- [ ] Step 1: Backend migrations — create tb_mas_faculty_departments and tb_mas_student_deficiencies
+- [ ] Step 2: Backend models — FacultyDepartment and StudentDeficiency
+- [ ] Step 3: Authorization — add Gates in AuthServiceProvider for department.deficiency.view/manage
+- [ ] Step 4: Context helpers — DepartmentContextService (resolve campus_id, allowed departments)
+- [ ] Step 5: Core service — DepartmentDeficiencyService (store/list/get/update/destroy with scoping and billing linkage)
+- [ ] Step 6: HTTP layer — Requests, Resource, Controller for Department Deficiencies
+- [ ] Step 7: Routes — register /api/v1/department-deficiencies endpoints; extend PaymentDescriptions access for department_admin
+- [ ] Step 8: Frontend — Department Deficiency page (service/controller/html), header/sidebar visibility, script includes/route
+- [ ] Step 9: Critical-path testing — exercise primary API endpoints and core UI interactions
 
-Scope:
-- Backend (Laravel API): Add endpoints to list student billing items without invoices and to generate an invoice for a billing item.
-- Frontend (AngularJS SPA): Cashier Viewer — auto-open modal listing missing-invoice billings, per-row generate action, and bottom-right floating bell icon with badge to reopen the modal.
+Scope of Testing (per user confirmation): Critical-path testing only
 
-Testing Mode: Critical-path testing (as requested).
+Backend/API critical-path tests:
+- POST /api/v1/department-deficiencies creates:
+  - Inline PaymentDescription when requested
+  - StudentBilling row (no invoice)
+  - StudentDeficiency row linked to billing_id and payment_description_id
+- GET /api/v1/department-deficiencies lists newly created item (filters: student_id/student_number, term, department_code)
+- GET /api/v1/department-deficiencies/{id} returns the created item
+- Role middleware role:department_admin,admin on new endpoints
+- Department scoping: department_admin can only act for assigned department_code
+- PaymentDescriptions: department_admin can list and create (campus-scoped)
 
----
-
-## Task Progress
-
-- [x] Step 1: Backend — Create StudentBillingExtrasService (service layer)
-  - [x] listMissingInvoices(studentId:int, term:int): array
-  - [x] generateInvoiceForBilling(billingId:int, opts: {posted_at?, remarks?}): array { invoice_id, invoice_number }
-  - [x] augmentBillingWithInvoiceInfo(rows, studentId, term) (internal helper) — covered within listMissingInvoices/hasInvoice heuristics
-  - [x] Strategy for determining existing invoice: explicit linkage (remarks "Billing #id") or deterministic match on {description, amount}
-
-- [x] Step 2: Backend — Create StudentBillingExtrasController
-  - [x] missingInvoices(Request): validate student_id and term, call service, return JSON
-  - [x] generateInvoice(int $id, Request): validate billing ownership/term/un-invoiced, call service, return invoice info
-  - [x] Add role middleware: finance,admin
-
-- [x] Step 3: Backend — Wire routes
-  - [x] GET /api/v1/finance/student-billing/missing-invoices → missingInvoices
-  - [x] POST /api/v1/finance/student-billing/{id}/generate-invoice → generateInvoice
-
-- [x] Step 4: Frontend Service — Extend StudentBillingService
-  - [x] missingInvoices(filters:{student_id, term})
-  - [x] generateInvoiceForBilling(id:number, body?:{posted_at?, remarks?})
-
-- [x] Step 5: Frontend Controller — Update CashierViewerController
-  - [x] Add state: vm.missingBilling, vm.ui.showMissingBillingModal, vm.ui.dismissedMissingBilling, vm.badge
-  - [x] Add methods: loadMissingBilling(force), openMissingBillingModal(), closeMissingBillingModal(), generateInvoiceForBilling(billing)
-  - [x] Insert loadMissingBilling in bootstrap and onTermChange chains
-  - [x] After generate success: refresh invoices, billing, and missing list; update badge
-
-- [x] Step 6: Frontend Template — Update cashier-viewer.html
-  - [x] Modal: "Billings Without Invoice" (date, description, amount, action)
-  - [x] Floating bell icon (bottom-right) with badge indicating count; click opens modal
-  - [x] Visibility gated by Finance/Admin role
-
-- [ ] Step 7: Critical-Path Testing
-  - [ ] Backend: missing-invoices returns correct rows; generate-invoice creates billing-type invoice, forbids duplicates, role-guarded
-  - [ ] Frontend:
-    - [ ] Auto-open modal when items exist
-    - [ ] Generate Invoice button works; refresh lists and badge
-    - [ ] Close modal → floating bell shows; click reopens modal; hides at count=0
-    - [ ] Term change re-evaluates and auto-opens if needed
-    - [ ] Role gating (Finance/Admin only)
-
-  Testing instructions (manual / curl):
-  - Backend:
-    1) List missing-invoices
-       curl -X GET "http://localhost/laravel-api/public/api/v1/finance/student-billing/missing-invoices?student_id=123&amp;term=20251" -H "X-Faculty-ID: <faculty_id>"
-    2) Generate invoice for a billing id
-       curl -X POST "http://localhost/laravel-api/public/api/v1/finance/student-billing/456/generate-invoice" -H "Content-Type: application/json" -H "X-Faculty-ID: <faculty_id>" -d "{}"
-    3) Verify invoices list:
-       curl -X GET "http://localhost/laravel-api/public/api/v1/finance/invoices?student_id=123&amp;term=20251" -H "X-Faculty-ID: <faculty_id>"
-  - Frontend:
-    - Open Cashier Viewer for the student/term that has un-invoiced billing items.
-    - Confirm modal auto-opens and lists items; click Generate Invoice per-row; verify count shrinks and invoices panel updates.
-    - Close modal; confirm floating bell shows with correct badge; clicking reopens modal; bell hides when count reaches zero.
-    - Switch term via global selector; confirm behavior re-evaluates correctly.
-    - Confirm only Finance/Admin role can see modal/bell.
-
-- [ ] Step 8: Polish and Error Handling
-  - [ ] User feedback via ToastService on success/error
-  - [ ] Loading states and disabled buttons during calls
+Frontend critical-path tests:
+- New Department Deficiency page loads with department_admin role
+- Select department from assigned list, choose student (id or number), choose term, select/create PaymentDescription
+- Amount defaults from PaymentDescription and is editable
+- Submit deficiency → success toast and appears in list
 
 Notes:
-- There is currently no explicit backend field indicating invoice linkage for billing items; we will add dedicated endpoints and compute linkage server-side.
-- Invoice generation for billing will target existing /finance/invoices/generate semantics with type='billing' and single item matching the billing row.
+- We will use X-Faculty-ID headers for department scoping and campus resolution (consistent with existing patterns).
+- Admin bypass applies via Gates; department_admin requires FacultyDepartment mapping entry.

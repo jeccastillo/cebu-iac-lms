@@ -1,0 +1,161 @@
+<div class="container" ng-cloak>
+  <h2>Online Payment Checkout</h2>
+
+  <div class="alert alert-info" ng-if="vm.loading">
+    Processing request, please wait...
+  </div>
+  <div class="alert alert-danger" ng-if="!vm.loading && vm.message">
+    {{ vm.message }}
+  </div>
+  <div class="alert alert-success" ng-if="vm.otc.reference">
+    <strong>OTC Reference:</strong> {{ vm.otc.reference }}
+  </div>
+  <div class="panel panel-default" ng-if="vm.otc.instructions">
+    <div class="panel-heading">Payment Instructions</div>
+    <div class="panel-body">
+      <pre style="white-space:pre-wrap">{{ vm.otc.instructions }}</pre>
+    </div>
+  </div>
+
+  <form name="checkoutForm" novalidate ng-submit="checkoutForm.$valid && vm.submit()">
+    <div class="row">
+      <div class="col-md-6">
+        <h4>Student Information</h4>
+
+        <div class="form-group">
+          <label>Student Information ID</label>
+          <input type="number" class="form-control" ng-model="vm.form.student_information_id" required>
+        </div>
+
+        <div class="form-group">
+          <label>Student Number</label>
+          <input type="text" class="form-control" ng-model="vm.form.student_number">
+        </div>
+
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" class="form-control" ng-model="vm.form.first_name" required>
+        </div>
+
+        <div class="form-group">
+          <label>Middle Name</label>
+          <input type="text" class="form-control" ng-model="vm.form.middle_name">
+        </div>
+
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" class="form-control" ng-model="vm.form.last_name" required>
+        </div>
+
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" class="form-control" ng-model="vm.form.email" required>
+        </div>
+
+        <div class="form-group">
+          <label>Contact Number</label>
+          <input type="text" class="form-control" ng-model="vm.form.contact_number" required>
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <input type="text" class="form-control" ng-model="vm.form.description" required>
+        </div>
+
+        <div class="form-group">
+          <label>Remarks</label>
+          <input type="text" class="form-control" ng-model="vm.form.remarks">
+        </div>
+
+      </div>
+
+      <div class="col-md-6">
+        <h4>Payment Mode</h4>
+        <div class="form-group">
+          <label>Mode of Payment</label>
+          <select class="form-control" ng-model="vm.selectedMode" ng-options="m as (m.name || m.pmethod) for m in vm.modes track by m.id" ng-change="vm.onModeChange()" required>
+            <option value="">-- Select Mode --</option>
+          </select>
+        </div>
+
+        <div class="well" ng-if="vm.selectedMode">
+          <p><strong>Method:</strong> {{ vm.selectedMode.pmethod }}</p>
+          <p><strong>Channel:</strong> {{ vm.selectedMode.pchannel }}</p>
+          <p><strong>Type:</strong> {{ vm.selectedMode.type }} <span ng-if="vm.selectedMode.type === 'percentage'">({{ vm.selectedMode.charge }}%)</span></p>
+        </div>
+
+        <div class="form-group" ng-if="vm.selectedMode && vm.selectedMode.pmethod === 'bdo_pay'">
+          <h5>BDO/CyberSource Billing Fields</h5>
+          <div class="form-group">
+            <label>Bill To Email</label>
+            <input type="email" class="form-control" ng-model="vm.form.bill_to_email" placeholder="Defaults to student's email if blank">
+          </div>
+          <div class="form-group">
+            <label>Bill To First Name</label>
+            <input type="text" class="form-control" ng-model="vm.form.bill_to_forename" placeholder="Defaults to student's first name if blank">
+          </div>
+          <div class="form-group">
+            <label>Bill To Last Name</label>
+            <input type="text" class="form-control" ng-model="vm.form.bill_to_surname" placeholder="Defaults to student's last name if blank">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <h4>Order Items</h4>
+    <div class="table-responsive">
+      <table class="table table-striped table-condensed">
+        <thead>
+          <tr>
+            <th style="width: 40%;">Title</th>
+            <th style="width: 15%;">Qty</th>
+            <th style="width: 20%;">Unit Price</th>
+            <th style="width: 25%;">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="it in vm.form.order_items track by $index">
+            <td>
+              <input type="text" class="form-control" ng-model="it.title" required>
+            </td>
+            <td>
+              <input type="number" min="1" class="form-control" ng-model="it.qty" ng-change="vm.recomputeTotals()" required>
+            </td>
+            <td>
+              <input type="number" step="0.01" min="0" class="form-control" ng-model="it.price_default" ng-change="vm.recomputeTotals()" required>
+            </td>
+            <td>
+              {{ (it.qty || 0) * (it.price_default || 0) | number:2 }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label>Mailing Fee</label>
+          <input type="number" step="0.01" min="0" class="form-control" ng-model="vm.form.mailing_fee" ng-change="vm.recomputeTotals()">
+        </div>
+      </div>
+      <div class="col-sm-4" ng-if="vm.selectedMode && vm.selectedMode.type !== 'percentage'">
+        <div class="form-group">
+          <label>Charge (Fixed)</label>
+          <input type="number" step="0.01" min="0" class="form-control" ng-model="vm.form.charge" ng-change="vm.recomputeTotals()">
+          <p class="help-block">For percentage modes, the system computes charge automatically; backend validates.</p>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="well">
+          <p><strong>Subtotal:</strong> {{ vm.form.total_price_without_charge | number:2 }}</p>
+          <p><strong>Total with Charge:</strong> {{ vm.form.total_price_with_charge | number:2 }}</p>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" ng-disabled="vm.loading || !vm.selectedMode">Proceed to Pay</button>
+  </form>
+</div>

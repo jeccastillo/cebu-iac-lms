@@ -89,6 +89,13 @@
         ]
       },
       {
+        key: 'department',
+        label: 'Department',
+        children: [
+          { label: 'Deficiency Tagging', path: '/department/deficiencies' }
+        ]
+      },
+      {
         key: 'clinic',
         label: 'Clinic',
         children: [

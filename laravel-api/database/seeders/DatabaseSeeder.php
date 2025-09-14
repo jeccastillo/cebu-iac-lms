@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             CampusSeeder::class,
             RoleSeeder::class,
             FacultyRolesSeeder::class,
+            PaymentModeSeeder::class,
         ]);
     }
 }

@@ -626,6 +626,35 @@
         controllerAs: "vm",
         requiredRoles: ["faculty", "admin"]
       })
+
+      // Department Admin — Deficiencies
+      .when('/department/deficiencies', {
+        templateUrl: 'features/department/deficiencies/deficiencies.html',
+        controller: 'DepartmentDeficienciesController',
+        controllerAs: 'vm',
+        requiredRoles: ['department_admin','admin'],
+      })
+      // Payments Checkout and Results
+      .when("/payments/checkout", {
+        templateUrl: "features/payments/checkout.html",
+        controller: "PaymentsCheckoutController",
+        controllerAs: "vm"
+      })
+      .when("/payments/success", {
+        templateUrl: "features/payments/success.html",
+        controller: "PaymentsResultController",
+        controllerAs: "vm"
+      })
+      .when("/payments/failure", {
+        templateUrl: "features/payments/failure.html",
+        controller: "PaymentsResultController",
+        controllerAs: "vm"
+      })
+      .when("/payments/cancel", {
+        templateUrl: "features/payments/cancel.html",
+        controller: "PaymentsResultController",
+        controllerAs: "vm"
+      })
       .otherwise({ redirectTo: "/login" });
 
     // Keep hashbang routing for simple static hosting

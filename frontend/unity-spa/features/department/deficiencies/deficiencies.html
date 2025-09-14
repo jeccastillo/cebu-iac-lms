@@ -1,0 +1,240 @@
+<div class="space-y-6" ng-controller="DepartmentDeficienciesController as vm">
+  <h1 class="text-2xl font-semibold text-gray-800">Department Deficiency Tagging</h1>
+
+  <!-- Meta/Status -->
+  <div class="flex items-center space-x-3" ng-if="vm.metaLoading">
+    <span class="text-gray-600">Loading options...</span>
+  </div>
+
+  <!-- Create Form -->
+  <div class="bg-white rounded border border-gray-200 shadow-sm p-4">
+    <h2 class="text-lg font-semibold text-gray-800 mb-3">Create Deficiency</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+
+      <!-- Department -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Department</label>
+        <select class="w-full border rounded px-3 py-2"
+                ng-model="vm.form.department_code"
+                ng-options="d for d in vm.meta.departments">
+          <option value="">-- Select Department --</option>
+        </select>
+      </div>
+
+      <!-- Term (Global, read-only from TermService) -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Term (SYID)</label>
+        <div class="w-full border rounded px-3 py-2 bg-gray-50 text-gray-700">
+          {{ vm.termLabel || (vm.form.term || '') }}
+        </div>
+      </div>
+
+      <!-- Student (autocomplete) -->
+      <div class="relative">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Student</label>
+        <input type="text"
+               class="w-full border rounded px-3 py-2"
+               placeholder="Search student by name or number…"
+               pui-autocomplete
+               pui-source="vm.students"
+               pui-item-key="id"
+               pui-label="(item.student_number + ' — ' + (item.last_name || '') + ', ' + (item.first_name || ''))"
+               pui-on-query="vm.onStudentQuery($query)"
+               pui-on-select="vm.onStudentSelect()"
+               ng-model="vm.selectedStudentId" />
+      </div>
+
+      <!-- Toggle create new PD -->
+      <div class="col-span-1 md:col-span-3 lg:col-span-4">
+        <label class="inline-flex items-center space-x-2">
+          <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600"
+                 ng-model="vm.form.use_new_pd"
+                 ng-change="vm.toggleNewPd()" />
+          <span class="text-sm text-gray-800">Create Payment Description inline</span>
+        </label>
+      </div>
+
+      <!-- Existing PD -->
+      <div ng-if="!vm.form.use_new_pd">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Payment Description</label>
+        <select class="w-full border rounded px-3 py-2"
+                ng-model="vm.form.payment_description_id"
+                ng-change="vm.onPdChange()"
+                ng-options="p.id as (p.name + (p.amount != null ? ' - ' + (p.amount | number:2) : '')) for p in vm.meta.payment_descriptions">
+          <option value="">-- Select Payment Description --</option>
+        </select>
+      </div>
+
+      <!-- New PD (inline) -->
+      <div class="md:col-span-2" ng-if="vm.form.use_new_pd">
+        <label class="block text-sm font-medium text-gray-700 mb-1">New Payment Description Name</label>
+        <input type="text" class="w-full border rounded px-3 py-2"
+               placeholder="e.g. Library Fine, Missing ID, etc."
+               ng-model="vm.form.new_payment_description.name" />
+      </div>
+      <div ng-if="vm.form.use_new_pd">
+        <label class="block text-sm font-medium text-gray-700 mb-1">New PD Amount (optional)</label>
+        <input type="number" step="0.01" class="w-full border rounded px-3 py-2"
+               placeholder="Defaults to 0.00 if omitted"
+               ng-model="vm.form.new_payment_description.amount" />
+      </div>
+      <div ng-if="vm.form.use_new_pd">
+        <label class="block text-sm font-medium text-gray-700 mb-1">New PD Campus (optional)</label>
+        <input type="number" class="w-full border rounded px-3 py-2"
+               placeholder="Leave blank to use current campus"
+               ng-model="vm.form.new_payment_description.campus_id" />
+      </div>
+
+      <!-- Description -->
+      <div class="md:col-span-2 lg:col-span-3">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+        <input type="text" class="w-full border rounded px-3 py-2"
+               placeholder="Description (required if Payment Description is not selected)"
+               ng-model="vm.form.description" />
+      </div>
+
+      <!-- Amount -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Amount</label>
+        <input type="number" step="0.01" class="w-full border rounded px-3 py-2"
+               placeholder="e.g. 100.00"
+               ng-model="vm.form.amount" />
+      </div>
+
+      <!-- Posted At -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Posted At (optional)</label>
+        <input type="datetime-local" class="w-full border rounded px-3 py-2"
+               ng-model="vm.form.posted_at" />
+      </div>
+
+      <!-- Remarks -->
+      <div class="md:col-span-2 lg:col-span-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Remarks</label>
+        <textarea class="w-full border rounded px-3 py-2"
+                  rows="2"
+                  placeholder="Optional remarks"
+                  ng-model="vm.form.remarks"></textarea>
+      </div>
+
+      <!-- Submit -->
+      <div class="md:col-span-2 lg:col-span-4 flex justify-end">
+        <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-60"
+                ng-disabled="vm.loading"
+                ng-click="vm.submit()">
+          <span ng-if="!vm.loading">Create Deficiency</span>
+          <span ng-if="vm.loading">Submitting...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search/List -->
+  <div class="bg-white rounded border border-gray-200 shadow-sm p-4">
+    <h2 class="text-lg font-semibold text-gray-800 mb-3">Search</h2>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Department</label>
+        <select class="w-full border rounded px-3 py-2"
+                ng-model="vm.filters.department_code"
+                ng-options="d for d in vm.meta.departments">
+          <option value="">-- Any --</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Term (SYID)</label>
+        <select class="w-full border rounded px-3 py-2"
+                ng-model="vm.filters.term"
+                ng-options="t.intID as (t.label || (t.intID + '')) for t in vm.terms">
+          <option value="">-- Any --</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Student Number</label>
+        <input type="text" class="w-full border rounded px-3 py-2"
+               placeholder="e.g. 20-12345"
+               ng-model="vm.filters.student_number" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Student ID</label>
+        <input type="number" class="w-full border rounded px-3 py-2"
+               placeholder="Internal Student ID"
+               ng-model="vm.filters.student_id" />
+      </div>
+    </div>
+
+    <div class="mt-4 flex items-center justify-end space-x-3">
+      <button class="px-3 py-2 bg-gray-100 text-gray-800 rounded hover:bg-gray-200"
+              ng-click="vm.search(true)">
+        Search
+      </button>
+    </div>
+
+    <!-- Results -->
+    <div class="mt-4 overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Student</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Term</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Department</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Description</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Billing ID</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Posted At</th>
+            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Remarks</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-100">
+          <tr ng-repeat="it in vm.items track by it.id">
+            <td class="px-3 py-2 text-sm text-gray-900">{{ it.id }}</td>
+            <td class="px-3 py-2 text-sm text-gray-700">
+              <div class="font-medium text-gray-900">
+                {{ it.student_full_name
+                   || ((it.student_last_name || '') + (it.student_last_name ? ', ' : '') + (it.student_first_name || '') + (it.student_middle_name ? (' ' + it.student_middle_name) : ''))
+                   || it.student_id }}
+              </div>
+              <div class="text-xs text-gray-500" ng-if="it.student_number">
+                {{ it.student_number }}
+              </div>
+            </td>
+            <td class="px-3 py-2 text-sm text-gray-700">{{ it.syid }}</td>
+            <td class="px-3 py-2 text-sm text-gray-700 uppercase">{{ it.department_code }}</td>
+            <td class="px-3 py-2 text-sm text-gray-700">
+              <div class="font-medium text-gray-900">{{ it.description }}</div>
+              <div class="text-xs text-gray-500" ng-if="it.payment_description_name">
+                PD: {{ it.payment_description_name }}
+              </div>
+            </td>
+            <td class="px-3 py-2 text-sm text-gray-700">{{ it.amount | number:2 }}</td>
+            <td class="px-3 py-2 text-sm text-gray-700">{{ it.billing_id }}</td>
+            <td class="px-3 py-2 text-sm text-gray-700">{{ it.posted_at || '-' }}</td>
+            <td class="px-3 py-2 text-sm text-gray-700 max-w-md truncate" title="{{ it.remarks }}">{{ it.remarks }}</td>
+          </tr>
+          <tr ng-if="!vm.loading && (!vm.items || !vm.items.length)">
+            <td colspan="9" class="px-3 py-6 text-center text-gray-500">No results</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="mt-4 flex items-center justify-between">
+      <div class="text-sm text-gray-600">Total: {{ vm.total }}</div>
+      <div class="space-x-2">
+        <button class="px-3 py-2 bg-gray-100 text-gray-800 rounded hover:bg-gray-200"
+                ng-disabled="vm.filters.page <= 1 || vm.loading"
+                ng-click="vm.pageChange(-1)">
+          Prev
+        </button>
+        <span class="text-sm text-gray-700">Page {{ vm.filters.page }}</span>
+        <button class="px-3 py-2 bg-gray-100 text-gray-800 rounded hover:bg-gray-200"
+                ng-disabled="vm.loading || (vm.items.length < vm.filters.per_page)"
+                ng-click="vm.pageChange(1)">
+          Next
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

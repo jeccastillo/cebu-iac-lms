@@ -185,8 +185,8 @@
     vm.search();
   }
 
-  FacultyEditController.$inject = ['$routeParams', '$location', 'StorageService', 'FacultyService', 'ToastService'];
-  function FacultyEditController($routeParams, $location, StorageService, FacultyService, ToastService) {
+  FacultyEditController.$inject = ['$routeParams', '$location', 'StorageService', 'FacultyService', 'ToastService', 'DepartmentDeficienciesService', 'CampusService', '$scope'];
+  function FacultyEditController($routeParams, $location, StorageService, FacultyService, ToastService, DepartmentDeficienciesService, CampusService, $scope) {
     var vm = this;
 
     vm.state = StorageService.getJSON('loginState');
@@ -221,6 +221,136 @@
       campus_id: null
     };
 
+    // Department tagging state
+    vm.dept = {
+      list: [],
+      meta: { departments: [] },
+      form: { department_code: '' },
+      selectedCampus: null,
+      loading: false,
+      error: null
+    };
+
+    // Bind to globally selected campus (Header campus selector)
+    vm.initCampusBinding = function () {
+      function setFromSelectedCampus() {
+        try {
+          var campus = (CampusService && CampusService.getSelectedCampus) ? CampusService.getSelectedCampus() : null;
+          vm.dept.selectedCampus = campus || null;
+        } catch (e) {}
+      }
+      var p = (CampusService && CampusService.init) ? CampusService.init() : null;
+      if (p && p.then) { p.then(setFromSelectedCampus); } else { setFromSelectedCampus(); }
+
+      // Listen to global campus changes
+      if ($scope && $scope.$on) {
+        $scope.$on('campusChanged', function (event, data) {
+          var campus = data && data.selectedCampus ? data.selectedCampus : null;
+          vm.dept.selectedCampus = campus || null;
+        });
+      }
+    };
+    try { vm.initCampusBinding(); } catch (e) {}
+
+    vm.loadDepartmentsMeta = function () {
+      vm.dept.error = null;
+      DepartmentDeficienciesService.meta()
+        .then(function (res) {
+          if (res && res.success !== false && res.data && Array.isArray(res.data.departments)) {
+            vm.dept.meta.departments = res.data.departments;
+            if (!vm.dept.form.department_code && vm.dept.meta.departments.length) {
+              vm.dept.form.department_code = vm.dept.meta.departments[0];
+            }
+          } else if (res && Array.isArray(res.departments)) {
+            vm.dept.meta.departments = res.departments;
+          } else {
+            vm.dept.meta.departments = [];
+          }
+        })
+        .catch(function (err) {
+          vm.dept.error = (err && err.message) ? err.message : 'Failed to load departments meta.';
+        });
+    };
+
+    vm.loadDepartments = function () {
+      if (!vm.isEdit || !vm.id) return;
+      vm.dept.loading = true;
+      vm.dept.error = null;
+      FacultyService.listDepartments(vm.id)
+        .then(function (res) {
+          var rows = (res && res.success !== false && res.data) ? res.data : res;
+          vm.dept.list = Array.isArray(rows) ? rows : [];
+        })
+        .catch(function (err) {
+          vm.dept.error = (err && err.message) ? err.message : 'Failed to load department tags.';
+        })
+        .finally(function () { vm.dept.loading = false; });
+    };
+
+    vm.addDepartmentTag = function () {
+      if (!vm.isEdit || !vm.id) return;
+      var code = (vm.dept.form.department_code || '').trim();
+
+      // Campus should be the globally selected campus
+      var campusId = null;
+      try {
+        if (vm.dept.selectedCampus && vm.dept.selectedCampus.id !== undefined && vm.dept.selectedCampus.id !== null) {
+          campusId = parseInt(vm.dept.selectedCampus.id, 10);
+          if (isNaN(campusId)) campusId = null;
+        }
+      } catch (e) { campusId = null; }
+
+      if (!code) {
+        vm.dept.error = 'Please select a department.';
+        return;
+      }
+      if (campusId === null) {
+        vm.dept.error = 'Please select a campus from the global campus selector.';
+        return;
+      }
+
+      vm.dept.loading = true;
+      vm.dept.error = null;
+      FacultyService.addDepartment(vm.id, { department_code: code, campus_id: campusId })
+        .then(function () {
+          if (ToastService && ToastService.success) {
+            ToastService.success('Department tag saved.');
+          }
+          vm.loadDepartments();
+        })
+        .catch(function (err) {
+          var msg = (err && err.message) ? err.message : 'Failed to save department tag.';
+          vm.dept.error = msg;
+          if (ToastService && ToastService.error) {
+            ToastService.error(msg);
+          }
+        })
+        .finally(function () { vm.dept.loading = false; });
+    };
+
+    vm.removeDepartmentTag = function (tag) {
+      if (!vm.isEdit || !vm.id || !tag) return;
+      var code = tag.department_code || tag.code || tag.department || '';
+      var campusId = (typeof tag.campus_id !== 'undefined') ? tag.campus_id : null;
+      vm.dept.loading = true;
+      vm.dept.error = null;
+      FacultyService.removeDepartment(vm.id, code, campusId)
+        .then(function () {
+          if (ToastService && ToastService.success) {
+            ToastService.success('Department tag removed.');
+          }
+          vm.loadDepartments();
+        })
+        .catch(function (err) {
+          var msg = (err && err.message) ? err.message : 'Failed to remove department tag.';
+          vm.dept.error = msg;
+          if (ToastService && ToastService.error) {
+            ToastService.error(msg);
+          }
+        })
+        .finally(function () { vm.dept.loading = false; });
+    };
+
     vm.load = function () {
       if (!vm.isEdit) return;
       vm.loading = true;
@@ -247,6 +377,10 @@
           vm.model.strFacultyNumber = row.strFacultyNumber || '';
           vm.model.campus_id        = (typeof row.campus_id !== 'undefined' && row.campus_id !== null) ? parseInt(row.campus_id, 10) : null;
           vm.model.strPass          = ''; // never prefill password
+
+          // Load department tagging meta and current tags
+          try { vm.loadDepartmentsMeta(); } catch (e) {}
+          try { vm.loadDepartments(); } catch (e) {}
         })
         .catch(function (err) {
           vm.error = (err && err.data && err.data.message) ? err.data.message : 'Failed to load faculty.';

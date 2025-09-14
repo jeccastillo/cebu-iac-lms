@@ -116,4 +116,81 @@
       </div>
     </div>
   </div>
+
+  <!-- Department Tags Panel (Edit mode only) -->
+  <div class="mt-8" ng-if="vm.isEdit">
+    <div class="bg-white rounded-lg shadow border border-gray-200">
+      <div class="p-4 border-b border-gray-200">
+        <h2 class="text-lg font-semibold text-gray-900">Department Tags</h2>
+        <p class="text-xs text-gray-500">Assign departments this faculty can act for. Campus is taken from the global campus selector.</p>
+      </div>
+      <div class="p-4 space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="md:col-span-1">
+            <label class="block text-sm font-medium text-gray-700">Department</label>
+            <select class="mt-1 block w-full border rounded px-3 py-2 text-sm"
+                    ng-model="vm.dept.form.department_code"
+                    ng-options="d for d in vm.dept.meta.departments">
+              <option value="">-- Select Department --</option>
+            </select>
+          </div>
+          <div class="md:col-span-1">
+            <label class="block text-sm font-medium text-gray-700">Campus (from global selector)</label>
+            <div class="mt-1 block w-full border rounded px-3 py-2 text-sm bg-gray-50 text-gray-700">
+              <span ng-if="vm.dept.selectedCampus">
+                {{ vm.dept.selectedCampus.campus_name || 'Campus' }} (ID: {{ vm.dept.selectedCampus.id }})
+              </span>
+              <span ng-if="!vm.dept.selectedCampus" class="text-gray-500">
+                No campus selected
+              </span>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">Change campus using the global selector in the header.</p>
+          </div>
+          <div class="md:col-span-1 flex items-end">
+            <button type="button"
+                    class="px-3 py-2 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
+                    ng-click="vm.addDepartmentTag()"
+                    ng-disabled="vm.dept.loading || !vm.dept.form.department_code || !vm.dept.selectedCampus">
+              <span ng-if="!vm.dept.loading">Add Tag</span>
+              <span ng-if="vm.dept.loading">Saving...</span>
+            </button>
+          </div>
+        </div>
+
+        <div ng-if="vm.dept.error" class="bg-red-50 text-red-700 border border-red-200 rounded px-3 py-2 text-sm">
+          {{ vm.dept.error }}
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Department</th>
+                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Campus</th>
+                <th class="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-100">
+              <tr ng-repeat="t in vm.dept.list">
+                <td class="px-3 py-2 text-sm text-gray-900">{{ t.department_code || t.department }}</td>
+                <td class="px-3 py-2 text-sm text-gray-900">{{ (t.campus_id != null && t.campus_id !== '') ? t.campus_id : '—' }}</td>
+                <td class="px-3 py-2 text-right">
+                  <button type="button"
+                          class="text-xs px-2 py-1 rounded border border-red-300 text-red-700 hover:bg-red-50"
+                          ng-click="vm.removeDepartmentTag(t)"
+                          ng-disabled="vm.dept.loading">
+                    Remove
+                  </button>
+                </td>
+              </tr>
+              <tr ng-if="!vm.dept.list.length">
+                <td colspan="3" class="px-3 py-6 text-center text-sm text-gray-400">No department tags yet</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
 </div>

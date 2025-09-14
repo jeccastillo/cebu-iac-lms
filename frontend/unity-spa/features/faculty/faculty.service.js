@@ -57,6 +57,25 @@
       // Delete faculty
       remove: function (id) {
         return $http.delete(BASE + '/faculty/' + encodeURIComponent(id), _adminHeaders()).then(_unwrap);
+      },
+
+      // --------------- Faculty Department Tags ---------------
+      // GET /faculty/{id}/departments
+      listDepartments: function (facultyId) {
+        return $http.get(BASE + '/faculty/' + encodeURIComponent(facultyId) + '/departments', _adminHeaders()).then(_unwrap);
+      },
+      // POST /faculty/{id}/departments
+      // payload: { department_code: string, campus_id?: number|null }
+      addDepartment: function (facultyId, payload) {
+        return $http.post(BASE + '/faculty/' + encodeURIComponent(facultyId) + '/departments', payload, _adminHeaders()).then(_unwrap);
+      },
+      // DELETE /faculty/{id}/departments/{code}?campus_id=...
+      removeDepartment: function (facultyId, code, campusId) {
+        var url = BASE + '/faculty/' + encodeURIComponent(facultyId) + '/departments/' + encodeURIComponent(code);
+        if (campusId !== undefined && campusId !== null && ('' + campusId).trim() !== '') {
+          url += '?campus_id=' + encodeURIComponent(campusId);
+        }
+        return $http.delete(url, _adminHeaders()).then(_unwrap);
       }
     };
   }

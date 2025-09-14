@@ -63,6 +63,10 @@ use App\Http\Controllers\Api\V1\ClasslistAttendanceController;
 use App\Services\ClasslistSlotsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\PaymentGatewayController;
+use App\Http\Controllers\Api\V1\PaymentsWebhookController;
+use App\Http\Controllers\Api\V1\DepartmentDeficiencyController;
+use App\Http\Controllers\Api\V1\FacultyDepartmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -121,6 +125,11 @@ Route::prefix('v1')->group(function () {
     Route::post('/faculty', [FacultyController::class, 'store'])->middleware('role:admin');
     Route::put('/faculty/{id}', [FacultyController::class, 'update'])->middleware('role:admin');
     Route::delete('/faculty/{id}', [FacultyController::class, 'destroy'])->middleware('role:admin');
+
+    // Faculty Department tags (admin-only)
+    Route::get('/faculty/{id}/departments', [FacultyDepartmentController::class, 'index'])->middleware('role:admin');
+    Route::post('/faculty/{id}/departments', [FacultyDepartmentController::class, 'store'])->middleware('role:admin');
+    Route::delete('/faculty/{id}/departments/{code}', [FacultyDepartmentController::class, 'destroy'])->middleware('role:admin');
 
     // Admissions - application submission
     Route::post('/admissions/student-info', [AdmissionsController::class, 'store']);
@@ -484,12 +493,20 @@ Route::prefix('v1')->group(function () {
     Route::delete('/payment-modes/{id}', [PaymentModeController::class, 'destroy'])->middleware('role:finance,admin');
     Route::post('/payment-modes/{id}/restore', [PaymentModeController::class, 'restore'])->middleware('role:finance,admin');
 
-    // Payment Descriptions CRUD (Finance/Admin)
-    Route::get('/payment-descriptions', [PaymentDescriptionController::class, 'index'])->middleware('role:finance,admin');
+    // Payment Descriptions CRUD (Finance/Admin | department_admin limited to index/store)
+    Route::get('/payment-descriptions', [PaymentDescriptionController::class, 'index'])->middleware('role:finance,department_admin,admin');
     Route::get('/payment-descriptions/{id}', [PaymentDescriptionController::class, 'show'])->middleware('role:finance,admin');
-    Route::post('/payment-descriptions', [PaymentDescriptionController::class, 'store'])->middleware('role:finance,admin');
+    Route::post('/payment-descriptions', [PaymentDescriptionController::class, 'store'])->middleware('role:finance,department_admin,admin');
     Route::put('/payment-descriptions/{id}', [PaymentDescriptionController::class, 'update'])->middleware('role:finance,admin');
     Route::delete('/payment-descriptions/{id}', [PaymentDescriptionController::class, 'destroy'])->middleware('role:finance,admin');
+
+    // Department Deficiencies (Department Admin/Admin)
+    Route::get('/department-deficiencies', [DepartmentDeficiencyController::class, 'index'])->middleware('role:department_admin,admin');
+    Route::get('/department-deficiencies/meta', [DepartmentDeficiencyController::class, 'meta'])->middleware('role:department_admin,admin');
+    Route::get('/department-deficiencies/{id}', [DepartmentDeficiencyController::class, 'show'])->middleware('role:department_admin,admin');
+    Route::post('/department-deficiencies', [DepartmentDeficiencyController::class, 'store'])->middleware('role:department_admin,admin');
+    Route::put('/department-deficiencies/{id}', [DepartmentDeficiencyController::class, 'update'])->middleware('role:department_admin,admin');
+    Route::delete('/department-deficiencies/{id}', [DepartmentDeficiencyController::class, 'destroy'])->middleware('role:department_admin,admin');
 
     // Requirements CRUD (Admissions/Admin)
     Route::get('/requirements', [RequirementController::class, 'index'])->middleware('role:admissions,admin');
@@ -581,4 +598,12 @@ Route::prefix('v1')->group(function () {
     Route::post('/clinic/attachments', [ClinicAttachmentController::class, 'store'])->middleware('role:clinic_staff,clinic_admin,admin');
     Route::get('/clinic/attachments/{id}/download', [ClinicAttachmentController::class, 'download'])->middleware('role:clinic_staff,clinic_admin,admin');
     Route::delete('/clinic/attachments/{id}', [ClinicAttachmentController::class, 'destroy'])->middleware('role:clinic_admin,admin');
+
+    // Payments: Checkout and Webhooks
+    Route::post('/payments/checkout', [PaymentGatewayController::class, 'checkout']);
+    Route::post('/payments/cancel', [PaymentGatewayController::class, 'cancel'])->middleware('role:finance,admin');
+    // Webhooks (public endpoints)
+    Route::post('/payments/webhook/paynamics', [PaymentsWebhookController::class, 'paynamics'])->name('payments.webhook.paynamics');
+    Route::post('/payments/webhook/bdo', [PaymentsWebhookController::class, 'bdo'])->name('payments.webhook.bdo');
+    Route::post('/payments/webhook/maxx', [PaymentsWebhookController::class, 'maxx'])->name('payments.webhook.maxx');
 });

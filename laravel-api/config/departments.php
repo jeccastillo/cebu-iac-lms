@@ -58,4 +58,25 @@ return [
     
     'copy_admin' => env('DEPT_EMAIL_COPY_ADMIN', false),
     'admin_email' => env('DEPT_EMAIL_ADMIN', 'admin@iacademy.edu.ph'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Department Codes (Authorization/Scoping)
+    |--------------------------------------------------------------------------
+    |
+    | Canonical list of department codes used for authorization
+    | and scoping of department-admin operations.
+    |
+    */
+    'codes' => [
+        'registrar',
+        'finance',
+        'admissions',
+        'building_admin',
+        'purchasing',
+        'academics',
+        'clinic',
+        'guidance',
+        'osas',
+    ],
 ];
