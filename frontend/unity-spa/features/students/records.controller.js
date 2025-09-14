@@ -447,29 +447,19 @@
     vm.fetchChecklist = function () {
       vm.loading.checklist = true;
       vm.error.checklist = null;
-      return ChecklistService.get(vm.id, {})
-        .then(function (resp) {
-          // API returns { success, data }
-          var data = resp && resp.data ? resp.data : (resp || null);
-          
-          // If no checklist exists, auto-generate it
-          if (!data || !data.items || data.items.length === 0) {
-            return vm.generateChecklist().then(function() {
-              return ChecklistService.get(vm.id, {});
-            }).then(function(resp) {
-              data = resp && resp.data ? resp.data : (resp || null);
-              vm.checklist = data;
-              // Group checklist after both data are available
-              vm.tryGroupChecklist();
-              return ChecklistService.summary(vm.id, {});
-            });
-          } else {
-            vm.checklist = data;
-            // Group checklist after both data are available
-            vm.tryGroupChecklist();
-            return ChecklistService.summary(vm.id, {});
-          }
-        })
+      
+      // Always generate a fresh checklist when visiting student records page
+      console.log('Auto-generating fresh checklist for student ' + vm.id + '...');
+      return vm.generateChecklist().then(function() {
+        return ChecklistService.get(vm.id, {});
+      }).then(function(resp) {
+        var data = resp && resp.data ? resp.data : (resp || null);
+        vm.checklist = data;
+        console.log('Fresh checklist loaded:', data);
+        // Group checklist after both data are available
+        vm.tryGroupChecklist();
+        return ChecklistService.summary(vm.id, {});
+      })
         .then(function (resp) {
           var data = resp && resp.data ? resp.data : (resp || null);
           vm.checklistSummary = data;
@@ -490,16 +480,19 @@
     };
 
     vm.generateChecklist = function () {
+      console.log('Generating new checklist for student ' + vm.id + '...');
       vm.loading.checklistAction = true;
       vm.error.checklistAction = null;
       var payload = {
         // intCurriculumID optional; backend falls back to tb_mas_users.intCurriculumID
       };
       return ChecklistService.generate(vm.id, payload)
-        .then(function () {
+        .then(function (resp) {
+          console.log('Checklist generation successful:', resp);
           return vm.fetchChecklist();
         })
-        .catch(function () {
+        .catch(function (error) {
+          console.error('Failed to generate checklist:', error);
           vm.error.checklistAction = 'Failed to generate checklist.';
         })
         .finally(function () {

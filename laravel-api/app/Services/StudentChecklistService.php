@@ -24,6 +24,9 @@ class StudentChecklistService
      */
     public function generateFromCurriculum(int $intStudentID, int $intCurriculumID): StudentChecklist
     {
+        // Delete any existing checklists for this student first
+        StudentChecklist::where('intStudentID', $intStudentID)->delete();
+        
         // Create a new checklist row (no checklist-level year/sem)
         $checklist = StudentChecklist::create([
             'intStudentID'    => $intStudentID,
