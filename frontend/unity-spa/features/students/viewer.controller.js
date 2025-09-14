@@ -27,19 +27,19 @@
 
     // api endpoints
     vm.api = {
+      studentInfo: APP_CONFIG.API_BASE + '/students/' + vm.id,
       balances: APP_CONFIG.API_BASE + '/student/balances',
       records: APP_CONFIG.API_BASE + '/student/records',
       recordsByTerm: APP_CONFIG.API_BASE + '/student/records-by-term',
-      ledger: APP_CONFIG.API_BASE + '/student/ledger',
       terms: APP_CONFIG.API_BASE + '/generic/terms'
     };
 
     // state
-    vm.loading = { balances: false, records: false, ledger: false, checklist: false, checklistAction: false };
-    vm.error = { balances: null, records: null, ledger: null, checklist: null, checklistAction: null };
+    vm.loading = { studentInfo: false, balances: false, records: false, checklist: false, checklistAction: false };
+    vm.error = { studentInfo: null, balances: null, records: null, checklist: null, checklistAction: null };
+    vm.studentInfo = null;
     vm.balances = null;
     vm.records = null;
-    vm.ledger = null;
 
     // Checklist state
     vm.checklist = null;
@@ -291,7 +291,36 @@
         });
     };
 
+    // Helper function to get full name
+    vm.getFullName = function() {
+      if (!vm.studentInfo) return '-';
+      var parts = [];
+      if (vm.studentInfo.last_name) parts.push(vm.studentInfo.last_name);
+      if (vm.studentInfo.first_name) parts.push(vm.studentInfo.first_name);
+      if (vm.studentInfo.middle_name) parts.push(vm.studentInfo.middle_name);
+      return parts.length > 0 ? parts.join(', ') : '-';
+    };
+
     // actions
+    vm.fetchStudentInfo = function () {
+      vm.loading.studentInfo = true;
+      vm.error.studentInfo = null;
+      return $http.get(vm.api.studentInfo)
+        .then(function (resp) {
+          if (resp && resp.data && resp.data.success !== false) {
+            vm.studentInfo = resp.data.data || resp.data;
+          } else {
+            vm.error.studentInfo = 'Failed to load student information.';
+          }
+        })
+        .catch(function () {
+          vm.error.studentInfo = 'Failed to load student information.';
+        })
+        .finally(function () {
+          vm.loading.studentInfo = false;
+        });
+    };
+
     vm.fetchBalances = function () {
       vm.loading.balances = true;
       vm.error.balances = null;
@@ -377,25 +406,6 @@
         });
     };
 
-    vm.fetchLedger = function () {
-      vm.loading.ledger = true;
-      vm.error.ledger = null;
-      return $http.post(vm.api.ledger, { student_id: vm.id })
-        .then(function (resp) {
-          if (resp && resp.data && resp.data.success !== false) {
-            vm.ledger = resp.data.data || resp.data;
-          } else {
-            vm.error.ledger = 'Failed to load ledger.';
-          }
-        })
-        .catch(function () {
-          vm.error.ledger = 'Failed to load ledger.';
-        })
-        .finally(function () {
-          vm.loading.ledger = false;
-        });
-    };
-
     vm.loadTerms = function () {
       return $http.get(vm.api.terms)
         .then(function (resp) {
@@ -445,22 +455,16 @@
       }
     });
 
-    // legacy utility links (optional)
-    vm.editUrl = function () {
-      return vm.links.unity.replace('/unity', '') + '/student/edit_student/' + vm.id;
-    };
-    vm.financesUrl = function () {
-      return '#/finance/cashier/' + vm.id;
-    };
-
     // init
     vm.init = function () {
+      // Fetch student information first
+      vm.fetchStudentInfo();
+      
       // Checklist operates by student id
       vm.fetchChecklist();
 
-      // Load balances and ledger right away using student_id
+      // Load balances right away using student_id
       vm.fetchBalances();
-      vm.fetchLedger();
 
       // Load terms first to apply saved/active term, then fetch records accordingly
       vm.loadTerms().then(function () {

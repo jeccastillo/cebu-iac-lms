@@ -47,6 +47,7 @@
     // state
     vm.loading = { checklist: false, checklistAction: false, grades: false };
     vm.error = { checklist: null, checklistAction: null, grades: null };
+    vm.groupedChecklist = [];
 
     // Checklist data
     vm.checklist = null;
@@ -304,6 +305,8 @@
           if (resp && resp.data && resp.data.success !== false) {
             var data = resp.data.data || resp.data;
             vm.records = _deriveTermsShapeIfFlat(data);
+            // Group checklist after both data are available
+            vm.tryGroupChecklist();
           } else {
             vm.error.grades = 'Failed to load grades.';
           }
@@ -337,6 +340,94 @@
     }
 
     // Checklist actions
+    // Helper function for semester label formatting (for individual items)
+    vm.getSemesterLabel = function(semester) {
+      if (semester == 1) return '1st Sem';
+      else if (semester == 2) return '2nd Sem';
+      else if (semester == 3) return '3rd Sem';
+      else if (semester == 4) return 'Summer';
+      else return semester || '';
+    };
+
+    // Group checklist items by term and year using actual student records data
+    vm.groupChecklistByTerm = function() {
+      if (!vm.checklist || !vm.checklist.items) {
+        vm.groupedChecklist = [];
+        return;
+      }
+
+      var grouped = {};
+      
+      vm.checklist.items.forEach(function(item) {
+        var yearLevel = item.intYearLevel || 0;
+        var semester = item.intSem || 0;
+        var key = yearLevel + '-' + semester;
+        
+        if (!grouped[key]) {
+          // Try to find matching term from student records
+          var termInfo = vm.findTermInfo(yearLevel, semester);
+          
+          grouped[key] = {
+            yearLevel: yearLevel,
+            semester: semester,
+            schoolYear: termInfo ? termInfo.schoolYear : null,
+            term: termInfo ? termInfo.term : null,
+            label: termInfo ? termInfo.label : vm.getSemesterLabel(semester) + ' (Year ' + yearLevel + ')',
+            items: []
+          };
+        }
+        grouped[key].items.push(item);
+      });
+
+      // Convert to array and sort
+      vm.groupedChecklist = Object.keys(grouped).map(function(key) {
+        return grouped[key];
+      }).sort(function(a, b) {
+        // Sort by year level first, then by semester
+        if (a.yearLevel !== b.yearLevel) {
+          return a.yearLevel - b.yearLevel;
+        }
+        return a.semester - b.semester;
+      });
+    };
+
+    // Find term information from student records data
+    vm.findTermInfo = function(yearLevel, semester) {
+      if (!vm.records || !vm.records.terms) {
+        return null;
+      }
+
+      // Look for a term that matches the year level and semester
+      for (var i = 0; i < vm.records.terms.length; i++) {
+        var term = vm.records.terms[i];
+        if (term.records && term.records.length > 0) {
+          // Check if any record in this term matches our criteria
+          var firstRecord = term.records[0];
+          
+          // Try to get semester number from the term data
+          var termSemester = firstRecord.enumSem || firstRecord.intSem || null;
+          if (termSemester) {
+            termSemester = parseInt(termSemester, 10);
+          }
+          
+          // If we find a matching semester, return this term's info
+          if (termSemester === semester) {
+            var schoolYear = firstRecord.strYearStart && firstRecord.strYearEnd 
+              ? (firstRecord.strYearStart + '-' + firstRecord.strYearEnd)
+              : (firstRecord.school_year || firstRecord.schoolYear || firstRecord.sy_text || firstRecord.sy || null);
+            
+            return {
+              schoolYear: schoolYear,
+              term: term.term || term.label,
+              label: term.term || term.label || (vm.getSemesterLabel(semester) + ' ' + schoolYear)
+            };
+          }
+        }
+      }
+      
+      return null;
+    };
+
     vm.fetchChecklist = function () {
       vm.loading.checklist = true;
       vm.error.checklist = null;
@@ -344,20 +435,24 @@
         .then(function (resp) {
           // API returns { success, data }
           var data = resp && resp.data ? resp.data : (resp || null);
-          vm.checklist = data;
-
-          // Normalize date fields for date input binding
-          try {
-            if (vm.checklist && vm.checklist.items && angular.isArray(vm.checklist.items)) {
-              vm.checklist.items.forEach(function (it) {
-                if (it && it.dteCompleted) {
-                  it.dteCompleted = parseDateYMD(it.dteCompleted);
-                }
-              });
-            }
-          } catch (e) {}
-
-          return ChecklistService.summary(vm.id, {});
+          
+          // If no checklist exists, auto-generate it
+          if (!data || !data.items || data.items.length === 0) {
+            return vm.generateChecklist().then(function() {
+              return ChecklistService.get(vm.id, {});
+            }).then(function(resp) {
+              data = resp && resp.data ? resp.data : (resp || null);
+              vm.checklist = data;
+              // Group checklist after both data are available
+              vm.tryGroupChecklist();
+              return ChecklistService.summary(vm.id, {});
+            });
+          } else {
+            vm.checklist = data;
+            // Group checklist after both data are available
+            vm.tryGroupChecklist();
+            return ChecklistService.summary(vm.id, {});
+          }
         })
         .then(function (resp) {
           var data = resp && resp.data ? resp.data : (resp || null);
@@ -369,6 +464,13 @@
         .finally(function () {
           vm.loading.checklist = false;
         });
+    };
+
+    // Group checklist only when both checklist and records data are available
+    vm.tryGroupChecklist = function() {
+      if (vm.checklist && vm.records) {
+        vm.groupChecklistByTerm();
+      }
     };
 
     vm.generateChecklist = function () {
