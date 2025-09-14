@@ -456,6 +456,10 @@
       return '#/students/' + row.id;
     };
 
+    vm.editChecklistUrl = function (id) {
+      return '#/students/' + id + '/checklist/edit';
+    };
+
     // Row actions dropdown state
     vm.menuOpenId = null;
     vm.toggleMenu = function (id) {

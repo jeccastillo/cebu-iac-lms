@@ -132,6 +132,12 @@
         controllerAs: "vm",
         requiredRoles: ["registrar", "admin"],
       })
+      .when("/students/:student_id/checklist/edit", {
+        templateUrl: "features/students/checklist-edit.html",
+        controller: "ChecklistEditController",
+        controllerAs: "vm",
+        requiredRoles: ["registrar", "admin"],
+      })
       .when("/admissions/apply", {
         templateUrl: "features/admissions/apply.html",
         controller: "AdmissionsApplyController",

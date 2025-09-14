@@ -489,11 +489,13 @@
       return ChecklistService.generate(vm.id, payload)
         .then(function (resp) {
           console.log('Checklist generation successful:', resp);
-          return vm.fetchChecklist();
+          // Don't call fetchChecklist() here to avoid infinite loop
+          return resp;
         })
         .catch(function (error) {
           console.error('Failed to generate checklist:', error);
           vm.error.checklistAction = 'Failed to generate checklist.';
+          throw error; // Re-throw to let fetchChecklist handle the error
         })
         .finally(function () {
           vm.loading.checklistAction = false;

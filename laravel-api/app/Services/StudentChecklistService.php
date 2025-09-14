@@ -224,9 +224,9 @@ class StudentChecklistService
             ->where('cls.intStudentID', $intStudentID)
             ->where(function($query) {
                 // No final grade recorded, or final grade is null/empty
-                $query->whereNull('cls.numFinalGrade')
-                      ->orWhere('cls.numFinalGrade', '=', 0)
-                      ->orWhere('cls.numFinalGrade', '=', '');
+                $query->whereNull('cls.floatFinalGrade')
+                      ->orWhere('cls.floatFinalGrade', '=', 0)
+                      ->orWhere('cls.floatFinalGrade', '=', '');
             })
             ->where(function($query) {
                 // No completion remarks or not marked as dropped/withdrawn
@@ -265,8 +265,8 @@ class StudentChecklistService
             ->where(function($query) {
                 $query->where(function($subQuery) {
                     // Failed by grade (> 3.0)
-                    $subQuery->whereNotNull('cls.numFinalGrade')
-                             ->where('cls.numFinalGrade', '>', 3.0);
+                    $subQuery->whereNotNull('cls.floatFinalGrade')
+                             ->where('cls.floatFinalGrade', '>', 3.0);
                 })
                 ->orWhere(function($subQuery) {
                     // Failed by remarks
