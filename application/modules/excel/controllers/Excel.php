@@ -1768,7 +1768,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A2', 'iACADEMY');
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A3', 'Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City');
+                    ->setCellValue('A3', $this->data['campus_address']);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A4', date("M j, Y h:i a"));
         $objPHPExcel->setActiveSheetIndex(0)
@@ -1844,7 +1844,7 @@ class Excel extends CI_Controller {
 
             foreach($classlists as $cl){
 
-            $objPHPExcel->setActiveSheetIndex(0)
+                $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A'.$i, $count.".")
                     ->setCellValue('B'.$i, preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']))
                     ->setCellValue('C'.$i, strtoupper($student['strLastname'].", ".$student['strFirstname']." ".$student['strMiddlename']))
@@ -1865,9 +1865,9 @@ class Excel extends CI_Controller {
                     $objPHPExcel->setActiveSheetIndex(0)->getStyle("I".$i)->applyFromArray($style);
                     $objPHPExcel->setActiveSheetIndex(0)->getStyle("J".$i)->applyFromArray($style);
                     $objPHPExcel->setActiveSheetIndex(0)->getStyle("N".$i)->applyFromArray($style);
-                    $count++;
                     $i++;
             }
+            $count++;
         }
         // $objPHPExcel->getActiveSheet()->getStyle('A2:I'.count($students))
         // ->getAlignment()->setWrapText(true);
@@ -5352,7 +5352,12 @@ class Excel extends CI_Controller {
                     }
     
                     $studentsEnrolled = true;
-                    $course = $this->data_fetcher->getProgramDetails($user['intProgramID']);
+                    $student_course = '';
+                    if($user['intProgramID'] != 0){
+                        $course = $this->data_fetcher->getProgramDetails($user['intProgramID']);
+                        $student_course = $course['strProgramCode'];
+                    }
+
                     $assessment_discount_rate = $assessment_discount_rate_scholar = $assessment_discount_rate_referrer = $assessment_discount_fixed = $tuition_discount_rate = 0;
                     $late_tagged_referrer = $external_scholarship = $external_referral = 0;
 
@@ -5432,7 +5437,7 @@ class Excel extends CI_Controller {
                         // ->setCellValue('D'.$i, isset($date_enrolled_array[$user['slug']]) ? date("M d,Y",strtotime($date_enrolled_array[$user['slug']])) : date("M d, Y",strtotime($reg['date_enlisted'])))
                         ->setCellValue('D'.$i, date("M d,Y",strtotime($date_enrolled)))
                         ->setCellValue('E'.$i, $reg['paymentType'] == 'full' ? 'FULL PAYMENT' : 'INSTALLMENT')
-                        ->setCellValue('F'.$i, $course['strProgramCode'])
+                        ->setCellValue('F'.$i, $student_course)
                         ->setCellValue('G'.$i, $reg['paymentType'] == 'full' && $tuition['tuition_before_discount'] > 0 ? (float)$tuition['tuition_before_discount'] : '')
                         ->setCellValue('H'.$i, $reg['paymentType'] == 'full' && $tuition['lab_before_discount'] > 0 ? (float)$tuition['lab_before_discount'] : '')
                         ->setCellValue('I'.$i, $reg['paymentType'] == 'full' && $tuition['misc_before_discount'] > 0 ? (float)$tuition['misc_before_discount'] : '')
