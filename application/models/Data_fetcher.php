@@ -2692,7 +2692,7 @@ class Data_fetcher extends CI_Model {
         //         ->result(); 
         // }
 
-        print_r($scholar_type_external);
+        print_r($scholarships_external);
         die();
         foreach($scholarships as $disc){
             $disc->date_applied = date('M j, Y h:ia',strtotime($disc->date_applied));
