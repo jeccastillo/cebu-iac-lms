@@ -2672,25 +2672,25 @@ class Data_fetcher extends CI_Model {
             $discount_array[] = $disc;
         }
 
-        if($sch == 0){
-            $scholarships = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
-                ->where(array('syid'=>$syid,'student_id'=>$student['intID'],'deduction_type'=>'scholarship','deduction_from'=>'in-house','tb_mas_student_discount.status'=>'applied'))
-                ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
-                ->get('tb_mas_student_discount')
-                ->result();             
-            $scholarships_external = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
-                ->where(array('syid'=>$syid,'student_id'=>$student['intID'],'deduction_type'=>'scholarship','deduction_from'=>'external','tb_mas_student_discount.status'=>'applied'))
-                ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
-                ->get('tb_mas_student_discount')
-                ->result();             
-        }
-        else{                                              
-            $scholarships = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
-                ->where(array('intID'=>$sch,'syid'=>$syid,'student_id'=>$student['intID']))
-                ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
-                ->get('tb_mas_student_discount')
-                ->result(); 
-        }
+        // if($sch == 0){
+        $scholarships = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
+            ->where(array('syid'=>$syid,'student_id'=>$student['intID'],'deduction_type'=>'scholarship','deduction_from'=>'in-house','tb_mas_student_discount.status'=>'applied'))
+            ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
+            ->get('tb_mas_student_discount')
+            ->result();             
+        $scholarships_external = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
+            ->where(array('syid'=>$syid,'student_id'=>$student['intID'],'deduction_type'=>'scholarship','deduction_from'=>'external','tb_mas_student_discount.status'=>'applied'))
+            ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
+            ->get('tb_mas_student_discount')
+            ->result();             
+        // }
+        // else{                                              
+        //     $scholarships = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
+        //         ->where(array('intID'=>$sch,'syid'=>$syid,'student_id'=>$student['intID']))
+        //         ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
+        //         ->get('tb_mas_student_discount')
+        //         ->result(); 
+        // }
 
         foreach($scholarships as $disc){
             $disc->date_applied = date('M j, Y h:ia',strtotime($disc->date_applied));
