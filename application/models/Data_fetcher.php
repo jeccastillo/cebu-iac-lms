@@ -2692,10 +2692,6 @@ class Data_fetcher extends CI_Model {
         //         ->result(); 
         // }
 
-        if($id == 822){
-            print_r($scholarships_external);
-            die();
-        }
         foreach($scholarships as $disc){
             $disc->date_applied = date('M j, Y h:ia',strtotime($disc->date_applied));
             $scholarship_array[] = $disc;
@@ -3478,7 +3474,7 @@ class Data_fetcher extends CI_Model {
                         $ar_external_scholarship_installment = $total_installment_assessment_temp * ($scholar->total_assessment_rate/100);
                         $ar_external_scholarship_installment30 = $total_assessment_temp30 * ($scholar->total_assessment_rate/100);
                         $ar_external_scholarship_installment50 = $total_assessment_temp50 * ($scholar->total_assessment_rate/100);
-                        
+
                         $data['sc_rate'] = $total_scholarship_temp * ($scholar->total_assessment_rate/100);
                         
                         if($scholar->total_assessment_rate == 100)
@@ -3497,6 +3493,11 @@ class Data_fetcher extends CI_Model {
                             $total_assessment_fixed = $scholar->total_assessment_fixed;
                             $total_assessment_fixed_installment = $scholar->total_assessment_fixed;
                         }
+                        
+                        $ar_external_scholarship_full = $total_assessment_fixed;
+                        $ar_external_scholarship_installment = $total_assessment_fixed;
+                        $ar_external_scholarship_installment30 = $total_assessment_fixed;
+                        $ar_external_scholarship_installment50 = $total_assessment_fixed;
                     }
                 }
                 else{
