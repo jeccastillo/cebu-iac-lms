@@ -383,12 +383,22 @@
           // Try to find matching term from student records
           var termInfo = vm.findTermInfo(yearLevel, semester);
           
+          // Helper function to get year level ordinal
+          function getYearOrdinal(year) {
+            if (year == 1) return '1st Year';
+            else if (year == 2) return '2nd Year';
+            else if (year == 3) return '3rd Year';
+            else if (year == 4) return '4th Year';
+            else if (year == 5) return '5th Year';
+            else return year + ' Year';
+          }
+          
           grouped[key] = {
             yearLevel: yearLevel,
             semester: semester,
             schoolYear: termInfo ? termInfo.schoolYear : null,
             term: termInfo ? termInfo.term : null,
-            label: termInfo ? termInfo.label : vm.getSemesterLabel(semester) + ' (Year ' + yearLevel + ')',
+            label: vm.getSemesterLabel(semester) + ' ' + getYearOrdinal(yearLevel),
             items: []
           };
         }
