@@ -67,6 +67,7 @@ use App\Http\Controllers\Api\V1\PaymentGatewayController;
 use App\Http\Controllers\Api\V1\PaymentsWebhookController;
 use App\Http\Controllers\Api\V1\DepartmentDeficiencyController;
 use App\Http\Controllers\Api\V1\FacultyDepartmentController;
+use App\Http\Controllers\Api\V1\ShiftRequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -266,6 +267,10 @@ Route::prefix('v1')->group(function () {
     Route::put('/students/{id}', [StudentController::class, 'update'])->middleware('role:admin');
     // Registrar/Admin: change student password (generate or set)
     Route::post('/students/{id}/password', [StudentController::class, 'updatePassword'])->middleware('role:registrar,admin');
+    // Registrar/Admin: shifting base program/curriculum (updates tb_mas_users.intProgramID/intCurriculumID)
+    Route::post('/students/{id}/shift', [StudentController::class, 'shift'])->middleware('role:registrar,admin');
+    // Registrar/Admin: check if student has a shifting record for a term
+    Route::get('/students/{id}/shifted', [StudentController::class, 'shifted'])->middleware('role:registrar,admin');
 
     // Students Import
     Route::get('/students/import/template', [StudentImportController::class, 'template'])->middleware('role:registrar,admin');
@@ -619,4 +624,9 @@ Route::prefix('v1')->group(function () {
     Route::get('/student/finances/invoices', [\App\Http\Controllers\Api\V1\StudentFinancesController::class, 'invoices']);
     Route::get('/student/finances/payment-modes', [\App\Http\Controllers\Api\V1\StudentFinancesController::class, 'paymentModes']);
     Route::get('/student/finances/payments', [\App\Http\Controllers\Api\V1\StudentFinancesController::class, 'payments']);
+
+    // Student: Program Change Requests
+    Route::get('/student/shift-requests', [ShiftRequestController::class, 'index']); // student-safe
+    Route::post('/student/shift-requests', [ShiftRequestController::class, 'store']); // student-safe
+    Route::patch('/student/shift-requests/status', [ShiftRequestController::class, 'setStatus'])->middleware('role:registrar,admin');
 });

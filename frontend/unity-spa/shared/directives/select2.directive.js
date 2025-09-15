@@ -99,7 +99,7 @@
                     }
                   });
                   if (keepVal !== undefined && keepVal !== null && keepVal !== '') {
-                    jQuery(element).val(keepVal);
+                    jQuery(element).val(toDomValue(keepVal));
                   }
                 } catch (e) {}
               }
@@ -131,11 +131,11 @@
               jQuery(element).off('change.select2').on('change.select2', function () {
                 scope.$applyAsync(function () {
                   var current = jQuery(element).val();
-                  if (current !== ngModel.$viewValue) {
-                    // Pass the raw DOM value so Angular's select/ngOptions pipeline converts it to model
-                    ngModel.$setViewValue(current);
+                  var parsed = fromDomValue(current);
+                  if (parsed !== ngModel.$viewValue) {
+                    ngModel.$setViewValue(parsed);
                   }
-                  // Mirror to select2Value if bound
+                  // Mirror to select2Value if bound (keep raw DOM value to interop with select2)
                   if (typeof scope.select2Value !== 'undefined') {
                     scope.select2Value = current;
                   }
@@ -165,7 +165,7 @@
               });
 
               // Ensure the current model is reflected in the UI without re-triggering our handler
-              jQuery(element).val(ngModel.$viewValue).trigger('change.select2');
+              jQuery(element).val(toDomValue(ngModel.$viewValue)).trigger('change.select2');
             } catch (e) {
               // swallow init errors to avoid breaking the page
             }
@@ -188,9 +188,12 @@
           $timeout(function () {
             try {
               var current = jQuery(element).val();
-              if (nv !== undefined && current !== nv) {
-                ngModel.$setViewValue(nv);
-                jQuery(element).val(nv).trigger('change.select2');
+              if (nv !== undefined) {
+                var desiredDom = toDomValue(nv);
+                if (current !== desiredDom) {
+                  ngModel.$setViewValue(fromDomValue(nv));
+                  jQuery(element).val(desiredDom).trigger('change.select2');
+                }
               }
             } catch (e) {}
           });
@@ -202,8 +205,9 @@
             try {
               var desired = ngModel.$viewValue;
               var current = jQuery(element).val();
-              if (current !== desired) {
-                jQuery(element).val(desired).trigger('change.select2');
+              var desiredDom = toDomValue(desired);
+              if (current !== desiredDom) {
+                jQuery(element).val(desiredDom).trigger('change.select2');
               }
             } catch (e) {}
           });

@@ -616,6 +616,12 @@
         controllerAs: "vm",
         requiredRoles: ["student_view", "admin"],
       })
+      .when("/student/change-program-request", {
+        templateUrl: "features/student/change-program-request/change-program-request.html",
+        controller: "StudentChangeProgramRequestController",
+        controllerAs: "vm",
+        requiredRoles: ["student_view", "admin"],
+      })
       .when("/public/initial-requirements/:hash", {
         templateUrl: "features/admissions/initial-requirements/initial-requirements.html",
         controller: "InitialRequirementsController",

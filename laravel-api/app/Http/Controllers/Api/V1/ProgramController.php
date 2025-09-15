@@ -54,6 +54,7 @@ class ProgramController extends Controller
                 'title' => $prog->strProgramDescription,
                 'type' => $prog->type,
                 'strMajor' => $prog->strMajor,
+                'strProgramCode' => $prog->strProgramCode,
             ];
         })->values();
 

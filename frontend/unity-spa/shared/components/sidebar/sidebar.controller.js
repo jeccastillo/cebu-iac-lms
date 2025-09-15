@@ -124,7 +124,8 @@
         key: 'student',
         label: 'Student',
         children: [
-          { label: 'Finances', path: '/student/finances' }
+          { label: 'Finances', path: '/student/finances' },
+          { label: 'Request Program Change', path: '/student/change-program-request' }
         ]
       },
       {

@@ -25,6 +25,8 @@
     vm.tuition = null;
     vm.tuitionLoading = false;
     vm._tuitionKey = null;
+    // Track if auto Student Type 'shiftee' applied per student|term
+    vm._autoStudentTypeApplied = {};
 
     // Global term (read-only, from TermService)
     vm.selectedTerm = null;
@@ -106,6 +108,7 @@
     vm.loadTuition = loadTuition;
 
     vm.sanitizeStudentNumber = sanitizeStudentNumber;
+    vm.maybeAutoSelectShiftee = maybeAutoSelectShiftee;
 
     // Installment tabs
     vm.installmentTab = 'standard';
@@ -194,6 +197,40 @@
       else
         return studentNumber;
 
+    }
+
+    // Auto-select Student Type to 'shiftee' once per student+term if a shifting record exists.
+    // Does not modify Registration Details (regForm.enumStudentType) and never overrides manual user choice after first run.
+    function maybeAutoSelectShiftee() {
+      try {
+        var sid = parseInt(vm.student_id, 10);
+        var termInt = parseInt(vm.term, 10);
+        if (!isFinite(sid) || sid <= 0) return;
+        if (!isFinite(termInt) || termInt <= 0) return;
+
+        vm._autoStudentTypeApplied = vm._autoStudentTypeApplied || {};
+        var key = String(sid) + '|' + String(termInt);
+        if (vm._autoStudentTypeApplied[key]) return;
+
+        if (!StudentsService || typeof StudentsService.shifted !== 'function') {
+          vm._autoStudentTypeApplied[key] = true;
+          return;
+        }
+
+        StudentsService.shifted(sid, termInt)
+          .then(function (res) {
+            try {
+              if (res && res.shifted) {
+                vm.studentType = 'shiftee';
+              }
+            } catch (_e) {}
+          })
+          .catch(function () { /* swallow */ })
+          .finally(function () {
+            try { vm._autoStudentTypeApplied[key] = true; } catch (_e2) {}
+            if ($scope && $scope.$applyAsync) { try { $scope.$applyAsync(); } catch (_e3) {} }
+          });
+      } catch (_e4) {}
     }
 
     // Determine if Reg Form generation should be enabled
@@ -770,6 +807,7 @@
               loadClasslistsForTerm();
               // Always try reloading registration panel on term changes
               loadRegistration();
+              try { maybeAutoSelectShiftee(); } catch (e) {}
             }
             
           }
@@ -863,6 +901,7 @@
           loadCurrent();
           loadRegistration();
           refreshChecklistExists();
+          try { maybeAutoSelectShiftee(); } catch (e) {}
         });
       } else {
         vm.selectedStudentName = '';

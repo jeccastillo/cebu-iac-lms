@@ -449,6 +449,30 @@ class StudentController extends Controller
             });
         }
 
+        // Shift request filter: include only students with a shift request (optionally unprocessed and by term)
+        $hasShiftReq = (string)$request->query('has_shift_request', '');
+        $hasShiftReqFlag = ($hasShiftReq === '1' || strtolower($hasShiftReq) === 'true' || $hasShiftReq === 'yes');
+        if ($hasShiftReqFlag) {
+            $unprocessedRaw = (string)$request->query('unprocessed_only', '');
+            $unprocessedOnly = ($unprocessedRaw === '1' || strtolower($unprocessedRaw) === 'true' || $unprocessedRaw === 'yes');
+
+            // Resolve term from any of: term, term_id, syid
+            $termRaw = $request->query('term', $request->query('term_id', $request->query('syid')));
+            $termId = ($termRaw !== null && $termRaw !== '' && is_numeric($termRaw)) ? (int)$termRaw : null;
+
+            $q->whereExists(function ($sub) use ($termId, $unprocessedOnly) {
+                $sub->from('tb_mas_shift_requests as sr')
+                    ->whereColumn('sr.student_id', 'u.intID');
+                if ($termId !== null) {
+                    $sub->where('sr.term_id', $termId);
+                }
+                if ($unprocessedOnly) {
+                    $sub->where('sr.status','pending');
+                        
+                }
+            });
+        }
+
         $total = (clone $q)->count();
 
         $rows = $q->orderBy('u.strLastname')
@@ -905,6 +929,261 @@ class StudentController extends Controller
             'success' => true,
             'message' => 'Password updated.',
             'data'    => $respData,
+        ]);
+    }
+
+    /**
+     * POST /api/v1/students/{id}/shift
+     * Body: { intProgramID?: int, intCurriculumID?: int }
+     * Roles: registrar, admin
+     * Updates tb_mas_users base program/curriculum with validation.
+     */
+    public function shift(Request $request, int $id): JsonResponse
+    {
+        // Fetch user
+        try {
+            $old = DB::table('tb_mas_users')->where('intID', $id)->first();
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Database error: ' . $e->getMessage(),
+            ], 422);
+        }
+
+        if (!$old) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Student not found.'
+            ], 404);
+        }
+
+        $programId = $request->input('intProgramID');
+        $curriculumId = $request->input('intCurriculumID');
+
+        // Robust term resolver: accept term, term_id, syid, or X-Term-ID header
+        $termRaw = $request->input('term', $request->input('term_id', $request->input('syid')));
+        if ($termRaw === null || $termRaw === '') {
+            $hdrTerm = $request->header('X-Term-ID');
+            if ($hdrTerm !== null && $hdrTerm !== '') {
+                $termRaw = $hdrTerm;
+            }
+        }
+        $resolvedTermId = (is_numeric($termRaw) ? (int)$termRaw : null);
+
+        if ($programId === null && $curriculumId === null) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Provide intProgramID and/or intCurriculumID.'
+            ], 422);
+        }
+
+        $updates = [];
+
+        // Validate program id if provided
+        if ($programId !== null && $programId !== '') {
+            if (!is_numeric($programId) || (int)$programId <= 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'intProgramID must be a positive integer.'
+                ], 422);
+            }
+            $pid = (int) $programId;
+            $exists = DB::table('tb_mas_programs')->where('intProgramID', $pid)->exists();
+            if (!$exists) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Program not found.'
+                ], 422);
+            }
+            $updates['intProgramID'] = $pid;
+        }
+
+        // Validate curriculum id if provided
+        if ($curriculumId !== null && $curriculumId !== '') {
+            if (!is_numeric($curriculumId) || (int)$curriculumId <= 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'intCurriculumID must be a positive integer.'
+                ], 422);
+            }
+            $cid = (int) $curriculumId;
+
+            // Ensure curriculum exists and matches program when both provided
+            $curr = DB::table('tb_mas_curriculum')->where('intID', $cid)->first();
+            if (!$curr) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Curriculum not found.'
+                ], 422);
+            }
+            if (array_key_exists('intProgramID', $updates)) {
+                if ((int)$curr->intProgramID !== (int)$updates['intProgramID']) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Curriculum does not belong to selected Program.'
+                    ], 422);
+                }
+            }
+            $updates['intCurriculumID'] = $cid;
+        }
+
+        if (empty($updates)) {
+            return response()->json([
+                'success' => true,
+                'message' => 'No changes',
+                'data' => $old,
+            ]);
+        }
+
+        try {
+            DB::table('tb_mas_users')->where('intID', $id)->update($updates);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Update failed: ' . $e->getMessage(),
+            ], 422);
+        }
+
+        $new = DB::table('tb_mas_users')->where('intID', $id)->first();
+
+        // Record shifting row (non-blocking best effort)
+        try {
+            $termId = $resolvedTermId;
+            $programFrom = isset($old->intProgramID) ? (int)$old->intProgramID : null;
+            $programTo = isset($updates['intProgramID'])
+                ? (int)$updates['intProgramID']
+                : (isset($new->intProgramID) ? (int)$new->intProgramID : null);
+
+            $currFrom = isset($old->intCurriculumID) ? (int)$old->intCurriculumID : null;
+            $currTo = isset($updates['intCurriculumID'])
+                ? (int)$updates['intCurriculumID']
+                : (isset($new->intCurriculumID) ? (int)$new->intCurriculumID : null);
+
+            DB::table('tb_mas_shifting')->insert([
+                'student_id'      => (int)$id,
+                'term_id'         => ($termId !== null && $termId !== '' && is_numeric($termId)) ? (int)$termId : null,
+                'program_from'    => $programFrom,
+                'program_to'      => $programTo,
+                'curriculum_from' => $currFrom,
+                'curriculum_to'   => $currTo,
+                'date_shifted'    => now()->toDateTimeString(),
+            ]);
+        } catch (\Throwable $e) {
+            // ignore failures when logging shifting rows
+        }
+
+        // Non-blocking system log
+        try {
+            SystemLogService::log('update', 'StudentShift', $id, $old, $new, $request);
+        } catch (\Throwable $e) {
+            // ignore logging failures
+        }
+
+        // Mark related shift request as processed (best-effort, non-blocking)
+        try {
+            if (Schema::hasTable('tb_mas_shift_requests')) {
+                // Resolve acting faculty id from header or input
+                $actorRaw = $request->header('X-Faculty-ID', $request->input('faculty_id'));
+                $actorId = (is_numeric($actorRaw) && (int)$actorRaw > 0) ? (int)$actorRaw : null;
+
+                $q = DB::table('tb_mas_shift_requests')
+                    ->where('student_id', $id)
+                    ->whereNull('processed_at')
+                    ->whereNull('processed_by_faculty_id');
+
+                if ($resolvedTermId !== null) {
+                    $q->where('term_id', $resolvedTermId);
+                }
+
+                $targetId = $q->orderByDesc('id')->value('id');
+                if ($targetId) {
+                    DB::table('tb_mas_shift_requests')
+                        ->where('id', (int)$targetId)
+                        ->update([
+                            'processed_at' => now()->toDateTimeString(),
+                            'processed_by_faculty_id' => $actorId,
+                            'status' => 'approved',
+                            'updated_at' => now()->toDateTimeString(),
+                        ]);
+                }
+            }
+        } catch (\Throwable $e) {
+            // ignore failures when marking shift request processed
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Shifted program/curriculum.',
+            'data' => $new,
+        ]);
+    }
+
+    /**
+     * GET /api/v1/students/{id}/shifted?term=ID
+     * Roles: registrar, admin
+     * Returns whether a shifting record exists for the student in the given term.
+     * Response: { success: true, data: { shifted: boolean, term_id: int|null, latest_at?: string|null } }
+     */
+    public function shifted(Request $request, int $id): JsonResponse
+    {
+        // Validate student existence
+        try {
+            $userExists = DB::table('tb_mas_users')->where('intID', $id)->exists();
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Database error: ' . $e->getMessage(),
+            ], 422);
+        }
+
+        if (!$userExists) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Student not found.'
+            ], 404);
+        }
+
+        // Resolve term id from query or header
+        $termRaw = $request->query('term', $request->query('term_id', $request->query('syid')));
+        if ($termRaw === null || $termRaw === '') {
+            $hdr = $request->header('X-Term-ID');
+            if ($hdr !== null && $hdr !== '') {
+                $termRaw = $hdr;
+            }
+        }
+        $termId = is_numeric($termRaw) ? (int)$termRaw : null;
+
+        $shifted = false;
+        $latestAt = null;
+
+        try {
+            if ($termId !== null && Schema::hasTable('tb_mas_shifting')) {
+                $base = DB::table('tb_mas_shifting')
+                    ->where('student_id', $id)
+                    ->where('term_id', $termId);
+
+                $shifted = $base->exists();
+
+                if ($shifted) {
+                    $latestAt = DB::table('tb_mas_shifting')
+                        ->where('student_id', $id)
+                        ->where('term_id', $termId)
+                        ->orderByDesc('date_shifted')
+                        ->value('date_shifted');
+                    $latestAt = $latestAt ? (string) $latestAt : null;
+                }
+            }
+        } catch (\Throwable $e) {
+            // keep shifted=false on error
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'shifted' => (bool)$shifted,
+                'term_id' => $termId,
+                'latest_at' => $latestAt,
+            ],
         ]);
     }
 }

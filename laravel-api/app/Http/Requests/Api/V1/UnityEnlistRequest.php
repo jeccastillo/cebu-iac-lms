@@ -37,7 +37,7 @@ class UnityEnlistRequest extends FormRequest
             'student_number' => ['required', 'string'],
             'term'           => ['required', 'integer'],
             'year_level'     => ['required', 'integer', 'min:1'],
-            'student_type'   => ['sometimes', 'string', 'in:continuing,new,returnee,transfer'],
+            'student_type'   => ['sometimes', 'string', 'in:continuing,new,returnee,transfer,shiftee'],
 
             'operations'                 => ['required', 'array', 'min:1'],
             'operations.*.type'          => ['required', 'string', 'in:add,drop,change_section'],

@@ -12,6 +12,7 @@
     'ProgramsService',
     'CurriculaService',
     'StudentsService',
+    'ChecklistService',
     'TermService',
     '$location',
     '$scope',
@@ -25,6 +26,7 @@
     ProgramsService,
     CurriculaService,
     StudentsService,
+    ChecklistService,
     TermService,
     $location,
     $scope,
@@ -37,6 +39,7 @@
     vm.loading = false;
     vm.regLoading = false;
     vm.saving = false;
+    vm.reqSaving = false;
 
     // Term
     vm.selectedTerm = null;
@@ -55,6 +58,8 @@
 
     // Registration snapshot
     vm.registration = null;
+    vm.shiftRequest = null;
+    vm.pendingProgramId = null; // defer program selection until programs list is loaded
 
     // Form selections
     vm.form = {
@@ -77,6 +82,12 @@
     vm.curriculumLabel = curriculumLabel;
     vm.findProgramById = findProgramById;
     vm.sanitizeStudentNumber = sanitizeStudentNumber;
+    vm.loadShifteeCandidates = loadShifteeCandidates;
+    vm.loadShiftRequest = loadShiftRequest;
+    vm.programShort = programShort;
+    vm.setShiftRequestStatus = setShiftRequestStatus;
+    vm.rejectShiftRequest = function () { return setShiftRequestStatus('rejected'); };
+    vm.cancelShiftRequest = function () { return setShiftRequestStatus('cancelled'); };
 
     // Initialize
     activate();
@@ -97,6 +108,7 @@
       }).finally(function () {
         vm.loading = false;
         loadPrograms();
+        try { loadShifteeCandidates(); } catch (e) {}
         // Listen for term changes
         if ($scope && $scope.$on) {
           $scope.$on('termChanged', function (event, data) {
@@ -105,6 +117,8 @@
               vm.term = data.selectedTerm && data.selectedTerm.intID ? data.selectedTerm.intID : vm.term;
               // Refresh registration context on term change
               try { loadRegistration(); } catch (e) {}
+              try { loadShifteeCandidates(); } catch (e) {}
+              try { vm.loadShiftRequest(); } catch (e) {}
             }
           });
         }
@@ -155,9 +169,11 @@
       try {
         ProgramsService.list({ enabledOnly: false }).then(function (res) {
           var rows = (res && res.data) ? res.data : (Array.isArray(res) ? res : []);
-          // Normalize similar to EnlistmentController
+          // Normalize similar to EnlistmentController, and COERCE ids to integers to avoid unknown option "?"
           vm.programs = (rows || []).map(function (p) {
-            var id = p.intProgramID || p.id || null;
+            var rawId = (p.intProgramID != null ? p.intProgramID : p.id);
+            var id = parseInt(rawId, 10);
+            if (isNaN(id)) id = null;
             var code = p.strProgramCode || p.code || '';
             var desc = p.strProgramDescription || p.title || p.description || '';
             return Object.assign({}, p, {
@@ -166,6 +182,24 @@
               strProgramDescription: desc
             });
           }).filter(function (p) { return p.intProgramID !== null; });
+          // Reconcile current selection type (ensure vm.form.program_id is integer)
+          try {
+            if (vm.form && vm.form.program_id != null && ('' + vm.form.program_id).trim() !== '') {
+              var pid = parseInt(vm.form.program_id, 10);
+              if (!isNaN(pid)) vm.form.program_id = pid;
+            }
+          } catch (e) {}
+          // If a program was requested before the list loaded, apply it now
+          try {
+            if (vm.pendingProgramId != null) {
+              var pend = parseInt(vm.pendingProgramId, 10);
+              if (!isNaN(pend) && pend > 0) {
+                vm.form.program_id = pend;
+                loadCurricula(pend);
+              }
+              vm.pendingProgramId = null;
+            }
+          } catch (e) {}
         });
       } catch (e) {
         vm.programs = [];
@@ -189,6 +223,41 @@
       }
     }
 
+    // Load student candidates with unprocessed shift requests (scoped by term)
+    function loadShifteeCandidates() {
+      try {
+        vm.students = [];
+        var t = parseInt(vm.term, 10);
+        if (!isFinite(t) || t <= 0) { return Promise.resolve([]); }
+        var per = 100;
+        var page = 1;
+        var acc = [];
+        function nextPage() {
+          return StudentsService.listPage({ per_page: per, page: page, has_shift_request: 1, unprocessed_only: 1, syid: t })
+            .then(function (rows) {
+              rows = rows || [];
+              acc = acc.concat(rows);
+              if (rows.length === per) {
+                page += 1;
+                return nextPage();
+              } else {
+                vm.students = acc;
+                try { if (vm.studentNumber) { setSelectedStudentName(); } } catch (e) {}
+                return acc;
+              }
+            })
+            .catch(function () {
+              vm.students = acc;
+              return acc;
+            });
+        }
+        return nextPage();
+      } catch (e) {
+        vm.students = vm.students || [];
+        return Promise.resolve(vm.students);
+      }
+    }
+
     function onProgramChange() {
       try {
         // Reset curriculum selection when program changes
@@ -205,8 +274,14 @@
     function onStudentQuery(q) {
       try {
         var s = (q != null) ? ('' + q).trim() : '';
-        if (!s) return;
-        StudentsService.listSuggestions(s).then(function (rows) {
+        if (!s) { vm.students = []; return; }
+        var opts = { q: s, per_page: 20, page: 1, has_shift_request: 1, unprocessed_only: 1 };
+        // Scope to selected term when available
+        try {
+          var t = parseInt(vm.term, 10);
+          if (isFinite(t) && t > 0) { opts.syid = t; }
+        } catch (e) {}
+        StudentsService.listPage(opts).then(function (rows) {
           vm.students = rows || [];
           try { if (vm.studentNumber) { setSelectedStudentName(); } } catch (e) {}
         }).catch(function () {
@@ -223,9 +298,11 @@
         // Clear cached id so we resolve fresh for this studentNumber
         vm.student_id = null;
         vm.registration = null;
-        // Resolve student id then load registration
+        // Resolve student id then load registration and shift request
         resolveStudentIdIfNeeded().then(function () {
-          loadRegistration();
+          return loadRegistration();
+        }).then(function () {
+          return vm.loadShiftRequest();
         });
       } else {
         vm.selectedStudentName = '';
@@ -312,14 +389,21 @@
         if (vm.registration) {
           var cp = (vm.registration.current_program !== undefined && vm.registration.current_program !== null)
             ? vm.registration.current_program : '';
-          vm.form.program_id = cp;
-          if (cp) {
-            loadCurricula(cp);
+          // Coerce to integer to match ng-options integer values
+          if (cp !== '') {
+            var cpInt = parseInt(cp, 10);
+            vm.form.program_id = !isNaN(cpInt) ? cpInt : cp;
+          } else {
+            vm.form.program_id = '';
+          }
+          if (vm.form.program_id) {
+            loadCurricula(vm.form.program_id);
           } else {
             vm.curricula = [];
           }
-          vm.form.curriculum_id = (vm.registration.current_curriculum !== undefined && vm.registration.current_curriculum !== null)
+          var cc = (vm.registration.current_curriculum !== undefined && vm.registration.current_curriculum !== null)
             ? vm.registration.current_curriculum : '';
+          vm.form.curriculum_id = cc !== '' ? cc : '';
         } else {
           vm.form.program_id = '';
           vm.form.curriculum_id = '';
@@ -356,41 +440,303 @@
           }
           return;
         }
-        vm.saving = true;
-        var fields = {};
+
         var pid = parseInt(vm.form.program_id, 10);
         var cid = parseInt(vm.form.curriculum_id, 10);
-        if (isFinite(pid)) fields.current_program = pid;
-        if (isFinite(cid)) fields.current_curriculum = cid;
+        var termInt = parseInt(vm.term, 10);
+        var sn = sanitizeStudentNumber(vm.studentNumber);
 
-        UnityService.updateRegistration({
-          student_number: sanitizeStudentNumber(vm.studentNumber),
-          term: parseInt(vm.term, 10),
-          fields: fields
-        }).then(function (res) {
-          var reg = res && res.data ? res.data.registration : null;
-          if (reg) {
-            vm.registration = reg;
-          }
+        // If a registration exists for the term: reset registration first (password-confirm), then shift base Program/Curriculum.
+        if (vm.registration) {
           if (window.Swal) {
-            Swal.fire({ icon: 'success', title: 'Saved', text: 'Program and Curriculum updated for the selected term.' });
+            Swal.fire({
+              title: 'Reset registration before shifting?',
+              text: 'This will delete all enlisted classes and the registration for the selected term before applying the program/curriculum change.',
+              input: 'password',
+              inputLabel: 'Enter your password to confirm',
+              inputAttributes: { autocapitalize: 'off', autocomplete: 'new-password' },
+              showCancelButton: true,
+              confirmButtonText: 'Confirm',
+              cancelButtonText: 'Cancel',
+              preConfirm: function (value) {
+                if (!value) {
+                  Swal.showValidationMessage('Password is required');
+                }
+                return value;
+              }
+            }).then(function (result) {
+              if (!result.isConfirmed) { return; }
+              var pw = result.value;
+              vm.saving = true;
+
+              UnityService.resetRegistration({ student_number: sn, term: termInt, password: pw })
+                .then(function () {
+                  return doShift(pid, cid);
+                })
+                .then(function () {
+                  // After reset+shift, registration likely no longer exists; reload to reflect state
+                  return loadRegistration();
+                })
+                .then(function () {
+                  // Auto-generate checklist for the new curriculum; do not block overall success on failure
+                  return autoGenerateChecklist(cid).catch(function (e) {
+                    try { console.error('Auto checklist generation failed', e); } catch (_e) {}
+                    return null;
+                  });
+                })
+                .then(function () { return vm.loadShiftRequest(); })
+                .then(function () {
+                  if (window.Swal) {
+                    Swal.fire({ icon: 'success', title: 'Shifted', text: 'Registration was reset and base Program/Curriculum updated. Checklist generated.' });
+                  } else {
+                    try { alert('Shift successful.'); } catch (e) {}
+                  }
+                })
+                .catch(function (err) {
+                  var m = (err && err.data && err.data.message) || (err && err.message) || 'Shift failed';
+                  if (window.Swal) {
+                    Swal.fire({ icon: 'error', title: 'Error', text: m });
+                  } else {
+                    try { alert(m); } catch (e) {}
+                  }
+                })
+                .finally(function () {
+                  vm.saving = false;
+                  if ($scope && $scope.$applyAsync) { $scope.$applyAsync(); }
+                });
+            });
           } else {
-            try { alert('Saved.'); } catch (e) {}
+            // Fallback prompt
+            var pw = null;
+            try {
+              pw = window.prompt('Reset registration will delete enlisted classes and the registration for the selected term.\nTo confirm, enter your password:', '');
+            } catch (e) { pw = ''; }
+            if (pw === null || pw === '') return;
+
+            vm.saving = true;
+            UnityService.resetRegistration({ student_number: sn, term: termInt, password: pw })
+              .then(function () { return doShift(pid, cid); })
+              .then(function () { return loadRegistration(); })
+              .then(function () { try { alert('Shift successful.'); } catch (e) {} })
+              .catch(function (err) {
+                var m = (err && err.data && err.data.message) || (err && err.message) || 'Shift failed';
+                try { alert(m); } catch (e) {}
+              })
+              .finally(function () {
+                vm.saving = false;
+                if ($scope && $scope.$applyAsync) { $scope.$applyAsync(); }
+              });
           }
-        }).catch(function (err) {
-          var m = (err && err.data && err.data.message) || 'Save failed';
-          if (window.Swal) {
-            Swal.fire({ icon: 'error', title: 'Error', text: m });
-          } else {
-            try { alert(m); } catch (e) {}
-          }
-        }).finally(function () {
-          vm.saving = false;
-          if ($scope && $scope.$applyAsync) { $scope.$applyAsync(); }
-        });
+        } else {
+          // No registration for term: directly shift base Program/Curriculum
+          vm.saving = true;
+          doShift(pid, cid)
+            .then(function () {
+              return loadRegistration();
+            })
+            .then(function () {
+              // Auto-generate checklist for the new curriculum; ignore failures
+              return autoGenerateChecklist(cid).catch(function (e) {
+                try { console.error('Auto checklist generation failed', e); } catch (_e) {}
+                return null;
+              });
+            })
+            .then(function () { return vm.loadShiftRequest(); })
+            .then(function () {
+              if (window.Swal) {
+                Swal.fire({ icon: 'success', title: 'Shifted', text: 'Base Program/Curriculum updated. Checklist generated.' });
+              } else {
+                try { alert('Shift successful.'); } catch (e) {}
+              }
+            })
+            .catch(function (err) {
+              var m = (err && err.data && err.data.message) || (err && err.message) || 'Shift failed';
+              if (window.Swal) {
+                Swal.fire({ icon: 'error', title: 'Error', text: m });
+              } else {
+                try { alert(m); } catch (e) {}
+              }
+            })
+            .finally(function () {
+              vm.saving = false;
+              if ($scope && $scope.$applyAsync) { $scope.$applyAsync(); }
+            });
+        }
       } catch (e) {
         vm.saving = false;
       }
+    }
+
+    // Performs POST /students/{id}/shift with admin headers.
+    function doShift(pid, cid) {
+      return vm.resolveStudentIdIfNeeded().then(function (sid) {
+        if (!sid) {
+          return Promise.reject({ message: 'Unable to resolve student id for shifting.' });
+        }
+        var t = parseInt(vm.term, 10);
+        var payload = {
+          intProgramID: pid,
+          intCurriculumID: cid,
+          term: isFinite(t) ? t : null
+        };
+        return $http.post(BASE + '/students/' + encodeURIComponent(sid) + '/shift', payload, _adminHeaders());
+      });
+    }
+
+    // Auto-generate graduation checklist from the selected curriculum after shifting
+    function autoGenerateChecklist(curriculumId) {
+      return vm.resolveStudentIdIfNeeded().then(function (sid) {
+        if (!sid) {
+          return Promise.reject({ message: 'Unable to resolve student id for checklist generation.' });
+        }
+        var payload = {};
+        var cid = parseInt(curriculumId, 10);
+        if (isFinite(cid) && cid > 0) {
+          payload.intCurriculumID = cid;
+        }
+        return ChecklistService.generate(sid, payload);
+      });
+    }
+
+    // Load shift request for selected student and term
+    function loadShiftRequest() {
+      try {
+        var sid = parseInt(vm.student_id, 10);
+        var t = parseInt(vm.term, 10);
+        if (!sid || isNaN(sid) || !t || isNaN(t)) {
+          vm.shiftRequest = null;
+          return Promise.resolve(null);
+        }
+        var params = { student_id: sid, term: t };
+        return $http.get(BASE + '/student/shift-requests', { params: params })
+          .then(function (resp) {
+            var data = (resp && resp.data) ? resp.data : {};
+            var rows = data && data.data ? data.data : (Array.isArray(data) ? data : []);
+            vm.shiftRequest = (rows && rows.length) ? rows[0] : null;
+
+            // Auto-select Program based on program_to from the shift request
+            try {
+              if (vm.shiftRequest && vm.shiftRequest.program_to != null && ('' + vm.shiftRequest.program_to).trim() !== '') {
+                var toPid = parseInt(vm.shiftRequest.program_to, 10);
+                if (!isNaN(toPid) && toPid > 0) {
+                  // If programs are already loaded, set immediately; otherwise defer
+                  if (Array.isArray(vm.programs) && vm.programs.length > 0) {
+                    vm.form.program_id = toPid;
+                    // Reset curriculum when program changes
+                    vm.form.curriculum_id = '';
+                    // Load curricula for the selected program
+                    loadCurricula(toPid);
+                  } else {
+                    vm.pendingProgramId = toPid;
+                  }
+                }
+              }
+            } catch (e) {}
+
+            return vm.shiftRequest;
+          })
+          .catch(function () { vm.shiftRequest = null; return null; });
+      } catch (e) {
+        vm.shiftRequest = null;
+        return Promise.resolve(null);
+      }
+    }
+
+    // Update shift request status (rejected|cancelled)
+    function setShiftRequestStatus(status) {
+      try {
+        if (!vm.shiftRequest) {
+          return Promise.reject({ message: 'No shift request found for this student and term.' });
+        }
+        // Only allow from pending
+        var current = (vm.shiftRequest.status || 'pending').toLowerCase();
+        if (current !== 'pending') {
+          return Promise.reject({ message: 'Shift request is already ' + current + '.' });
+        }
+        var sid = parseInt(vm.student_id, 10);
+        var t = parseInt(vm.term, 10);
+        if (!sid || isNaN(sid) || !t || isNaN(t)) {
+          return Promise.reject({ message: 'Select a student and term first.' });
+        }
+
+        var doUpdate = function () {
+          vm.reqSaving = true;
+          var payload = { student_id: sid, term: t, status: status };
+          return $http.patch(BASE + '/student/shift-requests/status', payload, _adminHeaders())
+            .then(function () {
+              return vm.loadShiftRequest();
+            })
+            .then(function () {
+              try { loadShifteeCandidates(); } catch (e) {}
+              try {
+                if (window.Swal) {
+                  Swal.fire({ icon: 'success', title: 'Updated', text: 'Shift request ' + status + '.' });
+                }
+              } catch (e) {}
+              return vm.shiftRequest;
+            })
+            .catch(function (err) {
+              var m = (err && err.data && err.data.message) || (err && err.message) || 'Update failed';
+              if (window.Swal) {
+                Swal.fire({ icon: 'error', title: 'Error', text: m });
+              } else {
+                try { alert(m); } catch (e) {}
+              }
+              throw err;
+            })
+            .finally(function () {
+              vm.reqSaving = false;
+              if ($scope && $scope.$applyAsync) { $scope.$applyAsync(); }
+            });
+        };
+
+        if (window.Swal) {
+          return Swal.fire({
+            title: 'Confirm ' + status + '?',
+            text: 'This will mark the request as ' + status + '.',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, ' + status,
+            cancelButtonText: 'Cancel'
+          }).then(function (res) {
+            if (!res.isConfirmed) { return null; }
+            return doUpdate();
+          });
+        } else {
+          var ok = true;
+          try { ok = window.confirm('Confirm ' + status + ' the shift request?'); } catch (e) {}
+          if (!ok) return Promise.resolve(null);
+          return doUpdate();
+        }
+      } catch (e) {
+        return Promise.reject(e);
+      }
+    }
+
+    // Short label for program id
+    function programShort(id) {
+      try {
+        var p = vm.findProgramById(id);
+        if (!p) return (id != null ? ('' + id) : 'N/A');
+        var code = p.strProgramCode || p.code || '';
+        if (code) return code;
+        var desc = p.strProgramDescription || p.title || '';
+        return desc || ('#' + (p.intProgramID || p.id || ''));
+      } catch (e) {
+        return (id != null ? ('' + id) : 'N/A');
+      }
+    }
+
+    // Attach X-Faculty-ID for registrar/admin context
+    function _adminHeaders(extra) {
+      var headers = Object.assign({}, extra || {});
+      try {
+        var state = StorageService && StorageService.getJSON ? StorageService.getJSON('loginState') : null;
+        if (state && state.faculty_id) {
+          headers['X-Faculty-ID'] = state.faculty_id;
+        }
+      } catch (e) {}
+      return { headers: headers };
     }
 
     // Helpers

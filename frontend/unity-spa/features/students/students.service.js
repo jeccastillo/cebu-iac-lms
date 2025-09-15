@@ -104,6 +104,9 @@
         if (opts.sem != null) params.sem = opts.sem;
         if (opts.syid != null) params.syid = opts.syid;
         if (opts.campus_id != null) params.campus_id = opts.campus_id;
+        // Shifting request filters passthrough
+        if (opts.has_shift_request != null) params.has_shift_request = opts.has_shift_request;
+        if (opts.unprocessed_only != null) params.unprocessed_only = opts.unprocessed_only;
         // Include applicants flag (0/1) when requested by caller
         if (opts.include_applicants != null) params.include_applicants = opts.include_applicants;
       } catch (e) {}
@@ -219,6 +222,37 @@
       });
     }
 
+    // Check if a shifting record exists for a student in a given term
+    function shifted(studentId, termId) {
+      try {
+        if (!studentId || !termId) {
+          return $q.when({ shifted: false, term_id: termId || null, latest_at: null });
+        }
+        var cfg = { params: { term: termId }, headers: {} };
+        try {
+          var state = _getLoginState();
+          if (state && state.faculty_id != null) {
+            cfg.headers['X-Faculty-ID'] = state.faculty_id;
+          }
+        } catch (e) {}
+        return $http.get(BASE + '/students/' + String(studentId) + '/shifted', cfg)
+          .then(function (resp) {
+            var body = (resp && resp.data) ? resp.data : resp;
+            var data = (body && body.data) ? body.data : body;
+            return {
+              shifted: !!(data && data.shifted),
+              term_id: (data && typeof data.term_id !== 'undefined') ? data.term_id : null,
+              latest_at: (data && typeof data.latest_at !== 'undefined') ? data.latest_at : null
+            };
+          })
+          .catch(function () {
+            return { shifted: false, term_id: termId || null, latest_at: null };
+          });
+      } catch (e) {
+        return $q.when({ shifted: false, term_id: termId || null, latest_at: null });
+      }
+    }
+
     return {
       listAll: listAll,
       listPage: listPage,
@@ -227,7 +261,8 @@
       downloadTemplate: downloadTemplate,
       importFile: importFile,
       downloadClassRecordsTemplate: downloadClassRecordsTemplate,
-      importClassRecords: importClassRecords
+      importClassRecords: importClassRecords,
+      shifted: shifted
     };
   }
 })();

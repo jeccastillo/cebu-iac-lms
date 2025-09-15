@@ -51,7 +51,12 @@ class DataFetcherService
 
         if (!$registered) {
             // Maintain parity: when no registration with dteRegistered, treat as not found
-            return null;
+            $last_term = 'Not Registered';
+            $reg_year = 'Not Registered';
+        }
+        else{
+            $last_term = $registered->enumSem . ' Term';
+            $reg_year = $registered->strYearStart . '-' . $registered->strYearEnd;
         }
 
         return [
@@ -63,8 +68,8 @@ class DataFetcherService
             'contact_number' => $user->strMobileNumber,
             'course_id'      => $user->intProgramID,
             'course_name'    => $user->strProgramCode,
-            'last_term'      => $registered->enumSem . ' Term',
-            'last_term_sy'   => $registered->strYearStart . '-' . $registered->strYearEnd,
+            'last_term'      => $last_term,
+            'last_term_sy'   => $reg_year,
         ];
     }
 
