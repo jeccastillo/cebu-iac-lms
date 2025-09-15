@@ -2692,8 +2692,10 @@ class Data_fetcher extends CI_Model {
         //         ->result(); 
         // }
 
-        print_r($scholarships_external);
-        die();
+        if($id == 822){
+            print_r($scholarships_external);
+            die();
+        }
         foreach($scholarships as $disc){
             $disc->date_applied = date('M j, Y h:ia',strtotime($disc->date_applied));
             $scholarship_array[] = $disc;
