@@ -12,7 +12,7 @@
                 <td>Address: <?php echo $campus_address; ?> </td>
             </tr>
             <tr>
-                <td>Institutional Identifier No.: 13315</td>
+                <td>Institutional Identifier No.: <?php if($campus == 'Makati') echo '13315'; elseif($campus =='Cebu') echo '07209';?></td>
             </tr>
             <tr>
                 <td>Term/SY: <?php echo $sem['enumSem'] . ' Term SY' . $sem['strYearStart'] . '-' . $sem['strYearEnd']; ?></td>
