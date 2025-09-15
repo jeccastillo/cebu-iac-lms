@@ -680,6 +680,16 @@
     // Fixed list of payment method options (no auto-populate from Payment Mode)
     vm.methodOptions = ['Cash', 'Check', 'Credit Card', 'Debit Card', 'Online Payment'];
 
+    // Predicate: show only rows whose status is exactly 'Paid' (case-insensitive)
+    vm.onlyPaid = function (row) {
+      try {
+        var s = (row && row.status != null) ? ('' + row.status).trim().toLowerCase() : '';
+        return s === 'paid';
+      } catch (e) {
+        return false;
+      }
+    };
+
     // Helpers
     vm.currency = function (num) {
       var n = parseFloat(num || 0);
@@ -687,7 +697,107 @@
       return s.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     };
 
-    // UI: Tuition Breakdown modal state and helpers
+    // Align Billing Total with Student Finances, with stricter rules:
+    // - Sum only Billing invoices
+    // - Exclude invoices without an invoice_number
+    // - Exclude Application and Reservation fees (by invoice type or item labels)
+    vm.recomputeBillingTotalFromInvoices = function () {
+      try {
+        var list = Array.isArray(vm.invoices) ? vm.invoices : [];
+        var sum = 0;
+        for (var i = 0; i < list.length; i++) {
+          var inv = list[i] || {};
+          var invNo = (inv.invoice_number != null ? ('' + inv.invoice_number).trim()
+                     : (inv.number != null ? ('' + inv.number).trim() : ''));
+          if (!invNo) continue; // exclude billings without an invoice number
+          var t = (inv.type == null ? '' : ('' + inv.type)).toLowerCase();
+          if (t.indexOf('application') === 0 || t.indexOf('reservation') === 0) continue; // exclude application/reservation-type invoices entirely
+          if (t !== 'billing') continue; // only billing invoices contribute
+
+          // Detect application or reservation fee on invoice items
+          var items = [];
+          try {
+            if (Array.isArray(inv.items)) items = inv.items;
+            else if (Array.isArray(inv.invoice_items)) items = inv.invoice_items;
+            else if (inv.payload && Array.isArray(inv.payload.items)) items = inv.payload.items;
+            else if (inv.payload && Array.isArray(inv.payload.invoice_items)) items = inv.payload.invoice_items;
+          } catch (_eItems) { items = []; }
+
+          var isExcludedItem = false;
+          for (var j = 0; j < items.length; j++) {
+            var it = items[j] || {};
+            var desc = it.description || it.name || it.code || '';
+            var d = (desc == null ? '' : ('' + desc)).trim().toLowerCase();
+            if (d === 'application payment' || d === 'application fee' || d.indexOf('application') === 0 ||
+                d === 'reservation payment' || d === 'reservation fee' || d.indexOf('reservation') === 0) {
+              isExcludedItem = true;
+              break;
+            }
+          }
+          if (isExcludedItem) continue; // exclude application/reservation items
+
+          // Take invoice total
+          var amt = null;
+          var cands = [inv.amount_total, inv.amount, inv.total];
+          for (var k = 0; k < cands.length; k++) {
+            var v = parseFloat(cands[k]);
+            if (isFinite(v)) { amt = v; break; }
+          }
+          sum += isFinite(amt) ? amt : 0;
+        }
+        vm.meta = vm.meta || {};
+        vm.meta.billing_total = Math.max(0, Math.round(sum * 100) / 100);
+        // Also refresh remaining using updated billing_total
+        try { if (typeof vm.refreshTuitionSummary === 'function') vm.refreshTuitionSummary(); } catch (_eR) {}
+      } catch (e) {
+        // noop
+      }
+    };
+ 
+    // Helper: compute billing total from invoices with the same strict rules (does not mutate vm.meta)
+    vm.billingTotalFromInvoices = function () {
+      try {
+        var list = Array.isArray(vm.invoices) ? vm.invoices : [];
+        var sum = 0;
+        for (var i = 0; i < list.length; i++) {
+          var inv = list[i] || {};
+          var invNo = (inv.invoice_number != null ? ('' + inv.invoice_number).trim()
+                     : (inv.number != null ? ('' + inv.number).trim() : ''));
+          if (!invNo) continue;
+          var t = (inv.type == null ? '' : ('' + inv.type)).toLowerCase();
+          if (t.indexOf('application') === 0 || t.indexOf('reservation') === 0) continue;
+          if (t !== 'billing') continue;
+          var items = [];
+          try {
+            if (Array.isArray(inv.items)) items = inv.items;
+            else if (Array.isArray(inv.invoice_items)) items = inv.invoice_items;
+            else if (inv.payload && Array.isArray(inv.payload.items)) items = inv.payload.items;
+            else if (inv.payload && Array.isArray(inv.payload.invoice_items)) items = inv.payload.invoice_items;
+          } catch (_e) { items = []; }
+          var isExcludedItem = false;
+          for (var j = 0; j < items.length; j++) {
+            var it = items[j] || {};
+            var desc = it.description || it.name || it.code || '';
+            var d = (desc == null ? '' : ('' + desc)).trim().toLowerCase();
+            if (d === 'application payment' || d === 'application fee' || d.indexOf('application') === 0 ||
+                d === 'reservation payment' || d === 'reservation fee' || d.indexOf('reservation') === 0) {
+              isExcludedItem = true; break;
+            }
+          }
+          if (isExcludedItem) continue;
+          var amt = null;
+          var cands = [inv.amount_total, inv.amount, inv.total];
+          for (var k = 0; k < cands.length; k++) {
+            var v = parseFloat(cands[k]);
+            if (isFinite(v)) { amt = v; break; }
+          }
+          sum += isFinite(amt) ? amt : 0;
+        }
+        return Math.max(0, Math.round(sum * 100) / 100);
+      } catch (e) { return null; }
+    };
+ 
+     // UI: Tuition Breakdown modal state and helpers
     vm.ui = vm.ui || { showTuitionModal: false, showInvoiceModal: false, showAssignNumberModal: false, showMissingBillingModal: false, dismissedMissingBilling: false };
     // Missing Billing Invoices state
     vm.missingBilling = [];
@@ -2025,10 +2135,19 @@ vm.loading.createPayment = false;
                 return _n(sum.total_due || payload.total || sum.total || sum.grand_total);
               }
             })();
-            var billingTotal = _n(payload.billing_total || sum.billing_total || (payload.meta && payload.meta.billing_total));
-            vm.meta.billing_total = billingTotal;
-            var remain = (totalDue + billingTotal) - _n(vm.meta.amount_paid) - _n(vm.meta.billing_paid);
-            vm.meta.remaining_amount = isFinite(remain) ? remain : 0;
+          var billingTotal = (typeof vm.billingTotalFromInvoices === 'function') ? vm.billingTotalFromInvoices() : null;
+          if (!(isFinite(billingTotal) && billingTotal >= 0)) {
+            billingTotal = _n(payload.billing_total || sum.billing_total || (payload.meta && payload.meta.billing_total));
+          }
+          vm.meta.billing_total = billingTotal;
+            var paidExclApp = (isFinite(parseFloat(vm.paymentDetailsTotal)))
+              ? _n(vm.paymentDetailsTotal)
+              : _n((vm.meta && vm.meta.amount_paid_excl_app != null) ? vm.meta.amount_paid_excl_app : vm.meta.amount_paid);
+            var totalBill = _n(totalDue) + _n(billingTotal);
+            var remain = totalBill - paidExclApp;
+            if (!isFinite(remain)) remain = 0;
+            if (remain < 0) remain = 0;
+            vm.meta.remaining_amount = remain;
           }
         }
       } catch (e) {
@@ -2475,10 +2594,19 @@ vm.loading.createPayment = false;
                   return _n2(s2.total_due || td.total || s2.total || s2.grand_total);
                 }
               })();
-              var billingTotal2 = _n2(td.billing_total || s2.billing_total || (td.meta && td.meta.billing_total));
+              var billingTotal2 = (typeof vm.billingTotalFromInvoices === 'function') ? vm.billingTotalFromInvoices() : null;
+              if (!(isFinite(billingTotal2) && billingTotal2 >= 0)) {
+                billingTotal2 = _n2(td.billing_total || s2.billing_total || (td.meta && td.meta.billing_total));
+              }
               vm.meta.billing_total = billingTotal2;
-              vm.meta.remaining_amount = (totalDue2 + billingTotal2) - _n2(vm.meta.amount_paid) - _n2(vm.meta.billing_paid);
+              var paidExclApp2 = (isFinite(parseFloat(vm.paymentDetailsTotal)))
+                ? _n2(vm.paymentDetailsTotal)
+                : _n2((vm.meta && vm.meta.amount_paid_excl_app != null) ? vm.meta.amount_paid_excl_app : vm.meta.amount_paid);
+              var totalBill2 = _n2(totalDue2) + _n2(billingTotal2);
+              var remain2 = totalBill2 - paidExclApp2;
+              vm.meta.remaining_amount = isFinite(remain2) ? remain2 : 0;
               if (!isFinite(vm.meta.remaining_amount)) vm.meta.remaining_amount = 0;
+              if (vm.meta.remaining_amount < 0) vm.meta.remaining_amount = 0;
             }
           } catch (e) {}
         })
@@ -2571,12 +2699,20 @@ vm.loading.createPayment = false;
                     return _numS(ssum.total_due || sd.total || ssum.total || ssum.grand_total);
                   }
                 })();
-                var billingTotalS = _numS(sd.billing_total || ssum.billing_total || (sd.meta && sd.meta.billing_total));
+                var billingTotalS = (typeof vm.billingTotalFromInvoices === 'function') ? vm.billingTotalFromInvoices() : null;
+                if (!(isFinite(billingTotalS) && billingTotalS >= 0)) {
+                  billingTotalS = _numS(sd.billing_total || ssum.billing_total || (sd.meta && sd.meta.billing_total));
+                }
                 var apaid = _numS(vm.meta.amount_paid);
                 apaid = isFinite(apaid) ? apaid : 0;
                 vm.meta.billing_total = (isFinite(billingTotalS) ? billingTotalS : 0);
-                vm.meta.remaining_amount = ((isFinite(totalDueS) ? totalDueS : 0) + (isFinite(billingTotalS) ? billingTotalS : 0)) - apaid - (isFinite(vm.meta && vm.meta.billing_paid) ? parseFloat(vm.meta.billing_paid) : 0);
+                var apaidExcl = (isFinite(parseFloat(vm.paymentDetailsTotal)))
+                  ? parseFloat(vm.paymentDetailsTotal)
+                  : ((vm.meta && isFinite(parseFloat(vm.meta.amount_paid_excl_app))) ? parseFloat(vm.meta.amount_paid_excl_app) : apaid);
+                var totalBillS = (isFinite(totalDueS) ? totalDueS : 0) + (isFinite(billingTotalS) ? billingTotalS : 0);
+                vm.meta.remaining_amount = totalBillS - apaidExcl;
                 if (!isFinite(vm.meta.remaining_amount)) vm.meta.remaining_amount = 0;
+                if (vm.meta.remaining_amount < 0) vm.meta.remaining_amount = 0;
               }
             } catch (e) {}
           }
@@ -2633,6 +2769,8 @@ vm.loading.createPayment = false;
           });
           vm.invoices = list;
           try { if (typeof vm.recomputeInvoicesPayments === 'function') vm.recomputeInvoicesPayments(); } catch (e) {}
+          // Align Billing Total with Student Finances: sum all Billing invoices (paid and unpaid)
+          try { if (typeof vm.recomputeBillingTotalFromInvoices === 'function') vm.recomputeBillingTotalFromInvoices(); } catch (_eBT) {}
           vm._last.invoices = { key: key, term: vm.term };
         })
         .catch(function () {
@@ -2670,71 +2808,104 @@ vm.loading.createPayment = false;
             vm.paymentDetails = data || { items: [], meta: {} };
 
             try {
-            var total = (vm.paymentDetails && vm.paymentDetails.meta && vm.paymentDetails.meta.total_paid_filtered != null)
-                ? parseFloat(vm.paymentDetails.meta.total_paid_filtered)
-                : null;
-            
-            vm.paymentDetailsTotal = isFinite(total) ? total : 0;
+            // Build invoice_number -> type index for classification
+            var invIndex = {};
+            try {
+              var invsIdx = Array.isArray(vm.invoices) ? vm.invoices : [];
+              for (var ii = 0; ii < invsIdx.length; ii++) {
+                var invI = invsIdx[ii] || {};
+                var numI = (invI.invoice_number != null ? ('' + invI.invoice_number).trim() : (invI.number != null ? ('' + invI.number).trim() : ''));
+                if (numI) invIndex[numI] = (invI.type ? ('' + invI.type).toLowerCase() : '');
+              }
+            } catch (_eIdx) { invIndex = {}; }
 
-            // Apply Debit/Credit adjustments to Amount Paid:
-            // - Credits are already included in total_paid_filtered (status='Paid')
-            // - Debits (Journal entries) should reduce Amount Paid
-            var itemsForAdj = (vm.paymentDetails && vm.paymentDetails.items) ? vm.paymentDetails.items : [];            
+            // Recompute totals from payment_details:
+            // - paymentDetailsTotal: sum of Paid rows (includes Application)
+            // - amount_paid (used for Remaining): Paid rows excluding Application, minus debits/journals
+            var itemsForAdj = (vm.paymentDetails && vm.paymentDetails.items) ? vm.paymentDetails.items : [];
+            var paidAll = 0;
+            var appOnly = 0;
+            for (var piA = 0; piA < itemsForAdj.length; piA++) {
+              var rowA = itemsForAdj[piA] || {};
+              if (rowA.status !== 'Paid') continue;
+              var descA = (rowA.description == null ? '' : ('' + rowA.description)).trim().toLowerCase();
+              var invNoA = rowA.invoice_number != null ? ('' + rowA.invoice_number).trim() : '';
+              var invTypeA = invNoA && invIndex[invNoA] ? invIndex[invNoA] : '';
+              var amtA = parseFloat(rowA.subtotal_order);
+              if (!isFinite(amtA)) continue;
+              // Always add to overall Paid total
+              paidAll += amtA;
+              // Track Application-only to subtract later for Remaining
+              var isApp = _isApplicationFeeDesc(descA)
+                || (invTypeA && invTypeA.indexOf('application') === 0)
+                || (descA.indexOf('application') !== -1)
+                || (descA.indexOf('app fee') !== -1)
+                || (descA.indexOf('admission fee') !== -1)
+                || (descA.indexOf('admissions fee') !== -1);
+              if (isApp) appOnly += amtA;
+            }
+
+            // Debit adjustments: subtract Journal or negative subtotals from Remaining computation
             var debitAdj = 0;
             try {
               for (var di = 0; di < itemsForAdj.length; di++) {
                 var rdi = itemsForAdj[di] || {};
                 var amt = parseFloat(rdi.subtotal_order);
-                // Consider Journal rows or any negative subtotal as debit adjustments
                 var isJournal = false;
-                try {
-                  isJournal = (rdi.status && ('' + rdi.status).toLowerCase() === 'journal');
-                } catch (_eJ) { isJournal = false; }
+                try { isJournal = (rdi.status && ('' + rdi.status).toLowerCase() === 'journal'); } catch (_eJ) { isJournal = false; }
                 if (isJournal || (isFinite(amt) && amt < 0)) {
                   debitAdj += Math.abs(isFinite(amt) ? amt : 0);
                 }
               }
-            } catch (_eAdj) {
-              debitAdj = 0;
-            }
-            var adjustedPaid = vm.paymentDetailsTotal - debitAdj;
-            if (!isFinite(adjustedPaid)) adjustedPaid = vm.paymentDetailsTotal;
+            } catch (_eAdj) { debitAdj = 0; }
+
+            // Show Paid total EXCLUDING Application on the card (per requirement)
+            vm.paymentDetailsTotal = round2Local(Math.max(0, paidAll - appOnly));
+            // Use Paid minus Application minus debits for Remaining computations
+            var adjustedPaid = (paidAll - appOnly) - debitAdj;
+            if (!isFinite(adjustedPaid)) adjustedPaid = (paidAll - appOnly);
             if (adjustedPaid < 0) adjustedPaid = 0;
 
-            // Sync adjusted amount paid
             if (vm.meta) {
-              vm.meta.amount_paid = adjustedPaid;
+              vm.meta.amount_paid = round2Local(adjustedPaid);
+              // expose explicit field to drive Remaining excluding application fee
+              vm.meta.amount_paid_excl_app = round2Local(adjustedPaid);
+            }
+
+            function round2Local(v) {
+              var n = parseFloat(v);
+              if (!isFinite(n)) n = 0;
+              return Math.round(n * 100) / 100;
             }
 
                 // Compute total paid toward Billing items (exclude tuition/reservation)
                 try {
-                  var invIndex = {};
+                  var invIndex2 = {};
                   try {
-                    var invs = Array.isArray(vm.invoices) ? vm.invoices : [];
-                    for (var ii = 0; ii < invs.length; ii++) {
-                      var inv = invs[ii] || {};
-                      var num = (inv.invoice_number != null ? ('' + inv.invoice_number).trim() : (inv.number != null ? ('' + inv.number).trim() : ''));
-                      if (num) invIndex[num] = (inv.type ? ('' + inv.type).toLowerCase() : null);
+                    var invs2 = Array.isArray(vm.invoices) ? vm.invoices : [];
+                    for (var ii2 = 0; ii2 < invs2.length; ii2++) {
+                      var inv2 = invs2[ii2] || {};
+                      var num2 = (inv2.invoice_number != null ? ('' + inv2.invoice_number).trim() : (inv2.number != null ? ('' + inv2.number).trim() : ''));
+                      if (num2) invIndex2[num2] = (inv2.type ? ('' + inv2.type).toLowerCase() : null);
                     }
-                  } catch (_eIdx) { invIndex = {}; }
+                  } catch (_eIdx2) { invIndex2 = {}; }
                   var items = (vm.paymentDetails && vm.paymentDetails.items) ? vm.paymentDetails.items : [];
-                var billingPaid = 0;
-                for (var pi = 0; pi < items.length; pi++) {
-                  var row = items[pi] || {};
-                  if (row.status !== 'Paid') continue;
-                  var amt = parseFloat(row.subtotal_order); if (!isFinite(amt)) amt = 0;
-                  var invNo = row.invoice_number != null ? ('' + row.invoice_number).trim() : '';
-                  var itype = invNo && invIndex[invNo] ? invIndex[invNo] : null;
-                  var desc = (row.description == null ? '' : ('' + row.description)).trim().toLowerCase();
-                  // classify as billing when invoice type says 'billing', or when not clearly tuition/reservation
-                  var isTuitionRes = (desc === 'tuition fee') || _isApplicationFeeDesc(desc) || _isReservationFeeDesc(desc);
-                  if (itype === 'billing' || (!itype && !isTuitionRes)) {                    
-                    billingPaid += amt;
+                  var billingPaid = 0;
+                  for (var pi = 0; pi < items.length; pi++) {
+                    var row = items[pi] || {};
+                    if (row.status !== 'Paid') continue;
+                    var amt = parseFloat(row.subtotal_order); if (!isFinite(amt)) amt = 0;
+                    var invNo = row.invoice_number != null ? ('' + row.invoice_number).trim() : '';
+                    var itype = invNo && invIndex2[invNo] ? invIndex2[invNo] : null;
+                    var desc = (row.description == null ? '' : ('' + row.description)).trim().toLowerCase();
+                    // classify as billing when invoice type says 'billing', or when not clearly tuition/reservation/application
+                    var isExcl = (desc === 'tuition fee') || _isApplicationFeeDesc(desc) || _isReservationFeeDesc(desc);
+                    if (itype === 'billing' || (!itype && !isExcl)) {
+                      billingPaid += amt;
+                    }
                   }
-                }
-                if (!vm.meta) vm.meta = {};
-                // Add negative billing amounts to amount_paid
-                vm.meta.billing_paid = billingPaid;
+                  if (!vm.meta) vm.meta = {};
+                  vm.meta.billing_paid = billingPaid;
                
                 } catch (_eBP) {
                   if (!vm.meta) vm.meta = {};
@@ -3185,13 +3356,70 @@ vm.loading.createPayment = false;
             // Bind invoices (already enriched with _paid/_remaining and effective totals)
             vm.invoices = Array.isArray(data && data.invoices) ? data.invoices.slice() : [];
 
-            // Bind payment details block and derive totals
+            // Bind payment details block and derive totals (card vs remaining)
             vm.paymentDetails = data && data.payment_details ? data.payment_details : { items: [], meta: {} };
             try {
-              var total = (vm.paymentDetails && vm.paymentDetails.meta && vm.paymentDetails.meta.total_paid_filtered != null)
-                ? parseFloat(vm.paymentDetails.meta.total_paid_filtered)
-                : null;
-              vm.paymentDetailsTotal = isFinite(total) ? total : 0;
+              // Build invoice index for application detection
+              var invIndexAgg = {};
+              try {
+                var invsAgg = Array.isArray(vm.invoices) ? vm.invoices : [];
+                for (var a = 0; a < invsAgg.length; a++) {
+                  var iAgg = invsAgg[a] || {};
+                  var nAgg = (iAgg.invoice_number != null ? ('' + iAgg.invoice_number).trim()
+                             : (iAgg.number != null ? ('' + iAgg.number).trim() : ''));
+                  if (nAgg) invIndexAgg[nAgg] = (iAgg.type ? ('' + iAgg.type).toLowerCase() : '');
+                }
+              } catch (_eIdxAgg) { invIndexAgg = {}; }
+
+              var rowsAgg = (vm.paymentDetails && vm.paymentDetails.items) ? vm.paymentDetails.items : [];
+              var paidAllAgg = 0;
+              var appOnlyAgg = 0;
+              for (var rAgg = 0; rAgg < rowsAgg.length; rAgg++) {
+                var rowAgg = rowsAgg[rAgg] || {};
+                if (rowAgg.status !== 'Paid') continue;
+                var dAgg = (rowAgg.description == null ? '' : ('' + rowAgg.description)).trim().toLowerCase();
+                var noAgg = rowAgg.invoice_number != null ? ('' + rowAgg.invoice_number).trim() : '';
+                var tAgg = noAgg && invIndexAgg[noAgg] ? invIndexAgg[noAgg] : '';
+                var amtAgg = parseFloat(rowAgg.subtotal_order);
+                if (!isFinite(amtAgg)) continue;
+                paidAllAgg += amtAgg;
+                var isAppAgg = _isApplicationFeeDesc(dAgg)
+                  || (tAgg && tAgg.indexOf('application') === 0)
+                  || (dAgg.indexOf('application') !== -1)
+                  || (dAgg.indexOf('app fee') !== -1)
+                  || (dAgg.indexOf('admission fee') !== -1)
+                  || (dAgg.indexOf('admissions fee') !== -1);
+                if (isAppAgg) appOnlyAgg += amtAgg;
+              }
+
+              // Debit/Journal adjustments
+              var debitAgg = 0;
+              try {
+                for (var dj = 0; dj < rowsAgg.length; dj++) {
+                  var rr = rowsAgg[dj] || {};
+                  var amtr = parseFloat(rr.subtotal_order);
+                  var isJ = false;
+                  try { isJ = (rr.status && ('' + rr.status).toLowerCase() === 'journal'); } catch (_eJ2) { isJ = false; }
+                  if (isJ || (isFinite(amtr) && amtr < 0)) {
+                    debitAgg += Math.abs(isFinite(amtr) ? amtr : 0);
+                  }
+                }
+              } catch (_eDJA) { debitAgg = 0; }
+
+              // Card total EXCLUDING Application
+              vm.paymentDetailsTotal = round2Local(Math.max(0, paidAllAgg - appOnlyAgg));
+              // Remaining uses amount_paid excluding Application and debits
+              if (vm.meta) {
+                var excl = Math.max(0, (paidAllAgg - appOnlyAgg) - debitAgg);
+                vm.meta.amount_paid = round2Local(excl);
+                vm.meta.amount_paid_excl_app = round2Local(excl);
+              }
+
+              function round2Local(v) {
+                var n = parseFloat(v);
+                if (!isFinite(n)) n = 0;
+                return Math.round(n * 100) / 100;
+              }
             } catch (_eTot) {
               vm.paymentDetailsTotal = 0;
             }
@@ -3271,6 +3499,7 @@ vm.loading.createPayment = false;
             // Recompute summaries/UI based on bound data
             try { if (typeof vm.refreshTuitionSummary === 'function') vm.refreshTuitionSummary(); } catch (_eRS) {}
             try { if (typeof vm.recomputeInvoicesPayments === 'function') vm.recomputeInvoicesPayments(); } catch (_eRI) {}
+            try { if (typeof vm.recomputeBillingTotalFromInvoices === 'function') vm.recomputeBillingTotalFromInvoices(); } catch (_eBT2) {}
 
             // Mark last
             vm._last = vm._last || {};

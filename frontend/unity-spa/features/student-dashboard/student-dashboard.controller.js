@@ -202,7 +202,34 @@
       vm.summary.totalSubjects = subjects;
       vm.summary.totalUnits = units;
     }
-
+ 
+    // Fallback schedule formatter: prefer backend schedule_text; otherwise compose from fields
+    vm.formatSchedule = function (r) {
+      if (!r) return '-';
+      var txt = (r.schedule_text !== undefined && r.schedule_text !== null) ? ('' + r.schedule_text).trim() : '';
+      if (txt) return txt;
+ 
+      // Try alternate field names as defensive fallbacks
+      var days = r.schedule_days || r.scheduleDays || r.days || null;
+      var times = r.schedule_times || r.scheduleTimes || r.times || null;
+      var rooms = r.schedule_rooms || r.scheduleRooms || r.rooms || null;
+ 
+      var parts = [];
+      if (days && times) {
+        parts.push((days + ' ' + times).trim());
+      } else if (times) {
+        parts.push(('' + times).trim());
+      } else if (days) {
+        parts.push(('' + days).trim());
+      }
+      if (rooms) {
+        parts.push(('' + rooms).trim());
+      }
+ 
+      var out = parts.join(' — ');
+      return out && out.trim() !== '' ? out : '-';
+    };
+ 
     // Data loaders
     function loadProfile() {
       vm.loading.profile = true;
@@ -221,6 +248,7 @@
             // StudentResource is returned; unwrap if needed
             vm.profile = (data && data.data) ? data.data : data;
             vm.student_number = (vm.profile && vm.profile.student_number) ? ('' + vm.profile.student_number).trim() : null;
+            vm.student_id = (vm.profile && vm.profile.student_id) ? ('' + vm.profile.student_id).trim() : null;
             if (!vm.student_number) {
               // Fallback to username if backend profile lacks student_number
               vm.student_number = username;
@@ -244,12 +272,12 @@
     function loadRecords() {
       vm.loading.records = true;
       vm.error.records = null;
-      if (!vm.student_number) {
+      if (!vm.student_id) {
         vm.loading.records = false;
-        vm.error.records = 'Missing student number.';
-        return $q.reject(new Error('missing student_number'));
+        vm.error.records = 'Missing student ID.';
+        return $q.reject(new Error('missing student id'));
       }
-      var payload = { student_number: vm.student_number, include_grades: true };
+      var payload = { student_id: vm.student_id, include_grades: true };
       return $http.post(vm.api.records, payload)
         .then(function (resp) {
           if (resp && resp.data && resp.data.success !== false) {

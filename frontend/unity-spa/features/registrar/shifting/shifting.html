@@ -1,0 +1,130 @@
+<div class="space-y-6">
+  <h1 class="text-2xl font-semibold">Registrar — Shifting</h1>
+  <p class="text-sm text-gray-600">
+    Update a student's Program and Curriculum for the selected term. Curriculum options are filtered by the selected Program.
+  </p>
+
+  <!-- Controls -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <!-- Student -->
+    <div class="md:col-span-2">
+      <label class="block text-sm font-medium text-gray-700">Student</label>
+      <input
+        type="text"
+        class="mt-1 block w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        placeholder="Search or select a student..."
+        pui-autocomplete
+        ng-model="vm.studentNumber"
+        pui-source="vm.students"
+        pui-item-key="student_number"
+        pui-label="(item.student_number + ' — ' + item.last_name + ', ' + item.first_name + (item.middle_name ? (' ' + item.middle_name) : ''))"
+        pui-on-select="vm.onStudentSelected()"
+        pui-min-chars="1"
+        pui-query-debounce="250"
+        pui-on-query="vm.onStudentQuery($query)"
+      />
+      <div class="text-xs text-gray-500 mt-1" ng-if="vm.studentNumber">
+        Selected: <span class="font-medium">{{ vm.selectedStudentName || vm.studentNumber }}</span>
+      </div>
+    </div>
+
+    <!-- Term -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Term</label>
+      <div class="mt-1 block w-full border rounded px-3 py-2 bg-gray-50">
+        <span ng-if="vm.selectedTerm">
+          {{ vm.selectedTerm.enumSem }} {{ vm.selectedTerm.term_label }} {{ vm.selectedTerm.strYearStart }}-{{ vm.selectedTerm.strYearEnd }}
+        </span>
+        <span ng-if="!vm.selectedTerm" class="text-gray-500">Select a term from the global selector.</span>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex items-end">
+      <a ng-if="vm.student_id"
+         href="#/students/{{vm.student_id}}/records?sn={{vm.studentNumber}}"
+         target="_blank"
+         class="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-center">
+        <i class="fas fa-external-link-alt mr-1"></i> View Records
+      </a>
+    </div>
+  </div>
+
+  <!-- Registration summary -->
+  <div class="bg-white border rounded p-4">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="text-lg font-semibold">Current Registration (Selected Term)</h2>
+      <span ng-if="vm.regLoading" class="text-gray-600 text-sm">
+        <i class="fas fa-spinner fa-spin"></i> Loading registration...
+      </span>
+    </div>
+    <div ng-if="!vm.registration" class="text-gray-600 bg-gray-50 border rounded p-3">
+      No registration found for this term. Shifting edits require an existing registration.
+    </div>
+    <div ng-if="vm.registration" class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+      <div>
+        <div class="text-gray-500 uppercase text-xs">Student Type</div>
+        <div class="font-medium">{{ vm.registration.enumStudentType || vm.registration.student_type || '—' }}</div>
+      </div>
+      <div>
+        <div class="text-gray-500 uppercase text-xs">Program</div>
+        <div class="font-medium">
+          {{ (vm.findProgramById(vm.registration.current_program) && (vm.findProgramById(vm.registration.current_program).strProgramCode + ' — ' + vm.findProgramById(vm.registration.current_program).strProgramDescription)) || vm.registration.program_code || '—' }}
+        </div>
+      </div>
+      <div>
+        <div class="text-gray-500 uppercase text-xs">Curriculum</div>
+        <div class="font-medium">
+          {{ vm.registration.curriculum_name || '—' }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shifting form -->
+  <div class="bg-white border rounded p-4 space-y-4">
+    <h2 class="text-lg font-semibold">Update Program and Curriculum</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- Program -->
+      <div class="md:col-span-1">
+        <label class="block text-sm font-medium text-gray-700">Program</label>
+        <select
+          ng-model="vm.form.program_id"
+          ng-change="vm.onProgramChange()"
+          class="mt-1 block w-full border rounded px-3 py-2"
+          ng-options="(p.intProgramID || p.id) as (p.strProgramCode + ' — ' + p.strProgramDescription) for p in vm.programs track by (p.intProgramID || p.id)">
+          <option value="">-- Select Program --</option>
+        </select>
+      </div>
+
+      <!-- Curriculum -->
+      <div class="md:col-span-1">
+        <label class="block text-sm font-medium text-gray-700">Curriculum</label>
+        <select
+          ng-model="vm.form.curriculum_id"
+          class="mt-1 block w-full border rounded px-3 py-2"
+          ng-options="(c.intID || c.id) as (c.strName || c.name) for c in vm.curricula track by (c.intID || c.id)">
+          <option value="">-- Select Curriculum --</option>
+        </select>
+        <div class="text-xs text-gray-500 mt-1" ng-if="vm.form.program_id && !vm.curricula.length">
+          No curricula found for the selected program.
+        </div>
+      </div>
+
+      <!-- Save -->
+      <div class="md:col-span-1 flex items-end">
+        <button class="w-full px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
+                ng-disabled="!vm.canSave() || vm.saving"
+                ng-click="vm.saveShift()">
+          <span ng-if="!vm.saving"><i class="fas fa-save mr-1"></i> Save</span>
+          <span ng-if="vm.saving"><i class="fas fa-spinner fa-spin mr-1"></i> Saving...</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="text-xs text-gray-500">
+      Note: Changes apply to the registration for the selected term (current_program and current_curriculum).
+    </div>
+  </div>
+</div>

@@ -108,7 +108,7 @@
                 <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Faculty</th>
                 <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Units</th>
                 <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Remarks</th>
-                <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">Prelim</th>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Schedule</th>
                 <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">Midterm</th>
                 <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">Finals</th>
                 <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">Final</th>
@@ -125,8 +125,8 @@
                 </td>
                 <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900 text-right">{{ r.units != null ? r.units : '-' }}</td>
                 <td class="px-4 py-2 text-sm text-gray-900">{{ r.remarks || '-' }}</td>
-                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900 text-center">
-                  {{ (r.grades &amp;&amp; r.grades.prelim != null) ? r.grades.prelim : '-' }}
+                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
+                  {{ vm.formatSchedule(r) }}
                 </td>
                 <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900 text-center">
                   {{ (r.grades &amp;&amp; r.grades.midterm != null) ? r.grades.midterm : '-' }}

@@ -458,6 +458,67 @@ class InvoiceService
     }
 
     /**
+     * Compute the total paid amount for a given invoice number from payment_details.
+     * Only counts rows with status 'Paid'. Handles both numeric and string invoice numbers.
+     */
+    public function getInvoicePaidTotal($invoiceNumber): float
+    {
+        if ($invoiceNumber === null || $invoiceNumber === '') {
+            return 0.0;
+        }
+
+        // Guard schema access
+        try {
+            $sum = DB::table('payment_details')
+                ->where('invoice_number', $invoiceNumber)
+                ->where('status', 'Paid')
+                ->sum('subtotal_order');
+
+            // subtotal_order in payment_details is positive for credits (payments) in many places.
+            // Ensure we return a positive "paid total" number.
+            $paid = (float) $sum;
+            if ($paid < 0) {
+                $paid = abs($paid);
+            }
+            return round($paid, 2);
+        } catch (\Throwable $e) {
+            return 0.0;
+        }
+    }
+
+    /**
+     * Compute remaining amount for an invoice.
+     * remaining = max(0, amount_total - paid_total)
+     */
+    public function getInvoiceRemaining($invoiceNumber): float
+    {
+        $inv = null;
+        try {
+            $inv = DB::table('tb_mas_invoices')
+                ->where('invoice_number', $invoiceNumber)
+                ->orderBy('intID', 'desc')
+                ->first();
+        } catch (\Throwable $e) {
+            $inv = null;
+        }
+
+        $total = 0.0;
+        if ($inv && isset($inv->amount_total)) {
+            $total = (float) $inv->amount_total;
+        } else {
+            // Fallback: try normalized getter when invoice_number resolves to a single row id
+            $row = $this->get((int) $invoiceNumber);
+            if (is_array($row)) {
+                $total = (float) ($row['amount_total'] ?? 0.0);
+            }
+        }
+
+        $paid = $this->getInvoicePaidTotal($invoiceNumber);
+        $remaining = max(0.0, (float) $total - (float) $paid);
+        return round($remaining, 2);
+    }
+
+    /**
      * Resolve campus id from options or actor's cashier context as fallback.
      *
      * @param array $options

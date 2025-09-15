@@ -583,7 +583,7 @@
                   </tr>
                 </thead>
                 <tbody ng-if="vm.invoiceModal.payments && vm.invoiceModal.payments.length">
-                  <tr class="odd:bg-white even:bg-gray-50" ng-repeat="p in vm.invoiceModal.payments">
+                  <tr class="odd:bg-white even:bg-gray-50" ng-repeat="p in (vm.invoiceModal.payments | filter:vm.onlyPaid)">
                     <td class="px-3 py-2">{{ p.or_date || p.posted_at || '' }}</td>
                     <td class="px-3 py-2">{{ p.or_no }}</td>
                     <td class="px-3 py-2">{{ p.description }}</td>
@@ -1127,7 +1127,7 @@
                 </tr>
               </thead>
               <tbody ng-if="vm.paymentDetails && vm.paymentDetails.items && vm.paymentDetails.items.length">
-                <tr class="odd:bg-white even:bg-gray-50" ng-repeat="p in vm.paymentDetails.items">
+                <tr class="odd:bg-white even:bg-gray-50" ng-repeat="p in (vm.paymentDetails.items | filter:vm.onlyPaid)">
                   <td class="px-3 py-2">{{ p.or_date || p.posted_at || '' }}</td>
                   <td class="px-3 py-2">{{ p.or_no }}</td>
                   <td class="px-3 py-2">{{ p.invoice_number }}</td>

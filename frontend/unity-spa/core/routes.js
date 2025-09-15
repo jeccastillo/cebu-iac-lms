@@ -78,6 +78,18 @@
         controllerAs: "vm",
         requiredRoles: ["registrar", "admin"],
       })
+      .when("/registrar/change-password", {
+        templateUrl: "features/registrar/change-password/change-password.html",
+        controller: "RegistrarChangePasswordController",
+        controllerAs: "vm",
+        requiredRoles: ["registrar", "admin"],
+      })
+      .when("/registrar/shifting", {
+        templateUrl: "features/registrar/shifting/shifting.html",
+        controller: "ShiftingController",
+        controllerAs: "vm",
+        requiredRoles: ["registrar", "admin"],
+      })
       .when("/finance/cashier/:id", {
         templateUrl: "features/finance/cashier-viewer/cashier-viewer.html",
         controller: "CashierViewerController",
@@ -552,6 +564,22 @@
         requiredRoles: ["admin"],
       })
 
+      // Admin: Student Editor (Prompt)
+      .when("/admin/students/prompt", {
+        templateUrl: "features/admin/students/prompt.html",
+        controller: "AdminStudentPromptController",
+        controllerAs: "vm",
+        requiredRoles: ["admin"],
+      })
+
+      // Admin: Student Editor
+      .when("/admin/students/:id/edit", {
+        templateUrl: "features/admin/students/edit.html",
+        controller: "AdminStudentEditController",
+        controllerAs: "vm",
+        requiredRoles: ["admin"],
+      })
+
       .when("/admin/payment-details", {
         templateUrl: "features/admin/payment-details/edit.html",
         controller: "AdminPaymentDetailsController",
@@ -573,6 +601,12 @@
       .when("/student/dashboard", {
         templateUrl: "features/student-dashboard/student-dashboard.html",
         controller: "StudentDashboardController",
+        controllerAs: "vm",
+        requiredRoles: ["student_view", "admin"],
+      })
+      .when("/student/finances", {
+        templateUrl: "features/student/finances/finances.html",
+        controller: "StudentFinancesController",
         controllerAs: "vm",
         requiredRoles: ["student_view", "admin"],
       })

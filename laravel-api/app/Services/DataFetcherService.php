@@ -59,6 +59,7 @@ class DataFetcherService
             'last_name'      => $user->strLastname,
             'personal_email' => $user->strEmail,
             'student_number' => $user->strStudentNumber,
+            'student_id'     => $user->intID,
             'contact_number' => $user->strMobileNumber,
             'course_id'      => $user->intProgramID,
             'course_name'    => $user->strProgramCode,

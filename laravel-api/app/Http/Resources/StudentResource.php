@@ -20,6 +20,7 @@ class StudentResource extends JsonResource
             'last_name'      => $res['last_name']      ?? null,
             'personal_email' => $res['personal_email'] ?? null,
             'student_number' => $res['student_number'] ?? null,
+            'student_id'     => $res['student_id'] ?? null,
             'contact_number' => $res['contact_number'] ?? null,
             'course_id'      => $res['course_id']      ?? null,
             'course_name'    => $res['course_name']    ?? null,

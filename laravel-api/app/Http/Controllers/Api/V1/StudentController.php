@@ -6,14 +6,21 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\StudentLookupRequest;
 use App\Http\Requests\Api\V1\StudentBalanceRequest;
 use App\Http\Requests\Api\V1\StudentRecordsRequest;
+use App\Http\Requests\Api\V1\StudentDeficienciesRequest;
 use App\Http\Resources\StudentResource;
 use App\Http\Resources\StudentBalanceResource;
 use App\Http\Resources\TransactionResource;
+use App\Http\Resources\StudentDeficiencyResource;
 use App\Services\DataFetcherService;
 use App\Services\ScheduleService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use App\Http\Requests\Api\V1\StudentUpdateRequest;
+use App\Services\SystemLogService;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class StudentController extends Controller
 {
@@ -148,6 +155,128 @@ class StudentController extends Controller
         return response()->json([
             'success' => true,
             'data' => $row
+        ]);
+    }
+
+    /**
+     * GET /api/v1/students/{id}/raw (admin)
+     * Returns the raw tb_mas_users row for admin editing.
+     */
+    public function raw(int $id): JsonResponse
+    {
+        try {
+            $user = DB::table('tb_mas_users')->where('intID', $id)->first();
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Database error: '.$e->getMessage(),
+            ], 422);
+        }
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Student not found.'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $user,
+        ]);
+    }
+
+    /**
+     * PUT /api/v1/students/{id} (admin)
+     * Schema-safe update for tb_mas_users with system logging.
+     */
+    public function update(StudentUpdateRequest $request, int $id): JsonResponse
+    {
+        if (!Schema::hasTable('tb_mas_users')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Users table not found.',
+            ], 422);
+        }
+
+        $old = DB::table('tb_mas_users')->where('intID', $id)->first();
+        if (!$old) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Student not found.'
+            ], 404);
+        }
+
+        $input = $request->all();
+
+        // If a new password was provided, hash it unless it already looks hashed.
+        // Field name: strPass (legacy). Accept plain text and store as bcrypt.
+        try {
+            if (array_key_exists('strPass', $input) && is_string($input['strPass']) && $input['strPass'] !== '') {
+                $pw = $input['strPass'];
+                // Avoid double-hashing if already bcrypt/argon formatted
+                if (!preg_match('/^\$(2y|2a|argon2i|argon2id)\$/', $pw)) {
+                    $input['strPass'] = Hash::make($pw);
+                }
+            }
+        } catch (\Throwable $e) {
+            // Do not block update on hashing errors; let validation handle later if needed
+        }
+
+        // Detect existing columns and build a case-insensitive map
+        try {
+            $cols = Schema::getColumnListing('tb_mas_users');
+        } catch (\Throwable $e) {
+            $cols = [];
+        }
+        $colMap = [];
+        foreach ($cols as $c) {
+            $colMap[strtolower($c)] = $c;
+        }
+
+        // Restrict immutable fields
+        $restricted = ['intid'];
+
+        $updates = [];
+        foreach ($input as $k => $v) {
+            $lk = strtolower((string)$k);
+            if (in_array($lk, $restricted, true)) continue;
+            if (isset($colMap[$lk])) {
+                $colName = $colMap[$lk];
+                // Normalize empty string to null to avoid invalid data in nullable columns
+                $updates[$colName] = ($v === '') ? null : $v;
+            }
+        }
+
+        if (empty($updates)) {
+            return response()->json([
+                'success' => true,
+                'data' => $old,
+                'message' => 'No changes applied.',
+            ]);
+        }
+
+        try {
+            DB::table('tb_mas_users')->where('intID', $id)->update($updates);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Update failed: '.$e->getMessage(),
+            ], 422);
+        }
+
+        $new = DB::table('tb_mas_users')->where('intID', $id)->first();
+
+        // Non-blocking system log
+        try {
+            SystemLogService::log('update', 'Student', $id, $old, $new, $request);
+        } catch (\Throwable $e) {
+            // ignore logging failures
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $new,
         ]);
     }
 
@@ -371,6 +500,73 @@ class StudentController extends Controller
                 'student_id'   => $studentId,
                 'transactions' => TransactionResource::collection($transactions),
             ],
+        ]);
+    }
+
+    /**
+     * POST /api/v1/student/deficiencies
+     * Body: { student_id: int }
+     * Returns deficiencies grouped by term with totals (registrar/admin only).
+     */
+    public function deficiencies(StudentDeficienciesRequest $request): JsonResponse
+    {
+        $studentId = (int) $request->input('student_id');
+
+        /** @var \App\Services\DepartmentDeficiencyService $svc */
+        $svc = app(\App\Services\DepartmentDeficiencyService::class);
+
+        // Fetch all deficiency items (across all terms, unrestricted department filter)
+        $out = $svc->list(
+            null,            // studentNumber
+            $studentId,      // studentId
+            null,            // syid (term) filter
+            null,            // department_code
+            null,            // campusId
+            1,               // page
+            1000,            // perPage (sufficiently high for typical volumes)
+            []               // allowed departments (not restricting for viewer; route guards roles)
+        );
+
+        $items = $out['items'] ?? [];
+
+        // Group items by syid and compute totals
+        $termsMap = [];
+        $grand = 0.0;
+
+        foreach ($items as $row) {
+            $syid = isset($row['syid']) ? (int) $row['syid'] : 0;
+            if (!isset($termsMap[$syid])) {
+                $termsMap[$syid] = [
+                    'syid' => $syid,
+                    'label' => null, // FE may map from /generic/terms
+                    'items' => [],
+                    'total_amount' => 0.0,
+                ];
+            }
+
+            // Normalize each item through resource
+            $res = (new StudentDeficiencyResource($row))->toArray($request);
+            $amt = isset($res['amount']) ? (float) $res['amount'] : 0.0;
+
+            $termsMap[$syid]['items'][] = $res;
+            $termsMap[$syid]['total_amount'] = round(((float) $termsMap[$syid]['total_amount']) + $amt, 2);
+            $grand += $amt;
+        }
+
+        // Sort terms by syid descending (newest first)
+        krsort($termsMap);
+
+        $result = [
+            'student_id' => $studentId,
+            'terms' => array_values($termsMap),
+            'totals' => [
+                'grand_total_amount' => round($grand, 2),
+            ],
+        ];
+
+        return response()->json([
+            'success' => true,
+            'data'    => $result,
         ]);
     }
 
@@ -623,6 +819,92 @@ class StudentController extends Controller
                 'interviewed' => isset($appData->interviewed) ? (bool) $appData->interviewed : false,
                 'interview_summary' => $interviewSummary,
             ],
+        ]);
+    }
+
+    /**
+     * POST /api/v1/students/{id}/password
+     * Body: { mode: "generate"|"set", new_password?: string, note?: string }
+     * Roles: registrar, admin (enforced by route middleware)
+     */
+    public function updatePassword(\App\Http\Requests\Api\V1\RegistrarStudentPasswordUpdateRequest $request, int $id): \Illuminate\Http\JsonResponse
+    {
+        // Resolve target student
+        try {
+            $old = \Illuminate\Support\Facades\DB::table('tb_mas_users')->where('intID', $id)->first();
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Database error: ' . $e->getMessage(),
+            ], 422);
+        }
+
+        if (!$old) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Student not found.'
+            ], 404);
+        }
+
+        $mode = (string) $request->input('mode');
+        $note = $request->input('note');
+
+        // Determine plaintext and hashed password
+        $plain = null;
+        if ($mode === 'generate') {
+            // Generate a 12-character random password (mixed alphanumeric)
+            $plain = \Illuminate\Support\Str::random(12);
+        } else { // mode === 'set'
+            $plain = (string) $request->input('new_password', '');
+        }
+
+        if ($mode === 'set' && strlen($plain) < 8) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Password must be at least 8 characters.'
+            ], 422);
+        }
+
+        try {
+            $hashed = \Illuminate\Support\Facades\Hash::make($plain);
+            \Illuminate\Support\Facades\DB::table('tb_mas_users')
+                ->where('intID', $id)
+                ->update(['strPass' => $hashed]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Update failed: ' . $e->getMessage(),
+            ], 422);
+        }
+
+        $respData = [
+            'student_id' => $id,
+            'mode'       => $mode,
+            'updated_at' => date('c'),
+        ];
+        if ($mode === 'generate') {
+            // Return the generated password once (do not log or persist plaintext)
+            $respData['generated_password'] = $plain;
+        }
+
+        // Non-blocking system log with redacted secrets
+        try {
+            \App\Services\SystemLogService::log(
+                'update',
+                'StudentPassword',
+                $id,
+                ['strPass' => 'REDACTED'],
+                ['strPass' => 'REDACTED', 'mode' => $mode, 'note' => $note],
+                $request
+            );
+        } catch (\Throwable $e) {
+            // ignore logging failures
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Password updated.',
+            'data'    => $respData,
         ]);
     }
 }

@@ -11,6 +11,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
+use App\Services\InvoiceService;
 use Throwable;
 
 class PaymentGatewayController extends Controller
@@ -57,9 +60,28 @@ class PaymentGatewayController extends Controller
                 ]);
             }
 
-            // request id (prefix with payment method name for diagnostics)
-            $prefix = $modePayment->pmethod ?: 'pay';
-            $requestId = $prefix . '-' . substr((string) Str::uuid(), 0, 18);
+            // Optional: validate invoice remaining and capture references
+            $syid = (int) ($request->input('syid') ?? 0);
+            $invoiceNumberRef = $request->input('invoice_number') ?? null;
+            // For invoice remaining validation, compare ONLY the base payment amount (exclude convenience charges and mailing fee)
+            $amountToApply = (float) $subtotal;
+            if (!empty($invoiceNumberRef)) {
+                /** @var InvoiceService $invSvc */
+                $invSvc = app(\App\Services\InvoiceService::class);
+                $remaining = $invSvc->getInvoiceRemaining($invoiceNumberRef);
+                if ($amountToApply > ($remaining + 0.01)) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Amount exceeds invoice remaining.',
+                        'invoice_number' => $invoiceNumberRef,
+                        'invoice_remaining' => $remaining,
+                        'attempt_amount' => $amountToApply
+                    ], 422);
+                }
+            }
+
+            // Request ID (gateway limit: max 32 chars, no dashes). Use compact UUID without long prefixes.
+            $requestId = substr(str_replace('-', '', (string) Str::uuid()), 0, 32);
 
             // Fetch student (optional info; some fields may not exist in current schema)
             $student = AdmissionStudentInformation::find((int) $request->input('student_information_id'));
@@ -77,19 +99,83 @@ class PaymentGatewayController extends Controller
             $p->email_address = (string) $request->input('email', '');
             $p->mode_of_payment_id = (int) $request->input('mode_of_payment_id');
             $p->remarks = (string) $request->input('remarks', '');
-            $p->convenience_fee = (float) ($modePayment->charge ?? 0);
+            // Persist computed convenience fee and charges (use validated computed charge to avoid rounding mismatches)
+            $p->convenience_fee = (float) $computedCharge;
             $p->subtotal_order = $subtotal + $mailingFee;
             $p->total_amount_due = $total + $mailingFee;
-            $p->charges = $total - $subtotal;
+            $p->charges = (float) $computedCharge;
             $p->contact_number = (string) $request->input('contact_number', '');
-            $p->student_campus = null; // not available in current AdmissionStudentInformation schema
+
+            // Resolve student campus name (non-null) from assigned campus:
+            // Priority:
+            //  1) tb_mas_users.campus_id (by student_information_id or student_number) -> tb_mas_campuses.campus_name
+            //  2) tb_mas_sy.campus_id (by syid) -> tb_mas_campuses.campus_name
+            //  3) Fallback 'Unknown' to satisfy NOT NULL constraint
+            $studentCampusName = null;
+            try {
+                $sid = (int) ($request->input('student_information_id') ?? 0);
+                $snum = (string) ($request->input('student_number') ?? '');
+
+                if (Schema::hasTable('tb_mas_users')) {
+                    // Prefer lookup by intID, fallback to student_number
+                    $uq = DB::table('tb_mas_users as u');
+                    if ($sid > 0) {
+                        $uq->where('u.intID', $sid);
+                    } elseif ($snum !== '') {
+                        $uq->where('u.strStudentNumber', $snum);
+                    } else {
+                        $uq = null;
+                    }
+
+                    if ($uq) {
+                        if (Schema::hasTable('tb_mas_campuses') && Schema::hasColumn('tb_mas_users', 'campus_id')) {
+                            $row = $uq->leftJoin('tb_mas_campuses as c', 'c.id', '=', 'u.campus_id')
+                                ->select('u.campus_id', 'c.campus_name')
+                                ->first();
+                            if ($row && !empty($row->campus_name)) {
+                                $studentCampusName = (string) $row->campus_name;
+                            }
+                        }
+                    }
+                }
+
+                if (!$studentCampusName && $syid > 0 && Schema::hasTable('tb_mas_sy') && Schema::hasColumn('tb_mas_sy', 'campus_id')) {
+                    $cid = DB::table('tb_mas_sy')->where('intID', $syid)->value('campus_id');
+                    if ($cid && Schema::hasTable('tb_mas_campuses')) {
+                        $cn = DB::table('tb_mas_campuses')->where('id', (int)$cid)->value('campus_name');
+                        if (!empty($cn)) {
+                            $studentCampusName = (string) $cn;
+                        }
+                    }
+                }
+            } catch (\Throwable $e) {
+                // swallow and fallback
+            }
+            $p->student_campus = $studentCampusName ?: 'Unknown';
             $p->ip_address = (string) $request->ip();
+
+            // Persist optional references when columns exist
+            try {
+                if (!empty($invoiceNumberRef) && \Illuminate\Support\Facades\Schema::hasColumn('payment_details', 'invoice_number')) {
+                    $p->invoice_number = $invoiceNumberRef;
+                }
+                if ($syid > 0) {
+                    if (\Illuminate\Support\Facades\Schema::hasColumn('payment_details', 'sy_reference')) {
+                        $p->sy_reference = $syid;
+                    } elseif (\Illuminate\Support\Facades\Schema::hasColumn('payment_details', 'syid')) {
+                        $p->syid = $syid;
+                    }
+                }
+            } catch (\Throwable $e) {
+                // ignore optional ref persistence failures
+            }
+
             // Safe-guard: persist; schema mismatches will be surfaced here
             $p->save();
 
             // Build item lines for gateways
             $orderItems = $request->input('order_items', []);
-            $paynamicsOrders = $this->buildPaynamicsOrderLines($orderItems, $subtotal, $mailingFee, (string) $modePayment->pmethod, (string) $modePayment->pchannel);
+            $paynamicsOrders = $this->buildPaynamicsOrderLines($orderItems, $subtotal, $mailingFee, (float) $computedCharge, (string) $modePayment->pmethod, (string) $modePayment->pchannel);
 
             // Resolve environment config
             $env = config('payments.environment', App::environment());
@@ -177,10 +263,12 @@ class PaymentGatewayController extends Controller
                     ],
                     'order_details' => [
                         'orders' => $paynamicsOrders,
-                        'subtotalprice' => (float) $total,
+                        // Paynamics expects subtotalprice and totalorderamount to equal sum of order lines:
+                        // subtotal (base) + convenience fee + mailing fee
+                        'subtotalprice' => (float) ($subtotal + $computedCharge + $mailingFee),
                         'shippingprice' => '0.00',
                         'discountamount' => '0.00',
-                        'totalorderamount' => (float) $total
+                        'totalorderamount' => (float) ($subtotal + $computedCharge + $mailingFee),
                     ],
                 ];
 
@@ -294,10 +382,11 @@ class PaymentGatewayController extends Controller
                     ],
                     'order_details' => [
                         'orders' => $paynamicsOrders,
-                        'subtotalprice' => (float) $total,
+                        // Subtotal and total must equal sum of order lines (subtotal + convenience fee + mailing fee)
+                        'subtotalprice' => (float) ($subtotal + $computedCharge + $mailingFee),
                         'shippingprice' => '0.00',
                         'discountamount' => '0.00',
-                        'totalorderamount' => (float) $total,
+                        'totalorderamount' => (float) ($subtotal + $computedCharge + $mailingFee),
                     ]
                 ];
 
@@ -469,7 +558,7 @@ class PaymentGatewayController extends Controller
         }
     }
 
-    private function buildPaynamicsOrderLines(array $orderItems, float $subtotal, float $mailingFee, string $pmethod, string $pchannel): array
+    private function buildPaynamicsOrderLines(array $orderItems, float $subtotal, float $mailingFee, float $convenienceFee, string $pmethod, string $pchannel): array
     {
         $lines = [];
         foreach ($orderItems as $orderItem) {
@@ -486,11 +575,12 @@ class PaymentGatewayController extends Controller
             ];
         }
 
-        // Add fee delta and mailing fee as separate lines (parity with legacy)
-        $feeDelta = ($subtotal + $mailingFee) > 0 ? 0 : 0;
-        if (in_array($pmethod, ['onlinebanktransfer', 'wallet', 'nonbank_otc'], true)) {
+        // Add Convenience Fee and Mailing Fee as separate lines so that
+        // sum(orders) = subtotal + convenienceFee + mailingFee and matches totalorderamount.
+        $feeDelta = max(0.0, (float) $convenienceFee);
+        if ($feeDelta > 0 && in_array($pmethod, ['onlinebanktransfer', 'wallet', 'nonbank_otc'], true)) {
             $lines[] = [
-                'itemname' => 'Fee',
+                'itemname' => 'Convenience Fee',
                 'quantity' => 1,
                 'unitprice' => $feeDelta,
                 'totalprice' => $feeDelta,

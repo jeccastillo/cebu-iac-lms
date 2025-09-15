@@ -48,9 +48,11 @@
           { label: 'Reports', path: '/registrar/reports' },
           { label: 'Transcripts / Copy of Grades', path: '/registrar/transcripts' },
           { label: 'Enlistment', path: '/registrar/enlistment' },
+          { label: 'Shifting', path: '/registrar/shifting' },
           { label: 'Enlistment Applicants', path: '/registrar/enlistment-applicants' },
           { label: 'Slot Monitoring', path: '/registrar/sections-slots' },
           { label: 'Credit Subjects', path: '/registrar/credit-subjects' },
+          { label: 'Change Student Password', path: '/registrar/change-password' },
           { label: 'Classlists', path: '/classlists' },          
         ]
       },
@@ -119,15 +121,23 @@
         ]
       },
       {
+        key: 'student',
+        label: 'Student',
+        children: [
+          { label: 'Finances', path: '/student/finances' }
+        ]
+      },
+      {
         key: 'admin',
         label: 'Admin',
         children: [
+          { label: 'Student Editor', path: '/admin/students/prompt' },
           { label: 'Invoices', path: '/admin/invoices' },
           { label: 'Payment Details', path: '/admin/payment-details' },
           { label: 'Faculty', path: '/faculty' },
           { label: 'Roles', path: '/roles' },
           { label: 'System Alerts', path: '/admin/system-alerts' },
-          { label: 'Logs', path: '/logs' },          
+          { label: 'Logs', path: '/logs' }
         ]
       }
     ];
@@ -185,6 +195,8 @@
         var path = $location.path();
         // Hide sidebar on login page
         vm.isVisible = path !== '/login' && !!(vm.loginState && vm.loginState.loggedIn);
+        // Update dynamic Admin link for editing current student (if applicable)
+        updateAdminEditStudentLink();
       });
 
       // Load collapsed state from storage
@@ -192,6 +204,8 @@
       if (savedCollapsed === 'true') {
         vm.isCollapsed = true;
       }
+      // Initialize dynamic Admin link for "Edit Current Student" (if on a student viewer route)
+      updateAdminEditStudentLink();
 
       // Close popouts on ESC key
       var keydownHandler = function (e) {
@@ -304,8 +318,27 @@
       } catch (e) { return false; }
     }
  
-     function canShowGroup(group) {
+    function canShowGroup(group) {
       if (!group || !group.children || !group.children.length) return false;
+
+      try {
+        var gkey = (group.key || '').toLowerCase();
+
+        // Hide the entire Student group for non-student logins
+        if (gkey === 'student') {
+          if (!(vm && typeof vm.hasRole === 'function' && vm.hasRole('student_view'))) {
+            return false;
+          }
+        }
+
+        // Hide specific groups for student users
+        if (vm && typeof vm.hasRole === 'function' && vm.hasRole('student_view')) {
+          if (gkey === 'department' || gkey === 'clinic') {
+            return false;
+          }
+        }
+      } catch (e) {}
+
       for (var i = 0; i < group.children.length; i++) {
         var c = group.children[i];
         var testPath = c.path || '';
@@ -314,6 +347,67 @@
         }
       }
       return false;
+    }
+
+    // ---------------- Dynamic Admin Link: Edit Current Student ----------------
+
+    // Extracts a numeric student id from routes like /students/:id
+    function extractCurrentStudentId() {
+      try {
+        var p = $location.path() || '';
+        var m = p.match(/^\/students\/(\d+)/);
+        return m && m[1] ? m[1] : null;
+      } catch (e) { return null; }
+    }
+
+    // Ensures an "Edit Current Student" entry exists under Admin when viewing /students/:id.
+    // Uses a dynamic href so the link points to /admin/students/:id/edit.
+    function updateAdminEditStudentLink() {
+      var sid = extractCurrentStudentId();
+
+      // Locate Admin group
+      var adminGroup = null;
+      try {
+        for (var gi = 0; gi < (vm.menu || []).length; gi++) {
+          if (vm.menu[gi] && vm.menu[gi].key === 'admin') {
+            adminGroup = vm.menu[gi];
+            break;
+          }
+        }
+      } catch (e) { adminGroup = null; }
+
+      if (!adminGroup || !Array.isArray(adminGroup.children)) return;
+
+      // Find existing dynamic child (by special key)
+      var idx = -1;
+      for (var ci = 0; ci < adminGroup.children.length; ci++) {
+        var ch = adminGroup.children[ci] || {};
+        if (ch._key === 'admin_edit_current_student') { idx = ci; break; }
+      }
+
+      if (sid) {
+        var href = '/admin/students/' + sid + '/edit';
+        var item = {
+          _key: 'admin_edit_current_student',
+          label: 'Edit Current Student',
+          // path used for RBAC check; keep under /admin to match Access Matrix/route guards
+          path: '/admin/students',
+          // href used for actual navigation to include the id parameter
+          href: href
+        };
+
+        if (idx >= 0) {
+          adminGroup.children[idx] = item;
+        } else {
+          // Prefer to insert near the top of Admin tools
+          adminGroup.children.unshift(item);
+        }
+      } else {
+        // Not in a student viewer route; remove dynamic item if present
+        if (idx >= 0) {
+          adminGroup.children.splice(idx, 1);
+        }
+      }
     }
   }
 

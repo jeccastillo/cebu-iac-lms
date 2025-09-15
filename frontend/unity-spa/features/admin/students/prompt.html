@@ -1,0 +1,75 @@
+<div class="container mx-auto px-4 py-6" ng-cloak>
+  <div class="bg-white rounded shadow border border-gray-200 p-5 max-w-2xl mx-auto">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">Admin: Student Editor</h2>
+
+    <div class="mb-3 text-sm text-gray-600">
+      Search and select a student by name or student number, or enter the internal Student ID (tb_mas_users.intID) below as fallback.
+    </div>
+
+    <div class="mb-3" ng-if="!vm.canEdit">
+      <div class="rounded border border-red-200 bg-red-50 px-4 py-3 text-red-700">
+        Access denied. Admin only.
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-center">
+      <label class="text-sm text-gray-700 md:col-span-1">Student</label>
+      <div class="md:col-span-2 relative">
+        <input type="text"
+               class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+               placeholder="Search or select a student..."
+               pui-autocomplete
+               pui-source="vm.items"
+               pui-item-key="id"
+               pui-label="(item.student_number + ' — ' + (item.last_name || '') + ', ' + (item.first_name || ''))"
+               pui-on-query="vm.onStudentQuery($query)"
+               pui-on-select="vm.goFromSelect()"
+               ng-model="vm.selectedId" />
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-center mt-2">
+      <label class="text-sm text-gray-700 md:col-span-1">Student ID (intID)</label>
+      <div class="md:col-span-2">
+        <input type="number"
+               class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+               ng-model="vm.studentId"
+               min="1"
+               placeholder="e.g., 36" />
+      </div>
+    </div>
+
+    <div class="mt-4 flex items-center space-x-2">
+      <button class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+              ng-click="vm.go()"
+              ng-disabled="!vm.canEdit">
+        Go to Editor
+      </button>
+      <button class="px-4 py-2 rounded bg-gray-100 text-gray-700 hover:bg-gray-200"
+              ng-click="vm.back()">
+        Back
+      </button>
+    </div>
+
+    <div class="mt-4" ng-if="vm.notice">
+      <div class="rounded border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-700">
+        {{ vm.notice }}
+      </div>
+    </div>
+    <div class="mt-4" ng-if="vm.error">
+      <div class="rounded border border-red-200 bg-red-50 px-4 py-3 text-red-700">
+        {{ vm.error }}
+      </div>
+    </div>
+
+    <hr class="my-5" />
+
+    <div class="text-sm text-gray-600">
+      Tips:
+      <ul class="list-disc ml-5">
+        <li>You can also open a student viewer first, then use the dynamic Admin link "Edit Current Student" that appears while viewing that student.</li>
+        <li>The Editor page requires Admin role and uses System Logs to audit changes.</li>
+      </ul>
+    </div>
+  </div>
+</div>

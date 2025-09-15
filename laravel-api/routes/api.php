@@ -259,7 +259,13 @@ Route::prefix('v1')->group(function () {
 
     // Student endpoints (baseline)
     Route::get('/students', [StudentController::class, 'index']);
+    // Admin: raw student row for editing (place before parameterized {id} to avoid collision)
+    Route::get('/students/{id}/raw', [StudentController::class, 'raw'])->middleware('role:admin');
     Route::get('/students/{id}', [StudentController::class, 'show']);
+    // Admin: update student (schema-safe)
+    Route::put('/students/{id}', [StudentController::class, 'update'])->middleware('role:admin');
+    // Registrar/Admin: change student password (generate or set)
+    Route::post('/students/{id}/password', [StudentController::class, 'updatePassword'])->middleware('role:registrar,admin');
 
     // Students Import
     Route::get('/students/import/template', [StudentImportController::class, 'template'])->middleware('role:registrar,admin');
@@ -272,6 +278,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/student/records', [StudentController::class, 'records']);
     Route::post('/student/records-by-term', [StudentController::class, 'recordsByTerm']);
     Route::post('/student/ledger', [StudentController::class, 'ledger']);
+    Route::post('/student/deficiencies', [StudentController::class, 'deficiencies'])->middleware('role:registrar,admin');
 
     // Student Checklist endpoints
     Route::get('/students/{student}/checklist', [StudentChecklistController::class, 'index']);
@@ -606,4 +613,10 @@ Route::prefix('v1')->group(function () {
     Route::post('/payments/webhook/paynamics', [PaymentsWebhookController::class, 'paynamics'])->name('payments.webhook.paynamics');
     Route::post('/payments/webhook/bdo', [PaymentsWebhookController::class, 'bdo'])->name('payments.webhook.bdo');
     Route::post('/payments/webhook/maxx', [PaymentsWebhookController::class, 'maxx'])->name('payments.webhook.maxx');
+
+    // Student Finances (student-safe)
+    Route::get('/student/finances/summary', [\App\Http\Controllers\Api\V1\StudentFinancesController::class, 'summary']);
+    Route::get('/student/finances/invoices', [\App\Http\Controllers\Api\V1\StudentFinancesController::class, 'invoices']);
+    Route::get('/student/finances/payment-modes', [\App\Http\Controllers\Api\V1\StudentFinancesController::class, 'paymentModes']);
+    Route::get('/student/finances/payments', [\App\Http\Controllers\Api\V1\StudentFinancesController::class, 'payments']);
 });

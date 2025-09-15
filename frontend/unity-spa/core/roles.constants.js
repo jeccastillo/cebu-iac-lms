@@ -59,6 +59,9 @@
       { test: '^/schedules(?:/.*)?$', roles: ['registrar', 'admin'] },
       { test: '^/cashier-admin(?:/.*)?$', roles: ['cashier_admin', 'admin'] },
       { test: '^/logs(?:/.*)?$', roles: ['admin'] },
+      // Explicit Admin: Student Editor routes
+      { test: '^/admin/students(?:/.*)?$', roles: ['admin'] },
+      // Generic admin fallback
       { test: '^/admin(?:/.*)?$', roles: ['admin'] },
       { test: '^/faculty$', roles: ['admin'] },
       { test: '^/student(?:/.*)?$', roles: ['student_view', 'admin'] }

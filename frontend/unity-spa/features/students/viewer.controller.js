@@ -21,6 +21,35 @@
     // Links for legacy CI pages (optional navigations)
     vm.links = LinkService.buildLinks();
     vm.nav = LinkService.buildSpaLinks();
+    vm.hasRegistrarOrAdmin = function () {
+      try {
+        if (vm.state && Array.isArray(vm.state.roles)) {
+          var roles = vm.state.roles.map(function (r) { return ('' + r).toLowerCase().trim(); });
+          return roles.indexOf('registrar') !== -1 || roles.indexOf('admin') !== -1;
+        }
+      } catch (e) {}
+      return false;
+    };
+    // Headers helper for role-guarded admin endpoints
+    vm._adminHeaders = function (extra) {
+      var headers = {};
+      try {
+        if (extra && typeof extra === 'object') {
+          for (var k in extra) { if (Object.prototype.hasOwnProperty.call(extra, k)) headers[k] = extra[k]; }
+        }
+        var s = vm.state || {};
+        if (s && s.faculty_id != null) {
+          headers['X-Faculty-ID'] = s.faculty_id;
+        }
+        if (s && Array.isArray(s.roles)) {
+          headers['X-User-Roles'] = s.roles.join(',');
+        }
+        if (s && s.campus_id != null) {
+          headers['X-Campus-ID'] = s.campus_id;
+        }
+      } catch (e) {}
+      return { headers: headers };
+    };
 
     // identifiers
     vm.id = $routeParams.id;
@@ -29,17 +58,19 @@
     vm.api = {
       studentInfo: APP_CONFIG.API_BASE + '/students/' + vm.id,
       balances: APP_CONFIG.API_BASE + '/student/balances',
+      deficiencies: APP_CONFIG.API_BASE + '/student/deficiencies',
       records: APP_CONFIG.API_BASE + '/student/records',
       recordsByTerm: APP_CONFIG.API_BASE + '/student/records-by-term',
       terms: APP_CONFIG.API_BASE + '/generic/terms'
     };
 
     // state
-    vm.loading = { studentInfo: false, balances: false, records: false, checklist: false, checklistAction: false };
-    vm.error = { studentInfo: null, balances: null, records: null, checklist: null, checklistAction: null };
+    vm.loading = { studentInfo: false, balances: false, records: false, checklist: false, checklistAction: false, deficiencies: false };
+    vm.error = { studentInfo: null, balances: null, records: null, checklist: null, checklistAction: null, deficiencies: null };
     vm.studentInfo = null;
     vm.balances = null;
     vm.records = null;
+    vm.deficiencies = null;
 
     // Checklist state
     vm.checklist = null;
@@ -146,6 +177,53 @@
         }
         return false;
       });
+    };
+
+    // Map syid to a human-readable label using loaded terms
+    vm.getTermLabel = function (syid) {
+      var sid = normalizeId(syid);
+      if (sid == null) return '-';
+      for (var i = 0; i < vm.terms.length; i++) {
+        var t = vm.terms[i] || {};
+        // Try multiple id variants and also intID (common id for /generic/terms)
+        var tSy = normalizeId(
+          t.syid || t.sy_id || t.syId ||
+          t.intSYID || t.intSyID ||
+          t.school_year_id || t.schoolYearId
+        );
+        var tId = normalizeId(t.intID);
+        if ((tSy != null && tSy === sid) || (tId != null && tId === sid)) {
+          // Prefer explicit label/term from API
+          if (t.label != null && ('' + t.label).trim() !== '') return ('' + t.label);
+          if (t.term != null && ('' + t.term).trim() !== '') return ('' + t.term);
+          // Compose from semester + school year labels if present
+          if (t.semester_label && t.school_year_label) {
+            var composed = ('' + t.semester_label + ' ' + t.school_year_label).trim();
+            if (composed) return composed;
+          }
+          if (t.semester && t.school_year) {
+            var composed2 = ('' + t.semester + ' ' + t.school_year).trim();
+            if (composed2) return composed2;
+          }
+        }
+      }
+      // Fallback to numeric SY id
+      return '1st Sem ' + sid; // minimal readable fallback if mapping fails; will be overridden when terms load
+    };
+
+    // Ensure deficiencies term labels after terms load
+    vm.ensureDefTermLabels = function () {
+      try {
+        if (vm.deficiencies && angular.isArray(vm.deficiencies.terms) && vm.terms && vm.terms.length) {
+          vm.deficiencies.terms.forEach(function (t) {
+            if (t && (t.label == null || ('' + t.label).trim() === '' || /^SY\s*#/.test('' + t.label))) {
+              if (t.syid != null) {
+                t.label = vm.getTermLabel(t.syid);
+              }
+            }
+          });
+        }
+      } catch (e) {}
     };
 
     // Fallback schedule formatter: prefer backend schedule_text; otherwise compose from fields
@@ -340,6 +418,39 @@
         });
     };
 
+    vm.fetchDeficiencies = function () {
+      vm.loading.deficiencies = true;
+      vm.error.deficiencies = null;
+      var cfg = vm._adminHeaders({ 'Content-Type': 'application/json' });
+      return $http.post(vm.api.deficiencies, { student_id: vm.id }, cfg)
+        .then(function (resp) {
+          if (resp && resp.data && resp.data.success !== false) {
+            vm.deficiencies = resp.data.data || resp.data;
+
+            // Map missing term labels from vm.terms if available
+            try {
+              if (vm.deficiencies && angular.isArray(vm.deficiencies.terms)) {
+                vm.deficiencies.terms.forEach(function (t) {
+                  if (!t.label && t.syid != null) {
+                    t.label = vm.getTermLabel(t.syid);
+                  }
+                });
+              }
+            } catch (e) {}
+            // Ensure labels if terms became available later
+            vm.ensureDefTermLabels();
+          } else {
+            vm.error.deficiencies = 'Failed to load deficiencies.';
+          }
+        })
+        .catch(function () {
+          vm.error.deficiencies = 'Failed to load deficiencies.';
+        })
+        .finally(function () {
+          vm.loading.deficiencies = false;
+        });
+    };
+
     vm.fetchRecords = function () {
       vm.loading.records = true;
       vm.error.records = null;
@@ -465,6 +576,11 @@
 
       // Load balances right away using student_id
       vm.fetchBalances();
+
+      // Load deficiencies for registrar/admin only
+      if (vm.hasRegistrarOrAdmin()) {
+        vm.fetchDeficiencies();
+      }
 
       // Load terms first to apply saved/active term, then fetch records accordingly
       vm.loadTerms().then(function () {

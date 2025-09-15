@@ -1,262 +1,175 @@
 # Implementation Plan
 
 [Overview]
-Enable institutional departments to tag students for deficiencies that automatically generate finance billings, with a new Department Admin role and frontend UI. The solution introduces department-scoped tagging, inline Payment Description creation, and a controlled permission model with department assignments for faculty.
+Create a new Registrar-facing Shifting page that allows changing a student’s Program and Curriculum for a selected term by updating the registration’s current_program and current_curriculum, with curriculum options filtered by the selected program.
 
-This feature allows designated department administrators to:
-- Select a department (registrar, finance, admissions, building_admin, purchasing, academics, clinic, guidance, osas)
-- Choose a student (by student_id or student_number) and a term (syid)
-- Select an existing Payment Description or create one inline if it does not exist (campus-scoped)
-- Set amount (defaulted from Payment Description) and remarks
-- Create a deficiency record that always generates a Student Billing row
+This implementation adds a dedicated Registrar page called "Shifting" under the SPA. The page lets users search/select a student, use the global term selector for the effective term, pick a Program, then choose a Curriculum whose tb_mas_curriculum.intProgramID equals the selected Program’s id. Saving will call the existing UnityController updateRegistration endpoint to persist current_program and current_curriculum for that student and term. The page also displays current registration values to aid verification and aligns with existing backend capabilities (no backend changes required). The Enlistment feature already contains similar registration editing UI; this new Shifting page extracts and streamlines that workflow into a focused tool.
 
-The implementation fits into the existing Laravel API and AngularJS Unity SPA. Backend service logic reuses StudentBillingService and PaymentDescription facilities, while adding a new persistence for deficiencies and a faculty-to-department mapping. Access control is enforced by role middleware and department scoping based on a new faculty-department assignment table.
+[Types]
+No new server-side types; on the frontend define/consume clear data shapes for Program, Curriculum, and the Unity update payload.
 
-[Types]  
-Type system changes introduce two new database-backed models and supporting request payloads.
+Type definitions and shapes:
+- Program (from ProgramsService.list):
+  - intProgramID: number
+  - strProgramCode: string
+  - strProgramDescription: string
+  - Optional adjunct fields (enabled flags, campus references) may be present and should be tolerated.
 
-Detailed type definitions, validation, and relationships:
-- Enum DepartmentCode (string; constrained values)
-  - Allowed codes: registrar, finance, admissions, building_admin, purchasing, academics, clinic, guidance, osas
-  - Validation: required, in:[list above]
+- Curriculum (from CurriculaService.list with program_id filter):
+  - intID: number
+  - strName: string
+  - intProgramID: number (must equal the selected Program id)
+  - campus_id?: number
+  - active?: 0|1
+  - isEnhanced?: 0|1
 
-- Model: StudentDeficiency (table: tb_mas_student_deficiencies)
-  - Fields:
-    - intID (int, PK, auto-increment)
-    - intStudentID (int, required) -> tb_mas_users.intID
-    - syid (int, required) -> school-year/term
-    - department_code (string, required, in DepartmentCode)
-    - payment_description_id (int, nullable) -> payment_descriptions.intID
-    - billing_id (int, required) -> tb_mas_student_billing.intID
-    - amount (decimal(12,2), required, not zero; signed allowed)
-    - description (string, required, max:255)  // ledger/billing description
-    - remarks (text, nullable)
-    - posted_at (datetime, nullable)
-    - campus_id (int, nullable) // optional scope parity with PaymentDescription
-    - created_by (int, nullable) -> faculty.intID
-    - updated_by (int, nullable) -> faculty.intID
-    - created_at, updated_at (timestamps)
-  - Relationships:
-    - belongsTo Student (tb_mas_users)
-    - belongsTo PaymentDescription
-    - belongsTo Billing (tb_mas_student_billing)
-  - Constraints:
-    - FK payment_description_id -> payment_descriptions.intID (nullable)
-    - FK billing_id -> tb_mas_student_billing.intID (required)
-    - Indexes: (intStudentID, syid), (department_code), (billing_id)
+- Registration (from UnityService.getRegistration/getRegistrationById):
+  - intRegistrationID: number
+  - intStudentID: number
+  - intAYID: number
+  - intYearLevel?: number
+  - enumStudentType?: string
+  - current_program?: number
+  - current_curriculum?: number
+  - program_code?: string
+  - program_description?: string
+  - curriculum_name?: string
+  - tuition_year?: number
+  - paymentType?: string
+  - enrollment_status?: string
+  - date_enlisted?: string|null
+  - withdrawal_period?: string|number
+  - loa_remarks?: string
 
-- Model: FacultyDepartment (table: tb_mas_faculty_departments)
-  - Purpose: map faculty to allowed department codes for scoping
-  - Fields:
-    - intID (int, PK, auto-increment)
-    - intFacultyID (int, required) -> tb_mas_faculty.intFacultyID or faculties PK
-    - department_code (string, required, in DepartmentCode)
-    - campus_id (int, nullable)
-    - created_at, updated_at (timestamps)
-  - Constraints:
-    - Unique: (intFacultyID, department_code, campus_id) to avoid duplicates
-    - Indexes: (intFacultyID), (department_code)
-
-- API Request DTOs:
-  - DepartmentDeficiencyStoreRequest
-    - student_id: integer (required_without:student_number)
-    - student_number: string (required_without:student_id)
-    - term: integer (required) // syid
-    - department_code: string (required, in DepartmentCode)
-    - payment_description_id: integer (required_without:new_payment_description)
-    - new_payment_description: object (required_without:payment_description_id)
-      - name: string required, max:128, unique per campus (case-insensitive)
-      - amount: numeric nullable, min:0 (defaults to 0 if omitted)
-      - campus_id: integer nullable (otherwise resolved from headers or cashier)
-    - amount: numeric required (defaults from PD if PD selected; editable; not_in:0)
-    - posted_at: datetime nullable
-    - remarks: string nullable, max:1000
-  - DepartmentDeficiencyUpdateRequest (optional for corrections)
-    - amount?: numeric not_in:0
-    - posted_at?: datetime
-    - remarks?: string max:1000
-
-- API Response DTOs:
-  - DepartmentDeficiencyResource
-    - id, student_id, syid, department_code, payment_description_id, billing_id,
-      amount, description, remarks, posted_at, campus_id, created_by, updated_by, created_at, updated_at
+- Update payload (UnityRegistrationUpdateRequest via UnityService.updateRegistration):
+  - {
+      student_number: string,
+      term: number,
+      fields: {
+        current_program?: number,
+        current_curriculum?: number
+      }
+    }
+Validation:
+- Program is required.
+- Curriculum is required and must belong to the selected program (client enforces, server trusts).
+- Student and Term are required to scope the registration row to update.
 
 [Files]
-Introduce new backend models, service, controller, requests, and migrations. Modify existing route protections and config to expose necessary capabilities to department_admin. Add frontend AngularJS UI page.
+Add a new SPA page, route, and menu entry; reuse existing services; update index.html script includes.
 
-Detailed breakdown:
-- New files to be created:
-  - Backend (Laravel):
-    - app/Models/StudentDeficiency.php
-      - Eloquent model for tb_mas_student_deficiencies with fillable, casts, relations
-    - app/Models/FacultyDepartment.php
-      - Eloquent model for tb_mas_faculty_departments
-    - app/Services/DepartmentDeficiencyService.php
-      - Core business logic for tagging deficiencies, PaymentDescription inline create, StudentBilling row generation, and scoping checks
-    - app/Http/Controllers/Api/V1/DepartmentDeficiencyController.php
-      - Endpoints: index (list), store, show, update (optional), destroy (optional), meta (options)
-    - app/Http/Requests/Api/V1/DepartmentDeficiencyStoreRequest.php
-    - app/Http/Requests/Api/V1/DepartmentDeficiencyUpdateRequest.php
-    - app/Http/Resources/DepartmentDeficiencyResource.php
-    - app/Services/DepartmentContextService.php
-      - Helper to resolve allowed departments for current faculty (via mapping table), and resolve campus_id from headers or cashier
-    - database/migrations/20xx_xx_xx_xxxxxx_create_tb_mas_student_deficiencies.php
-    - database/migrations/20xx_xx_xx_xxxxxx_create_tb_mas_faculty_departments.php
-  - Frontend (AngularJS Unity SPA):
-    - frontend/unity-spa/features/department/deficiencies/deficiencies.service.js
-    - frontend/unity-spa/features/department/deficiencies/deficiencies.controller.js
-    - frontend/unity-spa/features/department/deficiencies/deficiencies.html
-    - frontend/unity-spa/features/department/deficiencies/index.js (route wiring if needed)
-  - Config (optional extension):
-    - Update laravel-api/config/departments.php
-      - Add 'codes' => [ 'registrar', 'finance', 'admissions', 'building_admin', 'purchasing', 'academics', 'clinic', 'guidance', 'osas' ]
+New files to be created:
+- frontend/unity-spa/features/registrar/shifting/shifting.controller.js
+  - AngularJS controller (ShiftingController) to manage student search, term context, program/curriculum selection, and save.
+- frontend/unity-spa/features/registrar/shifting/shifting.html
+  - HTML template for the Shifting UI (student selection, program dropdown, curriculum dropdown, current registration peek, and Save).
 
-- Existing files to be modified (specific changes):
-  - laravel-api/routes/api.php
-    - Add Department Deficiency routes under /api/v1/department-deficiencies with middleware('role:department_admin,admin')
-    - Extend PaymentDescriptions routes to allow department_admin to list/create:
-      - index/store/update/destroy: middleware('role:finance,department_admin,admin') for index/store
-      - keep update/destroy to finance/admin only if desired; minimally index+store for department_admin
-  - laravel-api/app/Providers/AuthServiceProvider.php
-    - Add Gates:
-      - department.deficiency.manage($user, $departmentCode)
-      - department.deficiency.view($user, $departmentCode)
-    - Gate logic uses FacultyDepartment mapping; admin bypass
-  - laravel-api/app/Http/Middleware/RequireRole.php
-    - No change needed (we will rely on existing role middleware with 'department_admin')
-  - laravel-api/config/departments.php
-    - Add 'codes' array as above (if not present)
-  - frontend/unity-spa/index.html
-    - Include new scripts for the feature (controller, service)
-  - frontend/unity-spa/shared/components/header/header.controller.js and shared/components/sidebar/sidebar.html
-    - Add link visibility for users whose roles include 'department_admin'
-    - Add menu entry: "Department Deficiencies"
-  - Optional: frontend/unity-spa/core/run.js
-    - Register route for '/department/deficiencies'
+Existing files to be modified:
+- frontend/unity-spa/core/routes.js
+  - Register a new route:
+    - when('/registrar/shifting', { templateUrl: 'features/registrar/shifting/shifting.html', controller: 'ShiftingController', controllerAs: 'vm' })
+- frontend/unity-spa/index.html
+  - Append script tags:
+    - features/registrar/shifting/shifting.controller.js
+- frontend/unity-spa/shared/components/sidebar/sidebar.controller.js
+  - Add Registrar menu item:
+    - { label: 'Shifting', path: '/registrar/shifting' }
 
-- Files to be deleted or moved:
-  - None
+Files to be deleted or moved:
+- None.
 
-- Configuration file updates:
-  - .env values not required
-  - departments.php codes array addition as above
+Configuration file updates:
+- None (no new dependencies or build config changes).
 
 [Functions]
-Add new endpoints and service methods; modify route guards. No removal.
+Introduce a new AngularJS controller with isolated responsibilities and reuse existing services.
 
-Detailed breakdown:
-- New functions:
-  - App\Services\DepartmentDeficiencyService
-    - function list(?string $studentNumber, ?int $studentId, ?int $syid, ?string $departmentCode, ?int $campusId, int $page = 1, int $perPage = 25): array
-      - Purpose: list deficiencies by optional filters with pagination metadata
-    - function store(array $payload, ?int $actorFacultyId = null): array
-      - Purpose: orchestrate inline PD creation (when needed), create StudentBilling item via StudentBillingService, and persist StudentDeficiency with linkage; returns normalized deficiency
-      - Steps:
-        1) Resolve faculty context, campus_id, and allowed departments; assert department_code allowed
-        2) Resolve student_id (by id or student_number)
-        3) Resolve or create PaymentDescription (campus-scoped)
-        4) Create billing with StudentBillingService::create([...]) using description = PD name, amount = payload amount, posted_at, remarks "Deficiency: {dept}" merged with input remarks; no invoice generation
-        5) Insert StudentDeficiency row linking billing_id and PD id
-        6) Return normalized data
-    - function get(int $id): ?array
-    - function update(int $id, array $payload, ?int $actorFacultyId = null): ?array
-    - function destroy(int $id, ?int $actorFacultyId = null): void
-    - function allowedDepartmentsForFaculty(?int $facultyId): array
-    - function resolveCampusIdFromRequest(Request $request): ?int
-  - App\Http\Controllers\Api\V1\DepartmentDeficiencyController
-    - index(Request): JsonResponse // list with filters
-    - meta(Request): JsonResponse // returns departments, terms, and PDs for dropdowns
-    - store(DepartmentDeficiencyStoreRequest, Request): JsonResponse
-    - show(int $id): JsonResponse
-    - update(int $id, DepartmentDeficiencyUpdateRequest, Request): JsonResponse
-    - destroy(int $id): JsonResponse
-- Modified functions:
-  - laravel-api/app/Providers/AuthServiceProvider.php
-    - boot(): add Gate::define('department.deficiency.manage', ...), Gate::define('department.deficiency.view', ...)
-- Removed functions:
-  - None
+New functions (ShiftingController in features/registrar/shifting/shifting.controller.js):
+- activate(): Initialize term context via TermService, preload programs, wire initial state.
+- loadPrograms(): Fetch full programs list (ProgramsService.list or CurriculaService.getPrograms) and normalize for labels.
+- onProgramChange(): When program changes, clear curriculum selection and loadCurricula(selectedProgramId).
+- loadCurricula(programId: number): Fetch curricula filtered by program_id (CurriculaService.list({ program_id })).
+- loadStudents(): Optionally prefetch students (paged) to seed autocomplete; reuse patterns from EnlistmentController.
+- onStudentQuery(q: string): Remote search for autocomplete suggestions (StudentsService.listSuggestions).
+- onStudentSelected(): Resolve student id by exact student_number, fetch registration (UnityService.getRegistrationById or getRegistration), and populate current values.
+- resolveStudentIdIfNeeded(): Same strategy as EnlistmentController; use local list or GET /students with student_number.
+- loadRegistration(): Pull registration for student+term (UnityService.getRegistrationById/getRegistration) and store current values for read-only display.
+- canSave(): Return true if student, term, program, and curriculum selections are valid.
+- saveShift(): Compose and call UnityService.updateRegistration with fields { current_program, current_curriculum }; show success/failure alerts; refresh registration view.
+- ui helpers for label rendering (programLabel, curriculumLabel) and simple read-only registration summary.
+
+Modified functions:
+- sidebar.controller.js: Extend Registrar group list (no behavioral change).
+- routes.js: Add route config entry only.
+
+Removed functions:
+- None.
 
 [Classes]
-Introduce new Eloquent models and a service; no removals.
+No new classes; AngularJS controller pattern only.
 
-Detailed breakdown:
-- New classes:
-  - App\Models\StudentDeficiency
-    - Table: tb_mas_student_deficiencies
-    - Key methods: relations (student, paymentDescription, billing)
-  - App\Models\FacultyDepartment
-    - Table: tb_mas_faculty_departments
-    - Key methods: scopeByFaculty, scopeByDepartment
-  - App\Services\DepartmentDeficiencyService
-    - Methods: orchestrate store/list/update/destroy, scoping helpers
-  - App\Http\Requests\Api\V1\DepartmentDeficiencyStoreRequest
-  - App\Http\Requests\Api\V1\DepartmentDeficiencyUpdateRequest
-  - App\Http\Resources\DepartmentDeficiencyResource
-  - App\Services\DepartmentContextService (optional helper used by service/controller)
-- Modified classes:
-  - App\Providers\AuthServiceProvider
-    - Add Gate definitions using FacultyDepartment mapping and admin bypass
-- Removed classes:
-  - None
+New classes:
+- N/A.
+
+Modified classes:
+- N/A (AngularJS controllers are functions).
+
+Removed classes:
+- N/A.
 
 [Dependencies]
-No new external package dependencies.
+No new NPM/PHP dependencies; reuse existing Angular services and Laravel endpoints.
 
-- Laravel migrations add two tables
-- Reuse existing StudentBillingService, PaymentDescription model/controller, Cashier model for campus resolution
-- Route middleware role:department_admin,admin on new endpoints
-- Extend PaymentDescription routes to grant department_admin access to list/create
+Details:
+- Frontend services reused:
+  - ProgramsService (list programs)
+  - CurriculaService (list curricula with program_id)
+  - UnityService (getRegistration, getRegistrationById, updateRegistration)
+  - StudentsService (autocomplete)
+  - TermService (global term context)
+- Backend endpoints already present (no changes):
+  - GET /api/v1/programs
+  - GET /api/v1/curriculum?program_id=...
+  - GET /api/v1/unity/registration (by id or student_number)
+  - PUT /api/v1/unity/registration (update fields)
 
 [Testing]
-Introduce backend unit/integration tests and light frontend validation.
+Manual validation and integration-level checks in the SPA, covering state, filters, and update flow.
 
-- Backend:
-  - tests/Feature/DepartmentDeficiencyControllerTest.php
-    - test_store_creates_pd_billing_deficiency()
-    - test_store_rejects_unauthorized_department()
-    - test_list_filters_by_department_term_student()
-    - test_update_and_destroy_respect_scoping()
-  - tests/Unit/DepartmentDeficiencyServiceTest.php
-    - test_inline_pd_creation_scoped_by_campus()
-    - test_billing_creation_via_service_without_invoice()
-  - Gate tests to ensure department scoping
-- Frontend:
-  - Manual QA checklist
-    - Department Admin can open page, see allowed department list
-    - Student selector works by student_number and student_id
-    - Payment Description dropdown loads campus-scoped PDs; inline create flows to controller and refreshes dropdown
-    - Amount defaults from PD, editable
-    - Submit creates deficiency and shows in list
-  - E2E (if test harness exists): flow from selection to creation and list verification
+Test plan:
+- Access control: Ensure menu "Shifting" shows for users with registrar/admin roles; path renders template.
+- Student selection:
+  - Autocomplete returns results; selecting student populates selected name.
+  - Term is taken from global TermService; changing term triggers reload of registration.
+- Program/Curriculum:
+  - Programs dropdown lists all; selection triggers curricula fetch.
+  - Curricula dropdown lists only rows where intProgramID equals selected program id.
+- Load registration:
+  - With valid student and term, registration data appears; current values (program/curriculum) are visible.
+- Save update:
+  - Save is enabled only with student+term+program+curriculum set.
+  - On save success, a confirmation toast/alert displays; registration reloads; current values reflect the change.
+  - On backend error (e.g., registration not found), show error alert; no state change occurs.
+- Regression:
+  - Verify existing Enlistment and other registrar pages unaffected.
+  - Optionally verify tuition preview from Enlistment reflects changed program (out of scope to wire directly here, but changing program/curriculum should impact subsequent computations in Enlistment).
+
+Artifacts:
+- No unit tests required in this project; rely on end-to-end manual checks and backend logs.
 
 [Implementation Order]
-Implement backend foundations first (DB, service, controller), then wire routes and gates, finally build UI and expose menu links. PaymentDescription access must be extended early for UI.
+Implement in a safe sequence to minimize integration issues.
 
-Numbered steps:
-1. Database
-   - Create migration for tb_mas_faculty_departments (intID, intFacultyID, department_code, campus_id nullable, timestamps, unique compound index)
-   - Create migration for tb_mas_student_deficiencies (columns listed above with FKs and indexes)
-2. Models
-   - Add FacultyDepartment and StudentDeficiency models with relations and casts
-3. Authorization
-   - Add Gates in AuthServiceProvider for department.deficiency.view/manage
-   - Ensure role 'department_admin' will be created and assignable via existing RoleController
-4. Services
-   - Implement DepartmentContextService helper (resolve campus_id, allowed departments)
-   - Implement DepartmentDeficiencyService with store/list/get/update/destroy and scoping assertions
-5. Controllers/Requests/Resources
-   - Create DepartmentDeficiencyStoreRequest and UpdateRequest with validation rules
-   - Create DepartmentDeficiencyResource to shape API output
-   - Create DepartmentDeficiencyController: endpoints index/meta/store/show/update/destroy
-6. Routes
-   - Register /api/v1/department-deficiencies endpoints with middleware('role:department_admin,admin')
-   - Extend /api/v1/payment-descriptions index and store to allow department_admin role
-7. Frontend (Unity SPA)
-   - Create deficiencies.service.js with API bindings (include X-Faculty-ID headers)
-   - Create deficiencies.controller.js for UI logic (load departments, terms, students, PDs, inline PD create; submit deficiency)
-   - Create deficiencies.html with form (department, student selector, term, PD dropdown + inline create, amount, remarks) and list
-   - Wire routes and include scripts in index.html; add menu link visible to department_admin
-8. Smoke Tests
-   - Verify end-to-end flow: as department_admin, create PD inline, create deficiency; billing row appears via API; data visible in list
-9. Documentation
-   - Update README or internal docs with role setup steps: create role 'department_admin', assign via API, configure faculty-department mapping
+1) Route registration:
+   - Modify frontend/unity-spa/core/routes.js to register when('/registrar/shifting', ...).
+2) Controller + Template:
+   - Create features/registrar/shifting/shifting.controller.js with ShiftingController and its methods.
+   - Create features/registrar/shifting/shifting.html with UI for student selection, program dropdown, curriculum dropdown, current registration summary, and Save button.
+3) Script wiring:
+   - Append script tag in frontend/unity-spa/index.html to load shifting.controller.js.
+4) Sidebar:
+   - Add Registrar menu item "Shifting" in frontend/unity-spa/shared/components/sidebar/sidebar.controller.js.
+5) Smoke test:
+   - Navigate to #!/registrar/shifting, select student and term, confirm program/curriculum filtering, save, and verify registration updated via reloading.
+6) Polish and validation:
+   - Ensure disabled states and error messages are present; confirm no console errors; confirm role-based visibility.

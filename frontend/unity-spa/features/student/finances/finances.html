@@ -1,0 +1,569 @@
+<div class="space-y-6" ng-cloak>
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-semibold text-gray-800">{{ vm.title }}</h1>
+      <p class="text-sm text-gray-500">
+        View your tuition, invoices, and payments for the selected academic term.
+      </p>
+    </div>
+    <div class="flex items-center gap-3">
+      <div class="text-sm text-gray-600">
+        <span class="mr-2">Term:</span>
+        <strong>{{ (vm.term && vm.term.label) || '—' }}</strong>
+      </div>
+      <button
+        class="px-3 py-2 rounded bg-gray-800 text-white hover:bg-gray-900 disabled:opacity-50 text-sm"
+        ng-click="vm.openBreakdown()"
+        ng-disabled="!vm.profile || !vm.term || !vm.term.id">
+        View Breakdown
+      </button>
+    </div>
+  </div>
+
+  <!-- Tuition Breakdown Modal -->
+  <div class="fixed inset-0 z-50" ng-if="vm.breakdown.open">
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-black bg-opacity-40" ng-click="vm.closeBreakdown()"></div>
+    <!-- Panel -->
+    <div class="relative z-10 mx-auto my-8 w-full max-w-5xl">
+      <div class="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col max-h-[85vh]">
+        <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+          <div>
+            <div class="text-lg font-semibold text-gray-800">Tuition Breakdown</div>
+            <div class="text-xs text-gray-500">
+              {{ (vm.term && vm.term.label) || '—' }}
+            </div>
+          </div>
+          <button class="p-2 text-gray-500 hover:text-gray-700" ng-click="vm.closeBreakdown()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="p-4 overflow-y-auto flex-1">
+          <!-- Loading / Error -->
+          <div ng-if="vm.breakdown.loading" class="text-sm text-gray-600">
+            Loading breakdown...
+          </div>
+          <div ng-if="!vm.breakdown.loading && vm.breakdown.error" class="rounded border border-red-200 bg-red-50 text-red-700 px-3 py-2 text-sm">
+            {{ vm.breakdown.error }}
+          </div>
+
+          <div ng-if="!vm.breakdown.loading && vm.hasBreakdown()">
+            <!-- Summary cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
+              <div class="bg-gray-50 rounded p-3">
+                <div class="text-xs text-gray-500">Tuition</div>
+                <div class="text-base font-semibold">₱ {{ vm.currency((vm.breakdown.data.summary.tuition) || 0) }}</div>
+              </div>
+              <div class="bg-gray-50 rounded p-3">
+                <div class="text-xs text-gray-500">Misc</div>
+                <div class="text-base font-semibold">₱ {{ vm.currency((vm.breakdown.data.summary.misc_total) || 0) }}</div>
+              </div>
+              <div class="bg-gray-50 rounded p-3">
+                <div class="text-xs text-gray-500">Lab</div>
+                <div class="text-base font-semibold">₱ {{ vm.currency((vm.breakdown.data.summary.lab_total) || 0) }}</div>
+              </div>
+              <div class="bg-gray-50 rounded p-3">
+                <div class="text-xs text-gray-500">Additional</div>
+                <div class="text-base font-semibold">₱ {{ vm.currency((vm.breakdown.data.summary.additional_total) || 0) }}</div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+              <div class="bg-gray-50 rounded p-3">
+                <div class="text-xs text-gray-500">Discounts</div>
+                <div class="text-base font-semibold text-emerald-900">₱ {{ vm.currency((vm.breakdown.data.summary.discounts_total) || 0) }}</div>
+              </div>
+              <div class="bg-gray-50 rounded p-3">
+                <div class="text-xs text-gray-500">Scholarships</div>
+                <div class="text-base font-semibold text-emerald-900">₱ {{ vm.currency((vm.breakdown.data.summary.scholarships_total) || 0) }}</div>
+              </div>
+              <div class="bg-gray-50 rounded p-3">
+                <div class="text-xs text-gray-500">Total Due (Full)</div>
+                <div class="text-base font-semibold">₱ {{ vm.currency((vm.breakdown.data.summary.total_due) || 0) }}</div>
+              </div>
+            </div>
+
+            <!-- Installment info -->
+            <div class="mb-4" ng-if="vm.breakdown.data.summary.installments">
+              <div class="text-sm font-medium text-gray-800 mb-2">Installment Plan</div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div class="bg-gray-50 rounded p-3">
+                  <div class="text-xs text-gray-500">Total (Installment)</div>
+                  <div class="text-base font-semibold">₱ {{ vm.currency((vm.breakdown.data.summary.installments.total_installment) || 0) }}</div>
+                </div>
+                <div class="bg-gray-50 rounded p-3">
+                  <div class="text-xs text-gray-500">Down Payment</div>
+                  <div class="text-base font-semibold">₱ {{ vm.currency((vm.breakdown.data.summary.installments.down_payment) || 0) }}</div>
+                </div>
+                <div class="bg-gray-50 rounded p-3">
+                  <div class="text-xs text-gray-500">Installment Fee</div>
+                  <div class="text-base font-semibold">₱ {{ vm.currency((vm.breakdown.data.summary.installments.installment_fee) || 0) }}</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Items tables -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Tuition items -->
+              <div class="bg-white rounded border border-gray-200">
+                <div class="px-3 py-2 border-b text-sm font-medium text-gray-800">Subjects (Tuition)</div>
+                <div class="overflow-x-auto">
+                  <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                      <tr>
+                        <th class="px-3 py-2 text-left text-xs font-semibold text-gray-500">Code</th>
+                        <th class="px-3 py-2 text-right text-xs font-semibold text-gray-500">Units</th>
+                        <th class="px-3 py-2 text-right text-xs font-semibold text-gray-500">Rate</th>
+                        <th class="px-3 py-2 text-right text-xs font-semibold text-gray-500">Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-100">
+                      <tr ng-repeat="t in (vm.breakdown.data.items.tuition || [])">
+                        <td class="px-3 py-2 text-sm text-gray-900">{{ t.code || '—' }}</td>
+                        <td class="px-3 py-2 text-sm text-gray-900 text-right">{{ t.units || 0 }}</td>
+                        <td class="px-3 py-2 text-sm text-gray-900 text-right">₱ {{ vm.currency(t.rate || 0) }}</td>
+                        <td class="px-3 py-2 text-sm text-gray-900 text-right">₱ {{ vm.currency(t.amount || 0) }}</td>
+                      </tr>
+                      <tr ng-if="!(vm.breakdown.data.items.tuition && vm.breakdown.data.items.tuition.length)">
+                        <td colspan="4" class="px-3 py-3 text-sm text-gray-500 text-center">No subjects.</td>
+                      </tr>
+                      <tr class="bg-gray-50">
+                        <td class="px-3 py-2 text-xs text-gray-600 font-semibold" colspan="3">Total</td>
+                        <td class="px-3 py-2 text-sm font-semibold text-right">₱ {{ vm.currency(vm.sum(vm.breakdown.data.items.tuition, 'amount')) }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Misc / Lab / Additional -->
+              <div class="space-y-4">
+                <div class="bg-white rounded border border-gray-200">
+                  <div class="px-3 py-2 border-b text-sm font-medium text-gray-800">Misc Fees</div>
+                  <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                      <thead class="bg-gray-50">
+                        <tr>
+                          <th class="px-3 py-2 text-left text-xs font-semibold text-gray-500">Name</th>
+                          <th class="px-3 py-2 text-right text-xs font-semibold text-gray-500">Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody class="bg-white divide-y divide-gray-100">
+                        <tr ng-repeat="m in (vm.breakdown.data.items.misc || [])">
+                          <td class="px-3 py-2 text-sm text-gray-900">{{ m.name || '—' }}</td>
+                          <td class="px-3 py-2 text-sm text-gray-900 text-right">₱ {{ vm.currency(m.amount || 0) }}</td>
+                        </tr>
+                        <tr ng-if="!(vm.breakdown.data.items.misc && vm.breakdown.data.items.misc.length)">
+                          <td colspan="2" class="px-3 py-3 text-sm text-gray-500 text-center">No misc fees.</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="bg-white rounded border border-gray-200">
+                  <div class="px-3 py-2 border-b text-sm font-medium text-gray-800">Lab Fees</div>
+                  <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                      <thead class="bg-gray-50">
+                        <tr>
+                          <th class="px-3 py-2 text-left text-xs font-semibold text-gray-500">Code</th>
+                          <th class="px-3 py-2 text-right text-xs font-semibold text-gray-500">Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody class="bg-white divide-y divide-gray-100">
+                        <tr ng-repeat="l in (vm.breakdown.data.items.lab || [])">
+                          <td class="px-3 py-2 text-sm text-gray-900">{{ l.code || '—' }}</td>
+                          <td class="px-3 py-2 text-sm text-gray-900 text-right">₱ {{ vm.currency(l.amount || 0) }}</td>
+                        </tr>
+                        <tr ng-if="!(vm.breakdown.data.items.lab && vm.breakdown.data.items.lab.length)">
+                          <td colspan="2" class="px-3 py-3 text-sm text-gray-500 text-center">No lab fees.</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="bg-white rounded border border-gray-200">
+                  <div class="px-3 py-2 border-b text-sm font-medium text-gray-800">Additional</div>
+                  <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                      <thead class="bg-gray-50">
+                        <tr>
+                          <th class="px-3 py-2 text-left text-xs font-semibold text-gray-500">Name</th>
+                          <th class="px-3 py-2 text-right text-xs font-semibold text-gray-500">Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody class="bg-white divide-y divide-gray-100">
+                        <tr ng-repeat="a in (vm.breakdown.data.items.additional || [])">
+                          <td class="px-3 py-2 text-sm text-gray-900">{{ a.name || '—' }}</td>
+                          <td class="px-3 py-2 text-sm text-gray-900 text-right">₱ {{ vm.currency(a.amount || 0) }}</td>
+                        </tr>
+                        <tr ng-if="!(vm.breakdown.data.items.additional && vm.breakdown.data.items.additional.length)">
+                          <td colspan="2" class="px-3 py-3 text-sm text-gray-500 text-center">No additional fees.</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Discounts / Scholarships / Billing -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+              <div class="bg-white rounded border border-gray-200">
+                <div class="px-3 py-2 border-b text-sm font-medium text-gray-800">Discounts</div>
+                <div class="p-2 text-sm" ng-if="!(vm.breakdown.data.items.discounts && vm.breakdown.data.items.discounts.length)">
+                  <em class="text-gray-500">No discounts.</em>
+                </div>
+                <ul class="divide-y divide-gray-100" ng-if="vm.breakdown.data.items.discounts && vm.breakdown.data.items.discounts.length">
+                  <li class="px-3 py-2 text-sm flex items-center justify-between" ng-repeat="d in vm.breakdown.data.items.discounts">
+                    <span>{{ d.name || '—' }}</span>
+                    <span>₱ {{ vm.currency(d.amount || 0) }}</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="bg-white rounded border border-gray-200">
+                <div class="px-3 py-2 border-b text-sm font-medium text-gray-800">Scholarships</div>
+                <div class="p-2 text-sm" ng-if="!(vm.breakdown.data.items.scholarships && vm.breakdown.data.items.scholarships.length)">
+                  <em class="text-gray-500">No scholarships.</em>
+                </div>
+                <ul class="divide-y divide-gray-100" ng-if="vm.breakdown.data.items.scholarships && vm.breakdown.data.items.scholarships.length">
+                  <li class="px-3 py-2 text-sm flex items-center justify-between" ng-repeat="s in vm.breakdown.data.items.scholarships">
+                    <span>{{ s.name || '—' }}</span>
+                    <span>₱ {{ vm.currency(s.amount || 0) }}</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="bg-white rounded border border-gray-200">
+                <div class="px-3 py-2 border-b text-sm font-medium text-gray-800">Student Billing (Admin)</div>
+                <div class="p-2 text-sm" ng-if="!(vm.breakdown.data.items.billing && vm.breakdown.data.items.billing.length)">
+                  <em class="text-gray-500">No billing items.</em>
+                </div>
+                <ul class="divide-y divide-gray-100" ng-if="vm.breakdown.data.items.billing && vm.breakdown.data.items.billing.length">
+                  <li class="px-3 py-2 text-sm flex items-center justify-between" ng-repeat="b in vm.breakdown.data.items.billing">
+                    <span>{{ b.name || '—' }}</span>
+                    <span>₱ {{ vm.currency(b.amount || 0) }}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="px-4 py-3 border-t border-gray-200 flex justify-end flex-none">
+            <button class="px-4 py-2 rounded border border-gray-300 text-gray-700 hover:bg-gray-50" ng-click="vm.closeBreakdown()">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Errors summary -->
+  <div ng-if="vm.error.init || vm.error.summary || vm.error.invoices || vm.error.modes || vm.error.payments" class="rounded border border-red-200 bg-red-50 text-red-700 px-4 py-3">
+    <div ng-if="vm.error.init">Init: {{ vm.error.init }}</div>
+    <div ng-if="vm.error.summary">Summary: {{ vm.error.summary }}</div>
+    <div ng-if="vm.error.invoices">Invoices: {{ vm.error.invoices }}</div>
+    <div ng-if="vm.error.modes">Payment Modes: {{ vm.error.modes }}</div>
+    <div ng-if="vm.error.payments">Payments: {{ vm.error.payments }}</div>
+  </div>
+
+  <!-- Summary cards -->
+  <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
+    <div class="bg-white rounded-md shadow p-4">
+      <div class="text-xs text-gray-500">Tuition (Full)</div>
+      <div class="text-xl font-semibold text-gray-900">
+        ₱ {{ vm.currency((vm.summary && vm.summary.tuition && vm.summary.tuition.total_full) || 0) }}
+      </div>
+      <div class="text-xs text-gray-500 mt-1">Source: {{ (vm.summary && vm.summary.tuition && vm.summary.tuition.source) || '—' }}</div>
+    </div>
+    <div class="bg-white rounded-md shadow p-4">
+      <div class="text-xs text-gray-500">Tuition (Installment)</div>
+      <div class="text-xl font-semibold text-gray-900">
+        ₱ {{ vm.currency((vm.summary && vm.summary.tuition && vm.summary.tuition.total_installment) || 0) }}
+      </div>
+      <div class="text-xs text-gray-500 mt-1">Payment Type: {{ (vm.summary && vm.summary.registration && vm.summary.registration.paymentType) || '—' }}</div>
+    </div>
+    <div class="bg-white rounded-md shadow p-4">
+      <div class="text-xs text-gray-500">Billing Charges</div>
+      <div class="text-xl font-semibold text-gray-900">
+        ₱ {{ vm.currency((vm.summary && vm.summary.billing_total) || 0) }}
+      </div>
+      <div class="text-xs text-gray-500 mt-1">Non-tuition billings for the term</div>
+    </div>
+    <div class="bg-white rounded-md shadow p-4">
+      <div class="text-xs text-gray-500">Term Total (Tuition + Billing)</div>
+      <div class="text-xl font-semibold text-gray-900">
+        ₱ {{ vm.currency((vm.summary && vm.summary.grand_total) || 0) }}
+      </div>
+      <div class="text-xs text-gray-500 mt-1">Selected Tuition + Billing</div>
+    </div>
+    <div class="bg-white rounded-md shadow p-4">
+      <div class="text-xs text-gray-500">Amount Paid</div>
+      <div class="text-xl font-semibold text-emerald-900">
+        ₱ {{ vm.currency(vm.loading.payments ? ((vm.summary && vm.summary.payments && vm.summary.payments.total_paid) || 0) : vm.paymentsTotalDisplay()) }}
+      </div>
+      <div class="text-xs text-gray-500 mt-1">Last Payment: {{ (vm.summary && vm.summary.payments && vm.summary.payments.last_payment_date) || '—' }}</div>
+    </div>
+    <div class="bg-white rounded-md shadow p-4">
+      <div class="text-xs text-gray-500">Outstanding</div>
+      <div class="text-xl font-semibold" ng-class="{'text-red-700': vm.outstanding() > 0, 'text-gray-900': vm.outstanding() === 0}">
+        ₱ {{ vm.currency(vm.outstanding()) }}
+      </div>
+      <div class="text-xs text-gray-500 mt-1">Selected Total: ₱ {{ vm.currency(vm.selectedTotal()) }}</div>
+    </div>
+  </div>
+
+  <!-- Main grid -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+    <!-- Left: Invoices + Payments -->
+    <div class="lg:col-span-2 space-y-4">
+      <!-- Invoices -->
+      <div class="bg-white rounded-md shadow">
+        <div class="px-4 py-2 border-b border-gray-200 flex items-center justify-between">
+          <div class="font-medium text-gray-800">Invoices (Tuition and Billing)</div>
+          <div class="text-sm text-gray-500">
+            <span class="mr-2" ng-if="vm.loading.invoices"><em>loading...</em></span>
+            <span ng-if="!vm.loading.invoices">{{ (vm.invoices && vm.invoices.length) || 0 }} item(s)</span>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-3 py-2 text-left text-xs font-semibold text-gray-500">Invoice #</th>
+                <th class="px-3 py-2 text-left text-xs font-semibold text-gray-500">Type</th>
+                <th class="px-3 py-2 text-right text-xs font-semibold text-gray-500">Amount</th>
+                <th class="px-3 py-2 text-right text-xs font-semibold text-gray-500">Remaining</th>
+                <th class="px-3 py-2 text-left text-xs font-semibold text-gray-500">Due</th>
+                <th class="px-3 py-2 text-left text-xs font-semibold text-gray-500">Remarks</th>
+                <th class="px-3 py-2 text-center text-xs font-semibold text-gray-500">Action</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-100">
+              <tr ng-repeat="inv in vm.invoices">
+                <td class="px-3 py-2 text-sm text-gray-900 whitespace-nowrap">{{ inv.invoice_number || inv.id }}</td>
+                <td class="px-3 py-2 text-sm text-gray-900 whitespace-nowrap">{{ inv.type || '—' }}</td>
+                <td class="px-3 py-2 text-sm text-gray-900 text-right">
+                  <div>₱ {{ vm.currency((inv._total_effective != null) ? inv._total_effective : (inv.amount_total || 0)) }}</div>
+                  <div class="text-xs text-gray-500" ng-if="inv._reservation_applied > 0">
+                    Reservation applied: -₱ {{ vm.currency(inv._reservation_applied) }}
+                  </div>
+                </td>
+                <td class="px-3 py-2 text-sm text-right" ng-class="{'text-red-700': (vm.invoiceRemaining(inv) || 0) > 0}">
+                  ₱ {{ vm.currency(vm.invoiceRemaining(inv) || 0) }}
+                  <div class="text-xs text-gray-500" ng-if="inv._remaining_effective != null">(after Reservation)</div>
+                </td>
+                <td class="px-3 py-2 text-sm text-gray-900 whitespace-nowrap">{{ inv.due_at || '—' }}</td>
+                <td class="px-3 py-2 text-sm text-gray-900">{{ inv.remarks || '—' }}</td>
+                <td class="px-3 py-2 text-sm text-center">
+                  <button
+                    class="px-2 py-1 text-xs rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+                    ng-disabled="!(vm.invoiceRemaining(inv) > 0.009)"
+                    ng-click="vm.selectTarget('invoice'); vm.selectInvoice(inv);">
+                    Pay
+                  </button>
+                </td>
+              </tr>
+              <tr ng-if="!vm.invoices || !vm.invoices.length">
+                <td colspan="7" class="px-3 py-4 text-sm text-gray-500 text-center">
+                  No invoices found for this term.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Payments -->
+      <div class="bg-white rounded-md shadow">
+        <div class="px-4 py-2 border-b border-gray-200 flex items-center justify-between">
+          <div class="font-medium text-gray-800">Payments</div>
+          <div class="text-sm flex items-center gap-3">
+            <span class="text-emerald-900 font-semibold">Total: ₱ {{ vm.currency(vm.loading.payments ? ((vm.summary && vm.summary.payments && vm.summary.payments.total_paid) || 0) : vm.paymentsTotalDisplay()) }}</span>
+            <span class="text-gray-500" ng-if="vm.loading.payments"><em>loading...</em></span>
+            <div class="flex items-center gap-2">
+              <span class="text-gray-600">Status:</span>
+              <select
+                class="border border-gray-300 rounded px-2 py-1 bg-white text-sm"
+                ng-model="vm.paymentsFilter.status">
+                <option value="all">All</option>
+                <option value="not_paid">Not Paid</option>
+                <option value="paid">Paid only</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-3 py-2 text-left text-xs font-semibold text-gray-500">Date</th>
+                <th class="px-3 py-2 text-left text-xs font-semibold text-gray-500">Description</th>
+                <th class="px-3 py-2 text-left text-xs font-semibold text-gray-500">Method</th>
+                <th class="px-3 py-2 text-left text-xs font-semibold text-gray-500">OR #</th>
+                <th class="px-3 py-2 text-left text-xs font-semibold text-gray-500">Invoice #</th>
+                <th class="px-3 py-2 text-left text-xs font-semibold text-gray-500">Status</th>
+                <th class="px-3 py-2 text-right text-xs font-semibold text-gray-500">Amount</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-100">
+              <tr ng-repeat="p in vm.filteredPayments()">
+                <td class="px-3 py-2 text-sm text-gray-900 whitespace-nowrap">{{ p.posted_at || '—' }}</td>
+                <td class="px-3 py-2 text-sm text-gray-900">{{ p.description || 'Payment' }}</td>
+                <td class="px-3 py-2 text-sm text-gray-900">{{ p.method || '—' }}</td>
+                <td class="px-3 py-2 text-sm text-gray-900 whitespace-nowrap">{{ p.or_number || '—' }}</td>
+                <td class="px-3 py-2 text-sm text-gray-900 whitespace-nowrap">{{ p.invoice_number || '—' }}</td>
+                <td class="px-3 py-2 text-sm text-gray-900 whitespace-nowrap">{{ p.status || '—' }}</td>
+                <td class="px-3 py-2 text-sm text-gray-900 text-right">₱ {{ vm.currency(p.amount || 0) }}</td>
+              </tr>
+              <tr ng-if="!(vm.filteredPayments() && vm.filteredPayments().length)">
+                <td colspan="7" class="px-3 py-4 text-sm text-gray-500 text-center">No payment entries.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Read-only Installment Plan + Pay Online panel -->
+    <div class="space-y-4">
+      <div class="bg-white rounded-md shadow p-4">
+        <div class="font-medium text-gray-800 mb-1">Pay Online</div>
+        <div class="text-xs text-gray-500 mb-3">Select a target, amount, and payment method to proceed.</div>
+
+        <div class="space-y-3">
+          <!-- Target selector -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">What would you like to pay?</label>
+            <select
+              class="block w-full rounded border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              ng-model="vm.selection.target"
+              ng-change="vm.selectTarget(vm.selection.target)">
+              <option value="tuition">Tuition (Selected Total)</option>
+              <option value="invoice">Specific Invoice</option>
+            </select>
+            <div class="text-xs text-gray-500 mt-1" ng-if="vm.selection.target === 'tuition'">
+              Selected total: ₱ {{ vm.currency(vm.selectedTotal()) }} • Outstanding: ₱ {{ vm.currency(vm.outstanding()) }}
+              <span class="ml-2" ng-if="vm.allowPartialTuition()">(Partial payments allowed)</span>
+            </div>
+          </div>
+
+          <!-- Invoice selector -->
+          <div ng-if="vm.selection.target === 'invoice'">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Choose an invoice</label>
+            <select
+              class="block w-full rounded border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              ng-model="vm.selection.invoice"
+              ng-options="inv as ((inv.invoice_number || ('ID:' + inv.id)) + ' — ' + (inv.type || '') + ' — Remaining ₱ ' + vm.currency(vm.invoiceRemaining(inv) || 0)) for inv in vm.invoices track by inv.id"
+              ng-change="vm.selectInvoice(vm.selection.invoice)">
+            </select>
+          </div>
+
+          <!-- Amount is auto-set notice -->
+          <div>
+            <div class="text-xs text-gray-500">
+              Amount is automatically set:
+              <span ng-if="vm.selection.target === 'invoice'">to the invoice remaining.</span>
+              <span ng-if="vm.selection.target === 'tuition'">to the first due installment (Down Payment or the first unpaid installment) when on an installment plan; otherwise to your outstanding total.</span>
+            </div>
+          </div>
+
+          <!-- Amount display (auto-set, read-only) -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Amount (auto)</label>
+            <input
+              type="number"
+              min="0"
+              step="0.01"
+              class="block w-full rounded border border-gray-300 bg-gray-50 px-3 py-2"
+              ng-model="vm.selection.amount"
+              readonly
+              disabled
+              placeholder="0.00">
+          </div>
+
+          <!-- Payment mode -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Payment Method</label>
+            <select
+              class="block w-full rounded border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              ng-model="vm.selection.mode"
+              ng-options="m as (m.name + (m.type === 'percentage' ? (' (' + m.charge + '%)') : (m.charge ? (' (₱ ' + (m.charge | number:2) + ')') : ''))) for m in vm.modes track by m.id">
+            </select>
+            <div class="text-xs text-gray-500 mt-1">
+              All online gateways are enabled except Onsite.
+            </div>
+          </div>
+
+          <!-- Preview -->
+          <div class="rounded border border-gray-200 p-3 bg-gray-50">
+            <div class="text-xs text-gray-500 mb-1">Preview</div>
+            <div class="flex items-center justify-between text-sm">
+              <div>Charge</div>
+              <div>₱ {{ vm.currency(vm.computePreview().charge || 0) }}</div>
+            </div>
+            <div class="flex items-center justify-between text-sm">
+              <div>Total (with charge)</div>
+              <div class="font-semibold">₱ {{ vm.currency(vm.computePreview().total_with_charge || 0) }}</div>
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <div>
+            <div class="text-red-600 text-sm mb-2" ng-if="vm.error.checkout">{{ vm.error.checkout }}</div>
+            <button
+              class="w-full px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+              ng-disabled="vm.loading.checkout"
+              ng-click="vm.submitCheckout()">
+              <span ng-if="!vm.loading.checkout">Proceed to Payment</span>
+              <span ng-if="vm.loading.checkout"><em>processing...</em></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Help -->
+      <div class="bg-white rounded-md shadow p-4">
+        <div class="font-medium text-gray-800 mb-1">Help</div>
+        <p class="text-sm text-gray-600">
+          Partial payments are allowed for tuition only when your registration payment type is set to Partial.
+          For invoice payments, you can pay any amount up to the invoice remaining.
+        </p>
+      </div>
+    
+      <!-- Installment Plan (read-only, mirrors cashier viewer without selector) -->
+      <div class="rounded-md border border-emerald-200 bg-emerald-50" ng-if="vm.installmentsUI && vm.installmentsUI.show">
+        <div class="px-4 py-2 flex items-center justify-between">
+          <strong class="text-emerald-800">Installment Plan</strong>
+          <span class="text-sm text-emerald-700">Selected Plan: {{ vm.selectedInstallmentPlanName || 'Standard' }}</span>
+        </div>
+        <div class="p-4 bg-white border-t">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="space-y-1">
+              <div class="text-xs text-gray-600 uppercase">Down Payment</div>
+              <div class="text-base font-semibold">₱ {{ (vm.installmentsSummary() && vm.installmentsSummary().dp || 0) | number:2 }}</div>
+            </div>
+            <div class="space-y-1">
+              <div class="text-xs text-gray-600 uppercase">Total Installment</div>
+              <div class="text-base font-semibold">₱ {{ (vm.installmentsSummary() && vm.installmentsSummary().total || 0) | number:2 }}</div>
+            </div>
+          </div>
+          <div class="mt-2">
+            <div class="text-xs text-gray-600 uppercase mb-1">Installments ({{ (vm.installmentsSummary() && vm.installmentsSummary().count) || 5 }}x)</div>
+            <ul class="divide-y divide-gray-200 border rounded bg-white">
+              <li class="px-3 py-2 flex items-center justify-between" ng-repeat="it in vm.installmentsList() track by it.key" ng-if="it.key !== 'dp'">
+                <span class="text-gray-700">{{ it.label }}</span>
+                <span class="font-semibold">₱ {{ (it.amount || 0) | number:2 }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+      
+  </div>
+</div>
