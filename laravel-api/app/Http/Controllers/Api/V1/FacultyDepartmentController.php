@@ -37,6 +37,28 @@ class FacultyDepartmentController extends Controller
         ]);
     }
 
+    public function listAll(int $id, Request $request, DepartmentContextService $ctx): JsonResponse
+    {
+        // Soft check that faculty exists
+        $exists = DB::table('tb_mas_faculty')->where('intID', $id)->exists();
+        if (!$exists) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Faculty not found',
+            ], 404);
+        }
+
+        $rows = DB::table('tb_mas_faculty_departments')            
+            ->orderBy('department_code')
+            ->orderBy('campus_id')
+            ->get(['department_code', 'campus_id']);
+
+        return response()->json([
+            'success' => true,
+            'data'    => $rows,
+        ]);
+    }
+
     /**
      * POST /api/v1/faculty/{id}/departments
      * Body: { department_code: string, campus_id?: int|null }

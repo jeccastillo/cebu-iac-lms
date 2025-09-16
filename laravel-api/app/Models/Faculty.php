@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Faculty extends Model
 {
@@ -18,6 +19,22 @@ class Faculty extends Model
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class, 'tb_mas_faculty_roles', 'intFacultyID', 'intRoleID');
+    }
+
+    /**
+     * Advisee students currently pointing to this advisor (denormalized via tb_mas_users.intAdvisorID).
+     */
+    public function advisees(): HasMany
+    {
+        return $this->hasMany(User::class, 'intAdvisorID', 'intID');
+    }
+
+    /**
+     * Advisor assignment history rows where this faculty is the advisor.
+     */
+    public function advisorAssignments(): HasMany
+    {
+        return $this->hasMany(StudentAdvisor::class, 'intAdvisorID', 'intID');
     }
 
     /**

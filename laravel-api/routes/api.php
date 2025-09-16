@@ -68,6 +68,7 @@ use App\Http\Controllers\Api\V1\PaymentsWebhookController;
 use App\Http\Controllers\Api\V1\DepartmentDeficiencyController;
 use App\Http\Controllers\Api\V1\FacultyDepartmentController;
 use App\Http\Controllers\Api\V1\ShiftRequestController;
+use App\Http\Controllers\Api\V1\StudentAdvisorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -129,6 +130,7 @@ Route::prefix('v1')->group(function () {
 
     // Faculty Department tags (admin-only)
     Route::get('/faculty/{id}/departments', [FacultyDepartmentController::class, 'index'])->middleware('role:admin');
+    Route::get('/faculty/{id}/departments_all', [FacultyDepartmentController::class, 'listAll'])->middleware('role:admin');
     Route::post('/faculty/{id}/departments', [FacultyDepartmentController::class, 'store'])->middleware('role:admin');
     Route::delete('/faculty/{id}/departments/{code}', [FacultyDepartmentController::class, 'destroy'])->middleware('role:admin');
 
@@ -629,4 +631,11 @@ Route::prefix('v1')->group(function () {
     Route::get('/student/shift-requests', [ShiftRequestController::class, 'index']); // student-safe
     Route::post('/student/shift-requests', [ShiftRequestController::class, 'store']); // student-safe
     Route::patch('/student/shift-requests/status', [ShiftRequestController::class, 'setStatus'])->middleware('role:registrar,admin');
+
+    // Student Advisor Management (Faculty Admin/Admin)
+    Route::get('/student-advisors/list', [StudentAdvisorController::class, 'list'])->middleware('role:faculty_admin,admin');
+    Route::get('/student-advisors', [StudentAdvisorController::class, 'index'])->middleware('role:faculty_admin,admin');
+    Route::post('/advisors/switch', [StudentAdvisorController::class, 'switch'])->middleware('role:faculty_admin,admin');
+    Route::post('/advisors/{advisorId}/assign-bulk', [StudentAdvisorController::class, 'assignBulk'])->middleware('role:faculty_admin,admin');
+    Route::delete('/student-advisors/{studentId}', [StudentAdvisorController::class, 'destroy'])->middleware('role:faculty_admin,admin');
 });

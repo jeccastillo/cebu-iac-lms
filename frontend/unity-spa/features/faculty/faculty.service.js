@@ -64,6 +64,9 @@
       listDepartments: function (facultyId) {
         return $http.get(BASE + '/faculty/' + encodeURIComponent(facultyId) + '/departments', _adminHeaders()).then(_unwrap);
       },
+      listAllDepartments: function (facultyId){
+        return $http.get(BASE + '/faculty/' + encodeURIComponent(facultyId) + '/departments_all', _adminHeaders()).then(_unwrap);        
+      },
       // POST /faculty/{id}/departments
       // payload: { department_code: string, campus_id?: number|null }
       addDepartment: function (facultyId, payload) {

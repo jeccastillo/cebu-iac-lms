@@ -1,258 +1,277 @@
 # Implementation Plan
 
 [Overview]
-Add a student-facing “Request Program Change” feature that lets a logged-in student submit a single program-change request for the active term, persists it to a new table tb_mas_shift_requests, and automatically creates a System Alert targeted to Registrar users linking to the Registrar Shifting page for processing.
+Implement a Student Advisor management feature that lets faculty_admins assign students to a faculty advisor (teaching faculty), maintain historical advisor changes, and support bulk assignment and quick advisor switching, while enforcing department and campus alignment, and exposing APIs and a dedicated UI page.
 
-This feature introduces a lightweight workflow so students can explicitly request a change of their current program. It enforces at most one request per student per term and notifies the Registrar via a system-generated alert. The backend exposes a minimal student-safe API to create and view requests while the frontend adds a new Student page to submit requests. The Registrar continues to act on such requests through their existing Shifting tools.
+This feature introduces a normalized history table for advisor assignments while maintaining a denormalized pointer on tb_mas_users for fast lookup. Authorization is enforced via existing middleware and department/campus scoping using tb_mas_faculty_departments. The backend provides endpoints to fetch, assign in bulk, unassign, and quick-switch advisors. The frontend adds a dedicated management page (role-gated to faculty_admin) where an admin selects an advisor and bulk-adds students, and can quickly replace an advisor across all advisees.
 
 [Types]  
-The type system changes introduce a new Eloquent model ShiftRequest with a backing table tb_mas_shift_requests, plus clearly defined request/response shapes for the API endpoints.
+Introduce new DB entities and extend existing models to represent student↔advisor relationships with history and validation, plus request/response contracts for the APIs.
 
-New database table: tb_mas_shift_requests
-- id: bigint, PK, autoincrement
-- student_id: int, required; FK to tb_mas_users.intID (logical)
-- student_number: varchar(64), nullable; copy from tb_mas_users.strStudentNumber at creation time for convenience
-- term_id: int, required; active AY/Term id
-- program_from: int, required; intProgramID from tb_mas_users at request time (snapshot)
-- program_to: int, required; intProgramID requested
-- reason: text, nullable; optional student-provided reason
-- status: enum|string, default 'pending'; expected values: 'pending' | 'approved' | 'denied' | 'canceled'
-- requested_at: datetime, default now(); mirrors created_at
-- processed_at: datetime, nullable; set when approved/denied
-- processed_by_faculty_id: int, nullable; registrar/faculty who processed
-- campus_id: int, nullable; copy from tb_mas_users.campus_id if available
-- meta: json, nullable; for extensibility (UA, client info, etc.)
-- timestamps: created_at, updated_at
-- Constraints/Indexes:
-  - unique index on (student_id, term_id) to enforce one request per student per term
-  - indexes on student_id, term_id, program_to for typical queries
+1) Database
+- New table: tb_mas_student_advisor
+  - intID: bigint unsigned auto-increment (PK)
+  - intStudentID: bigint unsigned NOT NULL — references tb_mas_users.intID (logical FK)
+  - intAdvisorID: bigint unsigned NOT NULL — references tb_mas_faculty.intID (logical FK)
+  - is_active: tinyint(1) NOT NULL DEFAULT 1 — exactly one active row per student
+  - started_at: datetime NOT NULL — when assignment was activated (default now())
+  - ended_at: datetime NULL — when assignment ended (set on unassign/switch)
+  - assigned_by: bigint unsigned NOT NULL — faculty who performed assignment (tb_mas_faculty.intID)
+  - department_code: varchar(64) NOT NULL — department alignment used at assign-time (lowercased/tracked)
+  - campus_id: int NULL — nullable campus alignment used at assign-time
+  - created_at: timestamp NULL, updated_at: timestamp NULL
+  - Indexes/Constraints:
+    - UNIQUE (intStudentID, is_active) — ensures only one active assignment per student
+    - INDEX idx_studentid (intStudentID)
+    - INDEX idx_advisor_active (intAdvisorID, is_active)
+    - Optional check constraints (enforced in app if DB lacks support):
+      - is_active in (0,1)
+      - ended_at is NULL when is_active=1; ended_at NOT NULL when is_active=0
 
-Model: App\Models\ShiftRequest
-- $fillable: [student_id, student_number, term_id, program_from, program_to, reason, status, requested_at, processed_at, processed_by_faculty_id, campus_id, meta]
-- $casts:
-  - requested_at, processed_at: 'datetime'
-  - program_from, program_to, term_id, student_id, processed_by_faculty_id, campus_id: 'integer'
-  - meta: 'array'
+- Alter table: tb_mas_users
+  - Add column: intAdvisorID bigint unsigned NULL (indexed)
+  - Purpose: denormalized pointer to the currently active advisor for fast joins and listings.
+  - Backfill migration step populates intAdvisorID based on active tb_mas_student_advisor rows where available.
 
-API Contracts (student-safe)
-- POST /api/v1/student/shift-requests
-  - Request (JSON):
-    - student_id?: number (optional; if omitted, resolve from token or session headers)
-    - token?: string (optional; e.g., portal token for identification)
-    - term: number (required)
-    - program_to: number (required; existing tb_mas_programs.intProgramID)
-    - reason?: string (optional)
-  - Behavior:
-    - Resolve student_id by token, headers, or body.
-    - Validate existence of student and program_to.
-    - Populate program_from from student’s current program at request time.
-    - Enforce uniqueness (student_id, term_id) at app and DB levels.
-    - Create system-generated SystemAlert targeted to role_codes ['registrar'] with link "#/registrar/shifting".
-  - Responses:
-    - 201 { success: true, data: ShiftRequest } on success
-    - 409 { success: false, message: 'Duplicate request exists for this term.' } if unique constraint violated
-    - 422 { success: false, errors: { field: [msg] } } on validation errors
+2) Eloquent Models
+- New: App\Models\StudentAdvisor
+  - $table = 'tb_mas_student_advisor'
+  - $primaryKey = 'intID'
+  - $casts:
+    - intStudentID: integer
+    - intAdvisorID: integer
+    - assigned_by: integer
+    - is_active: integer
+    - campus_id: integer
+    - started_at: datetime
+    - ended_at: datetime
+  - Relations:
+    - student(): belongsTo(App\Models\User, 'intStudentID', 'intID')
+    - advisor(): belongsTo(App\Models\Faculty, 'intAdvisorID', 'intID')
+    - assignedBy(): belongsTo(App\Models\Faculty, 'assigned_by', 'intID')
 
-- GET /api/v1/student/shift-requests
+- Existing: App\Models\User (tb_mas_users)
+  - Add $fillable[] = 'intAdvisorID'
+  - Relations:
+    - advisor(): belongsTo(App\Models\Faculty, 'intAdvisorID', 'intID')
+    - advisorHistory(): hasMany(App\Models\StudentAdvisor, 'intStudentID', 'intID')
+
+- Existing: App\Models\Faculty (tb_mas_faculty)
+  - New relations:
+    - advisorAssignments(): hasMany(App\Models\StudentAdvisor, 'intAdvisorID', 'intID')
+    - advisees(): hasManyThrough(App\Models\User, App\Models\StudentAdvisor, 'intAdvisorID', 'intID', 'intID', 'intStudentID')
+
+3) Request Types (Laravel Form Requests)
+- StudentAdvisorAssignBulkRequest
+  - Body:
+    - student_ids: int[] (optional)
+    - student_numbers: string[] (optional)
+    - replace_existing: bool (optional, default false) — whether to end existing active advisor if present
+  - Rules:
+    - At least one of student_ids or student_numbers must be present.
+    - Each ID/number must resolve to an existing student.
+- StudentAdvisorSwitchRequest
+  - Body:
+    - from_advisor_id: int required
+    - to_advisor_id: int required, must be different from from_advisor_id
+  - Rules:
+    - Both advisors must exist and be teaching=1.
+- StudentAdvisorShowRequest
   - Query:
-    - term?: number (optional, filter by term)
-  - Behavior: Lists the caller’s own shift requests (ordered desc by requested_at)
-  - Response: 200 { success: true, data: ShiftRequest[] }
-
-System Alert payload (SystemAlert model, tb_sys_alerts)
-- title: 'Program Change Request'
-- message: "Program change request from {student_number}: {program_from} → {program_to}"
-- link: '#/registrar/shifting'
-- type: 'info' (or 'request' if acceptable)
-- role_codes: ['registrar']
-- campus_ids: [campus_id] when available; else []
-- target_all: false
-- intActive: 1
-- system_generated: true
-- created_by: 'system'
+    - student_id: int optional
+    - student_number: string optional
+  - Rules:
+    - One of student_id or student_number is required.
 
 [Files]
-The change introduces new backend and frontend files and modifies select routing and navigation files.
+Introduce new backend and frontend files, and modify existing files to wire the feature end-to-end.
 
-New files to be created
-- laravel-api/database/migrations/2025_09_15_000250_create_tb_mas_shift_requests_table.php
-  - Defines table tb_mas_shift_requests with columns and constraints above.
-- laravel-api/app/Models/ShiftRequest.php
-  - Eloquent model for tb_mas_shift_requests.
-- laravel-api/app/Http/Controllers/Api/V1/ShiftRequestController.php
-  - Controller implementing index() and store() and helper resolveStudentId().
+Backend (Laravel API)
+- New files:
+  - laravel-api/database/migrations/2025_09_16_000001_create_tb_mas_student_advisor.php
+    - Creates tb_mas_student_advisor with schema above and indexes.
+  - laravel-api/database/migrations/2025_09_16_000002_alter_tb_mas_users_add_intAdvisorID.php
+    - Adds intAdvisorID column, index, and backfill.
+  - laravel-api/app/Models/StudentAdvisor.php
+  - laravel-api/app/Services/StudentAdvisorService.php
+    - Core business logic (bulk assign, switch, show, unassign, validations).
+  - laravel-api/app/Http/Controllers/Api/V1/StudentAdvisorController.php
+    - API endpoints handler; injects service; handles requests/responses.
+  - laravel-api/app/Http/Requests/Api/V1/StudentAdvisorAssignBulkRequest.php
+  - laravel-api/app/Http/Requests/Api/V1/StudentAdvisorSwitchRequest.php
+  - laravel-api/app/Http/Requests/Api/V1/StudentAdvisorShowRequest.php
 
-- frontend/unity-spa/features/student/change-program-request/change-program-request.controller.js
-  - AngularJS controller StudentChangeProgramRequestController with init(), reloadPrograms(), canSubmit(), onSubmit().
-- frontend/unity-spa/features/student/change-program-request/change-program-request.html
-  - Template providing program dropdown, optional reason input, state handling, and submit button.
+- Modified files:
+  - laravel-api/routes/api.php
+    - Add routes:
+      - GET   /api/v1/student-advisors                 → StudentAdvisorController@index      (role:faculty_admin,admin)
+      - POST  /api/v1/advisors/{advisorId}/assign-bulk → StudentAdvisorController@assignBulk (role:faculty_admin,admin)
+      - POST  /api/v1/advisors/switch                  → StudentAdvisorController@switch     (role:faculty_admin,admin)
+      - DELETE /api/v1/student-advisors/{studentId}    → StudentAdvisorController@destroy    (role:faculty_admin,admin)
+  - laravel-api/app/Models/User.php
+    - $fillable includes intAdvisorID; add advisor() and advisorHistory() relations.
+  - laravel-api/app/Models/Faculty.php
+    - Add advisorAssignments() and advisees() relations.
 
-Existing files to be modified
-- laravel-api/routes/api.php
-  - Register:
-    - GET /api/v1/student/shift-requests → ShiftRequestController@index (role: student_view, admin)
-    - POST /api/v1/student/shift-requests → ShiftRequestController@store (role: student_view, admin)
-- frontend/unity-spa/core/routes.js
-  - Add route when('/student/change-program-request', ...) with requiredRoles: ['student_view', 'admin'].
-- frontend/unity-spa/shared/components/sidebar/sidebar.controller.js
-  - Under Student group: add menu entry { label: 'Request Program Change', path: '/student/change-program-request' }.
-- frontend/unity-spa/index.html
-  - Add script tag for features/student/change-program-request/change-program-request.controller.js.
-
-Files to be deleted or moved
-- None.
-
-Configuration file updates
-- None (no new packages or env keys required).
+Frontend (AngularJS unity-spa)
+- New feature module: Advisors Management (faculty_admin-only)
+  - frontend/unity-spa/features/advisors/advisors.service.js
+    - Wrapper for new API endpoints; uses existing auth/header patterns; select2 data sources for faculty/students.
+  - frontend/unity-spa/features/advisors/advisors.controller.js
+    - Page controller for:
+      - Select Advisor (teaching=1, filtered by department and campus)
+      - Bulk add students (by search, multi-select, or CSV paste) to selected advisor
+      - Quick switch all advisees from Advisor A to Advisor B
+      - Show summary of actions and conflicts
+  - frontend/unity-spa/features/advisors/advisors.html
+    - UI layout with:
+      - Advisor picker (select2)
+      - Bulk student picker (select2; support by ID or Student Number)
+      - Replace Existing toggle
+      - Actions: Assign Bulk, Quick Switch
+      - Results/History display for selected students/advisor
+  - Optional route/registration (if needed by app shell):
+    - frontend/unity-spa/features/advisors/advisors.routes.js (if project patterns isolate routes per feature)
+      - Registers state: app.advisors (url: /advisors), role-gated via existing FE role checks
+- Modified (if navigation/menu is centralized):
+  - Add menu entry "Advisors" visible to role faculty_admin.
 
 [Functions]
-New and modified functions provide the new API and UI workflow.
+Add new controller actions and service methods; modify models only to add relations; no removals.
 
-Backend: App\Http\Controllers\Api\V1\ShiftRequestController
-- public function index(Request $request): JsonResponse
-  - Purpose: Return authenticated student’s program change requests with optional term filter.
-  - Details:
-    - Resolve student id via resolveStudentId($request).
-    - Query ShiftRequest::where('student_id', $sid)->when(term, fn)->orderByDesc('requested_at')->get().
-    - Return { success: true, data: [...] }.
+New functions (Backend)
+- App\Services\StudentAdvisorService
+  - assignBulk(int $advisorId, array $studentIds = [], array $studentNumbers = [], bool $replaceExisting, int $actorFacultyId): array
+    - Validates advisor exists, teaching=1
+    - Resolves student IDs from inputs
+    - Enforces department_code and campus_id overlap: actor ↔ advisor (via tb_mas_faculty_departments)
+    - For each student:
+      - If active advisor exists:
+        - If same advisor: skip (idempotent)
+        - If replaceExisting: end active with ended_at, create new active assignment
+        - Else: record conflict
+      - If none: create new active assignment
+      - Update tb_mas_users.intAdvisorID pointer accordingly
+    - Returns summary: assigned_count, skipped, conflicts, errors
+  - switchAll(int $fromAdvisorId, int $toAdvisorId, int $actorFacultyId): array
+    - Validates both advisors (teaching=1)
+    - Enforces actor dept/campus overlap with both advisors
+    - For each active advisee of fromAdvisorId:
+      - If already assigned to toAdvisorId: skip
+      - End current, create new active assignment to toAdvisorId
+      - Update pointer
+    - Returns counts: switched, skipped, errors
+  - showByStudent(?int $studentId, ?string $studentNumber): array
+    - Returns current active advisor and full assignment history for the student
+  - unassign(int $studentId, int $actorFacultyId): array
+    - If active assignment exists: end it (ended_at), set is_active=0, nullify tb_mas_users.intAdvisorID
+    - Idempotent if none active
+  - Helpers (private):
+    - resolveStudentIds(array $ids, array $numbers): int[]
+    - checkDeptCampusOverlap(int $actorFacultyId, int $targetFacultyId): array{ok:bool, dept:string, campus_id:?int}
+      - At least one common department_code, campus-aware when campus tags exist
+    - endActiveAssignment(int $studentId): void
+    - createAssignment(int $studentId, int $advisorId, string $dept, ?int $campusId, int $actorId): StudentAdvisor
+    - facultyDeptTags(int $facultyId): array{departments: string[], campus_ids: int[]|null}
 
-- public function store(Request $request): JsonResponse
-  - Purpose: Create a new pending shift request.
-  - Validation:
-    - term: required|integer
-    - program_to: required|integer|exists:tb_mas_programs,intProgramID
-    - reason: nullable|string|max:2000
-  - Flow:
-    - $sid = resolveStudentId($request); fetch student record from tb_mas_users (id, strStudentNumber, intProgramID, campus_id).
-    - program_from = student.intProgramID
-    - enforce app-level uniqueness check; attempt insert; catch DB unique error return 409.
-    - Create ShiftRequest row (status='pending', requested_at=now()).
-    - Create SystemAlert row via SystemAlert model and broadcast via SystemAlertService::broadcast('create', ...).
-    - Return 201 { success: true, data: created }.
+New functions (Controllers)
+- App\Http\Controllers\Api\V1\StudentAdvisorController
+  - index(StudentAdvisorShowRequest $request, StudentAdvisorService $service)
+    - Query params: student_id or student_number
+    - Returns { active, history[] }
+  - assignBulk(int $advisorId, StudentAdvisorAssignBulkRequest $request, StudentAdvisorService $service)
+    - Returns summary
+  - switch(StudentAdvisorSwitchRequest $request, StudentAdvisorService $service)
+    - Returns summary
+  - destroy(int $studentId, Request $request, StudentAdvisorService $service)
+    - Returns result of unassign
 
-- protected function resolveStudentId(Request $request): int
-  - Purpose: Determine student_id from token, explicit student_id, or other hints.
-  - Approach:
-    - If student_id provided and exists → use it.
-    - Else if token provided → DataFetcherService->getStudentByToken($token).
-    - Else attempt headers (X-User-ID where role matches student_view) as fallback.
-    - Throw validation exception if not resolvable.
+Modified functions
+- None removed; existing models extended only with relations.
 
-Frontend: StudentChangeProgramRequestController (features/student/change-program-request/change-program-request.controller.js)
-- init()
-  - Purpose: Initialize active term and student profile then load programs.
-  - Flow:
-    - TermService.init() or TermService.getActiveTerm() fallback; if unavailable GET /generic/active-term fallback; handle gracefully.
-    - StudentFinancesService.resolveProfile() to obtain student id and student number.
-    - Call reloadPrograms().
-
-- reloadPrograms()
-  - Purpose: Load available programs and normalize to { id, code, name } for the dropdown.
-  - Flow:
-    - ProgramsService.list({ enabledOnly: true }) and map rows.
-
-- canSubmit()
-  - Purpose: Enable the submit button only when profile, term, and selected program are available and not already submitting.
-
-- onSubmit()
-  - Purpose: Submit POST /api/v1/student/shift-requests with { student_id, term, program_to, reason }.
-  - Handles:
-    - 201: toast success + local state updated + disable resubmission for this term.
-    - 409: toast warning “Request already exists for this term.”
-    - 422: toast error with validation messages.
-    - Errors: general toast error.
+Removed functions
+- None.
 
 [Classes]
-New classes cover the data model and controller.
-
 New classes
-- App\Models\ShiftRequest (laravel-api/app/Models/ShiftRequest.php)
-  - Extends Illuminate\Database\Eloquent\Model
-  - Table: tb_mas_shift_requests
-  - Casts and fillable as defined under [Types].
-- App\Http\Controllers\Api\V1\ShiftRequestController (laravel-api/app/Http/Controllers/Api/V1/ShiftRequestController.php)
-  - Depends on DataFetcherService, SystemAlertService, DB, SystemAlert, ShiftRequest
+- App\Models\StudentAdvisor — history model
+- App\Services\StudentAdvisorService — domain logic
+- App\Http\Controllers\Api\V1\StudentAdvisorController — endpoint layer
+- App\Http\Requests\Api\V1\StudentAdvisorAssignBulkRequest
+- App\Http\Requests\Api\V1\StudentAdvisorSwitchRequest
+- App\Http\Requests\Api\V1\StudentAdvisorShowRequest
 
 Modified classes
-- None beyond route usage; no changes required to existing controllers.
+- App\Models\User — add fillable intAdvisorID and relations advisor(), advisorHistory()
+- App\Models\Faculty — add advisorAssignments(), advisees()
 
 Removed classes
 - None.
 
 [Dependencies]
-No new composer/npm packages are required.
-
-Integration requirements
-- Table tb_mas_programs available and contains intProgramID for validation.
-- Table tb_mas_users provides student lookup (intID, strStudentNumber, intProgramID, campus_id).
-- SystemAlertService::broadcast must be callable and tolerant of failures (already designed to degrade gracefully).
+No new external composer or npm dependencies required; rely on existing Laravel components, DB facade, Eloquent, and current middleware RequireRole. Frontend uses existing AngularJS stack and shared select2 directive for pickers.
 
 [Testing]
-Testing approach covers both API and UI with focus on the critical path.
+Adopt critical-path API testing with authorized context and department/campus enforcement.
 
-Backend/API
-- Migration: run php artisan migrate to create tb_mas_shift_requests with unique(student_id, term_id).
-- POST /api/v1/student/shift-requests
-  - Valid: returns 201 and row has status 'pending', program_from matches student, SystemAlert row created.
-  - Duplicate: second request same student+term returns 409.
-  - Invalid program_to or missing term: returns 422 with errors.
-- GET /api/v1/student/shift-requests
-  - Returns caller’s list; respects term filter.
+Backend tests/manual validation
+- Migrations
+  - php artisan migrate → creates tables and columns; backfill intAdvisorID
+- API happy path (actor faculty_admin with matching dept/campus to advisor)
+  - POST /api/v1/advisors/{1188}/assign-bulk
+    - Body: { student_ids: [158], replace_existing: false }
+    - Headers: X-Faculty-ID: 13
+    - Expect: assigned_count=1, tb_mas_users.intAdvisorID of 158 becomes 1188, tb_mas_student_advisor row active
+  - GET /api/v1/student-advisors?student_id=158
+    - Expect: active advisor 1188, history includes created row
+  - POST /api/v1/advisors/switch
+    - Body: { from_advisor_id: 1188, to_advisor_id: 1199 }
+    - Headers: X-Faculty-ID: 13
+    - Expect: ended previous active, created new active to 1199, pointer updated
+  - DELETE /api/v1/student-advisors/158
+    - Expect: active ended, pointer cleared; idempotent on subsequent calls
+- Authorization/Validation
+  - Missing/invalid X-Faculty-ID → 401
+  - Role without faculty_admin/admin → 403
+  - Advisor not teaching=1 → 422
+  - No dept/campus overlap → 422 or 403 with clear message
+  - Duplicate assign to same advisor → idempotent skip
 
-System Alerts
-- After create, tb_sys_alerts has a new row with role_codes ['registrar'], link '#/registrar/shifting', intActive=1, system_generated=1.
-- Optional: Verify event broadcast (no hard requirement if broadcasting disabled in environment).
-
-Frontend
-- Route access: '/student/change-program-request' requires role student_view or admin.
-- Initialization: Page resolves active term, profile, and programs without throwing; shows user-friendly errors if fallbacks kick in.
-- Submission:
-  - Success path: Toast “Request submitted”, submit disabled for same term afterward.
-  - Duplicate path: Toast “A request already exists for this term.”
-  - Validation errors: Display reasons without breaking the page.
-
-Regression
-- Registrar sidebar and pages unaffected.
-- Roles and guards remain consistent.
+Frontend validation
+- Role-gated page visible only to faculty_admin
+- Advisor select shows only teaching=1 faculty filtered by the acting admin&#39;s departments/campus
+- Bulk student select supports search by student number/name; handles server errors; shows summary of assigned/skipped/conflicts
+- Quick switch flow prevents from=to and shows results
 
 [Implementation Order]
-Sequence minimizes integration risk and enables early API verification.
+Implement in safe, incremental steps minimizing risk and integration conflicts.
 
 1) Database
-   - Create migration 2025_09_15_000250_create_tb_mas_shift_requests_table.php
-   - Columns, indexes, and unique(student_id, term_id)
+   - Create migration: 2025_09_16_000001_create_tb_mas_student_advisor.php
+   - Create migration: 2025_09_16_000002_alter_tb_mas_users_add_intAdvisorID.php (with backfill)
+   - Run migrations
 
-2) Backend Model
-   - Add App\Models\ShiftRequest with casts/fillable and table mapping
+2) Backend Models/Service
+   - Add App\Models\StudentAdvisor
+   - Extend App\Models\User with fillable and relations
+   - Extend App\Models\Faculty with relations
+   - Implement App\Services\StudentAdvisorService (core logic + constraints)
 
-3) Backend Controller
-   - Add App\Http\Controllers\Api\V1\ShiftRequestController with:
-     - index(Request)
-     - store(Request)
-     - resolveStudentId(Request)
+3) Requests/Controller/Routes
+   - Add Form Requests (AssignBulk, Switch, Show)
+   - Implement StudentAdvisorController actions
+   - Register routes in laravel-api/routes/api.php guarded by middleware('role:faculty_admin,admin')
 
-4) Routes
-   - Update laravel-api/routes/api.php:
-     - GET /api/v1/student/shift-requests → index (role: student_view, admin)
-     - POST /api/v1/student/shift-requests → store (role: student_view, admin)
+4) Frontend
+   - Create advisors.service.js (API integration)
+   - Create advisors.controller.js and advisors.html (UI workflows)
+   - Register route/state and add menu entry for faculty_admin
 
-5) System Alerts Integration
-   - In store(): create SystemAlert row and call SystemAlertService->broadcast('create', $alert)
+5) QA & Verification
+   - Manual API tests using provided IDs (actor=13, advisor=1188, student=158)
+   - Frontend smoke test: bulk assign and quick switch
+   - Edge cases: idempotency, validation errors, dept/campus mismatch
 
-6) Frontend UI
-   - Add features/student/change-program-request/change-program-request.controller.js
-   - Add features/student/change-program-request/change-program-request.html
-   - Update core/routes.js to register “/student/change-program-request”
-   - Update shared/components/sidebar/sidebar.controller.js to add Student menu item
-   - Update index.html to include controller script
-
-7) End-to-end Tests
-   - Migrate DB; verify POST/GET endpoints (201/409/422)
-   - Load UI page; confirm initialization and submission flows (success and duplicate)
-   - Verify registrar alert row created and visible to registrar role
-
-8) Hardening and Polish
-   - Surface clear toasts on all error cases
-   - Ensure init fallbacks don’t block form rendering:
-     - If active term or profile fetch fails, show appropriate message and keep retry affordance
-   - Confirm no console errors and acceptable UX
+6) Documentation & Rollout
+   - README snippet for new endpoints and headers usage
+   - Add seeding examples if needed for test dept/campus tags

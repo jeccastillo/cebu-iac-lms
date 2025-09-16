@@ -24,9 +24,11 @@
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">By Program</label>
           <select class="w-full border rounded px-3 py-2"
-                  ng-model="vm.filters.program"
-                  ng-options="p.id as p.title for p in vm.programs">
-            <option value="0">-----------------SELECT---------------</option>
+                  ng-model="vm.filters.program">
+            <option ng-value="0">-----------------ALL PROGRAMS---------------</option>
+            <option ng-repeat="p in vm.programs" ng-value="{{ p.id }}">
+              {{ p.title }}
+            </option>
           </select>
         </div>
 

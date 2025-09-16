@@ -156,10 +156,12 @@
         <select
           ng-model="vm.form.program_id"
           ng-change="vm.onProgramChange()"
-          class="mt-1 block w-full border rounded px-3 py-2"
-          ng-options="(p.intProgramID || p.id) as (p.strProgramCode + ' — ' + p.strProgramDescription) for p in vm.programs track by (p.intProgramID || p.id)"          
+          class="mt-1 block w-full border rounded px-3 py-2"          
           data-placeholder="-- Select Program --">
-          <option value="">{{ vm.form.program_id }}</option>
+          <option value="">-- Select Program --</option>
+          <option ng-repeat="p in vm.programs" ng-value="{{ p.id }}">
+            {{ p.strProgramCode + ' — ' + p.strProgramDescription }}
+          </option>
         </select>
       </div>
 
@@ -168,10 +170,12 @@
         <label class="block text-sm font-medium text-gray-700">Curriculum</label>
         <select
           ng-model="vm.form.curriculum_id"
-          class="mt-1 block w-full border rounded px-3 py-2"
-          ng-options="(c.intID || c.id) as (c.strName || c.name) for c in vm.curricula track by (c.intID || c.id)"          
+          class="mt-1 block w-full border rounded px-3 py-2"          
           data-placeholder="-- Select Curriculum --">
           <option value="">-- Select Curriculum --</option>
+          <option ng-repeat="c in vm.curricula" ng-value="{{ (c.intID || c.id) }}">
+            {{ (c.strName || c.name) }}
+          </option>
         </select>
         <div class="text-xs text-gray-500 mt-1" ng-if="vm.form.program_id && !vm.curricula.length">
           No curricula found for the selected program.

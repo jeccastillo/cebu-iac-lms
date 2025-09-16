@@ -23,10 +23,23 @@
         onClosed: '&?'              // callback()
       },
       link: function (scope, element, attrs, ngModel) {
+        var isSyncing = false;
+        var isMultiple = (typeof attrs.multiple !== 'undefined');
         // Helpers to map between Angular ngOptions option value strings and model/view values
         function toDomValue(v) {
           try {
             if (v === undefined || v === null || v === '') return '';
+            // 1) Robust: scan actual <option> tokens and match by parsed value
+            var el = element && element[0];
+            if (el && el.options && el.options.length) {
+              for (var i = 0; i < el.options.length; i++) {
+                var token = el.options[i].value;
+                if (angular.equals(fromDomValue(token), v)) {
+                  return token;
+                }
+              }
+            }
+            // 2) Fallback: probe common Angular ngOptions encodings, prefer typed prefixes
             var vs = '' + v;
             var candidates = [
               'number:' + vs,
@@ -35,9 +48,9 @@
               'object:' + vs,
               vs
             ];
-            for (var i = 0; i < candidates.length; i++) {
-              var c = candidates[i];
-              // Escape quotes in selector
+            for (var j = 0; j < candidates.length; j++) {
+              var c = candidates[j];
+              // Escape quotes and backslashes in selector
               var sel = 'option[value="' + c.replace(/(["\\])/g, '\\$1') + '"]';
               if (jQuery(element).find(sel).length) return c;
             }
@@ -66,6 +79,24 @@
           }
         }
         var hasNgOptions = typeof attrs.ngOptions !== 'undefined';
+
+        function refreshRendered(forceText) {
+          try {
+            var $container = jQuery(element).next('.select2');
+            if (!$container || !$container.length) return;
+            var $rendered = $container.find('.select2-selection__rendered');
+            if (!$rendered || !$rendered.length) return;
+            var val = jQuery(element).val();
+            var hasValue = !(val == null || val === '');
+            var selectedText = forceText || jQuery(element).find('option:selected').text() || '';
+            var ph = attrs.placeholder || attrs.dataPlaceholder || attrs.select2Placeholder || '';
+            if (hasValue && selectedText) {
+              $rendered.removeClass('select2-selection__placeholder').text(selectedText).attr('title', selectedText);
+            } else {
+              $rendered.addClass('select2-selection__placeholder').text(ph).attr('title', ph);
+            }
+          } catch (e) {}
+        }
 
         function init() {
           $timeout(function () {
@@ -99,15 +130,46 @@
                     }
                   });
                   if (keepVal !== undefined && keepVal !== null && keepVal !== '') {
-                    jQuery(element).val(toDomValue(keepVal));
+                    isSyncing = true;
+                    jQuery(element).val(toDomValue(keepVal)).trigger('change');
+                    isSyncing = false;
+                    refreshRendered();
                   }
                 } catch (e) {}
               }
 
+              var tagsMode = (typeof attrs.select2Tags !== 'undefined');
+              var tokenSeps;
+              try {
+                tokenSeps = attrs.select2TokenSeparators ? JSON.parse(attrs.select2TokenSeparators) : [',', ';', '\n', ' '];
+              } catch (e) { tokenSeps = [',', ';', '\n', ' ']; }
+
               var select2Opts = {
                 width: '100%',
                 placeholder: placeholder || '',
-                allowClear: allowClear
+                allowClear: allowClear,
+                tags: !!tagsMode,
+                tokenSeparators: tagsMode ? tokenSeps : undefined,
+                closeOnSelect: (isMultiple && tagsMode) ? false : true,
+                templateSelection: function (data) {
+                  try {
+                    if (!data || data.id === undefined || data.id === null || data.id === '') {
+                      return placeholder || '';
+                    }
+                    if (data.text && ('' + data.text).trim() !== '') {
+                      return data.text;
+                    }
+                    // Fallback: read from the actual option text via its value token
+                    var token = data.id;
+                    var sel = 'option[value="' + ('' + token).replace(/(["\\])/g, '\\$1') + '"]';
+                    var t = jQuery(element).find(sel).text();
+                    return t || ('' + data.id);
+                  } catch (e) {
+                    return (data && data.text) ? data.text : (data && data.id != null ? ('' + data.id) : '');
+                  }
+                },
+                // Do not escape to allow plain text return without mangling
+                escapeMarkup: function (m) { return m; }
               };
 
               jQuery(element).select2(select2Opts);
@@ -128,23 +190,26 @@
               } catch (e) {}
 
               // Sync select2 -> ngModel (guard against recursive updates)
-              jQuery(element).off('change.select2').on('change.select2', function () {
+              jQuery(element).off('change.select2 change select2:select select2:clear').on('change select2:select select2:clear', function (e) {
+                if (isSyncing) return;
                 scope.$applyAsync(function () {
                   var current = jQuery(element).val();
-                  var parsed = fromDomValue(current);
-                  if (parsed !== ngModel.$viewValue) {
+                  var parsed = isMultiple
+                    ? ((current || []).map(function (v) { return fromDomValue(v); }))
+                    : fromDomValue(current);
+                  if (!angular.equals(parsed, ngModel.$viewValue)) {
                     ngModel.$setViewValue(parsed);
                   }
-                  // Mirror to select2Value if bound (keep raw DOM value to interop with select2)
                   if (typeof scope.select2Value !== 'undefined') {
                     scope.select2Value = current;
                   }
-                  // Fire callback if provided
                   if (attrs.onValueChanged && typeof scope.onValueChanged === 'function') {
                     try {
                       scope.onValueChanged({ value: current });
                     } catch (e) {}
                   }
+                  var forcedText = (e && e.params && e.params.data && e.params.data.text) ? e.params.data.text : null;
+                  refreshRendered(forcedText);
                 });
               });
 
@@ -165,7 +230,13 @@
               });
 
               // Ensure the current model is reflected in the UI without re-triggering our handler
-              jQuery(element).val(toDomValue(ngModel.$viewValue)).trigger('change.select2');
+              isSyncing = true;
+              var _initDom = isMultiple
+                ? (Array.isArray(ngModel.$viewValue) ? ngModel.$viewValue.map(function (v) { return toDomValue(v); }) : [])
+                : toDomValue(ngModel.$viewValue);
+              jQuery(element).val(_initDom).trigger('change');
+              isSyncing = false;
+              refreshRendered();
             } catch (e) {
               // swallow init errors to avoid breaking the page
             }
@@ -192,7 +263,10 @@
                 var desiredDom = toDomValue(nv);
                 if (current !== desiredDom) {
                   ngModel.$setViewValue(fromDomValue(nv));
-                  jQuery(element).val(desiredDom).trigger('change.select2');
+                  isSyncing = true;
+                  jQuery(element).val(desiredDom).trigger('change');
+                  isSyncing = false;
+                  refreshRendered();
                 }
               }
             } catch (e) {}
@@ -205,9 +279,14 @@
             try {
               var desired = ngModel.$viewValue;
               var current = jQuery(element).val();
-              var desiredDom = toDomValue(desired);
-              if (current !== desiredDom) {
-                jQuery(element).val(desiredDom).trigger('change.select2');
+              var desiredDom = isMultiple
+                ? (Array.isArray(desired) ? desired.map(function (v) { return toDomValue(v); }) : [])
+                : toDomValue(desired);
+              if (!angular.equals(current, desiredDom)) {
+                isSyncing = true;
+                jQuery(element).val(desiredDom).trigger('change');
+                isSyncing = false;
+                refreshRendered();
               }
             } catch (e) {}
           });

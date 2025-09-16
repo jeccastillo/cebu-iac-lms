@@ -1,0 +1,295 @@
+<div class="container mx-auto px-4 py-6">
+  <h1 class="text-2xl font-semibold text-gray-800 mb-6">Advisors Management</h1>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Bulk Assign -->
+    <div class="col-span-1 lg:col-span-2 bg-white shadow border border-gray-200 rounded">
+      <div class="p-4 border-b border-gray-200">
+        <h2 class="text-lg font-medium text-gray-800">Bulk Assign Students to Advisor</h2>
+        <p class="text-sm text-gray-500">Select a teaching faculty advisor, then search and add students by name or student number. Optionally replace existing assignments.</p>
+      </div>
+      <div class="p-4 space-y-4">
+        <!-- Advisor select -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Advisor</label>
+          <div class="flex items-center gap-2">
+            <select class="w-full"
+                    ng-model="vm.selectedAdvisorId"
+                    ng-options="o.id as o.text for o in vm.advisorOptions track by o.id"
+                    select2
+                    select2-watch="vm.advisorOptions"
+                    placeholder="Select advisor..."
+                    select2-allow-clear>
+              <option value=""></option>
+            </select>
+            <button type="button" class="px-3 py-2 text-sm rounded bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100"
+                    ng-click="vm.searchAdvisors()">
+              <i class="fas fa-sync-alt"></i>
+            </button>
+          </div>
+          <div class="text-xs text-gray-500 mt-1">
+            List is scoped by the selected campus when available. Only teaching=1 are shown.
+          </div>
+        </div>
+
+        <!-- Students (autocomplete) -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Students</label>
+          <div class="relative">
+            <input type="text"
+                   class="block w-full rounded border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                   placeholder="Search student by name or number…"
+                   pui-autocomplete
+                   ng-model="vm.studentSelectId"
+                   pui-source="vm.studentItems"
+                   pui-on-query="vm.onStudentQuery($query)"
+                   pui-on-select="vm.addSelectedStudent()"
+                   pui-min-chars="1"
+                   pui-label="((item.student_number || '') + ' — ' + (item.last_name || '') + ', ' + (item.first_name || ''))" />
+          </div>
+          <div class="mt-2 flex flex-wrap gap-2" ng-if="(vm.selectedStudents || []).length">
+            <span class="inline-flex items-center gap-1 bg-gray-100 text-gray-800 px-2 py-1 rounded"
+                  ng-repeat="s in vm.selectedStudents track by s.id">
+              {{(s.student_number || '') + ' — ' + (s.last_name || '') + ', ' + (s.first_name || '')}}
+              <button type="button" class="ml-1 text-red-600 hover:text-red-800" ng-click="vm.removeSelectedStudent(s)">
+                <i class="fas fa-times"></i>
+              </button>
+            </span>
+          </div>
+          <div class="text-xs text-gray-500 mt-1">
+            Search by name or student number. Select a result to add; use the × to remove.
+          </div>
+        </div>
+
+        <!-- Options -->
+        <div class="flex items-center justify-between">
+          <label class="inline-flex items-center space-x-2">
+            <input type="checkbox" class="h-4 w-4 text-blue-600 border-gray-300 rounded" ng-model="vm.replaceExisting" />
+            <span class="text-sm text-gray-700">Replace existing advisor if present</span>
+          </label>
+          <div class="flex items-center gap-2">
+            <button type="button"
+                    class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+                    ng-disabled="vm.loading"
+                    ng-click="vm.assignBulk()">
+              <i class="fas fa-user-plus mr-1"></i> Assign Bulk
+            </button>
+          </div>
+        </div>
+
+        <!-- Result -->
+        <div class="mt-2" ng-if="vm.bulkResult">
+          <div class="text-sm text-gray-700 mb-2">Result</div>
+          <div class="overflow-auto border border-gray-200 rounded">
+            <table class="min-w-full text-sm">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="text-left px-3 py-2 border-b">Student ID</th>
+                  <th class="text-left px-3 py-2 border-b">Status</th>
+                  <th class="text-left px-3 py-2 border-b">Message</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="r in (vm.bulkResult.results || [])" class="odd:bg-white even:bg-gray-50">
+                  <td class="px-3 py-2 border-b">{{r.student_id || '-'}}</td>
+                  <td class="px-3 py-2 border-b">
+                    <span class="inline-flex px-2 py-1 text-xs rounded"
+                          ng-class="{'bg-green-100 text-green-700': r.ok, 'bg-yellow-100 text-yellow-700': !r.ok}">
+                      {{r.ok ? 'OK' : 'SKIPPED'}}
+                    </span>
+                  </td>
+                  <td class="px-3 py-2 border-b">{{r.message || '-'}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Quick Switch -->
+    <div class="col-span-1 bg-white shadow border border-gray-200 rounded">
+      <div class="p-4 border-b border-gray-200">
+        <h2 class="text-lg font-medium text-gray-800">Quick Switch Advisor</h2>
+        <p class="text-sm text-gray-500">Move all active advisees from one advisor to another.</p>
+      </div>
+      <div class="p-4 space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">From Advisor</label>
+          <div class="flex items-center gap-2">
+            <select class="w-full"
+                    ng-model="vm.fromAdvisorId"
+                    ng-options="o.id as o.text for o in vm.fromAdvisorOptions track by o.id"
+                    select2
+                    select2-watch="vm.fromAdvisorOptions"
+                    placeholder="Select source advisor..."
+                    select2-allow-clear>
+              <option value=""></option>
+            </select>
+            <button type="button" class="px-3 py-2 text-sm rounded bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100"
+                    ng-click="vm.searchFromAdvisors()">
+              <i class="fas fa-sync-alt"></i>
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">To Advisor</label>
+          <div class="flex items-center gap-2">
+            <select class="w-full"
+                    ng-model="vm.toAdvisorId"
+                    ng-options="o.id as o.text for o in vm.toAdvisorOptions track by o.id"
+                    select2
+                    select2-watch="vm.toAdvisorOptions"
+                    placeholder="Select target advisor..."
+                    select2-allow-clear>
+              <option value=""></option>
+            </select>
+            <button type="button" class="px-3 py-2 text-sm rounded bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100"
+                    ng-click="vm.searchToAdvisors()">
+              <i class="fas fa-sync-alt"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex justify-end">
+          <button type="button"
+                  class="px-4 py-2 rounded bg-amber-600 text-white hover:bg-amber-700 disabled:opacity-50"
+                  ng-disabled="vm.loading"
+                  ng-click="vm.switchAll()">
+            <i class="fas fa-exchange-alt mr-1"></i> Switch All
+          </button>
+        </div>
+
+        <div class="mt-2 text-sm" ng-if="vm.switchResult">
+          <div class="grid grid-cols-2 gap-2">
+            <div><span class="text-gray-500">From Advisor:</span> <span class="font-medium">{{vm.switchResult.from_advisor_id}}</span></div>
+            <div><span class="text-gray-500">To Advisor:</span> <span class="font-medium">{{vm.switchResult.to_advisor_id}}</span></div>
+            <div><span class="text-gray-500">Processed:</span> <span class="font-medium">{{vm.switchResult.total_processed}}</span></div>
+            <div><span class="text-gray-500">Switched:</span> <span class="font-medium text-green-700">{{vm.switchResult.switched}}</span></div>
+            <div><span class="text-gray-500">Skipped:</span> <span class="font-medium text-amber-700">{{vm.switchResult.skipped}}</span></div>
+          </div>
+          <div class="mt-3" ng-if="(vm.switchResult.errors || []).length">
+            <div class="text-red-700 font-medium mb-1">Errors</div>
+            <ul class="list-disc ml-5">
+              <li ng-repeat="e in vm.switchResult.errors">{{(e.student_id||'-')}}: {{e.message}}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lookup -->
+    <div class="col-span-2 bg-white shadow border border-gray-200 rounded">
+      <div class="p-4 border-b border-gray-200">
+        <h2 class="text-lg font-medium text-gray-800">Lookup Student Advisor</h2>
+        <p class="text-sm text-gray-500">Query current advisor and full history by student ID or student number.</p>
+      </div>
+      <div class="p-4 space-y-3">
+        <!-- Student autocomplete -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Student</label>
+          <input type="text"
+                 class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                 placeholder="Search or select a student..."
+                 pui-autocomplete
+                 ng-model="vm.lookupStudentSelectId"
+                 pui-source="vm.lookupStudentItems"
+                 pui-item-key="id"
+                 pui-label="(((item.student_number && item.student_number.length) ? item.student_number : ('ID:' + item.id)) + ' — ' + (item.last_name || '') + ', ' + (item.first_name || ''))"
+                 pui-on-query="vm.onLookupStudentQuery($query)"
+                 pui-on-select="vm.onLookupStudentSelected()"
+                 pui-min-chars="1"
+                 pui-query-debounce="250" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Student ID</label>
+          <input type="number"
+                 class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                 placeholder="e.g. 158"
+                 ng-model="vm.lookupStudentId" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Student Number</label>
+          <input type="text"
+                 class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                 placeholder="e.g. 2021-12345"
+                 ng-model="vm.lookupStudentNumber" />
+        </div>
+        <div class="flex justify-end">
+          <button type="button"
+                  class="px-4 py-2 rounded bg-gray-800 text-white hover:bg-gray-900 disabled:opacity-50"
+                  ng-disabled="vm.loading"
+                  ng-click="vm.lookup()">
+            <i class="fas fa-search mr-1"></i> Lookup
+          </button>
+        </div>
+
+        <div class="mt-3" ng-if="vm.lookupResult">
+          <div class="text-sm text-gray-600 mb-2">
+            <div><span class="text-gray-500">Student ID:</span> <span class="font-medium">{{vm.lookupResult.student.id}}</span></div>
+            <div><span class="text-gray-500">Student Number:</span> <span class="font-medium">{{vm.lookupResult.student.student_number}}</span></div>
+            <div><span class="text-gray-500">Current Advisor:</span> <span class="font-medium">{{ (vm.lookupResult.current &amp;&amp; vm.lookupResult.current.advisor_name) || vm.lookupResult.student.current_advisor_name || '-' }}</span></div>
+          </div>
+          <div class="text-sm">
+            <div class="font-medium mb-1">History</div>
+            <div class="overflow-auto border border-gray-200 rounded" ng-if="(vm.lookupResult.history || []).length">
+              <table class="min-w-full text-sm">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="text-left px-3 py-2 border-b">Advisor</th>
+                    <th class="text-left px-3 py-2 border-b">Active</th>
+                    <th class="text-left px-3 py-2 border-b">Started</th>
+                    <th class="text-left px-3 py-2 border-b">Ended</th>
+                    <th class="text-left px-3 py-2 border-b">Dept</th>
+                    <th class="text-left px-3 py-2 border-b">Campus</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="h in vm.lookupResult.history" class="odd:bg-white even:bg-gray-50">
+                    <td class="px-3 py-2 border-b">{{h.advisor_name || h.advisor_id}}</td>
+                    <td class="px-3 py-2 border-b">
+                      <span class="inline-flex px-2 py-1 text-xs rounded"
+                            ng-class="{'bg-green-100 text-green-700': h.is_active === 1, 'bg-gray-100 text-gray-700': h.is_active !== 1}">
+                        {{h.is_active === 1 ? 'Yes' : 'No'}}
+                      </span>
+                    </td>
+                    <td class="px-3 py-2 border-b">{{h.started_at || '-'}}</td>
+                    <td class="px-3 py-2 border-b">{{h.ended_at || '-'}}</td>
+                    <td class="px-3 py-2 border-b">{{h.department_code || '-'}}</td>
+                    <td class="px-3 py-2 border-b">{{h.campus_name || '-'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="text-gray-500" ng-if="!(vm.lookupResult.history || []).length">
+              No history.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Global messages -->
+  <div class="mt-4" ng-if="vm.error">
+    <div class="px-4 py-3 rounded bg-red-50 text-red-700 border border-red-200">
+      <i class="fas fa-exclamation-triangle mr-1"></i> {{vm.error}}
+    </div>
+  </div>
+  <div class="mt-4" ng-if="vm.message">
+    <div class="px-4 py-3 rounded bg-green-50 text-green-700 border border-green-200">
+      <i class="fas fa-check mr-1"></i> {{vm.message}}
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="fixed bottom-4 right-4" ng-if="vm.loading">
+    <div class="px-4 py-2 rounded bg-gray-800 text-white shadow flex items-center gap-2">
+      <span class="inline-block h-3 w-3 rounded-full border-2 border-white border-t-transparent animate-spin"></span>
+      <span>Processing...</span>
+    </div>
+  </div>
+</div>

@@ -117,6 +117,7 @@
           // { label: 'Faculty Loading', path: '/faculty-loading' },
           { label: 'Faculty Loading', path: '/faculty-loading/by-faculty' },
           { label: 'Grading Systems', path: '/grading-systems' },
+          { label: 'Advisors', path: '/advisors' },
           { label: 'Grading Sheet', path: '/academics/grading-sheet' }
         ]
       },
