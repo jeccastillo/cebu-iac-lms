@@ -402,6 +402,8 @@ class PaymentGatewayController extends Controller
                 $p->remarks = 'Paynamics';
                 $p->save();
 
+                // $p->sendEmailStudent($p);
+
                 return response()->json([
                     'success' => true,
                     'gateway' => 'paynamics',
@@ -435,15 +437,53 @@ class PaymentGatewayController extends Controller
                     ], $conf['bill_to'] ?? []),
                 ]);
 
+                
+                $signedFieldNames = explode(",",$fields["signed_field_names"]);
+                foreach ($signedFieldNames as $field) {
+                    $dataToSign[] = $field . "=" . $fields[$field];
+                }
+
+                $dataToSign = implode(",",$dataToSign);
+
+                // dd($fields->secret_key);
+
+                $signature = base64_encode(hash_hmac('sha256', $dataToSign, $conf['secret_key'], true));
+                $arrPostData = $fields;
+                $arrPostData['signature'] = $signature;
+
+
+                // $data['success'] = true;
+                // $data['post_data'] = $arrPostData;
+
+                // return response()->json($data);
+                
                 $p->remarks = 'BDO Pay';
                 $p->save();
+
+                $mixResponse = $this->executeCurl(array(
+                    // CURLOPT_URL => $conf['url'],
+                    CURLOPT_URL => 'https://secureacceptance.cybersource.com/pay',
+                    CURLOPT_RETURNTRANSFER => true,                                        
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_SSL_VERIFYPEER  => false,
+                    CURLOPT_POSTFIELDS  => $fields,
+                    CURLOPT_HTTPHEADER  => array(
+                        "X-HTTP-Method-Override: POST",
+                        'Content-Type: application/json', // Only USE this when requesting JSON data
+                    ),
+                ));
+
+                dd($mixResponse);
 
                 return response()->json([
                     'success' => true,
                     'gateway' => 'bdo_pay',
                     'request_id' => $requestId,
-                    'post_data' => $fields,
-                    'action_url' => (string) $conf['url'],
+                    // 'post_data' => $fields,
+                    'post_data' => $arrPostData,
+                    // 'action_url' => (string) $conf['url'],
+                    // 'action_url' => 'https://sms-makati.iacademy.edu.ph',
                 ]);
             }
 
@@ -451,7 +491,7 @@ class PaymentGatewayController extends Controller
                 // MaxxPayment (BDO installment provider)
                 $conf = config('payments.maxx');
                 $urlBase = $isStaging ? ($conf['url']['staging'] ?? '') : ($conf['url']['prod'] ?? '');
-                $mc_tc = (string) $conf['mc_code'];
+                $mc_tc = $isStaging  ? (string)($conf['mc_code']['staging'] ?? '') : (string)($conf['mc_code']['prod'] ?? '');
                 $options = (string) $conf['options_json'];
                 $successUrl = config('payments.frontend.success_url', '/#/payments/success');
                 $failureUrl = config('payments.frontend.failure_url', '/#/payments/failure');
@@ -467,6 +507,21 @@ class PaymentGatewayController extends Controller
                     '&SC_FAILURL=' . rawurlencode($failureUrl) .
                     '&SC_CANCELURL=' . rawurlencode($cancelUrl) .
                     '&SC_CUR_DATA=PHP|1&SC_FREDIRECT=1';
+                
+
+                $mixResponse = $this->executeCurl(array(
+                    CURLOPT_URL => $fullUrl,
+                    CURLOPT_RETURNTRANSFER => true,                                        
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_SSL_VERIFYPEER  => false,
+                    CURLOPT_HTTPHEADER  => array(
+                        "X-HTTP-Method-Override: POST",
+                        'Content-Type: application/json', // Only USE this when requesting JSON data
+                    ),
+                ));
+
+                $mixResponse = str_replace('1|','', $mixResponse);
 
                 $p->remarks = 'BDO installment';
                 $p->save();
@@ -475,7 +530,7 @@ class PaymentGatewayController extends Controller
                     'success' => true,
                     'gateway' => 'maxx_payment',
                     'request_id' => $requestId,
-                    'payment_link' => $fullUrl,
+                    'payment_link' => $mixResponse,
                 ]);
             }
 
@@ -724,5 +779,19 @@ class PaymentGatewayController extends Controller
         $params['signature'] = $signature;
 
         return $params;
+    }
+
+    private function executeCurl($arrOptions)
+    {
+
+        $mixCH = curl_init();
+
+        foreach ($arrOptions as $strCurlOpt => $mixCurlOptValue) {
+            curl_setopt($mixCH, $strCurlOpt, $mixCurlOptValue);
+        }
+
+        $mixResponse = curl_exec($mixCH);
+        curl_close($mixCH);
+        return $mixResponse;
     }
 }

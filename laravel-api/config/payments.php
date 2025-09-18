@@ -46,7 +46,10 @@ return [
             'prod'    => env('MAXX_URL_PROD', 'https://secure.maxxpayment.com/api/mp?live=1'),
             'staging' => env('MAXX_URL_STAGING', 'https://sandbox.maxxpayment.com/api/mp/?live=0'),
         ],
-        'mc_code'      => env('MAXX_MC_CODE', 'SC000419'),
+        'mc_code'      => [
+            'prod'      => env('MAXX_MC_CODE_PROD', 'SC000419'),
+            'staging'      => env('MAXX_MC_CODE_STAGING', 'T0000454'),
+        ],
         'options_json' => env('MAXX_OPTIONS_JSON', '{"show_paymode":"1,2,3,4","show_payterm":"3,6,9,12,18,24"}'),
         // Notification endpoints (webhooks)
         'webhook' => [
