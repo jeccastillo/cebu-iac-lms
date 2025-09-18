@@ -68,18 +68,19 @@ class InvoicePdf
         $pdf->AddPage('P', 'Letter');
         $pdf->SetAutoPageBreak(true, 15);
         $pdf->SetTextColor(0, 0, 0);
+        $pageW = $pdf->GetPageWidth();
 
         // Header: Company name and address lines
         $pdf->SetFont('Helvetica', 'B', 15);
-        $this->text($pdf, 108, 18, strtoupper($companyName), 'C');
+        $this->text($pdf, 0, 18, strtoupper($companyName), 'C', $pageW);
         $pdf->SetFont('Helvetica', '', 9);
         $yHdr = 24;
         foreach ($companyLines as $ln) {
-            $this->text($pdf, 108, $yHdr, trim((string)$ln), 'C');
+            $this->text($pdf, 0, $yHdr, trim((string)$ln), 'C', $pageW);
             $yHdr += 5;
         }
         if ($companyTin !== '') {
-            $this->text($pdf, 108, $yHdr, (string)$companyTin, 'C');
+            $this->text($pdf, 0, $yHdr, (string)$companyTin, 'C', $pageW);
             $yHdr += 6;
         }
 
@@ -91,8 +92,8 @@ class InvoicePdf
         $pdf->SetFont('Helvetica', 'B', 12);
         $this->text($pdf, 174, 38, ($number === null || $number === '') ? '-' : (string) $number, 'R', 30);
         $pdf->SetFont('Helvetica', '', 9);
-        $this->text($pdf, 150, 44, 'Date:', 'L', 25);
-        $this->text($pdf, 174, 44, ($date ?: ''), 'R', 30);
+        // $this->text($pdf, 150, 44, 'Date:', 'L', 25);
+        // $this->text($pdf, 174, 44, ($date ?: ''), 'R', 30);
 
         // Sales type checkboxes (Cash vs Charge)
         // Draw square helper
@@ -107,33 +108,41 @@ class InvoicePdf
             }
         };
         $pdf->SetFont('Helvetica', '', 10);
-        $drawCheckbox($pdf, 20, 48, $cashSale === true);
-        $this->text($pdf, 26, 49, 'Cash Sales');
-        $drawCheckbox($pdf, 60, 48, $cashSale === false);
-        $this->text($pdf, 66, 49, 'Charge Sales');
+        // Align checkboxes row with the "Invoice No:" row (y ~ 38)
+        $drawCheckbox($pdf, 20, 36, $cashSale === true);
+        $this->text($pdf, 26, 38, 'Cash Sales');
+        $drawCheckbox($pdf, 60, 36, $cashSale === false);
+        $this->text($pdf, 66, 38, 'Charge Sales');
 
         // Buyer block (Sold to / Address / TIN)
-        $pdf->SetFont('Helvetica', '', 9.5);
-        $this->text($pdf, 15, 56, 'Sold to:');
+        $pdf->SetFont('Helvetica', '', 10);
+        $this->text($pdf, 15, 46, 'Sold to:');
         $pdf->SetFont('Helvetica', 'B', 10);
-        $this->text($pdf, 35, 56, strtoupper(trim($studentName)));
-        $pdf->SetFont('Helvetica', '', 9.5);
-        $this->text($pdf, 15, 62, 'Address:');
-        $this->text($pdf, 35, 62, $soldToAddress !== '' ? $soldToAddress : '');
-        $this->text($pdf, 150, 56, 'Date:', 'L', 20);
-        $this->text($pdf, 170, 56, ($date ?: ''), 'R', 32);
-        $this->text($pdf, 150, 62, 'TIN:', 'L', 20);
-        $this->text($pdf, 170, 62, $soldToTin, 'R', 32);
+        $this->text($pdf, 35, 46, strtoupper(trim($studentName)));
+        $pdf->SetFont('Helvetica', '', 10);
+        $this->text($pdf, 15, 52, 'Address:');
+        // MultiCell for long address; keep clear off the right info column
+        $addrStartX = 35; $addrStartY = 50; $addrW = 110; $addrLineH = 5;
+        $pdf->SetXY($addrStartX, $addrStartY);
+        $pdf->MultiCell($addrW, $addrLineH, ($soldToAddress !== '' ? strtoupper($soldToAddress) : ''), 0, 'L');
+        $addrEndY = $pdf->GetY();
+
+        // Right info column
+        $this->text($pdf, 150, 46, 'Date:', 'L', 20);
+        $this->text($pdf, 170, 46, ($date ?: ''), 'L', 32);
+        $this->text($pdf, 150, 52, 'TIN:', 'L', 20);
+        $this->text($pdf, 170, 52, $soldToTin, 'L', 32);
 
         // Items table
         $tableX = 8; $tableW = 196;
         // Expand column widths to better utilize Letter width and reduce side margins
         $colDescW = 130; $colQtyW = 18; $colPriceW = 26; $colAmtW = 26; // total = 200mm
-        $y = 70;
+        // Start table lower if address wrapped to multiple lines
+        $yTable = max(70, (isset($addrEndY) ? ($addrEndY + 8) : 70));
         $pdf->SetDrawColor(0,0,0); $pdf->SetLineWidth(0.2);
 
         // Header row
-        $pdf->SetXY($tableX, $y);
+        $pdf->SetXY($tableX, $yTable);
         $pdf->SetFont('Helvetica', 'B', 9);
         $pdf->Cell($colDescW, 8, 'ITEM DESCRIPTION', 1, 0, 'C');
         $pdf->Cell($colQtyW, 8, 'Quantity', 1, 0, 'C');
@@ -158,7 +167,7 @@ class InvoicePdf
                 : ($qty * $price);
 
             $noteOnly = !empty($line['note_only']);
-            $pdf->SetXY($tableX, $y + 8 + ($rowsPrinted * $rowH));
+            $pdf->SetXY($tableX, $yTable + 8 + ($rowsPrinted * $rowH));
             if ($noteOnly) {
                 // note-only spans description column
                 $pdf->Cell($colDescW + $colQtyW + $colPriceW + $colAmtW, $rowH, $this->truncate($desc, 110), 1, 1, 'L');
@@ -172,7 +181,7 @@ class InvoicePdf
         }
         // Fill remaining blank rows
         while ($rowsPrinted < $maxRows) {
-            $pdf->SetXY($tableX, $y + 8 + ($rowsPrinted * $rowH));
+            $pdf->SetXY($tableX, $yTable + 8 + ($rowsPrinted * $rowH));
             $pdf->Cell($colDescW, $rowH, '', 1, 0);
             $pdf->Cell($colQtyW,  $rowH, '', 1, 0);
             $pdf->Cell($colPriceW,$rowH, '', 1, 0);
@@ -180,7 +189,7 @@ class InvoicePdf
             $rowsPrinted++;
         }
 
-        $yAfterTable = $y + 8 + ($maxRows * $rowH) + 4;
+        $yAfterTable = $yTable + 8 + ($maxRows * $rowH) + 4;
 
         // Left block: PAYMENT IN FORM OF
         $leftX = 12; $leftW = 96; $leftH = 60;
@@ -262,7 +271,7 @@ class InvoicePdf
             $this->text($pdf, 140, 265, strtoupper((string)$footerName), 'L', 60);
         }
         $pdf->SetFont('Helvetica', 'I', 9);
-        $this->text($pdf, 108, 255, $companyName, 'C');
+        $this->text($pdf, 0, 255, $companyName, 'C', $pageW);
 
         return $pdf->Output('S');
     }

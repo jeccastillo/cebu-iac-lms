@@ -26,7 +26,7 @@ class PaymentDetailAdminService
         $numberInvoice = $col('invoice_number');
 
         // Method may be 'method' or 'payment_method'
-        $method = $col('method') ?: $col('payment_method');
+        $method = $col('method') ?: $col('pmethod');
 
         // Prefer 'paid_at', then 'date', else 'created_at'
         $date = $col('paid_at') ?: ($col('date') ?: $col('created_at'));

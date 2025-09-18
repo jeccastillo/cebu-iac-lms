@@ -139,8 +139,9 @@ class InvoiceController extends Controller
         }
         if ($total === null) $total = 0.0;
 
-        // Student name
+        // Student name and address
         $studentName = '';
+        $studentAddress = '';
         try {
             if (!empty($invoice['student_id'])) {
                 $u = DB::table('tb_mas_users')->where('intID', (int) $invoice['student_id'])->first();
@@ -150,6 +151,9 @@ class InvoiceController extends Controller
                     $middle = isset($u->strMiddlename) ? trim((string) $u->strMiddlename) : '';
                     $studentName = ($last !== '' ? ($last . ', ') : '') . $first . ($middle !== '' ? (' ' . $middle) : '');
                     $studentNumber = isset($u->strStudentNumber) ? trim((string) $u->strStudentNumber) : '';
+                    if (isset($u->strAddress) && trim((string) $u->strAddress) !== '') {
+                        $studentAddress = trim((string) $u->strAddress);
+                    }
                 }
             }
         } catch (\Throwable $e) {}
@@ -446,11 +450,33 @@ class InvoiceController extends Controller
             // ignore campus lookup errors
         }
 
+        // Determine Cash vs Charge checkbox based on payment_details.method/payment_method
+        $cashSale = false;
+        try {
+            $colsPd = app(PaymentDetailAdminService::class)->detectColumns();
+            // print_r($colsPd);
+            if (
+                ($colsPd['exists'] ?? false) &&
+                !empty($colsPd['table']) &&
+                !empty($colsPd['method']) &&
+                !empty($colsPd['number_invoice']) &&
+                !empty($invNo)
+            ) {                
+                $cashSale = DB::table($colsPd['table'])
+                    ->where($colsPd['number_invoice'], $invNo)
+                    ->where($colsPd['method'], 'Cash')
+                    ->exists();
+            }
+        } catch (\Throwable $e) {
+            // default remains false (Charge Sales)
+        }
+
         $dto = [
             'number'       => $invNo,
             'date'         => $dateStr,
             'student_name' => $studentName,
             'student_number'=> $studentNumber,
+            'sold_to_address' => $studentAddress,
             'term_label'   => $termLabel,
             'items'        => $items,
             'total'        => (float) $total,
@@ -461,7 +487,7 @@ class InvoiceController extends Controller
             'company_name' => $companyName,
             'company_lines'=> $companyLines,
             'company_tin'  => $companyTin,
-            'cash_sale'    => false,
+            'cash_sale'    => (bool) $cashSale,
         ];
 
         // Render and stream inline
