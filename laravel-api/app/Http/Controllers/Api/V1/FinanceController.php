@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Services\FinanceService;
 use App\Services\StudentLedgerService;
+use App\Services\Pdf\OfficialReceiptPdf;
+use App\Services\PaymentDetailAdminService;
 
 class FinanceController extends Controller
 {
@@ -17,6 +19,212 @@ class FinanceController extends Controller
     public function __construct(FinanceService $finance)
     {
         $this->finance = $finance;
+    }
+
+    /**
+     * GET /api/v1/finance/or/{or}/pdf
+     * Streams an Official Receipt PDF inline.
+     */
+    public function orPdf($or, Request $request)
+    {
+        $orStr = (string) $or;
+
+        // Defaults
+        $companyName = 'iACADEMY, Inc.';
+        $companyTin  = 'VAT REG TIN: 214-749-003-00003';
+        $companyLines = [];
+
+        // Resolve campus/company address (best-effort; mimic invoice header behavior)
+        try {
+            $campusId = null;
+            // Prefer explicit campus header or query
+            $hdrCampus = $request->header('X-Campus-ID');
+            $qpCampus  = $request->query('campus_id');
+            if ($hdrCampus !== null && $hdrCampus !== '' && is_numeric($hdrCampus)) {
+                $campusId = (int) $hdrCampus;
+            } elseif ($qpCampus !== null && $qpCampus !== '' && is_numeric($qpCampus)) {
+                $campusId = (int) $qpCampus;
+            }
+            // If still not provided, try student's campus_id (when resolvable)
+            if (!$campusId && $studentId) {
+                try {
+                    $u = DB::table('tb_mas_users')->where('intID', (int)$studentId)->select('campus_id')->first();
+                    if ($u && isset($u->campus_id) && is_numeric($u->campus_id)) {
+                        $campusId = (int)$u->campus_id;
+                    }
+                } catch (\Throwable $e) {}
+            }
+
+            // Helper to push campus address/description when available
+            $pushCampus = function ($camp) use (&$companyLines) {
+                if (!$camp) return;
+                $addr = trim((string) ($camp->address ?? ''));
+                if ($addr !== '') {
+                    $companyLines[] = $addr;
+                } elseif (!empty($camp->description)) {
+                    $companyLines[] = trim((string) $camp->description);
+                }
+            };
+
+            if ($campusId) {
+                $camp = DB::table('tb_mas_campuses')
+                    ->where('intID', $campusId)
+                    ->select('address', 'description')
+                    ->first();
+                $pushCampus($camp);
+            }
+
+            // Fallback: first campus (active preferred)
+            if (empty($companyLines)) {
+                $camp = DB::table('tb_mas_campuses')
+                    ->orderBy('status', 'desc')
+                    ->orderBy('intID', 'asc')
+                    ->select('address', 'description')
+                    ->first();
+                $pushCampus($camp);
+            }
+
+            // Final fallback: use default Cebu campus lines from spec if still empty
+            if (empty($companyLines)) {
+                $companyLines = [
+                    'Floor Filinvest Cebu Cyberzone Tower Two, Salinas Drive cor. W. Geonzon St.,',
+                    'Cebu IT Park, Apas Cebu City 6000, Cebu Philippines',
+                ];
+            }
+        } catch (\Throwable $e) {
+            // ignore campus lookup errors; use default fallback if empty
+            if (empty($companyLines)) {
+                $companyLines = [
+                    'Floor Filinvest Cebu Cyberzone Tower Two, Salinas Drive cor. W. Geonzon St.,',
+                    'Cebu IT Park, Apas Cebu City 6000, Cebu Philippines',
+                ];
+            }
+        }
+
+        // Find a payment_details row by OR number (normalized columns)
+        $pd = null;
+        $studentId = null;
+        $studentNumber = null;
+        $method = null;
+        $postedAt = null;
+        $invoiceRefNo = null;
+        $pdDesc = null;
+        $pdAmount = null;
+
+        try {
+            /** @var \App\Services\PaymentDetailAdminService $pdSvc */
+            $pdSvc = app(PaymentDetailAdminService::class);
+            $cols = $pdSvc->detectColumns();
+            if ($cols['exists'] && $cols['number_or']) {
+                $select = ['id'];
+                if ($cols['student_id']) $select[] = $cols['student_id'] . ' as student_information_id';
+                if ($cols['student_number']) $select[] = $cols['student_number'] . ' as student_number';
+                if ($cols['description']) $select[] = $cols['description'] . ' as description';
+                if ($cols['subtotal_order']) $select[] = $cols['subtotal_order'] . ' as subtotal_order';
+                if ($cols['number_invoice']) $select[] = $cols['number_invoice'] . ' as invoice_number';
+                if ($cols['remarks']) $select[] = $cols['remarks'] . ' as remarks';
+                if ($cols['method']) $select[] = $cols['method'] . ' as method';
+                if ($cols['date']) $select[] = $cols['date'] . ' as posted_at';
+
+                $pd = DB::table($cols['table'])
+                    ->where($cols['number_or'], $orStr)
+                    ->orderBy('id', 'desc')
+                    ->select($select)
+                    ->first();
+
+                if ($pd) {
+                    $studentId     = isset($pd->student_information_id) ? (int) $pd->student_information_id : null;
+                    $studentNumber = isset($pd->student_number) ? (string) $pd->student_number : null;
+                    $method        = isset($pd->method) ? (string) $pd->method : null;
+                    $postedAt      = isset($pd->posted_at) ? (string) $pd->posted_at : null;
+                    $invoiceRefNo  = isset($pd->invoice_number) ? (string) $pd->invoice_number : null;
+                    $pdDesc        = isset($pd->description) ? (string) $pd->description : null;
+                    $pdAmount      = isset($pd->subtotal_order) ? (float) $pd->subtotal_order : null;
+                }
+            }
+        } catch (\Throwable $e) {
+            // fail-open
+        }
+
+        // Resolve "RECEIVED FROM" information (student)
+        $rfName = '';
+        $rfTin = '';
+        $rfAddress = '';
+        if ($studentId) {
+            try {
+                $u = DB::table('tb_mas_users')->where('intID', $studentId)->first();
+                if ($u) {
+                    // Common columns in tb_mas_users
+                    $ln = isset($u->strLastname) ? trim((string)$u->strLastname) : '';
+                    $fn = isset($u->strFirstname) ? trim((string)$u->strFirstname) : '';
+                    $mn = isset($u->strMiddlename) ? trim((string)$u->strMiddlename) : '';
+                    $rfName = trim($ln . ', ' . $fn . ' ' . $mn);
+                    if ($rfName === ',' || $rfName === '') {
+                        // Fallback to any name-like fields if present
+                        $rfName = trim((string)($u->strName ?? ''));
+                    }
+                    $rfAddress = isset($u->strAddress) ? (string)$u->strAddress : '';
+                    // No stable TIN field in legacy tables; leave blank
+                    $rfTin = '';
+                }
+            } catch (\Throwable $e) {
+                // ignore user lookup
+            }
+        }
+
+        // Aggregate OR items/total from tb_mas_transactions (preferred)
+        $items = [];
+        $total = 0.0;
+        $orAgg = $this->finance->orLookup($orStr);
+        if ($orAgg !== null) {
+            foreach ($orAgg['items'] as $it) {
+                $items[] = [
+                    'description' => (string) ($it['type'] ?? ''),
+                    'amount'      => (float) ($it['amount'] ?? 0),
+                ];
+            }
+            $total = (float) ($orAgg['total'] ?? 0);
+            if (!$postedAt && !empty($orAgg['date'])) {
+                $postedAt = (string) $orAgg['date'];
+            }
+        } elseif ($pdDesc !== null && $pdAmount !== null) {
+            // Fallback to payment_details single item
+            $items[] = [
+                'description' => $pdDesc,
+                'amount'      => (float) $pdAmount,
+            ];
+            $total = (float) $pdAmount;
+        }
+
+        // Build DTO for renderer
+        $dto = [
+            'company_name'  => $companyName,
+            'company_lines' => $companyLines,
+            'company_tin'   => $companyTin,
+
+            'or_no'         => $orStr,
+            'payment_date'  => $postedAt ?: '',
+            'account_no'    => $studentNumber ?: '',
+            'method'        => $method ?: '',
+
+            'received_from_name'    => strtoupper($rfName),
+            'received_from_tin'     => $rfTin,
+            'received_from_address' => strtoupper($rfAddress),
+
+            'items'         => $items,
+            'total'         => (float) $total,
+            'invoice_ref_no'=> $invoiceRefNo ?: '',
+            'received_by_name' => (string) ($request->header('X-Authorized-Name') ?? ''),
+        ];
+
+        // Render and stream inline
+        $renderer = app(OfficialReceiptPdf::class);
+        $pdf = $renderer->render($dto);
+
+        return response($pdf, 200, [
+            'Content-Type'        => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="or-' . $orStr . '.pdf"',
+        ]);
     }
 
     /**

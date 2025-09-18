@@ -311,6 +311,8 @@ Route::prefix('v1')->group(function () {
     // Finance endpoints (baseline)
     Route::get('/finance/transactions', [FinanceController::class, 'transactions']);
     Route::get('/finance/or-lookup', [FinanceController::class, 'orLookup']);
+    // Official Receipt PDF
+    Route::get('/finance/or/{or}/pdf', [FinanceController::class, 'orPdf'])->middleware('role:finance,admin');
     Route::get('/finance/payment-details', [FinanceController::class, 'paymentDetails']);
     Route::post('/finance/payment-details/debit', [PaymentJournalController::class, 'debit'])->middleware('role:finance,admin');
     Route::post('/finance/payment-details/credit', [PaymentJournalController::class, 'credit'])->middleware('role:finance,admin');
