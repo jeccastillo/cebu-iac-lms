@@ -1413,7 +1413,17 @@ if (vm.ui.showAssignNumberModal == null) vm.ui.showAssignNumberModal = false;
         if (matched) {
           vm.payment.invoice_number = (matched.invoice_number || matched.number || null);
           // compute remaining cap and clamp amount if needed
-          try { if (typeof vm.computeInvoiceRemaining === 'function') vm.computeInvoiceRemaining(); } catch (_e) {}
+          var _remVal = null;
+          try { if (typeof vm.computeInvoiceRemaining === 'function') { _remVal = vm.computeInvoiceRemaining(); } } catch (_e) {}
+          // Auto-fill Amount with remaining when selecting an invoice (truncate to 2 decimals)
+          try {
+            var nRem = parseFloat(_remVal);
+            if (isFinite(nRem) && nRem >= 0) {
+              var trunc = Math.floor(nRem * 100) / 100;
+              vm.payment = vm.payment || {};
+              vm.payment.amount = trunc;
+            }
+          } catch (_eFill) {}
           try { if (typeof vm.onAmountChange === 'function') vm.onAmountChange(); } catch (_e2) {}
         } else {
           vm.payment.invoice_number = null;

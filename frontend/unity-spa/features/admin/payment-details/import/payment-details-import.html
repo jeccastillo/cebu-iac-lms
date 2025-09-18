@@ -1,0 +1,44 @@
+<div class="max-w-4xl mx-auto bg-white p-6 rounded shadow border border-gray-200">
+  <h1 class="text-2xl font-semibold mb-4">Payment Details Import</h1>
+
+  <div class="mb-4">
+    <button class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+            ng-click="vm.downloadTemplate()">
+      <i class="fas fa-file-excel mr-2"></i> Download Template
+    </button>
+  </div>
+
+  <div class="mb-4">
+    <label class="block mb-2 font-medium text-gray-700" for="importFile">Select Excel File (.xlsx, .xls, .csv)</label>
+    <input type="file" id="importFile" ngf-select ng-model="vm.importFile" name="file"
+           accept=".xlsx,.xls,.csv" ngf-max-size="20MB" ngf-change="vm.onFileSelected($files)" />
+  </div>
+
+  <div class="mb-4">
+    <button class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+            ng-disabled="!vm.importFile || vm.importing"
+            ng-click="vm.upload()">
+      <i class="fas fa-upload mr-2"></i> {{ vm.importing ? 'Importing...' : 'Import' }}
+    </button>
+  </div>
+
+  <div ng-if="vm.importError" class="mb-4 p-3 bg-red-50 border border-red-300 text-red-700 rounded">
+    <i class="fas fa-exclamation-triangle mr-2"></i> {{ vm.importError }}
+  </div>
+
+  <div ng-if="vm.importSummary" class="mb-4 p-3 bg-green-50 border border-green-300 text-green-700 rounded">
+    <div class="font-semibold mb-2">Import Summary</div>
+    <div>Total Rows: {{ vm.importSummary.totalRows }}</div>
+    <div>Inserted: {{ vm.importSummary.inserted }}</div>
+    <div>Updated: {{ vm.importSummary.updated }}</div>
+    <div>Skipped: {{ vm.importSummary.skipped }}</div>
+    <div ng-if="vm.importSummary.errors && vm.importSummary.errors.length" class="mt-3">
+      <div class="font-semibold mb-1">Errors (showing up to 50):</div>
+      <ul class="list-disc pl-6 max-h-48 overflow-auto text-sm">
+        <li ng-repeat="e in (vm.importSummary.errors | limitTo:50)">
+          Line {{ e.line }} <span ng-if="e.code">[{{ e.code }}]</span>: {{ e.message }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

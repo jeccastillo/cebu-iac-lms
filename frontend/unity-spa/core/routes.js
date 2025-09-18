@@ -592,6 +592,12 @@
         requiredRoles: ["admin"],
       })
 
+      .when("/admin/payment-details/import", {
+        templateUrl: "features/admin/payment-details/import/payment-details-import.html",
+        controller: "PaymentDetailsImportController",
+        controllerAs: "vm",
+        requiredRoles: ["finance_admin","admin"],
+      })
       .when("/admin/payment-details", {
         templateUrl: "features/admin/payment-details/edit.html",
         controller: "AdminPaymentDetailsController",

@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\V1\InitialRequirementsAdminController;
 use App\Http\Controllers\Api\V1\InvoiceController;
 use App\Http\Controllers\Api\V1\PaymentDescriptionController;
 use App\Http\Controllers\Api\V1\PaymentDetailAdminController;
+use App\Http\Controllers\Api\V1\PaymentDetailsImportController;
 use App\Http\Controllers\Api\V1\PaymentModeController;
 use App\Http\Controllers\Api\V1\PaymentJournalController;
 use App\Http\Controllers\Api\V1\FinancePaymentActionsController;
@@ -330,6 +331,10 @@ Route::prefix('v1')->group(function () {
     Route::get('/finance/payment-details/{id}', [PaymentDetailAdminController::class, 'show'])->middleware('role:admin');
     Route::patch('/finance/payment-details/{id}', [PaymentDetailAdminController::class, 'update'])->middleware('role:admin');
     Route::delete('/finance/payment-details/{id}', [PaymentDetailAdminController::class, 'destroy'])->middleware('role:admin');
+
+    // Admin/Finance Admin: Payment Details Import (template + upload)
+    Route::get('/finance/payment-details/import/template', [PaymentDetailsImportController::class, 'template'])->middleware('role:finance_admin,admin');
+    Route::post('/finance/payment-details/import', [PaymentDetailsImportController::class, 'import'])->middleware('role:finance_admin,admin');
 
     // Student Billing (Finance/Admin)
     Route::get('/finance/student-billing', [StudentBillingController::class, 'index'])->middleware('role:finance,admin');

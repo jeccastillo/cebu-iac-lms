@@ -427,17 +427,41 @@ class InvoiceController extends Controller
         }
 
         // Build DTO for renderer
+        // Company/campus header lines and TIN (address sourced from tb_mas_campuses when available)
+        $companyName = 'iACADEMY, Inc.';
+        $companyTin  = 'VAT REG TIN: 214-749-003-00003';
+        $companyLines = [];
+        try {
+            $campusId = $invoice['campus_id'] ?? null;
+            if ($campusId) {
+                $camp = DB::table('tb_mas_campuses')
+                    ->where('intID', (int) $campusId)
+                    ->select('address')
+                    ->first();
+                if ($camp && !empty($camp->address)) {
+                    $companyLines[] = trim((string) $camp->address);
+                }
+            }
+        } catch (\Throwable $e) {
+            // ignore campus lookup errors
+        }
+
         $dto = [
             'number'       => $invNo,
             'date'         => $dateStr,
             'student_name' => $studentName,
-            'student_number'=>$studentNumber,
+            'student_number'=> $studentNumber,
             'term_label'   => $termLabel,
             'items'        => $items,
             'total'        => (float) $total,
             'footer_name'  => $footerName,
             'amount_paid_first_tuition' => $firstTuitionPaid,
             'reservation_signature' => isset($reservationSignature) ? (bool)$reservationSignature : false,
+            // Header/layout fields for new invoice design
+            'company_name' => $companyName,
+            'company_lines'=> $companyLines,
+            'company_tin'  => $companyTin,
+            'cash_sale'    => false,
         ];
 
         // Render and stream inline
