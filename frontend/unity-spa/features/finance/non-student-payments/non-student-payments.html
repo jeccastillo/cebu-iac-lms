@@ -1,0 +1,306 @@
+<div class="space-y-6" ng-cloak>
+  <!-- Page Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-semibold text-gray-900">Non-Student Payments (Payees)</h1>
+      <p class="text-sm text-gray-600 mt-1">
+        Create payment entries for payees (non-students). Requires acting cashier and payment mode.
+      </p>
+    </div>
+    <div class="flex items-center space-x-3">
+      <a href="#!/cashier-admin"
+         class="inline-flex items-center px-3 py-2 rounded-md text-sm font-medium border border-gray-300 text-gray-700 bg-white hover:bg-gray-50"
+         title="Configure Cashier Ranges">
+        <i class="fas fa-cash-register mr-2"></i> Cashier Admin
+      </a>
+      <a href="#!/finance/ledger"
+         class="inline-flex items-center px-3 py-2 rounded-md text-sm font-medium border border-gray-300 text-gray-700 bg-white hover:bg-gray-50"
+         title="Finance Ledger">
+        <i class="fas fa-list mr-2"></i> Finance Ledger
+      </a>
+    </div>
+  </div>
+
+  <!-- Global messages -->
+  <div ng-if="vm.error" class="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+    <i class="fas fa-exclamation-triangle mr-2"></i>{{ vm.error }}
+  </div>
+  <div ng-if="vm.success" class="rounded-md border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800">
+    <i class="fas fa-check-circle mr-2"></i>{{ vm.success }}
+  </div>
+
+  <!-- Cashier status -->
+  <div class="rounded-md border p-4" ng-class="vm.myCashier ? 'border-blue-200 bg-blue-50' : 'border-amber-200 bg-amber-50'">
+    <div ng-if="vm.loading" class="text-sm text-gray-600">
+      <i class="fas fa-spinner fa-spin mr-2"></i> Resolving acting cashier and loading metadata...
+    </div>
+    <div ng-if="!vm.loading && vm.myCashier" class="text-sm text-blue-900">
+      <div class="font-medium mb-1">
+        <i class="fas fa-user-check mr-2"></i> Acting Cashier Resolved
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+        <div>
+          <span class="text-gray-500">Cashier ID:</span>
+          <span class="ml-2 font-semibold">{{ (vm.myCashier.intID || vm.myCashier.id) || 'N/A' }}</span>
+        </div>
+        <div>
+          <span class="text-gray-500">OR Current:</span>
+          <span class="ml-2">{{ vm.myCashier.or_current || '—' }}</span>
+        </div>
+        <div>
+          <span class="text-gray-500">Invoice Current:</span>
+          <span class="ml-2">{{ vm.myCashier.invoice_current || '—' }}</span>
+        </div>
+      </div>
+    </div>
+    <div ng-if="!vm.loading && !vm.myCashier" class="text-sm text-amber-900">
+      <div class="font-medium mb-1">
+        <i class="fas fa-info-circle mr-2"></i> No acting cashier assigned
+      </div>
+      <div>
+        You must be assigned to a cashier range before issuing OR/Invoice numbers.
+        Ask a Cashier Admin to assign you in
+        <a href="#!/cashier-admin" class="text-blue-700 underline">Cashier Admin</a>.
+        You can still submit with Mode = "No Number" if allowed.
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Card -->
+  <form name="nsPayForm" novalidate ng-submit="vm.submit()">
+    <div class="rounded-md border border-gray-200 bg-white p-4 shadow-sm">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Left column -->
+        <div class="space-y-4">
+          <!-- Payee -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Payee</label>
+
+            <!-- Autocomplete (best-effort) -->
+            <div class="relative">
+              <input type="text"
+                     class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                     placeholder="Search payee by name or ID (requires finance_admin/admin)"
+                     ng-model="vm.payeeQuery"
+                     ng-change="vm.searchPayees()"
+                     ng-disabled="vm.payeeLoading || !vm.enablePayeeSearch">
+              <div class="absolute right-2 top-2 text-gray-400" ng-if="vm.payeeLoading">
+                <i class="fas fa-spinner fa-spin"></i>
+              </div>
+            </div>
+
+            <!-- Results dropdown -->
+            <div ng-if="vm.showPayeeResults"
+                 class="mt-1 border border-gray-200 rounded-md bg-white shadow max-h-56 overflow-auto">
+              <div ng-if="!vm.payeeResults.length" class="px-3 py-2 text-sm text-gray-500">
+                No results
+              </div>
+              <button type="button"
+                      class="w-full text-left px-3 py-2 hover:bg-gray-50 text-sm"
+                      ng-repeat="item in vm.payeeResults track by item.id"
+                      ng-click="vm.selectPayee(item)">
+                <div class="font-medium">{{ item.name }}</div>
+                <div class="text-xs text-gray-500">ID: {{ item.id }} &middot; ID Number: {{ item.id_number || '—' }}</div>
+              </button>
+            </div>
+
+            <!-- Selected payee summary -->
+            <div class="mt-2 text-xs text-gray-600" ng-if="vm.form.payee_id">
+              <div><span class="text-gray-500">Selected:</span> {{ vm.form._payee_name || ('#' + vm.form.payee_id) }}</div>
+            </div>
+
+            <!-- Manual fallback -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
+              <div>
+                <label class="block text-xs text-gray-500">Payee ID</label>
+                <input type="number"
+                       class="w-full border border-gray-300 rounded-md px-3 py-2"
+                       placeholder="e.g. 123"
+                       ng-model="vm.form.payee_id"
+                       min="1" required>
+              </div>
+              <div>
+                <label class="block text-xs text-gray-500">Payee ID Number (cross-check)</label>
+                <input type="text"
+                       class="w-full border border-gray-300 rounded-md px-3 py-2"
+                       placeholder="e.g. TEN-0001"
+                       ng-model="vm.form.id_number" required>
+              </div>
+            </div>
+
+            <div class="mt-2">
+              <button type="button"
+                      class="inline-flex items-center px-3 py-1.5 rounded-md text-xs font-medium border border-gray-300 text-gray-700 bg-white hover:bg-gray-50"
+                      ng-click="vm.clearPayee()">
+                <i class="fas fa-undo mr-2"></i> Clear Payee
+              </button>
+            </div>
+          </div>
+
+          <!-- Mode + Number -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Mode</label>
+              <select class="w-full border border-gray-300 rounded-md px-3 py-2"
+                      ng-model="vm.form.mode"
+                      ng-change="vm.onModeChange()"
+                      required>
+                <option ng-repeat="m in vm.modes" ng-value="m.key">{{ m.label }}</option>
+              </select>
+              <p class="text-xs text-gray-500 mt-1">
+                OR: assign Official Receipt; Invoice: assign invoice number; No Number: encode only.
+              </p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Specific Number (optional)</label>
+              <input type="number"
+                     class="w-full border border-gray-300 rounded-md px-3 py-2"
+                     placeholder="Leave blank to auto-use sequence"
+                     ng-model="vm.form.number"
+                     ng-disabled="vm.numberDisabled()">
+              <p class="text-xs text-gray-500 mt-1">
+                Must be within cashier's configured range when provided.
+              </p>
+            </div>
+          </div>
+
+          <!-- Mode of Payment -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Mode of Payment</label>
+            <select class="w-full border border-gray-300 rounded-md px-3 py-2"
+                    ng-model="vm.form.mode_of_payment_id"
+                    ng-options="p.id as p.name for p in vm.paymentModes"
+                    required>
+              <option value="">-- Select Mode of Payment --</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Middle column -->
+        <div class="space-y-4">
+          <!-- Amount -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Amount</label>
+            <input type="number"
+                   class="w-full border border-gray-300 rounded-md px-3 py-2"
+                   ng-attr-step="{{ vm.amountInputAttrs().step }}"
+                   ng-attr-min="{{ vm.amountInputAttrs().min }}"
+                   placeholder="0.00"
+                   ng-change="vm.clampAmount()"
+                   ng-model="vm.form.amount" required>
+          </div>
+
+          <!-- Description -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+            <input type="text"
+                   class="w-full border border-gray-300 rounded-md px-3 py-2"
+                   placeholder="e.g. Walk-in Payment (A)"
+                   maxlength="255"
+                   ng-model="vm.form.description" required>
+            <p class="text-xs text-gray-500 mt-1">Short description for this payment.</p>
+          </div>
+
+          <!-- Remarks -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Remarks</label>
+            <textarea class="w-full border border-gray-300 rounded-md px-3 py-2"
+                      rows="3"
+                      placeholder="Enter remarks (required)"
+                      maxlength="1000"
+                      ng-model="vm.form.remarks" required></textarea>
+          </div>
+        </div>
+
+        <!-- Right column -->
+        <div class="space-y-4">
+          <!-- Optional fields -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Method (optional)</label>
+              <input type="text"
+                     class="w-full border border-gray-300 rounded-md px-3 py-2"
+                     placeholder="e.g. Cash"
+                     ng-model="vm.form.method">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Convenience Fee (optional)</label>
+              <input type="number"
+                     class="w-full border border-gray-300 rounded-md px-3 py-2"
+                     step="0.01" min="0"
+                     placeholder="0.00"
+                     ng-model="vm.form.convenience_fee">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">OR Date (optional)</label>
+              <input type="date"
+                     class="w-full border border-gray-300 rounded-md px-3 py-2"
+                     ng-model="vm.form.or_date">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Posted At (optional)</label>
+              <input type="datetime-local"
+                     class="w-full border border-gray-300 rounded-md px-3 py-2"
+                     ng-model="vm.form.posted_at">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Campus ID (optional)</label>
+              <input type="number"
+                     class="w-full border border-gray-300 rounded-md px-3 py-2"
+                     placeholder="e.g. 1"
+                     ng-model="vm.form.campus_id">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Invoice ID (optional)</label>
+              <input type="number"
+                     class="w-full border border-gray-300 rounded-md px-3 py-2"
+                     placeholder="e.g. 1001"
+                     ng-model="vm.form.invoice_id">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Invoice Number (optional)</label>
+            <input type="number"
+                   class="w-full border border-gray-300 rounded-md px-3 py-2"
+                   placeholder="e.g. 110001"
+                   ng-model="vm.form.invoice_number">
+            <p class="text-xs text-gray-500 mt-1">
+              If Mode = OR and an invoice number is provided, the first payment for that invoice will skip assigning an OR number and use the invoice number instead.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="mt-6 flex items-center space-x-3">
+        <button type="submit"
+                class="inline-flex items-center px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50"
+                ng-disabled="!vm.canSubmit() || vm.submitting">
+          <i class="fas fa-save mr-2" ng-class="{'fa-spin': vm.submitting}" ng-if="vm.submitting"></i>
+          <i class="fas fa-save mr-2" ng-if="!vm.submitting"></i>
+          Submit Payment
+        </button>
+        <button type="button"
+                class="inline-flex items-center px-4 py-2 rounded-md text-sm font-medium border border-gray-300 text-gray-700 bg-white hover:bg-gray-50"
+                ng-click="vm.reset()"
+                ng-disabled="vm.submitting">
+          <i class="fas fa-eraser mr-2"></i>
+          Reset
+        </button>
+      </div>
+
+      <!-- Helper notice -->
+      <div class="mt-4 text-xs text-gray-500">
+        Fields required: Payee ID, ID Number, Mode, Amount, Description, Mode of Payment, Remarks.
+        Optional fields are submitted only if filled.
+      </div>
+    </div>
+  </form>
+</div>

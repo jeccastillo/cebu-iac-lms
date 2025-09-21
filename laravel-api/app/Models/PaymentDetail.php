@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
+use App\Models\Payee;
 // use App\Models\PaymentOrderItem; // Class doesn't exist
 use App\Models\Admissions\AdmissionStudentInformation;
 // use App\Http\Resources\Website\WorkShopResource; // Class doesn't exist
@@ -62,6 +63,12 @@ class PaymentDetail extends Model
     {
         return $this->belongsTo(User::class, 'student_information_id', 'intID');
     }
+
+    public function payee()
+    {
+        return $this->belongsTo(\App\Models\Payee::class, 'payee_id', 'id');
+    }
+
     public function mode()
     {
         return $this->hasOne(PaymentMode::class, 'id', 'mode_of_payment_id');

@@ -86,6 +86,7 @@
           { label: 'Payment Modes', path: '/finance/payment-modes' },
           { label: 'Student Billing', path: '/finance/student-billing' },
           { label: 'Payment Actions', path: '/finance/payment-actions' },
+          { label: 'Non-Student Payments', path: '/finance/non-student-payments' },
           { label: 'Cashier Admin', path: '/cashier-admin' },
           { label: 'Credit/Debit', path: '/finance/debit-credit' },                    
         ]

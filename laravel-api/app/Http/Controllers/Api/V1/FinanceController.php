@@ -104,6 +104,7 @@ class FinanceController extends Controller
         // Find a payment_details row by OR number (normalized columns)
         $pd = null;
         $studentId = null;
+        $payeeId = null;
         $studentNumber = null;
         $method = null;
         $postedAt = null;
@@ -118,6 +119,7 @@ class FinanceController extends Controller
             if ($cols['exists'] && $cols['number_or']) {
                 $select = ['id'];
                 if ($cols['student_id']) $select[] = $cols['student_id'] . ' as student_information_id';
+                if ($cols['payee_id'])   $select[] = $cols['payee_id'] . ' as payee_id';
                 if ($cols['student_number']) $select[] = $cols['student_number'] . ' as student_number';
                 if ($cols['description']) $select[] = $cols['description'] . ' as description';
                 if ($cols['subtotal_order']) $select[] = $cols['subtotal_order'] . ' as subtotal_order';
@@ -134,6 +136,7 @@ class FinanceController extends Controller
 
                 if ($pd) {
                     $studentId     = isset($pd->student_information_id) ? (int) $pd->student_information_id : null;
+                    $payeeId       = isset($pd->payee_id) ? (int) $pd->payee_id : null;
                     $studentNumber = isset($pd->student_number) ? (string) $pd->student_number : null;
                     $method        = isset($pd->method) ? (string) $pd->method : null;
                     $postedAt      = isset($pd->posted_at) ? (string) $pd->posted_at : null;
@@ -146,11 +149,36 @@ class FinanceController extends Controller
             // fail-open
         }
 
-        // Resolve "RECEIVED FROM" information (student)
+        // Resolve "RECEIVED FROM" information (prefer Payee for non-student payments)
         $rfName = '';
         $rfTin = '';
         $rfAddress = '';
-        if ($studentId) {
+        $accountNo = '';
+
+        // Payee branch (non-student)
+        if ($payeeId) {
+            try {
+                $p = DB::table('tb_mas_payee')->where('id', (int) $payeeId)->first();
+                if ($p) {
+                    $ln = isset($p->lastname) ? trim((string)$p->lastname) : '';
+                    $fn = isset($p->firstname) ? trim((string)$p->firstname) : '';
+                    $mn = isset($p->middlename) ? trim((string)$p->middlename) : '';
+                    $rfName = trim($ln . ', ' . $fn . ' ' . $mn);
+                    if ($rfName === ',' || $rfName === '') {
+                        $rfName = trim(($fn . ' ' . $mn . ' ' . $ln));
+                    }
+                    $rfAddress = isset($p->address) ? (string) $p->address : '';
+                    $rfTin = isset($p->tin) ? (string) $p->tin : '';
+                    // Account number for payee: use id_number
+                    $accountNo = isset($p->id_number) ? (string) $p->id_number : '';
+                }
+            } catch (\Throwable $e) {
+                // ignore payee lookup
+            }
+        }
+
+        // Student branch (fallback)
+        if (!$payeeId && $studentId) {
             try {
                 $u = DB::table('tb_mas_users')->where('intID', $studentId)->first();
                 if ($u) {
@@ -166,6 +194,8 @@ class FinanceController extends Controller
                     $rfAddress = isset($u->strAddress) ? (string)$u->strAddress : '';
                     // No stable TIN field in legacy tables; leave blank
                     $rfTin = '';
+                    // Account number for student: student number
+                    $accountNo = $studentNumber ?: '';
                 }
             } catch (\Throwable $e) {
                 // ignore user lookup
@@ -204,7 +234,7 @@ class FinanceController extends Controller
 
             'or_no'         => $orStr,
             'payment_date'  => $postedAt ?: '',
-            'account_no'    => $studentNumber ?: '',
+            'account_no'    => $accountNo ?: '',
             'method'        => $method ?: '',
 
             'received_from_name'    => strtoupper($rfName),
