@@ -444,46 +444,19 @@ class PaymentGatewayController extends Controller
                 }
 
                 $dataToSign = implode(",",$dataToSign);
-
-                // dd($fields->secret_key);
-
                 $signature = base64_encode(hash_hmac('sha256', $dataToSign, $conf['secret_key'], true));
                 $arrPostData = $fields;
                 $arrPostData['signature'] = $signature;
-
-
-                // $data['success'] = true;
-                // $data['post_data'] = $arrPostData;
-
-                // return response()->json($data);
                 
                 $p->remarks = 'BDO Pay';
                 $p->save();
-
-                $mixResponse = $this->executeCurl(array(
-                    // CURLOPT_URL => $conf['url'],
-                    CURLOPT_URL => 'https://secureacceptance.cybersource.com/pay',
-                    CURLOPT_RETURNTRANSFER => true,                                        
-                    CURLOPT_CUSTOMREQUEST => 'POST',
-                    CURLOPT_FOLLOWLOCATION => true,
-                    CURLOPT_SSL_VERIFYPEER  => false,
-                    CURLOPT_POSTFIELDS  => $fields,
-                    CURLOPT_HTTPHEADER  => array(
-                        "X-HTTP-Method-Override: POST",
-                        'Content-Type: application/json', // Only USE this when requesting JSON data
-                    ),
-                ));
-
-                dd($mixResponse);
 
                 return response()->json([
                     'success' => true,
                     'gateway' => 'bdo_pay',
                     'request_id' => $requestId,
-                    // 'post_data' => $fields,
                     'post_data' => $arrPostData,
-                    // 'action_url' => (string) $conf['url'],
-                    // 'action_url' => 'https://sms-makati.iacademy.edu.ph',
+                    'action_url' => (string) $conf['url'],
                 ]);
             }
 
@@ -532,6 +505,73 @@ class PaymentGatewayController extends Controller
                     'request_id' => $requestId,
                     'payment_link' => $mixResponse,
                 ]);
+            }
+
+            if($pmethod == 'maya_pay'){
+                if (\App::environment(['local', 'staging'])) {
+                        Config::set('paymaya-sdk.mode', PaymayaClient::ENVIRONMENT_SANDBOX);
+                }else{
+                    if($student->campus == 'Cebu'){
+                        Config::set('paymaya-sdk.keys.secret', 'sk-2tglvJ050xJ3Pcqa9cRfb2sprsmuvZAvWw2HQe1DjAD');
+                        Config::set('paymaya-sdk.keys.public', 'pk-bPIZy0vHA5BnMFezVyBg6btpAuHf6KaYp7yppBmHAni');
+                        $failureUrl = 'cebu.iacademy.edu.ph';
+                    }else if($student->campus == 'Makati'){
+                        Config::set('paymaya-sdk.keys.secret', 'sk-n08wtfXteTusHlJssYUNd6aNFVVJmZVHgVCDWRa55N6');
+                        Config::set('paymaya-sdk.keys.public', 'pk-VnSJaz0kwzyWjNkAHmPboDR7ny8MwgOKppKRTpTkorr');
+                        $failureUrl = 'sms-makati.iacademy.edu.ph';
+                    }
+                }
+                         
+                $itemsTotalAmount = 0;
+                $phone = $student->contact_number ? $student->contact_number : '';
+                $s_email = $student->email ? $student->email : '';
+                $contact = (new Contact())->setPhone($phone)
+                                          ->setEmail($s_email);
+
+                $user = (new Buyer())->setFirstName($request->first_name)
+                                     ->setMiddleName($request->middle_name)
+                                     ->setLastName($request->last_name)
+                                     ->setContact($contact);
+                
+                $checkout = (new Checkout())
+                    ->setBuyer($user)
+                    ->setRedirectUrl(
+                       (new RedirectUrl())
+                           ->setFailure($failureUrl . '/unity/student_tuition_payment/' . $student->slug)
+                   )
+                    ->setRequestReferenceNumber($requestId)
+                    ->setMetadata(
+                        (new MetaData())
+                            ->setSMI('smi')
+                            ->setSMN('smn')
+                            ->setMCI('mci')
+                            ->setMPC('mpc')
+                            ->setMCO('mco')
+                            ->setMST('mst')
+                    );
+
+                foreach($paynamicsOrders as $order){
+                    $item = new Item();
+                    $item->name = $order['itemname'];
+                    $item->quantity = $order['quantity'];
+
+                    $itemAmount = $order['unitprice'] * $order['quantity'];
+                    $item->totalAmount = (new Amount())
+                        ->setValue($order['totalprice']);
+                    $itemsTotalAmount += $order['totalprice'];
+                    $checkout->addItem($item);
+                }
+
+                $checkout->setTotalAmount(
+                    (new TotalAmount())
+                        ->setValue($itemsTotalAmount)
+                        ->setDetails(
+                            (new AmountDetail())
+                                ->setSubtotal($itemsTotalAmount)                                
+                        )
+                );
+
+                $checkoutResponse = PaymayaSDK::checkout()->execute($checkout);
             }
 
             return response()->json([
