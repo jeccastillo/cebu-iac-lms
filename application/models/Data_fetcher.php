@@ -2796,16 +2796,22 @@ class Data_fetcher extends CI_Model {
                                     ->get()
                                     ->result_array());                       
                 
-                //Checks if subject is NSTP nstp fee is different from normal fee                                
-                if($class['isNSTP']){
+                // Special Class handling:
+                // If the subject is a special class, tuition is computed as 3x per lecture hour.
+                // Otherwise, apply NSTP or regular per-unit computation.
+                if (isset($subj['is_special_class']) && $subj['is_special_class']) {
+                    $hours = intval($class['intLectHours']);
+                    $tuition += ($hours * 3 * $unit_fee);
+                } elseif($class['isNSTP']){
                     $nstp_fee = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'nstp'))
                     ->get('tb_mas_tuition_year_misc')->first_row('array');
                     $nstp_fee = getExtraFee($nstp_fee, $class_type, 'misc');
 
                     $tuition += intval($class['strTuitionUnits'])*$nstp_fee;
                 }
-                else
+                else{
                     $tuition += intval($class['strTuitionUnits'])*$unit_fee;
+                }
                 
                 if($class['strLabClassification'] != "none"){
                     $lab_term = $this->db->get_where('tb_mas_subjects_labtype',array('subject_id'=>$class['intID'],'term_id'=>$syid))->first_row('array');
