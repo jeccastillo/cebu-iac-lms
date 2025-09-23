@@ -506,8 +506,7 @@ new Vue({
                     } else if (this.selected_mode_of_payment.pchannel ==
                         "maya") {
                         console.log("success");
-                        console.log(data.data.post_data);
-                        // document.location = data.data.post_data.redirectUrl;
+                        document.location = data.data.post_data.redirectUrl;
                     } else if (this.selected_mode_of_payment.pchannel ==
                         "maxx") {
                         console.log("success");
