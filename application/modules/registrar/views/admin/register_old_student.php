@@ -181,8 +181,6 @@ new Vue({
         subjects_loaded: false,
         total_tuition: 0,
         tuition_text: '',
-        tuition_table: '',
-        tuition_email: '',
         subject_ids:[],
         misc: {
             name: undefined,
@@ -291,7 +289,11 @@ new Vue({
                             this.subject_ids.push({
                                                     subjectID: data.data.subjects[i].subjectID,
                                                     is_modular: data.data.subjects[i].is_modular,
+                                                    is_special_class: data.data.subjects[i].is_special_class,
                                                     payment_amount: data.data.subjects[i].payment_amount,
+                                                    intMajor: data.data.subjects[i].intMajor,
+                                                    isElective: data.data.subjects[i].isElective,
+                                                    additional_elective: data.data.subjects[i].additional_elective,
                                                 });
                             containerText +=
                                 "<div><input type='hidden' class='subject-id' name='subjects-loaded[]' value='" +
@@ -318,7 +320,7 @@ new Vue({
                         formdata.append("sem",this.sem);
                         formdata.append("year",this.request.intYearLevel);
                         formdata.append("tuition_year",this.request.tuition_year);
-                        formdata.append("internship",this.request.internship);                        
+                        formdata.append("internship",this.request.internship);                     
                         
 
                         axios.post('<?php echo base_url(); ?>unity/get_tuition_ajax', formdata, {
@@ -327,11 +329,9 @@ new Vue({
                             },                            
                         })
                         .then(data => {                            
-                            this.tuition_text = data.data.tuition; 
-                            this.tuition_table = data.data.tuition_table; 
-                            this.tuition_email = data.data.tuition_for_email;
+                            this.tuition_text = data.data.tuition;  
                             this.tuition_data = data.data.full_data;                            
-                            this.subjects_loaded =  true;                          
+                            this.subjects_loaded =  true;
                             
                         });
 
@@ -373,31 +373,8 @@ new Vue({
                                     Authorization: `Bearer ${window.token}`
                                 }
                             })
-                        .then(data => {                 
-                            var assessment_data = {
-                                'assessment': this.tuition_email,                                
-                            }          
-                            var email_api = api_url + "registrar/send_notif_finance/" + this.student_data.slug;                  
-                            //SENDING OF EMAIL GOES HERE
-                            Swal.fire({
-                                showCancelButton: false,
-                                showCloseButton: false,
-                                allowEscapeKey: false,
-                                title: 'Loading',
-                                text: 'Processing Data do not leave page',
-                                icon: 'info',
-                            })
-                            Swal.showLoading();                            
-                            axios.post(email_api, assessment_data, {
-                                 headers: {
-                                     Authorization: `Bearer ${window.token}`
-                                 }
-                             })
-                             .then(data2 => {           
-                                Swal.hideLoading();                                 
-                                 document.location = data.data.student_link;                                        
-                            });                                                                  
-                           
+                        .then(data => {                                                                                                                              
+                            document.location = data.data.student_link;                                        
                         });
                 },
                 allowOutsideClick: () => !Swal.isLoading()
