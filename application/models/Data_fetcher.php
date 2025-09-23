@@ -2802,6 +2802,8 @@ class Data_fetcher extends CI_Model {
                 if (isset($subj['is_special_class']) && $subj['is_special_class']) {
                     $hours = intval($class['intLectHours']);
                     $tuition += ($hours * 3 * $unit_fee);
+                    print_r($tuition);
+                    die();
                 } elseif($class['isNSTP']){
                     $nstp_fee = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'nstp'))
                     ->get('tb_mas_tuition_year_misc')->first_row('array');
@@ -2848,8 +2850,11 @@ class Data_fetcher extends CI_Model {
                     $modular[] = $subj;
                 else
                     $regular[] = $subj;
-
-                if(isset($subj['intMajor']) && isset($subj['isElective']) && isset($subj['additional_elective']))
+                
+                if (isset($subj['is_special_class']) && $subj['is_special_class']) {
+                    $hours = intval($class['intLectHours']);
+                    $tuition += ($hours * 3 * $unit_fee);
+                } else if(isset($subj['intMajor']) && isset($subj['isElective']) && isset($subj['additional_elective']))
                     if($subj['intMajor'] == 1 && $subj['isElective'] == 1 && $subj['additional_elective'] == 1)
                         $elective[] = $subj;
             }
