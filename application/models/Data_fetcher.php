@@ -2800,7 +2800,7 @@ class Data_fetcher extends CI_Model {
                 // If the subject is a special class, tuition is computed as 3x per lecture hour.
                 // Otherwise, apply NSTP or regular per-unit computation.
 
-                if (isset($class['is_special_class']) && $class['is_special_class']) {
+                if (isset($subj['is_special_class']) && $subj['is_special_class']) {
                     $hours = intval($class['intLectHours']);
                     $tuition += ($hours * 3) * $unit_fee;
                     print_r($tuition);
@@ -4246,7 +4246,7 @@ class Data_fetcher extends CI_Model {
         // print_r($cl);
 
         $cl =  $this->db
-                    ->select("tb_mas_classlist_student.intCSID,intClassListID,strCode,strSection,intSubjectID,year,sub_section, strClassName, intLab, intLectHours, tb_mas_subjects.strDescription,floatFinalGrade as v3,floatMidtermGrade as v2, floatFinalsGrade as semFinalGrade, intFinalized,enumStatus,strRemarks,tb_mas_faculty.intID as facID, tb_mas_faculty.strFirstname,tb_mas_faculty.strLastname, tb_mas_subjects.strUnits, tb_mas_subjects.intBridging, tb_mas_classlist.intID as classlistID, tb_mas_subjects.intID as subjectID,include_gwa,elective_classlist_id,payment_amount,is_modular,enlisted_user, tb_mas_subjects.intMajor, tb_mas_subjects.isElective, tb_mas_classlist_student.additional_elective")                                        
+                    ->select("tb_mas_classlist_student.intCSID,intClassListID,strCode,strSection,intSubjectID,year,sub_section, strClassName, intLab, intLectHours, tb_mas_subjects.strDescription,floatFinalGrade as v3,floatMidtermGrade as v2, floatFinalsGrade as semFinalGrade, intFinalized,enumStatus,strRemarks,tb_mas_faculty.intID as facID, tb_mas_faculty.strFirstname,tb_mas_faculty.strLastname, tb_mas_subjects.strUnits, tb_mas_subjects.intBridging, tb_mas_classlist.intID as classlistID, tb_mas_subjects.intID as subjectID,include_gwa,elective_classlist_id,payment_amount,is_modular,is_special_class,enlisted_user, tb_mas_subjects.intMajor, tb_mas_subjects.isElective, tb_mas_classlist_student.additional_elective")                                        
                     ->from("tb_mas_classlist_student")            
                     ->where(array("intStudentID"=>$id,"strAcademicYear"=>$classlist,'isDissolved'=>0))                                            
                     ->join('tb_mas_classlist', 'tb_mas_classlist.intID = tb_mas_classlist_student.intClasslistID')
