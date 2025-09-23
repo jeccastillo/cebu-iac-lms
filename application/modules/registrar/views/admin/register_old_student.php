@@ -289,6 +289,7 @@ new Vue({
                             this.subject_ids.push({
                                                     subjectID: data.data.subjects[i].subjectID,
                                                     is_modular: data.data.subjects[i].is_modular,
+                                                    is_special_class: data.data.subjects[i].is_special_class,
                                                     payment_amount: data.data.subjects[i].payment_amount,
                                                     intMajor: data.data.subjects[i].intMajor,
                                                     isElective: data.data.subjects[i].isElective,
