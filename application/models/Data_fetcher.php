@@ -2799,6 +2799,9 @@ class Data_fetcher extends CI_Model {
                 // Special Class handling:
                 // If the subject is a special class, tuition is computed as 3x per lecture hour.
                 // Otherwise, apply NSTP or regular per-unit computation.
+
+                    print_r($subjects);
+                    die();
                 if (isset($subj['is_special_class']) && $subj['is_special_class']) {
                     $hours = intval($class['intLectHours']);
                     $tuition += ($hours * 3 * $unit_fee);
