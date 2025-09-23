@@ -2800,9 +2800,7 @@ class Data_fetcher extends CI_Model {
                 // If the subject is a special class, tuition is computed as 3x per lecture hour.
                 // Otherwise, apply NSTP or regular per-unit computation.
 
-                    print_r($subjects);
-                    die();
-                if (isset($subj['is_special_class']) && $subj['is_special_class']) {
+                if (isset($class['is_special_class']) && $class['is_special_class']) {
                     $hours = intval($class['intLectHours']);
                     $tuition += ($hours * 3 * $unit_fee);
                     print_r($tuition);
@@ -2818,6 +2816,8 @@ class Data_fetcher extends CI_Model {
                     $tuition += intval($class['strTuitionUnits'])*$unit_fee;
                 }
                 
+                    print_r($tuition);
+                    die();
                 if($class['strLabClassification'] != "none"){
                     $lab_term = $this->db->get_where('tb_mas_subjects_labtype',array('subject_id'=>$class['intID'],'term_id'=>$syid))->first_row('array');
                     $lab_class = $lab_term?$lab_term['lab_classification']:$class['strLabClassification'];
