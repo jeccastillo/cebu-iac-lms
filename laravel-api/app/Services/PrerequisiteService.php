@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
+use App\Services\AcademicRecordService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Services\AcademicRecordService;
 
 class PrerequisiteService
 {
