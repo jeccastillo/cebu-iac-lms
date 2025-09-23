@@ -463,6 +463,18 @@
         controllerAs: "vm",
         requiredRoles: ["registrar", "faculty_admin", "admin"],
       })
+      .when("/advisors", {
+        templateUrl: "features/advisors/advisors.html",
+        controller: "AdvisorsController",
+        controllerAs: "vm",
+        requiredRoles: ["faculty_admin", "admin"],
+      })
+      .when("/advisors/quick-view", {
+        templateUrl: "features/advisors/quick-view.html",
+        controller: "AdvisorsQuickViewController",
+        controllerAs: "vm",
+        requiredRoles: ["faculty_admin", "admin"],
+      })
 
       /* Tuition Years (Finance) */
       .when('/finance/tuition-years', {
@@ -529,6 +541,12 @@
         controllerAs: 'vm',
         requiredRoles: ['finance_admin', 'admin'],
       })
+      .when('/finance/non-student-payments', {
+        templateUrl: 'features/finance/non-student-payments/non-student-payments.html',
+        controller: 'NonStudentPaymentsController',
+        controllerAs: 'vm',
+        requiredRoles: ['finance','cashier_admin','admin'],
+      })
 
       .when("/cashier-admin", {
         templateUrl: "features/cashiers/list.html",
@@ -580,6 +598,12 @@
         requiredRoles: ["admin"],
       })
 
+      .when("/admin/payment-details/import", {
+        templateUrl: "features/admin/payment-details/import/payment-details-import.html",
+        controller: "PaymentDetailsImportController",
+        controllerAs: "vm",
+        requiredRoles: ["finance_admin","admin"],
+      })
       .when("/admin/payment-details", {
         templateUrl: "features/admin/payment-details/edit.html",
         controller: "AdminPaymentDetailsController",

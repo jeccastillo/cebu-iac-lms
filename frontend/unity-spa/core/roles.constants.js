@@ -59,6 +59,8 @@
       { test: '^/schedules(?:/.*)?$', roles: ['registrar', 'admin'] },
       { test: '^/cashier-admin(?:/.*)?$', roles: ['cashier_admin', 'admin'] },
       { test: '^/logs(?:/.*)?$', roles: ['admin'] },
+      // Finance Admin access to Payment Details Import (explicit)
+      { test: '^/admin/payment-details/import$', roles: ['finance_admin','admin'] },
       // Explicit Admin: Student Editor routes
       { test: '^/admin/students(?:/.*)?$', roles: ['admin'] },
       // Generic admin fallback

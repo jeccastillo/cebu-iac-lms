@@ -1,0 +1,112 @@
+<div class="container mx-auto px-4 py-6">
+  <div class="flex items-center justify-between mb-4">
+    <div>
+      <h1 class="text-2xl font-semibold text-gray-800">Advisors Quick View</h1>
+      <p class="text-sm text-gray-500">Lists students alphabetically by last name with their current advisors. Results are scoped by the selected campus.</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <div class="text-sm text-gray-700 bg-gray-50 border border-gray-200 rounded px-3 py-1.5">
+        <span class="text-gray-500">Campus:</span>
+        <span class="font-medium">
+          {{ (vm.selectedCampus &amp;&amp; (vm.selectedCampus.campus_name || vm.selectedCampus.name)) || 'All / Not set' }}
+        </span>
+      </div>
+      <button type="button"
+              class="px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+              ng-disabled="vm.loading"
+              ng-click="vm.refresh()">
+        <i class="fas fa-sync-alt mr-1"></i> Refresh
+      </button>
+    </div>
+  </div>
+
+  <!-- Global messages -->
+  <div class="mb-4" ng-if="vm.error">
+    <div class="px-4 py-3 rounded bg-red-50 text-red-700 border border-red-200">
+      <i class="fas fa-exclamation-triangle mr-1"></i> {{vm.error}}
+    </div>
+  </div>
+
+  <div class="mb-3 flex items-center justify-between text-sm text-gray-600">
+    <div>
+      <span class="text-gray-500">Total:</span>
+      <span class="font-medium">{{vm.total}}</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <label class="flex items-center gap-2">
+        <span class="text-gray-500">Advisor</span>
+        <select class="border border-gray-300 rounded px-2 py-1 bg-white"
+                ng-model="vm.hasAdvisor"
+                ng-change="vm.onAdvisorFilterChange()">
+          <option value="all">All</option>
+          <option value="with">With advisor</option>
+          <option value="without">Without advisor</option>
+        </select>
+      </label>
+      <label class="flex items-center gap-2">
+        <span class="text-gray-500">Per page</span>
+        <select class="border border-gray-300 rounded px-2 py-1 bg-white"
+                ng-model="vm.perPage"
+                ng-change="vm.onPerPageChange()">          
+          <option ng-value="20">20</option>
+          <option ng-value="50">50</option>
+          <option ng-value="100">100</option>
+          <option ng-value="200">200</option>
+        </select>
+      </label>
+      <div class="flex items-center gap-2">
+        <button type="button"
+                class="px-3 py-1 rounded border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                ng-click="vm.prevPage()"
+                ng-disabled="vm.loading || vm.page <= 1">
+          Prev
+        </button>
+        <span>
+          Page <span class="font-medium">{{vm.page}}</span> of <span class="font-medium">{{vm.totalPages}}</span>
+        </span>
+        <button type="button"
+                class="px-3 py-1 rounded border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                ng-click="vm.nextPage()"
+                ng-disabled="vm.loading || vm.page >= vm.totalPages">
+          Next
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white shadow border border-gray-200 rounded overflow-x-auto">
+    <table class="min-w-full text-sm">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="text-left px-3 py-2 border-b whitespace-nowrap">Student Number</th>
+          <th class="text-left px-3 py-2 border-b whitespace-nowrap">Last Name</th>
+          <th class="text-left px-3 py-2 border-b whitespace-nowrap">First Name</th>
+          <th class="text-left px-3 py-2 border-b whitespace-nowrap">Middle</th>
+          <th class="text-left px-3 py-2 border-b whitespace-nowrap">Advisor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="r in vm.items" class="odd:bg-white even:bg-gray-50">
+          <td class="px-3 py-2 border-b whitespace-nowrap">{{r.student_number || '-'}}</td>
+          <td class="px-3 py-2 border-b whitespace-nowrap">{{r.last_name || '-'}}</td>
+          <td class="px-3 py-2 border-b whitespace-nowrap">{{r.first_name || '-'}}</td>
+          <td class="px-3 py-2 border-b whitespace-nowrap">{{r.middle_name || '-'}}</td>
+          <td class="px-3 py-2 border-b whitespace-nowrap">{{vm.getAdvisorName(r)}}</td>
+        </tr>
+        <tr ng-if="!vm.loading &amp;&amp; (!vm.items || !vm.items.length)">
+          <td class="px-3 py-4 text-center text-gray-500 border-b" colspan="5">
+            No students found for the selected campus.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Loading -->
+  <div class="fixed bottom-4 right-4" ng-if="vm.loading">
+    <div class="px-4 py-2 rounded bg-gray-800 text-white shadow flex items-center gap-2">
+      <span class="inline-block h-3 w-3 rounded-full border-2 border-white border-t-transparent animate-spin"></span>
+      <span>Loading...</span>
+    </div>
+  </div>
+</div>

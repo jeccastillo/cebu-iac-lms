@@ -10,9 +10,12 @@
       <div>
         <label class="block text-sm text-gray-600 mb-1">Term</label>
         <select class="border rounded px-3 py-2"
-                ng-model="vm.selectedTerm"
-                ng-options="t.intID as t.label for t in vm.terms"
+                ng-model="vm.selectedTerm"                
                 ng-change="vm.onTermChange()">
+                <option value="">-- Select Term --</option>
+                <option ng-repeat="t in vm.terms" value="{{ t.intID }}">
+                  {{ t.label }}
+                </option>
         </select>
       </div>
       <div>
@@ -20,10 +23,10 @@
         <select class="border rounded px-3 py-2"
                 ng-model="vm.perPage"
                 ng-change="vm.onPerPageChange()">
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="50">50</option>
-          <option value="100">100</option>
+          <option ng-value="10">10</option>
+          <option ng-value="20">20</option>
+          <option ng-value="50">50</option>
+          <option ng-value="100">100</option>
         </select>
       </div>
 

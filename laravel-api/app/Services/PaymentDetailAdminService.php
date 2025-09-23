@@ -26,7 +26,7 @@ class PaymentDetailAdminService
         $numberInvoice = $col('invoice_number');
 
         // Method may be 'method' or 'payment_method'
-        $method = $col('method') ?: $col('payment_method');
+        $method = $col('method') ?: $col('pmethod');
 
         // Prefer 'paid_at', then 'date', else 'created_at'
         $date = $col('paid_at') ?: ($col('date') ?: $col('created_at'));
@@ -36,6 +36,7 @@ class PaymentDetailAdminService
             'exists'             => $exists,
             'id'                 => $col('id') ?: 'id',
             'student_id'         => $col('student_information_id'),
+            'payee_id'           => $col('payee_id'),
             'student_number'     => $col('student_number'),
             'student_campus'     => $col('student_campus'),
             'sy_reference'       => $col('sy_reference'),
@@ -62,6 +63,7 @@ class PaymentDetailAdminService
         $select = [];
         $select[] = 'id';
         if ($cols['student_id']) $select[] = $cols['student_id'] . ' as student_information_id';
+        if ($cols['payee_id'])   $select[] = $cols['payee_id'] . ' as payee_id';
         if ($cols['student_number']) $select[] = $cols['student_number'] . ' as student_number';
         if ($cols['sy_reference']) $select[] = $cols['sy_reference'] . ' as sy_reference';
         if ($cols['description']) $select[] = $cols['description'] . ' as description';
@@ -88,6 +90,7 @@ class PaymentDetailAdminService
         return [
             'id'                 => (int) $r->id,
             'student_information_id' => isset($r->student_information_id) ? (int) $r->student_information_id : null,
+            'payee_id'           => isset($r->payee_id) ? (int) $r->payee_id : null,
             'student_number'     => isset($r->student_number) ? (string) $r->student_number : null,
             'sy_reference'       => isset($r->sy_reference) ? (int) $r->sy_reference : null,
             'description'        => isset($r->description) ? (string) $r->description : null,

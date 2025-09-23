@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Model
 {
@@ -20,5 +22,22 @@ class User extends Model
         'strStudentNumber',
         'strMobileNumber',
         'intProgramID',
+        'intAdvisorID',
     ];
+
+    /**
+     * Current advisor (denormalized pointer).
+     */
+    public function advisor(): BelongsTo
+    {
+        return $this->belongsTo(Faculty::class, 'intAdvisorID', 'intID');
+    }
+
+    /**
+     * Full advisor history (active + ended).
+     */
+    public function advisorHistory(): HasMany
+    {
+        return $this->hasMany(StudentAdvisor::class, 'intStudentID', 'intID');
+    }
 }

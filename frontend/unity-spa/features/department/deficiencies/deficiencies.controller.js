@@ -183,10 +183,13 @@
     }
 
     function toggleNewPd() {
-      vm.form.use_new_pd = !vm.form.use_new_pd;
+      // ng-change fires after Angular updates vm.form.use_new_pd from the checkbox binding.
+      // Do not invert the boolean here; only clear dependent fields based on the current state.
       if (vm.form.use_new_pd) {
+        // Switching to "create new PD inline": clear existing PD selection.
         vm.form.payment_description_id = null;
       } else {
+        // Switching back to "use existing PD": reset inline new PD fields.
         vm.form.new_payment_description = { name: '', amount: null, campus_id: null };
       }
     }
@@ -293,6 +296,13 @@
         return;
       }
 
+      // Validate required Posted At
+      var _postedAt = normalizePostedAt(vm.form.posted_at);
+      if (!_postedAt) {
+        ToastService && ToastService.warn && ToastService.warn('Please provide a valid "Posted At" date/time.');
+        return;
+      }
+
       var body = {
         department_code: vm.form.department_code,
         term: Number(vm.form.term),
@@ -302,7 +312,7 @@
         new_payment_description: vm.form.use_new_pd ? sanitizeNewPd(vm.form.new_payment_description) : null,
         description: nonEmpty(vm.form.description),
         amount: isNum(vm.form.amount) ? Number(vm.form.amount) : null,
-        posted_at: nonEmpty(vm.form.posted_at),
+        posted_at: _postedAt,
         remarks: nonEmpty(vm.form.remarks)
       };
 
@@ -359,6 +369,49 @@
       if (v == null) return null;
       var s = ('' + v).trim();
       return s === '' ? null : s;
+    }
+    // Normalize datetime-local input (e.g., "YYYY-MM-DDTHH:mm") or similar strings
+    // to "YYYY-MM-DD HH:mm:ss" which is commonly accepted by backend validators.
+    function normalizePostedAt(v) {
+      try {
+        if (v == null || v === '') return null;
+        // If Date object provided
+        if (v instanceof Date && !isNaN(v.getTime())) {
+          return formatDateTime(v);
+        }
+        var s = String(v).trim();
+        if (!s) return null;
+        // Match "YYYY-MM-DDTHH:mm" or "YYYY-MM-DD HH:mm" optionally with seconds
+        var m = s.match(/^(\d{4}-\d{2}-\d{2})[T ](\d{2}):(\d{2})(?::(\d{2}))?$/);
+        if (m) {
+          var sec = m[4] || '00';
+          return m[1] + ' ' + m[2] + ':' + m[3] + ':' + sec;
+        }
+        // Match ISO with seconds "YYYY-MM-DDTHH:mm:ss"
+        var m2 = s.match(/^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}:\d{2})$/);
+        if (m2) {
+          return m2[1] + ' ' + m2[2];
+        }
+        // Fallback: attempt Date parsing
+        var d = new Date(s);
+        if (!isNaN(d.getTime())) {
+          return formatDateTime(d);
+        }
+        // Unparseable -> return null so backend doesn't reject invalid date
+        return null;
+      } catch (e) {
+        return null;
+      }
+    }
+    function formatDateTime(d) {
+      function pad2(n){ return (n < 10 ? '0' : '') + n; }
+      var yyyy = d.getFullYear();
+      var mm = pad2(d.getMonth() + 1);
+      var dd = pad2(d.getDate());
+      var hh = pad2(d.getHours());
+      var mi = pad2(d.getMinutes());
+      var ss = pad2(d.getSeconds());
+      return yyyy + '-' + mm + '-' + dd + ' ' + hh + ':' + mi + ':' + ss;
     }
     function isNum(v) {
       return v !== null && v !== '' && !isNaN(v);

@@ -78,5 +78,8 @@ return [
         'clinic',
         'guidance',
         'osas',
+        'soc',
+        'soda',
+        'sobla',
     ],
 ];

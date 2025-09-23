@@ -48,6 +48,38 @@ class GenericApiController extends Controller
             $q->where('teaching', 1);
         }
 
+        // Restrict to advisors whose departments overlap with the actor (from X-Faculty-ID)
+        // Overlap rule here is department-only (campus-insensitive), per requirement.
+        try {
+            $actorIdRaw = $request->header('X-Faculty-ID', $request->input('faculty_id'));
+            $actorId = ($actorIdRaw !== null && $actorIdRaw !== '' && is_numeric($actorIdRaw)) ? (int) $actorIdRaw : null;
+            if ($actorId) {
+                $actorDepts = DB::table('tb_mas_faculty_departments')
+                    ->where('intFacultyID', $actorId)
+                    ->pluck('department_code')
+                    ->map(function ($v) { return strtolower(trim((string) $v)); })
+                    ->filter(function ($v) { return $v !== ''; })
+                    ->unique()
+                    ->values()
+                    ->all();
+
+                if (!empty($actorDepts)) {
+                    // Candidate must have at least one matching department tag
+                    $q->whereExists(function ($sub) use ($actorDepts) {
+                        $sub->select(DB::raw(1))
+                            ->from('tb_mas_faculty_departments as fd')
+                            ->whereColumn('fd.intFacultyID', 'tb_mas_faculty.intID')
+                            ->whereIn(DB::raw('LOWER(fd.department_code)'), $actorDepts);
+                    });
+                } else {
+                    // Actor has no department tags -> no overlap with anyone; return empty set
+                    $q->whereRaw('1 = 0');
+                }
+            }
+        } catch (\Throwable $e) {
+            // fail-open (no restriction) on any unexpected error
+        }
+
         // Optional campus filter
         if (array_key_exists('campus_id', $payload)) {
             $q->where('campus_id', (int) $payload['campus_id']);

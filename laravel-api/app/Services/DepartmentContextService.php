@@ -57,6 +57,9 @@ class DepartmentContextService
                 'clinic',
                 'guidance',
                 'osas',
+                'soc',
+                'soda',
+                'sobla',
             ];
         }
         return array_values(array_unique(array_map(function ($c) {

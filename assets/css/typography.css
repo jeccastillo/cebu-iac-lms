@@ -1,0 +1,99 @@
+/* Typography layer for Unity SPA
+   - Default UI font: Montserrat
+   - Headings/emphasis: Gotham
+   - Optional rounded variant: Gotham Rounded
+*/
+
+:root {
+  --font-ui: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, 'Helvetica Neue', Helvetica, sans-serif;
+  --font-heading: 'Gotham', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, 'Helvetica Neue', Helvetica, sans-serif;
+  --font-rounded: 'Gotham Rounded', 'Gotham', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, 'Helvetica Neue', Helvetica, sans-serif;
+}
+
+/* Base smoothing and defaults */
+html {
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
+}
+@supports (-webkit-font-smoothing: antialiased) {
+  html {
+    -webkit-font-smoothing: antialiased;
+  }
+}
+body {
+  font-family: var(--font-ui);
+  line-height: 1.5;
+  color: #111827; /* Tailwind gray-900 */
+}
+
+/* Global headings use Gotham by default */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700; /* default strong heading weight */
+  line-height: 1.2;
+  color: #111827;
+}
+
+/* Utilities to opt-in/out explicitly */
+.font-ui { font-family: var(--font-ui) !important; }
+.font-heading { font-family: var(--font-heading) !important; }
+.font-rounded { font-family: var(--font-rounded) !important; }
+
+/* Optional heading weight utilities (light/regular/medium/bold/black) */
+.heading-light { font-weight: 300 !important; }
+.heading-regular { font-weight: 400 !important; }
+.heading-medium { font-weight: 500 !important; }
+.heading-bold { font-weight: 700 !important; }
+.heading-black { font-weight: 900 !important; }
+
+/* Legacy selectors from site_global.css — gently steer to new families.
+   Use !important to win over legacy declarations when both are present. */
+.nav {
+  font-family: var(--font-heading) !important;
+  letter-spacing: 0.08em; /* keep readable spacing for nav */
+}
+.h1 {
+  font-family: var(--font-heading) !important;
+  font-weight: 700;
+}
+.h2 {
+  font-family: var(--font-heading) !important;
+  font-weight: 600;
+}
+.p {
+  font-family: var(--font-ui) !important;
+}
+
+/* Strong, em emphasis (prefer UI font, weight-driven) */
+strong, b {
+  font-weight: 700;
+}
+em, i {
+  font-style: italic;
+}
+
+/* Titles in common layouts (non-destructive if absent) */
+.page-title, .section-title, .dialog-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+}
+
+/* Tables and form controls — defer to UI font for readability */
+table, th, td, input, select, textarea, button, .btn {
+  font-family: var(--font-ui);
+}
+
+/* Optional rounded headline style for marketing/soft sections */
+.rounded-title {
+  font-family: var(--font-rounded);
+  font-weight: 700;
+}
+
+/* Ensure Select2 and intl-tel-input inherit UI font for consistency */
+.select2-container,
+.select2-dropdown,
+.select2-search__field,
+.iti input[type="tel"],
+.iti input[type="text"] {
+  font-family: var(--font-ui);
+}

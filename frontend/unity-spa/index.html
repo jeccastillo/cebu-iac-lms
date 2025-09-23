@@ -55,6 +55,9 @@
   <!-- CSS fallbacks in case a CDN is blocked -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css">
   <link rel="stylesheet" href="https://unpkg.com/intl-tel-input@18.7.1/build/css/intlTelInput.css">
+  <!-- Local fonts: Montserrat + Gotham -->
+  <link rel="stylesheet" href="../../assets/css/fonts.css">
+  <link rel="stylesheet" href="../../assets/css/typography.css">
   <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.7.1/build/js/intlTelInput.min.js"></script>
   <!-- Preload utils to ensure formatting/masking availability -->
   <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.7.1/build/js/utils.js"></script>
@@ -235,6 +238,10 @@
   <script src="features/finance/payment-actions/payment-actions.service.js"></script>
   <script src="features/finance/payment-actions/payment-actions.controller.js"></script>
 
+  <!-- Finance: Non-Student Payments -->
+  <script src="features/finance/non-student-payments/non-student-payments.service.js"></script>
+  <script src="features/finance/non-student-payments/non-student-payments.controller.js"></script>
+
   <script src="features/scholarship/students.controller.js"></script>
   <script src="features/scholarship/scholarships/scholarships.service.js"></script>
   <script src="features/scholarship/scholarships/scholarships.controller.js"></script>
@@ -294,6 +301,11 @@
   <script src="features/faculty/faculty.service.js"></script>
   <script src="features/faculty/faculty.controller.js"></script>
 
+  <!-- Advisors management (Faculty Admin) -->
+  <script src="features/advisors/advisors.service.js"></script>
+  <script src="features/advisors/advisors.controller.js"></script>
+  <script src="features/advisors/quick-view.controller.js"></script>
+
   <!-- School Years feature -->
   <script src="features/school-years/school-years.service.js"></script>
   <script src="features/school-years/school-years.controller.js"></script>
@@ -352,6 +364,9 @@
   <!-- Admin: Payment Details -->
   <script src="features/admin/payment-details/payment-details.service.js"></script>
   <script src="features/admin/payment-details/payment-details.controller.js"></script>
+  <!-- Admin: Payment Details Import -->
+  <script src="features/admin/payment-details/import/payment-details-import.service.js"></script>
+  <script src="features/admin/payment-details/import/payment-details-import.controller.js"></script>
 
   <!-- Admin: Invoices CRUD -->
   <script src="features/admin/invoices/invoices.service.js"></script>

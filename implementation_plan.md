@@ -1,258 +1,258 @@
 # Implementation Plan
 
 [Overview]
-Add a student-facing “Request Program Change” feature that lets a logged-in student submit a single program-change request for the active term, persists it to a new table tb_mas_shift_requests, and automatically creates a System Alert targeted to Registrar users linking to the Registrar Shifting page for processing.
+Create a non-student payments module that enables school tenants to pay through the existing cashier module. Payments for tenants will reference tb_mas_payee instead of tb_mas_users, including full CRUD for payees, cashier payment support for either student or payee, and OR PDF updates to show payee details when applicable.
 
-This feature introduces a lightweight workflow so students can explicitly request a change of their current program. It enforces at most one request per student per term and notifies the Registrar via a system-generated alert. The backend exposes a minimal student-safe API to create and view requests while the frontend adds a new Student page to submit requests. The Registrar continues to act on such requests through their existing Shifting tools.
+This implementation extends the current finance and cashier subsystems with a parallel flow for non-student entities (tenants). We will introduce a Payee model mapped to the legacy table tb_mas_payee, expose an admin/finance-admin CRUD API for payee management, and update cashier payment creation to accept either student_id or payee_id. Payments created for payees will store a nullable payee_id on payment_details and omit sy_reference as requested. OR PDF generation will prefer payee data when payment_details.payee_id is set, falling back to student details as before. System logging will be added to all create/update/delete events of payees and to cashier payment creation for auditability.
 
 [Types]  
-The type system changes introduce a new Eloquent model ShiftRequest with a backing table tb_mas_shift_requests, plus clearly defined request/response shapes for the API endpoints.
+Add a nullable foreign key column payment_details.payee_id and new types for Payee payloads and responses.
 
-New database table: tb_mas_shift_requests
-- id: bigint, PK, autoincrement
-- student_id: int, required; FK to tb_mas_users.intID (logical)
-- student_number: varchar(64), nullable; copy from tb_mas_users.strStudentNumber at creation time for convenience
-- term_id: int, required; active AY/Term id
-- program_from: int, required; intProgramID from tb_mas_users at request time (snapshot)
-- program_to: int, required; intProgramID requested
-- reason: text, nullable; optional student-provided reason
-- status: enum|string, default 'pending'; expected values: 'pending' | 'approved' | 'denied' | 'canceled'
-- requested_at: datetime, default now(); mirrors created_at
-- processed_at: datetime, nullable; set when approved/denied
-- processed_by_faculty_id: int, nullable; registrar/faculty who processed
-- campus_id: int, nullable; copy from tb_mas_users.campus_id if available
-- meta: json, nullable; for extensibility (UA, client info, etc.)
-- timestamps: created_at, updated_at
-- Constraints/Indexes:
-  - unique index on (student_id, term_id) to enforce one request per student per term
-  - indexes on student_id, term_id, program_to for typical queries
+Detailed type specifications:
+- Table: tb_mas_payee (legacy, pre-existing; used as read/write store)
+  - id: int, PK, auto-increment
+  - id_number: varchar(40), required
+  - firstname: varchar(99), required
+  - lastname: varchar(99), nullable
+  - middlename: varchar(99), nullable
+  - tin: varchar(99), nullable
+  - address: text, nullable
+  - contact_number: varchar(40), nullable
+  - email: varchar(99), required
 
-Model: App\Models\ShiftRequest
-- $fillable: [student_id, student_number, term_id, program_from, program_to, reason, status, requested_at, processed_at, processed_by_faculty_id, campus_id, meta]
-- $casts:
-  - requested_at, processed_at: 'datetime'
-  - program_from, program_to, term_id, student_id, processed_by_faculty_id, campus_id: 'integer'
-  - meta: 'array'
+- New Model: App\Models\Payee
+  - protected $table = 'tb_mas_payee';
+  - protected $primaryKey = 'id';
+  - $timestamps = false (unless columns exist; per screenshot appears none)
+  - Fillable: ['id_number','firstname','lastname','middlename','tin','address','contact_number','email']
+  - Relationships:
+    - paymentDetails(): hasMany(PaymentDetail::class, 'payee_id', 'id')
 
-API Contracts (student-safe)
-- POST /api/v1/student/shift-requests
-  - Request (JSON):
-    - student_id?: number (optional; if omitted, resolve from token or session headers)
-    - token?: string (optional; e.g., portal token for identification)
-    - term: number (required)
-    - program_to: number (required; existing tb_mas_programs.intProgramID)
-    - reason?: string (optional)
-  - Behavior:
-    - Resolve student_id by token, headers, or body.
-    - Validate existence of student and program_to.
-    - Populate program_from from student’s current program at request time.
-    - Enforce uniqueness (student_id, term_id) at app and DB levels.
-    - Create system-generated SystemAlert targeted to role_codes ['registrar'] with link "#/registrar/shifting".
-  - Responses:
-    - 201 { success: true, data: ShiftRequest } on success
-    - 409 { success: false, message: 'Duplicate request exists for this term.' } if unique constraint violated
-    - 422 { success: false, errors: { field: [msg] } } on validation errors
+- Modified Table: payment_details
+  - payee_id: integer, nullable, FK to tb_mas_payee.id (no cascade delete; set null on payee removal)
+  - Validation/Rules:
+    - When payee_id is set: student_information_id may be null; sy_reference nullable (omitted for tenants)
+    - When student_information_id is set: existing behavior continues; sy_reference required
+    - OR invoice number assignment rules remain the same
 
-- GET /api/v1/student/shift-requests
-  - Query:
-    - term?: number (optional, filter by term)
-  - Behavior: Lists the caller’s own shift requests (ordered desc by requested_at)
-  - Response: 200 { success: true, data: ShiftRequest[] }
+- API Request DTOs:
+  - PayeeStoreRequest:
+    - id_number: required|string|max:40|unique:tb_mas_payee,id_number
+    - firstname: required|string|max:99
+    - lastname: nullable|string|max:99
+    - middlename: nullable|string|max:99
+    - tin: nullable|string|max:99
+    - address: nullable|string
+    - contact_number: nullable|string|max:40
+    - email: required|email|max:99
+  - PayeeUpdateRequest:
+    - same as store; id_number unique except current id
 
-System Alert payload (SystemAlert model, tb_sys_alerts)
-- title: 'Program Change Request'
-- message: "Program change request from {student_number}: {program_from} → {program_to}"
-- link: '#/registrar/shifting'
-- type: 'info' (or 'request' if acceptable)
-- role_codes: ['registrar']
-- campus_ids: [campus_id] when available; else []
-- target_all: false
-- intActive: 1
-- system_generated: true
-- created_by: 'system'
+  - CashierPaymentStoreRequest (modified):
+    - student_id: required_without:payee_id|integer|exists:tb_mas_users,intID
+    - payee_id: required_without:student_id|integer|exists:tb_mas_payee,id
+    - term: required_if:student_id,*,nullable|integer (nullable and omitted when paying as payee)
+    - mode: required|in:or,invoice,none
+    - amount: required|numeric|gt:0
+    - description: required|string|max:255
+    - mode_of_payment_id: required|integer|exists:payment_modes,id
+    - method: nullable|string|max:100
+    - remarks: required|string|max:1000
+    - posted_at: nullable|date
+    - campus_id: nullable|integer
+    - invoice_id: sometimes|nullable|integer
+    - invoice_number: sometimes|nullable|integer
+    - or_date: sometimes|nullable|date
+    - convenience_fee: sometimes|nullable|numeric|min:0
 
 [Files]
-The change introduces new backend and frontend files and modifies select routing and navigation files.
+Introduce a new Payee module with CRUD and modify existing controllers/services to support payee-based payments and OR PDF rendering.
 
-New files to be created
-- laravel-api/database/migrations/2025_09_15_000250_create_tb_mas_shift_requests_table.php
-  - Defines table tb_mas_shift_requests with columns and constraints above.
-- laravel-api/app/Models/ShiftRequest.php
-  - Eloquent model for tb_mas_shift_requests.
-- laravel-api/app/Http/Controllers/Api/V1/ShiftRequestController.php
-  - Controller implementing index() and store() and helper resolveStudentId().
+Detailed breakdown:
 
-- frontend/unity-spa/features/student/change-program-request/change-program-request.controller.js
-  - AngularJS controller StudentChangeProgramRequestController with init(), reloadPrograms(), canSubmit(), onSubmit().
-- frontend/unity-spa/features/student/change-program-request/change-program-request.html
-  - Template providing program dropdown, optional reason input, state handling, and submit button.
+- New files to be created:
+  - laravel-api/app/Models/Payee.php
+    - Eloquent model for tb_mas_payee
+  - laravel-api/app/Http/Controllers/Api/V1/PayeeController.php
+    - CRUD endpoints for payee management; guarded by role:admin,finance_admin
+    - Uses SystemLogService::log for create/update/delete
+  - laravel-api/app/Http/Requests/Api/V1/PayeeStoreRequest.php
+    - Validation for creating a payee
+  - laravel-api/app/Http/Requests/Api/V1/PayeeUpdateRequest.php
+    - Validation for updating a payee
+  - laravel-api/app/Http/Resources/PayeeResource.php
+    - Normalized API shape for payee responses
+  - laravel-api/database/migrations/20xx_xx_xx_xxxxxx_add_payee_id_to_payment_details.php
+    - Adds nullable payee_id, FK to tb_mas_payee(id). Safe up/down.
 
-Existing files to be modified
-- laravel-api/routes/api.php
-  - Register:
-    - GET /api/v1/student/shift-requests → ShiftRequestController@index (role: student_view, admin)
-    - POST /api/v1/student/shift-requests → ShiftRequestController@store (role: student_view, admin)
-- frontend/unity-spa/core/routes.js
-  - Add route when('/student/change-program-request', ...) with requiredRoles: ['student_view', 'admin'].
-- frontend/unity-spa/shared/components/sidebar/sidebar.controller.js
-  - Under Student group: add menu entry { label: 'Request Program Change', path: '/student/change-program-request' }.
-- frontend/unity-spa/index.html
-  - Add script tag for features/student/change-program-request/change-program-request.controller.js.
+- Existing files to be modified (specific changes):
+  - laravel-api/routes/api.php
+    - Add routes:
+      - GET /api/v1/payees
+      - POST /api/v1/payees
+      - GET /api/v1/payees/{id}
+      - PATCH /api/v1/payees/{id}
+      - DELETE /api/v1/payees/{id}
+      - Protect with middleware('role:admin,finance_admin')
+  - laravel-api/app/Http/Requests/Api/V1/CashierPaymentStoreRequest.php
+    - Relax validation: accept payee_id OR student_id; make term required only for student payments; nullable otherwise
+  - laravel-api/app/Http/Controllers/Api/V1/CashierController.php
+    - In createPayment():
+      - Support either student_id or payee_id
+      - When payee_id is provided:
+        - Do not require or use student-dependent lookups (tb_mas_users)
+        - Do not require sy_reference; set null
+        - Fill optional name/email/contact columns (first_name, middle_name, last_name, email_address, contact_number) from tb_mas_payee when columns exist
+        - Persist payment_details.payee_id = {payee_id}
+      - Continue existing invoice/OR logic, pointer increments, and applicant logic only for student payments
+  - laravel-api/app/Services/PaymentDetailAdminService.php
+    - detectColumns(): include 'payee_id' => $col('payee_id')
+    - selectList(): include payee_id when column exists
+    - normalizeRow(): include 'payee_id' (int|null) and 'source' unchanged
+  - laravel-api/app/Http/Controllers/Api/V1/FinanceController.php
+    - orPdf():
+      - Resolve payment_detail row and prefer payee info when payee_id is present:
+        - Lookup tb_mas_payee.id, read firstname/lastname/middlename, tin, address
+        - Render RECEIVED FROM using payee name/address; TIN from payee
+      - Fallback to student as currently implemented
+  - laravel-api/app/Models/PaymentDetail.php
+    - Add relationship:
+      - public function payee() { return $this->belongsTo(\App\Models\Payee::class, 'payee_id', 'id'); }
+  - laravel-api/app/Services/Pdf/OfficialReceiptPdf.php
+    - No schema changes, but ensure renderer supports any non-student labels if needed (existing DTO already generic)
 
-Files to be deleted or moved
-- None.
+- Files to be deleted or moved
+  - None
 
-Configuration file updates
-- None (no new packages or env keys required).
+- Configuration file updates
+  - None required
 
 [Functions]
-New and modified functions provide the new API and UI workflow.
+Add Payee CRUD and augment cashier payment creation and OR PDF logic.
 
-Backend: App\Http\Controllers\Api\V1\ShiftRequestController
-- public function index(Request $request): JsonResponse
-  - Purpose: Return authenticated student’s program change requests with optional term filter.
-  - Details:
-    - Resolve student id via resolveStudentId($request).
-    - Query ShiftRequest::where('student_id', $sid)->when(term, fn)->orderByDesc('requested_at')->get().
-    - Return { success: true, data: [...] }.
+Detailed breakdown:
 
-- public function store(Request $request): JsonResponse
-  - Purpose: Create a new pending shift request.
-  - Validation:
-    - term: required|integer
-    - program_to: required|integer|exists:tb_mas_programs,intProgramID
-    - reason: nullable|string|max:2000
-  - Flow:
-    - $sid = resolveStudentId($request); fetch student record from tb_mas_users (id, strStudentNumber, intProgramID, campus_id).
-    - program_from = student.intProgramID
-    - enforce app-level uniqueness check; attempt insert; catch DB unique error return 409.
-    - Create ShiftRequest row (status='pending', requested_at=now()).
-    - Create SystemAlert row via SystemAlert model and broadcast via SystemAlertService::broadcast('create', ...).
-    - Return 201 { success: true, data: created }.
+- New functions:
+  - App\Http\Controllers\Api\V1\PayeeController
+    - index(Request $request): list/search with pagination and q filter (id_number, firstname, lastname, email)
+    - show(int $id)
+    - store(PayeeStoreRequest $request): create; SystemLogService::log('create','Payee',id,null,newValues,$request)
+    - update(int $id, PayeeUpdateRequest $request): update; SystemLogService::log('update','Payee',id,old,new,$request)
+    - destroy(int $id): delete; on delete set related payment_details.payee_id = null; SystemLogService::log('delete','Payee',id,old,null,$request)
 
-- protected function resolveStudentId(Request $request): int
-  - Purpose: Determine student_id from token, explicit student_id, or other hints.
-  - Approach:
-    - If student_id provided and exists → use it.
-    - Else if token provided → DataFetcherService->getStudentByToken($token).
-    - Else attempt headers (X-User-ID where role matches student_view) as fallback.
-    - Throw validation exception if not resolvable.
+- Modified functions:
+  - App\Http\Requests\Api\V1\CashierPaymentStoreRequest::rules()
+    - Change validation to:
+      - 'student_id' => ['required_without:payee_id','integer','exists:tb_mas_users,intID']
+      - 'payee_id'   => ['required_without:student_id','integer','exists:tb_mas_payee,id']
+      - 'term'       => ['nullable','integer','required_if:student_id,*']  (or programmatically enforce in controller)
+  - App\Http\Controllers\Api\V1\CashierController::createPayment()
+    - Branch on payee_id vs student_id:
+      - If payee_id present:
+        - Bypass applicant_data hooks, student_number lookups, registration/enrollment toggles
+        - Set sy_reference to null
+        - Fill name/email/contact columns from tb_mas_payee if columns exist
+        - Set 'payee_id' in insert when payment_details.payee_id column exists
+    - Continue pointer logic (OR/invoice) unchanged
+  - App\Services\PaymentDetailAdminService
+    - detectColumns(): add 'payee_id'
+    - selectList(): include 'payee_id'
+    - normalizeRow(): include 'payee_id'
+  - App\Http\Controllers\Api\V1\FinanceController::orPdf()
+    - Resolve RECEIVED FROM:
+      - If payment_details.payee_id is non-null (resolved via PaymentDetailAdminService::detectColumns() and follow-up fetch), then:
+        - name: lastname, firstname middlename (uppercased as in student path)
+        - tin: tb_mas_payee.tin (or empty)
+        - address: tb_mas_payee.address
+      - else current student resolution as-is
 
-Frontend: StudentChangeProgramRequestController (features/student/change-program-request/change-program-request.controller.js)
-- init()
-  - Purpose: Initialize active term and student profile then load programs.
-  - Flow:
-    - TermService.init() or TermService.getActiveTerm() fallback; if unavailable GET /generic/active-term fallback; handle gracefully.
-    - StudentFinancesService.resolveProfile() to obtain student id and student number.
-    - Call reloadPrograms().
-
-- reloadPrograms()
-  - Purpose: Load available programs and normalize to { id, code, name } for the dropdown.
-  - Flow:
-    - ProgramsService.list({ enabledOnly: true }) and map rows.
-
-- canSubmit()
-  - Purpose: Enable the submit button only when profile, term, and selected program are available and not already submitting.
-
-- onSubmit()
-  - Purpose: Submit POST /api/v1/student/shift-requests with { student_id, term, program_to, reason }.
-  - Handles:
-    - 201: toast success + local state updated + disable resubmission for this term.
-    - 409: toast warning “Request already exists for this term.”
-    - 422: toast error with validation messages.
-    - Errors: general toast error.
+- Removed functions:
+  - None
 
 [Classes]
-New classes cover the data model and controller.
+Add new Payee Eloquent model and supporting controller/request/resource classes.
 
-New classes
-- App\Models\ShiftRequest (laravel-api/app/Models/ShiftRequest.php)
-  - Extends Illuminate\Database\Eloquent\Model
-  - Table: tb_mas_shift_requests
-  - Casts and fillable as defined under [Types].
-- App\Http\Controllers\Api\V1\ShiftRequestController (laravel-api/app/Http/Controllers/Api/V1/ShiftRequestController.php)
-  - Depends on DataFetcherService, SystemAlertService, DB, SystemAlert, ShiftRequest
+Detailed breakdown:
+- New classes:
+  - App\Models\Payee
+    - Table: tb_mas_payee; key: id; timestamps: false
+    - Key methods: paymentDetails() relationship
+  - App\Http\Controllers\Api\V1\PayeeController
+    - Inherits Controller
+    - Methods: index, show, store, update, destroy
+    - Middleware: role:admin,finance_admin
+  - App\Http\Requests\Api\V1\PayeeStoreRequest
+    - Rules as described
+  - App\Http\Requests\Api\V1\PayeeUpdateRequest
+    - Rules as described
+  - App\Http\Resources\PayeeResource
+    - Maps to: id, id_number, firstname, middlename, lastname, tin, address, contact_number, email
 
-Modified classes
-- None beyond route usage; no changes required to existing controllers.
+- Modified classes:
+  - App\Http\Requests\Api\V1\CashierPaymentStoreRequest (rules change)
+  - App\Http\Controllers\Api\V1\CashierController (createPayment branch for payees)
+  - App\Services\PaymentDetailAdminService (column mapping extensions)
+  - App\Http\Controllers\Api\V1\FinanceController (orPdf payee precedence)
+  - App\Models\PaymentDetail (add payee() relationship)
 
-Removed classes
-- None.
+- Removed classes:
+  - None
 
 [Dependencies]
-No new composer/npm packages are required.
+No external package dependencies required.
 
-Integration requirements
-- Table tb_mas_programs available and contains intProgramID for validation.
-- Table tb_mas_users provides student lookup (intID, strStudentNumber, intProgramID, campus_id).
-- SystemAlertService::broadcast must be callable and tolerant of failures (already designed to degrade gracefully).
+- Use existing SystemLogService for Payee CRUD logging and payment logging.
+- Use existing role middleware; grant access to admin and finance admin roles as required.
+- No composer changes.
 
 [Testing]
-Testing approach covers both API and UI with focus on the critical path.
+Add coverage for payee CRUD and non-student cashier payments.
 
-Backend/API
-- Migration: run php artisan migrate to create tb_mas_shift_requests with unique(student_id, term_id).
-- POST /api/v1/student/shift-requests
-  - Valid: returns 201 and row has status 'pending', program_from matches student, SystemAlert row created.
-  - Duplicate: second request same student+term returns 409.
-  - Invalid program_to or missing term: returns 422 with errors.
-- GET /api/v1/student/shift-requests
-  - Returns caller’s list; respects term filter.
+- New test scripts (optional parity with existing CLI tests):
+  - laravel-api/scripts/test_payees_api.php
+    - Create, list, update, delete payees; assert SystemLog entries exist (best-effort)
+  - laravel-api/scripts/test_cashier_nonstudent_payment_entry.php
+    - Create a payee
+    - Create cashier ranges if needed
+    - Create payment with payee_id, mode='or' and verify:
+      - payment_details row: payee_id set, student_information_id null, sy_reference null, OR assigned correctly
+      - Optional name/email/contact columns populated when present
+    - Fetch OR PDF and ensure RECEIVED FROM name/address come from payee
 
-System Alerts
-- After create, tb_sys_alerts has a new row with role_codes ['registrar'], link '#/registrar/shifting', intActive=1, system_generated=1.
-- Optional: Verify event broadcast (no hard requirement if broadcasting disabled in environment).
+- PHPUnit Feature tests (if desired):
+  - Feature/PayeeControllerTest.php (CRUD happy-path + validation failures)
+  - Feature/CashierNonStudentPaymentTest.php (happy path + validation)
 
-Frontend
-- Route access: '/student/change-program-request' requires role student_view or admin.
-- Initialization: Page resolves active term, profile, and programs without throwing; shows user-friendly errors if fallbacks kick in.
-- Submission:
-  - Success path: Toast “Request submitted”, submit disabled for same term afterward.
-  - Duplicate path: Toast “A request already exists for this term.”
-  - Validation errors: Display reasons without breaking the page.
-
-Regression
-- Registrar sidebar and pages unaffected.
-- Roles and guards remain consistent.
+- Manual validation:
+  - Verify API responses and OR PDF content for both student and payee-based payments
 
 [Implementation Order]
-Sequence minimizes integration risk and enables early API verification.
+Implement DB changes first, then API surface, then controller/service modifications, followed by testing scripts and verification.
 
-1) Database
-   - Create migration 2025_09_15_000250_create_tb_mas_shift_requests_table.php
-   - Columns, indexes, and unique(student_id, term_id)
+1. Migration: add nullable payment_details.payee_id (FK to tb_mas_payee.id; on delete set null)
+2. Model: create App\Models\Payee
+3. Requests/Resource/Controller: implement PayeeStoreRequest, PayeeUpdateRequest, PayeeResource, PayeeController
+4. Routes: register /api/v1/payees endpoints with role:admin,finance_admin
+5. Request Validation: modify CashierPaymentStoreRequest to accept student_id OR payee_id and make term nullable/required_if student
+6. CashierController::createPayment: implement non-student branch (payee flow), ensure no student-specific hooks run for payees; set payee_id in insert; populate optional columns from payee
+7. PaymentDetailAdminService: add payee_id to detectColumns/select/normalize
+8. PaymentDetail model: add payee() relationship
+9. FinanceController::orPdf: prefer payee details when payment_details.payee_id is set; fallback to student
+10. Test scripts: add test_payees_api.php and test_cashier_nonstudent_payment_entry.php; dry-run locally
+11. Security & logs: verify all create/update/delete for payees are logged using SystemLogService
+12. Documentation: brief README section in plans or commit description to onboard users
 
-2) Backend Model
-   - Add App\Models\ShiftRequest with casts/fillable and table mapping
-
-3) Backend Controller
-   - Add App\Http\Controllers\Api\V1\ShiftRequestController with:
-     - index(Request)
-     - store(Request)
-     - resolveStudentId(Request)
-
-4) Routes
-   - Update laravel-api/routes/api.php:
-     - GET /api/v1/student/shift-requests → index (role: student_view, admin)
-     - POST /api/v1/student/shift-requests → store (role: student_view, admin)
-
-5) System Alerts Integration
-   - In store(): create SystemAlert row and call SystemAlertService->broadcast('create', $alert)
-
-6) Frontend UI
-   - Add features/student/change-program-request/change-program-request.controller.js
-   - Add features/student/change-program-request/change-program-request.html
-   - Update core/routes.js to register “/student/change-program-request”
-   - Update shared/components/sidebar/sidebar.controller.js to add Student menu item
-   - Update index.html to include controller script
-
-7) End-to-end Tests
-   - Migrate DB; verify POST/GET endpoints (201/409/422)
-   - Load UI page; confirm initialization and submission flows (success and duplicate)
-   - Verify registrar alert row created and visible to registrar role
-
-8) Hardening and Polish
-   - Surface clear toasts on all error cases
-   - Ensure init fallbacks don’t block form rendering:
-     - If active term or profile fetch fails, show appropriate message and keep retry affordance
-   - Confirm no console errors and acceptable UX
+task_progress Items:
+- [ ] Step 1: Create migration to add payment_details.payee_id (nullable FK to tb_mas_payee.id)
+- [ ] Step 2: Implement App\Models\Payee
+- [ ] Step 3: Implement PayeeStoreRequest, PayeeUpdateRequest, PayeeResource
+- [ ] Step 4: Implement PayeeController with CRUD + SystemLog integration and role middleware
+- [ ] Step 5: Register /api/v1/payees routes in routes/api.php
+- [ ] Step 6: Update CashierPaymentStoreRequest rules for payee_id vs student_id and term behavior
+- [ ] Step 7: Update CashierController::createPayment to handle payee branch (no sy_reference; set payee_id; fill optional columns)
+- [ ] Step 8: Extend PaymentDetailAdminService detectColumns/select/normalize for payee_id
+- [ ] Step 9: Add payee() relation to PaymentDetail model
+- [ ] Step 10: Update FinanceController::orPdf to prefer payee data when available
+- [ ] Step 11: Add CLI test scripts for Payee CRUD and non-student payments; run local checks
+- [ ] Step 12: Smoke-test OR/Invoice number pointer behavior for payee payments
+- [ ] Step 13: Verify SystemLog entries for payee CRUD and payments; finalize docs

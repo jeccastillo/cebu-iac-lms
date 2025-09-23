@@ -100,8 +100,10 @@ class DepartmentDeficiencyController extends Controller
         // Ignore admin bypass for this meta endpoint to avoid showing unassigned departments.
         $codes = $ctx->departmentCodes();
         $assigned = $actorId ? FacultyDepartment::allowedForFaculty($actorId, $campusId) : [];
-        $allowed = array_values(array_intersect($codes, array_map('strtolower', (array) $assigned)));
-
+        if(!$isAdmin)
+            $allowed = array_values(array_intersect($codes, array_map('strtolower', (array) $assigned)));
+        else
+            $allowed = $codes;
         // Payment descriptions scoped by campus (parity with PaymentDescriptionController)
         $pdQ = PaymentDescription::query();
         if ($campusId !== null) {
