@@ -46,12 +46,14 @@ class PrerequisiteService
                 'id' => $prereq->intPrerequisiteID,
                 'code' => $prereq->code,
                 'description' => $prereq->description,
-                'program' => $prereq->program
+                'program' => $prereq->program,
+                'required_grade' => $prereq->required_grade
             ];
             
             $allPrerequisites[] = $prereqInfo;
             
-            $hasPassed = $this->recordService->hasStudentPassedSubject($studentId, $prereq->intPrerequisiteID);
+            // Check if student passed the prerequisite with required grade
+            $hasPassed = $this->checkPrerequisiteWithGrade($studentId, $prereq->intPrerequisiteID, $prereq->required_grade);
             
             if (!$hasPassed) {
                 $missingPrerequisites[] = $prereqInfo;
@@ -86,6 +88,7 @@ class PrerequisiteService
                 'p.intID',
                 'p.intPrerequisiteID',
                 'p.program',
+                'p.required_grade',
                 's.strCode as code',
                 's.strDescription as description'
             ]);
@@ -108,6 +111,61 @@ class PrerequisiteService
     protected function hasStudentPassedSubject(int $studentId, int $subjectId): bool
     {
         return $this->recordService->hasStudentPassedSubject($studentId, $subjectId);
+    }
+
+    /**
+     * Check if student passed a prerequisite with the required grade.
+     *
+     * @param int $studentId
+     * @param int $subjectId
+     * @param float|null $requiredGrade
+     * @return bool
+     */
+    protected function checkPrerequisiteWithGrade(int $studentId, int $subjectId, ?float $requiredGrade = null): bool
+    {
+        // If no specific grade requirement, just check if passed
+        if ($requiredGrade === null) {
+            return $this->recordService->hasStudentPassedSubject($studentId, $subjectId);
+        }
+
+        // Get student's best grade for this subject
+        $studentGrade = $this->getStudentBestGradeForSubject($studentId, $subjectId);
+        
+        if ($studentGrade === null) {
+            return false; // Student never took the subject
+        }
+
+        // Check if student's grade meets the requirement (lower number = better grade)
+        return $studentGrade <= $requiredGrade;
+    }
+
+    /**
+     * Get student's best grade for a specific subject.
+     *
+     * @param int $studentId
+     * @param int $subjectId
+     * @return float|null
+     */
+    protected function getStudentBestGradeForSubject(int $studentId, int $subjectId): ?float
+    {
+        $record = DB::table('tb_mas_classlist_student as cs')
+            ->join('tb_mas_classlist as c', 'cs.intClassListID', '=', 'c.intID')
+            ->where('cs.intStudentID', $studentId)
+            ->where('c.intSubjectID', $subjectId)
+            ->where(function ($query) {
+                $query->where('cs.strRemarks', 'Passed')
+                      ->orWhere('cs.strRemarks', 'LIKE', '%pass%')
+                      ->orWhere('cs.strRemarks', 'credit%')
+                      ->orWhere(function ($q) {
+                          $q->whereNotNull('cs.floatFinalGrade')
+                            ->where('cs.floatFinalGrade', '>', 0)
+                            ->where('cs.floatFinalGrade', '<=', 3.0); // 3.0 is passing grade
+                      });
+            })
+            ->selectRaw('MIN(cs.floatFinalGrade) as best_grade')
+            ->first();
+
+        return $record && $record->best_grade ? (float) $record->best_grade : null;
     }
 
     /**
