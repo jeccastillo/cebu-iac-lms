@@ -2803,7 +2803,6 @@ class Data_fetcher extends CI_Model {
                 if (isset($subj['is_special_class']) && $subj['is_special_class']) {
                     $hours = intval($class['intLectHours']);
                     $tuition += ($hours * 3) * $unit_fee;
-                    die();
                 } elseif($class['isNSTP']){
                     $nstp_fee = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'nstp'))
                     ->get('tb_mas_tuition_year_misc')->first_row('array');
