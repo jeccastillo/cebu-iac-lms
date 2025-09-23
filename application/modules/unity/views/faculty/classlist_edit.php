@@ -78,6 +78,13 @@
                     </select>
                 </div>
                 <div class="form-group">
+                    <label for="is_special_class">Is Special Class</label>
+                    <select type="text" id="is_special_class" name="is_special_class" class="form-control" placeholder="">
+                        <option <?php echo ($classlist['is_special_class'] == 0)?'selected':''; ?> value="0">No</option>
+                        <option <?php echo ($classlist['is_special_class'] == 1)?'selected':''; ?> value="1">Yes</option>
+                    </select>
+                </div>
+                <div class="form-group">
                         <label for="strAcademicYear">Term/Sem</label>
                         <select class="form-control" name="strAcademicYear">
                             <?php foreach($sy as $s): ?>

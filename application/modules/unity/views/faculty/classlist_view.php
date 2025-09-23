@@ -70,6 +70,13 @@
                         </select>                        
                     </div>
                     <div class="form-group">
+                        <label for="">Is Special Class</label>
+                        <select class="form-control" name="is_special_class" id="is_special_class" >
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>                            
+                        </select>                        
+                    </div>
+                    <div class="form-group">
                         <label for="">Curriculum</label>
                         <select class="form-control" name="intCurriculumID" id="intCurriculumID" >
                             <?php foreach ($curriculum as $curr): ?>
