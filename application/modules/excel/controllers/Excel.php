@@ -5551,7 +5551,7 @@ class Excel extends CI_Controller {
                     }
     
                     $balance_after_payment = '=AN' . $i . '-' . $this->columnIndexToLetter($last_index) . '' . $i;
-                    $total_adjustment = '=' . $this->columnIndexToLetter($last_index + 4) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 7) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 10) . '' . $i . 
+                    $total_adjustment = '=' . $this->columnIndexToLetter($last_index + 4) . '' . $i . '-' . $this->columnIndexToLetter($last_index + 7) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 10) . '' . $i . 
                                         '+' . $this->columnIndexToLetter($last_index + 13) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 16) . '' . $i;
                                         
                     $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index, $i)->setValue($total_amount);
