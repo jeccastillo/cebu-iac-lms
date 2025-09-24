@@ -676,7 +676,38 @@ new Vue({
                 });
                 
             }
-            this.ledger_term.sort((a, b) => new Date(a.date) - new Date(b.date))
+            // Sort ledger items by date (items without a valid date stay on top), then recompute running balance
+            this.ledger_term = this.ledger_term.slice().sort((a, b) => {
+                const ad = a && a.date ? new Date(a.date).getTime() : null;
+                const bd = b && b.date ? new Date(b.date).getTime() : null;
+
+                // If both have dates, sort ascending by date
+                if (ad !== null && bd !== null) return ad - bd;
+
+                // Items without date bubble to the top (keep Tuition / initial rows first)
+                if (ad === null && bd !== null) return -1;
+                if (ad !== null && bd === null) return 1;
+
+                // If both missing dates, keep original relative order
+                return 0;
+            });
+
+            // Recompute balance chronologically based on sorted order
+            let running = 0;
+            for (let k = 0; k < this.ledger_term.length; k++) {
+                const it = this.ledger_term[k];
+                let amt = parseFloat(it.amount);
+                if (isNaN(amt)) amt = 0;
+
+                // Payments reduce balance; balances with negative amounts also reduce
+                if (it.type === 'payment' || (it.type === 'balance' && amt < 0)) {
+                    running -= Math.abs(amt);
+                } else {
+                    running += amt;
+                }
+
+                this.ledger_term[k].balance = running.toFixed(2);
+            }
             this.ledger.push({
                 'ledger_items': this.ledger_term,
                 'balance': this.term_balance.toFixed(2)
