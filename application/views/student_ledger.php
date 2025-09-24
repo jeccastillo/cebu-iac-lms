@@ -673,64 +673,44 @@ new Vue({
                     'cashier': other[i].cashier_id,
                     'is_disabled':0,
                     'balance': this.term_balance_other.toFixed(2),
-                });
-                
+                });    
             }
-            // Sort ledger items strictly by O.R. Date ascending; items without valid dates last,
-            // then recompute running balance
-            const parseTs = (d) => {
-                if (!d) return Number.POSITIVE_INFINITY;
-                const s = ('' + d).trim();
-                if (!s || s === '0000-00-00' || s === '0000-00-00 00:00:00') return Number.POSITIVE_INFINITY;
-
-                // Normalize "YYYY-MM-DD HH:mm:ss" to ISO-ish "YYYY-MM-DDTHH:mm:ss"
-                const iso = s.includes('T') ? s : s.replace(' ', 'T');
-                let t = Date.parse(iso);
-                if (!isNaN(t)) return t;
-
-                // Try MM/DD/YYYY (with optional time and AM/PM)
-                const m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?)?$/i);
-                if (m) {
-                    let [_, mm, dd, yyyy, hh, mi, ss, ap] = m;
-                    mm = parseInt(mm, 10) - 1;
-                    dd = parseInt(dd, 10);
-                    yyyy = parseInt(yyyy, 10);
-                    let H = parseInt(hh || '0', 10);
-                    if (ap) {
-                        const up = ap.toUpperCase();
-                        if (up === 'PM' && H < 12) H += 12;
-                        if (up === 'AM' && H === 12) H = 0;
+            
+            // Sort all items except index 0 by date ascending
+            (function(){
+                const parseTs = function(d){
+                    if (!d) return Number.POSITIVE_INFINITY;
+                    const s = ('' + d).trim();
+                    if (!s || s === '0000-00-00' || s === '0000-00-00 00:00:00') return Number.POSITIVE_INFINITY;
+                    const iso = s.includes('T') ? s : s.replace(' ', 'T');
+                    let t = Date.parse(iso);
+                    if (!isNaN(t)) return t;
+                    const m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?)?$/i);
+                    if (m) {
+                        let mm = parseInt(m[1], 10) - 1;
+                        let dd = parseInt(m[2], 10);
+                        let yyyy = parseInt(m[3], 10);
+                        let H = parseInt(m[4] || '0', 10);
+                        const M = parseInt(m[5] || '0', 10);
+                        const S = parseInt(m[6] || '0', 10);
+                        const ap = (m[7] || '').toUpperCase();
+                        if (ap === 'PM' && H < 12) H += 12;
+                        if (ap === 'AM' && H === 12) H = 0;
+                        return new Date(yyyy, mm, dd, H, M, S).getTime();
                     }
-                    const M = parseInt(mi || '0', 10);
-                    const S = parseInt(ss || '0', 10);
-                    return new Date(yyyy, mm, dd, H, M, S).getTime();
+                    return Number.POSITIVE_INFINITY;
+                };
+                if (Array.isArray(this.ledger_term) && this.ledger_term.length > 1) {
+                    const head = this.ledger_term[0];
+                    const tail = this.ledger_term.slice(1).sort(function(a,b){
+                        const ad = parseTs(a && a.date);
+                        const bd = parseTs(b && b.date);
+                        return ad - bd;
+                    });
+                    this.ledger_term = [head].concat(tail);
                 }
+            }).call(this);
 
-                return Number.POSITIVE_INFINITY;
-            };
-
-            this.ledger_term = this.ledger_term.slice().sort((a, b) => {
-                const ad = parseTs(a && a.date);
-                const bd = parseTs(b && b.date);
-                return ad - bd;
-            });
-
-            // Recompute balance chronologically based on sorted order
-            let running = 0;
-            for (let k = 0; k < this.ledger_term.length; k++) {
-                const it = this.ledger_term[k];
-                let amt = parseFloat(it.amount);
-                if (isNaN(amt)) amt = 0;
-
-                // Payments reduce balance; balances with negative amounts also reduce
-                if (it.type === 'payment' || (it.type === 'balance' && amt < 0)) {
-                    running -= Math.abs(amt);
-                } else {
-                    running += amt;
-                }
-
-                this.ledger_term[k].balance = running.toFixed(2);
-            }
             this.ledger.push({
                 'ledger_items': this.ledger_term,
                 'balance': this.term_balance.toFixed(2)
