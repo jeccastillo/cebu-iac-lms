@@ -676,19 +676,49 @@ new Vue({
                 });
                 
             }
-            // Sort ledger items by date (items without a valid date stay on top), then recompute running balance
+            // Sort ledger items by date (Tuition first, then by O.R. Date ascending; items without valid dates last),
+            // then recompute running balance
+            const parseTs = (d) => {
+                if (!d) return Number.POSITIVE_INFINITY;
+                const s = ('' + d).trim();
+                if (!s || s === '0000-00-00' || s === '0000-00-00 00:00:00') return Number.POSITIVE_INFINITY;
+
+                // Normalize "YYYY-MM-DD HH:mm:ss" to ISO-ish "YYYY-MM-DDTHH:mm:ss"
+                const iso = s.includes('T') ? s : s.replace(' ', 'T');
+                let t = Date.parse(iso);
+                if (!isNaN(t)) return t;
+
+                // Try MM/DD/YYYY (with optional time and AM/PM)
+                const m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?)?$/i);
+                if (m) {
+                    let [_, mm, dd, yyyy, hh, mi, ss, ap] = m;
+                    mm = parseInt(mm, 10) - 1;
+                    dd = parseInt(dd, 10);
+                    yyyy = parseInt(yyyy, 10);
+                    let H = parseInt(hh || '0', 10);
+                    if (ap) {
+                        const up = ap.toUpperCase();
+                        if (up === 'PM' && H < 12) H += 12;
+                        if (up === 'AM' && H === 12) H = 0;
+                    }
+                    const M = parseInt(mi || '0', 10);
+                    const S = parseInt(ss || '0', 10);
+                    return new Date(yyyy, mm, dd, H, M, S).getTime();
+                }
+
+                return Number.POSITIVE_INFINITY;
+            };
+
             this.ledger_term = this.ledger_term.slice().sort((a, b) => {
-                const ad = a && a.date ? new Date(a.date).getTime() : null;
-                const bd = b && b.date ? new Date(b.date).getTime() : null;
+                const isTuitionA = a && a.name === 'Tuition';
+                const isTuitionB = b && b.name === 'Tuition';
+                if (isTuitionA && !isTuitionB) return -1;
+                if (!isTuitionA && isTuitionB) return 1;
 
-                // If both have dates, sort ascending by date
-                if (ad !== null && bd !== null) return ad - bd;
+                const ad = parseTs(a && a.date);
+                const bd = parseTs(b && b.date);
+                if (ad !== bd) return ad - bd;
 
-                // Items without date bubble to the top (keep Tuition / initial rows first)
-                if (ad === null && bd !== null) return -1;
-                if (ad !== null && bd === null) return 1;
-
-                // If both missing dates, keep original relative order
                 return 0;
             });
 
