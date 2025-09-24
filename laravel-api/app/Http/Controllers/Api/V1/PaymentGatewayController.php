@@ -14,6 +14,18 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 use App\Services\InvoiceService;
+use Illuminate\Support\Facades\Config;
+use Lloricode\Paymaya\PaymayaClient;
+use Lloricode\Paymaya\Request\Checkout\Amount\Amount;
+use Lloricode\Paymaya\Request\Checkout\Amount\AmountDetail;
+use Lloricode\Paymaya\Request\Checkout\Buyer\Buyer;
+use Lloricode\Paymaya\Request\Checkout\Buyer\Contact;
+use Lloricode\Paymaya\Request\Checkout\Checkout;
+use Lloricode\Paymaya\Request\Checkout\Item;
+use Lloricode\Paymaya\Request\Checkout\MetaData;
+use Lloricode\Paymaya\Request\Checkout\RedirectUrl;
+use Lloricode\Paymaya\Request\Checkout\TotalAmount;
+use Lloricode\LaravelPaymaya\Facades\PaymayaFacade as PaymayaSDK;
 use Throwable;
 
 class PaymentGatewayController extends Controller
@@ -508,37 +520,86 @@ class PaymentGatewayController extends Controller
             }
 
             if($pmethod == 'maya_pay'){
+                // Configure keys/mode
                 if (\App::environment(['local', 'staging'])) {
-                        Config::set('paymaya-sdk.mode', PaymayaClient::ENVIRONMENT_SANDBOX);
-                }else{
-                    if($student->campus == 'Cebu'){
+                    Config::set('paymaya-sdk.mode', PaymayaClient::ENVIRONMENT_SANDBOX);
+
+                    // Ensure keys are present even in local/staging
+                    $secret = env('PAYMAYA_SECRET_KEY');
+                    $public = env('PAYMAYA_PUBLIC_KEY');
+
+                    if (!$secret || !$public) {
+                        // Fallback based on campus if env keys are not set
+                        if ($student && $student->campus == 'Makati') {
+                            Config::set('paymaya-sdk.keys.secret', 'sk-n08wtfXteTusHlJssYUNd6aNFVVJmZVHgVCDWRa55N6');
+                            Config::set('paymaya-sdk.keys.public', 'pk-VnSJaz0kwzyWjNkAHmPboDR7ny8MwgOKppKRTpTkorr');
+                        } else {
+                            // Default to Cebu keys in local if campus is not available
+                            Config::set('paymaya-sdk.keys.secret', 'sk-2tglvJ050xJ3Pcqa9cRfb2sprsmuvZAvWw2HQe1DjAD');
+                            Config::set('paymaya-sdk.keys.public', 'pk-bPIZy0vHA5BnMFezVyBg6btpAuHf6KaYp7yppBmHAni');
+                        }
+                    } else {
+                        Config::set('paymaya-sdk.keys.secret', $secret);
+                        Config::set('paymaya-sdk.keys.public', $public);
+                    }
+                } else {
+                    Config::set('paymaya-sdk.mode', PaymayaClient::ENVIRONMENT_PRODUCTION);
+
+                    if ($student && $student->campus == 'Cebu') {
                         Config::set('paymaya-sdk.keys.secret', 'sk-2tglvJ050xJ3Pcqa9cRfb2sprsmuvZAvWw2HQe1DjAD');
                         Config::set('paymaya-sdk.keys.public', 'pk-bPIZy0vHA5BnMFezVyBg6btpAuHf6KaYp7yppBmHAni');
-                        $failureUrl = 'cebu.iacademy.edu.ph';
-                    }else if($student->campus == 'Makati'){
+                    } else if ($student && $student->campus == 'Makati') {
                         Config::set('paymaya-sdk.keys.secret', 'sk-n08wtfXteTusHlJssYUNd6aNFVVJmZVHgVCDWRa55N6');
                         Config::set('paymaya-sdk.keys.public', 'pk-VnSJaz0kwzyWjNkAHmPboDR7ny8MwgOKppKRTpTkorr');
-                        $failureUrl = 'sms-makati.iacademy.edu.ph';
+                    } else {
+                        // Fallback to env keys if campus is not defined; if still missing, default to Cebu
+                        $secret = env('PAYMAYA_SECRET_KEY');
+                        $public = env('PAYMAYA_PUBLIC_KEY');
+                        if ($secret && $public) {
+                            Config::set('paymaya-sdk.keys.secret', $secret);
+                            Config::set('paymaya-sdk.keys.public', $public);
+                        } else {
+                            Config::set('paymaya-sdk.keys.secret', 'sk-2tglvJ050xJ3Pcqa9cRfb2sprsmuvZAvWw2HQe1DjAD');
+                            Config::set('paymaya-sdk.keys.public', 'pk-bPIZy0vHA5BnMFezVyBg6btpAuHf6KaYp7yppBmHAni');
+                        }
                     }
                 }
-                         
-                $itemsTotalAmount = 0;
-                $phone = $student->contact_number ? $student->contact_number : '';
-                $s_email = $student->email ? $student->email : '';
-                $contact = (new Contact())->setPhone($phone)
-                                          ->setEmail($s_email);
 
-                $user = (new Buyer())->setFirstName($request->first_name)
-                                     ->setMiddleName($request->middle_name)
-                                     ->setLastName($request->last_name)
-                                     ->setContact($contact);
-                
+                // Build buyer/contact
+                $itemsTotalAmount = 0.0;
+                $phone = $p && $p->contact_number ? (string) $p->contact_number : '';
+                $s_email = $p && $p->email_address ? (string) $p->email_address : '';
+                $contact = (new Contact())
+                    ->setPhone($phone)
+                    ->setEmail($s_email);
+
+                $user = (new Buyer())
+                    ->setFirstName((string) $request->first_name)
+                    ->setMiddleName((string) $request->middle_name)
+                    ->setLastName((string) $request->last_name)
+                    ->setContact($contact);
+
+                // Redirect URLs
+                if (\App::environment(['local', 'staging'])) {
+                    $failureFull = url('/unity/student_tuition_payment/' . ($student ? $student->slug : ''));
+                } else {
+                    $domain = ($student && $student->campus == 'Cebu')
+                        ? 'https://cebu.iacademy.edu.ph'
+                        : 'https://sms-makati.iacademy.edu.ph';
+                    $failureFull = $domain . '/unity/student_tuition_payment/' . ($student ? $student->slug : '');
+                }
+                $successFull = url($responseURL);
+                $cancelFull = url($cancelURL);
+
+                // Build checkout request
                 $checkout = (new Checkout())
                     ->setBuyer($user)
                     ->setRedirectUrl(
-                       (new RedirectUrl())
-                           ->setFailure($failureUrl . '/unity/student_tuition_payment/' . $student->slug)
-                   )
+                        (new RedirectUrl())
+                            ->setSuccess($successFull)
+                            ->setFailure($failureFull)
+                            ->setCancel($cancelFull)
+                    )
                     ->setRequestReferenceNumber($requestId)
                     ->setMetadata(
                         (new MetaData())
@@ -550,15 +611,14 @@ class PaymentGatewayController extends Controller
                             ->setMST('mst')
                     );
 
-                foreach($paynamicsOrders as $order){
+                foreach ($paynamicsOrders as $order) {
                     $item = new Item();
-                    $item->name = $order['itemname'];
-                    $item->quantity = $order['quantity'];
-
-                    $itemAmount = $order['unitprice'] * $order['quantity'];
+                    $item->name = (string) ($order['itemname'] ?? 'Item');
+                    $item->description = (string) ($order['itemname'] ?? 'Item');
+                    $item->quantity = (int) ($order['quantity'] ?? 0);
                     $item->totalAmount = (new Amount())
-                        ->setValue($order['totalprice']);
-                    $itemsTotalAmount += $order['totalprice'];
+                        ->setValue((float) ($order['totalprice'] ?? 0.0));
+                    $itemsTotalAmount += (float) ($order['totalprice'] ?? 0.0);
                     $checkout->addItem($item);
                 }
 
@@ -567,11 +627,31 @@ class PaymentGatewayController extends Controller
                         ->setValue($itemsTotalAmount)
                         ->setDetails(
                             (new AmountDetail())
-                                ->setSubtotal($itemsTotalAmount)                                
+                                ->setSubtotal($itemsTotalAmount)
                         )
                 );
 
+                // Execute PayMaya checkout
                 $checkoutResponse = PaymayaSDK::checkout()->execute($checkout);
+
+                // Persist essential response fields
+                if (is_object($checkoutResponse)) {
+                    $p->response_id = $checkoutResponse->checkoutId ?? null;
+                    $p->payment_action_info = $checkoutResponse->redirectUrl ?? null;
+                }
+                $p->remarks = 'PayMaya';
+                $p->save();
+
+                return response()->json([
+                    'success' => true,
+                    'gateway' => 'paymaya',
+                    'request_id' => $requestId,
+                    'checkout_id' => $checkoutResponse->checkoutId ?? null,
+                    'payment_link' => $checkoutResponse->redirectUrl ?? null,
+                    'response_url' => $successFull,
+                    'cancel_url' => $cancelFull,
+                    'failure_url' => $failureFull,
+                ]);
             }
 
             return response()->json([

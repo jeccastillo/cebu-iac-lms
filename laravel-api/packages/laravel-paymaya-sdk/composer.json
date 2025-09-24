@@ -1,0 +1,77 @@
+{
+    "name": "lloricode/laravel-paymaya-sdk",
+    "description": "SDK for Paymaya using Laravel",
+    "keywords": [
+        "lloricode",
+        "paymaya",
+        "sdk",
+        "laravel",
+        "php"
+    ],
+    "homepage": "https://github.com/lloricode/laravel-paymaya-sdk",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Lloric Mayuga Garcia",
+            "email": "lloricode@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "ext-json": "*",
+        "illuminate/contracts": "^7.0|^8.0|^9.0|^10.0",
+        "lloricode/paymaya-sdk-php": "^0.4.2",
+        "spatie/laravel-package-tools": "^1.1"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^5.0|^6.0",
+        "phpunit/phpunit": "^9.3",
+        "spatie/laravel-ray": "^1.9",
+        "vimeo/psalm": "^4.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Lloricode\\LaravelPaymaya\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Lloricode\\LaravelPaymaya\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "psalm": "vendor/bin/psalm",
+        "test": "vendor/bin/phpunit --colors=always",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Lloricode\\LaravelPaymaya\\LaravelPaymayaServiceProvider"
+            ],
+            "aliases": {
+                "PaymayaSDKCheckoutClient": "Lloricode\\LaravelPaymaya\\Facades\\CheckoutFacade",
+                "PaymayaSDKClient": "Lloricode\\LaravelPaymaya\\Facades\\ClientFacade",
+                "PaymayaSDKCustomizationClient": "Lloricode\\LaravelPaymaya\\Facades\\CustomizationFacade",
+                "PaymayaSDK": "Lloricode\\LaravelPaymaya\\Facades\\PaymayaFacade",
+                "PaymayaSDKWebhhokClient": "Lloricode\\LaravelPaymaya\\Facades\\WebhookFacade"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/lloricde"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/lloricode/laravel-paymaya-sdk/issues",
+        "source": "https://github.com/lloricode/laravel-paymaya-sdk"
+    }
+}
