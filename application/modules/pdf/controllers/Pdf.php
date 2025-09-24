@@ -2603,7 +2603,12 @@ class Pdf extends CI_Controller {
                 case 'other':
                         $type = "UG ".$request['description'];
                         break;                    
-                case 'shs':
+                case 'shs':                                    
+                    $particulars = ["SHS - Graduation Ball","SHS - Graduation Fee","SHS UNIFORM"];
+                    if (in_array($particulars, $fruits)) {
+                         $type = $request['description'];
+                         break;
+                    }
                     $type = "SHS " .$request['description'];
                     break;
                 case 'ns_payment':
