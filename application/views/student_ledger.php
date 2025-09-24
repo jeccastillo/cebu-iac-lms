@@ -676,7 +676,7 @@ new Vue({
                 });
                 
             }
-            // Sort ledger items by date (Tuition first, then by O.R. Date ascending; items without valid dates last),
+            // Sort ledger items strictly by O.R. Date ascending; items without valid dates last,
             // then recompute running balance
             const parseTs = (d) => {
                 if (!d) return Number.POSITIVE_INFINITY;
@@ -710,16 +710,9 @@ new Vue({
             };
 
             this.ledger_term = this.ledger_term.slice().sort((a, b) => {
-                const isTuitionA = a && a.name === 'Tuition';
-                const isTuitionB = b && b.name === 'Tuition';
-                if (isTuitionA && !isTuitionB) return -1;
-                if (!isTuitionA && isTuitionB) return 1;
-
                 const ad = parseTs(a && a.date);
                 const bd = parseTs(b && b.date);
-                if (ad !== bd) return ad - bd;
-
-                return 0;
+                return ad - bd;
             });
 
             // Recompute balance chronologically based on sorted order
