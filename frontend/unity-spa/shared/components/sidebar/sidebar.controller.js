@@ -86,6 +86,7 @@
           { label: 'Payment Modes', path: '/finance/payment-modes' },
           { label: 'Student Billing', path: '/finance/student-billing' },
           { label: 'Payment Actions', path: '/finance/payment-actions' },
+          { label: 'Non-Student Payments', path: '/finance/non-student-payments' },
           { label: 'Cashier Admin', path: '/cashier-admin' },
           { label: 'Credit/Debit', path: '/finance/debit-credit' },                    
         ]
@@ -118,6 +119,7 @@
           { label: 'Faculty Loading', path: '/faculty-loading/by-faculty' },
           { label: 'Grading Systems', path: '/grading-systems' },
           { label: 'Advisors', path: '/advisors' },
+          { label: 'Advising List', path: '/advisors/quick-view' },
           { label: 'Grading Sheet', path: '/academics/grading-sheet' }
         ]
       },
@@ -136,6 +138,7 @@
           { label: 'Student Editor', path: '/admin/students/prompt' },
           { label: 'Invoices', path: '/admin/invoices' },
           { label: 'Payment Details', path: '/admin/payment-details' },
+          { label: 'Payment Details Import', path: '/admin/payment-details/import' },
           { label: 'Faculty', path: '/faculty' },
           { label: 'Roles', path: '/roles' },
           { label: 'System Alerts', path: '/admin/system-alerts' },

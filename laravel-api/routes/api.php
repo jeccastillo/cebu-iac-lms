@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\V1\InitialRequirementsAdminController;
 use App\Http\Controllers\Api\V1\InvoiceController;
 use App\Http\Controllers\Api\V1\PaymentDescriptionController;
 use App\Http\Controllers\Api\V1\PaymentDetailAdminController;
+use App\Http\Controllers\Api\V1\PaymentDetailsImportController;
 use App\Http\Controllers\Api\V1\PaymentModeController;
 use App\Http\Controllers\Api\V1\PaymentJournalController;
 use App\Http\Controllers\Api\V1\FinancePaymentActionsController;
@@ -69,6 +70,8 @@ use App\Http\Controllers\Api\V1\DepartmentDeficiencyController;
 use App\Http\Controllers\Api\V1\FacultyDepartmentController;
 use App\Http\Controllers\Api\V1\ShiftRequestController;
 use App\Http\Controllers\Api\V1\StudentAdvisorController;
+use App\Http\Controllers\Api\V1\PayeeController;
+use App\Http\Controllers\Api\V1\NonStudentPaymentsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -310,6 +313,8 @@ Route::prefix('v1')->group(function () {
     // Finance endpoints (baseline)
     Route::get('/finance/transactions', [FinanceController::class, 'transactions']);
     Route::get('/finance/or-lookup', [FinanceController::class, 'orLookup']);
+    // Official Receipt PDF
+    Route::get('/finance/or/{or}/pdf', [FinanceController::class, 'orPdf'])->middleware('role:finance,admin');
     Route::get('/finance/payment-details', [FinanceController::class, 'paymentDetails']);
     Route::post('/finance/payment-details/debit', [PaymentJournalController::class, 'debit'])->middleware('role:finance,admin');
     Route::post('/finance/payment-details/credit', [PaymentJournalController::class, 'credit'])->middleware('role:finance,admin');
@@ -330,6 +335,10 @@ Route::prefix('v1')->group(function () {
     Route::get('/finance/payment-details/{id}', [PaymentDetailAdminController::class, 'show'])->middleware('role:admin');
     Route::patch('/finance/payment-details/{id}', [PaymentDetailAdminController::class, 'update'])->middleware('role:admin');
     Route::delete('/finance/payment-details/{id}', [PaymentDetailAdminController::class, 'destroy'])->middleware('role:admin');
+
+    // Admin/Finance Admin: Payment Details Import (template + upload)
+    Route::get('/finance/payment-details/import/template', [PaymentDetailsImportController::class, 'template'])->middleware('role:finance_admin,admin');
+    Route::post('/finance/payment-details/import', [PaymentDetailsImportController::class, 'import'])->middleware('role:finance_admin,admin');
 
     // Student Billing (Finance/Admin)
     Route::get('/finance/student-billing', [StudentBillingController::class, 'index'])->middleware('role:finance,admin');
@@ -495,6 +504,8 @@ Route::prefix('v1')->group(function () {
     // Resolve acting cashier for current faculty context (place before parameterized {id} routes)
     Route::get('/cashiers/me', [CashierController::class, 'me'])->middleware('role:cashier_admin,finance,admin');
     Route::post('/cashiers/{id}/payments', [CashierController::class, 'createPayment'])->middleware('role:cashier_admin,finance,admin');
+    // Non-Student (Payee) Payments - separate controller
+    Route::post('/cashiers/{id}/payee-payments', [NonStudentPaymentsController::class, 'store'])->middleware('role:cashier_admin,finance,admin');
     Route::post('/cashiers/{cashier}/payments/{payment}/assign-number', [CashierController::class, 'assignNumber'])->middleware('role:cashier_admin,finance,admin');
     Route::get('/cashiers/{id}', [CashierController::class, 'show'])->middleware('role:cashier_admin,admin');
     Route::delete('/cashiers/{id}', [CashierController::class, 'destroy'])->middleware('role:cashier_admin,admin');
@@ -513,6 +524,13 @@ Route::prefix('v1')->group(function () {
     Route::post('/payment-descriptions', [PaymentDescriptionController::class, 'store'])->middleware('role:finance,department_admin,admin');
     Route::put('/payment-descriptions/{id}', [PaymentDescriptionController::class, 'update'])->middleware('role:finance,admin');
     Route::delete('/payment-descriptions/{id}', [PaymentDescriptionController::class, 'destroy'])->middleware('role:finance,admin');
+
+    // Payees CRUD (Finance Admin / Admin)
+    Route::get('/payees', [PayeeController::class, 'index'])->middleware('role:finance_admin,admin');
+    Route::get('/payees/{id}', [PayeeController::class, 'show'])->middleware('role:finance_admin,admin');
+    Route::post('/payees', [PayeeController::class, 'store'])->middleware('role:finance_admin,admin');
+    Route::patch('/payees/{id}', [PayeeController::class, 'update'])->middleware('role:finance_admin,admin');
+    Route::delete('/payees/{id}', [PayeeController::class, 'destroy'])->middleware('role:finance_admin,admin');
 
     // Department Deficiencies (Department Admin/Admin)
     Route::get('/department-deficiencies', [DepartmentDeficiencyController::class, 'index'])->middleware('role:department_admin,admin');

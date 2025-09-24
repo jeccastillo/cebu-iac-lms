@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\V1\SubjectSubmitRequest;
+use App\Services\CorequisiteService;
+use App\Services\PrerequisiteService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Requests\Api\V1\SubjectSubmitRequest;
-use App\Services\PrerequisiteService;
-use App\Services\CorequisiteService;
 
 class SubjectController extends Controller
 {
@@ -262,15 +262,27 @@ class SubjectController extends Controller
         $subject = (int) $request->input('intSubjectID', 0);
         $program = $request->input('program');
         $pre     = (int) $request->input('intPrerequisiteID', 0);
+        $requiredGrade = $request->input('required_grade');
 
         if ($subject <= 0 || $pre <= 0) {
             return response()->json(['success' => false, 'message' => 'intSubjectID and intPrerequisiteID required'], 422);
+        }
+
+        // Validate required_grade if provided
+        if ($requiredGrade !== null && $requiredGrade !== '') {
+            $requiredGrade = (float) $requiredGrade;
+            if ($requiredGrade < 1.0 || $requiredGrade > 3.0) {
+                return response()->json(['success' => false, 'message' => 'required_grade must be between 1.0 and 3.0 (passing grade)'], 422);
+            }
+        } else {
+            $requiredGrade = null;
         }
 
         DB::table('tb_mas_prerequisites')->insert([
             'program'        => $program,
             'intPrerequisiteID' => $pre,
             'intSubjectID'   => $subject,
+            'required_grade' => $requiredGrade,
         ]);
 
         return response()->json(['success' => true, 'message' => 'Success']);
@@ -329,6 +341,7 @@ class SubjectController extends Controller
                 'p.intID as id',
                 'p.intPrerequisiteID',
                 'p.program',
+                'p.required_grade',
                 's.strCode as code',
                 's.strDescription as description',
             ])

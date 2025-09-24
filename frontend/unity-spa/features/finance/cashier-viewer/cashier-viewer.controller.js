@@ -1027,6 +1027,48 @@
       }
     };
 
+    // Print Official Receipt (OR) for a payment_details row with an OR number
+    vm.printOr = function (row) {
+      try {
+        row = row || {};
+        var orNo = (row.or_no != null ? ('' + row.or_no).trim() : '');
+        if (!orNo) return $q.when();
+
+        var base = (APP_CONFIG && APP_CONFIG.API_BASE ? APP_CONFIG.API_BASE : '');
+        var url = base + '/finance/or/' + encodeURIComponent(orNo) + '/pdf';
+
+        // Append faculty_id and campus_id as query params
+        var params = [];
+        try {
+          var state = vm.state || (StorageService && StorageService.getJSON ? StorageService.getJSON('loginState') : null);
+          var fid = state && state.faculty_id != null ? state.faculty_id : null;
+          if (fid != null && fid !== '') params.push('faculty_id=' + encodeURIComponent(fid));
+        } catch (_eFID) {}
+        try {
+          var campusId = null;
+          if (vm.student && vm.student.campus_id != null) campusId = vm.student.campus_id;
+          else if (vm.myCashier && vm.myCashier.campus_id != null) campusId = vm.myCashier.campus_id;
+          if (campusId != null && campusId !== '') params.push('campus_id=' + encodeURIComponent(campusId));
+        } catch (_eCID) {}
+        if (params.length) url += (url.indexOf('?') === -1 ? '?' : '&') + params.join('&');
+
+        // Open in new tab
+        var opened = null;
+        try { opened = window.open(url, '_blank'); } catch (_eOpen) { opened = null; }
+        if (!opened) {
+          try {
+            var a = document.createElement('a');
+            a.href = url; a.target = '_blank'; a.rel = 'noopener';
+            document.body.appendChild(a); a.click();
+            setTimeout(function () { try { document.body.removeChild(a); } catch (_eRm) {} }, 0);
+          } catch (_eA) {}
+        }
+        return $q.when();
+      } catch (e) {
+        return $q.when();
+      }
+    };
+
     // =========================
     // Assign Number Modal (OR/Invoice)
     // =========================
@@ -1413,7 +1455,17 @@ if (vm.ui.showAssignNumberModal == null) vm.ui.showAssignNumberModal = false;
         if (matched) {
           vm.payment.invoice_number = (matched.invoice_number || matched.number || null);
           // compute remaining cap and clamp amount if needed
-          try { if (typeof vm.computeInvoiceRemaining === 'function') vm.computeInvoiceRemaining(); } catch (_e) {}
+          var _remVal = null;
+          try { if (typeof vm.computeInvoiceRemaining === 'function') { _remVal = vm.computeInvoiceRemaining(); } } catch (_e) {}
+          // Auto-fill Amount with remaining when selecting an invoice (truncate to 2 decimals)
+          try {
+            var nRem = parseFloat(_remVal);
+            if (isFinite(nRem) && nRem >= 0) {
+              var trunc = Math.floor(nRem * 100) / 100;
+              vm.payment = vm.payment || {};
+              vm.payment.amount = trunc;
+            }
+          } catch (_eFill) {}
           try { if (typeof vm.onAmountChange === 'function') vm.onAmountChange(); } catch (_e2) {}
         } else {
           vm.payment.invoice_number = null;

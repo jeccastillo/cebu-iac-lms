@@ -1,277 +1,258 @@
 # Implementation Plan
 
 [Overview]
-Implement a Student Advisor management feature that lets faculty_admins assign students to a faculty advisor (teaching faculty), maintain historical advisor changes, and support bulk assignment and quick advisor switching, while enforcing department and campus alignment, and exposing APIs and a dedicated UI page.
+Create a non-student payments module that enables school tenants to pay through the existing cashier module. Payments for tenants will reference tb_mas_payee instead of tb_mas_users, including full CRUD for payees, cashier payment support for either student or payee, and OR PDF updates to show payee details when applicable.
 
-This feature introduces a normalized history table for advisor assignments while maintaining a denormalized pointer on tb_mas_users for fast lookup. Authorization is enforced via existing middleware and department/campus scoping using tb_mas_faculty_departments. The backend provides endpoints to fetch, assign in bulk, unassign, and quick-switch advisors. The frontend adds a dedicated management page (role-gated to faculty_admin) where an admin selects an advisor and bulk-adds students, and can quickly replace an advisor across all advisees.
+This implementation extends the current finance and cashier subsystems with a parallel flow for non-student entities (tenants). We will introduce a Payee model mapped to the legacy table tb_mas_payee, expose an admin/finance-admin CRUD API for payee management, and update cashier payment creation to accept either student_id or payee_id. Payments created for payees will store a nullable payee_id on payment_details and omit sy_reference as requested. OR PDF generation will prefer payee data when payment_details.payee_id is set, falling back to student details as before. System logging will be added to all create/update/delete events of payees and to cashier payment creation for auditability.
 
 [Types]  
-Introduce new DB entities and extend existing models to represent student↔advisor relationships with history and validation, plus request/response contracts for the APIs.
+Add a nullable foreign key column payment_details.payee_id and new types for Payee payloads and responses.
 
-1) Database
-- New table: tb_mas_student_advisor
-  - intID: bigint unsigned auto-increment (PK)
-  - intStudentID: bigint unsigned NOT NULL — references tb_mas_users.intID (logical FK)
-  - intAdvisorID: bigint unsigned NOT NULL — references tb_mas_faculty.intID (logical FK)
-  - is_active: tinyint(1) NOT NULL DEFAULT 1 — exactly one active row per student
-  - started_at: datetime NOT NULL — when assignment was activated (default now())
-  - ended_at: datetime NULL — when assignment ended (set on unassign/switch)
-  - assigned_by: bigint unsigned NOT NULL — faculty who performed assignment (tb_mas_faculty.intID)
-  - department_code: varchar(64) NOT NULL — department alignment used at assign-time (lowercased/tracked)
-  - campus_id: int NULL — nullable campus alignment used at assign-time
-  - created_at: timestamp NULL, updated_at: timestamp NULL
-  - Indexes/Constraints:
-    - UNIQUE (intStudentID, is_active) — ensures only one active assignment per student
-    - INDEX idx_studentid (intStudentID)
-    - INDEX idx_advisor_active (intAdvisorID, is_active)
-    - Optional check constraints (enforced in app if DB lacks support):
-      - is_active in (0,1)
-      - ended_at is NULL when is_active=1; ended_at NOT NULL when is_active=0
+Detailed type specifications:
+- Table: tb_mas_payee (legacy, pre-existing; used as read/write store)
+  - id: int, PK, auto-increment
+  - id_number: varchar(40), required
+  - firstname: varchar(99), required
+  - lastname: varchar(99), nullable
+  - middlename: varchar(99), nullable
+  - tin: varchar(99), nullable
+  - address: text, nullable
+  - contact_number: varchar(40), nullable
+  - email: varchar(99), required
 
-- Alter table: tb_mas_users
-  - Add column: intAdvisorID bigint unsigned NULL (indexed)
-  - Purpose: denormalized pointer to the currently active advisor for fast joins and listings.
-  - Backfill migration step populates intAdvisorID based on active tb_mas_student_advisor rows where available.
+- New Model: App\Models\Payee
+  - protected $table = 'tb_mas_payee';
+  - protected $primaryKey = 'id';
+  - $timestamps = false (unless columns exist; per screenshot appears none)
+  - Fillable: ['id_number','firstname','lastname','middlename','tin','address','contact_number','email']
+  - Relationships:
+    - paymentDetails(): hasMany(PaymentDetail::class, 'payee_id', 'id')
 
-2) Eloquent Models
-- New: App\Models\StudentAdvisor
-  - $table = 'tb_mas_student_advisor'
-  - $primaryKey = 'intID'
-  - $casts:
-    - intStudentID: integer
-    - intAdvisorID: integer
-    - assigned_by: integer
-    - is_active: integer
-    - campus_id: integer
-    - started_at: datetime
-    - ended_at: datetime
-  - Relations:
-    - student(): belongsTo(App\Models\User, 'intStudentID', 'intID')
-    - advisor(): belongsTo(App\Models\Faculty, 'intAdvisorID', 'intID')
-    - assignedBy(): belongsTo(App\Models\Faculty, 'assigned_by', 'intID')
+- Modified Table: payment_details
+  - payee_id: integer, nullable, FK to tb_mas_payee.id (no cascade delete; set null on payee removal)
+  - Validation/Rules:
+    - When payee_id is set: student_information_id may be null; sy_reference nullable (omitted for tenants)
+    - When student_information_id is set: existing behavior continues; sy_reference required
+    - OR invoice number assignment rules remain the same
 
-- Existing: App\Models\User (tb_mas_users)
-  - Add $fillable[] = 'intAdvisorID'
-  - Relations:
-    - advisor(): belongsTo(App\Models\Faculty, 'intAdvisorID', 'intID')
-    - advisorHistory(): hasMany(App\Models\StudentAdvisor, 'intStudentID', 'intID')
+- API Request DTOs:
+  - PayeeStoreRequest:
+    - id_number: required|string|max:40|unique:tb_mas_payee,id_number
+    - firstname: required|string|max:99
+    - lastname: nullable|string|max:99
+    - middlename: nullable|string|max:99
+    - tin: nullable|string|max:99
+    - address: nullable|string
+    - contact_number: nullable|string|max:40
+    - email: required|email|max:99
+  - PayeeUpdateRequest:
+    - same as store; id_number unique except current id
 
-- Existing: App\Models\Faculty (tb_mas_faculty)
-  - New relations:
-    - advisorAssignments(): hasMany(App\Models\StudentAdvisor, 'intAdvisorID', 'intID')
-    - advisees(): hasManyThrough(App\Models\User, App\Models\StudentAdvisor, 'intAdvisorID', 'intID', 'intID', 'intStudentID')
-
-3) Request Types (Laravel Form Requests)
-- StudentAdvisorAssignBulkRequest
-  - Body:
-    - student_ids: int[] (optional)
-    - student_numbers: string[] (optional)
-    - replace_existing: bool (optional, default false) — whether to end existing active advisor if present
-  - Rules:
-    - At least one of student_ids or student_numbers must be present.
-    - Each ID/number must resolve to an existing student.
-- StudentAdvisorSwitchRequest
-  - Body:
-    - from_advisor_id: int required
-    - to_advisor_id: int required, must be different from from_advisor_id
-  - Rules:
-    - Both advisors must exist and be teaching=1.
-- StudentAdvisorShowRequest
-  - Query:
-    - student_id: int optional
-    - student_number: string optional
-  - Rules:
-    - One of student_id or student_number is required.
+  - CashierPaymentStoreRequest (modified):
+    - student_id: required_without:payee_id|integer|exists:tb_mas_users,intID
+    - payee_id: required_without:student_id|integer|exists:tb_mas_payee,id
+    - term: required_if:student_id,*,nullable|integer (nullable and omitted when paying as payee)
+    - mode: required|in:or,invoice,none
+    - amount: required|numeric|gt:0
+    - description: required|string|max:255
+    - mode_of_payment_id: required|integer|exists:payment_modes,id
+    - method: nullable|string|max:100
+    - remarks: required|string|max:1000
+    - posted_at: nullable|date
+    - campus_id: nullable|integer
+    - invoice_id: sometimes|nullable|integer
+    - invoice_number: sometimes|nullable|integer
+    - or_date: sometimes|nullable|date
+    - convenience_fee: sometimes|nullable|numeric|min:0
 
 [Files]
-Introduce new backend and frontend files, and modify existing files to wire the feature end-to-end.
+Introduce a new Payee module with CRUD and modify existing controllers/services to support payee-based payments and OR PDF rendering.
 
-Backend (Laravel API)
-- New files:
-  - laravel-api/database/migrations/2025_09_16_000001_create_tb_mas_student_advisor.php
-    - Creates tb_mas_student_advisor with schema above and indexes.
-  - laravel-api/database/migrations/2025_09_16_000002_alter_tb_mas_users_add_intAdvisorID.php
-    - Adds intAdvisorID column, index, and backfill.
-  - laravel-api/app/Models/StudentAdvisor.php
-  - laravel-api/app/Services/StudentAdvisorService.php
-    - Core business logic (bulk assign, switch, show, unassign, validations).
-  - laravel-api/app/Http/Controllers/Api/V1/StudentAdvisorController.php
-    - API endpoints handler; injects service; handles requests/responses.
-  - laravel-api/app/Http/Requests/Api/V1/StudentAdvisorAssignBulkRequest.php
-  - laravel-api/app/Http/Requests/Api/V1/StudentAdvisorSwitchRequest.php
-  - laravel-api/app/Http/Requests/Api/V1/StudentAdvisorShowRequest.php
+Detailed breakdown:
 
-- Modified files:
+- New files to be created:
+  - laravel-api/app/Models/Payee.php
+    - Eloquent model for tb_mas_payee
+  - laravel-api/app/Http/Controllers/Api/V1/PayeeController.php
+    - CRUD endpoints for payee management; guarded by role:admin,finance_admin
+    - Uses SystemLogService::log for create/update/delete
+  - laravel-api/app/Http/Requests/Api/V1/PayeeStoreRequest.php
+    - Validation for creating a payee
+  - laravel-api/app/Http/Requests/Api/V1/PayeeUpdateRequest.php
+    - Validation for updating a payee
+  - laravel-api/app/Http/Resources/PayeeResource.php
+    - Normalized API shape for payee responses
+  - laravel-api/database/migrations/20xx_xx_xx_xxxxxx_add_payee_id_to_payment_details.php
+    - Adds nullable payee_id, FK to tb_mas_payee(id). Safe up/down.
+
+- Existing files to be modified (specific changes):
   - laravel-api/routes/api.php
     - Add routes:
-      - GET   /api/v1/student-advisors                 → StudentAdvisorController@index      (role:faculty_admin,admin)
-      - POST  /api/v1/advisors/{advisorId}/assign-bulk → StudentAdvisorController@assignBulk (role:faculty_admin,admin)
-      - POST  /api/v1/advisors/switch                  → StudentAdvisorController@switch     (role:faculty_admin,admin)
-      - DELETE /api/v1/student-advisors/{studentId}    → StudentAdvisorController@destroy    (role:faculty_admin,admin)
-  - laravel-api/app/Models/User.php
-    - $fillable includes intAdvisorID; add advisor() and advisorHistory() relations.
-  - laravel-api/app/Models/Faculty.php
-    - Add advisorAssignments() and advisees() relations.
+      - GET /api/v1/payees
+      - POST /api/v1/payees
+      - GET /api/v1/payees/{id}
+      - PATCH /api/v1/payees/{id}
+      - DELETE /api/v1/payees/{id}
+      - Protect with middleware('role:admin,finance_admin')
+  - laravel-api/app/Http/Requests/Api/V1/CashierPaymentStoreRequest.php
+    - Relax validation: accept payee_id OR student_id; make term required only for student payments; nullable otherwise
+  - laravel-api/app/Http/Controllers/Api/V1/CashierController.php
+    - In createPayment():
+      - Support either student_id or payee_id
+      - When payee_id is provided:
+        - Do not require or use student-dependent lookups (tb_mas_users)
+        - Do not require sy_reference; set null
+        - Fill optional name/email/contact columns (first_name, middle_name, last_name, email_address, contact_number) from tb_mas_payee when columns exist
+        - Persist payment_details.payee_id = {payee_id}
+      - Continue existing invoice/OR logic, pointer increments, and applicant logic only for student payments
+  - laravel-api/app/Services/PaymentDetailAdminService.php
+    - detectColumns(): include 'payee_id' => $col('payee_id')
+    - selectList(): include payee_id when column exists
+    - normalizeRow(): include 'payee_id' (int|null) and 'source' unchanged
+  - laravel-api/app/Http/Controllers/Api/V1/FinanceController.php
+    - orPdf():
+      - Resolve payment_detail row and prefer payee info when payee_id is present:
+        - Lookup tb_mas_payee.id, read firstname/lastname/middlename, tin, address
+        - Render RECEIVED FROM using payee name/address; TIN from payee
+      - Fallback to student as currently implemented
+  - laravel-api/app/Models/PaymentDetail.php
+    - Add relationship:
+      - public function payee() { return $this->belongsTo(\App\Models\Payee::class, 'payee_id', 'id'); }
+  - laravel-api/app/Services/Pdf/OfficialReceiptPdf.php
+    - No schema changes, but ensure renderer supports any non-student labels if needed (existing DTO already generic)
 
-Frontend (AngularJS unity-spa)
-- New feature module: Advisors Management (faculty_admin-only)
-  - frontend/unity-spa/features/advisors/advisors.service.js
-    - Wrapper for new API endpoints; uses existing auth/header patterns; select2 data sources for faculty/students.
-  - frontend/unity-spa/features/advisors/advisors.controller.js
-    - Page controller for:
-      - Select Advisor (teaching=1, filtered by department and campus)
-      - Bulk add students (by search, multi-select, or CSV paste) to selected advisor
-      - Quick switch all advisees from Advisor A to Advisor B
-      - Show summary of actions and conflicts
-  - frontend/unity-spa/features/advisors/advisors.html
-    - UI layout with:
-      - Advisor picker (select2)
-      - Bulk student picker (select2; support by ID or Student Number)
-      - Replace Existing toggle
-      - Actions: Assign Bulk, Quick Switch
-      - Results/History display for selected students/advisor
-  - Optional route/registration (if needed by app shell):
-    - frontend/unity-spa/features/advisors/advisors.routes.js (if project patterns isolate routes per feature)
-      - Registers state: app.advisors (url: /advisors), role-gated via existing FE role checks
-- Modified (if navigation/menu is centralized):
-  - Add menu entry "Advisors" visible to role faculty_admin.
+- Files to be deleted or moved
+  - None
+
+- Configuration file updates
+  - None required
 
 [Functions]
-Add new controller actions and service methods; modify models only to add relations; no removals.
+Add Payee CRUD and augment cashier payment creation and OR PDF logic.
 
-New functions (Backend)
-- App\Services\StudentAdvisorService
-  - assignBulk(int $advisorId, array $studentIds = [], array $studentNumbers = [], bool $replaceExisting, int $actorFacultyId): array
-    - Validates advisor exists, teaching=1
-    - Resolves student IDs from inputs
-    - Enforces department_code and campus_id overlap: actor ↔ advisor (via tb_mas_faculty_departments)
-    - For each student:
-      - If active advisor exists:
-        - If same advisor: skip (idempotent)
-        - If replaceExisting: end active with ended_at, create new active assignment
-        - Else: record conflict
-      - If none: create new active assignment
-      - Update tb_mas_users.intAdvisorID pointer accordingly
-    - Returns summary: assigned_count, skipped, conflicts, errors
-  - switchAll(int $fromAdvisorId, int $toAdvisorId, int $actorFacultyId): array
-    - Validates both advisors (teaching=1)
-    - Enforces actor dept/campus overlap with both advisors
-    - For each active advisee of fromAdvisorId:
-      - If already assigned to toAdvisorId: skip
-      - End current, create new active assignment to toAdvisorId
-      - Update pointer
-    - Returns counts: switched, skipped, errors
-  - showByStudent(?int $studentId, ?string $studentNumber): array
-    - Returns current active advisor and full assignment history for the student
-  - unassign(int $studentId, int $actorFacultyId): array
-    - If active assignment exists: end it (ended_at), set is_active=0, nullify tb_mas_users.intAdvisorID
-    - Idempotent if none active
-  - Helpers (private):
-    - resolveStudentIds(array $ids, array $numbers): int[]
-    - checkDeptCampusOverlap(int $actorFacultyId, int $targetFacultyId): array{ok:bool, dept:string, campus_id:?int}
-      - At least one common department_code, campus-aware when campus tags exist
-    - endActiveAssignment(int $studentId): void
-    - createAssignment(int $studentId, int $advisorId, string $dept, ?int $campusId, int $actorId): StudentAdvisor
-    - facultyDeptTags(int $facultyId): array{departments: string[], campus_ids: int[]|null}
+Detailed breakdown:
 
-New functions (Controllers)
-- App\Http\Controllers\Api\V1\StudentAdvisorController
-  - index(StudentAdvisorShowRequest $request, StudentAdvisorService $service)
-    - Query params: student_id or student_number
-    - Returns { active, history[] }
-  - assignBulk(int $advisorId, StudentAdvisorAssignBulkRequest $request, StudentAdvisorService $service)
-    - Returns summary
-  - switch(StudentAdvisorSwitchRequest $request, StudentAdvisorService $service)
-    - Returns summary
-  - destroy(int $studentId, Request $request, StudentAdvisorService $service)
-    - Returns result of unassign
+- New functions:
+  - App\Http\Controllers\Api\V1\PayeeController
+    - index(Request $request): list/search with pagination and q filter (id_number, firstname, lastname, email)
+    - show(int $id)
+    - store(PayeeStoreRequest $request): create; SystemLogService::log('create','Payee',id,null,newValues,$request)
+    - update(int $id, PayeeUpdateRequest $request): update; SystemLogService::log('update','Payee',id,old,new,$request)
+    - destroy(int $id): delete; on delete set related payment_details.payee_id = null; SystemLogService::log('delete','Payee',id,old,null,$request)
 
-Modified functions
-- None removed; existing models extended only with relations.
+- Modified functions:
+  - App\Http\Requests\Api\V1\CashierPaymentStoreRequest::rules()
+    - Change validation to:
+      - 'student_id' => ['required_without:payee_id','integer','exists:tb_mas_users,intID']
+      - 'payee_id'   => ['required_without:student_id','integer','exists:tb_mas_payee,id']
+      - 'term'       => ['nullable','integer','required_if:student_id,*']  (or programmatically enforce in controller)
+  - App\Http\Controllers\Api\V1\CashierController::createPayment()
+    - Branch on payee_id vs student_id:
+      - If payee_id present:
+        - Bypass applicant_data hooks, student_number lookups, registration/enrollment toggles
+        - Set sy_reference to null
+        - Fill name/email/contact columns from tb_mas_payee if columns exist
+        - Set 'payee_id' in insert when payment_details.payee_id column exists
+    - Continue pointer logic (OR/invoice) unchanged
+  - App\Services\PaymentDetailAdminService
+    - detectColumns(): add 'payee_id'
+    - selectList(): include 'payee_id'
+    - normalizeRow(): include 'payee_id'
+  - App\Http\Controllers\Api\V1\FinanceController::orPdf()
+    - Resolve RECEIVED FROM:
+      - If payment_details.payee_id is non-null (resolved via PaymentDetailAdminService::detectColumns() and follow-up fetch), then:
+        - name: lastname, firstname middlename (uppercased as in student path)
+        - tin: tb_mas_payee.tin (or empty)
+        - address: tb_mas_payee.address
+      - else current student resolution as-is
 
-Removed functions
-- None.
+- Removed functions:
+  - None
 
 [Classes]
-New classes
-- App\Models\StudentAdvisor — history model
-- App\Services\StudentAdvisorService — domain logic
-- App\Http\Controllers\Api\V1\StudentAdvisorController — endpoint layer
-- App\Http\Requests\Api\V1\StudentAdvisorAssignBulkRequest
-- App\Http\Requests\Api\V1\StudentAdvisorSwitchRequest
-- App\Http\Requests\Api\V1\StudentAdvisorShowRequest
+Add new Payee Eloquent model and supporting controller/request/resource classes.
 
-Modified classes
-- App\Models\User — add fillable intAdvisorID and relations advisor(), advisorHistory()
-- App\Models\Faculty — add advisorAssignments(), advisees()
+Detailed breakdown:
+- New classes:
+  - App\Models\Payee
+    - Table: tb_mas_payee; key: id; timestamps: false
+    - Key methods: paymentDetails() relationship
+  - App\Http\Controllers\Api\V1\PayeeController
+    - Inherits Controller
+    - Methods: index, show, store, update, destroy
+    - Middleware: role:admin,finance_admin
+  - App\Http\Requests\Api\V1\PayeeStoreRequest
+    - Rules as described
+  - App\Http\Requests\Api\V1\PayeeUpdateRequest
+    - Rules as described
+  - App\Http\Resources\PayeeResource
+    - Maps to: id, id_number, firstname, middlename, lastname, tin, address, contact_number, email
 
-Removed classes
-- None.
+- Modified classes:
+  - App\Http\Requests\Api\V1\CashierPaymentStoreRequest (rules change)
+  - App\Http\Controllers\Api\V1\CashierController (createPayment branch for payees)
+  - App\Services\PaymentDetailAdminService (column mapping extensions)
+  - App\Http\Controllers\Api\V1\FinanceController (orPdf payee precedence)
+  - App\Models\PaymentDetail (add payee() relationship)
+
+- Removed classes:
+  - None
 
 [Dependencies]
-No new external composer or npm dependencies required; rely on existing Laravel components, DB facade, Eloquent, and current middleware RequireRole. Frontend uses existing AngularJS stack and shared select2 directive for pickers.
+No external package dependencies required.
+
+- Use existing SystemLogService for Payee CRUD logging and payment logging.
+- Use existing role middleware; grant access to admin and finance admin roles as required.
+- No composer changes.
 
 [Testing]
-Adopt critical-path API testing with authorized context and department/campus enforcement.
+Add coverage for payee CRUD and non-student cashier payments.
 
-Backend tests/manual validation
-- Migrations
-  - php artisan migrate → creates tables and columns; backfill intAdvisorID
-- API happy path (actor faculty_admin with matching dept/campus to advisor)
-  - POST /api/v1/advisors/{1188}/assign-bulk
-    - Body: { student_ids: [158], replace_existing: false }
-    - Headers: X-Faculty-ID: 13
-    - Expect: assigned_count=1, tb_mas_users.intAdvisorID of 158 becomes 1188, tb_mas_student_advisor row active
-  - GET /api/v1/student-advisors?student_id=158
-    - Expect: active advisor 1188, history includes created row
-  - POST /api/v1/advisors/switch
-    - Body: { from_advisor_id: 1188, to_advisor_id: 1199 }
-    - Headers: X-Faculty-ID: 13
-    - Expect: ended previous active, created new active to 1199, pointer updated
-  - DELETE /api/v1/student-advisors/158
-    - Expect: active ended, pointer cleared; idempotent on subsequent calls
-- Authorization/Validation
-  - Missing/invalid X-Faculty-ID → 401
-  - Role without faculty_admin/admin → 403
-  - Advisor not teaching=1 → 422
-  - No dept/campus overlap → 422 or 403 with clear message
-  - Duplicate assign to same advisor → idempotent skip
+- New test scripts (optional parity with existing CLI tests):
+  - laravel-api/scripts/test_payees_api.php
+    - Create, list, update, delete payees; assert SystemLog entries exist (best-effort)
+  - laravel-api/scripts/test_cashier_nonstudent_payment_entry.php
+    - Create a payee
+    - Create cashier ranges if needed
+    - Create payment with payee_id, mode='or' and verify:
+      - payment_details row: payee_id set, student_information_id null, sy_reference null, OR assigned correctly
+      - Optional name/email/contact columns populated when present
+    - Fetch OR PDF and ensure RECEIVED FROM name/address come from payee
 
-Frontend validation
-- Role-gated page visible only to faculty_admin
-- Advisor select shows only teaching=1 faculty filtered by the acting admin&#39;s departments/campus
-- Bulk student select supports search by student number/name; handles server errors; shows summary of assigned/skipped/conflicts
-- Quick switch flow prevents from=to and shows results
+- PHPUnit Feature tests (if desired):
+  - Feature/PayeeControllerTest.php (CRUD happy-path + validation failures)
+  - Feature/CashierNonStudentPaymentTest.php (happy path + validation)
+
+- Manual validation:
+  - Verify API responses and OR PDF content for both student and payee-based payments
 
 [Implementation Order]
-Implement in safe, incremental steps minimizing risk and integration conflicts.
+Implement DB changes first, then API surface, then controller/service modifications, followed by testing scripts and verification.
 
-1) Database
-   - Create migration: 2025_09_16_000001_create_tb_mas_student_advisor.php
-   - Create migration: 2025_09_16_000002_alter_tb_mas_users_add_intAdvisorID.php (with backfill)
-   - Run migrations
+1. Migration: add nullable payment_details.payee_id (FK to tb_mas_payee.id; on delete set null)
+2. Model: create App\Models\Payee
+3. Requests/Resource/Controller: implement PayeeStoreRequest, PayeeUpdateRequest, PayeeResource, PayeeController
+4. Routes: register /api/v1/payees endpoints with role:admin,finance_admin
+5. Request Validation: modify CashierPaymentStoreRequest to accept student_id OR payee_id and make term nullable/required_if student
+6. CashierController::createPayment: implement non-student branch (payee flow), ensure no student-specific hooks run for payees; set payee_id in insert; populate optional columns from payee
+7. PaymentDetailAdminService: add payee_id to detectColumns/select/normalize
+8. PaymentDetail model: add payee() relationship
+9. FinanceController::orPdf: prefer payee details when payment_details.payee_id is set; fallback to student
+10. Test scripts: add test_payees_api.php and test_cashier_nonstudent_payment_entry.php; dry-run locally
+11. Security & logs: verify all create/update/delete for payees are logged using SystemLogService
+12. Documentation: brief README section in plans or commit description to onboard users
 
-2) Backend Models/Service
-   - Add App\Models\StudentAdvisor
-   - Extend App\Models\User with fillable and relations
-   - Extend App\Models\Faculty with relations
-   - Implement App\Services\StudentAdvisorService (core logic + constraints)
-
-3) Requests/Controller/Routes
-   - Add Form Requests (AssignBulk, Switch, Show)
-   - Implement StudentAdvisorController actions
-   - Register routes in laravel-api/routes/api.php guarded by middleware('role:faculty_admin,admin')
-
-4) Frontend
-   - Create advisors.service.js (API integration)
-   - Create advisors.controller.js and advisors.html (UI workflows)
-   - Register route/state and add menu entry for faculty_admin
-
-5) QA & Verification
-   - Manual API tests using provided IDs (actor=13, advisor=1188, student=158)
-   - Frontend smoke test: bulk assign and quick switch
-   - Edge cases: idempotency, validation errors, dept/campus mismatch
-
-6) Documentation & Rollout
-   - README snippet for new endpoints and headers usage
-   - Add seeding examples if needed for test dept/campus tags
+task_progress Items:
+- [ ] Step 1: Create migration to add payment_details.payee_id (nullable FK to tb_mas_payee.id)
+- [ ] Step 2: Implement App\Models\Payee
+- [ ] Step 3: Implement PayeeStoreRequest, PayeeUpdateRequest, PayeeResource
+- [ ] Step 4: Implement PayeeController with CRUD + SystemLog integration and role middleware
+- [ ] Step 5: Register /api/v1/payees routes in routes/api.php
+- [ ] Step 6: Update CashierPaymentStoreRequest rules for payee_id vs student_id and term behavior
+- [ ] Step 7: Update CashierController::createPayment to handle payee branch (no sy_reference; set payee_id; fill optional columns)
+- [ ] Step 8: Extend PaymentDetailAdminService detectColumns/select/normalize for payee_id
+- [ ] Step 9: Add payee() relation to PaymentDetail model
+- [ ] Step 10: Update FinanceController::orPdf to prefer payee data when available
+- [ ] Step 11: Add CLI test scripts for Payee CRUD and non-student payments; run local checks
+- [ ] Step 12: Smoke-test OR/Invoice number pointer behavior for payee payments
+- [ ] Step 13: Verify SystemLog entries for payee CRUD and payments; finalize docs

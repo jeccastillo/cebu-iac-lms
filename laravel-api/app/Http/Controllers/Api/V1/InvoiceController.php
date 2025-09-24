@@ -139,8 +139,9 @@ class InvoiceController extends Controller
         }
         if ($total === null) $total = 0.0;
 
-        // Student name
+        // Student name and address
         $studentName = '';
+        $studentAddress = '';
         try {
             if (!empty($invoice['student_id'])) {
                 $u = DB::table('tb_mas_users')->where('intID', (int) $invoice['student_id'])->first();
@@ -150,6 +151,9 @@ class InvoiceController extends Controller
                     $middle = isset($u->strMiddlename) ? trim((string) $u->strMiddlename) : '';
                     $studentName = ($last !== '' ? ($last . ', ') : '') . $first . ($middle !== '' ? (' ' . $middle) : '');
                     $studentNumber = isset($u->strStudentNumber) ? trim((string) $u->strStudentNumber) : '';
+                    if (isset($u->strAddress) && trim((string) $u->strAddress) !== '') {
+                        $studentAddress = trim((string) $u->strAddress);
+                    }
                 }
             }
         } catch (\Throwable $e) {}
@@ -427,17 +431,231 @@ class InvoiceController extends Controller
         }
 
         // Build DTO for renderer
+        // Company/campus header lines and TIN (address sourced from tb_mas_campuses when available)
+        $companyName = 'iACADEMY, INC.';
+        $companyTin  = 'VAT REG TIN: 214-749-003-00003';
+        $companyLines = [];
+        try {
+            // Resolve campus id from several fallbacks to ensure an address prints:
+            // 1) invoice.campus_id
+            // 2) X-Campus-ID header
+            // 3) invoice.cashier_id -> tb_mas_cashiers.campus_id
+            // 4) X-Faculty-ID header -> tb_mas_cashiers.faculty_id -> campus_id
+            // 5) First active campus (or first campus) as last resort
+            $campusId = $invoice['campus_id'] ?? null;
+
+            if (!$campusId) {
+                $hdrCampus = $request->header('X-Campus-ID');
+                if ($hdrCampus !== null && $hdrCampus !== '' && is_numeric($hdrCampus)) {
+                    $campusId = (int) $hdrCampus;
+                }
+            }
+
+            if (!$campusId && !empty($invoice['cashier_id'])) {
+                $c = DB::table('tb_mas_cashiers')
+                    ->where('intID', (int) $invoice['cashier_id'])
+                    ->select('campus_id')
+                    ->first();
+                if ($c && !empty($c->campus_id)) {
+                    $campusId = (int) $c->campus_id;
+                }
+            }
+
+            if (!$campusId) {
+                $hdrFaculty = $request->header('X-Faculty-ID');
+                if ($hdrFaculty !== null && $hdrFaculty !== '' && is_numeric($hdrFaculty)) {
+                    $c2 = DB::table('tb_mas_cashiers')
+                        ->where('faculty_id', (int) $hdrFaculty)
+                        ->select('campus_id')
+                        ->first();
+                    if ($c2 && !empty($c2->campus_id)) {
+                        $campusId = (int) $c2->campus_id;
+                    }
+                }
+            }
+
+            $campAddress = null;
+            if ($campusId) {
+                // Resolve by whichever PK column exists: prefer 'id', fallback to legacy 'intID'
+                $campQuery = DB::table('tb_mas_campuses')->select(['address','description']);
+                if (\Illuminate\Support\Facades\Schema::hasColumn('tb_mas_campuses', 'id')) {
+                    $campQuery->where('id', (int) $campusId);
+                } else {
+                    $campQuery->where('intID', (int) $campusId);
+                }
+                $camp = $campQuery->first();
+                if ($camp) {
+                    $addr = '';
+                    if (isset($camp->address) && trim((string)$camp->address) !== '') {
+                        $addr = trim((string)$camp->address);
+                    } elseif (isset($camp->description) && trim((string)$camp->description) !== '') {
+                        $addr = trim((string)$camp->description);
+                    }
+                    if ($addr !== '') {
+                        $campAddress = $addr;
+                    }
+                }
+            }
+
+            // Final fallback: pick first active campus or first campus
+            if ($campAddress === null || $campAddress === '') {
+                $campBase = DB::table('tb_mas_campuses')
+                    ->when(\Illuminate\Support\Facades\Schema::hasColumn('tb_mas_campuses', 'status'), function ($q) {
+                        $q->where('status', 1);
+                    });
+                // Order by whichever PK exists
+                if (\Illuminate\Support\Facades\Schema::hasColumn('tb_mas_campuses', 'id')) {
+                    $campBase->orderBy('id', 'asc');
+                } else {
+                    $campBase->orderBy('intID', 'asc');
+                }
+                $camp = $campBase->select(['address','description'])->first();
+                if ($camp) {
+                    $addr = '';
+                    if (isset($camp->address) && trim((string)$camp->address) !== '') {
+                        $addr = trim((string)$camp->address);
+                    } elseif (isset($camp->description) && trim((string)$camp->description) !== '') {
+                        $addr = trim((string)$camp->description);
+                    }
+                    if ($addr !== '') {
+                        $campAddress = $addr;
+                    }
+                }
+            }
+
+            if (!empty($campAddress)) {
+                $companyLines[] = $campAddress;
+            }
+        } catch (\Throwable $e) {
+            // ignore campus lookup errors
+        }
+
+        // Determine Cash vs Charge checkbox based on payment_details.method/payment_method
+        $cashSale = false;
+        try {
+            $colsPd = app(PaymentDetailAdminService::class)->detectColumns();
+            // print_r($colsPd);
+            if (
+                ($colsPd['exists'] ?? false) &&
+                !empty($colsPd['table']) &&
+                !empty($colsPd['method']) &&
+                !empty($colsPd['number_invoice']) &&
+                !empty($invNo)
+            ) {                
+                $cashSale = DB::table($colsPd['table'])
+                    ->where($colsPd['number_invoice'], $invNo)
+                    ->where($colsPd['method'], 'Cash')
+                    ->exists();
+            }
+        } catch (\Throwable $e) {
+            // default remains false (Charge Sales)
+        }
+
+        // VAT disable rule:
+        // When invoice columns for VAT breakdown are all null, do not compute VAT.
+        // Instead, print total on Total Sale, Vatable, and Total Amount Due.
+        $vatDisable = false;
+        try {
+            $hasAnyVatFields = false;            
+            if (array_key_exists('invoice_amount', $invoice) && $invoice['invoice_amount'] != null && $invoice['invoice_amount'] != 0) $hasAnyVatFields = true;            
+            if (array_key_exists('invoice_amount_ves', $invoice) && $invoice['invoice_amount_ves'] != null && $invoice['invoice_amount_ves'] != 0) $hasAnyVatFields = true;            
+            if (array_key_exists('invoice_amount_vzrs', $invoice) && $invoice['invoice_amount_vzrs'] != null && $invoice['invoice_amount_vzrs'] != 0) $hasAnyVatFields = true;            
+            if (array_key_exists('withholding_tax_percentage', $invoice) && $invoice['withholding_tax_percentage'] != null && $invoice['withholding_tax_percentage'] != 0) $hasAnyVatFields = true;            
+            $vatDisable = !$hasAnyVatFields;
+        } catch (\Throwable $e) {
+            $vatDisable = false;
+        }
+        
+        // Determine earliest Paid payment for this invoice (by date asc, then id asc)
+        $paymentForm = [];
+        $paymentFormRemarks = '';
+        try {
+            $colsPd = app(PaymentDetailAdminService::class)->detectColumns();
+            if (
+                ($colsPd['exists'] ?? false) &&
+                !empty($colsPd['table']) &&
+                !empty($colsPd['number_invoice']) &&
+                !empty($invNo)
+            ) {
+                $qPay = DB::table($colsPd['table'])
+                    ->where($colsPd['number_invoice'], $invNo);
+
+                if (!empty($colsPd['status'])) {
+                    $qPay->where($colsPd['status'], 'Paid');
+                }
+
+                if (!empty($colsPd['date'])) {
+                    $qPay->orderBy($colsPd['date'], 'asc');
+                }
+                $qPay->orderBy('id', 'asc');
+
+                $p = $qPay->first();
+                if ($p) {
+                    // Resolve amount (prefer subtotal_order positive for credits)
+                    $amt = 0.0;
+                    if (!empty($colsPd['subtotal_order']) && isset($p->{$colsPd['subtotal_order']}) && is_numeric($p->{$colsPd['subtotal_order']})) {
+                        $amt = (float) $p->{$colsPd['subtotal_order']};
+                    } elseif (!empty($colsPd['total_amount_due']) && isset($p->total_amount_due) && is_numeric($p->total_amount_due)) {
+                        $amt = (float) $p->total_amount_due;
+                    }
+                    $amt = round(abs($amt), 2);
+
+                    // Determine method bucket
+                    $m = '';
+                    if (isset($p->method)) {
+                        $m = strtolower((string) $p->method);
+                    }
+                    $bucket = 'bank';
+                    if (str_contains($m, 'cash')) {
+                        $bucket = 'cash';
+                    } elseif (str_contains($m, 'check') || str_contains($m, 'cheque')) {
+                        $bucket = 'check';
+                    } elseif (str_contains($m, 'card') || str_contains($m, 'online') || str_contains($m, 'maya') || str_contains($m, 'pay') || str_contains($m, 'bank') || str_contains($m, 'gcash') || str_contains($m, 'bpi') || str_contains($m, 'bdo') || str_contains($m, 'visa') || str_contains($m, 'master')) {
+                        $bucket = 'bank';
+                    } else {
+                        // Fallback: mirror checkbox decision
+                        $bucket = $cashSale ? 'cash' : 'bank';
+                    }
+
+                    if ($amt > 0) {
+                        $paymentForm[$bucket] = $amt;
+                        $paymentForm['total'] = $amt;
+                    }
+                    if (!empty($colsPd['remarks']) && isset($p->remarks) && trim((string)$p->remarks) !== '') {
+                        $paymentFormRemarks = trim((string) $p->remarks);
+                    }
+                }
+            }
+        } catch (\Throwable $e) {
+            // silent on payment lookup errors
+        }
+
         $dto = [
             'number'       => $invNo,
             'date'         => $dateStr,
             'student_name' => $studentName,
-            'student_number'=>$studentNumber,
+            'student_number'=> $studentNumber,
+            'sold_to_address' => $studentAddress,
             'term_label'   => $termLabel,
             'items'        => $items,
             'total'        => (float) $total,
             'footer_name'  => $footerName,
             'amount_paid_first_tuition' => $firstTuitionPaid,
             'reservation_signature' => isset($reservationSignature) ? (bool)$reservationSignature : false,
+            // Header/layout fields for new invoice design
+            'company_name' => $companyName,
+            'company_lines'=> $companyLines,
+            'company_tin'  => $companyTin,
+            'cash_sale'    => (bool) $cashSale,
+            'vat_disabled' => (bool) $vatDisable,
+            // Pass raw invoice VAT fields so renderer can compute per spec when present
+            'invoice_amount'       => (isset($invoice['invoice_amount']) && is_numeric($invoice['invoice_amount'])) ? (float)$invoice['invoice_amount'] : null,
+            'invoice_amount_ves'   => (isset($invoice['invoice_amount_ves']) && is_numeric($invoice['invoice_amount_ves'])) ? (float)$invoice['invoice_amount_ves'] : 0.0,
+            'invoice_amount_vzrs'  => (isset($invoice['invoice_amount_vzrs']) && is_numeric($invoice['invoice_amount_vzrs'])) ? (float)$invoice['invoice_amount_vzrs'] : 0.0,
+            'withholding_pct'      => (isset($invoice['withholding_tax_percentage']) && is_numeric($invoice['withholding_tax_percentage'])) ? ((float)$invoice['withholding_tax_percentage'] / 100.0) : 0.0,
+            // Payment form (first payment mapping)
+            'payment_form'         => $paymentForm,
+            'payment_form_remarks' => $paymentFormRemarks,
         ];
 
         // Render and stream inline
