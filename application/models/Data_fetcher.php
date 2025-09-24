@@ -3508,10 +3508,10 @@ class Data_fetcher extends CI_Model {
                             $total_assessment_fixed_installment = $scholar->total_assessment_fixed;
                         }
                         
-                        $ar_external_scholarship_full = $scholar->total_assessment_fixed;
-                        $ar_external_scholarship_installment = $scholar->total_assessment_fixed;
-                        $ar_external_scholarship_installment30 = $scholar->total_assessment_fixed;
-                        $ar_external_scholarship_installment50 = $scholar->total_assessment_fixed;
+                        $ar_external_scholarship_full += $scholar->total_assessment_fixed;
+                        $ar_external_scholarship_installment += $scholar->total_assessment_fixed;
+                        $ar_external_scholarship_installment30 += $scholar->total_assessment_fixed;
+                        $ar_external_scholarship_installment50 += $scholar->total_assessment_fixed;
                     }
                 }
                 else{
