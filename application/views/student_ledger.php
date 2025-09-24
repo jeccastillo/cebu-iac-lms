@@ -673,10 +673,50 @@ new Vue({
                     'cashier': other[i].cashier_id,
                     'is_disabled':0,
                     'balance': this.term_balance_other.toFixed(2),
-                });
-                
+                });    
             }
-            // this.ledger_term.sort((a, b) => new Date(a.date) - new Date(b.date))
+            
+            // Sort ledger_term by date excluding the first item (index 0) before pushing to ledger
+            if (this.ledger_term && this.ledger_term.length > 1) {
+                const parseDate = (val) => {
+                    if (!val) return null;
+                    if (val instanceof Date) return val;
+                    // First try native parsing
+                    let d = new Date(val);
+                    if (!isNaN(d)) return d;
+                    // Handle "Apr 18, 2024" or full month names
+                    const m = String(val).trim().match(/^([A-Za-z]{3,9})\s+(\d{1,2}),\s*(\d{4})$/);
+                    if (m) {
+                        const monthNames = {
+                            jan:0,feb:1,mar:2,apr:3,may:4,jun:5,
+                            jul:6,aug:7,sep:8,sept:8,oct:9,nov:10,dec:11
+                        };
+                        const mi = monthNames[m[1].toLowerCase()];
+                        if (mi !== undefined) {
+                            const day = parseInt(m[2], 10);
+                            const year = parseInt(m[3], 10);
+                            return new Date(year, mi, day);
+                        }
+                    }
+                    // Handle "YYYY-MM-DD" (with optional time suffix)
+                    const m2 = String(val).trim().match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+                    if (m2) {
+                        const year = parseInt(m2[1],10);
+                        const month = parseInt(m2[2],10)-1;
+                        const day = parseInt(m2[3],10);
+                        return new Date(year, month, day);
+                    }
+                    return null;
+                };
+                const toTime = (item) => {
+                    const parsed = parseDate(item && item.date);
+                    return parsed ? parsed.getTime() : Number.POSITIVE_INFINITY;
+                };
+                const head = this.ledger_term[0];
+                const rest = this.ledger_term.slice(1).sort((a, b) => toTime(a) - toTime(b));
+                this.ledger_term = [head, ...rest];
+            }
+
             this.ledger.push({
                 'ledger_items': this.ledger_term,
                 'balance': this.term_balance.toFixed(2)
