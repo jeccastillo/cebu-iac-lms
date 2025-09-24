@@ -183,6 +183,13 @@
         if (opts && typeof opts.dry_run !== 'undefined') {
           fd.append('dry_run', opts.dry_run ? '1' : '0');
         }
+        if (opts && opts.campus_id != null) {
+          try {
+            fd.append('campus_id', String(parseInt(opts.campus_id, 10)));
+          } catch (e) {
+            fd.append('campus_id', String(opts.campus_id));
+          }
+        }
         var headers = { 'Content-Type': undefined };
         try {
           var state = _getLoginState();

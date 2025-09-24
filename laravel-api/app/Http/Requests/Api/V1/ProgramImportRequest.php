@@ -4,31 +4,30 @@ namespace App\Http\Requests\Api\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StudentImportRequest extends FormRequest
+class ProgramImportRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        // Role middleware (role: registrar,admin) should guard this route.
+        // Additionally guarded by role middleware (registrar,admin).
         return true;
     }
 
     /**
-     * Normalize/guard inputs before validation.
+     * Normalize flexible inputs before validation.
      */
     protected function prepareForValidation(): void
     {
-        // Allow flexible field names but prefer "file"
+        // Allow alternate keys but prefer "file"
         $file = $this->file('file')
             ?? $this->file('upload')
-            ?? $this->file('students')
+            ?? $this->file('programs')
             ?? null;
 
         if ($file !== null) {
-            // Force into "file" key for validation rules below
             $this->files->set('file', $file);
         }
 
-        // Optional flags (no hard validation, just normalize)
+        // Normalize dry_run flags (dry_run or dryRun)
         $dryRun = $this->input('dry_run', $this->input('dryRun', null));
         if ($dryRun !== null) {
             $this->merge([
@@ -40,19 +39,17 @@ class StudentImportRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // Accept .xlsx, .xls, .csv up to ~10MB (adjust as needed)
             'file' => [
                 'required',
                 'file',
                 'mimes:xlsx,xls,csv',
-                'max:10240', // size in KB (10 MB)
+                'max:10240', // 10 MB
             ],
-            // Optional dry-run toggle to parse/validate without writing
             'dry_run' => [
                 'sometimes',
                 'boolean',
             ],
-            // Optional campus override (applies to all rows when provided)
+            // Optional campus override applied to all rows when provided
             'campus_id' => [
                 'sometimes',
                 'nullable',

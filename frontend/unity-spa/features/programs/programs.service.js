@@ -51,6 +51,61 @@
       disable: function (id) {
         return $http.delete(BASE + '/programs/' + encodeURIComponent(id), _adminHeaders()).then(_unwrap);
       },
+
+      // Admin: Programs Import — download template (.xlsx)
+      downloadImportTemplate: function () {
+        var cfg = { responseType: 'arraybuffer', headers: {} };
+        try {
+          var state = _getLoginState();
+          if (state && state.faculty_id != null) {
+            cfg.headers['X-Faculty-ID'] = state.faculty_id;
+          }
+        } catch (e) {}
+        return $http.get(BASE + '/programs/import/template', cfg).then(function (resp) {
+          var headers = resp && resp.headers ? resp.headers : null;
+          var filename = 'programs-import-template.xlsx';
+          try {
+            if (headers && typeof headers === 'function') {
+              var cd = headers('Content-Disposition') || headers('content-disposition');
+              if (cd && /filename="?([^"]+)"?/i.test(cd)) {
+                filename = cd.match(/filename="?([^"]+)"?/i)[1];
+              }
+            }
+          } catch (e) {}
+          return { data: resp.data, filename: filename };
+        });
+      },
+
+      // Admin: Programs Import — upload file (.xlsx/.xls/.csv)
+      importFile: function (file, opts) {
+        if (!file) {
+          return Promise.reject({ message: 'No file selected' });
+        }
+        var fd = new FormData();
+        fd.append('file', file);
+        if (opts && typeof opts.dry_run !== 'undefined') {
+          fd.append('dry_run', opts.dry_run ? '1' : '0');
+        }
+        if (opts && opts.campus_id != null) {
+          try {
+            fd.append('campus_id', String(parseInt(opts.campus_id, 10)));
+          } catch (e) {
+            fd.append('campus_id', String(opts.campus_id));
+          }
+        }
+        var headers = { 'Content-Type': undefined };
+        try {
+          var state = _getLoginState();
+          if (state && state.faculty_id != null) {
+            headers['X-Faculty-ID'] = state.faculty_id;
+          }
+        } catch (e) {}
+        return $http.post(BASE + '/programs/import', fd, {
+          headers: headers,
+          transformRequest: angular.identity
+        }).then(_unwrap);
+      },
+
       getCurricula: function (opts) {
         var params = {};
         if (opts && opts.campus_id !== null && opts.campus_id !== undefined && opts.campus_id !== '') {

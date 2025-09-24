@@ -5,6 +5,7 @@ namespace App\Services;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
+use Carbon\Carbon;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
@@ -26,8 +27,9 @@ use RuntimeException;
 class StudentImportService
 {
     // Columns that must never be written by import for safety
+    // Note: 'slug' is allowed per requirement and treated as nullable (blank coerces to NULL)
     private array $prohibitedWriteColumns = [
-        'intID', 'slug', 'strPass', 'strReset', 'dteCreated', 'created_at', 'updated_at',
+        'intID', 'strPass', 'strReset', 'dteCreated', 'created_at', 'updated_at',
     ];
 
     // Header substitutions mapping template header -> write column name OR special key
@@ -213,6 +215,7 @@ class StudentImportService
     /**
      * Normalize a parsed row into writeable tb_mas_users columns.
      * - Applies header reverse mapping
+     * - Canonicalizes column names to actual tb_mas_users casing
      * - Filters prohibited columns
      * - Returns tuple [array $userCols, array $meta] where $meta contains
      *   'student_number', 'program_code', 'curriculum_code', 'campus_name'.
@@ -227,44 +230,121 @@ class StudentImportService
             'campus_name'     => null,
         ];
 
+        // Build a lowercase->canonical map of tb_mas_users columns once
+        static $canonMap = null;
+        if ($canonMap === null) {
+            $canonMap = [];
+            try {
+                if (\Illuminate\Support\Facades\Schema::hasTable('tb_mas_users')) {
+                    $cols = \Illuminate\Support\Facades\Schema::getColumnListing('tb_mas_users');
+                    foreach ($cols as $c) {
+                        $canonMap[strtolower($c)] = $c;
+                    }
+                }
+            } catch (\Throwable $e) {
+                // Fallback minimal set for canonicalization if schema introspection fails
+                $fallback = [
+                    'strstudentnumber', 'strusername', 'stremail', 'strgsuiteemail',
+                    'strfirstname', 'strmiddlename', 'strlastname', 'enumgender',
+                    'dtebirthdate', 'intprogramid', 'intcurriculumid', 'campus_id',
+                    'student_status', 'student_type', 'level', 'strmobilenumber',
+                ];
+                foreach ($fallback as $c) {
+                    // Use a best-effort canonical (camel-case the known special cases)
+                    $canon = $c;
+                    if ($c === 'strstudentnumber') $canon = 'strStudentNumber';
+                    if ($c === 'strusername') $canon = 'strUsername';
+                    if ($c === 'stremail') $canon = 'strEmail';
+                    if ($c === 'strgsuiteemail') $canon = 'strGSuiteEmail';
+                    if ($c === 'strfirstname') $canon = 'strFirstname';
+                    if ($c === 'strmiddlename') $canon = 'strMiddlename';
+                    if ($c === 'strlastname') $canon = 'strLastname';
+                    if ($c === 'enumgender') $canon = 'enumGender';
+                    if ($c === 'dtebirthdate') $canon = 'dteBirthDate';
+                    if ($c === 'intprogramid') $canon = 'intProgramID';
+                    if ($c === 'intcurriculumid') $canon = 'intCurriculumID';
+                    if ($c === 'strmobilenumber') $canon = 'strMobileNumber';
+                    $canonMap[strtolower($canon)] = $canon;
+                }
+                // Ensure these exist
+                $canonMap['campus_id'] = 'campus_id';
+            }
+        }
+
         foreach ($row as $k => $v) {
+            // Original lowercased header
             $lk = strtolower(trim((string) $k));
+            // Normalized header: collapse spaces
+            $hk = preg_replace('/\s+/', ' ', $lk);
+            // Base header token: take the last segment after common separators (e.g., "strAddress: strStudentNumber")
+            $parts = preg_split('/[:|\-]+/', $hk);
+            $base = trim(end($parts));
             $val = is_string($v) ? trim($v) : $v;
 
-            // Handle meta fields from substituted headers
-            if ($lk === 'program code') {
+            // Meta fields (robust detection allowing prefixes like "Meta: Program Code")
+            if ($base === 'program code' || strpos($hk, 'program code') !== false) {
                 $meta['program_code'] = (string) $val;
-                // write column after FK resolution: intProgramID
                 continue;
             }
-            if ($lk === 'curriculum code') {
+            if ($base === 'curriculum code' || strpos($hk, 'curriculum code') !== false) {
                 $meta['curriculum_code'] = (string) $val;
                 continue;
             }
-            if ($lk === 'campus') {
+            if ($base === 'campus' || preg_match('/\bcampus\b/', $hk)) {
                 $meta['campus_name'] = (string) $val;
                 continue;
             }
 
-            // Map to actual write column for non-meta headers
-            $targetCol = self::REVERSE_HEADER[$lk] ?? $k;
+            // Special-case: Student Number header might be embedded like "strAddress: strStudentNumber"
+            $isStudentNumberHeader =
+                $base === 'strstudentnumber' ||
+                $base === 'studentnumber' ||
+                $base === 'student_number' ||
+                strpos($hk, 'strstudentnumber') !== false;
 
-            // Deny prohibited columns
-            if (in_array($targetCol, $this->prohibitedWriteColumns, true)) {
+            if ($isStudentNumberHeader) {
+                $canon = 'strStudentNumber';
+                if (in_array($canon, $this->prohibitedWriteColumns, true)) {
+                    continue;
+                }
+                $meta['student_number'] = (string) $val;
+                // Coerce nullish tokens (e.g., "NULL") and blanks to null
+                $val = $this->coerceNullish($val);
+                $userCols[$canon] = $val;
                 continue;
             }
 
-            // Core key used for insert/update switch
-            if ($targetCol === 'strStudentNumber') {
+            // Map to actual write column for non-meta headers (reverse mapping first)
+            $targetCol = self::REVERSE_HEADER[$lk] ?? $k;
+
+            // Only include columns that actually exist on tb_mas_users
+            $canonKey = strtolower($targetCol);
+            if (!isset($canonMap[$canonKey])) {
+                // Drop unknown/extraneous columns that are not in tb_mas_users
+                continue;
+            }
+            // Canonicalize to actual tb_mas_users column name (exact casing)
+            $canon = $canonMap[$canonKey];
+
+            // Deny prohibited columns
+            if (in_array($canon, $this->prohibitedWriteColumns, true)) {
+                continue;
+            }
+
+            // Capture student number if the canonicalized column matches (case-insensitive)
+            if (strcasecmp($canon, 'strStudentNumber') === 0) {
                 $meta['student_number'] = (string) $val;
             }
 
-            // Normalize blanks to null
-            if ($val === '') {
-                $val = null;
+            // Normalize nullish tokens to null (e.g., "NULL", "N/A", "0000-00-00")
+            $val = $this->coerceNullish($val);
+
+            // Normalize known DATE columns to Y-m-d
+            if ($this->isDateColumn($canon)) {
+                $val = $this->normalizeDateValue($val);
             }
 
-            $userCols[$targetCol] = $val;
+            $userCols[$canon] = $val;
         }
 
         return [$userCols, $meta];
@@ -320,7 +400,7 @@ class StudentImportService
      * @param bool $dryRun if true, validate only without DB writes
      * @return array result summary: [totalRows, inserted, updated, skipped, errors[]]
      */
-    public function upsertRows(iterable $rowIter, bool $dryRun = false): array
+    public function upsertRows(iterable $rowIter, bool $dryRun = false, ?int $forcedCampusId = null): array
     {
         $total = 0; $ins = 0; $upd = 0; $skp = 0;
         $errors = [];
@@ -328,36 +408,52 @@ class StudentImportService
         $chunk = [];
         $CHUNK_SIZE = 200;
 
-        $flush = function () use (&$chunk, &$ins, &$upd, &$skp, &$errors, $dryRun) {
+        $flush = function () use (&$chunk, &$ins, &$upd, &$skp, &$errors, $dryRun, $forcedCampusId) {
             if (empty($chunk)) return;
 
-            DB::beginTransaction();
-            try {
-                foreach ($chunk as $item) {
-                    $line = $item['line'];
-                    [$userCols, $meta] = $this->normalizeRow($item['data']);
+            foreach ($chunk as $item) {
+                $line = $item['line'];
+                [$userCols, $meta] = $this->normalizeRow($item['data']);
 
-                    $sn = $meta['student_number'];
-                    if ($sn === null || trim($sn) === '') {
-                        $skp++;
-                        $errors[] = ['line' => $line, 'student_number' => null, 'message' => 'Missing strStudentNumber'];
-                        continue;
-                    }
+                $sn = $meta['student_number'];
+                if ($sn === null || trim($sn) === '') {
+                    $skp++;
+                    $errors[] = ['line' => $line, 'student_number' => null, 'message' => 'Missing strStudentNumber'];
+                    continue;
+                }
 
-                    try {
-                        $this->resolveForeigns($userCols, $meta);
-                    } catch (\Throwable $e) {
-                        $skp++;
-                        $errors[] = ['line' => $line, 'student_number' => $sn, 'message' => $e->getMessage()];
-                        continue;
-                    }
+                try {
+                    $this->resolveForeigns($userCols, $meta);
+                } catch (\Throwable $e) {
+                    $skp++;
+                    $errors[] = ['line' => $line, 'student_number' => $sn, 'message' => $e->getMessage()];
+                    continue;
+                }
 
-                    if ($dryRun) {
-                        // Count as would-update or would-insert
-                        $exists = DB::table('tb_mas_users')->where('strStudentNumber', $sn)->exists();
-                        if ($exists) $upd++; else $ins++;
-                        continue;
-                    }
+                // Apply campus override if provided (takes precedence over file/meta)
+                if ($forcedCampusId !== null) {
+                    $userCols['campus_id'] = (int) $forcedCampusId;
+                }
+
+                // FK normalization and validation
+                $this->normalizeForeignKeyValues($userCols);
+                try {
+                    $this->validateForeignKeyExistence($userCols);
+                } catch (\Throwable $e) {
+                    $skp++;
+                    $errors[] = ['line' => $line, 'student_number' => $sn, 'message' => $e->getMessage()];
+                    continue;
+                }
+
+                if ($dryRun) {
+                    // Count as would-update or would-insert
+                    $exists = DB::table('tb_mas_users')->where('strStudentNumber', $sn)->exists();
+                    if ($exists) $upd++; else $ins++;
+                    continue;
+                }
+
+                try {
+                    DB::beginTransaction();
 
                     $existing = DB::table('tb_mas_users')->where('strStudentNumber', $sn)->first();
 
@@ -375,18 +471,13 @@ class StudentImportService
                         DB::table('tb_mas_users')->insert($payload);
                         $ins++;
                     }
-                }
 
-                DB::commit();
-            } catch (\Throwable $e) {
-                DB::rollBack();
-                // Mark entire chunk failed (conservative)
-                foreach ($chunk as $item) {
-                    $line = $item['line'];
-                    $row = $item['data'];
-                    $sn = isset($row['strstudentnumber']) ? (string) $row['strstudentnumber'] : (isset($row['strStudentNumber']) ? (string) $row['strStudentNumber'] : null);
-                    $errors[] = ['line' => $line, 'student_number' => $sn, 'message' => 'DB error: ' . $e->getMessage()];
+                    DB::commit();
+                } catch (\Throwable $e) {
+                    DB::rollBack();
                     $skp++;
+                    $errors[] = ['line' => $line, 'student_number' => $sn, 'message' => 'DB error: ' . $e->getMessage()];
+                    continue;
                 }
             }
 
@@ -411,5 +502,110 @@ class StudentImportService
             'skipped'   => $skp,
             'errors'    => $errors,
         ];
+    }
+
+    /**
+     * Coerce common nullish string tokens or blanks to null.
+     * Leaves non-string values unchanged except null itself.
+     */
+    private function coerceNullish($val) {
+        if ($val === null) return null;
+
+        if (is_string($val)) {
+            $s = trim($val);
+            if ($s === '') return null;
+            $lower = strtolower($s);
+            if (in_array($lower, ['null','n/a','na','none','nil'], true)) return null;
+            if ($lower === '0000-00-00' || $lower === '0000-00-00 00:00:00') return null;
+            return $s;
+        }
+
+        return $val;
+    }
+
+    /**
+     * Returns true if the given canonical tb_mas_users column is a DATE field we normalize.
+     */
+    private function isDateColumn($canon): bool {
+        static $set = null;
+        if ($set === null) {
+            $set = [
+                'dteBirthDate'       => true,
+                'date_of_graduation' => true,
+                'date_of_admission'  => true,
+                'date_enrolled'      => true,
+            ];
+        }
+        return isset($set[$canon]);
+    }
+
+    /**
+     * Normalize various date string formats to Y-m-d or null on failure.
+     */
+    private function normalizeDateValue($val): ?string {
+        if ($val === null) return null;
+
+        if ($val instanceof \DateTimeInterface) {
+            return $val->format('Y-m-d');
+        }
+
+        // If a numeric sneaks through (unlikely with getFormattedValue), treat as unparseable
+        if (is_int($val) || is_float($val) || (is_string($val) && is_numeric($val))) {
+            return null;
+        }
+
+        try {
+            $s = trim((string) $val);
+            if ($s === '') return null;
+            $dt = Carbon::parse($s);
+            return $dt->format('Y-m-d');
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Normalize FK fields: coerce zero/blank to null and cast to int.
+     */
+    private function normalizeForeignKeyValues(array &$userCols): void {
+        foreach (['intProgramID','intCurriculumID','campus_id'] as $fk) {
+            if (array_key_exists($fk, $userCols)) {
+                $v = $userCols[$fk];
+                if ($v === '0' || $v === 0 || $v === '00' || $v === '000' || $v === '') {
+                    $userCols[$fk] = null;
+                }
+                if (is_string($userCols[$fk])) {
+                    $userCols[$fk] = trim($userCols[$fk]) === '' ? null : $userCols[$fk];
+                }
+                if ($userCols[$fk] !== null) {
+                    $userCols[$fk] = (int) $userCols[$fk];
+                }
+            }
+        }
+    }
+
+    /**
+     * Validate that referenced FK records exist if values are provided.
+     * Throws RuntimeException with clear message on failure.
+     */
+    private function validateForeignKeyExistence(array $userCols): void {
+        if (isset($userCols['intProgramID']) && $userCols['intProgramID'] !== null) {
+            $exists = DB::table('tb_mas_programs')->where('intProgramID', (int) $userCols['intProgramID'])->exists();
+            if (!$exists) {
+                throw new RuntimeException('Program ID not found: ' . $userCols['intProgramID']);
+            }
+        }
+        if (isset($userCols['intCurriculumID']) && $userCols['intCurriculumID'] !== null) {
+            $exists = DB::table('tb_mas_curriculum')->where('intID', (int) $userCols['intCurriculumID'])->exists();
+            if (!$exists) {
+                throw new RuntimeException('Curriculum ID not found: ' . $userCols['intCurriculumID']);
+            }
+        }
+        if (isset($userCols['campus_id']) && $userCols['campus_id'] !== null) {
+            $exists = DB::table('tb_mas_campuses')->where('id', (int) $userCols['campus_id'])->exists();
+            if (!$exists) {
+                throw new RuntimeException('Campus ID not found: ' . $userCols['campus_id']);
+            }
+        }
     }
 }

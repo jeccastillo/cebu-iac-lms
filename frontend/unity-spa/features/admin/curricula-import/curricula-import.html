@@ -1,0 +1,96 @@
+<div class="space-y-6" ng-cloak>
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-semibold text-gray-800">
+      <i class="fas fa-file-upload mr-2 text-blue-600"></i>
+      Admin — Curricula Import
+    </h1>
+  </div>
+
+  <div class="bg-white shadow rounded">
+    <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+      <h2 class="text-lg font-medium text-gray-700">
+        <i class="fas fa-cogs mr-2"></i> Import Settings
+      </h2>
+    </div>
+    <div class="p-4 space-y-4">
+
+      <!-- File upload -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Upload File (.xlsx preferred)</label>
+        <div class="flex items-center gap-3">
+          <button class="inline-flex items-center px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded"
+                  ng-click="vm.openFileDialog()">
+            <i class="fas fa-folder-open mr-2"></i> Choose File
+          </button>
+          <span class="text-sm text-gray-600 truncate max-w-md" ng-if="vm.file">{{ vm.file.name }}</span>
+          <span class="text-sm text-gray-400" ng-if="!vm.file">No file chosen</span>
+        </div>
+        <input id="curriculaImportFile" type="file" accept=".xlsx,.xls,.csv" style="display:none"
+               onchange="angular.element(this).scope().vm.onFileChanged(event)" />
+        <p class="text-xs text-gray-500 mt-1">
+          Supported: .xlsx (preferred). .xls/.csv are also accepted by the backend.
+        </p>
+      </div>
+
+      <!-- Options -->
+      <div class="flex items-center gap-3">
+        <label class="inline-flex items-center">
+          <input type="checkbox" class="mr-2" ng-model="vm.dry_run" />
+          <span class="text-sm text-gray-700">Dry run (validate only; do not write to database)</span>
+        </label>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-3">
+        <button class="inline-flex items-center px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded"
+                ng-click="vm.downloadTemplate()">
+          <i class="fas fa-file-excel mr-2 text-green-600"></i> Download Template
+        </button>
+        <button class="inline-flex items-center px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded disabled:opacity-50"
+                ng-disabled="vm.importing"
+                ng-click="vm.importFile()">
+          <i class="fas fa-upload mr-2"></i> {{ vm.importing ? 'Importing...' : 'Import' }}
+        </button>
+      </div>
+
+      <!-- Errors -->
+      <div class="mt-3" ng-if="vm.error">
+        <div class="px-3 py-2 rounded border border-red-200 bg-red-50 text-red-700 text-sm">
+          <i class="fas fa-exclamation-triangle mr-1"></i> {{ vm.error }}
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="mt-3" ng-if="vm.summary">
+        <div class="px-3 py-2 rounded border border-green-200 bg-green-50 text-green-700 text-sm">
+          <span class="font-semibold">Import summary:</span>
+          <span class="ml-2">Total: {{ vm.summary.totalRows }}</span>
+          <span class="ml-2">Curricula — Inserted: {{ vm.summary.insertedCurricula }}, Updated: {{ vm.summary.updatedCurricula }}, Skipped: {{ vm.summary.skippedCurricula }}</span>
+          <span class="ml-2">Subject Links — Inserted: {{ vm.summary.insertedSubjectLinks }}, Updated: {{ vm.summary.updatedSubjectLinks }}, Skipped: {{ vm.summary.skippedSubjectLinks }}</span>
+        </div>
+        <div class="mt-2" ng-if="vm.summary.errors && vm.summary.errors.length">
+          <div class="text-sm text-gray-700 mb-1">Errors (showing up to 50):</div>
+          <div class="max-h-60 overflow-auto border border-gray-200 rounded">
+            <table class="min-w-full text-xs">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="px-2 py-1 text-left">Sheet</th>
+                  <th class="px-2 py-1 text-left">Line</th>
+                  <th class="px-2 py-1 text-left">Message</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="e in (vm.summary.errors | limitTo:50)">
+                  <td class="px-2 py-1">{{ e.sheet || '-' }}</td>
+                  <td class="px-2 py-1">{{ e.line }}</td>
+                  <td class="px-2 py-1">{{ e.message }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

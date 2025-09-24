@@ -574,6 +574,38 @@
         requiredRoles: ["admin"],
       })
 
+      // Admin: Users Import
+      .when("/admin/users-import", {
+        templateUrl: "features/admin/users-import/users-import.html",
+        controller: "AdminUsersImportController",
+        controllerAs: "vm",
+        requiredRoles: ["admin"],
+      })
+
+      // Admin: Subjects Import
+      .when("/admin/subjects-import", {
+        templateUrl: "features/admin/subjects-import/subjects-import.html",
+        controller: "AdminSubjectsImportController",
+        controllerAs: "vm",
+        requiredRoles: ["admin"],
+      })
+
+      // Admin: Programs Import
+      .when("/admin/programs-import", {
+        templateUrl: "features/admin/programs-import/programs-import.html",
+        controller: "AdminProgramsImportController",
+        controllerAs: "vm",
+        requiredRoles: ["admin"],
+      })
+
+      // Admin: Curricula Import
+      .when("/admin/curricula-import", {
+        templateUrl: "features/admin/curricula-import/curricula-import.html",
+        controller: "AdminCurriculaImportController",
+        controllerAs: "vm",
+        requiredRoles: ["admin"],
+      })
+
       // Admin: Invoices CRUD
       .when("/admin/invoices", {
         templateUrl: "features/admin/invoices/list.html",

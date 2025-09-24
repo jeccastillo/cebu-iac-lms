@@ -111,10 +111,10 @@ class OfficialReceiptPdf
         }
 
         // Right title + OR No.
-        $pdf->SetFont('Helvetica', 'B', 15);
-        $this->text($pdf, 165, 18, 'OFFICIAL RECEIPT', 'L', 40);
+        $pdf->SetFont('Helvetica', 'B', 13);
+        $this->text($pdf, 165, 20, 'OFFICIAL RECEIPT', 'L', 40);
         $pdf->SetFont('Helvetica', '', 11);
-        $this->text($pdf, 150, 26, $this->padRight('3637A', 0), 'L', 25); // visual anchor only (empty)
+        //$this->text($pdf, 150, 26, $this->padRight('3637A', 0), 'L', 25); // visual anchor only (empty)
         $pdf->SetFont('Helvetica', 'B', 12);
         $this->text($pdf, 165, 26, 'No. ' . ($orNo !== '' ? $orNo : '-'), 'L', 40);
 
@@ -139,7 +139,7 @@ class OfficialReceiptPdf
         $this->checkbox($pdf, $x2, $yChk2, (!$this->isMethod($method, 'cash') && !$this->isMethod($method, 'online') && !$this->isMethod($method, 'check'))); $this->text($pdf, $x2 + 12, $yChk2 + 2, 'OTHERS');
 
         // RECEIVED FROM box
-        $rfX = 12; $rfY = 60; $rfW = 194; $rfH = 35;
+        $rfX = 12; $rfY = 60; $rfW = 194; $rfH = 37;
         $pdf->SetDrawColor(120,120,120); $pdf->SetLineWidth(0.5);
         $pdf->Rect($rfX, $rfY, $rfW, $rfH);
         // Title strip        
@@ -151,10 +151,9 @@ class OfficialReceiptPdf
         $lineY = $rfY + 12;
         $this->labelValueUnderline($pdf, $rfX + 3, $lineY, 'Registered Name :', strtoupper($rfName), $rfW - 10); $lineY += 8;
         $this->labelValueUnderline($pdf, $rfX + 3, $lineY, 'TIN', $rfTin, $rfW - 10); $lineY += 8;
-        // Business Address: fit content within width (ellipsis)
+        // Business Address: allow up to two lines (wrap with ellipsis on the last line)
         $addr = strtoupper($rfAddress);
-        $this->labelValueUnderline($pdf, $rfX + 3, $lineY, 'Business Address :', $addr, $rfW - 10);
-        $lineY += 8;
+        $lineY += $this->labelValueUnderlineWrap($pdf, $rfX + 3, $lineY, 'Business Address :', $addr, $rfW - 10, 2);
 
         // Items table
         $tableX = 12; $tableW = 194; $tableY = $rfY + $rfH + 6;
@@ -205,7 +204,7 @@ class OfficialReceiptPdf
         $pdf->SetTextColor(0,0,0);
 
         // Footer right: payer and invoice ref
-        $footY = $totBoxY + $totBoxH + 14;
+        $footY = $totBoxY + $totBoxH + 8;
         if ($receivedByName !== '') {
             $pdf->SetFont('Helvetica', 'B', 11);
             $this->text($pdf, 12, $footY, strtoupper($receivedByName), 'L', 100);
@@ -285,6 +284,153 @@ class OfficialReceiptPdf
 
         // Reset to bold for subsequent labels (preserve previous behavior)
         $pdf->SetFont('Helvetica', 'B', 10);
+    }
+
+    /**
+     * Multi-line variant: wraps value up to $maxLines lines within $totalW.
+     * Returns the vertical increment (in mm) to move the caller's cursor.
+     */
+    private function labelValueUnderlineWrap(
+        Fpdi $pdf,
+        float $x,
+        float $y,
+        string $label,
+        string $value,
+        float $totalW,
+        int $maxLines = 2
+    ): float {
+        // Label
+        $pdf->SetXY($x, $y - 4);
+        $pdf->Cell(40, 8, $label, 0, 0, 'L');
+
+        // Value area
+        $valX = $x + 42;
+        $valW = $totalW - 46; // right margin similar to single-line version
+        $pdf->SetTextColor(80,80,80);
+        $pdf->SetFont('Helvetica', '', 10);
+
+        $lines = $this->wrapToLines($pdf, (string) $value, $valW, max(1, $maxLines));
+        $lineH = 5.0;
+        foreach ($lines as $i => $ln) {
+            $pdf->SetXY($valX, $y - 2 + ($i * $lineH));
+            $pdf->Cell($valW, $lineH, $ln, 0, 0, 'L');
+        }
+
+        // Reset color
+        $pdf->SetTextColor(0,0,0);
+
+        // Underline for each printed line
+        $pdf->SetDrawColor(120,120,120);
+        $pdf->SetLineWidth(0.3);
+        $numLines = max(1, count($lines));
+        for ($i = 0; $i < $numLines; $i++) {
+            $uy = $y + 2.0 + ($i * $lineH);
+            $pdf->Line($valX, $uy, $x + $totalW - 2, $uy);
+        }
+
+        // Restore label font
+        $pdf->SetFont('Helvetica', 'B', 10);
+
+        // Vertical increment for caller: base 8 plus extra lines
+        return 8 + (max(1, count($lines)) - 1) * $lineH;
+    }
+
+    /**
+     * Wrap text into up to $maxLines lines within $maxW (mm).
+     * The last line is truncated with ellipsis when needed.
+     */
+    private function wrapToLines(Fpdi $pdf, string $text, float $maxW, int $maxLines = 2): array
+    {
+        $text = trim($text);
+        if ($text === '') return [''];
+
+        $words = preg_split('/\s+/u', $text) ?: [];
+        $lines = [];
+        $current = '';
+
+        for ($i = 0; $i < count($words); $i++) {
+            // If we are on the last line, fit the rest with ellipsis
+            if (count($lines) >= $maxLines - 1) {
+                $rest = $current === '' ? implode(' ', array_slice($words, $i)) : ($current . ' ' . implode(' ', array_slice($words, $i)));
+                $lines[] = $this->fitTextByWidth($pdf, $rest, $maxW);
+                return $lines;
+            }
+
+            $w = $words[$i];
+            $candidate = $current === '' ? $w : ($current . ' ' . $w);
+            if ($pdf->GetStringWidth($candidate) <= $maxW) {
+                $current = $candidate;
+            } else {
+                if ($current !== '') {
+                    $lines[] = $current;
+                    $current = '';
+                }
+                if ($pdf->GetStringWidth($w) <= $maxW) {
+                    $current = $w;
+                } else {
+                    // break the long word across lines
+                    $chunks = $this->breakLongWord($pdf, $w, $maxW);
+                    foreach ($chunks as $idx => $ch) {
+                        if (count($lines) >= $maxLines - 1) {
+                            $remaining = $ch . implode('', array_slice($chunks, $idx + 1));
+                            $lines[] = $this->fitTextByWidth($pdf, $remaining, $maxW);
+                            return $lines;
+                        }
+                        if ($current === '') {
+                            $current = $ch;
+                        } else {
+                            $try = $current . $ch;
+                            if ($pdf->GetStringWidth($try) <= $maxW) {
+                                $current = $try;
+                            } else {
+                                $lines[] = $current;
+                                $current = $ch;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if ($current !== '') {
+            $lines[] = $current;
+        }
+
+        // Ensure at least one line
+        if (empty($lines)) $lines = [''];
+
+        // If we somehow exceed lines, squeeze the last
+        if (count($lines) > $maxLines) {
+            $keep = array_slice($lines, 0, $maxLines - 1);
+            $last = implode('', array_slice($lines, $maxLines - 1));
+            $keep[] = $this->fitTextByWidth($pdf, $last, $maxW);
+            return $keep;
+        }
+
+        return $lines;
+    }
+
+    /**
+     * Break a single long word into chunks that each fit within $maxW.
+     */
+    private function breakLongWord(Fpdi $pdf, string $word, float $maxW): array
+    {
+        $chars = preg_split('//u', $word, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+        $chunks = [];
+        $current = '';
+
+        foreach ($chars as $ch) {
+            $test = $current . $ch;
+            if ($pdf->GetStringWidth($test) <= $maxW || $current === '') {
+                $current = $test;
+            } else {
+                $chunks[] = $current;
+                $current = $ch;
+            }
+        }
+        if ($current !== '') $chunks[] = $current;
+
+        return $chunks;
     }
 
     private function checkbox(Fpdi $pdf, float $x, float $y, bool $checked): void

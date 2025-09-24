@@ -3,37 +3,35 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\V1\StudentImportRequest;
-use App\Exports\StudentTemplateExport;
-use App\Services\StudentImportService;
+use App\Http\Requests\Api\V1\ProgramImportRequest;
+use App\Exports\ProgramTemplateExport;
+use App\Services\ProgramImportService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class StudentImportController extends Controller
+class ProgramImportController extends Controller
 {
-    protected StudentImportService $service;
+    protected ProgramImportService $service;
 
-    public function __construct(StudentImportService $service)
+    public function __construct(ProgramImportService $service)
     {
         $this->service = $service;
     }
 
     /**
-     * GET /api/v1/students/import/template
+     * GET /api/v1/programs/import/template
      * Role: registrar,admin
-     * Returns an .xlsx template with headers from tb_mas_users using substitutions:
-     *   - intProgramID -> Program Code
-     *   - intCurriculumID -> Curriculum Code
-     *   - campus_id -> Campus
+     * Returns an .xlsx template with headers:
+     *   [Program ID, Program Code, Program Description, Major, Type, School, Short Name, Default Curriculum ID, Enabled, Campus]
      */
     public function template(Request $request)
     {
-        $export = new StudentTemplateExport($this->service);
+        $export = new ProgramTemplateExport($this->service);
         $spreadsheet = $export->build();
         $writer = new Xlsx($spreadsheet);
 
-        $filename = 'students-import-template.xlsx';
+        $filename = 'programs-import-template.xlsx';
 
         return response()->streamDownload(function () use ($writer) {
             $writer->save('php://output');
@@ -46,18 +44,19 @@ class StudentImportController extends Controller
     }
 
     /**
-     * POST /api/v1/students/import
+     * POST /api/v1/programs/import
      * Role: registrar,admin
      * Accepts multipart/form-data with "file": .xlsx/.xls/.csv
      * Optional: "dry_run" (boolean) -> parse/validate without writing
+     * Optional: "campus_id" (int) -> override Campus for all rows
      *
      * Returns:
      * {
      *   success: true,
-     *   result: { totalRows, inserted, updated, skipped, errors: [ { line, student_number, message } ] }
+     *   result: { totalRows, inserted, updated, skipped, errors: [ { line, program_id, message } ] }
      * }
      */
-    public function import(StudentImportRequest $request): JsonResponse
+    public function import(ProgramImportRequest $request): JsonResponse
     {
         try {
             $file = $request->file('file');
@@ -69,14 +68,12 @@ class StudentImportController extends Controller
             }
 
             $ext = strtolower($file->getClientOriginalExtension() ?: '');
-            // Some clients may misreport; fall back to mime if needed
             if (!in_array($ext, ['xlsx', 'xls', 'csv'], true)) {
                 $mime = $file->getMimeType() ?: '';
                 if (str_contains($mime, 'spreadsheetml')) $ext = 'xlsx';
                 elseif (str_contains($mime, 'excel')) $ext = 'xls';
                 elseif (str_contains($mime, 'csv')) $ext = 'csv';
             }
-
             if (!in_array($ext, ['xlsx', 'xls', 'csv'], true)) {
                 return response()->json([
                     'success' => false,
@@ -84,18 +81,19 @@ class StudentImportController extends Controller
                 ], 422);
             }
 
-            // Move to a safe temporary path to ensure readable by PhpSpreadsheet
+            // Ensure readable temp path for PhpSpreadsheet
             $tmpPath = $file->getRealPath();
             if ($tmpPath === false || $tmpPath === null) {
-                $tmpPath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . uniqid('students_import_', true) . '.' . $ext;
+                $tmpPath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . uniqid('programs_import_', true) . '.' . $ext;
                 $file->move(dirname($tmpPath), basename($tmpPath));
             }
 
             $iter = $this->service->parse($tmpPath, $ext);
             $dryRun = (bool) $request->input('dry_run', false);
             $campusId = $request->input('campus_id');
+            $forcedCampusId = ($campusId !== null && $campusId !== '') ? (int) $campusId : null;
 
-            $result = $this->service->upsertRows($iter, $dryRun, $campusId ? (int) $campusId : null);
+            $result = $this->service->upsertRows($iter, $dryRun, $forcedCampusId);
 
             return response()->json([
                 'success' => true,

@@ -29,6 +29,7 @@ use App\Http\Controllers\Api\V1\FinancePaymentActionsController;
 use App\Http\Controllers\Api\V1\PortalController;
 use App\Http\Controllers\Api\V1\PreviousSchoolController;
 use App\Http\Controllers\Api\V1\ProgramController;
+use App\Http\Controllers\Api\V1\ProgramImportController;
 use App\Http\Controllers\Api\V1\PublicInitialRequirementsController;
 use App\Http\Controllers\Api\V1\RegistrarController;
 use App\Http\Controllers\Api\V1\ReportsController;
@@ -98,6 +99,10 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::get('/programs', [ProgramController::class, 'index']);
+    // Programs Import (literal routes before parameterized {id} to avoid collision)
+    Route::get('/programs/import/template', [ProgramImportController::class, 'template'])->middleware('role:registrar,admin');
+    Route::post('/programs/import', [ProgramImportController::class, 'import'])->middleware('role:registrar,admin');
+
     Route::get('/programs/{id}', [ProgramController::class, 'show']);
     Route::post('/programs', [ProgramController::class, 'store'])->middleware('role:registrar,admin');
     Route::put('/programs/{id}', [ProgramController::class, 'update'])->middleware('role:registrar,admin');
