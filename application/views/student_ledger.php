@@ -676,7 +676,7 @@ new Vue({
                 });
                 
             }
-            // this.ledger_term.sort((a, b) => new Date(a.date) - new Date(b.date))
+            this.ledger_term.sort((a, b) => new Date(a.date) - new Date(b.date))
             this.ledger.push({
                 'ledger_items': this.ledger_term,
                 'balance': this.term_balance.toFixed(2)
