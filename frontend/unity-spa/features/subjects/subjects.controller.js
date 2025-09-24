@@ -285,6 +285,7 @@
     vm.prereqsLoading = false;
     vm.addPrereqId = null;
     vm.addPrereqProgram = '';
+    vm.addPrereqGrade = null;
     vm.availableSubjects = [];
 
     vm.loadAvailableSubjects = function () {
@@ -322,11 +323,22 @@
       if (!pid || pid <= 0) { vm.error = 'Enter a valid prerequisite subject ID.'; return; }
       if (pid === vm.id) { vm.error = 'A subject cannot be a prerequisite of itself.'; return; }
 
+      // Validate required grade if provided
+      var requiredGrade = null;
+      if (vm.addPrereqGrade !== null && vm.addPrereqGrade !== undefined && vm.addPrereqGrade !== '') {
+        requiredGrade = parseFloat(vm.addPrereqGrade);
+        if (isNaN(requiredGrade) || requiredGrade < 1.0 || requiredGrade > 3.0) {
+          vm.error = 'Required grade must be between 1.0 and 3.0 (passing grades).';
+          return;
+        }
+      }
+
       vm.error = null;
-      SubjectsService.addPrereq(vm.id, pid, (vm.addPrereqProgram || undefined))
+      SubjectsService.addPrereq(vm.id, pid, (vm.addPrereqProgram || undefined), requiredGrade)
         .then(function (res) {
           vm.addPrereqId = null;
           vm.addPrereqProgram = '';
+          vm.addPrereqGrade = null;
           vm.loadPrereqs();
         })
         .catch(function (err) {

@@ -239,8 +239,8 @@
     </div>
 
     <div ng-if="vm.isEdit">
-      <div class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-4">
-        <div class="md:col-span-2">
+      <div class="grid grid-cols-1 md:grid-cols-8 gap-4 mb-4">
+        <div class="md:col-span-3">
           <label class="block text-sm font-medium text-gray-700 mb-1">Prerequisite Subject</label>
           <select class="w-full border rounded px-3 py-2" 
                   ng-model="vm.addPrereqId" 
@@ -258,6 +258,12 @@
           <label class="block text-sm font-medium text-gray-700 mb-1">Program (optional)</label>
           <input type="text" class="w-full border rounded px-3 py-2" ng-model="vm.addPrereqProgram" placeholder="e.g. BSCS">
         </div>
+        <div class="md:col-span-1">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Required Grade</label>
+          <input type="number" class="w-full border rounded px-3 py-2" ng-model="vm.addPrereqGrade" 
+                 placeholder="2.5" min="1.0" max="3.0" step="0.25" 
+                 title="Minimum grade required (1.0-3.0). Leave blank for no grade requirement.">
+        </div>
         <div class="md:col-span-2 flex items-end">
           <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" ng-click="vm.addPrereq()" ng-disabled="vm.prereqsLoading || !vm.addPrereqId">Add Prerequisite</button>
         </div>
@@ -272,12 +278,13 @@
               <th class="px-4 py-3">Code</th>
               <th class="px-4 py-3">Description</th>
               <th class="px-4 py-3 w-32">Program</th>
+              <th class="px-4 py-3 w-32">Required Grade</th>
               <th class="px-4 py-3 w-32">Actions</th>
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-100">
             <tr ng-if="!vm.prereqsLoading &amp;&amp; (!vm.prereqs || !vm.prereqs.length)">
-              <td colspan="6" class="px-4 py-4 text-sm text-gray-500">
+              <td colspan="7" class="px-4 py-4 text-sm text-gray-500">
                 No prerequisites found.
               </td>
             </tr>
@@ -288,11 +295,17 @@
               <td class="px-4 py-3 text-sm text-gray-900">{{ p.description || '-' }}</td>
               <td class="px-4 py-3 text-sm text-gray-900">{{ p.program || '-' }}</td>
               <td class="px-4 py-3 text-sm text-gray-900">
+                <span ng-if="p.required_grade" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                  {{ p.required_grade }} or higher
+                </span>
+                <span ng-if="!p.required_grade" class="text-gray-400">No requirement</span>
+              </td>
+              <td class="px-4 py-3 text-sm text-gray-900">
                 <button class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700" ng-click="vm.removePrereq(p)">Remove</button>
               </td>
             </tr>
             <tr ng-if="vm.prereqsLoading">
-              <td colspan="6" class="px-4 py-4 text-sm text-gray-500">Loading...</td>
+              <td colspan="7" class="px-4 py-4 text-sm text-gray-500">Loading...</td>
             </tr>
           </tbody>
         </table>

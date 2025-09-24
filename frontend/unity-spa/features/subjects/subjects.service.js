@@ -81,14 +81,17 @@
       },
 
       // POST /subjects/submit-prereq
-      // Body: { intSubjectID, program, intPrerequisiteID }
-      addPrereq: function (subjectId, prereqId, program) {
+      // Body: { intSubjectID, program, intPrerequisiteID, required_grade }
+      addPrereq: function (subjectId, prereqId, program, requiredGrade) {
         var body = {
           intSubjectID: (subjectId !== null && subjectId !== undefined) ? parseInt(subjectId, 10) : null,
           intPrerequisiteID: (prereqId !== null && prereqId !== undefined) ? parseInt(prereqId, 10) : null
         };
         if (typeof program !== 'undefined') {
           body.program = program;
+        }
+        if (typeof requiredGrade !== 'undefined' && requiredGrade !== null) {
+          body.required_grade = parseFloat(requiredGrade);
         }
         return $http.post(BASE + '/subjects/submit-prereq', body, _adminHeaders()).then(_unwrap);
       },
