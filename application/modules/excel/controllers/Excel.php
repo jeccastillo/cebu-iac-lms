@@ -5463,7 +5463,7 @@ class Excel extends CI_Controller {
                         ->setCellValue('AB'.$i, ($deduction_type == 'scholarship' || ($deduction_type == 'discount' && $date_enrolled <= $sy->ar_report_date_generation)) && $tuition['scholar_type'] ? $tuition['scholar_type'] : '')
                         // ->setCellValue('AC'.$i, $deduction_type == 'scholarship' && $tuition_discount > 0 ? $tuition['scholarship_total_assessment_rate_scholar'] : ($tuition['scholarship_total_assessment_rate_scholar'] > 0 ? $tuition['scholarship_total_assessment_rate_scholar'] : '') )
                         ->setCellValue('AC'.$i, $deduction_type == 'scholarship' && $tuition_discount > 0 ? $assessment_discount_rate_scholar : ($assessment_discount_rate_scholar > 0 ? $assessment_discount_rate_scholar : '') )
-                        ->setCellValue('AD'.$i, $deduction_type == 'scholarship' && $tuition['scholarship_tuition_fee_fixed'] > 0 ? $tuition['scholarship_tuition_fee_fixed'] : ($assessment_discount_fixed > 0 ? $assessment_discount_fixed : ''))
+                        ->setCellValue('AD'.$i, (max(0, ($assessment_discount_fixed - (isset($tuition['ar_external_scholarship_full']) ? $tuition['ar_external_scholarship_full'] : 0))) > 0) ? max(0, ($assessment_discount_fixed - (isset($tuition['ar_external_scholarship_full']) ? $tuition['ar_external_scholarship_full'] : 0))) : '')
                         ->setCellValue('AE'.$i, $deduction_type == 'scholarship' && $tuition['scholarship_lab_fee_rate'] > 0 ? $tuition['scholarship_lab_fee_rate'] : '')
                         ->setCellValue('AF'.$i, $deduction_type == 'scholarship' && $tuition['scholarship_lab_fee_fixed'] > 0 ? $tuition['scholarship_lab_fee_fixed'] : '')
                         ->setCellValue('AG'.$i, $deduction_type == 'scholarship' && $tuition['scholarship_misc_fee_rate'] > 0 ? $tuition['scholarship_misc_fee_rate'] : '')
@@ -5551,7 +5551,7 @@ class Excel extends CI_Controller {
                     }
     
                     $balance_after_payment = '=AN' . $i . '-' . $this->columnIndexToLetter($last_index) . '' . $i;
-                    $total_adjustment = '=' . $this->columnIndexToLetter($last_index + 4) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 7) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 10) . '' . $i . 
+                    $total_adjustment = '=' . $this->columnIndexToLetter($last_index + 4) . '' . $i . '-' . $this->columnIndexToLetter($last_index + 7) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 10) . '' . $i . 
                                         '+' . $this->columnIndexToLetter($last_index + 13) . '' . $i . '+' . $this->columnIndexToLetter($last_index + 16) . '' . $i;
                                         
                     $objPHPExcel->setActiveSheetIndex(0)->getCellByColumnAndRow($last_index, $i)->setValue($total_amount);
