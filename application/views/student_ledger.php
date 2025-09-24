@@ -677,39 +677,39 @@ new Vue({
             }
             
             // Sort all items except index 0 by date ascending
-            (function(){
-                const parseTs = function(d){
-                    if (!d) return Number.POSITIVE_INFINITY;
-                    const s = ('' + d).trim();
-                    if (!s || s === '0000-00-00' || s === '0000-00-00 00:00:00') return Number.POSITIVE_INFINITY;
-                    const iso = s.includes('T') ? s : s.replace(' ', 'T');
-                    let t = Date.parse(iso);
-                    if (!isNaN(t)) return t;
-                    const m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?)?$/i);
-                    if (m) {
-                        let mm = parseInt(m[1], 10) - 1;
-                        let dd = parseInt(m[2], 10);
-                        let yyyy = parseInt(m[3], 10);
-                        let H = parseInt(m[4] || '0', 10);
-                        const M = parseInt(m[5] || '0', 10);
-                        const S = parseInt(m[6] || '0', 10);
-                        const ap = (m[7] || '').toUpperCase();
-                        if (ap === 'PM' && H < 12) H += 12;
-                        if (ap === 'AM' && H === 12) H = 0;
-                        return new Date(yyyy, mm, dd, H, M, S).getTime();
-                    }
-                    return Number.POSITIVE_INFINITY;
-                };
-                if (Array.isArray(this.ledger_term) && this.ledger_term.length > 1) {
-                    const head = this.ledger_term[0];
-                    const tail = this.ledger_term.slice(1).sort(function(a,b){
-                        const ad = parseTs(a && a.date);
-                        const bd = parseTs(b && b.date);
-                        return ad - bd;
-                    });
-                    this.ledger_term = [head].concat(tail);
-                }
-            }).call(this);
+            // (function(){
+            //     const parseTs = function(d){
+            //         if (!d) return Number.POSITIVE_INFINITY;
+            //         const s = ('' + d).trim();
+            //         if (!s || s === '0000-00-00' || s === '0000-00-00 00:00:00') return Number.POSITIVE_INFINITY;
+            //         const iso = s.includes('T') ? s : s.replace(' ', 'T');
+            //         let t = Date.parse(iso);
+            //         if (!isNaN(t)) return t;
+            //         const m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?)?$/i);
+            //         if (m) {
+            //             let mm = parseInt(m[1], 10) - 1;
+            //             let dd = parseInt(m[2], 10);
+            //             let yyyy = parseInt(m[3], 10);
+            //             let H = parseInt(m[4] || '0', 10);
+            //             const M = parseInt(m[5] || '0', 10);
+            //             const S = parseInt(m[6] || '0', 10);
+            //             const ap = (m[7] || '').toUpperCase();
+            //             if (ap === 'PM' && H < 12) H += 12;
+            //             if (ap === 'AM' && H === 12) H = 0;
+            //             return new Date(yyyy, mm, dd, H, M, S).getTime();
+            //         }
+            //         return Number.POSITIVE_INFINITY;
+            //     };
+            //     if (Array.isArray(this.ledger_term) && this.ledger_term.length > 1) {
+            //         const head = this.ledger_term[0];
+            //         const tail = this.ledger_term.slice(1).sort(function(a,b){
+            //             const ad = parseTs(a && a.date);
+            //             const bd = parseTs(b && b.date);
+            //             return ad - bd;
+            //         });
+            //         this.ledger_term = [head].concat(tail);
+            //     }
+            // }).call(this);
 
             this.ledger.push({
                 'ledger_items': this.ledger_term,
