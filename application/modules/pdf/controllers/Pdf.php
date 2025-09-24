@@ -2605,7 +2605,7 @@ class Pdf extends CI_Controller {
                         break;                    
                 case 'shs':                                    
                     $particulars = ["SHS - Graduation Ball","SHS - Graduation Fee","SHS UNIFORM"];
-                    if (in_array($particulars, $fruits)) {
+                    if (in_array($request['description'], $particulars)) {
                          $type = $request['description'];
                          break;
                     }
