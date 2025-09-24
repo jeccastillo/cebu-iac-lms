@@ -676,7 +676,7 @@ new Vue({
                 });    
             }
             
-            console.log($this.ledger_term);
+            console.log(this.ledger_term);
             // Sort ledger_term by date excluding the first item (index 0) before pushing to ledger
             if (this.ledger_term && this.ledger_term.length > 1) {
                 const head = this.ledger_term[0];
