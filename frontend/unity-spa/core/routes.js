@@ -541,6 +541,18 @@
         controllerAs: 'vm',
         requiredRoles: ['finance_admin', 'admin'],
       })
+      .when('/finance/invoice-reports', {
+        templateUrl: 'features/finance/invoice-reports/invoice-reports.html',
+        controller: 'InvoiceReportsController',
+        controllerAs: 'vm',
+        requiredRoles: ['finance', 'admin'],
+      })
+      .when('/finance/or-reports', {
+        templateUrl: 'features/finance/or-reports/or-reports.html',
+        controller: 'OrReportsController',
+        controllerAs: 'vm',
+        requiredRoles: ['finance', 'admin'],
+      })
       .when('/finance/non-student-payments', {
         templateUrl: 'features/finance/non-student-payments/non-student-payments.html',
         controller: 'NonStudentPaymentsController',

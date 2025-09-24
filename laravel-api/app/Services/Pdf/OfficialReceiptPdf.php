@@ -85,7 +85,7 @@ class OfficialReceiptPdf
         // Letterhead image on left
         $imgPath = $this->resolveLetterhead();
         if ($imgPath && @file_exists($imgPath)) {
-            $pdf->Image($imgPath, 12, 10, 28);
+            $pdf->Image($imgPath, 8, 10, 28);
         }
 
         // Company header on the right; append VAT REG TIN to the second line
@@ -99,10 +99,10 @@ class OfficialReceiptPdf
                 $headerLines = [$companyTin];
             }
         }
-        $rightX = 40;                 // start x for header block (to the right of logo)
+        $rightX = 33;                 // start x for header block (to the right of logo)
         $rightW = $pageW - $rightX - 12;
         $pdf->SetFont('Helvetica', 'B', 16);
-        $this->text($pdf, $rightX, 16, strtoupper($companyName), 'L', $rightW);
+        $this->text($pdf, $rightX, 16, $companyName, 'L', $rightW);
         $pdf->SetFont('Helvetica', '', 9);
         $yHdr = 22;
         foreach ($headerLines as $ln) {
@@ -119,41 +119,41 @@ class OfficialReceiptPdf
         $this->text($pdf, 165, 26, 'No. ' . ($orNo !== '' ? $orNo : '-'), 'L', 40);
 
         // Right meta box: Payment Date / Account No.
-        $boxX = 138; $boxY = 32; $boxW = 68; $rowH = 8;
-        $pdf->SetDrawColor(120,120,120); $pdf->SetLineWidth(0.4);
-        $pdf->Rect($boxX, $boxY, $boxW, $rowH * 2);
+        $boxX = 134; $boxY = 40; $boxW = 72; $rowH = 8;
+        //$pdf->SetDrawColor(120,120,120); $pdf->SetLineWidth(0.4);
+        
         $pdf->SetFont('Helvetica', 'B', 10);
         $this->cellRow($pdf, $boxX, $boxY, $boxW, 'Payment Date', (string)$payDate);
         $this->cellRow($pdf, $boxX, $boxY + $rowH, $boxW, 'Account No.', (string)$accountNo);
 
         // Payment method checkboxes row (left) in 2 columns
-        $pdf->SetFont('Helvetica', 'B', 12);
+        $pdf->SetFont('Helvetica', 'B', 11);
         $yChk = 42;
-        $x1 = 18;
-        $x2 = 90;
+        $x1 = 12;
+        $x2 = 75;
         $this->checkbox($pdf, $x1, $yChk, $this->isMethod($method, 'cash')); $this->text($pdf, $x1 + 7, $yChk + 2, 'CASH');
         $this->checkbox($pdf, $x2, $yChk, $this->isMethod($method, 'online')); $this->text($pdf, $x2 + 7, $yChk + 2, 'ONLINE TRANSFER');
         $yChk2 = $yChk + 10;
         $this->checkbox($pdf, $x1, $yChk2, $this->isMethod($method, 'check')); $this->text($pdf, $x1 + 7, $yChk2 + 2, 'CHECK');
         // Fix: make sure the last checkbox and label are visible by moving right a bit
-        $this->checkbox($pdf, $x2 + 5, $yChk2, (!$this->isMethod($method, 'cash') && !$this->isMethod($method, 'online') && !$this->isMethod($method, 'check'))); $this->text($pdf, $x2 + 12, $yChk2 + 2, 'OTHERS');
+        $this->checkbox($pdf, $x2, $yChk2, (!$this->isMethod($method, 'cash') && !$this->isMethod($method, 'online') && !$this->isMethod($method, 'check'))); $this->text($pdf, $x2 + 12, $yChk2 + 2, 'OTHERS');
 
         // RECEIVED FROM box
-        $rfX = 12; $rfY = 52; $rfW = 194; $rfH = 28;
+        $rfX = 12; $rfY = 60; $rfW = 194; $rfH = 35;
         $pdf->SetDrawColor(120,120,120); $pdf->SetLineWidth(0.5);
         $pdf->Rect($rfX, $rfY, $rfW, $rfH);
         // Title strip        
-        $pdf->Rect($rfX, $rfY, $rfW, 7, 'F');
+        $pdf->Rect($rfX, $rfY, $rfW, 7);
         $pdf->SetFont('Helvetica', 'B', 10);
-        $this->text($pdf, $rfX + 3, $rfY + 5, 'RECEIVED FROM');
+        $this->text($pdf, $rfX + 3, $rfY + 4, 'RECEIVED FROM');
 
         $pdf->SetFont('Helvetica', '', 10);
         $lineY = $rfY + 12;
         $this->labelValueUnderline($pdf, $rfX + 3, $lineY, 'Registered Name :', strtoupper($rfName), $rfW - 10); $lineY += 8;
         $this->labelValueUnderline($pdf, $rfX + 3, $lineY, 'TIN', $rfTin, $rfW - 10); $lineY += 8;
-        // Business Address in one line (gray field)
+        // Business Address: fit content within width (ellipsis)
         $addr = strtoupper($rfAddress);
-        $this->labelValueUnderline($pdf, $rfX + 3, $lineY, 'Business Address :', $this->truncate($addr, 90), $rfW - 10);
+        $this->labelValueUnderline($pdf, $rfX + 3, $lineY, 'Business Address :', $addr, $rfW - 10);
         $lineY += 8;
 
         // Items table
@@ -161,10 +161,10 @@ class OfficialReceiptPdf
         $descW = 150; $amtW = 44;
         $pdf->SetDrawColor(120,120,120); $pdf->SetLineWidth(0.5);
         // Header strip        
-        $pdf->Rect($tableX, $tableY, $tableW, 7, 'F');
+        $pdf->Rect($tableX, $tableY, $tableW, 7);
         $pdf->SetFont('Helvetica', 'B', 10);
-        $this->text($pdf, $tableX + 3, $tableY + 5, 'ITEM DESCRIPTION / NATURE OF SERVICE');
-        $this->text($pdf, $tableX + $descW + 3, $tableY + 5, 'AMOUNT');
+        $this->text($pdf, $tableX + 3, $tableY + 4, 'ITEM DESCRIPTION / NATURE OF SERVICE');
+        $this->text($pdf, $tableX + $descW + 3, $tableY + 4, 'AMOUNT');
 
         // Rows border box
         $rowsStartY = $tableY + 7;
@@ -193,7 +193,7 @@ class OfficialReceiptPdf
         // Remaining rows left blank (within the bordered box)
 
         // TOTAL PAID AMOUNT box on the right under items
-        $totBoxW = 70; $totBoxH = 12;
+        $totBoxW = 80; $totBoxH = 8;
         $totBoxX = $tableX + $tableW - $totBoxW; $totBoxY = $rowsStartY + $rowsH + 6;
         $pdf->SetDrawColor(120,120,120); $pdf->SetLineWidth(0.5);
         $pdf->Rect($totBoxX, $totBoxY, $totBoxW, $totBoxH);
@@ -201,7 +201,7 @@ class OfficialReceiptPdf
         $this->text($pdf, $totBoxX + 3, $totBoxY + 4, 'TOTAL PAID AMOUNT');
         $pdf->SetFont('Helvetica', '', 11);
         $pdf->SetTextColor(110,110,110);
-        $this->text($pdf, $totBoxX + 3, $totBoxY + 9, $this->money($total), 'R', $totBoxW - 6);
+        $this->text($pdf, $totBoxX + 3, $totBoxY + 4, $this->money($total), 'R', $totBoxW - 6);
         $pdf->SetTextColor(0,0,0);
 
         // Footer right: payer and invoice ref
@@ -212,7 +212,7 @@ class OfficialReceiptPdf
         }
         $pdf->SetFont('Helvetica', '', 10);
         $refTxt = 'Invoice Ref. No. ' . (($invoiceRefNo !== '') ? $invoiceRefNo : '00000');
-        $this->text($pdf, 120, $footY, $refTxt, 'L', 80);
+        $this->text($pdf, 124, $footY, $refTxt, 'L', 80);
 
         // Disclaimer box
         $pdf->SetFont('Helvetica', 'I', 9);
@@ -249,11 +249,11 @@ class OfficialReceiptPdf
         $rowH = 8;
         $pdf->SetXY($x, $y);
         // Label
-        $pdf->Cell($w * 0.55, $rowH, $label, 1, 0, 'L', false);
+        $pdf->Cell($w * 0.45, $rowH, $label, 1, 0, 'L', false);
         // Value as gray text (no fill)
         $pdf->SetFont('Helvetica', '', 10);
         $pdf->SetTextColor(110,110,110);
-        $pdf->Cell($w * 0.45, $rowH, $value, 1, 0, 'R', false);
+        $pdf->Cell($w * 0.55, $rowH, $value, 1, 0, 'R', false);
         $pdf->SetTextColor(0,0,0);
         $pdf->SetFont('Helvetica', 'B', 10);
     }
@@ -263,17 +263,28 @@ class OfficialReceiptPdf
         // Label
         $pdf->SetXY($x, $y - 4);
         $pdf->Cell(40, 8, $label, 0, 0, 'L');
+
         // Gray text value with underline (no fill)
         $valX = $x + 42;
-        $valW = $totalW - 46;
+        $valW = $totalW - 46; // keep a small margin on the right
         $pdf->SetXY($valX, $y - 4);
         $pdf->SetTextColor(80,80,80);
-        $pdf->Cell($valW, 8, $value, 0, 0, 'L');
+
+        // Ensure we measure and render with the same font
+        $pdf->SetFont('Helvetica', '', 10);
+        $fitted = $this->fitTextByWidth($pdf, (string) $value, $valW);
+        $pdf->Cell($valW, 8, $fitted, 0, 0, 'L');
+
+        // Reset text color
         $pdf->SetTextColor(0,0,0);
-        // underline
+
+        // underline (move slightly lower so it doesn't strike through the text)
         $pdf->SetDrawColor(120,120,120);
         $pdf->SetLineWidth(0.3);
-        $pdf->Line($valX, $y + 2.8, $x + $totalW - 4, $y + 2.8);
+        $pdf->Line($valX, $y + 2.0, $x + $totalW - 2, $y + 2.0);
+
+        // Reset to bold for subsequent labels (preserve previous behavior)
+        $pdf->SetFont('Helvetica', 'B', 10);
     }
 
     private function checkbox(Fpdi $pdf, float $x, float $y, bool $checked): void
@@ -315,6 +326,46 @@ class OfficialReceiptPdf
     {
         if (mb_strlen($s) <= $limit) return $s;
         return rtrim(mb_substr($s, 0, $limit - 1)) . '…';
+    }
+
+    /**
+     * Fit text to a maximum width (in mm) for the current font in the given $pdf.
+     * If the text exceeds the width, truncate and append an ellipsis.
+     */
+    private function fitTextByWidth(Fpdi $pdf, string $text, float $maxW): string
+    {
+        $text = trim($text);
+        if ($text === '') return '';
+        // Slight safety margin so glyphs don't touch the border
+        $maxW = max(0.0, $maxW - 0.6);
+
+        if ($pdf->GetStringWidth($text) <= $maxW) {
+            return $text;
+        }
+
+        $ellipsis = '…';
+        $len = mb_strlen($text);
+        $low = 0;
+        $high = $len;
+        $best = '';
+
+        // Binary search for the longest prefix that fits (including ellipsis when truncated)
+        while ($low <= $high) {
+            $mid = intdiv($low + $high, 2);
+            $candidate = rtrim(mb_substr($text, 0, $mid));
+            if ($mid < $len) {
+                $candidate .= $ellipsis;
+            }
+            $w = $pdf->GetStringWidth($candidate);
+            if ($w <= $maxW) {
+                $best = $candidate;
+                $low = $mid + 1;
+            } else {
+                $high = $mid - 1;
+            }
+        }
+
+        return $best;
     }
 
     private function padRight(string $s, int $len): string

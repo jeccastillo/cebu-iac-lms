@@ -1,0 +1,116 @@
+<div class="space-y-6" ng-cloak>
+  <!-- Page header -->
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-semibold text-gray-800">
+      {{ vm.title }}
+    </h1>
+    <div class="flex items-center space-x-2">
+      <button type="button"
+              class="inline-flex items-center px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60"
+              ng-click="vm.load()"
+              ng-disabled="vm.loading">
+        <span class="fas fa-search mr-2"></span>
+        Search
+      </button>
+      <button type="button"
+              class="inline-flex items-center px-3 py-2 rounded bg-gray-200 text-gray-900 hover:bg-gray-300"
+              ng-click="vm.clear()">
+        <span class="fas fa-eraser mr-2"></span>
+        Clear
+      </button>
+      <button type="button"
+              class="inline-flex items-center px-3 py-2 rounded bg-green-600 text-white hover:bg-green-700 disabled:opacity-60"
+              ng-click="vm.exportCsv()"
+              ng-disabled="vm.loading || !vm.rows.length">
+        <span class="fas fa-file-csv mr-2"></span>
+        Export CSV
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="bg-white rounded shadow p-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">From</label>
+        <input type="date"
+               class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+               ng-model="vm.filters.date_from"
+               ng-model-options="{ timezone: 'UTC' }">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">To</label>
+        <input type="date"
+               class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+               ng-model="vm.filters.date_to"
+               ng-model-options="{ timezone: 'UTC' }">
+      </div>
+      <div class="flex items-end">
+        <button type="button"
+                class="inline-flex w-full items-center justify-center px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60"
+                ng-click="vm.load()"
+                ng-disabled="vm.loading">
+          <span class="fas fa-search mr-2"></span>
+          Apply
+        </button>
+      </div>
+    </div>
+
+    <!-- Error -->
+    <div class="mt-3" ng-if="vm.error">
+      <div class="rounded border border-red-300 bg-red-50 text-red-800 px-3 py-2 text-sm">
+        <span class="fas fa-exclamation-triangle mr-2"></span>
+        {{ vm.error }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="bg-white rounded shadow overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200 text-sm">
+      <thead class="bg-gray-800 text-white">
+        <tr>
+          <th class="px-3 py-2 text-left font-semibold">No</th>
+          <th class="px-3 py-2 text-left font-semibold">OR Date</th>
+          <th class="px-3 py-2 text-left font-semibold">OR Number</th>
+          <th class="px-3 py-2 text-left font-semibold">Invoice Number</th>
+          <th class="px-3 py-2 text-left font-semibold">Student Number</th>
+          <th class="px-3 py-2 text-left font-semibold">Payee Name</th>
+          <th class="px-3 py-2 text-left font-semibold">Payment For</th>
+          <th class="px-3 py-2 text-left font-semibold">Particulars</th>
+          <th class="px-3 py-2 text-right font-semibold">Payment Received</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        <tr ng-if="vm.loading">
+          <td colspan="9" class="px-3 py-8 text-center text-gray-500">
+            <span class="fas fa-spinner fa-spin mr-2"></span>
+            Loading...
+          </td>
+        </tr>
+        <tr ng-if="!vm.loading && !vm.rows.length">
+          <td colspan="9" class="px-3 py-8 text-center text-gray-500">
+            No records
+          </td>
+        </tr>
+        <tr ng-repeat="r in vm.rows track by $index" class="hover:bg-gray-50">
+          <td class="px-3 py-2">{{ $index + 1 }}</td>
+          <td class="px-3 py-2">{{ r.or_date || '' }}</td>
+          <td class="px-3 py-2">{{ r.or_number || '' }}</td>
+          <td class="px-3 py-2">{{ r.invoice_number || '' }}</td>
+          <td class="px-3 py-2">{{ r.student_number || '' }}</td>
+          <td class="px-3 py-2">{{ r.payee_name || '' }}</td>
+          <td class="px-3 py-2">{{ r.payment_for || '' }}</td>
+          <td class="px-3 py-2">{{ r.particulars || '' }}</td>
+          <td class="px-3 py-2 text-right">{{ (r.payment_received | number:2) || '0.00' }}</td>
+        </tr>
+      </tbody>
+      <tfoot ng-if="vm.rows.length">
+        <tr class="bg-gray-100">
+          <td class="px-3 py-2 text-right font-semibold" colspan="8">Total</td>
+          <td class="px-3 py-2 text-right font-semibold">{{ vm.total_received | number:2 }}</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>

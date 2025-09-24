@@ -15,6 +15,7 @@ use App\Models\TranscriptRequest;
 use App\Models\PaymentDescription;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Schema;
+use App\Services\PaymentDetailAdminService;
 
 class ReportsController extends Controller
 {
@@ -1030,5 +1031,440 @@ class ReportsController extends Controller
             $s = str_replace('T', ' ', (string)$v);
             return date('Y-m-d H:i:s', strtotime($s));
         } catch (\Throwable $e) { return null; }
+    }
+
+    /**
+     * GET /api/v1/reports/invoices
+     * Params:
+     *  - date_from: Y-m-d (required)
+     *  - date_to:   Y-m-d (required, >= date_from)
+     *  - campus_id?: int
+     *  - type?: string
+     *  - status?: string
+     *
+     * Filters by payment_details.or_date range (inclusive) when column exists; otherwise falls back to detected date column.
+     * Includes only invoices that have at least one Paid payment_details row within the range.
+     * Returns normalized rows for the Invoice Reports table.
+     */
+    public function invoiceReports(Request $request)
+    {
+        $payload = $request->validate([
+            'date_from' => 'required|date_format:Y-m-d',
+            'date_to'   => 'required|date_format:Y-m-d|after_or_equal:date_from',
+            'campus_id' => 'nullable|integer',
+            'type'      => 'nullable|string',
+            'status'    => 'nullable|string',
+        ]);
+
+        $dateFrom = (string) $payload['date_from'];
+        $dateTo   = (string) $payload['date_to'];
+        $campusId = array_key_exists('campus_id', $payload) ? (int) $payload['campus_id'] : null;
+        $type     = array_key_exists('type', $payload) ? (string) $payload['type'] : null;
+        $invStat  = array_key_exists('status', $payload) ? (string) $payload['status'] : null;
+
+        /** @var PaymentDetailAdminService $pdSvc */
+        $pdSvc = app(PaymentDetailAdminService::class);
+        $cols  = $pdSvc->detectColumns();
+
+        if (!($cols['exists'] ?? false) || empty($cols['number_invoice'])) {
+            return response()->json([
+                'success' => true,
+                'data'    => [],
+                'meta'    => ['count' => 0, 'date_from' => $dateFrom, 'date_to' => $dateTo],
+            ]);
+        }
+
+        // Prefer 'or_date' specifically for this report
+        $dateCol = Schema::hasColumn($cols['table'], 'or_date') ? 'or_date' : ($cols['date'] ?: null);
+
+        // 1) Collect earliest (date, method) per invoice_number for Paid rows in the date range
+        $base = DB::table($cols['table'] . ' as pd')
+            ->whereNotNull('pd.' . $cols['number_invoice']);
+
+        if (!empty($cols['status'])) {
+            $base->where('pd.' . $cols['status'], 'Paid');
+        }
+
+        if ($dateCol) {
+            // Inclusive range
+            $base->where('pd.' . $dateCol, '>=', $dateFrom)
+                 ->where('pd.' . $dateCol, '<=', $dateTo);
+        }
+
+        $agg = (clone $base)
+            ->select([
+                'pd.' . $cols['number_invoice'] . ' as invoice_number',
+                $dateCol
+                    ? DB::raw('MIN(pd.' . $dateCol . ') as invoice_date')
+                    : DB::raw('MIN(pd.' . $cols['id'] . ') as invoice_date'),
+            ])
+            ->groupBy('pd.' . $cols['number_invoice'])
+            ->orderBy('pd.' . $cols['number_invoice'], 'asc')
+            ->get();
+
+        $invNos = [];
+        $firstByInv = []; // invNo => ['date'=>..., 'method'=>...]
+        foreach ($agg as $row) {
+            $inv = (string) ($row->invoice_number ?? '');
+            if ($inv === '') continue;
+            $invNos[] = $inv;
+            $firstByInv[$inv] = [
+                'date'   => isset($row->invoice_date) ? (string) $row->invoice_date : null,
+                'method' => null,
+            ];
+        }
+
+        if (empty($invNos)) {
+            return response()->json([
+                'success' => true,
+                'data'    => [],
+                'meta'    => ['count' => 0, 'date_from' => $dateFrom, 'date_to' => $dateTo],
+            ]);
+        }
+
+        // Determine earliest method per invoice (by date asc, then id asc)
+        $q2 = DB::table($cols['table'] . ' as pd')
+            ->whereIn('pd.' . $cols['number_invoice'], $invNos);
+
+        if (!empty($cols['status'])) {
+            $q2->where('pd.' . $cols['status'], 'Paid');
+        }
+
+        if ($dateCol) {
+            $q2->orderBy('pd.' . $cols['number_invoice'], 'asc')
+               ->orderBy('pd.' . $dateCol, 'asc')
+               ->orderBy('pd.' . $cols['id'], 'asc');
+        } else {
+            $q2->orderBy('pd.' . $cols['number_invoice'], 'asc')
+               ->orderBy('pd.' . $cols['id'], 'asc');
+        }
+
+        $q2->select([
+            'pd.' . $cols['number_invoice'] . ' as invoice_number',
+            $dateCol ? ('pd.' . $dateCol . ' as d') : DB::raw('NULL as d'),
+            !empty($cols['method']) ? ('pd.' . $cols['method'] . ' as method') : DB::raw('NULL as method'),
+        ]);
+
+        $pdRows = $q2->get();
+        foreach ($pdRows as $r) {
+            $key = isset($r->invoice_number) ? (string) $r->invoice_number : '';
+            if ($key === '' || !array_key_exists($key, $firstByInv)) continue;
+            if ($firstByInv[$key]['method'] === null) {
+                $firstByInv[$key]['method'] = isset($r->method) ? (string) $r->method : null;
+            }
+        }
+
+        // 2) Fetch invoices joined to student for details and optional filters
+        $iq = DB::table('tb_mas_invoices as i')
+            ->leftJoin('tb_mas_users as u', 'u.intID', '=', 'i.intStudentID')
+            ->whereIn('i.invoice_number', $invNos);
+
+        if ($campusId !== null) {
+            $iq->where('i.campus_id', $campusId);
+        }
+        if ($type !== null && $type !== '') {
+            $iq->where('i.type', $type);
+        }
+        if ($invStat !== null && $invStat !== '') {
+            $iq->where('i.status', $invStat);
+        }
+
+        $invRows = $iq->select(
+                'i.*',
+                'u.strStudentNumber',
+                'u.strFirstname',
+                'u.strMiddlename',
+                'u.strLastname'
+            )
+            ->get();
+
+        $rows = [];
+        foreach ($invRows as $irow) {
+            $invNo = $irow->invoice_number ?? null;
+            if ($invNo === null) continue;
+            $invKey = (string) $invNo;
+            if (!isset($firstByInv[$invKey])) {
+                // When filtered out by campus/type/status, skip
+                continue;
+            }
+            $first = $firstByInv[$invKey];
+
+            // Resolve amounts (mirror PDF vatDisabled rule when VAT fields are absent)
+            $vatable = isset($irow->invoice_amount) ? (float) $irow->invoice_amount : 0.0;
+            $ves     = isset($irow->invoice_amount_ves) ? (float) $irow->invoice_amount_ves : 0.0;
+            $vzrs    = isset($irow->invoice_amount_vzrs) ? (float) $irow->invoice_amount_vzrs : 0.0;
+            $amountTotal = isset($irow->amount_total) ? (float) $irow->amount_total : 0.0;
+
+            // Determine if ALL VAT/EWT fields are strictly null (do not compute VAT when all are null)
+            $isInvAmtNull  = !isset($irow->invoice_amount) || $irow->invoice_amount === null;
+            $isVesNull     = !isset($irow->invoice_amount_ves) || $irow->invoice_amount_ves === null;
+            $isVzrsNull    = !isset($irow->invoice_amount_vzrs) || $irow->invoice_amount_vzrs === null;
+            $isEwtPctNull  = !isset($irow->withholding_tax_percentage) || $irow->withholding_tax_percentage === null;
+            $allVatFieldsNull = ($isInvAmtNull && $isVesNull && $isVzrsNull && $isEwtPctNull);
+
+            // Base totals from explicit fields
+            $totalSales = round($vatable + $ves + $vzrs, 2);
+
+            if ($allVatFieldsNull) {
+                // Do NOT compute VAT if all VAT/EWT fields are null.
+                // Set vatable amount to zero explicitly per requirement.
+                if ($amountTotal > 0) {
+                    $totalSales = round($amountTotal, 2);
+                }
+                $vatable = 0.0;
+                $vat = 0.0;
+                $ewtRate = 0.0;
+                $ewtAmt = 0.0;
+                $netDue = round(($amountTotal > 0 ? $amountTotal : $totalSales), 2);
+            } else {
+                // VAT and EWT computations (only when not all fields are null)
+                $vat = ($vatable !== null && $vatable != 0.0) ? round($vatable * 0.12, 2) : 0.0;
+                $ewtRate = isset($irow->withholding_tax_percentage) ? (float) $irow->withholding_tax_percentage : 0.0;
+                $ewtAmt  = ($vatable != 0.0 && $ewtRate)
+                    ? round($vatable * ($ewtRate / 100.0), 2)
+                    : 0.0;
+
+                $netDue = round($totalSales + $vat - $ewtAmt, 2);
+            }
+
+            // Payee name
+            $nameParts = [];
+            if (isset($irow->strLastname) && trim((string)$irow->strLastname) !== '') $nameParts[] = trim((string)$irow->strLastname) . ',';
+            if (isset($irow->strFirstname) && trim((string)$irow->strFirstname) !== '') $nameParts[] = trim((string)$irow->strFirstname);
+            if (isset($irow->strMiddlename) && trim((string)$irow->strMiddlename) !== '') $nameParts[] = trim((string)$irow->strMiddlename);
+            $payeeName = trim(implode(' ', $nameParts));
+
+            // Particulars: remarks or first payload item description
+            $particulars = '-';
+            try {
+                if (isset($irow->remarks) && trim((string)$irow->remarks) !== '') {
+                    $particulars = trim((string)$irow->remarks);
+                } elseif (isset($irow->payload) && $irow->payload !== null) {
+                    $pl = is_array($irow->payload) ? $irow->payload : (json_decode((string)$irow->payload, true) ?: null);
+                    if ($pl && isset($pl['items']) && is_array($pl['items']) && !empty($pl['items'])) {
+                        $desc = $pl['items'][0]['description'] ?? '';
+                        if (is_string($desc) && trim($desc) !== '') {
+                            $particulars = trim($desc);
+                        }
+                    }
+                }
+            } catch (\Throwable $e) {}
+
+            $method = $first['method'] ?? null;
+            $paymentType = ($method !== null && stripos((string)$method, 'cash') !== false) ? 'Cash Sale' : 'Charge Sales';
+
+            $rows[] = [
+                'invoice_date'    => $first['date'] ?? null,
+                'invoice_number'  => $invNo,
+                'student_number'  => isset($irow->strStudentNumber) ? (string) $irow->strStudentNumber : null,
+                'payee_name'      => $payeeName !== '' ? $payeeName : null,
+                'payment_for'     => isset($irow->type) ? ucwords((string) $irow->type) : null,
+                'particulars'     => $particulars,
+                'payment_type'    => $paymentType,
+                'mop'             => $method,
+                'vatable_amount'  => round($vatable, 2),
+                'vat_exempt'      => round($ves, 2),
+                'zero_rated'      => round($vzrs, 2),
+                'total_sales'     => round($totalSales, 2),
+                'vat'             => round($vat, 2),
+                'ewt_rate'        => is_numeric($ewtRate) ? (float) $ewtRate : null,
+                'ewt_amount'      => round($ewtAmt, 2),
+                'net_amount_due'  => round($netDue, 2),
+            ];
+        }
+
+        // Order rows by invoice_date asc, invoice_number asc
+        usort($rows, function ($a, $b) {
+            $da = $a['invoice_date'] ?? '';
+            $db = $b['invoice_date'] ?? '';
+            if ($da === $db) {
+                return ($a['invoice_number'] <=> $b['invoice_number']);
+            }
+            return strcmp((string)$da, (string)$db);
+        });
+
+        return response()->json([
+            'success' => true,
+            'data'    => $rows,
+            'meta'    => [
+                'count'     => count($rows),
+                'date_from' => $dateFrom,
+                'date_to'   => $dateTo,
+            ],
+        ]);
+    }
+
+    /**
+     * GET /api/v1/reports/official-receipts
+     * Params:
+     *  - date_from: Y-m-d (required)
+     *  - date_to:   Y-m-d (required, >= date_from)
+     *  - campus_id?: int (optional)
+     *
+     * Returns a list of Official Receipts (from payment_details with existing OR number)
+     * within the inclusive date range. Filters by payment_details.or_date when present;
+     * otherwise falls back to the detected date column (paid_at/date/created_at).
+     *
+     * Output rows:
+     *  - or_date, or_number, invoice_number, student_number, payee_name,
+     *    payment_for, particulars, payment_received
+     */
+    public function orReports(Request $request)
+    {
+        $payload = $request->validate([
+            'date_from' => 'required|date_format:Y-m-d',
+            'date_to'   => 'required|date_format:Y-m-d|after_or_equal:date_from',
+            'campus_id' => 'nullable|integer',
+        ]);
+
+        $dateFrom = (string) $payload['date_from'];
+        $dateTo   = (string) $payload['date_to'];
+        $campusId = array_key_exists('campus_id', $payload) ? (int) $payload['campus_id'] : null;
+
+        /** @var PaymentDetailAdminService $pdSvc */
+        $pdSvc = app(PaymentDetailAdminService::class);
+        $cols  = $pdSvc->detectColumns();
+
+        // Require payment_details table with an OR number column
+        if (!($cols['exists'] ?? false) || empty($cols['number_or'])) {
+            return response()->json([
+                'success' => true,
+                'data'    => [],
+                'meta'    => ['count' => 0, 'date_from' => $dateFrom, 'date_to' => $dateTo],
+            ]);
+        }
+
+        // Prefer explicit 'or_date' when available; else use detected date column
+        $dateCol = Schema::hasColumn($cols['table'], 'or_date') ? 'or_date' : ($cols['date'] ?: null);
+
+        // Base query: rows with OR number
+        $q = DB::table($cols['table'] . ' as pd')
+            ->whereNotNull('pd.' . $cols['number_or']);
+
+        // Status must be Paid when status column exists
+        if (!empty($cols['status'])) {
+            $q->where('pd.' . $cols['status'], 'Paid');
+        }
+
+        // Inclusive date range on chosen date column (when present)
+        if ($dateCol) {
+            $q->where('pd.' . $dateCol, '>=', $dateFrom)
+              ->where('pd.' . $dateCol, '<=', $dateTo);
+        }
+
+        // Campus filter: prefer payment_details.student_campus; else join tb_mas_users via student id
+        $joinedUsers = false;
+        if ($campusId !== null) {
+            if (!empty($cols['student_campus'])) {
+                $q->where('pd.' . $cols['student_campus'], $campusId);
+            } elseif (!empty($cols['student_id'])) {
+                $q->leftJoin('tb_mas_users as u', 'u.intID', '=', 'pd.' . $cols['student_id']);
+                $q->where('u.campus_id', $campusId);
+                $joinedUsers = true;
+            }
+        }
+
+        // Select normalized columns
+        $select = [];
+        $select[] = 'pd.' . $cols['id'] . ' as id';
+        $select[] = 'pd.' . $cols['number_or'] . ' as or_number';
+        $select[] = $dateCol ? ('pd.' . $dateCol . ' as or_date') : DB::raw('NULL as or_date');
+        $select[] = !empty($cols['number_invoice']) ? ('pd.' . $cols['number_invoice'] . ' as invoice_number') : DB::raw('NULL as invoice_number');
+        $select[] = !empty($cols['student_number']) ? ('pd.' . $cols['student_number'] . ' as student_number') : DB::raw('NULL as student_number');
+        $select[] = !empty($cols['student_id']) ? ('pd.' . $cols['student_id'] . ' as student_information_id') : DB::raw('NULL as student_information_id');
+        $select[] = !empty($cols['payee_id']) ? ('pd.' . $cols['payee_id'] . ' as payee_id') : DB::raw('NULL as payee_id');
+        $select[] = !empty($cols['description']) ? ('pd.' . $cols['description'] . ' as description') : DB::raw('NULL as description');
+        $select[] = !empty($cols['remarks']) ? ('pd.' . $cols['remarks'] . ' as remarks') : DB::raw('NULL as remarks');
+        $select[] = !empty($cols['subtotal_order']) ? ('pd.' . $cols['subtotal_order'] . ' as subtotal_order') : DB::raw('NULL as subtotal_order');
+
+        // When campusId filtered via join above and student_number not selected, ensure we can still read it if present
+        if ($joinedUsers && empty($cols['student_number'])) {
+            $select[] = DB::raw('u.strStudentNumber as student_number_joined');
+        }
+
+        $q->select($select);
+
+        // Ordering (deterministic)
+        if ($dateCol) $q->orderBy('pd.' . $dateCol, 'asc');
+        $q->orderBy('pd.' . $cols['number_or'], 'asc');
+        $q->orderBy('pd.' . $cols['id'], 'asc');
+
+        $rowsDb = $q->get();
+
+        // Build response rows
+        $rows = [];
+        foreach ($rowsDb as $r) {
+            // Resolve payee name (prefer Payee for non-student payments)
+            $payeeName = null;
+            try {
+                if (isset($r->payee_id) && $r->payee_id) {
+                    $p = DB::table('tb_mas_payee')->select('lastname', 'firstname', 'middlename')->where('id', (int)$r->payee_id)->first();
+                    if ($p) {
+                        $ln = isset($p->lastname) ? trim((string)$p->lastname) : '';
+                        $fn = isset($p->firstname) ? trim((string)$p->firstname) : '';
+                        $mn = isset($p->middlename) ? trim((string)$p->middlename) : '';
+                        $payeeName = trim(($ln !== '' ? $ln . ', ' : '') . $fn . ($mn !== '' ? (' ' . $mn) : ''));
+                        if ($payeeName === '' || $payeeName === ',') {
+                            $payeeName = null;
+                        }
+                    }
+                } elseif (isset($r->student_information_id) && $r->student_information_id) {
+                    $u = DB::table('tb_mas_users')->select('strLastname', 'strFirstname', 'strMiddlename')->where('intID', (int)$r->student_information_id)->first();
+                    if ($u) {
+                        $ln = isset($u->strLastname) ? trim((string)$u->strLastname) : '';
+                        $fn = isset($u->strFirstname) ? trim((string)$u->strFirstname) : '';
+                        $mn = isset($u->strMiddlename) ? trim((string)$u->strMiddlename) : '';
+                        $payeeName = trim(($ln !== '' ? $ln . ', ' : '') . $fn . ($mn !== '' ? (' ' . $mn) : ''));
+                        if ($payeeName === '' || $payeeName === ',') {
+                            $payeeName = null;
+                        }
+                    }
+                }
+            } catch (\Throwable $e) {
+                // ignore name lookup errors
+            }
+
+            // Student number fallback when joined via users (no student_number column)
+            $studentNumber = isset($r->student_number) ? (string)$r->student_number : null;
+            if (!$studentNumber && isset($r->student_number_joined)) {
+                $studentNumber = (string)$r->student_number_joined;
+            }
+
+            // Payment for / particulars
+            $desc = isset($r->description) ? trim((string)$r->description) : '';
+            $remarks = isset($r->remarks) ? trim((string)$r->remarks) : '';
+            $particulars = $remarks !== '' ? $remarks : ($desc !== '' ? $desc : '-');
+
+            $rows[] = [
+                'or_date'         => isset($r->or_date) ? (string)$r->or_date : null,
+                'or_number'       => isset($r->or_number) ? $r->or_number : null,
+                'invoice_number'  => isset($r->invoice_number) ? $r->invoice_number : null,
+                'student_number'  => $studentNumber ?: null,
+                'payee_name'      => $payeeName,
+                'payment_for'     => $desc !== '' ? $desc : null,
+                'particulars'     => $particulars,
+                'payment_received'=> isset($r->subtotal_order) ? round((float)$r->subtotal_order, 2) : 0.0,
+            ];
+        }
+
+        // Order rows by or_date asc, or_number asc
+        usort($rows, function ($a, $b) {
+            $da = $a['or_date'] ?? '';
+            $db = $b['or_date'] ?? '';
+            if ($da === $db) {
+                return ($a['or_number'] <=> $b['or_number']);
+            }
+            return strcmp((string)$da, (string)$db);
+        });
+
+        return response()->json([
+            'success' => true,
+            'data'    => $rows,
+            'meta'    => [
+                'count'     => count($rows),
+                'date_from' => $dateFrom,
+                'date_to'   => $dateTo,
+            ],
+        ]);
     }
 }
