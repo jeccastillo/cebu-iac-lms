@@ -716,7 +716,6 @@ new Vue({
                 const rest = this.ledger_term.slice(1).sort((a, b) => toTime(a) - toTime(b));
                 this.ledger_term = [head, ...rest];
             }
-            console.log(this.ledger_term);
 
             this.ledger.push({
                 'ledger_items': this.ledger_term,
