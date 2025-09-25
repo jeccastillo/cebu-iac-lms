@@ -119,11 +119,14 @@ class TuitionService
                 's.intLab as intLab',
                 's.strLabClassification as labClass',
                 's.isNSTP as isNSTP',
-                's.isThesisSubject as isThesisSubject',                
+                's.isThesisSubject as isThesisSubject',
                 's.isElective as isElective',
                 'cls.additional_elective as additional_elective',
                 'cl.is_modular as is_modular',
-                'cl.payment_amount as payment_amount'
+                'cl.payment_amount as payment_amount',
+                'cl.intID as classlist_id',
+                'cl.special_class as special_class',
+                'cl.special_multiplier as special_multiplier'
             )
             ->get()
             ->map(function ($r) {
@@ -133,11 +136,22 @@ class TuitionService
                 $arr['units'] = isset($arr['units']) ? (int) $arr['units'] : 0;
                 $arr['labClass'] = $arr['labClass'] ?? 'none';
                 $arr['isNSTP'] = (int) ($arr['isNSTP'] ?? 0);
-                $arr['isThesisSubject'] = (int) ($arr['isThesisSubject'] ?? 0);                
+                $arr['isThesisSubject'] = (int) ($arr['isThesisSubject'] ?? 0);
                 $arr['isElective'] = (int) ($arr['isElective'] ?? 0);
                 $arr['additional_elective'] = (int) ($arr['additional_elective'] ?? 0);
                 $arr['is_modular'] = (int) ($arr['is_modular'] ?? 0);
                 $arr['payment_amount'] = (float) ($arr['payment_amount'] ?? 0);
+
+                // special class multiplier fields (from classlist)
+                $arr['classlist_id'] = isset($arr['classlist_id']) ? (int) $arr['classlist_id'] : 0;
+                $arr['special_class'] = (int) ($arr['special_class'] ?? 0);
+                $sm = $arr['special_multiplier'] ?? null;
+                $arr['special_multiplier'] = (is_numeric($sm) && (float)$sm > 0) ? (float) $sm : 1.0;
+                if ($arr['special_class'] === 0) {
+                    // when not flagged, ensure multiplier is neutral
+                    $arr['special_multiplier'] = 1.0;
+                }
+
                 return $arr;
             })
             ->toArray();

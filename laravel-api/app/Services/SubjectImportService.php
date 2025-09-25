@@ -142,22 +142,74 @@ class SubjectImportService
             'intLab'             => 0,
             'strDepartment'      => null,
             'intLectHours'       => null,
-            'strTuitionUnits'    => null,
+            'strTuitionUnits'    => '0',
             'strLabClassification' => null,
         ];
+
+        // Accepted header aliases (lowercased) mapped to target columns
+        $aliasMap = [
+            'strCode' => ['strcode','code', 'subject code', 'subject_code', 'subjectcode', 'subject id', 'subjectid'],
+            'strDescription' => ['strdescription','description', 'desc', 'subject description', 'subject name', 'name', 'title'],
+            'strUnits' => ['strunits','units', 'unit', 'credits', 'credit units', 'credit'],
+            'intLab' => ['intlab','lab', 'is lab', 'islab', 'laboratory', 'has lab'],
+            'strDepartment' => ['strdepartment','department', 'dept', 'department code', 'dept code', 'department name'],
+            'intLectHours' => ['intlecthours','lect hours', 'lecture hours', 'lecture_hrs', 'lect_hours', 'lecture hrs', 'lec hours', 'lec_hrs'],
+            'strTuitionUnits' => ['strtuitionunits','inttuitionunits','tuition units', 'tuition unit', 'tuition_units', 'tuitionunits'],
+            'strLabClassification' => ['strlabclassification','lab classification', 'lab_classification', 'lab class', 'labclass'],
+        ];
+
+        $canon = function ($s): string {
+            $s = strtolower(trim((string) $s));
+            return preg_replace('/[^a-z0-9]+/', '', $s);
+        };
+
+        $headerToCol = [];
+        foreach ($aliasMap as $col => $aliases) {
+            foreach ($aliases as $a) {
+                $headerToCol[$canon($a)] = $col;
+            }
+        }
+
+        $parseBool = function ($v): int {
+            if ($v === null) return 0;
+            if (is_bool($v)) return $v ? 1 : 0;
+            $s = is_string($v) ? strtolower(trim($v)) : $v;
+            if ($s === '' || $s === null) return 0;
+            if (is_numeric($s)) return ((int) $s) ? 1 : 0;
+            if (in_array($s, ['y','yes','true','t'], true)) return 1;
+            if (in_array($s, ['n','no','false','f'], true)) return 0;
+            return 0;
+        };
 
         foreach ($row as $k => $v) {
             $lk = strtolower(trim((string) $k));
             $val = is_string($v) ? trim($v) : $v;
+            
+            $ck = $canon($lk);
+            $target = $headerToCol[$ck] ?? null;
+            if ($target === null) continue;
 
-            if ($lk === 'code') $cols['strCode'] = (string) $val;
-            elseif ($lk === 'description') $cols['strDescription'] = (string) $val;
-            elseif ($lk === 'units') $cols['strUnits'] = ($val === '' ? null : (string) $val);
-            elseif ($lk === 'lab') $cols['intLab'] = (int) ($val === '' ? 0 : $val);
-            elseif ($lk === 'department') $cols['strDepartment'] = ($val === '' ? null : (string) $val);
-            elseif ($lk === 'lect hours') $cols['intLectHours'] = ($val === '' ? null : (int) $val);
-            elseif ($lk === 'tuition units') $cols['strTuitionUnits'] = ($val === '' ? null : (string) $val);
-            elseif ($lk === 'lab classification') $cols['strLabClassification'] = ($val === '' ? null : (string) $val);
+            if ($target === 'strCode') {
+                $cols['strCode'] = ($val === '' ? null : (string) $val);
+            } elseif ($target === 'strDescription') {
+                $cols['strDescription'] = ($val === '' ? null : (string) $val);
+            } elseif ($target === 'strUnits') {
+                $cols['strUnits'] = ($val === '' ? null : (string) $val);
+            } elseif ($target === 'intLab') {
+                $cols['intLab'] = $parseBool($val);
+            } elseif ($target === 'strDepartment') {
+                $cols['strDepartment'] = ($val === '' ? null : (string) $val);
+            } elseif ($target === 'intLectHours') {
+                if ($val === '' || $val === null) {
+                    $cols['intLectHours'] = null;
+                } else {
+                    $cols['intLectHours'] = is_numeric($val) ? (int) $val : null;
+                }
+            } elseif ($target === 'strTuitionUnits') {
+                $cols['strTuitionUnits'] = ($val === '' || $val === null) ? '0' : (string) $val;
+            } elseif ($target === 'strLabClassification') {
+                $cols['strLabClassification'] = ($val === '' ? null : (string) $val);
+            }
         }
 
         return [$cols, (string) ($cols['strCode'] ?? '')];

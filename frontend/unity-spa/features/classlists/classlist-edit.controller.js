@@ -5,8 +5,8 @@
     .module('unityApp')
     .controller('ClasslistEditController', ClasslistEditController);
 
-  ClasslistEditController.$inject = ['$routeParams', '$location', 'ClasslistsService', 'TermService', 'CampusService'];
-  function ClasslistEditController($routeParams, $location, ClasslistsService, TermService, CampusService) {
+  ClasslistEditController.$inject = ['$routeParams', '$location', 'ClasslistsService', 'TermService', 'CampusService', 'CampusesService'];
+  function ClasslistEditController($routeParams, $location, ClasslistsService, TermService, CampusService, CampusesService) {
     var vm = this;
 
     vm.id = $routeParams.id ? parseInt($routeParams.id, 10) : null;
@@ -21,7 +21,9 @@
       strUnits: '',
       intFinalized: 0,
       campus_id: '',
-      sectionCode: ''
+      sectionCode: '',
+      special_class: 0,
+      special_multiplier: null
     };
 
     // Derived, display-only label for term (e.g., "1 Semester 2024-2025")
@@ -31,6 +33,7 @@
 
     vm.subjects = [];
     vm.faculty = [];
+    vm.campuses = [];
     vm.finalizedOptions = [
       { value: 0, label: 'Draft/0' },
       { value: 1, label: 'Midterm/1' },
@@ -68,7 +71,7 @@
                 vm.campusName = campus.campus_name || campus.name || ('Campus #' + campus.id);
               }
             }
-            return loadFilterOptions(sel && sel.intID ? sel.intID : null);
+            return loadFilterOptions(sel && sel.intID ? sel.intID : null).then(function () { return loadCampuses(); });
           });
         })
         .then(function () {
@@ -86,6 +89,8 @@
               vm.model.intFinalized = (row.intFinalized !== undefined && row.intFinalized !== null) ? row.intFinalized : 0;
               vm.model.campus_id = (row.campus_id !== undefined && row.campus_id !== null) ? row.campus_id : '';
               vm.model.sectionCode = row.sectionCode || '';
+              vm.model.special_class = (row.special_class !== undefined && row.special_class !== null) ? (row.special_class ? 1 : 0) : 0;
+              vm.model.special_multiplier = (row.special_multiplier !== undefined && row.special_multiplier !== null) ? parseFloat(row.special_multiplier) : null;
 
               // Derive display label for the term based on the loaded record's strAcademicYear
               var terms = (TermService && TermService.availableTerms) ? TermService.availableTerms : [];
@@ -138,6 +143,23 @@
       return Promise.all([p1, p2]);
     }
 
+    function loadCampuses() {
+      return CampusesService.list()
+        .then(function (data) {
+          var rows = (data && data.data) ? data.data : (Array.isArray(data) ? data : []);
+          vm.campuses = rows.map(function (r) {
+            return {
+              id: r.id || r.intID || r.campus_id || r.ID,
+              campus_name: r.campus_name || r.name || r.strName || ('Campus #' + (r.id || r.intID || r.campus_id || ''))
+            };
+          });
+        })
+        .catch(function (e) {
+          console.warn('Failed loading campuses list', e);
+          vm.campuses = [];
+        });
+    }
+
     function formatTermLabel(term) {
       if (!term) return '';
       var sem = term.enumSem || '';
@@ -161,7 +183,9 @@
         strUnits: (vm.model.strUnits !== undefined && vm.model.strUnits !== null) ? String(vm.model.strUnits) : null,        
         intFinalized: vm.model.intFinalized,
         campus_id: vm.model.campus_id || null,
-        sectionCode: (vm.model.sectionCode && vm.model.sectionCode.trim() !== '') ? vm.model.sectionCode.trim() : null
+        sectionCode: (vm.model.sectionCode && vm.model.sectionCode.trim() !== '') ? vm.model.sectionCode.trim() : null,
+        special_class: vm.model.special_class ? 1 : 0,
+        special_multiplier: (vm.model.special_class ? ((isFinite(vm.model.special_multiplier) && vm.model.special_multiplier > 0) ? Number(vm.model.special_multiplier) : 1.0) : null)
       };
 
       var p = vm.id

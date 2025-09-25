@@ -221,9 +221,12 @@ class CurriculumImportService
             $lk = strtolower(trim((string) $k));
             $val = is_string($v) ? trim($v) : $v;
 
-            if ($lk === 'name') {
-                $meta['name'] = (string) $val;
-                $cols['strName'] = (string) $val;
+            // Accept multiple aliases for curriculum name
+            if (in_array($lk, ['name', 'curriculum name', 'curriculum', 'curriculum_name'], true)) {
+                if ($meta['name'] === null || $meta['name'] === '') {
+                    $meta['name'] = (string) $val;
+                    $cols['strName'] = (string) $val;
+                }
             } elseif ($lk === 'program code') {
                 $meta['program_code'] = (string) $val;
             } elseif ($lk === 'campus') {
@@ -331,12 +334,33 @@ class CurriculumImportService
                     DB::table('tb_mas_curriculum')
                         ->where('intID', $existing->intID)
                         ->update($cols);
-                    $idMap[$meta['key']] = (int) $existing->intID;
+                    $curriculumId = (int) $existing->intID;
+                    $idMap[$meta['key']] = $curriculumId;
                     $upd++;
                 } else {
-                    $newId = DB::table('tb_mas_curriculum')->insertGetId($cols);
-                    $idMap[$meta['key']] = (int) $newId;
+                    $curriculumId = (int) DB::table('tb_mas_curriculum')->insertGetId($cols);
+                    $idMap[$meta['key']] = $curriculumId;
                     $ins++;
+                }
+
+                // If the matched program does not have a default curriculum,
+                // set the first encountered curriculum in this import as its default.
+                $programId = (int) ($cols['intProgramID'] ?? 0);
+                if ($programId > 0) {
+                    // Cache program default values within this import run to minimize DB reads.
+                    static $programDefaultCache = [];
+                    if (!array_key_exists($programId, $programDefaultCache)) {
+                        $currentDefault = DB::table('tb_mas_programs')
+                            ->where('intProgramID', $programId)
+                            ->value('default_curriculum');
+                        $programDefaultCache[$programId] = (int) ($currentDefault ?? 0);
+                    }
+                    if (empty($programDefaultCache[$programId])) {
+                        DB::table('tb_mas_programs')
+                            ->where('intProgramID', $programId)
+                            ->update(['default_curriculum' => $curriculumId]);
+                        $programDefaultCache[$programId] = $curriculumId;
+                    }
                 }
             }
             DB::commit();

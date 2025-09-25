@@ -174,9 +174,18 @@ class TuitionCalculator
                     ->first();
 
                 $nstpRate = $this->getExtraFee($nstpRow ? (array) $nstpRow : null, $classType, 'misc');
-                $lineAmount = (int) $units * $nstpRate;
+                $effectiveRate = (float) $nstpRate; // ignore multiplier for NSTP
+                $lineAmount = (int) $units * $effectiveRate;
             } else {
-                $lineAmount = (int) $units * $unitFee;
+                // apply special multiplier when classlist is flagged (non-NSTP only)
+                $specialClass = (int) ($subj['special_class'] ?? 0);
+                $mult = (float) ($subj['special_multiplier'] ?? 1.0);
+                if ($mult <= 0) { $mult = 1.0; }
+                $effectiveRate = (float) $unitFee;
+                if ($specialClass === 1) {
+                    $effectiveRate = (float) $unitFee * $mult;
+                }
+                $lineAmount = (int) $units * $effectiveRate;
             }
 
             $totalTuition += $lineAmount;
@@ -184,7 +193,7 @@ class TuitionCalculator
                 'code'       => $code,
                 'subject_id' => $sid,
                 'units'      => $units,
-                'rate'       => $unitFee,
+                'rate'       => $effectiveRate,
                 'amount'     => $lineAmount,
             ];
 
@@ -266,13 +275,22 @@ class TuitionCalculator
             if (!empty($s['is_modular']) && isset($s['payment_amount'])) {
                 $amt = (float) $s['payment_amount'];
                 if ($amt > 0) {
-                    $total += $amt;
+                    $rate = $amt;
+                    // apply multiplier when classlist is flagged for this modular subject
+                    $sc = (int) ($s['special_class'] ?? 0);
+                    $sm = (float) ($s['special_multiplier'] ?? 1.0);
+                    if ($sm <= 0) { $sm = 1.0; }
+                    if ($sc === 1) {
+                        $rate = round($rate * $sm, 2);
+                    }
+
+                    $total += $rate;
                     $items[] = [
                         'code'       => 'MODULAR',
                         'subject_id' => (int) ($s['subjectID'] ?? 0),
                         'units'      => null,
-                        'rate'       => $amt,
-                        'amount'     => $amt,
+                        'rate'       => $rate,
+                        'amount'     => $rate,
                     ];
                 }
             }
@@ -301,14 +319,24 @@ class TuitionCalculator
                         4 => (float) ($row->tuition_amount_hybrid ?? 0),
                         default => (float) ($row->tuition_amount ?? 0),
                     };
-                    $electiveTotal += $rate;
-                    $total += $rate;
+
+                    // apply multiplier when classlist is flagged for this elective subject
+                    $effRate = $rate;
+                    $sc = (int) ($s['special_class'] ?? 0);
+                    $sm = (float) ($s['special_multiplier'] ?? 1.0);
+                    if ($sm <= 0) { $sm = 1.0; }
+                    if ($sc === 1) {
+                        $effRate = round($rate * $sm, 2);
+                    }
+
+                    $electiveTotal += $effRate;
+                    $total += $effRate;
                     $items[] = [
                         'code'       => 'ELECTIVE',
                         'subject_id' => $sid,
                         'units'      => null,
-                        'rate'       => $rate,
-                        'amount'     => $rate,
+                        'rate'       => $effRate,
+                        'amount'     => $effRate,
                     ];
                 }
             }

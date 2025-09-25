@@ -170,10 +170,10 @@ class ProgramImportService
         $cols = [
             'strProgramCode'        => null,
             'strProgramDescription' => null,
-            'strMajor'              => null,
+            'strMajor'              => '',
             'type'                  => null,
             'school'                => null,
-            'short_name'            => null,
+            'short_name'            => '',
             'default_curriculum'    => null,
             'enumEnabled'           => 1,
             // 'campus_id' set by resolveForeigns()
@@ -196,13 +196,13 @@ class ProgramImportService
             } elseif ($lk === 'program description' || $lk === 'strprogramdescription') {
                 $cols['strProgramDescription'] = $val === null ? null : (string) $val;
             } elseif ($lk === 'major' || $lk === 'strmajor') {
-                $cols['strMajor'] = $val === null ? null : (string) $val;
+                $cols['strMajor'] = $val === null ? '' : (string) $val;
             } elseif ($lk === 'type') {
                 $cols['type'] = $val === null ? null : (string) $val;
             } elseif ($lk === 'school') {
                 $cols['school'] = $val === null ? null : (string) $val;
             } elseif ($lk === 'short name' || $lk === 'short_name') {
-                $cols['short_name'] = $val === null ? null : (string) $val;
+                $cols['short_name'] = $val === null ? '' : (string) $val;
             } elseif ($lk === 'default curriculum id' || $lk === 'default_curriculum') {
                 if ($val === null || $val === '') {
                     $cols['default_curriculum'] = null;
@@ -248,15 +248,17 @@ class ProgramImportService
 
     /**
      * Validate foreign keys that are present on $cols.
+     * Mutates $cols by reference to nullify invalid FKs.
      */
-    public function validateForeignKeyExistence(array $cols): void
+    public function validateForeignKeyExistence(array &$cols): void
     {
         if (isset($cols['default_curriculum']) && $cols['default_curriculum'] !== null) {
             $exists = DB::table('tb_mas_curriculum')
                 ->where('intID', (int) $cols['default_curriculum'])
                 ->exists();
             if (!$exists) {
-                throw new RuntimeException('Default Curriculum ID not found: ' . $cols['default_curriculum']);
+                // Requirement: When uploading programs CSV, if default curriculum id is not found, set it to null.
+                $cols['default_curriculum'] = null;
             }
         }
     }
