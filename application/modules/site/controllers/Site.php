@@ -279,7 +279,7 @@ class Site extends CI_Controller {
 			$data['event'] = $status;
 			$this->load->view('common/header_maya',$this->data);        
 			$this->load->view('bdo_redirect_url/events',$data);
-			$this->load->view('common/footer_new',$this->data);
+			// $this->load->view('common/footer_new',$this->data);
 	}
 
 	public function maya_redirect_url($status) {
@@ -289,6 +289,26 @@ class Site extends CI_Controller {
 			$this->load->view('maya_redirect_url/events',$data);
 			$this->load->view('common/footer_new',$this->data);
 	}
+	
+	public function scholarship_application() {		        
+		$this->load->view('common/header_maya',$this->data);  		
+		$this->load->view('verify_application',$this->data);
+		$this->load->view('common/footer_new',$this->data);
+    }
+
+	public function upload_video($slug = 0) {	
+		$this->data['slug'] = $slug;	        
+		$this->load->view('common/header_new',$this->data);  		
+		$this->load->view('scholarship_application',$this->data);
+		$this->load->view('common/footer_new',$this->data);
+    }
+
+	public function success($status = 0) {		
+		$this->data['status'] = $status;
+		$this->load->view('common/header_maya',$this->data);  		
+		$this->load->view('success_application',$this->data);
+		$this->load->view('common/footer_new',$this->data);
+    }
 
 	public function is_super_admin()
     {
