@@ -3,6 +3,7 @@
         <h1>            
             <small>
                 <a v-if="finance.intUserLevel == 6" style="margin-right:1rem;" class="btn btn-app" :href="base_url + 'finance/view_all_students'"><i class="ion ion-arrow-left-a"></i>All Students</a>
+                <a style="margin-right:1rem;" class="btn btn-app" :href="base_url + 'pdf/print_student_ledger/' + id + '/' + sem" target="_blank"><i class="fa fa-print"></i>Print PDF</a>
                 <div class="pull-right">
                     <!-- <p>Select Term Filter</p>
                     <select  @change="filterByTerm($event)" class="form-control" required v-model="sem">
