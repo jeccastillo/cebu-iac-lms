@@ -136,8 +136,6 @@ th {
                     <tr>
                         <td><strong>Program:</strong></td>
                         <td><?php echo $student['strProgramDescription']; ?></td>
-                        <td><strong>Date Generated:</strong></td>
-                        <td><?php echo date('F j, Y'); ?></td>
                     </tr>
                 </table>
             </div>
