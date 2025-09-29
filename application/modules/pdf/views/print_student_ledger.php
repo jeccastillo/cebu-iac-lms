@@ -164,7 +164,6 @@ th {
                                     <th>Balance</th>
                                     <th>Added/Changed By</th>
                                     <th>Cashier/Appointer</th>
-                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -218,10 +217,13 @@ th {
                                             if($index == 0) {
                                                 echo '';
                                             } else {
-                                                echo ($item['added_by'] == 0) ? $item['cashier'] : $item['added_by'];
+                                                if($item['added_by'] == 0) {
+                                                    echo isset($cashier_names[$item['cashier']]) ? $cashier_names[$item['cashier']] : $item['cashier'];
+                                                } else {
+                                                    echo isset($cashier_names[$item['added_by']]) ? $cashier_names[$item['added_by']] : $item['added_by'];
+                                                }
                                             }
                                         ?></td>
-                                        <td>-</td>
                                     </tr>
                                 <?php endforeach; ?>
                                 <tr class="total-row">
@@ -281,8 +283,7 @@ th {
                                         <td class="amount"><?php echo ($item['type'] != 'payment') ? $item['amount'] : '-'; ?></td>
                                         <td class="amount"><?php echo ($item['type'] == 'payment') ? $item['amount'] : '-'; ?></td>
                                         <td><?php echo ($item['added_by'] != 0) ? ($item['strLastname'] . ' ' . $item['strFirstname']) : 'System Generated'; ?></td>
-                                        <td><?php echo $item['cashier'] ?: ''; ?></td>
-                                        <td>-</td>
+                                        <td><?php echo isset($cashier_names[$item['cashier']]) ? $cashier_names[$item['cashier']] : $item['cashier']; ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
