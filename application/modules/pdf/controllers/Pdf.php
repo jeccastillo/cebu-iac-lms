@@ -4406,8 +4406,6 @@ class Pdf extends CI_Controller {
         }
         
         $this->data['ledger_data'] = $ledger_data;
-        print_r($this->data);
-        die();
         
         // Initialize TCPDF
         tcpdf();
