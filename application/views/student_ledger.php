@@ -715,6 +715,28 @@ new Vue({
                 const head = this.ledger_term[0];
                 const rest = this.ledger_term.slice(1).sort((a, b) => toTime(a) - toTime(b));
                 this.ledger_term = [head, ...rest];
+                
+                // Recalculate balance for each item after sorting
+                let running_balance = parseFloat(this.ledger_term[0].balance || 0);
+                for (let i = 1; i < this.ledger_term.length; i++) {
+                    const item = this.ledger_term[i];
+                    let amount = parseFloat(item.amount || 0);
+                    
+                    // Handle different item types for balance calculation
+                    if (item.type === 'payment' || (item.type === 'balance' && amount < 0)) {
+                        // For payments and negative balances, subtract from running balance
+                        running_balance -= Math.abs(amount);
+                    } else {
+                        // For assessments and positive adjustments, add to running balance
+                        running_balance += amount;
+                    }
+                    
+                    // Update the balance for this item
+                    this.ledger_term[i].balance = running_balance.toFixed(2);
+                }
+                
+                // Update the term_balance to reflect the final balance after sorting
+                this.term_balance = running_balance;
             }
 
             this.ledger.push({
