@@ -148,7 +148,7 @@ th {
                         <table>
                             <thead>
                                 <tr class="section-header">
-                                    <th colspan="13">TUITION</th>
+                                    <th colspan="14">Tuition</th>
                                 </tr>
                                 <tr>
                                     <th>School Year</th>
@@ -164,6 +164,7 @@ th {
                                     <th>Balance</th>
                                     <th>Added/Changed By</th>
                                     <th>Cashier/Appointer</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -171,23 +172,23 @@ th {
                                     <tr>
                                         <td><?php echo $item['strYearStart'] . ' - ' . $item['strYearEnd']; ?></td>
                                         <td><?php echo $item['enumSem'] . ' ' . $item['term_label']; ?></td>
-                                        <td><?php echo $item['scholarship_name'] ?: '-'; ?></td>
+                                        <td><?php echo $item['scholarship_name'] ?: ''; ?></td>
                                         <td><?php echo $item['name']; ?></td>
-                                        <td><?php echo $item['date'] ?: '-'; ?></td>
-                                        <td><?php echo $item['or_number'] ?: '-'; ?></td>
-                                        <td><?php echo $item['invoice_number'] ?: '-'; ?></td>
-                                        <td><?php echo $item['remarks'] ?: '-'; ?></td>
-                                        <td class="amount"><?php echo (($item['type'] != 'payment' && $item['type'] != 'balance') || ($item['type'] == 'balance' && $item['amount'] >= 0)) ? $item['amount'] : '-'; ?></td>
-                                        <td class="amount"><?php echo ($item['type'] == 'payment' || ($item['type'] == 'balance' && $item['amount'] < 0)) ? $item['amount'] : '-'; ?></td>
-                                        <td class="amount"><?php echo $item['balance']; ?></td>
+                                        <td><?php echo $item['date'] ?: ''; ?></td>
+                                        <td><?php echo $item['or_number'] ?: ''; ?></td>
+                                        <td><?php echo $item['invoice_number'] ?: ''; ?></td>
+                                        <td><?php echo $item['remarks'] ?: ''; ?></td>
+                                        <td class="amount"><?php echo (($item['type'] != 'payment' && $item['type'] != 'balance') || ($item['type'] == 'balance' && floatval(str_replace(',', '', $item['amount'])) >= 0)) ? $item['amount'] : '-'; ?></td>
+                                        <td class="amount"><?php echo ($item['type'] == 'payment' || ($item['type'] == 'balance' && floatval(str_replace(',', '', $item['amount'])) < 0)) ? (floatval(str_replace(',', '', $item['amount'])) < 0 ? number_format(floatval(str_replace(',', '', $item['amount'])) * -1, 2) : $item['amount']) : '-'; ?></td>
+                                        <td class="amount"><?php echo floatval(str_replace(',', '', $item['balance'])) < 0 ? '(' . number_format(floatval(str_replace(',', '', $item['balance'])) * -1, 2) . ')' : $item['balance']; ?></td>
                                         <td><?php echo ($item['added_by'] != 0) ? 'Manually Generated' : 'System Generated'; ?></td>
-                                        <td><?php echo $item['cashier'] ?: '-'; ?></td>
+                                        <td><?php echo ($item['added_by'] == 0) ? $item['cashier'] : $item['added_by']; ?></td>
+                                        <td>-</td>
                                     </tr>
                                 <?php endforeach; ?>
                                 <tr class="total-row">
-                                    <td colspan="10" class="amount"><strong>Term Balance/Refund:</strong></td>
-                                    <td class="amount"><strong><?php echo $term_data['balance']; ?></strong></td>
-                                    <td colspan="2"></td>
+                                    <td colspan="11" class="amount"><strong>Term Balance/Refund: <?php echo $term_data['balance']; ?></strong></td>
+                                    <td colspan="3"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -198,9 +199,8 @@ th {
                 <!-- Grand Total -->
                 <table style="margin-top: 15px;">
                     <tr class="total-row">
-                        <td colspan="10" class="amount"><strong>Grand Total Balance/Refund:</strong></td>
-                        <td class="amount"><strong><?php echo number_format($running_balance, 2); ?></strong></td>
-                        <td colspan="2"></td>
+                        <td colspan="11" class="amount"><strong>Grand Total Balance/Refund: <?php echo number_format($running_balance, 2); ?></strong></td>
+                        <td colspan="3"></td>
                     </tr>
                 </table>
             <?php endif; ?>
@@ -213,7 +213,7 @@ th {
                         <table style="margin-top: 15px;">
                             <thead>
                                 <tr class="section-header">
-                                    <th colspan="11">OTHER</th>
+                                    <th colspan="12">Other</th>
                                 </tr>
                                 <tr>
                                     <th>School Year</th>
@@ -227,6 +227,7 @@ th {
                                     <th>Payment</th>
                                     <th>Added/Changed By</th>
                                     <th>Cashier</th>
+                                    <th>Delete</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -236,13 +237,14 @@ th {
                                         <td><?php echo $item['enumSem'] . ' ' . $item['term_label']; ?></td>
                                         <td><?php echo $item['name']; ?></td>
                                         <td><?php echo $item['date']; ?></td>
-                                        <td><?php echo $item['or_number'] ?: '-'; ?></td>
-                                        <td><?php echo $item['invoice_number'] ?: '-'; ?></td>
-                                        <td><?php echo $item['remarks'] ?: '-'; ?></td>
+                                        <td><?php echo $item['or_number'] ?: ''; ?></td>
+                                        <td><?php echo $item['invoice_number'] ?: ''; ?></td>
+                                        <td><?php echo $item['remarks'] ?: ''; ?></td>
                                         <td class="amount"><?php echo ($item['type'] != 'payment') ? $item['amount'] : '-'; ?></td>
                                         <td class="amount"><?php echo ($item['type'] == 'payment') ? $item['amount'] : '-'; ?></td>
-                                        <td><?php echo ($item['added_by'] != 0) ? 'Manually Generated' : 'System Generated'; ?></td>
-                                        <td><?php echo $item['cashier'] ?: '-'; ?></td>
+                                        <td><?php echo ($item['added_by'] != 0) ? ($item['strLastname'] . ' ' . $item['strFirstname']) : 'System Generated'; ?></td>
+                                        <td><?php echo $item['cashier'] ?: ''; ?></td>
+                                        <td>-</td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
