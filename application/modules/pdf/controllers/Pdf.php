@@ -4347,65 +4347,146 @@ class Pdf extends CI_Controller {
 
     public function print_student_ledger($id, $sem = 0)
     {
-        // Get active semester if not specified
-        $active_sem = $this->data_fetcher->get_active_sem();
-        if($sem == 0)
-            $sem = $active_sem['intID'];
+        // Use the same data fetching logic as Finance controller
+        $data['student'] = $this->data_fetcher->getStudent($id);
+        $std_num = $data['student']['strStudentNumber'];
+        $data['student']['strStudentNumber'] = preg_replace("/[^a-zA-Z0-9]+/", "", $data['student']['strStudentNumber']);
         
-        // Get student data
-        $this->data['student'] = $this->data_fetcher->getStudent($id);
-        $this->data['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
-        
-        // Get ledger data similar to Finance controller
-        $ledger_data = array();
-        $other_data = array();
-        
-        // Get all registrations for this student
-        $registrations = $this->db->select('tb_mas_registration.*, tb_mas_sy.enumSem, tb_mas_sy.strYearStart, tb_mas_sy.strYearEnd, tb_mas_sy.term_label, tb_mas_sy.intID as term_id')
-                                ->from('tb_mas_registration')
+        $registrations = $this->db->select('tb_mas_sy.*, paymentType, enumStudentType')
                                 ->join('tb_mas_sy', 'tb_mas_registration.intAYID = tb_mas_sy.intID')
-                                ->where('intStudentID', $id)
-                                ->order_by('strYearStart ASC, enumSem ASC')
-                                ->get()
+                                ->where(array('intStudentID'=>$id))
+                                ->order_by("strYearStart desc, enumSem desc")
+                                ->get('tb_mas_registration')
                                 ->result_array();
         
-        foreach($registrations as $reg) {
-            $term_id = $reg['term_id'];
+        $tuition = [];
+        $ledger = [];
+        $other = [];
+        $running_balance = 0;
+        $running_balance_other = 0;
+        
+        foreach($registrations as $reg){            
+            $temp = $this->data_fetcher->getTuition($id,$reg['intID']);                            
+            $temp['term'] = $reg;     
             
-            // Get tuition data for this term
-            $tuition_data = $this->data_fetcher->getTuition($id, $term_id);
+            // Process tuition data similar to Vue.js getPayments method
+            $term_balance = 0;
+            $term_balance_other = 0;
+            $ledger_term = [];
+            $other_term = [];
             
-            // Fetch tuition-type ledger for this term
-            $ledger = $this->db->select('tb_mas_student_ledger.*,tb_mas_scholarships.name as scholarship_name, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')
-                ->from('tb_mas_student_ledger')
-                ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
-                ->join('tb_mas_scholarships', 'tb_mas_student_ledger.scholarship_id = tb_mas_scholarships.intID','left')
-                ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')
-                ->where(array('student_id'=>$id,'tb_mas_student_ledger.type'=>'tuition','syid' => $term_id))
-                ->order_by("strYearStart asc, enumSem asc, date asc")
-                ->get()
-                ->result_array();
-            
-            // Fetch other-type ledger for this term
-            $other = $this->db->select('tb_mas_student_ledger.*, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')
-                ->from('tb_mas_student_ledger')
-                ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
-                ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')
-                ->where(array('student_id'=>$id,'tb_mas_student_ledger.type'=>'other','syid' => $term_id))
-                ->get()
-                ->result_array();
-            
-            if(!empty($ledger) || !empty($tuition_data)) {
-                $ledger_data[] = array(
-                    'term' => $reg,
-                    'tuition_data' => $tuition_data,
-                    'ledger_items' => $ledger,
-                    'other_items' => $other
+            if($temp['term']['paymentType'] == 'partial')
+                $amount = $temp['ti_before_deductions'];
+            else
+                $amount = $temp['total_before_deductions'];
+
+            $term_balance += $amount;
+
+            // Add tuition assessment
+            $ledger_term[] = array(
+                'strYearStart' => $temp['term']['strYearStart'],
+                'strYearEnd' => $temp['term']['strYearEnd'],
+                'enumSem' => $temp['term']['enumSem'],
+                'term_label' => $temp['term']['term_label'],
+                'syid' => $temp['term']['intID'],
+                'scholarship_name' => '',
+                'name' => 'Tuition',
+                'or_number' => '',
+                'invoice_number' => '',
+                'remarks' => '',
+                'amount' => number_format($amount, 2),
+                'added_by' => 0,
+                'is_disabled' => 0,
+                'balance' => number_format($term_balance, 2),
+                'type' => 'assessment'
+            );
+
+            // Get tuition payments
+            $sql = "SELECT * FROM payment_details WHERE student_number = '".$data['student']['slug']."' AND sy_reference = ".$reg['intID']." AND (description LIKE 'Tuition%' || description LIKE 'Reservation%') AND (status = 'Paid' || status = 'Void' ) ORDER BY or_date ASC";
+            $tuition_payments = $this->db->query($sql)->result_array();
+
+            foreach($tuition_payments as $payment){
+                $paid = $payment['subtotal_order'] * -1;
+                $term_balance += $paid;
+                $payment['or_date'] = $payment['or_date'] ? date('M j, Y',strtotime($payment['or_date'])) : date('M j, Y',strtotime($payment['created_at']));
+                
+                $ledger_term[] = array(
+                    'payment_id' => $payment['id'],
+                    'type' => 'payment',
+                    'strYearStart' => $temp['term']['strYearStart'],
+                    'strYearEnd' => $temp['term']['strYearEnd'],
+                    'enumSem' => $temp['term']['enumSem'],
+                    'term_label' => $temp['term']['term_label'],
+                    'syid' => $temp['term']['intID'],
+                    'scholarship_name' => '',
+                    'date' => $payment['or_date'],
+                    'name' => $payment['description'],
+                    'or_number' => $payment['or_number'],
+                    'invoice_number' => $payment['invoice_number'],
+                    'remarks' => $payment['remarks'],
+                    'amount' => number_format($payment['subtotal_order'], 2),
+                    'added_by' => 0,
+                    'cashier' => $payment['cashier_id'],
+                    'is_disabled' => 0,
+                    'balance' => number_format($term_balance, 2),
                 );
+            }
+
+            // Get other payments
+            $sql = "SELECT * FROM payment_details WHERE student_number = '".$data['student']['slug']."' AND sy_reference = ".$reg['intID']." AND description NOT LIKE 'Reservation%' AND description NOT LIKE 'Tuition%' AND (status = 'Paid' || status = 'Void') ORDER BY or_date ASC";
+            $other_payments = $this->db->query($sql)->result_array();
+
+            foreach($other_payments as $payment){
+                $paid = $payment['subtotal_order'] * -1;
+                $term_balance_other += $paid;
+                $payment['or_date'] = date('M j, Y',strtotime($payment['or_date']));
+                
+                $other_term[] = array(
+                    'payment_id' => $payment['id'],
+                    'type' => 'payment',
+                    'strYearStart' => $temp['term']['strYearStart'],
+                    'strYearEnd' => $temp['term']['strYearEnd'],
+                    'enumSem' => $temp['term']['enumSem'],
+                    'term_label' => $temp['term']['term_label'],
+                    'syid' => $temp['term']['intID'],
+                    'scholarship_name' => '',
+                    'date' => $payment['or_date'],
+                    'name' => $payment['description'],
+                    'or_number' => $payment['or_number'],
+                    'invoice_number' => $payment['invoice_number'],
+                    'remarks' => $payment['remarks'],
+                    'amount' => number_format($payment['subtotal_order'], 2),
+                    'added_by' => 0,
+                    'cashier' => $payment['cashier_id'],
+                    'is_disabled' => 0,
+                    'balance' => number_format($term_balance_other, 2),
+                );
+            }
+
+            // Add to ledger and other arrays if there are items
+            if(!empty($ledger_term)) {
+                $ledger[] = array(
+                    'ledger_items' => $ledger_term,
+                    'balance' => number_format($term_balance, 2)
+                );
+                $running_balance += $term_balance;
+            }
+
+            if(!empty($other_term)) {
+                $other[] = array(
+                    'ledger_items' => $other_term,
+                    'balance' => number_format($term_balance_other, 2)
+                );
+                $running_balance_other += $term_balance_other;
             }
         }
         
-        $this->data['ledger_data'] = $ledger_data;
+        // Set data for the view
+        $this->data['student'] = $data['student'];
+        $this->data['ledger'] = $ledger;
+        $this->data['other'] = $other;
+        $this->data['running_balance'] = $running_balance;
+        $this->data['running_balance_other'] = $running_balance_other;
         
         // Initialize TCPDF
         tcpdf();
