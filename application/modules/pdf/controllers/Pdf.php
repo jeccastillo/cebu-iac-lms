@@ -4404,7 +4404,7 @@ class Pdf extends CI_Controller {
         tcpdf();
         
         // Create new PDF document
-        $pdf = new TCPDF("P", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf = new TCPDF("L", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         
         // Set document information
         $pdf->SetCreator(PDF_CREATOR);
