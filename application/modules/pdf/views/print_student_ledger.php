@@ -178,9 +178,25 @@ th {
                                         <td><?php echo $item['or_number'] ?: ''; ?></td>
                                         <td><?php echo $item['invoice_number'] ?: ''; ?></td>
                                         <td><?php echo $item['remarks'] ?: ''; ?></td>
-                                        <td class="amount"><?php echo (($item['type'] != 'payment' && $item['type'] != 'balance') || ($item['type'] == 'balance' && floatval(str_replace(',', '', $item['amount'])) >= 0)) ? $item['amount'] : '-'; ?></td>
-                                        <td class="amount"><?php echo ($item['type'] == 'payment' || ($item['type'] == 'balance' && floatval(str_replace(',', '', $item['amount'])) < 0)) ? (floatval(str_replace(',', '', $item['amount'])) < 0 ? number_format(floatval(str_replace(',', '', $item['amount'])) * -1, 2) : $item['amount']) : '-'; ?></td>
-                                        <td class="amount"><?php echo floatval(str_replace(',', '', $item['balance'])) < 0 ? '(' . number_format(floatval(str_replace(',', '', $item['balance'])) * -1, 2) . ')' : $item['balance']; ?></td>
+                                        <td class="amount"><?php 
+                                            // Assessment column: ((item.type != 'payment' && item.type != 'balance') || (item.type == 'balance' && item.amount >= 0))?numberWithCommas(item.amount):'-'
+                                            $amount_val = floatval(str_replace(',', '', $item['amount']));
+                                            echo (($item['type'] != 'payment' && $item['type'] != 'balance') || ($item['type'] == 'balance' && $amount_val >= 0)) ? $item['amount'] : '-';
+                                        ?></td>
+                                        <td class="amount"><?php 
+                                            // Payment column: (item.type == 'payment' || (item.type == 'balance' && item.amount < 0))? (item.amount < 0 ? numberWithCommas(item.amount * -1) : numberWithCommas(item.amount)) :'-'
+                                            $amount_val = floatval(str_replace(',', '', $item['amount']));
+                                            if($item['type'] == 'payment' || ($item['type'] == 'balance' && $amount_val < 0)) {
+                                                echo ($amount_val < 0) ? number_format($amount_val * -1, 2) : $item['amount'];
+                                            } else {
+                                                echo '-';
+                                            }
+                                        ?></td>
+                                        <td class="amount"><?php 
+                                            // Balance column: item.balance < 0 ?"(" + numberWithCommas(item.balance * -1) + ")": numberWithCommas(item.balance)
+                                            $balance_val = floatval(str_replace(',', '', $item['balance']));
+                                            echo ($balance_val < 0) ? '(' . number_format($balance_val * -1, 2) . ')' : $item['balance'];
+                                        ?></td>
                                         <td><?php echo ($item['added_by'] != 0) ? 'Manually Generated' : 'System Generated'; ?></td>
                                         <td><?php echo ($item['added_by'] == 0) ? $item['cashier'] : $item['added_by']; ?></td>
                                         <td>-</td>
