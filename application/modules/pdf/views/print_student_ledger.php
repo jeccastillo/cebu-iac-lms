@@ -168,28 +168,43 @@ th {
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach($term_data['ledger_items'] as $item): ?>
+                                <?php foreach($term_data['ledger_items'] as $index => $item): ?>
                                     <tr>
                                         <td><?php echo $item['strYearStart'] . ' - ' . $item['strYearEnd']; ?></td>
                                         <td><?php echo $item['enumSem'] . ' ' . $item['term_label']; ?></td>
                                         <td><?php echo $item['scholarship_name'] ?: ''; ?></td>
                                         <td><?php echo $item['name']; ?></td>
-                                        <td><?php echo $item['date'] ?: ''; ?></td>
+                                        <td><?php 
+                                            // O.R. Date can be null for first item (Tuition assessment)
+                                            if($index == 0) {
+                                                echo '';
+                                            } else {
+                                                echo $item['date'] ?: '';
+                                            }
+                                        ?></td>
                                         <td><?php echo $item['or_number'] ?: ''; ?></td>
                                         <td><?php echo $item['invoice_number'] ?: ''; ?></td>
                                         <td><?php echo $item['remarks'] ?: ''; ?></td>
                                         <td class="amount"><?php 
-                                            // Assessment column: ((item.type != 'payment' && item.type != 'balance') || (item.type == 'balance' && item.amount >= 0))?numberWithCommas(item.amount):'-'
-                                            $amount_val = floatval(str_replace(',', '', $item['amount']));
-                                            echo (($item['type'] != 'payment' && $item['type'] != 'balance') || ($item['type'] == 'balance' && $amount_val >= 0)) ? $item['amount'] : '-';
+                                            // Assessment column: can be null for first item, use conditions for others
+                                            if($index == 0) {
+                                                echo $item['amount'] ?: '';
+                                            } else {
+                                                $amount_val = floatval(str_replace(',', '', $item['amount']));
+                                                echo (($item['type'] != 'payment' && $item['type'] != 'balance') || ($item['type'] == 'balance' && $amount_val >= 0)) ? $item['amount'] : '-';
+                                            }
                                         ?></td>
                                         <td class="amount"><?php 
-                                            // Payment column: (item.type == 'payment' || (item.type == 'balance' && item.amount < 0))? (item.amount < 0 ? numberWithCommas(item.amount * -1) : numberWithCommas(item.amount)) :'-'
-                                            $amount_val = floatval(str_replace(',', '', $item['amount']));
-                                            if($item['type'] == 'payment' || ($item['type'] == 'balance' && $amount_val < 0)) {
-                                                echo ($amount_val < 0) ? number_format($amount_val * -1, 2) : $item['amount'];
+                                            // Payment column: can be null for first item, use conditions for others
+                                            if($index == 0) {
+                                                echo '';
                                             } else {
-                                                echo '-';
+                                                $amount_val = floatval(str_replace(',', '', $item['amount']));
+                                                if($item['type'] == 'payment' || ($item['type'] == 'balance' && $amount_val < 0)) {
+                                                    echo ($amount_val < 0) ? number_format($amount_val * -1, 2) : $item['amount'];
+                                                } else {
+                                                    echo '-';
+                                                }
                                             }
                                         ?></td>
                                         <td class="amount"><?php 
@@ -198,7 +213,14 @@ th {
                                             echo ($balance_val < 0) ? '(' . number_format($balance_val * -1, 2) . ')' : $item['balance'];
                                         ?></td>
                                         <td><?php echo ($item['added_by'] != 0) ? 'Manually Generated' : 'System Generated'; ?></td>
-                                        <td><?php echo ($item['added_by'] == 0) ? $item['cashier'] : $item['added_by']; ?></td>
+                                        <td><?php 
+                                            // Cashier can be null for first item (Tuition assessment)
+                                            if($index == 0) {
+                                                echo '';
+                                            } else {
+                                                echo ($item['added_by'] == 0) ? $item['cashier'] : $item['added_by'];
+                                            }
+                                        ?></td>
                                         <td>-</td>
                                     </tr>
                                 <?php endforeach; ?>
