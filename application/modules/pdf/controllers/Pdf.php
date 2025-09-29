@@ -4357,8 +4357,6 @@ class Pdf extends CI_Controller {
         $this->data['running_balance'] = $post['running_balance'];
         $this->data['running_balance_other'] = $post['running_balance_other'];
         
-        print_r($this->data);
-        die();
         // Initialize TCPDF
         tcpdf();
         
