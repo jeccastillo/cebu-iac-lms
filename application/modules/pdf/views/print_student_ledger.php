@@ -40,23 +40,6 @@ th {
     text-align: center;
 }
 
-.header {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.header h1 {
-    margin: 0;
-    font-size: 18px;
-    font-weight: bold;
-}
-
-.header h2 {
-    margin: 5px 0;
-    font-size: 14px;
-    font-weight: normal;
-}
-
 .student-info {
     margin-bottom: 15px;
 }
@@ -118,7 +101,7 @@ th {
     <div class="sheet-outer">
         <section class="sheet">
             <!-- Header -->
-            <div style="center">
+            <div style="text-align:center">
                 <h3>iACADEMY Inc.</h3>
                 <h5><?php echo $campus_address; ?></h5>
                 <h5>STUDENT LEDGER</h5>
