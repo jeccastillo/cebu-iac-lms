@@ -1,0 +1,273 @@
+<style>
+body {
+    margin: 0;
+    font-family: Arial, Sans-Serif;
+    font-size: 12px;
+}
+
+.sheet-outer {
+    margin: 0;
+}
+
+.sheet {
+    margin: 0;
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
+    page-break-after: always;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+}
+
+table, th, td {
+    border: 1px solid #000;
+}
+
+th, td {
+    padding: 5px;
+    text-align: left;
+    vertical-align: top;
+    font-size: 10px;
+}
+
+th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    text-align: center;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.header h2 {
+    margin: 5px 0;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.student-info {
+    margin-bottom: 15px;
+}
+
+.student-info table {
+    border: none;
+}
+
+.student-info td {
+    border: none;
+    padding: 2px 5px;
+}
+
+.amount {
+    text-align: right;
+}
+
+.total-row {
+    font-weight: bold;
+    background-color: #f5f5f5;
+}
+
+.section-header {
+    background-color: #d0d0d0;
+    font-weight: bold;
+    text-align: center;
+}
+
+@media screen {
+    body {
+        background: #e0e0e0
+    }
+
+    .sheet {
+        background: white;
+        box-shadow: 0 .5mm 2mm rgba(0, 0, 0, .3);
+        margin: 5mm auto;
+        width: 210mm;
+        min-height: 296mm;
+        padding: 10mm;
+    }
+}
+
+@page {
+    size: A4;
+    margin: 0;
+}
+
+@media print {
+    .sheet {
+        width: 210mm;
+        min-height: 296mm;
+        padding: 10mm;
+    }
+}
+</style>
+
+<body>
+    <div class="sheet-outer">
+        <section class="sheet">
+            <!-- Header -->
+            <div class="header">
+                <h1>iACADEMY Inc.</h1>
+                <h2><?php echo $campus_address; ?></h2>
+                <h2>STUDENT LEDGER</h2>
+            </div>
+
+            <!-- Student Information -->
+            <div class="student-info">
+                <table>
+                    <tr>
+                        <td><strong>Student Name:</strong></td>
+                        <td><?php echo strtoupper($student['strLastname'] . ', ' . $student['strFirstname'] . ' ' . $student['strMiddlename']); ?></td>
+                        <td><strong>Student Number:</strong></td>
+                        <td><?php echo $student['strStudentNumber']; ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Program:</strong></td>
+                        <td><?php echo $student['strProgramDescription']; ?></td>
+                        <td><strong>Date Generated:</strong></td>
+                        <td><?php echo date('F j, Y'); ?></td>
+                    </tr>
+                </table>
+            </div>
+
+            <?php if(!empty($ledger_data)): ?>
+                <?php foreach($ledger_data as $term_data): ?>
+                    <?php if(!empty($term_data['ledger_items']) || !empty($term_data['other_items'])): ?>
+                        
+                        <!-- Term Header -->
+                        <h3 style="margin: 20px 0 10px 0; font-size: 14px;">
+                            <?php echo $term_data['term']['enumSem'] . ' ' . $term_data['term']['term_label'] . ' ' . $term_data['term']['strYearStart'] . ' - ' . $term_data['term']['strYearEnd']; ?>
+                        </h3>
+
+                        <?php if(!empty($term_data['ledger_items'])): ?>
+                            <!-- Tuition Section -->
+                            <table>
+                                <thead>
+                                    <tr class="section-header">
+                                        <th colspan="13">TUITION</th>
+                                    </tr>
+                                    <tr>
+                                        <th>School Year</th>
+                                        <th>Term/Semester</th>
+                                        <th>Scholarship</th>
+                                        <th>Payment Description</th>
+                                        <th>O.R. Date</th>
+                                        <th>O.R. Number</th>
+                                        <th>Invoice Number</th>
+                                        <th>Remarks</th>
+                                        <th>Assessment</th>
+                                        <th>Payment</th>
+                                        <th>Balance</th>
+                                        <th>Added/Changed By</th>
+                                        <th>Cashier/Appointer</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Add tuition assessment first -->
+                                    <?php if(isset($term_data['tuition_data']) && $term_data['tuition_data']): ?>
+                                        <tr>
+                                            <td><?php echo $term_data['term']['strYearStart'] . ' - ' . $term_data['term']['strYearEnd']; ?></td>
+                                            <td><?php echo $term_data['term']['enumSem'] . ' ' . $term_data['term']['term_label']; ?></td>
+                                            <td>-</td>
+                                            <td>Tuition</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td class="amount"><?php echo number_format($term_data['tuition_data']['total'], 2); ?></td>
+                                            <td>-</td>
+                                            <td class="amount"><?php echo number_format($term_data['tuition_data']['total'], 2); ?></td>
+                                            <td>System Generated</td>
+                                            <td>-</td>
+                                        </tr>
+                                    <?php endif; ?>
+
+                                    <!-- Ledger items -->
+                                    <?php foreach($term_data['ledger_items'] as $item): ?>
+                                        <tr>
+                                            <td><?php echo $item['strYearStart'] . ' - ' . $item['strYearEnd']; ?></td>
+                                            <td><?php echo $item['enumSem'] . ' ' . $item['term_label']; ?></td>
+                                            <td><?php echo $item['scholarship_name'] ?: '-'; ?></td>
+                                            <td><?php echo $item['name']; ?></td>
+                                            <td><?php echo $item['date']; ?></td>
+                                            <td><?php echo $item['or_number'] ?: '-'; ?></td>
+                                            <td><?php echo $item['invoice_number'] ?: '-'; ?></td>
+                                            <td><?php echo $item['remarks'] ?: '-'; ?></td>
+                                            <td class="amount"><?php echo ($item['amount'] > 0) ? number_format($item['amount'], 2) : '-'; ?></td>
+                                            <td class="amount"><?php echo ($item['amount'] < 0) ? number_format(abs($item['amount']), 2) : '-'; ?></td>
+                                            <td class="amount">-</td>
+                                            <td><?php echo ($item['added_by'] != 0) ? ($item['strFirstname'] . ' ' . $item['strLastname']) : 'System Generated'; ?></td>
+                                            <td><?php echo $item['strFirstname'] . ' ' . $item['strLastname']; ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        <?php endif; ?>
+
+                        <?php if(!empty($term_data['other_items'])): ?>
+                            <!-- Other Section -->
+                            <table style="margin-top: 15px;">
+                                <thead>
+                                    <tr class="section-header">
+                                        <th colspan="11">OTHER</th>
+                                    </tr>
+                                    <tr>
+                                        <th>School Year</th>
+                                        <th>Term/Semester</th>
+                                        <th>Payment Description</th>
+                                        <th>O.R. Date</th>
+                                        <th>O.R. Number</th>
+                                        <th>Invoice Number</th>
+                                        <th>Remarks</th>
+                                        <th>Assessment</th>
+                                        <th>Payment</th>
+                                        <th>Added/Changed By</th>
+                                        <th>Cashier</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach($term_data['other_items'] as $item): ?>
+                                        <tr>
+                                            <td><?php echo $item['strYearStart'] . ' - ' . $item['strYearEnd']; ?></td>
+                                            <td><?php echo $item['enumSem'] . ' ' . $item['term_label']; ?></td>
+                                            <td><?php echo $item['name']; ?></td>
+                                            <td><?php echo $item['date']; ?></td>
+                                            <td><?php echo $item['or_number'] ?: '-'; ?></td>
+                                            <td><?php echo $item['invoice_number'] ?: '-'; ?></td>
+                                            <td><?php echo $item['remarks'] ?: '-'; ?></td>
+                                            <td class="amount"><?php echo ($item['amount'] > 0) ? number_format($item['amount'], 2) : '-'; ?></td>
+                                            <td class="amount"><?php echo ($item['amount'] < 0) ? number_format(abs($item['amount']), 2) : '-'; ?></td>
+                                            <td><?php echo ($item['added_by'] != 0) ? ($item['strFirstname'] . ' ' . $item['strLastname']) : 'System Generated'; ?></td>
+                                            <td><?php echo $item['strFirstname'] . ' ' . $item['strLastname']; ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        <?php endif; ?>
+
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p style="text-align: center; margin-top: 50px; font-style: italic;">No ledger data available for this student.</p>
+            <?php endif; ?>
+
+            <!-- Footer -->
+            <div style="margin-top: 30px; text-align: center; font-size: 10px;">
+                <p>Generated on <?php echo date('F j, Y g:i A'); ?></p>
+                <p>This is a computer-generated document.</p>
+            </div>
+        </section>
+    </div>
+</body>
