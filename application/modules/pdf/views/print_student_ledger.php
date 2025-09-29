@@ -148,7 +148,7 @@ th {
                         <table>
                             <thead>
                                 <tr class="section-header">
-                                    <th colspan="14">Tuition</th>
+                                    <th colspan="13">Tuition</th>
                                 </tr>
                                 <tr>
                                     <th>School Year</th>
@@ -300,7 +300,6 @@ th {
             <!-- Footer -->
             <div style="margin-top: 30px; text-align: center; font-size: 10px;">
                 <p>Generated on <?php echo date('F j, Y g:i A'); ?></p>
-                <p>This is a computer-generated document.</p>
             </div>
         </section>
     </div>
