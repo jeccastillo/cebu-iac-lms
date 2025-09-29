@@ -140,124 +140,119 @@ th {
                 </table>
             </div>
 
-            <?php if(!empty($ledger_data)): ?>
-                <?php foreach($ledger_data as $term_data): ?>
-                    <?php if(!empty($term_data['ledger_items']) || !empty($term_data['other_items'])): ?>
+            <?php if(!empty($ledger)): ?>
+                <?php foreach($ledger as $term_data): ?>
+                    <?php if(!empty($term_data['ledger_items'])): ?>
                         
-                        <!-- Term Header -->
-                        <h3 style="margin: 20px 0 10px 0; font-size: 14px;">
-                            <?php echo $term_data['term']['enumSem'] . ' ' . $term_data['term']['term_label'] . ' ' . $term_data['term']['strYearStart'] . ' - ' . $term_data['term']['strYearEnd']; ?>
-                        </h3>
-
-                        <?php if(!empty($term_data['ledger_items'])): ?>
-                            <!-- Tuition Section -->
-                            <table>
-                                <thead>
-                                    <tr class="section-header">
-                                        <th colspan="13">TUITION</th>
-                                    </tr>
+                        <!-- Tuition Section -->
+                        <table>
+                            <thead>
+                                <tr class="section-header">
+                                    <th colspan="13">TUITION</th>
+                                </tr>
+                                <tr>
+                                    <th>School Year</th>
+                                    <th>Term/Semester</th>
+                                    <th>Scholarship</th>
+                                    <th>Payment Description</th>
+                                    <th>O.R. Date</th>
+                                    <th>O.R. Number</th>
+                                    <th>Invoice Number</th>
+                                    <th>Remarks</th>
+                                    <th>Assessment</th>
+                                    <th>Payment</th>
+                                    <th>Balance</th>
+                                    <th>Added/Changed By</th>
+                                    <th>Cashier/Appointer</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($term_data['ledger_items'] as $item): ?>
                                     <tr>
-                                        <th>School Year</th>
-                                        <th>Term/Semester</th>
-                                        <th>Scholarship</th>
-                                        <th>Payment Description</th>
-                                        <th>O.R. Date</th>
-                                        <th>O.R. Number</th>
-                                        <th>Invoice Number</th>
-                                        <th>Remarks</th>
-                                        <th>Assessment</th>
-                                        <th>Payment</th>
-                                        <th>Balance</th>
-                                        <th>Added/Changed By</th>
-                                        <th>Cashier/Appointer</th>
+                                        <td><?php echo $item['strYearStart'] . ' - ' . $item['strYearEnd']; ?></td>
+                                        <td><?php echo $item['enumSem'] . ' ' . $item['term_label']; ?></td>
+                                        <td><?php echo $item['scholarship_name'] ?: '-'; ?></td>
+                                        <td><?php echo $item['name']; ?></td>
+                                        <td><?php echo $item['date'] ?: '-'; ?></td>
+                                        <td><?php echo $item['or_number'] ?: '-'; ?></td>
+                                        <td><?php echo $item['invoice_number'] ?: '-'; ?></td>
+                                        <td><?php echo $item['remarks'] ?: '-'; ?></td>
+                                        <td class="amount"><?php echo (($item['type'] != 'payment' && $item['type'] != 'balance') || ($item['type'] == 'balance' && $item['amount'] >= 0)) ? $item['amount'] : '-'; ?></td>
+                                        <td class="amount"><?php echo ($item['type'] == 'payment' || ($item['type'] == 'balance' && $item['amount'] < 0)) ? $item['amount'] : '-'; ?></td>
+                                        <td class="amount"><?php echo $item['balance']; ?></td>
+                                        <td><?php echo ($item['added_by'] != 0) ? 'Manually Generated' : 'System Generated'; ?></td>
+                                        <td><?php echo $item['cashier'] ?: '-'; ?></td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Add tuition assessment first -->
-                                    <?php if(isset($term_data['tuition_data']) && $term_data['tuition_data']): ?>
-                                        <tr>
-                                            <td><?php echo $term_data['term']['strYearStart'] . ' - ' . $term_data['term']['strYearEnd']; ?></td>
-                                            <td><?php echo $term_data['term']['enumSem'] . ' ' . $term_data['term']['term_label']; ?></td>
-                                            <td>-</td>
-                                            <td>Tuition</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td class="amount"><?php echo number_format($term_data['tuition_data']['total'], 2); ?></td>
-                                            <td>-</td>
-                                            <td class="amount"><?php echo number_format($term_data['tuition_data']['total'], 2); ?></td>
-                                            <td>System Generated</td>
-                                            <td>-</td>
-                                        </tr>
-                                    <?php endif; ?>
-
-                                    <!-- Ledger items -->
-                                    <?php foreach($term_data['ledger_items'] as $item): ?>
-                                        <tr>
-                                            <td><?php echo $item['strYearStart'] . ' - ' . $item['strYearEnd']; ?></td>
-                                            <td><?php echo $item['enumSem'] . ' ' . $item['term_label']; ?></td>
-                                            <td><?php echo $item['scholarship_name'] ?: '-'; ?></td>
-                                            <td><?php echo $item['name']; ?></td>
-                                            <td><?php echo $item['date']; ?></td>
-                                            <td><?php echo $item['or_number'] ?: '-'; ?></td>
-                                            <td><?php echo $item['invoice_number'] ?: '-'; ?></td>
-                                            <td><?php echo $item['remarks'] ?: '-'; ?></td>
-                                            <td class="amount"><?php echo ($item['amount'] > 0) ? number_format($item['amount'], 2) : '-'; ?></td>
-                                            <td class="amount"><?php echo ($item['amount'] < 0) ? number_format(abs($item['amount']), 2) : '-'; ?></td>
-                                            <td class="amount">-</td>
-                                            <td><?php echo ($item['added_by'] != 0) ? ($item['strFirstname'] . ' ' . $item['strLastname']) : 'System Generated'; ?></td>
-                                            <td><?php echo $item['strFirstname'] . ' ' . $item['strLastname']; ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        <?php endif; ?>
-
-                        <?php if(!empty($term_data['other_items'])): ?>
-                            <!-- Other Section -->
-                            <table style="margin-top: 15px;">
-                                <thead>
-                                    <tr class="section-header">
-                                        <th colspan="11">OTHER</th>
-                                    </tr>
-                                    <tr>
-                                        <th>School Year</th>
-                                        <th>Term/Semester</th>
-                                        <th>Payment Description</th>
-                                        <th>O.R. Date</th>
-                                        <th>O.R. Number</th>
-                                        <th>Invoice Number</th>
-                                        <th>Remarks</th>
-                                        <th>Assessment</th>
-                                        <th>Payment</th>
-                                        <th>Added/Changed By</th>
-                                        <th>Cashier</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach($term_data['other_items'] as $item): ?>
-                                        <tr>
-                                            <td><?php echo $item['strYearStart'] . ' - ' . $item['strYearEnd']; ?></td>
-                                            <td><?php echo $item['enumSem'] . ' ' . $item['term_label']; ?></td>
-                                            <td><?php echo $item['name']; ?></td>
-                                            <td><?php echo $item['date']; ?></td>
-                                            <td><?php echo $item['or_number'] ?: '-'; ?></td>
-                                            <td><?php echo $item['invoice_number'] ?: '-'; ?></td>
-                                            <td><?php echo $item['remarks'] ?: '-'; ?></td>
-                                            <td class="amount"><?php echo ($item['amount'] > 0) ? number_format($item['amount'], 2) : '-'; ?></td>
-                                            <td class="amount"><?php echo ($item['amount'] < 0) ? number_format(abs($item['amount']), 2) : '-'; ?></td>
-                                            <td><?php echo ($item['added_by'] != 0) ? ($item['strFirstname'] . ' ' . $item['strLastname']) : 'System Generated'; ?></td>
-                                            <td><?php echo $item['strFirstname'] . ' ' . $item['strLastname']; ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        <?php endif; ?>
+                                <?php endforeach; ?>
+                                <tr class="total-row">
+                                    <td colspan="10" class="amount"><strong>Term Balance/Refund:</strong></td>
+                                    <td class="amount"><strong><?php echo $term_data['balance']; ?></strong></td>
+                                    <td colspan="2"></td>
+                                </tr>
+                            </tbody>
+                        </table>
 
                     <?php endif; ?>
                 <?php endforeach; ?>
-            <?php else: ?>
+                
+                <!-- Grand Total -->
+                <table style="margin-top: 15px;">
+                    <tr class="total-row">
+                        <td colspan="10" class="amount"><strong>Grand Total Balance/Refund:</strong></td>
+                        <td class="amount"><strong><?php echo number_format($running_balance, 2); ?></strong></td>
+                        <td colspan="2"></td>
+                    </tr>
+                </table>
+            <?php endif; ?>
+
+            <?php if(!empty($other)): ?>
+                <?php foreach($other as $term_data): ?>
+                    <?php if(!empty($term_data['ledger_items'])): ?>
+                        
+                        <!-- Other Section -->
+                        <table style="margin-top: 15px;">
+                            <thead>
+                                <tr class="section-header">
+                                    <th colspan="11">OTHER</th>
+                                </tr>
+                                <tr>
+                                    <th>School Year</th>
+                                    <th>Term/Semester</th>
+                                    <th>Payment Description</th>
+                                    <th>O.R. Date</th>
+                                    <th>O.R. Number</th>
+                                    <th>Invoice Number</th>
+                                    <th>Remarks</th>
+                                    <th>Assessment</th>
+                                    <th>Payment</th>
+                                    <th>Added/Changed By</th>
+                                    <th>Cashier</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($term_data['ledger_items'] as $item): ?>
+                                    <tr>
+                                        <td><?php echo $item['strYearStart'] . ' - ' . $item['strYearEnd']; ?></td>
+                                        <td><?php echo $item['enumSem'] . ' ' . $item['term_label']; ?></td>
+                                        <td><?php echo $item['name']; ?></td>
+                                        <td><?php echo $item['date']; ?></td>
+                                        <td><?php echo $item['or_number'] ?: '-'; ?></td>
+                                        <td><?php echo $item['invoice_number'] ?: '-'; ?></td>
+                                        <td><?php echo $item['remarks'] ?: '-'; ?></td>
+                                        <td class="amount"><?php echo ($item['type'] != 'payment') ? $item['amount'] : '-'; ?></td>
+                                        <td class="amount"><?php echo ($item['type'] == 'payment') ? $item['amount'] : '-'; ?></td>
+                                        <td><?php echo ($item['added_by'] != 0) ? 'Manually Generated' : 'System Generated'; ?></td>
+                                        <td><?php echo $item['cashier'] ?: '-'; ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            <?php endif; ?>
+
+            <?php if(empty($ledger) && empty($other)): ?>
                 <p style="text-align: center; margin-top: 50px; font-style: italic;">No ledger data available for this student.</p>
             <?php endif; ?>
 
