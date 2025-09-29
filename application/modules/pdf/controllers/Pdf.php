@@ -4345,6 +4345,103 @@ class Pdf extends CI_Controller {
         $pdf->Output('Certificate of Unit Earned -.pdf', 'I');
     }
 
+    public function print_student_ledger($id, $sem = 0)
+    {
+        // Get active semester if not specified
+        $active_sem = $this->data_fetcher->get_active_sem();
+        if($sem == 0)
+            $sem = $active_sem['intID'];
+        
+        // Get student data
+        $this->data['student'] = $this->data_fetcher->getStudent($id);
+        $this->data['active_sem'] = $this->data_fetcher->get_sem_by_id($sem);
+        
+        // Get ledger data similar to Finance controller
+        $ledger_data = array();
+        $other_data = array();
+        
+        // Get all registrations for this student
+        $registrations = $this->db->select('tb_mas_registration.*, tb_mas_sy.enumSem, tb_mas_sy.strYearStart, tb_mas_sy.strYearEnd, tb_mas_sy.term_label, tb_mas_sy.intID as term_id')
+                                ->from('tb_mas_registration')
+                                ->join('tb_mas_sy', 'tb_mas_registration.intAYID = tb_mas_sy.intID')
+                                ->where('intStudentID', $id)
+                                ->order_by('strYearStart ASC, enumSem ASC')
+                                ->get()
+                                ->result_array();
+        
+        foreach($registrations as $reg) {
+            $term_id = $reg['term_id'];
+            
+            // Get tuition data for this term
+            $tuition_data = $this->data_fetcher->getTuition($id, $term_id);
+            
+            // Fetch tuition-type ledger for this term
+            $ledger = $this->db->select('tb_mas_student_ledger.*,tb_mas_scholarships.name as scholarship_name, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')
+                ->from('tb_mas_student_ledger')
+                ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
+                ->join('tb_mas_scholarships', 'tb_mas_student_ledger.scholarship_id = tb_mas_scholarships.intID','left')
+                ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')
+                ->where(array('student_id'=>$id,'tb_mas_student_ledger.type'=>'tuition','syid' => $term_id))
+                ->order_by("strYearStart asc, enumSem asc, date asc")
+                ->get()
+                ->result_array();
+            
+            // Fetch other-type ledger for this term
+            $other = $this->db->select('tb_mas_student_ledger.*, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')
+                ->from('tb_mas_student_ledger')
+                ->join('tb_mas_sy', 'tb_mas_student_ledger.syid = tb_mas_sy.intID')
+                ->join('tb_mas_faculty', 'tb_mas_student_ledger.added_by = tb_mas_faculty.intID','left')
+                ->where(array('student_id'=>$id,'tb_mas_student_ledger.type'=>'other','syid' => $term_id))
+                ->get()
+                ->result_array();
+            
+            if(!empty($ledger) || !empty($tuition_data)) {
+                $ledger_data[] = array(
+                    'term' => $reg,
+                    'tuition_data' => $tuition_data,
+                    'ledger_items' => $ledger,
+                    'other_items' => $other
+                );
+            }
+        }
+        
+        $this->data['ledger_data'] = $ledger_data;
+        
+        // Initialize TCPDF
+        tcpdf();
+        
+        // Create new PDF document
+        $pdf = new TCPDF("P", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        
+        // Set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetTitle("Student Ledger - " . $this->data['student']['strLastname'] . ", " . $this->data['student']['strFirstname']);
+        
+        // Set margins
+        $pdf->SetMargins(10, 15, 10);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        
+        // Set auto page breaks
+        $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
+        
+        // Remove default header/footer
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+        
+        // Add a page
+        $pdf->AddPage();
+        
+        // Load the view and generate HTML
+        $html = $this->load->view("print_student_ledger", $this->data, true);
+        
+        // Write HTML to PDF
+        $pdf->writeHTML($html, true, false, true, false, '');
+        
+        // Output PDF
+        $pdf->Output("Student_Ledger_" . $this->data['student']['strLastname'] . "_" . $this->data['student']['strFirstname'] . ".pdf", 'I');
+    }
+
     public function certificate_of_enrollment($id)
     {
         $post = $this->input->post();
@@ -4380,7 +4477,6 @@ class Pdf extends CI_Controller {
         $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
         
         $pdf->setPrintHeader(false);
-        $pdf->setPrintFooter(false);    
              
         $pdf->AddPage();
           
