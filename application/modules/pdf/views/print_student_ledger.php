@@ -119,9 +119,9 @@ th {
         <section class="sheet">
             <!-- Header -->
             <div class="header">
-                <h1>iACADEMY Inc.</h1>
-                <h2><?php echo $campus_address; ?></h2>
-                <h2>STUDENT LEDGER</h2>
+                <h3>iACADEMY Inc.</h3>
+                <h5><?php echo $campus_address; ?></h5>
+                <h5>STUDENT LEDGER</h5>
             </div>
 
             <!-- Student Information -->
@@ -253,7 +253,7 @@ th {
                         <table style="margin-top: 15px;">
                             <thead>
                                 <tr class="section-header">
-                                    <th colspan="12">Other</th>
+                                    <th colspan="11">Other</th>
                                 </tr>
                                 <tr>
                                     <th>School Year</th>
