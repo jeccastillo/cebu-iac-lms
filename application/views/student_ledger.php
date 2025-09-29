@@ -3,7 +3,16 @@
         <h1>            
             <small>
                 <a v-if="finance.intUserLevel == 6" style="margin-right:1rem;" class="btn btn-app" :href="base_url + 'finance/view_all_students'"><i class="ion ion-arrow-left-a"></i>All Students</a>
-                <a style="margin-right:1rem;" class="btn btn-app" :href="base_url + 'pdf/print_student_ledger/' + id + '/' + sem" target="_blank"><i class="fa fa-print"></i>Print PDF</a>
+                <a style="margin-right:1rem;" class="btn btn-app" @click="printLedgerPDF" href="#"><i class="fa fa-print"></i>Print PDF</a>
+                <form ref="print_ledger_form" method="post" :action="base_url + 'pdf/print_student_ledger'" target="_blank" style="display: none;">
+                    <input type="hidden" name="student_id" :value="id">
+                    <input type="hidden" name="sem" :value="sem">
+                    <input type="hidden" name="ledger_data" :value="JSON.stringify(ledger)">
+                    <input type="hidden" name="other_data" :value="JSON.stringify(other)">
+                    <input type="hidden" name="student_data" :value="JSON.stringify(student)">
+                    <input type="hidden" name="running_balance" :value="running_balance">
+                    <input type="hidden" name="running_balance_other" :value="running_balance_other">
+                </form>
                 <div class="pull-right">
                     <!-- <p>Select Term Filter</p>
                     <select  @change="filterByTerm($event)" class="form-control" required v-model="sem">
@@ -1112,6 +1121,9 @@ new Vue({
         },
         filterByTerm: function(event){
             document.location = this.base_url + 'finance/student_ledger/' + this.id + '/' + event.target.value;
+        },
+        printLedgerPDF: function(){
+            this.$refs.print_ledger_form.submit();
         }
         
     }
