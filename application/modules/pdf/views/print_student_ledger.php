@@ -118,7 +118,7 @@ th {
     <div class="sheet-outer">
         <section class="sheet">
             <!-- Header -->
-            <div class="header">
+            <div style="center">
                 <h3>iACADEMY Inc.</h3>
                 <h5><?php echo $campus_address; ?></h5>
                 <h5>STUDENT LEDGER</h5>
