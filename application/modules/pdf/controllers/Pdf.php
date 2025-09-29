@@ -4357,6 +4357,49 @@ class Pdf extends CI_Controller {
         $this->data['running_balance'] = $post['running_balance'];
         $this->data['running_balance_other'] = $post['running_balance_other'];
         
+        // Get cashier names for display
+        $cashier_names = array();
+        
+        // Process ledger data to get cashier names
+        if(!empty($this->data['ledger'])) {
+            foreach($this->data['ledger'] as &$term_data) {
+                if(!empty($term_data['ledger_items'])) {
+                    foreach($term_data['ledger_items'] as &$item) {
+                        if(!empty($item['cashier']) && !isset($cashier_names[$item['cashier']])) {
+                            $cashier_info = $this->db->get_where('tb_mas_faculty', array('intID' => $item['cashier']))->first_row('array');
+                            if($cashier_info) {
+                                $cashier_names[$item['cashier']] = $cashier_info['strFirstname'] . ' ' . $cashier_info['strLastname'];
+                            }
+                        }
+                        if(!empty($item['added_by']) && $item['added_by'] != 0 && !isset($cashier_names[$item['added_by']])) {
+                            $cashier_info = $this->db->get_where('tb_mas_faculty', array('intID' => $item['added_by']))->first_row('array');
+                            if($cashier_info) {
+                                $cashier_names[$item['added_by']] = $cashier_info['strFirstname'] . ' ' . $cashier_info['strLastname'];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Process other data to get cashier names
+        if(!empty($this->data['other'])) {
+            foreach($this->data['other'] as &$term_data) {
+                if(!empty($term_data['ledger_items'])) {
+                    foreach($term_data['ledger_items'] as &$item) {
+                        if(!empty($item['cashier']) && !isset($cashier_names[$item['cashier']])) {
+                            $cashier_info = $this->db->get_where('tb_mas_faculty', array('intID' => $item['cashier']))->first_row('array');
+                            if($cashier_info) {
+                                $cashier_names[$item['cashier']] = $cashier_info['strFirstname'] . ' ' . $cashier_info['strLastname'];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        $this->data['cashier_names'] = $cashier_names;
+        
         // Initialize TCPDF
         tcpdf();
         
