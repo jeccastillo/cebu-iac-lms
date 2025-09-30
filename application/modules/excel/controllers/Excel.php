@@ -8418,19 +8418,19 @@ class Excel extends CI_Controller {
                             print(" @faculty : " . $faculty['intID']);
                             print(" @subject : " . $subject['intID']);
                             print(" @classname : " . $row['D']);
-                            print(" @year : " . $row['D']);
+                            print(" @year : " . $row['E']);
                             print(" @section : " . $row['F']);
-                            
+
                             if(!$classlist){
                                 $newClasslist = array(
                                     'intFacultyID' => $faculty['intID'],
                                     'intSubjectID' => $subject['intID'],
-                                    'strClassName' => $row['D'],
+                                    'strClassName' => $row['F'],
                                     'intFinalized' => 2,
                                     'strAcademicYear' => $sem,
                                     'slots' => 0,
                                     'strUnits' => 3,
-                                    'strSection' => $row['D'],
+                                    'strSection' => $row['F'],
                                     'intWithPayment' => 0,
                                     'intCurriculumID' => $student['current_curriculum'],
                                     'year' => $row['E'],
