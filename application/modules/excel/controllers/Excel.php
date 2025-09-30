@@ -8414,6 +8414,12 @@ class Excel extends CI_Controller {
                                 ->get()
                                 ->first_row('array');
                             print_r($classlist);
+                            print(" @SEM : " . $sem);
+                            print(" @faculty : " . $faculty['intID']);
+                            print(" @subject : " . $subject['intID']);
+                            print(" @classname : " . $row['D']);
+                            print(" @year : " . $row['D']);
+                            print(" @section : " . $row['F']);
                             if(!$classlist){
                                 $newClasslist = array(
                                     'intFacultyID' => $faculty['intID'],
