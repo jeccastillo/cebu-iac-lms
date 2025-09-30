@@ -749,6 +749,8 @@ new Vue({
                 this.term_balance = running_balance;
             }
 
+            console.log(this.ledger_term);
+
             this.ledger.push({
                 'ledger_items': this.ledger_term,
                 'balance': this.term_balance.toFixed(2)
