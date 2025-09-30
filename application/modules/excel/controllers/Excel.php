@@ -8408,8 +8408,8 @@ class Excel extends CI_Controller {
                                         'intFacultyID' => $faculty['intID'], 
                                         'intSubjectID' => $subject['intID'],
                                         'strClassName' => $row['D'],
-                                        // 'year' => $row['E'],
-                                        'strSection' => $row['F']
+                                        'year' => $row['E'],
+                                        // 'strSection' => $row['F']
                                         ))
                                 ->order_by('intID', 'ASC')
                                 ->get()
