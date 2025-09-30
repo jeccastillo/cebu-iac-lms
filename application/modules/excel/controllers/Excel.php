@@ -8407,9 +8407,10 @@ class Excel extends CI_Controller {
                                 ->where(array('strAcademicYear' => $sem, 
                                         'intFacultyID' => $faculty['intID'], 
                                         'intSubjectID' => $subject['intID'],
-                                        'strClassName' => $row['D'],
-                                        'year' => $row['E'],
-                                        'strSection' => $row['F']))
+                                        // 'strClassName' => $row['D'],
+                                        // 'year' => $row['E'],
+                                        // 'strSection' => $row['F']
+                                        ))
                                 ->order_by('intID', 'ASC')
                                 ->get()
                                 ->first_row('array');
