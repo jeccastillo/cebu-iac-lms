@@ -111,6 +111,7 @@ th {
                     <tr>
                         <td><strong>Student Name:</strong></td>
                         <td><?php echo strtoupper($student['strLastname'] . ', ' . $student['strFirstname'] . ' ' . $student['strMiddlename']); ?></td>
+                        <td></td>
                         <td><strong>Student Number:</strong></td>
                         <td><?php echo $student['strStudentNumber']; ?></td>
                     </tr>
@@ -221,7 +222,7 @@ th {
                 <table style="margin-top: 15px;">
                     <tr class="total-row">
                         <td colspan="11" class="amount"><strong>Grand Total Balance/Refund: <?php echo number_format($running_balance, 2); ?></strong></td>
-                        <td colspan="3"></td>
+                        <td colspan="2"></td>
                     </tr>
                 </table>
             <?php endif; ?>
