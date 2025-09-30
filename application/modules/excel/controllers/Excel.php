@@ -8392,6 +8392,8 @@ class Excel extends CI_Controller {
                         if(isset($facultyName[1])){
                             $facultyName = explode(' ', ltrim($facultyName[1]));
                             $facultyFirstName = $facultyName[0];
+                            print($facultyName);
+                            print($facultyFirstName);
                         }
                         
                         $faculty = $this->db->from('tb_mas_faculty')->like(array('strLastname' => $facultyLastName, 'strFirstName' => $facultyFirstName))->get()->first_row('array');
