@@ -4411,7 +4411,7 @@ class Pdf extends CI_Controller {
         $pdf->SetTitle("Student Ledger - " . $this->data['student']['strLastname'] . ", " . $this->data['student']['strFirstname']);
         
         // Set margins
-        $pdf->SetMargins(5, 10, 5);
+        $pdf->SetMargins(2, 5, 2);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
         
