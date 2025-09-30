@@ -49,7 +49,7 @@ th {
 }
 
 .student-info td {
-    border: none;
+    border: 1px solid #000;
     padding: 2px 5px;
 }
 
@@ -91,7 +91,6 @@ th {
     .sheet {
         width: 210mm;
         min-height: 296mm;
-        padding: 10mm;
     }
 }
 </style>
