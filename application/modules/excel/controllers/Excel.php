@@ -8396,9 +8396,6 @@ class Excel extends CI_Controller {
                         
                         $faculty = $this->db->from('tb_mas_faculty')->like(array('strLastname' => $facultyLastName, 'strFirstName' => $facultyFirstName))->get()->first_row('array');
                         $subject = $this->db->get_where('tb_mas_subjects',array('strCode' => $row['G']))->first_row('array');
-                        
-                        print_r($faculty);
-                        print_r($subject);
 
                         if($faculty && $subject){
                             $classlistID = '';
@@ -8416,7 +8413,7 @@ class Excel extends CI_Controller {
                                 ->order_by('intID', 'ASC')
                                 ->get()
                                 ->first_row('array');
-                            
+                            print_r($classlist);
                             if(!$classlist){
                                 $newClasslist = array(
                                     'intFacultyID' => $faculty['intID'],
