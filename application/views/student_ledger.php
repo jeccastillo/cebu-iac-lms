@@ -2,8 +2,8 @@
     <section class="content-header">
         <h1>            
             <small>
-                <a v-if="finance.intUserLevel == 6" style="margin-right:1rem;" class="btn btn-app" :href="base_url + 'finance/view_all_students'"><i class="ion ion-arrow-left-a"></i>All Students</a>
-                <!-- <a style="margin-right:1rem;" class="btn btn-app" @click="printLedgerPDF" href="#"><i class="fa fa-print"></i>Print PDF</a>
+                <a v-if="finance.intUserLevel == 6" style="margin-right:1rem;" class="btn btn-app" :href="base_url + 'finance/view_all_students'"><i class="ion ion-arrow-left-a"></i>All Studentss</a>
+                <a style="margin-right:1rem;" class="btn btn-app" @click="printLedgerPDF" href="#"><i class="fa fa-print"></i>Print PDFf</a>
                 <form ref="print_ledger_form" method="post" :action="base_url + 'pdf/print_student_ledger'" target="_blank" style="display: none;">
                     <input type="hidden" name="student_id" :value="id">
                     <input type="hidden" name="sem" :value="sem">
@@ -12,7 +12,7 @@
                     <input type="hidden" name="student_data" :value="JSON.stringify(student)">
                     <input type="hidden" name="running_balance" :value="running_balance">
                     <input type="hidden" name="running_balance_other" :value="running_balance_other">
-                </form> -->
+                </form>
                 <div class="pull-right">
                     <!-- <p>Select Term Filter</p>
                     <select  @change="filterByTerm($event)" class="form-control" required v-model="sem">
@@ -748,8 +748,6 @@ new Vue({
                 // Update the term_balance to reflect the final balance after sorting
                 this.term_balance = running_balance;
             }
-
-            console.log(this.ledger_term);
 
             this.ledger.push({
                 'ledger_items': this.ledger_term,
