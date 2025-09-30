@@ -8414,16 +8414,6 @@ class Excel extends CI_Controller {
                                 ->order_by('intID', 'ASC')
                                 ->get()
                                 ->first_row('array');
-                            print('CLASSLIST = ');
-                            print_r($classlist);
-                            print(" @SEM : " . $sem);
-                            print(" @faculty : " . $faculty['intID']);
-                            print(" @subject : " . $subject['intID']);
-                            print(" @classname : " . $row['D']);
-                            print(" @year : " . $row['E']);
-                            print(" @section : " . $row['F']);
-                            print_r($student);
-                            die();
 
                             if(!$classlist){
                                 $newClasslist = array(
@@ -8449,8 +8439,6 @@ class Excel extends CI_Controller {
                                 $this->data_poster->post_data('tb_mas_classlist', array('intFinalized' => 2), $classlist['intID']);
                                 $classlistID = $classlist['intID'];
                             }
-
-                            print("classlist ID : " . $classlistID);
 
                             if($classlistID){
                                 $classlistStudent = array(
