@@ -8420,12 +8420,13 @@ class Excel extends CI_Controller {
                             print(" @classname : " . $row['D']);
                             print(" @year : " . $row['E']);
                             print(" @section : " . $row['F']);
+                            die();
 
                             if(!$classlist){
                                 $newClasslist = array(
                                     'intFacultyID' => $faculty['intID'],
                                     'intSubjectID' => $subject['intID'],
-                                    'strClassName' => $row['F'],
+                                    'strClassName' => $row['D'],
                                     'intFinalized' => 2,
                                     'strAcademicYear' => $sem,
                                     'slots' => 0,
