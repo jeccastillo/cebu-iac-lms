@@ -40,6 +40,10 @@ th {
     text-align: center;
 }
 
+tbody .tr{
+    border: 1px solid #000;
+}
+
 /* .student-info {
     margin-bottom: 15px;
 } */
@@ -49,7 +53,7 @@ th {
 }
 
 .student-info td {
-    border: 1px solid #000;
+    border: none;
     padding: 2px 5px;
 }
 
