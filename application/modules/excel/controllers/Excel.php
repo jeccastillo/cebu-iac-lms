@@ -8439,6 +8439,8 @@ class Excel extends CI_Controller {
                                 $classlistID = $classlist['intID'];
                             }
 
+                            print("classlist ID : " . $classlistID);
+
                             if($classlistID){
                                 $classlistStudent = array(
                                     'intStudentID' => $student['intID'],
