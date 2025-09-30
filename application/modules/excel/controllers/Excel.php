@@ -8392,7 +8392,7 @@ class Excel extends CI_Controller {
                         if(isset($facultyName[1])){
                             $facultyName = explode(' ', ltrim($facultyName[1]));
                             $facultyFirstName = $facultyName[0];
-                            print($facultyName);
+                            print_r($facultyName);
                             print($facultyFirstName);
                         }
                         
