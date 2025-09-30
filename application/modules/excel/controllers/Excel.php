@@ -8407,7 +8407,7 @@ class Excel extends CI_Controller {
                                 ->where(array('strAcademicYear' => $sem, 
                                         'intFacultyID' => $faculty['intID'], 
                                         'intSubjectID' => $subject['intID'],
-                                        // 'strClassName' => $row['D'],
+                                        'strClassName' => $row['D'],
                                         'year' => $row['E'],
                                         'strSection' => $row['F']
                                         ))
