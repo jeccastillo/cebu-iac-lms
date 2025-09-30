@@ -8413,13 +8413,14 @@ class Excel extends CI_Controller {
                                 ->order_by('intID', 'ASC')
                                 ->get()
                                 ->first_row('array');
-                            print_r($classlist);
+                            print_r("CLASSLIST = " . $classlist);
                             print(" @SEM : " . $sem);
                             print(" @faculty : " . $faculty['intID']);
                             print(" @subject : " . $subject['intID']);
                             print(" @classname : " . $row['D']);
                             print(" @year : " . $row['D']);
                             print(" @section : " . $row['F']);
+                            
                             if(!$classlist){
                                 $newClasslist = array(
                                     'intFacultyID' => $faculty['intID'],
