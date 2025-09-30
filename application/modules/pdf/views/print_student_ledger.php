@@ -40,9 +40,9 @@ th {
     text-align: center;
 }
 
-.student-info {
+/* .student-info {
     margin-bottom: 15px;
-}
+} */
 
 .student-info table {
     border: none;
@@ -73,14 +73,13 @@ th {
         background: #e0e0e0
     }
 
-    .sheet {
+    /* .sheet {
         background: white;
         box-shadow: 0 .5mm 2mm rgba(0, 0, 0, .3);
         margin: 5mm auto;
         width: 210mm;
         min-height: 296mm;
-        padding: 10mm;
-    }
+    } */
 }
 
 @page {
@@ -104,7 +103,6 @@ th {
             <div style="text-align:center">
                 <h3>iACADEMY Inc.</h3>
                 <h5><?php echo $campus_address; ?></h5>
-                <h5>STUDENT LEDGER</h5>
             </div>
 
             <!-- Student Information -->
