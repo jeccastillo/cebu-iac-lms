@@ -168,7 +168,7 @@ th {
                                         <td style="border: 1px solid #000;" class="amount"><?php 
                                             // Assessment column: can be null for first item, use conditions for others
                                             if($index == 0) {
-                                                echo $item['amount'] ?: '';
+                                                echo number_format($item['amount'], 2) ?: '';
                                             } else {
                                                 $amount_val = floatval(str_replace(',', '', $item['amount']));
                                                 echo (($item['type'] != 'payment' && $item['type'] != 'balance') || ($item['type'] == 'balance' && $amount_val >= 0)) ?  number_format($item['amount'], 2) : '-';
