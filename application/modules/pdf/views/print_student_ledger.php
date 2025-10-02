@@ -132,29 +132,29 @@ th {
                                     <th colspan="13">Tuition</th>
                                 </tr>
                                 <tr>
-                                    <th  style="border: 1px solid #000;">School Year</th>
-                                    <th  style="border: 1px solid #000;">Term/Semester</th>
-                                    <th  style="border: 1px solid #000;">Scholarship</th>
-                                    <th  style="border: 1px solid #000;">Payment Description</th>
-                                    <th  style="border: 1px solid #000;">O.R. Date</th>
-                                    <th  style="border: 1px solid #000;">O.R. Number</th>
-                                    <th  style="border: 1px solid #000;">Invoice Number</th>
-                                    <th  style="border: 1px solid #000;">Remarks</th>
-                                    <th  style="border: 1px solid #000;">Assessment</th>
-                                    <th  style="border: 1px solid #000;">Payment</th>
-                                    <th  style="border: 1px solid #000;">Balance</th>
-                                    <th  style="border: 1px solid #000;">Added/Changed By</th>
-                                    <th  style="border: 1px solid #000;">Cashier/Appointer</th>
+                                    <th style="border: 1px solid #000;">School Year</th>
+                                    <th style="border: 1px solid #000;">Term/Semester</th>
+                                    <th style="border: 1px solid #000;">Scholarship</th>
+                                    <th style="border: 1px solid #000;">Payment Description</th>
+                                    <th style="border: 1px solid #000;">O.R. Date</th>
+                                    <th style="border: 1px solid #000;">O.R. Number</th>
+                                    <th style="border: 1px solid #000;">Invoice Number</th>
+                                    <th style="border: 1px solid #000;">Remarks</th>
+                                    <th style="border: 1px solid #000;">Assessment</th>
+                                    <th style="border: 1px solid #000;">Payment</th>
+                                    <th style="border: 1px solid #000;">Balance</th>
+                                    <th style="border: 1px solid #000;">Added/Changed By</th>
+                                    <th style="border: 1px solid #000;">Cashier/Appointer</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach($term_data['ledger_items'] as $index => $item): ?>
                                     <tr>
                                         <td style="border: 1px solid #000;"><?php echo $item['strYearStart'] . ' - ' . $item['strYearEnd']; ?></td>
-                                        <td  style="border: 1px solid #000;"><?php echo $item['enumSem'] . ' ' . $item['term_label']; ?></td>
-                                        <td  style="border: 1px solid #000;"><?php echo $item['scholarship_name'] ?: ''; ?></td>
-                                        <td  style="border: 1px solid #000;"><?php echo $item['name']; ?></td>
-                                        <td  style="border: 1px solid #000;"><?php 
+                                        <td style="border: 1px solid #000;"><?php echo $item['enumSem'] . ' ' . $item['term_label']; ?></td>
+                                        <td style="border: 1px solid #000;"><?php echo $item['scholarship_name'] ?: ''; ?></td>
+                                        <td style="border: 1px solid #000;"><?php echo $item['name']; ?></td>
+                                        <td style="border: 1px solid #000;"><?php 
                                             // O.R. Date can be null for first item (Tuition assessment)
                                             if($index == 0) {
                                                 echo '';
@@ -162,38 +162,38 @@ th {
                                                 echo $item['date'] ?: '';
                                             }
                                         ?></td>
-                                        <td  style="border: 1px solid #000;"><?php echo $item['or_number'] ?: ''; ?></td>
-                                        <td  style="border: 1px solid #000;"><?php echo $item['invoice_number'] ?: ''; ?></td>
-                                        <td  style="border: 1px solid #000;"><?php echo $item['remarks'] ?: ''; ?></td>
-                                        <td  style="border: 1px solid #000;" class="amount"><?php 
+                                        <td style="border: 1px solid #000;"><?php echo $item['or_number'] ?: ''; ?></td>
+                                        <td style="border: 1px solid #000;"><?php echo $item['invoice_number'] ?: ''; ?></td>
+                                        <td style="border: 1px solid #000;"><?php echo $item['remarks'] ?: ''; ?></td>
+                                        <td style="border: 1px solid #000;" class="amount"><?php 
                                             // Assessment column: can be null for first item, use conditions for others
                                             if($index == 0) {
                                                 echo $item['amount'] ?: '';
                                             } else {
                                                 $amount_val = floatval(str_replace(',', '', $item['amount']));
-                                                echo (($item['type'] != 'payment' && $item['type'] != 'balance') || ($item['type'] == 'balance' && $amount_val >= 0)) ? $item['amount'] : '-';
+                                                echo (($item['type'] != 'payment' && $item['type'] != 'balance') || ($item['type'] == 'balance' && $amount_val >= 0)) ?  number_format($item['amount'], 2) : '-';
                                             }
                                         ?></td>
-                                        <td  style="border: 1px solid #000;" class="amount"><?php 
+                                        <td style="border: 1px solid #000;" class="amount"><?php 
                                             // Payment column: can be null for first item, use conditions for others
                                             if($index == 0) {
                                                 echo '';
                                             } else {
                                                 $amount_val = floatval(str_replace(',', '', $item['amount']));
                                                 if($item['type'] == 'payment' || ($item['type'] == 'balance' && $amount_val < 0)) {
-                                                    echo ($amount_val < 0) ? number_format($amount_val * -1, 2) : $item['amount'];
+                                                    echo ($amount_val < 0) ? number_format($amount_val * -1, 2) :  number_format($item['amount'], 2);
                                                 } else {
                                                     echo '-';
                                                 }
                                             }
                                         ?></td>
-                                        <td  style="border: 1px solid #000;" class="amount"><?php 
+                                        <td style="border: 1px solid #000;" class="amount"><?php 
                                             // Balance column: item.balance < 0 ?"(" + numberWithCommas(item.balance * -1) + ")": numberWithCommas(item.balance)
                                             $balance_val = floatval(str_replace(',', '', $item['balance']));
-                                            echo ($balance_val < 0) ? '(' . number_format($balance_val * -1, 2) . ')' : $item['balance'];
+                                            echo ($balance_val < 0) ? '(' . number_format($balance_val * -1, 2) . ')' :  number_format($item['balance'], 2);
                                         ?></td>
-                                        <td  style="border: 1px solid #000;"><?php echo ($item['added_by'] != 0) ? 'Manually Generated' : 'System Generated'; ?></td>
-                                        <td  style="border: 1px solid #000;"><?php 
+                                        <td style="border: 1px solid #000;"><?php echo ($item['added_by'] != 0) ? 'Manually Generated' : 'System Generated'; ?></td>
+                                        <td style="border: 1px solid #000;"><?php 
                                             // Cashier can be null for first item (Tuition assessment)
                                             if($index == 0) {
                                                 echo '';
@@ -208,7 +208,7 @@ th {
                                     </tr>
                                 <?php endforeach; ?>
                                 <tr class="total-row">
-                                    <td colspan="11" class="amount"><strong>Term Balance/Refund: <?php echo $term_data['balance']; ?></strong></td>
+                                    <td colspan="11" class="amount"><strong>Term Balance/Refund: <?php echo number_format($term_data['balance'], 2); ?></strong></td>
                                     <td colspan="3"></td>
                                 </tr>
                             </tbody>
@@ -225,6 +225,7 @@ th {
                     </tr>
                 </table>
             <?php endif; ?>
+            <br><br>
 
             <?php if(!empty($other)): ?>
                 <?php foreach($other as $term_data): ?>
@@ -237,34 +238,34 @@ th {
                                     <th colspan="11">Other</th>
                                 </tr>
                                 <tr>
-                                    <th>School Year</th>
-                                    <th>Term/Semester</th>
-                                    <th>Payment Description</th>
-                                    <th>O.R. Date</th>
-                                    <th>O.R. Number</th>
-                                    <th>Invoice Number</th>
-                                    <th>Remarks</th>
-                                    <th>Assessment</th>
-                                    <th>Payment</th>
-                                    <th>Added/Changed By</th>
-                                    <th>Cashier</th>
-                                    <th>Delete</th>
+                                    <th style="border: 1px solid #000;">School Year</th>
+                                    <th style="border: 1px solid #000;">Term/Semester</th>
+                                    <th style="border: 1px solid #000;">Payment Description</th>
+                                    <th style="border: 1px solid #000;">O.R. Date</th>
+                                    <th style="border: 1px solid #000;">O.R. Number</th>
+                                    <th style="border: 1px solid #000;">Invoice Number</th>
+                                    <th style="border: 1px solid #000;">Remarks</th>
+                                    <th style="border: 1px solid #000;">Assessment</th>
+                                    <th style="border: 1px solid #000;">Payment</th>
+                                    <th style="border: 1px solid #000;">Added/Changed By</th>
+                                    <th style="border: 1px solid #000;">Cashier</th>
+                                    <th style="border: 1px solid #000;">Delete</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach($term_data['ledger_items'] as $item): ?>
                                     <tr>
-                                        <td><?php echo $item['strYearStart'] . ' - ' . $item['strYearEnd']; ?></td>
-                                        <td><?php echo $item['enumSem'] . ' ' . $item['term_label']; ?></td>
-                                        <td><?php echo $item['name']; ?></td>
-                                        <td><?php echo $item['date']; ?></td>
-                                        <td><?php echo $item['or_number'] ?: ''; ?></td>
-                                        <td><?php echo $item['invoice_number'] ?: ''; ?></td>
-                                        <td><?php echo $item['remarks'] ?: ''; ?></td>
-                                        <td class="amount"><?php echo ($item['type'] != 'payment') ? $item['amount'] : '-'; ?></td>
-                                        <td class="amount"><?php echo ($item['type'] == 'payment') ? $item['amount'] : '-'; ?></td>
-                                        <td><?php echo ($item['added_by'] != 0) ? ($item['strLastname'] . ' ' . $item['strFirstname']) : 'System Generated'; ?></td>
-                                        <td><?php echo isset($cashier_names[$item['cashier']]) ? $cashier_names[$item['cashier']] : $item['cashier']; ?></td>
+                                        <td style="border: 1px solid #000;"><?php echo $item['strYearStart'] . ' - ' . $item['strYearEnd']; ?></td>
+                                        <td style="border: 1px solid #000;"><?php echo $item['enumSem'] . ' ' . $item['term_label']; ?></td>
+                                        <td style="border: 1px solid #000;"><?php echo $item['name']; ?></td>
+                                        <td style="border: 1px solid #000;"><?php echo $item['date']; ?></td>
+                                        <td style="border: 1px solid #000;"><?php echo $item['or_number'] ?: ''; ?></td>
+                                        <td style="border: 1px solid #000;"><?php echo $item['invoice_number'] ?: ''; ?></td>
+                                        <td style="border: 1px solid #000;"><?php echo $item['remarks'] ?: ''; ?></td>
+                                        <td style="border: 1px solid #000;" class="amount"><?php echo ($item['type'] != 'payment') ? $item['amount'] : '-'; ?></td>
+                                        <td style="border: 1px solid #000;" class="amount"><?php echo ($item['type'] == 'payment') ? $item['amount'] : '-'; ?></td>
+                                        <td style="border: 1px solid #000;"><?php echo ($item['added_by'] != 0) ? ($item['strLastname'] . ' ' . $item['strFirstname']) : 'System Generated'; ?></td>
+                                        <td style="border: 1px solid #000;"><?php echo isset($cashier_names[$item['cashier']]) ? $cashier_names[$item['cashier']] : $item['cashier']; ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
