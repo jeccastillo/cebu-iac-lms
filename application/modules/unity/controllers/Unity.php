@@ -1778,6 +1778,7 @@ class Unity extends CI_Controller {
         $data['units_left'] =  $curriculum_units - $assessment_units_earned - $credited_units;
         $data['data'] = $terms;
 
+        print_r($data);
         echo json_encode($data);
 
     }
