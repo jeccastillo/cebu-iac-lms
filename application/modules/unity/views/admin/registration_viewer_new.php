@@ -245,7 +245,7 @@
                                                     <div v-if="description == 'Tuition Fee'"
                                                         class="form-group">
                                                         <label>Particulars:</label>
-                                                        <select required class="form-control"
+                                                        <select class="form-control"
                                                             v-model="description_other">
                                                             <option v-if="isInvoice" value="full">
                                                                 Full Tuition</option>
@@ -257,7 +257,7 @@
                                                     </div>
                                                     <div v-else class="form-group">
                                                         <label>Particulars:</label>
-                                                        <select required class="form-control"
+                                                        <select class="form-control"
                                                             v-model="description_other">
                                                             <option v-for="p in particulars"
                                                                 :value="p.name">{{p.name}}</option>
