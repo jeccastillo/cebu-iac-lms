@@ -15,7 +15,8 @@
                         <!-- Add the bg color to the header using any of the bg-* classes -->
                         <div class="widget-user-header bg-red">
                             <div class="pull-right" style="margin-left:1rem;">
-                                <select class="form-control" @change="selectTerm($event)" v-model="request.sem">
+                                <select class="form-control" @change="selectTerm($event)"
+                                    v-model="request.sem">
                                     <option v-for="s in sy" :value="s.intID">
                                         {{ s.term_student_type}} {{ s.enumSem }} {{ s.term_label }}
                                         {{ s.strYearStart }} - {{ s.strYearEnd }}
@@ -24,7 +25,7 @@
                             </div>
                             <h3 v-if="payee" class="widget-user-username"
                                 style="text-transform:capitalize;margin-left:0;font-size:1.3em;">
-                                {{ payee.firstname+' '+payee.lastname }}
+                                {{ `${payee.lastname} ${payee.firstname}` }}
                             </h3>
                         </div>
                     </div>
@@ -67,20 +68,23 @@
                                     <td>
                                         <button v-if="payment.or_number" @click="printOR(payment)"
                                             class="btn btn-primary"> Print OR </button>
-                                        <button v-if="payment.invoice_number" @click="printInvoice(payment)"
-                                            class="btn btn-primary">
+                                        <button v-if="payment.invoice_number"
+                                            @click="printInvoice(payment)" class="btn btn-primary">
                                             Print Invoice </button>
-                                        <button v-if="cashier && payment.remarks != 'Voided'" data-toggle="modal"
+                                        <button v-if="cashier && payment.remarks != 'Voided'"
+                                            data-toggle="modal"
                                             @click="or_details.id = payment.id; or_details.status = payment.status; or_details.or_date = payment.or_date;"
                                             data-target="#orDetailsUpdate" class="btn btn-primary">
                                             Update Details </button>
                                         <button
                                             v-if="payment.remarks != 'Voided' && cashier && finance_manager_privilages"
-                                            data-toggle="modal" data-target="#voidPaymentModal" class="btn btn-primary"
+                                            data-toggle="modal" data-target="#voidPaymentModal"
+                                            class="btn btn-primary"
                                             @click="setToVoid(payment.id)">Void/Cancel</button>
                                         <button
                                             v-if="cashier && finance_manager_privilages && payment.status == 'Paid' || payment.status == 'Pending'"
-                                            class="btn btn-danger" @click="deletePayment(payment.id)">Retract
+                                            class="btn btn-danger"
+                                            @click="deletePayment(payment.id)">Retract
                                             Payment</button>
                                     </td>
                                 </tr>
@@ -95,7 +99,8 @@
             <!---row--->
         </div>
         <!---content container--->
-        <form ref="print_or" method="post" :action="base_url + 'pdf/print_updated_or'" target="_blank">
+        <form ref="print_or" method="post" :action="base_url + 'pdf/print_updated_or'"
+            target="_blank">
             <input type="hidden" name="student_name" v-model="or_print.student_name">
             <input type="hidden" name="campus" :value="request.student_campus">
             <input type="hidden" name="cashier_id" v-model="or_print.cashier_id">
@@ -114,7 +119,8 @@
             <input type="hidden" name="transaction_date" v-model="or_print.transaction_date" />
             <input type="hidden" name="type" v-model="or_print.type" />
         </form>
-        <form ref="print_invoice" method="post" :action="base_url + 'pdf/print_invoice/0'" target="_blank">
+        <form ref="print_invoice" method="post" :action="base_url + 'pdf/print_invoice/0'"
+            target="_blank">
             <input type="hidden" name="student_name" v-model="or_print.student_name">
             <input type="hidden" name="slug" v-model="slug">
             <input type="hidden" name="campus" :value="request.student_campus">
@@ -132,10 +138,12 @@
             <input type="hidden" name="sem" v-model="or_print.sem" />
             <input type="hidden" name="transaction_date" v-model="or_print.transaction_date" />
             <input type="hidden" name="type" v-model="or_print.type" />
-            <input type="hidden" name="withholding_tax_percentage" v-model="or_print.withholding_tax_percentage" />
+            <input type="hidden" name="withholding_tax_percentage"
+                v-model="or_print.withholding_tax_percentage" />
             <input type="hidden" name="invoice_amount" v-model="or_print.invoice_amount" />
             <input type="hidden" name="invoice_amount_ves" v-model="or_print.invoice_amount_ves" />
-            <input type="hidden" name="invoice_amount_vzrs" v-model="or_print.invoice_amount_vzrs" />
+            <input type="hidden" name="invoice_amount_vzrs"
+                v-model="or_print.invoice_amount_vzrs" />
             <input type="hidden" name="payee_id" v-model="or_print.payee_id" />
         </form>
         <div class="modal fade" id="orDetailsUpdate" role="dialog">
@@ -150,7 +158,8 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Issued Date <span class="text-danger">*</span> </label>
-                            <input type="date" class="form-control" v-model="or_details.or_date" required />
+                            <input type="date" class="form-control" v-model="or_details.or_date"
+                                required />
                         </div>
                         <div class="form-group">
                             <label>Payment Status</label>
@@ -164,7 +173,8 @@
                     <div class=" modal-footer">
                         <!-- modal footer  -->
                         <button type="submit" class="btn btn-primary">Submit</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default"
+                            data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </form>
@@ -180,13 +190,15 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <textarea class="form-control" v-model="void_reason" required></textarea>
+                            <textarea class="form-control" v-model="void_reason"
+                                required></textarea>
                         </div>
                     </div>
                     <div class=" modal-footer">
                         <!-- modal footer  -->
                         <button type="submit" class="btn btn-primary">Submit</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default"
+                            data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </form>
