@@ -28,7 +28,7 @@
                     $(row).addClass('highlight');
                 }
             },
-            "sAjaxSource": "<?php echo base_url(); ?>index.php/datatables/data_tables_ajax_cs/<?php echo $selected_ay; ?>/<?php echo $program; ?>/<?php echo $dissolved ?>/<?php echo $has_faculty ?>/<?php echo $status ?>",
+            "sAjaxSource": "<?php echo base_url(); ?>index.php/datatables/data_tables_ajax_cs/<?php echo $selected_ay; ?>/<?php echo $program; ?>/<?php echo $dissolved ?>/<?php echo $has_faculty ?>/<?php echo $status ?>/<?php echo $modular ?>",
             "aoColumnDefs":[
                 {
                     "aTargets":[13],
@@ -132,7 +132,56 @@
             
             },
         } );
-        
+
+        // Handle merge button click
+        $("#mergeBtn").click(function(e){
+            var mergeFrom = $("#mergeFrom").val();
+            var mergeTo = $("#mergeTo").val();
+            var sem = $("#select-sem-admin").val();
+            if(mergeFrom == "" || mergeTo == ""){
+                alert("Please select both sections.");
+                return;
+            }
+            if(mergeFrom == mergeTo){
+                alert("Cannot merge to the same section.");
+                return;
+            }
+            $(".loading-img").show();
+            $(".overlay").show();
+            $.ajax({
+                'url':'<?php echo base_url(); ?>unity/merge_subject',
+                'method':'post',
+                'data':{'merge_from':mergeFrom, 'merge_to':mergeTo, 'sem':sem},
+                'dataType':'json',
+                'success':function(ret){
+                    $(".loading-img").hide();
+                    $(".overlay").hide();
+                    if(ret.success){
+                        Swal.fire({
+                            title: "Success",
+                            text: ret.message,
+                            icon: "success"
+                        });
+                        location.reload();
+                    }else{
+                        Swal.fire({
+                            title: "Failed",
+                            text: ret.message,
+                            icon: "error"
+                        });
+                    }
+                },
+                'error':function(){
+                    $(".loading-img").hide();
+                    $(".overlay").hide();
+                    Swal.fire({
+                        title: "Failed",
+                        icon: "error"
+                    });
+                }
+            });
+        });
+
         // Apply the search
         table.columns().every( function () {
             var that = this;
