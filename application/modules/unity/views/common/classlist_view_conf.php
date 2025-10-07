@@ -132,7 +132,44 @@
             
             },
         } );
-        
+
+        // Handle merge button click
+        $("#mergeBtn").click(function(e){
+            var mergeFrom = $("#mergeFrom").val();
+            var mergeTo = $("#mergeTo").val();
+            var sem = $("#select-sem-admin").val();
+            if(mergeFrom == "" || mergeTo == ""){
+                alert("Please select both sections.");
+                return;
+            }
+            if(mergeFrom == mergeTo){
+                alert("Cannot merge to the same section.");
+                return;
+            }
+            $(".loading-img").show();
+            $(".overlay").show();
+            $.ajax({
+                'url':'<?php echo base_url(); ?>unity/merge_subject',
+                'method':'post',
+                'data':{'merge_from':mergeFrom, 'merge_to':mergeTo, 'sem':sem},
+                'dataType':'json',
+                'success':function(ret){
+                    $(".loading-img").hide();
+                    $(".overlay").hide();
+                    if(ret.success){
+                        location.reload();
+                    }else{
+                        alert(ret.error || "Merge failed.");
+                    }
+                },
+                'error':function(){
+                    $(".loading-img").hide();
+                    $(".overlay").hide();
+                    alert("An error occurred.");
+                }
+            });
+        });
+
         // Apply the search
         table.columns().every( function () {
             var that = this;
