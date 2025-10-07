@@ -31,6 +31,12 @@
                                 <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/".$has_faculty."/1" ?>" ><i class="fa fa-list"></i> No Grades Submitted</a>
                                 <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/".$has_faculty."/2" ?>" ><i class="fa fa-list"></i> Midterms Grade Submitted</a>                                                                
                             <?php endif; ?>
+                            <?php if($modular == 0): ?>
+                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/".$has_faculty."/".$status."/1" ?>" ><i class="fa fa-list"></i> Show Modular</a>
+                            <?php else: ?>
+                                <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/".$has_faculty."/".$status."/0" ?>" ><i class="fa fa-list"></i> Show All</a>
+                            <?php endif; ?>
+                                <button type="button" class="btn btn-app" data-toggle="modal" data-target="#mergeClasslistModal"><i class="fa fa-list"></i>Merge Classlist</button>
 
                         </small>
                     </h1>
@@ -104,5 +110,43 @@
                 </table>
             </div><!-- /.box-body -->
         </div><!-- /.box -->
+    </div>
+
+    <!-- Merge Classlist Modal -->
+    <div class="modal fade" id="mergeClasslistModal" tabindex="-1" role="dialog" aria-labelledby="mergeClasslistModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="mergeClasslistModalLabel">Merge Classlist</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="mergeForm">
+                        <div class="form-group">
+                            <label for="mergeFrom">Section to Merge</label>
+                            <select class="form-control" id="mergeFrom" name="mergeFrom">
+                                <option value="">Select Section</option>
+                                <?php foreach($classlists as $class): ?>
+                                    <option value="<?php echo $class['intID']; ?>"><?php echo $class['strCode'] . ' - ' . $class['strClassName'].'-'.$class['strSection']; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="mergeTo">Merge To</label>
+                            <select class="form-control" id="mergeTo" name="mergeTo">
+                                <option value="">Select Section</option>
+                                <?php foreach($classlists as $class): ?>
+                                    <option value="<?php echo $class['intID']; ?>"><?php echo $class['strCode'] . ' - ' . $class['strClassName'].'-'.$class['strSection']; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="mergeBtn">Merge</button>
+                </div>
+            </div>
+        </div>
     </div>
 </aside>
