@@ -592,14 +592,15 @@ class Data_fetcher extends CI_Model {
     function getSubjectsInSecondary($id)
     {
         $subjects = $this->db
-                         ->select('tb_mas_curriculum_second.intID,tb_mas_subjects.strCode,tb_mas_subjects.strUnits,tb_mas_subjects.intID as intSubjectID,tb_mas_subjects.strDescription,tb_mas_subjects.intLab, tb_mas_subjects.intLectHours,tb_mas_subjects.strUnits,include_gwa,tb_mas_curriculum_second.type')
+                         ->select('tb_mas_curriculum_second.intID,subj1.strCode,subj1.strUnits,subj1.intID as intSubjectID,subj1.strDescription,subj1.intLab, subj1.intLectHours,subj1.strUnits,subj1.include_gwa,tb_mas_curriculum_second.type, subj2.strCode as strCodeEquivalent')
                          ->from('tb_mas_curriculum_second')
-                         ->join('tb_mas_subjects','tb_mas_subjects.intID = tb_mas_curriculum_second.intSubjectID')
+                         ->join('tb_mas_subjects subj1','subj1.intID = tb_mas_curriculum_second.intSubjectID')
+                         ->join('tb_mas_subjects subj2','subj2.intID = tb_mas_curriculum_second.equivalentSubjectID')
                          ->where('tb_mas_curriculum_second.intCurriculumID',$id)
-                         ->order_by('tb_mas_subjects.strCode asc')
+                         ->order_by('subj1.strCode asc')
                          ->get()
                          ->result_array();
-        
+
         return $subjects;
     }
 
@@ -997,9 +998,10 @@ class Data_fetcher extends CI_Model {
                 if($sem_sel!=null)
                         $this->db->where(array('strAcademicYear'=>$sem_sel));
                 if($limit != null)
-                    $this->db->limit($limit);
-                 
+                    $this->db->limit($limit); 
+
                 return $this->db
+                        ->order_by('tb_mas_subjects.strCode','asc')
                         ->group_by('tb_mas_classlist.intID')
                         ->get()
                         ->result_array();
@@ -1051,7 +1053,7 @@ class Data_fetcher extends CI_Model {
     {
         $faculty_id = $this->session->userdata("intID");
                     $this->db
-                     ->select("tb_mas_classlist.intID as intID, tb_mas_sy.intID as term_id, grading_system, midterm_start, midterm_end, final_start, final_end, grading_system_id, year, sub_section, strSection, slots, intFacultyID,intSubjectID,strClassName,strCode,intFinalized,strAcademicYear,strFirstname,strLastname,strYearStart,strYearEnd,enumSem,tb_mas_classlist.strUnits,strSignatory1Name,strSignatory2Name,strSignatory1Title,strSignatory2Title,tb_mas_subjects.strDepartment,tb_mas_subjects.strDescription,intWithPayment,classType,term_label,intMajor,term_student_type,is_modular,cl_desc")
+                     ->select("tb_mas_classlist.intID as intID, tb_mas_sy.intID as term_id, grading_system, midterm_start, midterm_end, final_start, final_end, grading_system_id, year, sub_section, strSection, slots, intFacultyID,intSubjectID,strClassName,strCode,intFinalized,strAcademicYear,strFirstname,strLastname,strYearStart,strYearEnd,enumSem,tb_mas_classlist.strUnits,strSignatory1Name,strSignatory2Name,strSignatory1Title,strSignatory2Title,tb_mas_subjects.strDepartment,tb_mas_subjects.strDescription,intWithPayment,classType,term_label,intMajor,term_student_type,is_modular,is_special_class,cl_desc")
                      ->from("tb_mas_classlist")
                      ->join('tb_mas_faculty', 'tb_mas_faculty.intID = tb_mas_classlist.intFacultyID')
                      ->join('tb_mas_subjects', 'tb_mas_subjects.intID = tb_mas_classlist.intSubjectID')
@@ -2543,7 +2545,7 @@ class Data_fetcher extends CI_Model {
         
         $registration =  $this->db->where(array('intStudentID'=>$id, 'intAYID' => $sem))->get('tb_mas_registration')->first_row('array');                                          
         $subjects =  $this->db
-                            ->select("tb_mas_subjects.intID as subjectID,tb_mas_classlist.is_modular,tb_mas_classlist.payment_amount,tb_mas_subjects.intMajor,tb_mas_subjects.isElective, tb_mas_classlist_student.additional_elective")
+                            ->select("tb_mas_subjects.intID as subjectID,tb_mas_classlist.is_modular,tb_mas_classlist.is_special_class,tb_mas_classlist.payment_amount,tb_mas_subjects.intMajor,tb_mas_subjects.isElective, tb_mas_classlist_student.additional_elective")
                             ->from("tb_mas_classlist_student")
                             ->where(array("intStudentID"=>$id,"strAcademicYear"=>$sem,"tb_mas_classlist.intWithPayment"=>"0"))
                             ->join('tb_mas_classlist', 'tb_mas_classlist.intID = tb_mas_classlist_student.intClasslistID')
@@ -2655,6 +2657,7 @@ class Data_fetcher extends CI_Model {
             $discounts = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
                 ->where(array('syid'=>$syid,'student_id'=>$student['intID'],'deduction_type'=>'discount','tb_mas_student_discount.status'=>'applied'))
                 ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
+                ->order_by('date_applied','asc')
                 ->get('tb_mas_student_discount')
                 ->result();
                 
@@ -2662,6 +2665,7 @@ class Data_fetcher extends CI_Model {
             $discounts = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
                 ->where(array('intID'=>$discount,'syid'=>$syid,'student_id'=>$student['intID']))
                 ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
+                ->order_by('date_applied','asc')
                 ->get('tb_mas_student_discount')
                 ->result(); 
         }
@@ -2671,25 +2675,27 @@ class Data_fetcher extends CI_Model {
             $discount_array[] = $disc;
         }
 
-        if($sch == 0){
-            $scholarships = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
-                ->where(array('syid'=>$syid,'student_id'=>$student['intID'],'deduction_type'=>'scholarship','deduction_from'=>'in-house','tb_mas_student_discount.status'=>'applied'))
-                ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
-                ->get('tb_mas_student_discount')
-                ->result();             
-            $scholarships_external = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
-                ->where(array('syid'=>$syid,'student_id'=>$student['intID'],'deduction_type'=>'scholarship','deduction_from'=>'external','tb_mas_student_discount.status'=>'applied'))
-                ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
-                ->get('tb_mas_student_discount')
-                ->result();             
-        }
-        else{                                              
-            $scholarships = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
-                ->where(array('intID'=>$sch,'syid'=>$syid,'student_id'=>$student['intID']))
-                ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
-                ->get('tb_mas_student_discount')
-                ->result(); 
-        }
+        // if($sch == 0){
+        $scholarships = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
+            ->where(array('syid'=>$syid,'student_id'=>$student['intID'],'deduction_type'=>'scholarship','deduction_from'=>'in-house','tb_mas_student_discount.status'=>'applied'))
+            ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
+            ->order_by('date_applied','asc')
+            ->get('tb_mas_student_discount')
+            ->result();             
+        $scholarships_external = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
+            ->where(array('syid'=>$syid,'student_id'=>$student['intID'],'deduction_type'=>'scholarship','deduction_from'=>'external','tb_mas_student_discount.status'=>'applied'))
+            ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
+            ->order_by('date_applied','asc')
+            ->get('tb_mas_student_discount')
+            ->result();             
+        // }
+        // else{                                              
+        //     $scholarships = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
+        //         ->where(array('intID'=>$sch,'syid'=>$syid,'student_id'=>$student['intID']))
+        //         ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
+        //         ->get('tb_mas_student_discount')
+        //         ->result(); 
+        // }
 
         foreach($scholarships as $disc){
             $disc->date_applied = date('M j, Y',strtotime($disc->date_applied));
@@ -2791,16 +2797,23 @@ class Data_fetcher extends CI_Model {
                                     ->get()
                                     ->result_array());                       
                 
-                //Checks if subject is NSTP nstp fee is different from normal fee                                
-                if($class['isNSTP']){
+                // Special Class handling:
+                // If the subject is a special class, tuition is computed as 3x per lecture hour.
+                // Otherwise, apply NSTP or regular per-unit computation.
+
+                if (isset($subj['is_special_class']) && $subj['is_special_class']) {
+                    $hours = intval($class['intLectHours']);
+                    $tuition += ($hours * 3) * $unit_fee;
+                } elseif($class['isNSTP']){
                     $nstp_fee = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'nstp'))
                     ->get('tb_mas_tuition_year_misc')->first_row('array');
                     $nstp_fee = getExtraFee($nstp_fee, $class_type, 'misc');
 
                     $tuition += intval($class['strTuitionUnits'])*$nstp_fee;
                 }
-                else
+                else{
                     $tuition += intval($class['strTuitionUnits'])*$unit_fee;
+                }
                 
                 if($class['strLabClassification'] != "none"){
                     $lab_term = $this->db->get_where('tb_mas_subjects_labtype',array('subject_id'=>$class['intID'],'term_id'=>$syid))->first_row('array');
@@ -2837,8 +2850,11 @@ class Data_fetcher extends CI_Model {
                     $modular[] = $subj;
                 else
                     $regular[] = $subj;
-
-                if(isset($subj['intMajor']) && isset($subj['isElective']) && isset($subj['additional_elective']))
+                
+                if (isset($subj['is_special_class']) && $subj['is_special_class']) {
+                    $hours = intval($class['intLectHours']);
+                    $tuition += ($hours * 3 * $unit_fee);
+                } else if(isset($subj['intMajor']) && isset($subj['isElective']) && isset($subj['additional_elective']))
                     if($subj['intMajor'] == 1 && $subj['isElective'] == 1 && $subj['additional_elective'] == 1)
                         $elective[] = $subj;
             }
@@ -2934,6 +2950,11 @@ class Data_fetcher extends CI_Model {
                             $ctype = 'regular';
                         
                     }             
+                    
+                    if(strtoupper(trim($m['name'])) == 'ID VALIDATION' && $stype == 'returning'){
+                        $ctype = 'online';
+                    }
+                    
                     $misc_list[$m['name']] = getExtraFee($m, $ctype, 'misc');
                     $total_misc += $misc_list[$m['name']];
                 }
@@ -3202,199 +3223,6 @@ class Data_fetcher extends CI_Model {
         $discount = null;
         
 
-        if(!empty($scholarships_external)){
-            foreach($scholarships_external as $scholar){
-                
-                $tuition_scholarship_installment_current = 0;
-                $tuition_scholarship_installment_current30 = 0;
-                $tuition_scholarship_installment_current50 = 0;
-                $tuition_scholarship_current = 0;
-                $lab_scholarship_installment_current = 0;
-                $lab_scholarship_installment_current30 = 0;
-                $lab_scholarship_installment_current50 = 0;
-                $lab_scholarship_current = 0;
-                $misc_scholarship_current = 0;
-                $other_scholarship_current = 0;
-                $total_scholarship_temp = 0;
-                $total_scholarship_installment_temp = 0;
-                $total_scholarship_installment_temp30 = 0;
-                $total_scholarship_installment_temp50 = 0;
-                $total_assessment_temp = $total_assessment - $scholarship_grand_total - $discount_grand_total;
-                $total_installment_assessment_temp = $total_assessment_installment - $scholarship_installment_grand_total;
-                $total_assessment_temp30 = $total_assessment_installment30 - $scholarship_installment_grand_total30;
-                $total_assessment_temp50 = $total_assessment_installment50 - $scholarship_installment_grand_total50;
-
-                //list of all scholarships and date tagged
-                $scholar_type_external .= $scholar->name . '(' . date("M d, Y", strtotime($scholar->date_applied)) .') ';
-                
-
-                if($scholar->total_assessment_rate > 0 || $scholar->total_assessment_fixed > 0){                
-                    
-
-                    $scholar->total_assessment_rate = intval($scholar->total_assessment_rate);
-                    $scholar->total_assessment_fixed = intval($scholar->total_assessment_fixed);
-
-                    
-                    if($scholar->total_assessment_rate > 0){                        
-                        $total_scholarship_temp += $total_assessment_temp * ($scholar->total_assessment_rate/100);
-                        $total_scholarship_installment_temp += $total_installment_assessment_temp * ($scholar->total_assessment_rate/100);
-                        $total_scholarship_installment_temp30 += $total_assessment_temp30 * ($scholar->total_assessment_rate/100);
-                        $total_scholarship_installment_temp50 += $total_assessment_temp50 * ($scholar->total_assessment_rate/100);
-                        $total_assessment_rate = $total_assessment * ($scholar->total_assessment_rate/100);
-                        
-                        //external
-                        $ar_external_scholarship_full = $total_assessment_temp * ($scholar->total_assessment_rate/100);
-                        $ar_external_scholarship_installment = $total_installment_assessment_temp * ($scholar->total_assessment_rate/100);
-                        $ar_external_scholarship_installment30 = $total_assessment_temp30 * ($scholar->total_assessment_rate/100);
-                        $ar_external_scholarship_installment50 = $total_assessment_temp50 * ($scholar->total_assessment_rate/100);
-                        
-                        $data['sc_rate'] = $total_scholarship_temp * ($scholar->total_assessment_rate/100);
-                        
-                        if($scholar->total_assessment_rate == 100)
-                            $full_scholarship = true;
-                    }
-                    elseif($scholar->total_assessment_fixed > 0){
-                        if($scholar->total_assessment_fixed > $total_assessment){
-                            $total_scholarship_temp += $total_assessment;
-                            $total_scholarship_installment_temp += $total_assessment_installment;                            
-                            $total_assessment_fixed = $total_assessment;
-                            $total_assessment_fixed_installment = $total_assessment_installment;
-                        }
-                        else{
-                            $total_scholarship_temp += $scholar->total_assessment_fixed;
-                            $total_scholarship_installment_temp += $scholar->total_assessment_fixed;
-                            $total_assessment_fixed = $scholar->total_assessment_fixed;
-                            $total_assessment_fixed_installment = $scholar->total_assessment_fixed;
-                        }
-                    }
-                }
-                else{
-                    if($scholar->tuition_fee_rate > 0){
-                        $tuition_scholarship_installment_current = ($tuition + ($tuition * ($tuition_year['installmentIncrease']/100))) * ($scholar->tuition_fee_rate/100);
-                        $tuition_scholarship_installment_current30 = ($tuition + ($tuition * 0.15)) * ($scholar->tuition_fee_rate/100);
-                        $tuition_scholarship_installment_current50 = ($tuition + ($tuition * 0.09)) * ($scholar->tuition_fee_rate/100);
-                        $tuition_scholarship_installment += ($tuition + ($tuition * ($tuition_year['installmentIncrease']/100))) * ($scholar->tuition_fee_rate/100);
-                        $tuition_scholarship_installment30 += ($tuition + ($tuition * 0.15)) * ($scholar->tuition_fee_rate/100);
-                        $tuition_scholarship_installment50 += ($tuition + ($tuition * 0.09)) * ($scholar->tuition_fee_rate/100);
-                        $tuition_scholarship_current = $tuition * ($scholar->tuition_fee_rate/100);
-                        $tuition_scholarship += $tuition * ($scholar->tuition_fee_rate/100);
-                        $tuition_fee_rate += $tuition * ($scholar->tuition_fee_rate/100);
-                       
-                        $ar_external_scholarship_full += $tuition * ($scholar->tuition_fee_rate/100);
-                        $ar_external_scholarship_installment += $tuition_scholarship_installment_current;
-                        $ar_external_scholarship_installment30 += $tuition_scholarship_installment_current30;
-                        $ar_external_scholarship_installment50 += $tuition_scholarship_installment_current50;
-                       
-                        $tuition_fee_installment_rate = $tuition_scholarship_installment * ($scholar->tuition_fee_rate/100);
-                    }
-                    elseif($scholar->tuition_fee_fixed > 0){
-                        if($scholar->tuition_fee_fixed > $tuition){
-                            $tuition_scholarship_current = $tuition;
-                            $tuition_scholarship += $tuition;
-                            $tuition_fee_fixed = $scholar->tuition;
-                        }
-                        else{
-                            $tuition_scholarship_current = $scholar->tuition_fee_fixed;
-                            $tuition_scholarship += $scholar->tuition_fee_fixed;   
-                            $tuition_fee_fixed = $scholar->tuition_fee_fixed;                                    
-                        }
-
-                        $tuition_scholarship_installment_current = $tuition_scholarship;
-                        $tuition_scholarship_installment += $tuition_scholarship;
-                    }
-
-                    $total_scholarship_temp += $tuition_scholarship_current;
-                    $total_scholarship_installment_temp += $tuition_scholarship_installment_current;
-                    $total_scholarship_installment_temp30 += $tuition_scholarship_installment_current30;
-                    $total_scholarship_installment_temp50 += $tuition_scholarship_installment_current50;
-
-                    if($scholar->misc_fee_rate > 0){
-                        $misc_scholarship_current = $total_misc * ($scholar->misc_fee_rate/100);
-                        $misc_scholarship += $total_misc * ($scholar->misc_fee_rate/100);
-                        $misc_fee_rate = $total_misc * ($scholar->misc_fee_rate/100);
-                    }
-                    elseif($scholar->misc_fee_fixed > 0){
-                        if($scholar->misc_fee_fixed > $total_misc){
-                            $misc_scholarship_current = $total_misc;
-                            $misc_scholarship += $total_misc;
-                            $misc_fee_fixed = $total_misc;
-                        }
-                        else{
-                            $misc_scholarship_current = $scholar->misc_fee_fixed;
-                            $misc_scholarship += $scholar->misc_fee_fixed; 
-                            $misc_fee_fixed = $scholar->misc_fee_fixed;                      
-                        }
-                    }
-
-                    $total_scholarship_installment_temp += $misc_scholarship_current;
-                    $total_scholarship_installment_temp30 += $misc_scholarship_current;
-                    $total_scholarship_installment_temp50 += $misc_scholarship_current;
-                    $total_scholarship_temp += $misc_scholarship_current;
-
-                    if($scholar->lab_fee_rate > 0){
-                        $lab_scholarship_installment_current =  ($total_lab + ($total_lab * ($tuition_year['installmentIncrease']/100))) * ($scholar->lab_fee_rate/100);
-                        $lab_scholarship_installment_current30 =  ($total_lab + ($total_lab * 0.15)) * ($scholar->lab_fee_rate/100);
-                        $lab_scholarship_installment_current50 =  ($total_lab + ($total_lab * 0.09)) * ($scholar->lab_fee_rate/100);
-                        $lab_scholarship_installment += ($total_lab + ($total_lab * ($tuition_year['installmentIncrease']/100))) * ($scholar->lab_fee_rate/100);
-                        $lab_scholarship_current = $total_lab * ($scholar->lab_fee_rate/100);
-                        $lab_scholarship += $total_lab * ($scholar->lab_fee_rate/100);
-                    }
-                    elseif($scholar->lab_fee_fixed > 0){
-                        if($scholar->lab_fee_fixed > $total_lab){
-                            $lab_scholarship_current = $total_lab;
-                            $lab_scholarship += $total_lab;
-                        }
-                        else{
-                            $lab_scholarship_current = $scholar->lab_fee_fixed;
-                            $lab_scholarship += $scholar->lab_fee_fixed;
-                        }
-
-                        $lab_scholarship_installment_current = $lab_scholarship;
-                        $lab_scholarship_installment += $lab_scholarship;
-                    }
-
-                    $total_scholarship_installment_temp += $lab_scholarship_installment_current;
-                    $total_scholarship_installment_temp30 += $lab_scholarship_installment_current30;
-                    $total_scholarship_installment_temp50 += $lab_scholarship_installment_current50;
-                    $total_scholarship_temp += $lab_scholarship_current;
-
-                    if($scholar->other_fees_rate > 0){
-                        $total_other = $total_foreign + $total_new_student;
-                        $other_scholarship_current = $total_other * ($scholar->other_fees_rate/100);
-                        $other_scholarship += $total_other * ($scholar->other_fees_rate/100);
-                    }
-                    elseif($scholar->other_fees_fixed > 0){
-                        if($scholar->other_fees_fixed > $total_lab){
-                            $other_scholarship_current = $total_other;
-                            $other_scholarship += $total_other;
-                        }
-                        else{
-                            $other_scholarship_current = $scholar->other_fees_fixed;
-                            $other_scholarship += $scholar->other_fees_fixed;
-                        }
-                    }
-
-                    $total_scholarship_temp += $other_scholarship_current;
-                    $total_scholarship_installment_temp += $other_scholarship_current;
-                    $total_scholarship_installment_temp30 += $other_scholarship_current;
-                    $total_scholarship_installment_temp50 += $other_scholarship_current;
-                }
-
-                $total_scholarship[] = $total_scholarship_temp;
-                $total_scholarship_installment[] = $total_scholarship_installment_temp;
-                $total_scholarship_installment30[] = $total_scholarship_installment_temp30;
-                $total_scholarship_installment50[] = $total_scholarship_installment_temp50;
-
-                $scholarship_installment_grand_total += $total_scholarship_installment_temp;
-                $scholarship_installment_grand_total30 += $total_scholarship_installment_temp30;
-                $scholarship_installment_grand_total50 += $total_scholarship_installment_temp50;
-                       
-                $scholarship_grand_total += $total_scholarship_temp;
-
-                $ctr++;
-            }
-        }
-
         if(!empty($discounts)){
             foreach($discounts as $scholar){
                 
@@ -3611,6 +3439,204 @@ class Data_fetcher extends CI_Model {
                 $discount_installment_grand_total30 += $total_scholarship_installment_temp30;
                 $discount_installment_grand_total50 += $total_scholarship_installment_temp50;
                 $discount_grand_total += $total_scholarship_temp;
+
+                $ctr++;
+            }
+        }
+
+        if(!empty($scholarships_external)){
+            foreach($scholarships_external as $scholar){
+                
+                $tuition_scholarship_installment_current = 0;
+                $tuition_scholarship_installment_current30 = 0;
+                $tuition_scholarship_installment_current50 = 0;
+                $tuition_scholarship_current = 0;
+                $lab_scholarship_installment_current = 0;
+                $lab_scholarship_installment_current30 = 0;
+                $lab_scholarship_installment_current50 = 0;
+                $lab_scholarship_current = 0;
+                $misc_scholarship_current = 0;
+                $other_scholarship_current = 0;
+                $total_scholarship_temp = 0;
+                $total_scholarship_installment_temp = 0;
+                $total_scholarship_installment_temp30 = 0;
+                $total_scholarship_installment_temp50 = 0;
+                $total_assessment_temp = $total_assessment - $scholarship_grand_total - $discount_grand_total;
+                $total_installment_assessment_temp = $total_assessment_installment - $scholarship_installment_grand_total;
+                $total_assessment_temp30 = $total_assessment_installment30 - $scholarship_installment_grand_total30;
+                $total_assessment_temp50 = $total_assessment_installment50 - $scholarship_installment_grand_total50;
+
+                //list of all scholarships and date tagged
+                $scholar_type_external .= $scholar->name . '(' . date("M d, Y", strtotime($scholar->date_applied)) .') ';
+                
+
+                if($scholar->total_assessment_rate > 0 || $scholar->total_assessment_fixed > 0){                
+                    
+
+                    $scholar->total_assessment_rate = intval($scholar->total_assessment_rate);
+                    $scholar->total_assessment_fixed = intval($scholar->total_assessment_fixed);
+
+                    
+                    if($scholar->total_assessment_rate > 0){                        
+                        $total_scholarship_temp += $total_assessment_temp * ($scholar->total_assessment_rate/100);
+                        $total_scholarship_installment_temp += $total_installment_assessment_temp * ($scholar->total_assessment_rate/100);
+                        $total_scholarship_installment_temp30 += $total_assessment_temp30 * ($scholar->total_assessment_rate/100);
+                        $total_scholarship_installment_temp50 += $total_assessment_temp50 * ($scholar->total_assessment_rate/100);
+                        $total_assessment_rate = $total_assessment * ($scholar->total_assessment_rate/100);
+                        
+                        //external
+                        $ar_external_scholarship_full += $total_assessment_temp * ($scholar->total_assessment_rate/100);
+                        $ar_external_scholarship_installment += $total_installment_assessment_temp * ($scholar->total_assessment_rate/100);
+                        $ar_external_scholarship_installment30 += $total_assessment_temp30 * ($scholar->total_assessment_rate/100);
+                        $ar_external_scholarship_installment50 += $total_assessment_temp50 * ($scholar->total_assessment_rate/100);
+
+                        $data['sc_rate'] = $total_scholarship_temp * ($scholar->total_assessment_rate/100);
+                        
+                        if($scholar->total_assessment_rate == 100)
+                            $full_scholarship = true;
+                    }
+                    elseif($scholar->total_assessment_fixed > 0){
+                        if($scholar->total_assessment_fixed > $total_assessment){
+                            $total_scholarship_temp += $total_assessment;
+                            $total_scholarship_installment_temp += $total_assessment_installment;                            
+                            $total_assessment_fixed = $total_assessment;
+                            $total_assessment_fixed_installment = $total_assessment_installment;
+                        }
+                        else{
+                            $total_scholarship_temp += $scholar->total_assessment_fixed;
+                            $total_scholarship_installment_temp += $scholar->total_assessment_fixed;
+                            $total_assessment_fixed = $scholar->total_assessment_fixed;
+                            $total_assessment_fixed_installment = $scholar->total_assessment_fixed;
+                        }
+                        
+                        $ar_external_scholarship_full += $scholar->total_assessment_fixed;
+                        $ar_external_scholarship_installment += $scholar->total_assessment_fixed;
+                        $ar_external_scholarship_installment30 += $scholar->total_assessment_fixed;
+                        $ar_external_scholarship_installment50 += $scholar->total_assessment_fixed;
+                    }
+                }
+                else{
+                    if($scholar->tuition_fee_rate > 0){
+                        $tuition_scholarship_installment_current = ($tuition + ($tuition * ($tuition_year['installmentIncrease']/100))) * ($scholar->tuition_fee_rate/100);
+                        $tuition_scholarship_installment_current30 = ($tuition + ($tuition * 0.15)) * ($scholar->tuition_fee_rate/100);
+                        $tuition_scholarship_installment_current50 = ($tuition + ($tuition * 0.09)) * ($scholar->tuition_fee_rate/100);
+                        $tuition_scholarship_installment += ($tuition + ($tuition * ($tuition_year['installmentIncrease']/100))) * ($scholar->tuition_fee_rate/100);
+                        $tuition_scholarship_installment30 += ($tuition + ($tuition * 0.15)) * ($scholar->tuition_fee_rate/100);
+                        $tuition_scholarship_installment50 += ($tuition + ($tuition * 0.09)) * ($scholar->tuition_fee_rate/100);
+                        $tuition_scholarship_current = $tuition * ($scholar->tuition_fee_rate/100);
+                        $tuition_scholarship += $tuition * ($scholar->tuition_fee_rate/100);
+                        $tuition_fee_rate += $tuition * ($scholar->tuition_fee_rate/100);
+                       
+                        $ar_external_scholarship_full += $tuition * ($scholar->tuition_fee_rate/100);
+                        $ar_external_scholarship_installment += $tuition_scholarship_installment_current;
+                        $ar_external_scholarship_installment30 += $tuition_scholarship_installment_current30;
+                        $ar_external_scholarship_installment50 += $tuition_scholarship_installment_current50;
+                       
+                        $tuition_fee_installment_rate = $tuition_scholarship_installment * ($scholar->tuition_fee_rate/100);
+                    }
+                    elseif($scholar->tuition_fee_fixed > 0){
+                        if($scholar->tuition_fee_fixed > $tuition){
+                            $tuition_scholarship_current = $tuition;
+                            $tuition_scholarship += $tuition;
+                            $tuition_fee_fixed = $scholar->tuition;
+                        }
+                        else{
+                            $tuition_scholarship_current = $scholar->tuition_fee_fixed;
+                            $tuition_scholarship += $scholar->tuition_fee_fixed;   
+                            $tuition_fee_fixed = $scholar->tuition_fee_fixed;                                    
+                        }
+
+                        $tuition_scholarship_installment_current = $tuition_scholarship;
+                        $tuition_scholarship_installment += $tuition_scholarship;
+                    }
+
+                    $total_scholarship_temp += $tuition_scholarship_current;
+                    $total_scholarship_installment_temp += $tuition_scholarship_installment_current;
+                    $total_scholarship_installment_temp30 += $tuition_scholarship_installment_current30;
+                    $total_scholarship_installment_temp50 += $tuition_scholarship_installment_current50;
+
+                    if($scholar->misc_fee_rate > 0){
+                        $misc_scholarship_current = $total_misc * ($scholar->misc_fee_rate/100);
+                        $misc_scholarship += $total_misc * ($scholar->misc_fee_rate/100);
+                        $misc_fee_rate = $total_misc * ($scholar->misc_fee_rate/100);
+                    }
+                    elseif($scholar->misc_fee_fixed > 0){
+                        if($scholar->misc_fee_fixed > $total_misc){
+                            $misc_scholarship_current = $total_misc;
+                            $misc_scholarship += $total_misc;
+                            $misc_fee_fixed = $total_misc;
+                        }
+                        else{
+                            $misc_scholarship_current = $scholar->misc_fee_fixed;
+                            $misc_scholarship += $scholar->misc_fee_fixed; 
+                            $misc_fee_fixed = $scholar->misc_fee_fixed;                      
+                        }
+                    }
+
+                    $total_scholarship_installment_temp += $misc_scholarship_current;
+                    $total_scholarship_installment_temp30 += $misc_scholarship_current;
+                    $total_scholarship_installment_temp50 += $misc_scholarship_current;
+                    $total_scholarship_temp += $misc_scholarship_current;
+
+                    if($scholar->lab_fee_rate > 0){
+                        $lab_scholarship_installment_current =  ($total_lab + ($total_lab * ($tuition_year['installmentIncrease']/100))) * ($scholar->lab_fee_rate/100);
+                        $lab_scholarship_installment_current30 =  ($total_lab + ($total_lab * 0.15)) * ($scholar->lab_fee_rate/100);
+                        $lab_scholarship_installment_current50 =  ($total_lab + ($total_lab * 0.09)) * ($scholar->lab_fee_rate/100);
+                        $lab_scholarship_installment += ($total_lab + ($total_lab * ($tuition_year['installmentIncrease']/100))) * ($scholar->lab_fee_rate/100);
+                        $lab_scholarship_current = $total_lab * ($scholar->lab_fee_rate/100);
+                        $lab_scholarship += $total_lab * ($scholar->lab_fee_rate/100);
+                    }
+                    elseif($scholar->lab_fee_fixed > 0){
+                        if($scholar->lab_fee_fixed > $total_lab){
+                            $lab_scholarship_current = $total_lab;
+                            $lab_scholarship += $total_lab;
+                        }
+                        else{
+                            $lab_scholarship_current = $scholar->lab_fee_fixed;
+                            $lab_scholarship += $scholar->lab_fee_fixed;
+                        }
+
+                        $lab_scholarship_installment_current = $lab_scholarship;
+                        $lab_scholarship_installment += $lab_scholarship;
+                    }
+
+                    $total_scholarship_installment_temp += $lab_scholarship_installment_current;
+                    $total_scholarship_installment_temp30 += $lab_scholarship_installment_current30;
+                    $total_scholarship_installment_temp50 += $lab_scholarship_installment_current50;
+                    $total_scholarship_temp += $lab_scholarship_current;
+
+                    if($scholar->other_fees_rate > 0){
+                        $total_other = $total_foreign + $total_new_student;
+                        $other_scholarship_current = $total_other * ($scholar->other_fees_rate/100);
+                        $other_scholarship += $total_other * ($scholar->other_fees_rate/100);
+                    }
+                    elseif($scholar->other_fees_fixed > 0){
+                        if($scholar->other_fees_fixed > $total_lab){
+                            $other_scholarship_current = $total_other;
+                            $other_scholarship += $total_other;
+                        }
+                        else{
+                            $other_scholarship_current = $scholar->other_fees_fixed;
+                            $other_scholarship += $scholar->other_fees_fixed;
+                        }
+                    }
+
+                    $total_scholarship_temp += $other_scholarship_current;
+                    $total_scholarship_installment_temp += $other_scholarship_current;
+                    $total_scholarship_installment_temp30 += $other_scholarship_current;
+                    $total_scholarship_installment_temp50 += $other_scholarship_current;
+                }
+
+                $total_scholarship[] = $total_scholarship_temp;
+                $total_scholarship_installment[] = $total_scholarship_installment_temp;
+                $total_scholarship_installment30[] = $total_scholarship_installment_temp30;
+                $total_scholarship_installment50[] = $total_scholarship_installment_temp50;
+
+                $scholarship_installment_grand_total += $total_scholarship_installment_temp;
+                $scholarship_installment_grand_total30 += $total_scholarship_installment_temp30;
+                $scholarship_installment_grand_total50 += $total_scholarship_installment_temp50;
+                       
+                $scholarship_grand_total += $total_scholarship_temp;
 
                 $ctr++;
             }
@@ -4215,7 +4241,7 @@ class Data_fetcher extends CI_Model {
         // print_r($cl);
 
         $cl =  $this->db
-                    ->select("tb_mas_classlist_student.intCSID,intClassListID,strCode,strSection,intSubjectID,year,sub_section, strClassName, intLab, intLectHours, tb_mas_subjects.strDescription,floatFinalGrade as v3,floatMidtermGrade as v2, floatFinalsGrade as semFinalGrade, intFinalized,enumStatus,strRemarks,tb_mas_faculty.intID as facID, tb_mas_faculty.strFirstname,tb_mas_faculty.strLastname, tb_mas_subjects.strUnits, tb_mas_subjects.intBridging, tb_mas_classlist.intID as classlistID, tb_mas_subjects.intID as subjectID,include_gwa,elective_classlist_id,payment_amount,is_modular,enlisted_user, tb_mas_subjects.intMajor, tb_mas_subjects.isElective, tb_mas_classlist_student.additional_elective")                                        
+                    ->select("tb_mas_classlist_student.intCSID,intClassListID,strCode,strSection,intSubjectID,year,sub_section, strClassName, intLab, intLectHours, tb_mas_subjects.strDescription,floatFinalGrade as v3,floatMidtermGrade as v2, floatFinalsGrade as semFinalGrade, intFinalized,enumStatus,strRemarks,tb_mas_faculty.intID as facID, tb_mas_faculty.strFirstname,tb_mas_faculty.strLastname, tb_mas_subjects.strUnits, tb_mas_subjects.intBridging, tb_mas_classlist.intID as classlistID, tb_mas_subjects.intID as subjectID,include_gwa,elective_classlist_id,payment_amount,is_modular,is_special_class,enlisted_user, tb_mas_subjects.intMajor, tb_mas_subjects.isElective, tb_mas_classlist_student.additional_elective")                                        
                     ->from("tb_mas_classlist_student")            
                     ->where(array("intStudentID"=>$id,"strAcademicYear"=>$classlist,'isDissolved'=>0))                                            
                     ->join('tb_mas_classlist', 'tb_mas_classlist.intID = tb_mas_classlist_student.intClasslistID')
@@ -5138,791 +5164,4 @@ class Data_fetcher extends CI_Model {
         return $results;
         
     }
-
-    // Room Reservation Methods
-    function getAllReservations($filters = array())
-    {
-        $this->db->select('r.*, c.strRoomCode, c.description as roomDescription, f.strFirstname, f.strLastname, a.strFirstname as approverFirstname, a.strLastname as approverLastname')
-                 ->from('tb_mas_room_reservations r')
-                 ->join('tb_mas_classrooms c', 'r.intRoomID = c.intID')
-                 ->join('tb_mas_faculty f', 'r.intFacultyID = f.intID')
-                 ->join('tb_mas_faculty a', 'r.intApprovedBy = a.intID', 'left');
-
-        // Apply filters
-        if (isset($filters['status']) && $filters['status'] != '') {
-            $this->db->where('r.enumStatus', $filters['status']);
-        }
-        
-        if (isset($filters['date_from']) && $filters['date_from'] != '') {
-            $this->db->where('r.dteReservationDate >=', $filters['date_from']);
-        }
-        
-        if (isset($filters['date_to']) && $filters['date_to'] != '') {
-            $this->db->where('r.dteReservationDate <=', $filters['date_to']);
-        }
-        
-        if (isset($filters['room_id']) && $filters['room_id'] != '') {
-            $this->db->where('r.intRoomID', $filters['room_id']);
-        }
-
-        return $this->db->order_by('r.dteReservationDate', 'desc')
-                        ->order_by('r.dteStartTime', 'asc')
-                        ->get()
-                        ->result_array();
-    }
-
-    function getReservationById($id)
-    {
-        return $this->db->select('r.*, c.strRoomCode, c.description as roomDescription, f.strFirstname, f.strLastname, a.strFirstname as approverFirstname, a.strLastname as approverLastname')
-                        ->from('tb_mas_room_reservations r')
-                        ->join('tb_mas_classrooms c', 'r.intRoomID = c.intID')
-                        ->join('tb_mas_faculty f', 'r.intFacultyID = f.intID')
-                        ->join('tb_mas_faculty a', 'r.intApprovedBy = a.intID', 'left')
-                        ->where('r.intReservationID', $id)
-                        ->get()
-                        ->first_row('array');
-    }
-
-    function getReservationsByFaculty($facultyId)
-    {
-        return $this->db->select('r.*, c.strRoomCode, c.description as roomDescription, a.strFirstname as approverFirstname, a.strLastname as approverLastname')
-                        ->from('tb_mas_room_reservations r')
-                        ->join('tb_mas_classrooms c', 'r.intRoomID = c.intID')
-                        ->join('tb_mas_faculty a', 'r.intApprovedBy = a.intID', 'left')
-                        ->where('r.intFacultyID', $facultyId)
-                        ->order_by('r.dteReservationDate', 'desc')
-                        ->order_by('r.dteStartTime', 'asc')
-                        ->get()
-                        ->result_array();
-    }
-
-    function getTodaysReservations()
-    {
-        $today = date('Y-m-d');
-        return $this->db->select('r.*, c.strRoomCode, c.description as roomDescription, f.strFirstname, f.strLastname')
-                        ->from('tb_mas_room_reservations r')
-                        ->join('tb_mas_classrooms c', 'r.intRoomID = c.intID')
-                        ->join('tb_mas_faculty f', 'r.intFacultyID = f.intID')
-                        ->where('r.dteReservationDate', $today)
-                        ->where('r.enumStatus', 'approved')
-                        ->order_by('r.dteStartTime', 'asc')
-                        ->get()
-                        ->result_array();
-    }
-
-    function getPendingReservations()
-    {
-        return $this->db->select('r.*, c.strRoomCode, c.description as roomDescription, f.strFirstname, f.strLastname')
-                        ->from('tb_mas_room_reservations r')
-                        ->join('tb_mas_classrooms c', 'r.intRoomID = c.intID')
-                        ->join('tb_mas_faculty f', 'r.intFacultyID = f.intID')
-                        ->where('r.enumStatus', 'pending')
-                        ->order_by('r.dteCreated', 'asc')
-                        ->get()
-                        ->result_array();
-    }
-
-    function checkReservationConflicts($data, $excludeId = null)
-    {
-        $conflicts = array();
-        
-        // Check for existing reservations
-        $this->db->select('r.*, c.strRoomCode, f.strFirstname, f.strLastname')
-                 ->from('tb_mas_room_reservations r')
-                 ->join('tb_mas_classrooms c', 'r.intRoomID = c.intID')
-                 ->join('tb_mas_faculty f', 'r.intFacultyID = f.intID')
-                 ->where('r.intRoomID', $data['intRoomID'])
-                 ->where('r.dteReservationDate', $data['dteReservationDate'])
-                 ->where('r.enumStatus !=', 'cancelled')
-                 ->where('r.enumStatus !=', 'rejected')
-                 ->where("((r.dteStartTime < '{$data['dteEndTime']}' AND r.dteEndTime > '{$data['dteStartTime']}')", null, false);
-
-        if ($excludeId) {
-            $this->db->where('r.intReservationID !=', $excludeId);
-        }
-
-        $reservationConflicts = $this->db->get()->result_array();
-        
-        foreach ($reservationConflicts as $conflict) {
-            $conflicts[] = array(
-                'type' => 'reservation',
-                'message' => 'Conflicts with existing reservation by ' . $conflict['strFirstname'] . ' ' . $conflict['strLastname'] . 
-                           ' from ' . date('g:i A', strtotime($conflict['dteStartTime'])) . 
-                           ' to ' . date('g:i A', strtotime($conflict['dteEndTime'])),
-                'details' => $conflict
-            );
-        }
-
-        // Check for scheduled classes
-        $active_sem = $this->get_active_sem();
-        if ($active_sem) {
-            // Get day of week (1=Monday, 7=Sunday)
-            $dayOfWeek = date('N', strtotime($data['dteReservationDate']));
-            
-            $this->db->select('rs.*, c.strRoomCode, cl.strClassName, s.strCode, f.strFirstname, f.strLastname')
-                     ->from('tb_mas_room_schedule rs')
-                     ->join('tb_mas_classrooms c', 'rs.intRoomID = c.intID')
-                     ->join('tb_mas_classlist cl', 'rs.strScheduleCode = cl.intID')
-                     ->join('tb_mas_subjects s', 'cl.intSubjectID = s.intID')
-                     ->join('tb_mas_faculty f', 'cl.intFacultyID = f.intID')
-                     ->where('rs.intRoomID', $data['intRoomID'])
-                     ->where('rs.strDay', $dayOfWeek)
-                     ->where('rs.intSem', $active_sem['intID'])
-                     ->where("((rs.dteStart < '{$data['dteEndTime']}' AND rs.dteEnd > '{$data['dteStartTime']}')", null, false);
-
-            $scheduleConflicts = $this->db->get()->result_array();
-            
-            foreach ($scheduleConflicts as $conflict) {
-                $conflicts[] = array(
-                    'type' => 'schedule',
-                    'message' => 'Conflicts with scheduled class ' . $conflict['strCode'] . ' (' . $conflict['strClassName'] . ') ' .
-                               'from ' . date('g:i A', strtotime($conflict['dteStart'])) . 
-                               ' to ' . date('g:i A', strtotime($conflict['dteEnd'])),
-                    'details' => $conflict
-                );
-            }
-        }
-
-        return $conflicts;
-    }
-
-    function getAvailableRooms($date, $startTime, $endTime)
-    {
-        // Get all classrooms
-        $allRooms = $this->db->select('intID, strRoomCode, description, enumType')
-                            ->from('tb_mas_classrooms')
-                            ->order_by('strRoomCode')
-                            ->get()
-                            ->result_array();
-
-        $availableRooms = array();
-
-        foreach ($allRooms as $room) {
-            // Check if room has conflicts
-            $conflicts = $this->checkReservationConflicts(array(
-                'intRoomID' => $room['intID'],
-                'dteReservationDate' => $date,
-                'dteStartTime' => $startTime,
-                'dteEndTime' => $endTime
-            ));
-
-            if (empty($conflicts)) {
-                $availableRooms[] = $room;
-            }
-        }
-
-        return $availableRooms;
-    }
-
-    function getReservationStats($facultyId = null)
-    {
-        $stats = array();
-        
-        // Total reservations
-        $this->db->from('tb_mas_room_reservations');
-        if ($facultyId) {
-            $this->db->where('intFacultyID', $facultyId);
-        }
-        $stats['total'] = $this->db->count_all_results();
-
-        // Pending reservations
-        $this->db->from('tb_mas_room_reservations');
-        $this->db->where('enumStatus', 'pending');
-        if ($facultyId) {
-            $this->db->where('intFacultyID', $facultyId);
-        }
-        $stats['pending'] = $this->db->count_all_results();
-
-        // Approved reservations
-        $this->db->from('tb_mas_room_reservations');
-        $this->db->where('enumStatus', 'approved');
-        if ($facultyId) {
-            $this->db->where('intFacultyID', $facultyId);
-        }
-        $stats['approved'] = $this->db->count_all_results();
-
-        // Today's reservations
-        $today = date('Y-m-d');
-        $this->db->from('tb_mas_room_reservations');
-        $this->db->where('dteReservationDate', $today);
-        $this->db->where('enumStatus', 'approved');
-        if ($facultyId) {
-            $this->db->where('intFacultyID', $facultyId);
-        }
-        $stats['today'] = $this->db->count_all_results();
-
-        return $stats;
-    }
-
-    function getUpcomingReservations($facultyId = null, $limit = 5)
-    {
-        $this->db->select('r.*, c.strRoomCode, c.description as roomDescription, f.strFirstname, f.strLastname')
-                 ->from('tb_mas_room_reservations r')
-                 ->join('tb_mas_classrooms c', 'r.intRoomID = c.intID')
-                 ->join('tb_mas_faculty f', 'r.intFacultyID = f.intID')
-                 ->where('r.dteReservationDate >=', date('Y-m-d'))
-                 ->where('r.enumStatus', 'approved');
-
-        if ($facultyId) {
-            $this->db->where('r.intFacultyID', $facultyId);
-        }
-
-        return $this->db->order_by('r.dteReservationDate', 'asc')
-                        ->order_by('r.dteStartTime', 'asc')
-                        ->limit($limit)
-                        ->get()
-                        ->result_array();
-    }
-
-    function getRoomUtilization($roomId = null, $dateFrom = null, $dateTo = null)
-    {
-        $this->db->select('r.intRoomID, c.strRoomCode, COUNT(*) as reservation_count, 
-                          SUM(TIME_TO_SEC(TIMEDIFF(r.dteEndTime, r.dteStartTime))/3600) as total_hours')
-                 ->from('tb_mas_room_reservations r')
-                 ->join('tb_mas_classrooms c', 'r.intRoomID = c.intID')
-                 ->where('r.enumStatus', 'approved');
-
-        if ($roomId) {
-            $this->db->where('r.intRoomID', $roomId);
-        }
-
-        if ($dateFrom) {
-            $this->db->where('r.dteReservationDate >=', $dateFrom);
-        }
-
-        if ($dateTo) {
-            $this->db->where('r.dteReservationDate <=', $dateTo);
-        }
-
-        return $this->db->group_by('r.intRoomID')
-                        ->order_by('reservation_count', 'desc')
-                        ->get()
-                        ->result_array();
-    }
-    
-    function getScheduleByDay($dayOfWeek, $semId, $roomId = null)
-    {
-        $this->db->select('rs.*, c.strRoomCode, cl.strSection, s.strCode, s.strDescription, f.strFirstname, f.strLastname')
-                 ->from('tb_mas_room_schedule rs')
-                 ->join('tb_mas_classrooms c', 'rs.intRoomID = c.intID')
-                 ->join('tb_mas_classlist cl', 'rs.strScheduleCode = cl.intID')
-                 ->join('tb_mas_subjects s', 'cl.intSubjectID = s.intID')
-                 ->join('tb_mas_faculty f', 'cl.intFacultyID = f.intID')
-                 ->where('rs.strDay', $dayOfWeek)
-                 ->where('rs.intSem', $semId);
-        
-        if($roomId != null)
-            $this->db->where('rs.intRoomID', $roomId);
-            
-        return $this->db->order_by('rs.dteStart', 'asc')
-                        ->get()
-                        ->result_array();
-    }
-
-    // Enhanced reservation methods for recurring, calendar, and equipment features
-    
-    /**
-     * Create recurring reservations based on parent reservation
-     */
-    public function createRecurringReservations($parentId, $recurrenceType, $interval, $recurrenceDays, $endDate)
-    {
-        $sql = "CALL sp_CreateRecurringReservations(?, ?, ?, ?, ?)";
-        $query = $this->db->query($sql, array($parentId, $recurrenceType, $interval, $recurrenceDays, $endDate));
-        return $query;
-    }
-    
-    /**
-     * Get recurring reservation series
-     */
-    public function getRecurringReservationSeries($parentId)
-    {
-        $this->db->select('r.*, c.strRoomCode, c.strDescription as strRoomDescription, f.strFirstname, f.strLastname');
-        $this->db->from('tb_mas_room_reservations r');
-        $this->db->join('tb_mas_classrooms c', 'r.intRoomID = c.intID', 'left');
-        $this->db->join('tb_mas_faculty f', 'r.intFacultyID = f.intID', 'left');
-        $this->db->where('r.intParentReservationID', $parentId);
-        $this->db->or_where('r.intReservationID', $parentId);
-        $this->db->order_by('r.dteReservationDate', 'ASC');
-        $query = $this->db->get();
-        return $query->result_array();
-    }
-    
-    /**
-     * Update recurring reservation series
-     */
-    public function updateRecurringSeries($parentId, $data, $updateType = 'all')
-    {
-        if ($updateType == 'all') {
-            // Update all instances in the series
-            $this->db->where('intParentReservationID', $parentId);
-            $this->db->or_where('intReservationID', $parentId);
-            return $this->db->update('tb_mas_room_reservations', $data);
-        } elseif ($updateType == 'future') {
-            // Update only future instances
-            $this->db->where('intParentReservationID', $parentId);
-            $this->db->where('dteReservationDate >=', date('Y-m-d'));
-            return $this->db->update('tb_mas_room_reservations', $data);
-        }
-        return false;
-    }
-    
-    /**
-     * Delete recurring reservation series
-     */
-    public function deleteRecurringSeries($parentId, $deleteType = 'all')
-    {
-        if ($deleteType == 'all') {
-            // Delete all instances
-            $this->db->where('intParentReservationID', $parentId);
-            $this->db->or_where('intReservationID', $parentId);
-            return $this->db->delete('tb_mas_room_reservations');
-        } elseif ($deleteType == 'future') {
-            // Delete only future instances
-            $this->db->where('intParentReservationID', $parentId);
-            $this->db->where('dteReservationDate >=', date('Y-m-d'));
-            return $this->db->delete('tb_mas_room_reservations');
-        }
-        return false;
-    }
-    
-    /**
-     * Get equipment list
-     */
-    public function getAllEquipment($filters = array())
-    {
-        $this->db->select('e.*, f.strFirstname, f.strLastname');
-        $this->db->from('tb_mas_room_equipment e');
-        $this->db->join('tb_mas_faculty f', 'e.intCreatedBy = f.intID', 'left');
-        
-        if (isset($filters['type']) && !empty($filters['type'])) {
-            $this->db->where('e.enumType', $filters['type']);
-        }
-        
-        if (isset($filters['status']) && !empty($filters['status'])) {
-            $this->db->where('e.enumStatus', $filters['status']);
-        }
-        
-        if (isset($filters['available_only']) && $filters['available_only']) {
-            $this->db->where('e.enumStatus', 'available');
-        }
-        
-        $this->db->order_by('e.enumType', 'ASC');
-        $this->db->order_by('e.strEquipmentName', 'ASC');
-        $query = $this->db->get();
-        return $query->result_array();
-    }
-    
-    /**
-     * Get equipment by ID
-     */
-    public function getEquipmentById($id)
-    {
-        $this->db->select('e.*, f.strFirstname, f.strLastname');
-        $this->db->from('tb_mas_room_equipment e');
-        $this->db->join('tb_mas_faculty f', 'e.intCreatedBy = f.intID', 'left');
-        $this->db->where('e.intEquipmentID', $id);
-        $query = $this->db->get();
-        return $query->row_array();
-    }
-    
-    /**
-     * Check equipment availability for specific time slot
-     */
-    public function checkEquipmentAvailability($equipmentId, $quantityNeeded, $date, $startTime, $endTime, $excludeReservationId = null)
-    {
-        $sql = "SELECT fn_CheckEquipmentAvailability(?, ?, ?, ?, ?, ?) as available";
-        $query = $this->db->query($sql, array($equipmentId, $quantityNeeded, $date, $startTime, $endTime, $excludeReservationId));
-        $result = $query->row_array();
-        return $result['available'] == 1;
-    }
-    
-    /**
-     * Get available equipment for time slot
-     */
-    public function getAvailableEquipment($date, $startTime, $endTime, $type = null)
-    {
-        $this->db->select('e.*, 
-            (e.intQuantityAvailable - COALESCE(SUM(re.intQuantityApproved), 0)) as intAvailableQuantity');
-        $this->db->from('tb_mas_room_equipment e');
-        $this->db->join('tb_mas_reservation_equipment re', 'e.intEquipmentID = re.intEquipmentID', 'left');
-        $this->db->join('tb_mas_room_reservations r', 're.intReservationID = r.intReservationID', 'left');
-        
-        // Add conditions for time conflict
-        $this->db->group_start();
-        $this->db->where('r.intReservationID IS NULL');
-        $this->db->or_group_start();
-        $this->db->where('r.dteReservationDate !=', $date);
-        $this->db->or_where('re.enumStatus NOT IN', array('approved', 'delivered'));
-        $this->db->or_where('r.enumStatus NOT IN', array('approved', 'pending'));
-        $this->db->or_group_start();
-        $this->db->where('r.dteReservationDate', $date);
-        $this->db->group_start();
-        $this->db->where('r.dteEndTime <=', $startTime);
-        $this->db->or_where('r.dteStartTime >=', $endTime);
-        $this->db->group_end();
-        $this->db->group_end();
-        $this->db->group_end();
-        $this->db->group_end();
-        
-        $this->db->where('e.enumStatus', 'available');
-        
-        if ($type) {
-            $this->db->where('e.enumType', $type);
-        }
-        
-        $this->db->group_by('e.intEquipmentID');
-        $this->db->having('intAvailableQuantity > 0');
-        $this->db->order_by('e.enumType', 'ASC');
-        $this->db->order_by('e.strEquipmentName', 'ASC');
-        
-        $query = $this->db->get();
-        return $query->result_array();
-    }
-    
-    /**
-     * Get reservation equipment
-     */
-    public function getReservationEquipment($reservationId)
-    {
-        $this->db->select('re.*, e.strEquipmentName, e.strEquipmentCode, e.enumType, e.intQuantityAvailable');
-        $this->db->from('tb_mas_reservation_equipment re');
-        $this->db->join('tb_mas_room_equipment e', 're.intEquipmentID = e.intEquipmentID');
-        $this->db->where('re.intReservationID', $reservationId);
-        $this->db->order_by('e.enumType', 'ASC');
-        $this->db->order_by('e.strEquipmentName', 'ASC');
-        $query = $this->db->get();
-        return $query->result_array();
-    }
-    
-    /**
-     * Add equipment to reservation
-     */
-    public function addReservationEquipment($reservationId, $equipmentId, $quantity, $notes = null)
-    {
-        $data = array(
-            'intReservationID' => $reservationId,
-            'intEquipmentID' => $equipmentId,
-            'intQuantityRequested' => $quantity,
-            'strNotes' => $notes,
-            'dteCreated' => date('Y-m-d H:i:s')
-        );
-        
-        return $this->db->insert('tb_mas_reservation_equipment', $data);
-    }
-    
-    /**
-     * Update reservation equipment
-     */
-    public function updateReservationEquipment($reservationEquipmentId, $data)
-    {
-        $data['dteUpdated'] = date('Y-m-d H:i:s');
-        $this->db->where('intReservationEquipmentID', $reservationEquipmentId);
-        return $this->db->update('tb_mas_reservation_equipment', $data);
-    }
-    
-    /**
-     * Remove equipment from reservation
-     */
-    public function removeReservationEquipment($reservationEquipmentId)
-    {
-        $this->db->where('intReservationEquipmentID', $reservationEquipmentId);
-        return $this->db->delete('tb_mas_reservation_equipment');
-    }
-    
-    /**
-     * Get room configurations
-     */
-    public function getRoomConfigurations($roomId = null)
-    {
-        $this->db->select('rc.*, c.strRoomCode, c.strDescription as strRoomDescription');
-        $this->db->from('tb_mas_room_configurations rc');
-        $this->db->join('tb_mas_classrooms c', 'rc.intRoomID = c.intID');
-        
-        if ($roomId) {
-            $this->db->where('rc.intRoomID', $roomId);
-        }
-        
-        $this->db->where('rc.enumStatus', 'active');
-        $this->db->order_by('rc.intRoomID', 'ASC');
-        $this->db->order_by('rc.boolIsDefault', 'DESC');
-        $this->db->order_by('rc.strConfigurationName', 'ASC');
-        
-        $query = $this->db->get();
-        return $query->result_array();
-    }
-    
-    /**
-     * Get default room configuration
-     */
-    public function getDefaultRoomConfiguration($roomId)
-    {
-        $this->db->select('*');
-        $this->db->from('tb_mas_room_configurations');
-        $this->db->where('intRoomID', $roomId);
-        $this->db->where('boolIsDefault', 1);
-        $this->db->where('enumStatus', 'active');
-        $query = $this->db->get();
-        return $query->row_array();
-    }
-    
-    /**
-     * Get calendar data for FullCalendar integration
-     */
-    public function getCalendarData($startDate, $endDate, $roomId = null, $facultyId = null)
-    {
-        $events = array();
-        
-        // Get reservations
-        $this->db->select('r.*, c.strRoomCode, c.strDescription as strRoomDescription, 
-                          f.strFirstname, f.strLastname, f.strEmail');
-        $this->db->from('tb_mas_room_reservations r');
-        $this->db->join('tb_mas_classrooms c', 'r.intRoomID = c.intID');
-        $this->db->join('tb_mas_faculty f', 'r.intFacultyID = f.intID');
-        $this->db->where('r.dteReservationDate >=', $startDate);
-        $this->db->where('r.dteReservationDate <=', $endDate);
-        $this->db->where('r.enumStatus !=', 'cancelled');
-        
-        if ($roomId) {
-            $this->db->where('r.intRoomID', $roomId);
-        }
-        
-        if ($facultyId) {
-            $this->db->where('r.intFacultyID', $facultyId);
-        }
-        
-        $reservations = $this->db->get()->result_array();
-        
-        foreach ($reservations as $reservation) {
-            $events[] = array(
-                'id' => 'reservation_' . $reservation['intReservationID'],
-                'title' => $reservation['strPurpose'],
-                'start' => $reservation['dteReservationDate'] . 'T' . $reservation['dteStartTime'],
-                'end' => $reservation['dteReservationDate'] . 'T' . $reservation['dteEndTime'],
-                'backgroundColor' => $this->getReservationColor($reservation['enumStatus']),
-                'borderColor' => $this->getReservationColor($reservation['enumStatus']),
-                'textColor' => '#ffffff',
-                'extendedProps' => array(
-                    'type' => 'reservation',
-                    'reservationId' => $reservation['intReservationID'],
-                    'roomCode' => $reservation['strRoomCode'],
-                    'roomDescription' => $reservation['strRoomDescription'],
-                    'faculty' => $reservation['strFirstname'] . ' ' . $reservation['strLastname'],
-                    'email' => $reservation['strEmail'],
-                    'status' => $reservation['enumStatus'],
-                    'priority' => $reservation['enumPriority'],
-                    'isRecurring' => $reservation['enumRecurrenceType'] != 'none'
-                )
-            );
-        }
-        
-        // Get scheduled classes if no specific faculty filter
-        if (!$facultyId) {
-            $activeSem = $this->get_active_sem();
-            if ($activeSem) {
-                $current_date = new DateTime($startDate);
-                $end_date_obj = new DateTime($endDate);
-                
-                while ($current_date <= $end_date_obj) {
-                    $day_of_week = $current_date->format('N'); // 1=Monday, 7=Sunday
-                    $date_str = $current_date->format('Y-m-d');
-                    
-                    $schedules = $this->getScheduleByDay($day_of_week, $activeSem['intID'], $roomId);
-                    
-                    foreach ($schedules as $schedule) {
-                        $events[] = array(
-                            'id' => 'class_' . $schedule['intRoomSchedID'] . '_' . $date_str,
-                            'title' => $schedule['strCode'] . ' - ' . $schedule['strSection'],
-                            'start' => $date_str . 'T' . $schedule['dteStart'],
-                            'end' => $date_str . 'T' . $schedule['dteEnd'],
-                            'backgroundColor' => '#3c8dbc',
-                            'borderColor' => '#2c689c',
-                            'textColor' => '#ffffff',
-                            'extendedProps' => array(
-                                'type' => 'class',
-                                'scheduleId' => $schedule['intRoomSchedID'],
-                                'roomCode' => $schedule['strRoomCode'],
-                                'faculty' => $schedule['strFirstname'] . ' ' . $schedule['strLastname'],
-                                'subject' => $schedule['strDescription'],
-                                'section' => $schedule['strSection']
-                            )
-                        );
-                    }
-                    
-                    $current_date->add(new DateInterval('P1D'));
-                }
-            }
-        }
-        
-        return $events;
-    }
-    
-    /**
-     * Get reservation color based on status
-     */
-    private function getReservationColor($status)
-    {
-        $colors = array(
-            'pending' => '#f39c12',
-            'approved' => '#00a65a',
-            'rejected' => '#dd4b39',
-            'cancelled' => '#999999'
-        );
-        
-        return isset($colors[$status]) ? $colors[$status] : '#999999';
-    }
-    
-    /**
-     * Get calendar settings for faculty
-     */
-    public function getCalendarSettings($facultyId)
-    {
-        $this->db->select('*');
-        $this->db->from('tb_mas_calendar_settings');
-        $this->db->where('intFacultyID', $facultyId);
-        $this->db->where('enumStatus', 'active');
-        $query = $this->db->get();
-        return $query->result_array();
-    }
-    
-    /**
-     * Save calendar settings
-     */
-    public function saveCalendarSettings($facultyId, $provider, $settings)
-    {
-        $data = array(
-            'intFacultyID' => $facultyId,
-            'strCalendarProvider' => $provider,
-            'strCalendarToken' => isset($settings['token']) ? $settings['token'] : null,
-            'strCalendarID' => isset($settings['calendar_id']) ? $settings['calendar_id'] : null,
-            'boolAutoSync' => isset($settings['auto_sync']) ? $settings['auto_sync'] : 0,
-            'boolSyncReservations' => isset($settings['sync_reservations']) ? $settings['sync_reservations'] : 1,
-            'boolSyncClasses' => isset($settings['sync_classes']) ? $settings['sync_classes'] : 1,
-            'intSyncInterval' => isset($settings['sync_interval']) ? $settings['sync_interval'] : 60,
-            'enumStatus' => 'active',
-            'dteUpdated' => date('Y-m-d H:i:s')
-        );
-        
-        // Check if settings already exist
-        $existing = $this->db->get_where('tb_mas_calendar_settings', array(
-            'intFacultyID' => $facultyId,
-            'strCalendarProvider' => $provider
-        ))->row_array();
-        
-        if ($existing) {
-            $this->db->where('intSettingID', $existing['intSettingID']);
-            return $this->db->update('tb_mas_calendar_settings', $data);
-        } else {
-            $data['dteCreated'] = date('Y-m-d H:i:s');
-            return $this->db->insert('tb_mas_calendar_settings', $data);
-        }
-    }
-    
-    /**
-     * Get reservation statistics with enhanced metrics
-     */
-    public function getEnhancedReservationStats($facultyId = null, $dateFrom = null, $dateTo = null)
-    {
-        $stats = array();
-        
-        // Base query conditions
-        $where_conditions = array();
-        if ($facultyId) {
-            $where_conditions['intFacultyID'] = $facultyId;
-        }
-        if ($dateFrom) {
-            $this->db->where('dteReservationDate >=', $dateFrom);
-        }
-        if ($dateTo) {
-            $this->db->where('dteReservationDate <=', $dateTo);
-        }
-        
-        // Total reservations by status
-        foreach (array('pending', 'approved', 'rejected', 'cancelled') as $status) {
-            $this->db->select('COUNT(*) as count');
-            $this->db->from('tb_mas_room_reservations');
-            $this->db->where('enumStatus', $status);
-            if ($where_conditions) {
-                $this->db->where($where_conditions);
-            }
-            if ($dateFrom) $this->db->where('dteReservationDate >=', $dateFrom);
-            if ($dateTo) $this->db->where('dteReservationDate <=', $dateTo);
-            
-            $result = $this->db->get()->row_array();
-            $stats['total_' . $status] = $result['count'];
-        }
-        
-        // Recurring reservations count
-        $this->db->select('COUNT(*) as count');
-        $this->db->from('tb_mas_room_reservations');
-        $this->db->where('enumRecurrenceType !=', 'none');
-        if ($where_conditions) {
-            $this->db->where($where_conditions);
-        }
-        if ($dateFrom) $this->db->where('dteReservationDate >=', $dateFrom);
-        if ($dateTo) $this->db->where('dteReservationDate <=', $dateTo);
-        
-        $result = $this->db->get()->row_array();
-        $stats['total_recurring'] = $result['count'];
-        
-        // Equipment usage statistics
-        $this->db->select('e.strEquipmentName, COUNT(re.intReservationEquipmentID) as usage_count');
-        $this->db->from('tb_mas_reservation_equipment re');
-        $this->db->join('tb_mas_room_equipment e', 're.intEquipmentID = e.intEquipmentID');
-        $this->db->join('tb_mas_room_reservations r', 're.intReservationID = r.intReservationID');
-        $this->db->where('re.enumStatus', 'approved');
-        if ($where_conditions) {
-            foreach ($where_conditions as $key => $value) {
-                $this->db->where('r.' . $key, $value);
-            }
-        }
-        if ($dateFrom) $this->db->where('r.dteReservationDate >=', $dateFrom);
-        if ($dateTo) $this->db->where('r.dteReservationDate <=', $dateTo);
-        $this->db->group_by('e.intEquipmentID');
-        $this->db->order_by('usage_count', 'DESC');
-        $this->db->limit(10);
-        
-        $stats['top_equipment'] = $this->db->get()->result_array();
-        
-        // Peak hours analysis
-        $this->db->select('HOUR(dteStartTime) as hour, COUNT(*) as reservation_count');
-        $this->db->from('tb_mas_room_reservations');
-        $this->db->where('enumStatus', 'approved');
-        if ($where_conditions) {
-            $this->db->where($where_conditions);
-        }
-        if ($dateFrom) $this->db->where('dteReservationDate >=', $dateFrom);
-        if ($dateTo) $this->db->where('dteReservationDate <=', $dateTo);
-        $this->db->group_by('HOUR(dteStartTime)');
-        $this->db->order_by('reservation_count', 'DESC');
-        
-        $stats['peak_hours'] = $this->db->get()->result_array();
-        
-        return $stats;
-    }
-    
-    /**
-     * Get reservations by date range
-     */
-    public function getReservationsByDateRange($startDate, $endDate, $roomId = null)
-    {
-        $this->db->select('r.*, c.strRoomCode, c.description as roomDescription, f.strFirstname, f.strLastname')
-                 ->from('tb_mas_room_reservations r')
-                 ->join('tb_mas_classrooms c', 'r.intRoomID = c.intID')
-                 ->join('tb_mas_faculty f', 'r.intFacultyID = f.intID')
-                 ->where('r.dteReservationDate >=', $startDate)
-                 ->where('r.dteReservationDate <=', $endDate)
-                 ->where('r.enumStatus !=', 'cancelled');
-
-        if ($roomId) {
-            $this->db->where('r.intRoomID', $roomId);
-        }
-
-        return $this->db->order_by('r.dteReservationDate', 'asc')
-                        ->order_by('r.dteStartTime', 'asc')
-                        ->get()
-                        ->result_array();
-    }
-
-    // End of enhanced reservation methods
-
 }
