@@ -4162,10 +4162,10 @@ class Unity extends CI_Controller {
     public function merge_subject()
     {
         $post = $this->input->post();
-        $classlist_students = $this->data_fetcher->getClassListStudents($post['mergeFrom'], $post['sem']);
+        $classlist_students = $this->data_fetcher->getClassListStudents($post['merge_from']);
 
         $update_classlist = array(
-          'intClassListID' => $post['mergeTo']
+          'intClassListID' => $post['merge_to']
         );
 
         if($students){
