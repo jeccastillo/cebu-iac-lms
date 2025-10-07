@@ -160,7 +160,7 @@
                         Swal.fire({
                             title: "Success",
                             text: ret.message,
-                            icon: "error"
+                            icon: "success"
                         });
                         location.reload();
                     }else{
