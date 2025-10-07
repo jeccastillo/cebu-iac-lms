@@ -4168,7 +4168,7 @@ class Unity extends CI_Controller {
           'intClassListID' => $post['merge_to']
         );
 
-        if($students){
+        if($classlist_students){
             foreach($classlist_students as $classlist_student){
                 $this->data_poster->post_data('tb_mas_classlist_student', $update_classlist, $classlist_student['intCSID']);
             }
