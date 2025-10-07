@@ -156,16 +156,28 @@
                 'success':function(ret){
                     $(".loading-img").hide();
                     $(".overlay").hide();
-                    if(ret.success){
+                    if(ret){
+                        Swal.fire({
+                            title: "Success",
+                            text: 'Successfully merge sections',
+                            icon: "error"
+                        });
                         location.reload();
                     }else{
-                        alert(ret.error || "Merge failed.");
+                        Swal.fire({
+                            title: "Failed",
+                            text: "Merge Failed",
+                            icon: "error"
+                        });
                     }
                 },
                 'error':function(){
                     $(".loading-img").hide();
                     $(".overlay").hide();
-                    alert("An error occurred.");
+                    Swal.fire({
+                        title: "Failed",
+                        icon: "error"
+                    });
                 }
             });
         });
