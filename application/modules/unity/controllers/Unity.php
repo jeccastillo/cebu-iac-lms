@@ -4172,7 +4172,7 @@ class Unity extends CI_Controller {
             foreach($classlist_students as $classlist_student){
                 $this->data_poster->post_data('tb_mas_classlist_student', $update_classlist, $classlist_student['intCSID']);
             }
-            $data['message'] = "Successfully Merge";
+            $data['message'] = "Successfully merge sections";
             $data['success'] = true;
         }else{
             $data['message'] = "No students to merge";
