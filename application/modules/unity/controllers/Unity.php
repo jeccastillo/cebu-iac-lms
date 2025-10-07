@@ -4159,6 +4159,23 @@ class Unity extends CI_Controller {
         echo json_encode($data);
     }
     
+    public function merge_subject()
+    {
+        $post = $this->input->post();
+        $classlist_students = $this->data_fetcher->getClassListStudents($post['mergeFrom'], $post['sem']);
+
+        $update_classlist = array(
+          'intClassListID' => $post['mergeTo']
+        );
+
+        if($students){
+            foreach($classlist_students as $classlist_student){
+                $this->data_poster->post_data('tb_mas_classlist_student', $update_classlist, $classlist_student['intCSID']);
+            }
+        }
+        
+        return true;
+    }
     
     public function faculty_logged_in()
     {
