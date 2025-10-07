@@ -985,7 +985,7 @@ class Data_fetcher extends CI_Model {
     }
     
     
-    function fetch_classlists_all($limit=null,$sem_sel=null,$order_by=null)
+    function fetch_classlists_all($limit=null,$sem_sel=null)
     {
                     $this->db
                      ->select("tb_mas_classlist.intID as intID, strSection, year, sub_section, intFacultyID,intSubjectID,strClassName,strCode,intFinalized,strAcademicYear,strFirstname,strLastname,strYearStart,strYearEnd,enumSem, COUNT(tb_mas_classlist_student.intStudentID) as students")
@@ -999,10 +999,9 @@ class Data_fetcher extends CI_Model {
                         $this->db->where(array('strAcademicYear'=>$sem_sel));
                 if($limit != null)
                     $this->db->limit($limit); 
-                if($order_by != null)
-                    $this->db->order_by($order_by,'asc');
 
                 return $this->db
+                        ->order_by('tb_mas_subjects.strCode','asc')
                         ->group_by('tb_mas_classlist.intID')
                         ->get()
                         ->result_array();
