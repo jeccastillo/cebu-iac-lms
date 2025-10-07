@@ -156,17 +156,17 @@
                 'success':function(ret){
                     $(".loading-img").hide();
                     $(".overlay").hide();
-                    if(ret){
+                    if(ret.success){
                         Swal.fire({
                             title: "Success",
-                            text: 'Successfully merge sections',
+                            text: ret.message,
                             icon: "error"
                         });
                         location.reload();
                     }else{
                         Swal.fire({
                             title: "Failed",
-                            text: "Merge Failed",
+                            text: ret.message,
                             icon: "error"
                         });
                     }
