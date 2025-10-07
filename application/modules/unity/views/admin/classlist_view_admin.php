@@ -36,7 +36,7 @@
                             <?php else: ?>
                                 <a class="btn btn-app" href="<?php echo base_url()."unity/view_classlist_archive_admin/".$selected_ay."/".$program."/".$dissolved."/".$has_faculty."/".$status."/0" ?>" ><i class="fa fa-list"></i> Show All</a>
                             <?php endif; ?>
-                                <button type="button" class="btn btn-app" data-toggle="modal" data-target="#mergeClasslistModal">Merge Classlist</button>
+                                <button type="button" class="btn btn-app" data-toggle="modal" data-target="#mergeClasslistModal"><i class="fa fa-list"></i>Merge Classlist</button>
 
                         </small>
                     </h1>
