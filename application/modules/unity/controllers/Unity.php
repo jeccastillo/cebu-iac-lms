@@ -4175,7 +4175,7 @@ class Unity extends CI_Controller {
             $data['message'] = "Successfully Merge";
             $data['success'] = true;
         }else{
-            $data['message'] = "Merge Failed";
+            $data['message'] = "No students to merge";
             $data['success'] = false;
         }
         
