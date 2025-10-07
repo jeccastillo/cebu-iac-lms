@@ -1050,7 +1050,7 @@ class Data_fetcher extends CI_Model {
                         ->result_array();
     }
     
-    function fetch_by_id($limit=null,$id)
+    function fetch_classlist_by_id($limit=null,$id)
     {
         $faculty_id = $this->session->userdata("intID");
                     $this->db
