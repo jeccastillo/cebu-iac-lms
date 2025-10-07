@@ -4179,6 +4179,7 @@ class Unity extends CI_Controller {
         $data['message'] = "Merge Failed";
         $data['success'] = false;
         
+        echo json_encode($data);
     }
     
     public function faculty_logged_in()
