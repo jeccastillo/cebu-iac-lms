@@ -4172,9 +4172,11 @@ class Unity extends CI_Controller {
             foreach($classlist_students as $classlist_student){
                 $this->data_poster->post_data('tb_mas_classlist_student', $update_classlist, $classlist_student['intCSID']);
             }
+            return true;
         }
+
+        return false;
         
-        return true;
     }
     
     public function faculty_logged_in()
