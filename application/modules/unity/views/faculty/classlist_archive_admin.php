@@ -23,6 +23,7 @@
                             <option <?php echo ($selected_ay == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID']; ?>"><?php echo $s['term_student_type']." ".$s['enumSem']." ".$s['term_label']." ".$s['strYearStart']."-".$s['strYearEnd']; ?></option>
                         <?php endforeach; ?>
                     </select>
+                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#mergeClasslistModal">Merge Classlist</button>
                 </div>
             </div><!-- /.box-header -->
             <div class="box-body table-responsive">
@@ -78,5 +79,43 @@
                 </tbody></table>
             </div><!-- /.box-body -->
         </div><!-- /.box -->
+    </div>
+
+    <!-- Merge Classlist Modal -->
+    <div class="modal fade" id="mergeClasslistModal" tabindex="-1" role="dialog" aria-labelledby="mergeClasslistModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="mergeClasslistModalLabel">Merge Classlist</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="mergeForm">
+                        <div class="form-group">
+                            <label for="mergeFrom">Section to Merge</label>
+                            <select class="form-control" id="mergeFrom" name="mergeFrom">
+                                <option value="">Select Section</option>
+                                <?php foreach($classlists as $class): ?>
+                                    <option value="<?php echo $class['intID']; ?>"><?php echo $class['strCode'] . ' - ' . $class['strClassName'].'-'.$class['strSection']; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="mergeTo">Merge To</label>
+                            <select class="form-control" id="mergeTo" name="mergeTo">
+                                <option value="">Select Section</option>
+                                <?php foreach($classlists as $class): ?>
+                                    <option value="<?php echo $class['intID']; ?>"><?php echo $class['strCode'] . ' - ' . $class['strClassName'].'-'.$class['strSection']; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="mergeBtn">Merge</button>
+                </div>
+            </div>
+        </div>
     </div>
 </aside>
