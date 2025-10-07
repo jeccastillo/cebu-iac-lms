@@ -2942,7 +2942,7 @@ class Unity extends CI_Controller {
             $this->data['status'] = $status;
             $this->data['modular'] = $modular;
            
-            //$this->data['classlists'] = $this->data_fetcher->fetch_classlists_all(null,$this->data['selected_ay']);
+            $this->data['classlists'] = $this->data_fetcher->fetch_classlists_all(null,$this->data['selected_ay']);
             $this->data['page'] = "classlist_archive";
             // $this->data['opentree'] = "registrar";
             $this->load->view("common/header",$this->data);
