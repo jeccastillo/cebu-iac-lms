@@ -4168,6 +4168,9 @@ class Unity extends CI_Controller {
           'intClassListID' => $post['merge_to']
         );
 
+        $data['message'] = "Merge Failed";
+        $data['success'] = false;
+
         if($classlist_students){
             foreach($classlist_students as $classlist_student){
                 $this->data_poster->post_data('tb_mas_classlist_student', $update_classlist, $classlist_student['intCSID']);
@@ -4175,9 +4178,6 @@ class Unity extends CI_Controller {
             $data['message'] = "Successfully Merge";
             $data['success'] = true;
         }
-
-        $data['message'] = "Merge Failed";
-        $data['success'] = false;
         
         echo json_encode($data);
     }
