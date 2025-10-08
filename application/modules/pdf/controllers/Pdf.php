@@ -276,9 +276,7 @@ class Pdf extends CI_Controller {
         $this->data['registration'] = $this->data_fetcher->getRegistrationInfo($id,$this->data['selected_ay']);
         $this->data['prev_sem'] = $this->data_fetcher->get_prev_sem($active_sem['intID'],$id);
             
-        print_r($this->data['registration']);
-        die();
-        
+
         if(!empty($this->data['prev_sem']))
         {
 
@@ -2563,12 +2561,10 @@ class Pdf extends CI_Controller {
         $this->data['full_assessment'] = number_format($fullAssessment,2,'.',',');
         $this->data['total_assessment'] = number_format($totalAssessment,2,'.',',');
 
-
         if($this->data['campus'] == "Cebu"){
             $this->load->view("print_invoice_cebu",$this->data);
-        }else {            
-            $invoice_view = ($_SERVER['HTTP_HOST'] == 'sms-makati.iacademy.edu.ph') ? 'print_invoice' : 'print_invoice_new';
-            $this->load->view($invoice_view,$this->data);        
+        }else {
+            $this->load->view("print_invoice",$this->data);
         }
     }
 
@@ -2607,13 +2603,8 @@ class Pdf extends CI_Controller {
                 case 'other':
                         $type = "UG ".$request['description'];
                         break;                    
-                case 'shs':                                    
-                    $particulars = ["SHS - Graduation Ball","SHS - Graduation Fee","SHS UNIFORM"];
-                    if (in_array($request['description'], $particulars)) {
-                         $type = $request['description'];
-                         break;
-                    }
-                    $type = "SHS " .$request['description'];
+                case 'shs':
+                    $type = $request['description'];
                     break;
                 case 'ns_payment':
                         $type = $request['description'];
@@ -4349,96 +4340,6 @@ class Pdf extends CI_Controller {
         $pdf->Output('Certificate of Unit Earned -.pdf', 'I');
     }
 
-    public function print_student_ledger()
-    {
-        // Get POST data from the form
-        $post = $this->input->post();
-        
-        // Decode the JSON data passed from Vue.js
-        $this->data['student'] = json_decode($post['student_data'], true);
-        $this->data['ledger'] = json_decode($post['ledger_data'], true);
-        $this->data['other'] = json_decode($post['other_data'], true);
-        $this->data['running_balance'] = $post['running_balance'];
-        $this->data['running_balance_other'] = $post['running_balance_other'];
-        
-        // Get cashier names for display
-        $cashier_names = array();
-        
-        // Process ledger data to get cashier names
-        if(!empty($this->data['ledger'])) {
-            foreach($this->data['ledger'] as &$term_data) {
-                if(!empty($term_data['ledger_items'])) {
-                    foreach($term_data['ledger_items'] as &$item) {
-                        if(!empty($item['cashier']) && !isset($cashier_names[$item['cashier']])) {
-                            $cashier_info = $this->db->get_where('tb_mas_faculty', array('intID' => $item['cashier']))->first_row('array');
-                            if($cashier_info) {
-                                $cashier_names[$item['cashier']] = $cashier_info['strFirstname'] . ' ' . $cashier_info['strLastname'];
-                            }
-                        }
-                        if(!empty($item['added_by']) && $item['added_by'] != 0 && !isset($cashier_names[$item['added_by']])) {
-                            $cashier_info = $this->db->get_where('tb_mas_faculty', array('intID' => $item['added_by']))->first_row('array');
-                            if($cashier_info) {
-                                $cashier_names[$item['added_by']] = $cashier_info['strFirstname'] . ' ' . $cashier_info['strLastname'];
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        
-        // Process other data to get cashier names
-        if(!empty($this->data['other'])) {
-            foreach($this->data['other'] as &$term_data) {
-                if(!empty($term_data['ledger_items'])) {
-                    foreach($term_data['ledger_items'] as &$item) {
-                        if(!empty($item['cashier']) && !isset($cashier_names[$item['cashier']])) {
-                            $cashier_info = $this->db->get_where('tb_mas_faculty', array('intID' => $item['cashier']))->first_row('array');
-                            if($cashier_info) {
-                                $cashier_names[$item['cashier']] = $cashier_info['strFirstname'] . ' ' . $cashier_info['strLastname'];
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        
-        $this->data['cashier_names'] = $cashier_names;
-        
-        // Initialize TCPDF
-        tcpdf();
-        
-        // Create new PDF document
-        $pdf = new TCPDF("L", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        
-        // Set document information
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetTitle("Student Ledger - " . $this->data['student']['strLastname'] . ", " . $this->data['student']['strFirstname']);
-        
-        // Set margins
-        $pdf->SetMargins(5, 0.5, 5);
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-        
-        // Set auto page breaks
-        $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
-        
-        // Remove default header/footer
-        $pdf->setPrintHeader(false);
-        $pdf->setPrintFooter(false);
-        
-        // Add a page
-        $pdf->AddPage();
-        
-        // Load the view and generate HTML
-        $html = $this->load->view("print_student_ledger", $this->data, true);
-        
-        // Write HTML to PDF
-        $pdf->writeHTML($html, true, false, true, false, '');
-        
-        // Output PDF
-        $pdf->Output("Student_Ledger_" . $this->data['student']['strLastname'] . "_" . $this->data['student']['strFirstname'] . ".pdf", 'I');
-    }
-
     public function certificate_of_enrollment($id)
     {
         $post = $this->input->post();
@@ -4474,6 +4375,7 @@ class Pdf extends CI_Controller {
         $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
         
         $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);    
              
         $pdf->AddPage();
           
