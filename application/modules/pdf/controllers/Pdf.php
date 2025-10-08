@@ -2561,10 +2561,12 @@ class Pdf extends CI_Controller {
         $this->data['full_assessment'] = number_format($fullAssessment,2,'.',',');
         $this->data['total_assessment'] = number_format($totalAssessment,2,'.',',');
 
+
         if($this->data['campus'] == "Cebu"){
             $this->load->view("print_invoice_cebu",$this->data);
-        }else {
-            $this->load->view("print_invoice_new",$this->data);
+        }else {            
+            $invoice_view = ($_SERVER['HTTP_HOST'] == 'sms-makati.iacademy.edu.ph') ? 'print_invoice' : 'print_invoice_new';
+            $this->load->view($invoice_view,$this->data);        
         }
     }
 
