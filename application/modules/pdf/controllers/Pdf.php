@@ -276,7 +276,9 @@ class Pdf extends CI_Controller {
         $this->data['registration'] = $this->data_fetcher->getRegistrationInfo($id,$this->data['selected_ay']);
         $this->data['prev_sem'] = $this->data_fetcher->get_prev_sem($active_sem['intID'],$id);
             
-
+        print_r($this->data['registration']);
+        die();
+        
         if(!empty($this->data['prev_sem']))
         {
 
