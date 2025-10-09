@@ -111,6 +111,14 @@
                             <option value="3">3</option>
                         </select>
                     </div>
+                    <div class="form-group col-sm-3">
+                        <label for="intSem">Equivalent</label>
+                        <select class="form-control" name="intSem" id="intSem" >
+                            <?php foreach($curriculum_subjects as $s): ?>
+                                <option><?php echo $s['strCode']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
                     <div class="form-group col-sm-2">
                         <label for="intSem"></label>
                         <input type="submit" value="Add Subjects" class="form-control btn btn-default  btn-flat">
