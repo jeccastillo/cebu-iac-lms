@@ -92,7 +92,7 @@
                             <option value="Equivalent">Equivalent</option>
                         </select>
                     </div>
-                    <div class="form-group col-sm-3">
+                    <div class="form-group col-sm-2">
                         <input type="hidden" name="intCurriculumID" value="<?php echo $item['intID']; ?>" >
                         <label for="intYearLevel">Year Level</label>
                         <select class="form-control" name="intYearLevel" id="intYearLevel" >
@@ -103,7 +103,7 @@
                             <option value="5">5</option>
                         </select>
                     </div>
-                    <div class="form-group col-sm-3">
+                    <div class="form-group col-sm-2">
                         <label for="intSem">Term</label>
                         <select class="form-control" name="intSem" id="intSem" >
                             <option value="1">1</option>
@@ -112,6 +112,14 @@
                         </select>
                     </div>
                     <div class="form-group col-sm-3">
+                        <label for="intSem">Equivalent</label>
+                        <select class="form-control" name="intSem" id="intSem" >
+                            <?php foreach($curriculum_subjects as $s): ?>
+                                <option><?php echo $s['strCode']; ?></option>
+                            <? endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="form-group col-sm-2">
                         <label for="intSem"></label>
                         <input type="submit" value="Add Subjects" class="form-control btn btn-default  btn-flat">
                     </div>
@@ -186,7 +194,7 @@
                         <?php if($prev_year_sem != $s['intYearLevel'].'_'.$s['intSem']):
                         
                         ?>
-<!--
+<!--curriculum_subjects
                         <tr>
                             <td colspan="3">Units <?php echo $unitsPerSem; ?></td>
                         </tr>
