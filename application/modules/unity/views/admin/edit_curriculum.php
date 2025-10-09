@@ -112,8 +112,8 @@
                         </select>
                     </div>
                     <div class="form-group col-sm-3">
-                        <label for="intSem">Equivalent</label>
-                        <select class="form-control" name="intSem" id="intSem" >
+                        <label for="equivalentSubjectID">Equivalent</label>
+                        <select class="form-control" name="equivalentSubjectID" id="equivalentSubjectID" >
                             <?php foreach($curriculum_subjects as $s): ?>
                                 <option><?php echo $s['strCode']; ?></option>
                             <?php endforeach; ?>
