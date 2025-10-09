@@ -115,7 +115,7 @@
                                     <label for="equivalentSubjectID">Equivalent</label>
                                     <select class="form-control" name="equivalentSubjectID" id="equivalentSubjectID">
                                         <?php foreach($curriculum_subjects as $s): ?>
-                                        <option value="?php echo $s['strCode']; ?>"><?php echo $s['strCode']; ?></option>
+                                        <option value="<?php echo $s['strCode']; ?>"><?php echo $s['strCode']; ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
