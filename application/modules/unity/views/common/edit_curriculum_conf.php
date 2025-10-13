@@ -14,7 +14,7 @@ $(document).ready(function() {
     });
 
     $("#type").on('change', function(e) {
-        let isHidden = $(this).val() != 'Combine'
+        let isHidden = $(this).val() != 'Combine Subjects'
         combineSubject.hidden = isHidden
     });
 });
