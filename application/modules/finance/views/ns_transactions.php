@@ -144,6 +144,7 @@
             <input type="hidden" name="invoice_amount_vzrs"
                 v-model="or_print.invoice_amount_vzrs" />
             <input type="hidden" name="payee_id" v-model="or_print.payee_id" />
+            <input type="hidden" name="status" v-model="or_print.status" />
         </form>
         <div class="modal fade" id="orDetailsUpdate" role="dialog">
             <form @submit.prevent="updateORDetails" class="modal-dialog modal-lg">
@@ -259,6 +260,7 @@ new Vue({
             invoice_amount: 0,
             invoice_amount_ves: 0,
             invoice_amount_vzrs: 0,
+            status: undefined
         },
         void_id: undefined,
         void_reason: undefined,
@@ -445,6 +447,7 @@ new Vue({
                     this.or_print.check_number = payment.check_number;
                     this.or_print.sem = payment.sy_reference;
                     this.or_print.cashier_id = payment.cashier_id;
+                    this.or_print.status = payment.status
                 }
             }).then((result) => {
                 var delayInMilliseconds = 1000; //1 second

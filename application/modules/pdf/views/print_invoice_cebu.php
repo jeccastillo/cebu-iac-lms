@@ -161,7 +161,8 @@ table tr td {
                 <?php  echo $total_assessment; ?> </div> <?php endif; ?>
             <!--Total Amount received-->
             <div style="position:absolute; top:587px; left: 130px; width: 200px; height: 20px;">
-                <?php  echo $total_amount_due == 0 ? "" : $total_amount_due; ?> </div>
+                <?php  echo $total_amount_due == 0 || $request['status'] == 'Pending' ? "" : $total_amount_due; ?>
+            </div>
             <div
                 style="position:absolute; top: 565px; left: 600px; width: 200px; height: 20px;font-size:15px">
                 <?php echo $cashier_name; ?> </div>
