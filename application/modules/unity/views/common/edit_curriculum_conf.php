@@ -12,5 +12,10 @@ $(document).ready(function() {
         let isHidden = $(this).val() != 'Equivalent'
         equivalentSubjectID.hidden = isHidden
     });
+
+    $("#type").on('change', function(e) {
+        let isHidden = $(this).val() != 'Combine'
+        combineSubject.hidden = isHidden
+    });
 });
 </script>
