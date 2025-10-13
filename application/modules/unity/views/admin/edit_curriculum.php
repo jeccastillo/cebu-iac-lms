@@ -90,6 +90,7 @@
                                         <option value="2nd Specialization">2nd Specialization</option>
                                         <option value="Elective">Elective</option>
                                         <option value="Equivalent">Equivalent</option>
+                                        <option value="Combine">Combine Subjects</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-sm-2">
@@ -114,6 +115,14 @@
                                 <div class="form-group col-sm-3" id="equivalent" hidden>
                                     <label for="equivalentSubjectID">Equivalent</label>
                                     <select class="form-control" name="equivalentSubjectID" id="equivalentSubjectID">
+                                        <?php foreach($curriculum_subjects as $s): ?>
+                                        <option value="<?php echo $s['intSubjectID']; ?>"><?php echo $s['strCode']; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <div class="form-group col-sm-3" id="combine" hidden>
+                                    <label for="combineSubject">Combine</label>
+                                    <select multiple class="form-control" name="combineSubject" id="combineSubject">
                                         <?php foreach($curriculum_subjects as $s): ?>
                                         <option value="<?php echo $s['intSubjectID']; ?>"><?php echo $s['strCode']; ?></option>
                                         <?php endforeach; ?>
