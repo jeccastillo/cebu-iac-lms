@@ -2450,7 +2450,8 @@ class Unity extends CI_Controller {
             $post = $this->input->post();
             $type = $post['type'];
             
-            //print_r($post);
+            print_r($post);
+            die();
             if($type == "regular")                
                 foreach($post['subject'] as $subject)
                 {
