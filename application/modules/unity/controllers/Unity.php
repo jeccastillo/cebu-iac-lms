@@ -2460,7 +2460,7 @@ class Unity extends CI_Controller {
             else
                 foreach($post['subject'] as $subject)
                 {
-                    $data = array('intSubjectID'=>$subject,'intCurriculumID'=>$post['intCurriculumID'],'type'=>$post['type']);
+                    $data = array('intSubjectID'=>$subject,'intCurriculumID'=>$post['intCurriculumID'],'type'=>$post['type'], 'equivalentSubjectID' => $post['equivalentSubjectID']);
                     $this->data_poster->post_data('tb_mas_curriculum_second',$data);
                 }
             
@@ -2599,8 +2599,7 @@ class Unity extends CI_Controller {
     {
         if($this->is_registrar() || $this->is_super_admin()){
             $post = $this->input->post();
-        print_r($post);
-        die();
+            
             $this->data_poster->post_data('tb_mas_curriculum',$post,$post['intID']);
             $this->data_poster->log_action('Curriculum','Updated Curriculum Info: '.$post['strName'],'green');
         }
