@@ -120,9 +120,9 @@
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
-                                <div class="form-group col-sm-3" id="combine">
-                                    <label for="combineSubject">Combine</label>
-                                    <select class="form-control" name="combineSubject" id="combineSubject" multiple>
+                                <div class="form-group col-sm-3" id="combineSubject" hidden>
+                                    <label for="intSubjectID">Combine</label>
+                                    <select class="form-control" name="intSubjectID" id="intSubjectID" multiple>
                                         <?php foreach($curriculum_subjects as $s): ?>
                                         <option value="<?php echo $s['intSubjectID']; ?>"><?php echo $s['strCode']; ?></option>
                                         <?php endforeach; ?>
