@@ -1,6 +1,8 @@
 <script type="text/javascript">
 $(document).ready(function() {
     let equivalentSubjectID = document.getElementById('equivalent')
+    let combineSubject = document.getElementById('combineSubject')
+    
     $(function() {
         $('[data-toggle="popover"]').popover({
             trigger: 'hover'
@@ -14,7 +16,7 @@ $(document).ready(function() {
     });
 
     $("#type").on('change', function(e) {
-        let isHidden = $(this).val() != 'Combine Subjects'
+        let isHidden = $(this).val() != 'Combine'
         combineSubject.hidden = isHidden
     });
 });
