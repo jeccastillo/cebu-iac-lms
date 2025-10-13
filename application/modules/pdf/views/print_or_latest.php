@@ -119,3 +119,9 @@ table tr td {
         </section>
     </div>
 </body>
+<script>
+const request = <?php echo json_encode($request); ?>;
+const type = "<?php echo $type; ?>";
+console.log(request);
+console.log(type);
+</script>
