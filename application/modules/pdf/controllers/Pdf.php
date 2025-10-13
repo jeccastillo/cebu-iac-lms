@@ -2605,8 +2605,6 @@ class Pdf extends CI_Controller {
                         break;                    
                 case 'shs':
                     $particulars = ["SHS - Graduation Ball", "SHS - Graduation Fee", "SHS UNIFORM"];
-                    print_r($request['description']);
-                    print_r(in_array($request['description'], $particulars));
                     if (in_array($request['description'], $particulars)) {
                         $type = $request['description'];
                         break;
@@ -2647,6 +2645,7 @@ class Pdf extends CI_Controller {
         // $this->data['total_amount_due'] = $request['total_amount_due'];
         // $this->data['decimal'] = ($this->data['total_amount_due'] - floor( $this->data['total_amount_due'] )) * 100;
         // $this->data['decimal'] = round($this->data['decimal']);
+        $this->data['request'] = $request;
         $this->data['transaction_date'] =  $request['transaction_date'];          
         $this->data['tin'] = $payee?$payee['tin']:'';
         $this->data['type'] = $type == "Tuition Fee" ? "Total Assessment" : $type;
