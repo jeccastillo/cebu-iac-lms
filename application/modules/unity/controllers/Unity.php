@@ -2599,7 +2599,8 @@ class Unity extends CI_Controller {
     {
         if($this->is_registrar() || $this->is_super_admin()){
             $post = $this->input->post();
-            //print_r($post);
+        print_r($post);
+        die();
             $this->data_poster->post_data('tb_mas_curriculum',$post,$post['intID']);
             $this->data_poster->log_action('Curriculum','Updated Curriculum Info: '.$post['strName'],'green');
         }
