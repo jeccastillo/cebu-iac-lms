@@ -15,6 +15,7 @@ $(document).ready(function() {
     $("#type").on('change', function(e) {
         let isHidden = $(this).val() != 'Equivalent'
         equivalentSubjectID.hidden = isHidden
+        combineSubject.hidden = isHidden
         $("#intYearLevel").hidden = !isHidden
         $("#intSem").hidden = !isHidden
     });
