@@ -92,7 +92,7 @@
                                         <option value="Equivalent">Equivalent</option>
                                     </select>
                                 </div>
-                                <div class="form-group col-sm-3">
+                                <div class="form-group col-sm-2">
                                     <input type="hidden" name="intCurriculumID" value="<?php echo $item['intID']; ?>">
                                     <label for="intYearLevel">Year Level</label>
                                     <select class="form-control" name="intYearLevel" id="intYearLevel">
@@ -103,7 +103,7 @@
                                         <option value="5">5</option>
                                     </select>
                                 </div>
-                                <div class="form-group col-sm-3">
+                                <div class="form-group col-sm-2">
                                     <label for="intSem">Term</label>
                                     <select class="form-control" name="intSem" id="intSem">
                                         <option value="1">1</option>
@@ -115,11 +115,11 @@
                                     <label for="equivalentSubjectID">Equivalent</label>
                                     <select class="form-control" name="equivalentSubjectID" id="equivalentSubjectID">
                                         <?php foreach($curriculum_subjects as $s): ?>
-                                        <option><?php echo $s['strCode']; ?></option>
+                                        <option value="<?php echo $s['intSubjectID']; ?>"><?php echo $s['strCode']; ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
-                                <div class="form-group col-sm-3">
+                                <div class="form-group col-sm-2">
                                     <label for="intSem"></label>
                                     <input type="submit" value="Add Subjects"
                                         class="form-control btn btn-default  btn-flat">
@@ -193,7 +193,7 @@
                         <?php if($prev_year_sem != $s['intYearLevel'].'_'.$s['intSem']):
                         
                         ?>
-                        <!--
+                        <!--curriculum_subjects
                         <tr>
                             <td colspan="3">Units <?php echo $unitsPerSem; ?></td>
                         </tr>
@@ -225,7 +225,7 @@
                             <th>Lab Units</th>
                             <th>Total Units</th>
                             <th>Type</th>
-                            <th>Pre-requisites</th>
+                            <th>Subject Equivalent</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -240,21 +240,7 @@
                             <td><?php echo $s['intLab']; ?></td>
                             <td><?php echo $s['strUnits']; ?></td>
                             <td><?php echo $s['type']; ?></td>
-                            <td style="width:20%;">
-                                <?php
-                            $i = 0;
-                            foreach($s['prereq'] as $pre){ 
-                                if($i != 0)
-                                    echo ", ";
-                                    echo $pre['strCode']; 
-                                
-                                $i++;
-                            }
-                            ?>
-                                <br />
-                                <a style="font-size:.8em;" target="_blank"
-                                    href="<?php echo base_url(); ?>subject/edit_prerequisite/<?php echo $s['intSubjectID']."/".$item['intID']; ?>">[add/edit]</a>
-                            </td>
+                            <td><?php echo $s['strCodeEquivalent']; ?></td>
                             <td>
                                 <a rel="<?php echo $s['intID']; ?>" class="btn btn-danger remove-subject-second"
                                     href="#">Remove</a>
