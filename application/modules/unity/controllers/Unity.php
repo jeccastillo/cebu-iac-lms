@@ -2449,6 +2449,9 @@ class Unity extends CI_Controller {
         {
             $post = $this->input->post();
             $type = $post['type'];
+
+            print_r($post);
+            die();
             
             if($type == "regular")                
                 foreach($post['subject'] as $subject)
@@ -2456,7 +2459,7 @@ class Unity extends CI_Controller {
                     $data = array('intSubjectID'=>$subject,'intCurriculumID'=>$post['intCurriculumID'],'intYearLevel'=>$post['intYearLevel'],'intSem'=>$post['intSem']);
                     $this->data_poster->post_data('tb_mas_curriculum_subject',$data);
                 }
-            elseif($type == "combine")
+            elseif($type == "Combine")
                 foreach($post['combineSubjects'] as $subject){ 
                     $data = array('intSubjectID'=>$subject,'intCurriculumID'=>$post['intCurriculumID'],'type'=>$post['type']);
                     $this->data_poster->post_data('tb_mas_curriculum_second',$data);
