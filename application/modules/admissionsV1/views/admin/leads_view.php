@@ -1,31 +1,28 @@
 <div class="content-wrapper ">
     <section class="content-header container ">
-        <h1>
-            Student Applicants            
-            <small>            
-                <a class="btn btn-app" href="#" id="print_form"><i class="fa fa-file"></i> Export to Excel</a>
-            </small>            
-        </h1>        
+        <h1> Student Applicants <small>
+                <a class="btn btn-app" href="#" id="print_form"><i class="fa fa-file"></i> Export to
+                    Excel</a>
+            </small>
+        </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Student Applicants</a></li>
             <li class="active">View All Leads</li>
         </ol>
         <hr />
         <div class="pull-right">
-            <select id="select-term-leads" class="form-control" >
-                <?php foreach($sy as $s): ?>
-                    <option <?php echo ($current_sem == $s['intID'])?'selected':''; ?> value="<?php echo $s['intID']; ?>"><?php echo $s['term_student_type']." ".$s['enumSem']." ".$s['term_label']." ".$s['strYearStart']."-".$s['strYearEnd']; ?></option>
-                <?php endforeach; ?>
-            </select>
+            <select id="select-term-leads" class="form-control"> <?php foreach($sy as $s): ?>
+                <option <?php echo ($current_sem == $s['intID'])?'selected':''; ?>
+                    value="<?php echo $s['intID']; ?>">
+                    <?php echo $s['term_student_type']." ".$s['enumSem']." ".$s['term_label']." ".$s['strYearStart']."-".$s['strYearEnd']; ?>
+                </option> <?php endforeach; ?> </select>
         </div>
         <hr />
         <div class="row">
-            <div class="col-sm-4">
-                Filter by Status
-            </div>
+            <div class="col-sm-4"> Filter by Status </div>
         </div>
         <div class="row">
-            <div class="col-sm-4">                
+            <div class="col-sm-4">
                 <select class="form-select form-control" id="status_filter">
                     <option value="none" selected>None</option>
                     <option value="New">New Applicant</option>
@@ -38,7 +35,7 @@
                     <option value="Will Not Proceed">Will Not Proceed</option>
                     <option value="Did Not Reserve">Did Not Reserve</option>
                     <option value="For Enrollment">For Enrollment</option>
-                    <option value="Confirmed">Complete Confirmed Information</option>                    
+                    <option value="Confirmed">Complete Confirmed Information</option>
                     <option value="Enlisted">Enlisted</option>
                     <option value="Enrolled">Enrolled</option>
                     <option value="Rejected">Rejected</option>
@@ -48,14 +45,13 @@
             </div>
             <div class="col-sm-4">
                 <div class="input-group pull-right">
-                    <a href="<?php echo base_url(); ?>admissionsV1/admissions_report" class="btn btn-primary">
-                        Quick Stats
-                    </a>
+                    <a href="<?php echo base_url(); ?>admissionsV1/admissions_report"
+                        class="btn btn-primary"> Quick Stats </a>
                 </div>
             </div>
             <div class="col-sm-4">
                 <div class="form-group  pull-left">
-                    <select class="form-select form-control" id="range-to-select">                        
+                    <select class="form-select form-control" id="range-to-select">
                         <option value="created_at">Date Applied</option>
                         <option value="date_interviewed">Date Interviewed</option>
                         <option value="date_reserved">Date Reserved</option>
@@ -64,13 +60,17 @@
                 </div>
                 <div class="input-group pull-right">
                     <button class="btn btn-default pull-right" id="daterange-btn-users">
-                        <i class="fa fa-calendar"></i> Choose Date Range
-                        <i class="fa fa-caret-down"></i>
+                        <i class="fa fa-calendar"></i> Choose Date Range <i
+                            class="fa fa-caret-down"></i>
                     </button>
                 </div>
             </div>
         </div>
-    </section>    
+        <div class="row">
+            <div class="col-sm-4">iCSID Scholarship <input id="scholarship_filter" type="checkbox">
+            </div>
+        </div>
+    </section>
     <div class="content container">
         <div class="alert alert-danger" style="display:none;">
             <i class="fa fa-ban"></i>
@@ -79,7 +79,6 @@
         <div class="box box-solid box-primary">
             <div class="box-header">
                 <h3 class="box-title">Student Applicants</h3>
-
             </div><!-- /.box-header -->
             <div class="box-body table-responsive">
                 <table id="subjects-table" class="table table-hover table-bordered">
@@ -91,12 +90,11 @@
                             <th>Date Reserved</th>
                             <th>Date Enrolled</th>
                             <th>Last Name</th>
-                            <th>First Name</th> 
-                            <th>ST</th>                           
-                            <th>Program</th>                            
+                            <th>First Name</th>
+                            <th>ST</th>
+                            <th>Program</th>
                             <th>Status</th>
                             <th>Actions</th>
-
                         </tr>
                     </thead>
                     <tbody>
