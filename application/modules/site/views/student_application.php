@@ -813,12 +813,12 @@
             <hr class="mb-5 bg-[#10326f] h-1 w-3/5" />
             <div class="grid grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-6">
                 <div class="border-[1px] border-neutral-100  rounded-lg py-2.5 pl-2.5 pr-2.5">
-                    <ul class="list-disc ml-4">
-                        <li>Open to all 2026 applicants of iACADEMY Cebu</li>
-                    </ul>
+                    <p class="ml-4">
+                        Open to all 2026 applicants of iACADEMY Cebu</li>
+                    </p>
                     <label class="block color-primary italic text-sm mb-5"> (Submit a 1 minute video
                         introducing yourself and how you wish to create positive change through
-                        unique and innovative that address today’s challenges.) </label>
+                        unique and innovative ideas that address today’s challenges.) </label>
                     <input class="color-primary" type="file" @change="attachFile"
                         accept="video/*" />
                     <p class="mt-2 text-sm">Deadline of application: Feb 28, 2026</p>
