@@ -14,7 +14,10 @@ $(document).ready(function() {
         // "sAjaxSource": "http://localhost:8004/api/v1/admissions/applications",
         ajax: function(data, callback, settings) {
             var s_column = "last_name";                        
-            filter_status = $("#status_filter").val();
+            filter_status = $("#status_filter").val();            
+            var isChecked = $("#scholarship_filter").is(':checked');
+            // Convert the boolean checked state to 1 or 0
+            filter_scholarship = isChecked ? 1 : 0;
             switch(data.order[0].column){
                 case 1:
                     s_column = "created_at";
