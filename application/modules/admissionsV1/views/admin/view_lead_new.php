@@ -1684,6 +1684,16 @@
                 </div>
             </div>
             <!-- 1st row 2nd Column -->
+            <div class="col-md-6 box" style="height: fit-content">
+                <div class="box-header with-border font-weight-bold ">
+                    <h5 class=" text-left text-primary ">
+                        <strong>iCSID Video</strong>
+                    </h5>
+                </div>
+                <div class="box-body">
+                    <a :href="request.scholarship_video_path">{{request.scholarship_video}}</a>
+                </div>
+            </div>
         </div>
     </div>
     <!-- End -->
