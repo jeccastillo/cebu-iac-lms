@@ -38,7 +38,7 @@
                     <label class="block t color-primary font-bold mb-3 pr-4" for="inline-full-name">
                         Select Term <span class="text-red-500">*</span>
                     </label>
-                    <select disabled
+                    <select
                         class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                         type="text" required v-model="request.syid">
                         <option disabled value="">--Select options--</option>
