@@ -5,6 +5,7 @@
 $(document).ready(function() {
     var daterange = "";
     var filter_status = $("#status_filter").val();
+    var filter_scholarship = $("#scholarship_filter").val();
     var dtable = $('#subjects-table').dataTable({
         "aLengthMenu": [10, 20, 50, 100, 250, 500, 750, 1000, 2000, 10000],
         "bProcessing": true,
@@ -53,6 +54,7 @@ $(document).ready(function() {
                 filter: filter_status,
                 current_sem: <?php echo $current_sem; ?>,
                 campus: '<?php echo $campus; ?>',
+                filter_scholarship: filter_scholarship,
             }, function(json) {
                 callback({
                     recordsTotal: json.meta.to,
@@ -194,6 +196,9 @@ $(document).ready(function() {
         dtable.fnDraw(false);
     });
     $("#status_filter").on('change', function(e) {
+        dtable.fnDraw(false);
+    });
+    $("#scholarship_filter").on('change', function(e) {
         dtable.fnDraw(false);
     });
     $("#select-term-leads").on('change', function(e) {
