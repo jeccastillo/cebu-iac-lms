@@ -1691,7 +1691,8 @@
                     </h5>
                 </div>
                 <div class="box-body">
-                    <a :href="request.scholarship_video_path">{{request.scholarship_video}}</a>
+                    <a :href="request.scholarship_video_path"
+                        target="_blank">{{request.scholarship_video}}</a>
                 </div>
             </div>
         </div>
