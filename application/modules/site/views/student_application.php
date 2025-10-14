@@ -813,7 +813,7 @@
             <hr class="mb-5 bg-[#10326f] h-1 w-3/5" />
             <div class="grid grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-6">
                 <div class="border-[1px] border-neutral-100  rounded-lg py-2.5 pl-2.5 pr-2.5">
-                    <p class="ml-4">
+                    <p>
                         Open to all 2026 applicants of iACADEMY Cebu</li>
                     </p>
                     <label class="block color-primary italic text-sm mb-5"> (Submit a 1 minute video
