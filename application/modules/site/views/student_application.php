@@ -1443,7 +1443,11 @@ new Vue({
                         .health_concerns.join(", ");
                     Object.assign(this.request, this.addressObj)
                     this.request.type_id = this.cebuFilter
-                    axios.post(api_url + url, data, {
+                    const formData = new FormData()
+                    for (const key in this.request) {
+                        formData.append(key, this.request[key])
+                    }
+                    axios.post(api_url + url, formData, {
                         headers: {
                             Authorization: `Bearer ${window.token}`
                         }
