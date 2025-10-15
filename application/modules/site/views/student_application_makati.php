@@ -843,7 +843,7 @@
                 </div>
             </div>
         </div>
-        <div v-if="true" class=" mb-6 mt-10">
+        <div v-if="term.term_student_type == 'college'" class=" mb-6 mt-10">
             <h4 class="color-primary font-bold text-xl">Innovation, Design, and Entrepreneurship
                 Achievers (IDEA) Scholarship</h4>
             <hr class="mb-5 bg-[#10326f] h-1 w-3/5" />
