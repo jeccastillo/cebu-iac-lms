@@ -12,9 +12,8 @@
 </div>
 <div class="custom-container max-w-[1080px]" id="adminssions-form" style="margin-top:10px;">
     <div class="color-primary text-center">
-        <h4 class="font-medium text-2xl mb-5"> iCSID Application Form
-            {{ term.term_student_type.toUpperCase() }}
-            <strong>(Cebu Campus)</strong><br />
+        <h4 class="font-medium text-2xl mb-5"> iCSID Application Form <strong>(Cebu
+                Campus)</strong><br />
         </h4>
         <p>Hello future Game Changers! Kindly fill out your information sheet. If you have any
             questions, feel free to email us at
@@ -1010,7 +1009,8 @@ new Vue({
             school_country: '',
             grade_year_level: '',
             primary_contact: '',
-            scholarship_video: ''
+            scholarship_video: '',
+            scholarship_type: 'iCSID'
         },
         addressObj: {
             country: '',
@@ -1443,7 +1443,7 @@ new Vue({
                             var ret = data.data.data;
                             Swal.fire({
                                 title: "SUCCESS",
-                                text: data.data.message,
+                                text: `{data.data.message}\nNote: You can upload the video later if needed.`,
                                 icon: "success"
                             }).then(function() {
                                 location.href =
