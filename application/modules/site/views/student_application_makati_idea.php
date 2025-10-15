@@ -12,9 +12,8 @@
 </div>
 <div class="custom-container max-w-[1080px]" id="adminssions-form" style="margin-top:10px;">
     <div class="color-primary text-center">
-        <h4 class="font-medium text-2xl mb-5"> Application Form for
-            {{ term.term_student_type.toUpperCase() }}
-            <strong>(Makati Campus)</strong><br />
+        <h4 class="font-medium text-2xl mb-5">IDEA Application Form <strong>(Makati
+                Campus)</strong><br />
         </h4>
         <p>Hello future Game Changers! Kindly fill out your information sheet. If you have any
             questions, feel free to email us at <strong><u>admissions@iacademy.edu.ph</u></strong>
@@ -62,21 +61,6 @@
                                 @click="filterCourses('college')" required class="mr-1">
                             {{college}}
                         </label>
-                        <h6 class="color-primary font-bold">2nd Degree</h6>
-                        <label v-if="term.term_student_type == 'college'"
-                            v-for="college,index of collegeList.slice(2,4)"
-                            class="block indent-5 color-primary mb-1 ml-1.5">
-                            <input type="radio" :id="index" :value="secondDegreeValue[index]"
-                                name="college" v-model="request.student_type"
-                                @click="filterCourses()" required class="mr-1">
-                            {{college}}
-                        </label>
-                        <h6 class="color-primary font-bold">Other</h6>
-                        <label v-if="term.term_student_type == 'college'"
-                            class="block indent-5 color-primary mb-1 ml-1.5">
-                            <input type="radio" value="`College - Transferee`" name="college"
-                                v-model="request.student_type" @click="filterCourses('college')"
-                                required class="mr-1"> Transferee </label>
                     </template>
                     <label v-if="term.term_student_type == 'shs'" v-for="shs,index of shsList"
                         class="block color-primary mb-1 ml-1.5">
@@ -843,7 +827,7 @@
                 </div>
             </div>
         </div>
-        <div v-if="false" class=" mb-6 mt-10">
+        <div class=" mb-6 mt-10">
             <h4 class="color-primary font-bold text-xl">Innovation, Design, and Entrepreneurship
                 Achievers (IDEA) Scholarship</h4>
             <hr class="mb-5 bg-[#10326f] h-1 w-3/5" />
@@ -1061,6 +1045,8 @@ new Vue({
             school_country: '',
             grade_year_level: '',
             primary_contact: '',
+            scholarship_video: '',
+            scholarship_type: 'iDEA'
         },
         addressObj: {
             country: '',
@@ -1407,6 +1393,9 @@ new Vue({
             return false
         },
         customSubmit: function(type, title, text, data, url, redirect) {
+            if (this.validateVideo()) {
+                return
+            }
             if (this.confirmEmail()) {
                 return
             }
@@ -1485,7 +1474,11 @@ new Vue({
                     this.request.health_concern = this.request
                         .health_concerns.join(", ");
                     Object.assign(this.request, this.addressObj)
-                    axios.post(api_url + url, data, {
+                    const formData = new FormData()
+                    for (const key in this.request) {
+                        formData.append(key, this.request[key])
+                    }
+                    axios.post(api_url + url, formData, {
                         headers: {
                             Authorization: `Bearer ${window.token}`
                         }
@@ -1496,7 +1489,7 @@ new Vue({
                             var ret = data.data.data;
                             Swal.fire({
                                 title: "SUCCESS",
-                                text: data.data.message,
+                                text: `{data.data.message}\nNote: You can upload the video later if needed.`,
                                 icon: "success"
                             }).then(function() {
                                 location.href =
