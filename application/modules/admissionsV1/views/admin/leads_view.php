@@ -67,7 +67,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-4">iCSID Scholarship <input id="scholarship_filter" type="checkbox">
+            <div class="col-sm-4">IDEA Scholarship <input id="scholarship_filter" type="checkbox">
             </div>
         </div>
     </section>

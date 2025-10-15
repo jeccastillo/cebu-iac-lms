@@ -6,9 +6,6 @@ $(document).ready(function() {
     var daterange = "";
     var filter_status = $("#status_filter").val();
     var filter_scholarship = $("#scholarship_filter").val();
-    var isChecked = $("#scholarship_filter").is(':checked');
-    // Convert the boolean checked state to 1 or 0
-    filter_scholarship = isChecked ? 1 : 0;
     var dtable = $('#subjects-table').dataTable({
         "aLengthMenu": [10, 20, 50, 100, 250, 500, 750, 1000, 2000, 10000],
         "bProcessing": true,
@@ -17,6 +14,9 @@ $(document).ready(function() {
         ajax: function(data, callback, settings) {
             var s_column = "last_name";
             filter_status = $("#status_filter").val();
+            var isChecked = $("#scholarship_filter").is(':checked');
+            // Convert the boolean checked state to 1 or 0
+            filter_scholarship = isChecked ? 1 : 0;
             switch (data.order[0].column) {
                 case 1:
                     s_column = "created_at";

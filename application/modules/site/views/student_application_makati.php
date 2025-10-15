@@ -843,7 +843,7 @@
                 </div>
             </div>
         </div>
-        <div v-if="term.term_student_type == 'college'" class=" mb-6 mt-10">
+        <div v-if="isScholarship" class=" mb-6 mt-10">
             <h4 class="color-primary font-bold text-xl">Innovation, Design, and Entrepreneurship
                 Achievers (IDEA) Scholarship</h4>
             <hr class="mb-5 bg-[#10326f] h-1 w-3/5" />
@@ -976,7 +976,7 @@ input[type="number"] {
     background-color: rgb(245 245 245)
 }
 </style>
-<!-- <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 <script src="https://unpkg.com/vue-select@3.0.0"></script>
 <link rel="stylesheet" href="https://unpkg.com/vue-select@3.0.0/dist/vue-select.css">
 <script src="<?php echo $js_dir ?>dataExport.js"></script>
@@ -1139,6 +1139,10 @@ new Vue({
         isSecondaDegree() {
             return this.request.student_type == '2nd - Degree iACADEMY' || this.request
                 .student_type == '2nd - Degree Other'
+        },
+        isScholarship() {
+            return this.request.student_type == 'College - Freshmen Other' || this.request
+                .student_type == 'College - Freshmen iACADEMY'
         }
     },
     methods: {
