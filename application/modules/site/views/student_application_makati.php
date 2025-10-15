@@ -855,7 +855,8 @@
                     <label class="block color-primary italic text-sm mb-5"> (Submit a 1 minute video
                         introducing yourself and how you wish to create positive change through
                         unique and innovative ideas that address today's challenges.) </label>
-                    <input class="color-primary" type="file" accept="video/*" />
+                    <input class="color-primary" type="file" accept="video/*"
+                        @change="attachFile" />
                     <p class="mt-2 text-sm"> Deadline of application: Feb 28, 2026</p>
                 </div>
             </div>
