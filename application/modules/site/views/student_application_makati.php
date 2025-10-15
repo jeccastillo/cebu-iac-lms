@@ -1,31 +1,27 @@
 <div class="custom-container">
-    <a href="https://iacademy.edu.ph/" class="flex mt-10 items-center gap-x-2 text-[#666666] cursor-pointer">
-        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="15" viewBox="0 0 8 15" fill="none">
+    <a href="https://iacademy.edu.ph/"
+        class="flex mt-10 items-center gap-x-2 text-[#666666] cursor-pointer">
+        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="15" viewBox="0 0 8 15"
+            fill="none">
             <path d="M7 1L1 7.5L7 14" stroke="#666666" stroke-width="2" stroke-linecap="round"
                 stroke-linejoin="round" />
-        </svg>
-        BACK
-    </a>
+        </svg> BACK </a>
 </div>
 <div class=" block mx-auto mt-[60px]" data-aos="fade-up">
-    <h1 class="text-4xl font-[900] text-center color-primary">
-        iACADEMY
-    </h1>
+    <h1 class="text-4xl font-[900] text-center color-primary"> iACADEMY </h1>
 </div>
 <div class="custom-container max-w-[1080px]" id="adminssions-form" style="margin-top:10px;">
     <div class="color-primary text-center">
-        <h4 class="font-medium text-2xl mb-5">
-            Application Form for {{ term.term_student_type.toUpperCase() }}
+        <h4 class="font-medium text-2xl mb-5"> Application Form for
+            {{ term.term_student_type.toUpperCase() }}
             <strong>(Makati Campus)</strong><br />
         </h4>
         <p>Hello future Game Changers! Kindly fill out your information sheet. If you have any
-            questions, feel free
-            to email us at <strong><u>admissions@iacademy.edu.ph</u></strong> </p>
-        <p style="margin-top:15px;">
-            Note: You are applying for iACADEMY Makati Campus, if you want to apply to iACADEMY Cebu
-            click
-            <a style="text-decoration: underline;" href="http://cebu.iacademy.edu.ph/site/student_application">here</a>.
+            questions, feel free to email us at <strong><u>admissions@iacademy.edu.ph</u></strong>
         </p>
+        <p style="margin-top:15px;"> Note: You are applying for iACADEMY Makati Campus, if you want
+            to apply to iACADEMY Cebu click <a style="text-decoration: underline;"
+                href="http://cebu.iacademy.edu.ph/site/student_application">here</a>. </p>
     </div>
     <form @submit.prevent="
             customSubmit(
@@ -52,33 +48,35 @@
                     </select>
                 </div>
                 <div id="applicant-type" class="border-[1px] border-neutral-100 p-2.5 rounded-lg">
-                    <label class="block t color-primary font-bold  mb-2  pr-4" for="inline-full-name">
-                        Applicant Type <i class="font-normal">(Select one)</i>
+                    <label class="block t color-primary font-bold  mb-2  pr-4"
+                        for="inline-full-name"> Applicant Type <i class="font-normal">(Select
+                            one)</i>
                     </label>
                     <template v-if="term.term_student_type == 'college'">
                         <h6 class="color-primary font-bold">Freshman</h6>
                         <label v-if="term.term_student_type == 'college'"
                             v-for="college,index of collegeList.slice(0,2)"
                             class="block indent-5 color-primary mb-1 ml-1.5">
-                            <input type="radio" :id="index" :value="freshmenValue[index]" name="college"
-                                v-model="request.student_type" @click="filterCourses('college')" required class="mr-1">
+                            <input type="radio" :id="index" :value="freshmenValue[index]"
+                                name="college" v-model="request.student_type"
+                                @click="filterCourses('college')" required class="mr-1">
                             {{college}}
                         </label>
                         <h6 class="color-primary font-bold">2nd Degree</h6>
                         <label v-if="term.term_student_type == 'college'"
                             v-for="college,index of collegeList.slice(2,4)"
                             class="block indent-5 color-primary mb-1 ml-1.5">
-                            <input type="radio" :id="index" :value="secondDegreeValue[index]" name="college"
-                                v-model="request.student_type" @click="filterCourses()" required class="mr-1">
+                            <input type="radio" :id="index" :value="secondDegreeValue[index]"
+                                name="college" v-model="request.student_type"
+                                @click="filterCourses()" required class="mr-1">
                             {{college}}
                         </label>
                         <h6 class="color-primary font-bold">Other</h6>
                         <label v-if="term.term_student_type == 'college'"
                             class="block indent-5 color-primary mb-1 ml-1.5">
                             <input type="radio" value="`College - Transferee`" name="college"
-                                v-model="request.student_type" @click="filterCourses('college')" required class="mr-1">
-                            Transferee
-                        </label>
+                                v-model="request.student_type" @click="filterCourses('college')"
+                                required class="mr-1"> Transferee </label>
                     </template>
                     <label v-if="term.term_student_type == 'shs'" v-for="shs,index of shsList"
                         class="block color-primary mb-1 ml-1.5">
@@ -90,47 +88,49 @@
             </div>
             <div id=applying-for class=" flex-[4_1_auto] max-w-[710px]" v-if="request.student_type">
                 <div class="md:w-5/5">
-                    <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                        Applying for
-                    </label>
+                    <label class="block t color-primary font-bold  mb-3  pr-4"
+                        for="inline-full-name"> Applying for </label>
                     <div class="border-[1px] border-neutral-100 p-2.5 rounded-lg">
                         <div id="first-choice" class="mb-3">
-                            <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                                First Choice
-                            </label>
+                            <label class="block t color-primary font-bold  mb-3  pr-4"
+                                for="inline-full-name"> First Choice </label>
                             <select :disabled="!request.student_type ? true : false"
                                 class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                type="text" @change="setFirstChoice" required v-model="request.type_id">
+                                type="text" @change="setFirstChoice" required
+                                v-model="request.type_id">
                                 <option disabled value="">--Select options--</option>
-                                <option :value="t.id" v-for="t in filtered_programs" :data-title="t.title" :key="t.id"
+                                <option :value="t.id" v-for="t in filtered_programs"
+                                    :data-title="t.title" :key="t.id"
                                     :disabled="t.id == request.type_id2 || t.id == request.type_id3 ? true : false">
                                     {{t.title}}
                                 </option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                                Second Choice
-                            </label>
+                            <label class="block t color-primary font-bold  mb-3  pr-4"
+                                for="inline-full-name"> Second Choice </label>
                             <select :disabled="!request.student_type ? true : false"
                                 class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                type="text" @change="setSecondChoice" required v-model="request.type_id2">
+                                type="text" @change="setSecondChoice" required
+                                v-model="request.type_id2">
                                 <option disabled value="">--Select options--</option>
-                                <option :value="t.id" v-for="t in filtered_programs" :data-title="t.title" :key="t.id"
+                                <option :value="t.id" v-for="t in filtered_programs"
+                                    :data-title="t.title" :key="t.id"
                                     :disabled="t.id == request.type_id || t.id == request.type_id3 ? true : false">
                                     {{t.title}}
                                 </option>
                             </select>
                         </div>
                         <div>
-                            <label class="block t color-primary font-bold  mb-3  pr-4" for="inline-full-name">
-                                Third Choice
-                            </label>
+                            <label class="block t color-primary font-bold  mb-3  pr-4"
+                                for="inline-full-name"> Third Choice </label>
                             <select :disabled="!request.student_type ? true : false"
                                 class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                type="text" @change="setThirdChoice" required v-model="request.type_id3">
+                                type="text" @change="setThirdChoice" required
+                                v-model="request.type_id3">
                                 <option disabled value="">--Select options--</option>
-                                <option :value="t.id" v-for="t in filtered_programs" :key="t.id" :data-title="t.title"
+                                <option :value="t.id" v-for="t in filtered_programs" :key="t.id"
+                                    :data-title="t.title"
                                     :disabled="t.id == request.type_id || t.id == request.type_id2 ? true : false">
                                     {{t.title}}
                                 </option>
@@ -146,33 +146,30 @@
             <div class="border-[1px] border-neutral-100 rounded-lg mt-5 py-5 px-2.5">
                 <div class="flex flex-wrap gap-x-2 gap-y-2 mb-4">
                     <div id="first-name" class="flex-grow">
-                        <label class="block color-primary font-bold  mb-3  pr-4">
-                            First Name <span class="text-red-500">*</span>
+                        <label class="block color-primary font-bold  mb-3  pr-4"> First Name <span
+                                class="text-red-500">*</span>
                         </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" name="first_name" required v-model="request.first_name">
                     </div>
                     <div id="middle-name" class="flex-grow">
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Middle Name
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> Middle Name
                         </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" name="middle_name" v-model="request.middle_name">
                     </div>
                     <div class="flex-grow">
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Last Name <span class="text-red-500">*</span>
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> Last Name <span
+                                class="text-red-500">*</span>
                         </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" name="last_name" required v-model="request.last_name">
                     </div>
                     <div id="suffix" class="basis-[100px]">
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Suffix
-                        </label>
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> Suffix </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" v-model="request.suffix">
@@ -180,24 +177,25 @@
                 </div>
                 <div class="flex flex-wrap gap-x-2 gap-y-2 mb-4">
                     <div id="date-birth" class="basis-[300px]">
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Date of Birth <span class="text-red-500">*</span>
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> Date of Birth
+                            <span class="text-red-500">*</span>
                         </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="date" v-model="request.date_of_birth" required>
                     </div>
                     <div id="place-birth" class="basis-[300px]">
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Place of Birth <span class="text-red-500">*</span>
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> Place of Birth
+                            <span class="text-red-500">*</span>
                         </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" name="place_of_birth" v-model="request.place_of_birth" required>
+                            type="text" name="place_of_birth" v-model="request.place_of_birth"
+                            required>
                     </div>
                     <div id="gender" class="basis-[120px]">
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Gender <span class="text-red-500">*</span>
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> Gender <span
+                                class="text-red-500">*</span>
                         </label>
                         <select v-model="request.gender" required
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
@@ -209,13 +207,14 @@
                 </div>
                 <div class="flex flex-wrap gap-x-2 gap-y-2 ">
                     <div id="citizenship-base" class="basis-[300px]">
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Citizenship <span class="text-red-500">*</span>
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> Citizenship
+                            <span class="text-red-500">*</span>
                         </label>
                         <select v-model="request.citizenship"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
                             <option disabled value="">--Select options--</option>
-                            <option v-for="country in countries" :value="country">{{country}}</option>
+                            <option v-for="country in countries" :value="country">{{country}}
+                            </option>
                         </select>
                     </div>
                     <div id="citizenship-dual" v-if="isDual" class="basis-[300px] self-end">
@@ -223,14 +222,14 @@
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             required>
                             <option disabled value="">--Select options--</option>
-                            <option v-for="country in countries" :value="country">{{country}}</option>
+                            <option v-for="country in countries" :value="country">{{country}}
+                            </option>
                         </select>
                     </div>
                     <div id="citizenship-radio" class="self-end">
                         <label class="block color-primary mb-1 ml-1.5">
-                            <input type="radio" id="one" class="mr-1" :checked="isDual" @click="isDual = !isDual">
-                            I'm a dual citizen
-                        </label>
+                            <input type="radio" id="one" class="mr-1" :checked="isDual"
+                                @click="isDual = !isDual"> I'm a dual citizen </label>
                     </div>
                 </div>
             </div>
@@ -240,28 +239,30 @@
             <hr class="mb-5 bg-[#10326f] h-1 w-3/5" />
             <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
                 <h5 class="color-primary mb-2.5">CONTACT DETAILS</h5>
-                <div class="grid gap-x-16 grid-cols-[repeat(auto-fit,_minmax(0,420px))] gap-y-2 mb-4 ">
+                <div
+                    class="grid gap-x-16 grid-cols-[repeat(auto-fit,_minmax(0,420px))] gap-y-2 mb-4 ">
                     <div id="email" class="">
-                        <label class="block  color-primary font-bold mb-3 pr-4">
-                            Email Address <span class="text-red-500">*</span>
+                        <label class="block  color-primary font-bold mb-3 pr-4"> Email Address <span
+                                class="text-red-500">*</span>
                         </label>
                         <input v-model="request.email"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="email" name="confirm-email" required>
                     </div>
                     <div id="email-confirm">
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Confirm Email Address <span class="text-red-500">*</span>
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> Confirm Email
+                            Address <span class="text-red-500">*</span>
                         </label>
                         <input v-model="request.email_confirmation"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="email" name="confirm-email" required>
                     </div>
                 </div>
-                <div class="grid grid-cols-[repeat(auto-fit,_minmax(0,420px))] gap-x-16 gap-y-2 mb-4">
+                <div
+                    class="grid grid-cols-[repeat(auto-fit,_minmax(0,420px))] gap-x-16 gap-y-2 mb-4">
                     <div class="">
-                        <label class="block color-primary font-bold mb-3 pr-4">
-                            Mobile Number <span class="text-red-500">*</span>
+                        <label class="block color-primary font-bold mb-3 pr-4"> Mobile Number <span
+                                class="text-red-500">*</span>
                         </label>
                         <div class="flex gap-x-2.5">
                             <select v-model="code1"
@@ -276,8 +277,8 @@
                         </div>
                     </div>
                     <div>
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Confirm Mobile Number <span class="text-red-500">*</span>
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> Confirm Mobile
+                            Number <span class="text-red-500">*</span>
                         </label>
                         <div class="flex gap-x-2.5">
                             <select v-model="code2"
@@ -295,26 +296,26 @@
             </div>
             <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
                 <h5 class="color-primary mb-2.5">ADDRESS</h5>
-                <div class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-2.5 mb-4 ">
+                <div
+                    class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-2.5 mb-4 ">
                     <div id="" class="">
-                        <label class="block color-primary font-bold mb-3 pr-4">
-                            Home Number/Street/Subdivision <span class="text-red-500">*</span>
+                        <label class="block color-primary font-bold mb-3 pr-4"> Home
+                            Number/Street/Subdivision <span class="text-red-500">*</span>
                         </label>
                         <input v-model="request.address"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             name="address" type="text" required>
                     </div>
                     <div id="">
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Barangay
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> Barangay
                         </label>
                         <input v-model="addressObj.barangay"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             name="barangay" type="text" required>
                     </div>
                     <div id="">
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            City <span class="text-red-500">*</span>
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> City <span
+                                class="text-red-500">*</span>
                         </label>
                         <input v-model="addressObj.city"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
@@ -341,10 +342,11 @@
                         </select> -->
                     </div>
                 </div>
-                <div class="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] items-end gap-2.5 mb-4 ">
+                <div
+                    class="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] items-end gap-2.5 mb-4 ">
                     <div id="">
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Country<span class="text-red-500">*</span>
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> Country<span
+                                class="text-red-500">*</span>
                         </label>
                         <select @change="getState" name="country" v-model="addressObj.country"
                             class="w-full bg-neutral-100 border border-neutral-100 rounded-lg py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
@@ -359,8 +361,8 @@
                          -->
                     </div>
                     <div id="" class="">
-                        <label class="block color-primary font-bold mb-3 pr-4">
-                            State/Province <span class="text-red-500">*</span>
+                        <label class="block color-primary font-bold mb-3 pr-4"> State/Province <span
+                                class="text-red-500">*</span>
                         </label>
                         <input v-model="addressObj.province"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
@@ -395,34 +397,31 @@
             <hr class="mb-5 bg-[#10326f] h-1 w-3/5" />
             <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
                 <h5 class="color-primary mb-2.5">MOTHER <span class="text-red-500">*</span> </h5>
-                <div class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-2.5 mb-4 ">
+                <div
+                    class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-2.5 mb-4 ">
                     <div>
-                        <label class="block  color-primary font-bold mb-3 pr-4">
-                            Name
-                        </label>
+                        <label class="block  color-primary font-bold mb-3 pr-4"> Name </label>
                         <input v-model="request.mother_name"
                             class="parent-info bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" name="full_name" placeholder='(write "n/a" only if not applicable)' required>
+                            type="text" name="full_name"
+                            placeholder='(write "n/a" only if not applicable)' required>
                     </div>
                     <div>
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Occupation
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> Occupation
                         </label>
                         <input v-model="request.mother_occupation"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" name="job_title" required />
                     </div>
                     <div>
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Email Address
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> Email Address
                         </label>
                         <input v-model="request.mother_email"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="email" name="email" required>
                     </div>
                     <div>
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Mobile Number
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> Mobile Number
                         </label>
                         <input v-model="request.mother_contact"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
@@ -432,41 +431,37 @@
                 <div>
                     <label class="block color-primary mb-1 ml-1.5">
                         <input type="radio" class="mr-1" id="mother" name="primary_contact"
-                            v-model="request.primary_contact" value="mother" required>
-                        SET AS PRIMARY CONTACT
-                    </label>
+                            v-model="request.primary_contact" value="mother" required> SET AS
+                        PRIMARY CONTACT </label>
                 </div>
             </div>
             <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
                 <h5 class="color-primary mb-2.5">FATHER <span class="text-red-500">*</span> </h5>
-                <div class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-2.5 mb-4 ">
+                <div
+                    class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-2.5 mb-4 ">
                     <div>
-                        <label class="block  color-primary font-bold mb-3 pr-4">
-                            Name
-                        </label>
+                        <label class="block  color-primary font-bold mb-3 pr-4"> Name </label>
                         <input v-model="request.father_name"
                             class="parent-info bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" name="full_name" placeholder='(write "n/a" only if not applicable)' required>
+                            type="text" name="full_name"
+                            placeholder='(write "n/a" only if not applicable)' required>
                     </div>
                     <div>
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Occupation
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> Occupation
                         </label>
                         <input v-model="request.father_occupation"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             name="job_title" type="text" required>
                     </div>
                     <div>
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Email Address
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> Email Address
                         </label>
                         <input v-model="request.father_email"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             name="email" type="email" required>
                     </div>
                     <div>
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Mobile Number
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> Mobile Number
                         </label>
                         <input v-model="request.father_contact"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
@@ -476,41 +471,37 @@
                 <div>
                     <label class="block color-primary mb-1 ml-1.5">
                         <input type="radio" class="mr-1" id="father" name="primary_contact"
-                            v-model="request.primary_contact" value="father" required>
-                        SET AS PRIMARY CONTACT
-                    </label>
+                            v-model="request.primary_contact" value="father" required> SET AS
+                        PRIMARY CONTACT </label>
                 </div>
             </div>
             <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
                 <h5 class="color-primary mb-2.5">GUARDIAN <span class="text-red-500">*</span> </h5>
-                <div class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-2.5 mb-4 ">
+                <div
+                    class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-2.5 mb-4 ">
                     <div>
-                        <label class="block  color-primary font-bold mb-3 pr-4">
-                            Name
-                        </label>
+                        <label class="block  color-primary font-bold mb-3 pr-4"> Name </label>
                         <input v-model="request.guardian_name"
                             class="parent-info bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" name="full_name" placeholder='(write "n/a" only if not applicable)' required>
+                            type="text" name="full_name"
+                            placeholder='(write "n/a" only if not applicable)' required>
                     </div>
                     <div>
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Relationship
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> Relationship
                         </label>
                         <input v-model="request.guardian_occupation"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" required>
                     </div>
                     <div>
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Email Address
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> Email Address
                         </label>
                         <input v-model="request.guardian_email"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="email" name="email" required>
                     </div>
                     <div>
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Mobile Number
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> Mobile Number
                         </label>
                         <input v-model="request.guardian_contact"
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
@@ -520,9 +511,8 @@
                 <div>
                     <label class="block color-primary mb-1 ml-1.5">
                         <input type="radio" class="mr-1" id="guardian" name="primary_contact"
-                            v-model="request.primary_contact" value="guardian" required>
-                        SET AS PRIMARY CONTACT
-                    </label>
+                            v-model="request.primary_contact" value="guardian" required> SET AS
+                        PRIMARY CONTACT </label>
                 </div>
             </div>
         </div>
@@ -532,33 +522,27 @@
             <div class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
                 <div class="flex flex-wrap gap-2.5 mb-4 ">
                     <div class="grow">
-                        <label class="block color-primary font-bold mb-3 pr-4">
-                            Last School Attended
+                        <label class="block color-primary font-bold mb-3 pr-4"> Last School Attended
                         </label>
-                        <v-select :options="prevSchoolList" label="name" class="style-chooser" @input="onInputChange"
-                            v-model="selectedSchool">
+                        <v-select :options="prevSchoolList" label="name" class="style-chooser"
+                            @input="onInputChange" v-model="selectedSchool">
                         </v-select>
                     </div>
                     <div v-if="!hide_school_address" class="basis-[154px]">
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            City
-                        </label>
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> City </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" v-model="request.school_city">
                     </div>
                     <div v-if="!hide_school_address" class="basis-[154px]">
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            State/Province
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> State/Province
                         </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" v-model="request.school_province">
                     </div>
                     <div v-if="!hide_school_address">
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Country
-                        </label>
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> Country </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" v-model="request.school_country">
@@ -568,15 +552,12 @@
                     <div>
                         <label class="block color-primary mb-1 ml-1.5">
                             <input type="radio" class="mr-1" value="yes" v-model="notOnTheList"
-                                @change="onSelectChange">
-                            NOT ON THE LIST
-                        </label>
+                                @change="onSelectChange"> NOT ON THE LIST </label>
                     </div>
                 </div>
                 <div class="flex flex-wrap gap-2.5 mb-4 ">
                     <div class="grow lg:grow-0">
-                        <label class="block color-primary font-bold mb-3 pr-4">
-                            Grade/Year Level
+                        <label class="block color-primary font-bold mb-3 pr-4"> Grade/Year Level
                         </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
@@ -584,15 +565,14 @@
                     </div>
                     <div class="grow">
                         <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Program/Strand/Degree earned
-                        </label>
+                            Program/Strand/Degree earned </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" name="strand" v-model="request.program_strand_degree">
                     </div>
                     <div class="grow">
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            LRN <i class="font-normal">(For Junior High School Applicants)</i>
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> LRN <i
+                                class="font-normal">(For Junior High School Applicants)</i>
                         </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
@@ -600,37 +580,31 @@
                     </div>
                 </div>
             </div>
-            <div v-if="isOnList" class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
+            <div v-if="isOnList"
+                class="border-[1px] border-neutral-100  rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
                 <h5 class="color-primary mb-2.5">Register your school if not in the list </h5>
                 <div class="flex flex-wrap gap-2.5 mb-4 ">
                     <div class="grow">
-                        <label class="block color-primary font-bold mb-3 pr-4">
-                            School Name
-                        </label>
+                        <label class="block color-primary font-bold mb-3 pr-4"> School Name </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" v-model="register.school_name" required>
                     </div>
                     <div class="basis-[154px]">
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            City
-                        </label>
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> City </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" v-model="register.school_city" required>
                     </div>
                     <div class="basis-[154px]">
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            State/Province
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> State/Province
                         </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" v-model="register.school_province" required>
                     </div>
                     <div>
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Country
-                        </label>
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> Country </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" v-model="register.school_country" required>
@@ -644,31 +618,24 @@
             <div class="grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-6">
                 <div class="border-[1px] border-neutral-100 p-2.5 rounded-lg">
                     <h5 class="color-primary mb-2.5">Do you hold good moral standing in your
-                        previous
-                        school? <span class="text-red-500">*</span> </h5>
+                        previous school? <span class="text-red-500">*</span> </h5>
                     <label class="block color-primary mb-1 ml-1.5">
                         <input type="radio" class="mr-1" value="Yes" name="good_moral" required
-                            v-model="request.good_moral">
-                        Yes
-                    </label>
+                            v-model="request.good_moral"> Yes </label>
                     <label class="block color-primary mb-1 ml-1.5">
                         <input type="radio" class="mr-1" value="No" name="good_moral" required
-                            v-model="request.good_moral">
-                        No
-                    </label>
+                            v-model="request.good_moral"> No </label>
                 </div>
                 <div class="border-[1px] border-neutral-100 p-2.5 rounded-lg">
                     <h5 class="color-primary mb-2.5">Have you involved of any illegal activities?
                         <span class="text-red-500">*</span>
                     </h5>
                     <label class="block color-primary mb-1 ml-1.5">
-                        <input type="radio" class="mr-1" value="Yes" name="crime" required v-model="request.crime">
-                        Yes
-                    </label>
+                        <input type="radio" class="mr-1" value="Yes" name="crime" required
+                            v-model="request.crime"> Yes </label>
                     <label class="block color-primary mb-1 ml-1.5">
-                        <input type="radio" class="mr-1" value="No" name="crime" required v-model="request.crime">
-                        No
-                    </label>
+                        <input type="radio" class="mr-1" value="No" name="crime" required
+                            v-model="request.crime"> No </label>
                 </div>
             </div>
             <h5 class="color-primary font-bold text-base mt-4 mb-2">Health Conditions</h5>
@@ -678,22 +645,17 @@
                         <h5 class="color-primary mb-2.5">Have you been hospitalized before?* <span
                                 class="text-red-500">*</span> </h5>
                         <label class="block color-primary mb-1 ml-1.5">
-                            <input type="radio" class="mr-1" value="Yes" required name="hospitalized"
-                                v-model="request.hospitalized">
-                            Yes
-                        </label>
+                            <input type="radio" class="mr-1" value="Yes" required
+                                name="hospitalized" v-model="request.hospitalized"> Yes </label>
                         <label class="block color-primary mb-1 ml-1.5">
                             <input type="radio" class="mr-1" value="No" name="hospitalized" required
-                                v-model="request.hospitalized">
-                            No
-                        </label>
+                                v-model="request.hospitalized"> No </label>
                     </div>
-                    <label class="block color-primary font-bold text-base mt-2 ">
-                        Other health concerns/conditions <span class="text-red-500">*</span>
+                    <label class="block color-primary font-bold text-base mt-2 "> Other health
+                        concerns/conditions <span class="text-red-500">*</span>
                     </label>
-                    <label class="block color-primary italic text-sm mb-1">
-                        (Type "none" if you do not have any)
-                    </label>
+                    <label class="block color-primary italic text-sm mb-1"> (Type "none" if you do
+                        not have any) </label>
                     <input
                         class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                         type="text" v-model="request.other_health_concern" required>
@@ -703,58 +665,48 @@
                         that apply) </h5>
                     <label class="custom-checkbox">
                         <input type="checkbox" v-model="request.health_concerns" value="Diabetes">
-                        <span class="custom-checkbox-button"></span>
-                        Diabetes
-                    </label>
+                        <span class="custom-checkbox-button"></span> Diabetes </label>
                     <label class="custom-checkbox">
                         <input type="checkbox" v-model="request.health_concerns" value="Allergies">
-                        <span class="custom-checkbox-button"></span>
-                        Allergies
-                    </label>
+                        <span class="custom-checkbox-button"></span> Allergies </label>
                     <label class="custom-checkbox">
                         <input type="checkbox" v-model="request.health_concerns" value="High Blood">
-                        <span class="custom-checkbox-button"></span>
-                        High Blood
-                    </label>
+                        <span class="custom-checkbox-button"></span> High Blood </label>
                     <label class="custom-checkbox">
                         <input type="checkbox" v-model="request.health_concerns" value="Anemia">
-                        <span class="custom-checkbox-button"></span>
-                        Anemia
-                    </label>
+                        <span class="custom-checkbox-button"></span> Anemia </label>
                     <label class="custom-checkbox">
                         <input type="checkbox" v-model="request.health_concerns" value="Others">
-                        <span class="custom-checkbox-button"></span>
-                        Others (please specify)
+                        <span class="custom-checkbox-button"></span> Others (please specify)
                     </label>
-                    <label v-if="request.health_concerns.includes('Others')" class="block color-primary mb-1 ml-1.5">
+                    <label v-if="request.health_concerns.includes('Others')"
+                        class="block color-primary mb-1 ml-1.5">
                         <input type="text"
                             class="mr-1 bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             required v-model="request.health_concern_other">
                     </label>
                 </div>
             </div>
-            <div v-if="isSecondaDegree" class="border-[1px] border-neutral-100 rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
+            <div v-if="isSecondaDegree"
+                class="border-[1px] border-neutral-100 rounded-lg mt-5 py-2.5 pl-2.5 pr-2.5">
                 <h5 class="color-primary text-base mb-2.5">Professional Background </h5>
-                <div class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-2.5 mb-4 ">
+                <div
+                    class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-2.5 mb-4 ">
                     <div>
-                        <label class="block  color-primary font-bold mb-3 pr-4">
-                            Company
-                        </label>
+                        <label class="block  color-primary font-bold mb-3 pr-4"> Company </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" v-model="request.sd_company">
                     </div>
                     <div>
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Industry
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> Industry
                         </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                             type="text" v-model="request.sd_position">
                     </div>
                     <div>
-                        <label class="block t color-primary font-bold  mb-3  pr-4">
-                            Designation
+                        <label class="block t color-primary font-bold  mb-3  pr-4"> Designation
                         </label>
                         <input
                             class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
@@ -769,14 +721,15 @@
             <div class="grid grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-6">
                 <div>
                     <div class="border-[1px] border-neutral-100 p-2.5 mb-4 rounded-lg">
-                        <h5 class="color-primary mb-2.5">How did you know about us?<span class="text-red-500">*</span>
+                        <h5 class="color-primary mb-2.5">How did you know about us?<span
+                                class="text-red-500">*</span>
                         </h5>
                         <div class="flex ">
                             <div class="w-1/2">
                                 <template v-for="source,index in sourceList">
                                     <label v-if="index <= 4" class="custom-checkbox mb-1">
-                                        <input type="checkbox" :id="index" :name="source" :value="source"
-                                            v-model="sources">
+                                        <input type="checkbox" :id="index" :name="source"
+                                            :value="source" v-model="sources">
                                         <span class="custom-checkbox-button"></span>
                                         {{source}}
                                     </label>
@@ -795,16 +748,16 @@
                         </div>
                     </div>
                     <div class="border-[1px] border-neutral-100 p-2.5 rounded-lg">
-                        <h5 class="color-primary text-sm mb-2.5">(to
-                            receive
-                            application updates/announcement/etc)
-                            <em>Best time to contact you?</em><span class="text-red-500">*</span>
+                        <h5 class="color-primary text-sm mb-2.5">(to receive application
+                            updates/announcement/etc) <em>Best time to contact you?</em><span
+                                class="text-red-500">*</span>
                         </h5>
                         <div class="flex ">
                             <div class="w-1/2">
                                 <template v-for="time,index in timeList">
                                     <label v-if="index <= 3" class="custom-checkbox mb-1">
-                                        <input type="checkbox" name="time" :id="index" :value="time" v-model="bestTime">
+                                        <input type="checkbox" name="time" :id="index" :value="time"
+                                            v-model="bestTime">
                                         <span class="custom-checkbox-button"></span>
                                         {{time}}
                                     </label>
@@ -813,7 +766,8 @@
                             <div class="w-1/2">
                                 <template v-for="time,index in timeList">
                                     <label v-if="index >= 4" class="custom-checkbox mb-1">
-                                        <input type="checkbox" name="time" :id="index" :value="time" v-model="bestTime">
+                                        <input type="checkbox" name="time" :id="index" :value="time"
+                                            v-model="bestTime">
                                         <span class="custom-checkbox-button"></span>
                                         {{time}}
                                     </label>
@@ -835,42 +789,45 @@
                     <!-- v-if="sources === 'referral'" -->
                     <div v-if="sources.includes('referral')"
                         class="border-[1px] border-neutral-100 p-2.5 mb-4 rounded-lg">
-                        <h5 class="color-primary mb-2.5">Referred by<span class="text-red-500">*</span></h5>
+                        <h5 class="color-primary mb-2.5">Referred by<span
+                                class="text-red-500">*</span></h5>
                         <div class="flex">
                             <div class="w-full">
                                 <div class="grid grid-cols-[repeat(2,_1fr)]">
                                     <template v-for="refer,index in referredList">
                                         <label v-if="index < 1" class="custom-radio mb-1">
-                                            <input type="radio" class="mr-1 " :id="index" name="refer"
-                                                :value="refer.toLowerCase()" v-model="sourcesSpecify.referral" required>
+                                            <input type="radio" class="mr-1 " :id="index"
+                                                name="refer" :value="refer.toLowerCase()"
+                                                v-model="sourcesSpecify.referral" required>
                                             <span class="custom-radio-button"></span>
                                             {{refer}}
                                         </label>
                                     </template>
                                     <label class="custom-radio mb-1">
-                                        <input type="radio" class="mr-1 " id="index" name="refer" value="teacher"
-                                            v-model="sourcesSpecify.referral" required>
-                                        <span class="custom-radio-button"></span>
-                                        Teacher/Guardian
+                                        <input type="radio" class="mr-1 " id="index" name="refer"
+                                            value="teacher" v-model="sourcesSpecify.referral"
+                                            required>
+                                        <span class="custom-radio-button"></span> Teacher/Guardian
                                     </label>
                                 </div>
                                 <template v-for="refer,index in referredList">
                                     <label v-if="index > 1" class="custom-radio mb-1">
-                                        <input type="radio" :id="index" name="refer" :value="refer.toLowerCase()"
+                                        <input type="radio" :id="index" name="refer"
+                                            :value="refer.toLowerCase()"
                                             v-model="sourcesSpecify.referral" required>
                                         <span class="custom-radio-button"></span>
                                         {{refer}}
                                     </label>
                                 </template>
                                 <label class="custom-radio mb-1">
-                                    <input type="radio" name="refer" value="iacademy" v-model="sourcesSpecify.referral"
-                                        required>
-                                    <span class="custom-radio-button"></span>
-                                    iACADEMY Student/Alumni/Applicant/Employee/Partner
-                                </label>
+                                    <input type="radio" name="refer" value="iacademy"
+                                        v-model="sourcesSpecify.referral" required>
+                                    <span class="custom-radio-button"></span> iACADEMY
+                                    Student/Alumni/Applicant/Employee/Partner </label>
                                 <input
                                     class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                    type="text" required v-model="refferalName" placeholder="Name of your referrer">
+                                    type="text" required v-model="refferalName"
+                                    placeholder="Name of your referrer">
                             </div>
                         </div>
                     </div>
@@ -886,18 +843,30 @@
                 </div>
             </div>
         </div>
-        <div class="text-center color-primary mt-[50px]" v-if="true">
-            iACADEMY shall retain in confidence all confidential information concerning and
-            involving every
-            student and the school.
-            <a href=" https://iacademy.edu.ph/privacypolicy.htm" target="_blank" class="underline font-bold">
-                https://iacademy.edu.ph/privacypolicy.htm</a>
+        <div v-if="true" class=" mb-6 mt-10">
+            <h4 class="color-primary font-bold text-xl">Innovation, Design, and Entrepreneurship
+                Achievers (IDEA) Scholarship</h4>
+            <hr class="mb-5 bg-[#10326f] h-1 w-3/5" />
+            <div class="grid grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-6">
+                <div class="border-[1px] border-neutral-100  rounded-lg py-2.5 pl-2.5 pr-2.5">
+                    <p class="mb-4"> Open to all SY2026 College Freshmen Applicants of iACADEMY
+                        Makati</li>
+                    </p>
+                    <label class="block color-primary italic text-sm mb-5"> (Submit a 1 minute video
+                        introducing yourself and how you wish to create positive change through
+                        unique and innovative ideas that address today's challenges.) </label>
+                    <input class="color-primary" type="file" accept="video/*" />
+                    <p class="mt-2 text-sm"> Deadline of application: Feb 28, 2026</p>
+                </div>
+            </div>
+        </div>
+        <div class="text-center color-primary mt-[50px]" v-if="true"> iACADEMY shall retain in
+            confidence all confidential information concerning and involving every student and the
+            school. <a href=" https://iacademy.edu.ph/privacypolicy.htm" target="_blank"
+                class="underline font-bold"> https://iacademy.edu.ph/privacypolicy.htm</a>
             <div class="mt-4">
-                <input type="checkbox" required id="agreement"> <label for="agreement" class="italic">I have read and
-                    I
-                    agree to the
-                    said
-                    policy.</label>
+                <input type="checkbox" required id="agreement"> <label for="agreement"
+                    class="italic">I have read and I agree to the said policy.</label>
             </div>
         </div>
         <hr class="my-5 bg-gray-400 h-[3px]" />
@@ -920,7 +889,8 @@
     </form>
 </div>
 <!-- Start of HubSpot Embed Code -->
-<script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/45758391.js"></script>
+<script type="text/javascript" id="hs-script-loader" async defer
+    src="//js.hs-scripts.com/45758391.js"></script>
 <!-- End of HubSpot Embed Code -->
 <style>
 input::placeholder {
@@ -999,7 +969,6 @@ input[type="number"] {
     opacity: 1;
 }
 
-
 .style-chooser .vs__search::placeholder,
 .style-chooser .vs__dropdown-toggle,
 .style-chooser .vs__dropdown-menu {
@@ -1013,32 +982,20 @@ input[type="number"] {
 <script>
 const sourcesLeft = ['Google', 'Facebook', 'Instagram', 'Tiktok', 'News']
 const sourcesRight = ['School Fair/Orientation', 'Billboard', 'Event', 'Referral', 'Others']
-
 const timeLeft = ['8:00am-10:00am', '10:00am-12:00pm', '12:00pm-2:00pm', '2:00pm-4:00pm']
 const timeRight = ['4:00pm-6:00pm', '6:00pm-8:00pm', '8:00pm-10:00pm', '10:00pm-12:00am']
-
-const referred = ['Family', 'Teacher/Guidance',
-    'Relatives', 'Friend'
-]
-
+const referred = ['Family', 'Teacher/Guidance', 'Relatives', 'Friend']
 const applicantTypeCollege = ['iACADEMY SHS Graduate', 'Graduate from other SHS',
     'iACADEMY College Graduate', 'Graduate from other College'
 ]
-
-const collegeTypeValue = ['College - Freshman', 'College - Transferee',
-    'College - Second Degree', 'College - iACADEMY SHS Graduate'
+const collegeTypeValue = ['College - Freshman', 'College - Transferee', 'College - Second Degree',
+    'College - iACADEMY SHS Graduate'
 ]
-
 const freshmenValue = ['College - Freshmen iACADEMY', 'College - Freshmen Other']
-
 const secondDegreeValue = ['2nd - Degree iACADEMY', '2nd - Degree Other']
-
 const applicantTypeShs = ['SHS - New', 'SHS - Transferee']
-
 const healthConditions = ['Diabetes', 'Allergies', 'High Blood', 'Anemia']
-
 Vue.component('v-select', VueSelect.VueSelect)
-
 new Vue({
     el: "#adminssions-form",
     data: {
@@ -1102,7 +1059,8 @@ new Vue({
             school_province: '',
             school_country: '',
             grade_year_level: '',
-            primary_contact: ''
+            primary_contact: '',
+            scholarship_video: ''
         },
         addressObj: {
             country: '',
@@ -1122,107 +1080,81 @@ new Vue({
         filtered_programs: [],
         programs_group: [],
         types: [],
+        attachment: '',
         base_url: "<?php echo base_url(); ?>",
     },
-
     mounted() {
-
-        axios
-            .get(this.base_url + 'site/view_active_programs_makati/' + this.syid, {
-                headers: {
-                    Authorization: `Bearer ${window.token}`
-                },
-            })
-
-            .then((data) => {
-
-                this.programs = data.data.data;
-                this.sy = data.data.sy;
-                this.term = data.data.term;
-
-            })
-            .catch((e) => {
-                console.log("error");
-            });
-
-        axios
-            .get(api_url + 'admissions/student-info/types', {
-                headers: {
-                    Authorization: `Bearer ${window.token}`
-                },
-            })
-            .then((data) => {
-                this.types = data.data.data;
-                setTimeout(() => {
-                    $(".admissions_submission_cb").on("click", e => {
-                        $(".admissions_submission_cb")
-                            .not(e.currentTarget)
-                            .prop("checked", false);
-                        if ($(e.currentTarget).is(":checked")) {
-                            this.request.type_id = e.currentTarget
-                                .value;
-                            $(".admissions_submission_cb").removeAttr(
-                                "required"
-                            );
-                        } else {
-                            $(".admissions_submission_cb").attr(
-                                "required",
-                                true
-                            );
-                        }
-                    });
-                }, 500);
-
-                document.querySelector('#course_first_choice').onchange = (e) => {
-                    this.request.program = e.target.selectedOptions[0].getAttribute(
-                        'data-title');
-                };
-                document.querySelector('#course_second_choice').onchange = (e) => {
-                    this.request.program2 = e.target.selectedOptions[0]
-                        .getAttribute('data-title');
-                };
-                document.querySelector('#course_third_choice').onchange = (e) => {
-                    this.request.program3 = e.target.selectedOptions[0]
-                        .getAttribute('data-title');
-                };
-            })
-            .catch((e) => {
-                console.log("error");
-            });
-
-
+        axios.get(this.base_url + 'site/view_active_programs_makati/' + this.syid, {
+            headers: {
+                Authorization: `Bearer ${window.token}`
+            },
+        }).then((data) => {
+            this.programs = data.data.data;
+            this.sy = data.data.sy;
+            this.term = data.data.term;
+        }).catch((e) => {
+            console.log("error");
+        });
+        axios.get(api_url + 'admissions/student-info/types', {
+            headers: {
+                Authorization: `Bearer ${window.token}`
+            },
+        }).then((data) => {
+            this.types = data.data.data;
+            setTimeout(() => {
+                $(".admissions_submission_cb").on("click", e => {
+                    $(".admissions_submission_cb").not(e
+                        .currentTarget).prop("checked", false);
+                    if ($(e.currentTarget).is(":checked")) {
+                        this.request.type_id = e.currentTarget
+                        .value;
+                        $(".admissions_submission_cb").removeAttr(
+                            "required");
+                    } else {
+                        $(".admissions_submission_cb").attr(
+                            "required", true);
+                    }
+                });
+            }, 500);
+            document.querySelector('#course_first_choice').onchange = (e) => {
+                this.request.program = e.target.selectedOptions[0].getAttribute(
+                    'data-title');
+            };
+            document.querySelector('#course_second_choice').onchange = (e) => {
+                this.request.program2 = e.target.selectedOptions[0]
+                    .getAttribute('data-title');
+            };
+            document.querySelector('#course_third_choice').onchange = (e) => {
+                this.request.program3 = e.target.selectedOptions[0]
+                    .getAttribute('data-title');
+            };
+        }).catch((e) => {
+            console.log("error");
+        });
         this.getAllPrevSchool()
-
         this.getAllCountry()
-
-
     },
     computed: {
         isSecondaDegree() {
             return this.request.student_type == '2nd - Degree iACADEMY' || this.request
                 .student_type == '2nd - Degree Other'
-
         }
     },
-
     methods: {
         async getBarangay(e) {
             const {
                 data
             } = await axios.get(
                 `https://psgc.cloud/api/cities/${e.target.selectedOptions[0].id}/barangays`
-            )
+                )
             this.barangay = data
         },
         async getCities(e) {
             if (this.addressObj.country == 'Philippines') {
                 const {
                     data
-                } = await axios.get(
-                    `https://psgc.cloud/api/cities`
-                )
+                } = await axios.get(`https://psgc.cloud/api/cities`)
                 this.cities = data
-
             } else {
                 const {
                     data
@@ -1253,14 +1185,12 @@ new Vue({
                 } = await axios.get('https://psgc.cloud/api/provinces')
                 this.states = data
             } else {
-
                 const {
                     data
                 } = await axios.post(
                     'https://countriesnow.space/api/v0.1/countries/states', {
                         "country": e.target.value
                     })
-
                 for (const state of data.data.states) {
                     this.states.push(state.name)
                 }
@@ -1274,26 +1204,21 @@ new Vue({
             for (const countryObj of data.data) {
                 this.countryList.push(countryObj.country)
             }
-
         },
         async getAllPrevSchool() {
             try {
                 const {
                     data
-                } = await axios.get(
-                    `${api_url}admissions/previous-schools`, {
-                        headers: {
-                            Authorization: `Bearer ${window.token}`
-                        }
-                    })
-
+                } = await axios.get(`${api_url}admissions/previous-schools`, {
+                    headers: {
+                        Authorization: `Bearer ${window.token}`
+                    }
+                })
                 this.prevSchoolList = data
                 const obj = {
                     name: 'Not on the list'
                 }
                 this.prevSchoolList.push(obj)
-
-
             } catch (error) {
                 const obj = {
                     name: 'Not on the list'
@@ -1302,7 +1227,6 @@ new Vue({
             }
         },
         async onInputChange(value) {
-
             this.hide_school_address = false
             if (value == null) {
                 this.isOnList = false
@@ -1315,10 +1239,8 @@ new Vue({
                 for (const key in this.register) {
                     this.register[key] = ''
                 }
-
                 return
             }
-
             if (value.name == 'Not on the list') {
                 this.isOnList = true
                 this.request.school_id = ''
@@ -1330,26 +1252,20 @@ new Vue({
                 this.notOnTheList = 'yes'
                 return
             }
-
-
             if (value.name != '') {
                 this.isOnList = false
                 this.notOnTheList = null
             }
-
-
             this.request.school_id = value.id
             this.request.school_name = value.name
             this.request.school_city = value.city
             this.request.school_province = value.province
             this.request.school_country = value.country
         },
-        submitForm: function() {
-        },
+        submitForm: function() {},
         unmaskedValue: function() {
             var val = this.$refs.input.clean
         },
-
         filterProgram: function(type, title) {
             var group = _.filter(this.programs, function(o) {
                 return o.type == type;
@@ -1359,17 +1275,14 @@ new Vue({
             });
             this.programs_group = _.concat(group, others);
             this.request.program = title;
-
             setTimeout(() => {
                 $(".admissions_submission_pg").on("click", e => {
-                    $(".admissions_submission_pg")
-                        .not(e.currentTarget)
+                    $(".admissions_submission_pg").not(e.currentTarget)
                         .prop("checked", false);
                     if ($(e.currentTarget).is(":checked")) {
                         this.request.program_id = e.currentTarget.value;
                         $(".admissions_submission_pg").removeAttr(
                             "required");
-
                     } else {
                         $(".admissions_submission_pg").attr("required",
                             true);
@@ -1377,18 +1290,13 @@ new Vue({
                 });
             }, 500);
         },
-
         filterCourses: function(type) {
-            if (type === 'shs')
-                this.filtered_programs = this.programs.shs;
-            else if (type === 'college')
-                this.filtered_programs = this.programs.college;
-            else if (type === 'drive')
-                this.filtered_programs = this.programs.drive;
+            if (type === 'shs') this.filtered_programs = this.programs.shs;
+            else if (type === 'college') this.filtered_programs = this.programs.college;
+            else if (type === 'drive') this.filtered_programs = this.programs.drive;
             else {
                 this.filtered_programs = this.programs.sd;
             }
-
             this.request.type = type;
         },
         confirmEmail: function() {
@@ -1409,7 +1317,6 @@ new Vue({
             this.request.mobile_number = `${this.code1}${this.request.mobile_number}`
             this.request.mobile_number_confirmation =
                 `${this.code2}${this.request.mobile_number_confirmation}`
-
             if (this.request.mobile_number != this.request.mobile_number_confirmation) {
                 Swal.fire({
                     title: 'iACADEMY MAKATI CAMPUS',
@@ -1423,7 +1330,6 @@ new Vue({
             }
             return false
         },
-
         setSource: function() {
             if (this.sources.includes('event')) {
                 const index = this.sources.indexOf("event");
@@ -1433,16 +1339,12 @@ new Vue({
                 const index = this.sources.indexOf("others");
                 this.sources[index] = `Others(${this.sourcesSpecify.others})`
             }
-
             if (this.sources.includes('referral')) {
                 const index = this.sources.indexOf("referral");
                 this.sources[index] =
                     `referral-${this.sourcesSpecify.referral}(${this.refferalName})`
-
             }
-
             this.request.source = this.sources.join();
-
             // this.request.source = this.sources
             // if (this.sources == 'event' || this.sources == 'others') {
             //     this.request.source =
@@ -1456,7 +1358,6 @@ new Vue({
         setTime: function() {
             this.request.best_time = this.bestTime.join();
         },
-
         setFirstChoice: function(e) {
             this.request.program = e.target.selectedOptions[0].getAttribute(
                 'data-title')
@@ -1469,34 +1370,48 @@ new Vue({
             this.request.program3 = e.target.selectedOptions[0].getAttribute(
                 'data-title')
         },
-
         setYearStart: function() {
             const result = this.sy.find(data => data.intID === this.request.syid);
-
             this.request.year_start = result.strYearStart
         },
-
         setSchoolProgram: function() {
-            const result = this.filtered_programs.find(programs => programs.id === this.request.type_id);
-
+            const result = this.filtered_programs.find(programs => programs.id === this
+                .request.type_id);
             this.request.program_school = result.school
         },
-
         onSelectChange() {
             this.isOnList = true
             this.hide_school_address = true
             this.selectedSchool = this.setSelectedSchool
         },
-
-
+        attachFile($event) {
+            this.attachment = $event.target.files[0]
+        },
+        validateVideo() {
+            if (this.attachment && !this.attachment.type.startsWith("video/")) {
+                Swal.fire({
+                    title: 'iACADEMY MAKATI CAMPUS',
+                    html: 'Not a valid video file.',
+                    confirmButtonText: "Ok",
+                    imageWidth: 100,
+                    icon: "error",
+                    showCloseButton: false
+                })
+                return true
+            }
+            this.request.scholarship_video = this.attachment
+            return false
+        },
         customSubmit: function(type, title, text, data, url, redirect) {
+            if (this.validateVideo()) {
+                return
+            }
             if (this.confirmEmail()) {
                 return
             }
             if (this.confirmMobileNumber()) {
                 return
             }
-
             if (this.sources.length == 0) {
                 Swal.fire({
                     title: 'iACADEMY MAKATI CAMPUS',
@@ -1508,7 +1423,6 @@ new Vue({
                 })
                 return
             }
-
             if (this.bestTime.length == 0) {
                 Swal.fire({
                     title: 'iACADEMY MAKATI CAMPUS',
@@ -1524,8 +1438,6 @@ new Vue({
             if (this.request.school_id == "") {
                 Object.assign(this.request, this.register);
             }
-
-
             if (this.request.school_name == '') {
                 Swal.fire({
                     title: 'iACADEMY MAKATI CAMPUS',
@@ -1537,12 +1449,10 @@ new Vue({
                 })
                 return
             }
-
             this.setSource()
             this.setTime()
             this.setYearStart()
             this.setSchoolProgram()
-
             Swal.fire({
                 title: 'iACADEMY MAKATI CAMPUS',
                 html: `
@@ -1557,7 +1467,6 @@ new Vue({
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
                     this.loading_spinner = true;
-
                     // if (this.request.mobile_number.length < 9) {
                     //     this.loading_spinner = false;
                     //     Swal.fire(
@@ -1566,60 +1475,43 @@ new Vue({
                     //         'warning'
                     //     )
                     // } else {
-
-                    if (this.request.health_concerns.includes(
-                            "Others")) {
+                    if (this.request.health_concerns.includes("Others")) {
                         const hasOther = this.request.health_concerns
                             .indexOf("Others");
-                        this.request.health_concerns.splice(
-                            hasOther,
-                            1,
-                            this.request.health_concern_other
-                        );
+                        this.request.health_concerns.splice(hasOther, 1,
+                            this.request.health_concern_other);
                     }
-
-
                     this.request.health_concern = this.request
-                        .health_concerns.join(
-                            ", "
-                        );
-
+                        .health_concerns.join(", ");
                     Object.assign(this.request, this.addressObj)
-
-                    axios
-                        .post(api_url + url, data, {
-                            headers: {
-                                Authorization: `Bearer ${window.token}`
-                            }
-                        })
-                        .then(data => {
-                            this.is_done = true;
-
-                            if (data.data.success) {
-
-                                this.loading_spinner = false;
-                                var ret = data.data.data;
-
-                                Swal.fire({
-                                    title: "SUCCESS",
-                                    text: data.data.message,
-                                    icon: "success"
-                                }).then(function() {
-                                    location.href =
-                                        "<?php echo base_url(); ?>site/initial_requirements/" +
-                                        ret
-                                        .slug;
-                                });
-
-                            } else {
-                                this.loading_spinner = false;
-                                Swal.fire(
-                                    'Failed!',
-                                    data.data.message,
-                                    'error'
-                                )
-                            }
-                        });
+                    const formData = new FormData()
+                    for (const key in this.request) {
+                        formData.append(key, this.request[key])
+                    }
+                    axios.post(api_url + url, formData, {
+                        headers: {
+                            Authorization: `Bearer ${window.token}`
+                        }
+                    }).then(data => {
+                        this.is_done = true;
+                        if (data.data.success) {
+                            this.loading_spinner = false;
+                            var ret = data.data.data;
+                            Swal.fire({
+                                title: "SUCCESS",
+                                text: data.data.message,
+                                icon: "success"
+                            }).then(function() {
+                                location.href =
+                                    "<?php echo base_url(); ?>site/initial_requirements/" +
+                                    ret.slug;
+                            });
+                        } else {
+                            this.loading_spinner = false;
+                            Swal.fire('Failed!', data.data.message,
+                                'error')
+                        }
+                    });
                     // }
                 }
             })
@@ -1635,5 +1527,6 @@ new Vue({
 }
 </style>
 <!-- Start of HubSpot Embed Code -->
-<script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/45758391.js"></script>
+<script type="text/javascript" id="hs-script-loader" async defer
+    src="//js.hs-scripts.com/45758391.js"></script>
 <!-- End of HubSpot Embed Code -->
