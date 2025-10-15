@@ -1443,7 +1443,7 @@ new Vue({
                             var ret = data.data.data;
                             Swal.fire({
                                 title: "SUCCESS",
-                                text: `{data.data.message}\nNote: You can upload the video later if needed.`,
+                                text: `${data.data.message}\nNote: You can upload the video later if needed.`,
                                 icon: "success"
                             }).then(function() {
                                 location.href =
