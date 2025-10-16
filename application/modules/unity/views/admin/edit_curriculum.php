@@ -83,7 +83,7 @@
                             </div>
                             <!-- /.box-body -->
                             <div class="box-footer">
-                                <div class="form-group col-sm-3">
+                                <div class="form-group col-sm-2">
                                     <label for="type">Type</label>
                                     <select class="form-control" name="type" id="type">
                                         <option value="regular">Regular</option>
@@ -104,7 +104,7 @@
                                         <option value="5">5</option>
                                     </select>
                                 </div>
-                                <div class="form-group col-sm-2">
+                                <div class="form-group col-sm-1">
                                     <label for="intSem">Term</label>
                                     <select class="form-control" name="intSem" id="intSem">
                                         <option value="1">1</option>
@@ -127,6 +127,10 @@
                                         <option value="<?php echo $s['intSubjectID']; ?>"><?php echo $s['strCode']; ?></option>
                                         <?php endforeach; ?>
                                     </select>
+                                </div>
+                                <div class="form-group col-sm-3" id="combine">
+                                    <label for="combineDesc">Combine Name</label>
+                                    <input type="text" class="form-control" name="combineDesc" id="combineDesc">
                                 </div>
                                 <div class="form-group col-sm-2">
                                     <label for="intSem"></label>
