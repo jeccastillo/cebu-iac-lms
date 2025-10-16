@@ -592,7 +592,7 @@ class Data_fetcher extends CI_Model {
     function getSubjectsInSecondary($id)
     {
         $subjects = $this->db
-                         ->select('tb_mas_curriculum_second.intID,subj1.strCode,subj1.strUnits,subj1.intID as intSubjectID,subj1.strDescription,subj1.intLab, subj1.intLectHours,subj1.strUnits,subj1.include_gwa,tb_mas_curriculum_second.type, subj2.strCode as strCodeEquivalent')
+                         ->select('tb_mas_curriculum_second.intID,subj1.strCode,subj1.strUnits,subj1.intID as intSubjectID,subj1.strDescription,subj1.intLab, subj1.intLectHours,subj1.strUnits,subj1.include_gwa,tb_mas_curriculum_second.type, subj2.strCode as strCodeEquivalent, tb_mas_curriculum_second.combineCode, tb_mas_curriculum_second.combineDesc')
                          ->from('tb_mas_curriculum_second')
                          ->join('tb_mas_subjects subj1','subj1.intID = tb_mas_curriculum_second.intSubjectID')
                          ->join('tb_mas_subjects subj2','subj2.intID = tb_mas_curriculum_second.equivalentSubjectID', 'left')
