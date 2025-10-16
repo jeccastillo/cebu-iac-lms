@@ -2377,6 +2377,8 @@ class Unity extends CI_Controller {
             $this->data['curriculum_subjects'] = [];
             $this->data['curriculum_second'] = [];
              
+            print_r($curriculum_second);
+            die();
             foreach($curriculum as $subject){
                 $prereq_array = 
                         $this->db->select('tb_mas_subjects.*,tb_mas_prerequisites.program')
