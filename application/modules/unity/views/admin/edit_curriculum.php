@@ -228,6 +228,35 @@
                 <?php 
             $i++;
             endforeach; ?>
+                <?php
+                // Preprocess curriculum_second to group Combine subjects
+                $grouped_combine = array();
+                $non_combine = array();
+                foreach($curriculum_second as $s) {
+                    if($s['type'] == 'Combine') {
+                        $key = $s['combineCode'] . '_' . $s['combineDesc'];
+                        if(!isset($grouped_combine[$key])) {
+                            $grouped_combine[$key] = array(
+                                'combineCode' => $s['combineCode'],
+                                'combineDesc' => $s['combineDesc'],
+                                'subjects' => array(),
+                                'total_units' => 0,
+                                'count' => 0
+                            );
+                        }
+                        $grouped_combine[$key]['subjects'][] = $s;
+                        $grouped_combine[$key]['total_units'] += $s['strUnits'];
+                        $grouped_combine[$key]['count']++;
+                    } else {
+                        $non_combine[] = $s;
+                    }
+                }
+                // Compute units for grouped
+                foreach($grouped_combine as &$group) {
+                    $group['computed_units'] = $group['total_units'] / $group['count'];
+                }
+                unset($group);
+                ?>
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -243,11 +272,29 @@
                             <th>Total Units</th>
                             <th>Type</th>
                             <th>Subject Equivalent</th>
+                            <th>Combined Subjects</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach($curriculum_second as $s): ?>
+                        <?php
+                        // Display grouped Combine subjects
+                        foreach($grouped_combine as $group): ?>
+                        <tr>
+                            <td><?php echo $group['combineCode']; ?></td>
+                            <td><?php echo $group['combineDesc']; ?></td>
+                            <td></td>
+                            <td></td>
+                            <td><?php echo $group['computed_units']; ?></td>
+                            <td>Combine</td>
+                            <td></td>
+                            <td><?php echo implode(', ', array_map(function($subj){ return $subj['strCode']; }, $group['subjects'])); ?></td>
+                            <td></td>
+                        </tr>
+                        <?php endforeach; ?>
+                        <?php
+                        // Display non-Combine subjects
+                        foreach($non_combine as $s): ?>
                         <tr>
                             <td><a target="_blank"
                                     href="<?php echo base_url(); ?>subject/subject_viewer/<?php echo $s['intSubjectID']; ?>"><?php echo $s['strCode']; ?></a>
@@ -258,6 +305,7 @@
                             <td><?php echo $s['strUnits']; ?></td>
                             <td><?php echo $s['type']; ?></td>
                             <td><?php echo $s['strCodeEquivalent']; ?></td>
+                            <td></td>
                             <td>
                                 <a rel="<?php echo $s['intID']; ?>" class="btn btn-danger remove-subject-second"
                                     href="#">Remove</a>
