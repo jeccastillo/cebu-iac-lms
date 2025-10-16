@@ -129,6 +129,10 @@
                                     </select>
                                 </div>
                                 <div class="form-group col-sm-3" id="combine">
+                                    <label for="combineCode">Combine Course Code</label>
+                                    <input type="text" class="form-control" name="combineCode" id="combineCode">
+                                </div>
+                                <div class="form-group col-sm-3" id="combine">
                                     <label for="combineDesc">Combine Name</label>
                                     <input type="text" class="form-control" name="combineDesc" id="combineDesc">
                                 </div>
