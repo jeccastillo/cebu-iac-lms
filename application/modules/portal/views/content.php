@@ -140,18 +140,18 @@
                         <td><?php echo $record['strCode']; ?></td>
 						<td><?php echo $record['strDescription']; ?></td>
                         <td style="text-align: center;"><?php echo $record['strUnits']?>                                                
-                        <?php if($record['intFinalized'] >= 1 && $sem_selected->viewing_midterm_start <= date("Y-m-d") && $sem_selected->viewing_midterm_end > date("Y-m-d")): ?>                                
+                        <?php if($record['intFinalized'] >= 1 && $sem_selected->viewing_midterm_start <= date("Y-m-d")): ?>                                
                             <td><strong><?php echo $record['v2']; ?></strong></td>
                         <?php else: ?>
                             <td>Not Yet Available</td>
                         <?php endif; ?>    
-                        <?php if($record['intFinalized'] >= 2 && $sem_selected->viewing_final_start <= date("Y-m-d") && $sem_selected->viewing_final_end > date("Y-m-d") && count($deficiencies) == 0): ?>                                
+                        <?php if($record['intFinalized'] >= 2 && $sem_selected->viewing_final_start <= date("Y-m-d") && count($deficiencies) == 0): ?>                                
                             <td><strong><?php echo $record['v3']; ?></strong></td>
                         <?php else: ?>
                             <td>Not Yet Available</td>
                         <?php endif; ?>                                                        
                         <td>
-                            <?php if($record['intFinalized'] >= 2 && $sem_selected->viewing_final_start <= date("Y-m-d") && $sem_selected->viewing_final_end > date("Y-m-d") && count($deficiencies) == 0): ?> 
+                            <?php if($record['intFinalized'] >= 2 && $sem_selected->viewing_final_start <= date("Y-m-d") && count($deficiencies) == 0): ?> 
                                 <?php echo $record['strRemarks']; ?>
                             <?php else: ?>
                                 -
