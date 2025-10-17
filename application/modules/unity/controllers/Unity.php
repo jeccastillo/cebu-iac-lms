@@ -2565,7 +2565,7 @@ class Unity extends CI_Controller {
                 }
             elseif($type == "Combine")
                 foreach($post['combineSubjects'] as $subject){ 
-                    $data = array('intSubjectID'=>$subject,'intCurriculumID'=>$post['intCurriculumID'],'type'=>$post['type'], 'combineDesc' => $post['combineDesc']);
+                    $data = array('intSubjectID'=>$subject,'intCurriculumID'=>$post['intCurriculumID'],'type'=>$post['type'], 'combineCode' => $post['combineCode'], 'combineDesc' => $post['combineDesc']);
                     $this->data_poster->post_data('tb_mas_curriculum_second',$data);
                 }
             else
