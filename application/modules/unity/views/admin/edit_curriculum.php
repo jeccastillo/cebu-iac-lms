@@ -83,13 +83,14 @@
                             </div>
                             <!-- /.box-body -->
                             <div class="box-footer">
-                                <div class="form-group col-sm-3">
+                                <div class="form-group col-sm-2">
                                     <label for="type">Type</label>
                                     <select class="form-control" name="type" id="type">
                                         <option value="regular">Regular</option>
                                         <option value="2nd Specialization">2nd Specialization</option>
                                         <option value="Elective">Elective</option>
                                         <option value="Equivalent">Equivalent</option>
+                                        <option value="Combine">Combine Subjects</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-sm-2">
@@ -103,7 +104,7 @@
                                         <option value="5">5</option>
                                     </select>
                                 </div>
-                                <div class="form-group col-sm-2">
+                                <div class="form-group col-sm-1">
                                     <label for="intSem">Term</label>
                                     <select class="form-control" name="intSem" id="intSem">
                                         <option value="1">1</option>
@@ -118,6 +119,22 @@
                                         <option value="<?php echo $s['intSubjectID']; ?>"><?php echo $s['strCode']; ?></option>
                                         <?php endforeach; ?>
                                     </select>
+                                </div>
+                                <div class="form-group col-sm-3" id="combineSubject" hidden>
+                                    <label for="combineSubjects">Combine</label>
+                                    <select class="form-control" name="combineSubjects[]" id="combineSubjects[]" multiple>
+                                        <?php foreach($curriculum_subjects as $s): ?>
+                                        <option value="<?php echo $s['intSubjectID']; ?>"><?php echo $s['strCode']; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <div class="form-group col-sm-3" id="combine">
+                                    <label for="combineCode">Combine Course Code</label>
+                                    <input type="text" class="form-control" name="combineCode" id="combineCode">
+                                </div>
+                                <div class="form-group col-sm-3" id="combine">
+                                    <label for="combineDesc">Combine Description</label>
+                                    <input type="text" class="form-control" name="combineDesc" id="combineDesc">
                                 </div>
                                 <div class="form-group col-sm-2">
                                     <label for="intSem"></label>
@@ -211,6 +228,35 @@
                 <?php 
             $i++;
             endforeach; ?>
+                <?php
+                // Preprocess curriculum_second to group Combine subjects
+                $grouped_combine = array();
+                $non_combine = array();
+                foreach($curriculum_second as $s) {
+                    if($s['type'] == 'Combine') {
+                        $key = $s['combineCode'] . '_' . $s['combineDesc'];
+                        if(!isset($grouped_combine[$key])) {
+                            $grouped_combine[$key] = array(
+                                'combineCode' => $s['combineCode'],
+                                'combineDesc' => $s['combineDesc'],
+                                'subjects' => array(),
+                                'total_units' => 0,
+                                'count' => 0
+                            );
+                        }
+                        $grouped_combine[$key]['subjects'][] = $s;
+                        $grouped_combine[$key]['total_units'] += $s['strUnits'];
+                        $grouped_combine[$key]['count']++;
+                    } else {
+                        $non_combine[] = $s;
+                    }
+                }
+                // Compute units for grouped
+                foreach($grouped_combine as &$group) {
+                    $group['computed_units'] = $group['total_units'] / $group['count'];
+                }
+                unset($group);
+                ?>
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -226,11 +272,29 @@
                             <th>Total Units</th>
                             <th>Type</th>
                             <th>Subject Equivalent</th>
+                            <th>Combined Subjects</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach($curriculum_second as $s): ?>
+                        <?php
+                        // Display grouped Combine subjects
+                        foreach($grouped_combine as $group): ?>
+                        <tr>
+                            <td><?php echo $group['combineCode']; ?></td>
+                            <td><?php echo $group['combineDesc']; ?></td>
+                            <td></td>
+                            <td></td>
+                            <td><?php echo $group['computed_units']; ?></td>
+                            <td>Combine</td>
+                            <td></td>
+                            <td><?php echo implode(', ', array_map(function($subj){ return $subj['strCode']; }, $group['subjects'])); ?></td>
+                            <td></td>
+                        </tr>
+                        <?php endforeach; ?>
+                        <?php
+                        // Display non-Combine subjects
+                        foreach($non_combine as $s): ?>
                         <tr>
                             <td><a target="_blank"
                                     href="<?php echo base_url(); ?>subject/subject_viewer/<?php echo $s['intSubjectID']; ?>"><?php echo $s['strCode']; ?></a>
@@ -241,6 +305,7 @@
                             <td><?php echo $s['strUnits']; ?></td>
                             <td><?php echo $s['type']; ?></td>
                             <td><?php echo $s['strCodeEquivalent']; ?></td>
+                            <td></td>
                             <td>
                                 <a rel="<?php echo $s['intID']; ?>" class="btn btn-danger remove-subject-second"
                                     href="#">Remove</a>
