@@ -1,6 +1,10 @@
 <script type="text/javascript">
 $(document).ready(function() {
     let equivalentSubjectID = document.getElementById('equivalent')
+    let combineSubject = document.getElementById('combineSubject')
+    let intYearLevel = document.getElementById('intYearLevel')
+    let intSem = document.getElementById('intSem')
+
     $(function() {
         $('[data-toggle="popover"]').popover({
             trigger: 'hover'
@@ -11,7 +15,16 @@ $(document).ready(function() {
     $("#type").on('change', function(e) {
         let isHidden = $(this).val() != 'Equivalent'
         equivalentSubjectID.hidden = isHidden
+        combineSubject.hidden = isHidden
+        $("#intYearLevel").hidden = !isHidden
+        $("#intSem").hidden = !isHidden
     });
 
+    $("#type").on('change', function(e) {
+        let isHidden = $(this).val() != 'Combine'
+        combineSubject.hidden = isHidden
+        $("#intYearLevel").hidden = !isHidden
+        $("#intSem").hidden = !isHidden
+    });
 });
 </script>
