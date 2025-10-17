@@ -36,7 +36,7 @@
         <div v-if="true" class=" flex flex-wrap md:gap-x-5 mb-6 mt-10 justify-center ">
             <!-- col 1 -->
             <div id="select-term" class="flex-[5_0_188px]">
-                <div id="applicant-type" v-if="term.term_student_type == 'shs'"
+                <div id="applicant-type"
                     class="border-[1px] border-neutral-100 p-2.5 rounded-lg flex flex-wrap gap-x-4">
                     <div class="flex-grow">
                         <label class="block t color-primary font-bold mb-3 pr-4"
@@ -62,249 +62,177 @@
                             {{shs}} </label>
                     </div>
                 </div>
-                <div id=applying-for class=" flex-[4_1_auto] max-w-[710px]"
-                    v-if="request.student_type">
-                    <div class="md:w-5/5">
-                        <label class="block t color-primary font-bold  mb-3  pr-4"
-                            for="inline-full-name"> Applying for </label>
-                        <div class="border-[1px] border-neutral-100 p-2.5 rounded-lg">
-                            <div id="first-choice" class="mb-3">
-                                <label class="block t color-primary font-bold  mb-3  pr-4"
-                                    for="inline-full-name"> First Choice </label>
-                                <select :disabled="!request.student_type ? true : false"
-                                    class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                    type="text" @change="setFirstChoice" required
-                                    v-model="request.type_id">
-                                    <option disabled value="">--Select options--</option>
-                                    <option :value="t.id" v-for="t in filtered_programs"
-                                        :data-title="t.title" :key="t.id"
-                                        :disabled="t.id == request.type_id2 || t.id == request.type_id3 ? true : false">
-                                        {{t.title}}
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="block t color-primary font-bold  mb-3  pr-4"
-                                    for="inline-full-name"> Second Choice </label>
-                                <select :disabled="!request.student_type ? true : false"
-                                    class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                    type="text" @change="setSecondChoice" required
-                                    v-model="request.type_id2">
-                                    <option disabled value="">--Select options--</option>
-                                    <option :value="t.id" v-for="t in filtered_programs"
-                                        :data-title="t.title" :key="t.id"
-                                        :disabled="t.id == request.type_id || t.id == request.type_id3 ? true : false">
-                                        {{t.title}}
-                                    </option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block t color-primary font-bold  mb-3  pr-4"
-                                    for="inline-full-name"> Third Choice </label>
-                                <select :disabled="!request.student_type ? true : false"
-                                    class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                    type="text" @change="setThirdChoice" required
-                                    v-model="request.type_id3">
-                                    <option disabled value="">--Select options--</option>
-                                    <option :value="t.id" v-for="t in filtered_programs" :key="t.id"
-                                        :data-title="t.title"
-                                        :disabled="t.id == request.type_id || t.id == request.type_id2 ? true : false">
-                                        {{t.title}}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+                <div id=applying-for class=" flex-[4_1_auto] max-w-[710px]" v-if="true">
                 </div>
-                <h5 class="color-primary font-bold my-4" for="inline-full-name">Customize Your
-                    Electives </h5>
+                <h5 class="color-primary font-bold my-4 mb-0" for="inline-full-name">Select your
+                    preferred electives </h5>
+                <p class="color-primary">Please note that the selected electives are subject for
+                    consultation. <b>Final approved electives</b> will be discussed during the
+                    academic advising. Select only <b>2 elective subjects</b> for Grade 11 Semester
+                    1. </p>
                 <div class="border border-neutral-100 p-2.5 pt-1 rounded-lg">
-                    <h5 class="color-primary font-bold text-center" for="inline-full-name"> Academic
-                        Track </h5>
+                    <h5 class="color-primary font-bold text-left italic mb-2"> Senior High School
+                        Launchpad </h5>
+                    <h5 class="color-primary font-bold text-center uppercase mb-2"> Academic Track
+                    </h5>
                     <div class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] mb-4">
                         <div>
-                            <h6 class="color-primary font-bold">Business & Entrepreneurship</h6>
-                            <label class="custom-checkbox !items-baseline color-primary">
-                                <input type="checkbox" value="">
-                                <span class="custom-checkbox-button !rounded-full "></span> Business
-                                Math </label>
-                            <label class="custom-checkbox !items-baseline color-primary">
-                                <input type="checkbox" value="">
-                                <span class="custom-checkbox-button !rounded-full"></span> Business
-                                Ethics and Social Responsibility </label>
-                        </div>
-                        <div>
-                            <h6 class="color-primary font-bold">STEM</h6>
-                            <label class="custom-checkbox !items-baseline color-primary">
-                                <input type="checkbox" value="">
-                                <span class="custom-checkbox-button !rounded-full"></span>
-                                Introduction to Anatomy and Physiology [Health Technology] </label>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1">
-                        <div>
-                            <h6 class="color-primary font-bold">Multimedia Arts</h6>
-                            <label class="custom-checkbox !items-baseline color-primary">
-                                <input type="checkbox" value="">
-                                <span class="custom-checkbox-button !rounded-full "></span> Layout
-                                Design for Print Publication </label>
-                            <label class="custom-checkbox !items-baseline color-primary">
-                                <input type="checkbox" value="">
-                                <span class="custom-checkbox-button !rounded-full"></span> Vector
-                                Graphic and Illustration </label>
-                            <label class="custom-checkbox !items-baseline color-primary">
-                                <input type="checkbox" value="">
-                                <span class="custom-checkbox-button !rounded-full"></span>
-                                Integrating the Elements and Principles of Organization in the Arts
-                            </label>
-                            <label class="custom-checkbox !items-baseline color-primary">
-                                <input type="checkbox" value="">
-                                <span class="custom-checkbox-button !rounded-full"></span>Non-Linear
-                                Video Editing </label>
-                            <label class="custom-checkbox !items-baseline color-primary">
-                                <input type="checkbox" value="">
-                                <span class="custom-checkbox-button !rounded-full"></span> Photo
-                                Retouching and File Management </label>
-                            <label class="custom-checkbox !items-baseline color-primary">
-                                <input type="checkbox" value="">
-                                <span class="custom-checkbox-button !rounded-full"></span> Sound
-                                Mixing and Music Authoring </label>
-                        </div>
-                    </div>
-                    <h5 class="color-primary font-bold text-center"> Tech-Pro Track </h5>
-                    <div class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-y-4 mb-4">
-                        <div>
-                            <h6 class="color-primary font-bold">Animation</h6>
-                            <label class="custom-checkbox !items-baseline color-primary">
-                                <input type="checkbox" value="">
-                                <span class="custom-checkbox-button !rounded-full "></span> Freehand
-                                Drawing </label>
-                            <label class="custom-checkbox !items-baseline color-primary">
-                                <input type="checkbox" value="">
-                                <span class="custom-checkbox-button !rounded-full"></span> Figure
-                                Drawing </label>
-                            <label class="custom-checkbox !items-baseline color-primary">
-                                <input type="checkbox" value="">
-                                <span class="custom-checkbox-button !rounded-full "></span> Life
-                                Drawing </label>
-                            <label class="custom-checkbox !items-baseline color-primary">
-                                <input type="checkbox" value="">
-                                <span class="custom-checkbox-button !rounded-full "></span> Layout
-                                and Storyboarding </label>
-                            <label class="custom-checkbox !items-baseline color-primary">
-                                <input type="checkbox" value="">
+                            <h6 class="color-primary font-bold indent-[22px]">ABM</h6>
+                            <label class="custom-checkbox !items-baseline color-primary"
+                                v-for="track in  abmTrack">
+                                <input type="checkbox" data-strand="ABM" :value="track"
+                                    @change="setTrack" class="track">
                                 <span class="custom-checkbox-button !rounded-full "></span>
-                                Traditional Animation Principles </label>
-                            <label class="custom-checkbox !items-baseline color-primary">
-                                <input type="checkbox" value="">
-                                <span class="custom-checkbox-button !rounded-full "></span> Digital
-                                Illustration Technique </label>
-                            <label class="custom-checkbox !items-baseline color-primary">
-                                <input type="checkbox" value="">
-                                <span class="custom-checkbox-button !rounded-full "></span> 2D
-                                Digital Methodology </label>
-                            <label class="custom-checkbox !items-baseline color-primary">
-                                <input type="checkbox" value="">
-                                <span class="custom-checkbox-button !rounded-full "></span> 3D
-                                Digital Methodology </label>
+                                {{track}} </label>
                         </div>
+                        <div>
+                            <h6 class="color-primary font-bold indent-[22px]">HUMSS</h6>
+                            <label class="custom-checkbox !items-baseline color-primary"
+                                v-for="track in  humssTrack">
+                                <input type="checkbox" data-strand="HUMMS" :value="track"
+                                    @change="setTrack" class="track">
+                                <span class="custom-checkbox-button !rounded-full "></span>
+                                {{track}} </label>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))]">
+                        <div>
+                            <h6 class="color-primary font-bold indent-[22px]">Multimedia Arts</h6>
+                            <label class="custom-checkbox !items-baseline color-primary"
+                                v-for="track in  multiMediaTrack">
+                                <input type="checkbox" data-strand="MMA" :value="track"
+                                    @change="setTrack" class="track">
+                                <span class="custom-checkbox-button !rounded-full "></span>
+                                {{track}} </label>
+                        </div>
+                        <div></div>
+                    </div>
+                    <hr class="my-5">
+                    <h5 class="color-primary font-bold text-center uppercase"> Tech-Pro Track </h5>
+                    <div class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-y-4 mb-4">
+                        <section class="flex flex-col gap-y-4">
+                            <div>
+                                <h6 class="color-primary font-bold">Animation</h6>
+                                <label class="custom-checkbox !items-baseline color-primary"
+                                    v-for="track in animationTrack">
+                                    <input type="checkbox" data-strand="Ani" :value="track"
+                                        @change="setTrack" class="track">
+                                    <span class="custom-checkbox-button !rounded-full "></span>
+                                    {{track}} </label>
+                            </div>
+                            <div>
+                                <h6 class="color-primary font-bold">Graphic Illustration</h6>
+                                <label class="custom-checkbox !items-baseline color-primary"
+                                    v-for="track in graphicIllustrationTrack">
+                                    <input type="checkbox" data-strand="Graph ill" :value="track"
+                                        @change="setTrack" class="track">
+                                    <span class="custom-checkbox-button !rounded-full "></span>
+                                    {{track}} </label>
+                            </div>
+                            <div>
+                                <h6 class="color-primary font-bold">Fashion Design</h6>
+                                <label class="custom-checkbox !items-baseline color-primary"
+                                    v-for="track in fashionDesignTrack">
+                                    <input type="checkbox" data-strand="Fashion Des" :value="track"
+                                        @change="setTrack" class="track">
+                                    <span class="custom-checkbox-button !rounded-full "></span>
+                                    {{track}} </label>
+                            </div>
+                            <div>
+                                <h6 class="color-primary font-bold">Technical Drafting</h6>
+                                <label class="custom-checkbox !items-baseline color-primary"
+                                    v-for="track in techDraftingTrack">
+                                    <input type="checkbox" data-strand="Tech Draft" :value="track"
+                                        @change="setTrack" class="track">
+                                    <span class="custom-checkbox-button !rounded-full "></span>
+                                    {{track}} </label>
+                            </div>
+                        </section>
                         <div class="w-[27ch]">
-                            <h6 class="color-primary font-bold">Software Development</h6>
-                            <label class="custom-checkbox !items-baseline color-primary">
-                                <input type="checkbox" value="">
-                                <span class="custom-checkbox-button !rounded-full"></span>
-                                Introduction to Information Technology </label>
-                            <label class="custom-checkbox !items-baseline color-primary">
-                                <input type="checkbox" value="">
-                                <span class="custom-checkbox-button !rounded-full"></span>
-                                Fundamentals of Computer Programming </label>
-                            <label class="custom-checkbox !items-baseline color-primary">
-                                <input type="checkbox" value="">
-                                <span class="custom-checkbox-button !rounded-full"></span> Web
-                                Programming </label>
-                            <label class="custom-checkbox !items-baseline color-primary">
-                                <input type="checkbox" value="">
-                                <span class="custom-checkbox-button !rounded-full"></span> Data
-                                Structures </label>
-                            <label class="custom-checkbox !items-baseline color-primary">
-                                <input type="checkbox" value="">
-                                <span class="custom-checkbox-button !rounded-full"></span> Core Java
-                                Programming </label>
-                            <label class="custom-checkbox !items-baseline color-primary">
-                                <input type="checkbox" value="">
-                                <span class="custom-checkbox-button !rounded-full"></span> Database
-                                Management Programming </label>
-                            <label class="custom-checkbox !items-baseline color-primary">
-                                <input type="checkbox" value="">
-                                <span class="custom-checkbox-button !rounded-full"></span>
-                                Object-Oriented Programming </label>
-                            <label class="custom-checkbox !items-baseline color-primary">
-                                <input type="checkbox" value="">
-                                <span class="custom-checkbox-button !rounded-full"></span> Mobile
-                                Computing </label>
+                            <div>
+                                <h6 class="color-primary font-bold">Software Development</h6>
+                                <label class="custom-checkbox !items-baseline color-primary"
+                                    v-for="track in softwareDevelopmentTrack">
+                                    <input type="checkbox" data-strand="Soft Dev" :value="track"
+                                        @change="setTrack" class="track">
+                                    <span class="custom-checkbox-button !rounded-full "></span>
+                                    {{track}} </label>
+                            </div>
+                            <div>
+                                <h6 class="color-primary font-bold">Health Technology</h6>
+                                <label class="custom-checkbox !items-baseline color-primary"
+                                    v-for="track in healthTechTrack">
+                                    <input type="checkbox" data-strand="Health Tech" :value="track"
+                                        @change="setTrack" class="track">
+                                    <span class="custom-checkbox-button !rounded-full "></span>
+                                    {{track}} </label>
+                            </div>
+                            <div>
+                                <h6 class="color-primary font-bold">Other Electives</h6>
+                                <label class="custom-checkbox !items-baseline color-primary"
+                                    v-for="track in otherElectivesTrack">
+                                    <input type="checkbox" data-strand="Other" :value="track"
+                                        @change="setTrack" class="track">
+                                    <span class="custom-checkbox-button !rounded-full "></span>
+                                    {{track}} </label>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <!-- col 2 -->
-            <div id="elective-receipt"
-                class="flex-[2_0_188px] border border-neutral-100 rounded-lg p-2.5">
-                <h5 class=" color-primary font-bold mb-3 pr-4" for="inline-full-name"> Electives
-                    Receipt </h5>
-                <div id="main-track" class="flex items-center gap-x-6 mb-2 px-4">
-                    <label class=" color-primary font-bold flex-[1_0_auto] "> Main Track </label>
-                    <input
-                        class="w-full bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                        type="text"  required >
+            <div id="elective-receipt" class="flex-[2_0_188px] ">
+                <div class="border border-neutral-100 rounded-lg p-2.5 px-4 pb-8 mb-4">
+                    <h5 class="color-primary font-bold text-center  mb-4"> Career Pathway </h5>
+                    <div class="mb-4">
+                        <select
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text" required v-model="request.program">
+                            <option disabled value="">First Choice</option>
+                            <option v-for="career,index in careers" :value="career" :key="index"
+                                :disabled="career == request.program2 ? true : false">
+                                {{ career}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <select :disabled="!request.program ? true : false"
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text" required v-model="request.program2">
+                            <option disabled value="">Second Choice</option>
+                            <option v-for="career,index in careers" :value="career" :key="index"
+                                :disabled="career == request.program ? true : false">
+                                {{ career}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="">
+                        <input v-model="request.preferred_pathway" required
+                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text" placeholder="Type preffered career pathway">
+                    </div>
                 </div>
-                <div id="main-cluster" class="flex items-center gap-x-3 px-4">
-                    <label class="inline color-primary font-bold flex-[1_0_auto]"> Main Cluster </label>
-                    <input
-                        class="w-full bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                        type="text"  required >
-                </div>
-                <h5 class=" color-primary font-bold text-sm text-center my-4"> Core Subjects </h5>
-                <ul class="list-inside list-disc px-2 pl-1 indent-[-1]">
-                    <li>Effective Communication/Mabisang Komunikasyon</li>
-                    <li>Life Skills</li>
-                    <li>General Mathematics</li>
-                    <li>General Science</li>
-                    <li>Pag-aaral ng Kasaysayan</li>
-                    <li>at Lipunang Pilipini</li>
-                </ul>
-                <h5 class=" color-primary font-bold text-sm text-center my-4"> Choosen Electives
-                </h5>
-                <div class="text-center flex flex-col items-center gap-y-2">
-                    <input
-                        class="bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                        type="text">
-                    <input
-                        class="bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                        type="text">
-                    <input
-                        class="bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                        type="text">
-                    <input
-                        class="bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                        type="text">
-                    <input
-                        class="bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                        type="text">
-                    <input
-                        class="bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                        type="text">
-                    <input
-                        class="bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                        type="text">
-                    <input
-                        class="bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                        type="text">
-                    <input
-                        class="bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                        type="text">
-                    <input
-                        class="bg-neutral-100 border border-neutral-100 rounded-lg  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                        type="text">
+                <div class="border border-neutral-100 rounded-lg p-2.5 px-4 pb-8">
+                    <h5 class=" color-primary font-bold mb-3 pr-4"> Launchpad Summary</h5>
+                    <h5 class=" color-primary font-bold text-sm text-center my-4"> Core Subjects
+                    </h5>
+                    <ul class="list-inside list-disc px-2 pl-1 indent-[-1] text-sm">
+                        <li>Effective Communication/Mabisang Komunikasyon</li>
+                        <li>Life Skills</li>
+                        <li>General Mathematics</li>
+                        <li>General Science</li>
+                        <li>Pag-aaral ng Kasaysayan at Lipunang Pilipino</li>
+                    </ul>
+                    <h5 class=" color-primary font-bold text-sm text-center my-4"> Choosen Electives
+                    </h5>
+                    <div class="text-center flex flex-col items-center gap-y-2">
+                        <input disabled
+                            class="elective bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text" :placeholder="strandArr[0]">
+                        <input disabled
+                            class="elective bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                            type="text" :placeholder="strandArr[1]">
+                    </div>
                 </div>
             </div>
         </div>
@@ -1125,8 +1053,12 @@ input[type="number"] {
 .style-chooser .vs__dropdown-menu {
     background-color: rgb(245 245 245)
 }
+
+.elective::placeholder {
+    font-size: 14px;
+}
 </style>
-<!-- <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 <script src="https://unpkg.com/vue-select@3.0.0"></script>
 <link rel="stylesheet" href="https://unpkg.com/vue-select@3.0.0/dist/vue-select.css">
 <script src="<?php echo $js_dir ?>dataExport.js"></script>
@@ -1146,10 +1078,44 @@ const freshmenValue = ['College - Freshmen iACADEMY', 'College - Freshmen Other'
 const secondDegreeValue = ['2nd - Degree iACADEMY', '2nd - Degree Other']
 const applicantTypeShs = ['SHS - New', 'SHS - Transferee']
 const healthConditions = ['Diabetes', 'Allergies', 'High Blood', 'Anemia']
+const abmTrack = ['Business Math', 'Business Finance and Income Taxation']
+const humssTrack = ['The Social Science in Theory and Practice',
+    'Philippine Politics and Governance'
+]
+const multiMediaTrack = ['Layout Design for Print Publication',
+    'Creative Industries (Visual, Media, Applied, and Traditional Art)'
+]
+const animationTrack = ['Freehand Drawing', 'Figure Drawing']
+const softwareDevelopmentTrack = ['Introduction to Information Technology',
+    'Fundamentals of Computer Programming'
+]
+const graphicIllustrationTrack = ['Character Design']
+const healthTechTrack = ['Introduction to Anatomy and Physiology',
+    'Fundamentals of Medical Transcription'
+]
+const fashionDesignTrack = ['Basic Drawing for Fashion Design', 'Garment Construction']
+const techDraftingTrack = ['Fundamentals of Technical Drafting',
+    'Basic Drawing for Technical Drafting'
+]
+const otherElectivesTrack = ['Wika at Komunikasyon sa Akademikong Filipino',
+    'Advanced Mathematics 1 - 2', 'General Science (Earth and Life Science)', 'Biology 1 - 2 ',
+    'Chemistry 1 - 2', 'Physics 1 - 2'
+]
 Vue.component('v-select', VueSelect.VueSelect)
 new Vue({
     el: "#adminssions-form",
     data: {
+        abmTrack: [...abmTrack],
+        humssTrack: [...humssTrack],
+        multiMediaTrack: [...multiMediaTrack],
+        animationTrack: [...animationTrack],
+        softwareDevelopmentTrack: [...softwareDevelopmentTrack],
+        graphicIllustrationTrack: [...graphicIllustrationTrack],
+        healthTechTrack: [...healthTechTrack],
+        fashionDesignTrack: [...fashionDesignTrack],
+        techDraftingTrack: [...techDraftingTrack],
+        otherElectivesTrack: [...otherElectivesTrack],
+        careers: [...careers],
         selected: '',
         countryList: [],
         barangay: [],
@@ -1210,7 +1176,12 @@ new Vue({
             school_province: '',
             school_country: '',
             grade_year_level: '',
-            primary_contact: ''
+            primary_contact: '',
+            program: '',
+            program2: '',
+            preferred_pathway: '',
+            elective1: '',
+            elective2: '',
         },
         addressObj: {
             country: '',
@@ -1231,6 +1202,7 @@ new Vue({
         programs_group: [],
         types: [],
         base_url: "<?php echo base_url(); ?>",
+        strandArr: []
     },
     mounted() {
         axios.get(this.base_url + 'site/view_active_programs_makati/' + 29, {
@@ -1411,8 +1383,7 @@ new Vue({
             this.request.school_province = value.province
             this.request.school_country = value.country
         },
-        submitForm: function() {
-        },
+        submitForm: function() {},
         unmaskedValue: function() {
             var val = this.$refs.input.clean
         },
@@ -1495,15 +1466,6 @@ new Vue({
                     `referral-${this.sourcesSpecify.referral}(${this.refferalName})`
             }
             this.request.source = this.sources.join();
-            // this.request.source = this.sources
-            // if (this.sources == 'event' || this.sources == 'others') {
-            //     this.request.source =
-            //         `${this.sources}-${this.sourcesSpecify[this.sources]}`
-            // }
-            // if (this.sources == 'referral') {
-            //     this.request.source =
-            //         `${this.sources}-${this.sourcesSpecify[this.sources]}-${this.refferalName}`
-            // }
         },
         setTime: function() {
             this.request.best_time = this.bestTime.join();
@@ -1534,7 +1496,45 @@ new Vue({
             this.hide_school_address = true
             this.selectedSchool = this.setSelectedSchool
         },
+        setTrack($event) {
+            let strand = `[${event.target.dataset.strand}]${event.target.value}`
+            if ($event.target.checked) {
+                this.strandArr.push(strand)
+            }
+            if (!$event.target.checked) {
+                if (this.strandArr.includes(strand)) {
+                    const index = this.strandArr.indexOf(strand);
+                    this.strandArr.splice(index, 1);
+                }
+            }
+            const inputElements = document.querySelectorAll("input.track")
+            const isDisable = this.strandArr.length === 2;
+            inputElements.forEach(el => {
+                if (!el.checked) {
+                    el.disabled = isDisable;
+                }
+            });
+        },
+        setStrand() {
+            if (this.strandArr.length === 0) {
+                Swal.fire({
+                    title: 'iACADEMY MAKATI CAMPUS',
+                    html: 'Please select an elective offered in your track.',
+                    confirmButtonText: "Ok",
+                    imageWidth: 100,
+                    icon: "error",
+                    showCloseButton: true
+                })
+                return true
+            }
+            this.request.elective1 = this.strandArr[0]
+            this.request.elective2 = this.strandArr[1]
+            return false
+        },
         customSubmit: function(type, title, text, data, url, redirect) {
+            if (this.setStrand()) {
+                return
+            }
             if (this.confirmEmail()) {
                 return
             }
@@ -1580,8 +1580,8 @@ new Vue({
             }
             this.setSource()
             this.setTime()
-            this.setYearStart()
-            this.setSchoolProgram()
+            // this.setYearStart()
+            // this.setSchoolProgram()
             Swal.fire({
                 title: 'iACADEMY MAKATI CAMPUS',
                 html: `
@@ -1596,14 +1596,6 @@ new Vue({
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
                     this.loading_spinner = true;
-                    // if (this.request.mobile_number.length < 9) {
-                    //     this.loading_spinner = false;
-                    //     Swal.fire(
-                    //         'Failed!',
-                    //         "Please fill in mobile number",
-                    //         'warning'
-                    //     )
-                    // } else {
                     if (this.request.health_concerns.includes("Others")) {
                         const hasOther = this.request.health_concerns
                             .indexOf("Others");

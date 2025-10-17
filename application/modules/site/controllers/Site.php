@@ -321,18 +321,9 @@ class Site extends CI_Controller {
 		$this->load->view('common/footer_new',$this->data);
     }
 
-	public function shs_application_new($term = 0,$type = 0) {		
-
-		if($term == 0){
-			if($type == 0)
-            	$term = $this->data_fetcher->get_processing_sem_shs();         			
-			else
-				$term = $this->data_fetcher->get_processing_sem_shs();        						
-		}
-		else
-			$term = $this->data_fetcher->get_sem_by_id($term);
-
-
+	public function shs_application_new() {		
+		$term = $this->data_fetcher->get_processing_sem_shs(); 
+		
 		$this->data['term'] = $term;
 
 		$this->data['current_term'] = $term['intID'];		
