@@ -2974,6 +2974,7 @@ class Data_fetcher extends CI_Model {
         // }
         
 
+        $discount_grand_total = 0;
         $scholarship_grand_total = 0;
         $scholarship_installment_grand_total = 0;
         $scholarship_installment_grand_total30 = 0;
