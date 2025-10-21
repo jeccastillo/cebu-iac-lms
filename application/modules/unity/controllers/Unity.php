@@ -1791,7 +1791,7 @@ class Unity extends CI_Controller {
         $data['credited_units'] = $credited_units;
         $data['curriculum_units'] = $curriculum_units;
         $data['curriculum_units_na'] = $curriculum_units_na;  
-        $data['combined_subjects'] = $combined_subjects;     
+        $data['combined_subjects'] = $grouped_combined_subjects;     
         $data['units_left'] =  $curriculum_units - $assessment_units_earned - $credited_units;
         $data['data'] = $terms;
 
