@@ -208,6 +208,7 @@
                                                 <td v-if="item.data.equivalent">{{ item.data.equivalent.grade }}</td>
                                                 <td v-else>{{ item.data.rec?item.data.rec.floatFinalGrade:'---' }}</td>
                                                 <td v-if="item.data.equivalent">Credited from: {{ item.data.equivalent.course_code }} School: {{ item.data.equivalent.completion }}</td>
+                                            </tr>
                                     </table>
                                     <hr />
                                 </div>
