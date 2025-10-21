@@ -1541,7 +1541,7 @@ class Unity extends CI_Controller {
             $elective_subjects = $this->db->get_where('tb_mas_classlist_student_elective',array('elective_classlist_id'=>$cs['intSubjectID']))->result_array();            
 
             $combined_subjects = $this->db->where(array('intCurriculumID'=>$data['student']['intCurriculumID'], 'type'=>'Combine'))
-                                      ->group_by(array('combineCode','combineDesc'))
+                                    //   ->group_by(array('combineCode','combineDesc'))
                                       ->get('tb_mas_curriculum_second')
                                       ->result_array();
                                       
