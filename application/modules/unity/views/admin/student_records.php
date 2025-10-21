@@ -692,6 +692,7 @@ new Vue({
         records: [],         
         gwa: undefined,
         curriculum_subjects: [],
+        combined_subjects: [],
         deficiencies: [],
         subjects: [],
         units: undefined,
@@ -764,6 +765,7 @@ new Vue({
                     this.subjects = data.data.all_subjects;
                     this.deficiencies = data.data.deficiencies;
                     this.curriculum_subjects = data.data.curriculum_subjects; 
+                    this.combined_subjects = data.data.combined_subjects; 
                     this.gwa = data.data.gwa;
                     this.units = data.data.total_units_earned;  
                     this.assessment_gwa = data.data.assessment_gwa; 
