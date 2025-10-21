@@ -85,6 +85,7 @@
                                             <option value="Change of Payment Type">Change of Payment Type</option>
                                             <option value="Withdrawal Charges">Withdrawal Charges</option>
                                             <option value="To Close Balance">To Close Balance</option>
+                                            <option value="Applied Excess From">Applied Excess From</option>
                                         </select>                                        
                                     </td>                                    
                                     <td>
