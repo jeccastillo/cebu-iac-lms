@@ -42,6 +42,19 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_1">
+                        <div class="box box-success">
+                            <div class="box-header">
+                                <h4>Student Profile</h4>
+                            </div>
+                            <div class="box-body">
+                                <table class="table table-condensed">
+                                    <tr><th>Name:</th><td>{{ student.strLastname.toUpperCase() }}, {{ student.strFirstname.toUpperCase() }} {{ student.strMiddlename?student.strMiddlename.toUpperCase():'' }}</td></tr>
+                                    <tr><th>Student Number:</th><td>{{ student.strStudentNumber.replace(/-/g, '') }}</td></tr>
+                                    <tr><th>Program:</th><td>{{ student.strProgramDescription }} {{ (student.strMajor != 'None')?'Major in '+student.strMajor:'' }}</td></tr>
+                                    <tr><th>Type:</th><td>{{ student.type }}</td></tr>
+                                </table>
+                            </div>
+                        </div>
                         <div v-for="term in records" :class="term.reg.color + ' box box-solid'">
                             <div class="box-header">
                                 <div class="row">
@@ -156,7 +169,20 @@
                         </div> 
                     </div>
                     <div class="tab-pane" id="tab_2">
-                        <div class="box box-success">                            
+                        <div class="box box-success">
+                            <div class="box-header">
+                                <h4>Student Profile</h4>
+                            </div>
+                            <div class="box-body">
+                                <table class="table table-condensed">
+                                    <tr><th>Name:</th><td>{{ student.strLastname.toUpperCase() }}, {{ student.strFirstname.toUpperCase() }} {{ student.strMiddlename?student.strMiddlename.toUpperCase():'' }}</td></tr>
+                                    <tr><th>Student Number:</th><td>{{ student.strStudentNumber.replace(/-/g, '') }}</td></tr>
+                                    <tr><th>Program:</th><td>{{ student.strProgramDescription }} {{ (student.strMajor != 'None')?'Major in '+student.strMajor:'' }}</td></tr>
+                                    <tr><th>Type:</th><td>{{ student.type }}</td></tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="box box-success">
                             <div class="box-body">
                                 <div style="font-size:.8em">
                                     <span style="color:rgb(0, 144, 0);font-size:1.4em;">&#9632;</span> Passed &nbsp;
@@ -456,6 +482,7 @@
                             <select v-model="add_credits.equivalent_subject" class="form-control">
                                 <option v-for="item in subjects" :value="item.intSubjectID">
                                     {{ item.strCode + " "  + item.strDescription }}
+                                    <br />{{ item.intSubjectID }}
                                 </option>
                             </select>
                         </div>
@@ -515,6 +542,7 @@
                             <select v-model="edit_credits.equivalent_subject" class="form-control">
                                 <option v-for="item in subjects" :value="item.intSubjectID">
                                     {{ item.strCode + " "  + item.strDescription }}
+                                    <br />{{ item.intSubjectID }}
                                 </option>
                             </select>
                         </div>
