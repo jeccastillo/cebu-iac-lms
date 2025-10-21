@@ -67,34 +67,21 @@
                                             <th>Faculty</th>                                      
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <template v-for="item in getRecordsWithCombined(term)">
-                                        <tr v-if="item.type == 'combined'" style="font-size: 13px;">
-                                            <td>{{ item.data.strClassName + item.data.year + item.data.strSection + (item.data.sub_section?item.data.sub_section:'') }}</td>
-                                            <td v-if="!item.data.elective_subject">{{ item.data.combineCode }}</td>
-                                            <td v-else>({{ item.data.elective_subject.strCode + ' - ' + item.data.combineCode }})</td>
-                                            <td v-if="item.data.include_gwa == 1">{{ item.data.strUnits }}</td>
-                                            <td v-else>({{ item.data.strUnits }})</td>
-                                            <td>---</td>
-                                            <td>---</td>
-                                            <td>---</td>
-                                            <td>Combined</td>
-                                            <td>---</td>
-                                        </tr>
-                                        <tr v-else :style="(item.data.intFinalized == 2)?'background-color:#ccc;':''" style="font-size: 13px;">
-                                            <td>{{ item.data.strClassName + item.data.year + item.data.strSection + (item.data.sub_section?item.data.sub_section:'') }}</td>
-                                            <!-- <td>{{ item.data.strClassName + item.data.year + item.data.strSection + (item.data.sub_section?item.data.sub_section:'') }}</td> -->
-                                            <td v-if="!item.data.elective_subject">{{ item.data.strCode }}</td>
-                                            <td v-else>({{ item.data.elective_subject.strCode + ' - ' + item.data.strCode }})</td>
-                                            <td v-if="item.data.include_gwa == 1">{{ item.data.strUnits }}</td>
-                                            <td v-else>({{ item.data.strUnits }})</td>
-                                            <td v-if="item.data.v2 != 'OW'" :style="(item.data.intFinalized == 2)?'font-weight:bold;':''">{{ item.data.intFinalized >=1?item.data.v2:'NGS' }}</td>
+                                    <tbody>                                          
+                                        <tr :style="(record.intFinalized == 2)?'background-color:#ccc;':''" v-for="record in term.records" style="font-size: 13px;">
+                                            <td>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td>
+                                            <!-- <td>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td> -->
+                                            <td v-if="!record.elective_subject">{{ record.strCode }}</td>
+                                            <td v-else>({{ record.elective_subject.strCode + ' - ' + record.strCode }})</td>
+                                            <td v-if="record.include_gwa == 1">{{ record.strUnits }}</td>
+                                            <td v-else>({{ record.strUnits }})</td>
+                                            <td v-if="record.v2 != 'OW'" :style="(record.intFinalized == 2)?'font-weight:bold;':''">{{ record.intFinalized >=1?record.v2:'NGS' }}</td>
                                             <td v-else style="font-weight:bold">
                                                 OW
                                             </td>
-                                            <td v-if="item.data.v3 != 'OW'" :style="(item.data.intFinalized == 2)?'font-weight:bold;':''">
-                                                <span v-if="item.data.intFinalized >=2" :style="(item.data.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">
-                                                    {{ item.data.v3 }}
+                                            <td v-if="record.v3 != 'OW'" :style="(record.intFinalized == 2)?'font-weight:bold;':''">
+                                                <span v-if="record.intFinalized >=2" :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">
+                                                    {{ record.v3 }}
                                                 </span>
                                                 <span v-else>
                                                     NGS
@@ -103,13 +90,12 @@
                                             <td v-else style="font-weight:bold">
                                                 OW
                                             </td>
-                                            <!-- <td v-if="student.type == 'shs' && item.data.v2 && item.data.v3">{{ (parseInt(item.data.v2) + parseInt(item.data.v3) ? Math.round((parseInt(item.data.v2) + parseInt(item.data.v3)) / 2) : 'T')}}</td> -->
-                                            <td v-if="student.type == 'shs' && item.data.semFinalGrade">{{ item.data.semFinalGrade }}</td>
+                                            <!-- <td v-if="student.type == 'shs' && record.v2 && record.v3">{{ (parseInt(record.v2) + parseInt(record.v3) ? Math.round((parseInt(record.v2) + parseInt(record.v3)) / 2) : 'T')}}</td> -->
+                                            <td v-if="student.type == 'shs' && record.semFinalGrade">{{ record.semFinalGrade }}</td>
                                             <td v-else-if="student.type == 'shs'">---</td>
-                                            <td :style="(item.data.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">{{ item.data.intFinalized >=1?item.data.strRemarks:'---' }}</td>
-                                            <td>{{ item.data.strFirstname+" "+item.data.strLastname }}</td>
+                                            <td :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">{{ record.intFinalized >=1?record.strRemarks:'---' }}</td>   
+                                            <td>{{ record.strFirstname+" "+record.strLastname }}</td>                                 
                                         </tr>
-                                        </template>
                                         <tr style="font-size: 13px;">
                                             <td></td>
                                             <td align="right"><strong>Units Earned for Term:</strong></td>
@@ -193,22 +179,19 @@
                                                 <th width="10%">Units Earned</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <template v-for="item in getCurriculumRecords(term)">
-                                            <tr v-if="item.type == 'combined'" style="font-size: 13px;">
-                                                <td>{{ item.data.combineCode }}</td>
-                                                <td>{{ item.data.combineDesc }}</td>
-                                                <td>---</td>
-                                                <td>Combined</td>
-                                                <td>---</td>
-                                            </tr>
-                                            <tr v-else :style="(item.data.rec || item.data.equivalent)?'color:'+item.data.rec.bg+';':''" style="font-size: 13px;">
-                                                <td>{{ item.data.strCode }}</td>
-                                                <td>{{ item.data.strDescription }}</td>
-                                                <td v-if="item.data.equivalent">{{ item.data.equivalent.grade }}</td>
-                                                <td v-else>{{ item.data.rec?item.data.rec.floatFinalGrade:'---' }}</td>
-                                                <td v-if="item.data.equivalent">Credited from: {{ item.data.equivalent.course_code }} School: {{ item.data.equivalent.completion }}</td>
-                                            </tr>
+                                        <tbody>                                          
+                                            <tr :style="(item.rec || item.equivalent)?'color:'+item.rec.bg+';':''" v-for="item in term.records" style="font-size: 13px;">                                                
+                                                <td>{{ item.strCode }}</td>
+                                                <td>{{ item.strDescription }}</td>   
+                                                <td v-if="item.equivalent">{{ item.equivalent.grade }}</td>
+                                                <td v-else>{{ item.rec?item.rec.floatFinalGrade:'---' }}</td>
+                                                <td v-if="item.equivalent">Credited from: {{ item.equivalent.course_code }} School: {{ item.equivalent.completion }}</td>
+                                                <td v-else>{{ item.rec?item.rec.strRemarks:'---' }}</td>
+                                                <td v-if="item.equivalent">({{ parseInt(item.equivalent.units).toFixed(1) }})</td>
+                                                <td v-else-if="item.rec && item.rec.include_gwa == 1">{{ (item.rec && item.rec.strRemarks == 'Passed')?item.rec.strUnits:'---' }}</td>
+                                                <td v-else>{{ (item.rec && item.rec.strRemarks == 'Passed')?'('+item.rec.strUnits+')':'---' }}</td>                                                                                                                                                                               
+                                            </tr>                                                                                    
+                                        </tbody>
                                     </table>
                                     <hr />
                                 </div>
@@ -782,7 +765,7 @@ new Vue({
                     this.subjects = data.data.all_subjects;
                     this.deficiencies = data.data.deficiencies;
                     this.curriculum_subjects = data.data.curriculum_subjects; 
-                    this.combined_subjects = Array.isArray(data.data.combined_subjects) ? data.data.combined_subjects : [];
+                    this.combined_subjects = data.data.combined_subjects;
                     console.log(this.combined_subjects);
                     this.gwa = data.data.gwa;
                     this.units = data.data.total_units_earned;  
@@ -840,34 +823,8 @@ new Vue({
 
     },
 
-    methods: {
-        getRecordsWithCombined: function(term) {
-            let displayed = new Set();
-            let result = [];
-            for (let record of term.records) {
-                let combined = this.combined_subjects.find(c => c.intSubjectID == record.intSubjectID);
-                if (combined && !displayed.has(record.intSubjectID)) {
-                    result.push({type: 'combined', data: combined});
-                    displayed.add(record.intSubjectID);
-                }
-                result.push({type: 'record', data: record});
-            }
-            return result;
-        },
-        getCurriculumRecords: function(term) {
-            let displayed = new Set();
-            let result = [];
-            for (let item of term.records) {
-                let combined = this.combined_subjects.find(c => c.intSubjectID == item.intSubjectID);
-                if (combined && !displayed.has(item.intSubjectID)) {
-                    result.push({type: 'combined', data: combined});
-                    displayed.add(item.intSubjectID);
-                }
-                result.push({type: 'item', data: item});
-            }
-            return result;
-        },
-        printTOR: function(){
+    methods: {      
+        printTOR: function(){   
             Swal.fire({
                 title: 'Generate Document?',
                 text: "Continue genrating "+this.tor.type+"?",
