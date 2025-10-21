@@ -208,13 +208,6 @@
                                                 <td v-if="item.data.equivalent">{{ item.data.equivalent.grade }}</td>
                                                 <td v-else>{{ item.data.rec?item.data.rec.floatFinalGrade:'---' }}</td>
                                                 <td v-if="item.data.equivalent">Credited from: {{ item.data.equivalent.course_code }} School: {{ item.data.equivalent.completion }}</td>
-                                                <td v-else>{{ item.data.rec?item.data.rec.strRemarks:'---' }}</td>
-                                                <td v-if="item.data.equivalent">({{ parseInt(item.data.equivalent.units).toFixed(1) }})</td>
-                                                <td v-else-if="item.data.rec && item.data.rec.include_gwa == 1">{{ (item.data.rec && item.data.rec.strRemarks == 'Passed')?item.data.rec.strUnits:'---' }}</td>
-                                                <td v-else>{{ (item.data.rec && item.data.rec.strRemarks == 'Passed')?'('+item.data.rec.strUnits+')':'---' }}</td>
-                                            </tr>
-                                            </template>
-                                        </tbody>
                                     </table>
                                     <hr />
                                 </div>
@@ -788,7 +781,7 @@ new Vue({
                     this.subjects = data.data.all_subjects;
                     this.deficiencies = data.data.deficiencies;
                     this.curriculum_subjects = data.data.curriculum_subjects; 
-                    this.combined_subjects = data.data.combined_subjects;
+                    this.combined_subjects = Array.isArray(data.data.combined_subjects) ? data.data.combined_subjects : [];
                     console.log(this.combined_subjects);
                     this.gwa = data.data.gwa;
                     this.units = data.data.total_units_earned;  
