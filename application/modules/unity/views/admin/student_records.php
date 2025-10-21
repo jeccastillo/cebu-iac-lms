@@ -68,8 +68,19 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <template v-for="record in term.records">
-                                        <tr :style="(record.intFinalized == 2)?'background-color:#ccc;':''" style="font-size: 13px;">
+                                        <tr v-for="combined in combined_subjects" style="font-size: 13px;">
+                                            <td>{{ combined.strClassName + combined.year + combined.strSection + (combined.sub_section?combined.sub_section:'') }}</td>
+                                            <td v-if="!combined.elective_subject">{{ combined.strCode }}</td>
+                                            <td v-else>({{ combined.elective_subject.strCode + ' - ' + combined.strCode }})</td>
+                                            <td v-if="combined.include_gwa == 1">{{ combined.strUnits }}</td>
+                                            <td v-else>({{ combined.strUnits }})</td>
+                                            <td>---</td>
+                                            <td>---</td>
+                                            <td>---</td>
+                                            <td>Combined</td>
+                                            <td>---</td>
+                                        </tr>
+                                        <tr :style="(record.intFinalized == 2)?'background-color:#ccc;':''" v-for="record in term.records" style="font-size: 13px;">
                                             <td>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td>
                                             <!-- <td>{{ record.strClassName + record.year + record.strSection + (record.sub_section?record.sub_section:'') }}</td> -->
                                             <td v-if="!record.elective_subject">{{ record.strCode }}</td>
@@ -94,22 +105,9 @@
                                             <!-- <td v-if="student.type == 'shs' && record.v2 && record.v3">{{ (parseInt(record.v2) + parseInt(record.v3) ? Math.round((parseInt(record.v2) + parseInt(record.v3)) / 2) : 'T')}}</td> -->
                                             <td v-if="student.type == 'shs' && record.semFinalGrade">{{ record.semFinalGrade }}</td>
                                             <td v-else-if="student.type == 'shs'">---</td>
-                                            <td :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">{{ record.intFinalized >=1?record.strRemarks:'---' }}</td>
-                                            <td>{{ record.strFirstname+" "+record.strLastname }}</td>
+                                            <td :style="(record.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">{{ record.intFinalized >=1?record.strRemarks:'---' }}</td>   
+                                            <td>{{ record.strFirstname+" "+record.strLastname }}</td>                                 
                                         </tr>
-                                        <tr v-for="combined in combined_subjects" v-if="combined.intSubjectID == record.intSubjectID" style="font-size: 13px;">
-                                            <td>{{ combined.strClassName + combined.year + combined.strSection + (combined.sub_section?combined.sub_section:'') }}</td>
-                                            <td v-if="!combined.elective_subject">{{ combined.strCode }}</td>
-                                            <td v-else>({{ combined.elective_subject.strCode + ' - ' + combined.strCode }})</td>
-                                            <td v-if="combined.include_gwa == 1">{{ combined.strUnits }}</td>
-                                            <td v-else>({{ combined.strUnits }})</td>
-                                            <td>---</td>
-                                            <td>---</td>
-                                            <td>---</td>
-                                            <td>Combined</td>
-                                            <td>---</td>
-                                        </tr>
-                                        </template>
                                         <tr style="font-size: 13px;">
                                             <td></td>
                                             <td align="right"><strong>Units Earned for Term:</strong></td>
@@ -123,6 +121,7 @@
                                             <td v-else>{{ term.gwa }}</td>
                                             <td colspan="3"></td>
                                         </tr>
+
                                     </tbody>
                                 </table>
                             </div>
@@ -193,8 +192,14 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <template v-for="item in term.records">
-                                            <tr :style="(item.rec || item.equivalent)?'color:'+item.rec.bg+';':''" style="font-size: 13px;">
+                                            <tr v-for="combined in combined_subjects" style="font-size: 13px;">
+                                                <td>{{ combined.strCode }}</td>
+                                                <td>{{ combined.strDescription }}</td>
+                                                <td>---</td>
+                                                <td>Combined</td>
+                                                <td>---</td>
+                                            </tr>
+                                            <tr :style="(item.rec || item.equivalent)?'color:'+item.rec.bg+';':''" v-for="item in term.records" style="font-size: 13px;">
                                                 <td>{{ item.strCode }}</td>
                                                 <td>{{ item.strDescription }}</td>
                                                 <td v-if="item.equivalent">{{ item.equivalent.grade }}</td>
@@ -205,14 +210,6 @@
                                                 <td v-else-if="item.rec && item.rec.include_gwa == 1">{{ (item.rec && item.rec.strRemarks == 'Passed')?item.rec.strUnits:'---' }}</td>
                                                 <td v-else>{{ (item.rec && item.rec.strRemarks == 'Passed')?'('+item.rec.strUnits+')':'---' }}</td>
                                             </tr>
-                                            <tr v-for="combined in combined_subjects" v-if="combined.intSubjectID == item.intSubjectID" style="font-size: 13px;">
-                                                <td>{{ combined.strCode }}</td>
-                                                <td>{{ combined.strDescription }}</td>
-                                                <td>---</td>
-                                                <td>Combined</td>
-                                                <td>---</td>
-                                            </tr>
-                                            </template>
                                         </tbody>
                                     </table>
                                     <hr />
