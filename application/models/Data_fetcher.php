@@ -3211,6 +3211,9 @@ class Data_fetcher extends CI_Model {
             }
         }
 
+        print($tuition_scholarship_installment50);
+        die();
+
         if(!empty($scholarships)){
             foreach($scholarships as $scholar){
                 
