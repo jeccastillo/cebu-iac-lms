@@ -1540,6 +1540,14 @@ class Unity extends CI_Controller {
             $equivalent_subjects = $this->db->get_where('tb_mas_equivalents',array('intSubjectID'=>$cs['intSubjectID']))->result_array();            
             $elective_subjects = $this->db->get_where('tb_mas_classlist_student_elective',array('elective_classlist_id'=>$cs['intSubjectID']))->result_array();            
 
+            $combined_subjects = $this->db->get_where(
+                                'tb_mas_curriculum_second',
+                                array(
+                                    'intCurriculumID' => $data['student']['intCurriculumID'],
+                                )->group_by(array('combineCode','combineDesc'))
+                            )->result_array();
+            print_r($combined_subjects);
+            die();
             // Prefer curriculum_second mapping: if current subject is listed as an equivalentSubjectID,
             // fetch the grade of the mapped intSubjectID for this student's curriculum.
             $recs = [];
