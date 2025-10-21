@@ -1544,8 +1544,8 @@ class Unity extends CI_Controller {
                                 'tb_mas_curriculum_second',
                                 array(
                                     'intCurriculumID' => $data['student']['intCurriculumID'],
-                                )->group_by(array('combineCode','combineDesc'))
-                            )->result_array();
+                                )
+                            )->group_by(array('combineCode','combineDesc'))->result_array();
             print_r($combined_subjects);
             die();
             // Prefer curriculum_second mapping: if current subject is listed as an equivalentSubjectID,
