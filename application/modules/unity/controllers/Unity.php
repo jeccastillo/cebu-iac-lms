@@ -1550,6 +1550,9 @@ class Unity extends CI_Controller {
                                     'equivalentSubjectID' => $cs['intSubjectID']
                                 )
                             )->result_array();
+
+            print_r($secondary_map);
+            die();
             if(!empty($secondary_map)){
                 foreach($secondary_map as $sm){
                     $temp_recs = $this->db->select('floatFinalGrade,strRemarks,tb_mas_subjects.strUnits,tb_mas_subjects.include_gwa,tb_mas_subjects.strCode,intFinalized')
