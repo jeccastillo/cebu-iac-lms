@@ -1551,7 +1551,7 @@ class Unity extends CI_Controller {
             $grouped_combined_subjects = [];
             foreach ($combined_subjects as $row) {
                 // Use both 'combineCode' and 'combineDesc' to create a unique key for each group
-                $group_key = $row['combineCode'] . '-' . $row['combineDesc'];
+                $group_key = $row['combineCode'];
                 $grouped_combined_subjects[$group_key][] = $row;
             }
                                       
