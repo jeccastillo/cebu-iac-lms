@@ -1554,8 +1554,6 @@ class Unity extends CI_Controller {
                 $group_key = $row['combineCode'];
                 $grouped_combined_subjects[$group_key][] = $row;
             }
-            print_r($grouped_combined_subjects);
-            die();
                                       
             // Prefer curriculum_second mapping: if current subject is listed as an equivalentSubjectID,
             // fetch the grade of the mapped intSubjectID for this student's curriculum.
