@@ -108,6 +108,13 @@
         ]
       },
       {
+        key: 'help',
+        label: 'Help / Docs',
+        children: [
+          { label: 'Documentation', path: '/docs' }
+        ]
+      },
+      {
         key: 'academics',
         label: 'Academics',
         children: [

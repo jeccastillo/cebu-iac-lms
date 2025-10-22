@@ -769,6 +769,19 @@
         controller: "PaymentsResultController",
         controllerAs: "vm"
       })
+      // Help / Docs (internal)
+      .when("/docs", {
+        templateUrl: "features/help/docs/docs.html",
+        controller: "DocsController",
+        controllerAs: "vm",
+        requiredRoles: ["registrar","admissions","scholarship","finance","faculty_admin","finance_admin","admin"]
+      })
+      .when("/docs/:category/:page?", {
+        templateUrl: "features/help/docs/docs.html",
+        controller: "DocsController",
+        controllerAs: "vm",
+        requiredRoles: ["registrar","admissions","scholarship","finance","faculty_admin","finance_admin","admin"]
+      })
       .otherwise({ redirectTo: "/login" });
 
     // Keep hashbang routing for simple static hosting
