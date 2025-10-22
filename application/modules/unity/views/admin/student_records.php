@@ -873,10 +873,7 @@ new Vue({
             return result;
         },
         getCurriculumRecords: function(term) {
-            console.log('getCurriculumRecords called for term:', term);
-            console.log('combined_subjects:', this.combined_subjects);
             if (!Array.isArray(this.combined_subjects)) {
-                console.log('combined_subjects is not an array, flattening');
                 let flattened = [];
                 for (let key in this.combined_subjects) {
                     if (Array.isArray(this.combined_subjects[key])) {
@@ -884,25 +881,20 @@ new Vue({
                     }
                 }
                 this.combined_subjects = flattened;
-                console.log('flattened combined_subjects:', this.combined_subjects);
             }
             if (!Array.isArray(this.combined_subjects) || this.combined_subjects.length === 0) {
-                console.log('combined_subjects is still not an array or empty');
                 return term.records.map(item => ({type: 'item', data: item}));
             }
-            console.log('term.records IDs:', term.records.map(r => r.intSubjectID));
-            console.log('combined_subjects IDs:', this.combined_subjects.map(c => c.intSubjectID));
-            let displayed = new Set();
+            let displayedCombined = new Set();
             let result = [];
             for (let item of term.records) {
                 let combined = this.combined_subjects.find(c => c.intSubjectID == item.intSubjectID);
-                if (combined && !displayed.has(item.intSubjectID)) {
+                if (combined && !displayedCombined.has(combined.combineCode + '|' + combined.combineDesc)) {
                     result.push({type: 'combined', data: combined});
-                    displayed.add(item.intSubjectID);
+                    displayedCombined.add(combined.combineCode + '|' + combined.combineDesc);
                 }
                 result.push({type: 'item', data: item});
             }
-            console.log('result length:', result.length);
             return result;
         },
         printTOR: function(){
