@@ -848,15 +848,21 @@ new Vue({
 
     methods: {
         getRecordsWithCombined: function(term) {
+            console.log('getRecordsWithCombined called for term:', term);
+            console.log('combined_subjects:', this.combined_subjects);
             if (!Array.isArray(this.combined_subjects)) {
+                console.log('combined_subjects is not an array');
                 return term.records.map(record => ({type: 'record', data: record}));
             }
+            console.log('term.records:', term.records);
             console.log('term.records IDs:', term.records.map(r => r.intSubjectID));
             console.log('combined_subjects IDs:', this.combined_subjects.map(c => c.intSubjectID));
             let displayed = new Set();
             let result = [];
             for (let record of term.records) {
+                console.log('checking record:', record);
                 let combined = this.combined_subjects.find(c => c.intSubjectID == record.intSubjectID);
+                console.log('found combined:', combined);
                 if (combined && !displayed.has(record.intSubjectID)) {
                     result.push({type: 'combined', data: combined});
                     displayed.add(record.intSubjectID);
