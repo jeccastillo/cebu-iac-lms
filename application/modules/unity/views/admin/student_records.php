@@ -851,6 +851,8 @@ new Vue({
             if (!Array.isArray(this.combined_subjects)) {
                 return term.records.map(record => ({type: 'record', data: record}));
             }
+            console.log('term.records IDs:', term.records.map(r => r.intSubjectID));
+            console.log('combined_subjects IDs:', this.combined_subjects.map(c => c.intSubjectID));
             let displayed = new Set();
             let result = [];
             for (let record of term.records) {
