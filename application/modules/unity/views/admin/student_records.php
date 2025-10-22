@@ -73,11 +73,11 @@
                                             <td>{{ item.data.strClassName + item.data.year + item.data.strSection + (item.data.sub_section?item.data.sub_section:'') }}</td>
                                             <td v-if="!item.data.elective_subject">{{ item.data.combineCode }}</td>
                                             <td v-else>({{ item.data.elective_subject.strCode + ' - ' + item.data.combineCode }})</td>
-                                            <td v-if="item.data.include_gwa == 1">{{ item.data.strUnits }}</td>
-                                            <td v-else>({{ item.data.strUnits }})</td>
-                                            <td>---</td>
-                                            <td>---</td>
-                                            <td>---</td>
+                                            <td v-if="item.data.include_gwa == 1">{{ getTotalUnits(term, item.data.intSubjectID) }}</td>
+                                            <td v-else>({{ getTotalUnits(term, item.data.intSubjectID) }})</td>
+                                            <td>{{ getAverageMidterm(term, item.data.intSubjectID) }}</td>
+                                            <td>{{ getAverageFinal(term, item.data.intSubjectID) }}</td>
+                                            <td>{{ getAverageSemFinal(term, item.data.intSubjectID) }}</td>
                                             <td>Combined</td>
                                             <td>---</td>
                                         </tr>
@@ -896,6 +896,49 @@ new Vue({
                 result.push({type: 'item', data: item});
             }
             return result;
+        },
+        getTotalUnits: function(term, subjectID) {
+            let total = 0;
+            for (let record of term.records) {
+                if (record.intSubjectID == subjectID) {
+                    total += parseFloat(record.strUnits) || 0;
+                }
+            }
+            return total.toFixed(1);
+        },
+        getAverageMidterm: function(term, subjectID) {
+            let grades = [];
+            for (let record of term.records) {
+                if (record.intSubjectID == subjectID && record.v2 && record.v2 != 'OW' && record.intFinalized >= 1) {
+                    grades.push(parseFloat(record.v2) || 0);
+                }
+            }
+            if (grades.length === 0) return '---';
+            let avg = grades.reduce((a, b) => a + b, 0) / grades.length;
+            return avg.toFixed(2);
+        },
+        getAverageFinal: function(term, subjectID) {
+            let grades = [];
+            for (let record of term.records) {
+                if (record.intSubjectID == subjectID && record.v3 && record.v3 != 'OW' && record.intFinalized >= 2) {
+                    grades.push(parseFloat(record.v3) || 0);
+                }
+            }
+            if (grades.length === 0) return '---';
+            let avg = grades.reduce((a, b) => a + b, 0) / grades.length;
+            return avg.toFixed(2);
+        },
+        getAverageSemFinal: function(term, subjectID) {
+            if (this.student.type != 'shs') return '---';
+            let grades = [];
+            for (let record of term.records) {
+                if (record.intSubjectID == subjectID && record.semFinalGrade) {
+                    grades.push(parseFloat(record.semFinalGrade) || 0);
+                }
+            }
+            if (grades.length === 0) return '---';
+            let avg = grades.reduce((a, b) => a + b, 0) / grades.length;
+            return avg.toFixed(2);
         },
         printTOR: function(){
             Swal.fire({
