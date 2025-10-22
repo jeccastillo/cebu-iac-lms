@@ -70,7 +70,7 @@
                                     <tbody>
                                         <template v-for="item in getRecordsWithCombined(term)">
                                         <tr v-if="item.type == 'combined'" style="font-size: 13px;">
-                                            <td>{{ item.data.strClassName + item.data.year + item.data.strSection + (item.data.sub_section?item.data.sub_section:'') }}</td>
+                                            <td></td>
                                             <td v-if="!item.data.elective_subject">{{ item.data.combineCode }}</td>
                                             <td v-else>({{ item.data.elective_subject.strCode + ' - ' + item.data.combineCode }})</td>
                                             <td v-if="item.data.include_gwa == 1">{{ getTotalUnits(term, item.data.intSubjectID) }}</td>
