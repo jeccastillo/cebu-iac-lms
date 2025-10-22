@@ -198,9 +198,9 @@
                                             <tr v-if="item.type == 'combined'" style="font-size: 13px;">
                                                 <td>{{ item.data.combineCode }}</td>
                                                 <td>{{ item.data.combineDesc }}</td>
-                                                <td>---</td>
+                                                <td>{{ getAverageGradeCurriculum(term, item.data.intSubjectID) }}</td>
                                                 <td>Combined</td>
-                                                <td>---</td>
+                                                <td>{{ getTotalUnitsEarnedCurriculum(term, item.data.intSubjectID) }}</td>
                                             </tr>
                                             <tr v-else :style="(item.data.rec || item.data.equivalent)?'color:'+item.data.rec.bg+';':''" style="font-size: 13px;">
                                                 <td>{{ item.data.strCode }}</td>
@@ -915,7 +915,7 @@ new Vue({
             }
             if (grades.length === 0) return '---';
             let avg = grades.reduce((a, b) => a + b, 0) / grades.length;
-            return avg.toFixed(2);
+            return Math.round(avg);
         },
         getAverageFinal: function(term, subjectID) {
             let grades = [];
@@ -926,7 +926,7 @@ new Vue({
             }
             if (grades.length === 0) return '---';
             let avg = grades.reduce((a, b) => a + b, 0) / grades.length;
-            return avg.toFixed(2);
+            return Math.round(avg);
         },
         getAverageSemFinal: function(term, subjectID) {
             if (this.student.type != 'shs') return '---';
@@ -938,7 +938,27 @@ new Vue({
             }
             if (grades.length === 0) return '---';
             let avg = grades.reduce((a, b) => a + b, 0) / grades.length;
-            return avg.toFixed(2);
+            return Math.round(avg);
+        },
+        getAverageGradeCurriculum: function(term, subjectID) {
+            let grades = [];
+            for (let record of term.records) {
+                if (record.intSubjectID == subjectID && record.grade && record.grade != 'OW') {
+                    grades.push(parseFloat(record.grade) || 0);
+                }
+            }
+            if (grades.length === 0) return '---';
+            let avg = grades.reduce((a, b) => a + b, 0) / grades.length;
+            return Math.round(avg);
+        },
+        getTotalUnitsEarnedCurriculum: function(term, subjectID) {
+            let total = 0;
+            for (let record of term.records) {
+                if (record.intSubjectID == subjectID) {
+                    total += parseFloat(record.units_earned) || 0;
+                }
+            }
+            return total.toFixed(1);
         },
         printTOR: function(){
             Swal.fire({
