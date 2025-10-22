@@ -947,8 +947,12 @@ new Vue({
         getAverageGradeCurriculum: function(term, subjectID) {
             let grades = [];
             for (let record of term.records) {
-                if (record.intSubjectID == subjectID && record.grade && record.grade != 'OW') {
-                    grades.push(parseFloat(record.grade) || 0);
+                if (record.intSubjectID == subjectID) {
+                    if (record.equivalent && record.equivalent.grade && record.equivalent.grade != 'OW') {
+                        grades.push(parseFloat(record.equivalent.grade) || 0);
+                    } else if (record.rec && record.rec.floatFinalGrade && record.rec.floatFinalGrade != 'OW') {
+                        grades.push(parseFloat(record.rec.floatFinalGrade) || 0);
+                    }
                 }
             }
             if (grades.length === 0) return '---';
