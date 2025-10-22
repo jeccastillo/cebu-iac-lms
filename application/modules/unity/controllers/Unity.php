@@ -1547,13 +1547,15 @@ class Unity extends CI_Controller {
                 ))
                 ->get('tb_mas_curriculum_second')
                 ->result_array();
-                
+
             $grouped_combined_subjects = [];
             foreach ($combined_subjects as $row) {
                 // Use both 'combineCode' and 'combineDesc' to create a unique key for each group
                 $group_key = $row['combineCode'];
                 $grouped_combined_subjects[$group_key][] = $row;
             }
+            print_r($grouped_combined_subjects);
+            die();
                                       
             // Prefer curriculum_second mapping: if current subject is listed as an equivalentSubjectID,
             // fetch the grade of the mapped intSubjectID for this student's curriculum.
