@@ -861,6 +861,7 @@ new Vue({
                 }
                 result.push({type: 'record', data: record});
             }
+            console.log('result:');
             console.log(result);
             return result;
         },
