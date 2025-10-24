@@ -3533,6 +3533,7 @@ class Data_fetcher extends CI_Model {
 
                         if($scholar->tuition_fee_rate != 10){
                             print_r($tuition_discount_full);
+                            print_r($scholar);
                             die();
                         }
                         //check if discount is external or in-house
