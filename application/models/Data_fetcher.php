@@ -3531,8 +3531,10 @@ class Data_fetcher extends CI_Model {
                         $tuition_discount_installment30 += ($tuition + ($tuition * 0.15)) * ($scholar->tuition_fee_rate/100);
                         $tuition_discount_installment50 += ($tuition + ($tuition * 0.09)) * ($scholar->tuition_fee_rate/100);
 
-                        print_r($tuition_discount_full);
-                        die();
+                        if($scholar->tuition_fee_rate != 10){
+                            print_r($tuition_discount_full);
+                            die();
+                        }
                         //check if discount is external or in-house
                         if($scholar->deduction_from == 'external'){
                             $ar_external_discounts_full = $tuition * ($scholar->tuition_fee_rate/100);
