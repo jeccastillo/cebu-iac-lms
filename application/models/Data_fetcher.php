@@ -3087,6 +3087,12 @@ class Data_fetcher extends CI_Model {
                             $total_assessment_fixed = $scholar->total_assessment_fixed;
                             $total_assessment_fixed_installment = $scholar->total_assessment_fixed;
                         }
+
+                        //get tuition percentage discount in scholar fixed
+                        $tuition_discount_full += $total_scholarship_temp * ($tuition / $scholar->total_assessment_rate/100);
+                        $tuition_discount_installment += $total_scholarship_temp * ($tuition + ($tuition * ($tuition_year['installmentIncrease']/100)));
+                        $tuition_discount_installment30 += $total_scholarship_temp * ($tuition + ($tuition * 0.15));
+                        $tuition_discount_installment50 += $total_scholarship_temp * ($tuition + ($tuition * 0.09));
                         
                         $ar_external_scholarship_full += $scholar->total_assessment_fixed;
                         $ar_external_scholarship_installment += $scholar->total_assessment_fixed;
