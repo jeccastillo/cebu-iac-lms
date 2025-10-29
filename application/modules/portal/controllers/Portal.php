@@ -454,8 +454,23 @@ class Portal extends CI_Controller {
                 $this->data['reg_status'] = $this->data_fetcher->getRegistrationStatus($this->data['student']['intID'],$this->data['selected_ay']);
                 //$this->data['home'] = true;
                 //$this->data['body_class'] = "homepage";
+                $combined_subjects = $this->db->select('*')
+                        ->where(array(
+                            'intCurriculumID' => $this->data['student']['intCurriculumID'],
+                            'type' => 'Combine'
+                        ))
+                        ->get('tb_mas_curriculum_second')
+                        ->result_array();
 
-                            
+                    $grouped_combined_subjects = [];
+                    foreach ($combined_subjects as $row) {
+                        // Use both 'combineCode' and 'combineDesc' to create a unique key for each group
+                        $group_key = $row['combineCode'];
+                        $grouped_combined_subjects[$group_key][] = $row;
+                    }
+
+
+                $this->data['combined_subjects'] = $grouped_combined_subjects;
                 $this->data['subjects_not_taken'] = $this->data_fetcher->getRequiredSubjects($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
                 $grades = $this->data_fetcher->assessCurriculum($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
                 array_unshift($grades,array('strCode'=>'none','floatFinalGrade'=>'n/a','strRemarks'=>'n/a'));
