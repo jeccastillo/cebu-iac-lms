@@ -116,59 +116,54 @@
         <?php } ?>
 
         <?php else:  ?>
-        <div class="table-responsive">
+        <div class="table-responsive" id="grades-container">
             <table class="table table-striped">
                 <thead>
                     <tr>
                         <th width="13%">Section</th>
                         <th width="10%"> Course Code</th>
                         <th >Course Title</th>
-                        <th style="text-align: center;">Units</th>                        
-                        <th>Midterm</th>                        
-                        <th>Final Grade</th>                                                
+                        <th style="text-align: center;">Units</th>
+                        <th>Midterm</th>
+                        <th>Final Grade</th>
 						<th>Remarks</th>
                         <th>Faculty</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php 
-                    $totalUnits = 0;
-                    $countBridg = 0;
-                    foreach($records as $record): ?>
-                    <tr>                        
-                        <td><?php echo $record['strClassName'].$record['year'].$record['strSection']." ".$record['sub_section']; ?></td>
-                        <td><?php echo $record['strCode']; ?></td>
-						<td><?php echo $record['strDescription']; ?></td>
-                        <td style="text-align: center;"><?php echo $record['strUnits']?>                                                
-                        <?php if($record['intFinalized'] >= 1 && $sem_selected->viewing_midterm_start <= date("Y-m-d")): ?>                                
-                            <td><strong><?php echo $record['v2']; ?></strong></td>
-                        <?php else: ?>
-                            <td>Not Yet Available</td>
-                        <?php endif; ?>    
-                        <?php if($record['intFinalized'] >= 2 && $sem_selected->viewing_final_start <= date("Y-m-d") && count($deficiencies) == 0): ?>                                
-                            <td><strong><?php echo $record['v3']; ?></strong></td>
-                        <?php else: ?>
-                            <td>Not Yet Available</td>
-                        <?php endif; ?>                                                        
-                        <td>
-                            <?php if($record['intFinalized'] >= 2 && $sem_selected->viewing_final_start <= date("Y-m-d") && count($deficiencies) == 0): ?> 
-                                <?php echo $record['strRemarks']; ?>
-                            <?php else: ?>
-                                -
-                            <?php endif; ?>                            
-                        </td>
-                        <td><?php if($record['strFirstname']!="unassigned"){
-                                    $firstNameInitial = substr($record['strFirstname'], 0,1);
-                                    echo $firstNameInitial.". ".$record['strLastname'];  
-                                  }
-                                  else echo "unassigned";  ?>
-                        </td>
-                        
-                    </tr>
-                    <?php endforeach; ?>
-                       
-                        
-        
+                    <template v-for="item in getRecordsWithCombined()">
+                        <tr v-if="item.type == 'combined'" style="font-size: 13px;">
+                            <td></td>
+                            <td v-if="!item.data.elective_subject">{{ item.data.combineCode }}</td>
+                            <td v-else>({{ item.data.elective_subject.strCode + ' - ' + item.data.combineCode }})</td>
+                            <td>{{ item.data.combineDesc }}</td>
+                            <td v-if="item.data.include_gwa == 1">{{ getTotalUnits(item.data.intSubjectID) }}</td>
+                            <td v-else>({{ getTotalUnits(item.data.intSubjectID) }})</td>
+                            <td>{{ getAverageMidterm(item.data.intSubjectID) }}</td>
+                            <td>{{ getAverageFinal(item.data.intSubjectID) }}</td>
+                            <td>Combined</td>
+                            <td>---</td>
+                        </tr>
+                        <tr v-else :style="(item.data.intFinalized == 2)?'background-color:#ccc;':''" style="font-size: 13px;">
+                            <td>{{ item.data.strClassName + item.data.year + item.data.strSection + (item.data.sub_section?item.data.sub_section:'') }}</td>
+                            <td v-if="!item.data.elective_subject">{{ item.data.strCode }}</td>
+                            <td v-else>({{ item.data.elective_subject.strCode + ' - ' + item.data.strCode }})</td>
+                            <td>{{ item.data.strDescription }}</td>
+                            <td v-if="item.data.include_gwa == 1">{{ item.data.strUnits }}</td>
+                            <td v-else>({{ item.data.strUnits }})</td>
+                            <td v-if="item.data.v2 != 'OW'" :style="(item.data.intFinalized == 2)?'font-weight:bold;':''">{{ item.data.intFinalized >=1?item.data.v2:'NGS' }}</td>
+                            <td v-else style="font-weight:bold">OW</td>
+                            <td v-if="item.data.v3 != 'OW'" :style="(item.data.intFinalized == 2)?'font-weight:bold;':''">
+                                <span v-if="item.data.intFinalized >=2" :style="(item.data.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">
+                                    {{ item.data.v3 }}
+                                </span>
+                                <span v-else>NGS</span>
+                            </td>
+                            <td v-else style="font-weight:bold">OW</td>
+                            <td :style="(item.data.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">{{ item.data.intFinalized >=1?item.data.strRemarks:'---' }}</td>
+                            <td>{{ item.data.strFirstname+" "+item.data.strLastname }}</td>
+                        </tr>
+                    </template>
                 </tbody>
             </table>
         </div>
