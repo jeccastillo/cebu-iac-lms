@@ -100,12 +100,12 @@ foreach($students as $student):
     </tr>  
 </table>
 <div style="page-break-inside: avoid;">
-<table border="0" cellpadding="2px" style="font-size:8px;border-spacing: 15px 0;">
+<table border="0" cellpadding="2px" style="font-size:8px;border-spacing: 10px 0;">
     <tr>
         <td width="45%">Submitted by:</td>
         <td width="45%">Checked by:</td>
     </tr>
-    <tr style="line-height:20px; text-align:center;">
+    <tr style="line-height:15px; text-align:center;">
         <td><?php echo $submitted_by; ?></td>
         <td><?php echo $checked_by; ?></td>
     </tr>
@@ -118,7 +118,7 @@ foreach($students as $student):
             <td style="border-top:1px solid #333"><strong>Chairperson</strong></td>
         <?php endif; ?>
     </tr>
-    <tr style="line-height:20px; text-align:center;">
+    <tr style="line-height:15px; text-align:center;">
         <td><?php echo $submitted_by_date; ?></td>
         <td><?php echo $checked_by_date; ?></td>
     </tr>
@@ -130,13 +130,13 @@ foreach($students as $student):
         <tr>
             <td width="45%">Approved by:</td>
         </tr>
-        <tr style="line-height:20px; text-align:center;">
+        <tr style="line-height:15px; text-align:center;">
             <td><?php echo $approved_by; ?></td>
         </tr>
         <tr style="text-align:center;">
             <td style="border-top:1px solid #333"><strong>Principal</strong></td>
         </tr>
-        <tr style="line-height:20px; text-align:center;">
+        <tr style="line-height:15px; text-align:center;">
             <td><?php echo $approved_by_date; ?></td>
         </tr>
         <tr style="text-align:center;">
