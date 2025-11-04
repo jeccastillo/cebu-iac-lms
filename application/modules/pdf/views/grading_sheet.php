@@ -99,47 +99,36 @@ foreach($students as $student):
         <td colspan="7"></td>        
     </tr>  
 </table>
+<div style="page-break-inside: avoid;">
 <table border="0" cellpadding="2px" style="font-size:8px;border-spacing: 15px 0;">
     <tr>
-        <td width="45%">Submitted by:</td>
-        <td width="45%">Checked by:</td>      
+        <td width="30%">Submitted by:</td>
+        <td width="30%">Checked by:</td>
+        <td width="30%">Approved by:</td>
     </tr>
     <tr style="line-height:20px; text-align:center;">
-        <td><?php echo $submitted_by; ?></td>        
-        <td><?php echo $checked_by; ?></td>              
-    </tr>  
+        <td><?php echo $submitted_by; ?></td>
+        <td><?php echo $checked_by; ?></td>
+        <td><?php echo ($student_type == 'shs') ? $approved_by : ''; ?></td>
+    </tr>
     <tr style="text-align:center;">
         <td style="border-top:1px solid #333"><strong>Faculty Name</strong></td>
-
         <?php if($student_type == 'shs'): ?>
             <td style="border-top:1px solid #333"><strong>Academic Coordinator</strong></td>
         <?php else: ?>
             <td style="border-top:1px solid #333"><strong>Chairperson</strong></td>
         <?php endif; ?>
+        <td style="border-top:1px solid #333"><?php echo ($student_type == 'shs') ? '<strong>Principal</strong>' : ''; ?></td>
     </tr>
     <tr style="line-height:20px; text-align:center;">
         <td><?php echo $submitted_by_date; ?></td>
         <td><?php echo $checked_by_date; ?></td>
-    </tr>  
+        <td><?php echo ($student_type == 'shs') ? $approved_by_date : ''; ?></td>
+    </tr>
     <tr style="text-align:center;">
         <td style="border-top:1px solid #333">Date</td>
         <td style="border-top:1px solid #333">Date</td>
+        <td style="border-top:1px solid #333"><?php echo ($student_type == 'shs') ? 'Date' : ''; ?></td>
     </tr>
-    <?php if($student_type == 'shs'): ?>
-        <tr>
-            <td width="45%">Approved by:</td>   
-        </tr>
-        <tr style="line-height:20px; text-align:center;">
-            <td><?php echo $approved_by; ?></td>              
-        </tr>
-        <tr style="text-align:center;">
-            <td style="border-top:1px solid #333"><strong>Principal</strong></td>
-        </tr>
-        <tr style="line-height:20px; text-align:center;">
-            <td><?php echo $approved_by_date; ?></td> 
-        </tr>  
-        <tr style="text-align:center;">
-            <td style="border-top:1px solid #333">Date</td>
-        </tr>
-    <?php endif; ?>
 </table>
+</div>
