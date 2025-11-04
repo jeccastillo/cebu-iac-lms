@@ -469,7 +469,8 @@ class Portal extends CI_Controller {
                         $grouped_combined_subjects[$group_key][] = $row;
                     }
 
-
+                print_r($this->data);
+                die();
                 $this->data['combined_subjects'] = $grouped_combined_subjects;
                 $this->data['subjects_not_taken'] = $this->data_fetcher->getRequiredSubjects($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
                 $grades = $this->data_fetcher->assessCurriculum($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
