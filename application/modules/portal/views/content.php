@@ -247,21 +247,21 @@ function inArray(needle, haystack) {
 new Vue({
     el: '#registration-container',
     data: {
-        id: '<?php echo $id; ?>',    
+        id: '<?php echo $id; ?>',
         base_url: '<?php echo base_url(); ?>',
         slug: undefined,
-        student:undefined,         
-        records: [],         
+        student: <?php echo json_encode($student); ?>,
+        records: <?php echo json_encode($records); ?>,
         gwa: undefined,
         curriculum_subjects: [],
-        combined_subjects: [],
-        deficiencies: [],
+        combined_subjects: <?php echo json_encode($combined_subjects); ?>,
+        deficiencies: <?php echo json_encode($deficiencies); ?>,
         subjects: [],
         units: undefined,
-        assessment_gwa: undefined,  
+        assessment_gwa: undefined,
         balance: 0,
-        assessment_units: undefined, 
-        applicant_data: undefined,  
+        assessment_units: undefined,
+        applicant_data: undefined,
         credited_subjects: [],
         change_grades: [],
         generated_tor:[],
@@ -273,80 +273,7 @@ new Vue({
     },
 
     mounted() {
-
-        let url_string = window.location.href;        
-        if(this.id != 0){            
-            //this.loader_spinner = true;
-            axios.get(this.base_url + 'unity/student_records_data/' + this.id + '/')
-                .then((data) => {                                          
-                    this.student = data.data.student;
-                    this.credited_units = data.data.credited_units;
-                    this.curriculum_units = data.data.curriculum_units;
-                    this.curriculum_units_na = data.data.curriculum_units_na;                    
-                    this.units_left = data.data.units_left;
-                    this.generated_tor =  data.data.generated_tor;
-                    this.change_grades = data.data.change_grades;
-                    this.credited_subjects =  data.data.credited_subjects;
-                    this.records = data.data.data;                            
-                    this.balance = data.data.balance;
-                    this.subjects = data.data.all_subjects;
-                    this.deficiencies = data.data.deficiencies;
-                    this.curriculum_subjects = data.data.curriculum_subjects; 
-                    this.combined_subjects = data.data.combined_subjects;
-                    this.gwa = data.data.gwa;
-                    this.units = data.data.total_units_earned;  
-                    this.assessment_gwa = data.data.assessment_gwa; 
-                    this.assessment_units = data.data.assessment_units;
-                    for(i in this.records){
-                        switch(this.records[i].reg.intROG){
-                            case '0': 
-                                this.records[i].reg.enrollment_status = "Enlisted";
-                                this.records[i].reg.color = "box-default";
-                            break;
-                            case '1': 
-                                this.records[i].reg.enrollment_status = "Enrolled";
-                                this.records[i].reg.color = "box-success";
-                            break;
-                            case '2': 
-                                this.records[i].reg.enrollment_status = "Cleared";
-                                this.records[i].reg.color = "box-success";
-                            break;
-                            case '3': 
-                                this.records[i].reg.enrollment_status = "Officially Withdrawn";
-                                this.records[i].reg.color = "box-warning";
-                            break;
-                            case '4': 
-                                this.records[i].reg.enrollment_status = "LOA";
-                                this.records[i].reg.color = "box-info";
-                            break;
-                            case '5': 
-                                this.records[i].reg.enrollment_status = "AWOL";
-                                this.records[i].reg.color = "box-danger";
-                            break;
-                            default:
-                                this.records[i].reg.color = "box-default";
-                                this.records[i].reg.enrollment_status = "None";
-
-                        }
-                    }
-                    axios.get(api_url + 'admissions/student-info/' + this.student.slug)
-                    .then((data) => {
-                        this.applicant_data = data.data.data;
-                        for(i in this.applicant_data.uploaded_requirements){
-                                if(this.applicant_data.uploaded_requirements[i].type == "2x2" || this.applicant_data.uploaded_requirements[i].type == "2x2_foreign")
-                                this.tor.picture = this.applicant_data.uploaded_requirements[i].path;
-                        }
-                        this.tor.admission_date = this.applicant_data.date_enrolled;
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    })
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
-        }
-
+        // Data is already initialized from PHP
     },
 
     methods: {
