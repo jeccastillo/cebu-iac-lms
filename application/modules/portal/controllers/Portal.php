@@ -481,8 +481,6 @@ class Portal extends CI_Controller {
                 $this->load->view('common/header',$this->data);
                 $this->load->view('content',$this->data);
                 $this->load->view('common/footer',$this->data);
-                print_r($this->data);
-                die();
             }
             else{
                 echo "No Enrollement Data";
