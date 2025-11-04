@@ -120,72 +120,55 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Section Code</th>
-                        <th>Course Code</th>
-                        <th>Units</th>
-                        <th>Midterm</th>
-                        <th>Final</th>
-                        <th v-if="student.type == 'shs'">Sem Final Grade</th>
-                        <th>Remarks</th>
+                        <th width="13%">Section</th>
+                        <th width="10%"> Course Code</th>
+                        <th >Course Title</th>
+                        <th style="text-align: center;">Units</th>                        
+                        <th>Midterm</th>                        
+                        <th>Final Grade</th>                                                
+						<th>Remarks</th>
                         <th>Faculty</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <template v-for="item in getRecordsWithCombined(term)">
-                    <tr v-if="item.type == 'combined'" style="font-size: 13px;">
-                        <td></td>
-                        <td v-if="!item.data.elective_subject">{{ item.data.combineCode }}</td>
-                        <td v-else>({{ item.data.elective_subject.strCode + ' - ' + item.data.combineCode }})</td>
-                        <td v-if="item.data.include_gwa == 1">{{ getTotalUnits(term, item.data.intSubjectID) }}</td>
-                        <td v-else>({{ getTotalUnits(term, item.data.intSubjectID) }})</td>
-                        <td>{{ getAverageMidterm(term, item.data.intSubjectID) }}</td>
-                        <td>{{ getAverageFinal(term, item.data.intSubjectID) }}</td>
-                        <td>{{ getAverageSemFinal(term, item.data.intSubjectID) }}</td>
-                        <td>Combined</td>
-                        <td>---</td>
-                    </tr>
-                    <tr v-else :style="(item.data.intFinalized == 2)?'background-color:#ccc;':''" style="font-size: 13px;">
-                        <td>{{ item.data.strClassName + item.data.year + item.data.strSection + (item.data.sub_section?item.data.sub_section:'') }}</td>
-                        <!-- <td>{{ item.data.strClassName + item.data.year + item.data.strSection + (item.data.sub_section?item.data.sub_section:'') }}</td> -->
-                        <td v-if="!item.data.elective_subject">{{ item.data.strCode }}</td>
-                        <td v-else>({{ item.data.elective_subject.strCode + ' - ' + item.data.strCode }})</td>
-                        <td v-if="item.data.include_gwa == 1">{{ item.data.strUnits }}</td>
-                        <td v-else>({{ item.data.strUnits }})</td>
-                        <td v-if="item.data.v2 != 'OW'" :style="(item.data.intFinalized == 2)?'font-weight:bold;':''">{{ item.data.intFinalized >=1?item.data.v2:'NGS' }}</td>
-                        <td v-else style="font-weight:bold">
-                            OW
+                    <?php 
+                    $totalUnits = 0;
+                    $countBridg = 0;
+                    foreach($records as $record): ?>
+                    <tr>                        
+                        <td><?php echo $record['strClassName'].$record['year'].$record['strSection']." ".$record['sub_section']; ?></td>
+                        <td><?php echo $record['strCode']; ?></td>
+						<td><?php echo $record['strDescription']; ?></td>
+                        <td style="text-align: center;"><?php echo $record['strUnits']?>                                                
+                        <?php if($record['intFinalized'] >= 1 && $sem_selected->viewing_midterm_start <= date("Y-m-d")): ?>                                
+                            <td><strong><?php echo $record['v2']; ?></strong></td>
+                        <?php else: ?>
+                            <td>Not Yet Available</td>
+                        <?php endif; ?>    
+                        <?php if($record['intFinalized'] >= 2 && $sem_selected->viewing_final_start <= date("Y-m-d") && count($deficiencies) == 0): ?>                                
+                            <td><strong><?php echo $record['v3']; ?></strong></td>
+                        <?php else: ?>
+                            <td>Not Yet Available</td>
+                        <?php endif; ?>                                                        
+                        <td>
+                            <?php if($record['intFinalized'] >= 2 && $sem_selected->viewing_final_start <= date("Y-m-d") && count($deficiencies) == 0): ?> 
+                                <?php echo $record['strRemarks']; ?>
+                            <?php else: ?>
+                                -
+                            <?php endif; ?>                            
                         </td>
-                        <td v-if="item.data.v3 != 'OW'" :style="(item.data.intFinalized == 2)?'font-weight:bold;':''">
-                            <span v-if="item.data.intFinalized >=2" :style="(item.data.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">
-                                {{ item.data.v3 }}
-                            </span>
-                            <span v-else>
-                                NGS
-                            </span>
+                        <td><?php if($record['strFirstname']!="unassigned"){
+                                    $firstNameInitial = substr($record['strFirstname'], 0,1);
+                                    echo $firstNameInitial.". ".$record['strLastname'];  
+                                  }
+                                  else echo "unassigned";  ?>
                         </td>
-                        <td v-else style="font-weight:bold">
-                            OW
-                        </td>
-                        <!-- <td v-if="student.type == 'shs' && item.data.v2 && item.data.v3">{{ (parseInt(item.data.v2) + parseInt(item.data.v3) ? Math.round((parseInt(item.data.v2) + parseInt(item.data.v3)) / 2) : 'T')}}</td> -->
-                        <td v-if="student.type == 'shs' && item.data.semFinalGrade">{{ item.data.semFinalGrade }}</td>
-                        <td v-else-if="student.type == 'shs'">---</td>
-                        <td :style="(item.data.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">{{ item.data.intFinalized >=1?item.data.strRemarks:'---' }}</td>
-                        <td>{{ item.data.strFirstname+" "+item.data.strLastname }}</td>
+                        
                     </tr>
-                    </template>
-                    <tr style="font-size: 13px;">
-                        <td></td>
-                        <td align="right"><strong>Units Earned for Term:</strong></td>
-                        <td>{{ term.units_earned }}</td>
-                        <td colspan="3"></td>
-                    </tr>
-                    <tr style="font-size: 11px;">
-                        <td></td>
-                        <td align="right"><strong>Term GWA:</strong></td>
-                        <td v-if="student.type == 'shs'">{{ Math.round(term.gwa) }}</td>
-                        <td v-else>{{ term.gwa }}</td>
-                        <td colspan="3"></td>
-                    </tr>
+                    <?php endforeach; ?>
+                       
+                        
+        
                 </tbody>
             </table>
         </div>
@@ -233,172 +216,3 @@
 
 </div>
 
-
-<script src="<?php echo base_url(); ?>assets/themes/default/js/jquery.min.js"></script>
-<script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
-<script src="<?php echo base_url(); ?>assets/themes/default/js/vue.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
-    integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="<?php echo base_url(); ?>assets/themes/default/js/axios.min.js"></script>
-
-<script>
-var special = ['0th','1st', '2nd', '3rd', '4th', '5th'];
-
-function stringifyNumber(n) {
-  return special[n];
-  
-  
-}
-function inArray(needle, haystack) {
-    var length = haystack.length;
-    for(var i = 0; i < length; i++) {
-        if(haystack[i] == needle) return true;
-    }
-    return false;
-}
-new Vue({
-    el: '#registration-container',
-    data: {
-        id: '<?php echo $id; ?>',
-        base_url: '<?php echo base_url(); ?>',
-        slug: undefined,
-        student: <?php echo json_encode($student); ?>,
-        records: <?php echo json_encode($records); ?>,
-        gwa: undefined,
-        curriculum_subjects: [],
-        combined_subjects: <?php echo json_encode($combined_subjects); ?>,
-        deficiencies: <?php echo json_encode($deficiencies); ?>,
-        subjects: [],
-        units: undefined,
-        assessment_gwa: undefined,
-        balance: 0,
-        assessment_units: undefined,
-        applicant_data: undefined,
-        credited_subjects: [],
-        change_grades: [],
-        generated_tor:[],
-        credited_units: 0,
-        curriculum_units: 0,
-        curriculum_units_na: 0,
-        units_left: 0,
-
-    },
-
-    mounted() {
-        // Data is already initialized from PHP
-    },
-
-    methods: {
-        getRecordsWithCombined: function(term) {
-            if (!Array.isArray(this.combined_subjects)) {
-                let flattened = [];
-                for (let key in this.combined_subjects) {
-                    if (Array.isArray(this.combined_subjects[key])) {
-                        flattened = flattened.concat(this.combined_subjects[key]);
-                    }
-                }
-                this.combined_subjects = flattened;
-            }
-            if (!Array.isArray(this.combined_subjects) || this.combined_subjects.length === 0) {
-                return term.records.map(record => ({type: 'record', data: record}));
-            }
-            let displayedCombined = new Set();
-            let result = [];
-            for (let record of term.records) {
-                let combined = this.combined_subjects.find(c => c.intSubjectID == record.intSubjectID);
-                if (combined && !displayedCombined.has(combined.combineCode + '|' + combined.combineDesc)) {
-                    result.push({type: 'combined', data: combined});
-                    displayedCombined.add(combined.combineCode + '|' + combined.combineDesc);
-                }
-                result.push({type: 'record', data: record});
-            }
-            return result;
-        },
-        getCurriculumRecords: function(term) {
-            if (!Array.isArray(this.combined_subjects)) {
-                let flattened = [];
-                for (let key in this.combined_subjects) {
-                    if (Array.isArray(this.combined_subjects[key])) {
-                        flattened = flattened.concat(this.combined_subjects[key]);
-                    }
-                }
-                this.combined_subjects = flattened;
-            }
-            if (!Array.isArray(this.combined_subjects) || this.combined_subjects.length === 0) {
-                return term.records.map(item => ({type: 'item', data: item}));
-            }
-            let displayedCombined = new Set();
-            let result = [];
-            for (let item of term.records) {
-                let combined = this.combined_subjects.find(c => c.intSubjectID == item.intSubjectID);
-                if (combined && !displayedCombined.has(combined.combineCode + '|' + combined.combineDesc)) {
-                    result.push({type: 'combined', data: combined});
-                    displayedCombined.add(combined.combineCode + '|' + combined.combineDesc);
-                }
-                result.push({type: 'item', data: item});
-            }
-            return result;
-        },
-        getTotalUnits: function(term, subjectID) {
-            let total = 0;
-            for (let record of term.records) {
-                if (record.intSubjectID == subjectID) {
-                    total += parseFloat(record.strUnits) || 0;
-                }
-            }
-            return total.toFixed(1);
-        },
-        getAverageMidterm: function(term, subjectID) {
-            let grades = [];
-            for (let record of term.records) {
-                if (record.intSubjectID == subjectID && record.v2 && record.v2 != 'OW' && record.intFinalized >= 1) {
-                    grades.push(parseFloat(record.v2) || 0);
-                }
-            }
-            if (grades.length === 0) return '---';
-            let avg = grades.reduce((a, b) => a + b, 0) / grades.length;
-            return Math.round(avg);
-        },
-        getAverageFinal: function(term, subjectID) {
-            let grades = [];
-            for (let record of term.records) {
-                if (record.intSubjectID == subjectID && record.v3 && record.v3 != 'OW' && record.intFinalized >= 2) {
-                    grades.push(parseFloat(record.v3) || 0);
-                }
-            }
-            if (grades.length === 0) return '---';
-            let avg = grades.reduce((a, b) => a + b, 0) / grades.length;
-            return Math.round(avg);
-        },
-        getAverageSemFinal: function(term, subjectID) {
-            if (this.student.type != 'shs') return '---';
-            let grades = [];
-            for (let record of term.records) {
-                if (record.intSubjectID == subjectID && record.semFinalGrade) {
-                    grades.push(parseFloat(record.semFinalGrade) || 0);
-                }
-            }
-            if (grades.length === 0) return '---';
-            let avg = grades.reduce((a, b) => a + b, 0) / grades.length;
-            return Math.round(avg);
-        },
-        getAverageGradeCurriculum: function(term, subjectID) {
-            let grades = [];
-            for (let record of term.records) {
-                if (record.intSubjectID == subjectID) {
-                    if (record.equivalent && record.equivalent.grade && record.equivalent.grade != 'OW') {
-                        grades.push(parseFloat(record.equivalent.grade) || 0);
-                    } else if (record.rec && record.rec.floatFinalGrade && record.rec.floatFinalGrade != 'OW') {
-                        grades.push(parseFloat(record.rec.floatFinalGrade) || 0);
-                    }
-                }
-            }
-            if (grades.length === 0) return '---';
-            let avg = grades.reduce((a, b) => a + b, 0) / grades.length;
-            return Math.round(avg);
-        },
-    }
-
-})
-</script>
