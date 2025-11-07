@@ -3095,6 +3095,7 @@ class Data_fetcher extends CI_Model {
                         $tuition_discount_installment += $total_scholarship_temp * ($tuition + ($tuition * ($tuition_year['installmentIncrease']/100)) / $total_assessment);
                         $tuition_discount_installment30 += $total_scholarship_temp * ($tuition + ($tuition * 0.15) / $total_assessment);
                         $tuition_discount_installment50 += $total_scholarship_temp * ($tuition + ($tuition * 0.09) / $total_assessment);
+                        print_r($scholar);
                         print('2 ' . $tuition_discount_installment50);
                         die();
 
