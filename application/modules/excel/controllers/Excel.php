@@ -8769,7 +8769,7 @@ class Excel extends CI_Controller {
         //check if date end is last day of the month
         $isEndOfMonth = false;
         $date = new DateTime($report_date_end);
-        $lastDayOfMonth = (clone $date)->modify('last day of this month');
+        // $lastDayOfMonth = (clone $date)->modify('last day of this month');
         if($date->format('Y-m-d') === $lastDayOfMonth->format('Y-m-d')){
             $isEndOfMonth = true;
         }
@@ -9046,7 +9046,7 @@ class Excel extends CI_Controller {
         //check if date end is last day of the month
         $isEndOfMonth = false;
         $date = new DateTime($report_date_end);
-        $lastDayOfMonth = (clone $date)->modify('last day of this month');
+        // $lastDayOfMonth = (clone $date)->modify('last day of this month');
         if($date->format('Y-m-d') === $lastDayOfMonth->format('Y-m-d')){
             $isEndOfMonth = true;
         }
