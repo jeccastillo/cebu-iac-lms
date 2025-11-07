@@ -3062,8 +3062,8 @@ class Data_fetcher extends CI_Model {
                         $tuition_discount_installment += ($tuition + ($tuition * ($tuition_year['installmentIncrease']/100))) * ($scholar->total_assessment_rate/100);
                         $tuition_discount_installment30 += ($tuition + ($tuition * 0.15)) * ($scholar->total_assessment_rate/100);
                         $tuition_discount_installment50 += ($tuition + ($tuition * 0.09)) * ($scholar->total_assessment_rate/100);
-                        // print('1 ' . $tuition_discount_installment50);
-                        // die();
+                        print('1 ' . $tuition_discount_installment50);
+                        die();
 
                         //external
                         $ar_external_scholarship_full += $total_assessment_temp * ($scholar->total_assessment_rate/100);
@@ -3095,9 +3095,9 @@ class Data_fetcher extends CI_Model {
                         $tuition_discount_installment += $total_scholarship_temp * ($tuition + ($tuition * ($tuition_year['installmentIncrease']/100)) / $total_assessment);
                         $tuition_discount_installment30 += $total_scholarship_temp * ($tuition + ($tuition * 0.15) / $total_assessment);
                         $tuition_discount_installment50 += $total_scholarship_temp * ($tuition + ($tuition * 0.09) / $total_assessment);
-                        // print_r($scholar);
-                        // print('2 ' . $tuition_discount_installment50);
-                        // die();
+                        print_r($scholar);
+                        print('2 ' . $tuition_discount_installment50);
+                        die();
 
                         $ar_external_scholarship_full += $scholar->total_assessment_fixed;
                         $ar_external_scholarship_installment += $scholar->total_assessment_fixed;
@@ -3279,8 +3279,8 @@ class Data_fetcher extends CI_Model {
                         $tuition_discount_installment += ($tuition + ($tuition * ($tuition_year['installmentIncrease']/100))) * ($scholar->total_assessment_rate/100);
                         $tuition_discount_installment30 += ($tuition + ($tuition * 0.15)) * ($scholar->total_assessment_rate/100);
                         $tuition_discount_installment50 += ($tuition + ($tuition * 0.09)) * ($scholar->total_assessment_rate/100);
-                        // print('3 ' . $tuition_discount_installment50);
-                        // die();
+                        print('3 ' . $tuition_discount_installment50);
+                        die();
                         $data['sc_rate'] = $total_scholarship_temp * ($scholar->total_assessment_rate/100);
                         
                         if($scholar->total_assessment_rate == 100)
