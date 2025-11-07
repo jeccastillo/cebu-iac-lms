@@ -2,7 +2,14 @@
     <section class="content-header">
         <h1>
             Student
-            <small></small>
+            <small>
+              <div class="">
+                <?php if($user['intUserLevel'] == 2): ?>
+                    <button><a class="btn btn-app" target="_blank" href="<?php echo base_url() ?>excel/smsv2_students"><i
+                        class="fa fa-book"></i>Download Student Data</a></button>
+                <?php endif;?>
+              </div>
+            </small>
         </h1> 
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Student</a></li>
@@ -18,12 +25,6 @@
         <div class="box">
             <div class="box-header with-border">
               <h3 class="box-title">Advanced Search</h3>
-              <div class="box-tools pull-right">
-                <?php if($user['intUserLevel'] == 2): ?>
-                    <button><a class="btn btn-app" target="_blank" href="<?php echo base_url() ?>excel/smsv2_students"><i
-                        class="fa fa-book"></i>Download Student Data</a></button>
-                <?php endif;?>
-              </div>
               <div class="box-tools pull-right">
                     <div class="dropdown">
                       <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
