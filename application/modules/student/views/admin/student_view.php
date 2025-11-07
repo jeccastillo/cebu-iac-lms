@@ -5,7 +5,7 @@
             <small>
               <div class="">
                 <?php if($user['intUserLevel'] == 2): ?>
-                    <button><a class="btn btn-app" target="_blank" href="<?php echo base_url() ?>excel/smsv2_students"><i
+                    <button><a class="btn" target="_blank" href="<?php echo base_url() ?>excel/smsv2_students"><i
                         class="fa fa-book"></i>Download Student Data</a></button>
                 <?php endif;?>
               </div>
