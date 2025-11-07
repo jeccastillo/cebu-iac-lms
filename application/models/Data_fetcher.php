@@ -3542,6 +3542,7 @@ class Data_fetcher extends CI_Model {
                         print(' @@@@@ ' . ($scholar->tuition_fee_rate/100));
                         print(' @@@@@ ' . $tuition_discount_installment50);
                         print(' @@@@@ ' . $tuition_scholarship_installment_current50);
+                        print(' @@@@@ ' . $scholarship_installment_grand_total50);
                         die();               
 
                         //add total tuition percentage discount
