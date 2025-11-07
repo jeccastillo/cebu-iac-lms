@@ -18,10 +18,10 @@
         <div class="box">
             <div class="box-header with-border">
               <h3 class="box-title">Advanced Search</h3>
-              <div>
+              <div class="box-tools pull-right">
                 <?php if($user['intUserLevel'] == 2): ?>
-                    <button class="btn btn-app" target="_blank" href="<?php echo base_url() ?>excel/smsv2_students"><i
-                        class="fa fa-book"></i>Download Student Data</button>
+                    <button><a class="btn btn-app" target="_blank" href="<?php echo base_url() ?>excel/smsv2_students"><i
+                        class="fa fa-book"></i>Download Student Data</a></button>
                 <?php endif;?>
               </div>
               <div class="box-tools pull-right">
