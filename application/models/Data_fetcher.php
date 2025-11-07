@@ -3539,10 +3539,14 @@ class Data_fetcher extends CI_Model {
                         die();               
 
                         //add total tuition percentage discount
+                        // $tuition_discount_full += ($tuition * ($scholar->tuition_fee_rate/100));
+                        // $tuition_discount_installment += ($tuition + ($tuition * ($tuition_year['installmentIncrease']/100))) * ($scholar->tuition_fee_rate/100);
+                        // $tuition_discount_installment30 += ($tuition + ($tuition * 0.15)) * ($scholar->tuition_fee_rate/100);
+                        // $tuition_discount_installment50 += ($tuition + ($tuition * 0.09)) * ($scholar->tuition_fee_rate/100);
                         $tuition_discount_full += ($tuition * ($scholar->tuition_fee_rate/100));
                         $tuition_discount_installment += ($tuition + ($tuition * ($tuition_year['installmentIncrease']/100))) * ($scholar->tuition_fee_rate/100);
                         $tuition_discount_installment30 += ($tuition + ($tuition * 0.15)) * ($scholar->tuition_fee_rate/100);
-                        $tuition_discount_installment50 += ($tuition + ($tuition * 0.09)) * ($scholar->tuition_fee_rate/100);
+                        $tuition_discount_installment50 += $tuition_scholarship_installment_current50;
 
                         //check if discount is external or in-house
                         if($scholar->deduction_from == 'external'){
