@@ -6,8 +6,8 @@
     .controller('ApplicantsListController', ApplicantsListController)
     .controller('ApplicantViewController', ApplicantViewController);
 
-  ApplicantsListController.$inject = ['$location', '$scope', 'ApplicantsService', 'CampusService', 'SchoolYearsService'];
-  function ApplicantsListController($location, $scope, ApplicantsService, CampusService, SchoolYearsService) {
+  ApplicantsListController.$inject = ['$location', '$scope', '$window', 'ApplicantsService', 'CampusService', 'SchoolYearsService'];
+  function ApplicantsListController($location, $scope, $window, ApplicantsService, CampusService, SchoolYearsService) {
     var vm = this;
 
     vm.title = 'Applicants';
@@ -61,6 +61,44 @@
       var ln = (r && r.strLastname) ? ('' + r.strLastname).toUpperCase() : '';
       var fn = (r && r.strFirstname) ? r.strFirstname : '';
       return (ln && fn) ? (ln + ', ' + fn) : (ln || fn || '(no name)');
+    };
+
+    vm.downloadTemplate = function () {
+      vm.error = null;
+      try {
+        ApplicantsService.downloadTemplate().then(function (res) {
+          var data = res && res.data ? res.data : null;
+          var filename = 'applicants-import-template.xlsx';
+          if (!data) {
+            vm.error = 'Failed to download template.';
+            return;
+          }
+          // Convert arraybuffer to string for CSV
+          var csvString = new TextDecoder('utf-8').decode(data);
+          // Create blob and trigger download
+          var blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+          if (navigator.msSaveBlob) {
+            // IE 10+
+            navigator.msSaveBlob(blob, filename);
+          } else {
+            var link = document.createElement('a');
+            if (link.download !== undefined) {
+              var url = URL.createObjectURL(blob);
+              link.setAttribute('href', url);
+              link.setAttribute('download', filename);
+              link.style.visibility = 'hidden';
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              URL.revokeObjectURL(url);
+            }
+          }
+        }).catch(function () {
+          vm.error = 'Failed to download template.';
+        });
+      } catch (e) {
+        vm.error = 'Failed to download template.';
+      }
     };
 
     activate();

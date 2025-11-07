@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\Api\V1\ApplicantUpdateRequest;
 use App\Services\SystemLogService;
+use App\Exports\ApplicantImportTemplateExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ApplicantController extends Controller
 {
@@ -496,6 +498,28 @@ class ApplicantController extends Controller
                 'waived_at' => $updatedAppData->waived_at ?? null,
             ],
         ]);
+    }
+
+    /**
+     * GET /api/v1/applicants/template
+     *
+     * Downloads an Excel template for applicants import.
+     */
+    public function template()
+    {
+        $export = new ApplicantImportTemplateExport();
+        $spreadsheet = $export->build();
+
+        $tempDir = storage_path('framework/cache/laravel-excel');
+        if (!is_dir($tempDir)) {
+            mkdir($tempDir, 0755, true);
+        }
+
+        $tempFile = tempnam($tempDir, 'applicant_template_');
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $writer->save($tempFile);
+
+        return response()->download($tempFile, 'applicants-import-template.xlsx')->deleteFileAfterSend(true);
     }
 
     /**

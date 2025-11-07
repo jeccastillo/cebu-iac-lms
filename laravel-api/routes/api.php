@@ -568,6 +568,7 @@ Route::prefix('v1')->group(function () {
 
     // Applicants (Admissions/Admin)
     Route::get('/applicants', [ApplicantController::class, 'index'])->middleware('role:admissions,admin');
+    Route::get('/applicants/template', [ApplicantController::class, 'template'])->middleware('role:admissions,admin');
     Route::get('/applicants/{id}', [ApplicantController::class, 'show'])->middleware('role:admissions,admin');
     Route::put('/applicants/{id}', [ApplicantController::class, 'update'])->middleware('role:admissions,admin');
     // Admissions: Admin upload/replace initial requirements file for a student's requirement

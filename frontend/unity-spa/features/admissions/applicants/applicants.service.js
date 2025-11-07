@@ -76,6 +76,14 @@
       // Update core identity/contact fields for applicant
       update: function (id, payload) {
         return $http.put(ROOT + '/' + encodeURIComponent(id), payload, _adminHeaders()).then(_unwrap);
+      },
+      // Download applicants import template
+      downloadTemplate: function () {
+        var cfg = _adminHeaders();
+        cfg.responseType = 'arraybuffer';
+        return $http.get(ROOT + '/template', cfg).then(function (res) {
+          return res;
+        });
       }
     };
   }
