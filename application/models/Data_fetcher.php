@@ -3448,6 +3448,7 @@ class Data_fetcher extends CI_Model {
                 $tuition_scholarship_installment_current = 0;
                 $tuition_scholarship_installment_current30 = 0;
                 $tuition_scholarship_installment_current50 = 0;
+                $total_assessment_rate_discount_installment50 = 0;
                 $tuition_scholarship_current = 0;
                 $lab_scholarship_installment_current = 0;
                 $lab_scholarship_installment_current30 = 0;
