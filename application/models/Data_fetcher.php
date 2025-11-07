@@ -3448,7 +3448,6 @@ class Data_fetcher extends CI_Model {
                 $tuition_scholarship_installment_current = 0;
                 $tuition_scholarship_installment_current30 = 0;
                 $tuition_scholarship_installment_current50 = 0;
-                $total_assessment_rate_discount_installment50 = 0;
                 $tuition_scholarship_current = 0;
                 $lab_scholarship_installment_current = 0;
                 $lab_scholarship_installment_current30 = 0;
@@ -3532,10 +3531,10 @@ class Data_fetcher extends CI_Model {
                         $total_assessment_rate_discount_installment50 += $tuition_scholarship_installment_current50;
                         $tuition_fee_installment_rate = $tuition_scholarship_installment_current * ($scholar->tuition_fee_rate/100);
                             
-                        print_r($scholar);
-                        print(' @@@@@ ' . $tuition_discount_installment50);
-                        print(' @@@@@ ' . $tuition_scholarship_installment_current50);
-                        die();               
+                        // print_r($scholar);
+                        // print(' @@@@@ ' . $tuition_discount_installment50);
+                        // print(' @@@@@ ' . $tuition_scholarship_installment_current50);
+                        // die();               
 
                         //add total tuition percentage discount
                         $tuition_discount_full += ($tuition * ($scholar->tuition_fee_rate/100));
