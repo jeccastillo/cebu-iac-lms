@@ -91,13 +91,18 @@ foreach($students as $student):
         <?php endif; ?>        
         <td style="font-size:8px;"><?php echo ($classlist['intFinalized'] >= 1)?$student['strRemarks']:"---"; ?></td>                
     </tr>
-   <?php        
-    endforeach; ?>    
+   <?php
+    endforeach;
+    // Adjust height for signature section to prevent page break if it fits
+    $signature_height = ($student_type == 'shs') ? 150 : 75;
+    $hgt -= $signature_height;
+    if ($hgt < 0) $hgt = 0;
+    ?>
 </table>
-<table>    
+<table>
     <tr style="line-height:<?php echo $hgt; ?>px">
-        <td colspan="7"></td>        
-    </tr>  
+        <td colspan="7"></td>
+    </tr>
 </table>
 <div style="page-break-inside: avoid;">
 <table border="0" cellpadding="2px" style="font-size:8px;border-spacing: 10px 0;">
