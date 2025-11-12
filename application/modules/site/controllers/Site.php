@@ -352,12 +352,12 @@ class Site extends CI_Controller {
 	// 	$this->load->view('common/footer_new',$this->data);
     // }
 
-	// public function upload_video($slug = 0) {	
-	// 	$this->data['slug'] = $slug;	        
-	// 	$this->load->view('common/header_new',$this->data);  		
-	// 	$this->load->view('scholarship_application',$this->data);
-	// 	$this->load->view('common/footer_new',$this->data);
-    // }
+	public function upload_video($slug = 0) {	
+		$this->data['slug'] = $slug;	        
+		$this->load->view('common/header_new',$this->data);  		
+		$this->load->view('scholarship_application',$this->data);
+		$this->load->view('common/footer_new',$this->data);
+    }
 
 	// public function success($status = 0) {		
 	// 	$this->data['status'] = $status;

@@ -827,7 +827,7 @@
                 </div>
             </div>
         </div>
-        <div class=" mb-6 mt-10">
+        <div class=" mb-6 mt-10" v-if="false">
             <h4 class="color-primary font-bold text-xl">Innovation, Design, and Entrepreneurship
                 Achievers (IDEA) Scholarship</h4>
             <hr class="mb-5 bg-[#10326f] h-1 w-3/5" />
@@ -1075,8 +1075,9 @@ new Vue({
                 Authorization: `Bearer ${window.token}`
             },
         }).then((data) => {
+            const sy = data.data.sy.find(sy => sy.intID === "43");
+            this.sy.push(sy);
             this.programs = data.data.data;
-            this.sy = data.data.sy;
             this.term = data.data.term;
         }).catch((e) => {
             console.log("error");
