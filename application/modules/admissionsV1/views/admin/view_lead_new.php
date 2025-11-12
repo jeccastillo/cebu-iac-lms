@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="https://unpkg.com/vue-select@3.0.0/dist/vue-select.css">
 <div class="content-wrapper " id="applicant-container">
     <section class="content-header container ">
-        <h1> Student Applicants <small></small>
+        <h1> Student Applicants <small class="text-primary">{{scholarApplicant}}</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i>Student Applicant Details </a></li>
@@ -1312,6 +1312,23 @@
                         </div>
                         <hr>
                     </div>
+                    <div v-if="request.scholarship_video_path != ''">
+                        <strong>iCSID Video</strong>
+                        <div class="form-inline">
+                            <a :href="request.scholarship_video_path"
+                                target="_blank">{{request.scholarship_video}}</a>
+                        </div>
+                        <hr>
+                    </div>
+                    <div v-if="hasScholar">
+                        <div class="form-inline">
+                            <button
+                                v-if="request.status !=  'Game Changer' && request.status !=  'For Enrollment'"
+                                class="btn btn-primary text-right"
+                                @click="updateField('scholarship_type',$event)">Set as iCSID
+                                applicant </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1684,7 +1701,8 @@
                 </div>
             </div>
             <!-- 1st row 2nd Column -->
-            <div class="col-md-6 box" style="height: fit-content">
+            <div v-if="false" class="col-md-6 box" style="height: fit-content"
+                v-if="request.scholarship_video_path != ''">
                 <div class="box-header with-border font-weight-bold ">
                     <h5 class=" text-left text-primary ">
                         <strong>iCSID Video</strong>
@@ -3022,6 +3040,8 @@ new Vue({
             waive_reason: '',
             enhanced_curriculum: 0,
             applicant_id: undefined,
+            scholarship_video_path: '',
+            scholarship_type: ''
         },
         request_sched: {
             from: "",
@@ -3132,6 +3152,18 @@ new Vue({
         }).catch((error) => {
             console.log(error);
         })
+    },
+    computed: {
+        scholarApplicant() {
+            if (this.request.scholarship_type == '' || this.request.scholarship_type ==
+                undefined) {
+                return
+            }
+            return `${this.request.scholarship_type} applicant`
+        },
+        hasScholar() {
+            return this.request.scholarship_type == '' ? true : false
+        }
     },
     methods: {
         async addNewSchool(e) {
@@ -3279,7 +3311,6 @@ new Vue({
                 value: event.target?.value ?? event,
                 admissions_officer: "<?php echo $user['strFirstname'] . '  ' . $user['strLastname'] ; ?>"
             };
-            console.log(this.payload)
             axios.post(api_url + 'admissions/student-info/update-field/custom/' + this
                 .slug, this.payload, {
                     headers: {

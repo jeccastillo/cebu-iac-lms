@@ -792,7 +792,7 @@
                 </div>
             </div>
         </div>
-        <div v-if="true" class=" mb-6 mt-10">
+        <div v-if="false" class=" mb-6 mt-10">
             <h4 class="color-primary font-bold text-xl">iACADEMY CEBU Scholars for Innovation and
                 Design: “iCSID”</h4>
             <hr class="mb-5 bg-[#10326f] h-1 w-3/5" />
@@ -924,7 +924,7 @@ input[type="number"] {
     background-color: rgb(245 245 245)
 }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script> -->
 <script src="https://unpkg.com/vue-select@3.0.0"></script>
 <link rel="stylesheet" href="https://unpkg.com/vue-select@3.0.0/dist/vue-select.css">
 <script src="<?php echo $js_dir ?>dataExport.js"></script>
@@ -1040,8 +1040,9 @@ new Vue({
                 Authorization: `Bearer ${window.token}`
             },
         }).then((data) => {
+            const sy = data.data.sy.find(sy => sy.intID === "34");
+            this.sy.push(sy);
             this.programs = data.data.data;
-            this.sy = data.data.sy;
             this.term = data.data.term;
         }).catch((e) => {
             console.log("error");
