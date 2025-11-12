@@ -1325,7 +1325,7 @@
                             <button
                                 v-if="request.status !=  'Game Changer' && request.status !=  'For Enrollment'"
                                 class="btn btn-primary text-right"
-                                @click="updateField('scholarship_type',$event)">Set as iCSID
+                                @click="updateField('scholarship_type','iDEA')">Set as iCSID
                                 applicant </button>
                         </div>
                     </div>
@@ -3295,7 +3295,6 @@ new Vue({
         },
         updateField: function(type, event) {
             //this.loading_spinner = true;
-            console.log('submit');
             <?php if($userlevel == "2" || $userlevel == "5" || $userlevel == "3"):  ?>
             Swal.fire({
                 showCancelButton: false,
