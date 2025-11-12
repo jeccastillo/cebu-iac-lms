@@ -1325,7 +1325,7 @@
                             <button
                                 v-if="request.status !=  'Game Changer' && request.status !=  'For Enrollment'"
                                 class="btn btn-primary text-right"
-                                @click="updateField('scholarship_type',$event)">Set as iCSID
+                                @click="updateField('scholarship_type','iCSID')">Set as iCSID
                                 applicant </button>
                         </div>
                     </div>
@@ -3317,6 +3317,7 @@ new Vue({
                         Authorization: `Bearer ${window.token}`
                     }
                 }).then(data => {
+                this.request = data.data.data;
                 Swal.hideLoading();
                 Swal.fire({
                     showCancelButton: false,
