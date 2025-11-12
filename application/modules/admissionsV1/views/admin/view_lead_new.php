@@ -3316,6 +3316,7 @@ new Vue({
                         Authorization: `Bearer ${window.token}`
                     }
                 }).then(data => {
+                this.request = data.data.data;
                 Swal.hideLoading();
                 Swal.fire({
                     showCancelButton: false,
