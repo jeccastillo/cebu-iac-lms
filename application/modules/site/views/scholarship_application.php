@@ -13,8 +13,7 @@
                     <label class="block color-primary italic text-sm mb-5"> (Submit a 1 minute video
                         introducing yourself and how you wish to create positive change through
                         unique and innovative ideas that address today’s challenges.) </label>
-                    <input class="color-primary" @change="attachFile" type="file" accept="video/*"
-                        required />
+                    <input class="color-primary" @change="attachFile" type="file" accept="video/*" required />
                     <p class="mt-2 text-sm"> Deadline of application: Feb 28, 2026</p>
                 </div>
             </div>
@@ -28,8 +27,7 @@
     </form>
 </div>
 <!-- Start of HubSpot Embed Code -->
-<script type="text/javascript" id="hs-script-loader" async defer
-    src="//js.hs-scripts.com/45758391.js"></script>
+<script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/45758391.js"></script>
 <!-- End of HubSpot Embed Code -->
 <style>
 input::placeholder {
@@ -99,7 +97,8 @@ new Vue({
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
                     const formData = new FormData();
-                    formData.append("scholarship_video", this.attachment);
+                    formData.append("field", "scholarship_video");
+                    formData.append("value", this.attachment);
                     axios.post(
                         `${api_url}admissions/student-info/update-field/custom/${this.slug}`,
                         formData, {
