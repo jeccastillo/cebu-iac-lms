@@ -3761,11 +3761,11 @@ class Data_fetcher extends CI_Model {
         $data['scholarship_deductions'] = $scholarship_grand_total;        
         $data['discount_deductions'] = $discount_grand_total;
         $data['scholarship_deductions_installment_array'] = $total_scholarship_installment;
-        $data['scholarship_deductions_installment'] = $scholarship_installment_grand_total;
+        $data['scholarship_deductions_installment'] = round($scholarship_installment_grand_total, 2);
         $data['scholarship_deductions_installment_array30'] = $total_scholarship_installment30;
-        $data['scholarship_deductions_installment30'] = $scholarship_installment_grand_total30;
+        $data['scholarship_deductions_installment30'] = round($scholarship_installment_grand_total30, 2);
         $data['scholarship_deductions_installment_array50'] = $total_scholarship_installment50;
-        $data['scholarship_deductions_installment50'] = $scholarship_installment_grand_total50;
+        $data['scholarship_deductions_installment50'] = round($scholarship_installment_grand_total50, 2);
         $data['scholarship_deductions_dc_array'] = $total_discount;
         $data['scholarship_deductions_dc'] = $discount_grand_total;
         $data['scholarship_deductions_installment_dc_array'] = $total_discount_installment;        
