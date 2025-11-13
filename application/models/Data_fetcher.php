@@ -3107,6 +3107,8 @@ class Data_fetcher extends CI_Model {
                 }
                 else{
                     if($scholar->tuition_fee_rate > 0){
+                        print_r($scholar);
+                        die();
                         $tuition_scholarship_installment_current += ($tuition + ($tuition * ($tuition_year['installmentIncrease']/100))) * ($scholar->tuition_fee_rate/100);
                         $tuition_scholarship_installment_current30 += ($tuition + ($tuition * 0.15)) * ($scholar->tuition_fee_rate/100);
                         $tuition_scholarship_installment_current50 += ($tuition + ($tuition * 0.09)) * ($scholar->tuition_fee_rate/100);
