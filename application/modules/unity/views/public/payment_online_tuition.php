@@ -651,6 +651,7 @@ new Vue({
 
                         this.reservation_payment = data.data.data[0];
                         this.application_payment = data.data.application;
+                console.log(this.reservation_payment);
                         if (this.reservation_payment.status == "Paid" && data.data
                             .student_sy == this.sem) {
                             this.remaining_amount = this.remaining_amount - this
@@ -659,7 +660,6 @@ new Vue({
                                 .reservation_payment.subtotal_order;
                         }
                 });
-                console.log(this.reservation_payment);
                 this.remaining_amount = (this.remaining_amount < 0.02) ? 0 : this
                     .remaining_amount;
                 this.remaining_amount = Math.round(this.remaining_amount * 100) / 100;
