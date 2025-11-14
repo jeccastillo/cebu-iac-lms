@@ -649,15 +649,11 @@ new Vue({
                 axios.get(api_url + 'finance/reservation/' + this.slug + '/' + this.sem)
                     .then((data) => {
 
+                        var reservation_amount = 0;
                         this.reservation_payment = data.data.data[0];
-                        this.application_payment = data.data.application;
-                        // if (this.reservation_payment.status == "Paid" && data.data
-                        //     .student_sy == this.sem) {
-                        //     this.remaining_amount = this.remaining_amount - this
-                        //         .reservation_payment.subtotal_order;
-                        //     this.amount_paid = this.amount_paid + this
-                        //         .reservation_payment.subtotal_order;
-                        // }
+                        if(this.reservation_payment){
+                            reservation_amount = this.reservation_payment.subtotal_order
+                        }
 
                         this.remaining_amount = (this.remaining_amount < 0.02) ? 0 : this
                             .remaining_amount;
@@ -677,11 +673,7 @@ new Vue({
                         } else if (this.registration.downpayment == 1) {
                             this.item_details.price = 0;
                             var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this
-                                .remaining_amount - this.reservation_payment.subtotal_order);
-                            console.log(this.reservation_payment.subtotal_order + ' @ ');
-                            console.log(this.remaining_amount + ' @ ');
-                            console.log(this.tuition_data.installment_fee + ' @ ');
-                            console.log(this.tuition_data.installment_fee * 5 + ' @ ');
+                                .remaining_amount - reservation_amount);
                             for (i = 0; i < 5; i++) {
                                 if (this.tuition_data.installment_fee > temp) {
                                     val = this.tuition_data.installment_fee - temp;
