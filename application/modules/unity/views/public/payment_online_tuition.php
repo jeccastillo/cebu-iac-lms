@@ -649,8 +649,8 @@ new Vue({
                 axios.get(api_url + 'finance/reservation/' + this.slug + '/' + this.sem)
                     .then((data) => {
 
-                        // this.reservation_payment = data.data.data[0];
-                        // this.application_payment = data.data.application;
+                        this.reservation_payment = data.data.data[0];
+                        this.application_payment = data.data.application;
                         // if (this.reservation_payment.status == "Paid" && data.data
                         //     .student_sy == this.sem) {
                         //     this.remaining_amount = this.remaining_amount - this
@@ -677,7 +677,7 @@ new Vue({
                         } else if (this.registration.downpayment == 1) {
                             this.item_details.price = 0;
                             var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this
-                                .remaining_amount);
+                                .remaining_amount) - this.reservation_payment.subtotal_order;
                             // console.log(this.reservation_payment.subtotal_order + ' @ ');
                             console.log(this.remaining_amount + ' @ ');
                             console.log(this.tuition_data.installment_fee + ' @ ');
