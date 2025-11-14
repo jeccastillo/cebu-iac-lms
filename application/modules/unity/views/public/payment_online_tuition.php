@@ -658,7 +658,7 @@ new Vue({
                                 .reservation_payment.subtotal_order;
                         }
                 });
-                console.log(this.reservation_payment + ' @@@ ');
+                console.log(this.amount_paid + ' @@@ ');
                 this.remaining_amount = (this.remaining_amount < 0.02) ? 0 : this
                     .remaining_amount;
                 this.remaining_amount = Math.round(this.remaining_amount * 100) / 100;
