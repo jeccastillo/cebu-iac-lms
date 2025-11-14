@@ -666,6 +666,7 @@ new Vue({
                     this.item_details.price = 0;
                     var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this
                         .remaining_amount);
+                    console.log(this.this.reservation_payment + ' @ ');
                     console.log(this.remaining_amount + ' @ ');
                     console.log(this.tuition_data.installment_fee + ' @ ');
                     console.log(this.tuition_data.installment_fee * 5 + ' @ ');
