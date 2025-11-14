@@ -577,7 +577,7 @@ new Vue({
                 .selected_mode_of_payment);
         },
         computePayment: function(event) {
-            if (this.registration.enumStudentType == "new" || this.registration.enumStudentType == "freshman") {
+            if (this.registration.enumStudentType == "new") {
                 axios.get(api_url + 'finance/reservation/' + this.slug + '/' + this.sem)
                     .then((data) => {
                         this.reservation_payment = data.data.data[0];
