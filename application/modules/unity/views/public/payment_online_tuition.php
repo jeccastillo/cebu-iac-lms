@@ -677,8 +677,8 @@ new Vue({
                         } else if (this.registration.downpayment == 1) {
                             this.item_details.price = 0;
                             var temp = (this.tuition_data.installment_fee * 5) - parseFloat(this
-                                .remaining_amount) - this.reservation_payment.subtotal_order;
-                            // console.log(this.reservation_payment.subtotal_order + ' @ ');
+                                .remaining_amount - this.reservation_payment.subtotal_order);
+                            console.log(this.reservation_payment.subtotal_order + ' @ ');
                             console.log(this.remaining_amount + ' @ ');
                             console.log(this.tuition_data.installment_fee + ' @ ');
                             console.log(this.tuition_data.installment_fee * 5 + ' @ ');
