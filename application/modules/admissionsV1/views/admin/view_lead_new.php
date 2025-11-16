@@ -1325,7 +1325,7 @@
                             <button
                                 v-if="request.status !=  'Game Changer' && request.status !=  'For Enrollment'"
                                 class="btn btn-primary text-right"
-                                @click="updateField('scholarship_type','iDEA')">Set as iCSID
+                                @click="updateField('scholarship_type','iDEA')">Set as iDEA
                                 applicant </button>
                         </div>
                     </div>
