@@ -4899,7 +4899,7 @@ class Pdf extends CI_Controller {
     public function shs_permanent_record()
     {
         $post = $this->input->post();        
-        $student = $this->data_fetcher->getStudent($post['id']);
+        $student = $this->data_fetcher->getStudent($post['student_id']);
         
         if($student['level'] == 'shs'){
             $num_terms = count($post['included_terms']);
