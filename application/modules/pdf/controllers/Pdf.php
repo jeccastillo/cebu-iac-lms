@@ -4931,10 +4931,6 @@ class Pdf extends CI_Controller {
                 'verified_by' => $post['verified_by'],
                 'registrar' => $post['registrar'],
                 'included_terms' => implode(",", $post['included_terms']),
-                'student_id' => $post['student_id'],
-                'remarks' => $post['remarks'],         
-                'signatory_label' => $post['signatory_label'], 
-                'type' => $post['type'],
             );
     
             $units_overall = 0;
@@ -5016,7 +5012,7 @@ class Pdf extends CI_Controller {
             $this->data['units_overall'] = $units_overall;        
             $this->data['student'] = $student;
 
-            print_r($this->data);
+            print_r(json_encode($this->data));
             die();
         }
     }
