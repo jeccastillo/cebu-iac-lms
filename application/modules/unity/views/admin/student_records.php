@@ -123,7 +123,6 @@
                                             <td v-else>{{ term.gwa }}</td>
                                             <td colspan="3"></td>
                                         </tr>
-
                                     </tbody>
                                 </table>
                             </div>
@@ -369,7 +368,7 @@
         </div>
     </div>
     <div class="modal fade" id="printTranscript" role="dialog">
-        <form target="_blank" ref="generate_tor" @submit.prevent="printTOR" method="post" :action="base_url + 'pdf/generate_tor'" class="modal-dialog modal-lg">
+        <form target="_blank" ref="generate_tor" @submit.prevent="printTOR" method="post" :action="base_url + 'pdf/shs_permanent_record'" class="modal-dialog modal-lg">
 
             <!-- Modal content-->
             <div class="modal-content">
@@ -747,7 +746,7 @@ new Vue({
             signatory_label: undefined,
             type: 'tor',
         },
-        add_credits:{
+        add_credits:{ 
             course_code: undefined,
             descriptive_title: undefined,
             units: undefined,
