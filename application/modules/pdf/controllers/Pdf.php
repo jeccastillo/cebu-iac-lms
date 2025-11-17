@@ -4896,6 +4896,130 @@ class Pdf extends CI_Controller {
 
     }
 
+    public function shs_permanent_record()
+    {
+        if($student['level'] == 'shs'){
+
+            $post = $this->input->post();        
+            $student = $this->data_fetcher->getStudent($post['id']);
+            $num_terms = count($post['included_terms']);
+            switch($student['level']){
+                case 'shs':
+                    $stype = 'shs';
+                break;
+                case 'drive':
+                    $stype = 'shs';
+                break;
+                case 'college':
+                    $stype = 'college';
+                break;
+                case 'other':
+                    $stype = 'college';
+                break;
+                default: 
+                    $stype = 'college';
+            }
+            if($stype == "shs")
+                $sem = $this->data_fetcher->get_active_sem_shs();
+            else
+                $sem = $this->data_fetcher->get_active_sem();
+    
+            $rec =
+            array(
+                'date_issued' => $post['date_issued'],
+                'prepared_by' => $post['prepared_by'],
+                'verified_by' => $post['verified_by'],
+                'registrar' => $post['registrar'],
+                'included_terms' => implode(",", $post['included_terms']),
+                'student_id' => $post['student_id'],
+                'remarks' => $post['remarks'],         
+                'signatory_label' => $post['signatory_label'], 
+                'type' => $post['type'],
+            );
+    
+            $units_overall = 0;
+            $gwa_overall = 0;
+            $total_records = 0;
+            $credited_subjects = [];
+    
+            $terms_in_credited = $this->db->where(array('student_id'=>$post['student_id']))
+                                          ->order_by('school_year asc, term asc')
+                                          ->group_by(array('school_year','term','completion'))
+                                          ->get('tb_mas_credited')
+                                          ->result_array();
+                        
+            foreach($terms_in_credited as $term_credited){
+    
+                $credited = $this->db->where(array('student_id'=>$post['student_id'],'term'=>$term_credited['term'],'school_year'=>$term_credited['school_year'],'completion'=>$term_credited['completion']))
+                                    ->order_by('course_code','asc')                                
+                                    ->get('tb_mas_credited')
+                                    ->result_array();
+                
+                $credited_data = array(
+                    'term' => $term_credited['term'],
+                    'school' => $term_credited['completion'],
+                    'school_year' => $term_credited['school_year'],
+                );     
+    
+                $credited_subjects[] = array('records'=>$credited,'other_data'=>$credited_data);
+    
+            }   
+            
+            $this->data['credited_subjects'] = $credited_subjects;
+            
+    
+            foreach($post['included_terms'] as $term){
+                $records = $this->data_fetcher->getClassListStudentsSt($post['student_id'],$term);                
+                $sem = $this->data_fetcher->get_sem_by_id($term);                    
+                $sc_ret = [];
+                $gwa = 0;
+                $sum = 0;       
+                $total = 0; 
+                $total_units = 0;
+                
+                foreach($records as $record)
+                {
+                    
+                    if($record['include_gwa'] && $record['v3'] && $record['intFinalized'] > 1 && ($record['strRemarks'] == "Passed" || $record['strRemarks'] == "Failed")){
+                        $sum += (float)$record['v3'] * $record['strUnits'];
+                        $total += $record['strUnits'];                
+                    }
+    
+                    if($record['include_gwa'] && $record['strRemarks'] == "Passed" && $record['intFinalized'] > 1){
+                        $total_units += $record['strUnits'];
+                    }
+                    
+                    $sc_ret[] = $record;
+                    
+                    if($record['intFinalized'] > 1)
+                        $total_records++;
+                }                 
+                if($total > 0)
+                    $gwa =  number_format(round(($sum/$total),3),3);
+    
+                $units_overall += $total_units;
+                $gwa_overall += $gwa;
+                $other_data = 
+                array(
+                    'term' => $sem,
+                    'total_units' => $total_units,
+                    'gwa' => $gwa,
+                );
+    
+                $this->data['records'][] = array('records'=>$sc_ret,'other_data'=>$other_data);                            
+            }
+            
+            $rec['total_records'] = $total_records;
+
+            $this->data['other_details'] = $rec;
+            $this->data['gwa_overall'] = number_format(round(($gwa_overall/$num_terms),3),3);
+            $this->data['units_overall'] = $units_overall;        
+            $this->data['student'] = $student;
+
+            return $this->data;
+        }
+    }
+
     private function stringifyNumber($n) {
         $special = ['0th','1st', '2nd', '3rd', '4th', '5th'];
         return $special[$n];
