@@ -5016,7 +5016,8 @@ class Pdf extends CI_Controller {
             $this->data['units_overall'] = $units_overall;        
             $this->data['student'] = $student;
 
-            return $this->data;
+            print_r($this->data);
+            die();
         }
     }
 
