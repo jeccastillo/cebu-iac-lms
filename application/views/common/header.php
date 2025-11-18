@@ -978,6 +978,12 @@
                                 style="margin-left: 10px;"><i class="ion ion-android-list"></i>
                                 Students with Scholarships</a>
                         </li>
+                        <li
+                            class="<?php echo (isset($page) && $page=="mutual_exclusions")?'active':''; ?>">
+                            <a href="<?php echo base_url(); ?>scholarship/mutual_exclusions"
+                                style="margin-left: 10px;"><i class="ion ion-android-list"></i>
+                                Manage Mutual Exclusions</a>
+                        </li>
                     </ul>
                 </li> <?php endif; ?>
             </ul>

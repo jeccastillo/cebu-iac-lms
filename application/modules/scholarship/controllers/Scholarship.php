@@ -649,6 +649,163 @@ class Scholarship extends CI_Controller {
         return false;
     }
 
+    // ============================
+    // Mutual Exclusions Management
+    // ============================
+
+    // Render management page
+    public function mutual_exclusions(){
+        $this->data['page'] = "mutual_exclusions";
+        $this->data['opentree'] = "scholarship";
+
+        $this->load->view("common/header",$this->data);
+        $this->load->view("mutual_exclusions",$this->data);
+        $this->load->view("common/footer",$this->data);
+    }
+
+    // Return scholarships and existing exclusions
+    public function mutual_exclusions_data(){
+        $ret = array();
+
+        // Active scholarships only, deduction_type = scholarship
+        $ret['scholarships'] = $this->db->select('intID, name')
+                                        ->where(array('status'=>'active','deduction_type'=>'scholarship'))
+                                        ->order_by('name','asc')
+                                        ->get('tb_mas_scholarships')
+                                        ->result_array();
+
+        // Current exclusion pairs with names
+        if ($this->db->table_exists('tb_mas_scholarship_exclusions')) {
+            $ret['exclusions'] = $this->db->select('e.*, sa.name as scholarship_a_name, sb.name as scholarship_b_name')
+                                          ->from('tb_mas_scholarship_exclusions e')
+                                          ->join('tb_mas_scholarships sa','sa.intID = e.scholarship_id_a')
+                                          ->join('tb_mas_scholarships sb','sb.intID = e.scholarship_id_b')
+                                          ->order_by('e.id','desc')
+                                          ->get()
+                                          ->result_array();
+        } else {
+            $ret['exclusions'] = array();
+        }
+
+        echo json_encode($ret);
+    }
+
+    // Add a mutual exclusion pair
+    public function add_mutual_exclusion(){
+        $post = $this->input->post();
+        $data = array();
+
+        $a = isset($post['scholarship_id_a']) ? intval($post['scholarship_id_a']) : 0;
+        $b = isset($post['scholarship_id_b']) ? intval($post['scholarship_id_b']) : 0;
+
+        if($a <= 0 || $b <= 0){
+            $data['success'] = "error";
+            $data['message'] = "Invalid scholarship IDs.";
+            echo json_encode($data); return;
+        }
+        if($a == $b){
+            $data['success'] = "error";
+            $data['message'] = "Select two different scholarships.";
+            echo json_encode($data); return;
+        }
+
+        // Normalize order (smaller -> a)
+        if($a > $b){
+            $tmp = $a; $a = $b; $b = $tmp;
+        }
+
+        // Validate both scholarships exist and are of type 'scholarship'
+        $sa = $this->db->get_where('tb_mas_scholarships', array('intID'=>$a))->first_row('array');
+        $sb = $this->db->get_where('tb_mas_scholarships', array('intID'=>$b))->first_row('array');
+
+        if(!$sa || !$sb){
+            $data['success'] = "error";
+            $data['message'] = "One or both scholarships do not exist.";
+            echo json_encode($data); return;
+        }
+        if($sa['deduction_type'] != 'scholarship' || $sb['deduction_type'] != 'scholarship'){
+            $data['success'] = "error";
+            $data['message'] = "Mutual exclusions apply only to scholarship type (not discounts).";
+            echo json_encode($data); return;
+        }
+
+        if(!$this->db->table_exists('tb_mas_scholarship_exclusions')){
+            $data['success'] = "error";
+            $data['message'] = "Exclusions table not found. Run the SQL script in application/sql_update.";
+            echo json_encode($data); return;
+        }
+
+        // Check duplicate
+        $exists = $this->db->get_where('tb_mas_scholarship_exclusions', array('scholarship_id_a'=>$a, 'scholarship_id_b'=>$b))->num_rows() > 0;
+        if($exists){
+            $data['success'] = "error";
+            $data['message'] = "This pair already exists.";
+            echo json_encode($data); return;
+        }
+
+        // Insert
+        $ins = array(
+            'scholarship_id_a' => $a,
+            'scholarship_id_b' => $b
+        );
+        if($this->db->insert('tb_mas_scholarship_exclusions',$ins)){
+            // Log
+            $this->data_poster->log_action('Scholarships','Added mutual exclusion between '.$sa['name'].' and '.$sb['name'],'green');
+
+            $data['success'] = "success";
+            $data['message'] = "Mutual exclusion added.";
+        } else {
+            $data['success'] = "error";
+            $data['message'] = "Failed to add mutual exclusion.";
+        }
+
+        echo json_encode($data);
+    }
+
+    // Delete a mutual exclusion by ID
+    public function delete_mutual_exclusion(){
+        $post = $this->input->post();
+        $data = array();
+
+        if(!$this->db->table_exists('tb_mas_scholarship_exclusions')){
+            $data['success'] = "error";
+            $data['message'] = "Exclusions table not found.";
+            echo json_encode($data); return;
+        }
+
+        $id = isset($post['id']) ? intval($post['id']) : 0;
+        if($id <= 0){
+            $data['success'] = "error";
+            $data['message'] = "Invalid exclusion ID.";
+            echo json_encode($data); return;
+        }
+
+        // Fetch for logging
+        $row = $this->db->get_where('tb_mas_scholarship_exclusions', array('id'=>$id))->first_row('array');
+        if(!$row){
+            $data['success'] = "error";
+            $data['message'] = "Record not found.";
+            echo json_encode($data); return;
+        }
+
+        $sa = $this->db->get_where('tb_mas_scholarships', array('intID'=>$row['scholarship_id_a']))->first_row('array');
+        $sb = $this->db->get_where('tb_mas_scholarships', array('intID'=>$row['scholarship_id_b']))->first_row('array');
+
+        if($this->db->where(array('id'=>$id))->delete('tb_mas_scholarship_exclusions')){
+            $a_name = $sa ? $sa['name'] : $row['scholarship_id_a'];
+            $b_name = $sb ? $sb['name'] : $row['scholarship_id_b'];
+            $this->data_poster->log_action('Scholarships','Removed mutual exclusion between '.$a_name.' and '.$b_name,'green');
+
+            $data['success'] = "success";
+            $data['message'] = "Deleted successfully.";
+        } else {
+            $data['success'] = "error";
+            $data['message'] = "Failed to delete.";
+        }
+
+        echo json_encode($data);
+    }
+
 
 
    }
