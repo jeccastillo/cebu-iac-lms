@@ -260,6 +260,26 @@ class Scholarship extends CI_Controller {
         else
             $ret['scholarships'] = $this->db->get_where('tb_mas_scholarships',array('status'=>'active','deduction_type'=>'scholarship'))->result_array();
 
+        // Filter out scholarships that are mutually exclusive with already assigned scholarships
+        if(!empty($ret['scholarships']) && !empty($ret['student_scholarships'])){
+            $existingIds = array();
+            foreach($ret['student_scholarships'] as $s){
+                if(isset($s['discount_id']))
+                    $existingIds[] = intval($s['discount_id']);
+            }
+            $filtered = array();
+            foreach($ret['scholarships'] as $cand){
+                $ok = true;
+                foreach($existingIds as $eid){
+                    if($this->is_mutually_exclusive(intval($cand['intID']), $eid)){
+                        $ok = false; break;
+                    }
+                }
+                if($ok) $filtered[] = $cand;
+            }
+            $ret['scholarships'] = $filtered;
+        }
+
         //RESET VARS
         $has_inhouse = false;
         $has_external = false; 
@@ -360,6 +380,24 @@ class Scholarship extends CI_Controller {
     public function add_scholarship(){
         $post = $this->input->post();
         $post['status'] = "pending";
+
+        // Mutually exclusive scholarships enforcement
+        $incoming = $this->db->get_where('tb_mas_scholarships',array('intID'=>$post['discount_id']))->first_row('array');
+        if($incoming && isset($incoming['deduction_type']) && $incoming['deduction_type'] == "scholarship"){
+            $existing = $this->db->select('tb_mas_scholarships.intID, tb_mas_scholarships.name')
+                                 ->where(array('tb_mas_student_discount.student_id'=>$post['student_id'],'tb_mas_student_discount.syid'=>$post['syid'],'tb_mas_scholarships.deduction_type'=>'scholarship'))
+                                 ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
+                                 ->get('tb_mas_student_discount')
+                                 ->result_array();
+            foreach($existing as $ex){
+                if($this->is_mutually_exclusive(intval($incoming['intID']), intval($ex['intID']))){
+                    $data['success'] = "error";
+                    $data['message'] = "Cannot assign scholarship '".$incoming['name']."' because it is mutually exclusive with already assigned scholarship '".$ex['name']."' for this term.";
+                    echo json_encode($data);
+                    return;
+                }
+            }
+        }
 
         // Specify the conditions
         $conditions = array(
@@ -565,6 +603,50 @@ class Scholarship extends CI_Controller {
         else
             return false;
         
+    }
+
+    // Load mutual exclusions from database (fallback to config if table missing/empty)
+    private function get_mutual_exclusions(){
+        $pairs = array();
+
+        // Prefer database-driven exclusions
+        if ($this->db->table_exists('tb_mas_scholarship_exclusions')) {
+            $rows = $this->db->get('tb_mas_scholarship_exclusions')->result_array();
+            foreach ($rows as $row) {
+                if (isset($row['scholarship_id_a']) && isset($row['scholarship_id_b'])) {
+                    $a = intval($row['scholarship_id_a']);
+                    $b = intval($row['scholarship_id_b']);
+                    if ($a > 0 && $b > 0) {
+                        $pairs[] = array($a, $b);
+                    }
+                }
+            }
+        }
+
+        // Fallback to config only if DB table is missing or contains no pairs
+        if (empty($pairs)) {
+            $this->config->load('scholarship_config');
+            $cfg_pairs = $this->config->item('scholarship_mutual_exclusions');
+            if (is_array($cfg_pairs)) {
+                $pairs = $cfg_pairs;
+            }
+        }
+
+        return $pairs;
+    }
+
+    // Check if two scholarships are mutually exclusive
+    private function is_mutually_exclusive($a, $b){
+        $pairs = $this->get_mutual_exclusions();
+        foreach($pairs as $pair){
+            if(is_array($pair) && count($pair) >= 2){
+                if( (intval($pair[0]) === intval($a) && intval($pair[1]) === intval($b)) ||
+                    (intval($pair[0]) === intval($b) && intval($pair[1]) === intval($a)) ){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 
