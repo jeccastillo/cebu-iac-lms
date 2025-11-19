@@ -2042,7 +2042,9 @@ class Registrar extends CI_Controller {
             $data['success'] =  false;
         }    
         elseif($post['date'] == date("Y-m-d")){               
-            $section = $this->db->where(array('intID'=>$post['section_to_delete']))->get('tb_mas_classlist')->first_row('array');
+
+            $classlist_student = $this->db->where(array('intCSID'=>$post['section_to_delete']))->get('classlist_student')->first_row('array');
+            $section = $this->db->where(array('intID'=>$classlist_student['intClassListID']))->get('tb_mas_classlist')->first_row('array');
             $section_to_swap = $this->db->where(array('intID'=>$post['subject_to_add']))->get('tb_mas_subjects')->first_row('array');
             if($section_to_swap){
                 
@@ -2082,7 +2084,8 @@ class Registrar extends CI_Controller {
             $adj['adjusted_by'] =  $this->session->userdata('intID');
             
             $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj); 
-            $this->db->delete('tb_mas_classlist_student', array('intClassListID' => $post['section_to_delete'],'intStudentID'=>$post['student']));
+            // $this->db->delete('tb_mas_classlist_student', array('intClassListID' => $post['section_to_delete'],'intStudentID'=>$post['student']));
+            $this->db->delete('tb_mas_classlist_student', array('intCSID' => $post['section_to_delete'],'intStudentID'=>$post['student']));
 
             $down_payment = $this->db->get_where('tb_mas_student_ledger',array('name'=>'Tuition Down Payment','syid'=>$post['sem'],'student_id'=>$post['student'],'is_disabled'=>0))->first_row();
             //record in adjustments table                      
