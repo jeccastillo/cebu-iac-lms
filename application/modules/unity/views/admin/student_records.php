@@ -368,7 +368,7 @@
         </div>
     </div>
     <div class="modal fade" id="printTranscript" role="dialog">
-        <form target="_blank" ref="generate_tor" @submit.prevent="printTOR" method="post" :action="base_url + 'pdf/shs_permanent_record'" class="modal-dialog modal-lg">
+        <form target="_blank" ref="generate_tor" @submit.prevent="printTOR" method="post" :action="base_url + 'pdf/generate_tor'" class="modal-dialog modal-lg">
 
             <!-- Modal content-->
             <div class="modal-content">
