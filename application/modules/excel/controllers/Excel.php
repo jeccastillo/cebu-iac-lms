@@ -11175,14 +11175,23 @@ class Excel extends CI_Controller {
                     ->setCellValue('H2', 'SHS ANI 2023-2024')
                     ->setCellValue('I2', '30');
 
+        $style = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+            )
+        );
+
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A1:I1")->getFont()->setBold( true );
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A1:I1")->applyFromArray($style);
+
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(30);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(30);
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(10);
 
         $objPHPExcel->getActiveSheet()->setTitle('Subject Offering');
