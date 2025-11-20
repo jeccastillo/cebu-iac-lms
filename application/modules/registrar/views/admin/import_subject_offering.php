@@ -25,6 +25,11 @@
                             <?php endforeach; ?>
                         </select>
                     </div>
+                    <div class="form-group col-sm-4"></div>
+                    <div class="form-group col-sm-4" style="text-align:right">
+                        <button type="button" @click="downloadFormat" class="btn btn-lg btn-default  btn-flat">Download
+                            Format</button>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-sm-4">
@@ -185,6 +190,10 @@ new Vue({
             //     });
             // }
         },
+        downloadFormat() {
+            var url = base_url + 'excel/download_subject_offering_format';
+            window.open(url, '_blank');
+        }
 
 
         // // if(this.report_date == ""){
