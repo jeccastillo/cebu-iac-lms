@@ -11222,7 +11222,7 @@ class Excel extends CI_Controller {
         exit;
     }
     
-    public function import_subject_offering($sem, $term)
+    public function import_subject_offering($sem)
     {
         $post = $this->input->post();
 
