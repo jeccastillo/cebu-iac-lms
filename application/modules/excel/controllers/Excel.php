@@ -11257,7 +11257,7 @@ class Excel extends CI_Controller {
                         $facultyFirstName = $facultyName[1];
                     }
 
-                    print_r($facultName);
+                    print_r($facultyName);
                     die();
                     
                     $faculty = $this->db->from('tb_mas_faculty')->like(array('strLastname' => $facultyLastName, 'strFirstName' => $facultyFirstName))->get()->first_row('array');
