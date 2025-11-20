@@ -11234,13 +11234,11 @@ class Excel extends CI_Controller {
 
         if ( !$this->upload->do_upload("import_subject_offering"))
         {
-            print('0');
             $error = array('error' => $this->upload->display_errors());
             return $error;
         }
         else
         {
-            print('1');
             $fileData = $this->upload->data();
             $filePath = './assets/excel/' . $fileData['file_name'];
 
@@ -11251,10 +11249,6 @@ class Excel extends CI_Controller {
             // Now you can loop through the $sheetData array and insert into your database
             foreach ($sheetData as $index => $row) {
                 if($index >= 2){
-                    print_r($row);
-                    print($row['J']);
-                    print_r($facultyName);
-                    die();
                     $facultyLastName = $facultyFirstName = '';
 
                     $facultyName = explode(',', ltrim($row['J']));
@@ -11262,7 +11256,6 @@ class Excel extends CI_Controller {
                         $facultyLastName = $facultyName[0];
                         $facultyFirstName = $facultyName[1];
                     }
-
                     
                     $faculty = $this->db->from('tb_mas_faculty')->like(array('strLastname' => $facultyLastName, 'strFirstName' => $facultyFirstName))->get()->first_row('array');
                     $subject = $this->db->get_where('tb_mas_subjects',array('strCode' => $row['A']))->first_row('array');
