@@ -11268,15 +11268,15 @@ class Excel extends CI_Controller {
                     $isSpecialClass = $row['G'] == 'Yes' ? 1 : 0;
 
 
-                    print_r($faculty);
-                    print('@' . $facultyLastName);
-                    print('@' . $facultyFirstName .'@');
-                    print($faculty['intID']);
-                    die();
+                    // print_r($faculty);
+                    // print('@' . $facultyLastName);
+                    // print('@' . $facultyFirstName .'@');
+                    // print($faculty['intID']);
+                    // die();
 
                     if($faculty && $subject && $curriculum){
                         //Check if classlist exists
-                        $checkClasslist = $this->db->get_where('tb_mas_curriculum',
+                        $checkClasslist = $this->db->get_where('tb_mas_classlist',
                                                         array('intFacultyID' => $faculty['intID'], 
                                                             'intSubjectID' => $subject['intID'],
                                                             'intCurriculumID' => $curriculum['intID'],
