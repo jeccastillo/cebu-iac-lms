@@ -78,7 +78,7 @@ new Vue({
         },
         downloadFormat()
         {
-            var url = base_url + 'excel/download_subject_offering_format';
+            var url = base_url + 'excel/download_credit_subject_format';
             window.open(url, '_blank');
         }
     }
