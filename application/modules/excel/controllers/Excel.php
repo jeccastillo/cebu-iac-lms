@@ -11249,6 +11249,9 @@ class Excel extends CI_Controller {
             // Now you can loop through the $sheetData array and insert into your database
             foreach ($sheetData as $index => $row) {
                 if($index >= 2){
+                    print($row['J']);
+                    print_r($facultyName);
+                    die();
                     $facultyLastName = $facultyFirstName = '';
 
                     $facultyName = explode(',', ltrim($row['J']));
@@ -11257,9 +11260,6 @@ class Excel extends CI_Controller {
                         $facultyFirstName = $facultyName[1];
                     }
 
-                    print($row['J']);
-                    print_r($facultyName);
-                    die();
                     
                     $faculty = $this->db->from('tb_mas_faculty')->like(array('strLastname' => $facultyLastName, 'strFirstName' => $facultyFirstName))->get()->first_row('array');
                     $subject = $this->db->get_where('tb_mas_subjects',array('strCode' => $row['A']))->first_row('array');
