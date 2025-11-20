@@ -11267,6 +11267,12 @@ class Excel extends CI_Controller {
                     $isModular = $row['F'] == 'Yes' ? 1 : 0;
                     $isSpecialClass = $row['G'] == 'Yes' ? 1 : 0;
 
+
+                    print_r($faculty);
+                    print('@' . $facultyLastName);
+                    print('@' . $facultyFirstName .'@');
+                    die();
+
                     if($faculty && $subject && $curriculum){
                         //Check if classlist exists
                         $checkClasslist = $this->db->get_where('tb_mas_curriculum',
