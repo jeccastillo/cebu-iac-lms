@@ -11165,6 +11165,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('G1', 'Is Special Class')
                     ->setCellValue('H1', 'Curriculum (Complete name)')
                     ->setCellValue('I1', 'Slot')
+                    ->setCellValue('J1', 'Faculty (Last Name, First Name)')
                     ->setCellValue('A2', 'SH_GENMATH')
                     ->setCellValue('B2', 'ANI')
                     ->setCellValue('C2', '1')
@@ -11173,7 +11174,8 @@ class Excel extends CI_Controller {
                     ->setCellValue('F2', 'Yes')
                     ->setCellValue('G2', 'No')
                     ->setCellValue('H2', 'SHS ANI 2023-2024')
-                    ->setCellValue('I2', '30');
+                    ->setCellValue('I2', '30')
+                    ->setCellValue('J2', 'Doe, John');
 
         $style = array(
             'alignment' => array(
@@ -11181,8 +11183,8 @@ class Excel extends CI_Controller {
             )
         );
 
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A1:I1")->getFont()->setBold( true );
-        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A1:I1")->applyFromArray($style);
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A1:J1")->getFont()->setBold( true );
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A1:J1")->applyFromArray($style);
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(30);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
@@ -11193,6 +11195,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(30);
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(30);
 
         $objPHPExcel->getActiveSheet()->setTitle('Subject Offering');
 
@@ -11246,6 +11249,12 @@ class Excel extends CI_Controller {
             // Now you can loop through the $sheetData array and insert into your database
             foreach ($sheetData as $index => $row) {
                 if($index >= 2){
+
+                    $subject = 
+                    $curriculum
+
+                        $faculty = $this->db->from('tb_mas_faculty')->like(array('strLastname' => $facultyLastName, 'strFirstName' => $facultyFirstName))->get()->first_row('array');
+                        $subject = $this->db->get_where('tb_mas_subjects',array('strCode' => $row['G']))->first_row('array');
                     $facultyLastName = $facultyFirstName = '';
 
                     // format student number
