@@ -11266,40 +11266,38 @@ class Excel extends CI_Controller {
                     $curriculum = $this->db->get_where('tb_mas_curriculum',array('strName' => $row['H']))->first_row('array');
                     $isModular = $row['F'] == 'Yes' ? 1 : 0;
                     $isSpecialClass = $row['G'] == 'Yes' ? 1 : 0;
-                    //Check if classlist exists
-                    print_r($faculty);
-                    print(' @ ' . $facultyLastName);
-                    print(' @ ' . $facultyFirstName);
-                    die();
 
-                    $checkClasslist = $this->db->get_where('tb_mas_curriculum',
-                                                    array('intFacultyID' => $faculty['intID'], 
-                                                        'intSubjectID' => $subject['intID'],
-                                                        'intCurriculumID' => $curriculum['intID'],
-                                                        'strClassName' => $row['B'],
-                                                        'strAcademicYear' => $sem,
-                                                        'year' => $row['C'],
-                                                        'strSection' => $row['D'],
-                                                        'sub_section' => $row['E'],
-                                                        'is_modular' => $isModular,
-                                                        'is_special_class' => $isSpecialClass,
-                                                        ))
-                                                    ->first_row('array');
-                    if(!$classlist){
-                        $newClasslist = array('intFacultyID' => $faculty['intID'], 
-                                        'intSubjectID' => $subject['intID'],
-                                        'intCurriculumID' => $curriculum['intID'],
-                                        'strClassName' => $row['B'],
-                                        'strAcademicYear' => $sem,
-                                        'year' => $row['C'],
-                                        'strSection' => $row['D'],
-                                        'sub_section' => $row['E'],
-                                        'is_modular' => $isModular,
-                                        'is_special_class' => $isSpecialClass,
-                                        'slots' => $row['I'],
-                                        );
-
-                        $this->data_poster->post_data('tb_mas_classlist', $newClasslist);
+                    if($faculty && $subject && $curriculum){
+                        //Check if classlist exists
+                        $checkClasslist = $this->db->get_where('tb_mas_curriculum',
+                                                        array('intFacultyID' => $faculty['intID'], 
+                                                            'intSubjectID' => $subject['intID'],
+                                                            'intCurriculumID' => $curriculum['intID'],
+                                                            'strClassName' => $row['B'],
+                                                            'strAcademicYear' => $sem,
+                                                            'year' => $row['C'],
+                                                            'strSection' => $row['D'],
+                                                            'sub_section' => $row['E'],
+                                                            'is_modular' => $isModular,
+                                                            'is_special_class' => $isSpecialClass,
+                                                            ))
+                                                        ->first_row('array');
+                        if(!$classlist){
+                            $newClasslist = array('intFacultyID' => $faculty['intID'], 
+                                            'intSubjectID' => $subject['intID'],
+                                            'intCurriculumID' => $curriculum['intID'],
+                                            'strClassName' => $row['B'],
+                                            'strAcademicYear' => $sem,
+                                            'year' => $row['C'],
+                                            'strSection' => $row['D'],
+                                            'sub_section' => $row['E'],
+                                            'is_modular' => $isModular,
+                                            'is_special_class' => $isSpecialClass,
+                                            'slots' => $row['I'],
+                                            );
+    
+                            $this->data_poster->post_data('tb_mas_classlist', $newClasslist);
+                        }
                     }
                 }
             }
