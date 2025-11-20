@@ -11257,15 +11257,15 @@ class Excel extends CI_Controller {
                         $facultyFirstName = $facultyName[1];
                     }
 
-                    $faculty = $this->db->from('tb_mas_faculty')->like(array('strLastname' => $facultyLastName, 'strFirstName' => $facultyFirstName))->get()->first_row('array');
+                    $faculty = $this->db->from('tb_mas_faculty')->like(array('strLastname' => $facultyLastName))->get()->first_row('array');
                     $subject = $this->db->get_where('tb_mas_subjects',array('strCode' => $row['A']))->first_row('array');
                     $curriculum = $this->db->get_where('tb_mas_curriculum',array('strName' => $row['H']))->first_row('array');
                     $isModular = $row['F'] == 'Yes' ? 1 : 0;
                     $isSpecialClass = $row['G'] == 'Yes' ? 1 : 0;
                     //Check if classlist exists
-                    print($facultyLastName);
-                    print(' @ ' .$facultyFirstName);
                     print_r($faculty);
+                    print(' @ ' . $facultyLastName);
+                    print(' @ ' . $facultyFirstName);
                     die();
 
                     $checkClasslist = $this->db->get_where('tb_mas_curriculum',
