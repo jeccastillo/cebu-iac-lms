@@ -11225,8 +11225,6 @@ class Excel extends CI_Controller {
     public function import_subject_offering($sem, $term)
     {
         $post = $this->input->post();
-        print_r($post);
-        die();
 
         $config['upload_path'] = './assets/excel';
         $config['allowed_types'] = '*';
@@ -11251,124 +11249,52 @@ class Excel extends CI_Controller {
             // Now you can loop through the $sheetData array and insert into your database
             foreach ($sheetData as $index => $row) {
                 if($index >= 2){
-
-                    // $subject = 
-                    // $curriculum
-
-                    //     $faculty = $this->db->from('tb_mas_faculty')->like(array('strLastname' => $facultyLastName, 'strFirstName' => $facultyFirstName))->get()->first_row('array');
-                    //     $subject = $this->db->get_where('tb_mas_subjects',array('strCode' => $row['G']))->first_row('array');
                     $facultyLastName = $facultyFirstName = '';
 
-                    // format student number
-                    $studentNumber = substr_replace($row['B'], '-', strlen($row['B']) - 5, 0);
-                    $studentNumber = substr_replace($studentNumber, '-', strlen($studentNumber) - 3, 0);
-                    
-                    $student =  $this->db
-                    ->select("tb_mas_users.*,tb_mas_registration.current_curriculum")                                        
-                    ->from("tb_mas_users")            
-                    ->where(array("tb_mas_users.strStudentNumber"=>$studentNumber))             
-                    ->join('tb_mas_registration', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
-                    ->get()
-                    ->first_row('array');
-
-                    if($student){
-                        $facultyName = explode(',', ltrim($row['K']));
+                    $facultyName = explode(',', ltrim($row['J']));
+                    if($facultyName){
                         $facultyLastName = $facultyName[0];
-                        if(isset($facultyName[1])){
-                            $facultyName = explode(' ', ltrim($facultyName[1]));
-                            $facultyFirstName = $facultyName[0];
-                        }
-                        
-                        $faculty = $this->db->from('tb_mas_faculty')->like(array('strLastname' => $facultyLastName, 'strFirstName' => $facultyFirstName))->get()->first_row('array');
-                        $subject = $this->db->get_where('tb_mas_subjects',array('strCode' => $row['G']))->first_row('array');
+                        $facultyFirstName = $facultyName[1];
+                    }
 
-                        if($faculty && $subject){
-                            $classlistID = '';
+                    print_r($facultName);
+                    die();
+                    
+                    $faculty = $this->db->from('tb_mas_faculty')->like(array('strLastname' => $facultyLastName, 'strFirstName' => $facultyFirstName))->get()->first_row('array');
+                    $subject = $this->db->get_where('tb_mas_subjects',array('strCode' => $row['A']))->first_row('array');
+                    $curriculum = $this->db->get_where('tb_mas_curriculum',array('strName' => $row['H']))->first_row('array');
+                    $isModular = $row['F'] == 'Yes' ? 1 : 0;
+                    $isSpecialClass = $row['G'] == 'Yes' ? 1 : 0;
+                    //Check if classlist exists
 
-                            //Check if classlist exists
-                            $classlist = $this->db->select('tb_mas_classlist.*')
-                                ->from('tb_mas_classlist')
-                                ->join('tb_mas_classlist_student','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
-                                ->where(array('strAcademicYear' => $sem, 
-                                        'intFacultyID' => $faculty['intID'], 
+                    $checkClasslist = $this->db->get_where('tb_mas_curriculum',
+                                                    array('intFacultyID' => $faculty['intID'], 
+                                                        'intSubjectID' => $subject['intID'],
+                                                        'intCurriculumID' => $curriculum['intID'],
+                                                        'strClassName' => $row['B'],
+                                                        'strAcademicYear' => $sem,
+                                                        'year' => $row['C'],
+                                                        'strSection' => $row['D'],
+                                                        'sub_section' => $row['E'],
+                                                        'is_modular' => $isModular,
+                                                        'is_special_class' => $isSpecialClass,
+                                                        ))
+                                                    ->first_row('array');
+                    if(!$classlist){
+                        $newClasslist = array('intFacultyID' => $faculty['intID'], 
                                         'intSubjectID' => $subject['intID'],
-                                        'strClassName' => $row['D'],
-                                        'year' => $row['E'],
-                                        'strSection' => $row['F']
-                                        ))
-                                ->order_by('intID', 'ASC')
-                                ->get()
-                                ->first_row('array');
+                                        'intCurriculumID' => $curriculum['intID'],
+                                        'strClassName' => $row['B'],
+                                        'strAcademicYear' => $sem,
+                                        'year' => $row['C'],
+                                        'strSection' => $row['D'],
+                                        'sub_section' => $row['E'],
+                                        'is_modular' => $isModular,
+                                        'is_special_class' => $isSpecialClass,
+                                        'slots' => $row['I'],
+                                        );
 
-                            if(!$classlist){
-                                $newClasslist = array(
-                                    'intFacultyID' => $faculty['intID'],
-                                    'intSubjectID' => $subject['intID'],
-                                    'strClassName' => $row['D'],
-                                    'intFinalized' => 2,
-                                    'strAcademicYear' => $sem,
-                                    'slots' => 0,
-                                    'strUnits' => 3,
-                                    'strSection' => $row['F'],
-                                    'intWithPayment' => 0,
-                                    'intCurriculumID' => $student['current_curriculum'],
-                                    'year' => $row['E'],
-                                    'isDissolved' => 0,
-                                    'conduct_grade' => 0
-                                );
-
-                                $this->data_poster->post_data('tb_mas_classlist',$newClasslist);
-                                $classlistID = $this->db->insert_id();
-                            }else{
-
-                                $this->data_poster->post_data('tb_mas_classlist', array('intFinalized' => 2), $classlist['intID']);
-                                $classlistID = $classlist['intID'];
-                            }
-
-                            if($classlistID){
-                                $classlistStudent = array(
-                                    'intStudentID' => $student['intID'],
-                                    'intClassListID' => $classlistID,
-                                    'enumStatus' => 'act',
-                                    'intsyID' => $sem,
-                                    'date_added' => date("Y-m-d h:ia"),
-                                    'enlisted_user' => $this->data["user"]["intID"],
-                                );
-
-                                if($term == 'Midterm'){
-                                    $classlistStudent['floatMidtermGrade'] = $row['J'];
-                                }else if($term == 'Final'){
-                                    $classlistStudent['floatFinalGrade'] = $row['J'];
-
-                                    if(isset($row['M'])){
-                                        $remarks = strtolower($row['M']);
-                                        $remarks = ucfirst($remarks);
-                                        $classlistStudent['strRemarks'] = $remarks;
-                                    }
-                                    if($student['level'] == 'shs'){
-                                        $classlistStudent['floatFinalGrade'] = $row['J'];
-                                        if(isset($row['N'])){
-                                            $classlistStudent['floatFinalsGrade'] = $row['N'];
-                                        }
-                                    }
-                                }
-
-                                $checkClasslistStudent = $this->db->get_where('tb_mas_classlist_student',array('intStudentID' => $student['intID'], 'intClassListID' => $classlistID))->first_row();
-                                // if(!$checkClasslistStudent){
-                                //     $this->data_poster->post_data('tb_mas_classlist_student',$classlistStudent);
-                                // }else{
-                                if($checkClasslistStudent){
-                                    $this->data_poster->post_data('tb_mas_classlist_student',$classlistStudent,$checkClasslistStudent->intCSID);
-                                }
-                                // }
-                            }
-                        }
-                    }else{
-
-                        // Optionally, you can delete the uploaded file after import
-                        unlink($filePath);
-                        print('Student Registration/Curriculum not found : ' . $row['C']);
-                        return false;
+                        $this->data_poster->post_data('tb_mas_classlist', $newClasslist);
                     }
                 }
             }
