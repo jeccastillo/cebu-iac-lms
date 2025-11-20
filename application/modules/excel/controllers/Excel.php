@@ -11239,6 +11239,7 @@ class Excel extends CI_Controller {
         }
         else
         {
+            print('1');
             $fileData = $this->upload->data();
             $filePath = './assets/excel/' . $fileData['file_name'];
 
@@ -11249,6 +11250,7 @@ class Excel extends CI_Controller {
             // Now you can loop through the $sheetData array and insert into your database
             foreach ($sheetData as $index => $row) {
                 if($index >= 2){
+                    print_r($row);
                     print($row['J']);
                     print_r($facultyName);
                     die();
