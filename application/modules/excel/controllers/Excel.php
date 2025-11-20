@@ -11225,6 +11225,8 @@ class Excel extends CI_Controller {
     public function import_subject_offering($sem, $term)
     {
         $post = $this->input->post();
+        print_r($post);
+        die();
 
         $config['upload_path'] = './assets/excel';
         $config['allowed_types'] = '*';
@@ -11250,11 +11252,11 @@ class Excel extends CI_Controller {
             foreach ($sheetData as $index => $row) {
                 if($index >= 2){
 
-                    $subject = 
-                    $curriculum
+                    // $subject = 
+                    // $curriculum
 
-                        $faculty = $this->db->from('tb_mas_faculty')->like(array('strLastname' => $facultyLastName, 'strFirstName' => $facultyFirstName))->get()->first_row('array');
-                        $subject = $this->db->get_where('tb_mas_subjects',array('strCode' => $row['G']))->first_row('array');
+                    //     $faculty = $this->db->from('tb_mas_faculty')->like(array('strLastname' => $facultyLastName, 'strFirstName' => $facultyFirstName))->get()->first_row('array');
+                    //     $subject = $this->db->get_where('tb_mas_subjects',array('strCode' => $row['G']))->first_row('array');
                     $facultyLastName = $facultyFirstName = '';
 
                     // format student number
