@@ -11264,7 +11264,7 @@ class Excel extends CI_Controller {
                     $isSpecialClass = $row['G'] == 'Yes' ? 1 : 0;
                     //Check if classlist exists
                     print($facultyLastName);
-                    print(' @ ' .$facultyLastName);
+                    print(' @ ' .$facultyFirstName);
                     print_r($faculty);
                     die();
 
