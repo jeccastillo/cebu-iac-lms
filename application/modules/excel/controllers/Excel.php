@@ -11142,7 +11142,7 @@ class Excel extends CI_Controller {
         exit;
     }
 
-    public function download_import_subject_offering_format()
+    public function download_subject_offering_format()
     {
         error_reporting(E_ALL);
         ini_set('display_errors', TRUE);
@@ -11195,7 +11195,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(30);
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(30);
 
         $objPHPExcel->getActiveSheet()->setTitle('Subject Offering');
 
