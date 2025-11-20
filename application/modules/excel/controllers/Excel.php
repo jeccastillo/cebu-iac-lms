@@ -11232,7 +11232,7 @@ class Excel extends CI_Controller {
 
         $this->load->library('upload', $config);
 
-        if ( !$this->upload->do_upload("student_grade_excel"))
+        if ( !$this->upload->do_upload("import_subject_offering"))
         {
             print('0');
             $error = array('error' => $this->upload->display_errors());
