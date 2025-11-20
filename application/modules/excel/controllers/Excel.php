@@ -11234,6 +11234,7 @@ class Excel extends CI_Controller {
 
         if ( !$this->upload->do_upload("student_grade_excel"))
         {
+            print('0');
             $error = array('error' => $this->upload->display_errors());
             return $error;
         }
