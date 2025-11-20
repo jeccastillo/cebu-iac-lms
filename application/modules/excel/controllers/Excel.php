@@ -11271,6 +11271,7 @@ class Excel extends CI_Controller {
                     print_r($faculty);
                     print('@' . $facultyLastName);
                     print('@' . $facultyFirstName .'@');
+                    print($faculty['intID']);
                     die();
 
                     if($faculty && $subject && $curriculum){
