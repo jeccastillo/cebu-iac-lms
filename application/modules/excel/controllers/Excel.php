@@ -11289,7 +11289,7 @@ class Excel extends CI_Controller {
                                                             'is_special_class' => $isSpecialClass,
                                                             ))
                                                         ->first_row('array');
-                        if(!$classlist){
+                        if(!$checkClasslist){
                             $newClasslist = array('intFacultyID' => $faculty['intID'], 
                                             'intSubjectID' => $subject['intID'],
                                             'intCurriculumID' => $curriculum['intID'],
