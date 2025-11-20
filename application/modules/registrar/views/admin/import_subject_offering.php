@@ -191,7 +191,7 @@ new Vue({
             // }
         },
         downloadFormat() {
-            var url = base_url + 'excel/download_subject_offering_format';
+            var url = this.base_url + 'excel/download_subject_offering_format';
             window.open(url, '_blank');
         }
 
