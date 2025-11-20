@@ -11141,6 +11141,225 @@ class Excel extends CI_Controller {
         $objWriter->save('php://output');
         exit;
     }
+
+    public function download_import_subject_offering_format()
+    {
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
+
+        if (PHP_SAPI == 'cli')
+            die('This example should only be run from a Web Browser');
+
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+        $title = 'Subject Offering';
+        
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'Subject')
+                    ->setCellValue('B1', 'Class Name')
+                    ->setCellValue('C1', 'Year')
+                    ->setCellValue('D1', 'Section')
+                    ->setCellValue('E1', 'Sub Section')
+                    ->setCellValue('F1', 'Is Modular')
+                    ->setCellValue('G1', 'Is Special Class')
+                    ->setCellValue('H1', 'Curriculum (Complete name)')
+                    ->setCellValue('I1', 'Slot')
+                    ->setCellValue('A2', 'SH_GENMATH')
+                    ->setCellValue('B2', 'ANI')
+                    ->setCellValue('C2', '1')
+                    ->setCellValue('D2', '1')
+                    ->setCellValue('E2', '')
+                    ->setCellValue('F2', 'Yes')
+                    ->setCellValue('G2', 'No')
+                    ->setCellValue('H2', 'SHS ANI 2023-2024')
+                    ->setCellValue('I2', '30');
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(10);
+
+        $objPHPExcel->getActiveSheet()->setTitle('Subject Offering');
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
+        header('Content-Disposition: attachment;filename="Subject Offering.xls"');
+        header('Cache-Control: max-age=0'); 
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
+        exit;
+    }
+    
+    public function import_subject_offering($sem, $term)
+    {
+        $post = $this->input->post();
+
+        $config['upload_path'] = './assets/excel';
+        $config['allowed_types'] = '*';
+        $config['max_size'] = '1000000';
+
+        $this->load->library('upload', $config);
+
+        if ( !$this->upload->do_upload("student_grade_excel"))
+        {
+            $error = array('error' => $this->upload->display_errors());
+            return $error;
+        }
+        else
+        {
+            $fileData = $this->upload->data();
+            $filePath = './assets/excel/' . $fileData['file_name'];
+
+            // Load PhpSpreadsheet to read the file
+            $spreadsheet = PHPExcel_IOFactory::load($filePath);
+            $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+
+            // Now you can loop through the $sheetData array and insert into your database
+            foreach ($sheetData as $index => $row) {
+                if($index >= 2){
+                    $facultyLastName = $facultyFirstName = '';
+
+                    // format student number
+                    $studentNumber = substr_replace($row['B'], '-', strlen($row['B']) - 5, 0);
+                    $studentNumber = substr_replace($studentNumber, '-', strlen($studentNumber) - 3, 0);
+                    
+                    $student =  $this->db
+                    ->select("tb_mas_users.*,tb_mas_registration.current_curriculum")                                        
+                    ->from("tb_mas_users")            
+                    ->where(array("tb_mas_users.strStudentNumber"=>$studentNumber))             
+                    ->join('tb_mas_registration', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->get()
+                    ->first_row('array');
+
+                    if($student){
+                        $facultyName = explode(',', ltrim($row['K']));
+                        $facultyLastName = $facultyName[0];
+                        if(isset($facultyName[1])){
+                            $facultyName = explode(' ', ltrim($facultyName[1]));
+                            $facultyFirstName = $facultyName[0];
+                        }
+                        
+                        $faculty = $this->db->from('tb_mas_faculty')->like(array('strLastname' => $facultyLastName, 'strFirstName' => $facultyFirstName))->get()->first_row('array');
+                        $subject = $this->db->get_where('tb_mas_subjects',array('strCode' => $row['G']))->first_row('array');
+
+                        if($faculty && $subject){
+                            $classlistID = '';
+
+                            //Check if classlist exists
+                            $classlist = $this->db->select('tb_mas_classlist.*')
+                                ->from('tb_mas_classlist')
+                                ->join('tb_mas_classlist_student','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
+                                ->where(array('strAcademicYear' => $sem, 
+                                        'intFacultyID' => $faculty['intID'], 
+                                        'intSubjectID' => $subject['intID'],
+                                        'strClassName' => $row['D'],
+                                        'year' => $row['E'],
+                                        'strSection' => $row['F']
+                                        ))
+                                ->order_by('intID', 'ASC')
+                                ->get()
+                                ->first_row('array');
+
+                            if(!$classlist){
+                                $newClasslist = array(
+                                    'intFacultyID' => $faculty['intID'],
+                                    'intSubjectID' => $subject['intID'],
+                                    'strClassName' => $row['D'],
+                                    'intFinalized' => 2,
+                                    'strAcademicYear' => $sem,
+                                    'slots' => 0,
+                                    'strUnits' => 3,
+                                    'strSection' => $row['F'],
+                                    'intWithPayment' => 0,
+                                    'intCurriculumID' => $student['current_curriculum'],
+                                    'year' => $row['E'],
+                                    'isDissolved' => 0,
+                                    'conduct_grade' => 0
+                                );
+
+                                $this->data_poster->post_data('tb_mas_classlist',$newClasslist);
+                                $classlistID = $this->db->insert_id();
+                            }else{
+
+                                $this->data_poster->post_data('tb_mas_classlist', array('intFinalized' => 2), $classlist['intID']);
+                                $classlistID = $classlist['intID'];
+                            }
+
+                            if($classlistID){
+                                $classlistStudent = array(
+                                    'intStudentID' => $student['intID'],
+                                    'intClassListID' => $classlistID,
+                                    'enumStatus' => 'act',
+                                    'intsyID' => $sem,
+                                    'date_added' => date("Y-m-d h:ia"),
+                                    'enlisted_user' => $this->data["user"]["intID"],
+                                );
+
+                                if($term == 'Midterm'){
+                                    $classlistStudent['floatMidtermGrade'] = $row['J'];
+                                }else if($term == 'Final'){
+                                    $classlistStudent['floatFinalGrade'] = $row['J'];
+
+                                    if(isset($row['M'])){
+                                        $remarks = strtolower($row['M']);
+                                        $remarks = ucfirst($remarks);
+                                        $classlistStudent['strRemarks'] = $remarks;
+                                    }
+                                    if($student['level'] == 'shs'){
+                                        $classlistStudent['floatFinalGrade'] = $row['J'];
+                                        if(isset($row['N'])){
+                                            $classlistStudent['floatFinalsGrade'] = $row['N'];
+                                        }
+                                    }
+                                }
+
+                                $checkClasslistStudent = $this->db->get_where('tb_mas_classlist_student',array('intStudentID' => $student['intID'], 'intClassListID' => $classlistID))->first_row();
+                                // if(!$checkClasslistStudent){
+                                //     $this->data_poster->post_data('tb_mas_classlist_student',$classlistStudent);
+                                // }else{
+                                if($checkClasslistStudent){
+                                    $this->data_poster->post_data('tb_mas_classlist_student',$classlistStudent,$checkClasslistStudent->intCSID);
+                                }
+                                // }
+                            }
+                        }
+                    }else{
+
+                        // Optionally, you can delete the uploaded file after import
+                        unlink($filePath);
+                        print('Student Registration/Curriculum not found : ' . $row['C']);
+                        return false;
+                    }
+                }
+            }
+
+            // Optionally, you can delete the uploaded file after import
+            unlink($filePath);
+
+            print('true');
+            return true;
+        }
+    }
     
     private function get_student_number_year($student_number){
         
