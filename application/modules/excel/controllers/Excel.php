@@ -11257,6 +11257,7 @@ class Excel extends CI_Controller {
                         $facultyFirstName = $facultyName[1];
                     }
 
+                    print($row['J']);
                     print_r($facultyName);
                     die();
                     
