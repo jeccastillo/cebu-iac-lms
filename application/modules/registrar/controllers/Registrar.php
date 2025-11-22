@@ -2037,12 +2037,12 @@ class Registrar extends CI_Controller {
     public function drop_subject(){
         $post = $this->input->post();    
         $registration = $this->data_fetcher->getRegistrationInfo($post['student'],$post['sem']);
-        if(!$registration || $registration['intROG'] != 1){
-            $data['message'] = "Student has to be enrolled to make adjustments";            
-            $data['success'] =  false;
-        }    
-        elseif($post['date'] == date("Y-m-d")){               
-
+        // if(!$registration || $registration['intROG'] != 1){
+        //     $data['message'] = "Student has to be enrolled to make adjustments";            
+        //     $data['success'] =  false;
+        // }    
+        // else
+        if($post['date'] == date("Y-m-d")){               
             $classlist_student = $this->db->where(array('intCSID'=>$post['section_to_delete']))->get('tb_mas_classlist_student')->first_row('array');
             $section = $this->db->where(array('intID'=>$classlist_student['intClassListID']))->get('tb_mas_classlist')->first_row('array');
             $section_to_swap = $this->db->where(array('intID'=>$post['subject_to_add']))->get('tb_mas_subjects')->first_row('array');
@@ -2063,8 +2063,6 @@ class Registrar extends CI_Controller {
                         }
                     }
                 }
-
-                
             }
             else
                 $remarks = "Deleted";
@@ -2919,24 +2917,6 @@ class Registrar extends CI_Controller {
         $this->load->view("common/header",$this->data);
         $this->load->view("admin/enrollment_statistics",$this->data);
         $this->load->view("common/footer",$this->data);            
-    }
-
-    public function import_subject_offering()
-    {        
-        if($this->is_super_admin() || $this->is_registrar())
-        {
-            $term = $this->data_fetcher->get_processing_sem();
-    
-            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
-            $this->data['current_sem'] = $term['intID'];
-            $this->data['page'] = "import_subject_offering";
-            $this->data['opentree'] = "registrar";
-            $this->load->view("common/header",$this->data);
-            $this->load->view("admin/import_subject_offering",$this->data);
-            $this->load->view("common/footer",$this->data);
-        }
-        else
-            redirect(base_url()."unity");  
     }
 
     public function enrollment_summary_by_student_number_data($sem)
