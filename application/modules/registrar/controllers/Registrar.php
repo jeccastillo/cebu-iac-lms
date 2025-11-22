@@ -2076,10 +2076,18 @@ class Registrar extends CI_Controller {
             // $this->db->delete('tb_mas_classlist_student', array('intClassListID' => $post['section_to_delete'],'intStudentID'=>$post['student']));
             
             //check for duplicate
-            $checkDuplicate = $this->db->where(array('intID'=>$classlist_student['intClassListID']))->get('tb_mas_classlist')->first_row('array');
-            
+            // $checkDuplicate = $this->db->where(array('intID'=>$classlist_student['intClassListID']))->get('tb_mas_classlist')->first_row('array');
+            $checkDuplicate = $this->db->where(array('intID'=>$classlist_student['intClassListID']))->get('tb_mas_classlist')->result_array();
+            // $checkDuplicate = $this->db->select()
+            //         ->from('tb_mas_classlist')
+            //         ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+            //         ->where(array('intID'=>$classlist_student['intClassListID']))
+            //         ->order_by('tb_mas_users.strLastname', 'DESC')
+            //         ->get()
+            //         ->result_array();
+
             $adj['classlist_student_id'] = $subject['intID'];
-            $adj['adjustment_type'] = $checkDuplicate ? "Removed Duplicate" : "Removed";
+            $adj['adjustment_type'] = count($checkDuplicate) > 1 ? "Removed Duplicate" : "Removed";
             $adj['from_subject'] =  $section_to;
             $adj['to_subject'] =  "";
             $adj['syid'] = $post['sem'];
