@@ -3123,6 +3123,24 @@ class Registrar extends CI_Controller {
             $this->load->view("common/shs_enrolled_by_grade_level_conf",$this->data);
         }
     }
+    
+    public function import_subject_offering()
+    {        
+        if($this->is_super_admin() || $this->is_registrar())
+        {
+            $term = $this->data_fetcher->get_processing_sem();
+    
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['current_sem'] = $term['intID'];
+            $this->data['page'] = "import_subject_offering";
+            $this->data['opentree'] = "registrar";
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/import_subject_offering",$this->data);
+            $this->load->view("common/footer",$this->data);
+        }
+        else
+            redirect(base_url()."unity");  
+    }
 
     private function get_student_number_year($student_number){
         
