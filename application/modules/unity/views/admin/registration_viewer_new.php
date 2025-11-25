@@ -1211,12 +1211,14 @@ new Vue({
             status: 'Paid',
             is_cash: 1,
             check_number: '',
+            cashier_name: '',
             student_campus: '<?php echo $campus; ?>',
         },
         invoice_update_description: undefined,
         or_details: {
             id: undefined,
             or_date: undefined,
+            cashier_name: '',
         },
         invoice_update: {
             id: undefined,
@@ -1226,6 +1228,7 @@ new Vue({
             total_amount_due: undefined,
             student_campus: undefined,
             change_or_date: false,
+            cashier_name: '',
         },
         or_update_description: undefined,
         or_update: {
@@ -1235,6 +1238,7 @@ new Vue({
             sy_reference: undefined,
             total_amount_due: undefined,
             student_campus: undefined,
+            cashier_name: '',
         },
         amount_to_pay: 0,
         cashier_start: 0,
@@ -1380,6 +1384,12 @@ new Vue({
                         this.or_update.cashier_id = this.cashier.user_id;
                         this.invoice_update.cashier_id = this.cashier.user_id;
                         this.or_update.student_campus = this.request.student_campus;
+                        this.or_update.cashier_name =
+                            `${this.user.strFirstname} ${this.user.strLastname}`
+                        this.invoice_update.cashier_name =
+                            `${this.user.strFirstname} ${this.user.strLastname}`
+                        this.or_details.cashier_name =
+                            `${this.user.strFirstname} ${this.user.strLastname}`
                         this.soa.logo = (this.or_update.student_campus == "Cebu") ?
                             "https://i.ibb.co/9hgbYNB/seal.png" :
                             "https://i.ibb.co/kcYVsS7/i-ACADEMY-Seal-Makati.png";
@@ -2200,7 +2210,8 @@ new Vue({
                         'id': this.retract_id,
                         'remarks': this.retract_remarks,
                         'deleted_by': this.user.strLastname + ", " +
-                            this.user.strFirstname
+                            this.user.strFirstname,
+                        'cashier_name': `${this.user.strFirstname} ${this.user.strLastname}`
                     }
                     return axios.post(url, payload, {
                         headers: {
@@ -2284,7 +2295,8 @@ new Vue({
                 preConfirm: (login) => {
                     let payload = {
                         'id': this.void_id,
-                        'void_reason': this.void_reason
+                        'void_reason': this.void_reason,
+                        'cashier_name': `${this.user.strFirstname} ${this.user.strLastname}`
                     }
                     return axios.post(url, payload, {
                         headers: {
@@ -2373,6 +2385,8 @@ new Vue({
                     else this.request.description = this.description;
                     this.request.subtotal_order = this.amount_to_pay;
                     this.request.total_amount_due = this.amount_to_pay;
+                    this.request.cashier_name =
+                        `${this.user.strFirstname} ${this.user.strLastname}`
                     console.log(this.request);
                     // return 
                     return axios.post(url, this.request, {
