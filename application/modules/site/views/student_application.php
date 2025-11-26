@@ -313,7 +313,7 @@
                         <label class="block t color-primary font-bold  mb-3  pr-4"> Country<span
                                 class="text-red-500">*</span>
                         </label>
-                        <select @change="getState" name="country" v-model="addressObj.country"
+                        <select name="country" v-model="addressObj.country"
                             class="w-full bg-neutral-100 border border-neutral-100 rounded-lg py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
                             <option v-for="country in countryList" :value="country" required>
                                 {{ country}}
@@ -965,7 +965,7 @@ new Vue({
     el: "#adminssions-form",
     data: {
         selected: '',
-        countryList: [],
+        countryList: [...countries],
         barangay: [],
         hide_school_address: false,
         cities: [],
@@ -1097,7 +1097,7 @@ new Vue({
             console.log("error");
         });
         this.getAllPrevSchool()
-        this.getAllCountry()
+        // this.getAllCountry()
     },
     computed: {
         isSecondaDegree() {
