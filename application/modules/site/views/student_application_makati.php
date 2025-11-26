@@ -1001,7 +1001,7 @@ new Vue({
     el: "#adminssions-form",
     data: {
         selected: '',
-        countryList: [],
+        countryList: [...countries],
         barangay: [],
         cities: [],
         hide_school_address: false,
@@ -1132,7 +1132,7 @@ new Vue({
             console.log("error");
         });
         this.getAllPrevSchool()
-        this.getAllCountry()
+        // this.getAllCountry()
     },
     computed: {
         isSecondaDegree() {
