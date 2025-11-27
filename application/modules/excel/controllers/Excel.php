@@ -11254,10 +11254,6 @@ class Excel extends CI_Controller {
                     $facultyName = explode(',', ltrim($row['J']));
                     if($facultyName){
                         $facultyLastName = $facultyName[0];
-                        // if(isset($facultyName[1])){
-                        //     $facultyName = explode(' ', ltrim($facultyName[1]));
-                        //     $facultyFirstName = $facultyName[0];
-                        // }
                         $facultyFirstName = trim($facultyName[1]);
                     }
 
@@ -11266,14 +11262,6 @@ class Excel extends CI_Controller {
                     $curriculum = $this->db->get_where('tb_mas_curriculum',array('strName' => $row['H']))->first_row('array');
                     $isModular = $row['F'] == 'Yes' ? 1 : 0;
                     $isSpecialClass = $row['G'] == 'Yes' ? 1 : 0;
-
-
-                    print_r($faculty);
-                    print_r($subject);
-                    print('@' . $facultyLastName);
-                    print('@' . $facultyFirstName .'@');
-                    print($faculty['intID']);
-                    die();
 
                     if($faculty && $subject && $curriculum){
                         //Check if classlist exists
