@@ -2201,6 +2201,17 @@ class Finance extends CI_Controller {
         $this->load->view("tuition_other_fees",$this->data);
         $this->load->view("common/footer",$this->data);            
     }
+
+    public function audit_trail($term = 0)    
+    {
+        if($this->faculty_logged_in())
+        {                                        
+            $this->load->view("common/header",$this->data);
+            $this->load->view("audit_trail",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/audit_trail_conf",$this->data); 
+        }
+    }
     
     public function get_payments_without_OR_date()
     {

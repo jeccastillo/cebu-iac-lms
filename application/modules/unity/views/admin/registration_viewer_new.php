@@ -2,25 +2,20 @@
     <section class="content-header">
         <h1>
             <small>
-                <a v-if="cashier" class="btn btn-app"
-                    :href="base_url + 'finance/view_all_students'"><i
+                <a v-if="cashier" class="btn btn-app" :href="base_url + 'finance/view_all_students'"><i
                         class="ion ion-arrow-left-a"></i>All Students</a>
                 <a v-else class="btn btn-app" :href="base_url + 'student/view_all_students'"><i
                         class="ion ion-arrow-left-a"></i>All Students</a>
                 <a class="btn btn-app" :href="base_url + 'student/edit_student/' + student.intID"><i
                         class="ion ion-edit"></i> Edit</a>
-                <a class="btn btn-app"
-                    :href="base_url + 'finance/student_ledger/' + student.intID"><i
+                <a class="btn btn-app" :href="base_url + 'finance/student_ledger/' + student.intID"><i
                         class="ion ion-edit"></i> Ledger</a>
-                <a class="btn btn-app"
-                    :href="base_url + 'unity/registration_viewer_legacy/' + student.intID"><i
+                <a class="btn btn-app" :href="base_url + 'unity/registration_viewer_legacy/' + student.intID"><i
                         class="ion ion-edit"></i> Legacy View</a>
-                <a v-if="user_level == 2 || user_level == 3" target="_blank" v-if="registration"
-                    class="btn btn-app"
+                <a v-if="user_level == 2 || user_level == 3" target="_blank" v-if="registration" class="btn btn-app"
                     :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ application_payment.student_information_id">
                     <i class="ion ion-printer"></i>RF Print </a>
-                <a v-if="user_level == 2 || user_level == 3" target="_blank" v-if="registration"
-                    class="btn btn-app"
+                <a v-if="user_level == 2 || user_level == 3" target="_blank" v-if="registration" class="btn btn-app"
                     :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ application_payment.student_information_id +'/0/35'">
                     <i class="ion ion-printer"></i>RF No Header </a>
             </small>
@@ -34,9 +29,8 @@
                     <!-- Add the bg color to the header using any of the bg-* classes -->
                     <div class="widget-user-header bg-red">
                         <div v-if="registration && user.special_role >= 1 || (registration.downpayment == 0 && registration.fullpayment == 0)"
-                            class="pull-right" style="margin-left:1rem;"> Tuition Year <select
-                                class="form-control" @change="selectTuitionYear($event)"
-                                v-model="tuition_year">
+                            class="pull-right" style="margin-left:1rem;"> Tuition Year <select class="form-control"
+                                @change="selectTuitionYear($event)" v-model="tuition_year">
                                 <option v-for="ty in tuition_years" :value="ty.intID">{{ ty.year}}
                                 </option>
                             </select>
@@ -49,11 +43,11 @@
                                 </option>
                             </select>
                         </div>
-                        <div class="pull-right" v-if="description == 'Tuition Fee' && registration"
-                            class="col-sm-4" v-if="cashier"> Select Type <select
+                        <div class="pull-right" v-if="description == 'Tuition Fee' && registration" class="col-sm-4"
+                            v-if="cashier"> Select Type <select
                                 v-if="(registration.downpayment != 1 && registration.fullpayment != 1)"
-                                @change="description_other = ''; amount_to_pay = 0 "
-                                v-model="payment_type" class="form-control">
+                                @change="description_other = ''; amount_to_pay = 0 " v-model="payment_type"
+                                class="form-control">
                                 <option value="full">Full Payment</option>
                                 <option value="partial">Installment</option>
                             </select>
@@ -62,34 +56,30 @@
                             </div>
                         </div>
                         <!-- /.widget-user-image -->
-                        <div v-if="registration && user.special_role > 0"
-                            style="margin-right:1rem;" class="pull-right"> Payment Type <select
-                                v-model="change_payment_type" @change="changeType($event)"
+                        <div v-if="registration && user.special_role > 0" style="margin-right:1rem;" class="pull-right">
+                            Payment Type <select v-model="change_payment_type" @change="changeType($event)"
                                 class="form-control">
                                 <option value="full">Full Payment</option>
                                 <option value="partial">Installment</option>
                             </select>
                         </div>
-                        <div v-if="registration && user.special_role >= 1"
-                            style="margin-right:1rem;" class="pull-right"> Enrollment Status <select
-                                v-if="registration_status!=1" v-model="registration_status"
-                                @change="changeRegStatus" class="form-control">
+                        <div v-if="registration && user.special_role >= 1" style="margin-right:1rem;"
+                            class="pull-right"> Enrollment Status <select v-if="registration_status!=1"
+                                v-model="registration_status" @change="changeRegStatus" class="form-control">
                                 <option value="0">Enlisted</option>
                                 <option value="1">Enrolled</option>
                             </select>
                             <div v-else> Enrolled </div>
                         </div>
-                        <div v-if="registration && cashier" style="margin-right:1rem;"
-                            class="pull-right"> Has DP <select v-model="downpayment_status"
-                                @change="changeDownPaymentStatus" class="form-control">
+                        <div v-if="registration && cashier" style="margin-right:1rem;" class="pull-right"> Has DP
+                            <select v-model="downpayment_status" @change="changeDownPaymentStatus" class="form-control">
                                 <option value="0">No</option>
                                 <option value="1">Yes</option>
                             </select>
                         </div>
-                        <div v-if="registration && user.special_role >= 1"
-                            style="margin-right:1rem;" class="pull-right"> Allow To Print RF <select
-                                v-model="allow_enroll" @change="changeAllowEnroll"
-                                class="form-control">
+                        <div v-if="registration && user.special_role >= 1" style="margin-right:1rem;"
+                            class="pull-right"> Allow To Print RF <select v-model="allow_enroll"
+                                @change="changeAllowEnroll" class="form-control">
                                 <option value="0">No</option>
                                 <option value="1">Yes</option>
                             </select>
@@ -97,8 +87,8 @@
                         <h3 class="widget-user-username"
                             style="text-transform:capitalize;margin-left:0;font-size:1.3em;">
                             {{ student.strLastname }}, {{ student.strFirstname }}
-                            {{ student.strMiddlename }} &nbsp;<button class="btn btn-default"
-                                data-toggle="collapse" data-target="#student-info">More
+                            {{ student.strMiddlename }} &nbsp;<button class="btn btn-default" data-toggle="collapse"
+                                data-target="#student-info">More
                                 Info</button>
                         </h3>
                         <h5 class="widget-user-desc" style="margin-left:0;">
@@ -117,20 +107,17 @@
                             <li v-if="registration"><a style="font-size:13px;" href="#">Registration
                                     Status <span class="pull-right">{{ reg_status }}</span></a></li>
                             <li v-if="registration"><a style="font-size:13px;" href="#">Class Type
-                                    <span
-                                        class="pull-right">{{ registration.type_of_class }}</span></a>
+                                    <span class="pull-right">{{ registration.type_of_class }}</span></a>
                             </li>
                             <li v-if="registration">
-                                <a style="font-size:13px;" href="#">Date Registered <span
-                                        class="pull-right">
+                                <a style="font-size:13px;" href="#">Date Registered <span class="pull-right">
                                         <span style="color:#009000"
                                             v-if="registration">{{ registration.date_enlisted }}</span>
                                         <span style="color:#900000;" v-else>N/A</span>
                                 </a>
                             </li>
                             <li v-if="registration"><a style="font-size:13px;" href="#">Scholarship
-                                    Type <span
-                                        class="pull-right">{{ registration.scholarshipName }}</span></a>
+                                    Type <span class="pull-right">{{ registration.scholarshipName }}</span></a>
                             </li>
                         </ul>
                     </div>
@@ -164,8 +151,7 @@
                     </div>
                 </div>
                 <div class="col-sm-12">
-                    <div v-if="applicant_data.reserve_enroll" class="alert alert-success"
-                        role="alert">
+                    <div v-if="applicant_data.reserve_enroll" class="alert alert-success" role="alert">
                         <h4 class="alert-heading">Reserve Enroll</h4>
                         <p>This student has been tagged for reserve enrollment promo please update
                             tuition year if it hasn't been updated</p>
@@ -175,34 +161,28 @@
                     <div class="nav-tabs-custom">
                         <ul class="nav nav-tabs">
                             <li v-if="advanced_privilages">
-                                <a
-                                    :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_1'">
+                                <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_1'">
                                     Personal Information </a>
                             </li>
                             <li v-if="advanced_privilages">
-                                <a
-                                    :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_2'">
+                                <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_2'">
                                     Report of Grades </a>
                             </li>
                             <li v-if="advanced_privilages">
-                                <a
-                                    :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_3'">
+                                <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_3'">
                                     Assessment </a>
                             </li>
                             <li v-if="advanced_privilages">
-                                <a
-                                    :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_5'">
+                                <a :href="base_url + 'unity/student_viewer/' + student.intID + '/' + sem + '/tab_5'">
                                     Schedule </a>
                             </li>
                             <li v-if="advanced_privilages">
-                                <a
-                                    :href="base_url + 'unity/adjustments/' + student.intID + '/' + sem">
+                                <a :href="base_url + 'unity/adjustments/' + student.intID + '/' + sem">
                                     Adjustments </a>
                             </li>
                             <li v-if="cashier" :class="cashier?'active':''"><a href="#tab_1"
                                     data-toggle="tab">Payment</a></li>
-                            <li :class="!cashier?'active':''"><a href="#tab_2"
-                                    data-toggle="tab">Details</a></li>
+                            <li :class="!cashier?'active':''"><a href="#tab_2" data-toggle="tab">Details</a></li>
                             <li v-if="registration" :class="!cashier?'active':''"><a href="#tab_3"
                                     data-toggle="tab">SOA</a></li>
                             <!-- <li>
@@ -213,8 +193,7 @@
                         </ul>
                         <div class="tab-content">
                             <div :class="cashier?'active tab-pane':'tab-pane'" id="tab_1">
-                                <div v-if="cashier.invoice_current && cashier.or_current"
-                                    class="box box-solid">
+                                <div v-if="cashier.invoice_current && cashier.or_current" class="box box-solid">
                                     <div class="box-header">
                                         <h4 class="box-title">{{windowPayment}}</h4>
                                     </div>
@@ -222,11 +201,11 @@
                                         <h4 class="box-title">Cashier {{ cashier.intID }}</h4>
                                         <div style="margin-bottom:1rem">
                                             <label class="radio-inline">
-                                                <input type="radio" v-model="windowPayment"
-                                                    value="invoice"> Invoice </label>
+                                                <input type="radio" v-model="windowPayment" value="invoice"> Invoice
+                                            </label>
                                             <label v-if="registration" class="radio-inline">
-                                                <input type="radio" v-model="windowPayment"
-                                                    value="official receipt"> Official Receipt
+                                                <input type="radio" v-model="windowPayment" value="official receipt">
+                                                Official Receipt
                                             </label>
                                         </div>
                                         <form @submit.prevent="submitManualPayment" method="post">
@@ -234,16 +213,13 @@
                                                 <div class="col-sm-4" v-if="cashier">
                                                     <div class="form-group">
                                                         <label>Payment For</label>
-                                                        <select class="form-control"
-                                                            v-model="description">
-                                                            <option v-if="registration"
-                                                                value="Tuition Fee">Tuition Fee
+                                                        <select class="form-control" v-model="description">
+                                                            <option v-if="registration" value="Tuition Fee">Tuition Fee
                                                             </option>
                                                             <option value="Other"> Other</option>
                                                         </select>
                                                     </div>
-                                                    <div v-if="description == 'Tuition Fee'"
-                                                        class="form-group">
+                                                    <div v-if="description == 'Tuition Fee'" class="form-group">
                                                         <label>Particulars:</label>
                                                         <select required class="form-control"
                                                             v-model="description_other">
@@ -259,16 +235,14 @@
                                                         <label>Particulars:</label>
                                                         <select required class="form-control"
                                                             v-model="description_other">
-                                                            <option v-for="p in particulars"
-                                                                :value="p.name">{{p.name}}</option>
+                                                            <option v-for="p in particulars" :value="p.name">{{p.name}}
+                                                            </option>
                                                         </select>
                                                     </div>
-                                                    <input type="hidden" v-model="request.status"
-                                                        value="Paid" />
+                                                    <input type="hidden" v-model="request.status" value="Paid" />
                                                     <div class="form-group">
                                                         <label>Payment Type</label>
-                                                        <select class="form-control"
-                                                            v-model="request.is_cash">
+                                                        <select class="form-control" v-model="request.is_cash">
                                                             <option value="1">Cash</option>
                                                             <option value="0">Check</option>
                                                             <option value="2">Credit Card</option>
@@ -279,22 +253,18 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Reference No.:</label>
-                                                        <input type="text"
-                                                            :disabled="request.is_cash == 1"
-                                                            required class="form-control"
-                                                            v-model="request.check_number" />
+                                                        <input type="text" :disabled="request.is_cash == 1" required
+                                                            class="form-control" v-model="request.check_number" />
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Enter amount to pay:</label>
-                                                        <input type="number" step="0.01" required
-                                                            class="form-control"
+                                                        <input type="number" step="0.01" required class="form-control"
                                                             v-model="amount_to_pay" />
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Contact Number:</label>
                                                         {{ request.contact_number }}
-                                                        <input type="hidden" required
-                                                            class="form-control"
+                                                        <input type="hidden" required class="form-control"
                                                             v-model="request.contact_number" />
                                                     </div>
                                                     <div class="form-group">
@@ -303,8 +273,7 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Remarks:</label>
-                                                        <textarea type="text" required
-                                                            class="form-control"
+                                                        <textarea type="text" required class="form-control"
                                                             v-model="request.remarks"></textarea>
                                                     </div>
                                                 </div>
@@ -321,23 +290,19 @@
                                                         <label>OR Number:</label>
                                                         <div
                                                             v-if="user.special_role == 2 || cashier.temporary_admin ==  1">
-                                                            <input type="number"
-                                                                class="form-control"
+                                                            <input type="number" class="form-control"
                                                                 v-model="request.or_number" />
                                                         </div>
                                                         <div v-else>
-                                                            <input type="hidden"
-                                                                class="form-control"
+                                                            <input type="hidden" class="form-control"
                                                                 v-model="request.or_number">
                                                             {{ request.or_number }}
                                                         </div>
                                                     </div>
                                                     <div v-if="isOR" class="form-group">
                                                         <label>Invoice Number:</label>
-                                                        <select class="form-control"
-                                                            v-model="request.invoice_number">
-                                                            <option
-                                                                v-for="invoiceNumber in invoiceNumbers"
+                                                        <select class="form-control" v-model="request.invoice_number">
+                                                            <option v-for="invoiceNumber in invoiceNumbers"
                                                                 :value="invoiceNumber.invoice_number">
                                                                 {{ invoiceNumber.invoice_number }}
                                                             </option>
@@ -347,13 +312,11 @@
                                                         <label>Invoice Number:</label>
                                                         <div
                                                             v-if="user.special_role == 2 || cashier.temporary_admin ==  1">
-                                                            <input type="number"
-                                                                class="form-control"
+                                                            <input type="number" class="form-control"
                                                                 v-model="request.invoice_number" />
                                                         </div>
                                                         <div v-else>
-                                                            <input type="hidden"
-                                                                class="form-control"
+                                                            <input type="hidden" class="form-control"
                                                                 v-model="request.invoice_number">
                                                             {{ request.invoice_number }}
                                                         </div>
@@ -361,29 +324,25 @@
                                                     <div v-if="!isOR && description != 'Tuition Fee'"
                                                         class="form-group">
                                                         <label>Vatable Amount :</label>
-                                                        <input @change="computeVat" step=".01"
-                                                            type="number" class="form-control"
-                                                            v-model="request.invoice_amount">
+                                                        <input @change="computeVat" step=".01" type="number"
+                                                            class="form-control" v-model="request.invoice_amount">
                                                     </div>
                                                     <div v-if="!isOR && description != 'Tuition Fee'"
                                                         class="form-group">
                                                         <label>Vat Exempt Tax :</label>
-                                                        <input @change="computeVat" step=".01"
-                                                            type="number" class="form-control"
-                                                            v-model="request.invoice_amount_ves">
+                                                        <input @change="computeVat" step=".01" type="number"
+                                                            class="form-control" v-model="request.invoice_amount_ves">
                                                     </div>
                                                     <div v-if="!isOR && description != 'Tuition Fee'"
                                                         class="form-group">
                                                         <label>Vat Zero Rated Sales :</label>
-                                                        <input @change="computeVat" step=".01"
-                                                            type="number" class="form-control"
-                                                            v-model="request.invoice_amount_vzrs">
+                                                        <input @change="computeVat" step=".01" type="number"
+                                                            class="form-control" v-model="request.invoice_amount_vzrs">
                                                     </div>
                                                     <div v-if="!isOR && description != 'Tuition Fee'"
                                                         class="form-group">
                                                         <label>Less EWT:</label>
-                                                        <select @change="computeVat"
-                                                            class="form-control"
+                                                        <select @change="computeVat" class="form-control"
                                                             v-model="request.withholding_tax_percentage">
                                                             <option value="0">None</option>
                                                             <option value="1">1%</option>
@@ -428,8 +387,7 @@
                                                         {{ payment_type }}
                                                     </div>
                                                     <hr />
-                                                    <table class="table table-striped"
-                                                        v-if="payment_type == 'full'">
+                                                    <table class="table table-striped" v-if="payment_type == 'full'">
                                                         <tr>
                                                             <td>Full Tuition</td>
                                                             <td><a href="#"
@@ -440,8 +398,7 @@
                                                     <table class="table table-striped" v-else>
                                                         <tr>
                                                             <td>Down Payment</td>
-                                                            <td
-                                                                v-if="registration.downpayment == 0">
+                                                            <td v-if="registration.downpayment == 0">
                                                                 <a href="#"
                                                                     @click="setValue(tuition_data.down_payment,'down',0)">{{ tuition_data.down_payment }}</a>
                                                             </td>
@@ -500,8 +457,7 @@
                                                     <td :class="item.muted">
                                                         {{ (item.type == 'payment')?numberWithCommas(item.amount):'-' }}
                                                     </td>
-                                                    <td :class="item.muted"><a
-                                                            @click="cashierDetails(item.added_by)"
+                                                    <td :class="item.muted"><a @click="cashierDetails(item.added_by)"
                                                             href="#">{{ item.added_by }}</a></td>
                                                 </tr>
                                             </tbody>
@@ -576,15 +532,15 @@
                                                         v-if="application_payment.status == 'Paid' && cashier && application_payment.remarks != 'Voided' && cashier.invoice_current"
                                                         data-toggle="modal"
                                                         @click="invoice_update.id = application_payment.id; invoice_update_description = application_payment.description;"
-                                                        data-target="#invoiceUpdate"
-                                                        class="btn btn-primary"> Update Invoice
+                                                        data-target="#invoiceUpdate" class="btn btn-primary"> Update
+                                                        Invoice
                                                     </button>
                                                     <button
                                                         v-if="application_payment.status == 'Paid' && cashier && application_payment.remarks != 'Voided'"
                                                         data-toggle="modal"
                                                         @click="or_details.id = application_payment.id;"
-                                                        data-target="#orDetailsUpdate"
-                                                        class="btn btn-primary"> Update Details
+                                                        data-target="#orDetailsUpdate" class="btn btn-primary"> Update
+                                                        Details
                                                     </button>
                                                     <!-- <button
                                                         v-if="application_payment.or_number && cashier"
@@ -592,23 +548,20 @@
                                                         class="btn btn-primary">
                                                         Print OR
                                                     </button> -->
-                                                    <button
-                                                        v-if="application_payment.invoice_number && cashier"
+                                                    <button v-if="application_payment.invoice_number && cashier"
                                                         @click="printInvoice(application_payment)"
                                                         class="btn btn-primary"> Print Invoice
                                                     </button>
                                                     <button
                                                         v-if="application_payment.status == 'Paid' && application_payment.remarks != 'Voided' && cashier && finance_manager_privilages"
-                                                        data-toggle="modal"
-                                                        data-target="#voidPaymentModal"
+                                                        data-toggle="modal" data-target="#voidPaymentModal"
                                                         class="btn btn-primary"
                                                         @click="setToVoid(application_payment.id)">Void/Cancel</button>
                                                 </td>
                                             </tr>
                                             <tr v-for="payment in other_payments">
-                                                <td><input v-if="user.special_role > 1"
-                                                        type="checkbox" :value="payment.or_number"
-                                                        v-model="selected_items" /></td>
+                                                <td><input v-if="user.special_role > 1" type="checkbox"
+                                                        :value="payment.or_number" v-model="selected_items" /></td>
                                                 <td>{{ payment.invoice_number }}</td>
                                                 <td>{{ payment.or_number }}</td>
                                                 <td>{{ payment.description }}</td>
@@ -625,28 +578,27 @@
                                                         v-if="!payment.or_number && payment.status == 'Paid' && cashier && cashier.or_current"
                                                         data-toggle="modal"
                                                         @click="prepUpdate(payment.id,payment.description,payment.subtotal_order)"
-                                                        data-target="#myModal"
-                                                        class="btn btn-primary"> Update OR </button>
+                                                        data-target="#myModal" class="btn btn-primary"> Update OR
+                                                    </button>
                                                     <button
                                                         v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided' && cashier.invoice_current"
                                                         data-toggle="modal"
                                                         @click="invoice_update.id = payment.id; invoice_update_description = payment.description;"
-                                                        data-target="#invoiceUpdate"
-                                                        class="btn btn-primary"> Update Invoice
+                                                        data-target="#invoiceUpdate" class="btn btn-primary"> Update
+                                                        Invoice
                                                     </button>
                                                     <button
                                                         v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided'"
-                                                        data-toggle="modal"
-                                                        @click="or_details.id = payment.id;"
-                                                        data-target="#orDetailsUpdate"
-                                                        class="btn btn-primary"> Update Details
+                                                        data-toggle="modal" @click="or_details.id = payment.id;"
+                                                        data-target="#orDetailsUpdate" class="btn btn-primary"> Update
+                                                        Details
                                                     </button>
                                                     <button v-if="payment.or_number && cashier"
-                                                        @click="printOR(payment)"
-                                                        class="btn btn-primary"> Print OR </button>
+                                                        @click="printOR(payment)" class="btn btn-primary"> Print OR
+                                                    </button>
                                                     <button v-if="payment.invoice_number && cashier"
-                                                        @click="printInvoice(payment)"
-                                                        class="btn btn-primary"> Print Invoice
+                                                        @click="printInvoice(payment)" class="btn btn-primary"> Print
+                                                        Invoice
                                                     </button>
                                                     <button
                                                         v-if="payment.status == 'Paid' && payment.remarks != 'Voided' && cashier && finance_manager_privilages"
@@ -655,8 +607,7 @@
                                                         @click="setToVoid(payment.id)">Void/Cancel</button>
                                                     <button
                                                         v-if="payment.status == 'Pending' && payment.mode.name == 'Onsite Payment' && cashier"
-                                                        class="btn btn-primary"
-                                                        @click="setToPaid(payment.id)">Set to
+                                                        class="btn btn-primary" @click="setToPaid(payment.id)">Set to
                                                         paid</button>
                                                     <button
                                                         v-if="cashier && finance_manager_privilages && payment.status == 'Paid' &&  payment.mode.name == 'Onsite Payment' "
@@ -696,15 +647,15 @@
                                                         v-if="reservation_payment.status == 'Paid' && cashier && reservation_payment.remarks != 'Voided' && cashier.invoice_current"
                                                         data-toggle="modal"
                                                         @click="invoice_update.id = reservation_payment.id; invoice_update_description = reservation_payment.description;"
-                                                        data-target="#invoiceUpdate"
-                                                        class="btn btn-primary"> Update Invoice
+                                                        data-target="#invoiceUpdate" class="btn btn-primary"> Update
+                                                        Invoice
                                                     </button>
                                                     <button
                                                         v-if="reservation_payment.status == 'Paid' && cashier && reservation_payment.remarks != 'Voided'"
                                                         data-toggle="modal"
                                                         @click="or_details.id = reservation_payment.id;"
-                                                        data-target="#orDetailsUpdate"
-                                                        class="btn btn-primary"> Update Details
+                                                        data-target="#orDetailsUpdate" class="btn btn-primary"> Update
+                                                        Details
                                                     </button>
                                                     <!-- <button
                                                         v-if="reservation_payment.or_number && cashier"
@@ -712,23 +663,20 @@
                                                         class="btn btn-primary">
                                                         Print OR
                                                     </button> -->
-                                                    <button
-                                                        v-if="reservation_payment.invoice_number && cashier"
+                                                    <button v-if="reservation_payment.invoice_number && cashier"
                                                         @click="printInvoice(reservation_payment)"
                                                         class="btn btn-primary"> Print Invoice
                                                     </button>
                                                     <button
                                                         v-if="reservation_payment.status == 'Paid' && reservation_payment.remarks != 'Voided' && cashier && finance_manager_privilages"
-                                                        data-toggle="modal"
-                                                        data-target="#voidPaymentModal"
+                                                        data-toggle="modal" data-target="#voidPaymentModal"
                                                         class="btn btn-primary"
                                                         @click="setToVoid(reservation_payment.id)">Void/Cancel</button>
                                                 </td>
                                             </tr>
                                             <tr v-for="payment in payments">
-                                                <td><input v-if="user.special_role > 1"
-                                                        type="checkbox" :value="payment.or_number"
-                                                        v-model="selected_items" /></td>
+                                                <td><input v-if="user.special_role > 1" type="checkbox"
+                                                        :value="payment.or_number" v-model="selected_items" /></td>
                                                 <td>{{ payment.invoice_number }}</td>
                                                 <td>{{ payment.or_number }}</td>
                                                 <td>{{ payment.description }}</td>
@@ -745,40 +693,36 @@
                                                         v-if="(!payment.or_number && payment.status == 'Paid') && cashier && cashier.or_current"
                                                         data-toggle="modal"
                                                         @click="prepUpdate(payment.id,payment.description,payment.subtotal_order)"
-                                                        data-target="#myModal"
-                                                        class="btn btn-primary"> Update OR </button>
+                                                        data-target="#myModal" class="btn btn-primary"> Update OR
+                                                    </button>
                                                     <button
                                                         v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided' && cashier.invoice_current"
                                                         data-toggle="modal"
                                                         @click="invoice_update.id = payment.id; invoice_update_description = payment.description;"
-                                                        data-target="#invoiceUpdate"
-                                                        class="btn btn-primary"> Update Invoice
+                                                        data-target="#invoiceUpdate" class="btn btn-primary"> Update
+                                                        Invoice
                                                     </button>
                                                     <button
                                                         v-if="payment.status == 'Paid' && cashier && payment.remarks != 'Voided'"
-                                                        data-toggle="modal"
-                                                        @click="or_details.id = payment.id;"
-                                                        data-target="#orDetailsUpdate"
-                                                        class="btn btn-primary"> Update Details
+                                                        data-toggle="modal" @click="or_details.id = payment.id;"
+                                                        data-target="#orDetailsUpdate" class="btn btn-primary"> Update
+                                                        Details
                                                     </button>
-                                                    <button
-                                                        v-if="payment.or_number && cashier"
-                                                        @click="printOR(payment)"
-                                                        class="btn btn-primary"> Print OR </button>
+                                                    <button v-if="payment.or_number && cashier"
+                                                        @click="printOR(payment)" class="btn btn-primary"> Print OR
+                                                    </button>
                                                     <button v-if="payment.invoice_number && cashier"
-                                                        @click="printInvoice(payment)"
-                                                        class="btn btn-primary"> Print Invoice
+                                                        @click="printInvoice(payment)" class="btn btn-primary"> Print
+                                                        Invoice
                                                     </button>
                                                     <button
                                                         v-if="payment.mode && payment.status == 'Paid' && payment.remarks != 'Voided' && cashier && finance_manager_privilages"
-                                                        data-toggle="modal"
-                                                        data-target="#voidPaymentModal"
+                                                        data-toggle="modal" data-target="#voidPaymentModal"
                                                         class="btn btn-primary"
                                                         @click="setToVoid(payment.id)">Void/Cancel</button>
                                                     <button
                                                         v-if="(payment.mode && payment.status == 'Pending' && payment.mode.name == 'Onsite Payment') && cashier"
-                                                        class="btn btn-primary"
-                                                        @click="setToPaid(payment.id)">Set to
+                                                        class="btn btn-primary" @click="setToPaid(payment.id)">Set to
                                                         paid</button>
                                                     <button
                                                         v-if="(payment.mode && payment.mode.name == 'Onsite Payment')  && cashier && finance_manager_privilages"
@@ -792,8 +736,7 @@
                                                 <td class="text-right" colspan="2"> Do with
                                                     selected: </td>
                                                 <td colspan="3">
-                                                    <select class="form-control"
-                                                        v-model="switch_term">
+                                                    <select class="form-control" v-model="switch_term">
                                                         <option v-for="s in sy" :value="s.intID">
                                                             {{ s.term_student_type}}
                                                             {{ s.enumSem }} {{ s.term_label }}
@@ -803,8 +746,8 @@
                                                     </select>
                                                 </td>
                                                 <td colspan="6">
-                                                    <button @click="forwardSelected"
-                                                        class="btn btn-primary"> Forward Selected
+                                                    <button @click="forwardSelected" class="btn btn-primary"> Forward
+                                                        Selected
                                                     </button>
                                                 </td>
                                             </tr>
@@ -859,8 +802,7 @@
                                                     <td>Down Payment</td>
                                                     <td>{{ tuition_data.down_payment }}</td>
                                                 </tr>
-                                                <tr v-for="(inst,ctr) in installments"
-                                                    v-if="inst > 0">
+                                                <tr v-for="(inst,ctr) in installments" v-if="inst > 0">
                                                     <td>{{ addSuffix(ctr + 1) + ' installment due ' + installment_dates[ctr]+ ' ' }}
                                                     </td>
                                                     <td>P{{ inst }}</td>
@@ -880,8 +822,7 @@
                                             </table>
                                         </div>
                                         <hr />
-                                        <button class="btn btn-primary btn-lg"
-                                            @click="printSOA">Print</button>
+                                        <button class="btn btn-primary btn-lg" @click="printSOA">Print</button>
                                     </div>
                                 </div>
                             </div>
@@ -910,8 +851,7 @@
         <input type="hidden" name="transaction_date" v-model="or_print.transaction_date" />
         <input type="hidden" name="type" v-model="or_print.type" />
     </form>
-    <form ref="print_invoice" method="post" :action="base_url + 'pdf/print_invoice/' + assessment "
-        target="_blank">
+    <form ref="print_invoice" method="post" :action="base_url + 'pdf/print_invoice/' + assessment " target="_blank">
         <input type="hidden" name="student_name" v-model="or_print.student_name">
         <input type="hidden" name="slug" v-model="slug">
         <input type="hidden" name="campus" :value="request.student_campus">
@@ -930,17 +870,14 @@
         <input type="hidden" name="sem" v-model="or_print.sem" />
         <input type="hidden" name="transaction_date" v-model="or_print.transaction_date" />
         <input type="hidden" name="type" v-model="or_print.type" />
-        <input type="hidden" name="withholding_tax_percentage"
-            v-model="or_print.withholding_tax_percentage" />
+        <input type="hidden" name="withholding_tax_percentage" v-model="or_print.withholding_tax_percentage" />
         <input type="hidden" name="invoice_amount" v-model="or_print.invoice_amount" />
         <input type="hidden" name="invoice_amount_ves" v-model="or_print.invoice_amount_ves" />
         <input type="hidden" name="invoice_amount_vzrs" v-model="or_print.invoice_amount_vzrs" />
     </form>
     <form ref="print_soa" method="post" :action="base_url + 'pdf/print_soa'" target="_blank">
-        <input type="hidden" v-if="tuition_data" name="down_payment"
-            v-model="tuition_data.down_payment">
-        <input v-if="registration" type="hidden" name="is_paid_dp"
-            :value="registration.downpayment">
+        <input type="hidden" v-if="tuition_data" name="down_payment" v-model="tuition_data.down_payment">
+        <input v-if="registration" type="hidden" name="is_paid_dp" :value="registration.downpayment">
         <input type="hidden" name="cashier_id" v-model="or_print.cashier_id">
         <input type="hidden" name="student_id" v-model="soa.student_id">
         <input type="hidden" name="student_name" v-model="soa.student_name">
@@ -965,17 +902,15 @@
                     <div class="form-group">
                         <label>OR Number <span class="text-danger">*</span> </label>
                         <select class="form-control" v-model="or_update.or_number" required>
-                            <option v-for="i in (parseInt(cashier_start), parseInt(cashier_end))"
-                                :value="i">{{ i }}</option>
+                            <option v-for="i in (parseInt(cashier_start), parseInt(cashier_end))" :value="i">{{ i }}
+                            </option>
                         </select>
                     </div>
                 </div>
                 <div class=" modal-footer">
                     <!-- modal footer  -->
-                    <button type="submit" :disabled="!or_update.or_number"
-                        class="btn btn-primary">Submit</button>
-                    <button type="button" class="btn btn-default"
-                        data-dismiss="modal">Close</button>
+                    <button type="submit" :disabled="!or_update.or_number" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </form>
@@ -993,8 +928,7 @@
                     <div class="form-group">
                         <div class="form-group">
                             <label>Invoice Number <span class="text-danger">*</span> </label>
-                            <input type="text" class="form-control"
-                                v-model="invoice_update.invoice_number" required />
+                            <input type="text" class="form-control" v-model="invoice_update.invoice_number" required />
                         </div>
                         <div class="form-group">
                             <label>Update Issued Date</label>
@@ -1022,10 +956,8 @@
                 <div class=" modal-footer">
                     <!-- modal footer  -->
                     <!-- :disabled="!or_update.or_number" -->
-                    <button type="submit" :disabled="!or_update.or_number"
-                        class="btn btn-primary">Submit</button>
-                    <button type="button" class="btn btn-default"
-                        data-dismiss="modal">Close</button>
+                    <button type="submit" :disabled="!or_update.or_number" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </form>
@@ -1042,15 +974,13 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Issued Date <span class="text-danger">*</span> </label>
-                        <input type="date" class="form-control" v-model="or_details.or_date"
-                            required />
+                        <input type="date" class="form-control" v-model="or_details.or_date" required />
                     </div>
                 </div>
                 <div class=" modal-footer">
                     <!-- modal footer  -->
                     <button type="submit" class="btn btn-primary">Submit</button>
-                    <button type="button" class="btn btn-default"
-                        data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </form>
@@ -1073,8 +1003,7 @@
                 <div class=" modal-footer">
                     <!-- modal footer  -->
                     <button type="submit" class="btn btn-primary">Submit</button>
-                    <button type="button" class="btn btn-default"
-                        data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </form>
@@ -1091,15 +1020,13 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Remarks</label>
-                        <textarea class="form-control" v-model="retract_remarks"
-                            required></textarea>
+                        <textarea class="form-control" v-model="retract_remarks" required></textarea>
                     </div>
                 </div>
                 <div class=" modal-footer">
                     <!-- modal footer  -->
                     <button type="submit" class="btn btn-primary">Submit</button>
-                    <button type="button" class="btn btn-default"
-                        data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </form>
@@ -1204,12 +1131,14 @@ new Vue({
             status: 'Paid',
             is_cash: 1,
             check_number: '',
+            cashier_name: '',
             student_campus: '<?php echo $campus; ?>',
         },
         invoice_update_description: undefined,
         or_details: {
             id: undefined,
             or_date: undefined,
+            cashier_name: '',
         },
         invoice_update: {
             id: undefined,
@@ -1219,6 +1148,7 @@ new Vue({
             total_amount_due: undefined,
             student_campus: undefined,
             change_or_date: false,
+            cashier_name: '',
         },
         or_update_description: undefined,
         or_update: {
@@ -1228,6 +1158,7 @@ new Vue({
             sy_reference: undefined,
             total_amount_due: undefined,
             student_campus: undefined,
+            cashier_name: '',
         },
         amount_to_pay: 0,
         cashier_start: 0,
@@ -1374,11 +1305,17 @@ new Vue({
                         this.or_update.cashier_id = this.cashier.user_id;
                         this.invoice_update.cashier_id = this.cashier.user_id;
                         this.or_update.student_campus = this.request.student_campus;
+                        this.or_update.cashier_name =
+                            `${this.user.strFirstname} ${this.user.strLastname}`
+                        this.invoice_update.cashier_name =
+                            `${this.user.strFirstname} ${this.user.strLastname}`
+                        this.or_details.cashier_name =
+                            `${this.user.strFirstname} ${this.user.strLastname}`
                         this.soa.logo = (this.or_update.student_campus == "Cebu") ?
                             "https://i.ibb.co/9hgbYNB/seal.png" :
                             "https://i.ibb.co/kcYVsS7/i-ACADEMY-Seal-Makati.png";
                         this.soa.address = (this.or_update.student_campus ==
-                            "Cebu") ?
+                                "Cebu") ?
                             "5F Filinvest Cebu Cyberzone Tower 2 Salinas Drive corner W. Geonzon St., Brgy. Apas, Lahug, Cebu City, Philippines" :
                             "iACADEMY Nexus Campus, 7434 Yakal, Makati, 1203 Metro Manila, Philippines";
                     }
@@ -1487,7 +1424,7 @@ new Vue({
                                         };
                                     this.remaining_amount = (this
                                             .remaining_amount < 0.02
-                                            ) ? 0 : this
+                                        ) ? 0 : this
                                         .remaining_amount;
                                     this.remaining_amount_formatted =
                                         this.remaining_amount
@@ -1501,7 +1438,7 @@ new Vue({
                                         var temp = (this
                                             .tuition_data
                                             .installment_fee * 5
-                                            ) - parseFloat(this
+                                        ) - parseFloat(this
                                             .remaining_amount);
                                         for (i = 0; i < 5; i++) {
                                             if (this.tuition_data
@@ -1512,7 +1449,7 @@ new Vue({
                                                     .installment_fee -
                                                     temp;
                                                 val = val.toFixed(
-                                                2);
+                                                    2);
                                                 this.installments
                                                     .push(val);
                                                 temp = 0;
@@ -1662,7 +1599,7 @@ new Vue({
                 data
             } = await axios.get(
                 `${api_url}finance/invoice-list/${this.sem}/${this.applicant_data.campus}/${this.slug}`
-                )
+            )
             this.invoiceNumbers = data.data
             this.invoice_update.invoice_number = this.cashier.invoice_current
         },
@@ -1896,11 +1833,11 @@ new Vue({
                                     })
                                     Swal.showLoading();
                                     axios.post(url,
-                                    payload, {
-                                        headers: {
-                                            Authorization: `Bearer ${window.token}`
-                                        }
-                                    }).then(data => {
+                                        payload, {
+                                            headers: {
+                                                Authorization: `Bearer ${window.token}`
+                                            }
+                                        }).then(data => {
                                         this.loader_spinner =
                                             false;
                                         Swal.fire({
@@ -2045,11 +1982,11 @@ new Vue({
                                     })
                                     Swal.showLoading();
                                     axios.post(url,
-                                    payload, {
-                                        headers: {
-                                            Authorization: `Bearer ${window.token}`
-                                        }
-                                    }).then(data => {
+                                        payload, {
+                                            headers: {
+                                                Authorization: `Bearer ${window.token}`
+                                            }
+                                        }).then(data => {
                                         this.loader_spinner =
                                             false;
                                         Swal.fire({
@@ -2194,7 +2131,9 @@ new Vue({
                         'id': this.retract_id,
                         'remarks': this.retract_remarks,
                         'deleted_by': this.user.strLastname + ", " +
-                            this.user.strFirstname
+                            this.user.strFirstname,
+                        'cashier_name': `${this.user.strFirstname} ${this.user.strLastname}`
+
                     }
                     return axios.post(url, payload, {
                         headers: {
@@ -2239,7 +2178,7 @@ new Vue({
                                     icon: "success"
                                 }).then(function() {
                                     location
-                                    .reload();
+                                        .reload();
                                 });
                             })
                         } else Swal.fire({
@@ -2278,7 +2217,9 @@ new Vue({
                 preConfirm: (login) => {
                     let payload = {
                         'id': this.void_id,
-                        'void_reason': this.void_reason
+                        'void_reason': this.void_reason,
+                        'cashier_name': `${this.user.strFirstname} ${this.user.strLastname}`
+
                     }
                     return axios.post(url, payload, {
                         headers: {
@@ -2367,6 +2308,8 @@ new Vue({
                     else this.request.description = this.description;
                     this.request.subtotal_order = this.amount_to_pay;
                     this.request.total_amount_due = this.amount_to_pay;
+                    this.request.cashier_name =
+                        `${this.user.strFirstname} ${this.user.strLastname}`
                     console.log(this.request);
                     // return 
                     return axios.post(url, this.request, {
@@ -2411,7 +2354,7 @@ new Vue({
                                     .cashier.intID);
                                 formdata.append('invoice_current',
                                     this.cashier.invoice_current
-                                    );
+                                );
                                 formdata.append('invoice_used', this
                                     .invoice_update
                                     .invoice_number);
@@ -2459,11 +2402,11 @@ new Vue({
                                     })
                                     Swal.showLoading();
                                     axios.post(url,
-                                    payload, {
-                                        headers: {
-                                            Authorization: `Bearer ${window.token}`
-                                        }
-                                    }).then(data => {
+                                        payload, {
+                                            headers: {
+                                                Authorization: `Bearer ${window.token}`
+                                            }
+                                        }).then(data => {
                                         this.loader_spinner =
                                             false;
                                         Swal.fire({

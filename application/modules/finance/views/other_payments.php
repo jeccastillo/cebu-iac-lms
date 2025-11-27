@@ -20,8 +20,8 @@
                             <div class="row">
                                 <div class="form-group col-sm-6">
                                     <label>Select From List</label>
-                                    <select ref="payee" v-model="selected_payee"
-                                        class="form-control" @change="selectPayee($event)">
+                                    <select ref="payee" v-model="selected_payee" class="form-control"
+                                        @change="selectPayee($event)">
                                         <option v-for="(item,index) in payees" :value="index">
                                             {{ item.lastname + " " + item.firstname}}
                                         </option>
@@ -32,33 +32,30 @@
                                 <div class="col-sm-6">
                                     <div style="margin-bottom:1rem">
                                         <label class="radio-inline">
-                                            <input type="radio" v-model="windowPayment"
-                                                value="invoice"> Invoice </label>
+                                            <input type="radio" v-model="windowPayment" value="invoice"> Invoice
+                                        </label>
                                         <label class="radio-inline">
-                                            <input type="radio" v-model="windowPayment"
-                                                value="official receipt"> Official Receipt </label>
+                                            <input type="radio" v-model="windowPayment" value="official receipt">
+                                            Official Receipt </label>
                                     </div>
                                 </div>
                                 <form @submit.prevent="submitManualPayment" method="post">
-                                    <input type="hidden" required class="form-control"
-                                        v-model="request.description">
+                                    <input type="hidden" required class="form-control" v-model="request.description">
                                     <div class="col-sm-12">
                                         <label>Name:
                                             {{ request.last_name+" "+request.first_name+" "+request.middle_name}}</label>
                                     </div>
-                                    <input type="hidden" required class="form-control"
-                                        placeholder="First Name" v-model="request.first_name" />
-                                    <input type="hidden" required class="form-control"
-                                        placeholder="Last Name" v-model="request.last_name" />
-                                    <input type="hidden" class="form-control"
-                                        placeholder="Middle Name" v-model="request.middle_name" />
+                                    <input type="hidden" required class="form-control" placeholder="First Name"
+                                        v-model="request.first_name" />
+                                    <input type="hidden" required class="form-control" placeholder="Last Name"
+                                        v-model="request.last_name" />
+                                    <input type="hidden" class="form-control" placeholder="Middle Name"
+                                        v-model="request.middle_name" />
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Select Term</label>
-                                            <select ref="payee" v-model="request.sy_reference"
-                                                class="form-control">
-                                                <option v-for="(item,index) in sy"
-                                                    :value="item.intID">
+                                            <select ref="payee" v-model="request.sy_reference" class="form-control">
+                                                <option v-for="(item,index) in sy" :value="item.intID">
                                                     {{ item.enumSem + " " + item.term_label + " SY "+item.strYearStart+"-"+item.strYearEnd }}
                                                 </option>
                                             </select>
@@ -68,8 +65,7 @@
                                         <div class="form-group">
                                             <label>Particulars:</label>
                                             <label>Particulars:</label>
-                                            <select required class="form-control"
-                                                v-model="description_other">
+                                            <select required class="form-control" v-model="description_other">
                                                 <option v-for="p in particulars" :value="p.name">
                                                     {{p.name}}
                                                 </option>
@@ -79,8 +75,8 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Enter amount to pay/refund:</label>
-                                            <input type="number" step=".01" required
-                                                class="form-control" v-model="amount_to_pay" />
+                                            <input type="number" step=".01" required class="form-control"
+                                                v-model="amount_to_pay" />
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
@@ -115,10 +111,8 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Reference No.:</label>
-                                            <input type="text"
-                                                :disabled="request.is_cash == 1 || request.is_cash == 4"
-                                                required class="form-control"
-                                                v-model="request.check_number" />
+                                            <input type="text" :disabled="request.is_cash == 1 || request.is_cash == 4"
+                                                required class="form-control" v-model="request.check_number" />
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
@@ -136,27 +130,23 @@
                                                 v-model="request.invoice_number" />
                                         </div>
                                     </div>
-                                    <div v-if="windowPayment == 'official receipt'"
-                                        class="col-sm-6">
+                                    <div v-if="windowPayment == 'official receipt'" class="col-sm-6">
                                         <div class="form-group">
                                             <label>Invoice Number:</label>
                                             <input type="number" class="form-control"
                                                 v-model="request.invoice_number" />
                                         </div>
                                     </div>
-                                    <div v-if="windowPayment == 'official receipt'"
-                                        class="col-sm-6">
+                                    <div v-if="windowPayment == 'official receipt'" class="col-sm-6">
                                         <div v-if="user.special_role == 2 || cashier.temporary_admin ==  1"
                                             class="form-group">
                                             <label>OR Number:</label>
-                                            <input type="number" class="form-control"
-                                                v-model="request.or_number" />
+                                            <input type="number" class="form-control" v-model="request.or_number" />
                                         </div>
                                         <div v-else class="form-group">
                                             <label>OR Number:</label>
                                             <div>{{ request.or_number }}</div>
-                                            <input type="hidden" class="form-control"
-                                                v-model="request.or_number" />
+                                            <input type="hidden" class="form-control" v-model="request.or_number" />
                                         </div>
                                     </div>
                                     <!-- <div class="col-sm-6">
@@ -172,28 +162,22 @@
                                                 v-model="request.email_address" />
                                         </div>
                                     </div>
-                                    <div v-if="windowPayment == 'invoice'"
-                                        class="form-group col-sm-6">
+                                    <div v-if="windowPayment == 'invoice'" class="form-group col-sm-6">
                                         <label>Build Amount :</label>
-                                        <input @change="computeVat" step=".01" type="number"
-                                            class="form-control" v-model="request.invoice_amount">
+                                        <input @change="computeVat" step=".01" type="number" class="form-control"
+                                            v-model="request.invoice_amount">
                                     </div>
-                                    <div v-if="windowPayment == 'invoice'"
-                                        class="form-group col-sm-6">
+                                    <div v-if="windowPayment == 'invoice'" class="form-group col-sm-6">
                                         <label>Vat Exempt Tax :</label>
-                                        <input @change="computeVat" step=".01" type="number"
-                                            class="form-control"
+                                        <input @change="computeVat" step=".01" type="number" class="form-control"
                                             v-model="request.invoice_amount_ves">
                                     </div>
-                                    <div v-if="windowPayment == 'invoice'"
-                                        class="form-group col-sm-6">
+                                    <div v-if="windowPayment == 'invoice'" class="form-group col-sm-6">
                                         <label>Vat Zero Rated Sales :</label>
-                                        <input @change="computeVat" step=".01" type="number"
-                                            class="form-control"
+                                        <input @change="computeVat" step=".01" type="number" class="form-control"
                                             v-model="request.invoice_amount_vzrs">
                                     </div>
-                                    <div v-if="windowPayment == 'invoice'"
-                                        class="form-group col-sm-6">
+                                    <div v-if="windowPayment == 'invoice'" class="form-group col-sm-6">
                                         <label>Less EWT:</label>
                                         <select @change="computeVat" class="form-control"
                                             v-model="request.withholding_tax_percentage">
@@ -222,8 +206,7 @@
                                         {{ total_amount_computed_formatted }}
                                     </div>
                                     <div class="col-sm-12">
-                                        <button
-                                            :disabled="!request.or_number && !request.invoice_number"
+                                        <button :disabled="!request.or_number && !request.invoice_number"
                                             class="btn btn-primary btn-lg" type="submit">Submit
                                             Payment</button>
                                     </div>
@@ -297,6 +280,7 @@ new Vue({
             invoice_amount_ves: 0,
             invoice_amount_vzrs: 0,
             student_campus: '<?php echo $campus; ?>',
+            cashier_name: '',
         },
     },
     mounted() {
@@ -314,6 +298,8 @@ new Vue({
                 this.particulars = data.data.particulars;
                 this.user = data.data.user;
                 this.sy = data.data.sy;
+                this.request.cashier_name =
+                    `${this.user.strFirstname} ${this.user.strLastname}`
             }
         }).catch((error) => {
             console.log(error);
@@ -325,7 +311,7 @@ new Vue({
             this.request.last_name = this.payees[event.target.value].lastname;
             this.request.middle_name = this.payees[event.target.value].middlename;
             this.request.contact_number = this.payees[event.target.value]
-            .contact_number;
+                .contact_number;
             this.request.email_address = this.payees[event.target.value].email;
         },
         cashierDetails: function(id) {
@@ -405,7 +391,7 @@ new Vue({
                                     .cashier.intID);
                                 formdata.append('invoice_current',
                                     this.cashier.invoice_current
-                                    );
+                                );
                                 formdata.append('invoice_used', this
                                     .request.invoice_number);
                                 formdata.append('or_current', this
