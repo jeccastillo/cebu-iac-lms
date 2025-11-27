@@ -11258,7 +11258,7 @@ class Excel extends CI_Controller {
                         //     $facultyName = explode(' ', ltrim($facultyName[1]));
                         //     $facultyFirstName = $facultyName[0];
                         // }
-                        $facultyFirstName = ltrim($facultyName[1]);
+                        $facultyFirstName = rtrim($facultyName[1]);
                     }
 
                     $faculty = $this->db->from('tb_mas_faculty')->like(array('strLastname' => $facultyLastName, 'strFirstName' => $facultyFirstName))->get()->first_row('array');
