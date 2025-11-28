@@ -2096,7 +2096,9 @@ class Registrar extends CI_Controller {
             $adj['remarks'] =  $remarks;
             $adj['adjusted_by'] =  $this->session->userdata('intID');
             
-            $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj); 
+            if(!isset($post['change_section'])){
+                $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj);
+            }
 
             $down_payment = $this->db->get_where('tb_mas_student_ledger',array('name'=>'Tuition Down Payment','syid'=>$post['sem'],'student_id'=>$post['student'],'is_disabled'=>0))->first_row();
             //record in adjustments table                      
