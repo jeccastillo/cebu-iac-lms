@@ -2149,8 +2149,15 @@ class Registrar extends CI_Controller {
             return;
         }
         $classlist_student = $this->db->get_where('tb_mas_classlist_student',array('intCSID'=>$post['subject_to_replace']))->result_array();
-        $classlist_to_replace = $this->data_fetcher->getClasslistDetails($classlist_student->intClassListID);
+        $classlist_to_replace = $this->data_fetcher->getClasslistDetails($classlist_student['intClassListID']);
         
+
+            print($classlist_student['intClassListID'] . ' @@ ');
+            print($section_from . ' @@ ');
+            print($section_to . ' @@ ');
+            print_r($classlist_to_replace . ' @@ ');
+            print_r($classlist_student);
+            die();
 
 
         foreach($records as $record){            
@@ -2183,12 +2190,6 @@ class Registrar extends CI_Controller {
 
         //remove subject and add new section also add changes to ledger
         
-            print($section_from . ' @@ ');
-            print($section_to . ' @@ ');
-            print_r($classlist_to_replace . ' @@ ');
-            print_r($classlist_student);
-            die();
-
         if($data['success']){
             if($replace){
                 $this->db->delete('tb_mas_classlist_student', array('intClassListID' => $replace_id,'intStudentID'=>$post['student']));
