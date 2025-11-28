@@ -2072,7 +2072,7 @@ class Registrar extends CI_Controller {
             $section_to .= ($section['sub_section'])?"-".$section['sub_section']:"";
 
             //delete classlist student
-            $this->db->delete('tb_mas_classlist_student', array('intCSID' => $post['section_to_delete'],'intStudentID'=>$post['student']));
+            // $this->db->delete('tb_mas_classlist_student', array('intCSID' => $post['section_to_delete'],'intStudentID'=>$post['student']));
             // $this->db->delete('tb_mas_classlist_student', array('intClassListID' => $post['section_to_delete'],'intStudentID'=>$post['student']));
             
             //check for duplicate
@@ -2188,12 +2188,15 @@ class Registrar extends CI_Controller {
                 if($post['subject_to_replace'] != 0){
                     $adj['adjustment_type'] = "Replace Subject";
                     
-                    $classlist_student = $this->db->get_where('tb_mas_classlist_student',array('intCSID'=>$post['subject_to_replace']))->result_array();
-                    $classlist_to_replace = $this->data_fetcher->getClasslistDetails($classlist_student['intClassListID']);
-                    $remarks = "Changed subject from ".$classlist_to_replace->strCode." Section: ".$classlist_to_replace->strClassName.$classlist_to_replace->year.$classlist_to_replace->strSection." ".$classlist_to_replace->sub_section;
+                    // $classlist_student = $this->db->get_where('tb_mas_classlist_student',array('intCSID'=>$post['subject_to_replace']))->result_array();
+                    // $classlist_to_replace = $this->data_fetcher->getClasslistDetails($classlist_student['intClassListID']);
+                    // $remarks = "Changed subject from ".$classlist_to_replace->strCode." Section: ".$classlist_to_replace->strClassName.$classlist_to_replace->year.$classlist_to_replace->strSection." ".$classlist_to_replace->sub_section;
                 }
             }
-                
+              
+            print($section_from . ' @@ ');
+            print($section_to . ' @@ ');
+            die();
                 $add['date_added'] = date("Y-m-d H:i:s");
                 $add['enlisted_user'] = $this->data["user"]["intID"];
                 $add['intStudentID'] = $post['student'];
