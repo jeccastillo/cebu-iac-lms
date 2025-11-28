@@ -571,6 +571,8 @@ new Vue({
                                 formdata.append('date',inputValue);
                                 formdata.append('section_to_add',this.section_to_add);
                                 formdata.append('subject_to_add',this.subject_to_add);
+                                this.addSubject(1);
+                                
                                 return axios.post(url, formdata, {
                                     headers: {
                                         Authorization: `Bearer ${window.token}`
@@ -580,7 +582,7 @@ new Vue({
                                     this.loader_spinner = false;                                    
                                     if(data.data.success){   
                                         if(swap){
-                                            this.addSubject(1);
+                                            // this.addSubject(1);
                                         }
                                         else                                         
                                             Swal.fire({
