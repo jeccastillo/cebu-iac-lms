@@ -639,6 +639,7 @@ new Vue({
                 formdata.append('subject_to_replace',this.subject_to_replace);                        
                 formdata.append('student',this.id);
                 formdata.append('sem',this.sem);
+                formdata.append('change_section',1);
                 return axios.post(url, formdata, {
                     headers: {
                         Authorization: `Bearer ${window.token}`
