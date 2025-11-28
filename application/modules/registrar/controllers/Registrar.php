@@ -2188,7 +2188,7 @@ class Registrar extends CI_Controller {
                 if($post['subject_to_replace'] != 0){
                     $adj['adjustment_type'] = "Replace Subject";
                     
-                    $classlist_student = $this->db->get_where('intCSID',array('subject_to_replace'=>$post['subject_to_replace']))->result_array();
+                    $classlist_student = $this->db->get_where('tb_mas_classlist_student',array('intCSID'=>$post['subject_to_replace']))->result_array();
                     $classlist_to_replace = $this->data_fetcher->getClasslistDetails($classlist_student['intClassListID']);
                     $remarks = "Changed subject from ".$classlist_to_replace->strCode." Section: ".$classlist_to_replace->strClassName.$classlist_to_replace->year.$classlist_to_replace->strSection." ".$classlist_to_replace->sub_section;
                 }
