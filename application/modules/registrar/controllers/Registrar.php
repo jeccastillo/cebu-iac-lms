@@ -2150,7 +2150,10 @@ class Registrar extends CI_Controller {
         }
         $classlist_student = $this->db->get_where('tb_mas_classlist_student',array('intCSID'=>$post['subject_to_replace']))->first_row('array');
         $classlist_to_replace = $this->data_fetcher->getClasslistDetails($classlist_student['intClassListID']);
-
+        if($classlist_to_replace){
+                $section_from = $classlist_to_replace['strClassName'].$classlist_to_replace['year'].$classlist_to_replace['strSection'];
+                $section_from .= ($classlist_to_replace['sub_section'])?"-".$classlist_to_replace['sub_section']:"";
+        }
         foreach($records as $record){            
             if($subject == $record['subjectID']){
                 if($record['classlistID'] == $post['section_to_add'])
@@ -2163,8 +2166,6 @@ class Registrar extends CI_Controller {
                 $classlist_data = $this->db->where(array('intID'=>$record['classlistID']))->get('tb_mas_classlist')->first_row('array');
                 // $section_from = $classlist_data['strClassName'].$classlist_data['year'].$classlist_data['strSection'];
                 // $section_from .= ($classlist_data['sub_section'])?"-".$classlist_data['sub_section']:"";
-                $section_from = $classlist_to_replace['strClassName'].$classlist_to_replace['year'].$classlist_to_replace['strSection'];
-                $section_from .= ($classlist_to_replace['sub_section'])?"-".$classlist_to_replace['sub_section']:"";
             }
             elseif($student['level'] != "next"){
                 $conflict = $this->data_fetcher->student_conflict($post['section_to_add'],$record,$post['sem']);
