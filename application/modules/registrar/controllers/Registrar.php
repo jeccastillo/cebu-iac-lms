@@ -2148,6 +2148,11 @@ class Registrar extends CI_Controller {
             echo json_encode($data);                             
             return;
         }
+        $classlist_student = $this->db->get_where('tb_mas_classlist_student',array('intCSID'=>$post['subject_to_replace']))->result_array();
+        $classlist_to_replace = $this->data_fetcher->getClasslistDetails($classlist_student['intClassListID']);
+        
+
+
         foreach($records as $record){            
             if($subject == $record['subjectID']){
                 if($record['classlistID'] == $post['section_to_add'])
@@ -2158,8 +2163,10 @@ class Registrar extends CI_Controller {
                 $replace = true;
                 $replace_id = $record['classlistID'];
                 $classlist_data = $this->db->where(array('intID'=>$record['classlistID']))->get('tb_mas_classlist')->first_row('array');
-                $section_from = $classlist_data['strClassName'].$classlist_data['year'].$classlist_data['strSection'];
-                $section_from .= ($classlist_data['sub_section'])?"-".$classlist_data['sub_section']:"";
+                // $section_from = $classlist_data['strClassName'].$classlist_data['year'].$classlist_data['strSection'];
+                // $section_from .= ($classlist_data['sub_section'])?"-".$classlist_data['sub_section']:"";
+                $section_from = $classlist_to_replace['strClassName'].$classlist_to_replace['year'].$classlist_to_replace['strSection'];
+                $section_from .= ($classlist_to_replace['sub_section'])?"-".$classlist_to_replace['sub_section']:"";
             }
             elseif($student['level'] != "next"){
                 $conflict = $this->data_fetcher->student_conflict($post['section_to_add'],$record,$post['sem']);
@@ -2176,6 +2183,10 @@ class Registrar extends CI_Controller {
 
         //remove subject and add new section also add changes to ledger
         
+            print($section_from . ' @@ ');
+            print($section_to . ' @@ ');
+            print_r($classlist_to_replace);
+            die();
 
         if($data['success']){
             if($replace){
@@ -2190,13 +2201,10 @@ class Registrar extends CI_Controller {
                     
                     // $classlist_student = $this->db->get_where('tb_mas_classlist_student',array('intCSID'=>$post['subject_to_replace']))->result_array();
                     // $classlist_to_replace = $this->data_fetcher->getClasslistDetails($classlist_student['intClassListID']);
-                    // $remarks = "Changed subject from ".$classlist_to_replace->strCode." Section: ".$classlist_to_replace->strClassName.$classlist_to_replace->year.$classlist_to_replace->strSection." ".$classlist_to_replace->sub_section;
+                    $remarks = "Changed subject from ".$classlist_to_replace->strCode." Section: ".$classlist_to_replace->strClassName.$classlist_to_replace->year.$classlist_to_replace->strSection." ".$classlist_to_replace->sub_section;
                 }
             }
               
-            print($section_from . ' @@ ');
-            print($section_to . ' @@ ');
-            die();
                 $add['date_added'] = date("Y-m-d H:i:s");
                 $add['enlisted_user'] = $this->data["user"]["intID"];
                 $add['intStudentID'] = $post['student'];
