@@ -2151,8 +2151,8 @@ class Registrar extends CI_Controller {
         $classlist_student = $this->db->get_where('tb_mas_classlist_student',array('intCSID'=>$post['subject_to_replace']))->first_row('array');
         $classlist_to_replace = $this->data_fetcher->getClasslistDetails($classlist_student['intClassListID']);
         if($classlist_to_replace){
-                $section_from = $classlist_to_replace['strClassName'].$classlist_to_replace['year'].$classlist_to_replace['strSection'];
-                $section_from .= ($classlist_to_replace['sub_section'])?"-".$classlist_to_replace['sub_section']:"";
+                $section_from = $classlist_to_replace->strClassName .$classlist_to_replace->year .$classlist_to_replace->strSection;
+                $section_from .= ($classlist_to_replace->sub_section )?"-".$classlist_to_replace->sub_section :"";
         }
         foreach($records as $record){            
             if($subject == $record['subjectID']){
