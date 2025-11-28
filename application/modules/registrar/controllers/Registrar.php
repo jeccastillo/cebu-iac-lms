@@ -2185,7 +2185,8 @@ class Registrar extends CI_Controller {
         
             print($section_from . ' @@ ');
             print($section_to . ' @@ ');
-            print_r($classlist_to_replace);
+            print_r($classlist_to_replace . ' @@ ');
+            print_r($classlist_student);
             die();
 
         if($data['success']){
