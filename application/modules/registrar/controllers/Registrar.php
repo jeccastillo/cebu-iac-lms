@@ -2072,7 +2072,7 @@ class Registrar extends CI_Controller {
             $section_to .= ($section['sub_section'])?"-".$section['sub_section']:"";
 
             //delete classlist student
-            // $this->db->delete('tb_mas_classlist_student', array('intCSID' => $post['section_to_delete'],'intStudentID'=>$post['student']));
+            $this->db->delete('tb_mas_classlist_student', array('intCSID' => $post['section_to_delete'],'intStudentID'=>$post['student']));
             // $this->db->delete('tb_mas_classlist_student', array('intClassListID' => $post['section_to_delete'],'intStudentID'=>$post['student']));
             
             //check for duplicate
@@ -2154,6 +2154,7 @@ class Registrar extends CI_Controller {
                 $section_from = $classlist_to_replace->strClassName .$classlist_to_replace->year .$classlist_to_replace->strSection;
                 $section_from .= ($classlist_to_replace->sub_section )?"-".$classlist_to_replace->sub_section :"";
         }
+
         foreach($records as $record){            
             if($subject == $record['subjectID']){
                 if($record['classlistID'] == $post['section_to_add'])
@@ -2181,15 +2182,6 @@ class Registrar extends CI_Controller {
         }
 
         //remove subject and add new section also add changes to ledger
-        
-
-            print($classlist_student['intClassListID'] . ' @@ ');
-            print($section_from . ' @@ ');
-            print($section_to . ' @@ ');
-            print_r($classlist_to_replace);
-            print(' @@ ');
-            print_r($classlist_student);
-            die();
 
         if($data['success']){
             if($replace){
