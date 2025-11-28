@@ -30,13 +30,15 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Select payment for</label>
-                                            <select required @change="selectDescription" class="form-control"
-                                                v-model="request.description">
-                                                <option v-if="paid_application || student.waive_app_fee"
+                                            <select required @change="selectDescription"
+                                                class="form-control" v-model="request.description">
+                                                <option
+                                                    v-if="paid_application || student.waive_app_fee"
                                                     value="Reservation Payment">Reservation
                                                 </option>
-                                                <option v-if="!student.waive_app_fee" value="Application Payment">
-                                                    Application</option>
+                                                <option v-if="!student.waive_app_fee"
+                                                    value="Application Payment"> Application
+                                                </option>
                                                 <option value="Other">Other</option>
                                             </select>
                                         </div>
@@ -55,7 +57,8 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Enter type if other is selected:</label>
-                                            <input type="text" :disabled="request.description != 'Other'" required
+                                            <input type="text"
+                                                :disabled="request.description != 'Other'" required
                                                 class="form-control" v-model="description_other" />
                                         </div>
                                     </div>
@@ -64,7 +67,8 @@
                                             <label>Enter amount to pay/refund:</label>
                                             <input type="number" step=".01"
                                                 :disabled="request.description != 'Other' && (request.description != 'Reservation Payment' || (cashier.temporary_admin !=  1 && user.special_role != 2))"
-                                                required class="form-control" v-model="amount_to_pay" />
+                                                required class="form-control"
+                                                v-model="amount_to_pay" />
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
@@ -101,8 +105,9 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Reference No.:</label>
-                                            <input type="text" :disabled="request.is_cash == 1" required
-                                                class="form-control" v-model="request.check_number" />
+                                            <input type="text" :disabled="request.is_cash == 1"
+                                                required class="form-control"
+                                                v-model="request.check_number" />
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
@@ -137,7 +142,8 @@
                                             <!-- <div>
                                                 <input type="text" class="form-control" v-model="request.invoice_number" />
                                             </div>    -->
-                                            <div v-if="user.special_role == 2 || cashier.temporary_admin ==  1">
+                                            <div
+                                                v-if="user.special_role == 2 || cashier.temporary_admin ==  1">
                                                 <input type="number" class="form-control"
                                                     v-model="request.invoice_number" />
                                             </div>
@@ -207,10 +213,11 @@
                                     <td>{{ refunded.or_date }}</td>
                                     <td>
                                         <button v-if="!refunded.or_number" data-toggle="modal"
-                                            @click="or_update.id = refunded.id;" data-target="#myModal"
-                                            class="btn btn-primary"> Update
+                                            @click="or_update.id = refunded.id;"
+                                            data-target="#myModal" class="btn btn-primary"> Update
                                             OR </button>
-                                        <button data-toggle="modal" @click="invoice_update.id = refunded.id;"
+                                        <button data-toggle="modal"
+                                            @click="invoice_update.id = refunded.id;"
                                             data-target="#invoiceUpdate" class="btn btn-primary">
                                             Update Invoice </button>
                                         <button v-if="refunded.or_number" @click="printOR(refunded)"
@@ -273,8 +280,8 @@
                                     </td>
                                     <td :class="payment.muted"
                                         v-if="(payment.description == 'Application Payment' || payment.description == 'Reservation Payment' || payment.description == 'Tuition Fee')">
-                                        <select @change="updateDescription(payment.id,$event)" class="form-control"
-                                            v-model="payments[i].description">
+                                        <select @change="updateDescription(payment.id,$event)"
+                                            class="form-control" v-model="payments[i].description">
                                             <option value="Application Payment">Application Payment
                                             </option>
                                             <option value="Tuition Fee">Tuition Fee</option>
@@ -297,11 +304,13 @@
                                     <td v-else>{{ payment.void_reason }}</td>
                                     <td>{{ payment.or_date }}</td>
                                     <td>
-                                        <button v-if="!payment.or_number && payment.status == 'Paid'"
+                                        <button
+                                            v-if="!payment.or_number && payment.status == 'Paid'"
                                             data-toggle="modal" @click="or_update.id = payment.id;"
                                             data-target="#myModal" class="btn btn-primary"> Update
                                             OR </button>
-                                        <button data-toggle="modal" @click="invoice_update.id = payment.id;"
+                                        <button data-toggle="modal"
+                                            @click="invoice_update.id = payment.id;"
                                             data-target="#invoiceUpdate" class="btn btn-primary">
                                             Update Invoice </button>
                                         <button
@@ -311,17 +320,19 @@
                                             Update Details </button>
                                         <button v-if="payment.or_number" @click="printOR(payment)"
                                             class="btn btn-primary"> Print OR </button>
-                                        <button v-if="payment.invoice_number" @click="printInvoice(payment)"
-                                            class="btn btn-primary">
+                                        <button v-if="payment.invoice_number"
+                                            @click="printInvoice(payment)" class="btn btn-primary">
                                             Print Invoice </button>
                                         <button
                                             v-if="payment.status == 'Paid' && payment.remarks != 'Voided' && cashier && finance_manager_privilages"
-                                            data-toggle="modal" data-target="#voidPaymentModal" class="btn btn-primary"
+                                            data-toggle="modal" data-target="#voidPaymentModal"
+                                            class="btn btn-primary"
                                             @click="setToVoid(payment.id)">Void/Cancel</button>
                                         <button
                                             v-if="cashier && finance_manager_privilages && payment.status == 'Paid' &&  payment.mode.name == 'Onsite Payment' "
                                             class="btn btn-danger" data-toggle="modal"
-                                            data-target="#retractPaymentModal" @click="setToRetract(payment.id)">Retract
+                                            data-target="#retractPaymentModal"
+                                            @click="setToRetract(payment.id)">Retract
                                             Payment</button>
                                     </td>
                                 </tr>
@@ -342,7 +353,8 @@
             <!---row--->
         </div>
         <!---content container--->
-        <form ref="print_or" method="post" :action="base_url + 'pdf/print_updated_or'" target="_blank">
+        <form ref="print_or" method="post" :action="base_url + 'pdf/print_updated_or'"
+            target="_blank">
             <input type="hidden" name="campus" :value="request.student_campus">
             <input type="hidden" name="student_name" v-model="or_print.student_name">
             <input type="hidden" name="cashier_id" v-model="or_print.cashier_id">
@@ -360,7 +372,8 @@
             <input type="hidden" name="type" v-model="or_print.type" />
             <input type="hidden" name="transaction_date" v-model="or_print.transaction_date" />
         </form>
-        <form ref="print_invoice" method="post" :action="base_url + 'pdf/print_invoice'" target="_blank">
+        <form ref="print_invoice" method="post" :action="base_url + 'pdf/print_invoice'"
+            target="_blank">
             <input type="hidden" name="student_name" v-model="or_print.student_name">
             <input type="hidden" name="slug" v-model="slug">
             <input type="hidden" name="campus" :value="request.student_campus">
@@ -379,10 +392,12 @@
             <input type="hidden" name="sem" v-model="or_print.sem" />
             <input type="hidden" name="transaction_date" v-model="or_print.transaction_date" />
             <input type="hidden" name="type" v-model="or_print.type" />
-            <input type="hidden" name="withholding_tax_percentage" v-model="or_print.withholding_tax_percentage" />
+            <input type="hidden" name="withholding_tax_percentage"
+                v-model="or_print.withholding_tax_percentage" />
             <input type="hidden" name="invoice_amount" v-model="or_print.invoice_amount" />
             <input type="hidden" name="invoice_amount_ves" v-model="or_print.invoice_amount_ves" />
-            <input type="hidden" name="invoice_amount_vzrs" v-model="or_print.invoice_amount_vzrs" />
+            <input type="hidden" name="invoice_amount_vzrs"
+                v-model="or_print.invoice_amount_vzrs" />
         </form>
         <div class="modal fade" id="invoiceUpdate" role="dialog">
             <form @submit.prevent="updateInvoice" class="modal-dialog modal-lg">
@@ -397,15 +412,18 @@
                         <div class="form-group">
                             <label>Invoice Number <span class="text-danger">*</span> </label>
                             <div v-if="user.special_role == 2 || cashier.temporary_admin ==  1">
-                                <input type="number" class="form-control" v-model="invoice_update.invoice_number" />
+                                <input type="number" class="form-control"
+                                    v-model="invoice_update.invoice_number" />
                             </div>
                             <div v-else>
                                 <div>{{ request.invoice_number }}</div>
-                                <input type="hidden" class="form-control" v-model="invoice_update.invoice_number" />
+                                <input type="hidden" class="form-control"
+                                    v-model="invoice_update.invoice_number" />
                             </div>
                             <label>Cashier ID <span class="text-danger">*</span> </label>
                             <div v-if="user.special_role == 2 || cashier.temporary_admin ==  1">
-                                <input type="number" class="form-control" v-model="invoice_update.cashier_id" />
+                                <input type="number" class="form-control"
+                                    v-model="invoice_update.cashier_id" />
                             </div>
                             <!-- <template v-if="invoiceNumbers.length === 0">
                                 <p>{{invoice_update.invoice_number}}</p>                 
@@ -418,8 +436,10 @@
                     </div>
                     <div class=" modal-footer">
                         <!-- modal footer  -->
-                        <button type="submit" :disabled="!or_update.or_number" class="btn btn-primary">Submit</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" :disabled="!or_update.or_number"
+                            class="btn btn-primary">Submit</button>
+                        <button type="button" class="btn btn-default"
+                            data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </form>
@@ -436,15 +456,16 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label>OR Number <span class="text-danger">*</span> </label>
-                            <input type="hidden" class="form-control" v-model="or_update.or_number" required>
+                            <input type="hidden" class="form-control" v-model="or_update.or_number"
+                                required>
                             <h4>{{ String(or_update.or_number).padStart(5, '0') }}</h4>
                         </div>
                     </div>
                     <div class=" modal-footer">
                         <!-- modal footer  -->
                         <button type="submit" class="btn btn-primary">Submit</button>
-                        <button type="button" :disabled="!or_update.or_number" class="btn btn-default"
-                            data-dismiss="modal">Close</button>
+                        <button type="button" :disabled="!or_update.or_number"
+                            class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </form>
@@ -461,13 +482,16 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Issued Date <span class="text-danger">*</span> </label>
-                            <input type="date" class="form-control" v-model="or_details.or_date" required />
+                            <input type="date" class="form-control" v-model="or_details.or_date"
+                                required />
                         </div>
                     </div>
                     <div class=" modal-footer">
                         <!-- modal footer  -->
-                        <button type="submit" :disabled="!or_update.or_number" class="btn btn-primary">Submit</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" :disabled="!or_update.or_number"
+                            class="btn btn-primary">Submit</button>
+                        <button type="button" class="btn btn-default"
+                            data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </form>
@@ -484,13 +508,15 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Remarks</label>
-                            <textarea class="form-control" v-model="retract_remarks" required></textarea>
+                            <textarea class="form-control" v-model="retract_remarks"
+                                required></textarea>
                         </div>
                     </div>
                     <div class=" modal-footer">
                         <!-- modal footer  -->
                         <button type="submit" class="btn btn-primary">Submit</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default"
+                            data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </form>
@@ -506,13 +532,15 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <textarea class="form-control" v-model="void_reason" required></textarea>
+                            <textarea class="form-control" v-model="void_reason"
+                                required></textarea>
                         </div>
                     </div>
                     <div class=" modal-footer">
                         <!-- modal footer  -->
                         <button type="submit" class="btn btn-primary">Submit</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default"
+                            data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </form>
@@ -657,36 +685,36 @@ new Vue({
                 .uploaded_requirements = true;
             axios.get(base_url + 'finance/manualPayData/' + this.slug).then((
                 data) => {
-                this.cashier = data.data.cashier
-                this.request.sy_reference = data.data.current_sem;
-                this.or_update.sy_reference = data.data.current_sem;
-                this.user = data.data.user;
-                this.particulars = data.data.particulars;
-                this.sms_account = data.data.data;
-                this.finance_manager_privilages = data.data
-                    .finance_manager_privilages;
-                this.or_update.student_campus = this.request.student_campus;
-                this.applicant_id = "A" + data.data.sem_year + "-" + String(
-                    this.student.id).padStart(4, '0');
-                this.getInvoiceNumber()
-                if (this.cashier) {
-                    // this.request.or_number =  this.cashier.or_current;
-                    this.or_update.or_number = this.cashier.or_current;
-                    this.request.cashier_id = this.cashier.user_id;
-                    this.or_update.cashier_id = this.cashier.user_id;
-                    this.invoice_update.cashier_id = this.cashier.user_id;
-                    this.invoice_update.invoice_number = this.cashier
-                        .invoice_current;
-                    this.request.invoice_number = this.cashier
-                        .invoice_current
-                    this.or_update.cashier_name =
-                        `${this.user.strFirstname} ${this.user.strLastname}`
-                    this.invoice_update.cashier_name =
-                        `${this.user.strFirstname} ${this.user.strLastname}`
-                    this.or_details.cashier_name =
-                        `${this.user.strFirstname} ${this.user.strLastname}`
-                }
-            }).catch((error) => {
+                    this.cashier = data.data.cashier
+                    this.request.sy_reference = data.data.current_sem;
+                    this.or_update.sy_reference = data.data.current_sem;
+                    this.user = data.data.user;
+                    this.particulars = data.data.particulars;
+                    this.sms_account = data.data.data;
+                    this.finance_manager_privilages = data.data
+                        .finance_manager_privilages;
+                    this.or_update.student_campus = this.request.student_campus;
+                    this.applicant_id = "A" + data.data.sem_year + "-" + String(
+                        this.student.id).padStart(4, '0');
+                    this.getInvoiceNumber()
+                    if (this.cashier) {
+                        // this.request.or_number =  this.cashier.or_current;
+                        this.or_update.or_number = this.cashier.or_current;
+                        this.request.cashier_id = this.cashier.user_id;
+                        this.or_update.cashier_id = this.cashier.user_id;
+                        this.invoice_update.cashier_id = this.cashier.user_id;
+                        this.invoice_update.invoice_number = this.cashier
+                            .invoice_current;
+                        this.request.invoice_number = this.cashier
+                            .invoice_current
+                        this.or_update.cashier_name =
+                            `${this.user.strFirstname} ${this.user.strLastname}`
+                        this.invoice_update.cashier_name =
+                            `${this.user.strFirstname} ${this.user.strLastname}`
+                        this.or_details.cashier_name =
+                            `${this.user.strFirstname} ${this.user.strLastname}`
+                    }
+                }).catch((error) => {
                 console.log(error);
             })
             for (i in this.payments) {
@@ -695,8 +723,8 @@ new Vue({
                 else if (this.payments[i].status == "Paid") {
                     if (this.payments[i].description == "Application Payment") {
                         this.application_payment = this.payments[i];
-                        if (this.payments[i].status == "Paid")
-                            this.paid_application = true;
+                        if (this.payments[i].status == "Paid") this
+                            .paid_application = true;
                     }
                     if (this.payments[i].description == "Reservation Payment") {
                         this.reservation_payment = this.payments[i];
@@ -724,7 +752,7 @@ new Vue({
                 data
             } = await axios.get(
                 `${api_url}finance/invoice-list/${this.student.sy_reference}/${this.student.campus}/${this.slug}`
-            )
+                )
             this.invoiceNumbers = data.data
             if (this.invoiceNumbers.length === 0) {
                 this.invoice_update.invoice_number = this.cashier?.invoice_current
@@ -869,7 +897,7 @@ new Vue({
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
                     let payload = {
-                        'id': payment_id,
+                        'id': this.retract_id,
                         'remarks': this.retract_remarks,
                         'deleted_by': this.user.strLastname + ", " +
                             this.user.strFirstname,
@@ -916,7 +944,7 @@ new Vue({
                                     icon: "success"
                                 }).then(function() {
                                     location
-                                        .reload();
+                                    .reload();
                                 });
                             })
                         } else Swal.fire({
@@ -997,11 +1025,11 @@ new Vue({
                                     })
                                     Swal.showLoading();
                                     axios.post(url,
-                                        payload, {
-                                            headers: {
-                                                Authorization: `Bearer ${window.token}`
-                                            }
-                                        }).then(data => {
+                                    payload, {
+                                        headers: {
+                                            Authorization: `Bearer ${window.token}`
+                                        }
+                                    }).then(data => {
                                         this.loader_spinner =
                                             false;
                                         Swal.fire({
@@ -1129,11 +1157,11 @@ new Vue({
                                     })
                                     Swal.showLoading();
                                     axios.post(url,
-                                        payload, {
-                                            headers: {
-                                                Authorization: `Bearer ${window.token}`
-                                            }
-                                        }).then(data => {
+                                    payload, {
+                                        headers: {
+                                            Authorization: `Bearer ${window.token}`
+                                        }
+                                    }).then(data => {
                                         this.loader_spinner =
                                             false;
                                         Swal.fire({
@@ -1303,11 +1331,11 @@ new Vue({
                                     })
                                     Swal.showLoading();
                                     axios.post(url,
-                                        payload, {
-                                            headers: {
-                                                Authorization: `Bearer ${window.token}`
-                                            }
-                                        }).then(data => {
+                                    payload, {
+                                        headers: {
+                                            Authorization: `Bearer ${window.token}`
+                                        }
+                                    }).then(data => {
                                         this.loader_spinner =
                                             false;
                                         Swal.fire({
