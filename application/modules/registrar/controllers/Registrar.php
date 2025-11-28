@@ -2149,7 +2149,7 @@ class Registrar extends CI_Controller {
             return;
         }
         $classlist_student = $this->db->get_where('tb_mas_classlist_student',array('intCSID'=>$post['subject_to_replace']))->result_array();
-        $classlist_to_replace = $this->data_fetcher->getClasslistDetails($classlist_student['intClassListID']);
+        $classlist_to_replace = $this->data_fetcher->getClasslistDetails($classlist_student->intClassListID);
         
 
 
