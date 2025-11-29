@@ -571,7 +571,9 @@ new Vue({
                                 formdata.append('date',inputValue);
                                 formdata.append('section_to_add',this.section_to_add);
                                 formdata.append('subject_to_add',this.subject_to_add);
-                                this.addSubject(1);
+                                if(swap){
+                                    this.addSubject(1);
+                                }
                                 
                                 return axios.post(url, formdata, {
                                     headers: {
