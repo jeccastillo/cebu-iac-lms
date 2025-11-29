@@ -583,10 +583,10 @@ new Vue({
                                 .then(data => {
                                     this.loader_spinner = false;                                    
                                     if(data.data.success){   
-                                        if(swap){
+                                        // if(swap){
                                             // this.addSubject(1);
-                                        }
-                                        else                                         
+                                        // }
+                                        // else                                         
                                             Swal.fire({
                                                 title: "Success",
                                                 text: data.data.message,
