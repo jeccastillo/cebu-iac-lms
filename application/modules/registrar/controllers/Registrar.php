@@ -2043,7 +2043,6 @@ class Registrar extends CI_Controller {
         // }    
         // else
         if($post['date'] == date("Y-m-d")){
-            print('1');
             $classlist_student = $this->db->where(array('intCSID'=>$post['section_to_delete']))->get('tb_mas_classlist_student')->first_row('array');
             $section = $this->db->where(array('intID'=>$classlist_student['intClassListID']))->get('tb_mas_classlist')->first_row('array');
             $section_to_swap = $this->db->where(array('intID'=>$post['subject_to_add']))->get('tb_mas_subjects')->first_row('array');
@@ -2118,8 +2117,6 @@ class Registrar extends CI_Controller {
             
         }
         else{
-            print($post['date'] == date("Y-m-d"));
-            print('2');
             $data['success'] = false;
             $data['message'] = "Invalid";
         }
