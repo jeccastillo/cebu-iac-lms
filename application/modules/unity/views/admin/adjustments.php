@@ -572,6 +572,7 @@ new Vue({
                                 formdata.append('section_to_add',this.section_to_add);
                                 formdata.append('subject_to_add',this.subject_to_add);
                                 if(swap){
+                                    formdata.append('change_section',1);
                                     this.addSubject(1);
                                 }
                                 
