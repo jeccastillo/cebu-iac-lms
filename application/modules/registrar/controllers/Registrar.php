@@ -2118,7 +2118,8 @@ class Registrar extends CI_Controller {
             
         }
         else{
-            print($post['date']);
+            print($post['date'] == date("Y-m-d"));
+            print('2');
             $data['success'] = false;
             $data['message'] = "Invalid";
         }
