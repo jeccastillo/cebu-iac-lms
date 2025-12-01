@@ -35,7 +35,7 @@ class Finance extends CI_Controller {
         $this->data['css_dir'] = base_url()."assets/themes/".$theme."/css/";
         $this->data['js_dir'] = base_url()."assets/themes/".$theme."/js/";
         $this->data['title'] = "CCT Unity";
-        // $this->data['api_url'] = $this->config->item('api_url');
+        $this->data['api_url'] = $this->config->item('api_url');
         
         $this->load->library("email");
         
@@ -2204,6 +2204,8 @@ class Finance extends CI_Controller {
 
     public function audit_trail($term = 0)    
     {
+        print($this->config->item('api_url'));
+        die();
         if($this->faculty_logged_in())
         {                                        
             $this->load->view("common/header",$this->data);
