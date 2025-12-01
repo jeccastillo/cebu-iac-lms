@@ -311,7 +311,8 @@ new Vue({
         subjects_available: undefined,   
         sections: undefined,       
         schedules: undefined,
-        section_to_add: undefined,    
+        section_to_add: undefined, 
+        classlist_from: undefined,   
         adjustments:[],      
     },
 
@@ -585,8 +586,7 @@ new Vue({
                                     this.loader_spinner = false;                                    
                                     if(data.data.success){
                                         if(swap){
-                                            console.log(data.data.classlist_from);
-                                            formdata.append('classlist_from'. data.classlist_from);
+                                            this.classlist_from = data.data.classlist_from;
                                             this.addSubject(1);
                                         }
                                         else                                         
@@ -638,6 +638,9 @@ new Vue({
                 })
                 Swal.showLoading();
                 var formdata= new FormData();
+                var replace_subject = this.subject_to_replace;
+                if(this.classlist_from != undefined)
+                    replace_subject = this.classlist_from;
                 formdata.append('section_to_add',this.section_to_add);
                 formdata.append('subject_to_add',this.subject_to_add);
                 formdata.append('additional_elective',this.additional_elective);
