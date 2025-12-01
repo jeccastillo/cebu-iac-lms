@@ -222,7 +222,7 @@
                         <div v-if="records" class="input-group">
                             <select required @change="loadAvailableSubjects($event,'add-subject')" class="form-control" v-model="subject_to_replace">
                                 <option selected value="0">None</option>
-                                <option v-for="record in records" :value="record.classlistID">{{ record.strCode + ' ' + record.strDescription +' '+ record.strClassName + record.year + record.strSection + " "}} {{ record.sub_section?record.sub_section:'' }}</option>                                                                          
+                                <option v-for="record in records" :value="record.intCSID">{{ record.strCode + ' ' + record.strDescription +' '+ record.strClassName + record.year + record.strSection + " "}} {{ record.sub_section?record.sub_section:'' }}</option>                                                                          
                             </select>                        
                         </div>      
                         <hr /> 
@@ -571,6 +571,11 @@ new Vue({
                                 formdata.append('date',inputValue);
                                 formdata.append('section_to_add',this.section_to_add);
                                 formdata.append('subject_to_add',this.subject_to_add);
+                                if(swap){
+                                    formdata.append('change_section',1);
+                                //     this.addSubject(1);
+                                }
+                                
                                 return axios.post(url, formdata, {
                                     headers: {
                                         Authorization: `Bearer ${window.token}`
@@ -580,6 +585,7 @@ new Vue({
                                     this.loader_spinner = false;                                    
                                     if(data.data.success){   
                                         if(swap){
+                                            formdata.append('classlist_from'. data.data.classlist_from);
                                             this.addSubject(1);
                                         }
                                         else                                         
@@ -637,6 +643,7 @@ new Vue({
                 formdata.append('subject_to_replace',this.subject_to_replace);                        
                 formdata.append('student',this.id);
                 formdata.append('sem',this.sem);
+                formdata.append('change_section',1);
                 return axios.post(url, formdata, {
                     headers: {
                         Authorization: `Bearer ${window.token}`
@@ -721,3 +728,4 @@ new Vue({
 
 })
 </script>
+
