@@ -2042,9 +2042,10 @@ class Registrar extends CI_Controller {
         //     $data['success'] =  false;
         // }    
         // else
-        if($post['date'] == date("Y-m-d")){               
+        if($post['date'] == date("Y-m-d")){
             $classlist_student = $this->db->where(array('intCSID'=>$post['section_to_delete']))->get('tb_mas_classlist_student')->first_row('array');
             $section = $this->db->where(array('intID'=>$classlist_student['intClassListID']))->get('tb_mas_classlist')->first_row('array');
+            $classlist_from = '';
             $section_to_swap = $this->db->where(array('intID'=>$post['subject_to_add']))->get('tb_mas_subjects')->first_row('array');
             if($section_to_swap){
                 
@@ -2071,6 +2072,13 @@ class Registrar extends CI_Controller {
             $section_to = $section['strClassName'].$section['year'].$section['strSection'];
             $section_to .= ($section['sub_section'])?"-".$section['sub_section']:"";
 
+            if(isset($post['change_section'])){
+                if($post['change_section']){
+                    // $classlist_to_replace = $this->data_fetcher->getClasslistDetails($classlist_student['intClassListID']);
+                    $classlist_from = $section['intID'];
+                }
+            }
+
             //delete classlist student
             $this->db->delete('tb_mas_classlist_student', array('intCSID' => $post['section_to_delete'],'intStudentID'=>$post['student']));
             // $this->db->delete('tb_mas_classlist_student', array('intClassListID' => $post['section_to_delete'],'intStudentID'=>$post['student']));
@@ -2096,7 +2104,9 @@ class Registrar extends CI_Controller {
             $adj['remarks'] =  $remarks;
             $adj['adjusted_by'] =  $this->session->userdata('intID');
             
-            $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj); 
+            if(!isset($post['change_section'])){
+                $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj);
+            }
 
             $down_payment = $this->db->get_where('tb_mas_student_ledger',array('name'=>'Tuition Down Payment','syid'=>$post['sem'],'student_id'=>$post['student'],'is_disabled'=>0))->first_row();
             //record in adjustments table                      
@@ -2110,6 +2120,7 @@ class Registrar extends CI_Controller {
             $update['is_disabled'] = 1;
             $this->db->where(array('name'=>'tuition','syid'=>$post['sem'],'student_id'=>$post['student'],'is_disabled'=>0))->update('tb_mas_student_ledger',$update);   
             
+            $data['classlist_from'] = $classlist_from;
             $data['success'] = true;
             $data['message'] = "Success";
             
@@ -2148,6 +2159,13 @@ class Registrar extends CI_Controller {
             echo json_encode($data);                             
             return;
         }
+        // $classlist_student = $this->db->get_where('tb_mas_classlist_student',array('intCSID'=>$post['subject_to_replace']))->first_row('array');
+        // $classlist_to_replace = $this->data_fetcher->getClasslistDetails($classlist_student['intClassListID']);
+        // if($classlist_to_replace){
+        //         $section_from = $classlist_to_replace->strClassName .$classlist_to_replace->year .$classlist_to_replace->strSection;
+        //         $section_from .= ($classlist_to_replace->sub_section )?"-".$classlist_to_replace->sub_section :"";
+        // }
+
         foreach($records as $record){            
             if($subject == $record['subjectID']){
                 if($record['classlistID'] == $post['section_to_add'])
@@ -2167,7 +2185,7 @@ class Registrar extends CI_Controller {
                     if($c){
                         $data['success'] = false;
                         $data['message'] = "There was a conflict with one of the schedules ".$c->conflict['strCode']." ".$c->conflict['strClassName'].$c->conflict['year'].$c->conflict['strSection']." ".$c->conflict['sub_section'];   
-                        echo json_encode($data);                             
+                        echo json_encode($data);    
                         return;
                     }
                 }
@@ -2175,7 +2193,6 @@ class Registrar extends CI_Controller {
         }
 
         //remove subject and add new section also add changes to ledger
-        
 
         if($data['success']){
             if($replace){
@@ -2187,11 +2204,14 @@ class Registrar extends CI_Controller {
                 $adj['adjustment_type'] = "Add Subject";
                 if($post['subject_to_replace'] != 0){
                     $adj['adjustment_type'] = "Replace Subject";
+                    
+                    // $classlist_student = $this->db->get_where('tb_mas_classlist_student',array('intCSID'=>$post['subject_to_replace']))->result_array();
+                    // $classlist_to_replace = $this->data_fetcher->getClasslistDetails($classlist_student['intClassListID']);
                     $classlist_to_replace = $this->data_fetcher->getClasslistDetails($post['subject_to_replace']);
                     $remarks = "Changed subject from ".$classlist_to_replace->strCode." Section: ".$classlist_to_replace->strClassName.$classlist_to_replace->year.$classlist_to_replace->strSection." ".$classlist_to_replace->sub_section;
                 }
             }
-                
+              
                 $add['date_added'] = date("Y-m-d H:i:s");
                 $add['enlisted_user'] = $this->data["user"]["intID"];
                 $add['intStudentID'] = $post['student'];
