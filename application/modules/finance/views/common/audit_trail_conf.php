@@ -7,7 +7,7 @@ $(document).ready(function() {
         "ordering": false,
         "paging": true,
         ajax: {
-            url: "<?php echo $api_url; ?>sms/audit-trail",
+            url: "<?php echo $api_url; ?>sms/audit-trail/<?php echo $campus; ?>",
             dataSrc: 'data'
         },
         columns: [{
