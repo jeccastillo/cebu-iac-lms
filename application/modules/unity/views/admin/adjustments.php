@@ -585,9 +585,8 @@ new Vue({
                                     this.loader_spinner = false;                                    
                                     if(data.data.success){
                                         if(swap){
-                                            console.log(data);
-                                            var classlist_from = data.data.classlist_from;
-                                            formdata.append('classlist_from'. classlist_from);
+                                            console.log(data.data.classlist_from);
+                                            formdata.append('classlist_from'. data.classlist_from);
                                             this.addSubject(1);
                                         }
                                         else                                         
