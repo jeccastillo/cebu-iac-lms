@@ -2204,8 +2204,6 @@ class Finance extends CI_Controller {
 
     public function audit_trail($term = 0)    
     {
-        print($this->config->item('api_url'));
-        die();
         if($this->faculty_logged_in())
         {                                        
             $this->load->view("common/header",$this->data);
