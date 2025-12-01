@@ -35,7 +35,7 @@ class Finance extends CI_Controller {
         $this->data['css_dir'] = base_url()."assets/themes/".$theme."/css/";
         $this->data['js_dir'] = base_url()."assets/themes/".$theme."/js/";
         $this->data['title'] = "CCT Unity";
-        $this->data['api_url'] = $this->config->item('api_url');
+        // $this->data['api_url'] = $this->config->item('api_url');
         
         $this->load->library("email");
         
