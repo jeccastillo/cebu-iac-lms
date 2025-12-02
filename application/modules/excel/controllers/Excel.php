@@ -11319,12 +11319,12 @@ class Excel extends CI_Controller {
         $adjustments = $this->db->select(
                         'tb_mas_classlist_student_adjustment_log.*, 
                         tb_mas_subjects.strCode, 
-                        student.tb_mas_users.strStudentNumber,
-                        student.tb_mas_users.strLastname as studentLastName,
-                        student.tb_mas_users.strFirstname as studentFirstName,
-                        student.tb_mas_users.intProgramID,
-                        adjusted_by.tb_mas_users.strLastname as adjustedByLastName,
-                        adjusted_by.tb_mas_users.strFirstname as adjustedByFirstName,
+                        student.strStudentNumber,
+                        student.strLastname as studentLastName,
+                        student.strFirstname as studentFirstName,
+                        student.intProgramID,
+                        adjusted_by.strLastname as adjustedByLastName,
+                        adjusted_by.strFirstname as adjustedByFirstName,
                         ')
                     ->from('tb_mas_classlist_student_adjustment_log')
                     ->join('tb_mas_users student','tb_mas_users.intID = tb_mas_classlist_student_adjustment_log.student_id', 'left')
