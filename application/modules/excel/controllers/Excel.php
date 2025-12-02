@@ -11316,7 +11316,7 @@ class Excel extends CI_Controller {
             $sy = $s['intID'];
         }
 
-        $students = $this->db->select('tb_mas_classlist_student_adjustment_log.*, tb_mas_subjects.strCode, tb_mas_users.strStudentNumber, tb_mas_users.strLastname, tb_mas_users.strFirstname, tb_mas_users.intProgramID')
+        $adjustments = $this->db->select('tb_mas_classlist_student_adjustment_log.*, tb_mas_subjects.strCode, tb_mas_users.strStudentNumber, tb_mas_users.strLastname, tb_mas_users.strFirstname, tb_mas_users.intProgramID')
                     ->from('tb_mas_classlist_student_adjustment_log')
                     ->join('tb_mas_users','tb_mas_users.intID = tb_mas_classlist_student_adjustment_log.student_id')
                     ->join('tb_mas_subjects', 'tb_mas_subjects.intID = tb_mas_classlist_student_adjustment_log.classlist_student_id ')
@@ -11325,6 +11325,8 @@ class Excel extends CI_Controller {
                     ->get()
                     ->result_array();
 
+        print_r($adjustments);
+        die();
         error_reporting(E_ALL);
         ini_set('display_errors', TRUE);
         ini_set('display_startup_errors', TRUE);
@@ -11351,13 +11353,13 @@ class Excel extends CI_Controller {
                     ->setCellValue('F6', 'Changed Subjects From')
                     ->setCellValue('G6', 'Changed Subjects To');
 
-        foreach($students as $index => $student){
+        foreach($adjustments as $index => $adjustment){
 
-            $course = $this->data_fetcher->getProgramDetails($student['intProgramID']);
+            $course = $this->data_fetcher->getProgramDetails($adjustment['intProgramID']);
             $subjectFrom = '';
-            if($student['adjustment_type'] == 'Replace Subject'){
+            if($adjustment['adjustment_type'] == 'Replace Subject'){
 
-                $subject = $this->db->get_where('tb_mas_subjects', array('intID' => $student['from_subject']))->first_row('array');
+                $subject = $this->db->get_where('tb_mas_subjects', array('intID' => $adjustment['from_subject']))->first_row('array');
                 if($subject){
                     $subjectFrom = $subject['strCode'];
                 }
@@ -11365,13 +11367,13 @@ class Excel extends CI_Controller {
             
             // Add some data
             $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('A'.$i, str_replace("-", "", $student['strStudentNumber']))
-                ->setCellValue('B'.$i, ucfirst($student['strLastname']) . ', ' . $student['strFirstname'])
+                ->setCellValue('A'.$i, str_replace("-", "", $adjustment['strStudentNumber']))
+                ->setCellValue('B'.$i, ucfirst($adjustment['strLastname']) . ', ' . $adjustment['strFirstname'])
                 ->setCellValue('C'.$i, $course['strProgramCode'])
-                ->setCellValue('D'.$i, $student['adjustment_type'] == 'Add Subject' ? $student['strCode'] : '')
-                ->setCellValue('E'.$i, $student['adjustment_type'] == 'Removed' ? $student['strCode'] : '')
-                ->setCellValue('F'.$i, $student['adjustment_type'] == 'Replace Subject' ? $subjectFrom : '')
-                ->setCellValue('G'.$i, $student['adjustment_type'] == 'Replace Subject' ? $student['strCode'] : '');
+                ->setCellValue('D'.$i, $adjustment['adjustment_type'] == 'Add Subject' ? $adjustment['strCode'] : '')
+                ->setCellValue('E'.$i, $adjustment['adjustment_type'] == 'Removed' ? $adjustment['strCode'] : '')
+                ->setCellValue('F'.$i, $adjustment['adjustment_type'] == 'Replace Subject' ? $subjectFrom : '')
+                ->setCellValue('G'.$i, $adjustment['adjustment_type'] == 'Replace Subject' ? $adjustment['strCode'] : '');
 
             $i++;
 
@@ -11396,20 +11398,6 @@ class Excel extends CI_Controller {
                     'bold'  => true,
                     'size'  => 12,
                 )
-            )
-        );
-
-        $objPHPExcel->getActiveSheet()->getStyle('A8')->applyFromArray(
-            array(
-                'font'  => array(
-                    'bold'  => true,
-                    'color' => array('rgb' => '000000'),
-                    'size'  => 11,
-                ),
-                'fill' => array(
-                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
-                    'color' => array('rgb' => '0D6ED0')
-                ),
             )
         );
 
