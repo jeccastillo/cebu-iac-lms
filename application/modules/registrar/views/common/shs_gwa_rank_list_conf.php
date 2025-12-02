@@ -69,7 +69,7 @@ $(document).ready(function() {
     $("#shs_gwa_rank_list_excel").click(function(e) {
         var campus = "<?php echo $campus;?>";
         var base_url = "<?php echo base_url(); ?>";
-        var url = base_url + 'excel/shs_gwa_rank/' + $("#select-term-leads")
+        var url = base_url + 'excel/add_drop_report/' + $("#select-term-leads")
             .val() + '/' + $("#int-year-level").val() + '/' + campus;
         window.open(url, '_blank');
     })
