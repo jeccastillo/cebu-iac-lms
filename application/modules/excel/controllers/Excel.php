@@ -11328,7 +11328,7 @@ class Excel extends CI_Controller {
                         ')
                     ->from('tb_mas_classlist_student_adjustment_log')
                     ->join('tb_mas_users student','student.intID = tb_mas_classlist_student_adjustment_log.student_id', 'left')
-                    ->join('tb_mas_users adjusted_by','adjusted_by.intID = tb_mas_classlist_student_adjustment_log.adjustment_by', 'left')
+                    ->join('tb_mas_users adjusted_by','adjusted_by.intID = tb_mas_classlist_student_adjustment_log.adjusted_by', 'left')
                     ->join('tb_mas_subjects', 'tb_mas_subjects.intID = tb_mas_classlist_student_adjustment_log.classlist_student_id ')
                     ->where(array('tb_mas_classlist_student_adjustment_log.syid' => $sem))
                     ->where_in('tb_mas_classlist_student_adjustment_log.adjustment_type', ['Add Subject', 'Removed', 'Replace Subject'])
