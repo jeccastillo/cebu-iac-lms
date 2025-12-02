@@ -11357,8 +11357,10 @@ class Excel extends CI_Controller {
             $subjectFrom = '';
             if($student['adjustment_type'] == 'Replace Subject'){
 
-                $subject = $this->db->get_where('tb_mas_subjects', array('intID' => $student['from_subject']))->first_row();
-                $subjectFrom = $subject->strCode;
+                $subject = $this->db->get_where('tb_mas_subjects', array('intID' => $student['from_subject']))->first_row('array');
+                if($subject){
+                    $subjectFrom = $subject['strCode'];
+                }
             }
             
             // Add some data
