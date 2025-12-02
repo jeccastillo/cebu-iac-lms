@@ -11399,29 +11399,21 @@ class Excel extends CI_Controller {
             )
         );
 
-        $objPHPExcel->getActiveSheet()->duplicateStyle($objPHPExcel->getActiveSheet()->getStyle('A8'), 'C8:S8');
-        $objPHPExcel->getActiveSheet()->duplicateStyle($objPHPExcel->getActiveSheet()->getStyle('A8'), 'V8');
-        $objPHPExcel->getActiveSheet()->duplicateStyle($objPHPExcel->getActiveSheet()->getStyle('A8'), 'E9');
-
-        $objPHPExcel->getActiveSheet()->getStyle('B8')->applyFromArray(
-            array(
-                'font'  => array(
-                    'bold'  => true,
-                    'color' => array('rgb' => '000000'),
-                    'size'  => 11,
-                ),
-                'fill' => array(
-                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
-                    'color' => array('rgb' => 'FFAD56')
-                ),
-            )
-        );
-
-        $objPHPExcel->getActiveSheet()->duplicateStyle($objPHPExcel->getActiveSheet()->getStyle('B8'), 'T8:U8');
-        $objPHPExcel->getActiveSheet()->duplicateStyle($objPHPExcel->getActiveSheet()->getStyle('B8'), 'C9:D9');
-        $objPHPExcel->getActiveSheet()->duplicateStyle($objPHPExcel->getActiveSheet()->getStyle('B8'), 'F9:R9');
+        // $objPHPExcel->getActiveSheet()->getStyle('B8')->applyFromArray(
+        //     array(
+        //         'font'  => array(
+        //             'bold'  => true,
+        //             'color' => array('rgb' => '000000'),
+        //             'size'  => 11,
+        //         ),
+        //         'fill' => array(
+        //             'type' => PHPExcel_Style_Fill::FILL_SOLID,
+        //             'color' => array('rgb' => 'FFAD56')
+        //         ),
+        //     )
+        // );
         
-        $objPHPExcel->getActiveSheet()->getStyle('A8:V' . $i)->applyFromArray(
+        $objPHPExcel->getActiveSheet()->getStyle('A6:G' . $i)->applyFromArray(
             array(
                 'borders' => array(
                     'allborders' => array(
@@ -11438,52 +11430,23 @@ class Excel extends CI_Controller {
                 'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
             )
         );
-        $objPHPExcel->getActiveSheet()->getStyle('A8:V'.$i)->applyFromArray($style);
-        $objPHPExcel->getActiveSheet()->getStyle('A8:V'.$i)->getAlignment()->setWrapText(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A6:G'.$i)->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('A6:G'.$i)->getAlignment()->setWrapText(true);
 
-
-        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(12);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(7);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(11);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(25);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(6);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('V')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
         
         $sheet = $objPHPExcel->getActiveSheet();
-        $sheet->mergeCells('B2:H2');
-        $sheet->mergeCells('B3:H3');
-        $sheet->mergeCells('B4:H4');
-        $sheet->mergeCells('B7:J7');
-        $sheet->mergeCells('K7:R7');
-        $sheet->mergeCells('A8:A9');
-        $sheet->mergeCells('B8:B9');
-        $sheet->mergeCells('C8:F8');
-        $sheet->mergeCells('G8:J8');
-        $sheet->mergeCells('K8:M8');
-        $sheet->mergeCells('N8:P8');
-        $sheet->mergeCells('Q8:R8');
-        $sheet->mergeCells('S8:S9');
-        $sheet->mergeCells('T8:T9');
-        $sheet->mergeCells('U8:U9');
-        $sheet->mergeCells('V8:V9');
+        $sheet->mergeCells('A1:G1');
+        $sheet->mergeCells('B3:G3');
+        $sheet->mergeCells('B4:G4');
 
-        $objPHPExcel->getActiveSheet()->setTitle('CHED - TES');
+        $objPHPExcel->getActiveSheet()->setTitle('Add/Drop/Change Subjects');
 
         $date = date("ymdhis");
 
