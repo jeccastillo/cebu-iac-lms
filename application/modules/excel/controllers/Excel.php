@@ -11319,20 +11319,20 @@ class Excel extends CI_Controller {
         $adjustments = $this->db->select(
                         'tb_mas_classlist_student_adjustment_log.*, 
                         tb_mas_subjects.strCode, 
-                        student.strStudentNumber,
-                        student.strLastname as studentLastName,
-                        student.strFirstname as studentFirstName,
-                        student.intProgramID,
-                        adjusted_by.strLastname as adjustedByLastName,
-                        adjusted_by.strFirstname as adjustedByFirstName,
+                        tb_mas_users.strStudentNumber,
+                        tb_mas_users.strLastname as studentLastName,
+                        tb_mas_users.strFirstname as studentFirstName,
+                        tb_mas_users.intProgramID,
+                        tb_mas_faculty.strLastname as adjustedByLastName,
+                        tb_mas_faculty.strFirstname as adjustedByFirstName,
                         ')
                     ->from('tb_mas_classlist_student_adjustment_log')
-                    ->join('tb_mas_users student','student.intID = tb_mas_classlist_student_adjustment_log.student_id', 'left')
-                    ->join('tb_mas_users adjusted_by','adjusted_by.intID = tb_mas_classlist_student_adjustment_log.adjusted_by', 'left')
+                    ->join('tb_mas_users','tb_mas_users.intID = tb_mas_classlist_student_adjustment_log.student_id')
+                    ->join('tb_mas_faculty','tb_mas_faculty.intID = tb_mas_classlist_student_adjustment_log.adjusted_by')
                     ->join('tb_mas_subjects', 'tb_mas_subjects.intID = tb_mas_classlist_student_adjustment_log.classlist_student_id ')
                     ->where(array('tb_mas_classlist_student_adjustment_log.syid' => $sem))
                     ->where_in('tb_mas_classlist_student_adjustment_log.adjustment_type', ['Add Subject', 'Removed', 'Replace Subject'])
-                    ->order_by('student.strStudentNumber', 'ASC')
+                    ->order_by('tb_mas_users.strStudentNumber', 'ASC')
                     ->order_by('tb_mas_classlist_student_adjustment_log.id', 'ASC')
                     ->get()
                     ->result_array();
@@ -11379,7 +11379,7 @@ class Excel extends CI_Controller {
             
             if($adjustment['adjustment_type'] == 'Replace Subject'){
                 $replaceSubjectFrom = $adjustment['from_subject'] . $addedBy;
-                $replaceSubjectTO = $adjustment['strCode'] . ' (' . $adjustment['to_subject'] . ')' . $addedBy;
+                $replaceSubjectTo = $adjustment['strCode'] . ' (' . $adjustment['to_subject'] . ')' . $addedBy;
             }
 
             // Add some data
