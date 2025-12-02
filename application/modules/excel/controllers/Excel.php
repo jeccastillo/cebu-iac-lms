@@ -11446,7 +11446,7 @@ class Excel extends CI_Controller {
         $sheet->mergeCells('B3:G3');
         $sheet->mergeCells('B4:G4');
 
-        $objPHPExcel->getActiveSheet()->setTitle('Add/Drop/Change Subjects');
+        $objPHPExcel->getActiveSheet()->setTitle('Add,Drop,Change Subjects');
 
         $date = date("ymdhis");
 
