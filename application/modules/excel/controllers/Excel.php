@@ -11370,16 +11370,16 @@ class Excel extends CI_Controller {
             $addedBy = date("M j, Y",strtotime($adjustment['date'])) . ' ' . $adjustment['adjustedByFirstName'] . ' ' . $adjustment['adjustedByLastName'];
             
             if($adjustment['adjustment_type'] == 'Add Subject'){
-                $addSubject = $adjustment['strCode'] . ' (' . $adjustment['to_subject'] . ')' . $addedBy;
+                $addSubject = $adjustment['strCode'] . ' (' . $adjustment['to_subject'] . ') ' . $addedBy;
             }
             
             if($adjustment['adjustment_type'] == 'Removed'){
-                $dropSubject = $adjustment['strCode'] . ' (' . $adjustment['from_subject'] . ')' . $addedBy; 
+                $dropSubject = $adjustment['strCode'] . ' (' . $adjustment['from_subject'] . ') ' . $addedBy; 
             }
             
             if($adjustment['adjustment_type'] == 'Replace Subject'){
-                $replaceSubjectFrom = $adjustment['from_subject'] . $addedBy;
-                $replaceSubjectTo = $adjustment['strCode'] . ' (' . $adjustment['to_subject'] . ')' . $addedBy;
+                $replaceSubjectFrom = $adjustment['from_subject']  . $addedBy;
+                $replaceSubjectTo = $adjustment['strCode'] . ' (' . $adjustment['to_subject'] . ') ' . $addedBy;
             }
 
             // Add some data
@@ -11417,20 +11417,6 @@ class Excel extends CI_Controller {
                 )
             )
         );
-
-        // $objPHPExcel->getActiveSheet()->getStyle('B8')->applyFromArray(
-        //     array(
-        //         'font'  => array(
-        //             'bold'  => true,
-        //             'color' => array('rgb' => '000000'),
-        //             'size'  => 11,
-        //         ),
-        //         'fill' => array(
-        //             'type' => PHPExcel_Style_Fill::FILL_SOLID,
-        //             'color' => array('rgb' => 'FFAD56')
-        //         ),
-        //     )
-        // );
         
         $objPHPExcel->getActiveSheet()->getStyle('A6:G' . $i)->applyFromArray(
             array(
@@ -11454,11 +11440,11 @@ class Excel extends CI_Controller {
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(35);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(35);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(35);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(35);
         
         $sheet = $objPHPExcel->getActiveSheet();
         $sheet->mergeCells('A1:G1');
