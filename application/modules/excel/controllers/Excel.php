@@ -11355,14 +11355,14 @@ class Excel extends CI_Controller {
         foreach($adjustments as $index => $adjustment){
 
             $course = $this->data_fetcher->getProgramDetails($adjustment['intProgramID']);
-            $subjectFrom = '';
-            if($adjustment['adjustment_type'] == 'Replace Subject'){
+            // $subjectFrom = '';
+            // if($adjustment['adjustment_type'] == 'Replace Subject'){
 
-                $subject = $this->db->get_where('tb_mas_subjects', array('intID' => $adjustment['from_subject']))->first_row('array');
-                if($subject){
-                    $subjectFrom = $subject['strCode'];
-                }
-            }
+            //     $subject = $this->db->get_where('tb_mas_subjects', array('intID' => $adjustment['from_subject']))->first_row('array');
+            //     if($subject){
+            //         $subjectFrom = $adjustment;
+            //     }
+            // }
             
             // Add some data
             $objPHPExcel->setActiveSheetIndex(0)
@@ -11371,7 +11371,7 @@ class Excel extends CI_Controller {
                 ->setCellValue('C'.$i, $course['strProgramCode'])
                 ->setCellValue('D'.$i, $adjustment['adjustment_type'] == 'Add Subject' ? $adjustment['strCode'] : '')
                 ->setCellValue('E'.$i, $adjustment['adjustment_type'] == 'Removed' ? $adjustment['strCode'] : '')
-                ->setCellValue('F'.$i, $adjustment['adjustment_type'] == 'Replace Subject' ? $subjectFrom : '')
+                ->setCellValue('F'.$i, $adjustment['adjustment_type'] == 'Replace Subject' ? $adjustment['from_subject'] : '')
                 ->setCellValue('G'.$i, $adjustment['adjustment_type'] == 'Replace Subject' ? $adjustment['strCode'] : '');
 
             $i++;
