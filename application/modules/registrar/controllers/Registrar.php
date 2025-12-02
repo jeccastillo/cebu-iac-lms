@@ -2212,6 +2212,8 @@ class Registrar extends CI_Controller {
                     $remarks = "Changed subject from ".$classlist_to_replace->strCode." Section: ".$classlist_to_replace->strClassName.$classlist_to_replace->year.$classlist_to_replace->strSection." ".$classlist_to_replace->sub_section;
                 }
             }
+            print_r($section_from);
+            die();
               
                 $add['date_added'] = date("Y-m-d H:i:s");
                 $add['enlisted_user'] = $this->data["user"]["intID"];
