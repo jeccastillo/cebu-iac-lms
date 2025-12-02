@@ -11323,6 +11323,7 @@ class Excel extends CI_Controller {
                     ->where(array('tb_mas_classlist_student_adjustment_log.syid' => $sem))
                     ->where_in('tb_mas_classlist_student_adjustment_log.adjustment_type', ['Add Subject', 'Removed', 'Replace Subject'])
                     ->order_by('tb_mas_users.strStudentNumber', 'ASC')
+                    ->order_by('tb_mas_classlist_student_adjustment_log.id', 'ASC')
                     ->get()
                     ->result_array();
 
