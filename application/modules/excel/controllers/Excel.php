@@ -11367,7 +11367,7 @@ class Excel extends CI_Controller {
             $addSubject = $dropSubject = $replaceSubjectFrom = $replaceSubjectTo = '';
             $course = $this->data_fetcher->getProgramDetails($adjustment['intProgramID']);
             
-            $addedBy = date("M j, Y",strtotime($adjustment['date'])) . ' ' . $adjustment['adjustedByFirstName'] . ' ' . $adjusted['adjustedByLastName'];
+            $addedBy = date("M j, Y",strtotime($adjustment['date'])) . ' ' . $adjustment['adjustedByFirstName'] . ' ' . $adjustment['adjustedByLastName'];
             
             if($adjustment['adjustment_type'] == 'Add Subject'){
                 $addSubject = $adjustment['strCode'] . ' (' . $adjustment['to_subject'] . ')' . $addedBy;
