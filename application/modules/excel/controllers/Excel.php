@@ -11378,7 +11378,7 @@ class Excel extends CI_Controller {
             }
             
             if($adjustment['adjustment_type'] == 'Replace Subject'){
-                $replaceSubjectFrom = $adjustment['from_subject']  . $addedBy;
+                $replaceSubjectFrom = $adjustment['from_subject'] . $addedBy;
                 $replaceSubjectTo = $adjustment['strCode'] . ' (' . $adjustment['to_subject'] . ') ' . $addedBy;
             }
 
@@ -11441,10 +11441,10 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(35);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(35);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(35);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(35);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(40);
         
         $sheet = $objPHPExcel->getActiveSheet();
         $sheet->mergeCells('A1:G1');
