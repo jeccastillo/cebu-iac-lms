@@ -11316,9 +11316,19 @@ class Excel extends CI_Controller {
             $sy = $s['intID'];
         }
 
-        $adjustments = $this->db->select('tb_mas_classlist_student_adjustment_log.*, tb_mas_subjects.strCode, tb_mas_users.strStudentNumber, tb_mas_users.strLastname, tb_mas_users.strFirstname, tb_mas_users.intProgramID')
+        $adjustments = $this->db->select(
+                        'tb_mas_classlist_student_adjustment_log.*, 
+                        tb_mas_subjects.strCode, 
+                        student.tb_mas_users.strStudentNumber,
+                        student.tb_mas_users.strLastname as studentLastName,
+                        student.tb_mas_users.strFirstname as studentFirstName,
+                        student.tb_mas_users.intProgramID,
+                        adjusted_by.tb_mas_users.strLastname as adjustedByLastName,
+                        adjusted_by.tb_mas_users.strFirstname as adjustedByFirstName,
+                        ')
                     ->from('tb_mas_classlist_student_adjustment_log')
-                    ->join('tb_mas_users','tb_mas_users.intID = tb_mas_classlist_student_adjustment_log.student_id')
+                    ->join('tb_mas_users student','tb_mas_users.intID = tb_mas_classlist_student_adjustment_log.student_id', 'left')
+                    ->join('tb_mas_users adjusted_by','tb_mas_users.intID = tb_mas_classlist_student_adjustment_log.adjustment_by', 'left')
                     ->join('tb_mas_subjects', 'tb_mas_subjects.intID = tb_mas_classlist_student_adjustment_log.classlist_student_id ')
                     ->where(array('tb_mas_classlist_student_adjustment_log.syid' => $sem))
                     ->where_in('tb_mas_classlist_student_adjustment_log.adjustment_type', ['Add Subject', 'Removed', 'Replace Subject'])
@@ -11354,26 +11364,33 @@ class Excel extends CI_Controller {
                     ->setCellValue('G6', 'Changed Subjects To');
 
         foreach($adjustments as $index => $adjustment){
-
+            $addSubject = $dropSubject = $replaceSubjectFrom = $replaceSubjectTo = '';
             $course = $this->data_fetcher->getProgramDetails($adjustment['intProgramID']);
-            // $subjectFrom = '';
-            // if($adjustment['adjustment_type'] == 'Replace Subject'){
-
-            //     $subject = $this->db->get_where('tb_mas_subjects', array('intID' => $adjustment['from_subject']))->first_row('array');
-            //     if($subject){
-            //         $subjectFrom = $adjustment;
-            //     }
-            // }
             
+            $addedBy = date("M j, Y",strtotime($adjustment['date'])) . ' ' . $adjustment['adjustedByFirstName'] . ' ' . $adjusted['adjustedByLastName'];
+            
+            if($adjustment['adjustment_type'] == 'Add Subject'){
+                $addSubject = $adjustment['strCode'] . ' (' . $adjustment['to_subject'] . ')' . $addedBy;
+            }
+            
+            if($adjustment['adjustment_type'] == 'Removed'){
+                $dropSubject = $adjustment['strCode'] . ' (' . $adjustment['from_subject'] . ')' . $addedBy; 
+            }
+            
+            if($adjustment['adjustment_type'] == 'Replace Subject'){
+                $replaceSubjectFrom = $adjustment['from_subject'] . $addedBy;
+                $replaceSubjectTO = $adjustment['strCode'] . ' (' . $adjustment['to_subject'] . ')' . $addedBy;
+            }
+
             // Add some data
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A'.$i, str_replace("-", "", $adjustment['strStudentNumber']))
-                ->setCellValue('B'.$i, ucfirst($adjustment['strLastname']) . ', ' . $adjustment['strFirstname'])
+                ->setCellValue('B'.$i, ucfirst($adjustment['studentLastName']) . ', ' . $adjustment['studentFirstName'])
                 ->setCellValue('C'.$i, $course['strProgramCode'])
-                ->setCellValue('D'.$i, $adjustment['adjustment_type'] == 'Add Subject' ? $adjustment['strCode'] : '')
-                ->setCellValue('E'.$i, $adjustment['adjustment_type'] == 'Removed' ? $adjustment['strCode'] : '')
-                ->setCellValue('F'.$i, $adjustment['adjustment_type'] == 'Replace Subject' ? $adjustment['from_subject'] : '')
-                ->setCellValue('G'.$i, $adjustment['adjustment_type'] == 'Replace Subject' ? $adjustment['strCode'] : '');
+                ->setCellValue('D'.$i, $addSubject)
+                ->setCellValue('E'.$i, $dropSubject)
+                ->setCellValue('F'.$i, $replaceSubjectFrom)
+                ->setCellValue('G'.$i, $replaceSubjectTo);
 
             $i++;
         }
