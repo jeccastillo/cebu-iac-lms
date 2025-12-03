@@ -7711,6 +7711,8 @@ class Excel extends CI_Controller {
         $count = 1;
         $gwa_ranks = array();
 
+        print_r($students);
+        die();
         foreach($students as $student){
             $totalGrades = 0;
             $subjects = $this->db->select('tb_mas_classlist_student.floatPrelimGrade, tb_mas_classlist_student.floatMidtermGrade, tb_mas_classlist_student.floatFinalsGrade')
@@ -7739,8 +7741,6 @@ class Excel extends CI_Controller {
             }
         }
 
-        print_r($gwa_ranks);
-        die();
         //sort by GWA
         usort($gwa_ranks, function($a, $b) {
             return $a['gwa'] < $b['gwa'];
