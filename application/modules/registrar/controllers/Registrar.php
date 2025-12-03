@@ -3163,6 +3163,70 @@ class Registrar extends CI_Controller {
             redirect(base_url()."unity");  
     }
 
+    public function add_drop_subjects_data($sem)
+    {
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sy = $s['intID'];
+        }
+        $adjustments_array = array();
+        $adjustments = $this->db->select(
+                        'tb_mas_classlist_student_adjustment_log.*, 
+                        tb_mas_subjects.strCode, 
+                        tb_mas_users.strStudentNumber,
+                        tb_mas_users.strLastname as studentLastName,
+                        tb_mas_users.strFirstname as studentFirstName,
+                        tb_mas_users.intProgramID,
+                        tb_mas_faculty.strLastname as adjustedByLastName,
+                        tb_mas_faculty.strFirstname as adjustedByFirstName,
+                        ')
+                    ->from('tb_mas_classlist_student_adjustment_log')
+                    ->join('tb_mas_users','tb_mas_users.intID = tb_mas_classlist_student_adjustment_log.student_id')
+                    ->join('tb_mas_faculty','tb_mas_faculty.intID = tb_mas_classlist_student_adjustment_log.adjusted_by')
+                    ->join('tb_mas_subjects', 'tb_mas_subjects.intID = tb_mas_classlist_student_adjustment_log.classlist_student_id ')
+                    ->where(array('tb_mas_classlist_student_adjustment_log.syid' => $sem))
+                    ->where_in('tb_mas_classlist_student_adjustment_log.adjustment_type', ['Add Subject', 'Removed', 'Replace Subject'])
+                    ->order_by('tb_mas_users.strStudentNumber', 'ASC')
+                    ->order_by('tb_mas_classlist_student_adjustment_log.id', 'ASC')
+                    ->get()
+                    ->result_array();
+
+        foreach($adjustments as $index => $adjustment){
+            $student = array();
+
+            $addSubject = $dropSubject = $replaceSubjectFrom = $replaceSubjectTo = '';
+            $course = $this->data_fetcher->getProgramDetails($adjustment['intProgramID']);
+            
+            $addedBy = date("M j, Y",strtotime($adjustment['date'])) . ' ' . $adjustment['adjustedByFirstName'] . ' ' . $adjustment['adjustedByLastName'];
+            
+            if($adjustment['adjustment_type'] == 'Add Subject'){
+                $addSubject = $adjustment['strCode'] . ' (' . $adjustment['to_subject'] . ') ' . $addedBy;
+            }
+            
+            if($adjustment['adjustment_type'] == 'Removed'){
+                $dropSubject = $adjustment['strCode'] . ' (' . $adjustment['from_subject'] . ') ' . $addedBy; 
+            }
+            
+            if($adjustment['adjustment_type'] == 'Replace Subject'){
+                $replaceSubjectFrom = $adjustment['from_subject'] . $addedBy;
+                $replaceSubjectTo = $adjustment['strCode'] . ' (' . $adjustment['to_subject'] . ') ' . $addedBy;
+            }
+            
+            $student['student'] = ucfirst($adjustment['studentLastName']) . ', ' . $adjustment['studentFirstName'];
+            $student['student_number'] = str_replace("-", "", $adjustment['strStudentNumber']);
+            $student['course'] = $$course['strProgramCode'];
+            $student['add_subject'] = $addSubject;
+            $student['drop_subject'] = $dropSubject;
+            $student['replace_subject_from'] = $replaceSubjectFrom;
+            $student['replace_subject_To'] = $replaceSubjectTo;
+            $adjustments_array[] = $student;
+        }
+        $data['data'] = $adjustments_array;
+        echo json_encode($data);
+    }
+
     private function get_student_number_year($student_number){
         
         if (preg_match('/^[a-zA-Z]/', $student_number)) {
