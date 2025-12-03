@@ -7720,10 +7720,6 @@ class Excel extends CI_Controller {
             ->get()
             ->result_array();
 
-            print_r($subjects);
-            print_r($student);
-            die();
-
             if(count($subjects) >  0){
                 foreach($subjects as $subject){
                     $average = getAve($subject['floatMidtermGrade'], $subject['floatFinalsGrade']);
@@ -7743,8 +7739,6 @@ class Excel extends CI_Controller {
             }
         }
 
-        print_r($gwa_ranks);
-        die();
         //sort by GWA
         usort($gwa_ranks, function($a, $b) {
             return $a['gwa'] < $b['gwa'];
