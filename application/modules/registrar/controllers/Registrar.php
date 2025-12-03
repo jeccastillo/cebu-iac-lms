@@ -3214,13 +3214,13 @@ class Registrar extends CI_Controller {
                 $replaceSubjectTo = $adjustment['strCode'] . ' (' . $adjustment['to_subject'] . ') ' . $addedBy;
             }
             
-            $student['student'] = ucfirst($adjustment['studentLastName']) . ', ' . $adjustment['studentFirstName'];
+            $student['student_name'] = ucfirst($adjustment['studentLastName']) . ', ' . $adjustment['studentFirstName'];
             $student['student_number'] = str_replace("-", "", $adjustment['strStudentNumber']);
             $student['course'] = $course['strProgramCode'];
             $student['add_subject'] = $addSubject;
             $student['drop_subject'] = $dropSubject;
             $student['replace_subject_from'] = $replaceSubjectFrom;
-            $student['replace_subject_To'] = $replaceSubjectTo;
+            $student['replace_subject_to'] = $replaceSubjectTo;
             $adjustments_array[] = $student;
         }
         $data['data'] = $adjustments_array;
