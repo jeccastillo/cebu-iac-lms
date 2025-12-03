@@ -2037,12 +2037,15 @@ class Registrar extends CI_Controller {
     public function drop_subject(){
         $post = $this->input->post();    
         $registration = $this->data_fetcher->getRegistrationInfo($post['student'],$post['sem']);
-        if(!$registration || $registration['intROG'] != 1){
-            $data['message'] = "Student has to be enrolled to make adjustments";            
-            $data['success'] =  false;
-        }    
-        elseif($post['date'] == date("Y-m-d")){               
-            $section = $this->db->where(array('intID'=>$post['section_to_delete']))->get('tb_mas_classlist')->first_row('array');
+        // if(!$registration || $registration['intROG'] != 1){
+        //     $data['message'] = "Student has to be enrolled to make adjustments";            
+        //     $data['success'] =  false;
+        // }    
+        // else
+        if($post['date'] == date("Y-m-d")){
+            $classlist_student = $this->db->where(array('intCSID'=>$post['section_to_delete']))->get('tb_mas_classlist_student')->first_row('array');
+            $section = $this->db->where(array('intID'=>$classlist_student['intClassListID']))->get('tb_mas_classlist')->first_row('array');
+            $classlist_from = '';
             $section_to_swap = $this->db->where(array('intID'=>$post['subject_to_add']))->get('tb_mas_subjects')->first_row('array');
             if($section_to_swap){
                 
@@ -2061,8 +2064,6 @@ class Registrar extends CI_Controller {
                         }
                     }
                 }
-
-                
             }
             else
                 $remarks = "Deleted";
@@ -2071,8 +2072,30 @@ class Registrar extends CI_Controller {
             $section_to = $section['strClassName'].$section['year'].$section['strSection'];
             $section_to .= ($section['sub_section'])?"-".$section['sub_section']:"";
 
+            if(isset($post['change_section'])){
+                if($post['change_section']){
+                    // $classlist_to_replace = $this->data_fetcher->getClasslistDetails($classlist_student['intClassListID']);
+                    $classlist_from = $section['intID'];
+                }
+            }
+
+            //delete classlist student
+            $this->db->delete('tb_mas_classlist_student', array('intCSID' => $post['section_to_delete'],'intStudentID'=>$post['student']));
+            // $this->db->delete('tb_mas_classlist_student', array('intClassListID' => $post['section_to_delete'],'intStudentID'=>$post['student']));
+            
+            //check for duplicate
+            // $checkDuplicate = $this->db->where(array('intID'=>$classlist_student['intClassListID']))->get('tb_mas_classlist')->first_row('array');
+            $checkDuplicate = $this->db->where(array('intID'=>$classlist_student['intClassListID']))->get('tb_mas_classlist')->result_array();
+            // $checkDuplicate = $this->db->select()
+            //         ->from('tb_mas_classlist')
+            //         ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+            //         ->where(array('intID'=>$classlist_student['intClassListID']))
+            //         ->order_by('tb_mas_users.strLastname', 'DESC')
+            //         ->get()
+            //         ->result_array();
+
             $adj['classlist_student_id'] = $subject['intID'];
-            $adj['adjustment_type'] = "Removed";
+            $adj['adjustment_type'] = count($checkDuplicate) > 1 ? "Removed Duplicate" : "Removed";
             $adj['from_subject'] =  $section_to;
             $adj['to_subject'] =  "";
             $adj['syid'] = $post['sem'];
@@ -2081,8 +2104,9 @@ class Registrar extends CI_Controller {
             $adj['remarks'] =  $remarks;
             $adj['adjusted_by'] =  $this->session->userdata('intID');
             
-            $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj); 
-            $this->db->delete('tb_mas_classlist_student', array('intClassListID' => $post['section_to_delete'],'intStudentID'=>$post['student']));
+            if(!isset($post['change_section'])){
+                $this->db->insert('tb_mas_classlist_student_adjustment_log',$adj);
+            }
 
             $down_payment = $this->db->get_where('tb_mas_student_ledger',array('name'=>'Tuition Down Payment','syid'=>$post['sem'],'student_id'=>$post['student'],'is_disabled'=>0))->first_row();
             //record in adjustments table                      
@@ -2096,6 +2120,7 @@ class Registrar extends CI_Controller {
             $update['is_disabled'] = 1;
             $this->db->where(array('name'=>'tuition','syid'=>$post['sem'],'student_id'=>$post['student'],'is_disabled'=>0))->update('tb_mas_student_ledger',$update);   
             
+            $data['classlist_from'] = $classlist_from;
             $data['success'] = true;
             $data['message'] = "Success";
             
@@ -2134,6 +2159,13 @@ class Registrar extends CI_Controller {
             echo json_encode($data);                             
             return;
         }
+        // $classlist_student = $this->db->get_where('tb_mas_classlist_student',array('intCSID'=>$post['subject_to_replace']))->first_row('array');
+        // $classlist_to_replace = $this->data_fetcher->getClasslistDetails($classlist_student['intClassListID']);
+        // if($classlist_to_replace){
+        //         $section_from = $classlist_to_replace->strClassName .$classlist_to_replace->year .$classlist_to_replace->strSection;
+        //         $section_from .= ($classlist_to_replace->sub_section )?"-".$classlist_to_replace->sub_section :"";
+        // }
+
         foreach($records as $record){            
             if($subject == $record['subjectID']){
                 if($record['classlistID'] == $post['section_to_add'])
@@ -2153,7 +2185,7 @@ class Registrar extends CI_Controller {
                     if($c){
                         $data['success'] = false;
                         $data['message'] = "There was a conflict with one of the schedules ".$c->conflict['strCode']." ".$c->conflict['strClassName'].$c->conflict['year'].$c->conflict['strSection']." ".$c->conflict['sub_section'];   
-                        echo json_encode($data);                             
+                        echo json_encode($data);    
                         return;
                     }
                 }
@@ -2161,7 +2193,6 @@ class Registrar extends CI_Controller {
         }
 
         //remove subject and add new section also add changes to ledger
-        
 
         if($data['success']){
             if($replace){
@@ -2173,11 +2204,15 @@ class Registrar extends CI_Controller {
                 $adj['adjustment_type'] = "Add Subject";
                 if($post['subject_to_replace'] != 0){
                     $adj['adjustment_type'] = "Replace Subject";
+                    
+                    // $classlist_student = $this->db->get_where('tb_mas_classlist_student',array('intCSID'=>$post['subject_to_replace']))->result_array();
+                    // $classlist_to_replace = $this->data_fetcher->getClasslistDetails($classlist_student['intClassListID']);
                     $classlist_to_replace = $this->data_fetcher->getClasslistDetails($post['subject_to_replace']);
+                    $section_from = $classlist_to_replace->strCode . ' (' . $classlist_to_replace->strClassName . $classlist_to_replace->year . $classlist_to_replace->strSection . ')';
                     $remarks = "Changed subject from ".$classlist_to_replace->strCode." Section: ".$classlist_to_replace->strClassName.$classlist_to_replace->year.$classlist_to_replace->strSection." ".$classlist_to_replace->sub_section;
                 }
             }
-                
+
                 $add['date_added'] = date("Y-m-d H:i:s");
                 $add['enlisted_user'] = $this->data["user"]["intID"];
                 $add['intStudentID'] = $post['student'];
@@ -3108,6 +3143,88 @@ class Registrar extends CI_Controller {
             $this->load->view("common/footer",$this->data); 
             $this->load->view("common/shs_enrolled_by_grade_level_conf",$this->data);
         }
+    }
+    
+    public function import_subject_offering()
+    {        
+        if($this->is_super_admin() || $this->is_registrar())
+        {
+            $term = $this->data_fetcher->get_processing_sem();
+    
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['current_sem'] = $term['intID'];
+            $this->data['page'] = "import_subject_offering";
+            $this->data['opentree'] = "registrar";
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/import_subject_offering",$this->data);
+            $this->load->view("common/footer",$this->data);
+        }
+        else
+            redirect(base_url()."unity");  
+    }
+
+    public function add_drop_subjects_data($sem)
+    {
+        $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
+        if($sem == 0 )
+        {
+            $s = $this->data_fetcher->get_active_sem();
+            $sy = $s['intID'];
+        }
+        $adjustments_array = array();
+        $adjustments = $this->db->select(
+                        'tb_mas_classlist_student_adjustment_log.*, 
+                        tb_mas_subjects.strCode, 
+                        tb_mas_users.strStudentNumber,
+                        tb_mas_users.strLastname as studentLastName,
+                        tb_mas_users.strFirstname as studentFirstName,
+                        tb_mas_users.intProgramID,
+                        tb_mas_faculty.strLastname as adjustedByLastName,
+                        tb_mas_faculty.strFirstname as adjustedByFirstName,
+                        ')
+                    ->from('tb_mas_classlist_student_adjustment_log')
+                    ->join('tb_mas_users','tb_mas_users.intID = tb_mas_classlist_student_adjustment_log.student_id')
+                    ->join('tb_mas_faculty','tb_mas_faculty.intID = tb_mas_classlist_student_adjustment_log.adjusted_by')
+                    ->join('tb_mas_subjects', 'tb_mas_subjects.intID = tb_mas_classlist_student_adjustment_log.classlist_student_id ')
+                    ->where(array('tb_mas_classlist_student_adjustment_log.syid' => $sem))
+                    ->where_in('tb_mas_classlist_student_adjustment_log.adjustment_type', ['Add Subject', 'Removed', 'Replace Subject'])
+                    ->order_by('tb_mas_users.strStudentNumber', 'ASC')
+                    ->order_by('tb_mas_classlist_student_adjustment_log.id', 'ASC')
+                    ->get()
+                    ->result_array();
+
+        foreach($adjustments as $index => $adjustment){
+            $student = array();
+
+            $addSubject = $dropSubject = $replaceSubjectFrom = $replaceSubjectTo = '';
+            $course = $this->data_fetcher->getProgramDetails($adjustment['intProgramID']);
+            
+            $addedBy = date("M j, Y",strtotime($adjustment['date'])) . ' ' . $adjustment['adjustedByFirstName'] . ' ' . $adjustment['adjustedByLastName'];
+            
+            if($adjustment['adjustment_type'] == 'Add Subject'){
+                $addSubject = $adjustment['strCode'] . ' (' . $adjustment['to_subject'] . ') ' . $addedBy;
+            }
+            
+            if($adjustment['adjustment_type'] == 'Removed'){
+                $dropSubject = $adjustment['strCode'] . ' (' . $adjustment['from_subject'] . ') ' . $addedBy; 
+            }
+            
+            if($adjustment['adjustment_type'] == 'Replace Subject'){
+                $replaceSubjectFrom = $adjustment['from_subject'] . $addedBy;
+                $replaceSubjectTo = $adjustment['strCode'] . ' (' . $adjustment['to_subject'] . ') ' . $addedBy;
+            }
+            
+            $student['student_name'] = ucfirst($adjustment['studentLastName']) . ', ' . $adjustment['studentFirstName'];
+            $student['student_number'] = str_replace("-", "", $adjustment['strStudentNumber']);
+            $student['course'] = $course['strProgramCode'];
+            $student['add_subject'] = $addSubject;
+            $student['drop_subject'] = $dropSubject;
+            $student['replace_subject_from'] = $replaceSubjectFrom;
+            $student['replace_subject_to'] = $replaceSubjectTo;
+            $adjustments_array[] = $student;
+        }
+        $data['data'] = $adjustments_array;
+        echo json_encode($data);
     }
 
     private function get_student_number_year($student_number){
