@@ -2,14 +2,40 @@
   <h2 class="text-2xl font-semibold text-gray-800 mb-2">{{ vm.title }}</h2>
   <p class="text-gray-600 mb-6">Adjust your account preferences below.</p>
 
+  <!-- Profile Details (tb_mas_faculty) -->
   <div class="bg-white rounded shadow p-6">
+    <div class="text-sm text-blue-600 mb-3" ng-if="vm.loading.profile">Loading profile...</div>
+    <div class="text-sm text-red-600 mb-3" ng-if="vm.error && vm.error.profile">{{ vm.error.profile }}</div>
+
     <form novalidate ng-submit="vm.save()">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label class="block text-sm text-gray-500 mb-1" for="displayName">Display Name</label>
-          <input id="displayName" type="text" class="w-full border rounded px-3 py-2"
-                 ng-model="vm.model.displayName" placeholder="Display name" />
+          <label class="block text-sm text-gray-500 mb-1" for="strLastname">Last Name</label>
+          <input id="strLastname" type="text" class="w-full border rounded px-3 py-2"
+                 ng-model="vm.model.strLastname" placeholder="Last name" />
         </div>
+        <div>
+          <label class="block text-sm text-gray-500 mb-1" for="strFirstname">First Name</label>
+          <input id="strFirstname" type="text" class="w-full border rounded px-3 py-2"
+                 ng-model="vm.model.strFirstname" placeholder="First name" />
+        </div>
+        <div>
+          <label class="block text-sm text-gray-500 mb-1" for="strMiddlename">Middle Name</label>
+          <input id="strMiddlename" type="text" class="w-full border rounded px-3 py-2"
+                 ng-model="vm.model.strMiddlename" placeholder="Middle name" />
+        </div>
+        <div>
+          <label class="block text-sm text-gray-500 mb-1" for="strEmail">Email</label>
+          <input id="strEmail" type="email" class="w-full border rounded px-3 py-2"
+                 ng-model="vm.model.strEmail" placeholder="Email address" />
+        </div>
+        <div>
+          <label class="block text-sm text-gray-500 mb-1" for="strMobileNumber">Mobile Number</label>
+          <input id="strMobileNumber" type="text" class="w-full border rounded px-3 py-2"
+                 ng-model="vm.model.strMobileNumber" placeholder="09XXXXXXXXX" />
+        </div>
+
+        <!-- Optional preferences retained -->
         <div>
           <label class="block text-sm text-gray-500 mb-1" for="theme">Theme</label>
           <select id="theme" class="w-full border rounded px-3 py-2" ng-model="vm.model.theme">
@@ -33,9 +59,48 @@
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
           </svg>
-          Save Settings
+          Save Profile
         </button>
         <span class="text-sm text-green-700" ng-if="vm.message">{{ vm.message }}</span>
+      </div>
+    </form>
+  </div>
+
+  <!-- Change Password -->
+  <div class="bg-white rounded shadow p-6 mt-6">
+    <h3 class="text-lg font-medium text-gray-800 mb-3">Change Password</h3>
+
+    <div class="text-sm text-red-600 mb-3" ng-if="vm.error && vm.error.password">{{ vm.error.password }}</div>
+
+    <form novalidate ng-submit="vm.changePassword()">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div>
+          <label class="block text-sm text-gray-500 mb-1" for="currentPassword">Current Password</label>
+          <input id="currentPassword" type="password" class="w-full border rounded px-3 py-2"
+                 ng-model="vm.password.current" placeholder="Current password" />
+        </div>
+        <div>
+          <label class="block text-sm text-gray-500 mb-1" for="newPassword">New Password</label>
+          <input id="newPassword" type="password" class="w-full border rounded px-3 py-2"
+                 ng-model="vm.password.new" placeholder="New password" />
+        </div>
+        <div>
+          <label class="block text-sm text-gray-500 mb-1" for="confirmPassword">Confirm New Password</label>
+          <input id="confirmPassword" type="password" class="w-full border rounded px-3 py-2"
+                 ng-model="vm.password.confirm" placeholder="Confirm new password" />
+        </div>
+      </div>
+
+      <div class="mt-6">
+        <button type="submit"
+                class="inline-flex items-center px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50"
+                ng-disabled="vm.changingPassword">
+          <svg ng-if="vm.changingPassword" class="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+          </svg>
+          Update Password
+        </button>
       </div>
     </form>
   </div>

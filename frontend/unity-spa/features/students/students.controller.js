@@ -445,7 +445,7 @@
     };
 
     vm.financesUrl = function (id) {
-      return '#/finance/cashier/' + id;
+      return '#!/finance/cashier/' + id;
     };
 
     vm.applicantTxUrl = function (studentNumber) {
@@ -453,11 +453,11 @@
     };
 
     vm.viewerUrl = function (row) {
-      return '#/students/' + row.id;
+      return '#!/students/' + row.id;
     };
 
     vm.editChecklistUrl = function (id) {
-      return '#/students/' + id + '/checklist/edit';
+      return '#!/students/' + id + '/checklist/edit';
     };
 
     // Row actions dropdown state

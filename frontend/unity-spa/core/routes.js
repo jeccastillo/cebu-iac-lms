@@ -790,8 +790,8 @@
       })
       .otherwise({ redirectTo: "/login" });
 
-    // Keep hashbang routing for simple static hosting
-    $locationProvider.hashPrefix('');
+    // Use hashbang mode to align with existing '#!/' links
+    $locationProvider.hashPrefix('!');
   }
 
 })();

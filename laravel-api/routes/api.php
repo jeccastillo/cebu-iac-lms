@@ -73,6 +73,7 @@ use App\Http\Controllers\Api\V1\ShiftRequestController;
 use App\Http\Controllers\Api\V1\StudentAdvisorController;
 use App\Http\Controllers\Api\V1\PayeeController;
 use App\Http\Controllers\Api\V1\NonStudentPaymentsController;
+use App\Http\Controllers\Api\V1\FacultySelfController;
 
 /*
 |--------------------------------------------------------------------------
@@ -131,6 +132,12 @@ Route::prefix('v1')->group(function () {
     // Place search route BEFORE parameterized /faculty/{id} to avoid route collision
     // Faculty search for cashier assignment (cashier_admin and admin)
     Route::get('/faculty/search', [FacultyController::class, 'index'])->middleware('role:cashier_admin,admin');
+
+    // Faculty self-service (acting faculty via X-Faculty-ID header) — place BEFORE parameterized {id} to avoid collision
+    Route::get('/faculty/me', [FacultySelfController::class, 'me']);
+    Route::put('/faculty/me', [FacultySelfController::class, 'update']);
+    Route::post('/faculty/me/password', [FacultySelfController::class, 'updatePassword']);
+
     Route::get('/faculty/{id}', [FacultyController::class, 'show'])->middleware('role:admin');
     Route::post('/faculty', [FacultyController::class, 'store'])->middleware('role:admin');
     Route::put('/faculty/{id}', [FacultyController::class, 'update'])->middleware('role:admin');

@@ -68,7 +68,7 @@
     <div ng-if="vm.selectedStudentName" class="text-sm text-gray-700 mb-1 flex items-center justify-between">
       <span>Student: <span class="font-semibold">{{vm.selectedStudentName}} - {{ vm.registration.enrollment_status }}</span></span>      
       <a ng-if="vm.studentNumber" 
-         href="#/students/{{vm.student_id}}/records?sn={{vm.studentNumber}}" 
+         href="#!/students/{{vm.student_id}}/records?sn={{vm.studentNumber}}" 
          target="_blank" 
          class="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700">
         <i class="fas fa-external-link-alt"></i> View Records
@@ -118,7 +118,7 @@
       <div class="flex items-center gap-2">
         <a ng-if="vm.hasChecklist && vm.student_id"
            class="px-3 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-           href="#/students/{{vm.student_id}}/records?sn={{vm.studentNumber}}"
+           href="#!/students/{{vm.student_id}}/records?sn={{vm.studentNumber}}"
            target="_blank">
           <i class="fas fa-external-link-alt mr-1"></i> View Checklist
         </a>

@@ -17,14 +17,25 @@
     .fas { font-weight: 900 !important; }
   </style>
 
-  <!-- Pre-bootstrap normalization: fix malformed hash paths like '#//registrar/...'
+  <!-- Pre-bootstrap normalization:
+       - Convert '#/path' (no hashbang) to '#!/path' for compatibility after setting hashPrefix('!').
+       - Normalize malformed hash paths like '#//!/registrar/...' or '#//!/path' to a single slash after '#!/'.
        This must run BEFORE Angular is loaded to prevent $location:badpath on initial parse. -->
   <script>
     (function () {
       try {
         var h = window.location.hash || '';
-        // Normalize any leading double-slashes after the hash to a single slash
-        var fixed = h.replace(/^#\/{2,}/, '#\/');
+        var fixed = h;
+
+        // 1) If URL uses '#/path' (no '!'), convert to '#!/path'
+        if (/^#\/(?!!)/.test(fixed)) {
+          fixed = fixed.replace(/^#\//, '#!/');
+        }
+
+        // 2) If URL has duplicate slashes after '#!/', normalize to single
+        //    e.g., '#//!/registrar/...' or '#!//registrar/...' -> '#!/registrar/...'
+        fixed = fixed.replace(/^#!\/{2,}/, '#!/');
+
         if (fixed !== h) {
           // Use replace() to avoid polluting history
           var href = window.location.href.replace(h, fixed);

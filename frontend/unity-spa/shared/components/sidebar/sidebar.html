@@ -38,7 +38,7 @@
 
       <!-- Standalone Links -->
       <!-- Dashboard -->
-      <a ng-href="{{ '#' + vm.dashboardPath }}" 
+      <a ng-href="{{ '#!' + vm.dashboardPath }}" 
          class="sb-item"
          ng-class="{'sb-item--active': vm.isCurrentPath(vm.dashboardPath)}"
          title="Dashboard">
@@ -50,7 +50,7 @@
       </a>
 
       <!-- My Application (Student) -->
-      <a href="#/student/applicant" 
+      <a href="#!/student/applicant" 
          ng-if="vm.hasRole('student_view')"
          class="sb-item"
          ng-class="{'sb-item--active': vm.isCurrentPath('/student/applicant')}"
@@ -63,7 +63,7 @@
       </a>
 
       <!-- Students -->
-      <a href="#/students" 
+      <a href="#!/students" 
          ng-if="vm.canAccess('/students')"
          class="sb-item"
          ng-class="{'sb-item--active': vm.isCurrentPath('/students')}"
@@ -75,7 +75,7 @@
       </a>            
 
       <!-- Campuses -->
-      <a href="#/campuses"
+      <a href="#!/campuses"
          ng-if="vm.canAccess('/campuses')"
          class="sb-item"
          ng-class="{'sb-item--active': vm.isCurrentPath('/campuses')}"
@@ -88,7 +88,7 @@
       </a>
 
       <!-- Cashier (Top-level) -->
-      <a href="#/finance/cashier/0"
+      <a href="#!/finance/cashier/0"
          ng-if="vm.canAccess('/finance/cashier')"
          class="sb-item"
          ng-class="{'sb-item--active': vm.isActivePrefix('/finance/cashier')}"
@@ -178,7 +178,7 @@
               <!-- Existing dynamic children -->
               <a ng-repeat="child in group.children"
                  ng-if="vm.canAccess(child.path)"
-                 ng-href="{{ '#' + (child.href || child.path) }}"
+                 ng-href="{{ '#!' + (child.href || child.path) }}"
                  class="sb-popout-item"
                  ng-class="{'sb-item--active': vm.isActivePrefix(child.path)}"
                  title="{{ child.label }}"
