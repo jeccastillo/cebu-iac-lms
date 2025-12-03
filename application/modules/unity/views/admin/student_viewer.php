@@ -255,6 +255,7 @@
                               <option value="2nd Degree iAC">2nd Degree iAC</option>
                               <option value="returning">Returnee</option>
                               <option value="transferee">Transferee</option>
+                              <option value="acadRes">Academic Residency</option>
                             </select>
                           </p>
                           <p><strong>Year Level: </strong>
