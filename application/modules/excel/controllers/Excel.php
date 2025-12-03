@@ -7694,6 +7694,9 @@ class Excel extends CI_Controller {
                         ->get()
                         ->result_array();
         }
+
+        print_r($students);
+        die();
         
         error_reporting(E_ALL);
         ini_set('display_errors', TRUE);
