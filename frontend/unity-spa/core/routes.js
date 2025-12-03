@@ -553,6 +553,12 @@
         controllerAs: 'vm',
         requiredRoles: ['finance', 'admin'],
       })
+      .when('/finance/daily-collections', {
+        templateUrl: 'features/finance/daily-collections/daily-collections.html',
+        controller: 'DailyCollectionsController',
+        controllerAs: 'vm',
+        requiredRoles: ['finance', 'admin'],
+      })
       .when('/finance/non-student-payments', {
         templateUrl: 'features/finance/non-student-payments/non-student-payments.html',
         controller: 'NonStudentPaymentsController',

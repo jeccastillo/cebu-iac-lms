@@ -88,6 +88,7 @@
           { label: 'Payment Actions', path: '/finance/payment-actions' },
           { label: 'Official Receipt Reports', path: '/finance/or-reports' },
           { label: 'Invoice Reports', path: '/finance/invoice-reports' },
+          { label: 'Daily Collections', path: '/finance/daily-collections' },
           { label: 'Non-Student Payments', path: '/finance/non-student-payments' },
           { label: 'Cashier Admin', path: '/cashier-admin' },
           { label: 'Credit/Debit', path: '/finance/debit-credit' },                    

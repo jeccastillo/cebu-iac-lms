@@ -428,6 +428,8 @@ Route::prefix('v1')->group(function () {
     Route::get('/reports/invoices', [ReportsController::class, 'invoiceReports'])->middleware('role:finance,admin');
     // Finance reports - Official Receipt (OR) Reports JSON
     Route::get('/reports/official-receipts', [ReportsController::class, 'orReports'])->middleware('role:finance,admin');
+    // Finance reports - Daily Collections JSON
+    Route::get('/reports/daily-collections', [ReportsController::class, 'dailyCollections'])->middleware('role:finance,admin');
     // Grading Sheet PDF (Registrar / Faculty Admin / Admin)
     Route::get('/reports/grading-sheet/pdf', [ReportsController::class, 'gradingSheetPdf'])->middleware('role:registrar,faculty_admin,admin');
     // Student Transcript/Copy of Grades (Registrar/Admin)

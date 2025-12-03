@@ -1467,4 +1467,223 @@ class ReportsController extends Controller
             ],
         ]);
     }
+
+    /**
+     * GET /api/v1/reports/daily-collections
+     * Params:
+     *  - date_from: Y-m-d (required)
+     *  - date_to:   Y-m-d (required, >= date_from)
+     *  - campus_id?: int (optional)
+     *  - cashier_id?: int (optional, applied only if payment_details.cashier_id exists)
+     *
+     * Aggregates payment_details rows with status='Paid' (when status column exists) grouped by day.
+     * - Prefers payment_details.or_date for date column when available; otherwise uses detected date (paid_at/date/created_at).
+     * - Filters by inclusive date range on the chosen date column.
+     * - Optional campus filter: prefers payment_details.student_campus; else joins tb_mas_users via student_id.
+     * - Optional cashier filter: applied only if payment_details.cashier_id exists.
+     *
+     * Output JSON:
+     * {
+     *   "date_from": "Y-m-d",
+     *   "date_to": "Y-m-d",
+     *   "meta": { "count_rows": int, "grand_total": float },
+     *   "daily": [
+     *     {
+     *       "date": "Y-m-d",
+     *       "total_paid": float,
+     *       "count_paid": int,
+     *       "by_method": { "<method>": float, ... },
+     *       "by_cashier": [ { "cashier_id": int, "total": float }, ... ] // only if cashier_id column exists
+     *     }
+     *   ]
+     * }
+     */
+    public function dailyCollections(Request $request): JsonResponse
+    {
+        $payload = $request->validate([
+            'date_from'  => 'required|date_format:Y-m-d',
+            'date_to'    => 'required|date_format:Y-m-d|after_or_equal:date_from',
+            'campus_id'  => 'nullable|integer',
+            'cashier_id' => 'nullable|integer',
+        ]);
+
+        $dateFrom  = (string) $payload['date_from'];
+        $dateTo    = (string) $payload['date_to'];
+        $campusId  = array_key_exists('campus_id', $payload) ? (int) $payload['campus_id'] : null;
+        $cashierId = array_key_exists('cashier_id', $payload) ? (int) $payload['cashier_id'] : null;
+
+        /** @var PaymentDetailAdminService $pdSvc */
+        $pdSvc = app(PaymentDetailAdminService::class);
+        $cols  = $pdSvc->detectColumns();
+
+        // Require table and subtotal_order to exist
+        if (!($cols['exists'] ?? false) || empty($cols['subtotal_order'])) {
+            return response()->json([
+                'date_from' => $dateFrom,
+                'date_to'   => $dateTo,
+                'meta'      => ['count_rows' => 0, 'grand_total' => 0.0],
+                'daily'     => [],
+            ]);
+        }
+
+        // Prefer explicit 'or_date' when available; else use detected date column
+        $dateCol = Schema::hasColumn($cols['table'], 'or_date') ? 'or_date' : ($cols['date'] ?: null);
+
+        if (!$dateCol) {
+            // Without a date column, we cannot build a daily aggregation safely
+            return response()->json([
+                'date_from' => $dateFrom,
+                'date_to'   => $dateTo,
+                'meta'      => ['count_rows' => 0, 'grand_total' => 0.0],
+                'daily'     => [],
+            ]);
+        }
+
+        // Base query
+        $q = DB::table($cols['table'] . ' as pd');
+
+        // Only Paid rows when status column exists
+        if (!empty($cols['status'])) {
+            $q->where('pd.' . $cols['status'], 'Paid');
+        }
+
+        // Inclusive date range
+        $q->where('pd.' . $dateCol, '>=', $dateFrom)
+          ->where('pd.' . $dateCol, '<=', $dateTo);
+
+        // Campus filter
+        $joinedUsers = false;
+        if ($campusId !== null) {
+            if (!empty($cols['student_campus'])) {
+                $q->where('pd.' . $cols['student_campus'], $campusId);
+            } elseif (!empty($cols['student_id'])) {
+                $q->leftJoin('tb_mas_users as u', 'u.intID', '=', 'pd.' . $cols['student_id']);
+                $q->where('u.campus_id', $campusId);
+                $joinedUsers = true;
+            }
+        }
+
+        // Cashier filter (only if column exists)
+        $hasCashierCol = Schema::hasColumn($cols['table'], 'cashier_id');
+        if ($cashierId !== null && $hasCashierCol) {
+            $q->where('pd.cashier_id', $cashierId);
+        }
+
+        // Select minimal fields for aggregation
+        $select = [];
+        $select[] = DB::raw('DATE(pd.' . $dateCol . ') as d');
+        $select[] = 'pd.' . $cols['subtotal_order'] . ' as subtotal_order';
+        $select[] = !empty($cols['method']) ? ('pd.' . $cols['method'] . ' as method') : DB::raw('NULL as method');
+        $select[] = $hasCashierCol ? DB::raw('pd.cashier_id as cashier_id') : DB::raw('NULL as cashier_id');
+
+        $rowsDb = $q->select($select)->get();
+
+        // Initialize buckets for each day in range
+        $daily = [];
+        try {
+            $period = new \DatePeriod(
+                new \DateTime($dateFrom),
+                new \DateInterval('P1D'),
+                (new \DateTime($dateTo))->modify('+1 day')
+            );
+            foreach ($period as $dt) {
+                $d = $dt->format('Y-m-d');
+                $daily[$d] = [
+                    'date'       => $d,
+                    'total_paid' => 0.0,
+                    'count_paid' => 0,
+                    'by_method'  => [],
+                    // store map internally for cashiers; convert to array later
+                    '_by_cashier_map' => [],
+                ];
+            }
+        } catch (\Throwable $e) {
+            // Fallback: no pre-initialization if DatePeriod fails (shouldn't happen with valid Y-m-d)
+        }
+
+        $grandTotal = 0.0;
+        $countRows  = 0;
+
+        foreach ($rowsDb as $r) {
+            $countRows += 1;
+            $d = isset($r->d) ? (string) $r->d : null;
+            if ($d === null || $d === '') continue;
+
+            if (!isset($daily[$d])) {
+                // In case no pre-initialization (or date outside), create on the fly
+                $daily[$d] = [
+                    'date'       => $d,
+                    'total_paid' => 0.0,
+                    'count_paid' => 0,
+                    'by_method'  => [],
+                    '_by_cashier_map' => [],
+                ];
+            }
+
+            $amt = isset($r->subtotal_order) ? (float) $r->subtotal_order : 0.0;
+            $daily[$d]['total_paid'] += $amt;
+            $daily[$d]['count_paid'] += 1;
+            $grandTotal += $amt;
+
+            // By method
+            $m = isset($r->method) && trim((string)$r->method) !== '' ? (string) $r->method : 'Unknown';
+            if (!isset($daily[$d]['by_method'][$m])) {
+                $daily[$d]['by_method'][$m] = 0.0;
+            }
+            $daily[$d]['by_method'][$m] += $amt;
+
+            // By cashier (only if column exists and value present)
+            if ($hasCashierCol) {
+                $cid = isset($r->cashier_id) ? $r->cashier_id : null;
+                if ($cid !== null && $cid !== '') {
+                    $cidKey = (int) $cid;
+                    if (!isset($daily[$d]['_by_cashier_map'][$cidKey])) {
+                        $daily[$d]['_by_cashier_map'][$cidKey] = 0.0;
+                    }
+                    $daily[$d]['_by_cashier_map'][$cidKey] += $amt;
+                }
+            }
+        }
+
+        // Normalize daily array and convert by_cashier map to array
+        ksort($daily);
+        $dailyOut = [];
+        foreach ($daily as $d => $bucket) {
+            // Convert by_cashier map to array if we had cashier column
+            $byCashierArr = [];
+            if ($hasCashierCol && !empty($bucket['_by_cashier_map']) && is_array($bucket['_by_cashier_map'])) {
+                ksort($bucket['_by_cashier_map']);
+                foreach ($bucket['_by_cashier_map'] as $cid => $total) {
+                    $byCashierArr[] = [
+                        'cashier_id' => (int) $cid,
+                        'total'      => round((float) $total, 2),
+                    ];
+                }
+            }
+
+            // Round method totals
+            $byMethodOut = [];
+            foreach ($bucket['by_method'] as $method => $val) {
+                $byMethodOut[$method] = round((float) $val, 2);
+            }
+
+            $dailyOut[] = [
+                'date'       => $bucket['date'],
+                'total_paid' => round((float) $bucket['total_paid'], 2),
+                'count_paid' => (int) $bucket['count_paid'],
+                'by_method'  => $byMethodOut,
+                'by_cashier' => $byCashierArr,
+            ];
+        }
+
+        return response()->json([
+            'date_from' => $dateFrom,
+            'date_to'   => $dateTo,
+            'meta'      => [
+                'count_rows' => (int) $countRows,
+                'grand_total'=> round((float) $grandTotal, 2),
+            ],
+            'daily'     => $dailyOut,
+        ]);
+    }
 }
