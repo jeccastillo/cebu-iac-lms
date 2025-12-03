@@ -7716,7 +7716,7 @@ class Excel extends CI_Controller {
             $subjects = $this->db->select('tb_mas_classlist_student.floatPrelimGrade, tb_mas_classlist_student.floatMidtermGrade, tb_mas_classlist_student.floatFinalsGrade')
             ->from('tb_mas_classlist_student')
             ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
-            ->where(array('tb_mas_classlist_student.intStudentID'=>$student['intID'],'tb_mas_classlist.strAcademicYear'=>$sem,'tb_mas_classlist_student.floatPrelimGrade !='=>null, 'tb_mas_classlist_student.floatMidtermGrade !='=>null, 'tb_mas_classlist_student.floatFinalsGrade !='=>null))
+            ->where(array('tb_mas_classlist_student.intStudentID'=>$student['intID'],'tb_mas_classlist.strAcademicYear'=>$sem,'tb_mas_classlist_student.floatFinalGrade !='=>null, 'tb_mas_classlist_student.floatMidtermGrade !='=>null, 'tb_mas_classlist_student.floatFinalsGrade !='=>null))
             ->get()
             ->result_array();
 
@@ -7726,7 +7726,7 @@ class Excel extends CI_Controller {
 
             if(count($subjects) >  0){
                 foreach($subjects as $subject){
-                    $average = getAve($subject['floatPrelimGrade'], $subject['floatMidtermGrade'], $subject['floatFinalsGrade']);
+                    $average = getAve($subject['floatMidtermGrade'], $subject['floatFinalsGrade']);
                     $totalGrades += $average;
                 }
                 $gwa = $totalGrades / count($subjects);
