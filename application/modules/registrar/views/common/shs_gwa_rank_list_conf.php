@@ -8,7 +8,7 @@ $(document).ready(function() {
         "ordering": false,
         "paging": true,
         ajax: {
-            url: "<?php echo base_url(); ?>registrar/shs_gwa_rank_data/<?php echo $current_sem; ?>/<?php echo $postyear; ?>",
+            url: "<?php echo base_url(); ?>registrar/add_drop_subjects_data/<?php echo $current_sem; ?>/<?php echo $postyear; ?>",
             dataSrc: ''
         },
         columns: [{
