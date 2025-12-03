@@ -3216,7 +3216,7 @@ class Registrar extends CI_Controller {
             
             $student['student'] = ucfirst($adjustment['studentLastName']) . ', ' . $adjustment['studentFirstName'];
             $student['student_number'] = str_replace("-", "", $adjustment['strStudentNumber']);
-            $student['course'] = $$course['strProgramCode'];
+            $student['course'] = $course['strProgramCode'];
             $student['add_subject'] = $addSubject;
             $student['drop_subject'] = $dropSubject;
             $student['replace_subject_from'] = $replaceSubjectFrom;
