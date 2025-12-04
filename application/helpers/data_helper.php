@@ -303,6 +303,15 @@ if (!function_exists('getAve')) {
         }
 }
 
+if (!function_exists('getMidtermFinalAve')) {
+        
+    function getMidtermFinalAve($v1, $v2, $v3)
+        {   
+            $ave = number_format(round(($v1 *.30) + ($v2 *.30) + ($v3 * .40), 2), 2);
+            return $ave;
+        }
+}
+
 if (!function_exists('get_label')) {
 
     function get_label($table,$field) {
