@@ -55,7 +55,8 @@
                                             <label>Select Term</label>
                                             <select ref="payee" v-model="request.sy_reference" class="form-control">
                                                 <option v-for="(item,index) in sy" :value="item.intID">
-                                                    {{ item.enumSem + " " + item.term_label + " SY "+item.strYearStart+"-"+item.strYearEnd }}
+                                                    {{ s.term_student_type + " " + item.enumSem + " " + item.term_label + " SY "+item.strYearStart+"-"+item.strYearEnd }}
+                                                    
                                                 </option>
                                             </select>
                                         </div>
