@@ -7739,6 +7739,8 @@ class Excel extends CI_Controller {
             }
         }
         
+        print_r($gwa_ranks);
+        die();
         //sort by GWA
         usort($gwa_ranks, function($a, $b) {
             return $a['gwa'] < $b['gwa'];
