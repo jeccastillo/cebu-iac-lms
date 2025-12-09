@@ -7713,7 +7713,7 @@ class Excel extends CI_Controller {
 
         foreach($students as $student){
             $totalGrades = $gwa = 0;
-            $subjects = $this->db->select('tb_mas_classlist_student.floatPrelimGrade, tb_mas_classlist_student.floatMidtermGrade, tb_mas_classlist_student.floatFinalsGrade')
+            $subjects = $this->db->select('tb_mas_classlist_student.floatPrelimGrade, tb_mas_classlist_student.floatMidtermGrade, tb_mas_classlist_student.floatFinalsGrade, tb_mas_classlist_student.floatFinalGrade')
             ->from('tb_mas_classlist_student')
             ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
             ->where(array('tb_mas_classlist.intFinalized' => 2 ,'tb_mas_classlist_student.intStudentID'=>$student['intID'],'tb_mas_classlist.strAcademicYear'=>$sem,'tb_mas_classlist_student.floatFinalGrade !='=>null, 'tb_mas_classlist_student.floatMidtermGrade !='=>null, 'tb_mas_classlist_student.floatFinalsGrade !='=>null))
