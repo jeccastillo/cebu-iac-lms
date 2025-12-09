@@ -7722,7 +7722,7 @@ class Excel extends CI_Controller {
 
             if(count($subjects) >  0){
                 foreach($subjects as $subject){
-                    $average = getMidtermFinalAve($subject['floatMidtermGrade'], $subject['floatFinalsGrade']);
+                    $average = getMidtermFinalAve($subject['floatMidtermGrade'], $subject['floatFinalGrade']);
                     $totalGrades += $average;
                 }
                 $gwa = $totalGrades / count($subjects);
@@ -7737,14 +7737,8 @@ class Excel extends CI_Controller {
                 $student_data['year_level'] = $student['intYearLevel'];
                 $gwa_ranks[] = $student_data;
             }
-            if($student['intID'] == 846){
-                print(count($subjects));
-                print_r($totalGrades);
-                print_r($gwa_ranks);
-                die();
-            }
         }
-        die();
+        
         //sort by GWA
         usort($gwa_ranks, function($a, $b) {
             return $a['gwa'] < $b['gwa'];
