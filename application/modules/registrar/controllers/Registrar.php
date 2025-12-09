@@ -1450,21 +1450,21 @@ class Registrar extends CI_Controller {
 
         $gwa_ranks = array();
         foreach($students as $student){
-            $totalGrades = 0;
-            $subjects = $this->db->select('tb_mas_classlist_student.floatPrelimGrade, tb_mas_classlist_student.floatMidtermGrade, tb_mas_classlist_student.floatFinalsGrade')
+            $totalGrades = $gwa = 0;
+            $subjects = $this->db->select('tb_mas_classlist_student.floatPrelimGrade, tb_mas_classlist_student.floatMidtermGrade, tb_mas_classlist_student.floatFinalsGrade, tb_mas_classlist_student.floatFinalGrade')
             ->from('tb_mas_classlist_student')
             ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
-            ->where(array('tb_mas_classlist_student.intStudentID'=>$student['intID'],'tb_mas_classlist.strAcademicYear'=>$sem,'tb_mas_classlist_student.floatPrelimGrade !='=>null, 'tb_mas_classlist_student.floatMidtermGrade !='=>null, 'tb_mas_classlist_student.floatFinalsGrade !='=>null))
+            ->where(array('tb_mas_classlist.intFinalized' => 2 ,'tb_mas_classlist_student.intStudentID'=>$student['intID'],'tb_mas_classlist.strAcademicYear'=>$sem,'tb_mas_classlist_student.floatFinalGrade !='=>null, 'tb_mas_classlist_student.floatMidtermGrade !='=>null, 'tb_mas_classlist_student.floatFinalsGrade !='=>null))
             ->get()
             ->result_array();
 
-            foreach($subjects as $subject){
-                $average = getAve($subject['floatPrelimGrade'], $subject['floatMidtermGrade'], $subject['floatFinalsGrade']);
-                $totalGrades += $average;
-            }
-            if(count($subjects) > 0){
+            if(count($subjects) >  0){
+                foreach($subjects as $subject){
+                    $average = getMidtermFinalAve($subject['floatMidtermGrade'], $subject['floatFinalGrade']);
+                    $totalGrades += $average;
+                }
                 $gwa = $totalGrades / count($subjects);
-                
+    
                 $student_data = array();
                 $student_data['student_number'] = $student['strStudentNumber'];
                 $student_data['last_name'] = strtoupper($student['strLastname']);
