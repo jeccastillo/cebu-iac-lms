@@ -7722,7 +7722,7 @@ class Excel extends CI_Controller {
 
             if(count($subjects) >  0){
                 foreach($subjects as $subject){
-                    $average = getMidtermFinalAve($subject['floatPrelimGrade'], $subject['floatMidtermGrade'], $subject['floatFinalsGrade']);
+                    $average = getMidtermFinalAve($subject['floatMidtermGrade'], $subject['floatFinalsGrade']);
                     $totalGrades += $average;
                 }
                 $gwa = $totalGrades / count($subjects);
