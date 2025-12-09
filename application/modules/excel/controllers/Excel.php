@@ -7739,7 +7739,7 @@ class Excel extends CI_Controller {
             }
             if($student['intID'] == 846){
                 print(count($subjects));
-                print_r($subjects);
+                print_r($totalGrades);
                 print_r($gwa_ranks);
                 die();
             }
