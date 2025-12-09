@@ -290,6 +290,22 @@
                 </div>
                 <!-- small box -->
             </div>
+            <div class="col-md-4 col-sm-8 col-xs-12">
+                <!-- small box -->
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3>Add/Drop/Change Subject</h3>
+                        <p>Add/Drop/Change Subject Report List</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-users"></i>
+                    </div>
+                    <a href="<?php echo base_url(); ?>registrar/add_drop_subjects"
+                        class="small-box-footer"> View <i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+                <!-- small box -->
+            </div>
         </div>
     </div>
 </aside>

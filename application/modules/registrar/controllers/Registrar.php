@@ -3227,6 +3227,25 @@ class Registrar extends CI_Controller {
         echo json_encode($data);
     }
 
+    public function add_drop_subjects($term = 0)    
+    {
+        if($this->faculty_logged_in())
+        {
+            if($term == 0)
+                $term = $this->data_fetcher->get_processing_sem();        
+            else
+                $term = $this->data_fetcher->get_sem_by_id($term); 
+                 
+            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $this->data['current_sem'] = $term['intID'];
+     
+            $this->load->view("common/header",$this->data);
+            $this->load->view("admin/add_drop_subjects",$this->data);
+            $this->load->view("common/footer",$this->data); 
+            $this->load->view("common/add_drop_subjects_conf",$this->data);
+        }
+    }
+
     private function get_student_number_year($student_number){
         
         if (preg_match('/^[a-zA-Z]/', $student_number)) {
