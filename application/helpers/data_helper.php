@@ -307,7 +307,7 @@ if (!function_exists('getMidtermFinalAve')) {
         
     function getMidtermFinalAve($v1, $v2)
         {   
-            $ave = number_format(round($v1 + $v2), 2);
+            $ave = number_format(round(($v1 + $v2) /2, 2), 2);
             return $ave;
         }
 }
