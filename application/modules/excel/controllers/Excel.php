@@ -7737,12 +7737,14 @@ class Excel extends CI_Controller {
                 $student_data['year_level'] = $student['intYearLevel'];
                 $gwa_ranks[] = $student_data;
             }
+            if($student['strLastname'] == 'UNTARAN'){
+                print(count($subjects));
+                print_r($subjects);
+                print_r($gwa_ranks);
+                die();
+            }
         }
 
-        print(count($subjects));
-        print_r($subjects);
-        print_r($gwa_ranks);
-        die();
         //sort by GWA
         usort($gwa_ranks, function($a, $b) {
             return $a['gwa'] < $b['gwa'];
