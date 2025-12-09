@@ -7737,14 +7737,14 @@ class Excel extends CI_Controller {
                 $student_data['year_level'] = $student['intYearLevel'];
                 $gwa_ranks[] = $student_data;
             }
-            if($student['strLastname'] == 'UNTARAN'){
+            if($student['intID'] == 846){
                 print(count($subjects));
                 print_r($subjects);
                 print_r($gwa_ranks);
                 die();
             }
         }
-
+        die();
         //sort by GWA
         usort($gwa_ranks, function($a, $b) {
             return $a['gwa'] < $b['gwa'];
@@ -11469,7 +11469,7 @@ class Excel extends CI_Controller {
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');      
-        header('Content-Disposition: attachment;filename="CHED TES Report ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '.xls"');
+        header('Content-Disposition: attachment;filename="Added,Dropped,Changed Subjects Report ' . $sy->enumSem . '_' . $this->data["term_type"] . '_' . $sy->strYearStart . '-' . $sy->strYearEnd . '.xls"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
