@@ -7712,7 +7712,7 @@ class Excel extends CI_Controller {
         $gwa_ranks = array();
 
         foreach($students as $student){
-            $totalGrades = 0;
+            $totalGrades = $gwa = 0;
             $subjects = $this->db->select('tb_mas_classlist_student.floatPrelimGrade, tb_mas_classlist_student.floatMidtermGrade, tb_mas_classlist_student.floatFinalsGrade')
             ->from('tb_mas_classlist_student')
             ->join('tb_mas_classlist','tb_mas_classlist_student.intClassListID = tb_mas_classlist.intID')
@@ -7739,6 +7739,7 @@ class Excel extends CI_Controller {
             }
         }
 
+        print(count($subjects));
         print_r($subjects);
         print_r($gwa_ranks);
         die();
