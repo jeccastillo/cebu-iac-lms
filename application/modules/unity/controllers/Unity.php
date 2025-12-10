@@ -1433,6 +1433,21 @@ class Unity extends CI_Controller {
             $equivalent_subjects = $this->db->get_where('tb_mas_equivalents',array('intSubjectID'=>$cs['intSubjectID']))->result_array();            
             $elective_subjects = $this->db->get_where('tb_mas_classlist_student_elective',array('elective_classlist_id'=>$cs['intSubjectID']))->result_array();            
 
+            $combined_subjects = $this->db->select('*')
+                ->where(array(
+                    'intCurriculumID' => $data['student']['intCurriculumID'],
+                    'type' => 'Combine'
+                ))
+                ->get('tb_mas_curriculum_second')
+                ->result_array();
+
+            $grouped_combined_subjects = [];
+            foreach ($combined_subjects as $row) {
+                // Use both 'combineCode' and 'combineDesc' to create a unique key for each group
+                $group_key = $row['combineCode'];
+                $grouped_combined_subjects[$group_key][] = $row;
+            }
+                                      
             // Prefer curriculum_second mapping: if current subject is listed as an equivalentSubjectID,
             // fetch the grade of the mapped intSubjectID for this student's curriculum.
             $recs = [];
@@ -1443,6 +1458,7 @@ class Unity extends CI_Controller {
                                     'equivalentSubjectID' => $cs['intSubjectID']
                                 )
                             )->result_array();
+
             if(!empty($secondary_map)){
                 foreach($secondary_map as $sm){
                     $temp_recs = $this->db->select('floatFinalGrade,strRemarks,tb_mas_subjects.strUnits,tb_mas_subjects.include_gwa,tb_mas_subjects.strCode,intFinalized')
@@ -1667,7 +1683,8 @@ class Unity extends CI_Controller {
         $data['credited_subjects'] = $credited_subjects;
         $data['credited_units'] = $credited_units;
         $data['curriculum_units'] = $curriculum_units;
-        $data['curriculum_units_na'] = $curriculum_units_na;        
+        $data['curriculum_units_na'] = $curriculum_units_na;  
+        $data['combined_subjects'] = $grouped_combined_subjects;     
         $data['units_left'] =  $curriculum_units - $assessment_units_earned - $credited_units;
         $data['data'] = $terms;
 
@@ -2376,7 +2393,7 @@ class Unity extends CI_Controller {
             $curriculum_second = $this->data_fetcher->getSubjectsInSecondary($id);
             $this->data['curriculum_subjects'] = [];
             $this->data['curriculum_second'] = [];
-            
+             
             foreach($curriculum as $subject){
                 $prereq_array = 
                         $this->db->select('tb_mas_subjects.*,tb_mas_prerequisites.program')
@@ -2411,7 +2428,6 @@ class Unity extends CI_Controller {
                 $this->data['curriculum_second'][] = $subject;
             }
 
-            
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/edit_curriculum",$this->data);
             $this->load->view("common/footer",$this->data); 
@@ -2449,8 +2465,8 @@ class Unity extends CI_Controller {
         {
             $post = $this->input->post();
             $type = $post['type'];
-
             
+            //print_r($post);
             if($type == "regular")                
                 foreach($post['subject'] as $subject)
                 {
@@ -2604,7 +2620,7 @@ class Unity extends CI_Controller {
     {
         if($this->is_registrar() || $this->is_super_admin()){
             $post = $this->input->post();
-            
+            //print_r($post);
             $this->data_poster->post_data('tb_mas_curriculum',$post,$post['intID']);
             $this->data_poster->log_action('Curriculum','Updated Curriculum Info: '.$post['strName'],'green');
         }
