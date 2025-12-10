@@ -2149,10 +2149,10 @@ class Registrar extends CI_Controller {
         $section_to = $add_to['strClassName'].$add_to['year'].$add_to['strSection'];
         $section_to .= ($add_to['sub_section'])?"-".$add_to['sub_section']:"";
         $registration = $this->data_fetcher->getRegistrationInfo($post['student'],$post['sem']);
-        if(!$registration || $registration['intROG'] != 1){
-            $data['message'] = "Student has to be enrolled to make adjustments";            
-            $data['success'] =  false;
-        }
+        // if(!$registration || $registration['intROG'] != 1){
+        //     $data['message'] = "Student has to be enrolled to make adjustments";            
+        //     $data['success'] =  false;
+        // }
         if($this->data_fetcher->get_classlist_remaining_slots($post['section_to_add']) <= 0){
             $data['success'] = false;
             $data['message'] = "There are no more slots available for this section";
