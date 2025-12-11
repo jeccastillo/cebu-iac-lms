@@ -2528,9 +2528,9 @@ class Excel extends CI_Controller {
                         $enrollmentStatus = 'Returnee';
                     else if($student['student_type'] == 'transferee')
                         $enrollmentStatus = 'Transferee';
-                    else if($student['student_type'] == '2nd Degree')
+                    else if($student['enumStudentType'] == '2nd Degree')
                         $enrollmentStatus = '2nd Degree';
-                    else if($student['student_type'] == '2nd Degree iAC')
+                    else if($student['enumStudentType'] == '2nd Degree iAC')
                         $enrollmentStatus = '2nd Degree iAC';
                     else
                         $enrollmentStatus = 'Freshman';
