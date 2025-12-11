@@ -782,6 +782,12 @@ class Registrar extends CI_Controller {
                     $totals['returning'] += 1;
                     $withdrawnTotals['returningWithdrawn'] += $addWithdrawn;
                 }
+                elseif($st['enumStudentType'] == "acadRes")
+                {
+                    $data[$date]['continuing'] += 1;
+                    $totals['continuing'] += 1;
+                    $withdrawnTotals['continuingWithdrawn'] += $addWithdrawn;
+                }
                 else
                     switch($st['student_type']){
                         case 'freshman':
