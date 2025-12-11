@@ -815,7 +815,29 @@ class Registrar extends CI_Controller {
                                 $totals['second'] += 1;
                                 $withdrawnTotals['secondWithdrawn'] += $addWithdrawn;
                             }
-                            break;                     
+                            break;  
+                        case '2nd Degree iAC':
+                            if(in_array($st['slug'], $second_degree_iac)){
+                                $data[$date]['secondIAC'] += 1;
+                                $totals['secondIAC'] += 1;
+                                $withdrawnTotals['secondIACWithdrawn'] += $addWithdrawn;
+                            }else{
+                                $data[$date]['second'] += 1;
+                                $totals['second'] += 1;
+                                $withdrawnTotals['secondWithdrawn'] += $addWithdrawn;
+                            }
+                            break;  
+                        case '2nd Degree':
+                            if(in_array($st['slug'], $second_degree_iac)){
+                                $data[$date]['secondIAC'] += 1;
+                                $totals['secondIAC'] += 1;
+                                $withdrawnTotals['secondIACWithdrawn'] += $addWithdrawn;
+                            }else{
+                                $data[$date]['second'] += 1;
+                                $totals['second'] += 1;
+                                $withdrawnTotals['secondWithdrawn'] += $addWithdrawn;
+                            }
+                            break;                  
                         default:
                             $data[$date]['freshman'] += 1;
                             $totals['freshman'] += 1;
