@@ -788,6 +788,16 @@ class Registrar extends CI_Controller {
                     $totals['continuing'] += 1;
                     $withdrawnTotals['continuingWithdrawn'] += $addWithdrawn;
                 }
+                elseif($st['enumStudentType'] == "2nd Degree iAC"){
+                    $data[$date]['secondIAC'] += 1;
+                    $totals['secondIAC'] += 1;
+                    $withdrawnTotals['secondIACWithdrawn'] += $addWithdrawn;
+                }
+                elseif($st['enumStudentType'] == "2nd Degree"){
+                    $data[$date]['second'] += 1;
+                    $totals['second'] += 1;
+                    $withdrawnTotals['secondWithdrawn'] += $addWithdrawn;
+                }
                 else
                     switch($st['student_type']){
                         case 'freshman':
@@ -815,17 +825,7 @@ class Registrar extends CI_Controller {
                                 $totals['second'] += 1;
                                 $withdrawnTotals['secondWithdrawn'] += $addWithdrawn;
                             }
-                            break;  
-                        case '2nd Degree iAC':
-                            $data[$date]['secondIAC'] += 1;
-                            $totals['secondIAC'] += 1;
-                            $withdrawnTotals['secondIACWithdrawn'] += $addWithdrawn;
-                            break;  
-                        case '2nd Degree':
-                            $data[$date]['second'] += 1;
-                            $totals['second'] += 1;
-                            $withdrawnTotals['secondWithdrawn'] += $addWithdrawn;
-                            break;                  
+                            break;                                           
                         default:
                             $data[$date]['freshman'] += 1;
                             $totals['freshman'] += 1;
