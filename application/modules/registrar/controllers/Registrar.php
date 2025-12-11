@@ -653,12 +653,14 @@ class Registrar extends CI_Controller {
         $ret = [];        
 
         foreach($programs as $program){
-            $st = [];
+            $st = [];            
             $program['enrolled_transferee'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,2));
             $program['enrolled_freshman'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,1));
             $program['enrolled_foreign'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,3));
-            $program['enrolled_second'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,4));            
-            $program['enrolled_continuing'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,5));
+            $program['enrolled_second'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,4))
+                                         + count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,8))
+                                         + count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,9));
+            $program['enrolled_continuing'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,5)) + count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,10));
             $program['enrolled_shiftee'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,6));
             $program['enrolled_returnee'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,7));
             $ret[] = $program; 
