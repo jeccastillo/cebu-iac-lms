@@ -3788,7 +3788,7 @@ class Excel extends CI_Controller {
             $program['enrolled_second'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,4))
                                          + count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,8))
                                          + count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,9));
-            $program['enrolled_continuing'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,5));
+            $program['enrolled_continuing'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,5)) + count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,10));
             $program['enrolled_shiftee'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,6));
             $program['enrolled_returnee'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,7));
              
