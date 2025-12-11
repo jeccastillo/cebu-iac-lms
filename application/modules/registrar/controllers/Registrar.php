@@ -653,7 +653,8 @@ class Registrar extends CI_Controller {
         $ret = [];        
 
         foreach($programs as $program){
-            $st = [];            
+            $st = [];
+            
             $program['enrolled_transferee'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,2));
             $program['enrolled_freshman'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,1));
             $program['enrolled_foreign'] = count($this->data_fetcher->getStudents($program['intProgramID'],0,0,0,0,0,4,$sem,3));

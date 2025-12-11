@@ -1272,13 +1272,13 @@ class Data_fetcher extends CI_Model {
                     $this->db->where('tb_mas_registration.enumStudentType',"returning");
                 break;                       
                 case 8:
-                    $this->db->where('tb_mas_users.enumStudentType',"2nd Degree");                    
+                    $this->db->where('tb_mas_registration.enumStudentType',"2nd Degree");                    
                 break;
                 case 9:
-                    $this->db->where('tb_mas_users.enumStudentType',"2nd Degree iAC");
+                    $this->db->where('tb_mas_registration.enumStudentType',"2nd Degree iAC");
                 break;                
                 case 10:
-                    $this->db->where('tb_mas_users.enumStudentType',"acadRes");
+                    $this->db->where('tb_mas_registration.enumStudentType',"acadRes");
                 break;                
 
             }
