@@ -1230,27 +1230,35 @@ class Data_fetcher extends CI_Model {
                     $this->db->where('tb_mas_registration.enumStudentType !=',"continuing");
                     $this->db->where('tb_mas_registration.enumStudentType !=',"shiftee");
                     $this->db->where('tb_mas_registration.enumStudentType !=',"returning");
+                    $this->db->where('tb_mas_registration.enumStudentType !=',"2nd Degree");
+                    $this->db->where('tb_mas_registration.enumStudentType !=',"2nd Degree iAC");                    
                 break;
                 case 2:
                     $this->db->where('tb_mas_users.student_type',"transferee");
                     $this->db->where('tb_mas_registration.enumStudentType !=',"continuing");
                     $this->db->where('tb_mas_registration.enumStudentType !=',"shiftee");
                     $this->db->where('tb_mas_registration.enumStudentType !=',"returning");
+                    $this->db->where('tb_mas_registration.enumStudentType !=',"2nd Degree");
+                    $this->db->where('tb_mas_registration.enumStudentType !=',"2nd Degree iAC");
                 break;
                 case 3:
                     $this->db->where('tb_mas_users.student_type',"foreign");
                     $this->db->where('tb_mas_registration.enumStudentType !=',"continuing");
                     $this->db->where('tb_mas_registration.enumStudentType !=',"shiftee");
                     $this->db->where('tb_mas_registration.enumStudentType !=',"returning");
+                    $this->db->where('tb_mas_registration.enumStudentType !=',"2nd Degree");
+                    $this->db->where('tb_mas_registration.enumStudentType !=',"2nd Degree iAC");
                 break;
                 case 4:
-                    $this->db->where('tb_mas_users.student_type',"second degree");
+                    $this->db->where('tb_mas_users.student_type',"second degree");                    
                     $this->db->where('tb_mas_registration.enumStudentType !=',"continuing");
                     $this->db->where('tb_mas_registration.enumStudentType !=',"shiftee");
                     $this->db->where('tb_mas_registration.enumStudentType !=',"returning");
+                    $this->db->where('tb_mas_registration.enumStudentType !=',"2nd Degree");
+                    $this->db->where('tb_mas_registration.enumStudentType !=',"2nd Degree iAC");
                 break;
                 case 5:
-                    $this->db->where('tb_mas_registration.enumStudentType',"continuing");
+                    $this->db->where('tb_mas_registration.enumStudentType',"continuing");                    
                     $this->db->where('tb_mas_registration.withdrawal_period !=',"before");
                 break; 
                 case 6:
@@ -1259,6 +1267,12 @@ class Data_fetcher extends CI_Model {
                 case 7:
                     $this->db->where('tb_mas_registration.enumStudentType',"returning");
                 break;                       
+                case 8:
+                    $this->db->where('tb_mas_users.enumStudentType',"2nd Degree");                    
+                break;
+                case 9:
+                    $this->db->where('tb_mas_users.enumStudentType',"2nd Degree iAC");
+                break;                
 
             }
         }
