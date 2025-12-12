@@ -1004,9 +1004,7 @@ class Finance extends CI_Controller {
             // ->result_array();
             ->delete('tb_mas_student_ledger');
 
-        $this->db->where(array('id'=>$post['payment_id']))
-            ->limit(1)    
-            ->delete('payment_details');
+        $this->db->where(array('id'=>$post['payment_id']))->delete('payment_details');
 
         $this->data_poster->log_action('Cashier','Retracted OR number '.$post['or_number']." for ".$post['description']." with the amount of ".$amount,'red');
 
