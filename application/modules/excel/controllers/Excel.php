@@ -7705,14 +7705,14 @@ class Excel extends CI_Controller {
                     ->get()
                     ->result_array();
 
-        // $students = $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramCode, tb_mas_registration.intYearLevel')
-        //             ->from('tb_mas_users')
-        //             ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
-        //             ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
-        //             ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_programs.type'=>'shs', 'tb_mas_users.intProgramID' => $program))
-        //             ->order_by('tb_mas_users.strLastname', 'ASC')
-        //             ->get()
-        //             ->result_array();
+        $students = $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramCode, tb_mas_registration.intYearLevel')
+                    ->from('tb_mas_users')
+                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
+                    ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_programs.type'=>'shs', 'tb_mas_users.intProgramID' => $program))
+                    ->order_by('tb_mas_users.strLastname', 'ASC')
+                    ->get()
+                    ->result_array();
 
         // if($year_level != 0){
         //     $gradeLevel = 'Grade_' . $year_level;
