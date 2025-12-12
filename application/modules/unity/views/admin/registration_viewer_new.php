@@ -36,7 +36,7 @@
                         <div v-if="registration && user.special_role >= 1 || (registration.downpayment == 0 && registration.fullpayment == 0)"
                             class="pull-right" style="margin-left:1rem;"> Tuition Year <select
                                 class="form-control" @change="selectTuitionYear($event)"
-                                v-model="tuition_year">
+                                :disabled="cashier" v-model="tuition_year">
                                 <option v-for="ty in tuition_years" :value="ty.intID">{{ ty.year}}
                                 </option>
                             </select>
@@ -65,6 +65,7 @@
                         <div v-if="registration && user.special_role > 0 "
                             style="margin-right:1rem;" class="pull-right"> Payment Type <select
                                 v-model="change_payment_type" @change="changeType($event)"
+                                :disabled="reg_status == 'Enrolled' && cashier"
                                 class="form-control">
                                 <option value="full">Full Payment</option>
                                 <option value="partial">Installment</option>
