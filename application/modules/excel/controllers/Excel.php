@@ -7683,7 +7683,7 @@ class Excel extends CI_Controller {
             $sem = $s['intID'];
         }
 
-        $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramCode, tb_mas_registration.intYearLevel')
+        $students = $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramCode, tb_mas_registration.intYearLevel')
                     ->from('tb_mas_users')
                     ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
                     ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
