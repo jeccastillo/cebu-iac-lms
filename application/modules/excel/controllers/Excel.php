@@ -7709,7 +7709,7 @@ class Excel extends CI_Controller {
                     ->from('tb_mas_users')
                     ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
                     ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
-                    ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_programs.type'=>'shs', 'tb_mas_users.intProgramID' => $program))
+                    ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_programs.type'=>'shs'))
                     ->order_by('tb_mas_users.strLastname', 'ASC')
                     ->get()
                     ->result_array();
