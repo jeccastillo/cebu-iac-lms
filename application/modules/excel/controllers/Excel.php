@@ -7690,15 +7690,15 @@ class Excel extends CI_Controller {
                     ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_programs.type'=>'shs', 'tb_mas_users.intProgramID' => $program));
 
         // filter if selected program is not all
-        if ($program != 0) {
-            $this->db->where(array('tb_mas_users.intProgramID' => $program));
-        }
+        // if ($program != 0) {
+        //     $this->db->where(array('tb_mas_users.intProgramID' => $program));
+        // }
 
-        // fileter if selected grade level is not all
-        if ($year_level != 0) {
-            $gradeLevel = 'Grade_' . $year_level;
-            $this->db->where(array('tb_mas_registration.intYearLevel'=>$year_level));
-        }
+        // // fileter if selected grade level is not all
+        // if ($year_level != 0) {
+        //     $gradeLevel = 'Grade_' . $year_level;
+        //     $this->db->where(array('tb_mas_registration.intYearLevel'=>$year_level));
+        // }
 
         $students = $this->db
                     ->order_by('tb_mas_users.strLastname', 'ASC')
