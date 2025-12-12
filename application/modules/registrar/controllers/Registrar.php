@@ -1436,7 +1436,7 @@ class Registrar extends CI_Controller {
         }
     }
 
-    public function shs_gwa_rank_data($sem = 0, $year_level = 0)
+    public function shs_gwa_rank_data($sem = 0, $year_level = 0, $program = 0)
     {
         $sy = $this->db->get_where('tb_mas_sy', array('intID' => $sem))->first_row();
         if($sem == 0 )
@@ -1445,27 +1445,29 @@ class Registrar extends CI_Controller {
             $sem = $s['intID'];
         }
 
-        $gradeLevel = 'All Grade Level';
-        $students = $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramCode, tb_mas_registration.intYearLevel')
-                    ->from('tb_mas_users')
-                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
-                    ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
-                    ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_programs.type'=>'shs'))
-                    ->order_by('tb_mas_users.strLastname', 'ASC')
-                    ->get()
-                    ->result_array();
+        $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramDescription, tb_mas_registration.intYearLevel')
+         ->from('tb_mas_users')
+         ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+         ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
+         ->where([
+             'tb_mas_registration.intAYID' => $sem,
+             'tb_mas_programs.type'        => 'shs'
+         ]);
 
-        if($year_level != 0){
-            $gradeLevel = 'Grade ' . $year_level;
-            $students = $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramCode, tb_mas_registration.intYearLevel')
-                        ->from('tb_mas_users')
-                        ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
-                        ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
-                        ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_programs.type'=>'shs', 'tb_mas_registration.intYearLevel'=>$year_level))
-                        ->order_by('tb_mas_users.strLastname', 'ASC')
-                        ->get()
-                        ->result_array();
+        // condition if specific program is selected
+        if ($program != 0) {
+            $this->db->where('tb_mas_users.intProgramID', $program);
         }
+
+        // condition if specific grade level is selected
+        if ($year_level != 0) {
+            $this->db->where('tb_mas_registration.intYearLevel', $year_level);
+        }
+
+        $students = $this->db
+            ->order_by('tb_mas_users.strLastname', 'ASC')
+            ->get()
+            ->result_array();
 
         $gwa_ranks = array();
         foreach($students as $student){
@@ -1489,7 +1491,7 @@ class Registrar extends CI_Controller {
                 $student_data['last_name'] = strtoupper($student['strLastname']);
                 $student_data['first_name'] = strtoupper($student['strFirstname']);
                 $student_data['middle_name'] = strtoupper($student['strMiddlename']);
-                $student_data['track'] = $student['strProgramCode'];
+                $student_data['track'] = $student['strProgramDescription'];
                 $student_data['gwa'] = $gwa;
                 $student_data['year_level'] = $student['intYearLevel'];
                 $gwa_ranks[] = $student_data;
