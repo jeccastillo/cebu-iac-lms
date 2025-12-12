@@ -3657,7 +3657,7 @@ class Pdf extends CI_Controller {
                 $student_data['last_name'] = strtoupper($student['strLastname']);
                 $student_data['first_name'] = strtoupper($student['strFirstname']);
                 $student_data['middle_name'] = strtoupper($student['strMiddlename']);
-                $student_data['track'] = $student['strProgramCode'];
+                $student_data['track'] = $student['strProgramDescription'];
                 $student_data['gwa'] = $gwa;
                 $student_data['year_level'] = $student['intYearLevel'];
                 $gwa_ranks[] = $student_data;
