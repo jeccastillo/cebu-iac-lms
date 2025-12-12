@@ -1,6 +1,5 @@
 <script type="text/javascript">
 $(document).ready(function() {
-
     $('#shs-gwa-rank-table').DataTable({
         "aLengthMenu": [10, 20, 50, 100, 250, 500, 750, 1000],
         "bProcessing": true,
@@ -8,77 +7,70 @@ $(document).ready(function() {
         "ordering": false,
         "paging": true,
         ajax: {
-            url: "<?php echo base_url(); ?>registrar/shs_gwa_rank_data/<?php echo $current_sem; ?>/<?php echo $postyear; ?>",
+            url: "<?php echo base_url(); ?>registrar/<?php echo $current_sem; ?>/<?php echo $postyear; ?>/<?php echo $program; ?>",
             dataSrc: ''
         },
         columns: [{
-                data: 'student_number',
-                title: 'Student Number'
-            },
-            {
-                data: 'last_name',
-                title: 'Last Name'
-            },
-            {
-                data: 'first_name',
-                title: 'First Name'
-            },
-
-            {
-                data: 'middle_name',
-                title: 'Middle Name'
-            },
-
-            {
-                data: 'track',
-                title: 'Track'
-            },
-            {
-                data: 'gwa',
-                title: 'GWA'
-            },
-            {
-                data: 'year_level',
-                title: 'Year Level'
-            }
-
-        ]
+            data: 'student_number',
+            title: 'Student Number'
+        }, {
+            data: 'last_name',
+            title: 'Last Name'
+        }, {
+            data: 'first_name',
+            title: 'First Name'
+        }, {
+            data: 'middle_name',
+            title: 'Middle Name'
+        }, {
+            data: 'track',
+            title: 'Track'
+        }, {
+            data: 'gwa',
+            title: 'GWA'
+        }, {
+            data: 'year_level',
+            title: 'Year Level'
+        }]
     });
-
-
-
 });
-
-
 $("#select-term-leads").on('change', function(e) {
     let campus = "<?php echo $campus;?>";
     const term = $(this).val();
-    document.location = "<?php echo base_url()."registrar/shs_gwa_rank/"; ?>" +
-        term + '/' + $("#int-year-level").val();
+    document.location = "<?php echo base_url()."registrar/shs_gwa_rank/"; ?>" + term + '/' +
+        $("#int-year-level").val() + '/' + $("#select-programs").val();
 });
-
+$("#select-programs").on('change', function(e) {
+    let campus = "<?php echo $campus;?>";
+    const program = $(this).val();
+    document.location = "<?php echo base_url()."registrar/shs_gwa_rank/"; ?>" + $(
+        "#select-term-leads").val() + '/' + $("#int-year-level").val() + '/' + program;
+});
 $("#int-year-level").on('change', function(e) {
     let campus = "<?php echo $campus;?>";
     const level = $(this).val();
     document.location = "<?php echo base_url()."registrar/shs_gwa_rank/"; ?>" + $(
-        "#select-term-leads").val() + '/' + level;
+        "#select-term-leads").val() + '/' + level + '/' + $("#select-programs").val();
 });
-
-
+$("#select-term-leads").on('change', function(e) {
+    let campus = "<?php echo $campus;?>";
+    const term = $(this).val();
+    document.location = "<?php echo base_url()."registrar/shs_gwa_rank/"; ?>" + term + '/' +
+        $("#int-year-level").val();
+});
 $(document).ready(function() {
     $("#shs_gwa_rank_list_excel").click(function(e) {
         var campus = "<?php echo $campus;?>";
         var base_url = "<?php echo base_url(); ?>";
-        var url = base_url + 'excel/shs_gwa_rank/' + $("#select-term-leads")
-            .val() + '/' + $("#int-year-level").val() + '/' + campus;
+        var url = base_url + 'excel/shs_gwa_rank/' + $("#select-term-leads").val() +
+            '/' + $("#int-year-level").val() + '/' + $("#select-programs").val();
         window.open(url, '_blank');
     })
-
     $("#shs_gwa_rank_list_pdf").click(function(e) {
         var campus = "<?php echo $campus;?>";
         var base_url = "<?php echo base_url(); ?>";
-        var url = base_url + 'pdf/shs_gwa_rank/' + $("#select-term-leads")
-            .val() + '/' + $("#int-year-level").val();
+        var url = base_url + 'pdf/' + $("#select-term-leads").val() + '/' + $(
+            "#int-year-level").val() + '/' + $("#select-programs").val();
         window.open(url, '_blank');
     })
 });

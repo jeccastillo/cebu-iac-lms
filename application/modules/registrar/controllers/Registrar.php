@@ -1416,7 +1416,7 @@ class Registrar extends CI_Controller {
         echo json_encode($students_array);
     }
 
-    public function shs_gwa_rank($term = 0, $year = 0)    
+    public function shs_gwa_rank($term = 0, $year = 0,  $program='')    
     {
         if($this->faculty_logged_in())
         {
@@ -1424,10 +1424,23 @@ class Registrar extends CI_Controller {
                 $term = $this->data_fetcher->get_processing_sem();        
             else
                 $term = $this->data_fetcher->get_sem_by_id($term); 
-                 
+            $programs_shs = $this->data_fetcher->fetch_table('tb_mas_programs', null, null, array('enumEnabled'=>1,'type'=>'shs'));     
+
+            $this->data['shs'][] = [
+                'id' => 0,
+                'title' => 'All'
+            ];
+                    
+            foreach($programs_shs as $prog){
+                $temp['id'] = $prog['intProgramID'];
+                $temp['title'] = $prog['strProgramDescription'];
+                $this->data['shs'][] = $temp;
+            }
+         
             $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
             $this->data['current_sem'] = $term['intID'];
             $this->data['postyear'] = $year;
+            $this->data['program'] = $program; 
 
             $this->load->view("common/header",$this->data);
             $this->load->view("admin/shs_gwa_rank_list",$this->data);
