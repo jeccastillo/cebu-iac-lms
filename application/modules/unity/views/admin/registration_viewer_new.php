@@ -36,7 +36,7 @@
                         <div v-if="registration && user.special_role >= 1 || (registration.downpayment == 0 && registration.fullpayment == 0)"
                             class="pull-right" style="margin-left:1rem;"> Tuition Year <select
                                 class="form-control" @change="selectTuitionYear($event)"
-                                :disabled="cashier" v-model="tuition_year">
+                                :disabled="isCashier" v-model="tuition_year">
                                 <option v-for="ty in tuition_years" :value="ty.intID">{{ ty.year}}
                                 </option>
                             </select>
@@ -65,7 +65,7 @@
                         <div v-if="registration && user.special_role > 0 "
                             style="margin-right:1rem;" class="pull-right"> Payment Type <select
                                 v-model="change_payment_type" @change="changeType($event)"
-                                :disabled="reg_status == 'Enrolled' && cashier"
+                                :disabled="reg_status == 'Enrolled' && isCashier"
                                 class="form-control">
                                 <option value="full">Full Payment</option>
                                 <option value="partial">Installment</option>
@@ -1671,6 +1671,9 @@ new Vue({
             if (this.description_other == 'installment') {
                 return true
             }
+        },
+        isCashier() {
+            return this.user.intID == "1203" || this.user.intID == "1204"
         }
     },
     methods: {
@@ -2305,7 +2308,7 @@ new Vue({
                         }
                     }).then(data => {
                         this.loader_spinner = false;
-                        if (data.data.success){
+                        if (data.data.success) {
                             var formdata = new FormData();
                             formdata.append('payment_id', this
                                 .retract_id);
@@ -2319,7 +2322,6 @@ new Vue({
                                 .student.intID);
                             formdata.append('or_number', data.data
                                 .or_number);
-                            
                             axios.post(base_url +
                                 'finance/remove_from_ledger',
                                 formdata, {
@@ -2337,7 +2339,7 @@ new Vue({
                                     .reload();
                                 });
                             })
-                        }else Swal.fire({
+                        } else Swal.fire({
                             title: "Failed",
                             text: data.data.message,
                             icon: "error"
