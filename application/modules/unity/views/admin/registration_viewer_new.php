@@ -2243,7 +2243,6 @@ new Vue({
                                 .student.intID);
                             formdata.append('or_number', data.data
                                 .or_number);
-                            console.log(formdata);
                             axios.post(base_url +
                                 'finance/remove_from_ledger',
                                 formdata, {
@@ -2306,14 +2305,34 @@ new Vue({
                         }
                     }).then(data => {
                         this.loader_spinner = false;
-                        if (data.data.success) Swal.fire({
+                        if (data.data.success){
+                            
+                            axios.post(base_url +
+                                'finance/remove_from_ledger',
+                                formdata, {
+                                    headers: {
+                                        Authorization: `Bearer ${window.token}`
+                                    }
+                                }).then(function(data) {
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data
+                                        .message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location
+                                    .reload();
+                                });
+                            })
+                            
+                            Swal.fire({
                             title: "Success",
                             text: data.data.message,
                             icon: "success"
-                        }).then(function() {
-                            location.reload();
-                        });
-                        else Swal.fire({
+                            }).then(function() {
+                                location.reload();
+                            });
+                        }else Swal.fire({
                             title: "Failed",
                             text: data.data.message,
                             icon: "error"
