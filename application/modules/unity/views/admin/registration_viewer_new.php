@@ -2133,7 +2133,6 @@ new Vue({
                         'deleted_by': this.user.strLastname + ", " +
                             this.user.strFirstname,
                         'cashier_name': `${this.user.strFirstname} ${this.user.strLastname}`
-
                     }
                     return axios.post(url, payload, {
                         headers: {
@@ -2178,7 +2177,7 @@ new Vue({
                                     icon: "success"
                                 }).then(function() {
                                     location
-                                        .reload();
+                                    .reload();
                                 });
                             })
                         } else Swal.fire({
@@ -2219,7 +2218,6 @@ new Vue({
                         'id': this.void_id,
                         'void_reason': this.void_reason,
                         'cashier_name': `${this.user.strFirstname} ${this.user.strLastname}`
-
                     }
                     return axios.post(url, payload, {
                         headers: {
@@ -2227,14 +2225,38 @@ new Vue({
                         }
                     }).then(data => {
                         this.loader_spinner = false;
-                        if (data.data.success) Swal.fire({
-                            title: "Success",
-                            text: data.data.message,
-                            icon: "success"
-                        }).then(function() {
-                            location.reload();
-                        });
-                        else Swal.fire({
+                        if (data.data.success) {
+                            var formdata = new FormData();
+                            formdata.append('payment_id', this
+                                .void_id);
+                            formdata.append('description', data.data
+                                .description);
+                            formdata.append('total_amount_due', data
+                                .data.total_amount_due);
+                            formdata.append('sy_reference', data
+                                .data.sy_reference);
+                            formdata.append('student_id', this
+                                .student.intID);
+                            formdata.append('or_number', data.data
+                                .or_number);
+                            axios.post(base_url +
+                                'finance/remove_from_ledger',
+                                formdata, {
+                                    headers: {
+                                        Authorization: `Bearer ${window.token}`
+                                    }
+                                }).then(function(data) {
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data
+                                        .message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location
+                                    .reload();
+                                });
+                            })
+                        } else Swal.fire({
                             title: "Failed",
                             text: data.data.message,
                             icon: "error"
