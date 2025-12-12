@@ -2324,14 +2324,6 @@ new Vue({
                                     .reload();
                                 });
                             })
-                            
-                            Swal.fire({
-                            title: "Success",
-                            text: data.data.message,
-                            icon: "success"
-                            }).then(function() {
-                                location.reload();
-                            });
                         }else Swal.fire({
                             title: "Failed",
                             text: data.data.message,
