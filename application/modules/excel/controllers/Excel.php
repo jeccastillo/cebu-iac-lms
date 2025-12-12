@@ -7683,13 +7683,13 @@ class Excel extends CI_Controller {
             $sem = $s['intID'];
         }
 
-        $students = $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramCode, tb_mas_registration.intYearLevel')
-                    ->from('tb_mas_users')
-                    ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
-                    ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
-                    ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_programs.type'=>'shs', 'tb_mas_users.intProgramID' => $program));
+        // $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramCode, tb_mas_registration.intYearLevel')
+        //             ->from('tb_mas_users')
+        //             ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+        //             ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
+        //             ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_programs.type'=>'shs'));
 
-        // filter if selected program is not all
+        // // filter if selected program is not all
         // if ($program != 0) {
         //     $this->db->where(array('tb_mas_users.intProgramID' => $program));
         // }
@@ -7700,10 +7700,34 @@ class Excel extends CI_Controller {
         //     $this->db->where(array('tb_mas_registration.intYearLevel'=>$year_level));
         // }
 
-        $students = $this->db
-                    ->order_by('tb_mas_users.strLastname', 'ASC')
-                    ->get()
-                    ->result_array();
+        // $students = $this->db
+        //             ->order_by('tb_mas_users.strLastname', 'ASC')
+        //             ->get()
+        //             ->result_array();
+        $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramCode, tb_mas_registration.intYearLevel')
+         ->from('tb_mas_users')
+         ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
+         ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
+         ->where([
+             'tb_mas_registration.intAYID' => $sem,
+             'tb_mas_programs.type'        => 'shs'
+         ]);
+
+// filter if selected program is not all
+if ($program != 0) {
+    $this->db->where('tb_mas_users.intProgramID', $program);
+}
+
+// filter if selected grade level is not all
+if ($year_level != 0) {
+    $this->db->where('tb_mas_registration.intYearLevel', $year_level);
+}
+
+$students = $this->db
+            ->order_by('tb_mas_users.strLastname', 'ASC')
+            ->get()
+            ->result_array();
+
 
         // $students = $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramCode, tb_mas_registration.intYearLevel')
         //             ->from('tb_mas_users')
