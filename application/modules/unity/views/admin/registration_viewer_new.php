@@ -2311,7 +2311,7 @@ new Vue({
                         if (data.data.success) {
                             var formdata = new FormData();
                             formdata.append('payment_id', this
-                                .retract_id);
+                                .void_id);
                             formdata.append('description', data.data
                                 .description);
                             formdata.append('total_amount_due', data
