@@ -2243,6 +2243,7 @@ new Vue({
                                 .student.intID);
                             formdata.append('or_number', data.data
                                 .or_number);
+                                console.log(formdata);
                             axios.post(base_url +
                                 'finance/remove_from_ledger',
                                 formdata, {
