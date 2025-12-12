@@ -7,7 +7,7 @@ $(document).ready(function() {
         "ordering": false,
         "paging": true,
         ajax: {
-            url: "<?php echo base_url(); ?>registrar/<?php echo $current_sem; ?>/<?php echo $postyear; ?>/<?php echo $program; ?>",
+            url: "<?php echo base_url(); ?>registrar/shs_gwa_rank_data/<?php echo $current_sem; ?>/<?php echo $postyear; ?>/<?php echo $program; ?>",
             dataSrc: ''
         },
         columns: [{
@@ -69,8 +69,8 @@ $(document).ready(function() {
     $("#shs_gwa_rank_list_pdf").click(function(e) {
         var campus = "<?php echo $campus;?>";
         var base_url = "<?php echo base_url(); ?>";
-        var url = base_url + 'pdf/' + $("#select-term-leads").val() + '/' + $(
-            "#int-year-level").val() + '/' + $("#select-programs").val();
+        var url = base_url + 'pdf/shs_gwa_rank/' + $("#select-term-leads").val() +
+            '/' + $("#int-year-level").val() + '/' + $("#select-programs").val();
         window.open(url, '_blank');
     })
 });
