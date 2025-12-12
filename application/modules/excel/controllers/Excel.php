@@ -7683,28 +7683,7 @@ class Excel extends CI_Controller {
             $sem = $s['intID'];
         }
 
-        // $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramCode, tb_mas_registration.intYearLevel')
-        //             ->from('tb_mas_users')
-        //             ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
-        //             ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
-        //             ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_programs.type'=>'shs'));
-
-        // // filter if selected program is not all
-        // if ($program != 0) {
-        //     $this->db->where(array('tb_mas_users.intProgramID' => $program));
-        // }
-
-        // // fileter if selected grade level is not all
-        // if ($year_level != 0) {
-        //     $gradeLevel = 'Grade_' . $year_level;
-        //     $this->db->where(array('tb_mas_registration.intYearLevel'=>$year_level));
-        // }
-
-        // $students = $this->db
-        //             ->order_by('tb_mas_users.strLastname', 'ASC')
-        //             ->get()
-        //             ->result_array();
-        $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramCode, tb_mas_registration.intYearLevel')
+        $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramDescription, tb_mas_registration.intYearLevel')
          ->from('tb_mas_users')
          ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
          ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
@@ -7713,42 +7692,21 @@ class Excel extends CI_Controller {
              'tb_mas_programs.type'        => 'shs'
          ]);
 
-// filter if selected program is not all
-if ($program != 0) {
-    $this->db->where('tb_mas_users.intProgramID', $program);
-}
+        // condition if specific program is selected
+        if ($program != 0) {
+            $this->db->where('tb_mas_users.intProgramID', $program);
+        }
 
-// filter if selected grade level is not all
-if ($year_level != 0) {
-    $this->db->where('tb_mas_registration.intYearLevel', $year_level);
-}
+        // condition if specific grade level is selected
+        if ($year_level != 0) {
+            $gradeLevel = 'Grade_' . $year_level;
+            $this->db->where('tb_mas_registration.intYearLevel', $year_level);
+        }
 
-$students = $this->db
+        $students = $this->db
             ->order_by('tb_mas_users.strLastname', 'ASC')
             ->get()
             ->result_array();
-
-
-        // $students = $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramCode, tb_mas_registration.intYearLevel')
-        //             ->from('tb_mas_users')
-        //             ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
-        //             ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
-        //             ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_programs.type'=>'shs'))
-        //             ->order_by('tb_mas_users.strLastname', 'ASC')
-        //             ->get()
-        //             ->result_array();
-
-        // if($year_level != 0){
-        //     $gradeLevel = 'Grade_' . $year_level;
-        //     $students = $this->db->select('tb_mas_users.*, tb_mas_programs.strProgramCode, tb_mas_registration.intYearLevel')
-        //                 ->from('tb_mas_users')
-        //                 ->join('tb_mas_registration','tb_mas_registration.intStudentID = tb_mas_users.intID')
-        //                 ->join('tb_mas_programs','tb_mas_registration.current_program = tb_mas_programs.intProgramID')
-        //                 ->where(array('tb_mas_registration.intAYID'=>$sem, 'tb_mas_programs.type'=>'shs', 'tb_mas_registration.intYearLevel'=>$year_level, 'tb_mas_users.intProgramID' => $program))
-        //                 ->order_by('tb_mas_users.strLastname', 'ASC')
-        //                 ->get()
-        //                 ->result_array();
-        // }
         
         error_reporting(E_ALL);
         ini_set('display_errors', TRUE);
@@ -7787,7 +7745,7 @@ $students = $this->db
                 $student_data['last_name'] = strtoupper($student['strLastname']);
                 $student_data['first_name'] = strtoupper($student['strFirstname']);
                 $student_data['middle_name'] = strtoupper($student['strMiddlename']);
-                $student_data['track'] = $student['strProgramCode'];
+                $student_data['track'] = $student['strProgramDescription'];
                 $student_data['gwa'] = $gwa;
                 $student_data['year_level'] = $student['intYearLevel'];
                 $gwa_ranks[] = $student_data;
@@ -7799,8 +7757,6 @@ $students = $this->db
             return $a['gwa'] < $b['gwa'];
         });
 
-        print_r($gwa_ranks);
-        die();
         foreach($gwa_ranks as $student){
             // Add some data
             $objPHPExcel->setActiveSheetIndex(0)
