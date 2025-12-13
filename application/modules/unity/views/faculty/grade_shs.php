@@ -21,6 +21,11 @@
             <td>Passed</td>
         </tr>
         <tr>
+            <td>Fairly Satisfactory</td>
+            <td>75-79</td>
+            <td>Passed</td>
+        </tr>
+        <tr>
             <td>Did Not Meet Expectation</td>
             <td>Below 75</td>
             <td>Failed</td>
