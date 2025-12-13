@@ -70,7 +70,7 @@
                                 <td v-if="student.registered">
                                     <span
                                         v-if="(student.floatMidtermGrade == 'OW' || student.floatFinalGrade == 'OW' || classlist.intFinalized != 0 || ((cdate < classlist.midterm_start && cdate < classlist.midterm_end ) || (cdate > classlist.midterm_start && cdate > classlist.midterm_end ))) && !is_super_admin || classlist.intFinalized == 2">
-                                        {{ (student.floatMidtermGrade && student.floatMidtermGrade != 50)?student.floatMidtermGrade:"NGS" }}
+                                        {{ (student.floatMidtermGrade && student.floatMidtermGrade != 50)?student.floatMidtermGrade:"NGS1" }}
                                     </span>
                                     <span v-else-if="student.floatMidtermGrade == 'OW'">
                                         OW
