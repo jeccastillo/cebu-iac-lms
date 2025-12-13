@@ -2,7 +2,7 @@
     <thead>
         <tr>
             <th colspan="3" class="text-center">Grading System for SHS</th>
-        </tr>                                  
+        </tr>
     </thead>
     <tbody>
         <tr>
@@ -21,11 +21,6 @@
             <td>Passed</td>
         </tr>
         <tr>
-            <td>Fairly Satisfactory</td>
-            <td>75-79</td>
-            <td>Passed</td>
-        </tr>                   
-        <tr>
             <td>Did Not Meet Expectation</td>
             <td>Below 75</td>
             <td>Failed</td>
@@ -35,6 +30,5 @@
             <td>IP</td>
             <td>In Progress</td>
         </tr>
-       
     </tbody>
 </table>
