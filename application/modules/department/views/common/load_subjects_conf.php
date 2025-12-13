@@ -118,7 +118,7 @@
                 'data':data,
                 'dataType':'json',
                 'success':function(ret){
-                    location.reload();
+                    // location.reload();
                 }
             });
             
