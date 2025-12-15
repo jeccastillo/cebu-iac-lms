@@ -120,28 +120,30 @@ class AdmissionsV1 extends CI_Controller {
     
     public function view_all_leads($term = 0)
     {
-        if($this->faculty_logged_in() || $this->data["user"]["intID"] == 1747)
-        {
-            if($term == 0)
-                $term = $this->data_fetcher->get_processing_sem();        
-            else
-                $term = $this->data_fetcher->get_sem_by_id($term);  
+        print($this->data["user"]["intID"]);
+        die();
+        // if($this->faculty_logged_in() || $this->data["user"]["intID"] == 1747)
+        // {
+        //     if($term == 0)
+        //         $term = $this->data_fetcher->get_processing_sem();        
+        //     else
+        //         $term = $this->data_fetcher->get_sem_by_id($term);  
                 
             
-            $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
-            $this->data['current_sem'] = $term['intID'];
+        //     $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+        //     $this->data['current_sem'] = $term['intID'];
             
-            $this->data['page'] = "view_leads";
-            $this->data['opentree'] = "leads";
-            //$this->data['subjects'] = $this->data_fetcher->fetch_table('tb_mas_subjects',array('strCode','asc'));
-            $this->load->view("common/header",$this->data);
-            $this->load->view("admin/leads_view",$this->data);
-            $this->load->view("common/footer",$this->data); 
-            $this->load->view("common/subjects_conf",$this->data); 
-            //print_r($this->data['classlist']);
-        }   
-        else
-            redirect(base_url()."unity");  
+        //     $this->data['page'] = "view_leads";
+        //     $this->data['opentree'] = "leads";
+        //     //$this->data['subjects'] = $this->data_fetcher->fetch_table('tb_mas_subjects',array('strCode','asc'));
+        //     $this->load->view("common/header",$this->data);
+        //     $this->load->view("admin/leads_view",$this->data);
+        //     $this->load->view("common/footer",$this->data); 
+        //     $this->load->view("common/subjects_conf",$this->data); 
+        //     //print_r($this->data['classlist']);
+        // }   
+        // else
+        //     redirect(base_url()."unity");  
     }
 
     public function view_reserved_leads($term = 0)
