@@ -120,9 +120,7 @@ class AdmissionsV1 extends CI_Controller {
     
     public function view_all_leads($term = 0)
     {
-        print($this->data["user"]);
-        die();
-        if($this->faculty_logged_in() || $this->data["user"] == 1747)
+        if($this->faculty_logged_in() || $this->data["user"]["intID"] == 1747)
         {
             if($term == 0)
                 $term = $this->data_fetcher->get_processing_sem();        
