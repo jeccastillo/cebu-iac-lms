@@ -1682,10 +1682,10 @@
                         </p>
                         <hr>
                     </div>
-                    <div>
+                    <div v-if="request.type == 'next'">
                         <strong>Government ID</strong>
                         <p class="text-muted">
-                            <a :href="request.government_id"
+                            <a :href="request.government_id_path"
                                 target="_blank">{{request.government_id}}</a>
                         </p>
                         <hr>
