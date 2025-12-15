@@ -217,7 +217,7 @@
                 <?php if(in_array($user['intID'],array(1747,1374)) ): ?> <li
                     class="<?php echo (isset($page) && $page=="view_leads")?'active':''; ?>">
                     <a href="<?php echo base_url(); ?>admissionsV1/view_all_leads"><i
-                            class="fa fa-book"> </i> View Applicantss</a>
+                            class="fa fa-book"> </i> View Applicants</a>
                 </li> <?php endif; ?>
                 <?php if(in_array($user['intUserLevel'],array(2,5,3,6,7)) ): ?>
                 <!-- <li class="<?php echo (isset($page) && $page=="transactions")?'active':''; ?>"><a href="<?php echo base_url() ?>unity/transactions"><i class="ion ion-cash"></i> <span>Transactions</span> </a></li> -->
@@ -250,7 +250,18 @@
                             <a href="<?php echo base_url(); ?>admissionsV1/view_all_leads"
                                 style="margin-left: 10px;"><i class="fa fa-book"> </i> View
                                 Applicants</a>
-                        </li> <?php if(in_array($user['intUserLevel'],array(2,5,3,6)) ): ?> <li
+                        </li>
+                        <?php if(in_array($user['intID'],array(1747,1374)) ): ?>
+                            <li
+                                class="<?php echo (isset($page) && $page=="view_leads")?'active':''; ?>">
+                                <a href="<?php echo base_url(); ?>admissionsV1/view_all_leads"
+                                    style="margin-left: 10px;"><i class="fa fa-book"> </i> View
+                                    Applicants</a>
+                            </li>
+                        <?php endif; ?>
+
+                            <?php if(in_array($user['intUserLevel'],array(2,5,3,6)) ): ?> 
+                        <li
                             class="<?php echo (isset($page) && $page=="classlist_archive")?'active':''; ?>">
                             <a href="<?php echo base_url()."admissionsV1/view_classlist_archive_admin" ?>"
                                 style="margin-left: 10px;"><i class="fa fa-user"></i>Slot
