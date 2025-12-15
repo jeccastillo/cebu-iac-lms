@@ -120,7 +120,7 @@ class AdmissionsV1 extends CI_Controller {
     
     public function view_all_leads($term = 0)
     {
-        if($this->faculty_logged_in())
+        if($this->faculty_logged_in() || $this->data["user"] == 1747)
         {
             if($term == 0)
                 $term = $this->data_fetcher->get_processing_sem();        
@@ -139,7 +139,7 @@ class AdmissionsV1 extends CI_Controller {
             $this->load->view("common/footer",$this->data); 
             $this->load->view("common/subjects_conf",$this->data); 
             //print_r($this->data['classlist']);
-        }
+        }   
         else
             redirect(base_url()."unity");  
     }
