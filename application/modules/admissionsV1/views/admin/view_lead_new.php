@@ -903,8 +903,31 @@
                         </form>
                     </div>
                     <!-- end -->
+                    <!-- for next applicant -->
+                    <div v-if="request.campus == 'Makati' && request.type == 'next'"
+                        class="box-body">
+                        <div>
+                            <strong><i class="fa fa-user margin-r-5"></i>Enhanced
+                                Curriculum</strong>
+                            <select class="form-control"
+                                @change="updateField('enhanced_curriculum',$event)"
+                                v-model="request.enhanced_curriculum">
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                            <hr>
+                        </div>
+                        <div>
+                            <strong><i class="fa fa-user margin-r-5"></i>Selected Program: </strong>
+                            <p class="text-muted">
+                                {{request.short_course}}
+                            </p>
+                            <hr>
+                        </div>
+                    </div>
                     <!-- for Makati applicant -->
-                    <div v-if="request.campus == 'Makati'" class="box-body">
+                    <div v-if="request.campus == 'Makati' && request.type != 'next'"
+                        class="box-body">
                         <div>
                             <strong><i class="fa fa-user margin-r-5"></i>Enhanced
                                 Curriculum</strong>
