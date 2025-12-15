@@ -809,6 +809,28 @@
                         </div>
                         <hr>
                     </div>
+                    <div v-if="request.type == 'next'">
+                        <strong>Company</strong>
+                        <div class="form-inline">
+                            <input type="text" class="form-control" v-model="request.company"
+                                @blur="updateField('company',$event)" :disabled="true" />
+                            <button
+                                v-if="request.status !=  'Game Changer' && request.status !=  'For Enrollment'"
+                                class="btn btn-primary text-right" @click="onEdit">Edit</button>
+                        </div>
+                        <hr>
+                    </div>
+                    <div v-if="request.type == 'next'">
+                        <strong>Designation</strong>
+                        <div class="form-inline">
+                            <input type="text" class="form-control" v-model="request.designation"
+                                @blur="updateField('designation',$event)" :disabled="true" />
+                            <button
+                                v-if="request.status !=  'Game Changer' && request.status !=  'For Enrollment'"
+                                class="btn btn-primary text-right" @click="onEdit">Edit</button>
+                        </div>
+                        <hr>
+                    </div>
                 </div>
             </div>
             <!-- 1st row 2nd Column -->
@@ -1405,6 +1427,18 @@
                         </div>
                         <hr>
                     </div>
+                    <div v-if="request.type == 'next'">
+                        <strong>Current Address</strong>
+                        <div class="form-inline">
+                            <textarea class="form-control" v-model="request.current_address"
+                                @blur="updateField('current_address',$event)"
+                                :disabled="true"></textarea>
+                            <button
+                                v-if="request.status !=  'Game Changer' && request.status !=  'For Enrollment'"
+                                class="btn btn-primary text-right" @click="onEdit">Edit</button>
+                        </div>
+                        <hr>
+                    </div>
                 </div>
             </div>
             <!-- 1st row 2nd Column -->
@@ -1648,6 +1682,14 @@
                         </p>
                         <hr>
                     </div>
+                    <div>
+                        <strong>Government ID</strong>
+                        <p class="text-muted">
+                            <a :href="request.government_id"
+                                target="_blank">{{request.government_id}}</a>
+                        </p>
+                        <hr>
+                    </div>
                     <!--  -->
                 </div>
                 <div class="box-footer box-footer-voucher">
@@ -1705,7 +1747,7 @@
                 </div>
             </div>
         </div>
-        <div class="row-container" v-if="true">
+        <div class="row-container" style="grid-template-rows:170px">
             <!-- 1st row 1st Column -->
             <div class="col-md-6 box" style="height: fit-content">
                 <div class="box-header with-border font-weight-bold ">
@@ -1723,17 +1765,107 @@
                     </div>
                 </div>
             </div>
-            <!-- 1st row 2nd Column -->
-            <div v-if="false" class="col-md-6 box" style="height: fit-content"
-                v-if="request.scholarship_video_path != ''">
+            <div class="col-md-6 box" style="height: fit-content" v-if="request.type == 'next'">
                 <div class="box-header with-border font-weight-bold ">
                     <h5 class=" text-left text-primary ">
-                        <strong>iCSID Video</strong>
+                        <strong>Social Media Handles</strong>
                     </h5>
                 </div>
                 <div class="box-body">
-                    <a :href="request.scholarship_video_path"
-                        target="_blank">{{request.scholarship_video}}</a>
+                    <div class="form-inline">
+                        <textarea type="text" rows="5" class="form-control"
+                            v-model="request.social_media_handles"
+                            @blur="updateField('social_media_handles',$event)"
+                            :disabled="true" /></textarea>
+                        <button
+                            v-if="request.status !=  'Game Changer' && request.status !=  'For Enrollment'"
+                            class="btn btn-primary text-right" @click="onEdit">Edit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row-container" v-if="request.type == 'next'">
+            <div class="col-md-6 box">
+                <div class="box-header with-border font-weight-bold ">
+                    <h5 class=" text-left text-primary ">
+                        <strong>Emergency Contact</strong>
+                    </h5>
+                </div>
+                <div class="box-body">
+                    <div>
+                        <strong>First Name </strong>
+                        <div class="form-inline">
+                            <input type="text" class="form-control"
+                                v-model="request.emergency_contact_first_name"
+                                @blur="updateField('emergency_contact_first_name',$event)"
+                                :disabled="true" />
+                            <button class="btn btn-primary text-right" @click="onEdit">Edit</button>
+                        </div>
+                        <hr>
+                    </div>
+                    <div>
+                        <strong>Last Name</strong>
+                        <div class="form-inline">
+                            <input type="text" class="form-control"
+                                v-model="request.emergency_contact_last_name"
+                                @blur="updateField('emergency_contact_last_name',$event)"
+                                :disabled="true" />
+                            <button class="btn btn-primary text-right" @click="onEdit">Edit</button>
+                        </div>
+                        <hr>
+                    </div>
+                    <div>
+                        <strong>Middle Name</strong>
+                        <div class="form-inline">
+                            <textarea class="form-control"
+                                v-model="request.emergency_contact_middle_name"
+                                @blur="updateField('emergency_contact_middle_name',$event)"
+                                :disabled="true"></textarea>
+                            <button
+                                v-if="request.status !=  'Game Changer' && request.status !=  'For Enrollment'"
+                                class="btn btn-primary text-right" @click="onEdit">Edit</button>
+                        </div>
+                        <hr>
+                    </div>
+                    <div>
+                        <strong>Relationship</strong>
+                        <div class="form-inline">
+                            <textarea class="form-control"
+                                v-model="request.emergency_contact_relationship"
+                                @blur="updateField('emergency_contact_relationship',$event)"
+                                :disabled="true"></textarea>
+                            <button
+                                v-if="request.status !=  'Game Changer' && request.status !=  'For Enrollment'"
+                                class="btn btn-primary text-right" @click="onEdit">Edit</button>
+                        </div>
+                        <hr>
+                    </div>
+                    <div>
+                        <strong>Contact Number</strong>
+                        <div class="form-inline">
+                            <textarea class="form-control"
+                                v-model="request.emergency_contact_contact_number"
+                                @blur="updateField('emergency_contact_contact_number',$event)"
+                                :disabled="true"></textarea>
+                            <button
+                                v-if="request.status !=  'Game Changer' && request.status !=  'For Enrollment'"
+                                class="btn btn-primary text-right" @click="onEdit">Edit</button>
+                        </div>
+                        <hr>
+                    </div>
+                    <div>
+                        <strong>Address</strong>
+                        <div class="form-inline">
+                            <textarea class="form-control"
+                                v-model="request.emergency_contact_address"
+                                @blur="updateField('emergency_contact_address',$event)"
+                                :disabled="true"></textarea>
+                            <button
+                                v-if="request.status !=  'Game Changer' && request.status !=  'For Enrollment'"
+                                class="btn btn-primary text-right" @click="onEdit">Edit</button>
+                        </div>
+                        <hr>
+                    </div>
                 </div>
             </div>
         </div>
