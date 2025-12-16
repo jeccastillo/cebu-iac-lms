@@ -873,6 +873,7 @@ new Vue({
                 }
                 result.push({type: 'record', data: record});
             }
+            console.log(result);
             return result;
         },
         getCurriculumRecords: function(term) {
