@@ -873,6 +873,9 @@ new Vue({
                 }
                 result.push({type: 'record', data: record});
             }
+            console.log('Combined: ' + this.combined_subjects);
+            console.log('@@@');
+            console.log(result);
             return result;
         },
         getCurriculumRecords: function(term) {
