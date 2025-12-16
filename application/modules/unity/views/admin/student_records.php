@@ -873,9 +873,7 @@ new Vue({
                 }
                 result.push({type: 'record', data: record});
             }
-            console.log('Combined: ' + this.combined_subjects);
-            console.log('@@@');
-            console.log(result);
+              
             return result;
         },
         getCurriculumRecords: function(term) {
@@ -904,18 +902,46 @@ new Vue({
             return result;
         },
         getTotalUnits: function(term, subjectID) {
+            let flattenedCombined = this.combined_subjects;
+            if (!Array.isArray(flattenedCombined)) {
+                flattenedCombined = [];
+                for (let key in this.combined_subjects) {
+                    if (Array.isArray(this.combined_subjects[key])) {
+                        flattenedCombined = flattenedCombined.concat(this.combined_subjects[key]);
+                    }
+                }
+            }
+            let combined = flattenedCombined.find(c => c.intSubjectID == subjectID);
+            let subjectIDs = [subjectID];
+            if (combined) {
+                subjectIDs = flattenedCombined.filter(c => c.combineCode == combined.combineCode).map(c => c.intSubjectID);
+            }
             let total = 0;
             for (let record of term.records) {
-                if (record.intSubjectID == subjectID) {
+                if (subjectIDs.includes(record.intSubjectID)) {
                     total += parseFloat(record.strUnits) || 0;
                 }
             }
             return total.toFixed(1);
         },
         getAverageMidterm: function(term, subjectID) {
+            let flattenedCombined = this.combined_subjects;
+            if (!Array.isArray(flattenedCombined)) {
+                flattenedCombined = [];
+                for (let key in this.combined_subjects) {
+                    if (Array.isArray(this.combined_subjects[key])) {
+                        flattenedCombined = flattenedCombined.concat(this.combined_subjects[key]);
+                    }
+                }
+            }
+            let combined = flattenedCombined.find(c => c.intSubjectID == subjectID);
+            let subjectIDs = [subjectID];
+            if (combined) {
+                subjectIDs = flattenedCombined.filter(c => c.combineCode == combined.combineCode).map(c => c.intSubjectID);
+            }
             let grades = [];
             for (let record of term.records) {
-                if (record.intSubjectID == subjectID && record.v2 && record.v2 != 'OW' && record.intFinalized >= 1) {
+                if (subjectIDs.includes(record.intSubjectID) && record.v2 && record.v2 != 'OW' && record.intFinalized >= 1) {
                     grades.push(parseFloat(record.v2) || 0);
                 }
             }
@@ -924,9 +950,23 @@ new Vue({
             return Math.round(avg);
         },
         getAverageFinal: function(term, subjectID) {
+            let flattenedCombined = this.combined_subjects;
+            if (!Array.isArray(flattenedCombined)) {
+                flattenedCombined = [];
+                for (let key in this.combined_subjects) {
+                    if (Array.isArray(this.combined_subjects[key])) {
+                        flattenedCombined = flattenedCombined.concat(this.combined_subjects[key]);
+                    }
+                }
+            }
+            let combined = flattenedCombined.find(c => c.intSubjectID == subjectID);
+            let subjectIDs = [subjectID];
+            if (combined) {
+                subjectIDs = flattenedCombined.filter(c => c.combineCode == combined.combineCode).map(c => c.intSubjectID);
+            }
             let grades = [];
             for (let record of term.records) {
-                if (record.intSubjectID == subjectID && record.v3 && record.v3 != 'OW' && record.intFinalized >= 2) {
+                if (subjectIDs.includes(record.intSubjectID) && record.v3 && record.v3 != 'OW' && record.intFinalized >= 2) {
                     grades.push(parseFloat(record.v3) || 0);
                 }
             }
@@ -936,9 +976,23 @@ new Vue({
         },
         getAverageSemFinal: function(term, subjectID) {
             if (this.student.type != 'shs') return '---';
+            let flattenedCombined = this.combined_subjects;
+            if (!Array.isArray(flattenedCombined)) {
+                flattenedCombined = [];
+                for (let key in this.combined_subjects) {
+                    if (Array.isArray(this.combined_subjects[key])) {
+                        flattenedCombined = flattenedCombined.concat(this.combined_subjects[key]);
+                    }
+                }
+            }
+            let combined = flattenedCombined.find(c => c.intSubjectID == subjectID);
+            let subjectIDs = [subjectID];
+            if (combined) {
+                subjectIDs = flattenedCombined.filter(c => c.combineCode == combined.combineCode).map(c => c.intSubjectID);
+            }
             let grades = [];
             for (let record of term.records) {
-                if (record.intSubjectID == subjectID && record.semFinalGrade) {
+                if (subjectIDs.includes(record.intSubjectID) && record.semFinalGrade) {
                     grades.push(parseFloat(record.semFinalGrade) || 0);
                 }
             }
@@ -947,9 +1001,23 @@ new Vue({
             return Math.round(avg);
         },
         getAverageGradeCurriculum: function(term, subjectID) {
+            let flattenedCombined = this.combined_subjects;
+            if (!Array.isArray(flattenedCombined)) {
+                flattenedCombined = [];
+                for (let key in this.combined_subjects) {
+                    if (Array.isArray(this.combined_subjects[key])) {
+                        flattenedCombined = flattenedCombined.concat(this.combined_subjects[key]);
+                    }
+                }
+            }
+            let combined = flattenedCombined.find(c => c.intSubjectID == subjectID);
+            let subjectIDs = [subjectID];
+            if (combined) {
+                subjectIDs = flattenedCombined.filter(c => c.combineCode == combined.combineCode).map(c => c.intSubjectID);
+            }
             let grades = [];
             for (let record of term.records) {
-                if (record.intSubjectID == subjectID) {
+                if (subjectIDs.includes(record.intSubjectID)) {
                     if (record.equivalent && record.equivalent.grade && record.equivalent.grade != 'OW') {
                         grades.push(parseFloat(record.equivalent.grade) || 0);
                     } else if (record.rec && record.rec.floatFinalGrade && record.rec.floatFinalGrade != 'OW') {
@@ -962,9 +1030,23 @@ new Vue({
             return Math.round(avg);
         },
         getTotalUnitsEarnedCurriculum: function(term, subjectID) {
+            let flattenedCombined = this.combined_subjects;
+            if (!Array.isArray(flattenedCombined)) {
+                flattenedCombined = [];
+                for (let key in this.combined_subjects) {
+                    if (Array.isArray(this.combined_subjects[key])) {
+                        flattenedCombined = flattenedCombined.concat(this.combined_subjects[key]);
+                    }
+                }
+            }
+            let combined = flattenedCombined.find(c => c.intSubjectID == subjectID);
+            let subjectIDs = [subjectID];
+            if (combined) {
+                subjectIDs = flattenedCombined.filter(c => c.combineCode == combined.combineCode).map(c => c.intSubjectID);
+            }
             let total = 0;
             for (let record of term.records) {
-                if (record.intSubjectID == subjectID) {
+                if (subjectIDs.includes(record.intSubjectID)) {
                     total += parseFloat(record.units_earned) || 0;
                 }
             }
