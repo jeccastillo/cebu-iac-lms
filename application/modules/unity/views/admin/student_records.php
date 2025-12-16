@@ -873,7 +873,6 @@ new Vue({
                 }
                 result.push({type: 'record', data: record});
             }
-            console.log(result);
             return result;
         },
         getCurriculumRecords: function(term) {
@@ -1039,7 +1038,6 @@ new Vue({
                             }
                         })
                     .then(data => {
-                        console.log(data.data);
                         if (data.data.success) {
                             Swal.fire({
                                 title: "Success",
@@ -1082,7 +1080,6 @@ new Vue({
                             }
                         })
                     .then(data => {
-                        console.log(data.data);
                         if (data.data.success) {
                             Swal.fire({
                                 title: "Success",
