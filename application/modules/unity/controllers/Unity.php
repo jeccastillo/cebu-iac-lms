@@ -1756,7 +1756,7 @@ class Unity extends CI_Controller {
                         default:
                             $v3 = $record['v3'];
                     }                  
-                    if($v3 != "OW"){ 
+                    if($v3 != "OW" && is_numeric($v3)){ 
                         if($record['strUnits'] > 0){
                             $sum_grades += $v3 * $record['strUnits'];                
                             $total += $record['strUnits'];
