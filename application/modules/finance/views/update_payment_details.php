@@ -1,130 +1,138 @@
-
 <aside class="right-side">
     <div id="vue-container">
         <section class="content-header">
-            <h1>Payment Update
-                <small>
-
+            <h1>Payment Update <small>
                 </small>
             </h1>
         </section>
         <hr />
-        <div class="content">                        
-                <div class="col-sm-12">                    
-                    <label>Enter OR or Invoice Number</label>
-                    <div class="input-group mb-3">
-                        <input type="text" v-model="or_number" class="form-control" placeholder="OR Number" aria-label="OR Number" aria-describedby="basic-addon2">
-                        <div class="input-group-append">
-                            <button @click="getPaymentDetails" class="btn btn-primary" type="button">Search</button>
-                        </div>
-                    </div>                    
-                    <form v-if="payment_detail" @submit.prevent="submitPaymentDetails" class="modal-dialog modal-lg">
-                        <div class="box box-solid box-success">
-                            <div class="box-header">                            
-                                Update Details    
+        <div class="content">
+            <div class="col-sm-12">
+                <label>Enter OR or Invoice Number</label>
+                <div class="input-group mb-3">
+                    <input type="text" v-model="or_number" class="form-control"
+                        placeholder="OR Number" aria-label="OR Number"
+                        aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <button @click="getPaymentDetails" class="btn btn-primary"
+                            type="button">Search</button>
+                    </div>
+                </div>
+                <form v-if="payment_detail" @submit.prevent="submitPaymentDetails"
+                    class="modal-dialog modal-lg">
+                    <div class="box box-solid box-success">
+                        <div class="box-header"> Update Details </div>
+                        <div class="box-body">
+                            <!-- modal header  -->
+                            <h4 class="modal-title">Payment Details</h4>
+                            <table class="table">
+                                <tr>
+                                    <th>Payee</th>
+                                    <td>{{ payment_detail.lastname + " " + payment_detail.firstname }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Description</th>
+                                    <td>{{ payment_detail.description }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Amount</th>
+                                    <td>{{ payment_detail.subtotal_order }}</td>
+                                </tr>
+                            </table>
+                            <div class="form-group">
+                                <label>OR Date</label>
+                                <input type="date" required v-model="request.or_date"
+                                    class="form-control" />
                             </div>
-                            <div class="box-body">                                    
-                                <!-- modal header  -->                                        
-                                <h4 class="modal-title">Payment Details</h4>                                
-                                <table class="table">
-                                    <tr>
-                                        <th>Payee</th>
-                                        <td>{{ payment_detail.lastname + " " + payment_detail.firstname }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Description</th>
-                                        <td>{{ payment_detail.description }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Amount</th>
-                                        <td>{{ payment_detail.subtotal_order }}</td>
-                                    </tr>
-                                </table>                                                              
-                                <div class="form-group">
-                                    <label>OR Date</label>
-                                    <input type="date" required v-model="request.or_date" class="form-control" />
-                                </div>
-                                <div class="form-group">
-                                    <label>Change OR Number</label>
-                                    <input type="text" required v-model="request.or_number" class="form-control" />
-                                </div>
-                            </div><!---box body--->
-                            <div class="box-footer">
-                                <button :disabled="!payment_detail" type="submit" class="btn btn-primary">Update</button>                                        
-                            </div>                        
-                        </div><!---box--->                      
-                    </form>
-                </div><!---column--->
-            </div><!---row--->
-        </div><!---content container--->       
-    </div><!---vue container--->
+                            <div class="form-group">
+                                <label>Change OR Number</label>
+                                <input type="text" required v-model="request.or_number"
+                                    class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label>Term</label>
+                                <select class="form-control" v-model="request.sy_reference">
+                                    <option v-for="s in sy" :value="s.intID">
+                                        {{ s.term_student_type}} {{ s.enumSem }} {{ s.term_label }}
+                                        {{ s.strYearStart }} - {{ s.strYearEnd }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <!---box body--->
+                        <div class="box-footer">
+                            <button :disabled="!payment_detail" type="submit"
+                                class="btn btn-primary">Update</button>
+                        </div>
+                    </div>
+                    <!---box--->
+                </form>
+            </div>
+            <!---column--->
+        </div>
+        <!---row--->
+    </div>
+    <!---content container--->
+    </div>
+    <!---vue container--->
 </aside>
-<script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js">
+</script>
 <script src="<?php echo base_url(); ?>assets/themes/default/js/vue.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
     integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="<?php echo base_url(); ?>assets/themes/default/js/axios.min.js"></script>
-
 <script>
 new Vue({
     el: '#vue-container',
-    data: {        
-        
-        base_url: "<?php echo base_url(); ?>",   
+    data: {
+        base_url: "<?php echo base_url(); ?>",
         or_number: undefined,
         payment_detail: undefined,
         campus: undefined,
-        request:{
+        request: {
             id: undefined,
             or_number: undefined,
             or_date: undefined,
             campus: undefined,
-        }
-             
+            sy_reference: undefined
+        },
+        sy: <?php echo json_encode($sy); ?>
     },
-
     mounted() {
         let url_string = window.location.href;
         let url = new URL(url_string);
-
         this.loader_spinner = true;
-        axios.get(base_url + 'finance/override_payment_data')
-        .then((data) => {            
-            this.user = data.data.user;  
-            this.campus = data.data.campus;         
-        })
-        .catch((error) => {
+        axios.get(base_url + 'finance/override_payment_data').then((data) => {
+            this.user = data.data.user;
+            this.campus = data.data.campus;
+        }).catch((error) => {
             console.log(error);
         })
     },
-
-    methods: {                  
-        getPaymentDetails: function(){
-            axios
-            .get(api_url + 'finance/get_payment_detail/'+ this.or_number + '/' + this.campus, {
-                headers: {
-                    Authorization: `Bearer ${window.token}`
-                }
-            })
-            .then(data => {                
+    methods: {
+        getPaymentDetails: function() {
+            axios.get(api_url + 'finance/get_payment_detail/' + this.or_number + '/' +
+                this.campus, {
+                    headers: {
+                        Authorization: `Bearer ${window.token}`
+                    }
+                }).then(data => {
                 this.payment_detail = data.data.data;
-                if(this.payment_detail){
+                if (this.payment_detail) {
                     this.request.id = this.payment_detail.id;
                     this.request.or_number = this.payment_detail.or_number;
-                    this.request.or_date = this.payment_detail.or_date;                    
-                }
-                else
-                {
-                    Swal.fire(
-                        'Error',
-                        'Data not Found',
-                        'error'
-                    )
+                    this.request.or_date = this.payment_detail.or_date;
+                    this.request.sy_reference = this.payment_detail
+                    .sy_reference;
+                } else {
+                    Swal.fire('Error', 'Data not Found', 'error')
                 }
             });
         },
-        submitPaymentDetails: function(){
+        submitPaymentDetails: function() {
             Swal.fire({
                 title: 'Continue with the update',
                 text: "Are you sure you want to update this payment?",
@@ -135,49 +143,36 @@ new Vue({
                 cancelButtonText: "No, cancel!",
                 showCloseButton: true,
                 showLoaderOnConfirm: true,
-                    preConfirm: (login) => {
-                        //console.log(this.$refs['or_start'+id][0].value);                                                
-                       
-                        Swal.fire({
-                            showCancelButton: false,
-                            showCloseButton: false,
-                            allowEscapeKey: false,
-                            title: 'Updating',
-                            text: 'Processing Data do not leave page',
-                            icon: 'info',
-                        })
-                        Swal.showLoading();
-                        axios
-                        .post(api_url + 'finance/update_payment_details', this.request, {
+                preConfirm: (login) => {
+                    //console.log(this.$refs['or_start'+id][0].value);                                                
+                    Swal.fire({
+                        showCancelButton: false,
+                        showCloseButton: false,
+                        allowEscapeKey: false,
+                        title: 'Updating',
+                        text: 'Processing Data do not leave page',
+                        icon: 'info',
+                    })
+                    Swal.showLoading();
+                    axios.post(api_url + 'finance/update_payment_details',
+                        this.request, {
                             headers: {
                                 Authorization: `Bearer ${window.token}`
                             }
-                        })
-                        .then(data => {                
-                            if(data.data.success){
-                                Swal.fire(
-                                    'Done',
-                                    data.data.message,
-                                    'success'
-                                ).then(function(){                        
-                                    location.reload();
-                                });
-                            }
-                            else{
-                                Swal.fire(
-                                    'Error',
-                                    data.data.message,
-                                    'error'
-                                )
-                            }
-                            
-                            
-                        });
-                    }
+                        }).then(data => {
+                        if (data.data.success) {
+                            Swal.fire('Done', data.data.message,
+                                'success').then(function() {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire('Error', data.data.message,
+                                'error')
+                        }
+                    });
+                }
             });
-
         }
     }
-
 })
 </script>
