@@ -4418,7 +4418,7 @@ class Excel extends CI_Controller {
                     ->setCellValue('AP'.$i, $d->source)
                     ->setCellValue('AQ'.$i, $d->call_status)
                     ->setCellValue('AR'.$i, $d->call_remarks)
-                    ->setCellValue('AR'.$i, $d->short_course);
+                    ->setCellValue('AS'.$i, $d->short_course);
 
             $i++;
         }
@@ -4523,6 +4523,7 @@ class Excel extends CI_Controller {
         $objPHPExcel->getActiveSheet()->getColumnDimension('AP')->setWidth(35);
         $objPHPExcel->getActiveSheet()->getColumnDimension('AQ')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('AR')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AS')->setWidth(20);
         
         $objPHPExcel->getActiveSheet()->setTitle('Leads');
 
