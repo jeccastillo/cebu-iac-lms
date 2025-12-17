@@ -267,7 +267,7 @@ class Finance extends CI_Controller {
 
         $role = $this->session->userdata('special_role');
         $userlevel = $this->session->userdata('intUserLevel');
-        
+        $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
         if($role == 0 && $userlevel != 2)
             redirect(base_url()."unity");
 

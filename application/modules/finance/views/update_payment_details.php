@@ -50,6 +50,15 @@
                                 <input type="text" required v-model="request.or_number"
                                     class="form-control" />
                             </div>
+                            <div class="form-group">
+                                <label>Term</label>
+                                <select class="form-control" v-model="request.sy_reference">
+                                    <option v-for="s in sy" :value="s.intID">
+                                        {{ s.term_student_type}} {{ s.enumSem }} {{ s.term_label }}
+                                        {{ s.strYearStart }} - {{ s.strYearEnd }}
+                                    </option>
+                                </select>
+                            </div>
                         </div>
                         <!---box body--->
                         <div class="box-footer">
@@ -89,7 +98,8 @@ new Vue({
             or_date: undefined,
             campus: undefined,
             sy_reference: undefined
-        }
+        },
+        sy: <?php echo json_encode($sy); ?>
     },
     mounted() {
         let url_string = window.location.href;
