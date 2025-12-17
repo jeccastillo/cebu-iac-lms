@@ -4439,7 +4439,7 @@ class Excel extends CI_Controller {
                 )
         );
 
-        $objPHPExcel->getActiveSheet()->getStyle('A1:AR2')->applyFromArray($style);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:AS2')->applyFromArray($style);
 
         $objPHPExcel->getActiveSheet()->getStyle('V1:Z2')->applyFromArray(
             array(
@@ -4555,6 +4555,7 @@ class Excel extends CI_Controller {
         $sheet->mergeCells('AP1:AP2');
         $sheet->mergeCells('AQ1:AQ2');
         $sheet->mergeCells('AR1:AR2');
+        $sheet->mergeCells('AS1:AS2');
 
         // Set active sheet index to the first sheet, so Excel opens this as the first sheet
         $objPHPExcel->setActiveSheetIndex(0);
