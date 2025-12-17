@@ -1293,14 +1293,14 @@ class Finance extends CI_Controller {
     }
 
     public function ns_transactions_data($payee,$sem){   
-        $data['sy'] = $this->db->get('tb_mas_sy')->result_array();  
+        // $data['sy'] = $this->db->get('tb_mas_sy')->result_array();  
         $data['sy'] = $this->db->get('tb_mas_sy')
-                        ->order_by('yearStart', 'ASC', false);
+                        ->order_by('yearStart', 'ASC', false)
                         ->order_by(
                             "FIELD(enumSem, '1st', '2nd', '3rd', '4th', 'Summer')",
                             '',
                             false
-                        )->result_array()
+                        )->result_array();
 
 // $query = $this->db->get();
 // $result = $query->result();
