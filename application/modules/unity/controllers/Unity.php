@@ -1663,7 +1663,7 @@ class Unity extends CI_Controller {
                             $assessment_units += $temp_rec['strUnits'];
                             if(is_numeric($grade)){
                                 $assessment_sum += $grade * $temp_rec['strUnits'];
-                            }  
+                            }
                         }                       
                     }
                 }
