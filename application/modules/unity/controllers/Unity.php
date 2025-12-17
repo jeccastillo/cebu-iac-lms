@@ -627,9 +627,19 @@ class Unity extends CI_Controller {
         if($this->is_super_admin() || $this->is_accounting() || $this->is_registrar())
         {
             
-            $ret['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
-
             $ret['student'] = $this->data_fetcher->getStudent($id);
+            
+            $ret['sy'] = $this->db->select('tb_mas_sy.*')
+                        ->from('tb_mas_sy')
+                        ->where('tb_mas_sy.term_student_type', $ret['student']['level'])
+                        ->order_by('tb_mas_sy.term_student_type', 'ASC', false)
+                        ->order_by('tb_mas_sy.strYearStart', 'DESC', false)
+                        ->order_by(
+                            "FIELD(tb_mas_sy.enumSem, 'Summer', '4th', '3rd', '2nd', '1st')",
+                            '',
+                            false
+                        )->get()->result_array();
+
             
             if(get_stype($ret['student']['level']) == "college")
                 $active_sem = $this->data_fetcher->get_active_sem();
@@ -1556,7 +1566,7 @@ class Unity extends CI_Controller {
                             $assessment_units += $temp_rec['strUnits'];
                             if(is_numeric($grade)){
                                 $assessment_sum += $grade * $temp_rec['strUnits'];
-                            }   
+                            }
                         }                       
                     }
                 }
@@ -1655,7 +1665,7 @@ class Unity extends CI_Controller {
                         if($record['strUnits'] > 0){
                             if(is_numeric($v3)){
                                 $sum_grades += $v3 * $record['strUnits'];                
-                            }   
+                            }
                             $total += $record['strUnits'];
                         }
                     }
