@@ -1302,7 +1302,7 @@ class Finance extends CI_Controller {
         //             ->group_by('tb_mas_users.intID')
         //             ->get()
         //             ->result_array();
-        $data['sy'] = $this->db->select('tb_mas_sy')
+        $data['sy'] = $this->db->from('tb_mas_sy')
                         ->order_by('yearStart', 'ASC', false)
                         ->order_by(
                             "FIELD(enumSem, '1st', '2nd', '3rd', '4th', 'Summer')",
