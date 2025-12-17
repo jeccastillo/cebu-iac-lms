@@ -66,10 +66,11 @@ class Finance extends CI_Controller {
                         ->order_by('tb_mas_sy.term_student_type', 'ASC', false)
                         ->order_by('tb_mas_sy.strYearStart', 'DESC', false)
                         ->order_by(
-                            "FIELD(tb_mas_sy.enumSem, '1st', '2nd', '3rd', '4th', 'Summer')",
+                            "FIELD(tb_mas_sy.enumSem, 'Summer', '4th', '3rd', '2nd', '1st')",
                             '',
                             false
                         )->get()->result_array();
+
         $data['sem_year'] = $sem['strYearStart'];
         $data['particulars'] = $this->db->from('tb_mas_particulars')
                             ->where('type', 'particular')
@@ -1306,7 +1307,7 @@ class Finance extends CI_Controller {
                         ->order_by('tb_mas_sy.term_student_type', 'ASC', false)
                         ->order_by('tb_mas_sy.strYearStart', 'DESC', false)
                         ->order_by(
-                            "FIELD(tb_mas_sy.enumSem, '1st', '2nd', '3rd', '4th', 'Summer')",
+                            "FIELD(tb_mas_sy.enumSem, 'Summer', '4th', '3rd', '2nd', '1st')",
                             '',
                             false
                         )->get()->result_array();
