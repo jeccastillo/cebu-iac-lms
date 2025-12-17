@@ -4335,7 +4335,8 @@ class Excel extends CI_Controller {
                     ->setCellValue('AO1', 'BEST TIME TO CONTACT')
                     ->setCellValue('AP1', 'SOURCE')
                     ->setCellValue('AQ1', 'CALL STATUS')
-                    ->setCellValue('AR1', 'CALL REMARKS');
+                    ->setCellValue('AR1', 'CALL REMARKS')
+                    ->setCellValue('AS1', 'SHORT COURSE');
 
         $sheet = $objPHPExcel->getActiveSheet(0);
         $sheet->mergeCells('V1:Z1');
@@ -4416,7 +4417,8 @@ class Excel extends CI_Controller {
                     ->setCellValue('AO'.$i, $d->best_time)
                     ->setCellValue('AP'.$i, $d->source)
                     ->setCellValue('AQ'.$i, $d->call_status)
-                    ->setCellValue('AR'.$i, $d->call_remarks);
+                    ->setCellValue('AR'.$i, $d->call_remarks)
+                    ->setCellValue('AR'.$i, $d->short_course);
 
             $i++;
         }
