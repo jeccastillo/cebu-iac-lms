@@ -734,7 +734,15 @@ class Unity extends CI_Controller {
         if($this->is_super_admin() || $this->is_accounting() || $this->is_registrar())
         {
             
-            $ret['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+            $ret['sy'] = $this->db->select('tb_mas_sy.*')
+                        ->from('tb_mas_sy')
+                        ->order_by('tb_mas_sy.term_student_type', 'ASC', false)
+                        ->order_by('tb_mas_sy.strYearStart', 'DESC', false)
+                        ->order_by(
+                            "FIELD(tb_mas_sy.enumSem, '1st', '2nd', '3rd', '4th', 'Summer')",
+                            '',
+                            false
+                        )->get()->result_array();
 
             $ret['student'] = $this->data_fetcher->getStudent($id);
             
