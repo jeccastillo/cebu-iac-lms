@@ -61,7 +61,15 @@ class Finance extends CI_Controller {
         $data['cashier'] = $this->db->get_where('tb_mas_cashier',array('user_id'=>$this->data['user']['intID']))->first_row();
         $sem = $this->data_fetcher->get_active_sem();        
         $data['current_sem'] = $sem['intID'];
-        $data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+        $data['sy'] = $this->db->select('tb_mas_sy.*')
+                        ->from('tb_mas_sy')
+                        ->order_by('tb_mas_sy.term_student_type', 'ASC', false)
+                        ->order_by('tb_mas_sy.strYearStart', 'DESC', false)
+                        ->order_by(
+                            "FIELD(tb_mas_sy.enumSem, '1st', '2nd', '3rd', '4th', 'Summer')",
+                            '',
+                            false
+                        )->get()->result_array();
         $data['sem_year'] = $sem['strYearStart'];
         $data['particulars'] = $this->db->from('tb_mas_particulars')
                             ->where('type', 'particular')
@@ -1293,15 +1301,6 @@ class Finance extends CI_Controller {
     }
 
     public function ns_transactions_data($payee,$sem){   
-        // $data['sy'] = $this->db->get('tb_mas_sy')->result_array();  
-
-        // $data['sy'] = $this->db->select('tb_mas_users.*')
-        //             ->from('tb_mas_users')
-        //             ->where(array('tb_mas_users.slug' => $payment_detail->student_number))
-        //             ->order_by('tb_mas_users.strLastname', 'ASC')
-        //             ->group_by('tb_mas_users.intID')
-        //             ->get()
-        //             ->result_array();
         $data['sy'] = $this->db->select('tb_mas_sy.*')
                         ->from('tb_mas_sy')
                         ->order_by('tb_mas_sy.term_student_type', 'ASC', false)
@@ -1311,9 +1310,6 @@ class Finance extends CI_Controller {
                             '',
                             false
                         )->get()->result_array();
-
-// $query = $this->db->get();
-// $result = $query->result();
           
         $data['cashier'] = $this->db->get_where('tb_mas_cashier',array('user_id'=>$this->data['user']['intID']))->first_row();
         $data['user'] = $this->data['user'];
