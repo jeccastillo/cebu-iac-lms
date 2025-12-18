@@ -272,7 +272,6 @@ class Finance extends CI_Controller {
     }
 
     public function update_payment(){
-                
 
         $role = $this->session->userdata('special_role');
         $userlevel = $this->session->userdata('intUserLevel');
