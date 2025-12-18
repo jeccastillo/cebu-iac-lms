@@ -2409,6 +2409,9 @@ class Pdf extends CI_Controller {
     {
         $request = $this->input->post();
 
+        print_r($request);
+        die();
+
         $role = $this->session->userdata('special_role');
         $userlevel = $this->session->userdata('intUserLevel');
 
