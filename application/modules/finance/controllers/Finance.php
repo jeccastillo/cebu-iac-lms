@@ -276,7 +276,15 @@ class Finance extends CI_Controller {
 
         $role = $this->session->userdata('special_role');
         $userlevel = $this->session->userdata('intUserLevel');
-        $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
+        $data['sy'] = $this->db->select('tb_mas_sy.*')
+                        ->from('tb_mas_sy')
+                        ->order_by('tb_mas_sy.term_student_type', 'ASC', false)
+                        ->order_by('tb_mas_sy.strYearStart', 'DESC', false)
+                        ->order_by(
+                            "FIELD(tb_mas_sy.enumSem, 'Summer', '4th', '3rd', '2nd', '1st')",
+                            '',
+                            false
+                        )->get()->result_array();
         if($role == 0 && $userlevel != 2)
             redirect(base_url()."unity");
 
@@ -1301,7 +1309,7 @@ class Finance extends CI_Controller {
         $this->load->view("common/footer",$this->data);        
     }
 
-    public function ns_transactions_data($payee,$sem){   
+    public function ns_transactions_data($payee,$sem){
         $data['sy'] = $this->db->select('tb_mas_sy.*')
                         ->from('tb_mas_sy')
                         ->order_by('tb_mas_sy.term_student_type', 'ASC', false)
