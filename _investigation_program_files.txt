@@ -1,5 +1,0 @@
-C:\xampp8\htdocs\iacademy\cebu-iac-lms\frontend\unity-spa\features\programs\edit.html
-C:\xampp8\htdocs\iacademy\cebu-iac-lms\frontend\unity-spa\features\programs\list.html
-C:\xampp8\htdocs\iacademy\cebu-iac-lms\frontend\unity-spa\features\programs\programs.controller.js
-C:\xampp8\htdocs\iacademy\cebu-iac-lms\frontend\unity-spa\features\programs\programs.service.js
-
