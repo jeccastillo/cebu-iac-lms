@@ -16,3 +16,5 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+**/frontend/unity-spa/core/baseRoot.js
+**/.DS_Store
