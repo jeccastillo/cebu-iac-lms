@@ -146,7 +146,7 @@
             var items = (vm.items || []).filter(function (it) {
               return it && it.value !== '' && it.remarks && it.remarks.trim() !== '';
             }).map(function (it) {
-              return { value: parseFloat(it.value), remarks: it.remarks.trim() };
+              return { value: it.value, remarks: it.remarks.trim() };
             });
             if (items.length === 0) {
               ToastService && ToastService.success && ToastService.success('Created');
@@ -174,7 +174,7 @@
             var items = (vm.items || []).filter(function (it) {
               return it && it.value !== '' && it.remarks && it.remarks.trim() !== '';
             }).map(function (it) {
-              return { value: parseFloat(it.value), remarks: it.remarks.trim() };
+              return { value: it.value, remarks: it.remarks.trim() };
             });
             if (items.length) {
               return GradingService.addItems(vm.form.id, items).then(function () {
@@ -205,7 +205,15 @@
         ToastService && ToastService.warn && ToastService.warn('Value and remarks are required');
         return;
       }
-      GradingService.addItem(vm.form.id, { value: parseFloat(it.value), remarks: it.remarks.trim() })
+
+      var valueToSend;
+      if (!isNaN(it.value) && it.value !== null && it.value !== '' && isFinite(it.value)) {
+        valueToSend = parseFloat(it.value);
+      } else {
+        valueToSend = it.value;
+      }
+
+      GradingService.addItem(vm.form.id, { value: valueToSend, remarks: it.remarks.trim() })
         .then(function () {
           ToastService && ToastService.success && ToastService.success('Item added');
           vm.singleItem = { value: '', remarks: '' };

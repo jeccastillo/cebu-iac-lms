@@ -15,7 +15,7 @@ class GradingItemStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'value' => ['required', 'numeric'],
+            'value' => ['required'],
             'remarks' => ['required', 'string', 'max:255'],
         ];
     }
@@ -24,7 +24,7 @@ class GradingItemStoreRequest extends FormRequest
     {
         return [
             'value.required' => 'Value is required',
-            'value.numeric' => 'Value must be numeric',
+            // 'value.numeric' => 'Value must be numeric',
             'remarks.required' => 'Remarks is required',
         ];
     }

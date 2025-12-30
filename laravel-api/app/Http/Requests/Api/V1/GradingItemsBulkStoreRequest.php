@@ -16,7 +16,7 @@ class GradingItemsBulkStoreRequest extends FormRequest
     {
         return [
             'items' => ['required', 'array', 'min:1'],
-            'items.*.value' => ['required', 'numeric'],
+            'items.*.value' => ['required'],
             'items.*.remarks' => ['required', 'string', 'max:255'],
         ];
     }
@@ -28,7 +28,7 @@ class GradingItemsBulkStoreRequest extends FormRequest
             'items.array' => 'Items must be an array',
             'items.min' => 'At least one item is required',
             'items.*.value.required' => 'Each item must have a value',
-            'items.*.value.numeric' => 'Each item value must be numeric',
+            // 'items.*.value.numeric' => 'Each item value must be numeric',
             'items.*.remarks.required' => 'Each item must have remarks',
         ];
     }
