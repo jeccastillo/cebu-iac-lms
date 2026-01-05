@@ -453,9 +453,6 @@ class Finance extends CI_Controller {
                 $temp['other'][] = $item;
             }
 
-                print('C');
-                print_r($temp);
-                die();
             $tuition[] =  $temp;
             
         }
@@ -528,9 +525,6 @@ class Finance extends CI_Controller {
                         // attach prev balances for this term
                         $temp['balance'] = $balances;
 
-                print('B');
-                print_r($temp);
-                die();
                         $tuition[] = $temp;
                     }
                 }
@@ -593,9 +587,6 @@ class Finance extends CI_Controller {
                                     ->get()
                                     ->result_array();
                 
-                print('A');
-                print_r($ledger);
-                die();
                 $temp['ledger'] = [];
                 foreach($ledger as $item){
                     $item['date'] = date('M j, Y',strtotime($item['date']));
@@ -610,9 +601,7 @@ class Finance extends CI_Controller {
                                   ->where(array('student_id'=>$id,'tb_mas_student_ledger.type'=>'other','syid' => $term_id))        
                                   ->get()
                                   ->result_array();
-                print('A1');
-                print_r($ledger);
-                die();
+                                  
                 $temp['other'] = [];
                 foreach($other as $item){
                     $item['date'] = date('M j, Y',strtotime($item['date']));
