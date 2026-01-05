@@ -627,8 +627,6 @@ class Finance extends CI_Controller {
             }
         }
 
-        print_r($tuition);
-        die();
         $data['tuition'] = $tuition;
         $data['user'] = $this->data["user"];
         $data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
