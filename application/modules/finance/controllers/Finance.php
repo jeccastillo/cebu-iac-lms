@@ -586,6 +586,8 @@ class Finance extends CI_Controller {
                                     ->order_by("strYearStart asc, enumSem asc, date asc")
                                     ->get()
                                     ->result_array();
+                print_r($ledger);
+                die();
                 $temp['ledger'] = [];
                 foreach($ledger as $item){
                     $item['date'] = date('M j, Y',strtotime($item['date']));
