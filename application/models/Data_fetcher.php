@@ -3562,13 +3562,13 @@ class Data_fetcher extends CI_Model {
                 }
                 else{
                     if($scholar->tuition_fee_rate > 0){
-                        $tuition_scholarship_installment_current = ($tuition + ($tuition * ($tuition_year['installmentIncrease']/100))) * ($scholar->tuition_fee_rate/100);
-                        $tuition_scholarship_installment_current30 = ($tuition + ($tuition * 0.15)) * ($scholar->tuition_fee_rate/100);
-                        $tuition_scholarship_installment_current50 = ($tuition + ($tuition * 0.09)) * ($scholar->tuition_fee_rate/100);
+                        // $tuition_scholarship_installment_current = ($tuition + ($tuition * ($tuition_year['installmentIncrease']/100))) * ($scholar->tuition_fee_rate/100);
+                        // $tuition_scholarship_installment_current30 = ($tuition + ($tuition * 0.15)) * ($scholar->tuition_fee_rate/100);
+                        // $tuition_scholarship_installment_current50 = ($tuition + ($tuition * 0.09)) * ($scholar->tuition_fee_rate/100);
                         $tuition_scholarship_installment += ($tuition + ($tuition * ($tuition_year['installmentIncrease']/100))) * ($scholar->tuition_fee_rate/100);
                         $tuition_scholarship_installment30 += ($tuition + ($tuition * 0.15)) * ($scholar->tuition_fee_rate/100);
                         $tuition_scholarship_installment50 += ($tuition + ($tuition * 0.09)) * ($scholar->tuition_fee_rate/100);
-                        $tuition_scholarship_current = $tuition * ($scholar->tuition_fee_rate/100);
+                        // $tuition_scholarship_current = $tuition * ($scholar->tuition_fee_rate/100);
                         $tuition_scholarship += $tuition * ($scholar->tuition_fee_rate/100);
                         $tuition_fee_rate += $tuition * ($scholar->tuition_fee_rate/100);
 
@@ -3579,12 +3579,11 @@ class Data_fetcher extends CI_Model {
                         $total_assessment_rate_installment50 += $tuition_scholarship_installment_current50;                            
                         
 
-                        //get tuition percentage discount in assessment
-                        $tuition_discount_full += ($tuition * ($scholar->total_assessment_rate/100));
-                        $tuition_discount_installment += ($tuition + ($tuition * ($tuition_year['installmentIncrease']/100))) * ($scholar->total_assessment_rate/100);
-                        $tuition_discount_installment30 += ($tuition + ($tuition * 0.15)) * ($scholar->total_assessment_rate/100);
-                        $tuition_scholarship_installment_current50 += ($tuition + ($tuition * 0.09)) * ($scholar->total_assessment_rate/100);
-
+                        $tuition_scholarship_current = ($tuition - $in_house_grand_total - $tuition_discount_full) * ($scholar->tuition_fee_rate/100);
+                        $tuition_scholarship_installment_current = ($tuition + ($tuition * ($tuition_year['installmentIncrease']/100)) - $scholarship_installment_grand_total) * ($scholar->tuition_fee_rate/100);
+                        $tuition_scholarship_installment_current30 = ($tuition + ($tuition * 0.15) - $scholarship_installment_grand_total30) * ($scholar->tuition_fee_rate/100);
+                        $tuition_scholarship_installment_current50 = ($tuition + ($tuition * 0.09) - $scholarship_installment_grand_total50) * ($scholar->tuition_fee_rate/100);
+                        
 
                         $tuition_fee_installment_rate = $tuition_scholarship_installment * ($scholar->tuition_fee_rate/100);
                     }
