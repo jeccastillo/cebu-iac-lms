@@ -54,7 +54,51 @@
 
     <!-- Dropdown Menu -->
     <div ng-if="vm.dropdownOpen" 
-         class="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
+         class="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
+      
+      <!-- Filter Section -->
+      <div class="p-3 border-b border-gray-200 bg-gray-50">
+        <div class="flex items-center space-x-2 mb-2">
+          <div class="text-xs font-medium text-gray-700">Search Filters:</div>
+          <button 
+            ng-click="vm.clearFilters(); $event.stopPropagation()" 
+            class="text-xs text-blue-600 hover:text-blue-800 underline"
+            ng-if="vm.filterStudentType || vm.filterYear || vm.filterSemester">
+            Clear
+          </button>
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+          <!-- Student Type Filter -->
+          <div>
+            <input type="text" 
+                   class="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                   placeholder="Type (Old/New)"
+                   ng-model="vm.filterStudentType"
+                   ng-click="$event.stopPropagation()">
+          </div>
+          <!-- Year Filter -->
+          <div>
+            <input type="text" 
+                   class="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                   placeholder="Year (2024)"
+                   ng-model="vm.filterYear"
+                   ng-click="$event.stopPropagation()">
+          </div>
+          <!-- Semester Filter -->
+          <div>
+            <select 
+                    class="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    ng-model="vm.filterSemester"
+                    ng-click="$event.stopPropagation()">
+              <option value="">All Terms</option>
+              <option value="1st">1st</option>
+              <option value="2nd">2nd</option>
+              <option value="3rd">3rd</option>
+              <option value="summer">Summer</option>
+            </select>
+          </div>
+        </div>
+      </div>
       
       <!-- No terms available -->
       <div ng-if="!vm.availableTerms.length" class="px-3 py-2 text-sm text-gray-500">
@@ -62,22 +106,34 @@
       </div>
 
       <!-- Term Options -->
-      <div ng-if="vm.availableTerms.length" class="py-1">
-        <button
-          ng-repeat="term in vm.availableTerms track by term.intID"
-          ng-click="vm.selectTerm(term)"
-          class="w-full text-left px-3 py-2 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none transition-colors duration-150"
-          ng-class="{
-            'bg-blue-50 text-blue-700': vm.selectedTerm && term.intID === vm.selectedTerm.intID,
-            'text-gray-900': !vm.selectedTerm || term.intID !== vm.selectedTerm.intID
-          }"
-        >
-          <div class="font-medium">{{ term.label }}</div>
-          <div ng-if="!vm.compact" class="text-xs text-gray-500">
-            {{ term.term_student_type }} {{ term.enumSem }} {{ term.term_label }} {{ term.strYearStart }}-{{ term.strYearEnd }}
-            <span ng-if="term.term_student_type" class="ml-1">({{ term.term_student_type }})</span>
-          </div>
-        </button>
+      <div ng-if="vm.availableTerms.length" class="max-h-60 overflow-auto">
+        <div ng-if="vm.filteredTerms().length" class="py-1">
+          <button
+            ng-repeat="term in vm.filteredTerms() track by term.intID"
+            ng-click="vm.selectTerm(term)"
+            class="w-full text-left px-3 py-2 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none transition-colors duration-150"
+            ng-class="{
+              'bg-blue-50 text-blue-700': vm.selectedTerm && term.intID === vm.selectedTerm.intID,
+              'text-gray-900': !vm.selectedTerm || term.intID !== vm.selectedTerm.intID
+            }"
+          >
+            <div class="font-medium">{{ term.label }}</div>
+            <div ng-if="!vm.compact" class="text-xs text-gray-500">
+              {{ term.term_student_type }} {{ term.enumSem }} {{ term.term_label }} {{ term.strYearStart }}-{{ term.strYearEnd }}
+              <span ng-if="term.term_student_type" class="ml-1">({{ term.term_student_type }})</span>
+            </div>
+          </button>
+        </div>
+        <!-- No results message -->
+        <div ng-if="!vm.filteredTerms().length && (vm.filterStudentType || vm.filterYear || vm.filterSemester)" 
+             class="px-3 py-4 text-sm text-gray-500 text-center">
+          <div class="mb-2">No terms found matching your filters</div>
+          <button 
+            ng-click="vm.clearFilters(); $event.stopPropagation()" 
+            class="text-blue-600 hover:text-blue-800 underline text-xs">
+            Clear filters
+          </button>
+        </div>
       </div>
 
       <!-- Refresh Option -->

@@ -16,6 +16,11 @@
     vm.error = null;
     vm.dropdownOpen = false;
 
+    // Filter properties
+    vm.filterStudentType = '';
+    vm.filterYear = '';
+    vm.filterSemester = '';
+
     // Component options (from directive scope)
     vm.compact = vm.compact === 'true';
     vm.showLabel = vm.showLabel !== 'false'; // Default to true
@@ -25,6 +30,8 @@
     vm.selectTerm = selectTerm;
     vm.closeDropdown = closeDropdown;
     vm.refresh = refresh;
+    vm.filteredTerms = filteredTerms;
+    vm.clearFilters = clearFilters;
 
     // Initialize
     activate();
@@ -88,11 +95,59 @@
 
     function closeDropdown() {
       vm.dropdownOpen = false;
+      // Reset filters when dropdown closes
+      vm.clearFilters();
     }
 
     function refresh() {
       TermService.clearCache();
       TermService.loadTerms();
+    }
+
+    function filteredTerms() {
+      if (!vm.availableTerms || !vm.availableTerms.length) {
+        return [];
+      }
+
+      var studentTypeFilter = (vm.filterStudentType || '').toLowerCase().trim();
+      var yearFilter = (vm.filterYear || '').trim();
+      var semesterFilter = (vm.filterSemester || '').toLowerCase().trim();
+
+      // If no filters applied, return all terms
+      if (!studentTypeFilter && !yearFilter && !semesterFilter) {
+        return vm.availableTerms;
+      }
+
+      return vm.availableTerms.filter(function(term) {
+        var matches = true;
+
+        // Filter by student type (partial match)
+        if (studentTypeFilter) {
+          var termStudentType = (term.term_student_type || '').toLowerCase();
+          matches = matches && termStudentType.indexOf(studentTypeFilter) !== -1;
+        }
+
+        // Filter by year (matches either start or end year)
+        if (yearFilter && matches) {
+          var yearStart = (term.strYearStart || '').toString();
+          var yearEnd = (term.strYearEnd || '').toString();
+          matches = matches && (yearStart.indexOf(yearFilter) !== -1 || yearEnd.indexOf(yearFilter) !== -1);
+        }
+
+        // Filter by semester/term (partial match)
+        if (semesterFilter && matches) {
+          var enumSem = (term.enumSem || '').toLowerCase();
+          matches = matches && enumSem.indexOf(semesterFilter) !== -1;
+        }
+
+        return matches;
+      });
+    }
+
+    function clearFilters() {
+      vm.filterStudentType = '';
+      vm.filterYear = '';
+      vm.filterSemester = '';
     }
   }
 
