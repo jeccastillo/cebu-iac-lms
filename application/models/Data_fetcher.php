@@ -2708,7 +2708,9 @@ class Data_fetcher extends CI_Model {
             ->join('tb_mas_scholarships','tb_mas_scholarships.intID = tb_mas_student_discount.discount_id')
             ->order_by('date_applied','asc')
             ->get('tb_mas_student_discount')
-            ->result();             
+            ->result();     
+            
+        
         // }
         // else{                                              
         //     $scholarships = $this->db->select('tb_mas_student_discount.*,tb_mas_scholarships.*')
@@ -2718,12 +2720,12 @@ class Data_fetcher extends CI_Model {
         //         ->result(); 
         // }
 
-        foreach($scholarships as $disc){
+        foreach($scholarships_external as $disc){
             $disc->date_applied = date('M j, Y',strtotime($disc->date_applied));
             $scholarship_array[] = $disc;
         }
-        
-        foreach($scholarships_external as $disc){
+
+        foreach($scholarships as $disc){
             $disc->date_applied = date('M j, Y',strtotime($disc->date_applied));
             $scholarship_array[] = $disc;
         }
@@ -3081,7 +3083,6 @@ class Data_fetcher extends CI_Model {
                 //list of all scholarships and date tagged
                 $scholar_type_external .= $scholar->name . '(' . date("M d, Y", strtotime($scholar->date_applied)) .') ';
                 
-
                 if($scholar->total_assessment_rate > 0 || $scholar->total_assessment_fixed > 0){                
                     
 
@@ -3101,8 +3102,6 @@ class Data_fetcher extends CI_Model {
                         $tuition_discount_installment += ($tuition + ($tuition * ($tuition_year['installmentIncrease']/100))) * ($scholar->total_assessment_rate/100);
                         $tuition_discount_installment30 += ($tuition + ($tuition * 0.15)) * ($scholar->total_assessment_rate/100);
                         $tuition_discount_installment50 += ($tuition + ($tuition * 0.09)) * ($scholar->total_assessment_rate/100);
-                        // print('1 ' . $tuition_discount_installment50);
-                        // die();
 
                         //external
                         $ar_external_scholarship_full += $total_assessment_temp * ($scholar->total_assessment_rate/100);
@@ -3270,7 +3269,7 @@ class Data_fetcher extends CI_Model {
                 $ctr++;
             }
         }
-        
+
         if(!empty($discounts)){
             foreach($discounts as $scholar){
                 
@@ -3359,24 +3358,12 @@ class Data_fetcher extends CI_Model {
                         $total_assessment_rate_discount_installment30 += $tuition_scholarship_installment_current30;
                         $total_assessment_rate_discount_installment50 += $tuition_scholarship_installment_current50;
                         $tuition_fee_installment_rate = $tuition_scholarship_installment_current * ($scholar->tuition_fee_rate/100);
-                            
-                        // print_r($scholar);
-                        // print(' @@@@@ ' . ($tuition + ($tuition * 0.09)));
-                        // print(' @@@@@ ' . ($scholar->tuition_fee_rate/100));
-                        // print(' @@@@@ ' . $tuition_discount_installment50);
-                        // print(' @@@@@ ' . $tuition_scholarship_installment_current50);
-                        // print(' @@@@@ ' . $scholarship_installment_grand_total50);
-                        // die();               
 
                         //add total tuition percentage discount
                         $tuition_discount_full += ($tuition * ($scholar->tuition_fee_rate/100));
                         $tuition_discount_installment += ($tuition + ($tuition * ($tuition_year['installmentIncrease']/100))) * ($scholar->tuition_fee_rate/100);
                         $tuition_discount_installment30 += ($tuition + ($tuition * 0.15)) * ($scholar->tuition_fee_rate/100);
                         $tuition_discount_installment50 += ($tuition + ($tuition * 0.09)) * ($scholar->tuition_fee_rate/100);
-                        // $tuition_discount_full += ($tuition * ($scholar->tuition_fee_rate/100));
-                        // $tuition_discount_installment += ($tuition + ($tuition * ($tuition_year['installmentIncrease']/100))) * ($scholar->tuition_fee_rate/100);
-                        // $tuition_discount_installment30 += ($tuition + ($tuition * 0.15)) * ($scholar->tuition_fee_rate/100);
-                        // $tuition_discount_installment50 += $tuition_scholarship_installment_current50;
 
                         //check if discount is external or in-house
                         if($scholar->deduction_from == 'external'){
@@ -3509,7 +3496,6 @@ class Data_fetcher extends CI_Model {
                 $ctr++;
             }
         }
-
 
         if(!empty($scholarships)){
             foreach($scholarships as $scholar){
