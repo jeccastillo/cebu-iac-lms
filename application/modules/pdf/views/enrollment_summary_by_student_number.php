@@ -37,7 +37,7 @@
         $total_per_program = 0; 
         $major = ($item['strMajor'] != "None" && $item['strMajor'] != "")?'Major in '.$item['strMajor']:''
     ?>
-        <tr><td style="font-size:10px;font-weight: bold;"><?php echo $item['strProgramDescription'] . ' ' . $major; ?></td>
+        <tr><td style="font-size:10px;font-weight: bold;"><?php echo $item['strProgramDescription']; ?></td>
         <?php foreach($student_years as $year):  
             $total_per_program += $item['years'][$year];
         ?>
