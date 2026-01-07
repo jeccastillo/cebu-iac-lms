@@ -66,7 +66,7 @@ $html .= '
         $all_enrolled +=  $item['enrolled_freshman'] + $item['enrolled_transferee'] + $item['enrolled_foreign'] + $item['enrolled_second'] + $item['enrolled_continuing'] + $item['enrolled_shiftee'] + $item['enrolled_returnee'];
         $html .= '            
             <tr>
-                <td style="font-size:8px;">'.trim($item['strProgramDescription']).' '.$major.'</td>
+                <td style="font-size:8px;">'.trim($item['strProgramDescription']).'</td>
                 <td style="font-size:8px;">
                     '.$item['enrolled_freshman'].'
                 </td>
