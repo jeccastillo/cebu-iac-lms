@@ -36,7 +36,7 @@
                 </tr>
                 <tr v-for="item in enrolled">
                     <td>
-                        {{ item.strProgramDescription }} {{ (item.strMajor != "None" && item.strMajor != "")?'Major in '+item.strMajor:'' }}
+                        {{ item.strProgramDescription }}
                     </td>
                     <td>
                         {{ item.enrolled_freshman }}
