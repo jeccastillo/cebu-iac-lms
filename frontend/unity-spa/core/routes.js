@@ -737,6 +737,31 @@
         controller: "PaymentsResultController",
         controllerAs: "vm"
       })
+      .when("/room-reservations", {
+        templateUrl: "features/room-reservations/list.html",
+        controller: "RoomReservationListController",
+        controllerAs: "vm"
+      })
+      .when("/room-reservations/new", {
+        templateUrl: "features/room-reservations/form.html",
+        controller: "RoomReservationFormController",
+        controllerAs: "vm"
+      })
+      .when("/room-reservations/:id/edit", {
+        templateUrl: "features/room-reservations/form.html",
+        controller: "RoomReservationFormController",
+        controllerAs: "vm"
+      })
+      .when("/room-reservations/:id", {
+        templateUrl: "features/room-reservations/view.html",
+        controller: "RoomReservationViewController",
+        controllerAs: "vm"
+      })
+      .when("/vehicle-reservations", {
+        templateUrl: "features/vehicle-reservations/list.html",
+        controller: "VehicleReservationDashboardController",
+        controllerAs: "vm"
+      })
       .otherwise({ redirectTo: "/login" });
 
     // Keep hashbang routing for simple static hosting

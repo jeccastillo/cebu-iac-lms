@@ -72,6 +72,14 @@ use App\Http\Controllers\Api\V1\ShiftRequestController;
 use App\Http\Controllers\Api\V1\StudentAdvisorController;
 use App\Http\Controllers\Api\V1\PayeeController;
 use App\Http\Controllers\Api\V1\NonStudentPaymentsController;
+use App\Http\Controllers\Api\V1\ReservationController;
+use App\Http\Controllers\Api\V1\RoomReservationController;
+use App\Http\Controllers\Api\V1\RoomEquipmentController;
+use App\Http\Controllers\Api\V1\ReservationEquipmentController;
+use App\Http\Controllers\Api\V1\RoomConfigurationController;
+use App\Http\Controllers\Api\V1\CalendarSettingController;
+use App\Http\Controllers\Api\V1\VehicleController;
+use App\Http\Controllers\Api\V1\VehicleReservationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -661,4 +669,54 @@ Route::prefix('v1')->group(function () {
     Route::post('/advisors/switch', [StudentAdvisorController::class, 'switch'])->middleware('role:faculty_admin,admin');
     Route::post('/advisors/{advisorId}/assign-bulk', [StudentAdvisorController::class, 'assignBulk'])->middleware('role:faculty_admin,admin');
     Route::delete('/student-advisors/{studentId}', [StudentAdvisorController::class, 'destroy'])->middleware('role:faculty_admin,admin');
+
+    // Room Reservations
+    Route::get('room-reservations/dashboard', [RoomReservationController::class, 'dashboard']);
+    Route::get('room-reservations', [RoomReservationController::class, 'dashboard']);
+    Route::get('room-reservations/add-form', [RoomReservationController::class, 'addForm']);
+    Route::get('room-reservations/{id}/edit-form', [RoomReservationController::class, 'editForm']);
+    Route::get('room-reservations/{id}', [RoomReservationController::class, 'show']);
+    Route::post('room-reservations', [RoomReservationController::class, 'store']);
+    Route::put('room-reservations/{id}', [RoomReservationController::class, 'update']);
+    Route::post('room-reservations/delete', [RoomReservationController::class, 'destroy']);
+    Route::delete('room-reservations/{id}', [RoomReservationController::class, 'destroy']);
+    Route::post('room-reservations/approve', [RoomReservationController::class, 'approve']);
+    Route::post('room-reservations/reject', [RoomReservationController::class, 'reject']);
+    Route::post('room-reservations/check-availability', [RoomReservationController::class, 'checkAvailability']);
+    Route::post('room-reservations/get-available-rooms', [RoomReservationController::class, 'getAvailableRooms']);
+    Route::post('room-reservations/get-schedule-data', [RoomReservationController::class, 'getScheduleData']);
+
+    Route::apiResource('room-equipment', RoomEquipmentController::class);
+    Route::get('reservation-equipment', [ReservationEquipmentController::class, 'index']);
+    Route::get('reservation-equipment/{id}', [ReservationEquipmentController::class, 'show']);
+    Route::post('reservation-equipment', [ReservationEquipmentController::class, 'store']);
+    Route::put('reservation-equipment/{id}', [ReservationEquipmentController::class, 'update']);
+    Route::delete('reservation-equipment/{id}', [ReservationEquipmentController::class, 'destroy']);
+    Route::post('reservation-equipment/{id}/status', [ReservationEquipmentController::class, 'changeStatus']);
+    Route::apiResource('room-configurations', RoomConfigurationController::class);
+    Route::apiResource('calendar-settings', CalendarSettingController::class);
+
+    Route::apiResource('vehicles', VehicleController::class);
+    Route::get('vehicles/available', [VehicleController::class, 'available']);
+    
+    Route::get('vehicle-reservations/dashboard', [VehicleReservationController::class, 'dashboard']);
+    Route::get('vehicle-reservations/add-form', [VehicleReservationController::class, 'addForm']);
+    Route::get('vehicle-reservations/{id}/edit-form', [VehicleReservationController::class, 'editForm']);
+    Route::post('vehicle-reservations/check-availability', [VehicleReservationController::class, 'checkAvailability']);
+    Route::post('vehicle-reservations/get-available-vehicles', [VehicleReservationController::class, 'getAvailableVehicles']);
+    Route::get('vehicle-reservations', [VehicleReservationController::class, 'index']);
+    Route::post('vehicle-reservations', [VehicleReservationController::class, 'store']);
+    Route::get('vehicle-reservations/{id}', [VehicleReservationController::class, 'show']);
+    Route::put('vehicle-reservations/{id}', [VehicleReservationController::class, 'update']);
+    Route::delete('vehicle-reservations/{id}', [VehicleReservationController::class, 'destroy']);
+    Route::post('vehicle-reservations/approve', [VehicleReservationController::class, 'approve']);
+    Route::post('vehicle-reservations/reject', [VehicleReservationController::class, 'reject']);
+    Route::post('vehicle-reservations/{id}/start-use', [VehicleReservationController::class, 'startUse']);
+    Route::post('vehicle-reservations/{id}/complete', [VehicleReservationController::class, 'complete']);
+
+    Route::post('reservations', [ReservationController::class, 'store']);
+    Route::post('reservations/{id}/assign-approver', [ReservationController::class, 'assignApprover']);
+    Route::post('reservations/{id}/approve', [ReservationController::class, 'approve']);
+    Route::post('reservations/{id}/reject', [ReservationController::class, 'reject']);
+    Route::get('reservations/{id}', [ReservationController::class, 'show']);
 });

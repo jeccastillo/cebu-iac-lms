@@ -1,0 +1,131 @@
+<div class="p-4" ng-controller="VehicleReservationDashboardController as vm">
+  <h1 class="text-2xl font-semibold text-gray-900 mb-4">Vehicle Reservations</h1>
+  <div class="flex items-center justify-between mb-4">
+    <div class="flex space-x-4">
+      <div class="text-sm text-gray-600">Today's Reservations: <span class="font-bold">{{ vm.todaysReservations.length }}</span></div>
+      <div class="text-sm text-gray-600">My Reservations: <span class="font-bold">{{ vm.myReservations.length }}</span></div>
+      <div class="text-sm text-gray-600" ng-if="vm.isAdmin">Pending Approval: <span class="font-bold">{{ vm.pendingReservations.length }}</span></div>
+    </div>
+    <button type="button" class="bg-blue-600 hover:bg-blue-700 text-white rounded px-4 py-2 text-sm font-medium" ng-click="vm.openAddModal()">
+      <i class="fas fa-plus mr-2"></i> New Vehicle Reservation
+    </button>
+  </div>
+  <div ng-if="vm.error" class="p-3 rounded bg-red-50 border border-red-200 text-red-700 text-sm mb-2 flex items-center justify-between">
+    <div class="flex items-center"><i class="fas fa-exclamation-triangle mr-2"></i>{{ vm.error }}</div>
+    <button type="button" class="text-red-500 hover:text-red-700" ng-click="vm.clearAlert()"><i class="fas fa-times"></i></button>
+  </div>
+  <div ng-if="vm.success" class="p-3 rounded bg-green-50 border border-green-200 text-green-700 text-sm mb-2 flex items-center justify-between">
+    <div class="flex items-center"><i class="fas fa-check mr-2"></i>{{ vm.success }}</div>
+    <button type="button" class="text-green-500 hover:text-green-700" ng-click="vm.clearAlert()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="bg-white border rounded">
+    <table class="min-w-full text-sm">
+      <thead class="bg-gray-50 text-gray-700">
+        <tr>
+          <th class="text-left px-4 py-2 border-b">Date</th>
+          <th class="text-left px-4 py-2 border-b">Time</th>
+          <th class="text-left px-4 py-2 border-b">Vehicle</th>
+          <th class="text-left px-4 py-2 border-b">Reserved By</th>
+          <th class="text-left px-4 py-2 border-b">Destination</th>
+          <th class="text-left px-4 py-2 border-b">Status</th>
+          <th class="text-left px-4 py-2 border-b">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-if="!vm.consolidatedReservations.length && !vm.loading">
+          <td colspan="7" class="px-4 py-4 text-center text-gray-500">No records found.</td>
+        </tr>
+        <tr ng-repeat="reservation in vm.consolidatedReservations" class="border-b hover:bg-gray-50">
+          <td class="px-4 py-2">{{ reservation.dteReservationDate }}</td>
+          <td class="px-4 py-2">{{ vm.formatTime(reservation.dteStartTime) }} - {{ vm.formatTime(reservation.dteEndTime) }}</td>
+          <td class="px-4 py-2">{{ reservation.strVehicleName }} ({{ reservation.strPlateNumber }})</td>
+          <td class="px-4 py-2">{{ reservation.strFirstname }} {{ reservation.strLastname }}</td>
+          <td class="px-4 py-2">{{ reservation.strDestination }}</td>
+          <td class="px-4 py-2">
+            <span ng-if="reservation.enumStatus === 'approved'" class="inline-block px-2 py-1 rounded bg-green-100 text-green-700 text-xs">Approved</span>
+            <span ng-if="reservation.enumStatus === 'pending'" class="inline-block px-2 py-1 rounded bg-yellow-100 text-yellow-800 text-xs">Pending</span>
+            <span ng-if="reservation.enumStatus === 'rejected'" class="inline-block px-2 py-1 rounded bg-red-100 text-red-700 text-xs">Rejected</span>
+            <span ng-if="reservation.enumStatus === 'in_use'" class="inline-block px-2 py-1 rounded bg-blue-100 text-blue-700 text-xs">In Use</span>
+            <span ng-if="reservation.enumStatus === 'completed'" class="inline-block px-2 py-1 rounded bg-gray-100 text-gray-700 text-xs">Completed</span>
+            <span ng-if="reservation.enumStatus === 'cancelled'" class="inline-block px-2 py-1 rounded bg-gray-100 text-gray-700 text-xs">Cancelled</span>
+          </td>
+          <td class="px-4 py-2 flex items-center space-x-2">
+            <button type="button" class="text-blue-600 hover:text-blue-800" title="Edit" ng-click="vm.openEditModal(reservation)"><i class="fas fa-edit"></i></button>
+            <button type="button" class="text-red-600 hover:text-red-800" title="Delete" ng-click="vm.deleteReservation(reservation)"><i class="fas fa-trash"></i></button>
+            <button type="button" class="text-green-600 hover:text-green-800" ng-if="vm.canApprove(reservation)" ng-click="vm.approveReservation(reservation)">Approve</button>
+            <button type="button" class="text-red-600 hover:text-red-800" ng-if="vm.canReject(reservation)" ng-click="vm.rejectReservation(reservation)">Reject</button>
+            <button type="button" class="text-blue-600 hover:text-blue-800" ng-if="reservation.enumStatus === 'approved'" ng-click="vm.startUseReservation(reservation)">Start Use</button>
+            <button type="button" class="text-purple-600 hover:text-purple-800" ng-if="reservation.enumStatus === 'in_use'" ng-click="vm.completeReservation(reservation)">Complete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50" ng-if="vm.addModalOpen">
+    <div class="bg-white rounded shadow-xl w-full max-w-2xl">
+      <div class="border-b px-4 py-3 flex items-center justify-between">
+        <h2 class="text-lg font-semibold text-gray-800">{{ vm.isCreate ? 'Add Vehicle Reservation' : 'Edit Vehicle Reservation' }}</h2>
+        <button class="text-gray-500 hover:text-gray-700" ng-click="vm.closeAddModal()"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="p-6">
+        <form name="addReservationForm" ng-submit="vm.submitAddReservation()" novalidate>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Reservation Date <span class="text-red-500">*</span></label>
+              <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" ng-model="vm.model.dteReservationDate" min="{{vm.minDate}}" required>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Start Time <span class="text-red-500">*</span></label>
+                <input type="time" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" ng-model="vm.model.dteStartTime" required>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">End Time <span class="text-red-500">*</span></label>
+                <input type="time" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" ng-model="vm.model.dteEndTime" required>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Vehicle <span class="text-red-500">*</span></label>
+              <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" ng-model="vm.model.intVehicleID" required>
+                <option value="">Select Vehicle</option>
+                <option ng-repeat="vehicle in vm.vehicles" value="{{vehicle.intVehicleID}}">{{vehicle.strVehicleName}} ({{vehicle.strPlateNumber}})</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Reserved By <span class="text-red-500">*</span></label>
+              <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" ng-model="vm.model.intFacultyID" required>
+                <option value="">Select Faculty</option>
+                <option ng-repeat="faculty in vm.facultyList" value="{{faculty.intID}}">{{faculty.strFirstname}} {{faculty.strLastname}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Purpose <span class="text-red-500">*</span></label>
+              <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" ng-model="vm.model.strPurpose" placeholder="Enter purpose" required>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Destination <span class="text-red-500">*</span></label>
+              <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" ng-model="vm.model.strDestination" placeholder="Enter destination" required>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 mb-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Driver (Optional)</label>
+              <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" ng-model="vm.model.intDriverID">
+                <option value="">Select Driver</option>
+                <option ng-repeat="faculty in vm.facultyList" value="{{faculty.intID}}">{{faculty.strFirstname}} {{faculty.strLastname}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="flex justify-end space-x-2">
+            <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">{{ vm.isCreate ? 'Submit Reservation' : 'Update Reservation' }}</button>
+            <button type="button" class="inline-flex items-center px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500" ng-click="vm.closeAddModal()">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

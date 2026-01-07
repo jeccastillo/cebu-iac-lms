@@ -1,0 +1,42 @@
+<div>
+    <h3>Equipment Requests</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Equipment</th>
+                <th>Quantity</th>
+                <th>Status</th>
+                <th>Requested</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="eq in equipmentList">
+                <td>{{eq.equipment.strEquipmentName}}</td>
+                <td>{{eq.intQuantityRequested}}</td>
+                <td>{{eq.enumStatus}}</td>
+                <td>{{eq.dteCreated}}</td>
+                <td>
+                    <button ng-if="eq.enumStatus=='requested'" ng-click="editEquipment(eq)">Edit</button>
+                    <button ng-if="eq.enumStatus=='requested'" ng-click="deleteEquipment(eq)">Delete</button>
+                    <button ng-if="eq.enumStatus=='requested'" ng-click="changeStatus(eq, 'approved')">Approve</button>
+                    <button ng-if="eq.enumStatus=='requested'" ng-click="changeStatus(eq, 'denied')">Deny</button>
+                    <button ng-if="eq.enumStatus=='approved'" ng-click="changeStatus(eq, 'delivered')">Deliver</button>
+                    <button ng-if="eq.enumStatus=='delivered'" ng-click="changeStatus(eq, 'returned')">Return</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <form ng-submit="addEquipment()">
+        <input type="number" ng-model="newEquipment.intEquipmentID" placeholder="Equipment ID" required>
+        <input type="number" ng-model="newEquipment.intQuantityRequested" min="1" placeholder="Quantity" required>
+        <button type="submit">Add Equipment</button>
+    </form>
+    <div ng-if="editingEquipment">
+        <form ng-submit="updateEquipment()">
+            <input type="number" ng-model="editingEquipment.intQuantityRequested" min="1" required>
+            <button type="submit">Update</button>
+            <button type="button" ng-click="editingEquipment=null">Cancel</button>
+        </form>
+    </div>
+</div>

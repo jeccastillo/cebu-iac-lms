@@ -1,0 +1,68 @@
+<div class="space-y-6" ng-controller="RoomReservationViewController as vm">
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-semibold text-gray-900">View Reservations</h1>
+    <button type="button" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" ng-click="vm.add()">
+      <i class="fas fa-plus mr-2"></i>
+      Add Reservation
+    </button>
+  </div>
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+    <div class="p-6 space-y-4">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+        <div>
+          <label class="block text-xs font-medium text-gray-700 mb-1">Status</label>
+          <select class="w-full px-2 py-1 border border-gray-300 rounded-md" ng-model="vm.filters.status" ng-change="vm.applyFilters()">
+            <option value="">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-700 mb-1">Date From</label>
+          <input type="date" class="w-full px-2 py-1 border border-gray-300 rounded-md" ng-model="vm.filters.dateFrom" ng-change="vm.applyFilters()">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-700 mb-1">Date To</label>
+          <input type="date" class="w-full px-2 py-1 border border-gray-300 rounded-md" ng-model="vm.filters.dateTo" ng-change="vm.applyFilters()">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-700 mb-1">Search</label>
+          <input type="text" class="w-full px-2 py-1 border border-gray-300 rounded-md" ng-model="vm.filters.search" ng-change="vm.applyFilters()" placeholder="Search purpose, room...">
+        </div>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="min-w-full table-auto border border-gray-200 rounded-md text-sm whitespace-nowrap">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-2 py-1 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer" ng-click="vm.sortBy('dteReservationDate')">Date</th>
+              <th class="px-2 py-1 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer" ng-click="vm.sortBy('dteStartTime')">Time</th>
+              <th class="px-2 py-1 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer" ng-click="vm.sortBy('strRoomCode')">Room</th>
+              <th class="px-2 py-1 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer" ng-click="vm.sortBy('strPurpose')">Purpose</th>
+              <th class="px-2 py-1 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer" ng-click="vm.sortBy('strFirstname')">Requested By</th>
+              <th class="px-2 py-1 text-left font-medium text-gray-500 uppercase tracking-wider">Status</th>
+              <th class="px-2 py-1 text-left font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="reservation in vm.filteredReservations" class="border-t border-gray-100">
+              <td class="px-2 py-1">{{ vm.formatDate(reservation.dteReservationDate) }}</td>
+              <td class="px-2 py-1">{{ vm.formatTime(reservation.dteStartTime) }} - {{ vm.formatTime(reservation.dteEndTime) }}</td>
+              <td class="px-2 py-1 truncate max-w-xs">{{ reservation.strRoomCode }}</td>
+              <td class="px-2 py-1 truncate max-w-xs">{{ reservation.strPurpose }}</td>
+              <td class="px-2 py-1 truncate max-w-xs">{{ reservation.strFirstname }} {{ reservation.strLastname }}</td>
+              <td class="px-2 py-1">{{ reservation.enumStatus | capitalize }}</td>
+              <td class="px-2 py-1">
+                <button class="btn btn-xs bg-yellow-100 text-yellow-800 rounded px-2 py-1 mr-1" ng-click="vm.edit(reservation.intReservationID)">Edit</button>
+                <button class="btn btn-xs bg-red-100 text-red-800 rounded px-2 py-1" ng-click="vm.deleteReservation(reservation.intReservationID)">Delete</button>
+                <button class="btn btn-xs bg-green-100 text-green-800 rounded px-2 py-1 ml-1" ng-if="vm.canApprove(reservation)" ng-click="vm.approveReservation(reservation)">Approve</button>
+                <button class="btn btn-xs bg-red-100 text-red-800 rounded px-2 py-1 ml-1" ng-if="vm.canReject(reservation)" ng-click="vm.rejectReservation(reservation)">Reject</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

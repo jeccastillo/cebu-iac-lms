@@ -146,6 +146,14 @@
           { label: 'System Alerts', path: '/admin/system-alerts' },
           { label: 'Logs', path: '/logs' }
         ]
+      },
+      {
+        key: 'facilities',
+        label: 'Admin and Facilities',
+        children: [
+          { label: 'Room Reservations', path: '/room-reservations' },
+          { label: 'Vehicle Reservations', path: '/vehicle-reservations' }
+        ]
       }
     ];
 
