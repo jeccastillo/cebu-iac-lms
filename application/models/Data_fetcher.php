@@ -3398,13 +3398,8 @@ class Data_fetcher extends CI_Model {
                         $tuition_discount_installment += $tuition_scholarship;
                     }
 
-                    if($syid == 29){
-                        print($tuition_scholarship_current . ' @ ');
-                        print($tuition_discount);
-                        die();
-                    }
-
-                    $total_scholarship_temp += $tuition_scholarship_current;
+                    // $total_scholarship_temp += $tuition_scholarship_current;
+                    $total_scholarship_temp += $tuition_discount;
                     $total_scholarship_installment_temp += $tuition_scholarship_installment_current;
                     $total_scholarship_installment_temp30 += $tuition_scholarship_installment_current30;
                     $total_scholarship_installment_temp50 += $tuition_scholarship_installment_current50;
