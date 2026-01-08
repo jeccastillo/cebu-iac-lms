@@ -3545,13 +3545,13 @@ class Data_fetcher extends CI_Model {
                         if($scholar->total_assessment_rate == 100)
                             $full_scholarship = true;
 
-                        // print_r($scholar);
-                        print('@ ' .$tuition);
-                        print('@ ' .$in_house_grand_total);
-                        print('@ ' .$tuition_discount_full);
-                        print('@ ' .$scholar->tuition_fee_rate/100);
-                        print('@ ' .$total_scholarship_temp);
-                        die();
+                        // // print_r($scholar);
+                        // print('@ ' .$tuition);
+                        // print('@ ' .$in_house_grand_total);
+                        // print('@ ' .$tuition_discount_full);
+                        // print('@ ' .$scholar->tuition_fee_rate/100);
+                        // print('@ ' .$total_scholarship_temp);
+                        // die();
                     }
                     elseif($scholar->total_assessment_fixed > 0){
                         if($scholar->total_assessment_fixed > $total_assessment){
