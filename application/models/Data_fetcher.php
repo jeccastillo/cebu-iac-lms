@@ -3535,7 +3535,7 @@ class Data_fetcher extends CI_Model {
                         $total_assessment_rate_installment30 = $total_assessment_installment30 * ($scholar->total_assessment_rate/100);
                         $total_assessment_rate_installment50 = $total_assessment_installment50 * ($scholar->total_assessment_rate/100);
 
-                        $total_scholarship_temp = ($tuition - $in_house_grand_total - $tuition_discount_full) * ($scholar->total_assessment_rate/100);
+                        $total_scholarship_temp = ($total_assessment - $in_house_grand_total - $tuition_discount_full) * ($scholar->total_assessment_rate/100);
                         $total_scholarship_installment_temp = ($tuition + ($tuition * ($tuition_year['installmentIncrease']/100)) - $scholarship_installment_grand_total) * ($scholar->tuition_fee_rate/100);
                         $total_scholarship_installment_temp30 = ($tuition + ($tuition * 0.15) - $scholarship_installment_grand_total30) * ($scholar->tuition_fee_rate/100);
                         $total_scholarship_installment_temp50 = ($tuition + ($tuition * 0.09) - $scholarship_installment_grand_total50) * ($scholar->tuition_fee_rate/100);
