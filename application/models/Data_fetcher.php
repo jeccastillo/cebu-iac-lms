@@ -2618,8 +2618,7 @@ class Data_fetcher extends CI_Model {
             $thesis = $this->db->where(array('tuitionYearID'=>$tuition_year['intID'], 'type' => 'thesis'))
             ->get('tb_mas_tuition_year_misc')->first_row('array');
             $tuition += getExtraFee($thesis, $class_type, 'misc');                                
-        }
-        
+        }        
     }   
 
     function getTuitionSubjects($stype,$sch,$discount,$subjects,$id,$class_type="regular",$syid,$tuition_year_id,$dr=null,$year_level = 1,$internship = 0, $intROG = 0,$w_status="",$current_program=null)
@@ -3348,6 +3347,7 @@ class Data_fetcher extends CI_Model {
                         // $tuition_scholarship_installment_current = ($tuition + ($tuition * ($tuition_year['installmentIncrease']/100)) - $tuition_discount_installment) * ($scholar->tuition_fee_rate/100);
                         // $tuition_scholarship_installment_current30 = ($tuition + ($tuition * 0.15) - $tuition_discount_installment30) * ($scholar->tuition_fee_rate/100);
                         // $tuition_scholarship_installment_current50 = ($tuition + ($tuition * 0.09) - $tuition_discount_installment50) * ($scholar->tuition_fee_rate/100);
+                        
                         $tuition_discount += ($tuition - $in_house_grand_total) * ($scholar->tuition_fee_rate/100);
                         $tuition_fee_rate += ($tuition - $in_house_grand_total) * ($scholar->tuition_fee_rate/100);
                         $total_assessment_rate_discount += ($tuition - $in_house_grand_total) * ($scholar->tuition_fee_rate/100);
@@ -3397,6 +3397,10 @@ class Data_fetcher extends CI_Model {
                         $tuition_scholarship_installment_current = $tuition_scholarship;
                         $tuition_discount_installment += $tuition_scholarship;
                     }
+
+                    print($tuition_scholarship_current);
+                    print($tuition_discount);
+                    die();
 
                     $total_scholarship_temp += $tuition_scholarship_current;
                     $total_scholarship_installment_temp += $tuition_scholarship_installment_current;
@@ -3914,9 +3918,6 @@ class Data_fetcher extends CI_Model {
 
     }
         
-    
-
-    
     function getTransactions($id,$sem)
     {
         return  $this->db
