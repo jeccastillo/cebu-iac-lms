@@ -3545,10 +3545,10 @@ class Data_fetcher extends CI_Model {
                         if($scholar->total_assessment_rate == 100)
                             $full_scholarship = true;
 
-                        print_r($scholar);
-                        print('@ ' .$total_assessment_rate);
-                        print('@ ' .$total_assessment_rate_scholarship);
-                        die();
+                        // print_r($scholar);
+                        // print('@ ' .$total_assessment_rate);
+                        // print('@ ' .$total_assessment_rate_scholarship);
+                        // die();
                     }
                     elseif($scholar->total_assessment_fixed > 0){
                         if($scholar->total_assessment_fixed > $total_assessment){
