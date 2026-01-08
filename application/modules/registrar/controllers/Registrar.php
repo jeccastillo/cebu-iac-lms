@@ -3280,6 +3280,70 @@ class Registrar extends CI_Controller {
         }
     }
 
+    public function add_document_checklist()
+    {
+        $data = array(
+            "type" => $post['type'],
+            "document_name" => $post['document_name']
+        );
+
+        $this->data_poster->post_data('tb_mas_document_checklist',$data);
+
+        $data['message'] = "Success";
+        $data['success'] = true;
+
+        echo json_encode($data);
+    }
+    
+    public function delete_document_checklist()
+    {
+        $post = $this->input->post();
+
+        $this->db->where('intID',$post['id'])
+                 ->delete('tb_mas_document_checklist');
+
+        $this->db->where('documentID',$post['id'])
+                 ->delete('tb_mas_student_documents');
+
+        $data['message'] = "Deleted";
+        $data['success'] = true;
+
+        echo json_encode($data);
+    }
+
+    public function add_student_document($id = 0)
+    {
+        $post = $this->input->post();
+
+
+        $document['documentID'] = $post['documentID'];
+        $document['intStudentID'] = $post['intStudentID'];
+        $document['dateSubmitted'] = $post['dateSubmitted'];
+        $document['dateSubmitted'] = $post['dateSubmitted'];
+        $document['user'] = $post['user'];
+        $document['dateTime'] = $post['dateTime'];
+        $document['remarks'] = $post['remarks'];
+        
+        $this->data_poster->post_data('tb_mas_student_documents',$document);
+
+        $data['message'] = "Success";
+        $data['success'] = true;
+
+        echo json_encode($data);
+    }
+
+    public function delete_student_document()
+    {
+        $post = $this->input->post();
+
+        $this->db->where('intID',$post['id'])->delete('tb_mas_student_documents');
+
+        $data['message'] = "Deleted";
+        $data['success'] = true;
+
+        echo json_encode($data);
+    }
+
     private function get_student_number_year($student_number){
         
         if (preg_match('/^[a-zA-Z]/', $student_number)) {
