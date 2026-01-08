@@ -3547,8 +3547,8 @@ class Data_fetcher extends CI_Model {
 
                         // print_r($scholar);
                         // print('@ ' .$total_assessment_rate);
-                        // print('@ ' .$total_assessment_rate_scholarship);
-                        // die();
+                        print('@ ' .$total_scholarship_temp);
+                        die();
                     }
                     elseif($scholar->total_assessment_fixed > 0){
                         if($scholar->total_assessment_fixed > $total_assessment){
