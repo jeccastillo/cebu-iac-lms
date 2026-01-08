@@ -3585,8 +3585,7 @@ class Data_fetcher extends CI_Model {
                         // $tuition_scholarship_installment_current50 = ($tuition + ($tuition * 0.09) - $scholarship_installment_grand_total50) * ($scholar->tuition_fee_rate/100);
                         
                         $tuition_scholarship_installment_current50 = ($tuition + ($tuition * 0.09) - ((($tuition + ($tuition * 0.09)) / $total_assessment_temp50) * $scholarship_installment_grand_total50)) * ($scholar->tuition_fee_rate/100);
-                        $tuition_scholarship_installment50 = ($tuition + ($tuition * 0.09) - ((($tuition + ($tuition * 0.09)) / $total_assessment_temp50) * $scholarship_installment_grand_total50)) * ($scholar->tuition_fee_rate/100);
-
+                        
                         // print($tuition_scholarship_installment_current50 . ' @ ');
                         // print($tuition . ' @ ');
                         // print($scholarship_installment_grand_total50 . ' @ ');
@@ -3614,7 +3613,7 @@ class Data_fetcher extends CI_Model {
                     }
 
                     $total_scholarship_temp += $tuition_scholarship_current;
-                    $total_scholarship_installment_temp += $tuition_scholarship_installment_current;
+                    $total_scholarship_installment_temp += $tuition_scholarship_installment_current50;
                     $total_scholarship_installment_temp30 += $tuition_scholarship_installment_current30;
                     $total_scholarship_installment_temp50 += $tuition_scholarship_installment_current50;
 
