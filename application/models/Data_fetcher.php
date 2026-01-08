@@ -3546,7 +3546,10 @@ class Data_fetcher extends CI_Model {
                             $full_scholarship = true;
 
                         // print_r($scholar);
-                        // print('@ ' .$total_assessment_rate);
+                        print('@ ' .$tuition);
+                        print('@ ' .$in_house_grand_total);
+                        print('@ ' .$tuition_discount_full);
+                        print('@ ' .$scholar->tuition_fee_rate/100);
                         print('@ ' .$total_scholarship_temp);
                         die();
                     }
