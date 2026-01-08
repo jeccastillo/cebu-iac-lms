@@ -3399,7 +3399,7 @@ class Data_fetcher extends CI_Model {
                     }
 
                     if($syid == 29){
-                        print($tuition_scholarship_current);
+                        print($tuition_scholarship_current . ' @ ');
                         print($tuition_discount);
                         die();
                     }
