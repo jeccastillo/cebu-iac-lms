@@ -3398,10 +3398,6 @@ class Data_fetcher extends CI_Model {
                         $tuition_discount_installment += $tuition_scholarship;
                     }
 
-                    print($tuition_scholarship_current);
-                    print($tuition_discount);
-                    die();
-
                     $total_scholarship_temp += $tuition_scholarship_current;
                     $total_scholarship_installment_temp += $tuition_scholarship_installment_current;
                     $total_scholarship_installment_temp30 += $tuition_scholarship_installment_current30;
