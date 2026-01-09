@@ -3284,7 +3284,7 @@ class Registrar extends CI_Controller {
     {
         $data = array(
             "type" => $post['type'],
-            "document_name" => $post['document_name']
+            "documentName" => $post['document_name']
         );
 
         $this->data_poster->post_data('tb_mas_document_checklist',$data);
@@ -3315,10 +3315,8 @@ class Registrar extends CI_Controller {
     {
         $post = $this->input->post();
 
-
         $document['documentID'] = $post['documentID'];
         $document['intStudentID'] = $post['intStudentID'];
-        $document['dateSubmitted'] = $post['dateSubmitted'];
         $document['dateSubmitted'] = $post['dateSubmitted'];
         $document['user'] = $post['user'];
         $document['dateTime'] = $post['dateTime'];
