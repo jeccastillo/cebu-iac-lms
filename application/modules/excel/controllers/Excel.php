@@ -8489,10 +8489,10 @@ class Excel extends CI_Controller {
                                 if(!$checkClasslistStudent){
                                     $this->data_poster->post_data('tb_mas_classlist_student',$classlistStudent);
                                 }else{
-                                if($checkClasslistStudent){
-                                    $this->data_poster->post_data('tb_mas_classlist_student',$classlistStudent,$checkClasslistStudent->intCSID);
+                                    if($checkClasslistStudent){
+                                        $this->data_poster->post_data('tb_mas_classlist_student',$classlistStudent,$checkClasslistStudent->intCSID);
+                                    }
                                 }
-                                // }
                             }
                         }
                     }else{
