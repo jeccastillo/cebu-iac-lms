@@ -386,7 +386,7 @@ class Schedule extends CI_Controller {
                 }
             
                 $this->data_poster->log_action('Schedule','Added a new Schedule Room Sched ID: '.$this->db->insert_id(),'green');
-            redirect(base_url()."schedule/view_schedules");
+            redirect(base_url()."schedule/add_schedule");
         }
         
             
