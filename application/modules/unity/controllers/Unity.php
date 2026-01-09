@@ -2321,7 +2321,8 @@ class Unity extends CI_Controller {
             $this->data['tab'] = $tab;
         else
             $this->data['tab'] = "tab_1";
-                    
+
+        $this->data['documents'] = $this->db->get_where('tb_mas_student_documents',array('studentID'=>$id))->first_row('array');
         
         if(is_numeric($id)){
             $this->data['student'] = $this->data_fetcher->getStudent($id);
