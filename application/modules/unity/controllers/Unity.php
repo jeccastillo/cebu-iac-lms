@@ -2214,7 +2214,7 @@ class Unity extends CI_Controller {
                     ];
                 }
             }
-            $ret['documents'] = $this->db->get_where('tb_mas_student_documents',array('studentID'=>$id))->first_row('array');
+            $ret['documents'] = $this->db->get_where('tb_mas_student_documents',array('studentID'=>$id))->result_array();
             $ret['term_balances'] = $term_balances;
             $ret['success']= true;
         }
