@@ -3316,7 +3316,7 @@ class Registrar extends CI_Controller {
         $post = $this->input->post();
 
         $document['documentID'] = $post['documentID'];
-        $document['intStudentID'] = $post['intStudentID'];
+        $document['studentID'] = $post['intStudentID'];
         $document['dateSubmitted'] = $post['dateSubmitted'];
         $document['user'] = $post['user'];
         $document['dateTime'] = $post['dateTime'];
