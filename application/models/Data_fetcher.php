@@ -3116,12 +3116,16 @@ class Data_fetcher extends CI_Model {
                     elseif($scholar->total_assessment_fixed > 0){
                         if($scholar->total_assessment_fixed > $total_assessment){
                             $total_scholarship_temp += $total_assessment;
+                            $total_scholarship_installment_temp30 += $total_assessment;
+                            $total_scholarship_installment_temp50 += $total_assessment; 
                             $total_scholarship_installment_temp += $total_assessment_installment;                            
                             $total_assessment_fixed = $total_assessment;
                             $total_assessment_fixed_installment = $total_assessment_installment;
                         }
                         else{
                             $total_scholarship_temp += $scholar->total_assessment_fixed;
+                            $total_scholarship_installment_temp30 += $total_assessment;
+                            $total_scholarship_installment_temp50 += $total_assessment;
                             $total_scholarship_installment_temp += $scholar->total_assessment_fixed;
                             $total_assessment_fixed = $scholar->total_assessment_fixed;
                             $total_assessment_fixed_installment = $scholar->total_assessment_fixed;
