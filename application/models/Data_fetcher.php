@@ -2873,7 +2873,7 @@ class Data_fetcher extends CI_Model {
                 else
                     $regular[] = $subj;
                 
-                if (isset($subj['is_special_class']) && $subj['is_special_class']) {
+                if (isset($subj['is_special_class']) && $subj['is_special_class'] && isset($class['intLecHours'])) {
                     $hours = intval($class['intLectHours']);
                     $tuition += ($hours * 3 * $unit_fee);
                 } else if(isset($subj['intMajor']) && isset($subj['isElective']) && isset($subj['additional_elective']))
