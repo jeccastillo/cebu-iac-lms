@@ -3302,7 +3302,7 @@ class Registrar extends CI_Controller {
         $this->db->where('intID',$post['id'])
                  ->delete('tb_mas_document_checklist');
 
-        $this->db->where('documentID',$post['id'])
+        $this->db->where('document',$post['id'])
                  ->delete('tb_mas_student_documents');
 
         $data['message'] = "Deleted";
@@ -3315,7 +3315,7 @@ class Registrar extends CI_Controller {
     {
         $post = $this->input->post();
 
-        $document['documentID'] = $post['documentID'];
+        $document['document'] = $post['document'];
         $document['studentID'] = $post['intStudentID'];
         $document['dateSubmitted'] = $post['dateSubmitted'];
         $document['user'] = $post['user'];
