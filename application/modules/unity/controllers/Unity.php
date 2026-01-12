@@ -3182,7 +3182,6 @@ class Unity extends CI_Controller {
             
                 
             $data['grading_items'] = $this->db->where(array("grading_id"=>$grading_system))
-                                                    // ->order_by('value','ASC')
                                                     ->order_by("
                                                         CASE
                                                             WHEN value REGEXP '^[0-9]+(\\.[0-9]+)?$' THEN 0
@@ -3209,11 +3208,13 @@ class Unity extends CI_Controller {
                 $grading_system_midterm = $override_midterm?$override_midterm['grading_system_id']:$data['subject']['grading_system_id_midterm'];
 
                 $data['grading_items_midterm'] = $this->db->where(array("grading_id"=>$grading_system_midterm))
-                                                    ->order_by("
-                                                        value REGEXP '^[0-9]+(\\.[0-9]+)?$' ASC,
-                                                        CAST(value AS DECIMAL(10,2)) ASC,
-                                                        value ASC
-                                                        ", null, false)
+                                                ->order_by("
+                                                    CASE
+                                                        WHEN value REGEXP '^[0-9]+(\\.[0-9]+)?$' THEN 0
+                                                        ELSE 1
+                                                    END,
+                                                    CAST(value AS DECIMAL(10,2)) DESC
+                                                    ", null, false)
                                                 ->get('tb_mas_grading_item')
                                                 ->result_array();                  
             }            
