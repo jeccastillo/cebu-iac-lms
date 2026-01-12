@@ -4234,7 +4234,7 @@ class Unity extends CI_Controller {
         $post = $this->input->post();
 
         $document['document'] = $post['document'];
-        $document['studentID'] = $post['intStudentID'];
+        $document['studentID'] = $post['studentID'];
         $document['dateSubmitted'] = $post['dateSubmitted'];
         $document['user'] = $post['user'];
         $document['remarks'] = $post['remarks'];
