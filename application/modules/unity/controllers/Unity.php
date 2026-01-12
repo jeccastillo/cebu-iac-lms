@@ -3184,7 +3184,7 @@ class Unity extends CI_Controller {
             $data['grading_items'] = $this->db->where(array("grading_id"=>$grading_system))
                                                     // ->order_by('value','ASC')
                                                     ->order_by("
-                                                        value REGEXP '^[9-0]+(\\.[9-0]+)?$' DESC,
+                                                        value REGEXP '^[0-9]+(\\.[0-9]+)?$' ASC,
                                                         CAST(value AS DECIMAL(10,2)) ASC,
                                                         value ASC
                                                         ", null, false)
@@ -3208,7 +3208,7 @@ class Unity extends CI_Controller {
 
                 $data['grading_items_midterm'] = $this->db->where(array("grading_id"=>$grading_system_midterm))
                                                     ->order_by("
-                                                        value REGEXP '^[9-0]+(\\.[9-0]+)?$' DESC,
+                                                        value REGEXP '^[0-9]+(\\.[0-9]+)?$' ASC,
                                                         CAST(value AS DECIMAL(10,2)) ASC,
                                                         value ASC
                                                         ", null, false)
