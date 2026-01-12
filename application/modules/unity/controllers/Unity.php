@@ -4238,6 +4238,7 @@ class Unity extends CI_Controller {
         $document['dateSubmitted'] = $post['dateSubmitted'];
         $document['user'] = $post['user'];
         $document['remarks'] = $post['remarks'];
+        $document['created_at'] = date("Y-m-d H:i:s");
         
         $this->data_poster->post_data('tb_mas_student_documents',$document);
 
