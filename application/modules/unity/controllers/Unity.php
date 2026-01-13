@@ -2219,7 +2219,12 @@ class Unity extends CI_Controller {
             }
 
             $sy = $this->db->get('tb_mas_sy')->result_array();
-            print_r($registeredSems);
+            $semNotRegistered = $this->db->select('tb_mas_sy.*')
+                    ->from('tb_mas_sy')
+                    ->where_not_in('intID', $registeredSems)
+                    ->get()
+                    ->result_array();
+            print_r($semNotRegistered);
             die();
 
             $ret['documents'] = $this->db->get_where('tb_mas_student_documents',array('studentID'=>$id))->result_array();
