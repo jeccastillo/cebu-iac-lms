@@ -2181,12 +2181,11 @@ class Unity extends CI_Controller {
                 ->get('tb_mas_registration')
                 ->result_array();
 
-            $sy = $this->db->get('tb_mas_sy')->result_array();
-            print_r($sy);
-            die();
-            
+            $registeredSems = array();
+
             $term_balances = [];
-            foreach($registrations as $reg){     
+            foreach($registrations as $reg){
+                $registeredSems[] = $reg['intID'];
                 if($reg['intID'] != $sem_id){
                     $tuition = $this->data_fetcher->getTuition($ret['student']['intID'],$reg['intID']);                                                    
                     $term_payments = $this->db->query("SELECT subtotal_order from payment_details WHERE student_number = '".$ret['student']['slug']."' AND sy_reference=".$reg['intID']." AND status = 'Paid' AND ( description LIKE 'Tuition%' OR description LIKE 'Reservation%')")
@@ -2218,6 +2217,11 @@ class Unity extends CI_Controller {
                     ];
                 }
             }
+
+            $sy = $this->db->get('tb_mas_sy')->result_array();
+            print_r($registeredSems);
+            die();
+
             $ret['documents'] = $this->db->get_where('tb_mas_student_documents',array('studentID'=>$id))->result_array();
             $ret['term_balances'] = $term_balances;
             $ret['success']= true;
