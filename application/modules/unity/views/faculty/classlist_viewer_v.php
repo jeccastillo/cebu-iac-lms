@@ -1,9 +1,7 @@
 <aside class="right-side">
     <div id="vue-container">
         <section class="content-header">
-            <h1>
-                Classlist
-                <small>
+            <h1> Classlist <small>
                     <a class="btn btn-app" v-if="(is_super_admin || is_registrar) && show_all"
                         :href="base_url + 'unity/classlist_viewer/' + classlist.intID +'/0/'+sid"><i
                             class="fa fa-times"></i> Hide Enlisted</a></li>
@@ -11,7 +9,8 @@
                         :href="base_url + 'unity/classlist_viewer/' + classlist.intID +'/1/'+sid"><i
                             class="fa fa-check"></i> Show Enlisted</a>
                     <a class="btn btn-app" v-if="is_super_admin || is_registrar"
-                        :href="base_url + 'unity/edit_classlist/'+ classlist.intID"><i class="fa fa-gear"></i> Edit</a>
+                        :href="base_url + 'unity/edit_classlist/'+ classlist.intID"><i
+                            class="fa fa-gear"></i> Edit</a>
                     <a class="btn btn-app" v-if="is_super_admin || is_registrar"
                         :href="base_url + 'excel/download_classlist/'+ classlist.intID + '/' + show_all"><i
                             class="fa fa-table"></i> Download Spreadsheet</a>
@@ -19,8 +18,9 @@
                         :href="base_url + 'pdf/print_classlist_registrar/' + classlist.intID +'/front'"><i
                             class="fa fa-print"></i>Print Classlist</a>
                     <!-- <a class="btn btn-app" v-if="classlist.intFinalized > 0" target="_blank" :href="base_url + 'pdf/grading_sheet/' + classlist.intID"><i class="fa fa-print"></i> Print Grading Sheet</a> -->
-                    <a class="btn btn-app" v-if="classlist.intFinalized > 0" href="#" data-toggle="modal"
-                        data-target="#gradingSheetModal"><i class="fa fa-print"></i> Print Grading Sheet</a>
+                    <a class="btn btn-app" v-if="classlist.intFinalized > 0" href="#"
+                        data-toggle="modal" data-target="#gradingSheetModal"><i
+                            class="fa fa-print"></i> Print Grading Sheet</a>
                 </small>
             </h1>
         </section>
@@ -58,9 +58,9 @@
                         </thead>
                         <tbody>
                             <tr :style="sid == student.intID?'background-color:#ccc;':''"
-                                v-for="(student,index) in students" v-if="show_all || student.registered">
-                                <td v-if="is_super_admin || is_registrar"><input type="checkbox" v-model="checked"
-                                        :value="student.intID" /></td>
+                                v-for="(student,index) in students">
+                                <td v-if="is_super_admin || is_registrar"><input type="checkbox"
+                                        v-model="checked" :value="student.intID" /></td>
                                 <td>{{ index + 1 }}</td>
                                 <td><a :href="base_url + 'unity/student_viewer/' + student.intID">{{ student.strLastname.toUpperCase() +' '+student.strFirstname.toUpperCase() }}
                                         <span
@@ -72,10 +72,9 @@
                                         v-if="(student.floatMidtermGrade == 'OW' || student.floatFinalGrade == 'OW' || classlist.intFinalized != 0 || ((cdate < classlist.midterm_start && cdate < classlist.midterm_end ) || (cdate > classlist.midterm_start && cdate > classlist.midterm_end ))) && !is_super_admin || classlist.intFinalized == 2">
                                         {{ (student.floatMidtermGrade && student.floatMidtermGrade != 50)?student.floatMidtermGrade:"NGS" }}
                                     </span>
-                                    <span v-else-if="student.floatMidtermGrade == 'OW'">
-                                        OW
-                                    </span>
-                                    <select v-else @change="updateGrade($event,'midterm',student.intCSID)"
+                                    <span v-else-if="student.floatMidtermGrade == 'OW'"> OW </span>
+                                    <select v-else
+                                        @change="updateGrade($event,'midterm',student.intCSID)"
                                         class="form-control">
                                         <option
                                             :selected="(!student.floatMidtermGrade || student.floatMidtermGrade == 50)? true : false"
@@ -85,7 +84,8 @@
                                             :value="grading_item.value+'-'+grading_item.remarks">
                                             {{ grading_item.value }}
                                         </option>
-                                        <option v-if="is_super_admin || is_registrar" value="OW">OW</option>
+                                        <option v-if="is_super_admin || is_registrar" value="OW">OW
+                                        </option>
                                     </select>
                                 </td>
                                 <td v-else></td>
@@ -94,30 +94,32 @@
                                         v-if="(student.floatMidtermGrade == 'OW' || student.floatFinalGrade == 'OW' || classlist.intFinalized != 1 || ((cdate < classlist.final_start && cdate < classlist.final_end ) || (cdate > classlist.final_start && cdate > classlist.final_end ))) && !is_super_admin">
                                         {{ (student.floatFinalGrade)?student.floatFinalGrade:"NGS" }}
                                     </span>
-                                    <span v-else-if="student.floatFinalGrade == 'OW'">
-                                        OW
-                                    </span>
-                                    <select v-else @change="updateGrade($event,'final',student.intCSID)"
+                                    <span v-else-if="student.floatFinalGrade == 'OW'"> OW </span>
+                                    <select @change="updateGrade($event,'final',student.intCSID)"
                                         class="form-control">
-                                        <option :selected="(!student.floatFinalGrade)? true : false" value="NGS">NGS
-                                        </option>
+                                        <option :selected="(!student.floatFinalGrade)? true : false"
+                                            value="NGS">NGS </option>
                                         <option v-for="grading_item in grading_items"
                                             :selected="student.floatFinalGrade == grading_item.value"
                                             :value="grading_item.value+'-'+grading_item.remarks">
                                             {{ grading_item.value }}
                                         </option>
-                                        <option v-if="is_super_admin || is_registrar" value="OW">OW</option>
+                                        <option v-if="is_super_admin || is_registrar" value="OW">OW
+                                        </option>
                                     </select>
                                 </td>
                                 <td v-if="subject.intMajor == 1">
-                                    {{ (student.floatFinalsGrade)?student.floatFinalsGrade:"NGS" }}</td>
+                                    {{ (student.floatFinalsGrade)?student.floatFinalsGrade:"NGS" }}
+                                </td>
                                 <td v-else></td>
                                 <td>{{ student.strRemarks }}</td>
                                 <td class="text-left">
                                     {{ student.registered?'yes':'no' }}
                                 </td>
                                 <td :style="student.pre_req_passed?'color:#009900':'color:#990000'"
-                                    v-if="pre_req.length > 0">{{ student.pre_req_passed?'yes':'no' }}</td>
+                                    v-if="pre_req.length > 0">
+                                    {{ student.pre_req_passed?'yes':'no' }}
+                                </td>
                                 <td v-if="!student.registered"><button class="btn btn-danger"
                                         @click="removeStudent(student.intCSID,section,student.strLastname + ' ' + student.strFirstname)">Remove</button>
                                 </td>
@@ -127,11 +129,12 @@
                     </table>
                     <div class="box-footer">
                         <div class="row">
-                            <form v-if="classlist.intFinalized == 0 && (is_super_admin || is_registrar)" method="post"
-                                @submit.prevent="transferToClasslist">
+                            <form
+                                v-if="classlist.intFinalized == 0 && (is_super_admin || is_registrar)"
+                                method="post" @submit.prevent="transferToClasslist">
                                 <div class="col-sm-2">
-                                    <button type="submit" class="btn btn-warning btn-block">Transfer to <i
-                                            class="fa fa-arrow-right"></i></button>
+                                    <button type="submit" class="btn btn-warning btn-block">Transfer
+                                        to <i class="fa fa-arrow-right"></i></button>
                                 </div>
                                 <div class="col-sm-4">
                                     <select required v-model="transfer_to" class="form-control">
@@ -142,28 +145,25 @@
                                 </div>
                             </form>
                             <div class="col-sm-4">
-                                <a v-if="classlist.intFinalized <= 0" href="#" data-target="#addModal"
-                                    data-toggle="modal" class="btn btn-success">
-                                    Add Student
-                                </a>
-                                <a v-if="classlist.intFinalized < 2 && !disable_submit" href="#" data-target="#myModal"
-                                    data-toggle="modal" class="btn btn-success">
+                                <a v-if="classlist.intFinalized <= 0" href="#"
+                                    data-target="#addModal" data-toggle="modal"
+                                    class="btn btn-success"> Add Student </a>
+                                <a v-if="classlist.intFinalized < 2 && !disable_submit" href="#"
+                                    data-target="#myModal" data-toggle="modal"
+                                    class="btn btn-success">
                                     {{ label }}
                                 </a>
                                 <a v-if="classlist.intFinalized > 0 && (is_super_admin || is_registrar)"
                                     @click.prevent="unfinalize" href="#" class="btn btn-danger">
-                                    Unfinalize
-                                </a>
+                                    Unfinalize </a>
                             </div>
                         </div>
                         <hr />
                         <div class="row">
                             <div v-if="classlist.term_student_type == 'shs'" class="col-md-4">
-                                <?php $this->load->view('faculty/grade_shs'); ?>
-                            </div>
+                                <?php $this->load->view('faculty/grade_shs'); ?> </div>
                             <div v-if="classlist.term_student_type == 'college'" class="col-md-4">
-                                <?php $this->load->view('faculty/grade_college'); ?>
-                            </div>
+                                <?php $this->load->view('faculty/grade_college'); ?> </div>
                         </div>
                     </div>
                 </div>
@@ -171,8 +171,9 @@
         </div>
         <!---content container--->
         <div class="modal fade" id="gradingSheetModal" role="dialog">
-            <form ref="print_grading_sheet" @submit.prevent="printGradingSheet" method="post" target="_blank"
-                :action="base_url + 'pdf/grading_sheet/' + classlist.intID" class="modal-dialog modal-lg">
+            <form ref="print_grading_sheet" @submit.prevent="printGradingSheet" method="post"
+                target="_blank" :action="base_url + 'pdf/grading_sheet/' + classlist.intID"
+                class="modal-dialog modal-lg">
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
@@ -189,12 +190,14 @@
                             </div>
                             <div class="form-group col-sm-6" class="form-control">
                                 <label>Date</label>
-                                <input type="text" class="form-control" name="submitted_by_date" :value="cdate">
+                                <input type="text" class="form-control" name="submitted_by_date"
+                                    :value="cdate">
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-sm-6" class="form-control">
-                                <label v-if="classlist.term_student_type == 'shs'">Academic Coordinator</label>
+                                <label v-if="classlist.term_student_type == 'shs'">Academic
+                                    Coordinator</label>
                                 <label v-else>Chairperson</label>
                                 <input type="text" class="form-control" name="checked_by">
                             </div>
@@ -213,12 +216,14 @@
                                 <input type="text" class="form-control" name="approved_by_date">
                             </div>
                         </div>
-                        <input type="hidden" name="student_type" :value="classlist.term_student_type">
+                        <input type="hidden" name="student_type"
+                            :value="classlist.term_student_type">
                     </div>
                     <div class=" modal-footer">
                         <!-- modal footer  -->
                         <button type="submit" class="btn btn-primary">Submit</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default"
+                            data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </form>
@@ -253,7 +258,9 @@
                                 <td v-if="classlist.intFinalized == 0">
                                     {{ (student.floatMidtermGrade && student.floatMidtermGrade != 50)?student.floatMidtermGrade:"NGS" }}
                                 </td>
-                                <td v-else> {{ (student.floatFinalGrade)?student.floatFinalGrade:"NGS" }}</td>
+                                <td v-else>
+                                    {{ (student.floatFinalGrade)?student.floatFinalGrade:"NGS" }}
+                                </td>
                                 <td>{{ student.strRemarks }}</td>
                                 <td></td>
                             </tr>
@@ -264,7 +271,8 @@
                     <!-- modal footer  -->
                     <button type="button" :disabled="disable_submit" @click="finalizePeriod"
                         class="btn btn-primary">Finalize</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default"
+                        data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -286,18 +294,21 @@
                     <!-- modal footer  -->
                     <button type="button" :disabled="disable_submit" @click="addStudent"
                         class="btn btn-primary">Add</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default"
+                        data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
     <!---vue container--->
 </aside>
-<script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js">
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.12.1/sweetalert2.min.js"
     integrity="sha512-TV1UlDAJWH0asrDpaia2S8380GMp6kQ4S6756j3Vv2IwglqZc3w2oR6TxN/fOYfAzNpj2WQJUiuel9a7lbH8rA=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.6.2/sweetalert2.min.css"
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.6.2/sweetalert2.min.css"
     integrity="sha512-5aabpGaXyIfdaHgByM7ZCtgSoqg51OAt8XWR2FHr/wZpTCea7ByokXbMX2WSvosioKvCfAGDQLlGDzuU6Nm37Q=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="<?php echo base_url(); ?>assets/themes/default/js/vue.min.js"></script>
@@ -335,73 +346,57 @@ new Vue({
         legend: undefined,
         section: undefined,
         selected_student: undefined,
-
     },
-
     mounted() {
-
         let url_string = window.location.href;
         let url = new URL(url_string);
-
         const current = new Date();
-        const date = current.getFullYear() + '-' +
-            ('0' + (current.getMonth() + 1)).slice(-2) + '-' +
-            ('0' + current.getDate()).slice(-2);
-
+        const date = current.getFullYear() + '-' + ('0' + (current.getMonth() + 1)).slice(-
+            2) + '-' + ('0' + current.getDate()).slice(-2);
         this.cdate = date;
-
         this.loader_spinner = true;
-
-        axios.get(base_url + 'unity/classlist_viewer_data/' + this.id + '/' + this.show_all + '/' + this.sid)
-            .then((data) => {
-                if (data.data.success) {
-                    this.active_sem = data.data.active_sem;
-                    this.legend = data.data.legend;
-                    this.cl = data.data.cl;
-                    this.classlist = data.data.classlist;
-                    if (this.classlist.cl_desc == null)
-                        this.classlist.cl_desc = "";
-                    this.section = this.classlist.strCode + ' - ' + this.classlist.strClassName + ' ' + this
-                        .classlist.year + this.classlist.strSection + ' ' + (this.classlist.sub_section ?
-                            this.classlist.sub_section : '');
-                    this.grading_items = data.data.grading_items;
-                    this.grading_items_midterm = data.data.grading_items_midterm;
-                    this.is_admin = data.data.is_admin;
-                    this.is_registrar = data.data.is_registrar;
-                    this.grading_system_midterm = data.data.grading_system_midterm;
-                    this.grading_system_finals = data.data.grading_system_finals;
-                    this.is_super_admin = data.data.is_super_admin;
-                    this.show_all = data.data.showall;
-                    this.students = data.data.students;
-                    this.all_students = data.data.all_students;
-                    this.subject = data.data.subject;
-                    this.label = data.data.label;
-                    this.pre_req = data.data.pre_req;
-                    this.disable_submit = data.data.disable_submit;
-                } else {
-                    Swal.fire({
-                        title: "Warning",
-                        text: "This Page is Forbidden",
-                        icon: "warning"
-                    }).then(function() {
-                        document.location = base_url + 'unity';
-                    });
-
-                }
-
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-
-
-
+        axios.get(base_url + 'unity/classlist_viewer_data/' + this.id + '/' + this
+            .show_all + '/' + this.sid).then((data) => {
+            if (data.data.success) {
+                console.log(data.data);
+                this.active_sem = data.data.active_sem;
+                this.legend = data.data.legend;
+                this.cl = data.data.cl;
+                this.classlist = data.data.classlist;
+                if (this.classlist.cl_desc == null) this.classlist.cl_desc = "";
+                this.section = this.classlist.strCode + ' - ' + this.classlist
+                    .strClassName + ' ' + this.classlist.year + this.classlist
+                    .strSection + ' ' + (this.classlist.sub_section ? this.classlist
+                        .sub_section : '');
+                this.grading_items = data.data.grading_items;
+                this.grading_items_midterm = data.data.grading_items_midterm;
+                this.is_admin = data.data.is_admin;
+                this.is_registrar = data.data.is_registrar;
+                this.grading_system_midterm = data.data.grading_system_midterm;
+                this.grading_system_finals = data.data.grading_system_finals;
+                this.is_super_admin = data.data.is_super_admin;
+                this.show_all = data.data.showall;
+                this.students = data.data.students;
+                this.all_students = data.data.all_students;
+                this.subject = data.data.subject;
+                this.label = data.data.label;
+                this.pre_req = data.data.pre_req;
+                this.disable_submit = data.data.disable_submit;
+            } else {
+                Swal.fire({
+                    title: "Warning",
+                    text: "This Page is Forbidden",
+                    icon: "warning"
+                }).then(function() {
+                    document.location = base_url + 'unity';
+                });
+            }
+        }).catch((error) => {
+            console.log(error);
+        })
     },
-
     methods: {
         updateGrade: function(event, period, csid) {
-
-
             var type = 3;
             var formdata = new FormData();
             formdata.append("intCSID", csid);
@@ -414,8 +409,6 @@ new Vue({
                 formdata.append("floatFinalGrade", values[0]);
                 formdata.append("grading_system", this.grading_system_finals);
             }
-
-
             this.loader_spinner = true;
             if (this.classlist.intFinalized == 2) {
                 Swal.fire({
@@ -429,52 +422,47 @@ new Vue({
                     showCloseButton: true,
                     showLoaderOnConfirm: true,
                     preConfirm: (login) => {
-                        axios.post(base_url + 'unity/update_grade/' + type, formdata, {
+                        axios.post(base_url + 'unity/update_grade/' + type,
+                            formdata, {
                                 headers: {
                                     Authorization: `Bearer ${window.token}`
                                 }
-                            })
-                            .then(data => {
-                                this.loader_spinner = false;
-                                Swal.fire({
-                                    title: "Success",
-                                    text: data.data.message,
-                                    icon: "success"
-                                }).then(function() {
-                                    location.reload();
-                                });
+                            }).then(data => {
+                            this.loader_spinner = false;
+                            Swal.fire({
+                                title: "Success",
+                                text: data.data.message,
+                                icon: "success"
+                            }).then(function() {
+                                location.reload();
                             });
-
+                        });
                     }
-
                 });
             } else {
                 axios.post(base_url + 'unity/update_grade/' + type, formdata, {
-                        headers: {
-                            Authorization: `Bearer ${window.token}`
-                        }
-                    })
-                    .then(data => {
-                        this.loader_spinner = false;
-                        Swal.fire({
-                            title: "Success",
-                            text: data.data.message,
-                            icon: "success"
-                        }).then(function() {
-                            location.reload();
-                        });
-                    });
+                    headers: {
+                        Authorization: `Bearer ${window.token}`
+                    }
+                }).then(data => {
+                    this.loader_spinner = false;
+                    // Swal.fire({
+                    //     title: "Success",
+                    //     text: data.data.message,
+                    //     icon: "success"
+                    // }).then(function() {
+                    //     location.reload();
+                    // });
+                });
             }
         },
         removeStudent: function(csid, section, name) {
-
             var formdata = new FormData();
             formdata.append("intCSID", csid);
             formdata.append("name", name);
             formdata.append("section", section);
             var values = event.target.value.split("-");
             this.loader_spinner = true;
-
             Swal.fire({
                 title: 'Remove Student?',
                 text: "Are you sure you want to remove Student?",
@@ -486,33 +474,29 @@ new Vue({
                 showCloseButton: true,
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
-                    axios.post(base_url + 'unity/remove_student_classlist', formdata, {
+                    axios.post(base_url + 'unity/remove_student_classlist',
+                        formdata, {
                             headers: {
                                 Authorization: `Bearer ${window.token}`
                             }
-                        })
-                        .then(data => {
-                            this.loader_spinner = false;
-                            Swal.fire({
-                                title: "Success",
-                                text: data.data.message,
-                                icon: "success"
-                            }).then(function() {
-                                location.reload();
-                            });
+                        }).then(data => {
+                        this.loader_spinner = false;
+                        Swal.fire({
+                            title: "Success",
+                            text: data.data.message,
+                            icon: "success"
+                        }).then(function() {
+                            location.reload();
                         });
-
+                    });
                 }
-
             });
         },
         addStudent: function() {
-
             var formdata = new FormData();
             formdata.append("intClassListID", this.classlist.intID);
             formdata.append("intStudentID", this.selected_student)
             this.loader_spinner = true;
-
             Swal.fire({
                 title: 'Add Student?',
                 text: "Are you sure you want to add Student?",
@@ -524,138 +508,150 @@ new Vue({
                 showCloseButton: true,
                 showLoaderOnConfirm: true,
                 preConfirm: (login) => {
-                    axios.get(base_url + 'unity/get_student_records/' + this.selected_student +
-                            '/' + this.classlist.term_id)
-                        .then(data => {
-                            if (data.data.total_units >= 21)
-                                Swal.fire({
-                                    title: 'Overload',
-                                    text: "Are you sure you want to continue?",
-                                    showCancelButton: true,
-                                    confirmButtonText: "Yes",
-                                    imageWidth: 100,
-                                    icon: "question",
-                                    cancelButtonText: "No, cancel!",
-                                    showCloseButton: true,
-                                    showLoaderOnConfirm: true,
-                                    preConfirm: (login) => {
-                                        axios.post(base_url +
-                                                'unity/add_to_classlist',
-                                                formdata, {
-                                                    headers: {
-                                                        Authorization: `Bearer ${window.token}`
-                                                    }
-                                                })
-                                            .then(data => {
-                                                this.loader_spinner = false;
-                                                if (data.data.message ==
-                                                    'success') {
-                                                    Swal.fire({
-                                                        title: "Success",
-                                                        text: data.data
-                                                            .message,
-                                                        icon: "success"
-                                                    }).then(function() {
-                                                        location
-                                                        .reload();
-                                                    });
-                                                } else {
-                                                    Swal.fire({
-                                                        title: 'Failed',
-                                                        text: data.data
-                                                            .message,
-                                                        icon: "error"
-                                                    }).then(function() {
-                                                        location
-                                                        .reload();
-                                                    });
-                                                }
-                                            });
-                                    }
-                                });
-                            else
-                                axios.post(base_url + 'unity/add_to_classlist', formdata, {
-                                    headers: {
-                                        Authorization: `Bearer ${window.token}`
-                                    }
-                                })
-                                .then(data => {
-                                    console.log(data.data);
-                                    if (data.data.message == 'success') {
+                    axios.get(base_url + 'unity/get_student_records/' + this
+                        .selected_student + '/' + this.classlist.term_id
+                        ).then(data => {
+                        if (data.data.total_units >= 21) Swal.fire({
+                            title: 'Overload',
+                            text: "Are you sure you want to continue?",
+                            showCancelButton: true,
+                            confirmButtonText: "Yes",
+                            imageWidth: 100,
+                            icon: "question",
+                            cancelButtonText: "No, cancel!",
+                            showCloseButton: true,
+                            showLoaderOnConfirm: true,
+                            preConfirm: (login) => {
+                                axios.post(base_url +
+                                    'unity/add_to_classlist',
+                                    formdata, {
+                                        headers: {
+                                            Authorization: `Bearer ${window.token}`
+                                        }
+                                    }).then(
+                                data => {
+                                    this.loader_spinner =
+                                        false;
+                                    if (data
+                                        .data
+                                        .message ==
+                                        'success'
+                                        ) {
                                         Swal.fire({
-                                            title: "Success",
-                                            text: data.data.message,
-                                            icon: "success"
-                                        }).then(function() {
-                                            location.reload();
-                                        });
+                                                title: "Success",
+                                                text: data
+                                                    .data
+                                                    .message,
+                                                icon: "success"
+                                            })
+                                            .then(
+                                                function() {
+                                                    location
+                                                        .reload();
+                                                }
+                                                );
                                     } else {
                                         Swal.fire({
-                                            title: 'Failed',
-                                            text: data.data.message,
-                                            icon: "error"
-                                        }).then(function() {
-                                            location.reload();
-                                        });
+                                                title: 'Failed',
+                                                text: data
+                                                    .data
+                                                    .message,
+                                                icon: "error"
+                                            })
+                                            .then(
+                                                function() {
+                                                    location
+                                                        .reload();
+                                                }
+                                                );
                                     }
                                 });
+                            }
                         });
-
-
+                        else axios.post(base_url +
+                            'unity/add_to_classlist',
+                            formdata, {
+                                headers: {
+                                    Authorization: `Bearer ${window.token}`
+                                }
+                            }).then(data => {
+                            console.log(data.data);
+                            if (data.data.message ==
+                                'success') {
+                                Swal.fire({
+                                    title: "Success",
+                                    text: data.data
+                                        .message,
+                                    icon: "success"
+                                }).then(function() {
+                                    location
+                                    .reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Failed',
+                                    text: data.data
+                                        .message,
+                                    icon: "error"
+                                }).then(function() {
+                                    location
+                                    .reload();
+                                });
+                            }
+                        });
+                    });
                 }
-
             });
         },
         finalizePeriod: function() {
             var complete_grades = true;
             for (i in this.students) {
                 if (this.classlist.intFinalized == 0) {
-                    if (!this.students[i].floatMidtermGrade || this.students[i].floatMidtermGrade == 50 ||
-                        this.students[i].floatMidtermGrade == "NGS")
-                        complete_grades = false;
+                    if (!this.students[i].floatMidtermGrade || this.students[i]
+                        .floatMidtermGrade == 50 || this.students[i]
+                        .floatMidtermGrade == "NGS") complete_grades = false;
                 } else
-                if (!this.students[i].floatFinalGrade || this.students[i].floatFinalGrade == 50 || this
-                    .students[i].floatFinalGrade == "NGS")
+                if (!this.students[i].floatFinalGrade || this.students[i]
+                    .floatFinalGrade == 50 || this.students[i].floatFinalGrade == "NGS")
                     complete_grades = false;
             }
-            if (complete_grades)
-                Swal.fire({
-                    title: 'Submit Grades?',
-                    text: "Are you sure you want to submit?",
-                    showCancelButton: true,
-                    confirmButtonText: "Yes",
-                    imageWidth: 100,
-                    icon: "question",
-                    cancelButtonText: "No, cancel!",
-                    showCloseButton: true,
-                    showLoaderOnConfirm: true,
-                    preConfirm: (login) => {
-                        var formdata = new FormData();
-                        formdata.append("intID", this.classlist.intID);
-                        formdata.append("intFinalized", this.classlist.intFinalized);
-                        return axios.post(base_url + 'unity/finalize_term', formdata, {
-                                headers: {
-                                    Authorization: `Bearer ${window.token}`
-                                }
-                            })
-                            .then(data => {
-                                this.loader_spinner = false;
-                                Swal.fire({
-                                    title: "Success",
-                                    text: data.data.message,
-                                    icon: "success"
-                                }).then(function() {
-                                    location.reload();
-                                });
-                            });
-                    }
-                });
-            else
-                Swal.fire({
-                    title: "Warning",
-                    text: "Complete grades before submitting",
-                    icon: "warning"
-                }).then(function() {});
+            if (complete_grades) Swal.fire({
+                title: 'Submit Grades?',
+                text: "Are you sure you want to submit?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                imageWidth: 100,
+                icon: "question",
+                cancelButtonText: "No, cancel!",
+                showCloseButton: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    var formdata = new FormData();
+                    formdata.append("intID", this.classlist.intID);
+                    formdata.append("intFinalized", this.classlist
+                        .intFinalized);
+                    return axios.post(base_url + 'unity/finalize_term',
+                        formdata, {
+                            headers: {
+                                Authorization: `Bearer ${window.token}`
+                            }
+                        }).then(data => {
+                        this.loader_spinner = false;
+                        Swal.fire({
+                            title: "Success",
+                            text: data.data.message,
+                            icon: "success"
+                        }).then(function() {
+                            location.reload();
+                        });
+                    });
+                }
+            });
+            else Swal.fire({
+                title: "Warning",
+                text: "Complete grades before submitting",
+                icon: "warning"
+            }).then(function() {});
         },
         unfinalize: function() {
             Swal.fire({
@@ -671,22 +667,23 @@ new Vue({
                 preConfirm: (login) => {
                     var formdata = new FormData();
                     formdata.append("intID", this.classlist.intID);
-                    formdata.append("intFinalized", this.classlist.intFinalized);
-                    return axios.post(base_url + 'unity/unfinalize_term', formdata, {
+                    formdata.append("intFinalized", this.classlist
+                        .intFinalized);
+                    return axios.post(base_url + 'unity/unfinalize_term',
+                        formdata, {
                             headers: {
                                 Authorization: `Bearer ${window.token}`
                             }
-                        })
-                        .then(data => {
-                            this.loader_spinner = false;
-                            Swal.fire({
-                                title: "Success",
-                                text: data.data.message,
-                                icon: "success"
-                            }).then(function() {
-                                location.reload();
-                            });
+                        }).then(data => {
+                        this.loader_spinner = false;
+                        Swal.fire({
+                            title: "Success",
+                            text: data.data.message,
+                            icon: "success"
+                        }).then(function() {
+                            location.reload();
                         });
+                    });
                 }
             });
         },
@@ -712,27 +709,25 @@ new Vue({
                         console.log(this.checked);
                         var formdata = new FormData();
                         formdata.append("transferTo", this.transfer_to);
-
-                        for (i in this.checked)
-                            formdata.append("students[]", this.checked[i]);
-
-                        formdata.append("classlistFrom", this.classlist.intID);
-
-                        return axios.post(base_url + 'unity/transfer_classlist', formdata, {
+                        for (i in this.checked) formdata.append(
+                            "students[]", this.checked[i]);
+                        formdata.append("classlistFrom", this.classlist
+                            .intID);
+                        return axios.post(base_url +
+                            'unity/transfer_classlist', formdata, {
                                 headers: {
                                     Authorization: `Bearer ${window.token}`
                                 }
-                            })
-                            .then(data => {
-                                this.loader_spinner = false;
-                                Swal.fire({
-                                    title: "Success",
-                                    text: data.data.message,
-                                    icon: "success"
-                                }).then(function() {
-                                    location.reload();
-                                });
+                            }).then(data => {
+                            this.loader_spinner = false;
+                            Swal.fire({
+                                title: "Success",
+                                text: data.data.message,
+                                icon: "success"
+                            }).then(function() {
+                                location.reload();
                             });
+                        });
                     }
                 });
             }
@@ -741,6 +736,5 @@ new Vue({
             this.$refs.print_grading_sheet.submit();
         },
     }
-
 })
 </script>
