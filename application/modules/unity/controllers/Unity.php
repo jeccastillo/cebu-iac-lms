@@ -2180,6 +2180,10 @@ class Unity extends CI_Controller {
                 ->order_by("strYearStart asc, enumSem asc")
                 ->get('tb_mas_registration')
                 ->result_array();
+
+            $sy = $this->db->get('tb_mas_sy')->result_array();
+            print_r($sy);
+            die();
             
             $term_balances = [];
             foreach($registrations as $reg){     
