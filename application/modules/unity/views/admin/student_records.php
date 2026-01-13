@@ -68,8 +68,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!-- <template v-for="item in getRecordsWithCombined(term)"> -->
-                                        <template v-for="item in getCurriculumRecords(term)">
+                                        <template v-for="item in getRecordsWithCombined(term)">
                                         <tr v-if="item.type == 'combined'" style="font-size: 13px;">
                                             <td></td>
                                             <td v-if="!item.data.elective_subject">{{ item.data.combineCode }}</td>
