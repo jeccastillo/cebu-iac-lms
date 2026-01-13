@@ -427,6 +427,7 @@ class ScholarshipService
 
         $q = DB::table('tb_mas_student_discount as sd')
             ->join('tb_mas_scholarships as sc', 'sc.intID', '=', 'sd.discount_id')
+            ->join('tb_mas_users as u', 'u.intID', '=', 'sd.student_id')
             ->where('sd.syid', $syid)
             ->select(
                 DB::raw('sd.' . $pk . ' as id'),
@@ -438,19 +439,22 @@ class ScholarshipService
                 'sc.deduction_type',
                 'sc.deduction_from',
                 'sd.referrer',
-                'sc.status'
+                'sc.status',
+                'u.strStudentNumber',
+                'u.strFirstname',
+                'u.strLastname',
+                'u.strMiddlename'
             );
 
         if (!empty($filters['student_id'])) {
             $q->where('sd.student_id', (int) $filters['student_id']);
         } elseif (!empty($filters['q'])) {
             $like = '%' . $filters['q'] . '%';
-            $q->join('tb_mas_users as u', 'u.intID', '=', 'sd.student_id')
-                ->where(function ($sub) use ($like) {
-                    $sub->where('u.strStudentNumber', 'like', $like)
-                        ->orWhere('u.strLastname', 'like', $like)
-                        ->orWhere('u.strFirstname', 'like', $like);
-                });
+            $q->where(function ($sub) use ($like) {
+                $sub->where('u.strStudentNumber', 'like', $like)
+                    ->orWhere('u.strLastname', 'like', $like)
+                    ->orWhere('u.strFirstname', 'like', $like);
+            });
         }
 
         return $q->orderBy('sc.deduction_type', 'asc')
@@ -468,6 +472,12 @@ class ScholarshipService
                     'referrer'          => $r->referrer ?? null,
                     'status'            => $r->status, // catalog status
                     'assignment_status' => $r->assignment_status ?? null,
+                    'student'           => [
+                        'strStudentNumber' => $r->strStudentNumber ?? '',
+                        'strFirstname'     => $r->strFirstname ?? '',
+                        'strLastname'      => $r->strLastname ?? '',
+                        'strMiddlename'    => $r->strMiddlename ?? '',
+                    ],
                 ];
             })
             ->toArray();

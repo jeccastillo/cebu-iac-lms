@@ -54,7 +54,7 @@
 
     <!-- Dropdown Menu -->
     <div ng-if="vm.dropdownOpen" 
-         class="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
+         class="absolute z-50 w-full min-w-[320px] mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
       
       <!-- Filter Section -->
       <div class="p-3 border-b border-gray-200 bg-gray-50">
@@ -72,7 +72,7 @@
           <div>
             <input type="text" 
                    class="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
-                   placeholder="Type (Old/New)"
+                   placeholder="Type (shs/college/next)"
                    ng-model="vm.filterStudentType"
                    ng-click="$event.stopPropagation()">
           </div>
@@ -157,7 +157,7 @@
 <!-- Compact mode styles -->
 <style>
 .term-selector.compact .truncate {
-  max-width: 150px;
+  max-width: 250px;
 }
 
 .term-selector .animate-spin {
