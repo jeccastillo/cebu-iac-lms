@@ -1805,51 +1805,54 @@ class Unity extends CI_Controller {
             // die();
 
         $notRegisteredTerms = [];
-        //Not Registered Sem
+        //Not Registered Sem/Term
         foreach($semNotRegistered as $reg){
             $syid = isset($reg['intAYID'])?$reg['intAYID']:$reg['intID'];
             $records = $this->data_fetcher->getClassListStudentsSt($id,$syid);
-            $units = 0;
-            $sum_grades = 0;
-            $units_earned = 0;
-            $total = 0;
-            foreach($records as $record){
-                if($record['intFinalized'] == 2 && $record['strRemarks'] == "Passed")
-                    $units_earned += $record['strUnits'];
-                if($record['intFinalized'] == 2 && $record['include_gwa'] && $record['strRemarks'] != "Officially Withdrawn"){
-                    switch($record['v3']){
-                        case 'FA':
-                            $v3 = 5;
-                        break;
-                        case 'UD':
-                            $v3 = 5;
-                        break;
-                        case '5.00':
-                            $v3 = 5;
-                        break;
-                        default:
-                            $v3 = $record['v3'];
-                    }                  
-                    if($v3 != "OW"){ 
-                        if($record['strUnits'] > 0){
-                            if(is_numeric($grade)){
-                                $sum_grades += $v3 * $record['strUnits'];                
+            if($records){
+
+                $units = 0;
+                $sum_grades = 0;
+                $units_earned = 0;
+                $total = 0;
+                foreach($records as $record){
+                    if($record['intFinalized'] == 2 && $record['strRemarks'] == "Passed")
+                        $units_earned += $record['strUnits'];
+                    if($record['intFinalized'] == 2 && $record['include_gwa'] && $record['strRemarks'] != "Officially Withdrawn"){
+                        switch($record['v3']){
+                            case 'FA':
+                                $v3 = 5;
+                            break;
+                            case 'UD':
+                                $v3 = 5;
+                            break;
+                            case '5.00':
+                                $v3 = 5;
+                            break;
+                            default:
+                                $v3 = $record['v3'];
+                        }                  
+                        if($v3 != "OW"){ 
+                            if($record['strUnits'] > 0){
+                                if(is_numeric($grade)){
+                                    $sum_grades += $v3 * $record['strUnits'];                
+                                }
+                                $total += $record['strUnits'];
                             }
-                            $total += $record['strUnits'];
                         }
                     }
+    
                 }
-
+                $total_units_earned += $units_earned;
+                $term_gwa = 0;
+                if($total > 0){
+                    $term_gwa = $sum_grades/$total;
+                    $term_gwa = number_format(round($term_gwa,3),3);
+                }
+                $gwa += $sum_grades;
+                $total_units_gwa += $total;
+                $notRegisteredTerms[] = array('records'=> $records,'reg'=>$reg,'units_earned'=>$units_earned,'gwa'=>$term_gwa);
             }
-            $total_units_earned += $units_earned;
-            $term_gwa = 0;
-            if($total > 0){
-                $term_gwa = $sum_grades/$total;
-                $term_gwa = number_format(round($term_gwa,3),3);
-            }
-            $gwa += $sum_grades;
-            $total_units_gwa += $total;
-            $notRegisteredTerms[] = array('records'=> $records,'reg'=>$reg,'units_earned'=>$units_earned,'gwa'=>$term_gwa);
         }
 
         if($total_units_gwa > 0){
