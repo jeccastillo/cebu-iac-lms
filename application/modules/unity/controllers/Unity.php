@@ -1792,17 +1792,65 @@ class Unity extends CI_Controller {
         }
 
 
-            $sy = $this->db->get('tb_mas_sy')->result_array();
-            $semNotRegistered = $this->db->select('tb_mas_sy.*')
-                    ->from('tb_mas_sy')
-                    ->where_not_in('intID', $registeredSems)
-                    ->get()
-                    ->result_array();
-            print_r($semNotRegistered);
+        $sy = $this->db->get('tb_mas_sy')->result_array();
+        $semNotRegistered = $this->db->select('tb_mas_sy.*')
+                ->from('tb_mas_sy')
+                ->where_not_in('intID', $registeredSems)
+                ->get()
+                ->result_array();
+        // print_r($semNotRegistered);
 
             // $records = $this->data_fetcher->getClassListStudentsSt($id,41);
             // print_r($records);
-            die();
+            // die();
+
+        $notRegisteredTerms = [];
+        //Not Registered Sem
+        foreach($semNotRegistered as $reg){
+            $syid = isset($reg['intAYID'])?$reg['intAYID']:$reg['intID'];
+            $records = $this->data_fetcher->getClassListStudentsSt($id,$syid);
+            $units = 0;
+            $sum_grades = 0;
+            $units_earned = 0;
+            $total = 0;
+            foreach($records as $record){
+                if($record['intFinalized'] == 2 && $record['strRemarks'] == "Passed")
+                    $units_earned += $record['strUnits'];
+                if($record['intFinalized'] == 2 && $record['include_gwa'] && $record['strRemarks'] != "Officially Withdrawn"){
+                    switch($record['v3']){
+                        case 'FA':
+                            $v3 = 5;
+                        break;
+                        case 'UD':
+                            $v3 = 5;
+                        break;
+                        case '5.00':
+                            $v3 = 5;
+                        break;
+                        default:
+                            $v3 = $record['v3'];
+                    }                  
+                    if($v3 != "OW"){ 
+                        if($record['strUnits'] > 0){
+                            if(is_numeric($grade)){
+                                $sum_grades += $v3 * $record['strUnits'];                
+                            }
+                            $total += $record['strUnits'];
+                        }
+                    }
+                }
+
+            }
+            $total_units_earned += $units_earned;
+            $term_gwa = 0;
+            if($total > 0){
+                $term_gwa = $sum_grades/$total;
+                $term_gwa = number_format(round($term_gwa,3),3);
+            }
+            $gwa += $sum_grades;
+            $total_units_gwa += $total;
+            $notRegisteredTerms[] = array('records'=> $records,'reg'=>$reg,'units_earned'=>$units_earned,'gwa'=>$term_gwa);
+        }
 
         if($total_units_gwa > 0){
             $gwa = $gwa/$total_units_gwa;
@@ -1821,6 +1869,7 @@ class Unity extends CI_Controller {
         $data['combined_subjects'] = $grouped_combined_subjects;     
         $data['units_left'] =  $curriculum_units - $assessment_units_earned - $credited_units;
         $data['data'] = $terms;
+        $data['notRegisteredTerms'] = $notRegisteredTerms;
 
         echo json_encode($data);
 
