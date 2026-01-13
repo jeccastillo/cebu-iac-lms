@@ -8403,7 +8403,7 @@ class Excel extends CI_Controller {
                     ->get()
                     ->first_row('array');
 
-                    if($student){
+                    // if($student){
                         $facultyName = explode(',', ltrim($row['K']));
                         $facultyLastName = $facultyName[0];
                         if(isset($facultyName[1])){
@@ -8495,13 +8495,10 @@ class Excel extends CI_Controller {
                                 }
                             }
                         }
-                    }else{
-
-                        // Optionally, you can delete the uploaded file after import
-                        unlink($filePath);
-                        print('Student Registration/Curriculum not found : ' . $row['C']);
-                        return false;
-                    }
+                    // }else{
+                    //     print('Student Registration/Curriculum not found : ' . $row['C']);
+                    //     return false;
+                    // }
                 }
             }
 
