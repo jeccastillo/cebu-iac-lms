@@ -95,7 +95,8 @@
                                         {{ (student.floatFinalGrade)?student.floatFinalGrade:"NGS" }}
                                     </span>
                                     <span v-else-if="student.floatFinalGrade == 'OW'"> OW </span>
-                                    <select @change="updateGrade($event,'final',student.intCSID)"
+                                    <select v-else
+                                        @change="updateGrade($event,'final',student.intCSID)"
                                         class="form-control">
                                         <option :selected="(!student.floatFinalGrade)? true : false"
                                             value="NGS">NGS </option>
