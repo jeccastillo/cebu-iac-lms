@@ -1743,10 +1743,21 @@ class Unity extends CI_Controller {
         }
 
 
+            // $sy = $this->db->get('tb_mas_sy')->result_array();
+            // $semNotRegistered = $this->db->select('tb_mas_sy.*')
+            //         ->from('tb_mas_sy')
+            //         ->where_not_in('intID', $registeredSems)
+            //         ->get()
+            //         ->result_array();
+            // print_r($semNotRegistered);
+
+            $records = $this->data_fetcher->getClassListStudentsSt($id,41);
+            print_r($records);
+            die();
         //Check Curriculum for units earned
         foreach($registrations as $reg){
             $syid = isset($reg['intAYID'])?$reg['intAYID']:$reg['intID'];
-            $records = $this->data_fetcher->getClassListStudentsSt($id,$syid); 
+            $records = $this->data_fetcher->getClassListStudentsSt($id,$syid);
             $units = 0;
             $sum_grades = 0;
             $units_earned = 0;
@@ -2217,15 +2228,6 @@ class Unity extends CI_Controller {
                     ];
                 }
             }
-
-            $sy = $this->db->get('tb_mas_sy')->result_array();
-            $semNotRegistered = $this->db->select('tb_mas_sy.*')
-                    ->from('tb_mas_sy')
-                    ->where_not_in('intID', $registeredSems)
-                    ->get()
-                    ->result_array();
-            // print_r($semNotRegistered);
-            // die();
 
             $ret['documents'] = $this->db->get_where('tb_mas_student_documents',array('studentID'=>$id))->result_array();
             $ret['term_balances'] = $term_balances;
