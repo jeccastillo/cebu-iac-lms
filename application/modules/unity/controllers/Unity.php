@@ -1742,20 +1742,10 @@ class Unity extends CI_Controller {
             
         }
 
-
-            // $sy = $this->db->get('tb_mas_sy')->result_array();
-            // $semNotRegistered = $this->db->select('tb_mas_sy.*')
-            //         ->from('tb_mas_sy')
-            //         ->where_not_in('intID', $registeredSems)
-            //         ->get()
-            //         ->result_array();
-            // print_r($semNotRegistered);
-
-            $records = $this->data_fetcher->getClassListStudentsSt($id,41);
-            print_r($records);
-            die();
+        $registeredSems = array();
         //Check Curriculum for units earned
         foreach($registrations as $reg){
+            $registeredSems = isset($reg['intAYID'])?$reg['intAYID']:$reg['intID'];
             $syid = isset($reg['intAYID'])?$reg['intAYID']:$reg['intID'];
             $records = $this->data_fetcher->getClassListStudentsSt($id,$syid);
             $units = 0;
@@ -1789,7 +1779,6 @@ class Unity extends CI_Controller {
                     }
                 }
 
-
             }
             $total_units_earned += $units_earned;
             $term_gwa = 0;
@@ -1801,6 +1790,19 @@ class Unity extends CI_Controller {
             $total_units_gwa += $total;
             $terms[] = array('records'=> $records,'reg'=>$reg,'units_earned'=>$units_earned,'gwa'=>$term_gwa);
         }
+
+
+            $sy = $this->db->get('tb_mas_sy')->result_array();
+            $semNotRegistered = $this->db->select('tb_mas_sy.*')
+                    ->from('tb_mas_sy')
+                    ->where_not_in('intID', $registeredSems)
+                    ->get()
+                    ->result_array();
+            print_r($semNotRegistered);
+
+            // $records = $this->data_fetcher->getClassListStudentsSt($id,41);
+            // print_r($records);
+            die();
 
         if($total_units_gwa > 0){
             $gwa = $gwa/$total_units_gwa;
@@ -2192,11 +2194,8 @@ class Unity extends CI_Controller {
                 ->get('tb_mas_registration')
                 ->result_array();
 
-            $registeredSems = array();
-
             $term_balances = [];
             foreach($registrations as $reg){
-                $registeredSems[] = $reg['intID'];
                 if($reg['intID'] != $sem_id){
                     $tuition = $this->data_fetcher->getTuition($ret['student']['intID'],$reg['intID']);                                                    
                     $term_payments = $this->db->query("SELECT subtotal_order from payment_details WHERE student_number = '".$ret['student']['slug']."' AND sy_reference=".$reg['intID']." AND status = 'Paid' AND ( description LIKE 'Tuition%' OR description LIKE 'Reservation%')")
