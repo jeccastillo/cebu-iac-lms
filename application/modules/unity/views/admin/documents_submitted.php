@@ -26,6 +26,9 @@
                             <option value="transcript of record">Transcript of Record</option>
                             <option value="transfer credential">Transfer Credential / Honorable
                                 Dismissal</option>
+                            <option value="esc voucher">ESC Voucher</option>
+                            <option value="qvr voucher">QVR Voucher </option>
+                            <option value="other">Other</option>
                         </select>
                     </div>
                     <div class="col-md-5">
