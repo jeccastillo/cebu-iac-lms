@@ -587,8 +587,7 @@ class Pdf extends CI_Controller {
         // dejavusans is a UTF-8 Unicode font, if you only need to
         // print standard ASCII chars, you can use core fonts like
         // helvetica or times to reduce file size.
-        print_r($this->data);
-        die();
+        
         $pdf->SetAutoPageBreak(true, PDF_MARGIN_FOOTER);
         // Fit to one page wide (horizontally)
         $pdf->setPrintHeader(false);
