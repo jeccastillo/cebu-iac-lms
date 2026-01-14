@@ -4394,7 +4394,7 @@ class Pdf extends CI_Controller {
         $pdf->Output('Certificate of Enrollment.pdf', 'I');
     }
 
-    public function certificate_of_gwa($id)
+    public function certificate_of_gwa2($id)
     {
         $post = $this->input->post();
         $this->data['selected_term'] = $post['term'];
@@ -4899,7 +4899,8 @@ class Pdf extends CI_Controller {
 
     }
 
-    public function shs_permanent_record()
+    // public function shs_permanent_record($id)
+    public function certificate_of_gwa($id)
     {
         $post = $this->input->post();        
         $student = $this->data_fetcher->getStudent($post['student_id']);
