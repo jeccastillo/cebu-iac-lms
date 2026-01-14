@@ -104,7 +104,7 @@
                                 </select>
                             </div>
                             <div class="mb-4">
-                                <select
+                                <select :disabled="!request.program2 ? true : false"
                                     class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                                     type="text" required v-model="request.program3">
                                     <option disabled value="">Third Choice</option>
