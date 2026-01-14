@@ -4935,6 +4935,8 @@ class Pdf extends CI_Controller {
                 'verified_by' => $post['verified_by'],
                 'registrar' => $post['registrar'],
                 'included_terms' => implode(",", $post['included_terms']),
+                'admission_date' => $post['admission_date'] ? $post['admission_date'] : '',
+                'graduation_date' => $post['graduation_date'] ? $post['graduation_date'] : '',
             );
     
             $units_overall = 0;
@@ -5016,8 +5018,7 @@ class Pdf extends CI_Controller {
             $data['units_overall'] = $units_overall;        
             $data['student'] = $student;
 
-            print_r(json_encode($data));
-            die();
+            return json_encode($data);
         }
     }
 
