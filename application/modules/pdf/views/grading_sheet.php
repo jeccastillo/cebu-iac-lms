@@ -78,7 +78,7 @@ foreach($students as $student):
     <tr style="line-height:12px;">        
         <td  style="font-size:8px;"><?php echo preg_replace("/[^a-zA-Z0-9]+/", "", $student['strStudentNumber']); ?></td>
         <td  style="font-size:8px;"> <?php echo $student['strLastname']." ".$student['strFirstname']." ".$student['strMiddlename']; ?></td>        
-        <td  style="font-size:8px;"><?php echo $student['strProgramCode']; ?></td>
+        <td  style="font-size:8px;"><?php echo $student['strProgramCode'] . '' . $classlist['year'].$classlist['strSection']; ?></td>
         <?php if($classlist['intFinalized'] >= 1): ?>
             <td style="font-size:8px;"><?php echo $student['floatMidtermGrade']; ?></td>
         <?php else: ?>
