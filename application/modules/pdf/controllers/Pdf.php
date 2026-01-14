@@ -659,7 +659,7 @@ class Pdf extends CI_Controller {
         $html = $this->load->view("daily_enrollment",$this->data);        
     }
 
-    public function generate_tor(){
+    public function generate_tor2(){
         $post = $this->input->post();        
         $student = $this->data_fetcher->getStudent($post['student_id']);
         $num_terms = count($post['included_terms']);
@@ -1141,7 +1141,7 @@ class Pdf extends CI_Controller {
     function permanent_record_pdf(){
         $this->load->view("permanent_record_printed",$this->data);
     }
-    function student_viewer_registration_printX($id, $app_id, $sem = null, $mt = 6)
+    function student_viewer_registration_print($id, $app_id, $sem = null, $mt = 6)
     {        
         $this->data['mt'] = $mt;        
         $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
@@ -4900,11 +4900,10 @@ class Pdf extends CI_Controller {
     }
 
     // public function shs_permanent_record()
-    function student_viewer_registration_print($id, $app_id, $sem = null, $mt = 6)
+    public function generate_tor()
     {
         $post = $this->input->post();        
-        // $student = $this->data_fetcher->getStudent($post['student_id']);
-        $student = $this->data_fetcher->getStudent($id);
+        $student = $this->data_fetcher->getStudent($post['student_id']);
         
         if($student['level'] == 'shs'){
             $num_terms = count($post['included_terms']);
