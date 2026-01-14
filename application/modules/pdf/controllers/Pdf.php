@@ -5006,7 +5006,7 @@ class Pdf extends CI_Controller {
                     'gwa' => $gwa,
                 );
     
-                $this->data['records'][] = array('records'=>$sc_ret,'other_data'=>$other_data);                            
+                $data['records'][] = array('records'=>$sc_ret,'other_data'=>$other_data);                            
             }
             
             $rec['total_records'] = $total_records;
