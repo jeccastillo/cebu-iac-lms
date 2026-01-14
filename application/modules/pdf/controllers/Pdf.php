@@ -5018,8 +5018,8 @@ class Pdf extends CI_Controller {
             $data['units_overall'] = $units_overall;        
             $data['student'] = $student;
 
-            return json_encode($data);
         }
+        echo json_encode($data);
     }
 
     private function stringifyNumber($n) {
