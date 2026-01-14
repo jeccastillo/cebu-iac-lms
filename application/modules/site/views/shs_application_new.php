@@ -35,206 +35,167 @@
         <!-- TODO: change to grid -->
         <div v-if="true" class=" flex flex-wrap md:gap-x-5 mb-6 mt-10 justify-center ">
             <!-- col 1 -->
-            <div id="select-term" class="flex-[5_0_188px]">
-                <div id="applicant-type"
-                    class="border-[1px] border-neutral-100 p-2.5 rounded-lg flex flex-wrap gap-x-4">
-                    <div class="flex-grow">
-                        <label class="block t color-primary font-bold mb-3 pr-4"
-                            for="inline-full-name"> Select Term <span class="text-red-500">*</span>
-                        </label>
-                        <select
-                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" required v-model="request.syid">
-                            <option disabled value="">--Select options--</option>
-                            <option v-for="s in sy" :value="s.intID">
-                                {{ `${s.enumSem} ${s.term_label} SY ${s.strYearStart}-${s.strYearEnd}`}}
-                            </option>
-                        </select>
+            <div id="select-term" class="">
+                <div class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-x-10 gap-y-4">
+                    <div>
+                        <div id="applicant-type"
+                            class="border-[1px] h-[fit-content] border-neutral-100 p-2.5 rounded-lg flex flex-wrap gap-x-4">
+                            <div class="flex-grow">
+                                <label class="block t color-primary font-bold mb-3 pr-4"
+                                    for="inline-full-name"> Select Term <span
+                                        class="text-red-500">*</span>
+                                </label>
+                                <select
+                                    class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                    type="text" required v-model="request.syid">
+                                    <option disabled value="">--Select options--</option>
+                                    <option v-for="s in sy" :value="s.intID">
+                                        {{ `${s.enumSem} ${s.term_label} SY ${s.strYearStart}-${s.strYearEnd}`}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="flex-grow">
+                                <label class="block  color-primary font-bold  mb-2  pr-4"
+                                    for="inline-full-name"> Applicant Type <i
+                                        class="font-normal">(Select one)</i>
+                                </label>
+                                <label v-for="shs,index of shsList"
+                                    class="block color-primary mb-1 ml-5">
+                                    <input type="radio" id="one" :value="shs"
+                                        v-model="request.student_type"
+                                        @click="filterCourses(filterShs[index])" class="mr-1"
+                                        required>
+                                    {{shs}} </label>
+                            </div>
+                        </div>
+                        <div class="hidden md:block">
+                            <h5 class="color-primary font-bold my-4 mb-0" for="inline-full-name">
+                                Select your clusters </h5>
+                            <p class="color-primary">Please note that the selected clusters are
+                                subject to consultation. Select your top three preferred
+                                <b>clusters</b> based on your dream career pathways! </p>
+                        </div>
                     </div>
-                    <div class="flex-grow">
-                        <label class="block  color-primary font-bold  mb-2  pr-4"
-                            for="inline-full-name"> Applicant Type <i class="font-normal">(Select
-                                one)</i>
-                        </label>
-                        <label v-for="shs,index of shsList" class="block color-primary mb-1 ml-5">
-                            <input type="radio" id="one" :value="shs" v-model="request.student_type"
-                                @click="filterCourses(filterShs[index])" class="mr-1" required>
-                            {{shs}} </label>
+                    <div id="elective-receipt" class="flex-[2_0_188px]" v-if="true">
+                        <div class="border border-neutral-100 rounded-lg p-2.5 px-4 pb-8 mb-4">
+                            <h5 class="color-primary font-bold   mb-4"> Select Your Cluster </h5>
+                            <div class="mb-4">
+                                <select
+                                    class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                    type="text" required v-model="request.program">
+                                    <option disabled value="">First Choice</option>
+                                    <option v-for="career,index in careers" :value="career"
+                                        :key="index"
+                                        :disabled="career === request.program2 || career === request.program3">
+                                        {{ career}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <select :disabled="!request.program ? true : false"
+                                    class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                    type="text" required v-model="request.program2">
+                                    <option disabled value="">Second Choice</option>
+                                    <option v-for="career,index in careers" :value="career"
+                                        :key="index"
+                                        :disabled="career === request.program || career === request.program3">
+                                        {{ career}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <select
+                                    class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                    type="text" required v-model="request.program3">
+                                    <option disabled value="">Third Choice</option>
+                                    <option v-for="career,index in careers" :value="career"
+                                        :key="index"
+                                        :disabled="career === request.program || career === request.program2">
+                                        {{ career}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div id=applying-for class=" flex-[4_1_auto] max-w-[710px]" v-if="true">
+                <div class="md:hidden">
+                    <h5 class="color-primary font-bold my-4 mb-0" for="inline-full-name">Select your
+                        clusters </h5>
+                    <p class="color-primary">Please note that the selected clusters are subject to
+                        consultation. Select your top three preferred <b>clusters</b> based on your
+                        dream career pathways! </p>
                 </div>
-                <h5 class="color-primary font-bold my-4 mb-0" for="inline-full-name">Select your
-                    preferred electives </h5>
-                <p class="color-primary">Please note that the selected electives are subject for
-                    consultation. <b>Final approved electives</b> will be discussed during the
-                    academic advising. Select only <b>2 elective subjects</b> for Grade 11 Semester
-                    1. </p>
                 <div class="border border-neutral-100 p-2.5 pt-1 rounded-lg">
-                    <h5 class="color-primary font-bold text-left italic mb-2"> Senior High School
-                        Launchpad </h5>
-                    <h5 class="color-primary font-bold text-center uppercase mb-2"> Academic Track
+                    <h5 class="color-primary font-bold text-center uppercase mb-5"> Academic Track
                     </h5>
-                    <div class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] mb-4">
+                    <div class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] mb-4 gap-y-4">
                         <div>
-                            <h6 class="color-primary font-bold indent-[22px]">ABM</h6>
-                            <label class="custom-checkbox !items-baseline color-primary"
-                                v-for="track in  abmTrack">
-                                <input type="checkbox" data-strand="ABM" :value="track"
-                                    @change="setTrack" class="track">
-                                <span class="custom-checkbox-button !rounded-full "></span>
-                                {{track}} </label>
+                            <h6 class="color-primary font-bold indent-[22px]">Business and
+                                Entrepreneurship</h6>
+                            <p class='color-primary ml-[22px]'>Career Pathways: Accountant,
+                                Entrepreneur, Marketing & Sales, Finance, Human Resources,
+                                Operations Manager, Business Analyst, etc.,</p>
                         </div>
                         <div>
-                            <h6 class="color-primary font-bold indent-[22px]">HUMSS</h6>
-                            <label class="custom-checkbox !items-baseline color-primary"
-                                v-for="track in  humssTrack">
-                                <input type="checkbox" data-strand="HUMMS" :value="track"
-                                    @change="setTrack" class="track">
-                                <span class="custom-checkbox-button !rounded-full "></span>
-                                {{track}} </label>
+                            <h6 class="color-primary font-bold indent-[22px]">Arts, Social Sciences,
+                                and Humanities</h6>
+                            <p class='color-primary ml-[22px]'>Career Pathways: Multimedia Artist,
+                                Content Creator, Film Maker, Photographer, Videographer, Performing
+                                Artist, Audio Producer, UI/UX Designer, Lawyer, Teacher, Journalist,
+                                Public Relations Officer Civil Servant, etc.,</p>
                         </div>
                     </div>
                     <div class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))]">
                         <div>
-                            <h6 class="color-primary font-bold indent-[22px]">Multimedia Arts</h6>
-                            <label class="custom-checkbox !items-baseline color-primary"
-                                v-for="track in  multiMediaTrack">
-                                <input type="checkbox" data-strand="MMA" :value="track"
-                                    @change="setTrack" class="track">
-                                <span class="custom-checkbox-button !rounded-full "></span>
-                                {{track}} </label>
+                            <h6 class="color-primary font-bold indent-[22px]">Science, Technology,
+                                Engineering and Mathematics</h6>
+                            <p class='color-primary ml-[22px]'>Career Pathways:Civil Engineer,
+                                Mechanical Engineer, Aeronautics Specialist, Data Analyst, DevOps
+                                Engineer, Doctor, Nurse, Psychologist, Chemist, Pharmacist, and
+                                Other Allied Health, Mathematics, Statistics, etc.,</p>
                         </div>
                         <div></div>
                     </div>
                     <hr class="my-5">
-                    <h5 class="color-primary font-bold text-center uppercase"> Tech-Pro Track </h5>
+                    <h5 class="color-primary font-bold text-center uppercase mb-5"> TechPro Track
+                    </h5>
                     <div class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-y-4 mb-4">
-                        <section class="flex flex-col gap-y-4">
-                            <div>
-                                <h6 class="color-primary font-bold">Animation</h6>
-                                <label class="custom-checkbox !items-baseline color-primary"
-                                    v-for="track in animationTrack">
-                                    <input type="checkbox" data-strand="Ani" :value="track"
-                                        @change="setTrack" class="track">
-                                    <span class="custom-checkbox-button !rounded-full "></span>
-                                    {{track}} </label>
-                            </div>
-                            <div>
-                                <h6 class="color-primary font-bold">Graphic Illustration</h6>
-                                <label class="custom-checkbox !items-baseline color-primary"
-                                    v-for="track in graphicIllustrationTrack">
-                                    <input type="checkbox" data-strand="Graph ill" :value="track"
-                                        @change="setTrack" class="track">
-                                    <span class="custom-checkbox-button !rounded-full "></span>
-                                    {{track}} </label>
-                            </div>
-                            <div>
-                                <h6 class="color-primary font-bold">Fashion Design</h6>
-                                <label class="custom-checkbox !items-baseline color-primary"
-                                    v-for="track in fashionDesignTrack">
-                                    <input type="checkbox" data-strand="Fashion Des" :value="track"
-                                        @change="setTrack" class="track">
-                                    <span class="custom-checkbox-button !rounded-full "></span>
-                                    {{track}} </label>
-                            </div>
-                            <div>
-                                <h6 class="color-primary font-bold">Technical Drafting</h6>
-                                <label class="custom-checkbox !items-baseline color-primary"
-                                    v-for="track in techDraftingTrack">
-                                    <input type="checkbox" data-strand="Tech Draft" :value="track"
-                                        @change="setTrack" class="track">
-                                    <span class="custom-checkbox-button !rounded-full "></span>
-                                    {{track}} </label>
-                            </div>
-                        </section>
-                        <div class="w-[27ch]">
-                            <div>
-                                <h6 class="color-primary font-bold">Software Development</h6>
-                                <label class="custom-checkbox !items-baseline color-primary"
-                                    v-for="track in softwareDevelopmentTrack">
-                                    <input type="checkbox" data-strand="Soft Dev" :value="track"
-                                        @change="setTrack" class="track">
-                                    <span class="custom-checkbox-button !rounded-full "></span>
-                                    {{track}} </label>
-                            </div>
-                            <div>
-                                <h6 class="color-primary font-bold">Health Technology</h6>
-                                <label class="custom-checkbox !items-baseline color-primary"
-                                    v-for="track in healthTechTrack">
-                                    <input type="checkbox" data-strand="Health Tech" :value="track"
-                                        @change="setTrack" class="track">
-                                    <span class="custom-checkbox-button !rounded-full "></span>
-                                    {{track}} </label>
-                            </div>
-                            <div>
-                                <h6 class="color-primary font-bold">Other Electives</h6>
-                                <label class="custom-checkbox !items-baseline color-primary"
-                                    v-for="track in otherElectivesTrack">
-                                    <input type="checkbox" data-strand="Other" :value="track"
-                                        @change="setTrack" class="track">
-                                    <span class="custom-checkbox-button !rounded-full "></span>
-                                    {{track}} </label>
-                            </div>
+                        <div>
+                            <h6 class="color-primary font-bold indent-[22px]">Animation</h6>
+                            <p class='color-primary ml-[22px]'>Career Pathways:Animator, Graphic
+                                Designer, Fashion Designer, Illustrator, Art Gallery Director, Game
+                                Designer, Fine Artist, Visual Artist, Motion Designer, Storyboard
+                                Artist etc.,</p>
+                        </div>
+                        <div>
+                            <h6 class="color-primary font-bold indent-[22px]">Information and
+                                Communication Technology</h6>
+                            <p class='color-primary ml-[22px]'>Career Pathways: Software Developer,
+                                Web Developer, Game Developer, and Software Engineer. Other roles
+                                listed are Computer Engineer, Data Scientist, IT Specialist, Network
+                                Engineer, etc.,</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-y-4 mb-4">
+                        <div>
+                            <h6 class="color-primary font-bold indent-[22px]">Family and Consumer
+                                Science</h6>
+                            <p class='color-primary ml-[22px]'>Career Pathways: Medical
+                                Technologist, Radiologic Technologist, Biomedical Engineer, Health
+                                Data Analyst, Pharmaceutical Chemist, and Research Scientist, etc.,
+                            </p>
+                        </div>
+                        <div>
+                            <h6 class="color-primary font-bold indent-[22px]">Industrial Arts </h6>
+                            <p class='color-primary ml-[22px]'>Career Pathways: Industrial Engineer,
+                                Architect, Interior Designer, Industrial Designer, Urban Planner,
+                                Site Supervisor, Electrical Design Engineer, Space Planner, etc.,
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
             <!-- col 2 -->
-            <div id="elective-receipt" class="flex-[2_0_188px] ">
-                <div class="border border-neutral-100 rounded-lg p-2.5 px-4 pb-8 mb-4">
-                    <h5 class="color-primary font-bold text-center  mb-4"> Career Pathway </h5>
-                    <div class="mb-4">
-                        <select
-                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" required v-model="request.program">
-                            <option disabled value="">First Choice</option>
-                            <option v-for="career,index in careers" :value="career" :key="index"
-                                :disabled="career == request.program2 ? true : false">
-                                {{ career}}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <select :disabled="!request.program ? true : false"
-                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" required v-model="request.program2">
-                            <option disabled value="">Second Choice</option>
-                            <option v-for="career,index in careers" :value="career" :key="index"
-                                :disabled="career == request.program ? true : false">
-                                {{ career}}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="">
-                        <input v-model="request.preferred_pathway" required
-                            class="bg-neutral-100 border border-neutral-100 rounded-lg w-full  py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" placeholder="Type preffered career pathway">
-                    </div>
-                </div>
-                <div class="border border-neutral-100 rounded-lg p-2.5 px-4 pb-8">
-                    <h5 class=" color-primary font-bold mb-3 pr-4"> Launchpad Summary</h5>
-                    <h5 class=" color-primary font-bold text-sm text-center my-4"> Core Subjects
-                    </h5>
-                    <ul class="list-inside list-disc px-2 pl-1 indent-[-1] text-sm">
-                        <li>Effective Communication/Mabisang Komunikasyon</li>
-                        <li>Life Skills</li>
-                        <li>General Mathematics</li>
-                        <li>General Science</li>
-                        <li>Pag-aaral ng Kasaysayan at Lipunang Pilipino</li>
-                    </ul>
-                    <h5 class=" color-primary font-bold text-sm text-center my-4"> Choosen Electives
-                    </h5>
-                    <div class="text-center flex flex-col items-center gap-y-2">
-                        <input disabled
-                            class="elective bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" :placeholder="strandArr[0]">
-                        <input disabled
-                            class="elective bg-neutral-100 border border-neutral-100 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                            type="text" :placeholder="strandArr[1]">
-                    </div>
-                </div>
-            </div>
         </div>
         <div v-if="true" class=" mb-6 mt-10">
             <h4 class="color-primary font-bold text-xl">BASIC INFORMATION</h4>
@@ -1179,6 +1140,7 @@ new Vue({
             primary_contact: '',
             program: '',
             program2: '',
+            program3: '',
             preferred_pathway: '',
             elective1: '',
             elective2: '',
