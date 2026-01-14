@@ -4965,7 +4965,7 @@ class Pdf extends CI_Controller {
     
             }   
             
-            $this->data['credited_subjects'] = $credited_subjects;
+            $data['credited_subjects'] = $credited_subjects;
             
     
             foreach($post['included_terms'] as $term){
@@ -5011,12 +5011,12 @@ class Pdf extends CI_Controller {
             
             $rec['total_records'] = $total_records;
 
-            $this->data['other_details'] = $rec;
-            $this->data['gwa_overall'] = number_format(round(($gwa_overall/$num_terms),3),3);
-            $this->data['units_overall'] = $units_overall;        
-            $this->data['student'] = $student;
+            $data['other_details'] = $rec;
+            $data['gwa_overall'] = number_format(round(($gwa_overall/$num_terms),3),3);
+            $data['units_overall'] = $units_overall;        
+            $data['student'] = $student;
 
-            print_r(json_encode($this->data));
+            print_r(json_encode($data));
             die();
         }
     }
