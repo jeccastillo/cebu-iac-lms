@@ -1141,7 +1141,7 @@ class Pdf extends CI_Controller {
     function permanent_record_pdf(){
         $this->load->view("permanent_record_printed",$this->data);
     }
-    function student_viewer_registration_print($id, $app_id, $sem = null, $mt = 6)
+    function student_viewer_registration_printX($id, $app_id, $sem = null, $mt = 6)
     {        
         $this->data['mt'] = $mt;        
         $this->data['sy'] = $this->data_fetcher->fetch_table('tb_mas_sy');
@@ -4899,10 +4899,12 @@ class Pdf extends CI_Controller {
 
     }
 
-    public function shs_permanent_record()
+    // public function shs_permanent_record()
+    function student_viewer_registration_print($id, $app_id, $sem = null, $mt = 6)
     {
         $post = $this->input->post();        
-        $student = $this->data_fetcher->getStudent($post['student_id']);
+        // $student = $this->data_fetcher->getStudent($post['student_id']);
+        $student = $this->data_fetcher->getStudent($id);
         
         if($student['level'] == 'shs'){
             $num_terms = count($post['included_terms']);
