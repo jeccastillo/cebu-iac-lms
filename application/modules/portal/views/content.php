@@ -2,7 +2,7 @@
     error_reporting(0);
 ?>
 
-<aside class="right-side">
+<aside class="right-side" id="registration-container">
 <section class="content-header">
             <h1>
                         My Grades
