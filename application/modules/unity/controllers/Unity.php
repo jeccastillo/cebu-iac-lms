@@ -1745,7 +1745,7 @@ class Unity extends CI_Controller {
         $registeredSems = array();
         //Check Curriculum for units earned
         foreach($registrations as $reg){
-            $registeredSems = isset($reg['intAYID'])?$reg['intAYID']:$reg['intID'];
+            $registeredSems[] = isset($reg['intAYID'])?$reg['intAYID']:$reg['intID'];
             $syid = isset($reg['intAYID'])?$reg['intAYID']:$reg['intID'];
             $records = $this->data_fetcher->getClassListStudentsSt($id,$syid);
             $units = 0;
@@ -1791,21 +1791,13 @@ class Unity extends CI_Controller {
             $terms[] = array('records'=> $records,'reg'=>$reg,'units_earned'=>$units_earned,'gwa'=>$term_gwa);
         }
 
-        print_r($registrations);
-        die();
-
         $sy = $this->db->get('tb_mas_sy')->result_array();
         $semNotRegistered = $this->db->select('tb_mas_sy.*')
                 ->from('tb_mas_sy')
                 ->where_not_in('intID', $registeredSems)
                 ->get()
                 ->result_array();
-        // print_r($semNotRegistered);
-
-            // $records = $this->data_fetcher->getClassListStudentsSt($id,41);
-            // print_r($records);
-            // die();
-
+                
         $notRegisteredTerms = [];
         //Not Registered Sem/Term
         foreach($semNotRegistered as $reg){
