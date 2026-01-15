@@ -134,31 +134,7 @@
                                         </thead>
                                         <tbody>
                                             <template v-for="item in getRecordsWithCombined(term)">
-                                                <tr v-if="item.type == 'combined'"
-                                                    style="font-size: 13px;">
-                                                    <td></td>
-                                                    <td v-if="!item.data.elective_subject">
-                                                        {{ item.data.combineCode }}
-                                                    </td>
-                                                    <td v-else>
-                                                        ({{ item.data.elective_subject.strCode + ' - ' + item.data.combineCode }})
-                                                    </td>
-                                                    <td v-if="item.data.include_gwa == 1">
-                                                        {{ getTotalUnits(term, item.data.intSubjectID) }}
-                                                    </td>
-                                                    <td v-else>
-                                                        ({{ getTotalUnits(term, item.data.intSubjectID) }})
-                                                    </td>
-                                                    <td>{{ getAverageMidterm(term, item.data.intSubjectID) }}
-                                                    </td>
-                                                    <td>{{ getAverageFinal(term, item.data.intSubjectID) }}
-                                                    </td>
-                                                    <td>{{ getAverageSemFinal(term, item.data.intSubjectID) }}
-                                                    </td>
-                                                    <td>Combined</td>
-                                                    <td>---</td>
-                                                </tr>
-                                                <tr v-else
+                                                <tr
                                                     :style="(item.data.intFinalized == 2)?'background-color:#ccc;':''"
                                                     style="font-size: 13px;">
                                                     <td>{{ item.data.strClassName + item.data.year + item.data.strSection + (item.data.sub_section?item.data.sub_section:'') }}
@@ -221,60 +197,6 @@
                                         </tbody>
                                     </table>
                                 </div>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th width="13%">Section</th>
-                        <th width="10%"> Course Code</th>
-                        <th >Course Title</th>
-                        <th style="text-align: center;">Units</th>                        
-                        <th>Midterm</th>                        
-                        <th>Final Grade</th>                                                
-						<th>Remarks</th>
-                        <th>Faculty</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php 
-                    $totalUnits = 0;
-                    $countBridg = 0;
-                    foreach($records as $record): ?>
-                    <tr>                        
-                        <td><?php echo $record['strClassName'].$record['year'].$record['strSection']." ".$record['sub_section']; ?></td>
-                        <td><?php echo $record['strCode']; ?></td>
-						<td><?php echo $record['strDescription']; ?></td>
-                        <td style="text-align: center;"><?php echo $record['strUnits']?>                                                
-                        <?php if($record['intFinalized'] >= 1 && $sem_selected->viewing_midterm_start <= date("Y-m-d")): ?>                                
-                            <td><strong><?php echo $record['v2']; ?></strong></td>
-                        <?php else: ?>
-                            <td>Not Yet Available</td>
-                        <?php endif; ?>    
-                        <?php if($record['intFinalized'] >= 2 && $sem_selected->viewing_final_start <= date("Y-m-d") && count($deficiencies) == 0): ?>                                
-                            <td><strong><?php echo $record['v3']; ?></strong></td>
-                        <?php else: ?>
-                            <td>Not Yet Available</td>
-                        <?php endif; ?>                                                        
-                        <td>
-                            <?php if($record['intFinalized'] >= 2 && $sem_selected->viewing_final_start <= date("Y-m-d") && count($deficiencies) == 0): ?> 
-                                <?php echo $record['strRemarks']; ?>
-                            <?php else: ?>
-                                -
-                            <?php endif; ?>                            
-                        </td>
-                        <td><?php if($record['strFirstname']!="unassigned"){
-                                    $firstNameInitial = substr($record['strFirstname'], 0,1);
-                                    echo $firstNameInitial.". ".$record['strLastname'];  
-                                  }
-                                  else echo "unassigned";  ?>
-                        </td>
-                        
-                    </tr>
-                    <?php endforeach; ?>
-                       
-                        
-        
-                </tbody>
-            </table>
         </div>
     </div>
     <?php endif; ?>
@@ -482,287 +404,287 @@ new Vue({
         }
     },
     methods: {
-        getRecordsWithCombined: function(term) {
-            if (!Array.isArray(this.combined_subjects)) {
-                let flattened = [];
-                for (let key in this.combined_subjects) {
-                    if (Array.isArray(this.combined_subjects[key])) {
-                        flattened = flattened.concat(this.combined_subjects[key]);
-                    }
-                }
-                this.combined_subjects = flattened;
-            }
-            if (!Array.isArray(this.combined_subjects) || this.combined_subjects
-                .length === 0) {
-                return term.records.map(record => ({
-                    type: 'record',
-                    data: record
-                }));
-            }
-            let displayedCombined = new Set();
-            let result = [];
-            for (let record of term.records) {
-                let combined = this.combined_subjects.find(c => c.intSubjectID == record
-                    .intSubjectID);
-                if (combined && !displayedCombined.has(combined.combineCode + '|' +
-                        combined.combineDesc)) {
-                    result.push({
-                        type: 'combined',
-                        data: combined
-                    });
-                    displayedCombined.add(combined.combineCode + '|' + combined
-                        .combineDesc);
-                }
-                result.push({
-                    type: 'record',
-                    data: record
-                });
-            }
-            return result;
-        },
-        getCurriculumRecords: function(term) {
-            if (!Array.isArray(this.combined_subjects)) {
-                let flattened = [];
-                for (let key in this.combined_subjects) {
-                    if (Array.isArray(this.combined_subjects[key])) {
-                        flattened = flattened.concat(this.combined_subjects[key]);
-                    }
-                }
-                this.combined_subjects = flattened;
-            }
-            if (!Array.isArray(this.combined_subjects) || this.combined_subjects
-                .length === 0) {
-                return term.records.map(item => ({
-                    type: 'item',
-                    data: item
-                }));
-            }
-            let displayedCombined = new Set();
-            let result = [];
-            for (let item of term.records) {
-                let combined = this.combined_subjects.find(c => c.intSubjectID == item
-                    .intSubjectID);
-                if (combined && !displayedCombined.has(combined.combineCode + '|' +
-                        combined.combineDesc)) {
-                    result.push({
-                        type: 'combined',
-                        data: combined
-                    });
-                    displayedCombined.add(combined.combineCode + '|' + combined
-                        .combineDesc);
-                }
-                result.push({
-                    type: 'item',
-                    data: item
-                });
-            }
-            return result;
-        },
-        getTotalUnits: function(term, subjectID) {
-            let flattenedCombined = this.combined_subjects;
-            if (!Array.isArray(flattenedCombined)) {
-                flattenedCombined = [];
-                for (let key in this.combined_subjects) {
-                    if (Array.isArray(this.combined_subjects[key])) {
-                        flattenedCombined = flattenedCombined.concat(this
-                            .combined_subjects[key]);
-                    }
-                }
-            }
-            let combined = flattenedCombined.find(c => c.intSubjectID == subjectID);
-            let subjectIDs = [subjectID];
-            if (combined) {
-                subjectIDs = flattenedCombined.filter(c => c.combineCode == combined
-                    .combineCode).map(c => c.intSubjectID);
-            }
-            let total = 0;
-            for (let record of term.records) {
-                if (subjectIDs.includes(record.intSubjectID)) {
-                    total += parseFloat(record.strUnits) || 0;
-                }
-            }
-            return total.toFixed(1);
-        },
-        getAverageMidterm: function(term, subjectID) {
-            let flattenedCombined = this.combined_subjects;
-            if (!Array.isArray(flattenedCombined)) {
-                flattenedCombined = [];
-                for (let key in this.combined_subjects) {
-                    if (Array.isArray(this.combined_subjects[key])) {
-                        flattenedCombined = flattenedCombined.concat(this
-                            .combined_subjects[key]);
-                    }
-                }
-            }
-            let combined = flattenedCombined.find(c => c.intSubjectID == subjectID);
-            let subjectIDs = [subjectID];
-            if (combined) {
-                subjectIDs = flattenedCombined.filter(c => c.combineCode == combined
-                    .combineCode).map(c => c.intSubjectID);
-            }
-            let grades = [];
-            for (let record of term.records) {
-                if (subjectIDs.includes(record.intSubjectID) && record.v2 && record
-                    .v2 != 'OW' && record.intFinalized >= 1) {
-                    grades.push(parseFloat(record.v2) || 0);
-                }
-            }
-            if (grades.length === 0) return '---';
-            let avg = grades.reduce((a, b) => a + b, 0) / grades.length;
-            return Math.round(avg);
-        },
-        getAverageFinal: function(term, subjectID) {
-            let flattenedCombined = this.combined_subjects;
-            if (!Array.isArray(flattenedCombined)) {
-                flattenedCombined = [];
-                for (let key in this.combined_subjects) {
-                    if (Array.isArray(this.combined_subjects[key])) {
-                        flattenedCombined = flattenedCombined.concat(this
-                            .combined_subjects[key]);
-                    }
-                }
-            }
-            let combined = flattenedCombined.find(c => c.intSubjectID == subjectID);
-            let subjectIDs = [subjectID];
-            if (combined) {
-                subjectIDs = flattenedCombined.filter(c => c.combineCode == combined
-                    .combineCode).map(c => c.intSubjectID);
-            }
-            let grades = [];
-            for (let record of term.records) {
-                if (subjectIDs.includes(record.intSubjectID) && record.v3 && record
-                    .v3 != 'OW' && record.intFinalized >= 2) {
-                    grades.push(parseFloat(record.v3) || 0);
-                }
-            }
-            if (grades.length === 0) return '---';
-            let avg = grades.reduce((a, b) => a + b, 0) / grades.length;
-            return Math.round(avg);
-        },
-        getAverageSemFinal: function(term, subjectID) {
-            if (this.student.type != 'shs') return '---';
-            let flattenedCombined = this.combined_subjects;
-            if (!Array.isArray(flattenedCombined)) {
-                flattenedCombined = [];
-                for (let key in this.combined_subjects) {
-                    if (Array.isArray(this.combined_subjects[key])) {
-                        flattenedCombined = flattenedCombined.concat(this
-                            .combined_subjects[key]);
-                    }
-                }
-            }
-            let combined = flattenedCombined.find(c => c.intSubjectID == subjectID);
-            let subjectIDs = [subjectID];
-            if (combined) {
-                subjectIDs = flattenedCombined.filter(c => c.combineCode == combined
-                    .combineCode).map(c => c.intSubjectID);
-            }
-            let grades = [];
-            for (let record of term.records) {
-                if (subjectIDs.includes(record.intSubjectID) && record.semFinalGrade) {
-                    grades.push(parseFloat(record.semFinalGrade) || 0);
-                }
-            }
-            if (grades.length === 0) return '---';
-            let avg = grades.reduce((a, b) => a + b, 0) / grades.length;
-            return Math.round(avg);
-        },
-        getAverageGradeCurriculum: function(term, subjectID) {
-            let flattenedCombined = this.combined_subjects;
-            if (!Array.isArray(flattenedCombined)) {
-                flattenedCombined = [];
-                for (let key in this.combined_subjects) {
-                    if (Array.isArray(this.combined_subjects[key])) {
-                        flattenedCombined = flattenedCombined.concat(this
-                            .combined_subjects[key]);
-                    }
-                }
-            }
-            let combined = flattenedCombined.find(c => c.intSubjectID == subjectID);
-            let subjectIDs = [subjectID];
-            if (combined) {
-                subjectIDs = flattenedCombined.filter(c => c.combineCode == combined
-                    .combineCode).map(c => c.intSubjectID);
-            }
-            let grades = [];
-            for (let record of term.records) {
-                if (subjectIDs.includes(record.intSubjectID)) {
-                    if (record.equivalent && record.equivalent.grade && record
-                        .equivalent.grade != 'OW') {
-                        grades.push(parseFloat(record.equivalent.grade) || 0);
-                    } else if (record.rec && record.rec.floatFinalGrade && record.rec
-                        .floatFinalGrade != 'OW') {
-                        grades.push(parseFloat(record.rec.floatFinalGrade) || 0);
-                    }
-                }
-            }
-            if (grades.length === 0) return '---';
-            let avg = grades.reduce((a, b) => a + b, 0) / grades.length;
-            return Math.round(avg);
-        },
-        getTotalUnitsEarnedCurriculum: function(term, subjectID) {
-            let flattenedCombined = this.combined_subjects;
-            if (!Array.isArray(flattenedCombined)) {
-                flattenedCombined = [];
-                for (let key in this.combined_subjects) {
-                    if (Array.isArray(this.combined_subjects[key])) {
-                        flattenedCombined = flattenedCombined.concat(this
-                            .combined_subjects[key]);
-                    }
-                }
-            }
-            let combined = flattenedCombined.find(c => c.intSubjectID == subjectID);
-            let subjectIDs = [subjectID];
-            if (combined) {
-                subjectIDs = flattenedCombined.filter(c => c.combineCode == combined
-                    .combineCode).map(c => c.intSubjectID);
-            }
-            let total = 0;
-            for (let record of term.records) {
-                if (subjectIDs.includes(record.intSubjectID)) {
-                    total += parseFloat(record.units_earned) || 0;
-                }
-            }
-            return total.toFixed(1);
-        },
-        printTOR: function() {
-            Swal.fire({
-                title: 'Generate Document?',
-                text: "Continue genrating " + this.tor.type + "?",
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                imageWidth: 100,
-                icon: "question",
-                cancelButtonText: "No, cancel!",
-                showCloseButton: true,
-                showLoaderOnConfirm: true,
-                preConfirm: (login) => {
-                    if (this.deficiencies.length > 0 || this.balance > 0) {
-                        Swal.fire({
-                            title: 'Warning',
-                            text: "This student has active deficiencies",
-                            showCancelButton: true,
-                            confirmButtonText: "Continue Printing Anyway?",
-                            imageWidth: 100,
-                            icon: "question",
-                            cancelButtonText: "No, cancel!",
-                            showCloseButton: true,
-                            showLoaderOnConfirm: true,
-                            footer: '<a target="_blank" href="' +
-                                base_url +
-                                'deficiencies/student_deficiencies/' +
-                                this.student.intID +
-                                '">View Deficiencies</a>',
-                            preConfirm: (login) => {
-                                this.$refs.generate_tor
-                            .submit();
-                            }
-                        })
-                    } else this.$refs.generate_tor.submit();
-                },
-                allowOutsideClick: () => !Swal.isLoading()
-            });
-        },
+        // getRecordsWithCombined: function(term) {
+        //     if (!Array.isArray(this.combined_subjects)) {
+        //         let flattened = [];
+        //         for (let key in this.combined_subjects) {
+        //             if (Array.isArray(this.combined_subjects[key])) {
+        //                 flattened = flattened.concat(this.combined_subjects[key]);
+        //             }
+        //         }
+        //         this.combined_subjects = flattened;
+        //     }
+        //     if (!Array.isArray(this.combined_subjects) || this.combined_subjects
+        //         .length === 0) {
+        //         return term.records.map(record => ({
+        //             type: 'record',
+        //             data: record
+        //         }));
+        //     }
+        //     let displayedCombined = new Set();
+        //     let result = [];
+        //     for (let record of term.records) {
+        //         let combined = this.combined_subjects.find(c => c.intSubjectID == record
+        //             .intSubjectID);
+        //         if (combined && !displayedCombined.has(combined.combineCode + '|' +
+        //                 combined.combineDesc)) {
+        //             result.push({
+        //                 type: 'combined',
+        //                 data: combined
+        //             });
+        //             displayedCombined.add(combined.combineCode + '|' + combined
+        //                 .combineDesc);
+        //         }
+        //         result.push({
+        //             type: 'record',
+        //             data: record
+        //         });
+        //     }
+        //     return result;
+        // },
+        // getCurriculumRecords: function(term) {
+        //     if (!Array.isArray(this.combined_subjects)) {
+        //         let flattened = [];
+        //         for (let key in this.combined_subjects) {
+        //             if (Array.isArray(this.combined_subjects[key])) {
+        //                 flattened = flattened.concat(this.combined_subjects[key]);
+        //             }
+        //         }
+        //         this.combined_subjects = flattened;
+        //     }
+        //     if (!Array.isArray(this.combined_subjects) || this.combined_subjects
+        //         .length === 0) {
+        //         return term.records.map(item => ({
+        //             type: 'item',
+        //             data: item
+        //         }));
+        //     }
+        //     let displayedCombined = new Set();
+        //     let result = [];
+        //     for (let item of term.records) {
+        //         let combined = this.combined_subjects.find(c => c.intSubjectID == item
+        //             .intSubjectID);
+        //         if (combined && !displayedCombined.has(combined.combineCode + '|' +
+        //                 combined.combineDesc)) {
+        //             result.push({
+        //                 type: 'combined',
+        //                 data: combined
+        //             });
+        //             displayedCombined.add(combined.combineCode + '|' + combined
+        //                 .combineDesc);
+        //         }
+        //         result.push({
+        //             type: 'item',
+        //             data: item
+        //         });
+        //     }
+        //     return result;
+        // },
+        // getTotalUnits: function(term, subjectID) {
+        //     let flattenedCombined = this.combined_subjects;
+        //     if (!Array.isArray(flattenedCombined)) {
+        //         flattenedCombined = [];
+        //         for (let key in this.combined_subjects) {
+        //             if (Array.isArray(this.combined_subjects[key])) {
+        //                 flattenedCombined = flattenedCombined.concat(this
+        //                     .combined_subjects[key]);
+        //             }
+        //         }
+        //     }
+        //     let combined = flattenedCombined.find(c => c.intSubjectID == subjectID);
+        //     let subjectIDs = [subjectID];
+        //     if (combined) {
+        //         subjectIDs = flattenedCombined.filter(c => c.combineCode == combined
+        //             .combineCode).map(c => c.intSubjectID);
+        //     }
+        //     let total = 0;
+        //     for (let record of term.records) {
+        //         if (subjectIDs.includes(record.intSubjectID)) {
+        //             total += parseFloat(record.strUnits) || 0;
+        //         }
+        //     }
+        //     return total.toFixed(1);
+        // },
+        // getAverageMidterm: function(term, subjectID) {
+        //     let flattenedCombined = this.combined_subjects;
+        //     if (!Array.isArray(flattenedCombined)) {
+        //         flattenedCombined = [];
+        //         for (let key in this.combined_subjects) {
+        //             if (Array.isArray(this.combined_subjects[key])) {
+        //                 flattenedCombined = flattenedCombined.concat(this
+        //                     .combined_subjects[key]);
+        //             }
+        //         }
+        //     }
+        //     let combined = flattenedCombined.find(c => c.intSubjectID == subjectID);
+        //     let subjectIDs = [subjectID];
+        //     if (combined) {
+        //         subjectIDs = flattenedCombined.filter(c => c.combineCode == combined
+        //             .combineCode).map(c => c.intSubjectID);
+        //     }
+        //     let grades = [];
+        //     for (let record of term.records) {
+        //         if (subjectIDs.includes(record.intSubjectID) && record.v2 && record
+        //             .v2 != 'OW' && record.intFinalized >= 1) {
+        //             grades.push(parseFloat(record.v2) || 0);
+        //         }
+        //     }
+        //     if (grades.length === 0) return '---';
+        //     let avg = grades.reduce((a, b) => a + b, 0) / grades.length;
+        //     return Math.round(avg);
+        // },
+        // getAverageFinal: function(term, subjectID) {
+        //     let flattenedCombined = this.combined_subjects;
+        //     if (!Array.isArray(flattenedCombined)) {
+        //         flattenedCombined = [];
+        //         for (let key in this.combined_subjects) {
+        //             if (Array.isArray(this.combined_subjects[key])) {
+        //                 flattenedCombined = flattenedCombined.concat(this
+        //                     .combined_subjects[key]);
+        //             }
+        //         }
+        //     }
+        //     let combined = flattenedCombined.find(c => c.intSubjectID == subjectID);
+        //     let subjectIDs = [subjectID];
+        //     if (combined) {
+        //         subjectIDs = flattenedCombined.filter(c => c.combineCode == combined
+        //             .combineCode).map(c => c.intSubjectID);
+        //     }
+        //     let grades = [];
+        //     for (let record of term.records) {
+        //         if (subjectIDs.includes(record.intSubjectID) && record.v3 && record
+        //             .v3 != 'OW' && record.intFinalized >= 2) {
+        //             grades.push(parseFloat(record.v3) || 0);
+        //         }
+        //     }
+        //     if (grades.length === 0) return '---';
+        //     let avg = grades.reduce((a, b) => a + b, 0) / grades.length;
+        //     return Math.round(avg);
+        // },
+        // getAverageSemFinal: function(term, subjectID) {
+        //     if (this.student.type != 'shs') return '---';
+        //     let flattenedCombined = this.combined_subjects;
+        //     if (!Array.isArray(flattenedCombined)) {
+        //         flattenedCombined = [];
+        //         for (let key in this.combined_subjects) {
+        //             if (Array.isArray(this.combined_subjects[key])) {
+        //                 flattenedCombined = flattenedCombined.concat(this
+        //                     .combined_subjects[key]);
+        //             }
+        //         }
+        //     }
+        //     let combined = flattenedCombined.find(c => c.intSubjectID == subjectID);
+        //     let subjectIDs = [subjectID];
+        //     if (combined) {
+        //         subjectIDs = flattenedCombined.filter(c => c.combineCode == combined
+        //             .combineCode).map(c => c.intSubjectID);
+        //     }
+        //     let grades = [];
+        //     for (let record of term.records) {
+        //         if (subjectIDs.includes(record.intSubjectID) && record.semFinalGrade) {
+        //             grades.push(parseFloat(record.semFinalGrade) || 0);
+        //         }
+        //     }
+        //     if (grades.length === 0) return '---';
+        //     let avg = grades.reduce((a, b) => a + b, 0) / grades.length;
+        //     return Math.round(avg);
+        // },
+        // getAverageGradeCurriculum: function(term, subjectID) {
+        //     let flattenedCombined = this.combined_subjects;
+        //     if (!Array.isArray(flattenedCombined)) {
+        //         flattenedCombined = [];
+        //         for (let key in this.combined_subjects) {
+        //             if (Array.isArray(this.combined_subjects[key])) {
+        //                 flattenedCombined = flattenedCombined.concat(this
+        //                     .combined_subjects[key]);
+        //             }
+        //         }
+        //     }
+        //     let combined = flattenedCombined.find(c => c.intSubjectID == subjectID);
+        //     let subjectIDs = [subjectID];
+        //     if (combined) {
+        //         subjectIDs = flattenedCombined.filter(c => c.combineCode == combined
+        //             .combineCode).map(c => c.intSubjectID);
+        //     }
+        //     let grades = [];
+        //     for (let record of term.records) {
+        //         if (subjectIDs.includes(record.intSubjectID)) {
+        //             if (record.equivalent && record.equivalent.grade && record
+        //                 .equivalent.grade != 'OW') {
+        //                 grades.push(parseFloat(record.equivalent.grade) || 0);
+        //             } else if (record.rec && record.rec.floatFinalGrade && record.rec
+        //                 .floatFinalGrade != 'OW') {
+        //                 grades.push(parseFloat(record.rec.floatFinalGrade) || 0);
+        //             }
+        //         }
+        //     }
+        //     if (grades.length === 0) return '---';
+        //     let avg = grades.reduce((a, b) => a + b, 0) / grades.length;
+        //     return Math.round(avg);
+        // },
+        // getTotalUnitsEarnedCurriculum: function(term, subjectID) {
+        //     let flattenedCombined = this.combined_subjects;
+        //     if (!Array.isArray(flattenedCombined)) {
+        //         flattenedCombined = [];
+        //         for (let key in this.combined_subjects) {
+        //             if (Array.isArray(this.combined_subjects[key])) {
+        //                 flattenedCombined = flattenedCombined.concat(this
+        //                     .combined_subjects[key]);
+        //             }
+        //         }
+        //     }
+        //     let combined = flattenedCombined.find(c => c.intSubjectID == subjectID);
+        //     let subjectIDs = [subjectID];
+        //     if (combined) {
+        //         subjectIDs = flattenedCombined.filter(c => c.combineCode == combined
+        //             .combineCode).map(c => c.intSubjectID);
+        //     }
+        //     let total = 0;
+        //     for (let record of term.records) {
+        //         if (subjectIDs.includes(record.intSubjectID)) {
+        //             total += parseFloat(record.units_earned) || 0;
+        //         }
+        //     }
+        //     return total.toFixed(1);
+        // },
+        // printTOR: function() {
+        //     Swal.fire({
+        //         title: 'Generate Document?',
+        //         text: "Continue genrating " + this.tor.type + "?",
+        //         showCancelButton: true,
+        //         confirmButtonText: "Yes",
+        //         imageWidth: 100,
+        //         icon: "question",
+        //         cancelButtonText: "No, cancel!",
+        //         showCloseButton: true,
+        //         showLoaderOnConfirm: true,
+        //         preConfirm: (login) => {
+        //             if (this.deficiencies.length > 0 || this.balance > 0) {
+        //                 Swal.fire({
+        //                     title: 'Warning',
+        //                     text: "This student has active deficiencies",
+        //                     showCancelButton: true,
+        //                     confirmButtonText: "Continue Printing Anyway?",
+        //                     imageWidth: 100,
+        //                     icon: "question",
+        //                     cancelButtonText: "No, cancel!",
+        //                     showCloseButton: true,
+        //                     showLoaderOnConfirm: true,
+        //                     footer: '<a target="_blank" href="' +
+        //                         base_url +
+        //                         'deficiencies/student_deficiencies/' +
+        //                         this.student.intID +
+        //                         '">View Deficiencies</a>',
+        //                     preConfirm: (login) => {
+        //                         this.$refs.generate_tor
+        //                     .submit();
+        //                     }
+        //                 })
+        //             } else this.$refs.generate_tor.submit();
+        //         },
+        //         allowOutsideClick: () => !Swal.isLoading()
+        //     });
+        // },
         prepareCredited: function(record) {
             this.edit_credits.id = record.id;
             this.edit_credits.course_code = record.course_code;
