@@ -117,6 +117,110 @@
 
         <?php else:  ?>
         <div class="table-responsive">
+                                <div class="box-body">
+                                    <table class="table table-condensed table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Section Code</th>
+                                                <th>Course Code</th>
+                                                <th>Units</th>
+                                                <th>Midterm</th>
+                                                <th>Final</th>
+                                                <th v-if="student.type == 'shs'">Sem Final Grade
+                                                </th>
+                                                <th>Remarks</th>
+                                                <th>Faculty</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <template v-for="item in getRecordsWithCombined(term)">
+                                                <tr v-if="item.type == 'combined'"
+                                                    style="font-size: 13px;">
+                                                    <td></td>
+                                                    <td v-if="!item.data.elective_subject">
+                                                        {{ item.data.combineCode }}
+                                                    </td>
+                                                    <td v-else>
+                                                        ({{ item.data.elective_subject.strCode + ' - ' + item.data.combineCode }})
+                                                    </td>
+                                                    <td v-if="item.data.include_gwa == 1">
+                                                        {{ getTotalUnits(term, item.data.intSubjectID) }}
+                                                    </td>
+                                                    <td v-else>
+                                                        ({{ getTotalUnits(term, item.data.intSubjectID) }})
+                                                    </td>
+                                                    <td>{{ getAverageMidterm(term, item.data.intSubjectID) }}
+                                                    </td>
+                                                    <td>{{ getAverageFinal(term, item.data.intSubjectID) }}
+                                                    </td>
+                                                    <td>{{ getAverageSemFinal(term, item.data.intSubjectID) }}
+                                                    </td>
+                                                    <td>Combined</td>
+                                                    <td>---</td>
+                                                </tr>
+                                                <tr v-else
+                                                    :style="(item.data.intFinalized == 2)?'background-color:#ccc;':''"
+                                                    style="font-size: 13px;">
+                                                    <td>{{ item.data.strClassName + item.data.year + item.data.strSection + (item.data.sub_section?item.data.sub_section:'') }}
+                                                    </td>
+                                                    <!-- <td>{{ item.data.strClassName + item.data.year + item.data.strSection + (item.data.sub_section?item.data.sub_section:'') }}</td> -->
+                                                    <td v-if="!item.data.elective_subject">
+                                                        {{ item.data.strCode }}
+                                                    </td>
+                                                    <td v-else>
+                                                        ({{ item.data.elective_subject.strCode + ' - ' + item.data.strCode }})
+                                                    </td>
+                                                    <td v-if="item.data.include_gwa == 1">
+                                                        {{ item.data.strUnits }}
+                                                    </td>
+                                                    <td v-else>({{ item.data.strUnits }})</td>
+                                                    <td v-if="item.data.v2 != 'OW'"
+                                                        :style="(item.data.intFinalized == 2)?'font-weight:bold;':''">
+                                                        {{ item.data.intFinalized >=1?item.data.v2:'NGS' }}
+                                                    </td>
+                                                    <td v-else style="font-weight:bold"> OW </td>
+                                                    <td v-if="item.data.v3 != 'OW'"
+                                                        :style="(item.data.intFinalized == 2)?'font-weight:bold;':''">
+                                                        <span v-if="item.data.intFinalized >=2"
+                                                            :style="(item.data.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">
+                                                            {{ item.data.v3 }}
+                                                        </span>
+                                                        <span v-else> NGS </span>
+                                                    </td>
+                                                    <td v-else style="font-weight:bold"> OW </td>
+                                                    <!-- <td v-if="student.type == 'shs' && item.data.v2 && item.data.v3">{{ (parseInt(item.data.v2) + parseInt(item.data.v3) ? Math.round((parseInt(item.data.v2) + parseInt(item.data.v3)) / 2) : 'T')}}</td> -->
+                                                    <td
+                                                        v-if="student.type == 'shs' && item.data.semFinalGrade">
+                                                        {{ item.data.semFinalGrade }}
+                                                    </td>
+                                                    <td v-else-if="student.type == 'shs'">---</td>
+                                                    <td
+                                                        :style="(item.data.strRemarks != 'Failed')?'color:#333;':'color:#990000;'">
+                                                        {{ item.data.intFinalized >=1?item.data.strRemarks:'---' }}
+                                                    </td>
+                                                    <td>{{ item.data.strFirstname+" "+item.data.strLastname }}
+                                                    </td>
+                                                </tr>
+                                            </template>
+                                            <tr style="font-size: 13px;">
+                                                <td></td>
+                                                <td align="right"><strong>Units Earned for
+                                                        Term:</strong></td>
+                                                <td>{{ term.units_earned }}</td>
+                                                <td colspan="3"></td>
+                                            </tr>
+                                            <tr style="font-size: 11px;">
+                                                <td></td>
+                                                <td align="right"><strong>Term GWA:</strong></td>
+                                                <td v-if="student.type == 'shs'">
+                                                    {{ Math.round(term.gwa) }}
+                                                </td>
+                                                <td v-else>{{ term.gwa }}</td>
+                                                <td colspan="3"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
             <table class="table table-striped">
                 <thead>
                     <tr>
