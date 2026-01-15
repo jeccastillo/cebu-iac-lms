@@ -348,6 +348,7 @@ new Vue({
     data: {
         id: '<?php echo $id; ?>',
         base_url: '<?php echo base_url(); ?>',
+        term:<?php echo $selected_ay; ?>,
         slug: undefined,
         student: undefined,
         records: [],
@@ -369,41 +370,6 @@ new Vue({
         curriculum_units_na: 0,
         units_left: 0,
         unregistered: [],
-        tor: {
-            date_issued: undefined,
-            remarks: undefined,
-            prepared_by: undefined,
-            verified_by: undefined,
-            registrar: undefined,
-            included_terms: [],
-            student_id: '<?php echo $id; ?>',
-            picture: undefined,
-            admission_date: undefined,
-            signatory_label: undefined,
-            type: 'tor',
-        },
-        add_credits: {
-            course_code: undefined,
-            descriptive_title: undefined,
-            units: undefined,
-            grade: undefined,
-            completion: '',
-            term: undefined,
-            school_year: undefined,
-            student_id: '<?php echo $id; ?>',
-            equivalent_subject: 0,
-        },
-        edit_credits: {
-            id: undefined,
-            course_code: undefined,
-            descriptive_title: undefined,
-            units: undefined,
-            grade: undefined,
-            completion: '',
-            term: undefined,
-            school_year: undefined,
-            equivalent_subject: undefined,
-        }
     },
     mounted() {
         let url_string = window.location.href;
@@ -807,132 +773,6 @@ new Vue({
             this.edit_credits.term = record.term;
             this.edit_credits.school_year = record.school_year;
             this.edit_credits.equivalent_subject = record.equivalent_subject;
-        },
-        creditSubject: function() {
-            Swal.fire({
-                title: 'Add Credits?',
-                text: "Continue adding credits?",
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                imageWidth: 100,
-                icon: "question",
-                cancelButtonText: "No, cancel!",
-                showCloseButton: true,
-                showLoaderOnConfirm: true,
-                preConfirm: (login) => {
-                    var formdata = new FormData();
-                    for (const [key, value] of Object.entries(this
-                            .add_credits)) {
-                        formdata.append(key, value);
-                    }
-                    return axios.post(base_url + 'unity/add_credit',
-                        formdata, {
-                            headers: {
-                                Authorization: `Bearer ${window.token}`
-                            }
-                        }).then(data => {
-                        if (data.data.success) {
-                            Swal.fire({
-                                title: "Success",
-                                text: data.data.message,
-                                icon: "success"
-                            }).then(function() {
-                                location.reload();
-                            });
-                        } else {
-                            Swal.fire('Failed!', data.data.message,
-                                'error')
-                        }
-                    });
-                },
-                allowOutsideClick: () => !Swal.isLoading()
-            });
-        },
-        deleteCredited: function(id) {
-            Swal.fire({
-                title: 'Delete Credited Subject?',
-                text: "Continue Deleting This Subject?",
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                imageWidth: 100,
-                icon: "question",
-                cancelButtonText: "No, cancel!",
-                showCloseButton: true,
-                showLoaderOnConfirm: true,
-                preConfirm: (login) => {
-                    var formdata = new FormData();
-                    formdata.append('id', id);
-                    return axios.post(base_url + 'unity/delete_credited',
-                        formdata, {
-                            headers: {
-                                Authorization: `Bearer ${window.token}`
-                            }
-                        }).then(data => {
-                        if (data.data.success) {
-                            Swal.fire({
-                                title: "Success",
-                                text: data.data.message,
-                                icon: "success"
-                            }).then(function() {
-                                location.reload();
-                            });
-                        } else {
-                            Swal.fire('Failed!', data.data.message,
-                                'error')
-                        }
-                    });
-                },
-                allowOutsideClick: () => !Swal.isLoading()
-            });
-        },
-        updateCredited: function() {
-            Swal.fire({
-                title: 'Edit credited subject?',
-                text: "Continue with update?",
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                imageWidth: 100,
-                icon: "question",
-                cancelButtonText: "No, cancel!",
-                showCloseButton: true,
-                showLoaderOnConfirm: true,
-                preConfirm: (login) => {
-                    var formdata = new FormData();
-                    for (const [key, value] of Object.entries(this
-                            .edit_credits)) {
-                        formdata.append(key, value);
-                    }
-                    return axios.post(base_url +
-                        'registrar/edit_credited_subject', formdata, {
-                            headers: {
-                                Authorization: `Bearer ${window.token}`
-                            }
-                        }).then(data => {
-                        if (data.data.success) {
-                            Swal.fire({
-                                title: "Success",
-                                text: data.data.message,
-                                icon: "success"
-                            }).then(function() {
-                                location.reload();
-                            });
-                        } else {
-                            Swal.fire('Failed!', data.data.message,
-                                'error')
-                        }
-                    });
-                },
-                allowOutsideClick: () => !Swal.isLoading()
-            });
-        },
-        printCertficateUnitEarned: function() {
-            this.$refs.print_unit_earned.submit();
-        },
-        printCertficateOfEnrollment: function() {
-            this.$refs.print_certificate_enrollment.submit();
-        },
-        printCertficateOfGWA: function() {
-            this.$refs.print_certificate_gwa.submit();
         },
     }
 })
