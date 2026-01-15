@@ -1791,9 +1791,9 @@ class Unity extends CI_Controller {
             $terms[] = array('records'=> $records,'reg'=>$reg,'units_earned'=>$units_earned,'gwa'=>$term_gwa);
         }
 
-        print_r($registeredSems);
+        print_r($registrations);
         die();
-        
+
         $sy = $this->db->get('tb_mas_sy')->result_array();
         $semNotRegistered = $this->db->select('tb_mas_sy.*')
                 ->from('tb_mas_sy')
