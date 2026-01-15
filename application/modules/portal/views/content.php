@@ -1,5 +1,5 @@
 <?php 
-    error_reporting(0);
+    // error_reporting(0);
 ?>
 
 <aside class="right-side" id="registration-container">
