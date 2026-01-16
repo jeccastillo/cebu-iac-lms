@@ -224,6 +224,7 @@ class Scholarship extends CI_Controller {
         $ret['registration'] = $this->data_fetcher->getRegistrationInfo($student,$sem);
         $has_inhouse = false;
         $has_external = false; 
+        $has_referral = false;
 
         
         if($ret['registration']){
