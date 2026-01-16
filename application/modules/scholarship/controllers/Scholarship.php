@@ -290,6 +290,14 @@ class Scholarship extends CI_Controller {
             'tb_mas_scholarships.name LIKE' => '%Referral%'
         ))->result_array();
 
+        $student_discounts = $this->db->select('tb_mas_scholarships.*')
+        ->join('tb_mas_scholarships', 'tb_mas_student_discount.discount_id = tb_mas_scholarships.intID')
+        ->get_where('tb_mas_student_discount', array(
+            'tb_mas_student_discount.student_id' => $student,
+            'tb_mas_student_discount.syid' => $sem,
+            'tb_mas_scholarships.name NOT LIKE' => '%Referral%'
+        ))->result_array();
+
         $num_ref_disc = count($referral_discounts);
 
         if ($num_ref_disc < 10) {
@@ -303,7 +311,7 @@ class Scholarship extends CI_Controller {
         $ref_discounts = array_unique($ref_discounts, SORT_REGULAR);
 
         $ret['discounts'] = array_merge($discounts,$ref_discounts);
-        $ret['student_discounts'] = array_merge($ret['student_scholarships'],$referral_discounts);
+        $ret['student_discounts'] = array_merge($student_discounts,$referral_discounts);
         $ret['has_inhouse_discount'] = $has_inhouse;
         $ret['has_external_discount'] = $has_external;
 
