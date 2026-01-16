@@ -300,7 +300,7 @@ class Scholarship extends CI_Controller {
         }
         
         $ret['discounts'] = array_merge($discounts,$ref_discounts);
-        $ret['student_discounts'] = array_merge($student_discounts,$referral_discounts);
+        $ret['student_discounts'] = array_merge($ret['student_scholarships'],$referral_discounts);
         $ret['has_inhouse_discount'] = $has_inhouse;
         $ret['has_external_discount'] = $has_external;
 
