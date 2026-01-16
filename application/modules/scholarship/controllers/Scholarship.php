@@ -283,17 +283,15 @@ class Scholarship extends CI_Controller {
             ))->result_array();
         }
 
-        $referral_discounts = $this->db->get_where('tb_mas_scholarships', array(
-            'status' => 'active',
-            'deduction_type' => 'discount',
-            'name LIKE' => '%Referral%'
+        $referral_discounts = $this->db->select('tb_mas_scholarships.*')
+        ->join('tb_mas_scholarships', 'tb_mas_student_discount.discount_id = tb_mas_scholarships.intID')
+        ->get_where('tb_mas_student_discount', array(
+            'tb_mas_student_discount.student_id' => $student,
+            'tb_mas_student_discount.syid' => $sem,
+            'tb_mas_scholarships.name LIKE' => '%Referral%'
         ))->result_array();
 
-        $num_ref_disc = count($this->db->get_where('tb_mas_student_discount', array(
-            'student_id' => $student,
-            'syid' => $sem,
-            'name LIKE' => '%Referral%'
-        ))->result_array());
+        $num_ref_disc = count($referral_discounts);
 
         if ($num_ref_disc < 10) {
             $ref_discounts = $referral_discounts;
