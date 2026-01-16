@@ -260,7 +260,7 @@ class Scholarship extends CI_Controller {
                 'name LIKE' => '%Referral%'
             ))->result_array();
         } elseif ($has_inhouse && $has_external) {
-            $ret['scholarships'] = [];
+            $discounts = [];
         } elseif ($has_inhouse) {
             $discounts = $this->db->get_where('tb_mas_scholarships', array(
                 'status' => 'active',
@@ -299,6 +299,10 @@ class Scholarship extends CI_Controller {
             $ref_discounts = [];
         }
         
+        // Remove duplicate discounts
+        $discounts = array_unique($discounts, SORT_REGULAR);
+        $ref_discounts = array_unique($ref_discounts, SORT_REGULAR);
+
         $ret['discounts'] = array_merge($discounts,$ref_discounts);
         $ret['student_discounts'] = array_merge($ret['student_scholarships'],$referral_discounts);
         $ret['has_inhouse_discount'] = $has_inhouse;
