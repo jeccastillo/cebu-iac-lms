@@ -831,7 +831,7 @@ new Vue({
         },
         documentDetails: {
             document: '',
-            dateSubmitted: '',
+            dateSubmitted: new Date().toISOString().split('T')[0],
             studentID: '<?php echo $id; ?>',
             user: <?php echo json_encode($user['strFirstname'] . ' ' .$user['strLastname']) ; ?>,
             remarks: ''

@@ -33,22 +33,9 @@
                     </div>
                     <div class="col-md-5">
                         <div class="form-group">
-                            <label>Date:</label>
-                            <div class="input-group date">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                </div>
-                                <input v-model="documentDetails.dateSubmitted" type="date"
-                                    class="form-control pull-right" id="datepicker" required>
-                            </div>
+                            <label>Remarks</label>
+                            <input v-model="documentDetails.remarks" type="text" class=form-control>
                         </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-10">
-                        <label>Remarks</label>
-                        <input v-model="documentDetails.remarks" type="text" class=form-control
-                            required>
                     </div>
                 </div>
                 <div class="row">
