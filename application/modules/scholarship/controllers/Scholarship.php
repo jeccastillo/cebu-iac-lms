@@ -252,6 +252,9 @@ class Scholarship extends CI_Controller {
             }
         }
 
+        $discounts = [];
+        $scholarships = [];
+
         if($has_referral) {
             $discounts = $this->db->get_where('tb_mas_scholarships', array(
                 'status' => 'active',
@@ -267,6 +270,13 @@ class Scholarship extends CI_Controller {
                 'deduction_from !=' => 'in-house',
                 'name NOT LIKE' => '%Referral%'
             ))->result_array();
+
+            $scholarships = $this->db->get_where('tb_mas_scholarships', array(
+                'status' => 'active',
+                'deduction_type' => 'scholarship',
+                'deduction_from !=' => 'in-house',                
+            ))->result_array();
+
         } elseif ($has_external) {
             $discounts = $this->db->get_where('tb_mas_scholarships', array(
                 'status' => 'active',
@@ -274,11 +284,23 @@ class Scholarship extends CI_Controller {
                 'deduction_from !=' => 'external',
                 'name NOT LIKE' => '%Referral%'
             ))->result_array();
+
+            $scholarships = $this->db->get_where('tb_mas_scholarships', array(
+                'status' => 'active',
+                'deduction_type' => 'scholarship',
+                'deduction_from !=' => 'external',                
+            ))->result_array();
+
         } else {
             $discounts = $this->db->get_where('tb_mas_scholarships', array(
                 'status' => 'active',
                 'deduction_type' => 'discount',
                 'name NOT LIKE' => '%Referral%'
+            ))->result_array();
+
+            $scholarships = $this->db->get_where('tb_mas_scholarships', array(
+                'status' => 'active',
+                'deduction_type' => 'scholarship',                
             ))->result_array();
         }
 
@@ -310,6 +332,7 @@ class Scholarship extends CI_Controller {
         $discounts = array_unique($discounts, SORT_REGULAR);
         $ref_discounts = array_unique($ref_discounts, SORT_REGULAR);
 
+        $ret['scholarships'] = $scholarships;
         $ret['discounts'] = array_merge($discounts,$ref_discounts);
         $ret['student_discounts'] = array_merge($student_discounts,$referral_discounts);
         $ret['has_inhouse_discount'] = $has_inhouse;
