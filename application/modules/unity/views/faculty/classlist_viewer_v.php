@@ -73,7 +73,11 @@
                                         {{ (student.floatMidtermGrade && student.floatMidtermGrade != 50)?student.floatMidtermGrade:"NGS" }}
                                     </span>
                                     <span v-else-if="student.floatMidtermGrade == 'OW'"> OW </span>
-                                    <select v-else
+                                    <v-select v-else :value="getInitialGrade(student, 'midterm')"
+                                        :clearable="false" :options="getAvailableOptions"
+                                        :reduce="option => option.code" label="label"
+                                        @input="(val) => updateGrade(val, 'midterm', student.intCSID)" />
+                                    <!-- <select v-else
                                         @change="updateGrade($event,'midterm',student.intCSID)"
                                         class="form-control">
                                         <option
@@ -86,7 +90,7 @@
                                         </option>
                                         <option v-if="is_super_admin || is_registrar" value="OW">OW
                                         </option>
-                                    </select>
+                                    </select> -->
                                 </td>
                                 <td v-else></td>
                                 <td v-if="student.registered">
@@ -95,7 +99,11 @@
                                         {{ (student.floatFinalGrade)?student.floatFinalGrade:"NGS" }}
                                     </span>
                                     <span v-else-if="student.floatFinalGrade == 'OW'"> OW </span>
-                                    <select v-else
+                                    <v-select v-else :value="getInitialGrade(student, 'final')"
+                                        :clearable="false" :options="getAvailableOptions"
+                                        :reduce="option => option.code" label="label"
+                                        @input="(val) => updateGrade(val, 'final', student.intCSID)" />
+                                    <!-- <select v-else
                                         @change="updateGrade($event,'final',student.intCSID)"
                                         class="form-control">
                                         <option :selected="(!student.floatFinalGrade)? true : false"
@@ -107,7 +115,7 @@
                                         </option>
                                         <option v-if="is_super_admin || is_registrar" value="OW">OW
                                         </option>
-                                    </select>
+                                    </select> -->
                                 </td>
                                 <td v-if="subject.intMajor == 1">
                                     {{ (student.floatFinalsGrade)?student.floatFinalsGrade:"NGS" }}
@@ -316,8 +324,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
     integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://unpkg.com/vue-select@3.0.0"></script>
+<link rel="stylesheet" href="https://unpkg.com/vue-select@3.0.0/dist/vue-select.css">
 <script src="<?php echo base_url(); ?>assets/themes/default/js/axios.min.js"></script>
 <script>
+Vue.component('v-select', VueSelect.VueSelect)
 new Vue({
     el: '#vue-container',
     data: {
@@ -359,7 +370,6 @@ new Vue({
         axios.get(base_url + 'unity/classlist_viewer_data/' + this.id + '/' + this
             .show_all + '/' + this.sid).then((data) => {
             if (data.data.success) {
-                console.log(data.data);
                 this.active_sem = data.data.active_sem;
                 this.legend = data.data.legend;
                 this.cl = data.data.cl;
@@ -401,7 +411,8 @@ new Vue({
             var type = 3;
             var formdata = new FormData();
             formdata.append("intCSID", csid);
-            var values = event.target.value.split("-");
+            var values = event.split("-");
+            // var values = event.target.value.split("-");
             formdata.append("strRemarks", values[1]);
             if (period == 'midterm') {
                 formdata.append("floatMidtermGrade", values[0]);
@@ -736,6 +747,40 @@ new Vue({
         printGradingSheet: function() {
             this.$refs.print_grading_sheet.submit();
         },
-    }
+        getInitialGrade(student, term) {
+            if (term == 'midterm') {
+                if (!student.floatMidtermGrade || student.floatMidtermGrade == 50) {
+                    return "NGS";
+                }
+                if (student.floatMidtermGrade) return student.floatMidtermGrade;
+            }
+            if (term == 'final') {
+                if (!student.floatFinalGrade) {
+                    return "NGS";
+                }
+                if (student.floatFinalGrade) return student.floatFinalGrade;
+            }
+        },
+    },
+    computed: {
+        getAvailableOptions() {
+            let options = [{
+                label: 'NGS',
+                code: 'NGS'
+            }];
+            const items = this.grading_items_midterm.map(item => ({
+                label: item.value,
+                code: item.value + '-' + item.remarks
+            }));
+            options = options.concat(items);
+            if (this.is_super_admin || this.is_registrar) {
+                options.push({
+                    label: 'OW',
+                    code: 'OW'
+                });
+            }
+            return options;
+        }
+    },
 })
 </script>
