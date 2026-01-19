@@ -41,7 +41,7 @@ class VehicleController extends Controller
 
         $data['intCreatedBy'] = $request->header('X-Faculty-ID') ?? $request->header('X-User-ID');
         $data['dteCreated'] = now();
-        
+
         $vehicle = Vehicle::create($data);
         return response()->json($vehicle->load('creator'), 201);
     }
@@ -49,7 +49,7 @@ class VehicleController extends Controller
     public function update(Request $request, $id)
     {
         $vehicle = Vehicle::findOrFail($id);
-        
+
         $data = $request->validate([
             'strPlateNumber' => 'sometimes|string|max:20|unique:tb_mas_vehicles,strPlateNumber,' . $id . ',intVehicleID',
             'strVehicleName' => 'sometimes|string|max:100',
@@ -69,7 +69,7 @@ class VehicleController extends Controller
 
         $data['dteUpdated'] = now();
         $vehicle->update($data);
-        
+
         return response()->json($vehicle->load('creator'));
     }
 

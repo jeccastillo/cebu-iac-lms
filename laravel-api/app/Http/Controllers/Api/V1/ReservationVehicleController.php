@@ -71,7 +71,7 @@ class ReservationVehicleController extends Controller
     public function update(Request $request, $id)
     {
         $reservation = ReservationVehicle::findOrFail($id);
-        
+
         $data = $request->validate([
             'intVehicleID' => 'sometimes|integer|exists:tb_mas_vehicles,intVehicleID',
             'intFacultyID' => 'sometimes|integer|exists:tb_mas_faculty,intID',
@@ -97,7 +97,7 @@ class ReservationVehicleController extends Controller
 
         $data['dteUpdated'] = now();
         $reservation->update($data);
-        
+
         return response()->json($reservation->load(['vehicle', 'faculty', 'driver']));
     }
 
@@ -113,7 +113,7 @@ class ReservationVehicleController extends Controller
         $id = $request->input('intReservationVehicleID');
         $reservation = ReservationVehicle::findOrFail($id);
         $facultyId = $request->header('X-Faculty-ID') ?? $request->header('X-User-ID');
-        
+
         if ($reservation->enumStatus !== 'pending') {
             return response()->json(['message' => 'Reservation already processed'], 422);
         }
@@ -122,11 +122,11 @@ class ReservationVehicleController extends Controller
         $reservation->intApprovedBy = $facultyId;
         $reservation->dteApproved = now();
         $reservation->dteUpdated = now();
-        
+
         if ($request->has('strRemarks')) {
             $reservation->strRemarks = $request->input('strRemarks');
         }
-        
+
         $reservation->save();
         return response()->json(['message' => 'success', 'reservation' => $reservation->load(['vehicle', 'faculty', 'driver'])]);
     }
@@ -136,7 +136,7 @@ class ReservationVehicleController extends Controller
         $id = $request->input('intReservationVehicleID');
         $reservation = ReservationVehicle::findOrFail($id);
         $facultyId = $request->header('X-Faculty-ID') ?? $request->header('X-User-ID');
-        
+
         if ($reservation->enumStatus !== 'pending') {
             return response()->json(['message' => 'Reservation already processed'], 422);
         }
@@ -145,11 +145,11 @@ class ReservationVehicleController extends Controller
         $reservation->intApprovedBy = $facultyId;
         $reservation->dteApproved = now();
         $reservation->dteUpdated = now();
-        
+
         if ($request->has('strRemarks')) {
             $reservation->strRemarks = $request->input('strRemarks');
         }
-        
+
         $reservation->save();
         return response()->json(['message' => 'success', 'reservation' => $reservation->load(['vehicle', 'faculty', 'driver'])]);
     }
@@ -157,7 +157,7 @@ class ReservationVehicleController extends Controller
     public function startUse(Request $request, $id)
     {
         $reservation = ReservationVehicle::findOrFail($id);
-        
+
         if ($reservation->enumStatus !== 'approved') {
             return response()->json(['message' => 'Reservation must be approved first'], 422);
         }
@@ -175,7 +175,7 @@ class ReservationVehicleController extends Controller
     public function complete(Request $request, $id)
     {
         $reservation = ReservationVehicle::findOrFail($id);
-        
+
         if ($reservation->enumStatus !== 'in_use') {
             return response()->json(['message' => 'Reservation must be in use'], 422);
         }
@@ -210,14 +210,14 @@ class ReservationVehicleController extends Controller
                     $q2->where('dteStartTime', '<=', $data['dteStartTime'])
                         ->where('dteEndTime', '>', $data['dteStartTime']);
                 })
-                ->orWhere(function ($q2) use ($data) {
-                    $q2->where('dteStartTime', '<', $data['dteEndTime'])
-                        ->where('dteEndTime', '>=', $data['dteEndTime']);
-                })
-                ->orWhere(function ($q2) use ($data) {
-                    $q2->where('dteStartTime', '>=', $data['dteStartTime'])
-                        ->where('dteEndTime', '<=', $data['dteEndTime']);
-                });
+                    ->orWhere(function ($q2) use ($data) {
+                        $q2->where('dteStartTime', '<', $data['dteEndTime'])
+                            ->where('dteEndTime', '>=', $data['dteEndTime']);
+                    })
+                    ->orWhere(function ($q2) use ($data) {
+                        $q2->where('dteStartTime', '>=', $data['dteStartTime'])
+                            ->where('dteEndTime', '<=', $data['dteEndTime']);
+                    });
             })
             ->whereIn('enumStatus', ['approved', 'pending', 'in_use']);
 

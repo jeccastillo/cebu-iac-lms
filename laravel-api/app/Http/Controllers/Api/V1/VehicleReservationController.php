@@ -215,14 +215,14 @@ class VehicleReservationController extends Controller
                         $q2->where('dteStartTime', '<=', $start_time)
                             ->where('dteEndTime', '>', $start_time);
                     })
-                    ->orWhere(function ($q2) use ($end_time) {
-                        $q2->where('dteStartTime', '<', $end_time)
-                            ->where('dteEndTime', '>=', $end_time);
-                    })
-                    ->orWhere(function ($q2) use ($start_time, $end_time) {
-                        $q2->where('dteStartTime', '>=', $start_time)
-                            ->where('dteEndTime', '<=', $end_time);
-                    });
+                        ->orWhere(function ($q2) use ($end_time) {
+                            $q2->where('dteStartTime', '<', $end_time)
+                                ->where('dteEndTime', '>=', $end_time);
+                        })
+                        ->orWhere(function ($q2) use ($start_time, $end_time) {
+                            $q2->where('dteStartTime', '>=', $start_time)
+                                ->where('dteEndTime', '<=', $end_time);
+                        });
                 })
                 ->whereIn('enumStatus', ['approved', 'pending', 'ongoing'])
                 ->count();
@@ -244,14 +244,14 @@ class VehicleReservationController extends Controller
                     $q2->where('dteStartTime', '<=', $data['dteStartTime'])
                         ->where('dteEndTime', '>', $data['dteStartTime']);
                 })
-                ->orWhere(function ($q2) use ($data) {
-                    $q2->where('dteStartTime', '<', $data['dteEndTime'])
-                        ->where('dteEndTime', '>=', $data['dteEndTime']);
-                })
-                ->orWhere(function ($q2) use ($data) {
-                    $q2->where('dteStartTime', '>=', $data['dteStartTime'])
-                        ->where('dteEndTime', '<=', $data['dteEndTime']);
-                });
+                    ->orWhere(function ($q2) use ($data) {
+                        $q2->where('dteStartTime', '<', $data['dteEndTime'])
+                            ->where('dteEndTime', '>=', $data['dteEndTime']);
+                    })
+                    ->orWhere(function ($q2) use ($data) {
+                        $q2->where('dteStartTime', '>=', $data['dteStartTime'])
+                            ->where('dteEndTime', '<=', $data['dteEndTime']);
+                    });
             })
             ->whereIn('enumStatus', ['approved', 'pending', 'ongoing']);
 

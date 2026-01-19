@@ -696,9 +696,10 @@ Route::prefix('v1')->group(function () {
     Route::apiResource('room-configurations', RoomConfigurationController::class);
     Route::apiResource('calendar-settings', CalendarSettingController::class);
 
-    Route::apiResource('vehicles', VehicleController::class);
+    // Define specific routes BEFORE resource routes to avoid parameter conflicts
     Route::get('vehicles/available', [VehicleController::class, 'available']);
-    
+    Route::apiResource('vehicles', VehicleController::class);
+
     Route::get('vehicle-reservations/dashboard', [VehicleReservationController::class, 'dashboard']);
     Route::get('vehicle-reservations/add-form', [VehicleReservationController::class, 'addForm']);
     Route::get('vehicle-reservations/{id}/edit-form', [VehicleReservationController::class, 'editForm']);
