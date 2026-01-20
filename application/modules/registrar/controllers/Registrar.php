@@ -1493,11 +1493,15 @@ class Registrar extends CI_Controller {
             ->result_array();
 
             if(count($subjects) >  0){
+                $subjectCount = 0;
                 foreach($subjects as $subject){
-                    $average = getMidtermFinalAve($subject['floatMidtermGrade'], $subject['floatFinalGrade']);
-                    $totalGrades += $average;
+                    if(is_numeric($subject['floatMidtermGrade']) && is_numeric($subject['floatFinalGrade'])){
+                        $average = getMidtermFinalAve($subject['floatMidtermGrade'], $subject['floatFinalGrade']);
+                        $totalGrades += $average;
+                        $subjectCount++;
+                    }
                 }
-                $gwa = $totalGrades / count($subjects);
+                $gwa = $totalGrades / $subjectCount;
     
                 $student_data = array();
                 $student_data['student_number'] = $student['strStudentNumber'];
@@ -3304,37 +3308,6 @@ class Registrar extends CI_Controller {
 
         $this->db->where('document',$post['id'])
                  ->delete('tb_mas_student_documents');
-
-        $data['message'] = "Deleted";
-        $data['success'] = true;
-
-        echo json_encode($data);
-    }
-
-    public function add_student_document($id = 0)
-    {
-        $post = $this->input->post();
-
-        $document['document'] = $post['document'];
-        $document['studentID'] = $post['intStudentID'];
-        $document['dateSubmitted'] = $post['dateSubmitted'];
-        $document['user'] = $post['user'];
-        $document['dateTime'] = $post['dateTime'];
-        $document['remarks'] = $post['remarks'];
-        
-        $this->data_poster->post_data('tb_mas_student_documents',$document);
-
-        $data['message'] = "Success";
-        $data['success'] = true;
-
-        echo json_encode($data);
-    }
-
-    public function delete_student_document()
-    {
-        $post = $this->input->post();
-
-        $this->db->where('intID',$post['id'])->delete('tb_mas_student_documents');
 
         $data['message'] = "Deleted";
         $data['success'] = true;
