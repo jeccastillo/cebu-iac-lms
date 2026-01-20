@@ -3290,6 +3290,10 @@ class Data_fetcher extends CI_Model {
 
                 $ctr++;
             }
+                        print($scholar->deduction_from . ' ');
+                        print($tuition_scholarship_current . ' ');
+                        print($tuition_discount . ' ');             
+                        die();
         }
 
         if(!empty($scholarships_external)){
@@ -3730,8 +3734,6 @@ class Data_fetcher extends CI_Model {
         if($full_scholarship)
             $late_enrollment_fee = 0;
         
-        print($tuition_discount);
-        die();
         $data['lab_discount'] = $lab_scholarship;
         $data['lab_discount_dc'] = $lab_discount;
         $data['total_discount'] = $scholarship_grand_total;
