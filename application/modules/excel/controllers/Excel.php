@@ -7738,11 +7738,15 @@ class Excel extends CI_Controller {
             ->result_array();
 
             if(count($subjects) >  0){
+                $subjectCount = 0;
                 foreach($subjects as $subject){
-                    $average = getMidtermFinalAve($subject['floatMidtermGrade'], $subject['floatFinalGrade']);
-                    $totalGrades += $average;
+                    if(is_numeric($subject['floatMidtermGrade']) && is_numeric($subject['floatFinalGrade'])){
+                        $average = getMidtermFinalAve($subject['floatMidtermGrade'], $subject['floatFinalGrade']);
+                        $totalGrades += $average;
+                        $subjectCount++;
+                    }
                 }
-                $gwa = $totalGrades / count($subjects);
+                $gwa = $totalGrades / $subjectCount;
     
                 $student_data = array();
                 $student_data['student_number'] = $student['strStudentNumber'];
@@ -8395,15 +8399,48 @@ class Excel extends CI_Controller {
                     $studentNumber = substr_replace($row['B'], '-', strlen($row['B']) - 5, 0);
                     $studentNumber = substr_replace($studentNumber, '-', strlen($studentNumber) - 3, 0);
                     
-                    $student =  $this->db
-                    ->select("tb_mas_users.*,tb_mas_registration.current_curriculum")                                        
+                    $student = $this->db
+                    ->select("tb_mas_users.*")                                        
                     ->from("tb_mas_users")            
-                    ->where(array("tb_mas_users.strStudentNumber"=>$studentNumber))             
-                    ->join('tb_mas_registration', 'tb_mas_registration.intStudentID = tb_mas_users.intID')
+                    ->where(array("strStudentNumber"=>$studentNumber))
                     ->get()
                     ->first_row('array');
 
-                    // if($student){
+                    if($student){
+                        $checkRegistration = $this->db                                    
+                        ->from("tb_mas_registration")
+                        ->where(array("intStudentID"=>$student['intID']))             
+                        ->get()
+                        ->first_row('array');
+
+                        if(!$checkRegistration){
+                            $newRegistration = array(
+                                'intStudentID' => $student['intID'],
+                                'enlisted_by' => $this->data["user"]["intID"],
+                                'dteRegistered' => date("Y-m-d H:i:s"),
+                                'date_enlisted' => date("Y-m-d H:i:s"),
+                                'intAYID' => date("Y-m-d H:i:s"),
+                                'enumRegistrationStatus' => 'regular',
+                                'enumStudentType' => 'new',
+                                'intYearLevel' => '1',
+                                'intROG' => '1',
+                                'paymentType' => 'full',
+                                'paymentStatus' => 'fully paid',
+                                'downpayment' => 1,
+                                'fullpayment' => 1,
+                                'type_of_class' => 'regular',
+                                'current_program' => $student['intProgramID'],
+                                'current_curriculum' => 0,
+                                'tuition_year' => 0,
+                                'late_enrollment' => 0,
+                                'loa_remarks' => '-',
+                                'allow_enroll' => 0,
+                                'internship' => 0,
+                            );
+
+                            $this->data_poster->post_data('tb_mas_registration', $newRegistration);
+                        }
+
                         $facultyName = explode(',', ltrim($row['K']));
                         $facultyLastName = $facultyName[0];
                         if(isset($facultyName[1])){
@@ -8495,10 +8532,10 @@ class Excel extends CI_Controller {
                                 }
                             }
                         }
-                    // }else{
-                    //     print('Student Registration/Curriculum not found : ' . $row['C']);
-                    //     return false;
-                    // }
+                    }else{
+                        print('Student not found : ' . $row['C']);
+                        return false;
+                    }
                 }
             }
 
