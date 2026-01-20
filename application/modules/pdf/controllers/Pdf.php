@@ -3646,11 +3646,15 @@ class Pdf extends CI_Controller {
             ->result_array();
 
             if(count($subjects) >  0){
+                $subjectCount = 0;
                 foreach($subjects as $subject){
-                    $average = getMidtermFinalAve($subject['floatMidtermGrade'], $subject['floatFinalGrade']);
-                    $totalGrades += $average;
+                    if(is_numeric($subject['floatMidtermGrade']) && is_numeric($subject['floatFinalGrade'])){
+                        $average = getMidtermFinalAve($subject['floatMidtermGrade'], $subject['floatFinalGrade']);
+                        $totalGrades += $average;
+                        $subjectCount++;
+                    }
                 }
-                $gwa = $totalGrades / count($subjects);
+                $gwa = $totalGrades / $subjectCount;
     
                 $student_data = array();
                 $student_data['student_number'] = $student['strStudentNumber'];
