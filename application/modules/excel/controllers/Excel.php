@@ -5207,7 +5207,7 @@ class Excel extends CI_Controller {
                     ->group_by('payment_details.id')
                     ->get()
                     ->result_array();
-                    
+
             $payment_month = $payment_year = '';
             $current_index = 0;
             if($payment_details){
@@ -5438,6 +5438,16 @@ class Excel extends CI_Controller {
                     }else{
                         $total_discount = $tuition_discount_rate + $tuition['scholarship_tuition_fee_fixed'] + $tuition['scholarship_lab_fee_rate'] + $tuition['scholarship_lab_fee_fixed'] + $tuition['scholarship_misc_fee_rate'] + 
                                             $tuition['scholarship_misc_fee_fixed'] + $tuition['nsf'] + $tuition['scholarship_misc_fee_fixed'] + $assessment_discount_rate + $assessment_discount_fixed + $assessment_discount_rate_referrer + $assessment_discount_rate_scholar;
+                    }
+
+                    if($user['intID'] == 901){
+                        print(($date_enrolled <= $sy->ar_report_date_generation || $assessment_discount_rate_scholar > 0) && $assessment_discount_rate_referrer > 0);
+                        print(' @ ' . $date_enrolled);
+                        print(' @ ' . $sy->ar_report_date_generation);
+                        print(' @ ' . $assessment_discount_rate_scholar);
+                        print(' @ ' . $assessment_discount_rate_referrer);
+                        die();
+                        
                     }
 
                     // Add some data
