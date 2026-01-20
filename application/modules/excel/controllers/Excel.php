@@ -5207,11 +5207,7 @@ class Excel extends CI_Controller {
                     ->group_by('payment_details.id')
                     ->get()
                     ->result_array();
-
-            if($user['intID'] == 901){
-                print_r($payment_details);
-                die();
-            }
+                    
             $payment_month = $payment_year = '';
             $current_index = 0;
             if($payment_details){
