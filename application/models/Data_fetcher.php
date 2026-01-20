@@ -3148,7 +3148,7 @@ class Data_fetcher extends CI_Model {
                          $tuition_discount = $tuition * ($scholar->tuition_fee_rate/100);
                         //discount after discount if external
                         if($scholar->deduction_from == 'external'){
-                            $tuition_discount = ($tuition - $tuition_discount_full) * ($scholar->tuition_fee_rate/100);
+                            $tuition_discount = ($tuition - $total_scholarship_temp) * ($scholar->tuition_fee_rate/100);
                         }
                         $tuition_fee_rate += ($tuition - $in_house_grand_total) * ($scholar->tuition_fee_rate/100);
                         $total_assessment_rate_discount += ($tuition - $in_house_grand_total) * ($scholar->tuition_fee_rate/100);
