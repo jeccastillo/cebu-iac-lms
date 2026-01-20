@@ -5474,7 +5474,7 @@ class Excel extends CI_Controller {
                         ->setCellValue('AA'.$i, '=M' . $i . '+Z' . $i . ')')
                         ->setCellValue('AB'.$i, ($deduction_type == 'scholarship' || ($deduction_type == 'discount' && $date_enrolled <= $sy->ar_report_date_generation)) && $tuition['scholar_type'] ? $tuition['scholar_type'] : '')
                         // ->setCellValue('AC'.$i, $deduction_type == 'scholarship' && $tuition_discount > 0 ? $tuition['scholarship_total_assessment_rate_scholar'] : ($tuition['scholarship_total_assessment_rate_scholar'] > 0 ? $tuition['scholarship_total_assessment_rate_scholar'] : '') )
-                        ->setCellValue('AC'.$i, $deduction_type == 'scholarship' && $tuition_discount > 0 ? $assessment_discount_rate_scholar : ($assessment_discount_rate_scholar > 0 ? $assessment_discount_rate_scholar : '') )
+                        ->setCellValue('AC'.$i, $deduction_type == 'scholarship' && $tuition_discount > 0 ? $tuition_discount_rate : ($assessment_discount_rate_scholar > 0 ? $assessment_discount_rate_scholar : '') )
                         ->setCellValue('AD'.$i, (max(0, ($assessment_discount_fixed - (isset($tuition['ar_external_scholarship_full']) ? $tuition['ar_external_scholarship_full'] : 0))) > 0) ? max(0, ($assessment_discount_fixed - (isset($tuition['ar_external_scholarship_full']) ? $tuition['ar_external_scholarship_full'] : 0))) : '')
                         ->setCellValue('AE'.$i, $deduction_type == 'scholarship' && $tuition['scholarship_lab_fee_rate'] > 0 ? $tuition['scholarship_lab_fee_rate'] : '')
                         ->setCellValue('AF'.$i, $deduction_type == 'scholarship' && $tuition['scholarship_lab_fee_fixed'] > 0 ? $tuition['scholarship_lab_fee_fixed'] : '')
