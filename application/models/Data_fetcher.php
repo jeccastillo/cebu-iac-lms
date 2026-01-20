@@ -3290,10 +3290,6 @@ class Data_fetcher extends CI_Model {
 
                 $ctr++;
             }
-                        print($scholar->deduction_from . ' ');
-                        print($tuition_scholarship_current . ' ');
-                        print($tuition_discount . ' ');             
-                        die();
         }
 
         if(!empty($scholarships_external)){
