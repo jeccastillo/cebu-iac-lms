@@ -488,11 +488,60 @@ class Portal extends CI_Controller {
                 echo "No Enrollement Data";
             }
         }
-           
         else
             redirect(base_url()."users/student_login");
-        
-       
+	}
+
+
+    public function student_grades($sem = null)
+	{ 
+        $this->data['sy'] = $this->data_fetcher->getSyStudentEnrolled($this->session->userdata('intID'), 1);
+        if($this->data['sy']){
+            if($sem == null)
+                $this->data['selected_ay'] = $this->data['sy'][0]['intID'];
+            else
+                $this->data['selected_ay'] = $sem;
+
+            $this->data['sem_selected'] = $this->db->get_where('tb_mas_sy',array('intID'=>$this->data['selected_ay']))->first_row();
+    
+            $this->data['registration'] = $this->data_fetcher->getRegistrationInfo($this->session->userdata('intID'),$this->data['selected_ay']);
+            $this->data['student'] = $this->data_fetcher->getStudent($this->session->userdata('intID'));
+            $this->data['records'] = $this->data_fetcher->getClassListStudentsSt($this->session->userdata('intID'),$this->data['selected_ay']);
+            $this->data['academic_standing'] = $this->data_fetcher->getAcademicStanding($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
+            $this->data['reg_status'] = $this->data_fetcher->getRegistrationStatus($this->data['student']['intID'],$this->data['selected_ay']);
+            //$this->data['home'] = true;
+            //$this->data['body_class'] = "homepage";
+            $combined_subjects = $this->db->select('*')
+                    ->where(array(
+                        'intCurriculumID' => $this->data['student']['intCurriculumID'],
+                        'type' => 'Combine'
+                    ))
+                    ->get('tb_mas_curriculum_second')
+                    ->result_array();
+
+                $grouped_combined_subjects = [];
+                foreach ($combined_subjects as $row) {
+                    // Use both 'combineCode' and 'combineDesc' to create a unique key for each group
+                    $group_key = $row['combineCode'];
+                    $grouped_combined_subjects[$group_key][] = $row;
+                }
+
+            $this->data['combined_subjects'] = $grouped_combined_subjects;
+            $this->data['subjects_not_taken'] = $this->data_fetcher->getRequiredSubjects($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
+            $grades = $this->data_fetcher->assessCurriculum($this->data['student']['intID'],$this->data['student']['intCurriculumID']);
+            array_unshift($grades,array('strCode'=>'none','floatFinalGrade'=>'n/a','strRemarks'=>'n/a'));
+            $this->data['grades'] = $grades;
+            $this->data['curriculum_subjects'] = $this->data_fetcher->getSubjectsInCurriculumMain($this->data['student']['intCurriculumID']);
+            $this->data['equivalent_subjects'] = $this->data_fetcher->getSubjectsInCurriculumEqu($this->data['student']['intCurriculumID']);
+            $this->data['deficiencies'] = $this->db
+            ->get_where('tb_mas_student_deficiencies',array('student_id'=>$this->session->userdata('intID'),'status'=>'active','temporary_resolve_date <'=> date("Y-m-d")))->result_array();
+            $this->data['id'] = $this->session->userdata('intID');
+            
+            echo json_encode($this->data);
+        }
+        else{
+            echo "No Enrollement Data";
+        }
 	}
 
     public function deficiencies($id = 0,$sem = 0)
