@@ -5440,16 +5440,6 @@ class Excel extends CI_Controller {
                                             $tuition['scholarship_misc_fee_fixed'] + $tuition['nsf'] + $tuition['scholarship_misc_fee_fixed'] + $assessment_discount_rate + $assessment_discount_fixed + $assessment_discount_rate_referrer + $assessment_discount_rate_scholar;
                     }
 
-                    if($user['intID'] == 901){
-                        print(($date_enrolled <= $sy->ar_report_date_generation || $assessment_discount_rate_scholar > 0) && $assessment_discount_rate_referrer > 0);
-                        print(' @ ' . $date_enrolled);
-                        print(' @ ' . $sy->ar_report_date_generation);
-                        print(' @ ' . $assessment_discount_rate_scholar);
-                        print(' @ ' . $assessment_discount_rate_referrer);
-                        die();
-                        
-                    }
-
                     // Add some data
                     $objPHPExcel->setActiveSheetIndex(0)
                         ->setCellValue('A'.$i, $count)
