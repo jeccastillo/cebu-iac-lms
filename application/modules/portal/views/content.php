@@ -1,5 +1,5 @@
 <?php 
-    // error_reporting(0);
+    error_reporting(0);
 ?>
 
 <aside class="right-side" id="registration-container">
@@ -117,26 +117,60 @@
 
         <?php else:  ?>
         <div class="table-responsive">
-                                <div class="box-body">
-                                    <table class="table table-condensed table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>Section Code</th>
-                                                <th>Course Code</th>
-                                                <th>Units</th>
-                                                <th>Midterm</th>
-                                                <th>Final</th>
-                                                <th v-if="student.type == 'shs'">Sem Final Grade
-                                                </th>
-                                                <th>Remarks</th>
-                                                <th>Faculty</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            
-                                        </tbody>
-                                    </table>
-                                </div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th width="13%">Section</th>
+                        <th width="10%"> Course Code</th>
+                        <th >Course Title</th>
+                        <th style="text-align: center;">Units</th>                        
+                        <th>Midterm</th>                        
+                        <th>Final Grade</th>                                                
+						<th>Remarks</th>
+                        <th>Faculty</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php 
+                    $totalUnits = 0;
+                    $countBridg = 0;
+                    foreach($records as $record): ?>
+                    <tr>                        
+                        <td><?php echo $record['strClassName'].$record['year'].$record['strSection']." ".$record['sub_section']; ?></td>
+                        <td><?php echo $record['strCode']; ?></td>
+						<td><?php echo $record['strDescription']; ?></td>
+                        <td style="text-align: center;"><?php echo $record['strUnits']?>                                                
+                        <?php if($record['intFinalized'] >= 1 && $sem_selected->viewing_midterm_start <= date("Y-m-d")): ?>                                
+                            <td><strong><?php echo $record['v2']; ?></strong></td>
+                        <?php else: ?>
+                            <td>Not Yet Available</td>
+                        <?php endif; ?>    
+                        <?php if($record['intFinalized'] >= 2 && $sem_selected->viewing_final_start <= date("Y-m-d") && count($deficiencies) == 0): ?>                                
+                            <td><strong><?php echo $record['v3']; ?></strong></td>
+                        <?php else: ?>
+                            <td>Not Yet Available</td>
+                        <?php endif; ?>                                                        
+                        <td>
+                            <?php if($record['intFinalized'] >= 2 && $sem_selected->viewing_final_start <= date("Y-m-d") && count($deficiencies) == 0): ?> 
+                                <?php echo $record['strRemarks']; ?>
+                            <?php else: ?>
+                                -
+                            <?php endif; ?>                            
+                        </td>
+                        <td><?php if($record['strFirstname']!="unassigned"){
+                                    $firstNameInitial = substr($record['strFirstname'], 0,1);
+                                    echo $firstNameInitial.". ".$record['strLastname'];  
+                                  }
+                                  else echo "unassigned";  ?>
+                        </td>
+                        
+                    </tr>
+                    <?php endforeach; ?>
+                       
+                        
+        
+                </tbody>
+            </table>
         </div>
     </div>
     <?php endif; ?>
@@ -181,169 +215,3 @@
     </div>
 
 </div>
-
-
-<script src="<?php echo base_url(); ?>assets/themes/default/js/jquery.min.js"></script>
-<script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js">
-</script>
-<script src="<?php echo base_url(); ?>assets/themes/default/js/vue.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
-    integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="<?php echo base_url(); ?>assets/themes/default/js/axios.min.js"></script>
-<script>
-var special = ['0th', '1st', '2nd', '3rd', '4th', '5th'];
-
-function stringifyNumber(n) {
-    return special[n];
-}
-
-function inArray(needle, haystack) {
-    var length = haystack.length;
-    for (var i = 0; i < length; i++) {
-        if (haystack[i] == needle) return true;
-    }
-    return false;
-}
-new Vue({
-    el: '#registration-container',
-    data: {
-        id: '<?php echo $id; ?>',
-        base_url: '<?php echo base_url(); ?>',
-        term:<?php echo $selected_ay; ?>,
-        slug: undefined,
-        student: undefined,
-        records: [],
-        gwa: undefined,
-        curriculum_subjects: [],
-        combined_subjects: [],
-        deficiencies: [],
-        subjects: [],
-        units: undefined,
-        assessment_gwa: undefined,
-        balance: 0,
-        assessment_units: undefined,
-        applicant_data: undefined,
-        credited_subjects: [],
-        change_grades: [],
-        generated_tor: [],
-        credited_units: 0,
-        curriculum_units: 0,
-        curriculum_units_na: 0,
-        units_left: 0,
-        unregistered: [],
-    },
-    mounted() {
-        let url_string = window.location.href;
-        if (this.id != 0) {
-            //this.loader_spinner = true;
-            axios.get(this.base_url + 'unity/student_records_data/' + this.id + '/').then((
-                data) => {
-                this.student = data.data.student;
-                this.credited_units = data.data.credited_units;
-                this.curriculum_units = data.data.curriculum_units;
-                this.curriculum_units_na = data.data.curriculum_units_na;
-                this.units_left = data.data.units_left;
-                this.generated_tor = data.data.generated_tor;
-                this.change_grades = data.data.change_grades;
-                this.credited_subjects = data.data.credited_subjects;
-                this.records = data.data.data;
-                this.balance = data.data.balance;
-                this.subjects = data.data.all_subjects;
-                this.deficiencies = data.data.deficiencies;
-                this.curriculum_subjects = data.data.curriculum_subjects;
-                this.combined_subjects = data.data.combined_subjects;
-                console.log(this.combined_subjects);
-                this.gwa = data.data.gwa;
-                this.units = data.data.total_units_earned;
-                this.assessment_gwa = data.data.assessment_gwa;
-                this.assessment_units = data.data.assessment_units;
-                this.unregistered = data.data.notRegisteredTerms
-                for (i in this.records) {
-                    switch (this.records[i].reg.intROG) {
-                        case '0':
-                            this.records[i].reg.enrollment_status = "Enlisted";
-                            this.records[i].reg.color = "box-default";
-                            break;
-                        case '1':
-                            this.records[i].reg.enrollment_status = "Enrolled";
-                            this.records[i].reg.color = "box-success";
-                            break;
-                        case '2':
-                            this.records[i].reg.enrollment_status = "Cleared";
-                            this.records[i].reg.color = "box-success";
-                            break;
-                        case '3':
-                            this.records[i].reg.enrollment_status =
-                                "Officially Withdrawn";
-                            this.records[i].reg.color = "box-warning";
-                            break;
-                        case '4':
-                            this.records[i].reg.enrollment_status = "LOA";
-                            this.records[i].reg.color = "box-info";
-                            break;
-                        case '5':
-                            this.records[i].reg.enrollment_status = "AWOL";
-                            this.records[i].reg.color = "box-danger";
-                            break;
-                        default:
-                            this.records[i].reg.color = "box-default";
-                            this.records[i].reg.enrollment_status = "None";
-                    }
-                }
-                for (i in this.unregistered) {
-                    switch (this.unregistered[i].reg.intROG) {
-                        case '0':
-                            this.unregistered[i].reg.enrollment_status = "Enlisted";
-                            this.unregistered[i].reg.color = "box-default";
-                            break;
-                        case '1':
-                            this.unregistered[i].reg.enrollment_status = "Enrolled";
-                            this.unregistered[i].reg.color = "box-success";
-                            break;
-                        case '2':
-                            this.unregistered[i].reg.enrollment_status = "Cleared";
-                            this.unregistered[i].reg.color = "box-success";
-                            break;
-                        case '3':
-                            this.unregistered[i].reg.enrollment_status =
-                                "Officially Withdrawn";
-                            this.unregistered[i].reg.color = "box-warning";
-                            break;
-                        case '4':
-                            this.unregistered[i].reg.enrollment_status = "LOA";
-                            this.unregistered[i].reg.color = "box-info";
-                            break;
-                        case '5':
-                            this.unregistered[i].reg.enrollment_status = "AWOL";
-                            this.unregistered[i].reg.color = "box-danger";
-                            break;
-                        default:
-                            this.unregistered[i].reg.color = "box-default";
-                            this.unregistered[i].reg.enrollment_status = "None";
-                    }
-                }
-                axios.get(api_url + 'admissions/student-info/' + this.student.slug)
-                    .then((data) => {
-                        this.applicant_data = data.data.data;
-                        for (i in this.applicant_data.uploaded_requirements) {
-                            if (this.applicant_data.uploaded_requirements[i]
-                                .type == "2x2" || this.applicant_data
-                                .uploaded_requirements[i].type == "2x2_foreign")
-                                this.tor.picture = this.applicant_data
-                                .uploaded_requirements[i].path;
-                        }
-                        this.tor.admission_date = this.applicant_data
-                            .date_enrolled;
-                    }).catch((error) => {
-                        console.log(error);
-                    })
-            }).catch((error) => {
-                console.log(error);
-            })
-        }
-    },
-    methods: {
-    }
-})
-</script>
