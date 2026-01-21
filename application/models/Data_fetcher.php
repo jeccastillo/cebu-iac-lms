@@ -3137,7 +3137,7 @@ class Data_fetcher extends CI_Model {
                         if($scholar->deduction_from == 'external'){
                             $tuition_scholarship_current = ($tuition - $tuition_discount_full) * ($scholar->tuition_fee_rate/100);
                         }
-                        $tuition_scholarship_installment_current = ($tuition - $scholarship_installment_grand_total) * ($scholar->tuition_fee_rate/100);
+                        $tuition_scholarship_installment_current = ($tuition + ($tuition * ($tuition_year['installmentIncrease']/100)) - $scholarship_installment_grand_total) * ($scholar->tuition_fee_rate/100);
                         $tuition_scholarship_installment_current30 = ($tuition + ($tuition * 0.15) - $scholarship_installment_grand_total30) * ($scholar->tuition_fee_rate/100);
                         $tuition_scholarship_installment_current50 = ($tuition + ($tuition * 0.09) - $scholarship_installment_grand_total50) * ($scholar->tuition_fee_rate/100);
                         // $tuition_scholarship_installment_current = ($tuition + ($tuition * ($tuition_year['installmentIncrease']/100)) - $tuition_discount_installment) * ($scholar->tuition_fee_rate/100);
@@ -3804,8 +3804,8 @@ class Data_fetcher extends CI_Model {
         $data['scholarship_deductions_installment_dc'] = $discount_installment_grand_total;
         $data['scholarship_tuition_fee_rate'] = $tuition_fee_rate;
         $data['scholarship_tuition_fee_installment_rate'] = $tuition_scholarship_installment + $tuition_discount_installment;
-        $data['scholarship_tuition_fee_installment_rate30'] = $tuition_scholarship_installment30 + $tuition_discount_installmen30;
-        $data['scholarship_tuition_fee_installment_rate50'] = $tuition_scholarship_installment50 + $tuition_discount_installmen50;
+        $data['scholarship_tuition_fee_installment_rate30'] = $tuition_scholarship_installment30 + $tuition_discount_installment30;
+        $data['scholarship_tuition_fee_installment_rate50'] = $tuition_scholarship_installment50 + $tuition_discount_installment50;
         $data['scholarship_tuition_fee_fixed'] = $tuition_fee_fixed;
         $data['scholarship_lab_fee_rate'] = $lab_fee_rate;
         $data['scholarship_lab_fee_fixed'] = $lab_fee_fixed;
