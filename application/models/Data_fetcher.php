@@ -3730,6 +3730,10 @@ class Data_fetcher extends CI_Model {
         if($full_scholarship)
             $late_enrollment_fee = 0;
         
+        print($tuition_scholarship_installment . ' @ ');
+        print($tuition_discount_installment . ' @ ');
+        die();
+        
         $data['lab_discount'] = $lab_scholarship;
         $data['lab_discount_dc'] = $lab_discount;
         $data['total_discount'] = $scholarship_grand_total;
