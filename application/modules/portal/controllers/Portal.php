@@ -479,9 +479,13 @@ class Portal extends CI_Controller {
                 $this->data['deficiencies'] = $this->db
                 ->get_where('tb_mas_student_deficiencies',array('student_id'=>$this->session->userdata('intID'),'status'=>'active','temporary_resolve_date <'=> date("Y-m-d")))->result_array();
                 $this->data['id'] = $this->session->userdata('intID');
-                
+                                
                 $this->load->view('common/header',$this->data);
-                $this->load->view('content',$this->data);
+                if ($this->data['student']['type'] == 'shs') {                                    
+                    $this->load->view('content_shs',$this->data);
+                }else {
+                    $this->load->view('content',$this->data);
+                }
                 $this->load->view('common/footer',$this->data);
             }
             else{
