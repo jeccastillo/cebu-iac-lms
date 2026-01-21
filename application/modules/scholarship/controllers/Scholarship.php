@@ -259,7 +259,7 @@ class Scholarship extends CI_Controller {
             $discounts = $this->db->get_where('tb_mas_scholarships', array(
                 'status' => 'active',
                 'deduction_type' => 'discount',
-                'name LIKE' => '%Referral%'
+                'name NOT LIKE' => '%Referral%'
             ))->result_array();
         } elseif ($has_inhouse && $has_external) {
             $discounts = [];
@@ -295,7 +295,7 @@ class Scholarship extends CI_Controller {
             $discounts = $this->db->get_where('tb_mas_scholarships', array(
                 'status' => 'active',
                 'deduction_type' => 'discount',
-                'name NOT LIKE' => '%Referral%'
+                'name LIKE' => '%Referral%'
             ))->result_array();
 
             $scholarships = $this->db->get_where('tb_mas_scholarships', array(
