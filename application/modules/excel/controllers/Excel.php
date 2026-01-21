@@ -8413,6 +8413,9 @@ class Excel extends CI_Controller {
                         ->get()
                         ->first_row('array');
 
+                        print_r($checkRegistration);
+                        die();
+
                         if(!$checkRegistration){
                             $newRegistration = array(
                                 'intStudentID' => $student['intID'],
