@@ -8409,12 +8409,9 @@ class Excel extends CI_Controller {
                     if($student){
                         $checkRegistration = $this->db                                    
                         ->from("tb_mas_registration")
-                        ->where(array("intStudentID"=>$student['intID']))             
+                        ->where(array('intStudentID'=>$student['intID'], 'intAYID' => $sem))             
                         ->get()
                         ->first_row('array');
-
-                        print_r($checkRegistration);
-                        die();
 
                         if(!$checkRegistration){
                             $newRegistration = array(
@@ -8422,7 +8419,7 @@ class Excel extends CI_Controller {
                                 'enlisted_by' => $this->data["user"]["intID"],
                                 'dteRegistered' => date("Y-m-d H:i:s"),
                                 'date_enlisted' => date("Y-m-d H:i:s"),
-                                'intAYID' => date("Y-m-d H:i:s"),
+                                'intAYID' => $sem,
                                 'enumRegistrationStatus' => 'regular',
                                 'enumStudentType' => 'new',
                                 'intYearLevel' => '1',
