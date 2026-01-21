@@ -295,7 +295,6 @@ class Scholarship extends CI_Controller {
             $discounts = $this->db->get_where('tb_mas_scholarships', array(
                 'status' => 'active',
                 'deduction_type' => 'discount',
-                'name LIKE' => '%Referral%'
             ))->result_array();
 
             $scholarships = $this->db->get_where('tb_mas_scholarships', array(
