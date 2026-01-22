@@ -329,7 +329,7 @@
                     <h3>Miscellaneous Fees</h3>
                     <table class="table table-bordered table-striped">
                         <thead>
-                            <tr v-if="request.year.includes('shs')">
+                            <tr v-if="request.year.includes('SHS')">
                                 <th>Name</th>
                                 <th>G11 1st Sem</th>
                                 <th>G12 1st Sem</th>
