@@ -4906,9 +4906,7 @@ class Pdf extends CI_Controller {
     // public function shs_permanent_record()
     public function generate_tor()
     {
-        $post = $this->input->post();        
-        print_r($post);
-        die();
+        $post = $this->input->post();      
         $student = $this->data_fetcher->getStudent($post['student_id']);
         
         if($student['level'] == 'shs'){
@@ -4944,7 +4942,7 @@ class Pdf extends CI_Controller {
                 'admission_date' => isset($post['admission_date']) ? $post['admission_date'] : '',
                 'graduation_date' => isset($post['graduation_date']) ? $post['graduation_date'] : '',
             );
-    
+      
             $units_overall = 0;
             $gwa_overall = 0;
             $total_records = 0;
@@ -5023,6 +5021,8 @@ class Pdf extends CI_Controller {
             $data['gwa_overall'] = number_format(round(($gwa_overall/$num_terms),3),3);
             $data['units_overall'] = $units_overall;        
             $data['student'] = $student;
+        print_r($data);
+        die();
 
         }
         echo json_encode($data);
