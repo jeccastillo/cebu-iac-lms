@@ -3101,14 +3101,6 @@ class Data_fetcher extends CI_Model {
                         $tuition_discount_installment30 += ($tuition + ($tuition * 0.15)) * ($scholar->total_assessment_rate/100);
                         $tuition_discount_installment50 += ($tuition + ($tuition * 0.09)) * ($scholar->total_assessment_rate/100);
 
-                        // print($tuition_discount_full . ' @ ');
-                        // print($tuition_discount_installment . ' @ ');
-                        // print($tuition_discount_installment30 . ' @ ');
-                        // print($tuition_discount_installment50 . ' @ ');
-                        // die();
-
-                        // 11922.6 @ 12995.634 @ 13710.99 @ 12995.634 @
-
                         //external
                         $ar_external_scholarship_full += $total_assessment_temp * ($scholar->total_assessment_rate/100);
                         $ar_external_scholarship_installment += $total_installment_assessment_temp * ($scholar->total_assessment_rate/100);
@@ -3356,7 +3348,7 @@ class Data_fetcher extends CI_Model {
                     if($scholar->tuition_fee_rate > 0){  
                         
                         // $tuition_scholarship_current = ($tuition - $in_house_grand_total - $tuition_discount_full) * ($scholar->tuition_fee_rate/100);
-                        $tuition_scholarship_current = $tuition * ($scholar->tuition_fee_rate/100);
+                        $tuition_scholarship_current = $tuition - $tuition_discount_full * ($scholar->tuition_fee_rate/100);
                         //discount after discount if external
                         if($scholar->deduction_from == 'external'){
                             $tuition_scholarship_current = ($tuition - $tuition_discount_full) * ($scholar->tuition_fee_rate/100);
