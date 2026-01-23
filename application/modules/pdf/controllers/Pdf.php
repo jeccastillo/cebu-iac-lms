@@ -4917,7 +4917,7 @@ class Pdf extends CI_Controller {
         ->get()
         ->result_array();
         
-        print_r($post);
+        print_r($registrations);
         die();
         if($student['level'] == 'shs'){
             $num_terms = count($post['included_terms']);
