@@ -1792,12 +1792,16 @@ class Unity extends CI_Controller {
         }
 
         $sy = $this->db->get('tb_mas_sy')->result_array();
+        
         $semNotRegistered = $this->db->select('tb_mas_sy.*')
-                ->from('tb_mas_sy')
-                ->where_not_in('intID', $registeredSems)
+                ->from('tb_mas_sy')                
                 ->get()
                 ->result_array();
-                
+        
+        if(!empty($registeredSems))
+        {
+            $this->db->where_not_in('intID',$registeredSems);
+        }
         $notRegisteredTerms = [];
         //Not Registered Sem/Term
         foreach($semNotRegistered as $reg){
