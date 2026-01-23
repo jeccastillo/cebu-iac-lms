@@ -3351,7 +3351,7 @@ class Data_fetcher extends CI_Model {
                         $tuition_scholarship_current = $tuition - $in_house_grand_total * ($scholar->tuition_fee_rate/100);
                         //discount after discount if external
                         if($scholar->deduction_from == 'external'){
-                            $tuition_scholarship_current = ($tuition - $tuition_discount_full) * ($scholar->tuition_fee_rate/100);
+                            $tuition_scholarship_current = ($tuition - $tuition_discount_full - $in_house_grand_total) * ($scholar->tuition_fee_rate/100);
                         }
 
                         $tuition_scholarship_installment_current = ($tuition + ($tuition * ($tuition_year['installmentIncrease']/100)) - $scholarship_installment_grand_total) * ($scholar->tuition_fee_rate/100);
@@ -3509,9 +3509,6 @@ class Data_fetcher extends CI_Model {
                 if($scholar->deduction_from == 'in-house'){
                     $in_house_grand_total += $total_scholarship_temp;
                 }
-                print($total_scholarship_temp . ' @ ');
-                print($in_house_grand_total . ' @ ');
-                die();
 
                 $ctr++;
             }
