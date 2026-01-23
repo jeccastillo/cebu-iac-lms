@@ -3101,11 +3101,13 @@ class Data_fetcher extends CI_Model {
                         $tuition_discount_installment30 += ($tuition + ($tuition * 0.15)) * ($scholar->total_assessment_rate/100);
                         $tuition_discount_installment50 += ($tuition + ($tuition * 0.09)) * ($scholar->total_assessment_rate/100);
 
-                        print($tuition_discount_full . ' @ ');
-                        print($tuition_discount_installment . ' @ ');
-                        print($tuition_discount_installment30 . ' @ ');
-                        print($tuition_discount_installment50 . ' @ ');
-                        die();
+                        // print($tuition_discount_full . ' @ ');
+                        // print($tuition_discount_installment . ' @ ');
+                        // print($tuition_discount_installment30 . ' @ ');
+                        // print($tuition_discount_installment50 . ' @ ');
+                        // die();
+
+                        // 11922.6 @ 12995.634 @ 13710.99 @ 12995.634 @
 
                         //external
                         $ar_external_scholarship_full += $total_assessment_temp * ($scholar->total_assessment_rate/100);
