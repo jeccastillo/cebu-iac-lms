@@ -4903,9 +4903,12 @@ class Pdf extends CI_Controller {
 
     }
 
-    public function shs_permanent_record()
+    // public function shs_permanent_record()
+    public function generate_tor()
     {
         $post = $this->input->post();        
+        print_r($post);
+        die();
         $student = $this->data_fetcher->getStudent($post['student_id']);
         
         if($student['level'] == 'shs'){
