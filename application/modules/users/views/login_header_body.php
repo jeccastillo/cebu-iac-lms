@@ -29,4 +29,4 @@
 
 		<title><?php echo isset($title)?$title:'Untitled Page'; ?></title>
 </head>
-<body class="hold-transition login-page">
+<body class="hold-transition login-page" style="background: linear-gradient(135deg, #e9f0fa 0%, #f7fafc 100%); min-height: 100vh;">
