@@ -3506,6 +3506,9 @@ class Data_fetcher extends CI_Model {
                 $discount_grand_total += $total_scholarship_temp;
 
                 $ctr++;
+                print($tuition_discount_installment50 . ' @ ');
+                print($tuition_scholarship_installment_current50 . ' @ ');
+                die();
             }
         }
 
