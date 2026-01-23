@@ -1,82 +1,88 @@
 <aside class="right-side">
     <div id="student-viewer-container">
-        <section class="content-header">
-            <h1>
-                <small>
-                    <a class="btn btn-app" :href="base_url + 'student/view_all_students'"><i
-                            class="ion ion-arrow-left-a"></i>All </a>
-                    <a target="_blank" class="btn btn-app"
-                        :href="base_url + 'admissionsV1/view_lead_new/' + student.slug"><i
-                            class="fa fa-list"></i> Applicant Data</a>
-                    <a v-if="user_level == 2 || user_level == 3" class="btn btn-app"
-                        :href="base_url + 'student/edit_student/' + student.intID"><i
-                            class="ion ion-edit"></i> Edit</a>
-                    <a v-if="user_level == 2 || user_level == 3" class="btn btn-app"
-                        :href="base_url + 'unity/student_records/' + student.intID"><i
-                            class="fa fa-user"></i>Records</a>
-                    <a v-if="registration && (user_level == 2 || user_level == 3)"
-                        :disabled="show_alert && registration.allow_enroll == 0" target="_blank"
-                        v-if="registration" class="btn btn-app"
-                        :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id +'/'+ active_sem.intID">
-                        <i class="ion ion-printer"></i>RF Print </a>
-                    <a target="_blank" v-if="registration && (user_level == 2 || user_level == 3)"
-                        :disabled="show_alert && registration.allow_enroll == 0" class="btn btn-app"
-                        href="#" @click.prevent="printRF">
-                        <i class="ion ion-printer"></i>RF No Header </a>
-                    <a v-if="reg_status == 'Enrolled' && (user_level == 2 || user_level == 3)"
-                        class="btn btn-app"
-                        :href="base_url + 'registrar/shifting/' + student.intID + '/' + active_sem.intID">
-                        <i class="fa fa-arrows-h"></i>Shifting </a>
-                    <a class="btn btn-app"
-                        :href="base_url + 'deficiencies/student_deficiencies/' + student.intID">
-                        <i class="fa fa-user"></i>Deficiencies </a>
-                    <a v-if="user_level == 2 || user_level == 3" class="btn btn-app"
-                        :href="base_url + 'academics/enlistment/' + student.intID + '/' + active_sem.intID">
-                        <i class="fa fa-book"></i>Advising Form</a>
-                    </a>
-                    <a v-if="reg_status != 'For Subject Enlistment' && reg_status != 'For Sectioning' && (user_level == 2 || user_level == 3)"
-                        target="_blank" class="btn btn-app"
-                        :href="base_url + 'pdf/student_viewer_advising_print/' + student.intID + '/' + active_sem.intID">
-                        <i class="ion ion-printer"></i>Print Subjects </a>
-                    <a v-else-if="user_level == 2 || user_level == 3" class="btn btn-app"
-                        :href="base_url + 'department/load_subjects/' + student.intID + '/' + active_sem.intID">
-                        <i class="fa fa-book"></i>Subject Enlistment</a>
-                    </a>
-                    <!-- <a v-if="reg_status == 'For Registration' && (user_level == 2 || user_level == 3)"  class="btn btn-app" :href="base_url + 'unity/edit_sections/' + student.intID + '/' + active_sem.intID">
-                        <i class="fa fa-book"></i> Update Sections
-                    </a>                         -->
-                    <a v-if="reg_status =='For Registration' && (user_level == 2 || user_level == 3)"
-                        class="btn btn-app"
-                        :href="base_url + 'registrar/register_old_student2/' + student.intID +  '/' + active_sem.intID">
-                        <i class="fa fa-book"></i>Student Fee Assessment </a>
-                    <a v-if="user_level == 2 || user_level == 3" class="btn btn-app"
-                        :href="base_url + 'registrar/student_grade_slip/' + student.intID">
-                        <i class="fa fa-book"></i>Grade Slip </a>
-                    <a v-if="user_level == 2 || user_level == 7" class="btn btn-app"
-                        :href="base_url + 'scholarship/assign_scholarship/'+sem_student+'/'+ student.intID">
-                        <i class="fa fa-book"></i>Scholarship/Discount </a>
-                    <a v-if="user_level == 2 || user_level == 3" class="btn btn-app"
-                        data-toggle="modal" data-target="#loa-modal">
-                        <i class="fa fa-book"></i>LOA </a>
-                    <a v-if="(user_level == 2 || user_level == 3) && registration"
-                        class="btn btn-app" @click="sendEnlistedNotification">
-                        <i class="fa fa-book"></i>Send Enlistment Notification </a>
-                </small>
-                <div class="box-tools pull-right" style="width: 100%; max-width: 600px;">
-                    <div style="display: flex; gap: 5px; margin-bottom: 5px; flex-wrap: wrap;">
-                        <input type="text" v-model="term_filter.type" class="form-control" placeholder="Type" style="flex: 1; min-width: 80px; font-size: 12px; padding: 5px;">
-                        <input type="text" v-model="term_filter.term" class="form-control" placeholder="Term" style="flex: 1; min-width: 80px; font-size: 12px; padding: 5px;">
-                        <input type="text" v-model="term_filter.year_start" class="form-control" placeholder="Year Start" style="flex: 1; min-width: 80px; font-size: 12px; padding: 5px;">
-                        <input type="text" v-model="term_filter.year_end" class="form-control" placeholder="Year End" style="flex: 1; min-width: 80px; font-size: 12px; padding: 5px;">
-                    </div>
-                    <select @change="changeTermSelected" v-model="sem_student" class="form-control" style="width: 100%">
-                        <option v-for="s in filtered_sy" :value="s.intID" :key="s.intID">
-                            {{ s.term_student_type + ' ' + s.enumSem + ' ' + s.term_label + ' ' + s.strYearStart + '-' + s.strYearEnd }}
-                        </option>
-                    </select>
-                </div>
-                <div style="clear:both"></div>
+        <section class="content-header" style="background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); margin-bottom: 20px;">
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px;">
+                <a class="btn-modern btn-back" :href="base_url + 'student/view_all_students'">
+                    <i class="ion ion-arrow-left-a"></i>
+                    <span>Back to All</span>
+                </a>
+                <a target="_blank" class="btn-modern btn-info" :href="base_url + 'admissionsV1/view_lead_new/' + student.slug">
+                    <i class="fa fa-list"></i>
+                    <span>Applicant Data</span>
+                </a>
+                <a v-if="user_level == 2 || user_level == 3" class="btn-modern btn-warning" :href="base_url + 'student/edit_student/' + student.intID">
+                    <i class="ion ion-edit"></i>
+                    <span>Edit</span>
+                </a>
+                <a v-if="user_level == 2 || user_level == 3" class="btn-modern btn-primary" :href="base_url + 'unity/student_records/' + student.intID">
+                    <i class="fa fa-user"></i>
+                    <span>Records</span>
+                </a>
+                <a v-if="registration && (user_level == 2 || user_level == 3)" :disabled="show_alert && registration.allow_enroll == 0" target="_blank" class="btn-modern btn-success" :href="base_url + 'pdf/student_viewer_registration_print/' + student.intID +'/'+ applicant_data.id +'/'+ active_sem.intID">
+                    <i class="ion ion-printer"></i>
+                    <span>RF Print</span>
+                </a>
+                <a target="_blank" v-if="registration && (user_level == 2 || user_level == 3)" :disabled="show_alert && registration.allow_enroll == 0" class="btn-modern btn-success" href="#" @click.prevent="printRF">
+                    <i class="ion ion-printer"></i>
+                    <span>RF No Header</span>
+                </a>
+                <a v-if="reg_status == 'Enrolled' && (user_level == 2 || user_level == 3)" class="btn-modern btn-purple" :href="base_url + 'registrar/shifting/' + student.intID + '/' + active_sem.intID">
+                    <i class="fa fa-arrows-h"></i>
+                    <span>Shifting</span>
+                </a>
+                <a class="btn-modern btn-danger" :href="base_url + 'deficiencies/student_deficiencies/' + student.intID">
+                    <i class="fa fa-exclamation-triangle"></i>
+                    <span>Deficiencies</span>
+                </a>
+                <a v-if="user_level == 2 || user_level == 3" class="btn-modern btn-primary" :href="base_url + 'academics/enlistment/' + student.intID + '/' + active_sem.intID">
+                    <i class="fa fa-book"></i>
+                    <span>Advising Form</span>
+                </a>
+                <a v-if="reg_status != 'For Subject Enlistment' && reg_status != 'For Sectioning' && (user_level == 2 || user_level == 3)" target="_blank" class="btn-modern btn-success" :href="base_url + 'pdf/student_viewer_advising_print/' + student.intID + '/' + active_sem.intID">
+                    <i class="ion ion-printer"></i>
+                    <span>Print Subjects</span>
+                </a>
+                <a v-else-if="user_level == 2 || user_level == 3" class="btn-modern btn-info" :href="base_url + 'department/load_subjects/' + student.intID + '/' + active_sem.intID">
+                    <i class="fa fa-book"></i>
+                    <span>Subject Enlistment</span>
+                </a>
+                <a v-if="reg_status =='For Registration' && (user_level == 2 || user_level == 3)" class="btn-modern btn-warning" :href="base_url + 'registrar/register_old_student2/' + student.intID +  '/' + active_sem.intID">
+                    <i class="fa fa-calculator"></i>
+                    <span>Fee Assessment</span>
+                </a>
+                <a v-if="user_level == 2 || user_level == 3" class="btn-modern btn-info" :href="base_url + 'registrar/student_grade_slip/' + student.intID">
+                    <i class="fa fa-graduation-cap"></i>
+                    <span>Grade Slip</span>
+                </a>
+                <a v-if="user_level == 2 || user_level == 7" class="btn-modern btn-purple" :href="base_url + 'scholarship/assign_scholarship/'+sem_student+'/'+ student.intID">
+                    <i class="fa fa-trophy"></i>
+                    <span>Scholarship/Discount</span>
+                </a>
+                <a v-if="user_level == 2 || user_level == 3" class="btn-modern btn-warning" data-toggle="modal" data-target="#loa-modal">
+                    <i class="fa fa-pause-circle"></i>
+                    <span>LOA</span>
+                </a>
+                <a v-if="(user_level == 2 || user_level == 3) && registration" class="btn-modern btn-success" @click="sendEnlistedNotification">
+                    <i class="fa fa-envelope"></i>
+                    <span>Send Notification</span>
+                </a>
+            </div>
+            <h1 style="margin: 0;">
             </h1>
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e9ecef;">
+                <label style="font-size: 13px; font-weight: 600; color: #495057; margin-bottom: 8px; display: block;">Filter Terms:</label>
+                <div style="display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;">
+                    <input type="text" v-model="term_filter.type" class="form-control" placeholder="Type (e.g., college, shs)" style="flex: 1; min-width: 100px; font-size: 13px; padding: 8px 12px; border-radius: 6px; border: 1px solid #ced4da;">
+                    <input type="text" v-model="term_filter.term" class="form-control" placeholder="Term (e.g., 1st, 2nd)" style="flex: 1; min-width: 100px; font-size: 13px; padding: 8px 12px; border-radius: 6px; border: 1px solid #ced4da;">
+                    <input type="text" v-model="term_filter.year_start" class="form-control" placeholder="Year Start" style="flex: 1; min-width: 90px; font-size: 13px; padding: 8px 12px; border-radius: 6px; border: 1px solid #ced4da;">
+                    <input type="text" v-model="term_filter.year_end" class="form-control" placeholder="Year End" style="flex: 1; min-width: 90px; font-size: 13px; padding: 8px 12px; border-radius: 6px; border: 1px solid #ced4da;">
+                </div>
+                <select @change="changeTermSelected" v-model="sem_student" class="form-control" style="width: 100%; font-size: 14px; padding: 10px 12px; border-radius: 6px; border: 1px solid #ced4da; background-color: #fff;">
+                    <option v-for="s in filtered_sy" :value="s.intID" :key="s.intID">
+                        {{ s.term_student_type + ' ' + s.enumSem + ' ' + s.term_label + ' ' + s.strYearStart + '-' + s.strYearEnd }}
+                    </option>
+                </select>
+            </div>
         </section>
         <hr />
         <div class="content">
@@ -747,6 +753,106 @@
 }
 .select2-dropdown {
     min-width: 320px !important;
+}
+
+/* Modern Button Styles */
+.btn-modern {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    white-space: nowrap;
+}
+
+.btn-modern:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    text-decoration: none;
+}
+
+.btn-modern:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.btn-modern i {
+    font-size: 14px;
+}
+
+.btn-modern span {
+    line-height: 1;
+}
+
+/* Button Color Variants */
+.btn-back {
+    background: #6c757d;
+    color: #fff;
+}
+.btn-back:hover {
+    background: #5a6268;
+    color: #fff;
+}
+
+.btn-primary {
+    background: #007bff;
+    color: #fff;
+}
+.btn-primary:hover {
+    background: #0056b3;
+    color: #fff;
+}
+
+.btn-success {
+    background: #28a745;
+    color: #fff;
+}
+.btn-success:hover {
+    background: #218838;
+    color: #fff;
+}
+
+.btn-info {
+    background: #17a2b8;
+    color: #fff;
+}
+.btn-info:hover {
+    background: #138496;
+    color: #fff;
+}
+
+.btn-warning {
+    background: #ffc107;
+    color: #212529;
+}
+.btn-warning:hover {
+    background: #e0a800;
+    color: #212529;
+}
+
+.btn-danger {
+    background: #dc3545;
+    color: #fff;
+}
+.btn-danger:hover {
+    background: #c82333;
+    color: #fff;
+}
+
+.btn-purple {
+    background: #6f42c1;
+    color: #fff;
+}
+.btn-purple:hover {
+    background: #5a32a3;
+    color: #fff;
 }
 </style>
 <!-- jQuery (required for Select2) -->
