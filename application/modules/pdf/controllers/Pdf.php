@@ -659,7 +659,7 @@ class Pdf extends CI_Controller {
         $html = $this->load->view("daily_enrollment",$this->data);        
     }
 
-    public function generate_tor2(){
+    public function generate_tor(){
         $post = $this->input->post();        
         $student = $this->data_fetcher->getStudent($post['student_id']);
         $num_terms = count($post['included_terms']);
@@ -4903,8 +4903,7 @@ class Pdf extends CI_Controller {
 
     }
 
-    // public function shs_permanent_record()
-    public function generate_tor()
+    public function shs_permanent_record()
     {
         $post = $this->input->post();      
         $student = $this->data_fetcher->getStudent($post['student_id']);
