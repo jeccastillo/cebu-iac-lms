@@ -3509,6 +3509,9 @@ class Data_fetcher extends CI_Model {
                 if($scholar->deduction_from == 'in-house'){
                     $in_house_grand_total += $total_scholarship_temp;
                 }
+                print($total_scholarship_temp . ' @ ');
+                print($in_house_grand_total . ' @ ');
+                die();
 
                 $ctr++;
             }
