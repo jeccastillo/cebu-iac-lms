@@ -425,7 +425,7 @@ class Finance extends CI_Controller {
             ->result_array();
 
             //TUITION YEAR
-            $term['tuition_year'] = $this->db->select('tb_mas_tuition_year.year,tb_mas_tuition_year.installmentDP')     
+            $temp['tuition_year'] = $this->db->select('tb_mas_tuition_year.year,tb_mas_tuition_year.installmentDP')     
                         ->from('tb_mas_registration')              
                         ->join('tb_mas_tuition_year', 'tb_mas_registration.tuition_year = tb_mas_tuition_year.intID')
                         ->where(array('tb_mas_registration.intStudentID'=>$id))
@@ -463,9 +463,6 @@ class Finance extends CI_Controller {
             $tuition[] =  $temp;
             
         }
-
-        print_r($tuition);
-        print(' @@@@@ ');
         
         // Add previous-balance terms (not in registrations) and include ledger/other for those terms
         $reg_term_ids = array();
@@ -540,9 +537,6 @@ class Finance extends CI_Controller {
                 }
             }
         }
-
-        print_r($tuition);
-        print(' @@@@@ ');
 
         // Add payment-only terms (terms with payments but without registration records)
         $existing_term_ids = array();
@@ -641,9 +635,6 @@ class Finance extends CI_Controller {
                 $existing_term_ids[] = $term_id;
             }
         }
-        print_r($tuition);
-        print(' @@@@@ ');
-        die();
 
         $data['tuition'] = $tuition;
         $data['user'] = $this->data["user"];
