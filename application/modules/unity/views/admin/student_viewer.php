@@ -741,6 +741,7 @@
 </style>
 <!-- Select2 CSS -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/themes/default/js/vue.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js">
 </script>
@@ -841,6 +842,20 @@ new Vue({
         documents: []
     },
     mounted() {
+        // ...existing code...
+        this.$nextTick(() => {
+            $('#term-select').select2({
+                placeholder: 'Search or select a term',
+                allowClear: true,
+                width: 'resolve'
+            });
+
+            // Sync Select2 with Vue model
+            $('#term-select').on('change', (e) => {
+                this.sem_student = e.target.value;
+                this.changeTermSelected();
+            });
+        });
         let url_string = window.location.href;
         if (this.id != 0) {
             Swal.fire({
