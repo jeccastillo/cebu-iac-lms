@@ -3348,7 +3348,7 @@ class Data_fetcher extends CI_Model {
                     if($scholar->tuition_fee_rate > 0){  
                         
                         // $tuition_scholarship_current = ($tuition - $in_house_grand_total - $tuition_discount_full) * ($scholar->tuition_fee_rate/100);
-                        $tuition_scholarship_current = $tuition - $tuition_discount_full * ($scholar->tuition_fee_rate/100);
+                        $tuition_scholarship_current = $tuition * ($scholar->tuition_fee_rate/100);
                         //discount after discount if external
                         if($scholar->deduction_from == 'external'){
                             $tuition_scholarship_current = ($tuition - $tuition_discount_full) * ($scholar->tuition_fee_rate/100);
