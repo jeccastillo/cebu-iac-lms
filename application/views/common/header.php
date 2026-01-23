@@ -45,6 +45,91 @@
     .swal2-popup {
         font-size: 1.6rem !important;
     }
+    /* Modernized UI/UX styles from enhanced_dashboard.php */
+    .small-box {
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        transition: transform 0.2s ease;
+    }
+    .small-box:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    .info-box {
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .box {
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .btn-app {
+        border-radius: 6px;
+        margin: 5px;
+        transition: all 0.2s ease;
+    }
+    .btn-app:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .table-striped > tbody > tr:nth-of-type(odd) {
+        background-color: rgba(0,0,0,0.02);
+    }
+    .content-header h1 {
+        color: #333;
+        font-weight: 600;
+    }
+    .label {
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 4px 8px;
+    }
+    .text-muted i {
+        opacity: 0.5;
+        margin-bottom: 15px;
+    }
+    /* Quick Actions List Styling */
+    .quick-action-link {
+        display: block;
+        color: #333;
+        text-decoration: none;
+        padding: 8px 0;
+        transition: all 0.2s ease;
+    }
+    .quick-action-link:hover {
+        color: #337ab7;
+        text-decoration: none;
+        background-color: rgba(0,0,0,0.02);
+        margin: 0 -15px;
+        padding: 8px 15px;
+        border-radius: 4px;
+    }
+    .quick-action-link i {
+        margin-right: 10px;
+        width: 16px;
+        text-align: center;
+    }
+    .list-group-unbordered .list-group-item {
+        border: none;
+        border-bottom: 1px solid #f0f0f0;
+        padding: 10px 15px;
+    }
+    .list-group-unbordered .list-group-item:last-child {
+        border-bottom: none;
+    }
+    @media (max-width: 768px) {
+        .small-box .inner h3 {
+            font-size: 24px;
+        }
+        .btn-app {
+            width: 100%;
+            margin: 2px 0;
+        }
+        .quick-action-link {
+            font-size: 16px;
+            padding: 12px 0;
+        }
+    }
     </style> <?php 
     switch($user['intUserLevel'] ){
         case 0:
@@ -178,23 +263,22 @@
     <!-- Left side column. contains the logo and sidebar -->
     <aside class="main-sidebar">
         <!-- sidebar: style can be found in sidebar.less -->
-        <section class="sidebar">
+        <section class="sidebar" style="padding-top: 10px;">
             <!-- Sidebar user panel -->
-            <div class="user-panel">
+            <div class="user-panel" style="margin-bottom: 20px;">
                 <div class="pull-left image">
                     <img src="<?php echo ($user['strPicture']=="")?$img_dir."default_image.jpg":base_url().IMAGE_UPLOAD_DIR.$user['strPicture']; ?>"
-                        class="img-circle" alt="User Image">
+                        class="img-circle" alt="User Image" style="box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
                 </div>
                 <div class="pull-left info">
-                    <p> <?php echo $user['strFirstname']; ?></p>
-                    <i class="fa fa-users text-green"></i> <small>
+                    <p style="font-weight: 600; margin-bottom: 2px;"> <?php echo $user['strFirstname']; ?></p>
+                    <i class="fa fa-users text-green"></i> <small style="font-size: 12px; color: #888;">
                         <?php echo switch_user_level($user['intUserLevel']); ?></small>
                 </div>
             </div>
-            <!-- /.search form -->
             <!-- sidebar menu: : style can be found in sidebar.less -->
-            <ul class="sidebar-menu">
-                <li class="header">Main Menu</li>
+            <ul class="sidebar-menu" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
+                <li class="header" style="font-size: 13px; letter-spacing: 1px; color: #888;">MAIN MENU</li>
                 <li class="<?php echo (isset($page) && $page=="dashboard")?'active':''; ?>"><a
                         href="<?php echo base_url() ?>unity/faculty_dashboard"><i
                             class="fa fa-home text-green"></i>
@@ -221,7 +305,8 @@
                 </li> <?php endif; ?>
                 <?php if(in_array($user['intUserLevel'],array(2,5,3,6,7)) ): ?>
                 <!-- <li class="<?php echo (isset($page) && $page=="transactions")?'active':''; ?>"><a href="<?php echo base_url() ?>unity/transactions"><i class="ion ion-cash"></i> <span>Transactions</span> </a></li> -->
-                <li class="header">Admissions</li>
+                <li class="header" style="font-size: 13px; letter-spacing: 1px; color: #888; font-weight: bold; margin-top: 18px;">ADMISSIONS</li>
+                <li style="border-bottom: 1px solid #eaeaea; margin: 8px 0;"></li>
                 <?php if(in_array($user['intUserLevel'],array(2,5)) ): ?> <li
                     class="<?php echo (isset($page) && $page=="admissions_sy_setup")?'active':''; ?>">
                     <a href="<?php echo base_url() ?>admissionsV1/edit_ay/"><i
@@ -314,7 +399,9 @@
                                 Link</a>
                         </li>
                     </ul>
-                </li> <?php endif; ?> <li class="header">Menu</li>
+                </li> <?php endif; ?>
+                <li class="header" style="font-size: 13px; letter-spacing: 1px; color: #888; font-weight: bold; margin-top: 18px;">MENU</li>
+                <li style="border-bottom: 1px solid #eaeaea; margin: 8px 0;"></li>
                 <?php if($user['teaching'] == 1): ?> <li
                     class="treeview <?php echo (isset($opentree) && $opentree=="faculty")?'active':''; ?>">
                     <a href="#">

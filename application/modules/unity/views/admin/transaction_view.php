@@ -1,4 +1,4 @@
-<aside class="right-side">
+<aside class="right-side" style="padding: 24px 12px 12px 12px; background: #fafbfc; min-height: 100vh;">
      <section class="content-header">
                     <h1>
                         Transactions

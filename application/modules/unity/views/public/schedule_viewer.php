@@ -1,5 +1,5 @@
 <div id="vue-container">    
-    <div class="content container">               
+    <div class="content container" style="padding: 24px 12px 12px 12px; background: #fafbfc; min-height: 100vh;">               
         <div class="box box-primary">
             <div class="box-header">
                 <h4>Schedule for {{ section.name }}</h4>

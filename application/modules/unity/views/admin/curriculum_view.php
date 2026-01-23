@@ -1,4 +1,4 @@
-<div class="content-wrapper">
+<div class="content-wrapper" style="padding: 24px 12px 12px 12px; background: #fafbfc; min-height: 100vh;">
 <section class="content-header">
                     <h1>
                         Curriculum
@@ -9,7 +9,7 @@
                         <li class="active">View All Curriculum</li>
                     </ol>
                 </section>
-    <div class="content">
+    <div class="content" style="margin-top: 10px;">
         <div class="alert alert-danger" style="display:none;">
             <i class="fa fa-ban"></i>
             <span id="alert-text"></span>
