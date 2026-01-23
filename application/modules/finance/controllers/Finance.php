@@ -463,6 +463,9 @@ class Finance extends CI_Controller {
             $tuition[] =  $temp;
             
         }
+
+        print_r($tuition);
+        print(' @@@@@ ');
         
         // Add previous-balance terms (not in registrations) and include ledger/other for those terms
         $reg_term_ids = array();
@@ -537,6 +540,9 @@ class Finance extends CI_Controller {
                 }
             }
         }
+
+        print_r($tuition);
+        print(' @@@@@ ');
 
         // Add payment-only terms (terms with payments but without registration records)
         $existing_term_ids = array();
@@ -635,6 +641,9 @@ class Finance extends CI_Controller {
                 $existing_term_ids[] = $term_id;
             }
         }
+        print_r($tuition);
+        print(' @@@@@ ');
+        die();
 
         $data['tuition'] = $tuition;
         $data['user'] = $this->data["user"];
