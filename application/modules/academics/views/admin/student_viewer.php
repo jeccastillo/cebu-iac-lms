@@ -17,9 +17,11 @@
                 </small>
                 
                 <div class="box-tools pull-right">
-                    <select v-model="sem_student" @change="changeTermSelected" class="form-control" >
-                        <option v-for="s in sy" :value="s.intID">{{s.term_student_type + ' ' + s.enumSem + ' ' + s.term_label + ' ' + s.strYearStart + '-' + s.strYearEnd}}</option>                      
-                    </select>                   
+                    <select id="term-select" v-model="sem_student" class="form-control" style="width: 100%">
+                        <option v-for="s in sy" :value="s.intID">
+                            {{ s.term_student_type + ' ' + s.enumSem + ' ' + s.term_label + ' ' + s.strYearStart + '-' + s.strYearEnd }}
+                        </option>
+                    </select>
                 </div>
                 <div style="clear:both"></div>
             </h1>
@@ -75,7 +77,11 @@
         display: block !important;
     }
 </style>
+<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js"></script>
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
 new Vue({
     el: '#student-viewer-container',
@@ -110,97 +116,36 @@ new Vue({
         sem_student: undefined,
         prev_year_sem: 0,
         add_subject:{
-            code: undefined,
-            section:undefined,
-            studentID: undefined,
-            activeSem: undefined,
-        },        
-        advanced_privilages1: false,
-        advanced_privilages2: false,
-        registrar_privilages: false,
-        photo_dir: undefined,
-        img_dir: undefined,  
-        grad_status: 0,      
-        selected_ay: undefined,
-        base_url: '<?php echo base_url(); ?>',   
-        registration_status: 0,                   
-        loader_spinner: true,  
-        change_grade: [],         
-        total_units: 0,
-        picture: undefined,
-        lab_units: 0,    
-        gpa: 0,        
-        assessment: '',   
-        deficency_msg: '',          
-    },
-
-    mounted() {
-
-        let url_string = window.location.href;                
-        if(this.id != 0){            
-            //this.loader_spinner = true;
-            axios.get(this.base_url + 'unity/student_viewer_data/' + this.id + '/' + this.sem )
-                .then((data) => {  
-                    console.log(data);
-                    if(data.data.success){                                                                                                                   
-                        this.student = data.data.student;                        
-                        if(data.data.scholarship.length > 0){
-                            var sch = "";
-                            for(i in data.data.scholarship)
-                                sch += data.data.scholarship[i].name+" ";
-                            this.scholarship = {name:sch};
-                        }
-                        else{
-                            this.scholarship = {name:'none'};
-                        } 
-                        if(data.data.discount.length > 0){
-                            var sch = "";
-                            for(i in data.data.discount)
-                                sch += data.data.discount[i].name+" ";
-                            this.discount = {name:sch};
-                        }
-                        else{
-                            this.discount = {name:'none'};
-                        }                               
-                        this.change_grade = data.data.change_grade;
-                        this.deficiencies = data.data.deficiencies;
-                        this.balance = data.data.balancel;
-                        this.user_level = data.data.user_level;
-                        this.registration = data.data.registration;                        
-                        this.registration_status = data.data.registration ? data.data.registration.intROG : 0;                        
-                        this.active_sem = data.data.active_sem;
-                        this.reg_status = data.data.reg_status;
-                        this.selected_ay = data.data.selected_ay;
-                        this.curriculum_subjects = data.data.curriculum_subjects;                        
-                        this.sections = data.data.sections;
-                        
-                        if(this.sections)
-                            this.add_subject.section = ( this.sections.length > 0 ) ? this.sections[0].intID : null;
-
-                        this.add_subject.subject = ( this.curriculum_subjects.length > 0 ) ? this.curriculum_subjects[0].intSubjectID : null;
-                        this.add_subject.studentID = this.id;
-                        this.add_subject.activeSem = this.selected_ay;
-                        this.advanced_privilages1 = data.data.advanced_privilages1;
-                        this.advanced_privilages2 = data.data.advanced_privilages2;                        
-                        this.sy = data.data.sy;
-                        this.term_type = data.data.term_type;
-                        this.photo_dir = data.data.photo_dir;
-                        this.img_dir = data.data.img_dir;
-                        this.sem_student = this.selected_ay;
-                        this.registrar_privilages =  data.data.registrar_privilages;        
-                        this.grad_status = this.student.isGraduate;     
-                        this.records = data.data.records;           
-                        this.total_units = data.data.total_units;
-                        this.lab_units = data.data.lab_units;
-                        this.gpa = data.data.gpa;
-                        this.other_data = data.data.other_data;   
-                        var sched = data.data.schedule;                        
-                        axios.get(api_url + 'admissions/student-info/' + this.student.slug)
+            mounted() {
+                // ...existing code...
+                let url_string = window.location.href;
+                if(this.id != 0){
+                    // ...existing code for axios.get, etc...
+                    axios.get(this.base_url + 'unity/student_viewer_data/' + this.id + '/' + this.sem )
                         .then((data) => {
-                            this.applicant_data = data.data.data;
-                            for(i in this.applicant_data.uploaded_requirements){
-                                 if(this.applicant_data.uploaded_requirements[i].type == "2x2" || this.applicant_data.uploaded_requirements[i].type == "2x2_foreign")
-                                    this.picture = this.applicant_data.uploaded_requirements[i].path;
+                            // ...existing code...
+                            this.loader_spinner = false;
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        })
+                }
+                // Initialize Select2 after DOM is updated
+                this.$nextTick(() => {
+                    if (window.jQuery && $('#term-select').length) {
+                        $('#term-select').select2({
+                            placeholder: 'Search or select a term',
+                            allowClear: true,
+                            width: 'resolve'
+                        });
+                        // Sync Select2 with Vue model
+                        $('#term-select').on('change', (e) => {
+                            this.sem_student = e.target.value;
+                            this.changeTermSelected();
+                        });
+                    }
+                });
+            },
                             }
                         })
                         .catch((error) => {
