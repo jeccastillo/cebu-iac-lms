@@ -69,7 +69,7 @@
                         <input type="text" v-model="term_filter.year_start" class="form-control" placeholder="Year Start" style="flex: 1; min-width: 80px; font-size: 12px; padding: 5px;">
                         <input type="text" v-model="term_filter.year_end" class="form-control" placeholder="Year End" style="flex: 1; min-width: 80px; font-size: 12px; padding: 5px;">
                     </div>
-                    <select id="sem-select" v-model="sem_student" class="form-control" style="width: 100%">
+                    <select id="select-sem" v-model="sem_student" class="form-control" style="width: 100%">
                         <option v-for="s in filtered_sy" :value="s.intID" :key="s.intID">
                             {{ s.term_student_type + ' ' + s.enumSem + ' ' + s.term_label + ' ' + s.strYearStart + '-' + s.strYearEnd }}
                         </option>
