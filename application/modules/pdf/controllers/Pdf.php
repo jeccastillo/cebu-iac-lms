@@ -4909,10 +4909,11 @@ class Pdf extends CI_Controller {
         $post = $this->input->post();      
         $student = $this->data_fetcher->getStudent($post['student_id']);
         $registrations = $this->db->select('tb_mas_registration.intAYID')
-        ->from('tb_mas_registration')  
+        ->from('tb_mas_registration')
+        ->join('tb_mas_sy', 'tb_mas_sy.intID = tb_mas_registration.intAYID')
         ->where('intROG', '1')
-        ->order_by('strYearStart asc,enumSem asc')
-        ->group_by('intAYID')
+        ->order_by('tb_mas_sy.strYearStart asc,enumSem asc')
+        ->group_by('tb_mas_registration.intAYID')
         ->get()
         ->result_array();
         
