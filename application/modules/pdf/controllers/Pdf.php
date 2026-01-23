@@ -4950,6 +4950,7 @@ class Pdf extends CI_Controller {
                 'admission_date' => isset($post['admission_date']) ? $post['admission_date'] : '',
                 'admission_to' => isset($post['admission_to']) ? $post['admission_to'] : '',
                 'graduation_date' => isset($post['graduation_date']) ? $post['graduation_date'] : '',
+                'remarks' => isset($post['remarks']) ? $post['remarks'] : '',
             );
       
             $units_overall = 0;
