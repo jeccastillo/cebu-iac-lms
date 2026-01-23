@@ -3372,11 +3372,11 @@ class Data_fetcher extends CI_Model {
                         $tuition_fee_installment_rate = $tuition_scholarship_installment_current * ($scholar->tuition_fee_rate/100);
 
 
-                        print($tuition + ($tuition * 0.09) . ' @ ');
-                        print($tuition - $tuition_discount_installment . ' @ ');
-                        print($tuition_scholarship_installment_current50 . ' @ ');
-                        print($tuition_discount_installment50 . ' @ ');
-                        die();
+                        // print($tuition + ($tuition * 0.09) . ' @ ');
+                        // print($tuition - $tuition_discount_installment . ' @ ');
+                        // print($tuition_scholarship_installment_current50 . ' @ ');
+                        // print($tuition_discount_installment50 . ' @ ');
+                        // die();
                         // print($tuition_discount_full . ' @ ');
                         // print($tuition_discount_installment . ' @ ');
                         // print($tuition_discount_installment30 . ' @ ');
