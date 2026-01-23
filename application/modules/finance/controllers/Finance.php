@@ -496,6 +496,19 @@ class Finance extends CI_Controller {
                             $temp['ledger'][] = $item;
                         }
 
+                        //TUITION YEAR
+                        $temp['tuition_year'] = $this->db->select('tb_mas_tuition_year.year,tb_mas_tuition_year.installmentDP')     
+                                    ->from('tb_mas_registration')              
+                                    ->join('tb_mas_tuition_year', 'tb_mas_registration.tuition_year = tb_mas_tuition_year.intID')
+                                    ->where(array('tb_mas_registration.intStudentID'=>$id))
+                                    ->get()
+                                    ->first_row('array');
+
+                                    // print_r($paid_terms);
+                                    // print(' @@@ ');
+                                    // print_r($tuition_year);
+                                    // die();
+
                         // fetch other-type ledger for this term
                         $other = $this->db->select('tb_mas_student_ledger.*, enumSem, strYearStart, strYearEnd, term_label, tb_mas_faculty.strFirstname, tb_mas_faculty.strLastname')
                             ->from('tb_mas_student_ledger')
@@ -545,20 +558,6 @@ class Finance extends CI_Controller {
                                ->where("sy_reference IS NOT NULL", null, false)
                                ->get()
                                ->result_array();
-
-
-                //TUITION YEAR
-                $tuition_year = $this->db->select('tb_mas_tuition_year.year,tb_mas_tuition_year.installmentDP')     
-                                    ->from('tb_mas_registration')              
-                                    ->join('tb_mas_tuition_year', 'tb_mas_registration.tuition_year = tb_mas_tuition_year.intID')
-                                    ->where(array('tb_mas_registration.intStudentID'=>$id))
-                                    ->get()
-                                    ->first_row('array');
-
-                                    print_r($paid_terms);
-                                    print(' @@@ ');
-                                    print_r($tuition_year);
-                                    die();
 
         if($paid_terms){
             foreach($paid_terms as $pt){
