@@ -3361,10 +3361,6 @@ class Data_fetcher extends CI_Model {
                         // $tuition_scholarship_installment_current30 = ($tuition + ($tuition * 0.15) - $tuition_discount_installment30) * ($scholar->tuition_fee_rate/100);
                         // $tuition_scholarship_installment_current50 = ($tuition + ($tuition * 0.09) - $tuition_discount_installment50) * ($scholar->tuition_fee_rate/100);
                         
-                        print($tuition_scholarship_installment_current50 . ' @ ');
-                        print($in_house_grand_total . ' @ ');
-                        print($scholarship_installment_grand_total50 . ' @ ');
-                        die();
                         // $tuition_discount += ($tuition - $in_house_grand_total) * ($scholar->tuition_fee_rate/100);
                         $tuition_discount += $tuition_scholarship_current;
                         $tuition_fee_rate += ($tuition - $in_house_grand_total) * ($scholar->tuition_fee_rate/100);
@@ -3513,6 +3509,11 @@ class Data_fetcher extends CI_Model {
                 if($scholar->deduction_from == 'in-house'){
                     $in_house_grand_total += $total_scholarship_temp;
                 }
+
+                        print($tuition_scholarship_installment_current50 . ' @ ');
+                        print($discount_installment_grand_total50 . ' @ ');
+                        print($scholarship_installment_grand_total50 . ' @ ');
+                        die();
 
                 $ctr++;
             }
