@@ -4972,6 +4972,12 @@ class Pdf extends CI_Controller {
     
             }   
             
+            $data['student'] = $student;
+            $data['other_details'] = $rec;
+            $rec['total_records'] = $total_records;
+
+            $data['gwa_overall'] = number_format(round(($gwa_overall/$num_terms),3),3);
+            $data['units_overall'] = $units_overall;    
             $data['credited_subjects'] = $credited_subjects;
             
     
@@ -5015,13 +5021,7 @@ class Pdf extends CI_Controller {
     
                 $data['records'][] = array('records'=>$sc_ret,'other_data'=>$other_data);                            
             }
-            
-            $data['student'] = $student;
-            $data['other_details'] = $rec;
-            $rec['total_records'] = $total_records;
-
-            $data['gwa_overall'] = number_format(round(($gwa_overall/$num_terms),3),3);
-            $data['units_overall'] = $units_overall;        
+                
         print_r($data);
         die();
 
