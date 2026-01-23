@@ -5017,9 +5017,9 @@ class Pdf extends CI_Controller {
             }
             
             $data['student'] = $student;
+            $data['other_details'] = $rec;
             $rec['total_records'] = $total_records;
 
-            $data['other_details'] = $rec;
             $data['gwa_overall'] = number_format(round(($gwa_overall/$num_terms),3),3);
             $data['units_overall'] = $units_overall;        
         print_r($data);
