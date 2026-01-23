@@ -4991,9 +4991,7 @@ class Pdf extends CI_Controller {
             
     
             foreach($included_terms as $term){
-                print_r($term);
-                die();
-                $records = $this->data_fetcher->getClassListStudentsSt($post['student_id'],$term);                
+                $records = $this->data_fetcher->getClassListStudentsSt($post['student_id'],$term['intAYID']);                
                 $sem = $this->data_fetcher->get_sem_by_id($term);                    
                 $sc_ret = [];
                 $gwa = 0;
