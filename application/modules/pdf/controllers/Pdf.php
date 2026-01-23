@@ -4908,7 +4908,7 @@ class Pdf extends CI_Controller {
     {
         $post = $this->input->post();      
         $student = $this->data_fetcher->getStudent($post['student_id']);
-        $registrations = $this->db->select('tb_mas_registration.intAYID')
+        $registrations = $this->db->select('tb_mas_registration.intAYID, tb_mas_sy.*')
         ->from('tb_mas_registration')
         ->join('tb_mas_sy', 'tb_mas_sy.intID = tb_mas_registration.intAYID')
         ->where(array('intROG' => '1', 'intStudentID' => $post['student_id']))
