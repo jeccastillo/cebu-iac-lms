@@ -63,9 +63,9 @@
                         <i class="fa fa-book"></i>Send Enlistment Notification </a>
                 </small>
                 <div class="box-tools pull-right">
-                    <select v-model="sem_student" @change="changeTermSelected" class="form-control">
+                    <select id="term-select" v-model="sem_student" class="form-control" style="width: 100%">
                         <option v-for="s in sy" :value="s.intID">
-                            {{s.term_student_type + ' ' + s.enumSem + ' ' + s.term_label + ' ' + s.strYearStart + '-' + s.strYearEnd}}
+                            {{ s.term_student_type + ' ' + s.enumSem + ' ' + s.term_label + ' ' + s.strYearStart + '-' + s.strYearEnd }}
                         </option>
                     </select>
                 </div>
@@ -739,6 +739,8 @@
     display: block !important;
 }
 </style>
+<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="<?php echo base_url(); ?>assets/themes/default/js/vue.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/themes/default/js/script.js">
 </script>
