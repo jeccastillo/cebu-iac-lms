@@ -63,7 +63,7 @@
                         <i class="fa fa-book"></i>Send Enlistment Notification </a>
                 </small>
                 <div class="box-tools pull-right">
-                    <select id="term-select" v-model="sem_student" class="form-control" style="width: 100%">
+                    <select id="term-select" v-model="sem_student" class="form-control" style="min-width:320px; width:100%">
                         <option v-for="s in sy" :value="s.intID">
                             {{ s.term_student_type + ' ' + s.enumSem + ' ' + s.term_label + ' ' + s.strYearStart + '-' + s.strYearEnd }}
                         </option>
@@ -737,6 +737,10 @@
 
 .select2-container {
     display: block !important;
+    min-width: 320px !important;
+}
+.select2-dropdown {
+    min-width: 320px !important;
 }
 </style>
 <!-- jQuery (required for Select2) -->
@@ -846,17 +850,27 @@ new Vue({
     mounted() {
         // ...existing code...
         this.$nextTick(() => {
-            $('#term-select').select2({
-                placeholder: 'Search or select a term',
-                allowClear: true,
-                width: 'resolve'
-            });
-
-            // Sync Select2 with Vue model
-            $('#term-select').on('change', (e) => {
-                this.sem_student = e.target.value;
-                this.changeTermSelected();
-            });
+            // Destroy previous Select2 instance if any (prevents duplicate init)
+            if ($.fn.select2 && $('#term-select').hasClass('select2-hidden-accessible')) {
+                $('#term-select').select2('destroy');
+            }
+            // Only initialize if sy is loaded and has options
+            if (this.sy && this.sy.length > 0) {
+                setTimeout(() => {
+                    $('#term-select').select2({
+                        placeholder: 'Search or select a term',
+                        allowClear: true,
+                        width: 'style',
+                        dropdownAutoWidth: true,
+                        minimumResultsForSearch: 0
+                    });
+                    // Sync Select2 with Vue model
+                    $('#term-select').on('change', (e) => {
+                        this.sem_student = e.target.value;
+                        this.changeTermSelected();
+                    });
+                }, 100); // slight delay to ensure DOM update
+            }
         });
         let url_string = window.location.href;
         if (this.id != 0) {
