@@ -4911,7 +4911,7 @@ class Pdf extends CI_Controller {
         $registrations = $this->db->select('tb_mas_registration.intAYID')
         ->from('tb_mas_registration')
         ->join('tb_mas_sy', 'tb_mas_sy.intID = tb_mas_registration.intAYID')
-        ->where('intROG', '1')
+        ->where(array('intROG' => '1', 'intStudentID' => $post['student_id']))
         ->order_by('tb_mas_sy.strYearStart asc,enumSem asc')
         ->group_by('tb_mas_registration.intAYID')
         ->get()
