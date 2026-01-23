@@ -62,9 +62,15 @@
                         class="btn btn-app" @click="sendEnlistedNotification">
                         <i class="fa fa-book"></i>Send Enlistment Notification </a>
                 </small>
-                <div class="box-tools pull-right">
-                    <select id="term-select" v-model="sem_student" class="form-control" style="min-width:320px; width:100%">
-                        <option v-for="s in sy" :value="s.intID">
+                <div class="box-tools pull-right" style="width: 100%; max-width: 600px;">
+                    <div style="display: flex; gap: 5px; margin-bottom: 5px; flex-wrap: wrap;">
+                        <input type="text" v-model="term_filter.type" class="form-control" placeholder="Type" style="flex: 1; min-width: 80px; font-size: 12px; padding: 5px;">
+                        <input type="text" v-model="term_filter.term" class="form-control" placeholder="Term" style="flex: 1; min-width: 80px; font-size: 12px; padding: 5px;">
+                        <input type="text" v-model="term_filter.year_start" class="form-control" placeholder="Year Start" style="flex: 1; min-width: 80px; font-size: 12px; padding: 5px;">
+                        <input type="text" v-model="term_filter.year_end" class="form-control" placeholder="Year End" style="flex: 1; min-width: 80px; font-size: 12px; padding: 5px;">
+                    </div>
+                    <select id="term-select" v-model="sem_student" class="form-control" style="width: 100%">
+                        <option v-for="s in filtered_sy" :value="s.intID" :key="s.intID">
                             {{ s.term_student_type + ' ' + s.enumSem + ' ' + s.term_label + ' ' + s.strYearStart + '-' + s.strYearEnd }}
                         </option>
                     </select>
@@ -845,32 +851,30 @@ new Vue({
             user: <?php echo json_encode($user['strFirstname'] . ' ' .$user['strLastname']) ; ?>,
             remarks: ''
         },
-        documents: []
+        documents: [],
+        term_filter: {
+            type: '',
+            term: '',
+            year_start: '',
+            year_end: ''
+        }
+    },
+    computed: {
+        filtered_sy() {
+            if (!this.sy) return [];
+            return this.sy.filter(s => {
+                const type_match = !this.term_filter.type || (s.term_student_type || '').toLowerCase().includes(this.term_filter.type.toLowerCase());
+                const term_match = !this.term_filter.term || (s.enumSem + ' ' + s.term_label || '').toLowerCase().includes(this.term_filter.term.toLowerCase());
+                const year_start_match = !this.term_filter.year_start || (s.strYearStart || '').includes(this.term_filter.year_start);
+                const year_end_match = !this.term_filter.year_end || (s.strYearEnd || '').includes(this.term_filter.year_end);
+                return type_match && term_match && year_start_match && year_end_match;
+            });
+        }
     },
     mounted() {
         // ...existing code...
         this.$nextTick(() => {
-            // Destroy previous Select2 instance if any (prevents duplicate init)
-            if ($.fn.select2 && $('#term-select').hasClass('select2-hidden-accessible')) {
-                $('#term-select').select2('destroy');
-            }
-            // Only initialize if sy is loaded and has options
-            if (this.sy && this.sy.length > 0) {
-                setTimeout(() => {
-                    $('#term-select').select2({
-                        placeholder: 'Search or select a term',
-                        allowClear: true,
-                        width: 'style',
-                        dropdownAutoWidth: true,
-                        minimumResultsForSearch: 0
-                    });
-                    // Sync Select2 with Vue model
-                    $('#term-select').on('change', (e) => {
-                        this.sem_student = e.target.value;
-                        this.changeTermSelected();
-                    });
-                }, 100); // slight delay to ensure DOM update
-            }
+            // No need for Select2 anymore - using Vue filtering with native select
         });
         let url_string = window.location.href;
         if (this.id != 0) {
