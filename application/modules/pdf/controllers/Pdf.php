@@ -4908,7 +4908,8 @@ class Pdf extends CI_Controller {
     {
         $post = $this->input->post();      
         $student = $this->data_fetcher->getStudent($post['student_id']);
-        $registrations = $this->db->select('tb_mas_registration.intAYID')
+        
+        $included_terms = $this->db->select('tb_mas_registration.intAYID')
         ->from('tb_mas_registration')
         ->join('tb_mas_sy', 'tb_mas_sy.intID = tb_mas_registration.intAYID')
         ->where(array('intROG' => '1', 'intStudentID' => $post['student_id']))
@@ -4917,10 +4918,8 @@ class Pdf extends CI_Controller {
         ->get()
         ->result_array();
         
-        print_r($registrations);
-        die();
         if($student['level'] == 'shs'){
-            $num_terms = count($post['included_terms']);
+            $num_terms = count($included_terms);
             switch($student['level']){
                 case 'shs':
                     $stype = 'shs';
@@ -4948,7 +4947,7 @@ class Pdf extends CI_Controller {
                 'prepared_by' => $post['prepared_by'],
                 'verified_by' => $post['verified_by'],
                 'registrar' => $post['registrar'],
-                'included_terms' => implode(",", $post['included_terms']),
+                'included_terms' => implode(",", $included_terms),
                 'admission_date' => isset($post['admission_date']) ? $post['admission_date'] : '',
                 'admission_to' => isset($post['admission_to']) ? $post['admission_to'] : '',
                 'graduation_date' => isset($post['graduation_date']) ? $post['graduation_date'] : '',
@@ -4991,7 +4990,7 @@ class Pdf extends CI_Controller {
             $data['credited_subjects'] = $credited_subjects;
             
     
-            foreach($post['included_terms'] as $term){
+            foreach($included_terms as $term){
                 $records = $this->data_fetcher->getClassListStudentsSt($post['student_id'],$term);                
                 $sem = $this->data_fetcher->get_sem_by_id($term);                    
                 $sc_ret = [];
@@ -5031,8 +5030,8 @@ class Pdf extends CI_Controller {
     
                 $data['records'][] = array('records'=>$sc_ret,'other_data'=>$other_data);                            
             }
-                
-
+                print_r($data);
+                die();
         }
         echo json_encode($data);
     }
