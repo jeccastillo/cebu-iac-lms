@@ -3101,6 +3101,9 @@ class Data_fetcher extends CI_Model {
                         $tuition_discount_installment30 += ($tuition + ($tuition * 0.15)) * ($scholar->total_assessment_rate/100);
                         $tuition_discount_installment50 += ($tuition + ($tuition * 0.09)) * ($scholar->total_assessment_rate/100);
 
+                        print($tuition_discount_installment50);
+                        die();
+                        
                         //external
                         $ar_external_scholarship_full += $total_assessment_temp * ($scholar->total_assessment_rate/100);
                         $ar_external_scholarship_installment += $total_installment_assessment_temp * ($scholar->total_assessment_rate/100);
