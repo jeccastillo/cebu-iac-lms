@@ -1,6 +1,15 @@
 <aside class="right-side">
     <div id="student-viewer-container">
         <section class="content-header" style="background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); margin-bottom: 20px;">
+            <style>
+            /* Ensure the term select box displays full text */
+            .filter-select, select[name="term"] {
+                width: 100%;
+                min-width: 300px;
+                max-width: 100%;
+                box-sizing: border-box;
+            }
+            </style>
             <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px;">
                 <a class="btn-modern btn-back" :href="base_url + 'student/view_all_students'">
                     <i class="ion ion-arrow-left-a"></i>
