@@ -477,7 +477,7 @@ new Vue({
 
         },     
         getPayments: function(tuition){
-            alert(tuition);
+            console.log(tuition)
             this.term_balance = 0;
             this.term_balance_other = 0;
             this.ledger_term = [];
