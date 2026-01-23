@@ -11318,11 +11318,12 @@ class Excel extends CI_Controller {
                     $curriculum = $this->db->get_where('tb_mas_curriculum',array('strName' => $row['H']))->first_row('array');
                     $isModular = $row['F'] == 'Yes' ? 1 : 0;
                     $isSpecialClass = $row['G'] == 'Yes' ? 1 : 0;
+                    $facultyId = $faculty ? $faculty['intID'] : 999;
 
-                    if($faculty && $subject && $curriculum){
+                    if($subject && $curriculum){
                         //Check if classlist exists
                         $checkClasslist = $this->db->get_where('tb_mas_classlist',
-                                                        array('intFacultyID' => $faculty['intID'], 
+                                                        array('intFacultyID' => $facultyId, 
                                                             'intSubjectID' => $subject['intID'],
                                                             'intCurriculumID' => $curriculum['intID'],
                                                             'strClassName' => $row['B'],
