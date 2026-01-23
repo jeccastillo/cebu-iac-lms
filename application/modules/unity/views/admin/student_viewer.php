@@ -86,7 +86,7 @@
                     <input type="text" v-model="term_filter.year_start" class="form-control" placeholder="Year Start" style="flex: 1; min-width: 90px; font-size: 13px; padding: 8px 12px; border-radius: 6px; border: 1px solid #ced4da;">
                     <input type="text" v-model="term_filter.year_end" class="form-control" placeholder="Year End" style="flex: 1; min-width: 90px; font-size: 13px; padding: 8px 12px; border-radius: 6px; border: 1px solid #ced4da;">
                 </div>
-                <select @change="changeTermSelected" v-model="sem_student" class="form-control" style="width: 100%; font-size: 14px; padding: 10px 12px; border-radius: 6px; border: 1px solid #ced4da; background-color: #fff;">
+                <select @change="changeTermSelected" v-model="sem_student" class="form-control" style="width: 100%; font-size: 14px; padding: 6px 12px; border-radius: 6px; border: 1px solid #ced4da; background-color: #fff;">
                     <option v-for="s in filtered_sy" :value="s.intID" :key="s.intID">
                         {{ s.term_student_type + ' ' + s.enumSem + ' ' + s.term_label + ' ' + s.strYearStart + '-' + s.strYearEnd }}
                     </option>
