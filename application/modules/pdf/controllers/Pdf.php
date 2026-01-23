@@ -4940,6 +4940,7 @@ class Pdf extends CI_Controller {
                 'registrar' => $post['registrar'],
                 'included_terms' => implode(",", $post['included_terms']),
                 'admission_date' => isset($post['admission_date']) ? $post['admission_date'] : '',
+                'admission_to' => isset($post['admission_to']) ? $post['admission_to'] : '',
                 'graduation_date' => isset($post['graduation_date']) ? $post['graduation_date'] : '',
             );
       
@@ -5015,12 +5016,12 @@ class Pdf extends CI_Controller {
                 $data['records'][] = array('records'=>$sc_ret,'other_data'=>$other_data);                            
             }
             
+            $data['student'] = $student;
             $rec['total_records'] = $total_records;
 
             $data['other_details'] = $rec;
             $data['gwa_overall'] = number_format(round(($gwa_overall/$num_terms),3),3);
             $data['units_overall'] = $units_overall;        
-            $data['student'] = $student;
         print_r($data);
         die();
 
