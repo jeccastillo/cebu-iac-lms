@@ -545,6 +545,21 @@ class Finance extends CI_Controller {
                                ->where("sy_reference IS NOT NULL", null, false)
                                ->get()
                                ->result_array();
+
+
+                //TUITION YEAR
+                $tuition_year = $this->db->select('tb_mas_tuition_year.year,tb_mas_tuition_year.installmentDP')     
+                                    ->from('tb_mas_registration')              
+                                    ->join('tb_mas_tuition_year', 'tb_mas_registration.tuition_year = tb_mas_tuition_year.intID')
+                                    ->where(array('tb_mas_registration.intStudentID'=>$id))
+                                    ->get()
+                                    ->first_row('array');
+
+                                    print_r($paid_terms);
+                                    print(' @@@ ');
+                                    print_r($tuition_year);
+                                    die();
+
         if($paid_terms){
             foreach($paid_terms as $pt){
                 $term_id = (int) $pt['sy_reference'];
@@ -586,17 +601,6 @@ class Finance extends CI_Controller {
                                     ->order_by("strYearStart asc, enumSem asc, date asc")
                                     ->get()
                                     ->result_array();
-
-                //TUITION YEAR
-                $tuition_year = $this->db->select('tb_mas_tuition_year.year,tb_mas_tuition_year.installmentDP')     
-                                    ->from('tb_mas_registration')              
-                                    ->join('tb_mas_tuition_year', 'tb_mas_registration.tuition_year = tb_mas_tuition_year.intID')
-                                    ->where(array('tb_mas_registration.intStudentID'=>$id))
-                                    ->get()
-                                    ->first_row('array');
-
-                                    print_r($tuition_year);
-                                    die();
                 
                 $temp['ledger'] = [];
                 foreach($ledger as $item){
