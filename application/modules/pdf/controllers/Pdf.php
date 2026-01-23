@@ -4909,6 +4909,8 @@ class Pdf extends CI_Controller {
         $post = $this->input->post();      
         $student = $this->data_fetcher->getStudent($post['student_id']);
         
+        print_r($post);
+        die();
         if($student['level'] == 'shs'){
             $num_terms = count($post['included_terms']);
             switch($student['level']){
@@ -5022,8 +5024,6 @@ class Pdf extends CI_Controller {
                 $data['records'][] = array('records'=>$sc_ret,'other_data'=>$other_data);                            
             }
                 
-        print_r($data);
-        die();
 
         }
         echo json_encode($data);
