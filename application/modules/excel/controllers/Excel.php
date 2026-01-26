@@ -8434,7 +8434,7 @@ class Excel extends CI_Controller {
                                 'type_of_class' => 'regular',
                                 'current_program' => $student['intProgramID'],
                                 'current_curriculum' => 0,
-                                'tuition_year' => 0,
+                                'tuition_year' => 35, //iSIMS Old Data setup in live
                                 'late_enrollment' => 0,
                                 'loa_remarks' => '-',
                                 'allow_enroll' => 0,
