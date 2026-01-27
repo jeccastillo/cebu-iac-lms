@@ -241,6 +241,11 @@
         background: #f5f5f5 !important;
         border-left-color: #2559a8;
     }
+    .sidebar-menu > li.treeview.menu-open > a,
+    .sidebar-menu > li.treeview:hover > a {
+        background: #fff !important;
+        border-left-color: transparent !important;
+    }
     .sidebar-menu > li.active > a {
         background: #e8f0f8 !important;
         color: #2559a8 !important;
