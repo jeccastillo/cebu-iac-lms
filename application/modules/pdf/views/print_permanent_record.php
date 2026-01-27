@@ -180,7 +180,7 @@ tbody {
 
 .continued-next {
     position: absolute;
-    bottom: -40px;
+    bottom: -27px;
     left: 0;
     right: 0;
     font-size: 10pt;
@@ -353,6 +353,51 @@ h3 {
         </div>
       </div>
     </div> -->
+    <footer id="footer-template">
+        <div class="footer-container">
+            <p class="text-center">TRANSFER ELIGIBILITY</p>
+            <div>
+                <p> I certify that this is the true record of <span
+                        class="blank-line md-name-line"><?php echo $student['strFirstname'] .' '. $student['strMiddlename'] .' '. $student['strLastname']; ?></span>who
+                    is eligible for admission to <span
+                        class="blank-line sm-name-line"><?php echo $other_details['admission_to']?></span>and
+                    has no outstanding obligation to the school </p>
+            </div>
+            <br />
+            <p>Remarks: <?php echo $other_details['remarks']?></p>
+            <br />
+            <p>Grading System:</p>
+            <p> 90-100 (Outstanding); 85-89 (Very Satisfactory); 80-84 (Satisfactory); 75-79 (Fairly
+                Satisfactory); Below 75 (Did Not Meet Expectation); IP (In Progress); OW (Officially
+                Withdrawn); OD (Officially Dropped) </p>
+            <br />
+            <p>Note: This document is valid only when it bears the seal of the School and affixed
+                with the original signature in ink. Any erasure or alteration made on this copy
+                renders the whole document invalid.</p>
+            <div class="signature-container">
+                <div class="left-section">
+                    <div class="field-row">
+                        <span class="label">Prepared by:</span>
+                        <span class="underline"><?php echo $other_details['prepared_by']?></span>
+                    </div>
+                    <div class="field-row">
+                        <span class="label">Verified by:</span>
+                        <span class="underline"><?php echo $other_details['verified_by']?></span>
+                    </div>
+                    <div class="field-row">
+                        <span class="label">Date Issued:</span>
+                        <span class="underline"><?php echo $other_details['date_issued']?></span>
+                    </div>
+                </div>
+                <div class="right-section">
+                    <div class="name"><?php echo $other_details['registrar']?></div>
+                    <div class="signature-line">
+                        <div class="role">AVP for Administration</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
     <main class="content-area">
         <div id="main-content">
             <div class="info-container">
@@ -415,13 +460,14 @@ h3 {
                     </div>
                     <div class="info-group">
                         <span>Date of Admission :</span>
-                        <span class="value"><?php echo $student['high_school_attended']?></span>
+                        <span
+                            class="value"><?php echo date("F d, Y", strtotime($student['high_school_attended']))?></span>
                     </div>
                 </div>
                 <div class="grid-row">
                     <div class="info-group">
                         <span>Senior High School :</span>
-                        <span class="value"><?php echo $student['senior_high']?></span>
+                        <span class="value"><?php echo $other_details['senior_high_school']?></span>
                     </div>
                     <div class="info-group">
                         <span>Date of Graduation :</span>
@@ -512,51 +558,6 @@ foreach ($records  as $block):
         </div>
     </main>
     <!-- Footer Template for All Pages -->
-    <footer id="footer-template">
-        <div class="footer-container">
-            <p class="text-center">TRANSFER ELIGIBILITY</p>
-            <div>
-                <p> I certify that this is the true record of <span
-                        class="blank-line md-name-line"><?php echo $student['strFirstname'] .' '. $student['strMiddlename'] .' '. $student['strLastname']; ?></span>who
-                    is eligible for admission to <span
-                        class="blank-line sm-name-line"><?php echo $other_details['admission_to']?></span>and
-                    has no outstanding obligation to the school </p>
-            </div>
-            <br />
-            <p>Remarks: <?php echo $other_details['remarks']?></p>
-            <br />
-            <p>Grading System:</p>
-            <p> 90-100 (Outstanding); 85-89 (Very Satisfactory); 80-84 (Satisfactory); 75-79 (Fairly
-                Satisfactory); Below 75 (Did Not Meet Expectation); IP (In Progress); OW (Officially
-                Withdrawn); OD (Officially Dropped) </p>
-            <br />
-            <p>Note: This document is valid only when it bears the seal of the School and affixed
-                with the original signature in ink. Any erasure or alteration made on this copy
-                renders the whole document invalid.</p>
-            <div class="signature-container">
-                <div class="left-section">
-                    <div class="field-row">
-                        <span class="label">Prepared by:</span>
-                        <span class="underline"><?php echo $other_details['prepared_by']?></span>
-                    </div>
-                    <div class="field-row">
-                        <span class="label">Verified by:</span>
-                        <span class="underline"><?php echo $other_details['verified_by']?></span>
-                    </div>
-                    <div class="field-row">
-                        <span class="label">Date Issued:</span>
-                        <span class="underline"><?php echo $other_details['date_issued']?></span>
-                    </div>
-                </div>
-                <div class="right-section">
-                    <div class="name"><?php echo $other_details['registrar']?></div>
-                    <div class="signature-line">
-                        <div class="role">AVP for Administration</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
     <script>
     // const dynamicRows = document.getElementById("dynamic-rows")
     // for (let i = 1; i <= 100; i++) {
